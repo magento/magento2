@@ -463,16 +463,14 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         $this->y = $top - 40;
         $addressesStartY = $this->y;
 
-        foreach ([$billingAddress] as $value) {
-            if ($value !== '') {
-                $text = [];
-                foreach ($this->string->split($value, 45, true, true) as $_value) {
-                    $text[] = $_value;
-                }
-                foreach ($text as $part) {
-                    $page->drawText(strip_tags(ltrim($part)), 35, $this->y, 'UTF-8');
-                    $this->y -= 15;
-                }
+        if ($billingAddress !== '') {
+            $text = [];
+            foreach ($this->string->split($billingAddress, 45, true, true) as $_value) {
+                $text[] = $_value;
+            }
+            foreach ($text as $part) {
+                $page->drawText(strip_tags(ltrim($part)), 35, $this->y, 'UTF-8');
+                $this->y -= 15;
             }
         }
 
@@ -480,16 +478,14 @@ abstract class AbstractPdf extends \Magento\Framework\Object
 
         if (!$order->getIsVirtual()) {
             $this->y = $addressesStartY;
-            foreach ([$shippingAddress] as $value) {
-                if ($value !== '') {
-                    $text = [];
-                    foreach ($this->string->split($value, 45, true, true) as $_value) {
-                        $text[] = $_value;
-                    }
-                    foreach ($text as $part) {
-                        $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
-                        $this->y -= 15;
-                    }
+            if ($shippingAddress !== '') {
+                $text = [];
+                foreach ($this->string->split($shippingAddress, 45, true, true) as $_value) {
+                    $text[] = $_value;
+                }
+                foreach ($text as $part) {
+                    $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
+                    $this->y -= 15;
                 }
             }
 
