@@ -97,6 +97,11 @@ class DeploymentConfig
     public function getConfigData($key = null)
     {
         $this->load();
+
+        if ($key !== null && !isset($this->data[$key])) {
+            return null;
+        }
+
         if (isset($this->data[$key])) {
             return $this->data[$key];
         }

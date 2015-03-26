@@ -49,6 +49,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
