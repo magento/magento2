@@ -14,11 +14,18 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Address\Validator
      */
     protected $validator;
-
     /**
      * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $addressMock;
+    /**
+     * @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $directoryHelperMock;
+    /**
+     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $countryFactoryMock;
 
     /**
      * Mock order address model
@@ -32,7 +39,24 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->validator = new \Magento\Sales\Model\Order\Address\Validator();
+        $this->directoryHelperMock = $this->getMock(
+            'Magento\Directory\Helper\Data',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->countryFactoryMock = $this->getMock(
+            'Magento\Directory\Model\CountryFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->validator = new \Magento\Sales\Model\Order\Address\Validator(
+            $this->directoryHelperMock,
+            $this->countryFactoryMock
+        );
     }
 
     /**
