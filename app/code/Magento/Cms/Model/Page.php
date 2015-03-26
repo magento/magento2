@@ -15,8 +15,7 @@ use Magento\Framework\Object\IdentityInterface;
  * @method \Magento\Cms\Model\Resource\Page getResource()
  * @method int[] getStores()
  */
-class Page extends \Magento\Framework\Model\AbstractModel
-    implements PageInterface, IdentityInterface
+class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
 {
     /**
      * No route page id

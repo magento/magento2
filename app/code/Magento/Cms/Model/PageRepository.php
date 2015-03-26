@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class PageRepository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PageRepository implements PageRepositoryInterface
 {
@@ -109,6 +110,8 @@ class PageRepository implements PageRepositoryInterface
     /**
      * Load Page data collection by given search criteria
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param SearchCriteriaInterface $criteria
      * @return Resource\Page\Collection
      */

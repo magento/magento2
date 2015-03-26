@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class BlockRepository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BlockRepository implements BlockRepositoryInterface
 {
@@ -109,6 +110,8 @@ class BlockRepository implements BlockRepositoryInterface
     /**
      * Load Block data collection by given search criteria
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param SearchCriteriaInterface $criteria
      * @return Resource\Block\Collection
      */
