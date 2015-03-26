@@ -37,6 +37,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/order_with_message.php
+     * @magentoConfigFixture default_store sales/gift_options/allow_order 1
      */
     public function testGet()
     {

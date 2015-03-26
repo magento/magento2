@@ -40,6 +40,7 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/order_with_message.php
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 1
      */
     public function testGet()
     {
@@ -58,6 +59,7 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/GiftMessage/_files/order_with_message.php
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 1
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage There is no item with provided id in the order
      */
