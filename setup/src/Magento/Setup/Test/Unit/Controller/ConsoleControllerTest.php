@@ -652,7 +652,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
             ['install',''],
             ['update', $noParameters],
             ['uninstall', $noParameters],
-            ['install-configuration', ''],
             ['install-schema', $noParameters],
             ['install-data', $noParameters],
             ['install-user-configuration', ''],

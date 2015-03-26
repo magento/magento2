@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\Setup\Option\AbstractConfigOption;
 
 class ConfigModel
 {
@@ -57,15 +58,16 @@ class ConfigModel
     /**
      * Gets available config options
      *
-     * @return array
+     * @return AbstractConfigOption[]
      */
     public function getAvailableOptions()
     {
+        /** @var AbstractConfigOption[] $optionCollection */
         $optionCollection = [];
         $options = $this->collector->collectOptions();
 
-        foreach ($options as $option) {
-            $optionCollection = array_merge($optionCollection, $option->getOptions());
+        foreach ($options as $optionList) {
+            $optionCollection = array_merge($optionCollection, $optionList->getOptions());
         }
 
         foreach ($optionCollection as $option) {

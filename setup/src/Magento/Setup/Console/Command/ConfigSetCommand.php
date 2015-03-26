@@ -21,11 +21,6 @@ class ConfigSetCommand extends Command
     protected $configModel;
 
     /**
-     * @var ConfigFilePool
-     */
-    protected $configFilePool;
-
-    /**
      * Enabled module list
      *
      * @var ModuleList
