@@ -27,16 +27,32 @@
             </item>
         </item>
     </argument>
-    <container name="block_listing_top">
+    <container name="listing_top">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/header</item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/toolbar</item>
             </item>
-        </argument>        
+        </argument>
+        <container name="default_view">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/grid/controls/view</item>
+                    <item name="displayArea" xsi:type="string">topRight</item>
+                </item>
+            </argument>
+        </container>
+        <container name="columns_controls">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
+                    <item name="displayArea" xsi:type="string">topRight</item>
+                </item>
+            </argument>
+        </container>      
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="displayArea" xsi:type="string">top</item>
+                    <item name="displayArea" xsi:type="string">topLeft</item>
                     <item name="dataScope" xsi:type="string">params.filters</item>
                 </item>
             </argument>
@@ -180,7 +196,35 @@
                 </item>
             </argument>
         </massaction>
-        <paging name="listing_paging"/>
+        <paging name="listing_paging">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="displayArea" xsi:type="string">bottom</item>
+                    <item name="options" xsi:type="array">
+                        <item name="20" xsi:type="array">
+                            <item name="value" xsi:type="number">20</item>
+                            <item name="label" xsi:type="string" translate="true">20</item>
+                        </item>
+                        <item name="30" xsi:type="array">
+                            <item name="value" xsi:type="number">30</item>
+                            <item name="label" xsi:type="string" translate="true">30</item>
+                        </item>
+                        <item name="50" xsi:type="array">
+                            <item name="value" xsi:type="number">50</item>
+                            <item name="label" xsi:type="string" translate="true">50</item>
+                        </item>
+                        <item name="100" xsi:type="array">
+                            <item name="value" xsi:type="number">100</item>
+                            <item name="label" xsi:type="string" translate="true">100</item>
+                        </item>
+                        <item name="200" xsi:type="array">
+                            <item name="value" xsi:type="number">200</item>
+                            <item name="label" xsi:type="string" translate="true">200</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </paging>
     </container>    
     <dataSource name="cms_block_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -210,6 +254,7 @@
                 <item name="childDefaults" xsi:type="array">
                     <item name="actionField" xsi:type="string">actions</item>
                     <item name="clickAction" xsi:type="string">edit</item>
+                    <item name="appendTo" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.columns_controls</item>
                 </item>
             </item>
         </argument>
@@ -220,6 +265,7 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">block_id</item>
+                    <item name="appendTo" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -328,7 +374,6 @@
                     <item name="data_type" xsi:type="string">actions</item>
                     <item name="filterable" xsi:type="boolean">false</item>
                     <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>

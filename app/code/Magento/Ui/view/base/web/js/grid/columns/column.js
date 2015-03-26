@@ -11,7 +11,11 @@ define([
         defaults: {
             headerTmpl: 'ui/grid/columns/text',
             bodyTmpl: 'ui/grid/cells/text',
-            sortable: false
+            sortable: false,
+            visible: true,
+            exports: {
+                visible: '<%= provider %>:config.<%= index %>.visible'
+            }
         },
 
         getClickUrl: function (row) {

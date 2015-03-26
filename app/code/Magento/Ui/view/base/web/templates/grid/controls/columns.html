@@ -1,0 +1,44 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div data-bind="css: {_active: active}, outerClick: hidePanel, stopPropagation: true" class="admin__action-dropdown-wrap admin__data-grid-action-columns">
+    <button
+        class="admin__action-dropdown"
+        type="button"
+        data-bind="click: togglePanel"
+        data-toggle="dropdown"
+        aria-haspopup="true">
+        <span class="admin__action-dropdown-text">Columns</span>
+    </button>
+    <div class="admin__action-dropdown-menu admin__data-grid-action-columns-menu">
+        <div class="admin__action-dropdown-menu-header">
+            <span data-bind="text: countVisible()"></span> out of <span data-bind="text: elems().length"></span> visible
+        </div>
+        <div class="admin__action-dropdown-menu-content">
+            <!-- ko foreach: elems -->
+            <div class="admin__field-option">
+                <input data-bind="attr: {id: index}, checked: visible" class="admin__control-checkbox" type="checkbox"/>
+                <label data-bind="text: label, attr: {for: index}" class="admin__field-label"></label>
+            </div>
+            <!-- /ko -->
+        </div>
+        <div class="admin__action-dropdown-menu-footer">
+            <div class="admin__action-dropdown-footer-secondary-actions">
+                <button class="action-tertiary" type="button">
+                    <span>Reset</span>
+                </button>
+            </div>
+            <div class="admin__action-dropdown-footer-main-actions">
+                <button class="action-tertiary" type="button">
+                    <span>Cancel</span>
+                </button>
+                <button class="action-secondary" type="button">
+                    <span>Apply</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

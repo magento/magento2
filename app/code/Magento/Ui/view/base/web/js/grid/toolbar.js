@@ -10,8 +10,8 @@ define([
 
     return Component.extend({
         defaults: {
-            regions: ['top', 'bottom'],
-            template: 'ui/grid/header'
+            regions: ['topRight', 'topLeft', 'bottom'],
+            template: 'ui/grid/toolbar'
         }
     });
 });

@@ -49,16 +49,32 @@
             </item>
         </argument>
     </dataSource>
-    <container name="page_listing_top">
+    <container name="listing_top">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/header</item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/toolbar</item>
             </item>
         </argument>
+        <container name="default_view">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/grid/controls/view</item>
+                    <item name="displayArea" xsi:type="string">topRight</item>
+                </item>
+            </argument>
+        </container>
+        <container name="columns_controls">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
+                    <item name="displayArea" xsi:type="string">topRight</item>
+                </item>
+            </argument>
+        </container>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="displayArea" xsi:type="string">top</item>
+                    <item name="displayArea" xsi:type="string">topLeft</item>
                     <item name="dataScope" xsi:type="string">params.filters</item>
                 </item>
             </argument>
@@ -248,6 +264,7 @@
                 <item name="childDefaults" xsi:type="array">
                     <item name="actionField" xsi:type="string">actions</item>
                     <item name="clickAction" xsi:type="string">edit</item>
+                    <item name="appendTo" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.columns_controls</item>
                 </item>
             </item>
         </argument>
@@ -258,6 +275,7 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">page_id</item>
+                    <item name="appendTo" xsi:type="string"></item>
                 </item>
             </argument>
         </column>
@@ -370,7 +388,6 @@
                     <item name="data_type" xsi:type="string">actions</item>
                     <item name="filterable" xsi:type="boolean">false</item>
                     <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>

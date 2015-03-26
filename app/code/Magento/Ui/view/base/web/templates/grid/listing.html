@@ -9,7 +9,9 @@
         <thead data-part="head">
             <tr class="headings" data-part="head.row">
                 <!-- ko foreach: elems -->
-                    <!-- ko template: getHeader() --><!-- /ko -->
+                    <!-- ko if: visible -->
+                        <!-- ko template: getHeader() --><!-- /ko -->
+                    <!-- /ko -->
                 <!-- /ko -->
             </tr>
         </thead>
@@ -18,7 +20,9 @@
                 <!-- ko foreach: { data: rows, as: 'row' } -->
                     <tr data-part="body.row" class="even pointer">
                         <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
-                            <!-- ko template: getBody() --><!-- /ko -->
+                            <!-- ko if: visible -->
+                                <!-- ko template: getBody() --><!-- /ko -->
+                            <!-- /ko -->
                         <!-- /ko -->
                     </tr>
                 <!-- /ko -->
