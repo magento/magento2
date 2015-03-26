@@ -44,7 +44,7 @@ class CreateSequence
     ) {
         $this->sequenceBuilder = $sequenceBuilder;
         $this->salesSetup = $salesSetup;
-        $this->sequenceConfig;
+        $this->sequenceConfig = $sequenceConfig;
     }
 
     /**
