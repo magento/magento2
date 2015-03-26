@@ -39,15 +39,22 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     {
         $options = [ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'admin'];
         $actualConfig = $this->object->createConfig($options, $this->deploymentConfig);
+
         $expectedData = [
-            ['file' => ConfigFilePool::APP_CONFIG, 'segment' => 'backend', 'data' => ['frontName' => 'admin']]
+            [
+                'file' => ConfigFilePool::APP_CONFIG,
+                'segment' => 'backend',
+                'data' => [
+                    'backend' => ['frontName' => 'admin']
+                ]
+            ]
         ];
+
         $this->assertInternalType('array', $actualConfig);
         /** @var \Magento\Framework\Config\Data\ConfigData $config */
         foreach ($actualConfig as $i => $config) {
             $this->assertInstanceOf('\Magento\Framework\Config\Data\ConfigData', $config);
             $this->assertSame($expectedData[$i]['file'], $config->getFileKey());
-            $this->assertSame($expectedData[$i]['segment'], $config->getSegmentKey());
             $this->assertSame($expectedData[$i]['data'], $config->getData());
         }
     }

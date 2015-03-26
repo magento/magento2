@@ -35,6 +35,8 @@ class ConfigGenerator
         ConfigOptionsList::INPUT_KEY_RESOURCE => ConfigOptionsList::KEY_RESOURCE,
     ];
 
+
+
     /**
      * Constructor
      *
@@ -56,11 +58,12 @@ class ConfigGenerator
      */
     public function createInstallConfig()
     {
-        $installConfig = [];
+        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+
         if (!$this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE)) {
-            $installConfig = [ConfigOptionsList::KEY_DATE => date('r')];
+             $configData->set(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE, date('r'));
         }
-        return new ConfigData(ConfigFilePool::APP_CONFIG, 'install', $installConfig);
+        return $configData;
     }
 
     /**
@@ -72,7 +75,7 @@ class ConfigGenerator
     {
         $currentKey = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
 
-        $cryptData = [];
+        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
         if (isset($data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY])) {
             if ($currentKey) {
                 $key = $currentKey . "\n" . $data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY];
@@ -80,33 +83,14 @@ class ConfigGenerator
                 $key = $data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY];
             }
 
-            $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY]] = $key;
+            $configData->set(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY, $key);
         } else {
             if (!$currentKey) {
-                $cryptData[self::$paramMap[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY]] =
-                    md5($this->random->getRandomString(10));
+                $configData->set(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY, md5($this->random->getRandomString(10)));
             }
         }
 
-        return new ConfigData(ConfigFilePool::APP_CONFIG, 'crypt', $cryptData);
-    }
-
-    /**
-     * Creates module config data
-     *
-     * @return ConfigData
-     */
-    public function createModuleConfig()
-    {
-        if (!$this->deploymentConfig->isAvailable()) {
-            $modulesData = [];
-            if (isset($this->moduleList)) {
-                foreach ($this->moduleList as $key) {
-                    $modulesData[$key] = 1;
-                }
-            }
-            return new ConfigData(ConfigFilePool::APP_CONFIG, 'modules', $modulesData);
-        }
+        return $configData;
     }
 
     /**
@@ -117,13 +101,16 @@ class ConfigGenerator
      */
     public function createSessionConfig(array $data)
     {
-        $sessionData = [];
+        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+
         if (isset($data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
-            $sessionData[self::$paramMap[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]] =
-                $data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE];
+            $configData->set(
+                ConfigOptionsList::CONFIG_PATH_SESSION_SAVE,
+                $data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE]
+            );
         }
 
-        return new ConfigData(ConfigFilePool::APP_CONFIG, 'session', $sessionData);
+        return $configData;
     }
 
     /**
@@ -134,13 +121,16 @@ class ConfigGenerator
      */
     public function createDefinitionsConfig(array $data)
     {
+        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+
         if (!empty($data[ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT])) {
-            return new ConfigData(
-                ConfigFilePool::APP_CONFIG,
-                'definition',
-                ['format' => $data[ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT]]
+            $configData->set(
+                ConfigOptionsList::CONFIG_PATH_DEFINITION_FORMAT,
+                $data[ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT]
             );
         }
+
+        return $configData;
     }
 
     /**
@@ -151,7 +141,7 @@ class ConfigGenerator
      */
     public function createDbConfig(array $data)
     {
-        $connection = [];
+        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
 
         $optional = [
             ConfigOptionsList::INPUT_KEY_DB_HOST,
@@ -162,21 +152,20 @@ class ConfigGenerator
             ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS,
         ];
 
-        foreach ($optional as $key) {
-            if (isset($data[$key])) {
-                $connection[self::$paramMap[$key]] = $data[$key];
-            }
-        }
-
-        $connection[self::$paramMap[ConfigOptionsList::INPUT_KEY_ACTIVE]] = '1';
         $prefixKey = isset($data[ConfigOptionsList::INPUT_KEY_DB_PREFIX])
             ? $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]
             : '';
-        $dbData = [
-            self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX] => $prefixKey,
-            'connection' => ['default' => $connection]
-        ];
-        return new ConfigData(ConfigFilePool::APP_CONFIG, 'db', $dbData);
+        $configData->set('db/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX], $prefixKey);
+
+        foreach ($optional as $key) {
+            if (isset($data[$key])) {
+                $configData->set('db/connection/default/' . self::$paramMap[$key], $data[$key]);
+            }
+        }
+
+        $configData->set('db/connection/default/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_ACTIVE], '1');
+
+        return $configData;
     }
 
     /**
@@ -186,7 +175,10 @@ class ConfigGenerator
      */
     public function createResourceConfig()
     {
-        $resourceData = ['default_setup' => [ConfigOptionsList::KEY_CONNECTION => 'default']];
-        return new ConfigData(ConfigFilePool::APP_CONFIG, ConfigOptionsList::KEY_RESOURCE, $resourceData);
+        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+
+        $configData->set('resource/default_setup/connection', 'default');
+
+        return $configData;
     }
 }

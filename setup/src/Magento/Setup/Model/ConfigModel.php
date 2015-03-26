@@ -107,15 +107,13 @@ class ConfigModel
                     );
                 }
 
-                if (isset($fileConfigStorage[$config->getFileKey()])
-                    && isset($fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()])
-                ) {
-                    $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()] = array_replace_recursive(
-                        $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()],
+                if (isset($fileConfigStorage[$config->getFileKey()])) {
+                    $fileConfigStorage[$config->getFileKey()] = array_replace_recursive(
+                        $fileConfigStorage[$config->getFileKey()],
                         $config->getData()
                     );
                 } else {
-                    $fileConfigStorage[$config->getFileKey()][$config->getSegmentKey()] = $config->getData();
+                    $fileConfigStorage[$config->getFileKey()] = $config->getData();
                 }
             }
 

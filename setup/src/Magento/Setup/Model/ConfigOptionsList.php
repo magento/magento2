@@ -21,6 +21,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     const CONFIG_PATH_INSTALL_DATE = 'install/date';
     const CONFIG_PATH_CRYPT_KEY = 'crypt/key';
+    const CONFIG_PATH_SESSION_SAVE = 'session/save';
+    const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
     /**#@-*/
 
     /**#@+
@@ -204,10 +206,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $configData = [];
         $configData[] = $this->configGenerator->createInstallConfig($deploymentConfig);
         $configData[] = $this->configGenerator->createCryptConfig($data, $deploymentConfig);
-        $modulesConfig = $this->configGenerator->createModuleConfig();
-        if (isset($modulesConfig)) {
-            $configData[] = $modulesConfig;
-        }
         $configData[] = $this->configGenerator->createSessionConfig($data);
         $definitionConfig = $this->configGenerator->createDefinitionsConfig($data);
         if (isset($definitionConfig)) {

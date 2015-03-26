@@ -19,31 +19,20 @@ class ConfigData
     private $fileKey;
 
     /**
-     * Segment key
-     *
-     * @var string
-     */
-    private $segmentKey;
-
-    /**
      * Data
      *
      * @var array
      */
-    private $data;
+    private $data = [];
 
     /**
      * Constructor
      *
      * @param string $fileKey
-     * @param string $segmentKey
-     * @param array $data
      */
-    public function __construct($fileKey, $segmentKey, array $data)
+    public function __construct($fileKey)
     {
         $this->fileKey = $fileKey;
-        $this->segmentKey = $segmentKey;
-        $this->data = $data;
     }
 
     /**
@@ -57,16 +46,6 @@ class ConfigData
     }
 
     /**
-     * Gets Segment Key
-     *
-     * @return string
-     */
-    public function getSegmentKey()
-    {
-        return $this->segmentKey;
-    }
-
-    /**
      * Gets Data
      *
      * @return array
@@ -74,5 +53,49 @@ class ConfigData
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Updates a value in ConfigData configuration by specified path
+     *
+     * @param string $path
+     * @param mixed $value
+     * @return void
+     */
+    public function set($path, $value)
+    {
+        $chunks = $this->expand($path);
+        $data = [];
+        $element = &$data;
+        while ($chunks) {
+            $key = array_shift($chunks);
+            if ($chunks) {
+                $element[$key] = [];
+                $element = &$element[$key];
+            } else {
+                $element[$key] = $value;
+            }
+        }
+        $this->data = array_replace_recursive($this->data, $data);
+    }
+
+    /**
+     * Expands a path into chunks
+     *
+     * All chunks must be not empty and there must be at least two.
+     *
+     * @param string $path
+     * @return string[]
+     * @throws \InvalidArgumentException
+     */
+    private function expand($path)
+    {
+        $chunks = array_pad(explode('/', $path), 2, '');
+        foreach ($chunks as $chunk) {
+            if ('' == $chunk) {
+                throw new \InvalidArgumentException("The path '$path' is invalid");
+            }
+        }
+        return $chunks;
     }
 }
