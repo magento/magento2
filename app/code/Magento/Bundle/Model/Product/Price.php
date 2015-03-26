@@ -57,6 +57,8 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         \Magento\Framework\Event\ManagerInterface $eventManager,
         PriceCurrencyInterface $priceCurrency,
         GroupManagementInterface $groupManagement,
+        \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Helper\Data $catalogData
     ) {
         $this->_catalogData = $catalogData;
@@ -67,7 +69,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             $customerSession,
             $eventManager,
             $priceCurrency,
-            $groupManagement
+            $groupManagement,
+            $groupPriceFactory,
+            $config
         );
     }
 
