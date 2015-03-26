@@ -33,6 +33,10 @@ class Validator
      * @var DirectoryHelper
      */
     protected $directoryHelper;
+
+    /**
+     * @var CountryFactory
+     */
     protected $countryFactory;
     /**
      * @param DirectoryHelper $directoryHelper
@@ -78,7 +82,7 @@ class Validator
      */
     public function validateForPayment(Address $address)
     {
-        $country = $this->countryFactory()->create()->load($address->getCountryId());
+        $country = $this->countryFactory->create()->load($address->getCountryId());
         $errors = [];
         if (!\Zend_Validate::is($address->getFirstname(), 'NotEmpty')) {
             $errors[] = __('Please enter the first name.');
