@@ -57,7 +57,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
         $command = new ConfigSetCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
         $commandTester = new CommandTester($command);
-        $commandTester->execute(['config:set']);
+        $commandTester->execute(['setup:config:set']);
         $this->assertSame(
             'No module configuration is available, so all modules are enabled.' . PHP_EOL
             . 'You saved the deployment config.' . PHP_EOL,
@@ -109,7 +109,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->add(new ConfigSetCommand($this->configModel, $this->moduleList, $this->deploymentConfig));
-        $command = $app->find('config:set');
+        $command = $app->find('setup:config:set');
         $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', [], [], '', false);
         $dialog
             ->expects($this->once())

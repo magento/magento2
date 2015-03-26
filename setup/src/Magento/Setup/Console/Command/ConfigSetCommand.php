@@ -59,7 +59,7 @@ class ConfigSetCommand extends Command
     {
         $options = $this->configModel->getAvailableOptions();
 
-        $this->setName('config:set')
+        $this->setName('setup:config:set')
             ->setDescription('Create deployment configuration')
             ->setDefinition($options);
 
