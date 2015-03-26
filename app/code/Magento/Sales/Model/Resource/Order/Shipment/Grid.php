@@ -24,33 +24,43 @@ class Grid extends AbstractGrid
     protected $shipmentTableName = 'sales_shipment';
 
     /**
-     * Refreshes (adds new) grid rows.
+     * Adds new order shipments to the grid.
      *
-     * By default if $value parameter is omitted, order shipments created/updated
-     * since the last method call will be refreshed.
+     * Only order shipments that correspond to $value and $field
+     * parameters will be added.
      *
-     * Otherwise single order shipment will be refreshed according to $value, $field
-     * parameters.
-     *
-     * @param null|int|string $value
+     * @param int|string $value
      * @param null|string $field
      * @return \Zend_Db_Statement_Interface
      */
-    public function refresh($value = null, $field = null)
+    public function refresh($value, $field = null)
     {
-        $select = $this->getGridOriginSelect();
+        $select = $this->getGridOriginSelect()
+            ->where(($field ?: 'sfs.entity_id') . ' = ?', $value);
 
-        if (!$value) {
-            $select->where(
-                ($field ?: 'sfs.created_at') . ' >= ?',
-                $this->getLastUpdatedAtValue()
-            );
-        } else {
-            $select->where(
-                ($field ?: 'sfs.entity_id') . ' = ?',
-                $value
-            );
-        }
+        return $this->getConnection()->query(
+            $this->getConnection()
+                ->insertFromSelect(
+                    $select,
+                    $this->getTable($this->gridTableName),
+                    [],
+                    AdapterInterface::INSERT_ON_DUPLICATE
+                )
+        );
+    }
+
+    /**
+     * Adds new order shipments to the grid.
+     *
+     * Only order shipments created/updated since the last method call
+     * will be added.
+     *
+     * @return \Zend_Db_Statement_Interface
+     */
+    public function refreshBySchedule()
+    {
+        $select = $this->getGridOriginSelect()
+            ->where('sfs.updated_at >= ?', $this->getLastUpdatedAtValue());
 
         return $this->getConnection()->query(
             $this->getConnection()

@@ -6,12 +6,12 @@
 namespace Magento\Sales\Model\Observer;
 
 /**
- * Sales entity grids re-indexing observer.
+ * Sales entity grids indexing observer.
  *
- * Performs handling of events and cron jobs related to re-indexing
+ * Performs handling of events and cron jobs related to indexing
  * of Order, Invoice, Shipment and Creditmemo grids.
  */
-class ReindexGrid
+class IndexGrid
 {
     /**
      * Entity grid model.
@@ -50,7 +50,7 @@ class ReindexGrid
      *  - sales_order_shipment_save_after
      *  - sales_order_creditmemo_save_after
      *
-     * Works only if synchronous grid re-indexing is enabled
+     * Works only if asynchronous grid indexing is disabled
      * in global settings.
      *
      * @param \Magento\Framework\Event\Observer $observer
@@ -58,8 +58,7 @@ class ReindexGrid
      */
     public function syncInsert(\Magento\Framework\Event\Observer $observer)
     {
-        //TODO: Replace path to real configuration path after MAGETWO-35147 is complete.
-        if (!$this->globalConfig->getValue('path/to/value/sync_grid_indexing')) {
+        if (!$this->globalConfig->getValue('dev/grid/async_indexing')) {
             $this->entityGrid->refresh($observer->getDataObject()->getId());
         }
     }
@@ -87,16 +86,19 @@ class ReindexGrid
      * Handles asynchronous insertion of the new entity into
      * corresponding grid during cron job.
      *
-     * Works only if synchronous grid re-indexing is disabled
+     * Also method is used in the next events:
+     *
+     * - config_data_dev_grid_async_indexing_disabled
+     *
+     * Works only if asynchronous grid indexing is enabled
      * in global settings.
      *
      * @return void
      */
     public function asyncInsert()
     {
-        //TODO: Replace path to real configuration path after MAGETWO-35147 is complete.
-        if (!$this->globalConfig->getValue('path/to/value/sync_grid_indexing')) {
-            $this->entityGrid->refresh();
+        if ($this->globalConfig->getValue('dev/grid/async_indexing')) {
+            $this->entityGrid->refreshBySchedule();
         }
     }
 }
