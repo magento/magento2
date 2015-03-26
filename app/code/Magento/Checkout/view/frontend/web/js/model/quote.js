@@ -27,6 +27,16 @@ define(
             getCurrencySymbol: function() {
               return currencySymbol.data;
             },
+            getItems: function() {
+                return window.cartItems;
+            },
+            getTotals: function() {
+                return {
+                    'subtotal': quoteData.subtotal,
+                    'subtotal_with_discount': quoteData.subtotal_with_discount,
+                    'grandtotal': quoteData.grandtotal
+                }
+            },
             setBillingAddress: function (address, useForShipping) {
                 billingAddress(address);
             },

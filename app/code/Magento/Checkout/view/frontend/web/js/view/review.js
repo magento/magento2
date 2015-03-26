@@ -28,7 +28,7 @@ define(
                 itemsBefore: itemsBefore,
                 itemsAfter: itemsAfter,
                 getItems: function() {
-                    return window.cartItems;
+                    return quote.getItems();
                 },
                 getAgreementsTemplate: function() {},
                 isVisible: navigator.isStepVisible(stepName),
