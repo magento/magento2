@@ -164,7 +164,7 @@ class ConfigModel
     {
         $results = $this->filePermissions->getMissingWritableDirectoriesForInstallation();
         if ($results) {
-            $errorMsg = "Missing writing permissions to the following directories: '" . implode("' '", $results) . "'";
+            $errorMsg = "Missing writing permissions to the following directories: '" . implode("', '", $results) . "'";
             throw new \Exception($errorMsg);
         }
     }

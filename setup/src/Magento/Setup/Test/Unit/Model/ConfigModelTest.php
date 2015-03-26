@@ -165,4 +165,15 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
         $this->configModel->process([]);
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Missing writing permissions to the following directories: '/a/ro/dir', '/media'
+     */
+    public function testWritePermissionErrors()
+    {
+        $this->filePermissions->expects($this->once())->method('getMissingWritableDirectoriesForInstallation')
+            ->willReturn(['/a/ro/dir', '/media']);
+        $this->configModel->process([]);
+    }
 }
