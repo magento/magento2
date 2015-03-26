@@ -55,6 +55,9 @@
         &:after {
             right: .3rem;
         }
+        &[disabled] {
+            .disabled();
+        }
         > span {
             .visually-hidden();
         }
@@ -68,5 +71,9 @@
     .action-menu-item {
         white-space: nowrap;
     }
-
+    > .admin__control-checkbox {
+        &[disabled] {
+            .disabled();
+        }
+    }
 }
