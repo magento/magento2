@@ -27,8 +27,10 @@ define([
             notice: '',
 
             listens: {
-                value: 'setPreview onUpdate',
-                hidden: 'setPreview'
+                value: 'onUpdate',
+                hidden: 'setPreview',
+                '<%= provider %>:data.reset': 'reset',
+                '<%= provider %>:data.validate': 'validate'
             },
 
             links: {
@@ -37,6 +39,10 @@ define([
 
             exports: {
                 hidden: '<%= provider %>:config.<%= name %>.hidden'
+            },
+
+            imports: {
+                setPreview: '<%= name %>:value'
             }
         },
 
@@ -52,6 +58,7 @@ define([
             this._super();
 
             this.initialValue = this.getInititalValue();
+
             this.value(this.initialValue);
 
             return this;
@@ -95,19 +102,6 @@ define([
         },
 
         /**
-         * Initializes instance's listeners.
-         *
-         * @returns {Abstract} Chainable.
-         */
-        initListeners: function () {
-            this._super();
-
-            this.source.on('reset', this.reset, this.name);
-
-            return this;
-        },
-
-        /**
          * Gets initial value of element
          *
          * @returns {*} Elements' value.
@@ -135,33 +129,6 @@ define([
         },
 
         /**
-         * Returnes unwrapped preview observable.
-         *
-         * @returns {String} Value of the preview observable.
-         */
-        getPreview: function () {
-            return this.preview();
-        },
-
-        /**
-         * Calls 'setHidden' passing true to it.
-         */
-        hide: function () {
-            this.setHidden(true);
-
-            return this;
-        },
-
-        /**
-         * Calls 'setHidden' passing false to it.
-         */
-        show: function () {
-            this.setHidden(false);
-
-            return this;
-        },
-
-        /**
          * Sets 'value' as 'hidden' propertie's value, triggers 'toggle' event,
          * sets instance's hidden identifier in params storage based on
          * 'value'.
@@ -174,6 +141,15 @@ define([
             this.trigger('toggle', isHidden);
 
             return this;
+        },
+
+        /**
+         * Returnes unwrapped preview observable.
+         *
+         * @returns {String} Value of the preview observable.
+         */
+        getPreview: function () {
+            return this.preview();
         },
 
         /**

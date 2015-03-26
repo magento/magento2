@@ -152,7 +152,7 @@
                     <item name="template" xsi:type="string">templates/layout/generic</item>
                 </item>
                 <item name="tabs" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Ui\Component\Layout\TabsEx</item>
+                    <item name="class" xsi:type="string">Magento\Ui\Component\Layout\Tabs</item>
                     <item name="template" xsi:type="string">templates/layout/tabs</item>
                 </item>
             </argument>

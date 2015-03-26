@@ -34,7 +34,7 @@ define([
             offset = getIndex(container, target);
 
             if (position.after) {
-                offset++;
+                ++offset;
             }
         }
 
@@ -58,7 +58,6 @@ define([
          */
         insert: function (elem, position) {
             reserve(this._elems, elem, position);
-
             registry.get(elem, this._insert);
 
             return this;
@@ -107,12 +106,8 @@ define([
          * @returns {Component} Chainable.
          */
         _clearData: function () {
-            var layout = this.renderer.layout;
-
-            this.source.remove('data.' + this.dataScope);
+            this.source.remove(this.dataScope);
             this.source.remove('params.' + this.name);
-
-            layout.clear(this.name);
 
             return this;
         },

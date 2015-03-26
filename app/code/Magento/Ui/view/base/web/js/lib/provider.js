@@ -17,6 +17,8 @@ define([
          */
         initialize: function (config) {
             _.extend(this.data = {}, config);
+
+            return this;
         },
 
         /**
@@ -50,9 +52,9 @@ define([
 
             return this;
         },
-        
+
         remove: function (path) {
-            this.set(path);
+            utils.nestedRemove(this.data, path);
         }
     }, EventsBus);
 

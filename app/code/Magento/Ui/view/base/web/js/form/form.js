@@ -6,7 +6,7 @@ define([
     'underscore',
     'uiComponent',
     'Magento_Ui/js/lib/spinner',
-    './form/adapter'
+    './adapter'
 ], function (_, Component, loader, adapter) {
     'use strict';
 

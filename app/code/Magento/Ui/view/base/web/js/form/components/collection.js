@@ -5,9 +5,10 @@
 define([
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/registry/registry',
-    'uiComponent'
-], function (_, utils, registry, Component) {
+    'uiRegistry',
+    'uiComponent',
+    'Magento_Ui/js/core/renderer/layout'
+], function (_, utils, registry, Component, layout) {
     'use strict';
 
     var childTemplate = {
@@ -78,11 +79,7 @@ define([
                 'new_' + this.lastIndex++ :
                 index;
 
-            this.renderer.render({
-                components: [
-                    utils.template(childTemplate, this)
-                ]
-            });
+            layout([utils.template(childTemplate, this)]);
 
             return this;
         },
@@ -155,14 +152,11 @@ define([
          *      it requires function to invoke.
          */
         removeChild: function (elem) {
-            return function () {
-                var confirmed = confirm(this.removeMessage);
+            var confirmed = confirm(this.removeMessage);
 
-                if (confirmed) {
-                    this._removeChild(elem);
-                }
-
-            }.bind(this);
+            if (confirmed) {
+                this._removeChild(elem);
+            }
         },
 
         /**

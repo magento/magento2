@@ -9,6 +9,15 @@
       xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
+            <referenceBlock name="customer_form">
+                <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View" name="customer_edit_tab_view" template="tab/view.phtml">
+                    <arguments>
+                        <argument name="tab_label" xsi:type="string">Customer View</argument>
+                        <argument name="sort_order" xsi:type="number">10</argument>
+                    </arguments>
+                    <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo" name="personal_info" template="tab/view/personal_info.phtml"/>
+                </block>
+            </referenceBlock>
             <uiComponent name="customer_form"/>
         </referenceContainer>
     </body>

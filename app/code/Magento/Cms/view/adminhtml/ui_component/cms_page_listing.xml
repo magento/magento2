@@ -48,8 +48,7 @@
                 <item name="update_url" xsi:type="string">mui/index/render</item>
             </item>
         </argument>
-    </dataSource>
-    <container name="block_listing_top">
+    </dataSource><container name="page_listing_top">
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

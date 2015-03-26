@@ -6,23 +6,21 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    './abstract'
-], function (_, utils, registry, Abstract) {
+    './abstract',
+    'Magento_Ui/js/core/renderer/layout'
+], function (_, utils, registry, Abstract, layout) {
     'use strict';
 
     var inputNode = {
-        name: '<%= $data.index %>_input',
-        type: 'form.input',
         parent: '<%= $data.parentName %>',
+        type: 'form.input',
+        name: '<%= $data.index %>_input',
         dataScope: '<%= $data.customEntry %>',
         sortOrder: {
             after: '<%= $data.name %>'
         },
-        config: {
-            displayArea: 'body',
-            hidden: false,
-            label: '<%= $data.label %>'
-        }
+        displayArea: 'body',
+        label: '<%= $data.label %>'
     };
 
     /**
@@ -171,11 +169,7 @@ define([
          * @returns {Select} Chainable.
          */
         initInput: function () {
-            this.renderer.render({
-                components: [
-                    utils.template(inputNode, this)
-                ]
-            });
+            layout([utils.template(inputNode, this)]);
 
             return this;
         },
