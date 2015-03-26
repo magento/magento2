@@ -14,7 +14,10 @@ define([
             content:        '',
             showSpinner:    false,
             loading:        false,
-            template:       'ui/content/content'
+            template:       'ui/content/content',
+            listens: {
+                loading: 'toggleLoadState'
+            }
         },
 
         /**
@@ -39,21 +42,6 @@ define([
         initObservable: function () {
             this._super()
                 .observe('content loading');
-
-            return this;
-        },
-
-        /**
-         * Calls 'initListeners' method of parent, defines instance's subscriptions
-         *
-         * @return {Object} - reference to instance
-         */
-        initListeners: function () {
-            this._super();
-
-            this.loading.subscribe(function (value) {
-                this.trigger(value ? 'loading' : 'loaded');
-            }, this);
 
             return this;
         },
@@ -93,6 +81,10 @@ define([
             if (active && this.shouldLoad()) {
                 this.loadData();
             }
+        },
+
+        toggleLoadState: function (value) {
+            this.trigger(value ? 'loading' : 'loaded');
         },
 
         /**

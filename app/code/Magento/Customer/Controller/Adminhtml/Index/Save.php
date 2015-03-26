@@ -27,7 +27,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     protected function _extractCustomerData()
     {
         $customerData = [];
-        if ($this->getRequest()->getPost('account')) {
+        if ($this->getRequest()->getPost('customer')) {
             $serviceAttributes = [
                 CustomerInterface::DEFAULT_BILLING,
                 CustomerInterface::DEFAULT_SHIPPING,
@@ -40,7 +40,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 'adminhtml_customer',
                 \Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
                 $serviceAttributes,
-                'account'
+                'customer'
             );
         }
 
@@ -113,7 +113,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         $extractedCustomerData[CustomerInterface::DEFAULT_BILLING] = null;
         $extractedCustomerData[CustomerInterface::DEFAULT_SHIPPING] = null;
         foreach ($addressIdList as $addressId) {
-            $scope = sprintf('account/customer_address/%s', $addressId);
+            $scope = sprintf('address/%s', $addressId);
             $addressData = $this->_extractData(
                 $this->getRequest(),
                 'adminhtml_customer_address',
@@ -151,9 +151,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      */
     protected function _extractCustomerAddressData(array & $extractedCustomerData)
     {
-        $addresses = $this->getRequest()->getPost('address', []);
+        $addresses = $this->getRequest()->getPost('address');
         $result = [];
-        if ($addresses) {
+        if (is_array($addresses)) {
             if (isset($addresses['_template_'])) {
                 unset($addresses['_template_']);
             }
@@ -176,8 +176,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     public function execute()
     {
         $returnToEdit = false;
-        $customerId = (int)$this->getRequest()->getParam('id');
         $originalRequestData = $this->getRequest()->getPostValue();
+        $customerId = isset($originalRequestData['customer']['entity_id'])
+            ? $originalRequestData['customer']['entity_id']
+            : null;
         if ($originalRequestData) {
             try {
                 // optional fields might be set in request for future processing by observers in other modules

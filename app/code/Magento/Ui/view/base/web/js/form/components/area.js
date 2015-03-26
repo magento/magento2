@@ -61,11 +61,11 @@ define([
          * Sets changed property to one incoming.
          * Invokes setActive method if settings
          * contain makeVisible property set to true.
-         * 
-         * @param  {Boolean} changed
+         *
+         * @param  {Boolean} hasChanged
          */
-        onChildrenUpdate: function(hasChanged){
-            if(!hasChanged){
+        onChildrenUpdate: function (hasChanged) {
+            if (!hasChanged) {
                 hasChanged = _.some(this.delegate('hasChanged'));
             }
 

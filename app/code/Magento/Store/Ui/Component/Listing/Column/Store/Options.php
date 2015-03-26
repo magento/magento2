@@ -83,7 +83,7 @@ class Options implements OptionSourceInterface
                     if (!empty($stores)) {
                         $name = $this->escaper->escapeHtml($group->getName());
                         $groups[$name]['label'] = str_repeat(' ', 4) . $name;
-                        $groups[$name]['value'] = $stores;
+                        $groups[$name]['value'] = array_values($stores);
                     }
                 }
             }

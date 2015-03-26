@@ -15,8 +15,6 @@ define([
 
         data = utils.serialize(data);
 
-        console.log(data);
-
         data.form_key = FORM_KEY;
 
         if (!url) {
