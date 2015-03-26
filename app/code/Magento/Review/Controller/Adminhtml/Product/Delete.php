@@ -9,17 +9,12 @@ namespace Magento\Review\Controller\Adminhtml\Product;
 class Delete extends \Magento\Review\Controller\Adminhtml\Product
 {
     /**
-     * @var int
-     */
-    protected $reviewId;
-
-    /**
      * @return void
      */
     public function execute()
     {
-        $this->reviewId = $this->getRequest()->getParam('id', false);
-        $this->_reviewFactory->create()->setId($this->reviewId)->aggregate()->delete();
+        $reviewId = $this->getRequest()->getParam('id', false);
+        $this->_reviewFactory->create()->setId($reviewId)->aggregate()->delete();
 
         $this->messageManager->addSuccess(__('The review has been deleted.'));
         if ($this->getRequest()->getParam('ret') == 'pending') {
@@ -27,7 +22,6 @@ class Delete extends \Magento\Review\Controller\Adminhtml\Product
         } else {
             $this->getResponse()->setRedirect($this->getUrl('review/*/'));
         }
-        return;
     }
 
     /**
@@ -38,6 +32,6 @@ class Delete extends \Magento\Review\Controller\Adminhtml\Product
     public function getDefaultRedirect()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setPath('review/*/edit/', ['id' => $this->reviewId]);
+        return $resultRedirect->setPath('review/*/edit/', ['id' => $this->getRequest()->getParam('id', false)]);
     }
 }
