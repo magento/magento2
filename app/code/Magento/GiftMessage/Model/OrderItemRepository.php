@@ -112,7 +112,7 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
         if ($order->getIsVirtual()) {
             throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
         }
-        if (!$this->helper->getIsMessagesAllowed('order_item', $orderItemId, $this->storeManager->getStore())) {
+        if (!$this->helper->getIsMessagesAllowed('order_item', $orderItem, $this->storeManager->getStore())) {
             throw new CouldNotSaveException(__('Gift Message is not available'));
         }
 

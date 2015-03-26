@@ -22,6 +22,8 @@ class OrderGet
     protected $orderItemExtensionFactory;
 
     /**
+     * Init plugin
+     *
      * @param \Magento\GiftMessage\Api\OrderRepositoryInterface $giftMessageOrderRepository
      * @param \Magento\GiftMessage\Api\OrderItemRepositoryInterface $giftMessageOrderItemRepository
      * @param \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory
@@ -41,6 +43,8 @@ class OrderGet
     }
 
     /**
+     * Get gift message
+     *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $subject
      * @param callable $proceed
      * @param int $orderId
@@ -54,6 +58,10 @@ class OrderGet
     ) {
         /** @var \Magento\Sales\Api\Data\OrderInterface $resultOrder */
         $resultOrder = $proceed($orderId);
+
+        if ($resultOrder->getExtensionAttributes() && $resultOrder->getExtensionAttributes()->getGiftMessage()) {
+            return $resultOrder;
+        }
 
         $resultOrder = $this->getOrderGiftMessage($resultOrder);
         $resultOrder = $this->getOrderItemGiftMessage($resultOrder);
