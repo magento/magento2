@@ -8,6 +8,7 @@ namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Backend\App\Action;
+use Magento\Framework\View\Result\LayoutFactory;
 
 class AddComment extends \Magento\Backend\App\Action
 {
@@ -22,17 +23,25 @@ class AddComment extends \Magento\Backend\App\Action
     protected $shipmentSender;
 
     /**
+     * @var LayoutFactory
+     */
+    protected $resultLayoutFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param ShipmentSender $shipmentSender
+     * @param LayoutFactory $resultLayoutFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        ShipmentSender $shipmentSender
+        ShipmentSender $shipmentSender,
+        LayoutFactory $resultLayoutFactory
     ) {
         $this->shipmentLoader = $shipmentLoader;
         $this->shipmentSender = $shipmentSender;
+        $this->resultLayoutFactory = $resultLayoutFactory;
         parent::__construct($context);
     }
 
@@ -72,10 +81,9 @@ class AddComment extends \Magento\Backend\App\Action
 
             $this->shipmentSender->send($shipment, !empty($data['is_customer_notified']), $data['comment']);
             $shipment->save();
-
-            $this->_view->loadLayout(false);
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Shipments'));
-            $response = $this->_view->getLayout()->getBlock('shipment_comments')->toHtml();
+            $resultLayout = $this->resultLayoutFactory->create();
+            $resultLayout->addDefaultHandle();
+            $response = $resultLayout->getLayout()->getBlock('shipment_comments')->toHtml();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
