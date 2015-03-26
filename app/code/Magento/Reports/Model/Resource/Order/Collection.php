@@ -71,7 +71,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory
      * @param \Magento\Framework\DB\Helper $coreResourceHelper
-     * @param null $connection
+     * @param string | null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
