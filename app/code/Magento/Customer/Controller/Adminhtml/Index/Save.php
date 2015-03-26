@@ -151,8 +151,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
      */
     protected function _extractCustomerAddressData(array & $extractedCustomerData)
     {
-        $customerData = $this->getRequest()->getPost('account');
-        $addresses = isset($customerData['customer_address']) ? $customerData['customer_address'] : [];
+        $addresses = $this->getRequest()->getPost('address', []);
         $result = [];
         if ($addresses) {
             if (isset($addresses['_template_'])) {

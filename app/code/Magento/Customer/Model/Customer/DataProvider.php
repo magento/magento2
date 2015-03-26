@@ -102,6 +102,7 @@ class DataProvider implements DataProviderInterface
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
         $this->collection = $customerCollectionFactory->create();
+        $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->meta = $meta;
         $this->meta['customer']['fields'] = $this->getAttributesMeta(
@@ -197,7 +198,6 @@ class DataProvider implements DataProviderInterface
         $items = $this->collection->getItems();
         /** @var Customer $customer */
         foreach ($items as $customer) {
-            $customer->load($customer->getId());
             $result['customer'] = $customer->getData();
 
             $addresses = [];
