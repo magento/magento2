@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model\Observer;
 
 use Magento\Sales\Setup\SalesSetup;
+use Magento\SalesSequence\Model\Config;
 use Magento\SalesSequence\Model\Sequence\SequenceBuilder;
 use Magento\Framework\Event\Observer;
 
@@ -25,17 +26,25 @@ class CreateSequence
     private $salesSetup;
 
     /**
+     * @var Config
+     */
+    private $sequenceConfig;
+
+    /**
      * Initialization
      *
      * @param SequenceBuilder $sequenceBuilder
      * @param SalesSetup $salesSetup
+     * @param Config $sequenceConfig
      */
     public function __construct(
         SequenceBuilder $sequenceBuilder,
-        SalesSetup $salesSetup
+        SalesSetup $salesSetup,
+        Config $sequenceConfig
     ) {
         $this->sequenceBuilder = $sequenceBuilder;
         $this->salesSetup = $salesSetup;
+        $this->sequenceConfig = $sequenceConfig;
     }
 
     /**
@@ -47,13 +56,13 @@ class CreateSequence
         $storeId = $observer->getData('store')->getId();
         $defaultEntities = array_keys($this->salesSetup->getDefaultEntities());
         foreach ($defaultEntities as $entityType) {
-            $this->sequenceBuilder->setPrefix('')
-                ->setSuffix('')
-                ->setStartValue(1)
+            $this->sequenceBuilder->setPrefix($this->sequenceConfig->get('prefix'))
+                ->setSuffix($this->sequenceConfig->get('suffix'))
+                ->setStartValue($this->sequenceConfig->get('startValue'))
                 ->setStoreId($storeId)
-                ->setStep(1)
-                ->setWarningValue(SequenceBuilder::SEQUENCE_UNSIGNED_INT_WARNING_VALUE)
-                ->setMaxValue(SequenceBuilder::MYSQL_MAX_UNSIGNED_INT)
+                ->setStep($this->sequenceConfig->get('step'))
+                ->setWarningValue($this->sequenceConfig->get('warningValue'))
+                ->setMaxValue($this->sequenceConfig->get('maxValue'))
                 ->setEntityType($entityType)->create();
         }
         return $this;
