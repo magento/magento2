@@ -27,7 +27,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
-     * @param null $connection
+     * @param string|null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      * @throws \Zend_Exception
      */
