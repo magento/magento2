@@ -78,8 +78,8 @@
                 <?php $_items = $block->getRecentItems() ?>
                 <?php if (count($_items)): ?>
                     <strong class="subtitle"><?php echo __('Recently added item(s)') ?></strong>
-                    <div id="mini-cart" data-action="scroll" class="minicart-items-wrapper">
-                        <ol class="minicart-items">
+                    <div data-action="scroll" class="minicart-items-wrapper">
+                        <ol id="mini-cart" class="minicart-items">
                             <?php foreach ($_items as $_item): ?>
                             <?php echo $block->getItemHtml($_item) ?>
                             <?php endforeach; ?>
@@ -103,8 +103,7 @@
                         </div>
                     </div>
                 <?php endif ?>
-
-                <div id="minicart-widgets">
+                <div id="minicart-widgets" class="minicart-widgets">
                     <?php echo $block->getChildHtml('cart_promotion') ?>
                 </div>
             </div>
@@ -127,3 +126,5 @@
     }
     </script>
 </div>
+
+
