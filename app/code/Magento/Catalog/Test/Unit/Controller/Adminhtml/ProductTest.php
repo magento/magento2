@@ -93,7 +93,7 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
         $this->context->expects($this->any())->method('getHelper')->will($this->returnValue($helperDataMock));
 
-        foreach($additionalParams as $property => $object) {
+        foreach ($additionalParams as $property => $object) {
             $this->context->expects($this->any())->method('get' . ucfirst($property))->willReturn($object);
         }
 

@@ -7,6 +7,9 @@ namespace Magento\Theme\Block\Html;
 
 use Magento\Framework\View\Block\IdentityInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\Data\TreeFactory;
+use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\Data\Tree\NodeFactory;
 
 /**
  * Html page top menu block
@@ -28,13 +31,32 @@ class Topmenu extends Template implements IdentityInterface
     protected $_menu;
 
     /**
-     * Init top menu tree structure
+     * Core registry
      *
-     * @return void
+     * @var Registry
      */
-    public function _construct()
-    {
-        $this->_menu = new \Magento\Framework\Data\Tree\Node([], 'root', new \Magento\Framework\Data\Tree());
+    protected $registry;
+
+    /**
+     * @param Template\Context $context
+     * @param NodeFactory $nodeFactory
+     * @param TreeFactory $treeFactory
+     * @param array $data
+     */
+    public function __construct(
+        Template\Context $context,
+        NodeFactory $nodeFactory,
+        TreeFactory $treeFactory,
+        array $data = []
+    ) {
+        parent::__construct($context, $data);
+        $this->_menu = $nodeFactory->create(
+            [
+                'data' => [],
+                'idField' => 'root',
+                'tree' => $treeFactory->create()
+            ]
+        );
     }
 
     /**
@@ -272,6 +294,8 @@ class Topmenu extends Template implements IdentityInterface
 
         if ($item->getIsActive()) {
             $classes[] = 'active';
+        } elseif ($item->getHasActive()) {
+            $classes[] = 'has-active';
         }
 
         if ($item->getIsLast()) {
