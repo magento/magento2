@@ -12,6 +12,7 @@
             <module name="Magento_Catalog"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Payment"/>
+            <module name="Magento_Sequence"/>
         </sequence>
     </module>
 </config>
