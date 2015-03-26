@@ -205,6 +205,9 @@ class DataProvider implements DataProviderInterface
             foreach ($customer->getAddresses() as $address) {
                 $address->load($address->getId());
                 $addresses[$address->getId()] = $address->getData();
+                if (isset($addresses[$address->getId()]['street'])) {
+                    $addresses[$address->getId()]['street'] = (array) $addresses[$address->getId()]['street'];
+                }
             }
             if (!empty($addresses)) {
                 $result['address'] = $addresses;
