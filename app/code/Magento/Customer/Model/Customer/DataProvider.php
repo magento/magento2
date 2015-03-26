@@ -206,7 +206,9 @@ class DataProvider implements DataProviderInterface
                 $address->load($address->getId());
                 $addresses[$address->getId()] = $address->getData();
             }
-            $result['address'] = $addresses;
+            if (!empty($addresses)) {
+                $result['address'] = $addresses;
+            }
 
             $this->loadedData[$customer->getId()] = $result;
         }
