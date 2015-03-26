@@ -119,6 +119,7 @@ class Customer extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**
      * Export process.
      *
+     * @api
      * @return string
      */
     public function export()
