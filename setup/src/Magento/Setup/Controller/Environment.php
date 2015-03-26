@@ -191,9 +191,19 @@ class Environment extends AbstractActionController
             $error = true;
         }
 
+        $message = sprintf(
+            'Your PHP Version is %s, but always_populate_raw_post_data = %d.
+            $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
+            Please open your php.ini file and set always_populate_raw_post_data to -1.
+            If you need more help please call your hosting provider.
+            ',
+            PHP_VERSION,
+            ini_get('always_populate_raw_post_data')
+        );
+
         $data['rawpost'] = [
-            'version' => PHP_VERSION,
-            'ini' => ini_get('always_populate_raw_post_data'),
+            'message' => $message,
+            'helpUrl' => 'http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data',
             'error' => $error
         ];
 
@@ -216,12 +226,18 @@ class Environment extends AbstractActionController
             $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
 
             if ($minimumRequiredXDebugNestedLevel > $currentXDebugNestingLevel) {
-                $error = true;
+                $error = false;
             }
 
+            $message = sprintf(
+                'Magento2 requires xdebug.max_nesting_level to be set %d or more,
+                        but it set xdebug.max_nesting_level=%d.',
+                $minimumRequiredXDebugNestedLevel,
+                $currentXDebugNestingLevel
+            );
+
             $data['xdebug_max_nesting_level'] = [
-                'currentLevel' => $currentXDebugNestingLevel,
-                'requiredLevel' => $minimumRequiredXDebugNestedLevel,
+                'message' => $message,
                 'error' => $error
             ];
         }

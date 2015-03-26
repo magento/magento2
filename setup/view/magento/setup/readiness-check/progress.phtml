@@ -112,37 +112,17 @@
             <span class="readiness-check-icon icon-failed-round"></span>
             <h3 class="readiness-check-title">PHP Settings Check</h3>
 
-            <div ng-show="settings.data.rawpost.error">
-                <div class="rediness-check-side">
+            <div ng-repeat="setting in settings.data">
+                <div ng-show="setting.error && setting.helpUrl" class="rediness-check-side">
                     <p class="side-title">Need Help?</p>
-                    <a href="http://php.net/manual/en/ini.core.php#ini.always-populate-settings-data" target="_blank">PHP Documentation</a>
+                    <a href="{{setting.helpUrl}}" target="_blank">PHP Documentation</a>
                 </div>
-                <div class="readiness-check-content">
-
+                <div ng-show="setting.error" class="readiness-check-content">
                     <p>
-                        Your PHP Version is {{settings.data.rawpost.version}}, but always_populate_raw_post_data = {{settings.data.rawpost.ini}}.
-                        <a href="#php-settings" ng-click="updateOnExpand(settings)">
-                            <span ng-hide="settings.expanded">Show detail</span>
-                            <span ng-show="settings.expanded">Hide detail</span>
-                        </a>
-                    </p>
-                    <p ng-show="settings.expanded">
-                        $HTTP_RAW_POST_DATA is deprecated from PHP 5.6 onwards and will stop the installer from running.
-                        Please open your php.ini file and set always_populate_raw_post_data to -1.
-                    </p>
-                    <p ng-show="settings.expanded">If you need more help please call your hosting provider.</p>
-                </div>
-            </div>
-
-            <div ng-show="settings.data.xdebug_max_nesting_level.error">
-                <div class="readiness-check-content">
-                    <p>
-                        Magento2 requires xdebug.max_nesting_level to be set {{settings.data.xdebug_max_nesting_level.requiredLevel}} or more,
-                        but it set xdebug.max_nesting_level={{settings.data.xdebug_max_nesting_level.currentLevel}}.
+                        {{setting.message}}
                     </p>
                 </div>
             </div>
-
         </div>
 
     </div>
