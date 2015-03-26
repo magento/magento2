@@ -97,7 +97,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $table = $setup->getTable($table);
 
                 $setup->getConnection()
-                    ->modifyColumn($table, 'updated_at',
+                    ->modifyColumn(
+                        $table,
+                        'updated_at',
                         [
                             'type' => Table::TYPE_TIMESTAMP,
                             'default' => Table::TIMESTAMP_INIT_UPDATE
