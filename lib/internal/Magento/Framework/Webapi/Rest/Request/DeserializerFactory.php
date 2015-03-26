@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Webapi\Rest\Request;
 
+use Magento\Framework\Phrase;
+
 class DeserializerFactory
 {
     /**
