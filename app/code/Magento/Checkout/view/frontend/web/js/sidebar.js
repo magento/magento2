@@ -14,15 +14,15 @@ define([
         options: {
             isRecursive: true,
             maxItemsVisible: 3,
-            selectorItem: '#mini-cart > li.product-item',
-            selectorItemQty: ':input.item-qty',
-            selectorItemButton: ':button.item-update',
+            selectorItemQty: ':input.cart-item-qty',
+            selectorItemButton: ':button.update-cart-item',
             selectorSummaryQty: 'div.content > div.items-total',
             selectorSubtotal: 'div.content > div.subtotal > div.amount span.price',
             selectorShowcartNumber: 'a.showcart > span.counter > span.counter-number',
             selectorShowcartLabel: 'a.showcart > span.counter > span.counter-label',
             selectorList: '#mini-cart'
         },
+        scrollHeight: 0,
 
         _create: function() {
             var self = this;
@@ -61,11 +61,39 @@ define([
             });
 
             this._calcHeight();
+            this._isOverflowed();
+        },
+
+        _isOverflowed: function() {
+            var list = $(this.options.selectorList);
+            if (this.scrollHeight > list.innerHeight()) {
+                list.parent().addClass('overflowed');
+            } else {
+                list.parent().removeClass('overflowed');
+            }
         },
 
         _showButton: function(elem) {
             var itemId = elem.data('cart-item');
-            $('#update-cart-item-' + itemId).show('fade', 300);
+            var itemQty = elem.data('item-qty');
+            if (this._isValidQty(itemQty, elem.val())) {
+                $('#update-cart-item-' + itemId).show('fade', 300);
+            } else {
+                this._hideButton(elem);
+            }
+        },
+
+        /**
+         * @param origin - origin qty. 'data-item-qty' attribute.
+         * @param changed - new qty.
+         * @returns {boolean}
+         * @private
+         */
+        _isValidQty: function(origin, changed) {
+            return (origin != changed)
+                && (changed.length > 0)
+                && (changed - 0 == changed)
+                && (changed - 0 > 0);
         },
 
         _hideButton: function(elem) {
@@ -84,6 +112,7 @@ define([
 
         _updateQtyAfter: function(elem, response) {
             if ($.type(response.data) === 'object') {
+                this._refreshItemQty(elem, response.data.summary_qty);
                 this._refreshSummaryQty(response.data.summary_qty, response.data.summary_text);
                 this._refreshSubtotal(response.data.subtotal);
                 this._refreshShowcartCounter(response.data.summary_qty, response.data.summary_text);
@@ -104,14 +133,15 @@ define([
                 this._refreshSubtotal(response.data.subtotal);
                 this._refreshShowcartCounter(response.data.summary_qty, response.data.summary_text);
             }
-            elem.parents(this.options.selectorItem).remove();
+            elem.closest('li').remove();
             this._calcHeight();
+            this._isOverflowed();
         },
 
         /**
          * @param url - ajax url
          * @param data - post data for ajax call
-         * @param elem - element
+         * @param elem - element that initiated the event
          * @param callback - callback method to execute after AJAX success
          */
         _ajax: function(url, data, elem, callback) {
@@ -120,7 +150,13 @@ define([
                 data: data,
                 type: 'post',
                 dataType: 'json',
-                context: this
+                context: this,
+                beforeSend: function() {
+                    elem.attr('disabled', 'disabled');
+                },
+                complete: function() {
+                    elem.attr('disabled', null);
+                }
             })
                 .done(function(response) {
                     if (response.success) {
@@ -134,41 +170,61 @@ define([
                 })
                 .fail(function(error) {
                     console.log(JSON.stringify(error));
-            });
+                });
         },
 
         _refreshSummaryQty: function(qty, text) {
             if (qty != undefined && text != undefined) {
-                $(this.options.selectorSummaryQty).text(qty + text);
+                var self = this;
+                $(this.options.selectorSummaryQty).fadeOut('slow', function() {
+                    $(self.options.selectorSummaryQty).text(qty + text);
+                }).fadeIn();
+            }
+        },
+
+        _refreshItemQty: function(elem, qty) {
+            if (qty != undefined) {
+                var itemId = elem.data('cart-item');
+                $('#cart-item-' + itemId + '-qty').data('item-qty', qty);
             }
         },
 
         _refreshSubtotal: function(val) {
             if (val != undefined) {
-                $(this.options.selectorSubtotal).replaceWith(val);
+                var self = this;
+                $(this.options.selectorSubtotal).fadeOut('slow', function() {
+                    $(self.options.selectorSubtotal).replaceWith(val);
+                }).fadeIn();
             }
         },
 
         _refreshShowcartCounter: function(qty, text) {
             if (qty != undefined && text != undefined) {
-                $(this.options.selectorShowcartNumber).text(qty);
-                $(this.options.selectorShowcartLabel).text(text);
+                var self = this;
+                $(this.options.selectorShowcartNumber).fadeOut('slow', function() {
+                    $(self.options.selectorShowcartNumber).text(qty);
+                }).fadeIn();
+                $(this.options.selectorShowcartLabel).fadeOut('slow', function() {
+                    $(self.options.selectorShowcartLabel).text(text);
+                }).fadeIn();
             }
         },
 
         _calcHeight: function() {
-            var height = 0,
+            var self = this,
+                height = 0,
                 counter = this.options.maxItemsVisible,
                 target = $(this.options.selectorList)
                     .clone()
                     .attr('style', 'position: absolute !important; top: -10000 !important;')
                     .appendTo('body');
 
+            this.scrollHeight = 0;
             target.children().each(function() {
-                if (counter-- == 0) {
-                    return false;
+                if (counter-- > 0) {
+                    height += $(this).height() - 15;
                 }
-                height += $(this).height() - 15;    // Fix height for each item!
+                self.scrollHeight += $(this).height() - 15;
             });
 
             target.remove();
