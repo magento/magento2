@@ -15,7 +15,6 @@
             <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
             <data name="shipping/shipping_service" xsi:type="string">United Parcel Service</data>
             <data name="shipping/shipping_method" xsi:type="string">UPS Ground</data>
-            <data name="cart/data/shipping_service" xsi:type="string">United Parcel Service</data>
             <data name="cart/data/shipping_method" xsi:type="string">UPS Ground</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, ups, shipping_origin_US_CA</data>
@@ -32,7 +31,6 @@
             <data name="billingAddress/dataSet" xsi:type="string">customer_UK</data>
             <data name="shipping/shipping_service" xsi:type="string">United Parcel Service</data>
             <data name="shipping/shipping_method" xsi:type="string">UPS Worldwide Expedited</data>
-            <data name="cart/data/shipping_service" xsi:type="string">United Parcel Service</data>
             <data name="cart/data/shipping_method" xsi:type="string">UPS Worldwide Expedited</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, ups, shipping_origin_US_CA</data>

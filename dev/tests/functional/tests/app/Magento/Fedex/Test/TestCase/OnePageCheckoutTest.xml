@@ -15,7 +15,6 @@
             <data name="billingAddress/dataSet" xsi:type="string">customer_UK</data>
             <data name="shipping/shipping_service" xsi:type="string">Federal Express</data>
             <data name="shipping/shipping_method" xsi:type="string">International Economy</data>
-            <data name="cart/data/shipping_service" xsi:type="string">Federal Express</data>
             <data name="cart/data/shipping_method" xsi:type="string">International Economy</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, fedex, shipping_origin_US_CA</data>
@@ -32,7 +31,6 @@
             <data name="billingAddress/dataSet" xsi:type="string">customer_DE</data>
             <data name="shipping/shipping_service" xsi:type="string">Federal Express</data>
             <data name="shipping/shipping_method" xsi:type="string">Ground</data>
-            <data name="cart/data/shipping_service" xsi:type="string">Federal Express</data>
             <data name="cart/data/shipping_method" xsi:type="string">Ground</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, fedex, shipping_origin_US_CA</data>
