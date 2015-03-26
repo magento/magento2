@@ -133,7 +133,7 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * self::setOrder() alias
+     * Add ORDER BY to the end or to the beginning
      *
      * @param string $field
      * @param string $direction

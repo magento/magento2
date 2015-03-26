@@ -44,13 +44,6 @@ interface DataProviderInterface
     public function getFieldsMetaInfo($fieldSetName);
 
     /**
-     * Get data
-     *
-     * @return mixed
-     */
-    public function getData();
-
-    /**
      * Get primary field name
      *
      * @return string
@@ -63,6 +56,13 @@ interface DataProviderInterface
      * @return string
      */
     public function getRequestFieldName();
+
+    /**
+     * Get data
+     *
+     * @return mixed
+     */
+    public function getData();
 
     /**
      * Add field to select
@@ -83,7 +83,7 @@ interface DataProviderInterface
     public function addFilter($field, $condition = null);
 
     /**
-     * self::setOrder() alias
+     * Add ORDER BY to the end or to the beginning
      *
      * @param string $field
      * @param string $direction
