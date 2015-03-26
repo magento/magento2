@@ -6,11 +6,10 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Console\Command\ConfigSetCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Console\Application;
 
 class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,11 +17,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigModel
      */
     private $configModel;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject| ConfigFilePool
-     */
-    private $configFilePool;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList
@@ -35,80 +29,102 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InputInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
      */
-    private $input;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OutputInterface
-     */
-    private $output;
+    private $option;
 
     public function setUp()
     {
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
-        $this->configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
         $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->input = $this->getMock('Symfony\Component\Console\Input\InputInterface', [], [], '', false);
-        $this->output = $this->getMock('Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
+        $this->deploymentConfig
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue('localhost'));
+        $this->option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
     }
 
-    public function testInitialize()
+    public function testExecuteNoInteractive()
     {
-        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $optionsSet = [
-            $option
+            $this->option
         ];
-        $this->input->expects($this->once())->method('getOptions')->will($this->returnValue([]));
-
-        $this->moduleList->expects($this->once())->method('isModuleInfoAvailable')->will($this->returnValue(false));
-
-        $this->configModel->expects($this->once())
-            ->method('validate')
-            ->will($this->returnValue([]));
         $this->configModel
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getAvailableOptions')
             ->will($this->returnValue($optionsSet));
 
-        $this->output->expects($this->once())
-            ->method('writeln')
-            ->with('<info>No module configuration is available, so all modules are enabled.</info>');
-        $this->deploymentConfig->expects($this->any())->method('isAvailable')->willReturn(false);
-
         $command = new ConfigSetCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
-        $command->initialize($this->input, $this->output);
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(['config:set']);
+        $this->assertSame(
+            'No module configuration is available, so all modules are enabled.' . PHP_EOL
+            . 'You saved the deployment config.' . PHP_EOL,
+            $commandTester->getDisplay()
+        );
+    }
+
+    public function testExecuteInteractiveWithYes()
+    {
+        $this->option
+            ->expects($this->exactly(7))
+            ->method('getName')
+            ->will($this->returnValue('db_host'));
+        $optionsSet = [
+            $this->option
+        ];
+        $this->configModel
+            ->expects($this->exactly(2))
+            ->method('getAvailableOptions')
+            ->will($this->returnValue($optionsSet));
+
+        $this->checkInteraction(true);
+    }
+
+    public function testExecuteInteractiveWithNo()
+    {
+        $this->option
+            ->expects($this->exactly(8))
+            ->method('getName')
+            ->will($this->returnValue('db_host'));
+        $optionsSet = [
+            $this->option
+        ];
+        $this->configModel
+            ->expects($this->exactly(2))
+            ->method('getAvailableOptions')
+            ->will($this->returnValue($optionsSet));
+
+        $this->checkInteraction(false);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Parameters validation is failed
+     * Checks interaction with users on CLI
+     *
+     * @param bool $interactionType
+     * @return void
      */
-    public function testInitializeFailedValidation()
+    private function checkInteraction($interactionType)
     {
-        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $optionsSet = [
-            $option
-        ];
-
-        $this->input->expects($this->once())->method('getOptions')->will($this->returnValue([]));
-
-        $this->moduleList->expects($this->once())->method('isModuleInfoAvailable')->will($this->returnValue(true));
-
-        $this->configModel->expects($this->once())
-            ->method('validate')
-            ->will($this->returnValue(['Error message']));
-
-        $this->output->expects($this->once())->method('writeln')->with('<error>Error message</error>');
-
-        $this->configModel
+        $app = new Application();
+        $app->add(new ConfigSetCommand($this->configModel, $this->moduleList, $this->deploymentConfig));
+        $command = $app->find('config:set');
+        $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', [], [], '', false);
+        $dialog
             ->expects($this->once())
-            ->method('getAvailableOptions')
-            ->will($this->returnValue($optionsSet));
-        $this->deploymentConfig->expects($this->any())->method('isAvailable')->willReturn(false);
-
-        $command = new ConfigSetCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
-        $command->initialize($this->input, $this->output);
+            ->method('askConfirmation')
+            ->will($this->returnValue($interactionType));
+        $command->getHelperSet()->set($dialog, 'dialog');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(
+            ['command' => $command->getName(), '--db_host' => 'host'],
+            ['interactive']
+        );
+        $this->assertSame(
+            'No module configuration is available, so all modules are enabled.' . PHP_EOL
+            . 'You saved the deployment config.' . PHP_EOL,
+            $commandTester->getDisplay()
+        );
     }
 }

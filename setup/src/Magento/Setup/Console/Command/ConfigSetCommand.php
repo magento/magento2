@@ -74,7 +74,7 @@ class ConfigSetCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $inputOptions = $input->getOptions();
         $optionCollection = $this->configModel->getAvailableOptions();
@@ -103,7 +103,7 @@ class ConfigSetCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function initialize(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output)
     {
         if (!$this->moduleList->isModuleInfoAvailable()) {
             $output->writeln(
