@@ -11,7 +11,7 @@ use Magento\SalesSequence\Model\Sequence\SequenceBuilder;
 /**
  * Class Observer
  */
-class Observer
+class CreateSequence
 {
     /**
      * @var SequenceBuilder
