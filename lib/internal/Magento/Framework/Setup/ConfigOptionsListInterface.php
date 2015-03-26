@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
+
 use Magento\Framework\App\DeploymentConfig;
 
 /**

@@ -74,7 +74,7 @@ class ConfigSetCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $inputOptions = $input->getOptions();
         $optionCollection = $this->configModel->getAvailableOptions();
@@ -90,7 +90,8 @@ class ConfigSetCommand extends Command
                 }
             }
         }
-        $inputOptions = array_filter($inputOptions,
+        $inputOptions = array_filter(
+            $inputOptions,
             function ($value) {
                 return $value !== null;
             }

@@ -36,6 +36,7 @@ class FlagConfigOption extends AbstractConfigOption
             $configPath,
             $description,
             null,
-            $shortCut);
+            $shortCut
+        );
     }
 }
