@@ -14,6 +14,17 @@ define([
             sortable: false
         },
 
+        getClickUrl: function (row) {
+            var field = row[this.actionField],
+                action = field && field[this.clickAction];
+
+            return action ? action.href : '';
+        },
+
+        isClickable: function (row) {
+            return !!this.getClickUrl(row);
+        },
+
         redirect: function (url) {
             window.location.href = url;
         },

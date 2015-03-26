@@ -245,8 +245,10 @@
     <columns name="cms_page_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="action_field" xsi:type="string">actions</item>
-                <item name="click_action" xsi:type="string">edit</item>
+                <item name="childDefaults" xsi:type="array">
+                    <item name="actionField" xsi:type="string">actions</item>
+                    <item name="clickAction" xsi:type="string">edit</item>
+                </item>
             </item>
         </argument>
         <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">

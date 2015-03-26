@@ -175,7 +175,6 @@
                             <item name="label" xsi:type="string" translate="true">Delete</item>
                             <item name="url" xsi:type="string">cms/block/massDelete</item>
                         </item>
-                        <item name="indexField" xsi:type="string">block_id</item>
                     </item>
                     <item name="indexField" xsi:type="string">block_id</item>
                 </item>
@@ -208,8 +207,10 @@
     <columns name="cms_block_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="action_field" xsi:type="string">actions</item>
-                <item name="click_action" xsi:type="string">edit</item>
+                <item name="childDefaults" xsi:type="array">
+                    <item name="actionField" xsi:type="string">actions</item>
+                    <item name="clickAction" xsi:type="string">edit</item>
+                </item>
             </item>
         </argument>
         <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
@@ -242,7 +243,6 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Title</item>
                 </item>
@@ -255,7 +255,6 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Identifier</item>
                 </item>
@@ -291,7 +290,6 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">select</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
                 </item>

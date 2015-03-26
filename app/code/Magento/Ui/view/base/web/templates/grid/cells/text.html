@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<!-- ko if: $parents[1].isClickable(row) -->
-<td data-bind="click: redirect.bind($data, $parents[1].getClickUrl(row)), html: getLabel(row[field.index])">
+<!-- ko if: isClickable(row) -->
+<td data-bind="click: redirect.bind($data, getClickUrl(row)), html: getLabel(row[field.index])">
 </td>
 <!-- /ko -->
-<!-- ko ifnot: $parents[1].isClickable(row) -->
+<!-- ko ifnot: isClickable(row) -->
 <td data-bind="html: getLabel(row[field.index])">
 </td>
 <!-- /ko -->
