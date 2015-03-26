@@ -127,7 +127,8 @@ class Fieldset extends AbstractComponent
     protected function updateField(array $fieldData, UiComponentInterface $component)
     {
         $config = $component->getData('config');
-        $config = array_replace_recursive($config, $fieldData);
+        // XML data configuration override configuration coming from the DB
+        $config = array_replace_recursive($fieldData, $config);
         $config = $this->updateDataScope($config, $component->getName());
         $component->setData('config', $config);
     }

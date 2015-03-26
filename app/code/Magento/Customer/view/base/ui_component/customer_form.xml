@@ -84,6 +84,15 @@
                 </item>
             </argument>
         </field>
+        <field name="created_in">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">customer</item>
+                </item>
+            </argument>
+        </field>
         <field name="default_billing">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -123,6 +132,7 @@
         <field name="prefix">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">customer</item>
@@ -178,6 +188,7 @@
         <field name="middlename">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">customer</item>
@@ -199,6 +210,7 @@
         <field name="suffix">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">customer</item>
@@ -224,15 +236,20 @@
         <field name="dob">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">date</item>
                     <item name="source" xsi:type="string">customer</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="validate-date" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
         </field>
         <field name="taxvat">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">customer</item>
@@ -242,6 +259,7 @@
         <field name="gender">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">customer</item>
@@ -290,6 +308,7 @@
         <field name="prefix">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">address</item>
@@ -311,6 +330,7 @@
         <field name="middlename">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">address</item>
@@ -332,9 +352,11 @@
         <field name="suffix">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">address</item>
+                    <item name="sortOrder" xsi:type="string">43</item>
                 </item>
             </argument>
         </field>
@@ -344,22 +366,50 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">address</item>
+                    <item name="sortOrder" xsi:type="string">44</item>
                 </item>
             </argument>
         </field>
-        <field name="street">
+        <container name="container_address">
             <argument name="data" xsi:type="array">
-                <item name="size" xsi:type="number">2</item>
+                <item name="type" xsi:type="string">group</item>
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                </item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">input</item>
-                    <item name="source" xsi:type="string">address</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
+                    <item name="label" xsi:type="string" translate="true">Street Address</item>
+                    <item name="required" xsi:type="boolean">true</item>
+                    <item name="dataScope" xsi:type="string">street</item>
+                    <item name="sortOrder" xsi:type="string">45</item>
                 </item>
             </argument>
-        </field>
+            <field name="street">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">1</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="source" xsi:type="string">address</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="street_second">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">2</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="source" xsi:type="string">address</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+        </container>
         <field name="city">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -381,6 +431,28 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
+                </item>
+            </argument>
+        </field>
+        <field name="country_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">address</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="region">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">address</item>
                 </item>
             </argument>
         </field>
