@@ -15,8 +15,16 @@ define(
         var paymentMethod = ko.observable(null);
         var quoteData = window.cartData;
         var currencySymbol = window.currencySymbol;
-        var selectedShippingMethod = window.selectedShippingMethod;
+        var selectedShippingMethod = ko.observable(window.selectedShippingMethod);
         var storeCode = window.storeCode;
+        var totals = ko.observable(
+            {
+                'subtotal': quoteData.subtotal,
+                'subtotal_with_discount': quoteData.subtotal_with_discount,
+                'grandtotal': quoteData.grandtotal
+            }
+        );
+        var rates = ko.observable([]);
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -31,11 +39,10 @@ define(
                 return window.cartItems;
             },
             getTotals: function() {
-                return {
-                    'subtotal': quoteData.subtotal,
-                    'subtotal_with_discount': quoteData.subtotal_with_discount,
-                    'grandtotal': quoteData.grandtotal
-                }
+                return totals
+            },
+            setTotals: function(totalsData) {
+                totals(totalsData);
             },
             setBillingAddress: function (address, useForShipping) {
                 billingAddress(address);
@@ -64,8 +71,17 @@ define(
             getSelectedShippingMethod: function() {
                 return selectedShippingMethod;
             },
+            setSelectedShippingMethod: function(shippingMethod) {
+                selectedShippingMethod(shippingMethod);
+            },
             getStoreCode: function() {
                 return storeCode;
+            },
+            getRates: function() {
+                return rates;
+            },
+            setRates: function(ratesData) {
+                rates(ratesData);
             }
         };
     }

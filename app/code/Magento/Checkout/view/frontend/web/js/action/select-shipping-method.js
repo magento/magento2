@@ -15,10 +15,11 @@ define(
         'Magento_Ui/js/model/errorlist'
     ],
     function (quote, urlBuilder, navigator, storage, errorList) {
-        return function (shippingMethodCode) {
-            if (!shippingMethodCode) {
+        return function (code) {
+            if (!code) {
                 alert('Please specify a shipping method');
             }
+            var shippingMethodCode = code.split("_");
             var shippingMethodData ={
                 "cartId": quote.getQuoteId(),
                 "carrierCode" : shippingMethodCode[0],
@@ -29,8 +30,9 @@ define(
                 urlBuilder.createUrl('/carts/:quoteId/selected-shipping-method', {quoteId: quote.getQuoteId()}),
                 JSON.stringify(shippingMethodData)
             ).done(
-                function(shippingMethodCode) {
+                function(response) {
                     quote.setShippingMethod(shippingMethodCode);
+                    quote.setSelectedShippingMethod(code);
                     navigator.setCurrent('shippingMethod').goNext();
                 }
             ).error(

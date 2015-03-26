@@ -32,9 +32,10 @@ define(
                 return quote.isVirtual() || quote.getShippingAddress();
             },
 
-            verifySelectedMethodCode: function (data, value) {
-                if (quote.getSelectedShippingMethod() == data) {
-                    return value;
+            selectedMethod: quote.getSelectedShippingMethod(),
+            verifySelectedMethodCode: function (data) {
+                if (this.selectedMethod() == data) {
+                    return data;
                 }
                 return false;
             },
@@ -42,8 +43,7 @@ define(
             setShippingMethod: function (form) {
                 form = $(form);
                 var code = form.find("input[name='shipping_method']:checked").val();
-                var shippingMethodCode = code ? code.split("_") : null;
-                selectShippingMethod(shippingMethodCode);
+                selectShippingMethod(code);
             },
 
             getFormatedPrice: function (price) {

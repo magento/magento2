@@ -12,9 +12,10 @@ define(
         '../model/quote',
         'mage/url',
         'Magento_Checkout/js/model/step-navigator',
-        'Magento_Checkout/js/action/place-order'
+        'Magento_Checkout/js/action/place-order',
+        'Magento_Checkout/js/model/review'
     ],
-    function (Component, quote, url, navigator, orderAction) {
+    function (Component, quote, url, navigator, orderAction, review) {
         var stepName = 'review';
         var itemsBefore = [];
         var itemsAfter = [];
@@ -36,7 +37,9 @@ define(
             cartUrl: url.build('checkout/cart/'),
             placeOrder: function() {
                 orderAction();
-            }
+            },
+            // get recalculated totals when all data set
+            getTotals: review.getTotals()
         });
     }
 );

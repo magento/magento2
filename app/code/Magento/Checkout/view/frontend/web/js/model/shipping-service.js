@@ -21,6 +21,7 @@ define(
                 urlBuilder.createUrl('/carts/:quoteId/shipping-methods', {quoteId: quote.getQuoteId()})
             ).success(
                 function (data) {
+                    quote.setRates(data);
                     var ratesData = [];
                     rates.removeAll();
                     $.each(data, function (key, entity) {

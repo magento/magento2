@@ -1,0 +1,10 @@
+<!--todo implement tax logic @see grandtotal.phtml-->
+
+<tr class="grand totals">
+    <th data-bind="attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row">
+        <strong data-bind="text: getTitle()"></strong>
+    </th>
+    <td data-bind="attr: {'style':style, 'data-th': getTitle()}" class="amount">
+        <strong data-bind="text: getValue()"></strong>
+    </td>
+</tr>

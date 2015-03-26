@@ -42,7 +42,7 @@
                                  <!--ko ifnot: ($parent.items.length && $parents[1].rates().length == 1)-->
                                 <div class="control">
                                     <input name="shipping_method" type="radio"
-                                           data-bind="checked:$parents[1].verifySelectedMethodCode(item.method_code, item.carrier_code + '_' + item.method_code), attr: {'value': item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.carrier_code + '_' + item.method_code}"
+                                           data-bind="checked:$parents[1].verifySelectedMethodCode(item.carrier_code + '_' + item.method_code), attr: {'value': item.carrier_code + '_' + item.method_code, 'id': 's_method_' + item.carrier_code + '_' + item.method_code}"
                                            class="radio"/>
                                 </div>
                                  <!--/ko-->

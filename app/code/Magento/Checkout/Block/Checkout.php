@@ -244,7 +244,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         try {
             $shippingMethod = $this->shippingMethodManagement->get($quoteId);
             if ($shippingMethod) {
-                $selectedShippingMethod = $shippingMethod->getMethodCode();
+                $selectedShippingMethod = $shippingMethod->getCarrierCode() . "_" . $shippingMethod->getMethodCode();
             }
         } catch( \Exception $e) {
             //do nothing
