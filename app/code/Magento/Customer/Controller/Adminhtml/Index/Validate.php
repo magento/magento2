@@ -74,7 +74,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
      */
     protected function _validateCustomerAddress($response)
     {
-        $addresses = $this->getRequest()->getPost('address', []);
+        $addresses = $this->getRequest()->getPost('address');
         if (!is_array($addresses)) {
             return;
         }
