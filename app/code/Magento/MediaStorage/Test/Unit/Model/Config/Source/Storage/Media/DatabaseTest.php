@@ -9,6 +9,7 @@
 namespace Magento\MediaStorage\Test\Unit\Model\Config\Source\Storage\Media;
 
 use Magento\Setup\Model\ConfigOptionsList;
+use Magento\MediaStorage\Model\Config\Source\Storage\Media\Database;
 
 /**
  * Class DatabaseTest
@@ -21,17 +22,17 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     protected $mediaDatabase;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readerMock;
+    protected $deploymentConfig;
 
     protected function setUp()
     {
-        $this->readerMock = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
-        $this->readerMock->expects(
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->deploymentConfig->expects(
             $this->any()
         )->method(
-            'getConfigData'
+            'get'
         )->with(
                 ConfigOptionsList::KEY_RESOURCE
         )->will(
@@ -42,7 +43,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ]
         )
         );
-        $this->mediaDatabase = new \Magento\MediaStorage\Model\Config\Source\Storage\Media\Database($this->readerMock);
+        $this->mediaDatabase = new Database($this->deploymentConfig);
     }
 
     /**

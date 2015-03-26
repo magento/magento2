@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class MassActionTest extends \Magento\Backend\Utility\Controller
 {
     /**
-     * Configuratio of cache types
+     * Configuration of cache types
      *
      * @var CacheConfig
      */

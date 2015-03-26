@@ -98,16 +98,4 @@ class Writer
             }
         }
     }
-
-    /**
-     * Persists the data into file
-     *
-     * @param array $data
-     * @return void
-     */
-    private function write($data)
-    {
-        $contents = $this->formatter->format($data);
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($this->reader->getFile(), $contents);
-    }
 }

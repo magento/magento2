@@ -324,7 +324,7 @@ class Installer
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
         $estimatedModules = $this->createModulesConfig($request);
-        $total = count($script) + 3 * count(array_filter($estimatedModules->getData()));
+        $total = count($script) + 3 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
 
         $this->log->log('Starting Magento installation:');
@@ -346,7 +346,7 @@ class Installer
      * Creates modules deployment configuration segment
      *
      * @param \ArrayObject|array $request
-     * @return DeploymentConfig
+     * @return array
      * @throws \LogicException
      */
     private function createModulesConfig($request)
@@ -363,7 +363,7 @@ class Installer
             $key = array_search($module, $toEnable);
             $result[$module] = false !== $key;
         }
-        return $this->deploymentConfigFactory->create($result);
+        return $result;
     }
 
     /**

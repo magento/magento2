@@ -43,7 +43,9 @@ abstract class AbstractState implements StateInterface
             ->get('Magento\Framework\Filesystem\DirectoryList');
 
         $reader = new \Magento\Framework\App\DeploymentConfig\Reader($dirList);
-        $dbConfig = $reader->getConfigData(ConfigOptionsList::CONFIG_KEY);
+        $deploymentConfig = new \Magento\Framework\App\DeploymentConfig($reader);
+        $dbConfig = $deploymentConfig->get(ConfigOptionsList::CONFIG_KEY);
+
         $dbInfo = $dbConfig['connection']['default'];
         $host = $dbInfo['host'];
         $user = $dbInfo['username'];
