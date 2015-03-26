@@ -557,7 +557,9 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             }
         }
         if ($errors) {
-            $this->fail(implode(PHP_EOL, $errors));
+            $this->fail(
+                'Nonexistent classes/methods were found in @covers annotations: ' . PHP_EOL . implode(PHP_EOL, $errors)
+            );
         }
     }
 
@@ -567,8 +569,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
      */
     private function isNonexistentEntityCovered($matches)
     {
-        return (!empty($matches[2]) && !class_exists($matches[2])
-            || !empty($matches[4]) && !method_exists($matches[2], $matches[4]))
-            && strpos($matches[2], 'Magento\TestFramework') === false; // not autoloaded currently
+        return !empty($matches[2]) && !class_exists($matches[2])
+            || !empty($matches[4]) && !method_exists($matches[2], $matches[4]);
     }
 }

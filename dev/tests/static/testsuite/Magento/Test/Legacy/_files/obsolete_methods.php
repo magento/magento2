@@ -2149,4 +2149,5 @@ return [
     ['loadCollectionAttributes', 'Magento\Eav\Model\Config'],
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
     ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
+    ['prepareCatalogProductPriceIndexTable', 'Magento\CatalogRule\Model\Observer'],
 ];

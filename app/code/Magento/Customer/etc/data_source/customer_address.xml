@@ -49,7 +49,7 @@
             </field>
             <field name="region" source="eav" formElement="input" visible="false"/>
 
-            <field name="postcode" source="eav" formElement="post_code_fix" >
+            <field name="postcode" source="eav" formElement="post_code" >
                 <constraints>
                     <validate name="required-entry"/>
                 </constraints>
