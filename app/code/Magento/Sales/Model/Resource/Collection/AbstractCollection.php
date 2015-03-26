@@ -7,8 +7,7 @@ namespace Magento\Sales\Model\Resource\Collection;
 
 /**
  * Flat sales abstract collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
