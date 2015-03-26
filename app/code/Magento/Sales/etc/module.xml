@@ -12,7 +12,7 @@
             <module name="Magento_Catalog"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Payment"/>
-            <module name="Magento_Sequence"/>
+            <module name="Magento_SalesSequence"/>
         </sequence>
     </module>
 </config>
