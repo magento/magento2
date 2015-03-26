@@ -50,13 +50,15 @@ class Form extends AbstractComponent
             if ($component instanceof DataSourceInterface) {
                 $dataProvider = $component->getDataProvider();
                 $id = $this->getContext()->getRequestParam($dataProvider->getRequestFieldName());
+                $preparedData = [];
                 if ($id) {
                     $dataProvider->addFilter($dataProvider->getPrimaryFieldName(), $id);
                     $preparedData = $dataProvider->getData();
-                    $preparedData = isset($preparedData[$id]) ? $preparedData[$id] : [];
-                } else {
-                    $preparedData = [];
+                    if (isset($preparedData[$id])) {
+                        $preparedData = ['data' => $preparedData[$id]];
+                    }
                 }
+
                 $config = $dataProvider->getConfigData();
                 if (isset($config['submit_url'])) {
                     $config['submit_url'] = $this->getContext()->getUrl($config['submit_url']);
@@ -68,7 +70,7 @@ class Form extends AbstractComponent
                     'type' => $component->getComponentName(),
                     'name' => $component->getName(),
                     'dataScope' => $component->getContext()->getNamespace(),
-                    'config' => array_merge(['data' => $preparedData], $config)
+                    'config' => array_merge($preparedData, $config)
                 ];
             }
         }
