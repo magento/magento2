@@ -10,7 +10,7 @@ use Magento\SalesSequence\Model\Sequence\SequenceBuilder;
 use Magento\Framework\Event\Observer;
 
 /**
- * Class Observer
+ * Class CreateSequence
  */
 class CreateSequence
 {
@@ -37,7 +37,7 @@ class CreateSequence
         $this->sequenceBuilder = $sequenceBuilder;
         $this->salesSetup = $salesSetup;
     }
-    
+
     /**
      * @param Observer $observer
      * @return $this
