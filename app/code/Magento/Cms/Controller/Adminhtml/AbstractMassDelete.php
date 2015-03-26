@@ -38,14 +38,6 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
     protected $model = 'Magento\Framework\Model\AbstractModel';
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     */
-    public function __construct(\Magento\Backend\App\Action\Context $context)
-    {
-        parent::__construct($context);
-    }
-
-    /**
      * Execute action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect

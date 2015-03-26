@@ -6,19 +6,8 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Backend\App\Action;
-
 class Delete extends \Magento\Backend\App\Action
 {
-    /**
-     * @param Action\Context $context
-     */
-    public function __construct(
-        Action\Context $context
-    ) {
-        parent::__construct($context);
-    }
-
     /**
      * {@inheritdoc}
      */

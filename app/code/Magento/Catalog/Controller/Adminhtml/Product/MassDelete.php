@@ -9,17 +9,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
-    ) {
-        parent::__construct($context, $productBuilder);
-    }
-
-    /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()

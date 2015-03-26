@@ -197,9 +197,9 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
 
         $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Controller\Result\RedirectFactory'
-        )->setMethods(['create'])
+
+        $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
+            ->setMethods(['create'])
             ->getMock();
         $this->resultRedirectFactoryMock->expects($this->any())
             ->method('create')
@@ -208,22 +208,22 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getRedirect')
-            ->will($this->returnValue($this->redirectMock));
+            ->willReturn($this->redirectMock);
         $contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
         $contextMock->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
-            ->will($this->returnValue($this->resultRedirectFactoryMock));
+            ->willReturn($this->resultRedirectFactoryMock);
 
         $this->model = $objectManager->getObject(
             'Magento\Customer\Controller\Account\CreatePost',

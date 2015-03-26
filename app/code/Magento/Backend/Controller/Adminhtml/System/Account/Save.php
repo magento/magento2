@@ -10,14 +10,6 @@ use Magento\Framework\Exception\AuthenticationException;
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     */
-    public function __construct(\Magento\Backend\App\Action\Context $context)
-    {
-        parent::__construct($context);
-    }
-
-    /**
      * Saving edited user information
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
