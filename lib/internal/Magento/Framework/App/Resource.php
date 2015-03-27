@@ -10,7 +10,7 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Resource\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 
 class Resource
 {

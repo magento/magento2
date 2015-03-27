@@ -41,7 +41,7 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
         $result = $object->collectOptions();
 
         $setupOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Setup\Model\ConfigOptionsList');
+            ->get('Magento\Framework\Config\ConfigOptionsList');
         $backendOptions = new \Magento\Backend\Setup\ConfigOptionsList();
         $expected = [
             'setup' => $setupOptions,
@@ -70,7 +70,7 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
         $backendOptions = new \Magento\Backend\Setup\ConfigOptionsList();
         $expected = [
             'setup' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-                ->get('Magento\Setup\Model\ConfigOptionsList'),
+                ->get('Magento\Framework\Config\ConfigOptionsList'),
             'Magento_Backend' => $backendOptions,
         ];
 

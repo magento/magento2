@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Resource\Config;
+use Magento\Framework\Config\ConfigOptionsList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\FilesystemException;
 use Magento\Framework\Model\Resource\Db\Context;

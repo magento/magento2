@@ -7,7 +7,7 @@
 namespace Magento\Mtf\App\State;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 
 /**
  * Abstract class AbstractState

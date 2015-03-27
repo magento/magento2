@@ -6,7 +6,7 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 
 /**
  * A list of modules in the Magento application

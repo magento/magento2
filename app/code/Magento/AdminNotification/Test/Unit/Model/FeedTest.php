@@ -7,7 +7,7 @@
 namespace Magento\AdminNotification\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

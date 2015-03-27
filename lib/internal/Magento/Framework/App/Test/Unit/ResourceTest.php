@@ -10,7 +10,7 @@ namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\Resource;
 
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {

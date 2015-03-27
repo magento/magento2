@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Model\Resource\Db;
 
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 
 class ProfilerTest extends \PHPUnit_Framework_TestCase
 {

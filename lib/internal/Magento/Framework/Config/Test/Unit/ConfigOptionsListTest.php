@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Test\Unit\Model;
+namespace Magento\Framework\Config\Test\Unit;
 
-use Magento\Setup\Model\ConfigGenerator;
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigGenerator;
+use Magento\Framework\Config\ConfigOptionsList;
 
 class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +16,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     private $object;
 
     /**
-     * @var ConfigGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ConfigGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $generator;
 
@@ -27,7 +27,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->generator = $this->getMock('Magento\Setup\Model\ConfigGenerator', [], [], '', false);
+        $this->generator = $this->getMock('Magento\Framework\Config\ConfigGenerator', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->object = new ConfigOptionsList($this->generator);
     }

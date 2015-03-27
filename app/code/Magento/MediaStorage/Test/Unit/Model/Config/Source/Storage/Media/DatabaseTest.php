@@ -8,7 +8,7 @@
 
 namespace Magento\MediaStorage\Test\Unit\Model\Config\Source\Storage\Media;
 
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 use Magento\MediaStorage\Model\Config\Source\Storage\Media\Database;
 
 /**

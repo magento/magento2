@@ -6,7 +6,7 @@
 namespace Magento\Framework\App\Cache\Type;
 
 use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 
 /**
  * In-memory readonly pool of cache front-ends with enforced access control, specific to cache types

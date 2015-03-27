@@ -10,7 +10,7 @@
 namespace Magento\MediaStorage\Model\Config\Source\Storage\Media;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 
 class Database implements \Magento\Framework\Option\ArrayInterface
 {

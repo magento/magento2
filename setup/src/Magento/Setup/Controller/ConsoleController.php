@@ -10,7 +10,7 @@ use Composer\Package\Version\VersionParser;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Setup\Model\AdminAccount;
-use Magento\Setup\Model\ConfigOptionsList as SetupConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use Magento\Setup\Model\ConsoleLogger;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;

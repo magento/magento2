@@ -7,9 +7,9 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Setup\Model\ConfigOptionsList as SetupConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use \Magento\Setup\Model\Installer;
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 
@@ -120,11 +120,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private static $dbConfig = [
-        ConfigOptionsList::KEY_PREFIX => '',
+        \Magento\Framework\Config\ConfigOptionsList::KEY_PREFIX => '',
         'connection' => [
             'default' => [
-                ConfigOptionsList::KEY_HOST => '127.0.0.1',
-                ConfigOptionsList::KEY_NAME => 'magento',
+                \Magento\Framework\Config\ConfigOptionsList::KEY_HOST => '127.0.0.1',
+                \Magento\Framework\Config\ConfigOptionsList::KEY_NAME => 'magento',
                 ConfigOptionsList::KEY_USER => 'magento',
                 ConfigOptionsList::KEY_PASS => '',
             ],

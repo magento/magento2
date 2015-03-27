@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Config;
 
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -12,7 +12,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Creates deployment config data based on user input array
- * this class introduced to brake Magento\Setup\Model\ConfigOptionsList::createConfig
+ * this class introduced to brake Magento\Framework\Config\ConfigOptionsList::createConfig
  */
 class ConfigGenerator
 {

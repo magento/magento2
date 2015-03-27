@@ -3,16 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Test\Unit\Model;
+namespace Magento\Framework\Config\Test\Unit;
 
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Setup\Model\ConfigGenerator;
-use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Framework\Config\ConfigGenerator;
+use Magento\Framework\Config\ConfigOptionsList;
 
 class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ConfigGenerator
+     * @var \Magento\Framework\Config\ConfigGenerator
      */
     private $configGeneratorObject;
 
@@ -22,7 +22,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $random->expects($this->any())->method('getRandomString')->willReturn('key');
         $deployConfig= $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
-        $this->configGeneratorObject = new ConfigGenerator($random, $deployConfig);
+        $this->configGeneratorObject = new \Magento\Framework\Config\ConfigGenerator($random, $deployConfig);
     }
 
     public function testCreateInstallConfig()
@@ -34,7 +34,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateCryptConfigWithInput()
     {
-        $testData = [ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => 'some-test_key'];
+        $testData = [\Magento\Framework\Config\ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => 'some-test_key'];
         $returnValue = $this->configGeneratorObject->createCryptConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['crypt' => ['key' => 'some-test_key']], $returnValue->getData());
@@ -49,15 +49,15 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateSessionConfigWithInput()
     {
-        $testData = [ConfigOptionsList::INPUT_KEY_SESSION_SAVE => 'files'];
+        $testData = [\Magento\Framework\Config\ConfigOptionsList::INPUT_KEY_SESSION_SAVE => 'files'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['session' => ['save' => ConfigOptionsList::SESSION_SAVE_FILES]], $returnValue->getData());
+        $this->assertEquals(['session' => ['save' => \Magento\Framework\Config\ConfigOptionsList::SESSION_SAVE_FILES]], $returnValue->getData());
 
-        $testData = [ConfigOptionsList::INPUT_KEY_SESSION_SAVE => 'db'];
+        $testData = [\Magento\Framework\Config\ConfigOptionsList::INPUT_KEY_SESSION_SAVE => 'db'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['session' => ['save' => ConfigOptionsList::SESSION_SAVE_DB]], $returnValue->getData());
+        $this->assertEquals(['session' => ['save' => \Magento\Framework\Config\ConfigOptionsList::SESSION_SAVE_DB]], $returnValue->getData());
     }
 
     public function testCreateSessionConfigWithoutInput()
@@ -69,7 +69,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateDefinitionsConfig()
     {
-        $testData = [ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT => 'test-format'];
+        $testData = [\Magento\Framework\Config\ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT => 'test-format'];
         $returnValue = $this->configGeneratorObject->createDefinitionsConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['definition' => ['format' => 'test-format']], $returnValue->getData());
@@ -79,9 +79,9 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $testData = [
             ConfigOptionsList::INPUT_KEY_DB_HOST => 'testLocalhost',
-            ConfigOptionsList::INPUT_KEY_DB_NAME => 'testDbName',
-            ConfigOptionsList::INPUT_KEY_DB_USER => 'testDbUser',
-            ConfigOptionsList::INPUT_KEY_DB_PREFIX => 'testSomePrefix',
+            \Magento\Framework\Config\ConfigOptionsList::INPUT_KEY_DB_NAME => 'testDbName',
+            \Magento\Framework\Config\ConfigOptionsList::INPUT_KEY_DB_USER => 'testDbUser',
+            \Magento\Framework\Config\ConfigOptionsList::INPUT_KEY_DB_PREFIX => 'testSomePrefix',
         ];
         $returnValue = $this->configGeneratorObject->createDbConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Config;
 
 use Magento\Framework\ObjectManager\DefinitionFactory;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
