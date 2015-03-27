@@ -191,8 +191,6 @@
     <column class="Magento\Ui\Component\Listing\Columns\Column"/>
     <form class="Magento\Ui\Component\Form">
         <argument name="data" xsi:type="array">
-            <item name="save_url" xsi:type="string">mui/form/save</item>
-            <item name="validate_url" xsi:type="string">mui/form/validate</item>
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/form</item>
             </item>
@@ -215,14 +213,6 @@
             </item>
         </argument>
     </tab>
-    <group class="Magento\Ui\Component\Layout\Group">
-        <argument name="data" xsi:type="array">
-            <item name="template" xsi:type="string">templates/layout/group/default</item>
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-            </item>
-        </argument>
-    </group>
     <!-- navigation -->
     <nav class="Magento\Ui\Component\Layout\Tabs\Nav">
         <argument name="data" xsi:type="array">
