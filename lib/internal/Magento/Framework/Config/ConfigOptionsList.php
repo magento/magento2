@@ -49,6 +49,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     const SESSION_SAVE_FILES = 'files';
     const SESSION_SAVE_DB = 'db';
+    /**#@-*/
 
     /**
      * Array Key for session save method
@@ -69,9 +70,9 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**#@-*/
     
     /**
-     * Segment key
+     * Db config key
      */
-    const CONFIG_DB_KEY = 'db';
+    const KEY_DB = 'db';
 
     /**
      * Array Key for encryption key in deployment config file
@@ -79,12 +80,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const KEY_ENCRYPTION_KEY = 'key';
 
     /**
-     * Segment key
+     * Resource config key
      */
     const KEY_RESOURCE = 'resource';
 
     /**
-     * Segment key for modules
+     * Key for modules
      */
     const KEY_MODULES = 'modules';
 

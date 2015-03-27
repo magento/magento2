@@ -204,7 +204,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         ];
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->any())->method('getSegment')->will($this->returnValueMap([
-            [SetupConfigOptionsList::CONFIG_DB_KEY, self::$dbConfig],
+            [SetupConfigOptionsList::KEY_DB, self::$dbConfig],
             [
                 'crypt',
                 [SetupConfigOptionsList::KEY_ENCRYPTION_KEY => 'encryption_key']
@@ -382,7 +382,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->once())
             ->method('getConfigData')
-            ->with(SetupConfigOptionsList::CONFIG_DB_KEY)
+            ->with(SetupConfigOptionsList::KEY_DB)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');

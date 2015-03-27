@@ -7,11 +7,11 @@
  */
 namespace Magento\Framework\App\Resource;
 
+use Magento\Framework\Config\ConfigOptionsList;
+
 class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInterface
 {
     const DEFAULT_SETUP_CONNECTION = 'default';
-
-    const PARAM_INITIAL_RESOURCES = 'resource';
 
     /**
      * List of connection names per resource
@@ -37,7 +37,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId);
 
-        foreach ($deploymentConfig->getConfigData('resource') as $resourceName => $resourceData) {
+        foreach ($deploymentConfig->getConfigData(ConfigOptionsList::KEY_RESOURCE) as $resourceName => $resourceData) {
             if (!isset($resourceData['connection'])) {
                 throw new \InvalidArgumentException('Invalid initial resource configuration');
             }

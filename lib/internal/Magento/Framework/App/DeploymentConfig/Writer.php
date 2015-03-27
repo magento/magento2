@@ -10,7 +10,6 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Tools\SampleData\Helper\Deploy;
 
 /**
  * Deployment configuration writer

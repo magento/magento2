@@ -55,7 +55,7 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects(
             $this->once()
         )->method(
-            'get'
+            'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
         )->will(

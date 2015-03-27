@@ -102,7 +102,7 @@ class FrontendPool
     protected function _getCacheFrontendId($cacheType)
     {
         $result = null;
-        $cacheInfo = $this->deploymentConfig->get(self::KEY_CACHE);
+        $cacheInfo = $this->deploymentConfig->getConfigData(self::KEY_CACHE);
         if (null !== $cacheInfo) {
             $result = $cacheInfo[self::KEY_CACHE_TYPE][$cacheType][self::KEY_FRONTEND_CACHE];
         }

@@ -81,7 +81,7 @@ class Pool implements \Iterator
          * Merging is intentionally implemented through array_merge() instead of array_replace_recursive()
          * to avoid "inheritance" of the default settings that become irrelevant as soon as cache storage type changes
          */
-        $cacheInfo = $this->deploymentConfig->get(FrontendPool::KEY_CACHE);
+        $cacheInfo = $this->deploymentConfig->getConfigData(FrontendPool::KEY_CACHE);
         if (null !== $cacheInfo) {
             return array_merge($this->_frontendSettings, $cacheInfo[FrontendPool::KEY_FRONTEND_CACHE]);
         }

@@ -46,7 +46,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $deploymentConfig->expects(
             $this->any()
         )->method(
-            'get'
+            'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
         )->will(
@@ -92,7 +92,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         $deploymentConfig->expects(
             $this->once()
         )->method(
-            'get'
+            'getConfigData'
         )->with(
             FrontendPool::KEY_CACHE
         )->will(

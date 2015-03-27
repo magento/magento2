@@ -104,7 +104,7 @@ class Resource
             return $this->_connections[$connectionName];
         }
 
-        $dbInfo = $this->deploymentConfig->getConfigData(ConfigOptionsList::CONFIG_DB_KEY);
+        $dbInfo = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
         if (null === $dbInfo) {
             return false;
         }
