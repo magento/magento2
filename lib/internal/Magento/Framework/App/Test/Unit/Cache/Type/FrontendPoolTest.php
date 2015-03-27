@@ -57,7 +57,7 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-            ConfigOptionsList::KEY_CACHE
+                FrontendPool::KEY_CACHE
         )->will(
             $this->returnValue($fixtureConfigData)
         );

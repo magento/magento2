@@ -79,19 +79,4 @@ class Reader
         $result = @include $file;
         return $result ?: [];
     }
-
-    /**
-     *  Gets a value specified key from config data
-     *
-     * @param string $key
-     * @return array
-     */
-    public function getConfigData($key)
-    {
-        $config = $this->load();
-        if (!isset($config[$key])) {
-            return null;
-        }
-        return $config[$key];
-    }
 }

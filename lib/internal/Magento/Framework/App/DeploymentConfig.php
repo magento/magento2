@@ -110,6 +110,16 @@ class DeploymentConfig
     }
 
     /**
+     * Resets config data
+     *
+     * @return void
+     */
+    public function resetData()
+    {
+        $this->data = null;
+    }
+
+    /**
      * Loads the configuration data
      *
      * @return void

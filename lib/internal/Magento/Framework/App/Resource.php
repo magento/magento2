@@ -104,7 +104,7 @@ class Resource
             return $this->_connections[$connectionName];
         }
 
-        $dbInfo = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_KEY);
+        $dbInfo = $this->deploymentConfig->getConfigData(ConfigOptionsList::CONFIG_DB_KEY);
         if (null === $dbInfo) {
             return false;
         }
@@ -231,7 +231,9 @@ class Resource
     private function getTablePrefix()
     {
         if (null === $this->_tablePrefix) {
-            $this->_tablePrefix = (string)$this->deploymentConfig->get(ConfigOptionsList::KEY_PREFIX);
+            $this->_tablePrefix = (string)$this->deploymentConfig->get(
+                ConfigOptionsList::CONFIG_DB_KEY .'/' . ConfigOptionsList::KEY_PREFIX
+            );
         }
         return $this->_tablePrefix;
     }

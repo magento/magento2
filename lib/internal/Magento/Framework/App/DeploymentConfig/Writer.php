@@ -6,9 +6,11 @@
 
 namespace Magento\Framework\App\DeploymentConfig;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Tools\SampleData\Helper\Deploy;
 
 /**
  * Deployment configuration writer
@@ -42,23 +44,31 @@ class Writer
     private $configFilePool;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Constructor
      *
      * @param Reader $reader
      * @param Filesystem $filesystem
      * @param ConfigFilePool $configFilePool
+     * @param DeploymentConfig $deploymentConfig
      * @param Writer\FormatterInterface $formatter
      */
     public function __construct(
         Reader $reader,
         Filesystem $filesystem,
         ConfigFilePool $configFilePool,
+        DeploymentConfig $deploymentConfig,
         Writer\FormatterInterface $formatter = null
     ) {
         $this->reader = $reader;
         $this->filesystem = $filesystem;
         $this->formatter = $formatter ?: new Writer\PhpFormatter();
         $this->configFilePool = $configFilePool;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -97,5 +107,6 @@ class Writer
                 $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($paths[$fileKey], $contents);
             }
         }
+        $this->deploymentConfig->resetData();
     }
 }

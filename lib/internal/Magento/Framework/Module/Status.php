@@ -8,6 +8,7 @@ namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\State\Cleanup;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * A service for controlling module status
@@ -156,12 +157,12 @@ class Status
         foreach ($this->getAllModules($modules) as $name) {
             $currentStatus = $this->list->has($name);
             if (in_array($name, $modules)) {
-                $result[$name] = $isEnabled;
+                $result[$name] = (int)$isEnabled;
             } else {
-                $result[$name] = $currentStatus;
+                $result[$name] = (int)$currentStatus;
             }
         }
-        $this->writer->saveConfig($result);
+        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]]);
         $this->cleanup->clearCaches();
         $this->cleanup->clearCodeGeneratedFiles();
     }

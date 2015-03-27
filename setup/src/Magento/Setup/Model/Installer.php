@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Resource\Config;
@@ -17,17 +17,18 @@ use Magento\Framework\Filesystem\FilesystemException;
 use Magento\Framework\Model\Resource\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Shell;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Shell;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
 use Magento\Store\Model\Store;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -310,17 +311,24 @@ class Installer
     private function createModulesConfig($request)
     {
         $all = array_keys($this->moduleLoader->load());
-        $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES) ?: $all;
-        $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
-        $toEnable = array_diff($enable, $disable);
-        if (empty($toEnable)) {
-            throw new \LogicException('Unable to determine list of enabled modules.');
+        $currentModules = [];
+        if ($this->deploymentConfig->isAvailable()) {
+            $deploymentConfig = $this->deploymentConfigReader->load();
+            $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;
         }
+        $enable = $this->readListOfModules($all, $request, self::ENABLE_MODULES);
+        $disable = $this->readListOfModules($all, $request, self::DISABLE_MODULES);
         $result = [];
         foreach ($all as $module) {
-            $key = array_search($module, $toEnable);
-            $result[$module] = false !== $key;
+            if ((isset($currentModules[$module]) && !$currentModules[$module])) {
+                $result[$module] = 0;
+            } else {
+                $result[$module] = 1;
+            }
+            $result[$module] = in_array($module, $disable) ? 0 : $result[$module];
+            $result[$module] = in_array($module, $enable) ? 1 : $result[$module];
         }
+        $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]]);
         return $result;
     }
 
@@ -871,18 +879,7 @@ class Installer
         $this->deleteDirContents(DirectoryList::GENERATION);
         $this->deleteDirContents(DirectoryList::CACHE);
         $this->log->log('Updating modules:');
-        $allModules = array_keys($this->moduleLoader->load());
-        $deploymentConfig = $this->deploymentConfigReader->load();
-        $currentModules = isset($deploymentConfig['modules']) ? $deploymentConfig['modules'] : [] ;
-        $result = [];
-        foreach ($allModules as $module) {
-            if (isset($currentModules[$module]) && !$currentModules[$module]) {
-                $result[$module] = 0;
-            } else {
-                $result[$module] = 1;
-            }
-        }
-        $this->deploymentConfigWriter->saveConfig($result);
+        $this->createModulesConfig([]);
     }
 
     /**
@@ -1011,7 +1008,7 @@ class Installer
     {
         // stops cleanup if app/etc/config.php does not exist
         if ($this->deploymentConfig->isAvailable()) {
-            $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::CONFIG_KEY);
+            $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::CONFIG_DB_KEY);
             $config = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
 
             if ($config) {
@@ -1103,7 +1100,7 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::CONFIG_KEY);
+        $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::CONFIG_DB_KEY);
         $connectionConfig = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
         $this->checkDatabaseConnection(
             $connectionConfig[ConfigOptionsList::KEY_NAME],

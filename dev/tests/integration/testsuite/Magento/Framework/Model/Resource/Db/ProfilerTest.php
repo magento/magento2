@@ -46,7 +46,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $reader = $objectManager->get('Magento\Framework\App\DeploymentConfig\Reader');
-        $dbConfig = $reader->getConfigData(ConfigOptionsList::CONFIG_KEY);
+        $dbConfig = $reader->getConfigData(ConfigOptionsList::CONFIG_DB_KEY);
         $connectionConfig = $dbConfig['connection']['default'];
         $connectionConfig['profiler'] = [
             'class' => 'Magento\Framework\Model\Resource\Db\Profiler',

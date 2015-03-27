@@ -6,7 +6,8 @@
 
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 
-use \Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 
@@ -37,6 +38,11 @@ class WriterTest extends \PHPUnit_Framework_TestCase
      */
     private $configFilePool;
 
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
     protected function setUp()
     {
         $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
@@ -45,7 +51,14 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface'
         );
         $this->configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
-        $this->object = new Writer($this->reader, $filesystem, $this->configFilePool, $this->formatter);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->object = new Writer(
+            $this->reader,
+            $filesystem,
+            $this->configFilePool,
+            $this->deploymentConfig,
+            $this->formatter
+        );
         $this->reader->expects($this->any())->method('getFile')->willReturn('test.php');
         $this->dirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $filesystem->expects($this->any())
@@ -89,6 +102,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        $this->deploymentConfig->expects($this->once())->method('resetData');
         $this->configFilePool->expects($this->once())->method('getPaths')->willReturn($configFiles);
         $this->dirWrite->expects($this->any())->method('isExist')->willReturn(true);
         $this->reader->expects($this->once())->method('load')->willReturn($testSetExisting[ConfigFilePool::APP_CONFIG]);

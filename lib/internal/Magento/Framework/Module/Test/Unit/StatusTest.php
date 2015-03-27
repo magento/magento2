@@ -7,6 +7,7 @@
 namespace Magento\Framework\Module\Test\Unit;
 
 use \Magento\Framework\Module\Status;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 class StatusTest extends \PHPUnit_Framework_TestCase
 {
@@ -168,7 +169,8 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->moduleList->expects($this->at(1))->method('has')->with('Module_Bar')->willReturn(false);
         $this->moduleList->expects($this->at(2))->method('has')->with('Module_Baz')->willReturn(false);
         $expectedModules = ['Module_Foo' => 1, 'Module_Bar' => 1, 'Module_Baz' => 0];
-        $this->writer->expects($this->once())->method('saveConfig')->with($expectedModules);
+        $this->writer->expects($this->once())->method('saveConfig')
+            ->with([ConfigFilePool::APP_CONFIG => ['modules' => $expectedModules]]);
         $this->cleanup->expects($this->once())->method('clearCaches');
         $this->cleanup->expects($this->once())->method('clearCodeGeneratedFiles');
         $this->object->setIsEnabled(true, ['Module_Foo', 'Module_Bar']);

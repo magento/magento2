@@ -161,7 +161,7 @@ class ConfigGenerator
             ? $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]
             : '';
         $configData->set(
-            ConfigOptionsList::CONFIG_KEY . '/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX],
+            ConfigOptionsList::CONFIG_DB_KEY . '/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX],
             $prefixKey
         );
 

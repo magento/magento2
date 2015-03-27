@@ -34,12 +34,12 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-                ConfigOptionsList::KEY_RESOURCE
+            'resource'
         )->will(
             $this->returnValue(
             [
-                'default_setup' => ['name' => 'default_setup', ConfigOptionsList::KEY_CONNECTION => 'connect1'],
-                'custom_resource' => ['name' => 'custom_resource', ConfigOptionsList::KEY_CONNECTION => 'connect2'],
+                'default_setup' => ['name' => 'default_setup', 'connection' => 'connect1'],
+                'custom_resource' => ['name' => 'custom_resource', 'connection' => 'connect2'],
             ]
         )
         );

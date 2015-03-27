@@ -9,8 +9,10 @@ namespace Magento\Setup\Test\Unit\Model;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use \Magento\Setup\Model\Installer;
+use Magento\Framework\Config\ConfigOptionsList;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -52,16 +54,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleLoader;
-
-    /**
-     * @var \Magento\Framework\Module\ModuleList\DeploymentConfigFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfigFactory;
-
-    /**
-     * @var \Magento\Framework\Module\ModuleList\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
@@ -150,20 +142,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ['Foo_One', 'Bar_Two']
         );
         $this->moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $this->deploymentConfigFactory = $this->getMock(
-            'Magento\Framework\Module\ModuleList\DeploymentConfigFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->deploymentConfig = $this->getMock(
-            'Magento\Framework\Module\ModuleList\DeploymentConfig',
-            [],
-            [],
-            '',
-            false
-        );
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->adminFactory = $this->getMock('Magento\Setup\Model\AdminAccountFactory', [], [], '', false);
         $this->logger = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
@@ -226,18 +204,14 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         ];
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->any())->method('getSegment')->will($this->returnValueMap([
-            [SetupConfigOptionsList::CONFIG_KEY, self::$dbConfig],
+            [SetupConfigOptionsList::CONFIG_DB_KEY, self::$dbConfig],
             [
-                SetupConfigOptionsList::ENCRYPT_CONFIG_KEY,
+                'crypt',
                 [SetupConfigOptionsList::KEY_ENCRYPTION_KEY => 'encryption_key']
             ]
         ]));
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
-        $modules = ['Foo_One' => 1, 'Bar_Two' => 1 ];
-        $this->deploymentConfig->expects($this->any())->method('getData')->willReturn($modules);
-        $this->deploymentConfigFactory->expects($this->any())->method('create')->with($modules)
-            ->willReturn($this->deploymentConfig);
         $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
         $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
         $connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
@@ -341,9 +315,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
 
         $expectedModules = [
-            'Bar_Two' => 0,
-            'Foo_One' => 1,
-            'New_Module' => 1
+            ConfigFilePool::APP_CONFIG => [
+                'modules' => [
+                    'Bar_Two' => 0,
+                    'Foo_One' => 1,
+                    'New_Module' => 1
+                ]
+            ]
         ];
 
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
@@ -404,7 +382,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->once())
             ->method('getConfigData')
-            ->with(SetupConfigOptionsList::CONFIG_KEY)
+            ->with(SetupConfigOptionsList::CONFIG_DB_KEY)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');

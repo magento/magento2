@@ -59,8 +59,8 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->deploymentConfig->expects($this->any())
-            ->method('get')
-            ->with(ConfigOptionsList::CONFIG_KEY)
+            ->method('getConfigData')
+            ->with(ConfigOptionsList::CONFIG_DB_KEY)
             ->will($this->returnValue(
                     [
                         'connection' => [
