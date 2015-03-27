@@ -75,7 +75,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->viewMock = $this->getMockBuilder('Magento\Framework\App\View')
             ->disableOriginalConstructor()
-            ->setMethods(['loadLayout','getLayout','getPage','renderLayout'])
+            ->setMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
             ->getMock();
         $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\Layout')
             ->disableOriginalConstructor()

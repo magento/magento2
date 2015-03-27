@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
+namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
 
 /**
  * @covers Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action
@@ -25,7 +25,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->columnMock = $this->getMockBuilder('Magento\Backend\Block\Widget\Grid\Column')
             ->disableOriginalConstructor()
-            ->setMethods(['setActions','getActions'])
+            ->setMethods(['setActions', 'getActions'])
             ->getMock();
         $this->action = $objectManager->getObject('Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Action');
     }
@@ -54,7 +54,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             ->method('setActions');
         $this->columnMock->expects($this->once())
             ->method('getActions')
-            ->willReturn(['url','popup','caption']);
+            ->willReturn(['url', 'popup', 'caption']);
         $this->action->setColumn($this->columnMock);
         $row = new \Magento\Framework\Object();
         $row->setId(1);

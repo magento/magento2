@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Email\Block\Adminhtml\Template\Grid\Renderer;
+namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
 
 /**
  * @covers Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type

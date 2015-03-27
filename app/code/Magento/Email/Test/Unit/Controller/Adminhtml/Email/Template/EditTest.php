@@ -70,22 +70,26 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageTitleMock;
 
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
             ->disableOriginalConstructor()
-            ->setMethods(['registry','register'])
+            ->setMethods(['registry', 'register'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
             ->getMock();
         $this->viewMock = $this->getMockBuilder('Magento\Framework\App\View')
             ->disableOriginalConstructor()
-            ->setMethods(['loadLayout','getLayout','getPage','renderLayout'])
+            ->setMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
             ->getMock();
         $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\Layout')
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock','createBlock','setChild'])
+            ->setMethods(['getBlock', 'createBlock', 'setChild'])
             ->getMock();
         $this->menuBlockMock = $this->getMockBuilder('\Magento\Backend\Block\Menu')
             ->disableOriginalConstructor()
@@ -139,7 +143,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->pageTitleMock);
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with('Magento\Email\Block\Adminhtml\Template\Edit','template_edit',[])
+            ->with('Magento\Email\Block\Adminhtml\Template\Edit', 'template_edit', [])
             ->willReturn($this->editBlockMock);
         $this->editBlockMock->expects($this->once())
             ->method('setEditMode')
@@ -208,8 +212,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('addLink')
             ->willReturnMap(
                 [
-                    ['Transactional Emails','Transactional Emails', null, $this->returnSelf()],
-                    ['New Template','New System Template', null, $this->returnSelf()]
+                    ['Transactional Emails', 'Transactional Emails', null, $this->returnSelf()],
+                    ['New Template', 'New System Template', null, $this->returnSelf()]
                 ]
             );
 
@@ -245,8 +249,8 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('addLink')
             ->willReturnMap(
                 [
-                    ['Transactional Emails','Transactional Emails', null, $this->returnSelf()],
-                    ['Edit Template','Edit System Template', null, $this->returnSelf()]
+                    ['Transactional Emails', 'Transactional Emails', null, $this->returnSelf()],
+                    ['Edit Template', 'Edit System Template', null, $this->returnSelf()]
                 ]
             );
 
