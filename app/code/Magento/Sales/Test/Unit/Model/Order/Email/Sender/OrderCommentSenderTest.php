@@ -90,11 +90,13 @@ class OrderCommentSenderTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
+        $addressRendererMock = $this->getMock('Magento\Sales\Model\Order\Address\Renderer', [], [], '', false);
 
         $this->sender = new OrderCommentSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
-            $this->senderBuilderFactoryMock
+            $this->senderBuilderFactoryMock,
+            $addressRendererMock
         );
     }
 

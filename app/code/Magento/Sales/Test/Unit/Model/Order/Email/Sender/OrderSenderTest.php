@@ -118,13 +118,15 @@ class OrderSenderTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
+        $addressRendererMock = $this->getMock('Magento\Sales\Model\Order\Address\Renderer', [], [], '', false);
 
         $this->sender = new OrderSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->paymentHelper,
-            $this->orderResource
+            $this->orderResource,
+            $addressRendererMock
         );
     }
 

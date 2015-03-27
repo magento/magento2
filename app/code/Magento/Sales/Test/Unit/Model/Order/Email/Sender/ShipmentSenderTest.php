@@ -140,13 +140,15 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
         $this->shipmentMock->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
+        $addressRendererMock = $this->getMock('Magento\Sales\Model\Order\Address\Renderer', [], [], '', false);
 
         $this->sender = new ShipmentSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->paymentHelper,
-            $this->shipmentResource
+            $this->shipmentResource,
+            $addressRendererMock
         );
     }
 
