@@ -36,6 +36,13 @@ class RemoveItem extends Action
      */
     protected $resultPageFactory;
 
+    /**
+     * @param Context $context
+     * @param Sidebar $sidebar
+     * @param LoggerInterface $logger
+     * @param Data $jsonHelper
+     * @param PageFactory $resultPageFactory
+     */
     public function __construct(
         Context $context,
         Sidebar $sidebar,

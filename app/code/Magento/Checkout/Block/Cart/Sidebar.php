@@ -163,7 +163,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
     /**
      * Get one page checkout page url
      *
-     * @return bool
+     * @return string
      */
     public function getCheckoutUrl()
     {
@@ -173,7 +173,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
     /**
      * Get shoppinc cart page url
      *
-     * @return bool
+     * @return string
      */
     public function getShoppingCartUrl()
     {
@@ -183,7 +183,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
     /**
      * Get update cart item url
      *
-     * @return bool
+     * @return string
      */
     public function getUpdateItemQtyUrl()
     {
@@ -193,7 +193,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
     /**
      * Get remove cart item url
      *
-     * @return bool
+     * @return string
      */
     public function getRemoveItemUrl()
     {
@@ -204,6 +204,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
      * Define if Mini Shopping Cart Pop-Up Menu enabled
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsNeedToDisplaySideBar()
     {
