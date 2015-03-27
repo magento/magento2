@@ -15,6 +15,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products';
 
+    const KEY_GROUP_PRICES = 'group_prices';
+
     private $productData = [
         [
             ProductInterface::SKU => 'simple',
@@ -111,6 +113,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $response = $this->saveProduct($product);
         $this->assertArrayHasKey(ProductInterface::SKU, $response);
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
         $this->deleteProduct($product[ProductInterface::SKU]);
     }
 
@@ -228,6 +231,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'custom_attributes' => [
                 ['attribute_code' => 'cost', 'value' => ''],
                 ['attribute_code' => 'description', 'value' => 'Description'],
+            ],
+            self::KEY_GROUP_PRICES => [
+                [
+                    "customer_group_id" => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+                    "value" => 3.14
+                ]
             ]
         ];
     }
@@ -275,5 +284,43 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         return (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
             $this->_webApiCall($serviceInfo, ['sku' => $sku]) : $this->_webApiCall($serviceInfo);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_group_prices.php
+     */
+    public function testGetGroupPrices()
+    {
+        // note: Catalog Price Scope must be GLOBAL (not WEBSITE)
+        $productSku = 'simple_with_group_price';
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $productSku,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+        $response = $this->_webApiCall($serviceInfo, ['sku' => $productSku]);
+
+        $this->assertNotNull($response, "could not get the product that has group prices");
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
+        $groupPriceList = $response[self::KEY_GROUP_PRICES];
+        $this->assertNotNull($groupPriceList, "expected to have group prices");
+        $this->assertCount(2, $groupPriceList, "expected to have 2 group prices objects");
+        $this->assertEquals(9, $groupPriceList[0]['value']);
+        $this->assertEquals(7, $groupPriceList[1]['value']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_group_prices.php
+     */
+    public function testDeleteGroupPrices()
+    {
+        $response = $this->deleteProduct('simple_with_group_price');
+        $this->assertTrue($response);
     }
 }
