@@ -35,6 +35,7 @@ class Fromcart extends Action\Action implements IndexInterface
      * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute()
     {
