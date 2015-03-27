@@ -12,7 +12,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Creates deployment config data based on user input array
- * this class introduced to break Magento\Framework\Config\ConfigOptionsList::createConfig
+ * this class introduced to break down Magento\Framework\Config\ConfigOptionsList::createConfig
  */
 class ConfigGenerator
 {
@@ -161,7 +161,7 @@ class ConfigGenerator
             ? $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]
             : '';
         $configData->set(
-            ConfigOptionsList::SESSION_SAVE_DB . '/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX],
+            ConfigOptionsList::CONFIG_KEY . '/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX],
             $prefixKey
         );
 

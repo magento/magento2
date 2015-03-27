@@ -130,14 +130,14 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 self::INPUT_KEY_ENCRYPTION_KEY,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'crypt/key',
+                self::CONFIG_PATH_CRYPT_KEY,
                 'Encryption key'
             ),
             new SelectConfigOption(
                 self::INPUT_KEY_SESSION_SAVE,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 [self::SESSION_SAVE_FILES, self::SESSION_SAVE_DB],
-                'session/save',
+                self::CONFIG_PATH_SESSION_SAVE,
                 'Session save location',
                 self::SESSION_SAVE_FILES
             ),
@@ -145,54 +145,54 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 self::INPUT_KEY_DEFINITION_FORMAT,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 DefinitionFactory::getSupportedFormats(),
-                'definition/format',
+                self::CONFIG_PATH_DEFINITION_FORMAT,
                 'Type of definitions used by Object Manager'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'db/connection/default/host',
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_HOST,
                 'Database server host',
                 'localhost'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_NAME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'db/connection/default/dbname',
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_NAME,
                 'Database name',
                 'magento2'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_USER,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'db/connection/default/username',
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_USER,
                 'Database server username',
                 'root'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_PASS,
                 TextConfigOption::FRONTEND_WIZARD_PASSWORD,
-                'db/connection/default/password',
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_PASS,
                 'Database server password',
                 ''
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_PREFIX,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'db/table_prefix',
+                self::CONFIG_KEY . '/' . self::KEY_PREFIX,
                 'Database table prefix'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_MODEL,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'db/connection/default/model',
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_MODEL,
                 'Database type',
                 'mysql4'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_INIT_STATEMENTS,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'db/connection/default/initStatements',
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_INIT_STATEMENTS,
                 'Database  initial set of commands',
                 'SET NAMES utf8;'
             ),

@@ -16,7 +16,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\Config\ConfigGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     private $generator;
 

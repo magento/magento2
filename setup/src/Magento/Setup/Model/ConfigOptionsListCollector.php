@@ -98,7 +98,7 @@ class ConfigOptionsListCollector
             }
         }
 
-        // check setup
+        // check Framework
         $setupOptionsClassName = 'Magento\Framework\Config\ConfigOptionsList';
         if (class_exists($setupOptionsClassName)) {
             $setupOptionsClass = $this->objectManagerProvider->get()->create($setupOptionsClassName);
