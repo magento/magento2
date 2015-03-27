@@ -230,10 +230,11 @@ class Environment extends AbstractActionController
             }
 
             $message = sprintf(
-                'Magento2 requires xdebug.max_nesting_level to be set %d or more,
-                        but it set xdebug.max_nesting_level=%d.',
-                $minimumRequiredXDebugNestedLevel,
-                $currentXDebugNestingLevel
+                'Your current setting of xdebug.max_nesting_level=%d.
+                 Magento 2 requires it to be set to %d or more.
+                 Edit your config, restart web server, and try again.',
+                $currentXDebugNestingLevel,
+                $minimumRequiredXDebugNestedLevel
             );
 
             $data['xdebug_max_nesting_level'] = [
