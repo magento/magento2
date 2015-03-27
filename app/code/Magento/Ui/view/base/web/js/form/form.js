@@ -24,11 +24,9 @@ define([
     }
 
     return Component.extend({
-
         initialize: function () {
             this._super()
                 .initAdapter()
-                .initSelector()
                 .hideLoader();
 
             return this;
@@ -44,7 +42,9 @@ define([
             return this;
         },
 
-        initSelector: function () {
+        initProperties: function () {
+            this._super();
+
             this.selector = '[data-form-part=' + this.namespace + ']';
 
             return this;
@@ -68,13 +68,14 @@ define([
          * Submits form
          */
         submit: function (redirect) {
-            var additional = collectData(this.selector);
+            var additional = collectData(this.selector),
+                source = this.source;
 
             _.each(additional, function (value, name) {
-                this.source.set('data.' + name, value);
+                source.set('data.' + name, value);
             });
 
-            this.source.save({
+            source.save({
                 redirect: redirect
             });
         },
