@@ -192,6 +192,15 @@ class TransportBuilder
     }
 
     /**
+     * @param $from
+     * @return array
+     */
+    public function getFrom($from)
+    {
+        return $this->_senderResolver->resolve($from);
+    }
+
+    /**
      * Prepare message
      *
      * @return $this

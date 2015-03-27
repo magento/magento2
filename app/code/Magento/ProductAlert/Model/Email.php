@@ -364,14 +364,16 @@ class Email extends \Magento\Framework\Model\AbstractModel
             [$block, 'toHtml']
         );
         $this->_appEmulation->stopEnvironmentEmulation();
+        $from = $this->_transportBuilder->getFrom(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
+        );
         $this->_transportBuilder->getMessage()
-            ->setFrom(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_EMAIL_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $storeId
-                )
-            )->addTo(
+            ->setFrom($from['email'],$from['name'])
+            ->addTo(
                 $this->_customer->getEmail(),
                 $this->_customerHelper->getCustomerName($this->_customer)
             );

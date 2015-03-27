@@ -646,13 +646,15 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
 
         $this->inlineTranslation->suspend();
+        $from = $this->_transportBuilder->getFrom(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
         $this->_transportBuilder->getMessage()
-            ->setFrom(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )->addTo(
+            ->setFrom($from['email'],$from['name'])
+            ->addTo(
                 $this->getEmail(),
                 $this->getName()
             );
@@ -700,13 +702,15 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
 
         $this->inlineTranslation->suspend();
+        $from = $this->_transportBuilder->getFrom(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
         $this->_transportBuilder->getMessage()
-            ->setFrom(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )->addTo(
+            ->setFrom($from['email'],$from['name'])
+            ->addTo(
                 $this->getEmail(),
                 $this->getName()
             );
@@ -753,13 +757,15 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
 
         $this->inlineTranslation->suspend();
+        $from = $this->_transportBuilder->getFrom(
+            $this->_scopeConfig->getValue(
+                self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
         $this->_transportBuilder->getMessage()
-            ->setFrom(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )->addTo(
+            ->setFrom($from['email'],$from['name'])
+            ->addTo(
                 $this->getEmail(),
                 $this->getName()
             );

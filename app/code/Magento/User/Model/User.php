@@ -458,10 +458,10 @@ class User extends AbstractModel implements StorageInterface
     public function sendPasswordResetConfirmationEmail()
     {
         // Set all required params and send emails
+        $from = $this->_transportBuilder->getFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY));
         $this->_transportBuilder->getMessage()
-            ->setFrom(
-                $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
-            )->addTo(
+            ->setFrom($from['email'],$from['name'])
+            ->addTo(
                 $this->getEmail(),
                 $this->getName()
             );
@@ -486,10 +486,10 @@ class User extends AbstractModel implements StorageInterface
     public function sendPasswordResetNotificationEmail()
     {
         // Set all required params and send emails
+        $from = $this->_transportBuilder->getFrom($this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY));
         $this->_transportBuilder->getMessage()
-            ->setFrom(
-                $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
-            )->addTo(
+            ->setFrom($from['email'],$from['name'])
+            ->addTo(
                 $this->getEmail(),
                 $this->getName()
             );

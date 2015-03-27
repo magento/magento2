@@ -840,14 +840,16 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
-        $this->transportBuilder->getMessage()
-            ->setFrom(
-            $this->scopeConfig->getValue(
+        $from = $this->transportBuilder->getFrom(
+                $this->scopeConfig->getValue(
                 self::XML_PATH_FORGOT_EMAIL_IDENTITY,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             )
-            )->addTo(
+        );
+        $this->transportBuilder->getMessage()
+            ->setFrom($from['email'],$from['name'])
+            ->addTo(
                 $customer->getEmail(),
                 $this->customerViewHelper->getCustomerName($customer)
             );
@@ -915,9 +917,10 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function sendEmailTemplate($customer, $template, $sender, $templateParams = [], $storeId = null)
     {
+        $from = $this->transportBuilder->getFrom($this->scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId));
         $this->transportBuilder->getMessage()
             ->setFrom(
-                $this->scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+                $from['email'],$from['name']
             )->addTo(
                 $customer->getEmail(),
                 $this->customerViewHelper->getCustomerName($customer)

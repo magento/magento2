@@ -182,14 +182,10 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
 
         foreach ($this->getRecipients()->getEmails() as $k => $email) {
             $name = $this->getRecipients()->getNames($k);
+            $from = $this->_transportBuilder->getFrom($sender);
             $this->_transportBuilder->getMessage()
-                ->setFrom(
-                    $sender
-                )
-                ->addTo(
-                    $email,
-                    $name
-                );
+                ->setFrom($from['email'],$from['name'])
+                ->addTo($email,$name);
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_sendfriendData->getEmailTemplate()
             )->setTemplateOptions(

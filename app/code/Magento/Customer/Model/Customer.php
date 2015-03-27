@@ -855,9 +855,10 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     protected function _sendEmailTemplate($template, $sender, $templateParams = [], $storeId = null)
     {
+        $from = $this->_transportBuilder->getFrom($this->_scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId));
         $this->_transportBuilder->getMessage()
             ->setFrom(
-                $this->_scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+                $from['email'],$from['name']
             )->addTo(
                 $this->getEmail(),
                 $this->getName()

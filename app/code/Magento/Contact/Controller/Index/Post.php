@@ -46,8 +46,9 @@ class Post extends \Magento\Contact\Controller\Index
             }
 
             $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+            $from = $this->_transportBuilder->getFrom($this->scopeConfig->getValue(self::XML_PATH_EMAIL_SENDER, $storeScope));
             $this->_transportBuilder->getMessage()
-                ->setFrom($this->scopeConfig->getValue(self::XML_PATH_EMAIL_SENDER, $storeScope))
+                ->setFrom($from['email'],$from['name'])
                 ->addTo($this->scopeConfig->getValue(self::XML_PATH_EMAIL_RECIPIENT, $storeScope))
                 ->setReplyTo($post['email']);
 

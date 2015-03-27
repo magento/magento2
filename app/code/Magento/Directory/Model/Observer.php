@@ -128,13 +128,15 @@ class Observer
             $this->_currencyFactory->create()->saveRates($rates);
         } else {
             $this->inlineTranslation->suspend();
+            $from = $this->_transportBuilder->getFrom(
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_ERROR_IDENTITY,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            );
             $this->_transportBuilder->getMessage()
-                ->setFrom(
-                    $this->_scopeConfig->getValue(
-                        self::XML_PATH_ERROR_IDENTITY,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
-                )->addTo(
+                ->setFrom($from['email'],$from['name'])
+                ->addTo(
                     $this->_scopeConfig->getValue(
                         self::XML_PATH_ERROR_RECIPIENT,
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
