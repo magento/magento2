@@ -14,7 +14,7 @@ return [
     '/lib/web/underscore.js',
     '/lib/web/mage/template.js',
     '/lib/web/jquery/jquery-ui-1.9.2.js',
-    '/dev/tests/js/framework/requirejs-util.js',
+    '/dev/tests/js/JsTestDriver/framework/requirejs-util.js',
     '/lib/web/jquery/jquery.cookie.js',
     '/lib/web/mage/apply/main.js',
     '/lib/web/mage/mage.js',
