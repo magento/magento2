@@ -122,6 +122,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $imageCacheFactory;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Type|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $catalogProductType;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataObjectHelperMock;
@@ -692,5 +697,51 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
             ->will($this->returnValue($this->categoryIndexerMock));
+    }
+
+    /**
+     * @dataProvider getGroupPriceDataProvider
+     */
+    public function testGetGroupPrices($originalGroupPrices)
+    {
+        $priceModel = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\Price')
+            ->disableOriginalConstructor()
+            ->setMethods(['getGroupPrices'])
+            ->getMock();
+        $priceModel->expects($this->any())
+            ->method('getGroupPrices')
+            ->will($this->returnValue($originalGroupPrices));
+
+        $this->catalogProductType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type')
+            ->disableOriginalConstructor()
+            ->setMethods(['priceFactory'])
+            ->getMock();
+        $this->catalogProductType->expects(($this->any()))
+            ->method('priceFactory')
+            ->will($this->returnValue($priceModel));
+
+        $model = $this->objectManagerHelper->getObject(
+            'Magento\Catalog\Model\Product',
+            [
+                'catalogProductType' => $this->catalogProductType
+            ]
+        );
+
+        $expectedResultIsNull = (empty($originalGroupPrices) ? true : false);
+        $groupPrices = $model->getGroupPrices();
+        $actualResultIsNull = (empty($groupPrices) ? true : false);
+        $this->assertEquals($expectedResultIsNull,$actualResultIsNull );
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroupPriceDataProvider()
+    {
+        return [
+            'receive empty array' => [[]],
+            'receive null' => [null],
+            'receive non-empty array' => [['non-empty', 'array', 'of', 'values']]
+        ];
     }
 }
