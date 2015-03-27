@@ -48,7 +48,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-                FrontendPool::KEY_CACHE
+            FrontendPool::KEY_CACHE
         )->will(
             $this->returnValue(['frontend' => ['resource2' => ['r2d1' => 'value1', 'r2d2' => 'value2']]])
         );
