@@ -15,18 +15,18 @@ class ConfigDataTest extends \PHPUnit_Framework_TestCase
         $expectedValue = [
             'test' => [
                 'path' => [
-                    'value1' => '1',
-                    'value2' => '4',
-                    'value3' => '3',
+                    'value1' => 'val1',
+                    'value2' => 'val4',
+                    'value3' => 'val3',
                 ]
             ]
         ];
         $configData = new ConfigData($fileKey);
 
-        $configData->set('test/path/value1', '1');
-        $configData->set('test/path/value2', '2');
-        $configData->set('test/path/value3', '3');
-        $configData->set('test/path/value2', '4');
+        $configData->set('test/path/value1', 'val1');
+        $configData->set('test/path/value2', 'val2');
+        $configData->set('test/path/value3', 'val3');
+        $configData->set('test/path/value2', 'val4');
 
         $this->assertEquals($expectedValue, $configData->getData());
         $this->assertEquals($fileKey, $configData->getFileKey());
