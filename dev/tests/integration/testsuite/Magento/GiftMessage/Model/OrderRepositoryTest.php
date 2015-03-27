@@ -128,6 +128,6 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         $order = $this->objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId('100000001');
 
         /** @var \Magento\GiftMessage\Api\Data\MessageInterface $message */
-        $this->giftMessageOrderRepository->save($order->getEntityId()*10, $this->message);
+        $this->giftMessageOrderRepository->save($order->getEntityId() * 10, $this->message);
     }
 }

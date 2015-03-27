@@ -10,4 +10,3 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 $order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId('100000001');
 $order->setItems([])->setTotalItemCount(0)->save();
-

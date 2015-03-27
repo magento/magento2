@@ -72,7 +72,7 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $orderItem = array_shift($orderItem);
 
         /** @var \Magento\GiftMessage\Api\Data\MessageInterface $message */
-        $this->giftMessageOrderItemRepository->get($order->getEntityId(), $orderItem->getItemId()*10);
+        $this->giftMessageOrderItemRepository->get($order->getEntityId(), $orderItem->getItemId() * 10);
     }
 
     /**
@@ -89,7 +89,9 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\GiftMessage\Api\Data\MessageInterface $message */
         $result = $this->giftMessageOrderItemRepository->save(
-            $order->getEntityId(), $orderItem->getItemId(), $this->message
+            $order->getEntityId(),
+            $orderItem->getItemId(),
+            $this->message
         );
 
         $message = $this->giftMessageOrderItemRepository->get($order->getEntityId(), $orderItem->getItemId());
@@ -152,6 +154,10 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $orderItem = array_shift($orderItem);
 
         /** @var \Magento\GiftMessage\Api\Data\MessageInterface $message */
-        $this->giftMessageOrderItemRepository->save($order->getEntityId(), $orderItem->getItemId()*10, $this->message);
+        $this->giftMessageOrderItemRepository->save(
+            $order->getEntityId(),
+            $orderItem->getItemId() * 10,
+            $this->message
+        );
     }
 }

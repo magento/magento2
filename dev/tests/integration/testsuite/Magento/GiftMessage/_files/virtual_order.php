@@ -9,5 +9,4 @@ require __DIR__ . '/../../../Magento/Sales/_files/order.php';
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 $order = $objectManager->create('Magento\Sales\Model\Order')->loadByIncrementId('100000001');
-$order-> setIsVirtual(1)->save();
-
+$order->setIsVirtual(1)->save();
