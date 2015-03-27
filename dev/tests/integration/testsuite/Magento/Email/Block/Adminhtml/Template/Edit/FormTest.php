@@ -61,7 +61,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Email\Block\Adminhtml\Template\Form::_prepareForm
+     * @covers \Magento\Email\Block\Adminhtml\Template\Edit\Form::_prepareForm
      */
     public function testPrepareFormWithTemplateId()
     {
@@ -70,7 +70,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Email\Block\Adminhtml\Template\Form::_prepareForm
+     * @covers \Magento\Email\Block\Adminhtml\Template\Edit\Form::_prepareForm
      */
     public function testPrepareFormWithoutTemplateId()
     {
