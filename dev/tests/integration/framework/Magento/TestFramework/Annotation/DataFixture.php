@@ -32,7 +32,9 @@ class DataFixture
     public function __construct($fixtureBaseDir)
     {
         if (!is_dir($fixtureBaseDir)) {
-            throw new \Magento\Framework\Exception\LocalizedException("Fixture base directory '{$fixtureBaseDir}' does not exist.");
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase("Fixture base directory '%1' does not exist.", [$fixtureBaseDir])
+            );
         }
         $this->_fixtureBaseDir = realpath($fixtureBaseDir);
     }
@@ -116,7 +118,7 @@ class DataFixture
                 if (strpos($fixture, '\\') !== false) {
                     // usage of a single directory separator symbol streamlines search across the source code
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        'Directory separator "\\" is prohibited in fixture declaration.'
+                        new \Magento\Framework\Phrase('Directory separator "\\" is prohibited in fixture declaration.')
                     );
                 }
                 $fixtureMethod = [get_class($test), $fixture];

@@ -208,11 +208,11 @@ class SettingsTest extends \PHPUnit_Framework_TestCase
         return [
             'non-existing setting' => [
                 'non_existing',
-                "Setting 'non_existing' specifies the non-existing file ''.",
+                __("Setting 'non_existing' specifies the non-existing file ''."),
             ],
             'non-existing file' => [
                 'item_label',
-                "Setting 'item_label' specifies the non-existing file '{$this->_fixtureDir}Item Label.dist'.",
+                __("Setting 'item_label' specifies the non-existing file '%1Item Label.dist'.", $this->_fixtureDir),
             ]
         ];
     }
