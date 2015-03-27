@@ -6,7 +6,7 @@
 
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\Framework\App\Cache\Type\CacheConfig;
+use Magento\Framework\App\Cache\State;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class MassActionTest extends \Magento\Backend\Utility\Controller
@@ -14,7 +14,7 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
     /**
      * Configuration of cache types
      *
-     * @var CacheConfig
+     * @var array
      */
     private static $typesConfig;
 
@@ -22,15 +22,14 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
     {
         /** @var \Magento\Framework\App\DeploymentConfig $config */
         $config = Bootstrap::getObjectManager()->get('Magento\Framework\App\DeploymentConfig');
-        $data = $config->getConfigData(CacheConfig::CACHE_KEY);
-        self::$typesConfig = new CacheConfig($data);
+        self::$typesConfig = $config->getConfigData(State::CACHE_KEY);
     }
 
     protected function tearDown()
     {
         /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
         $cacheState = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\StateInterface');
-        foreach (self::$typesConfig->getData() as $type => $value) {
+        foreach (self::$typesConfig as $type => $value) {
             $cacheState->setEnabled($type, $value);
         }
         $cacheState->persist();

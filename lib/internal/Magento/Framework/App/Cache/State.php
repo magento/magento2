@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\App\Cache;
 
-use Magento\Framework\App\Cache\Type\CacheConfig;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -18,6 +17,11 @@ class State implements StateInterface
      * Disallow cache
      */
     const PARAM_BAN_CACHE = 'global_ban_use_cache';
+
+    /**
+     * Deployment config key
+     */
+    const CACHE_KEY = 'cache_types';
 
     /**
      * Deployment configuration
@@ -109,7 +113,7 @@ class State implements StateInterface
             if ($this->banAll) {
                 return;
             }
-            $this->statuses = $this->config->getConfigData(CacheConfig::CACHE_KEY) ?: [];
+            $this->statuses = $this->config->getConfigData(self::CACHE_KEY) ?: [];
         }
     }
 }
