@@ -1366,7 +1366,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getStreet()
     {
-        return $this->getData(self::KEY_STREET);
+        return (array) $this->getData(self::KEY_STREET);
     }
 
     /**
