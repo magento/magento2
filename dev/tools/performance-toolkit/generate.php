@@ -41,6 +41,18 @@ try {
         echo ' |- ' . $label . ': ' . $config->getValue($configKey) . PHP_EOL;
     }
 
+    /** @var $config \Magento\Indexer\Model\Config */
+    $config = $application->getObjectManager()->get('Magento\Indexer\Model\Config');
+    $indexerListIds = $config->getIndexers();
+    /** @var $indexerRegistry \Magento\Indexer\Model\IndexerRegistry */
+    $indexerRegistry = $application->getObjectManager()->create('Magento\Indexer\Model\IndexerRegistry');
+    $indexersState = [];
+    foreach ($indexerListIds as $key => $indexerId) {
+        $indexer = $indexerRegistry->get($indexerId['indexer_id']);
+        $indexersState[$indexerId['indexer_id']] = $indexer->isScheduled();
+        $indexer->setScheduled(true);
+    }
+
     foreach ($application->getFixtures() as $fixture) {
         echo $fixture->getActionTitle() . '... ';
         $startTime = microtime(true);
@@ -48,6 +60,12 @@ try {
         $endTime = microtime(true);
         $resultTime = $endTime - $startTime;
         echo ' done in ' . gmdate('H:i:s', $resultTime) . PHP_EOL;
+    }
+
+    foreach ($indexerListIds as $indexerId) {
+        /** @var $indexer \Magento\Indexer\Model\Indexer */
+        $indexer = $indexerRegistry->get($indexerId['indexer_id']);
+        $indexer->setScheduled($indexersState[$indexerId['indexer_id']]);
     }
 
     $application->reindex();
