@@ -6,7 +6,7 @@
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Action\NotFoundException;
-use \Magento\Framework\App\State;
+use Magento\Framework\App\State;
 
 class FrontControllerTest extends \PHPUnit_Framework_TestCase
 {
