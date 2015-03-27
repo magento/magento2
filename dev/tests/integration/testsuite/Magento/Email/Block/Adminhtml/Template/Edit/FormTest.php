@@ -8,6 +8,7 @@ namespace Magento\Email\Block\Adminhtml\Template\Edit;
 /**
  * Test class for \Magento\Email\Block\Adminhtml\Template\Edit\Form
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
 class FormTest extends \PHPUnit_Framework_TestCase
 {
