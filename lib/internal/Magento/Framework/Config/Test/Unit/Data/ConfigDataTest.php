@@ -50,15 +50,15 @@ class ConfigDataTest extends \PHPUnit_Framework_TestCase
         return [
             'segment is empty' => [
                 '/test/test/test',
-                "The path '/test/test/test' is invalid, it should not be empty and started or ended with '/' symbol"
+                "Path '/test/test/test' is invalid. It cannot be empty nor start or end with '/'"
             ],
             'key is empty' => [
                 '',
-                "The path '' is invalid, it should not be empty and started or ended with '/' symbol"
+                "Path '' is invalid. It cannot be empty nor start or end with '/'"
             ],
             'access by empty value key' => [
                 'test/',
-                "The path 'test/' is invalid, it should not be empty and started or ended with '/' symbol"
+                "Path 'test/' is invalid. It cannot be empty nor start or end with '/'"
             ]
         ];
     }

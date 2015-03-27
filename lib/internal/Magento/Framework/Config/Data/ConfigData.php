@@ -97,7 +97,7 @@ class ConfigData
         foreach ($chunks as $chunk) {
             if ('' == $chunk) {
                 throw new \InvalidArgumentException(
-                    "The path '$path' is invalid, it should not be empty and started or ended with '/' symbol"
+                    "Path '$path' is invalid. It cannot be empty nor start or end with '/'"
                 );
             }
         }
