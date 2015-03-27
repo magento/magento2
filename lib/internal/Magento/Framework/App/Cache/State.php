@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Cache;
 use Magento\Framework\App\Cache\Type\CacheConfig;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 class State implements StateInterface
 {
