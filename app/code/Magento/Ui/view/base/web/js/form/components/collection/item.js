@@ -34,7 +34,6 @@ define([
 
     return Tab.extend({
         defaults: {
-            template: 'ui/form/components/collection/item',
             label: '',
             uniqueNs: 'activeCollectionItem',
             previewTpl: 'ui/form/components/collection/preview',
