@@ -30,7 +30,7 @@ class Index extends \Magento\Rss\Controller\Feed
         try {
             $provider = $this->rssManager->getProvider($type);
         } catch (\InvalidArgumentException $e) {
-            throw new NotFoundException($e->getMessage());
+            throw new NotFoundException(__($e->getMessage()));
         }
 
         if ($provider->isAuthRequired() && !$this->auth()) {

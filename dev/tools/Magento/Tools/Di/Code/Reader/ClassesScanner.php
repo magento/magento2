@@ -45,7 +45,7 @@ class ClassesScanner implements ClassesScannerInterface
     {
         $realPath = realpath($path);
         if (!(bool)$realPath) {
-            throw new FileSystemException(new \Magento\Framework\Phrase('Invalid path: %1', $realPath));
+            throw new FileSystemException(new \Magento\Framework\Phrase('Invalid path: %1', $path));
         }
 
         $recursiveIterator = new \RecursiveIteratorIterator(

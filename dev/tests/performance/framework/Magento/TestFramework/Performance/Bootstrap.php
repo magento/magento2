@@ -60,7 +60,7 @@ class Bootstrap
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             if (file_exists($reportDir)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("Cannot cleanup reports directory '%1'.", $reportDir)
+                    new \Magento\Framework\Phrase("Cannot cleanup reports directory '%1'.", $reportDir)
                 );
             }
         }

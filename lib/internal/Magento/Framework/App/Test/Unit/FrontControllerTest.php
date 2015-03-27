@@ -120,7 +120,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $this->router->expects($this->at(0))
             ->method('match')
             ->with($this->request)
-            ->will($this->throwException(new NotFoundException(__('Page not found.'))));
+            ->willThrowException(new NotFoundException(new \Magento\Framework\Phrase('Page not found.')));
         $this->router->expects($this->at(1))
             ->method('match')
             ->with($this->request)
