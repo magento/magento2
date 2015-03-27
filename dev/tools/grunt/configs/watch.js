@@ -14,7 +14,7 @@ var themeOptions = {};
 _.each(themes, function(theme, name) {
     themeOptions[name] = {
         "files": [
-            "<%= combo.autopath(\""+name+"\",\"pub\") %>/**/*.less"
+            "<%= combo.autopath(\""+name+"\", path.pub) %>/**/*.less"
         ],
         "tasks": "less:" + name
     };

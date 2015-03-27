@@ -20,7 +20,7 @@
 
 <?php if ($block->isHomePage()):?>
     <strong class="logo">
-<?else:?>
+<?php else:?>
     <a class="logo" href="<?php echo $block->getUrl(''); ?>" title="<?php echo $logoAlt; ?>">
 <?php endif;?>
 
@@ -31,6 +31,6 @@
 
 <?php if ($block->isHomePage()):?>
     </strong>
-<?else:?>
+<?php else:?>
     </a>
-<?endif;?>
+<?php endif;?>
