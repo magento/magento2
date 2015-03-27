@@ -210,8 +210,13 @@ class Price
         foreach ($groupPrices as $price) {
             /** @var \Magento\Catalog\Api\Data\ProductGroupPriceInterface $groupPrice */
             $groupPrice = $this->groupPriceFactory->create();
-            $groupPrice->setCustomerGroupId($price['cust_group'])
-                ->setValue($price['website_price']);
+            $groupPrice->setCustomerGroupId($price['cust_group']);
+            if (array_key_exists('website_price', $price)) {
+                $value = $price['website_price'];
+            } else {
+                $value = $price['price'];
+            }
+            $groupPrice->setValue($value);
             $prices[] = $groupPrice;
         }
         return $prices;

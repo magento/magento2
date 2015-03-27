@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Catalog\Test\Unit\Model;
+namespace Magento\Catalog\Test\Unit\Model\Product\Type;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
