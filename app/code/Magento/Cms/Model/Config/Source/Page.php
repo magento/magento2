@@ -5,6 +5,8 @@
  */
 namespace Magento\Cms\Model\Config\Source;
 
+use Magento\Cms\Model\Resource\Page\CollectionFactory;
+
 /**
  * Class Page
  */
@@ -16,25 +18,17 @@ class Page implements \Magento\Framework\Option\ArrayInterface
     protected $options;
 
     /**
-     * @var \Magento\Cms\Model\PageRepository
+     * @var CollectionFactory
      */
-    protected $pageRepository;
+    protected $collectionFactory;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $pageCriteriaBuilder;
-
-    /**
-     * @param \Magento\Cms\Model\PageRepository $pageRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $pageCriteriaBuilder
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        \Magento\Cms\Model\PageRepository $pageRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $pageCriteriaBuilder
+        CollectionFactory $collectionFactory
     ) {
-        $this->pageRepository = $pageRepository;
-        $this->pageCriteriaBuilder = $pageCriteriaBuilder;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -45,7 +39,7 @@ class Page implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         if (!$this->options) {
-            $this->options = $this->pageRepository->getList($this->pageCriteriaBuilder->create())->toOptionIdArray();
+            $this->options = $this->collectionFactory->create()->toOptionIdArray();
         }
         return $this->options;
     }
