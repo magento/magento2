@@ -35,7 +35,7 @@ class ConfigDataTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $key
      * @param string $expectedException
-     * @dataProvider exceptionDataProvider
+     * @dataProvider setWrongKeyDataProvider
      */
     public function testSetWrongKey($key, $expectedException) {
 
@@ -45,7 +45,7 @@ class ConfigDataTest extends \PHPUnit_Framework_TestCase
         $configData->set($key, 'value');
     }
 
-    public function exceptionDataProvider()
+    public function setWrongKeyDataProvider()
     {
         return [
             'segment is empty' => [
