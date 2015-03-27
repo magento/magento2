@@ -1061,18 +1061,21 @@ fieldset[disabled] .address-list .action-delete {
 }
 .admin__control-checkbox + label:before {
   border-radius: 1px;
-  content: '\e62d';
+  content: '';
   font-size: 0;
-  transition: font-size 0.1s ease-out, line-height 0.1s ease-out, color 0.1s ease-out, border-color 0.1s linear;
+  transition: font-size 0.1s ease-out, color 0.1s ease-out, border-color 0.1s linear;
 }
 .admin__control-checkbox:checked + label:before {
+  content: '\e62d';
   font-size: 1.1rem;
   line-height: 125%;
 }
-.admin__control-checkbox._indeterminate + label:before,
-.admin__control-checkbox:indeterminate + label:before {
+.admin__control-checkbox:not(:checked)._indeterminate + label:before,
+.admin__control-checkbox:not(:checked):indeterminate + label:before {
+  color: #514943;
   content: '-';
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.4rem;
   font-weight: 700;
 }
 .admin__action-dropdown-wrap {
@@ -1415,6 +1418,12 @@ fieldset[disabled] .address-list .action-delete {
 .action-multiselect-wrap .action-multiselect-toggle:after {
   right: .3rem;
 }
+.action-multiselect-wrap .action-multiselect-toggle[disabled] {
+  box-shadow: none;
+  cursor: default;
+  opacity: .5;
+  outline: 0;
+}
 .action-multiselect-wrap .action-multiselect-toggle > span {
   border: 0;
   clip: rect(0, 0, 0, 0);
@@ -1433,6 +1442,12 @@ fieldset[disabled] .address-list .action-delete {
 }
 .action-multiselect-wrap .action-menu-item {
   white-space: nowrap;
+}
+.action-multiselect-wrap > .admin__control-checkbox[disabled] {
+  box-shadow: none;
+  cursor: default;
+  opacity: .5;
+  outline: 0;
 }
 .abs-action-reset,
 .action-close,

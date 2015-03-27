@@ -129,27 +129,31 @@
     + label {
         &:before {
             border-radius: 1px;
-            content: @icon-check-mage__content;
+            content: '';
             font-size: 0;
-            transition: font-size .1s ease-out, line-height .1s ease-out, color .1s ease-out, @smooth__border-color;
+            transition: font-size .1s ease-out, color .1s ease-out, @smooth__border-color;
         }
     }
     &:checked {
         + label {
             &:before {
+                content: @icon-check-mage__content;
                 font-size: 1.1rem;
                 line-height: 125%;
             }
         }
     }
-    &._indeterminate,
-    &:indeterminate,
-    &[indeterminate]  {
-        + label {
-            &:before {
-                content: '-';
-                font-family: @font-family__base;
-                font-weight: @font-weight__bold;
+    &:not(:checked) {
+        &._indeterminate,
+        &:indeterminate {
+            + label {
+                &:before {
+                    color: @control-checkbox-radio-mark__color;
+                    content: '-';
+                    font-family: @font-family__base;
+                    font-size: @font-size__base;
+                    font-weight: @font-weight__bold;
+                }
             }
         }
     }
