@@ -24,7 +24,7 @@ class CreateCustomer extends Webapi
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        $configuration = $this->_configuration->getParameter('handler/webapi');
+        $configuration = $this->_configuration->get('handler/0/webapi/0/value');
 
         $soap = new SoapTransport($configuration['soap']);
         return $soap->call('customerCustomerList', $fixture->getData());
