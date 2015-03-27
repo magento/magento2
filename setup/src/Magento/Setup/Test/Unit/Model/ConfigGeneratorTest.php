@@ -42,16 +42,16 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testCreateCryptConfigWithInput()
     {
         $testData = [ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => 'some-test_key'];
-        $returnValue = $this->configGeneratorObject->createCryptConfig($testData, []);
+        $returnValue = $this->configGeneratorObject->createCryptConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['key' => 'some-test_key'], $returnValue->getData());
+        $this->assertEquals(['crypt' => ['key' => 'some-test_key']], $returnValue->getData());
     }
 
     public function testCreateCryptConfigWithoutInput()
     {
-        $returnValue = $this->configGeneratorObject->createCryptConfig([], []);
+        $returnValue = $this->configGeneratorObject->createCryptConfig([]);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['key' => md5('key')], $returnValue->getData());
+        $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
     }
 
     public function testCreateSessionConfigWithInput()
@@ -59,12 +59,12 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $testData = [ConfigOptionsList::INPUT_KEY_SESSION_SAVE => 'files'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['save' => ConfigOptionsList::SESSION_SAVE_FILES], $returnValue->getData());
+        $this->assertEquals(['session' => ['save' => ConfigOptionsList::SESSION_SAVE_FILES]], $returnValue->getData());
 
         $testData = [ConfigOptionsList::INPUT_KEY_SESSION_SAVE => 'db'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['save' => ConfigOptionsList::SESSION_SAVE_DB], $returnValue->getData());
+        $this->assertEquals(['session' => ['save' => ConfigOptionsList::SESSION_SAVE_DB]], $returnValue->getData());
     }
 
     public function testCreateSessionConfigWithoutInput()
@@ -79,7 +79,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $testData = [ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT => 'test-format'];
         $returnValue = $this->configGeneratorObject->createDefinitionsConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['format' => 'test-format'], $returnValue->getData());
+        $this->assertEquals(['definition' => ['format' => 'test-format']], $returnValue->getData());
     }
 
     public function testCreateDbConfig()
@@ -93,6 +93,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $returnValue = $this->configGeneratorObject->createDbConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $dbData = $returnValue->getData();
+        $dbData = $dbData['db'];
         $this->assertArrayHasKey('table_prefix', $dbData);
         $this->assertSame('testSomePrefix', $dbData['table_prefix']);
         $this->assertArrayHasKey('connection', $dbData);
@@ -111,6 +112,6 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $returnValue = $this->configGeneratorObject->createResourceConfig();
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['default_setup' => ['connection' => 'default']], $returnValue->getData());
+        $this->assertEquals(['resource' => ['default_setup' => ['connection' => 'default']]], $returnValue->getData());
     }
 }

@@ -67,6 +67,7 @@ class ConfigData
         $chunks = $this->expand($path);
         $data = [];
         $element = &$data;
+
         while ($chunks) {
             $key = array_shift($chunks);
             if ($chunks) {
@@ -76,6 +77,7 @@ class ConfigData
                 $element[$key] = $value;
             }
         }
+
         $this->data = array_replace_recursive($this->data, $data);
     }
 
@@ -91,11 +93,13 @@ class ConfigData
     private function expand($path)
     {
         $chunks = array_pad(explode('/', $path), 2, '');
+
         foreach ($chunks as $chunk) {
             if ('' == $chunk) {
                 throw new \InvalidArgumentException("The path '$path' is invalid");
             }
         }
+
         return $chunks;
     }
 }

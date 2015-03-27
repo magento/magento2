@@ -119,15 +119,13 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
         $configData1->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($testSet1[ConfigFilePool::APP_CONFIG]['segment']));
+            ->will($this->returnValue($testSet1[ConfigFilePool::APP_CONFIG]));
         $configData1->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
-        $configData1->expects($this->any())->method('getSegmentKey')->will($this->returnValue('segment'));
 
         $configData2->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($testSet2[ConfigFilePool::APP_CONFIG]['segment']));
+            ->will($this->returnValue($testSet2[ConfigFilePool::APP_CONFIG]));
         $configData2->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
-        $configData2->expects($this->any())->method('getSegmentKey')->will($this->returnValue('segment'));
 
         $configOption = $this->configOptionsList;
         $configOption->expects($this->once())
