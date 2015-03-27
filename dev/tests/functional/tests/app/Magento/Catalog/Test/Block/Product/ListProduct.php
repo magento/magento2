@@ -22,7 +22,7 @@ class ListProduct extends Block
      *
      * @var string
      */
-    protected $productItem = './/*[contains(@class,"product-item-link") and .//*[text()="%s"]]/ancestor::li';
+    protected $productItem = './/*[contains(@class,"product-item-link") and text()="%s"]/ancestor::li';
 
     /**
      * This member holds the class name of the regular price block.
