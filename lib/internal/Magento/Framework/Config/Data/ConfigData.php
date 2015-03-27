@@ -92,11 +92,13 @@ class ConfigData
      */
     private function expand($path)
     {
-        $chunks = array_pad(explode('/', $path), 2, '');
+        $chunks = explode('/', $path);
 
         foreach ($chunks as $chunk) {
             if ('' == $chunk) {
-                throw new \InvalidArgumentException("The path '$path' is invalid");
+                throw new \InvalidArgumentException(
+                    "The path '$path' is invalid, it should not be empty and started or ended with '/' symbol"
+                );
             }
         }
 

@@ -48,21 +48,17 @@ class ConfigDataTest extends \PHPUnit_Framework_TestCase
     public function exceptionDataProvider()
     {
         return [
-            'segment element' => [
-                'test',
-                "The path 'test' is invalid"
-            ],
             'segment is empty' => [
                 '/test/test/test',
-                "The path '/test/test/test' is invalid"
+                "The path '/test/test/test' is invalid, it should not be empty and started or ended with '/' symbol"
             ],
             'key is empty' => [
                 '',
-                "The path '' is invalid"
+                "The path '' is invalid, it should not be empty and started or ended with '/' symbol"
             ],
             'access by empty value key' => [
                 'test/',
-                "The path 'test/' is invalid"
+                "The path 'test/' is invalid, it should not be empty and started or ended with '/' symbol"
             ]
         ];
     }
