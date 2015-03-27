@@ -840,6 +840,17 @@ class AccountManagement implements AccountManagementInterface
         }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
+        $this->transportBuilder->getMessage()
+            ->setFrom(
+            $this->scopeConfig->getValue(
+                self::XML_PATH_FORGOT_EMAIL_IDENTITY,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $storeId
+            )
+            )->addTo(
+                $customer->getEmail(),
+                $this->customerViewHelper->getCustomerName($customer)
+            );
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->transportBuilder->setTemplateIdentifier(
             $this->scopeConfig->getValue(
@@ -851,15 +862,6 @@ class AccountManagement implements AccountManagementInterface
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
             ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)]
-        )->setFrom(
-            $this->scopeConfig->getValue(
-                self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )
-        )->addTo(
-            $customer->getEmail(),
-            $this->customerViewHelper->getCustomerName($customer)
         )->getTransport();
         $transport->sendMessage();
 
@@ -913,6 +915,13 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function sendEmailTemplate($customer, $template, $sender, $templateParams = [], $storeId = null)
     {
+        $this->transportBuilder->getMessage()
+            ->setFrom(
+                $this->scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            )->addTo(
+                $customer->getEmail(),
+                $this->customerViewHelper->getCustomerName($customer)
+            );
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->transportBuilder->setTemplateIdentifier(
             $this->scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
@@ -920,11 +929,6 @@ class AccountManagement implements AccountManagementInterface
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
             $templateParams
-        )->setFrom(
-            $this->scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
-        )->addTo(
-            $customer->getEmail(),
-            $this->customerViewHelper->getCustomerName($customer)
         )->getTransport();
         $transport->sendMessage();
 

@@ -458,6 +458,13 @@ class User extends AbstractModel implements StorageInterface
     public function sendPasswordResetConfirmationEmail()
     {
         // Set all required params and send emails
+        $this->_transportBuilder->getMessage()
+            ->setFrom(
+                $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
+            )->addTo(
+                $this->getEmail(),
+                $this->getName()
+            );
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_TEMPLATE)
@@ -465,11 +472,6 @@ class User extends AbstractModel implements StorageInterface
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0]
         )->setTemplateVars(
             ['user' => $this, 'store' => $this->_storeManager->getStore(0)]
-        )->setFrom(
-            $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
-        )->addTo(
-            $this->getEmail(),
-            $this->getName()
         )->getTransport();
 
         $transport->sendMessage();
@@ -484,6 +486,13 @@ class User extends AbstractModel implements StorageInterface
     public function sendPasswordResetNotificationEmail()
     {
         // Set all required params and send emails
+        $this->_transportBuilder->getMessage()
+            ->setFrom(
+                $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
+            )->addTo(
+                $this->getEmail(),
+                $this->getName()
+            );
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $this->_config->getValue(self::XML_PATH_RESET_PASSWORD_TEMPLATE)
@@ -491,11 +500,6 @@ class User extends AbstractModel implements StorageInterface
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 0]
         )->setTemplateVars(
             ['user' => $this, 'store' => $this->_storeManager->getStore(0)]
-        )->setFrom(
-            $this->_config->getValue(self::XML_PATH_FORGOT_EMAIL_IDENTITY)
-        )->addTo(
-            $this->getEmail(),
-            $this->getName()
         )->getTransport();
 
         $transport->sendMessage();

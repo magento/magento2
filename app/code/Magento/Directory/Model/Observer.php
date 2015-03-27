@@ -128,7 +128,18 @@ class Observer
             $this->_currencyFactory->create()->saveRates($rates);
         } else {
             $this->inlineTranslation->suspend();
-
+            $this->_transportBuilder->getMessage()
+                ->setFrom(
+                    $this->_scopeConfig->getValue(
+                        self::XML_PATH_ERROR_IDENTITY,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
+                )->addTo(
+                    $this->_scopeConfig->getValue(
+                        self::XML_PATH_ERROR_RECIPIENT,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    )
+                );
             $this->_transportBuilder->setTemplateIdentifier(
                 $this->_scopeConfig->getValue(
                     self::XML_PATH_ERROR_TEMPLATE,
@@ -141,16 +152,6 @@ class Observer
                 ]
             )->setTemplateVars(
                 ['warnings' => join("\n", $importWarnings)]
-            )->setFrom(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_ERROR_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            )->addTo(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_ERROR_RECIPIENT,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
             );
             $transport = $this->_transportBuilder->getTransport();
             $transport->sendMessage();

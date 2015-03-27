@@ -646,7 +646,16 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
 
         $this->inlineTranslation->suspend();
-
+        $this->_transportBuilder->getMessage()
+            ->setFrom(
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->addTo(
+                $this->getEmail(),
+                $this->getName()
+            );
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
@@ -659,14 +668,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             ]
         )->setTemplateVars(
             ['subscriber' => $this, 'store' => $this->_storeManager->getStore()]
-        )->setFrom(
-            $this->_scopeConfig->getValue(
-                self::XML_PATH_CONFIRM_EMAIL_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-        )->addTo(
-            $this->getEmail(),
-            $this->getName()
         );
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();
@@ -699,7 +700,16 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
 
         $this->inlineTranslation->suspend();
-
+        $this->_transportBuilder->getMessage()
+            ->setFrom(
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->addTo(
+                $this->getEmail(),
+                $this->getName()
+            );
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_SUCCESS_EMAIL_TEMPLATE,
@@ -712,14 +722,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             ]
         )->setTemplateVars(
             ['subscriber' => $this]
-        )->setFrom(
-            $this->_scopeConfig->getValue(
-                self::XML_PATH_SUCCESS_EMAIL_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-        )->addTo(
-            $this->getEmail(),
-            $this->getName()
         );
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();
@@ -751,7 +753,16 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         }
 
         $this->inlineTranslation->suspend();
-
+        $this->_transportBuilder->getMessage()
+            ->setFrom(
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                )
+            )->addTo(
+                $this->getEmail(),
+                $this->getName()
+            );
         $this->_transportBuilder->setTemplateIdentifier(
             $this->_scopeConfig->getValue(
                 self::XML_PATH_UNSUBSCRIBE_EMAIL_TEMPLATE,
@@ -764,14 +775,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             ]
         )->setTemplateVars(
             ['subscriber' => $this]
-        )->setFrom(
-            $this->_scopeConfig->getValue(
-                self::XML_PATH_UNSUBSCRIBE_EMAIL_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-        )->addTo(
-            $this->getEmail(),
-            $this->getName()
         );
         $transport = $this->_transportBuilder->getTransport();
         $transport->sendMessage();

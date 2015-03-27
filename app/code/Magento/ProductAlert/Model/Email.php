@@ -364,7 +364,17 @@ class Email extends \Magento\Framework\Model\AbstractModel
             [$block, 'toHtml']
         );
         $this->_appEmulation->stopEnvironmentEmulation();
-
+        $this->_transportBuilder->getMessage()
+            ->setFrom(
+                $this->_scopeConfig->getValue(
+                    self::XML_PATH_EMAIL_IDENTITY,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $storeId
+                )
+            )->addTo(
+                $this->_customer->getEmail(),
+                $this->_customerHelper->getCustomerName($this->_customer)
+            );
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $templateId
         )->setTemplateOptions(
@@ -374,15 +384,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
                 'customerName' => $this->_customerHelper->getCustomerName($this->_customer),
                 'alertGrid' => $alertGrid,
             ]
-        )->setFrom(
-            $this->_scopeConfig->getValue(
-                self::XML_PATH_EMAIL_IDENTITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )
-        )->addTo(
-            $this->_customer->getEmail(),
-            $this->_customerHelper->getCustomerName($this->_customer)
         )->getTransport();
 
         $transport->sendMessage();
