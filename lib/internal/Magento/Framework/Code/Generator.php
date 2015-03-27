@@ -177,7 +177,10 @@ class Generator
         if (!$this->definedClasses->classLoadable($sourceClassName)) {
             if ($this->generateClass($sourceClassName) !== self::GENERATION_SUCCESS) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    sprintf('Source class "%s" for "%s" generation does not exist.', $sourceClassName, $className)
+                    new \Magento\Framework\Phrase(
+                        'Source class "%1" for "%2" generation does not exist.',
+                        [$sourceClassName, $className]
+                    )
                 );
             }
         }
