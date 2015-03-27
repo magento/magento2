@@ -87,7 +87,7 @@ class InstallSchema implements InstallSchemaInterface
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'is_active',
@@ -136,7 +136,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Entity'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity'
          */
@@ -182,7 +182,7 @@ class InstallSchema implements InstallSchemaInterface
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_UPDATE],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'is_active',
@@ -204,7 +204,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Address Entity'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_datetime'
          */
@@ -292,7 +292,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Address Entity Datetime'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_decimal'
          */
@@ -380,7 +380,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Address Entity Decimal'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_int'
          */
@@ -458,7 +458,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Address Entity Int'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_text'
          */
@@ -538,7 +538,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Address Entity Text'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_varchar'
          */
@@ -626,7 +626,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Address Entity Varchar'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_datetime'
          */
@@ -704,7 +704,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Entity Datetime'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_decimal'
          */
@@ -782,7 +782,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Entity Decimal'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_int'
          */
@@ -860,7 +860,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Entity Int'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_text'
          */
@@ -935,7 +935,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Entity Text'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_varchar'
          */
@@ -1013,7 +1013,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Entity Varchar'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_group'
          */
@@ -1041,7 +1041,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Group'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_eav_attribute'
          */
@@ -1106,7 +1106,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Eav Attribute'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_form_attribute'
          */
@@ -1138,7 +1138,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Form Attribute'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_eav_attribute_website'
          */
@@ -1201,7 +1201,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Eav Attribute Website'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_visitor'
          */
@@ -1229,8 +1229,8 @@ class InstallSchema implements InstallSchemaInterface
             'Visitor Table'
         );
         $installer->getConnection()->createTable($table);
-        
+
         $installer->endSetup();
-        
+
     }
 }
