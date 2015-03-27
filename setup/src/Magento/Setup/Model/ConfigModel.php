@@ -64,9 +64,9 @@ class ConfigModel
     {
         /** @var AbstractConfigOption[] $optionCollection */
         $optionCollection = [];
-        $options = $this->collector->collectOptions();
+        $optionLists = $this->collector->collectOptionLists();
 
-        foreach ($options as $optionList) {
+        foreach ($optionLists as $optionList) {
             $optionCollection = array_merge($optionCollection, $optionList->getOptions());
         }
 
@@ -92,7 +92,7 @@ class ConfigModel
         $this->checkInstallationFilePermissions();
 
         $fileConfigStorage = [];
-        $options = $this->collector->collectOptions();
+        $options = $this->collector->collectOptionLists();
 
         foreach ($options as $moduleName => $option) {
 
@@ -145,7 +145,7 @@ class ConfigModel
         }
 
         // validate ConfigOptionsList
-        $options = $this->collector->collectOptions();
+        $options = $this->collector->collectOptionLists();
 
         foreach ($options as $option) {
             $errors = array_merge($errors, $option->validate($inputOptions));

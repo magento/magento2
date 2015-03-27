@@ -82,7 +82,7 @@ class ConfigOptionsListCollector
      *
      * @return \Magento\Framework\Setup\ConfigOptionsListInterface[]
      */
-    public function collectOptions()
+    public function collectOptionLists()
     {
         $optionsList = [];
 
