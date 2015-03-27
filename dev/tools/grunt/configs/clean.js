@@ -87,6 +87,7 @@ var cleanOptions = {
                 "src": [
                     "<%= path.tmp %>/cache/**/*",
                     "<%= path.tmp %>/generation/**/*",
+                    "<%= path.tmp %>/view_preprocessed/html/**/*",
                     "<%= path.tmp %>/page_cache/**/*"
                 ]
             }
