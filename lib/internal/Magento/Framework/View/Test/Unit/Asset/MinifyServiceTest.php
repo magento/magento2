@@ -151,7 +151,7 @@ class MinifyServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetAssetsInvalidAdapter()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Exception',
+            '\Magento\Framework\Exception\LocalizedException',
             'Invalid adapter: \'stdClass\'. Expected: \Magento\Framework\Code\Minifier\AdapterInterface'
         );
         $asset = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');

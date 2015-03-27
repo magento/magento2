@@ -66,7 +66,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'successful CRUD' => ['saveModelSuccessfully'],
-            'cleanup on update error' => ['saveModelAndFailOnUpdate', 'Magento\Framework\Exception']
+            'cleanup on update error' => ['saveModelAndFailOnUpdate', 'Magento\Framework\Exception\LocalizedException']
         ];
     }
 

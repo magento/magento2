@@ -132,7 +132,7 @@ class JmeterTest extends \PHPUnit_Framework_TestCase
             'no report created' => [
                 "{$fixtureDir}/scenario_without_report.jmx",
                 "{$fixtureDir}/scenario_without_report.jtl",
-                'Magento\Framework\Exception',
+                'Magento\Framework\Exception\LocalizedException',
                 "Report file '{$fixtureDir}/scenario_without_report.jtl' for 'Scenario' has not been created.",
             ],
             'scenario failure in report' => [

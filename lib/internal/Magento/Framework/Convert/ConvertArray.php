@@ -24,7 +24,7 @@ class ConvertArray
     public function assocToXml(array $array, $rootName = '_')
     {
         if (empty($rootName) || is_numeric($rootName)) {
-            throw new LocalizedException('Root element must not be empty or numeric');
+            throw new LocalizedException(new \Magento\Framework\Phrase('Root element must not be empty or numeric'));
         }
 
         $xmlStr = <<<XML
@@ -34,7 +34,7 @@ XML;
         $xml = new \SimpleXMLElement($xmlStr);
         foreach (array_keys($array) as $key) {
             if (is_numeric($key)) {
-                throw new LocalizedException('Array root keys must not be numeric.');
+                throw new LocalizedException(new \Magento\Framework\Phrase('Array root keys must not be numeric.'));
             }
         }
         return self::_assocToXml($array, $rootName, $xml);
