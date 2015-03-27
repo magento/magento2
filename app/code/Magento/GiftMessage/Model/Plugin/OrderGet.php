@@ -7,6 +7,8 @@
 
 namespace Magento\GiftMessage\Model\Plugin;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 class OrderGet
 {
     /** @var \Magento\GiftMessage\Api\OrderRepositoryInterface */
@@ -75,10 +77,11 @@ class OrderGet
         if ($order->getExtensionAttributes() && $order->getExtensionAttributes()->getGiftMessage()) {
             return $order;
         }
-        /** @var \Magento\GiftMessage\Api\Data\MessageInterface|null $giftMessage */
-        $giftMessage = $this->giftMessageOrderRepository->get($order->getEntityId());
 
-        if (!$giftMessage) {
+        try {
+            /** @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
+            $giftMessage = $this->giftMessageOrderRepository->get($order->getEntityId());
+        } catch (NoSuchEntityException $e) {
             return $order;
         }
 
@@ -104,13 +107,14 @@ class OrderGet
                 if ($orderItem->getExtensionAttributes() && $orderItem->getExtensionAttributes()->getGiftMessage()) {
                     continue;
                 }
-                /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
-                $giftMessage = $this->giftMessageOrderItemRepository->get(
-                    $order->getEntityId(),
-                    $orderItem->getItemId()
-                );
 
-                if (!$giftMessage) {
+                try {
+                    /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
+                    $giftMessage = $this->giftMessageOrderItemRepository->get(
+                        $order->getEntityId(),
+                        $orderItem->getItemId()
+                    );
+                } catch (Exception $e) {
                     continue;
                 }
 
