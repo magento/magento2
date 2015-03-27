@@ -1,3 +1,19 @@
+0.74.0-beta2
+=============
+* Fixed bugs
+    * Wrong capitalization of the label names (the sentence-style capitalization instead of the headline style)
+    * Inconsistency in the labels in the Admin panel
+    * Customer menu tabs aren't displayed as selected for the child pages
+    * An issue with the Active item in the navigation menu in the Blank and Luma themes
+    * Incorrect price alignment during checkout in the Blank and Luma themes
+    * Broken field "URL" in the Downloadable product in the Admin panel
+* GitHub issues and requests:
+    * [#1096] (https://github.com/magento/magento2/issues/1096) -- Customer model - getPrimaryAddresses without primary billing address
+    * [#1114] (https://github.com/magento/magento2/issues/1114) -- GA bug
+    * [#1116] (https://github.com/magento/magento2/issues/1116) -- Incorrect use of implode()
+    * [#1126] (https://github.com/magento/magento2/pull/1126) -- Fixed occurrences of implode with wrong argument order
+    * [#1128] (https://github.com/magento/magento2/pull/1128) -- Change wording for long operation warning
+
 0.74.0-beta1
 =============
 * Various
