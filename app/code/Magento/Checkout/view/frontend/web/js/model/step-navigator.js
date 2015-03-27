@@ -1,8 +1,6 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
@@ -11,12 +9,42 @@ define(['jquery', 'ko', 'Magento_Customer/js/model/customer'], function($, ko, c
     return {
         currentStep: null,
         steps: [
-            {name: 'authentication', isVisible: ko.observable(!customerIsLoggedIn), order: 1, isEnabled: true},
-            {name: 'billingAddress', isVisible: ko.observable(customerIsLoggedIn), order: 2, isEnabled: true},
-            {name: 'shippingAddress', isVisible: ko.observable(false), order: 3, isEnabled: true},
-            {name: 'shippingMethod', isVisible: ko.observable(false), order: 4, isEnabled: true},
-            {name: 'paymentMethod', isVisible: ko.observable(false), order: 5, isEnabled: true},
-            {name: 'review', isVisible: ko.observable(false), order: 6, isEnabled: true}
+            {
+                name: 'authentication',
+                isVisible: ko.observable(!customerIsLoggedIn),
+                isEnabled: true,
+                number: ko.observable(1)
+            },
+            {
+                name: 'billingAddress',
+                isVisible: ko.observable(customerIsLoggedIn),
+                isEnabled: true,
+                number: ko.observable(2)
+            },
+            {
+                name: 'shippingAddress',
+                isVisible: ko.observable(false),
+                isEnabled: true,
+                number: ko.observable(3)
+            },
+            {
+                name: 'shippingMethod',
+                isVisible: ko.observable(false),
+                isEnabled: true,
+                number: ko.observable(4)
+            },
+            {
+                name: 'paymentMethod',
+                isVisible: ko.observable(false),
+                isEnabled: true,
+                number: ko.observable(5)
+            },
+            {
+                name: 'review',
+                isVisible: ko.observable(false),
+                isEnabled: true,
+                number: ko.observable(6)
+            }
         ],
         setCurrent: function(step) {
             this.currentStep = step;
@@ -38,52 +66,46 @@ define(['jquery', 'ko', 'Magento_Customer/js/model/customer'], function($, ko, c
         },
         goNext: function() {
             var currentStep = this.getCurrentStep();
-            var nextStepOrder = currentStep.order + 1;
-            var nextStep;
-
-            for (var item in this.steps) {
-                nextStep = this.findStepByOrder(nextStepOrder);
-                if (!nextStep || !nextStep.isEnabled) {
-                    nextStepOrder++;
-                    this.findStepByOrder(nextStepOrder);
-                } else {
-                    break;
-                }
-            }
-            this.toStep(nextStep.name);
-        },
-        goBack: function() {
-            var currentStep = this.getCurrentStep();
-            var prevStepOrder = currentStep.order - 1;
-            var previousStep;
-            for (var item in this.steps) {
-                previousStep = this.findStepByOrder(prevStepOrder);
-                if (!previousStep || !previousStep.isEnabled) {
-                    prevStepOrder--;
-                    this.findStepByOrder(prevStepOrder);
-                } else {
-                    break;
-                }
-            }
-            this.toStep(previousStep.name);
-        },
-        toStep: function(step) {
-            if (step) {
-                $.each(this.steps, function(key, step) {
-                    step.isVisible(false);
-                });
-                this.findStepByName(step).isVisible(true);
-            }
-        },
-        findStepByOrder: function(order) {
-            var step = null;
+            var nextStepOrder = currentStep.number() + 1;
+            var nextStep = null;
             $.each(this.steps, function(key, item) {
-                if (order == item.order) {
-                    step = item;
+                if (nextStepOrder == item.number()) {
+                    nextStep = item;
                     return false;
                 }
             });
-            return step;
+            if (nextStep) {
+                this.toStep(nextStep.name);
+            }
+        },
+        goBack: function() {
+            var currentStep = this.getCurrentStep();
+            var prevStepOrder = currentStep.number() - 1;
+            var previousStep = null;
+            $.each(this.steps, function(key, item) {
+                if (prevStepOrder == item.number()) {
+                    previousStep = item;
+                    return false;
+                }
+            });
+            if (previousStep) {
+                this.toStep(previousStep.name);
+            }
+        },
+        goToStep: function(name) {
+            var visibleStep = this.getCurrentVisibleStep();
+            var step = this.findStepByName(name);
+            if (step.number() < visibleStep.number()) {
+                this.toStep(name);
+            }
+        },
+        toStep: function(name) {
+            if (name) {
+                $.each(this.steps, function(key, step) {
+                    step.isVisible(false);
+                });
+                this.findStepByName(name).isVisible(true);
+            }
         },
         findStepByName: function(name) {
             var step = null;
@@ -101,20 +123,33 @@ define(['jquery', 'ko', 'Magento_Customer/js/model/customer'], function($, ko, c
         setStepVisible: function(step, flag) {
             this.findStepByName(step).isVisible(flag);
         },
-        setStepEnabled: function(step, flag) {
-            this.findStepByName(step).isEnabled = flag;
-        },
-        getStepNumber: function(name) {
-            var order = 1;
-            $.each(this.steps, function(key, item) {
-                if (item.name == name && item.isEnabled) {
+        getCurrentVisibleStep: function() {
+            var step = null;
+            $.each(this.steps, function(key, currentStep) {
+                if (currentStep.isVisible()) {
+                    step = currentStep;
                     return false;
                 }
+            });
+            return step;
+        },
+        setStepEnabled: function(step, flag) {
+            this.findStepByName(step).isEnabled = flag;
+            this.refreshStepsNumbers();
+        },
+        refreshStepsNumbers: function() {
+            var numb = 1;
+            $.each(this.steps, function(key, item) {
                 if (item.isEnabled) {
-                    order++;
+                    item.number(numb);
+                    numb++;
+                } else {
+                    item.number(null);
                 }
             });
-            return order;
+        },
+        getStepNumber: function(name) {
+            return this.findStepByName(name).number;
         }
     };
 });

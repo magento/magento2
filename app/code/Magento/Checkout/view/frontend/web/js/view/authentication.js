@@ -1,8 +1,6 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
@@ -17,9 +15,7 @@ define(
     function(ko, Component, login, customer, navigator) {
         var stepName = 'authentication';
         return Component.extend({
-            stepNumber: function(){
-                return navigator.getStepNumber(stepName);
-            },
+            stepNumber: navigator.getStepNumber(stepName),
             isAllowedGuestCheckout: true,
             isRegistrationAllowed: true,
             isMethodRegister: false,

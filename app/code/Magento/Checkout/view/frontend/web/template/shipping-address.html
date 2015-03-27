@@ -1,5 +1,11 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
 <li id="opc-shipping" class="section allow active" data-bind="fadeVisible: isActive()">
-    <div class="step-title" data-role="title">
+    <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <span class="number" data-bind="text: stepNumber()"></span>
         <h2>Shipping Information</h2>
     </div>

@@ -1,9 +1,7 @@
 <?php
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 ?>
 
@@ -20,7 +18,7 @@
         <script>
             window.customerData = <?php echo $this->getCustomerData(); ?>;
             window.cartData = <?php echo $this->getCart(); ?>;
-            window.cartItems = JSON.parse('<?php echo json_encode($this->getCartItems()); ?>');
+            window.cartItems = <?php echo $this->getCartItems(); ?>;
             window.isLoggedIn = <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>;
             window.currencySymbol = <?php echo $this->getCurrencySymbol()?>;
             window.selectedShippingMethod = <?php echo $this->getSelectedShippingMethod()?>;

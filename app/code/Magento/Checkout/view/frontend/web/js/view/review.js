@@ -1,8 +1,6 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
@@ -24,9 +22,7 @@ define(
             defaults: {
                 template: 'Magento_Checkout/review'
             },
-            stepNumber: function(){
-                return navigator.getStepNumber(stepName);
-            },
+            stepNumber: navigator.getStepNumber(stepName),
             quoteHasPaymentMethod: quote.getPaymentMethod(),
             itemsBefore: itemsBefore,
             itemsAfter: itemsAfter,

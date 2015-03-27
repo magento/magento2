@@ -1,8 +1,6 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
@@ -13,7 +11,6 @@ define(
         '../model/url-builder',
         'mage/storage'
     ],
-
     function (ko, quote, urlBuilder, storage) {
         var availablePaymentMethods = ko.observableArray([]);
         quote.getBillingAddress().subscribe(function () {

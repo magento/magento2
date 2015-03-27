@@ -1,9 +1,7 @@
 <?php
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block;
 
@@ -187,9 +185,8 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     protected function getCartData()
     {
-        if (!$this->cartData) {
-            $quoteId = $this->getQuote()->getId();
-            $this->cartData = $this->cartRepositoryInterface->get($quoteId);
+        if (!$this->cartData && $this->getQuote()->getId()) {
+            $this->cartData = $this->cartRepositoryInterface->get($this->getQuote()->getId());
         }
         return $this->cartData;
     }
@@ -211,12 +208,14 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     public function getCartItems()
     {
         $itemData = [];
-        $itemObjects = $this->cartItemRepository->getList($this->getQuote()->getId());
-        /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
-        foreach($itemObjects as $item) {
-            $itemData[] = $item->toArray();
+        if ($this->getQuote()->getId()) {
+            $itemObjects = $this->cartItemRepository->getList($this->getQuote()->getId());
+            /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
+            foreach($itemObjects as $item) {
+                $itemData[] = $item->toArray();
+            }
         }
-        return $itemData;
+        return \Zend_Json::encode($itemData);
     }
 
     /**
@@ -226,9 +225,12 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getCurrencySymbol()
     {
-        $currencyCode = $this->getCartData()->getQuoteCurrencyCode();
-        $currency = $this->localeCurrency->getCurrency($currencyCode);
-        $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
+        $symbol = '';
+        if ($this->getCartData()) {
+            $currencyCode = $this->getCartData()->getQuoteCurrencyCode();
+            $currency = $this->localeCurrency->getCurrency($currencyCode);
+            $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
+        }
         return \Zend_Json::encode(['data' => $symbol]);
     }
 
