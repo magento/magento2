@@ -128,10 +128,6 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($this->gridAggregator) {
-            $this->gridAggregator->refresh($object->getId());
-        }
-
         $adapter = $this->_getReadAdapter();
         $columns = $adapter->describeTable($this->getMainTable());
 
@@ -188,6 +184,9 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
     {
+        if ($this->gridAggregator) {
+            $this->gridAggregator->refresh($object->getId());
+        }
         return $this;
     }
 
