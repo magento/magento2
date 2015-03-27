@@ -35,7 +35,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 self::INPUT_KEY_BACKEND_FRONTNAME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                'backend/frontName',
+                self::CONFIG_PATH_BACKEND_FRONTNAME,
                 'Backend frontname',
                 'admin'
             )
