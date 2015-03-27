@@ -44,11 +44,11 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Shipping\Helper\Carrier $carrierHelper
+     * @param Carrier $carrierHelper
+     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -64,10 +64,10 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         Carrier $carrierHelper,
+        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = []
     ) {
         $this->_carrierHelper = $carrierHelper;

@@ -85,7 +85,7 @@ class Validator
      */
     public function validateForPayment(Address $address)
     {
-        if ($address->getShouldIgnoreValidation()){
+        if ($address->getShouldIgnoreValidation()) {
             return true;
         }
 
