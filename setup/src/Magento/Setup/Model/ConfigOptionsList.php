@@ -23,6 +23,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const CONFIG_PATH_CRYPT_KEY = 'crypt/key';
     const CONFIG_PATH_SESSION_SAVE = 'session/save';
     const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
+    const CONFIG_PATH_RESOURCE_DEFAULT_SETUP = 'resource/default_setup/connection';
+    const CONFIG_PATH_DB_CONNECTION_DEFAULT = 'db/connection/default/';
     /**#@-*/
 
     /**#@+
@@ -38,7 +40,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const INPUT_KEY_DB_PREFIX = 'db_prefix';
     const INPUT_KEY_DB_MODEL = 'db_model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
-    const INPUT_KEY_ACTIVE = 'active';
     const INPUT_KEY_RESOURCE = 'resource';
     /**#@-*/
 

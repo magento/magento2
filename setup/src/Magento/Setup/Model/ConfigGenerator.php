@@ -8,11 +8,11 @@ namespace Magento\Setup\Model;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
-use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Creates deployment config data based on user input array
+ * this class introduced to brake Magento\Setup\Model\ConfigOptionsList::createConfig
  */
 class ConfigGenerator
 {
@@ -29,26 +29,31 @@ class ConfigGenerator
         ConfigOptionsList::INPUT_KEY_DB_PREFIX => ConfigOptionsList::KEY_PREFIX,
         ConfigOptionsList::INPUT_KEY_DB_MODEL => ConfigOptionsList::KEY_MODEL,
         ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS => ConfigOptionsList::KEY_INIT_STATEMENTS,
-        ConfigOptionsList::INPUT_KEY_ACTIVE => ConfigOptionsList::KEY_ACTIVE,
         ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => ConfigOptionsList::KEY_ENCRYPTION_KEY,
         ConfigOptionsList::INPUT_KEY_SESSION_SAVE => ConfigOptionsList::KEY_SAVE,
         ConfigOptionsList::INPUT_KEY_RESOURCE => ConfigOptionsList::KEY_RESOURCE,
     ];
 
+    /**
+     * @var Random
+     */
+    protected $random;
 
+    /**
+     * @var DeploymentConfig
+     */
+    protected $deploymentConfig;
 
     /**
      * Constructor
      *
      * @param Random $random
-     * @param Loader $moduleLoader
      * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(Random $random, Loader $moduleLoader, DeploymentConfig $deploymentConfig)
+    public function __construct(Random $random, DeploymentConfig $deploymentConfig)
     {
         $this->random = $random;
         $this->deploymentConfig = $deploymentConfig;
-        $this->moduleList = array_keys($moduleLoader->load());
     }
 
     /**
@@ -155,15 +160,21 @@ class ConfigGenerator
         $prefixKey = isset($data[ConfigOptionsList::INPUT_KEY_DB_PREFIX])
             ? $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]
             : '';
-        $configData->set('db/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX], $prefixKey);
+        $configData->set(
+            ConfigOptionsList::SESSION_SAVE_DB . '/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX],
+            $prefixKey
+        );
 
         foreach ($optional as $key) {
             if (isset($data[$key])) {
-                $configData->set('db/connection/default/' . self::$paramMap[$key], $data[$key]);
+                $configData->set(
+                    ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::$paramMap[$key],
+                    $data[$key]
+                );
             }
         }
 
-        $configData->set('db/connection/default/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_ACTIVE], '1');
+        $configData->set(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_ACTIVE, '1');
 
         return $configData;
     }
@@ -177,7 +188,7 @@ class ConfigGenerator
     {
         $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
 
-        $configData->set('resource/default_setup/connection', 'default');
+        $configData->set(ConfigOptionsList::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');
 
         return $configData;
     }

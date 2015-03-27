@@ -20,16 +20,9 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $random = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
         $random->expects($this->any())->method('getRandomString')->willReturn('key');
-        $loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $loader->expects($this->any())->method('load')->willReturn(
-            [
-                'module1' => ['name' => 'module_one', 'version' => '1.0.0'],
-                'module2' => ['name' => 'module_two', 'version' => '1.0.0']
-            ]
-        );
         $deployConfig= $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
-        $this->configGeneratorObject = new ConfigGenerator($random, $loader, $deployConfig);
+        $this->configGeneratorObject = new ConfigGenerator($random, $deployConfig);
     }
 
     public function testCreateInstallConfig()
