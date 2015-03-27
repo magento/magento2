@@ -94,7 +94,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-                FrontendPool::KEY_CACHE
+            FrontendPool::KEY_CACHE
         )->will(
             $this->returnValue($fixtureCacheConfig)
         );
