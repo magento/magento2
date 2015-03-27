@@ -265,13 +265,15 @@ class Context implements ContextInterface
      */
     protected function setAcceptType()
     {
-        $this->acceptType = 'xml';
+        $this->acceptType = 'html';
 
         $rawAcceptType = $this->request->getHeader('Accept');
         if ($this->request->getParam('isAjax') === 'true' || strpos($rawAcceptType, 'json') !== false) {
             $this->acceptType = 'json';
-        } elseif (strpos($rawAcceptType, 'html') !== false) {
+        } else if (strpos($rawAcceptType, 'html') !== false) {
             $this->acceptType = 'html';
+        } else if (strpos($rawAcceptType, 'xml') !== false) {
+            $this->acceptType = 'xml';
         }
     }
 
