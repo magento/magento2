@@ -33,7 +33,6 @@ define([
             parentScope: '<%= $data.getPart(dataScope, -2) %>',
             template: 'ui/collection',
             containers: [],
-            regions: [],
             _elems: []
         },
 
@@ -67,6 +66,7 @@ define([
          * @returns {Component} Chainable.
          */
         initProperties: function () {
+            this.regions = [];
             this.source = registry.get(this.provider);
 
             return this;

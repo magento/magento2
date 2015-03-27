@@ -30,7 +30,7 @@
     <container name="listing_top">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/toolbar</item>
+                <item name="template" xsi:type="string">ui/grid/toolbar</item>
             </item>
         </argument>
         <container name="default_view">

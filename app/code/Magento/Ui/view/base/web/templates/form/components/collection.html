@@ -15,7 +15,7 @@
                     </button>
                 </div>
                 <!-- ko template: previewTpl --><!-- /ko -->
-                <div data-bind="foreach: { data: element.head, as: 'element' }, stopPropagation: true">
+                <div data-bind="foreach: { data:  element.getRegion('head'), as: 'element' }, stopPropagation: true">
                     <!-- ko template: element.getTemplate() --><!-- /ko -->
                 </div>
             </li>
@@ -35,7 +35,7 @@
                     <span data-bind="text: $parent.label"></span>
                 </legend>
                 <br>
-                <!-- ko foreach: { data: element.body, as: 'element' } -->
+                <!-- ko foreach: { data: element.getRegion('body'), as: 'element' } -->
                     <!-- ko template: element.getTemplate() --><!-- /ko -->
                 <!-- /ko -->
             </fieldset>

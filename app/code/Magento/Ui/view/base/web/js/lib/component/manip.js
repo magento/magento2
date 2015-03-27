@@ -3,10 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
+    'ko',
     'underscore',
     'mageUtils',
     'uiRegistry'
-], function (_, utils, registry) {
+], function (ko, _, utils, registry) {
     'use strict';
 
     function getIndex(container, target) {
@@ -48,6 +49,22 @@ define([
     }
 
     return {
+        getRegion: function (name) {
+            var regions = this.regions;
+
+            if (!regions[name]) {
+                regions[name] = ko.observable([]);
+            }
+
+            return regions[name];
+        },
+
+        updateRegion: function (items, name) {
+            var region = this.getRegion(name);
+
+            region(items);
+        },
+
         /**
          * Requests specified components to insert
          * them into 'elems' array starting from provided position.
@@ -161,16 +178,9 @@ define([
          */
         _update: function () {
             var _elems = compact(this._elems),
-                grouped = _.groupBy(_elems, 'displayArea'),
-                group;
+                grouped = _.groupBy(_elems, 'displayArea');
 
-            this.regions.forEach(function (region) {
-                group = grouped[region];
-
-                if (group) {
-                    this[region](group);
-                }
-            }, this);
+            _.each(grouped, this.updateRegion, this);
 
             this.elems(_elems);
 

@@ -36,8 +36,7 @@ define([
         defaults: {
             label: '',
             uniqueNs: 'activeCollectionItem',
-            previewTpl: 'ui/form/components/collection/preview',
-            regions: ['body', 'head']
+            previewTpl: 'ui/form/components/collection/preview'
         },
 
         /**

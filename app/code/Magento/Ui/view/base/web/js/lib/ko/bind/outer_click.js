@@ -25,9 +25,13 @@ define([
 
             $(document).on('click', callback);
 
+            ko.utils.registerEventHandler(element, 'click', function (event) {
+                event.stopPropagation();
+            });
+
             ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
                 $(document).off('click', callback);
             });
         }
-    }
+    };
 });
