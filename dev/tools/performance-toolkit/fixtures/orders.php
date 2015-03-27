@@ -70,7 +70,7 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
 
                     /** @var $simpleProductCollection \Magento\Catalog\Model\Resource\Product\Collection */
                     $simpleProductCollection = $this->application->getObjectManager()->create(
-                        '\Magento\Catalog\Model\Resource\Product\Collection'
+                        'Magento\Catalog\Model\Resource\Product\Collection'
                     );
 
                     $simpleProductCollection->addStoreFilter($storeId);
