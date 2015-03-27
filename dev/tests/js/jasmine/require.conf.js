@@ -23,7 +23,7 @@ require.config({
             'dev/tests/js/jasmine/assets/jsbuild/local.js': 'define([], function () {\'use strict\'; return \'internal module\'; });'
         },
         text: {
-            'dev/tests/js/jasmine/assets/text/local.html': '<span>Local Template</span>'
+            'dev/tests/js/jasmine/assets/text/local.html': '<!--\n/**\n * Copyright © 2015 Magento. All rights reserved.\n * See COPYING.txt for license details.\n */\n-->\n<span>Local Template</span>'
         }
     },
     deps: [
