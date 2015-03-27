@@ -41,29 +41,36 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
      * Execute action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
         $data = $this->getRequest()->getParam('massaction', '[]');
         $data = json_decode($data, true);
-        $resultRedirect = $this->resultRedirectFactory->create();
 
-        try {
-            if (isset($data['all_selected']) && $data['all_selected'] === true) {
-                if (!empty($data['excluded'])) {
-                    $this->excludedDelete($data['excluded']);
-                } else {
-                    $this->deleteAll();
-                }
-            } elseif (!empty($data['selected'])) {
-                $this->selectedDelete($data['selected']);
+        if (isset($data['all_selected']) && $data['all_selected'] === true) {
+            if (!empty($data['excluded'])) {
+                $this->excludedDelete($data['excluded']);
             } else {
-                $this->messageManager->addError(__('Please select item(s).'));
+                $this->deleteAll();
             }
-        } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+        } elseif (!empty($data['selected'])) {
+            $this->selectedDelete($data['selected']);
+        } else {
+            $this->messageManager->addError(__('Please select item(s).'));
         }
 
+        return $this->getDefaultRedirect();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath(static::REDIRECT_URL);
     }
 
