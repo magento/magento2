@@ -1,7 +1,7 @@
 /**
- * @copyright Copyright (c) 2015 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 module.exports = function (grunt) {
     'use strict';
 
@@ -11,9 +11,8 @@ module.exports = function (grunt) {
         ok      = grunt.log.ok,
         error   = grunt.log.error;
 
-    grunt.registerTask('deploy', function (grunt) {
-        var deployLog,
-            deploy,
+    grunt.registerTask('deploy', function () {
+        var deploy,
             done = this.async();
 
         log('Cleaning "pub/static"...');
@@ -22,7 +21,7 @@ module.exports = function (grunt) {
 
         log('Deploying Magento application...');
         deploy = spawn('php', ['dev/tools/Magento/Tools/View/deploy.php']);
-        
+
         deploy.stdout.on('data', function (data) {
             log(data);
         });
@@ -33,4 +32,4 @@ module.exports = function (grunt) {
 
         deploy.on('close', done);
     });
-}
+};
