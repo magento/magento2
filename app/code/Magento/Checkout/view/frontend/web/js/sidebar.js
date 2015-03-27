@@ -20,7 +20,9 @@ define([
             selectorSubtotal: '.block-content > div.subtotal > div.amount span.price',
             selectorShowcartNumber: 'a.showcart > span.counter > span.counter-number',
             selectorShowcartLabel: 'a.showcart > span.counter > span.counter-label',
-            selectorList: '#mini-cart'
+            selectorShowcart: 'a.showcart > span.counter',
+            selectorList: '#mini-cart',
+            selectorContentWrapper: '#minicart-content-wrapper'
         },
         scrollHeight: 0,
 
@@ -33,12 +35,6 @@ define([
             $(this.options.checkoutButton).on('click', $.proxy(function() {
                 location.href = this.options.checkoutUrl;
             }, this));
-
-            // Add event on "Close" button click
-            $(this.options.closeButton).click(function(event) {
-                event.stopPropagation();
-                $(self.options.targetElement).dropdownDialog("close");
-            });
 
             // Add event on "Remove item" click
             $(this.options.removeButton).click(function(event) {
@@ -60,8 +56,22 @@ define([
                 self._updateQty($(this))
             });
 
+            this._initCloseButton();
             this._calcHeight();
             this._isOverflowed();
+        },
+
+        /**
+         * Add event on "Close" button click
+         *
+         * @private
+         */
+        _initCloseButton: function() {
+            var self = this;
+            $(this.options.closeButton).click(function(event) {
+                event.stopPropagation();
+                $(self.options.targetElement).dropdownDialog("close");
+            });
         },
 
         _isOverflowed: function() {
@@ -133,9 +143,15 @@ define([
                 this._refreshSubtotal(response.data.subtotal);
                 this._refreshShowcartCounter(response.data.summary_qty, response.data.summary_text);
             }
-            elem.closest('li').remove();
-            this._calcHeight();
-            this._isOverflowed();
+            if (response.cleanup === true) {
+                $(this.options.selectorContentWrapper).replaceWith($.trim(response.content));
+                $(this.options.selectorShowcart).addClass('empty');
+                this._initCloseButton();
+            } else {
+                elem.closest('li').remove();
+                this._calcHeight();
+                this._isOverflowed();
+            }
         },
 
         /**

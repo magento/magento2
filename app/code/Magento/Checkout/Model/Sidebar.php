@@ -60,6 +60,9 @@ class Sidebar
             'success' => empty($error) ? true : false,
         ];
         if ($response['success']) {
+            if (!$this->getSummaryQty()) {
+                $response['cleanup'] = true;
+            }
             $response = array_merge($response, [
                 'data' => [
                     'summary_qty' => $this->getSummaryQty(),
