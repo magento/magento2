@@ -138,7 +138,7 @@ class Install extends AbstractActionController
         $result[BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME] = isset($source['config']['address']['admin'])
             ? $source['config']['address']['admin'] : '';
         $result[SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY] = isset($source['config']['encrypt']['key'])
-            ? $source['config']['encrypt']['key'] : '';
+            ? $source['config']['encrypt']['key'] : null;
         $result[Installer::ENABLE_MODULES] = isset($source['store']['selectedModules'])
             ? implode(',', $source['store']['selectedModules']) : '';
         $result[Installer::DISABLE_MODULES] = isset($source['store']['allModules'])
