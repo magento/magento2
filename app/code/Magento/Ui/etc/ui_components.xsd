@@ -260,15 +260,6 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <xs:complexType name="group">
-        <xs:complexContent>
-            <xs:extension base="ui_element">
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:group ref="configurable"/>
-                </xs:choice>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
     <xs:complexType name="nav">
         <xs:complexContent>
             <xs:extension base="ui_element">

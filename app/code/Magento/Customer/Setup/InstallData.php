@@ -161,7 +161,7 @@ class InstallData implements InstallDataInterface
             'customer_address',
             'street',
             'backend_model',
-            'Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend'
+            'Magento\Eav\Model\Entity\Attribute\Backend\Multiline'
         );
 
         $migrationSetup = $setup->createMigrationSetup();
