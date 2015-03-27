@@ -69,8 +69,8 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $this->configModel
             ->expects($this->once())
             ->method('process')
-            ->with( ['db_host' => 'host']);
-
+            ->with( ['db_host' => 'host']
+            );
         $this->checkInteraction(true);
     }
 

@@ -37,7 +37,8 @@ class ConfigDataTest extends \PHPUnit_Framework_TestCase
      * @param string $expectedException
      * @dataProvider setWrongKeyDataProvider
      */
-    public function testSetWrongKey($key, $expectedException) {
+    public function testSetWrongKey($key, $expectedException)
+    {
 
         $configData = new ConfigData('testKey');
 

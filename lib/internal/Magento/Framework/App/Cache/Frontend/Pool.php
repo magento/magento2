@@ -44,8 +44,11 @@ class Pool implements \Iterator
      * @param Factory $frontendFactory
      * @param array $frontendSettings Format: array('<frontend_id>' => array(<cache_settings>), ...)
      */
-    public function __construct(DeploymentConfig $deploymentConfig, Factory $frontendFactory, array $frontendSettings = [])
-    {
+    public function __construct(
+        DeploymentConfig $deploymentConfig,
+        Factory $frontendFactory,
+        array $frontendSettings = []
+    ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->_factory = $frontendFactory;
         $this->_frontendSettings = $frontendSettings + [self::DEFAULT_FRONTEND_ID => []];
