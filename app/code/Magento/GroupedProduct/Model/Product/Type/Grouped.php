@@ -326,6 +326,12 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         return $this;
     }
 
+    /**
+     * @param \Magento\Framework\Object $buyRequest
+     * @param $product
+     * @param $isStrictProcessMode
+     * @return array|string
+     */
     protected function getProductInfo(\Magento\Framework\Object $buyRequest, $product, $isStrictProcessMode)
     {
         $productsInfo = $buyRequest->getSuperGroup() ?: [];
@@ -355,6 +361,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param string $processMode
      * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
     {
@@ -375,7 +382,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 continue;
             }
 
-            $_result = $subProduct->getTypeInstance()->_prepareProduct($buyRequest, $subProduct,$processMode);
+            $_result = $subProduct->getTypeInstance()->_prepareProduct($buyRequest, $subProduct, $processMode);
 
             if (is_string($_result)) {
                 return $_result;

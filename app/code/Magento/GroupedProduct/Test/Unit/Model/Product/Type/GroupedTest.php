@@ -391,8 +391,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $cached = true;
         $associatedProducts = [];
-        $this->product->expects($this->atLeastOnce())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->atLeastOnce())->method('getData')->will($this->returnValue($associatedProducts));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue($associatedProducts));
 
         $this->assertEquals(
             $expectedMsg,
@@ -407,8 +413,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $cached = true;
         $associatedProducts = [];
-        $this->product->expects($this->atLeastOnce())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->atLeastOnce())->method('getData')->will($this->returnValue($associatedProducts));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue($associatedProducts));
 
         $this->assertEquals(
             [0 => $this->product],
@@ -438,8 +450,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
-        $this->product->expects($this->atLeastOnce())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->atLeastOnce())->method('getData')->will($this->returnValue([$associatedProduct]));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([$associatedProduct]));
 
         $this->assertEquals(
             $associatedPrepareResult,
@@ -470,8 +488,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
-        $this->product->expects($this->atLeastOnce())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->atLeastOnce())->method('getData')->will($this->returnValue([$associatedProduct]));
+        $this->product->
+        expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product->
+        expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([$associatedProduct]));
 
         $this->assertEquals(
             $expectedMsg,
@@ -501,8 +525,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
-        $this->product->expects($this->atLeastOnce())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->atLeastOnce())->method('getData')->will($this->returnValue([$associatedProduct]));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([$associatedProduct]));
 
         $this->assertEquals(
             [$this->product],
@@ -532,8 +562,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
-        $this->product->expects($this->atLeastOnce())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->atLeastOnce())->method('getData')->will($this->returnValue([$associatedProduct]));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([$associatedProduct]));
 
         $this->assertEquals(
             $associatedPrepareResult,
