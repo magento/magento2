@@ -325,8 +325,12 @@ class Installer
             } else {
                 $result[$module] = 1;
             }
-            $result[$module] = in_array($module, $disable) ? 0 : $result[$module];
-            $result[$module] = in_array($module, $enable) ? 1 : $result[$module];
+            if (in_array($module, $disable)) {
+                $result[$module] = 0;
+            }
+            if (in_array($module, $enable)) {
+                $result[$module] = 1;
+            }
         }
         $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]]);
         return $result;
