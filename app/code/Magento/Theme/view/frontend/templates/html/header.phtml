@@ -12,7 +12,24 @@
 ?>
 <?php switch ($block->getShowPart()):
     case 'welcome': ?>
-        <li class="greet welcome"><?php echo $block->getWelcome() ?></li>
+        <li class="greet welcome" data-bind="scope: 'welcome'">
+                <span data-bind="text: customer().username"></span>
+        </li>
+        <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "renderer": {
+                        "layout": {
+                            "welcome": {
+                                "component": "Magento_Theme/js/view/welcome"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        </script>
     <?php break; ?>
 
     <?php case 'other': ?>
