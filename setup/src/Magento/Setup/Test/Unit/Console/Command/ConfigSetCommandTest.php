@@ -18,16 +18,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $configModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList
-     */
-    private $moduleList;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Console\Command\ConfigSetCommand
      */
     private $command;
