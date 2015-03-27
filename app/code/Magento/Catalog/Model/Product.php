@@ -127,7 +127,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @var array
      */
-    protected $_links = [];
+    protected $_links = null;
 
     /**
      * Flag for available duplicate function
@@ -1271,10 +1271,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get product links info
      *
-     * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]|null
      */
     public function getProductLinks()
     {
+        if ($this->_links === null) {
+            return null;
+        }
+
         if (empty($this->_links)) {
             $productLinks = [];
 

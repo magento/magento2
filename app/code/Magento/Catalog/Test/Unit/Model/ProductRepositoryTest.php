@@ -841,7 +841,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
                 "Simple Product 3", "linked_product_type" => "simple", "position" => 0]]
         ];
-        
+
         return $data;
     }
 }
