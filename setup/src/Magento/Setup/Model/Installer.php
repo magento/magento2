@@ -428,6 +428,12 @@ class Installer
 
         $this->setupConfigModel->process($userData);
 
+        if ($this->deploymentConfig->isAvailable()) {
+            $deploymentConfigData = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
+            if (isset($deploymentConfigData)) {
+                $this->installInfo[ConfigOptionsList::KEY_ENCRYPTION_KEY] = $deploymentConfigData;
+            }
+        }
         // reset object manager now that there is a deployment config
         $this->objectManagerProvider->reset();
     }
