@@ -4,10 +4,10 @@
         <!-- additional info block skipped -->
     </td>
     <td class="col price" data-th="Price">
-        <span data-bind="text: item.price"></span>
+        <span data-bind="text: $parent.getFormattedPrice(item.price)"></span>
     </td>
     <td class="col qty" data-th="Qty"><span class="qty" data-bind="text: item.qty"></span></td>
     <td class="col subtotal" data-th="Subtotal">
-        <span data-bind="text: item.row_total"></span>
+        <span data-bind="text: $parent.getFormattedPrice(item.row_total)"></span>
     </td>
 </tr>

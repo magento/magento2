@@ -13,9 +13,10 @@ define(
         'mage/url',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/action/place-order',
-        'Magento_Checkout/js/model/review'
+        'Magento_Checkout/js/model/review',
+        'Magento_Catalog/js/price-utils'
     ],
-    function (Component, quote, url, navigator, orderAction, review) {
+    function (Component, quote, url, navigator, orderAction, review, priceUtils) {
         var stepName = 'review';
         var itemsBefore = [];
         var itemsAfter = [];
@@ -39,7 +40,11 @@ define(
                 orderAction();
             },
             // get recalculated totals when all data set
-            getTotals: review.getTotals()
+            getTotals: review.getTotals(),
+            getFormattedPrice: function (price) {
+                //todo add format data further
+                return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
+            }
         });
     }
 );
