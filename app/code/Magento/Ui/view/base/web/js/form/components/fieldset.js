@@ -9,7 +9,7 @@ define([
 
     return Collapsible.extend({
         defaults: {
-            template: 'ui/fieldset/fieldset',
+            template: 'ui/form/fieldset',
             collapsible: false,
             opened: true
         }
