@@ -21,7 +21,6 @@ return [
     ['Magento\Cache', 'Magento\Framework\Cache'],
     ['Magento\ObjectManager', 'Magento\Framework\ObjectManager'],
     ['Magento\Exception', 'Magento\Framework\Exception\LocalizedException'],
-    ['Magento\Framework\Exception', 'Magento\Framework\Exception\LocalizedException'],
     ['Magento\Autoload', 'Magento\Framework\Autoload'],
     ['Magento\Translate', 'Magento\Framework\Translate'],
     ['Magento\Code', 'Magento\Framework\Code'],
