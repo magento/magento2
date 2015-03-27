@@ -95,14 +95,14 @@ class OrderGetTest extends WebapiAbstract
 
         $this->assertArrayHasKey('gift_message', $result['extension_attributes']);
         $expectedGiftMessage = $expectedExtensionAttributes['gift_message'];
-        $actualGiftMessage =  $result['extension_attributes']['gift_message'];
+        $actualGiftMessage = $result['extension_attributes']['gift_message'];
         $this->assertEquals($expectedGiftMessage['sender'], $actualGiftMessage['sender']);
         $this->assertEquals($expectedGiftMessage['recipient'], $actualGiftMessage['recipient']);
         $this->assertEquals($expectedGiftMessage['message'], $actualGiftMessage['message']);
 
         $this->assertArrayHasKey('gift_message', $result['items'][0]['extension_attributes']);
         $expectedGiftMessage = $expectedExtensionAttributes['gift_message'];
-        $actualGiftMessage =  $result['items'][0]['extension_attributes']['gift_message'];
+        $actualGiftMessage = $result['items'][0]['extension_attributes']['gift_message'];
         $this->assertEquals($expectedGiftMessage['sender'], $actualGiftMessage['sender']);
         $this->assertEquals($expectedGiftMessage['recipient'], $actualGiftMessage['recipient']);
         $this->assertEquals($expectedGiftMessage['message'], $actualGiftMessage['message']);
