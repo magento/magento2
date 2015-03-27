@@ -44,14 +44,13 @@ try {
     /** @var $config \Magento\Indexer\Model\Config */
     $config = $application->getObjectManager()->get('Magento\Indexer\Model\Config');
     $indexerListIds = $config->getIndexers();
+    /** @var $indexerRegistry \Magento\Indexer\Model\IndexerRegistry */
+    $indexerRegistry = $application->getObjectManager()->create('Magento\Indexer\Model\IndexerRegistry');
     $indexersState = [];
     foreach ($indexerListIds as $key => $indexerId) {
-        /** @var $indexer \Magento\Indexer\Model\Indexer */
-        $indexer = $application->getObjectManager()->create('Magento\Indexer\Model\Indexer');
-        $indexer->load($indexerId['indexer_id']);
+        $indexer = $indexerRegistry->get($indexerId['indexer_id']);
         $indexersState[$indexerId['indexer_id']] = $indexer->isScheduled();
         $indexer->setScheduled(true);
-        unset($indexer);
     }
 
     foreach ($application->getFixtures() as $fixture) {
@@ -65,10 +64,8 @@ try {
 
     foreach ($indexerListIds as $indexerId) {
         /** @var $indexer \Magento\Indexer\Model\Indexer */
-        $indexer = $application->getObjectManager()->create('Magento\Indexer\Model\Indexer');
-        $indexer->load($indexerId['indexer_id']);
+        $indexer = $indexerRegistry->get($indexerId['indexer_id']);
         $indexer->setScheduled($indexersState[$indexerId['indexer_id']]);
-        unset($indexer);
     }
 
     $application->reindex();
