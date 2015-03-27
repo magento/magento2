@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     /**
@@ -62,16 +65,23 @@ class Observer
     protected $_productResourceFactory;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Category $categoryResource
-     * @param \Magento\Catalog\Model\Resource\Product $catalogProduct
+     * @var \Magento\Framework\Registry
+     */
+    protected $_registry;
+
+    /**
+     * @param \Magento\Framework\Registry $registry
+     * @param Resource\Category $categoryResource
+     * @param Resource\Product $catalogProduct
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+     * @param Layer\Resolver $layerResolver
      * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Indexer\Category\Flat\State $categoryFlatState
-     * @param \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
+     * @param Resource\ProductFactory $productResourceFactory
      */
     public function __construct(
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Resource\Category $categoryResource,
         \Magento\Catalog\Model\Resource\Product $catalogProduct,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -81,6 +91,7 @@ class Observer
         \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState,
         \Magento\Catalog\Model\Resource\ProductFactory $productResourceFactory
     ) {
+        $this->_registry = $registry;
         $this->_categoryResource = $categoryResource;
         $this->_catalogProduct = $catalogProduct;
         $this->_storeManager = $storeManager;
@@ -137,11 +148,20 @@ class Observer
             $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG . '_' . $category->getId());
 
             $tree = $parentCategoryNode->getTree();
+
+            $isActiveCategory = false;
+            /** @var \Magento\Catalog\Model\Category $currentCategory */
+            $currentCategory = $this->_registry->registry('current_category');
+            if ($currentCategory && $currentCategory->getId() == $category->getId()) {
+                $isActiveCategory = true;
+            }
+
             $categoryData = [
                 'name' => $category->getName(),
                 'id' => $nodeId,
                 'url' => $this->_catalogCategory->getCategoryUrl($category),
-                'is_active' => $this->_isActiveMenuCategory($category),
+                'has_active' => $this->hasActive($category),
+                'is_active' => $isActiveCategory
             ];
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
@@ -162,7 +182,7 @@ class Observer
      * @param \Magento\Framework\Data\Tree\Node $category
      * @return bool
      */
-    protected function _isActiveMenuCategory($category)
+    protected function hasActive($category)
     {
         if (!$this->_catalogLayer) {
             return false;
