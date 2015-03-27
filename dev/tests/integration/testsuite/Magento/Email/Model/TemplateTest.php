@@ -286,7 +286,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testProcessTemplate()
     {
         $this->_model->setId('customer_create_account_email_template');
-        $this->_model->processTemplate();
+        $this->assertContains('<body style', $this->_model->processTemplate());
     }
 
     public function testGetSubject()
