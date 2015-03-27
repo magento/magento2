@@ -3118,12 +3118,21 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
 }
 .menu-wrapper .logo {
   display: block;
-  height: 6.5rem;
-  margin-bottom: 1rem;
-  padding: 1.2rem 0;
+  height: 7.5rem;
+  padding: 1.2rem 0 2.2rem;
   position: relative;
   text-align: center;
   z-index: 700;
+}
+.menu-wrapper .logo:focus {
+  background-color: #524d49;
+  box-shadow: none;
+}
+.menu-wrapper .logo:focus + .admin__menu .level-0:first-child > a {
+  background-color: #373330;
+}
+.menu-wrapper .logo:focus + .admin__menu .level-0:first-child > a:after {
+  display: none;
 }
 .menu-wrapper .logo:hover .logo-img {
   -webkit-filter: brightness(1.1);
@@ -3161,7 +3170,6 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   display: none;
 }
 .admin__menu .level-0._active > a,
-.admin__menu .level-0._hover > a,
 .admin__menu .level-0:hover > a {
   background-color: #524d49;
   color: #f7f3eb;
@@ -3204,11 +3212,7 @@ fieldset[disabled] .admin__control-text + .ui-datepicker-trigger {
   visibility: hidden;
   z-index: 698;
 }
-.admin__menu .level-0 > .submenu._show {
-  left: 100%;
-  visibility: visible;
-}
-.admin__menu .level-0._recent._hover .submenu {
+.admin__menu .level-0._show > .submenu {
   left: 100%;
   visibility: visible;
 }
