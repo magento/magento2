@@ -33,6 +33,6 @@ return array(
         '/lib/web/mage/gallery-fullscreen.js',
         '/lib/web/mage/zoom.js',
     ),
-    'test' => array('/dev/tests/js/testsuite'),
+    'test' => array('/dev/tests/js/JsTestDriver/testsuite'),
     'JsTestDriver' => '{{path_to_jstestdriver_jar}}'
 );

@@ -6,8 +6,8 @@
  * See COPYING.txt for license details.
  */
 
-define('RELATIVE_APP_ROOT', '../../..');
-require __DIR__ . '/../../../app/autoload.php';
+define('RELATIVE_APP_ROOT', '../../../..');
+require __DIR__ . '/../../../../app/autoload.php';
 
 $userConfig = normalize('jsTestDriver.php');
 $defaultConfig = normalize('jsTestDriver.php.dist');
