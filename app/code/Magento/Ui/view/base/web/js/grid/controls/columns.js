@@ -9,11 +9,16 @@ define([
 
     return Collapsible.extend({
         defaults: {
-            template: 'ui/grid/controls/columns'
+            template: 'ui/grid/controls/columns',
+            viewportSize: 18
         },
 
         reset: function () {
             this.delegate('resetVisible');
+        },
+
+        hasOverflow: function () {
+            return this.elems().length > this.viewportSize;
         },
 
         countVisible: function () {
