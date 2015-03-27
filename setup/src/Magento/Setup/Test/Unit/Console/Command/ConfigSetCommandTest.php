@@ -28,30 +28,34 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Console\Command\ConfigSetCommand
      */
-    private $option;
+    private $command;
 
     public function setUp()
     {
-        $this->option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('db_host'));
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
         $this->configModel
             ->expects($this->exactly(2))
             ->method('getAvailableOptions')
-            ->will($this->returnValue([$this->option]));
-        $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->deploymentConfig
+            ->will($this->returnValue([$option]));
+        $moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
+        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig
             ->expects($this->once())
             ->method('get')
             ->will($this->returnValue('localhost'));
+        $this->command = new ConfigSetCommand($this->configModel, $moduleList, $deploymentConfig);
     }
 
     public function testExecuteNoInteractive()
     {
-        $command = new ConfigSetCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
-        $commandTester = new CommandTester($command);
+        $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
         $this->assertSame(
             'No module configuration is available, so all modules are enabled.' . PHP_EOL
@@ -62,19 +66,20 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteInteractiveWithYes()
     {
-        $this->option
-            ->expects($this->exactly(7))
-            ->method('getName')
-            ->will($this->returnValue('db_host'));
+        $this->configModel
+            ->expects($this->once())
+            ->method('process')
+            ->with( ['db_host' => 'host']);
+
         $this->checkInteraction(true);
     }
 
     public function testExecuteInteractiveWithNo()
     {
-        $this->option
-            ->expects($this->exactly(8))
-            ->method('getName')
-            ->will($this->returnValue('db_host'));
+        $this->configModel
+            ->expects($this->once())
+            ->method('process')
+            ->with([]);
         $this->checkInteraction(false);
     }
 
@@ -86,7 +91,6 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
      */
     private function checkInteraction($interactionType)
     {
-        $command = new ConfigSetCommand($this->configModel, $this->moduleList, $this->deploymentConfig);
         $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', [], [], '', false);
         $dialog
             ->expects($this->once())
@@ -100,9 +104,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('dialog')
             ->will($this->returnValue($dialog));
-        $command->setHelperSet($helperSet);
+        $this->command->setHelperSet($helperSet);
 
-        $commandTester = new CommandTester($command);
+        $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--db_host' => 'host']);
         $this->assertSame(
             'No module configuration is available, so all modules are enabled.' . PHP_EOL
