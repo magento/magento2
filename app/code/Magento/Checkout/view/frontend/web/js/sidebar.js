@@ -18,21 +18,22 @@ define([
         scrollHeight: 0,
 
         _create: function() {
+            this._initContent();
+        },
+
+        _initContent: function() {
             var self = this;
 
             this.element.decorate('list', this.options.isRecursive);
 
+            $(this.options.button.close).click(function(event) {
+                event.stopPropagation();
+                $(self.options.targetElement).dropdownDialog("close");
+            });
+
             $(this.options.button.checkout).on('click', $.proxy(function() {
                 location.href = this.options.url.checkout;
             }, this));
-
-            $(this.options.item.qty).keyup(function(event) {
-                self._showButton($(this));
-            });
-            $(this.options.item.button).click(function(event) {
-                event.stopPropagation();
-                self._updateQty($(this))
-            });
 
             $(this.options.button.remove).click(function(event) {
                 event.stopPropagation();
@@ -41,22 +42,16 @@ define([
                 }
             });
 
-            this._initCloseButton();
+            $(this.options.item.qty).keyup(function() {
+                self._showItemButton($(this));
+            });
+            $(this.options.item.button).click(function(event) {
+                event.stopPropagation();
+                self._updateItemQty($(this))
+            });
+
             this._calcHeight();
             this._isOverflowed();
-        },
-
-        /**
-         * Add event on "Close" button click
-         *
-         * @private
-         */
-        _initCloseButton: function() {
-            var self = this;
-            $(this.options.button.close).click(function(event) {
-                event.stopPropagation();
-                $(self.options.targetElement).dropdownDialog("close");
-            });
         },
 
         /**
@@ -73,16 +68,16 @@ define([
             }
         },
 
-        _showButton: function(elem) {
+        _showItemButton: function(elem) {
             var itemId = elem.data('cart-item');
             var itemQty = elem.data('item-qty');
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
             } else if (elem.val() == 0) {
                 elem.val(itemQty);
-                this._hideButton(elem);
+                this._hideItemButton(elem);
             } else {
-                this._hideButton(elem);
+                this._hideItemButton(elem);
             }
         },
 
@@ -99,17 +94,17 @@ define([
                 && (changed - 0 > 0);
         },
 
-        _hideButton: function(elem) {
+        _hideItemButton: function(elem) {
             var itemId = elem.data('cart-item');
             $('#update-cart-item-' + itemId).hide('fade', 300);
         },
 
-        _updateQty: function(elem) {
+        _updateItemQty: function(elem) {
             var itemId = elem.data('cart-item');
             this._ajax(this.options.url.update, {
                 item_id: itemId,
                 item_qty: $('#cart-item-' + itemId + '-qty').val()
-            }, elem, this._updateQtyAfter);
+            }, elem, this._updateItemQtyAfter);
         },
 
         /**
@@ -119,14 +114,14 @@ define([
          * @param response
          * @private
          */
-        _updateQtyAfter: function(elem, response) {
+        _updateItemQtyAfter: function(elem, response) {
             if ($.type(response.data) === 'object') {
                 this._refreshQty(response.data.summary_qty, response.data.summary_text);
                 this._refreshSubtotal(response.data.subtotal);
                 this._refreshShowcart(response.data.summary_qty, response.data.summary_text);
                 this._refreshItemQty(elem, response.data.summary_qty);
             }
-            this._hideButton(elem);
+            this._hideItemButton(elem);
         },
 
         _removeItem: function(elem) {
@@ -145,19 +140,13 @@ define([
          */
         _removeItemAfter: function(elem, response) {
             if ($.type(response.data) === 'object') {
-                this._refreshQty(response.data.summary_qty, response.data.summary_text);
-                this._refreshSubtotal(response.data.subtotal);
                 this._refreshShowcart(response.data.summary_qty, response.data.summary_text);
             }
+            $(this.options.minicart.content).html($.trim(response.content));
             if (response.cleanup === true) {
-                $(this.options.minicart.content).replaceWith($.trim(response.content));
                 $(this.options.showcart.parent).addClass('empty');
-                this._initCloseButton();
-            } else {
-                elem.closest('li').remove();
-                this._calcHeight();
-                this._isOverflowed();
             }
+            this._initContent();
         },
 
         /**

@@ -84,11 +84,11 @@ class RemoveItem extends Action
     protected function jsonResponse($error = '')
     {
         $response = $this->sidebar->getResponseData($error);
-        if (isset($response['cleanup']) && (bool)$response['cleanup']) {
-            $resultPage = $this->resultPageFactory->create();
-            $block = $resultPage->getLayout()->getBlock('minicart.content')->toHtml();
-            $response['content'] = $block;
-        }
+
+        $resultPage = $this->resultPageFactory->create();
+        $block = $resultPage->getLayout()->getBlock('minicart.content')->toHtml();
+        $response['content'] = $block;
+
         return $this->getResponse()->representJson(
             $this->jsonHelper->jsonEncode($response)
         );
