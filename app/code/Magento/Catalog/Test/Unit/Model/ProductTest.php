@@ -249,6 +249,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->productLinkFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -268,6 +273,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'categoryRepository' => $this->categoryRepository,
                 'catalogProduct' => $this->_catalogProduct,
                 'imageCacheFactory' => $this->imageCacheFactory,
+                'productLinkFactory' => $this->productLinkFactory,
                 'data' => ['id' => 1]
             ]
         );
@@ -692,5 +698,69 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
             ->will($this->returnValue($this->categoryIndexerMock));
+    }
+
+    /**
+     *  Test for getProductLinks()
+     */
+    public function testGetProductLinks()
+    {
+        $inputLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputLink->setProductSku("Simple Product 1");
+        $inputLink->setLinkType("related");
+        $inputLink->setData("sku", "Simple Product 2");
+        $inputLink->setData("type_id", "simple");
+        $inputLink->setPosition(0);
+
+        $outputLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $outputLink->setProductSku("Simple Product 1");
+        $outputLink->setLinkType("related");
+        $outputLink->setLinkedProductSku("Simple Product 2");
+        $outputLink->setLinkedProductType("simple");
+        $outputLink->setPosition(0);
+
+        $productLinks = [];
+        $this->model->setData('related_products', [$inputLink]);
+        $productLinks[] = $outputLink;
+        $outputLink->setLinkType("upsell");
+        $inputLink->setLinkType("upsell");
+        $this->model->setData('up_sell_products', [$inputLink]);
+        $productLinks[] = $outputLink;
+        $outputLink->setLinkType("crosssell");
+        $inputLink->setLinkType("crosssell");
+        $this->model->setData('cross_sell_products', [$inputLink]);
+        $productLinks[] = $outputLink;
+
+        $productLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $this->productLinkFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($productLink);
+
+        $typeInstanceMock = $this->getMock(
+            'Magento\ConfigurableProduct\Model\Product\Type\Simple', ["getSku"], [], '', false);
+        $typeInstanceMock
+            ->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn("Simple Product 1");
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        $links = $this->model->getProductLinks();
+        $this->assertEquals($links, $productLinks);
+    }
+
+    /**
+     *  Test for setProductLinks()
+     */
+    public function testSetProductLinks()
+    {
+        $link = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $link->setProductSku("Simple Product 1");
+        $link->setLinkType("upsell");
+        $link->setLinkedProductSku("Simple Product 2");
+        $link->setLinkedProductType("simple");
+        $link->setPosition(0);
+        $productLinks = [$link];
+        $this->model->setProductLinks($productLinks);
+        $this->assertEquals($productLinks, $this->model->getProductLinks());
     }
 }

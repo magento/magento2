@@ -62,11 +62,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $resourceModel;
 
     /*
-     * @var \Magento\Catalog\Model\Resource\Product
-     */
-    protected $productResource;
-
-    /*
      * @var \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks
      */
     protected $linkInitializer;
@@ -104,7 +99,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param Resource\Product $resourceModel
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
@@ -121,7 +115,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\Resource\Product $resourceModel,
-        \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
@@ -135,7 +128,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceModel = $resourceModel;
-        $this->productResource = $productResource;
         $this->linkInitializer = $linkInitializer;
         $this->attributeRepository = $attributeRepository;
         $this->filterBuilder = $filterBuilder;
@@ -240,6 +232,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Process product options, creating new options, updating and deleting existing options
      *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param array $newOptions
      * @return $this
      * @throws NoSuchEntityException
      */
@@ -302,6 +296,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /*
      * Process product links, creating new links, updating and deleting existing links
      *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $newLinks
      * @return $this
      * @throws NoSuchEntityException
      */
@@ -314,17 +310,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $productLinks[$link->getLinkType()][] = $link;
             }
 
-            //$linkTypes = $this->linkTypeProvider->getLinkTypes();
             foreach ($productLinks as $type => $linksByType) {
                 $assignedSkuList = [];
                 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $link */
                 foreach ($linksByType as $link) {
                     $assignedSkuList[] = $link->getLinkedProductSku();
                 }
-                $linkedProductIds = $this->productResource->getProductsIdsBySkus($assignedSkuList);
+                $linkedProductIds = $this->resourceModel->getProductsIdsBySkus($assignedSkuList);
 
                 $linksToInitialize = [];
-                /** @var \Magento\Catalog\Api\Data\ProductLinkInterface[] $items */
                 foreach ($linksByType as $link) {
                     $data = $link->__toArray();
                     $linkedSku = $link->getLinkedProductSku();
@@ -369,7 +363,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
         if (isset($productDataArray['product_links'])) {
             $this->processLinks($product, $productLinks);
-
         }
 
         $validationResult = $this->resourceModel->validate($product);

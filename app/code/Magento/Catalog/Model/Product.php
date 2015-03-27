@@ -128,7 +128,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @var array
      */
     protected $_links = [];
-    
+
     /**
      * Flag for available duplicate function
      *

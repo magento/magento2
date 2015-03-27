@@ -97,7 +97,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->initializedProductMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['setProductOptions', 'load', 'getOptions', 'getSku'],
+            ['setProductOptions', 'load', 'getOptions', 'getSku', 'getProductLinks', 'setProductLinks'],
             [],
             '',
             false
@@ -721,6 +721,127 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        return $data;
+    }
+
+    /**
+     * @param array $newLinks
+     * @param array $existingLinks
+     * @param array $expectedData
+     * @dataProvider saveWithLinksDataProvider
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    public function testSaveWithLinks(array $newLinks, array $existingLinks, array $expectedData)
+    {
+        $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')->will($this->returnValue(100));
+        $this->productFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->initializedProductMock));
+        $this->initializationHelperMock->expects($this->once())->method('initialize')
+            ->with($this->initializedProductMock);
+        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->initializedProductMock)
+            ->willReturn(true);
+        $this->resourceModelMock->expects($this->once())->method('save')
+            ->with($this->initializedProductMock)->willReturn(true);
+
+        $this->initializedProductMock->setData("product_links", $existingLinks);
+
+        if (!empty($newLinks)) {
+            $this->resourceModelMock
+                ->expects($this->any())->method('getProductsIdsBySkus')
+                ->willReturn([$newLinks['linked_product_sku'] => $newLinks['linked_product_sku']]);
+
+            $inputLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+            $inputLink->setProductSku($newLinks['product_sku']);
+            $inputLink->setLinkType($newLinks['link_type']);
+            $inputLink->setLinkedProductSku($newLinks['linked_product_sku']);
+            $inputLink->setLinkedProductType($newLinks['linked_product_type']);
+            $inputLink->setPosition($newLinks['position']);
+
+            $this->productData['product_links'] = [$inputLink];
+
+            $this->initializedProductMock->expects($this->once())
+                ->method('getProductLinks')
+                ->willReturn([$inputLink]);
+        } else {
+            $this->resourceModelMock
+                ->expects($this->any())->method('getProductsIdsBySkus')
+                ->willReturn([]);
+
+            $this->productData['product_links'] = [];
+
+            $this->initializedProductMock->expects($this->once())
+                ->method('getProductLinks')
+                ->willReturn([]);
+        }
+
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
+
+        if (!empty($expectedData)) {
+            $outputLinks = [];
+            foreach ($expectedData as $link) {
+                $outputLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+                $outputLink->setProductSku($link['product_sku']);
+                $outputLink->setLinkType($link['link_type']);
+                $outputLink->setLinkedProductSku($link['linked_product_sku']);
+                $outputLink->setLinkedProductType($link['linked_product_type']);
+                $outputLink->setPosition($link['position']);
+
+                $outputLinks[] = $outputLink;
+            }
+
+            $this->initializedProductMock->expects($this->once())
+                ->method('setProductLinks')
+                ->with([$inputLink]);
+        } else {
+            $this->initializedProductMock->expects($this->once())
+                ->method('setProductLinks')
+                ->with([]);
+        }
+
+        $this->assertEquals($this->initializedProductMock, $this->model->save($this->initializedProductMock));
+        $this->productData['product_links'] = [];
+    }
+
+    public function saveWithLinksDataProvider()
+    {
+        // Scenario 1
+        // No existing, new links
+        $data['scenario_1'] = [
+            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
+            'existingLinks' => [],
+            'expectedData' => [["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0]]
+            ];
+
+        // Scenario 2
+        // Existing, no new links
+        $data['scenario_2'] = [
+            'newLinks' => [],
+            'existingLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
+            'expectedData' => []
+        ];
+
+        // Scenario 3
+        // Existing and new links
+        $data['scenario_3'] = [
+            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
+            'existingLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
+                "Simple Product 3", "linked_product_type" => "simple", "position" => 0],
+            'expectedData' => [
+                ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
+                ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
+                "Simple Product 3", "linked_product_type" => "simple", "position" => 0]]
+        ];
+        
         return $data;
     }
 }

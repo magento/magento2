@@ -233,7 +233,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     /**
      * Get product links info
      *
-     * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]|null
      */
     public function getProductLinks();
 
