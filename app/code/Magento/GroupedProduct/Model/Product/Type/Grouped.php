@@ -326,13 +326,19 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         return $this;
     }
 
-    protected function getProductInfo(\Magento\Framework\Object $buyRequest, $product)
+    protected function getProductInfo(\Magento\Framework\Object $buyRequest, $product, $isStrictProcessMode)
     {
         $productsInfo = $buyRequest->getSuperGroup() ?: [];
-
         $associatedProducts = $this->getAssociatedProducts($product);
+
+        if (!is_array($productsInfo)) {
+            return __('Please specify the quantity of product(s).')->render();
+        }
         foreach ($associatedProducts as $subProduct) {
             if (!isset($productsInfo[$subProduct->getId()])) {
+                if ($isStrictProcessMode && !$subProduct->getQty()) {
+                    return __('Please specify the quantity of product(s).')->render();
+                }
                 $productsInfo[$subProduct->getId()] = intval($subProduct->getQty());
             }
         }
@@ -354,15 +360,14 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     {
         $products = [];
         $associatedProductsInfo = [];
-        $productsInfo = $this->getProductInfo($buyRequest, $product);
         $isStrictProcessMode = $this->_isStrictProcessMode($processMode);
+        $productsInfo = $this->getProductInfo($buyRequest, $product, $isStrictProcessMode);
+        if (is_string($productsInfo)) {
+            return $productsInfo;
+        }
         $associatedProducts = !$isStrictProcessMode || !empty($productsInfo)
             ? $this->getAssociatedProducts($product)
             : false;
-
-        if ($associatedProducts && empty($productsInfo)) {
-            return __('Please specify the quantity of product(s).')->render();
-        }
 
         foreach ($associatedProducts as $subProduct) {
             $qty = $productsInfo[$subProduct->getId()];
