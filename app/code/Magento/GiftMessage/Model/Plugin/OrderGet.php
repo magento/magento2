@@ -34,8 +34,7 @@ class OrderGet
         \Magento\GiftMessage\Api\OrderItemRepositoryInterface $giftMessageOrderItemRepository,
         \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionFactory,
         \Magento\Sales\Api\Data\OrderItemExtensionFactory $orderItemExtensionFactory
-    )
-    {
+    ) {
         $this->giftMessageOrderRepository = $giftMessageOrderRepository;
         $this->giftMessageOrderItemRepository = $giftMessageOrderItemRepository;
         $this->orderExtensionFactory = $orderExtensionFactory;
@@ -107,7 +106,8 @@ class OrderGet
                 }
                 /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
                 $giftMessage = $this->giftMessageOrderItemRepository->get(
-                    $order->getEntityId(), $orderItem->getItemId()
+                    $order->getEntityId(),
+                    $orderItem->getItemId()
                 );
 
                 if (!$giftMessage) {
