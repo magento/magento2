@@ -298,11 +298,11 @@ class Bootstrap
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
-            throw new \Exception('Application is not installed yet.');
+            throw new \Exception('Application is not installed yet. ');
         }
         if ($isInstalled && !$isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
-            throw new \Exception('Application is already installed.');
+            throw new \Exception('Application is already installed. ');
         }
     }
 
