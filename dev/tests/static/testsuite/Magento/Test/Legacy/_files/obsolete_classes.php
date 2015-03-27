@@ -3117,4 +3117,9 @@ return [
     ['Magento\LocaleFactory'],
     ['Magento\Framework\LocaleFactory'],
     ['Magento\Core\Helper\Data', 'Magento\Framework\Json\Helper\Data'],
+    ['Magento\Backup\Exception'],
+    ['Magento\Catalog\Exception'],
+    ['Magento\Reports\Exception'],
+    ['Magento\Sales\Exception'],
+    ['Magento\SalesRule\Exception'],
 ];
