@@ -71,7 +71,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 require __DIR__ . '/_files/config_data.php',
                 'non_existing_dir',
                 'Magento\Framework\Exception\LocalizedException',
-                "Base directory 'non_existing_dir' does not exist",
+                new \Magento\Framework\Phrase("Base directory 'non_existing_dir' does not exist"),
             ],
             'invalid scenarios format' => [
                 require __DIR__ . '/_files/config_data_invalid_scenarios_format.php',
