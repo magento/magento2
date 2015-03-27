@@ -5,7 +5,6 @@
  */
 namespace Magento\Developer\Test\Unit\Model\Config\Backend;
 
-use Magento\Developer\Model\Config\Backend\AllowedIps;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -53,11 +52,6 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->contextMock,
             ]
         );
-    }
-
-    protected function tearDown()
-    {
-        $this->model = null;
     }
 
     /**

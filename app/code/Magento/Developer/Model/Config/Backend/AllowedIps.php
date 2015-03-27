@@ -15,7 +15,7 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * Constructor
@@ -48,33 +48,33 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
      */
     public function beforeSave()
     {
-        parent::beforeSave();
-        $fieldSetData = $this->getFieldsetDataValue('allow_ips');
-        $noticeMsg = '';
-        $allowedIps = '';
+        $allowedIpsRaw = $this->getFieldsetDataValue('allow_ips');
+        $noticeMsgArray = [];
+        $allowedIpsArray = [];
 
-        if (empty($fieldSetData)) {
-            return $this;
+        if (empty($allowedIpsRaw)) {
+            return parent::beforeSave();
         }
 
-        $dataArray = preg_split('#\s*,\s*#', $fieldSetData, null, PREG_SPLIT_NO_EMPTY);
+        $dataArray = preg_split('#\s*,\s*#', $allowedIpsRaw, null, PREG_SPLIT_NO_EMPTY);
         foreach ($dataArray as $k => $data) {
             $data = trim(preg_replace('/\s+/','', $data));
-            if ( !filter_var($data, FILTER_VALIDATE_IP) === false ) {
-                $allowedIps .= (empty($allowedIps)) ? $data : "," . $data;
+            if ( filter_var($data, FILTER_VALIDATE_IP) ) {
+                $allowedIpsArray[] = $data;
             } else {
-                $noticeMsg .= (empty($noticeMsg)) ? $data : "," . $data;
+                $noticeMsgArray[] = $data;
              }
         }
 
-        if (!empty($noticeMsg))
+        $noticeMsg = implode(',', $noticeMsgArray);
+        if (!empty($noticeMsgArray))
             $this->messageManager->addNotice(
                 __(
-                    'Invalid values ' . $noticeMsg . ' are not saved.'
+                    __('The following invalid values cannot be saved: %values', ['values' => $noticeMsg])
                 )
             );
 
-        $this->setValue($allowedIps);
-        return $this;
+        $this->setValue(implode(',', $allowedIpsArray));
+        return parent::beforeSave();
     }
 }
