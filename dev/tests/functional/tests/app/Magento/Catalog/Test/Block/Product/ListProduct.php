@@ -50,7 +50,7 @@ class ListProduct extends Block
      *
      * @var string
      */
-    protected $productTitle = './/*[@class="product name product-item-name"]/a[text()="%s"]';
+    protected $productTitle = './/*[@class="product name product-item-name"]/a[contains(text(),"%s")]';
 
     /**
      * Click for Price link on category page.
