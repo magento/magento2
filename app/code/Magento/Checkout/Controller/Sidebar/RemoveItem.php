@@ -85,9 +85,11 @@ class RemoveItem extends Action
     {
         $response = $this->sidebar->getResponseData($error);
 
-        $resultPage = $this->resultPageFactory->create();
-        $block = $resultPage->getLayout()->getBlock('minicart.content')->toHtml();
-        $response['content'] = $block;
+        if (empty($error)) {
+            $resultPage = $this->resultPageFactory->create();
+            $block = $resultPage->getLayout()->getBlock('minicart.content')->toHtml();
+            $response['content'] = $block;
+        }
 
         return $this->getResponse()->representJson(
             $this->jsonHelper->jsonEncode($response)
