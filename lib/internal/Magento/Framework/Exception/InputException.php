@@ -27,7 +27,7 @@ class InputException extends AbstractAggregateException
      */
     public function __construct(Phrase $phrase = null, \Exception $cause = null)
     {
-        if (is_null($phrase)) {
+        if ($phrase === null) {
             $phrase = new Phrase(self::DEFAULT_MESSAGE);
         }
         parent::__construct($phrase, $cause);

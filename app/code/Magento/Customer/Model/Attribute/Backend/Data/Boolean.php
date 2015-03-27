@@ -22,7 +22,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     {
         $attributeName = $this->getAttribute()->getName();
         $inputValue = $customer->getData($attributeName);
-        $inputValue = is_null($inputValue) ? $this->getAttribute()->getDefaultValue() : $inputValue;
+        $inputValue = $inputValue === null ? $this->getAttribute()->getDefaultValue() : $inputValue;
         $sanitizedValue = !empty($inputValue) ? '1' : '0';
         $customer->setData($attributeName, $sanitizedValue);
         return $this;

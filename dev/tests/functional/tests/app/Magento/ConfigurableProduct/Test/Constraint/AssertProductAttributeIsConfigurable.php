@@ -31,7 +31,7 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         CatalogProductNew $newProductPage,
         CatalogProductAttribute $productAttribute = null
     ) {
-        $attributeSearch = is_null($productAttribute) ? $attribute : $productAttribute;
+        $attributeSearch = $productAttribute === null ? $attribute : $productAttribute;
         $productGrid->open();
         $productGrid->getGridPageActionBlock()->addProduct('configurable');
         $productBlockForm = $newProductPage->getProductForm();

@@ -159,7 +159,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $element = $this->accountBlock->getForm()->getElement('firstname');
 
         // Make sure readonly has not been set (is null) or set to false
-        $this->assertTrue(is_null($element->getReadonly()) || !$element->getReadonly());
+        $this->assertTrue($element->getReadonly() === null || !$element->getReadonly());
     }
 
     /**

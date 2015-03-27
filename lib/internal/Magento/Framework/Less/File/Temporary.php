@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Framework\Less\File;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Less\Config;
+
+class Temporary
+{
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * @var Filesystem\Directory\WriteInterface
+     */
+    private $tmpDirectory;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param Config $config
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        Config $config
+    ) {
+        $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->config = $config;
+    }
+
+    /**
+     * Write down contents to a temporary file and return its absolute path
+     *
+     * @param string $relativePath
+     * @param string $contents
+     * @return string
+     */
+    public function createFile($relativePath, $contents)
+    {
+        $filePath =  $this->config->getLessMaterializationRelativePath() . '/' . $relativePath;
+
+        if (!$this->tmpDirectory->isExist($filePath)) {
+            $this->tmpDirectory->writeFile($filePath, $contents);
+        }
+        return $this->tmpDirectory->getAbsolutePath($filePath);
+    }
+}

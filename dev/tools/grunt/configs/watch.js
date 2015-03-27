@@ -24,6 +24,21 @@ var watchOptions = {
     "setup": {
         "files": "<%= path.less.setup %>/**/*.less",
         "tasks": "less:setup"
+    },
+    "reload": {
+        "files": "<%= path.pub %>/**/*.css",
+        "options": {
+            livereload: true
+        }
+    },
+    "backendMigration": {
+        "files": [
+            "<%= combo.autopath(\"backend\",\"pub\") %>/css/styles.css"
+        ],
+        "tasks": [
+            "replace:escapeCalc",
+            "less:override"
+        ]
     }
 };
 

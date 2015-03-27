@@ -61,7 +61,7 @@ class Data extends \Magento\Framework\Url\Helper\Data
      */
     public function getProduct()
     {
-        if (!is_null($this->_product)) {
+        if ($this->_product !== null) {
             return $this->_product;
         }
         return $this->_coreRegistry->registry('product');

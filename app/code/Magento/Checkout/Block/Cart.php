@@ -153,7 +153,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     public function getContinueShoppingUrl()
     {
         $url = $this->getData('continue_shopping_url');
-        if (is_null($url)) {
+        if ($url === null) {
             $url = $this->_checkoutSession->getContinueShoppingUrl(true);
             if (!$url) {
                 $url = $this->_urlBuilder->getUrl();

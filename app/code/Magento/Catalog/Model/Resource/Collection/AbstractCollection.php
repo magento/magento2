@@ -104,7 +104,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      */
     public function getStoreId()
     {
-        if (is_null($this->_storeId)) {
+        if ($this->_storeId === null) {
             $this->setStoreId($this->_storeManager->getStore()->getId());
         }
         return $this->_storeId;

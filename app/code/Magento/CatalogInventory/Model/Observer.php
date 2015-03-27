@@ -205,7 +205,7 @@ class Observer
     {
         $product = $observer->getEvent()->getProduct();
 
-        if (is_null($product->getStockData())) {
+        if ($product->getStockData() === null) {
             if ($product->getIsChangedWebsites() || $product->dataHasChangedFor('status')) {
                 $this->stockIndex->rebuild(
                     $product->getId(),

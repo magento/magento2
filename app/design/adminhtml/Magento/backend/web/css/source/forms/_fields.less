@@ -39,6 +39,9 @@
         padding: 0;
         #mix-grid .row();
 
+        &.admin__field-wide {
+            .extend__field-rows();
+        }
         > .admin__field-control {
             #mix-grid .column(4,9);
         }
@@ -87,12 +90,13 @@
         span:after {
             color: @field-label__required__color;
             content: '*';
-            display: inline;
+            display: inline-block;
             font-size: @font-size__l;
             font-weight: @font-weight__heavier;
+            line-height: 1;
             margin-left: 10px;
-            margin-top: 2px;
             position: absolute;
+            top: 1.2rem;
             z-index: 1;
         }
     }
@@ -137,9 +141,11 @@
             color: @field-scope__color;
             content: attr(data-config-scope);
             display: inline-block;
-            position: absolute;
+            font-size: @font-size__s;
             left: @_length;
+            line-height: 3.2rem;
             margin-left: 2 * @temp_gutter;
+            position: absolute;
 
             & {
                 #mix-grid .return_length(2,9);

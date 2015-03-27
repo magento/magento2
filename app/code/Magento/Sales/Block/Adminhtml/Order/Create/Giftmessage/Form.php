@@ -276,7 +276,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     public function getMessage()
     {
-        if (is_null($this->_giftMessage)) {
+        if ($this->_giftMessage === null) {
             $this->_initMessage();
         }
 

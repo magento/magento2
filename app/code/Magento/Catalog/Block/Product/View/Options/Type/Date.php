@@ -201,12 +201,12 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         $extraParams .= ' data-role="calendar-dropdown" data-calendar-role="' . $name . '"';
         $select->setExtraParams($extraParams);
 
-        if (is_null($value)) {
+        if ($value === null) {
             $value = $this->getProduct()->getPreconfiguredValues()->getData(
                 'options/' . $option->getId() . '/' . $name
             );
         }
-        if (!is_null($value)) {
+        if ($value !== null) {
             $select->setValue($value);
         }
 

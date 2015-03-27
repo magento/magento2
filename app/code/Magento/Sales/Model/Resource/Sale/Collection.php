@@ -154,7 +154,7 @@ class Collection extends \Magento\Framework\Data\Collection\Db
             $this->addFieldToFilter('sales.customer_id', $this->_customerId);
         }
 
-        if (!is_null($this->_state)) {
+        if ($this->_state !== null) {
             $condition = '';
             switch ($this->_orderStateCondition) {
                 case 'IN':

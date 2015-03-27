@@ -64,7 +64,7 @@ class Customization
      */
     public function getAssignedThemeCustomizations()
     {
-        if (is_null($this->_assignedTheme)) {
+        if ($this->_assignedTheme === null) {
             $this->_prepareThemeCustomizations();
         }
         return $this->_assignedTheme;
@@ -78,7 +78,7 @@ class Customization
      */
     public function getUnassignedThemeCustomizations()
     {
-        if (is_null($this->_unassignedTheme)) {
+        if ($this->_unassignedTheme === null) {
             $this->_prepareThemeCustomizations();
         }
         return $this->_unassignedTheme;

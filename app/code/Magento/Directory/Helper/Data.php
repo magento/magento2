@@ -209,7 +209,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (empty($this->_currencyCache[$from])) {
             $this->_currencyCache[$from] = $this->_currencyFactory->create()->load($from);
         }
-        if (is_null($to)) {
+        if ($to === null) {
             $to = $this->_storeManager->getStore()->getCurrentCurrencyCode();
         }
         $converted = $this->_currencyCache[$from]->convert($amount, $to);

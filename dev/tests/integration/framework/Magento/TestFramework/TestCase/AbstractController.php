@@ -199,7 +199,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         /** @var $messageManager \Magento\Framework\Message\ManagerInterface */
         $messageManager = $this->_objectManager->get($messageManagerClass);
         /** @var $messages \Magento\Framework\Message\AbstractMessage[] */
-        if (is_null($messageType)) {
+        if ($messageType === null) {
             $messages = $messageManager->getMessages()->getItems();
         } else {
             $messages = $messageManager->getMessages()->getItemsByType($messageType);

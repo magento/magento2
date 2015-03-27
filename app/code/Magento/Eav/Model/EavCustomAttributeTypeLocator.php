@@ -10,6 +10,9 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 
+/**
+ * Class to locate types for Eav custom attributes
+ */
 class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterface
 {
     /**
@@ -32,7 +35,22 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      *
      * @param AttributeRepositoryInterface $attributeRepository
      * @param array $serviceEntityTypeMap
+     * <pre>
+     * [
+     *      'ServiceInterfaceA' => 'EavEntityType1',
+     *      'ServiceInterfaceB' => 'EavEntityType2'
+     * ]
+     * </pre>
      * @param array $serviceBackendModelDataInterfaceMap
+     * <pre>
+     * [
+     *      'ServiceInterfaceA' => ['BackendType1' => 'ServiceDataInterface1'],
+     *      'ServiceInterfaceB' => [
+     *                              'BackendType2' => 'ServiceDataInterface2',
+     *                              'BackendType3' => 'ServiceDataInterface3'
+     *                             ]
+     * ]
+     * </pre>
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
@@ -68,5 +86,23 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
             : null;
 
         return $dataInterface;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAllServiceDataInterfaces()
+    {
+        $dataInterfaceArray = [];
+        if (!$this->serviceBackendModelDataInterfaceMap) {
+            return [];
+        } else {
+            foreach ($this->serviceBackendModelDataInterfaceMap as $serviceArray) {
+                foreach ($serviceArray as $dataInterface) {
+                    $dataInterfaceArray[] = $dataInterface;
+                }
+            }
+        }
+        return $dataInterfaceArray;
     }
 }

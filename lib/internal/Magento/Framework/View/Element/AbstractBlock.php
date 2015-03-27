@@ -701,19 +701,19 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     public function getJsId($arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null)
     {
         $args = [];
-        if (!is_null($arg1)) {
+        if ($arg1 !== null) {
             $args[] = $arg1;
         }
-        if (!is_null($arg2)) {
+        if ($arg2 !== null) {
             $args[] = $arg2;
         }
-        if (!is_null($arg3)) {
+        if ($arg3 !== null) {
             $args[] = $arg3;
         }
-        if (!is_null($arg4)) {
+        if ($arg4 !== null) {
             $args[] = $arg4;
         }
-        if (!is_null($arg5)) {
+        if ($arg5 !== null) {
             $args[] = $arg5;
         }
         $rawId = $this->_nameInLayout . '-' . implode('-', $args);
@@ -979,7 +979,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      */
     protected function _loadCache()
     {
-        if (is_null($this->getCacheLifetime()) || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
+        if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
             return false;
         }
         $cacheKey = $this->getCacheKey();
@@ -1002,7 +1002,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      */
     protected function _saveCache($data)
     {
-        if (is_null($this->getCacheLifetime()) || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
+        if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
             return false;
         }
         $cacheKey = $this->getCacheKey();
@@ -1024,7 +1024,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      */
     protected function _getSidPlaceholder($cacheKey = null)
     {
-        if (is_null($cacheKey)) {
+        if ($cacheKey === null) {
             $cacheKey = $this->getCacheKey();
         }
 

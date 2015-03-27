@@ -41,7 +41,7 @@ class FieldsFilter
             return [];
         }
         $filterArray = $this->parse($filter);
-        if (is_null($filterArray)) {
+        if ($filterArray === null) {
             return [];
         }
         $partialResponse = $this->applyFilter($response, $filterArray);

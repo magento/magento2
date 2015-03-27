@@ -161,7 +161,7 @@ class CompositeUserContextTest extends \PHPUnit_Framework_TestCase
     {
         $useContextMock = $this->getMockBuilder('Magento\Authorization\Model\CompositeUserContext')
             ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMock();
-        if (!is_null($userId) && !is_null($userType)) {
+        if ($userId !== null && $userType !== null) {
             $useContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
             $useContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
         }

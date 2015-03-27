@@ -268,7 +268,7 @@ class Samples extends \Magento\Backend\Block\Widget
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
+        if ($this->_config === null) {
             $this->_config = new \Magento\Framework\Object();
         }
 
