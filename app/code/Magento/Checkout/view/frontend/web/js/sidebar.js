@@ -13,16 +13,7 @@ define([
     $.widget('mage.sidebar', {
         options: {
             isRecursive: true,
-            maxItemsVisible: 3,
-            selectorItemQty: ':input.cart-item-qty',
-            selectorItemButton: ':button.update-cart-item',
-            selectorSummaryQty: '.block-content > div.items-total',
-            selectorSubtotal: '.block-content > div.subtotal > div.amount span.price',
-            selectorShowcartNumber: 'a.showcart > span.counter > span.counter-number',
-            selectorShowcartLabel: 'a.showcart > span.counter > span.counter-label',
-            selectorShowcart: 'a.showcart > span.counter',
-            selectorList: '#mini-cart',
-            selectorContentWrapper: '#minicart-content-wrapper'
+            maxItemsVisible: 3
         },
         scrollHeight: 0,
 
@@ -35,8 +26,12 @@ define([
                 location.href = this.options.url.checkout;
             }, this));
 
-            $(this.options.selectorItemQty).keyup(function(event) {
+            $(this.options.item.qty).keyup(function(event) {
                 self._showButton($(this));
+            });
+            $(this.options.item.button).click(function(event) {
+                event.stopPropagation();
+                self._updateQty($(this))
             });
 
             $(this.options.button.remove).click(function(event) {
@@ -44,18 +39,6 @@ define([
                 if (confirm(self.options.confirmMessage)) {
                     self._removeItem($(this));
                 }
-            });
-
-            $(this.options.selectorItemButton).click(function(event) {
-                event.stopPropagation();
-                self._updateQty($(this))
-            });
-
-            $('body').on('minicart.update', function(event, elem, response) {
-                event.stopPropagation();
-                self._refreshQty(response.data.summary_qty, response.data.summary_text);
-                self._refreshSubtotal(response.data.subtotal);
-                self._refreshShowcart(response.data.summary_qty, response.data.summary_text);
             });
 
             this._initCloseButton();
@@ -82,7 +65,7 @@ define([
          * @private
          */
         _isOverflowed: function() {
-            var list = $(this.options.selectorList);
+            var list = $(this.options.minicart.list);
             if (this.scrollHeight > list.innerHeight()) {
                 list.parent().addClass('overflowed');
             } else {
@@ -138,7 +121,9 @@ define([
          */
         _updateQtyAfter: function(elem, response) {
             if ($.type(response.data) === 'object') {
-                $('body').trigger('minicart.update', [elem, response]);
+                this._refreshQty(response.data.summary_qty, response.data.summary_text);
+                this._refreshSubtotal(response.data.subtotal);
+                this._refreshShowcart(response.data.summary_qty, response.data.summary_text);
                 this._refreshItemQty(elem, response.data.summary_qty);
             }
             this._hideButton(elem);
@@ -160,11 +145,13 @@ define([
          */
         _removeItemAfter: function(elem, response) {
             if ($.type(response.data) === 'object') {
-                $('body').trigger('minicart.update', [elem, response]);
+                this._refreshQty(response.data.summary_qty, response.data.summary_text);
+                this._refreshSubtotal(response.data.subtotal);
+                this._refreshShowcart(response.data.summary_qty, response.data.summary_text);
             }
             if (response.cleanup === true) {
-                $(this.options.selectorContentWrapper).replaceWith($.trim(response.content));
-                $(this.options.selectorShowcart).addClass('empty');
+                $(this.options.minicart.content).replaceWith($.trim(response.content));
+                $(this.options.showcart.parent).addClass('empty');
                 this._initCloseButton();
             } else {
                 elem.closest('li').remove();
@@ -218,8 +205,8 @@ define([
         _refreshQty: function(qty, text) {
             if (qty != undefined && text != undefined) {
                 var self = this;
-                $(this.options.selectorSummaryQty).fadeOut('slow', function() {
-                    $(self.options.selectorSummaryQty).text(qty + text);
+                $(this.options.minicart.qty).fadeOut('slow', function() {
+                    $(self.options.minicart.qty).html('<span class="count">' + qty + '</span>' + text);
                 }).fadeIn();
             }
         },
@@ -227,8 +214,8 @@ define([
         _refreshSubtotal: function(val) {
             if (val != undefined) {
                 var self = this;
-                $(this.options.selectorSubtotal).fadeOut('slow', function() {
-                    $(self.options.selectorSubtotal).replaceWith(val);
+                $(this.options.minicart.subtotal).fadeOut('slow', function() {
+                    $(self.options.minicart.subtotal).replaceWith(val);
                 }).fadeIn();
             }
         },
@@ -236,11 +223,11 @@ define([
         _refreshShowcart: function(qty, text) {
             if (qty != undefined && text != undefined) {
                 var self = this;
-                $(this.options.selectorShowcartNumber).fadeOut('slow', function() {
-                    $(self.options.selectorShowcartNumber).text(qty);
+                $(this.options.showcart.qty).fadeOut('slow', function() {
+                    $(self.options.showcart.qty).text(qty);
                 }).fadeIn();
-                $(this.options.selectorShowcartLabel).fadeOut('slow', function() {
-                    $(self.options.selectorShowcartLabel).text(text);
+                $(this.options.showcart.label).fadeOut('slow', function() {
+                    $(self.options.showcart.label).text(text);
                 }).fadeIn();
             }
         },
@@ -254,7 +241,7 @@ define([
             var self = this,
                 height = 0,
                 counter = this.options.maxItemsVisible,
-                target = $(this.options.selectorList)
+                target = $(this.options.minicart.list)
                     .clone()
                     .attr('style', 'position: absolute !important; top: -10000 !important;')
                     .appendTo('body');
@@ -269,7 +256,7 @@ define([
 
             target.remove();
 
-            $(this.options.selectorList).css('height', height);
+            $(this.options.minicart.list).css('height', height);
         }
     });
 

@@ -53,6 +53,21 @@
                     "remove": "#mini-cart a.action.delete",
                     "close": "#btn-minicart-close"
                 },
+                "showcart": {
+                    "parent": "span.counter",
+                    "qty": "span.counter-number",
+                    "label": "span.counter-label"
+                },
+                "minicart": {
+                    "list": "#mini-cart",
+                    "content": "#minicart-content-wrapper",
+                    "qty": "div.items-total",
+                    "subtotal": "div.subtotal span.price"
+                },
+                "item": {
+                    "qty": ":input.cart-item-qty",
+                    "button": ":button.update-cart-item"
+                },
                 "confirmMessage": "<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>"
             }
         }
