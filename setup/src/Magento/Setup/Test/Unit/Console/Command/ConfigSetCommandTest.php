@@ -18,9 +18,16 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
     private $configModel;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Console\Command\ConfigSetCommand
      */
     private $command;
+
+
 
     public function setUp()
     {
@@ -35,22 +42,22 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getAvailableOptions')
             ->will($this->returnValue([$option]));
         $moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $deploymentConfig
-            ->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue('localhost'));
-        $this->command = new ConfigSetCommand($this->configModel, $moduleList, $deploymentConfig);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->command = new ConfigSetCommand($this->configModel, $moduleList, $this->deploymentConfig);
     }
 
     public function testExecuteNoInteractive()
     {
+        $this->deploymentConfig
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue(null));
         $this->configModel
             ->expects($this->once())
             ->method('process')
-            ->with([]);
+            ->with(['db_host' => 'host']);
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute([]);
+        $commandTester->execute(['--db_host' => 'host']);
         $this->assertSame(
             'No module configuration is available, so all modules are enabled.' . PHP_EOL
             . 'You saved the deployment config.' . PHP_EOL,
@@ -60,6 +67,10 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteInteractiveWithYes()
     {
+        $this->deploymentConfig
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue('localhost'));
         $this->configModel
             ->expects($this->once())
             ->method('process')
@@ -69,6 +80,10 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteInteractiveWithNo()
     {
+        $this->deploymentConfig
+            ->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue('localhost'));
         $this->configModel
             ->expects($this->once())
             ->method('process')
