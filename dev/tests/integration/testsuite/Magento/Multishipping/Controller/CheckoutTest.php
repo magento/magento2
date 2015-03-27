@@ -5,53 +5,65 @@
  */
 namespace Magento\Multishipping\Controller;
 
-use Magento\TestFramework\Helper\Bootstrap;
+use \Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
 /**
  * Test class for \Magento\Multishipping\Controller\Checkout
  *
  * @magentoAppArea frontend
+ * @magentoDataFixture Magento/Sales/_files/quote.php
+ * @magentoDataFixture Magento/Customer/_files/customer.php
  */
 class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
-     * Covers app/code/Magento/Checkout/Block/Multishipping/Payment/Info.php
-     * and app/code/Magento/Checkout/Block/Multishipping/Overview.php
+     * @var \Magento\Quote\Model\Quote
+     */
+    protected $quote;
+
+    /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
+     * @inheritdoc
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->quote = $this->_objectManager->create('Magento\Quote\Model\Quote');
+        $this->checkoutSession = $this->_objectManager->get('Magento\Checkout\Model\Session');
+
+        $this->quote->load('test01', 'reserved_order_id');
+        $this->checkoutSession->setQuoteId($this->quote->getId());
+        $this->checkoutSession->setCartWasUpdated(false);
+    }
+
+    /**
+     * Covers \Magento\Multishipping\Block\Checkout\Payment\Info and \Magento\Multishipping\Block\Checkout\Overview
      *
-     * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoConfigFixture current_store multishipping/options/checkout_multiple 1
      */
     public function testOverviewAction()
     {
-        $this->markTestSkipped('Skipped due to fails on Travis CI (MAGETWO-35405)');
-
-        /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
-        $quote->load('test01', 'reserved_order_id');
-
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Checkout\Model\Session')
-            ->setQuoteId($quote->getId());
-
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
         $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
-
-        /** @var $session \Magento\Customer\Model\Session */
-        $session = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session', [$logger]);
-
-        /** @var \Magento\Customer\Api\AccountManagementInterface  $service */
-        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Api\AccountManagementInterface');
+        /** @var \Magento\Customer\Api\AccountManagementInterface $service */
+        $service = $this->_objectManager->create('Magento\Customer\Api\AccountManagementInterface');
         $customer = $service->authenticate('customer@example.com', 'password');
-
-        $session->setCustomerDataAsLoggedIn($customer);
+        /** @var \Magento\Customer\Model\Session $customerSession */
+        $customerSession = $this->_objectManager->create('Magento\Customer\Model\Session', [$logger]);
+        $customerSession->setCustomerDataAsLoggedIn($customer);
+        $this->checkoutSession->setCheckoutState(State::STEP_BILLING);
         $this->getRequest()->setPostValue('payment', ['method' => 'checkmo']);
         $this->dispatch('multishipping/checkout/overview');
         $html = $this->getResponse()->getBody();
         $this->assertContains('<div class="box box-billing-method">', $html);
         $this->assertContains('<div class="box box-shipping-method">', $html);
         $this->assertContains(
-            '<dt class="title">' . $quote->getPayment()->getMethodInstance()->getTitle() . '</dt>',
+            '<dt class="title">' . $this->quote->getPayment()->getMethodInstance()->getTitle() . '</dt>',
             $html
         );
         $this->assertContains('<span class="price">$10.00</span>', $html);
