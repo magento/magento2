@@ -33,7 +33,7 @@ class Menu extends Block
      *
      * @var string
      */
-    protected $subMenuItem = './/li[@role="menu-item"]//a[span="%s"]';
+    protected $subMenuItem = '//li[@role="menu-item"]//a[span="%s"]';
 
     /**
      * Parent menu item.
@@ -92,7 +92,7 @@ class Menu extends Block
         $this->waitForElementVisible($subMenuSelector, Locator::SELECTOR_XPATH);
         $subMenuItem = $subMenuSelector . sprintf($this->subMenuItem, $subMenu);
         $this->waitForElementVisible($subMenuItem, Locator::SELECTOR_XPATH);
-        $subMenuItem->click();
+        $this->_rootElement->find($subMenuItem, Locator::SELECTOR_XPATH)->click();
         $this->waitForElementNotVisible($subMenuSelector, Locator::SELECTOR_XPATH);
     }
 }
