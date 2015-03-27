@@ -60,7 +60,7 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
      * @param MessageFactory $messageFactory
      */
     public function __construct(
-        \Magento\Sales\Model\OrderFactory  $orderFactory,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\GiftMessage\Model\Save $giftMessageSaveModel,
         \Magento\GiftMessage\Helper\Message $helper,
