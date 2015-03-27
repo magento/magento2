@@ -379,7 +379,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'text',
                         'label' => 'Street Address',
                         'input' => 'multiline',
-                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend',
+                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Multiline',
                         'sort_order' => 70,
                         'multiline_count' => 2,
                         'validate_rules' => 'a:2:{s:15:"max_text_length";i:255;s:15:"min_text_length";i:1;}',

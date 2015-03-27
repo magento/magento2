@@ -27,7 +27,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method string getTelephone()
  * @method string getPostcode()
  * @method bool getShouldIgnoreValidation()
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)\
  */
 class AbstractAddress extends AbstractExtensibleModel
 {
@@ -263,8 +263,6 @@ class AbstractAddress extends AbstractExtensibleModel
     {
         if (is_array($key)) {
             $key = $this->_implodeStreetField($key);
-        } elseif ($key == 'street') {
-            $value = $this->_implodeStreetValue($value);
         }
         return parent::setData($key, $value);
     }
