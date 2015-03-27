@@ -103,8 +103,8 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         $product = $this->productRepository->get($sku, true);
         if (!$option->getOptionId()) {
             $currentOptions = $product->getOptions();
-            if ($currentOptions == null) {
-                $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
+            if ($existingOptions == null) {
+                $newID = array_keys($currentOptions);
             } else {
                 $newID = array_diff(array_keys($currentOptions), array_keys($existingOptions));
             }
