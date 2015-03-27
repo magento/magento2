@@ -14,11 +14,6 @@
             <item name="deps" xsi:type="string">customer_form.customer_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Customer Information</item>
-        <item name="meta" xsi:type="array">
-            <item name="defaults" xsi:type="array">
-                <item name="visible" xsi:type="boolean">true</item>
-            </item>
-        </item>
         <item name="layout" xsi:type="array">
             <item name="type" xsi:type="string">tabs</item>
             <item name="navContainerName" xsi:type="string">left</item>
