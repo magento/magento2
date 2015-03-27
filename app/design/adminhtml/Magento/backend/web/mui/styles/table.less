@@ -194,30 +194,38 @@ table {
             vertical-align: top;
             width: 99%;
         }
-        img {
-            cursor: pointer;
-            height: 25px;
-            width: 25px;
-            right: 0;
-            position: absolute;
-            vertical-align: middle;
-            z-index: 2;
-            opacity: 0;
-        }
-        .icon-font(
-            @icon-calendar,
-            @_icon-font-color: @grid-headings-color,
-            @_icon-font-color-hover: @grid-headings-color-darker,
-            @_icon-font-size: 42px,
-            @_icon-font-line-height: 30px
-        );
-        &:before {
-            height: 29px;
-            margin-left: 5px;
+        .ui-datepicker-trigger {
+            .icon-font(
+                @icon-calendar,
+                @_icon-font-color: @grid-headings-color,
+                @_icon-font-color-hover: @grid-headings-color-darker,
+                @_icon-font-size: 42px,
+                @_icon-font-line-height: 30px
+            );
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            padding: 0;
             position: absolute;
             right: -3px;
             top: -3px;
-            width: 35px;
+            > span {
+                position: absolute;
+                visibility: hidden;
+                z-index: -1;
+            }
+            &:active {
+                top: -2px;
+            }
+            &:focus {
+                outline: 0;
+                box-shadow: none;
+            }
+            &:before {
+                width: 35px;
+                height: 29px;
+                margin-left: 5px;
+            }
         }
     }
 
@@ -688,12 +696,16 @@ td.col-type {
             float: left;
             margin: 0 15px 0 0;
             position: relative;
-            &:before {
-                color: @color-middle;
-                top: 1px;
-            }
-            &:hover:before {
-                color: @color-dark;
+            .ui-datepicker-trigger {
+                &:before {
+                    color: @color-middle;
+                    top: 1px;
+                }
+                &:hover {
+                    &:before {
+                        color: @color-dark;
+                    }
+                }
             }
         }
         .label {
