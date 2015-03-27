@@ -42,12 +42,12 @@ try {
     }
 
     /** @var $config \Magento\Indexer\Model\Config */
-    $config = $application->getObjectManager()->get('\Magento\Indexer\Model\Config');
+    $config = $application->getObjectManager()->get('Magento\Indexer\Model\Config');
     $indexerListIds = $config->getIndexers();
     $indexersState = [];
     foreach ($indexerListIds as $key => $indexerId) {
         /** @var $indexer \Magento\Indexer\Model\Indexer */
-        $indexer = $application->getObjectManager()->create('\Magento\Indexer\Model\Indexer');
+        $indexer = $application->getObjectManager()->create('Magento\Indexer\Model\Indexer');
         $indexer->load($indexerId['indexer_id']);
         $indexersState[$indexerId['indexer_id']] = $indexer->isScheduled();
         $indexer->setScheduled(true);
@@ -65,7 +65,7 @@ try {
 
     foreach ($indexerListIds as $indexerId) {
         /** @var $indexer \Magento\Indexer\Model\Indexer */
-        $indexer = $application->getObjectManager()->create('\Magento\Indexer\Model\Indexer');
+        $indexer = $application->getObjectManager()->create('Magento\Indexer\Model\Indexer');
         $indexer->load($indexerId['indexer_id']);
         $indexer->setScheduled($indexersState[$indexerId['indexer_id']]);
         unset($indexer);
