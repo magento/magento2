@@ -11,7 +11,7 @@
 return array(
     'server' => 'http://localhost:9876',
     'load' => array(
-        '/dev/tests/js/framework',
+        '/dev/tests/js/JsTestDriver/framework',
         '/lib/web/mage/webapi.js',
         '/lib/web/mage/validation/validation.js',
         '/app/code/Magento/DesignEditor/view/adminhtml/web/js/infinitescroll.js',
