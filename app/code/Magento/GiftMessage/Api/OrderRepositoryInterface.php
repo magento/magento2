@@ -11,7 +11,7 @@ interface OrderRepositoryInterface
      * Return the gift message for a specified order.
      *
      * @param int $orderId The order ID.
-     * @return \Magento\GiftMessage\Api\Data\MessageInterface|null Gift message.
+     * @return \Magento\GiftMessage\Api\Data\MessageInterface Gift message.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($orderId);

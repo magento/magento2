@@ -12,7 +12,7 @@ interface OrderItemRepositoryInterface
      *
      * @param int $orderId The order ID.
      * @param int $orderItemId The item ID.
-     * @return \Magento\GiftMessage\Api\Data\MessageInterface|null Gift message.
+     * @return \Magento\GiftMessage\Api\Data\MessageInterface Gift message.
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($orderId, $orderItemId);
