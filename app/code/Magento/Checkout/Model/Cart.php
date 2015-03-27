@@ -184,7 +184,7 @@ class Cart extends Object implements CartInterface
     public function getQuoteProductIds()
     {
         $products = $this->getData('product_ids');
-        if (is_null($products)) {
+        if ($products === null) {
             $products = [];
             foreach ($this->getQuote()->getAllItems() as $item) {
                 $products[$item->getProductId()] = $item->getProductId();
@@ -246,7 +246,7 @@ class Cart extends Object implements CartInterface
     public function addOrderItem($orderItem, $qtyFlag = null)
     {
         /* @var $orderItem \Magento\Sales\Model\Order\Item */
-        if (is_null($orderItem->getParentItem())) {
+        if ($orderItem->getParentItem() === null) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
                 $product = $this->productRepository->getById($orderItem->getProductId(), false, $storeId);
@@ -255,7 +255,7 @@ class Cart extends Object implements CartInterface
             }
             $info = $orderItem->getProductOptionByCode('info_buyRequest');
             $info = new \Magento\Framework\Object($info);
-            if (is_null($qtyFlag)) {
+            if ($qtyFlag === null) {
                 $info->setQty($orderItem->getQtyOrdered());
             } else {
                 $info->setQty(1);

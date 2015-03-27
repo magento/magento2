@@ -12,6 +12,11 @@ use Magento\Framework\Code\Minifier\AdapterInterface;
 class CssMinifier implements AdapterInterface
 {
     /**
+     * 'pcre.recursion_limit' value for CSSMin minification
+     */
+    const PCRE_RECURSION_LIMIT = 1000;
+
+    /**
      * @var CSSmin
      */
     protected $cssMinifier;
@@ -32,6 +37,10 @@ class CssMinifier implements AdapterInterface
      */
     public function minify($content)
     {
-        return $this->cssMinifier->run($content);
+        $pcreRecursionLimit = ini_get('pcre.recursion_limit');
+        ini_set('pcre.recursion_limit', self::PCRE_RECURSION_LIMIT);
+        $result = $this->cssMinifier->run($content);
+        ini_set('pcre.recursion_limit', $pcreRecursionLimit);
+        return $result;
     }
 }

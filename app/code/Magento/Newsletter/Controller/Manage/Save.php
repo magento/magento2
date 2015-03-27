@@ -67,7 +67,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
         }
 
         $customerId = $this->_customerSession->getCustomerId();
-        if (is_null($customerId)) {
+        if ($customerId === null) {
             $this->messageManager->addError(__('Something went wrong while saving your subscription.'));
         } else {
             try {

@@ -209,7 +209,7 @@ class Auth
      */
     public static function throwException(Phrase $msg = null)
     {
-        if (is_null($msg)) {
+        if ($msg === null) {
             $msg = __('Authentication error occurred.');
         }
         throw new AuthenticationException($msg);

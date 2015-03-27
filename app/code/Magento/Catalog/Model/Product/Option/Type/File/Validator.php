@@ -138,7 +138,7 @@ abstract class Validator
             $dimensions['maxheight'] = $option->getImageSizeY();
         }
         if (count($dimensions) > 0) {
-            if (!is_null($fileFullPath) && !$this->isImage($fileFullPath)) {
+            if ($fileFullPath !== null && !$this->isImage($fileFullPath)) {
                 throw new \Magento\Framework\Exception\InputException(
                     __('File \'%1\' is not an image.', $option->getTitle())
                 );

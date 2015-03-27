@@ -104,12 +104,12 @@ class GiftMessageManager
      */
     public function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {
-        if (is_null($quote->getBillingAddress()->getCountryId())) {
+        if ($quote->getBillingAddress()->getCountryId() === null) {
             throw new InvalidTransitionException(__('Billing address is not set'));
         }
 
         // check if shipping address is set
-        if (is_null($quote->getShippingAddress()->getCountryId())) {
+        if ($quote->getShippingAddress()->getCountryId() === null) {
             throw new InvalidTransitionException(__('Shipping address is not set'));
         }
         $message[$type][$entityId] = [

@@ -105,7 +105,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getWishlistItems()
     {
-        if (is_null($this->_collection)) {
+        if ($this->_collection === null) {
             $this->_collection = $this->_createWishlistItemCollection();
             $this->_prepareCollection($this->_collection);
         }

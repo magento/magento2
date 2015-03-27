@@ -62,7 +62,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         \Magento\Framework\Filesystem $filesystem,
         $filePath = null
     ) {
-        if (!is_null($filePath)) {
+        if ($filePath !== null) {
             $this->_setUploadFile($filePath);
         }
         $this->_imageFactory = $imageFactory;

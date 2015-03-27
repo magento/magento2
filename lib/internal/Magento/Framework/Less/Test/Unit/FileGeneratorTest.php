@@ -4,11 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Less\Test\Unit;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class FileGeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,47 +38,106 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Magento\Framework\Less\FileGenerator\RelatedGenerator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $relatedGenerator;
+
+    /**
+     * @var \Magento\Framework\Less\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $config;
+
+    /**
+     * @var \Magento\Framework\Less\File\Temporary|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $temporaryFile;
+
     protected function setUp()
     {
-        $this->tmpDirectory = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
-        $this->rootDirectory = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->tmpDirectory = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $this->rootDirectory = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
         $this->rootDirectory->expects($this->any())
             ->method('getRelativePath')
             ->will($this->returnArgument(0));
         $this->rootDirectory->expects($this->any())
             ->method('readFile')
-            ->will($this->returnCallback(function ($file) {
-                return "content of '$file'";
-            }));
+            ->will(
+                $this->returnCallback(
+                    function ($file) {
+                        return "content of '$file'";
+                    }
+                )
+            );
         $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::VAR_DIR)
             ->will($this->returnValue($this->tmpDirectory));
         $this->assetRepo = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
         $this->magentoImport = $this->getMock(
-            '\Magento\Framework\Less\PreProcessor\Instruction\MagentoImport', [], [], '', false
+            'Magento\Framework\Less\PreProcessor\Instruction\MagentoImport',
+            [],
+            [],
+            '',
+            false
         );
         $this->import = $this->getMock(
-            '\Magento\Framework\Less\PreProcessor\Instruction\Import', [], [], '', false
+            'Magento\Framework\Less\PreProcessor\Instruction\Import',
+            [],
+            [],
+            '',
+            false
         );
+
+        $assetSource = $this->getMock(
+            'Magento\Framework\View\Asset\Source',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->relatedGenerator = $this->getMockBuilder('Magento\Framework\Less\FileGenerator\RelatedGenerator')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->config = $this->getMockBuilder('Magento\Framework\Less\Config')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->temporaryFile = $this->getMockBuilder('Magento\Framework\Less\File\Temporary')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->object = new \Magento\Framework\Less\FileGenerator(
-            $filesystem, $this->assetRepo, $this->magentoImport, $this->import
+            $filesystem,
+            $this->assetRepo,
+            $this->magentoImport,
+            $this->import,
+            $assetSource,
+            $this->relatedGenerator,
+            $this->config,
+            $this->temporaryFile
         );
     }
 
     public function testGenerateLessFileTree()
     {
-        $originalContent = 'original content';
+        $lessDirectory = 'path/to/less';
         $expectedContent = 'updated content';
-        $expectedRelativePath = 'view_preprocessed/less/some/file.less';
-        $expectedPath = '/var/view_preprocessed/less/some/file.less';
+        $expectedRelativePath = 'some/file.less';
+        $expectedPath = $lessDirectory . '/some/file.less';
 
-        $asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
-        $asset->expects($this->exactly(2))
-            ->method('getPath')
-            ->will($this->returnValue('some/file.css'));
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($asset, $originalContent, 'less');
+
+        $asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
+        $chain = $this->getMock('Magento\Framework\View\Asset\PreProcessor\Chain', [], [], '', false);
+
+        $this->config->expects($this->any())
+            ->method('getLessDirectory')
+            ->willReturn($lessDirectory);
+        $this->tmpDirectory->expects($this->once())
+            ->method('isExist')
+            ->willReturn(true);
 
         $this->magentoImport->expects($this->once())
             ->method('process')
@@ -90,59 +145,28 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->import->expects($this->once())
             ->method('process')
             ->with($chain);
+        $this->relatedGenerator->expects($this->once())
+            ->method('generate')
+            ->with($this->import);
 
-        $relatedAssetOne = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
-        $relatedAssetOne->expects($this->any())
+        $asset->expects($this->once())
             ->method('getPath')
-            ->will($this->returnValue('related/file_one.css'));
-        $relatedAssetOne->expects($this->any())
+            ->will($this->returnValue('some/file.css'));
+        $chain->expects($this->once())
             ->method('getContent')
-            ->will($this->returnValue("content of 'related/file_one.css'"));
-        $relatedAssetTwo = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
-        $relatedAssetTwo->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValue('related/file_two.css'));
-        $relatedAssetTwo->expects($this->any())
-            ->method('getContent')
-            ->will($this->returnValue("content of 'related/file_two.css'"));
-        $assetsMap = [
-            ['related/file_one.css', $asset, $relatedAssetOne],
-            ['related/file_two.css', $asset, $relatedAssetTwo],
-        ];
-        $this->assetRepo->expects($this->any())
-            ->method('createRelated')
-            ->will($this->returnValueMap($assetsMap));
+            ->willReturn($expectedContent);
+        $chain->expects($this->once())
+            ->method('getAsset')
+            ->willReturn($asset);
 
-        $relatedFilesOne = [['related/file_one.css', $asset]];
-        $this->import->expects($this->at(1))
-            ->method('getRelatedFiles')
-            ->will($this->returnValue($relatedFilesOne));
-        $relatedFilesTwo = [['related/file_two.css', $asset]];
-        $this->import->expects($this->at(3))
-            ->method('getRelatedFiles')
-            ->will($this->returnValue($relatedFilesTwo));
-        $this->import->expects($this->at(5))
-            ->method('getRelatedFiles')
-            ->will($this->returnValue([]));
+        $this->temporaryFile->expects($this->once())
+            ->method('createFile')
+            ->with(
+                $expectedRelativePath,
+                $expectedContent
+            )
+            ->willReturn($expectedPath);
 
-        $writeMap = [
-            [$expectedRelativePath, $expectedContent],
-            ['related/file_one.css', "content of 'related/file_one.css'"],
-            ['related/file_two.css', "content of 'related/file_two.css'"],
-        ];
-        $pathsMap = [
-            [$expectedRelativePath, $expectedPath],
-            ['related/file_one.css', '/var/view_preprocessed/less/related/file_one.css'],
-            ['related/file_two.css', '/var/view_preprocessed/less/related/file_two.css'],
-        ];
-        $this->tmpDirectory->expects($this->any())
-            ->method('writeFile')
-            ->will($this->returnValueMap($writeMap));
-        $this->tmpDirectory->expects($this->any())
-            ->method('getAbsolutePath')
-            ->will($this->returnValueMap($pathsMap));
-
-        $actual = $this->object->generateLessFileTree($chain);
-        $this->assertSame($expectedPath, $actual);
+        $this->assertSame($expectedPath, $this->object->generateFileTree($chain));
     }
 }

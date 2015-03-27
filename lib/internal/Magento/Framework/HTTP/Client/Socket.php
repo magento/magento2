@@ -319,7 +319,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
                 continue;
             }
             list($key, $val) = explode("=", $values[0]);
-            if (is_null($val)) {
+            if ($val === null) {
                 continue;
             }
             $out[trim($key)] = trim($val);
@@ -345,7 +345,7 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
                 continue;
             }
             list($key, $val) = explode("=", $values[0]);
-            if (is_null($val)) {
+            if ($val === null) {
                 continue;
             }
             $out[trim($key)] = ['value' => trim($val)];

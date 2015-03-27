@@ -839,6 +839,7 @@ class AccountManagement implements AccountManagementInterface
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
+        $customerEmailData = $this->getFullCustomerObject($customer);
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->transportBuilder->setTemplateIdentifier(
             $this->scopeConfig->getValue(
@@ -849,7 +850,7 @@ class AccountManagement implements AccountManagementInterface
         )->setTemplateOptions(
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
-            ['customer' => $customer, 'store' => $this->storeManager->getStore($storeId)]
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)]
         )->setFrom(
             $this->scopeConfig->getValue(
                 self::XML_PATH_FORGOT_EMAIL_IDENTITY,
@@ -1077,7 +1078,7 @@ class AccountManagement implements AccountManagementInterface
      */
     public function sendPasswordResetConfirmationEmail($customer)
     {
-        $storeId = $customer->getStoreId();
+        $storeId = $this->storeManager->getStore()->getId();
         if (!$storeId) {
             $storeId = $this->getWebsiteStoreId($customer);
         }

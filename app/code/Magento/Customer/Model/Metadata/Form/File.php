@@ -151,7 +151,7 @@ class File extends AbstractData
             $rules,
             'file_extensions'
         );
-        if (!is_null($fileExtensions)) {
+        if ($fileExtensions !== null) {
             $extensions = explode(',', $fileExtensions);
             $extensions = array_map('trim', $extensions);
             if (!in_array($extension, $extensions)) {
@@ -174,7 +174,7 @@ class File extends AbstractData
             $rules,
             'max_file_size'
         );
-        if (!is_null($maxFileSize)) {
+        if ($maxFileSize !== null) {
             $size = $value['size'];
             if ($maxFileSize < $size) {
                 return [__('"%1" exceeds the allowed file size.', $label)];

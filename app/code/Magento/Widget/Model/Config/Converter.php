@@ -23,11 +23,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $widgetArray['@']['type'] = $widgetAttributes->getNamedItem('class')->nodeValue;
 
             $isEmailCompatible = $widgetAttributes->getNamedItem('is_email_compatible');
-            if (!is_null($isEmailCompatible)) {
+            if ($isEmailCompatible !== null) {
                 $widgetArray['is_email_compatible'] = $isEmailCompatible->nodeValue == 'true' ? '1' : '0';
             }
             $placeholderImage = $widgetAttributes->getNamedItem('placeholder_image');
-            if (!is_null($placeholderImage)) {
+            if ($placeholderImage !== null) {
                 $widgetArray['placeholder_image'] = $placeholderImage->nodeValue;
             }
 
@@ -143,7 +143,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
         } elseif ($xsiType == 'select' || $xsiType == 'multiselect') {
             $sourceModel = $sourceAttributes->getNamedItem('source_model');
-            if (!is_null($sourceModel)) {
+            if ($sourceModel !== null) {
                 $parameter['source_model'] = $sourceModel->nodeValue;
             }
             $parameter['type'] = $xsiType;
@@ -159,7 +159,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                         $optionAttributes = $option->attributes;
                         $optionName = $optionAttributes->getNamedItem('name')->nodeValue;
                         $selected = $optionAttributes->getNamedItem('selected');
-                        if (!is_null($selected)) {
+                        if ($selected !== null) {
                             $parameter['value'] = $optionAttributes->getNamedItem('value')->nodeValue;
                         }
                         if (!isset($parameter['values'])) {

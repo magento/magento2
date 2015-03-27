@@ -30,14 +30,14 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      */
     const SOURCE_CODE = "a = 1; b = array (); {\n\n some source code \n\n}";
 
-    const RESULT_CODE = "a = 1; b = array(); {\n some source code \n}";
+    const RESULT_CODE = "a = 1; b = array(); {\n some generated php code \n}";
 
     /**#@-*/
 
     /**
      * Model under test
      *
-     * @var \Magento\Framework\Code\Generator\EntityAbstract|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Generator\EntityAbstract| \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_model;
 
@@ -77,14 +77,13 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals(self::SOURCE_CLASS . 'Abstract', '_resultClassName', $this->_model);
 
         // with all arguments
-        $ioObject = $this->getMock('Magento\Framework\Code\Generator\Io', [], [], '', false);
-        $codeGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\ClassGenerator',
-            [],
-            [],
-            '',
-            false
-        );
+        // Configure IoObject mock
+        $ioObject = $this->getMockBuilder('Magento\Framework\Code\Generator\Io')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $codeGenerator = $this->getMockBuilder('Magento\Framework\Code\Generator\ClassGenerator')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Code\Generator\EntityAbstract',
@@ -105,48 +104,38 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         return [
             'no_source_class' => [
                 '$errors' => ['Source class ' . self::SOURCE_CLASS . ' doesn\'t exist.'],
-                '$isGeneration' => false,
-                '$classExistsFirst' => false,
+                '$validationSuccess' => false,
+                '$sourceClassExists' => false,
             ],
             'result_class_exists' => [
                 '$errors' => ['Result class ' . self::RESULT_CLASS . ' already exists.'],
-                '$isGeneration' => false,
-                '$classExistsFirst' => true,
-                '$classExistsSecond' => true,
-            ],
-            'cant_create_generation_directory' => [
-                '$errors' => ['Can\'t create directory ' . self::GENERATION_DIRECTORY . '.'],
-                '$isGeneration' => false,
-                '$classExistsFirst' => true,
-                '$classExistsSecond' => false,
-                '$makeGeneration' => false,
+                '$validationSuccess' => false,
+                '$sourceClassExists' => true,
+                '$resultClassExists' => true,
             ],
             'cant_create_result_directory' => [
                 '$errors' => ['Can\'t create directory ' . self::RESULT_DIRECTORY . '.'],
-                '$isGeneration' => false,
-                '$classExistsFirst' => true,
-                '$classExistsSecond' => false,
-                '$makeGeneration' => true,
-                '$makeResultFile' => false,
+                '$validationSuccess' => false,
+                '$sourceClassExists' => true,
+                '$resultClassExists' => false,
+                '$makeResultDirSuccess' => false,
             ],
             'result_file_exists' => [
-                '$errors' => ['Result file ' . self::RESULT_FILE . ' already exists.'],
-                '$isGeneration' => false,
-                '$classExistsFirst' => true,
-                '$classExistsSecond' => false,
-                '$makeGeneration' => true,
-                '$makeResultFile' => true,
-                '$fileExists' => true,
+                '$errors' => [],
+                '$validationSuccess' => true,
+                '$sourceClassExists' => true,
+                '$resultClassExists' => false,
+                '$makeResultDirSuccess' => false,
+                '$resultFileExists' => true,
             ],
             'generate_no_data' => [
                 '$errors' => ['Can\'t generate source code.'],
-                '$isGeneration' => true,
-                '$classExistsFirst' => true,
-                '$classExistsSecond' => false,
-                '$makeGeneration' => true,
-                '$makeResultFile' => true,
-                '$fileExists' => true,
-                '$isValid' => false,
+                '$validationSuccess' => true,
+                '$sourceClassExists' => true,
+                '$resultClassExists' => false,
+                '$makeResultDirSuccess' => true,
+                '$resultFileExists' => true,
+                '$willWriteCode' => false,
             ],
             'generate_ok' => []
         ];
@@ -154,46 +143,43 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $errors
-     * @param bool $isGeneration
-     * @param bool $classExistsFirst
-     * @param bool $classExistsSecond
-     * @param bool $makeGeneration
-     * @param bool $makeResultFile
-     * @param bool $fileExists
-     * @param bool $isValid
+     * @param bool $validationSuccess
+     * @param bool $sourceClassExists
+     * @param bool $resultClassExists
+     * @param bool $makeResultDirSuccess
+     * @param bool $resultFileExists
+     * @param bool $willWriteCode
      *
      * @dataProvider generateDataProvider
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::generate
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::getErrors
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getSourceClassName
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getResultClassName
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getDefaultResultClassName
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_generateCode
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_addError
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_validateData
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getClassDocBlock
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_getGeneratedCode
-     * covers \Magento\Framework\Code\Generator\EntityAbstract::_fixCodeStyle
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::generate
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::getErrors
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::getSourceClassName
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getResultClassName
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getDefaultResultClassName
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_generateCode
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_addError
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_validateData
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getClassDocBlock
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_getGeneratedCode
+     * @covers \Magento\Framework\Code\Generator\EntityAbstract::_fixCodeStyle
      */
     public function testGenerate(
         $errors = [],
-        $isGeneration = true,
-        $classExistsFirst = true,
-        $classExistsSecond = false,
-        $makeGeneration = true,
-        $makeResultFile = true,
-        $fileExists = false,
-        $isValid = true
+        $validationSuccess = true,
+        $sourceClassExists = true,
+        $resultClassExists = false,
+        $makeResultDirSuccess = true,
+        $resultFileExists = false,
+        $willWriteCode = true
     ) {
-        if ($isGeneration) {
-            $arguments = $this->_prepareMocksForGenerateCode($isValid);
+        if ($validationSuccess) {
+            $arguments = $this->_prepareMocksForGenerateCode($willWriteCode);
         } else {
             $arguments = $this->_prepareMocksForValidateData(
-                $classExistsFirst,
-                $classExistsSecond,
-                $makeGeneration,
-                $makeResultFile,
-                $fileExists
+                $sourceClassExists,
+                $resultClassExists,
+                $makeResultDirSuccess,
+                $resultFileExists
             );
         }
         $abstractGetters = ['_getClassProperties', '_getClassMethods'];
@@ -224,102 +210,45 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepares mocks for validation verification
      *
-     * @param bool $classExistsFirst
-     * @param bool $classExistsSecond
-     * @param bool $makeGeneration
-     * @param bool $makeResultFile
-     * @param bool $fileExists
+     * @param bool $sourceClassExists
+     * @param bool $resultClassExists
+     * @param bool $makeResultDirSuccess
+     * @param bool $resultFileExists
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareMocksForValidateData(
-        $classExistsFirst = true,
-        $classExistsSecond = false,
-        $makeGeneration = true,
-        $makeResultFile = true,
-        $fileExists = false
+        $sourceClassExists = true,
+        $resultClassExists = false,
+        $makeResultDirSuccess = true,
+        $resultFileExists = false
     ) {
-        $ioObject = $this->getMock(
-            'Magento\Framework\Code\Generator\Io',
-            [
-                'getResultFileName',
-                'makeGenerationDirectory',
-                'makeResultFileDirectory',
-                'fileExists',
-                'getGenerationDirectory',
-                'getResultFileDirectory',
-                'writeResultFile'
-            ],
-            [],
-            '',
-            false
-        );
+        // Configure DefinedClasses mock
         $definedClassesMock = $this->getMock('Magento\Framework\Code\Generator\DefinedClasses');
-        $ioObject->expects(
-            $this->any()
-        )->method(
-            'getResultFileName'
-        )->with(
-            self::RESULT_CLASS
-        )->will(
-            $this->returnValue(self::RESULT_FILE)
-        );
-        $ioObject->expects(
-            $this->any()
-        )->method(
-            'getGenerationDirectory'
-        )->will(
-            $this->returnValue(self::GENERATION_DIRECTORY)
-        );
-        $ioObject->expects(
-            $this->any()
-        )->method(
-            'getResultFileDirectory'
-        )->will(
-            $this->returnValue(self::RESULT_DIRECTORY)
-        );
-
-        $definedClassesMock->expects(
-            $this->at(0)
-        )->method(
-            'classLoadable'
-        )->with(
-            self::SOURCE_CLASS
-        )->will(
-            $this->returnValue($classExistsFirst)
-        );
-        if ($classExistsSecond) {
-            $definedClassesMock->expects(
-                $this->at(1)
-            )->method(
-                'classLoadable'
-            )->with(
-                self::RESULT_CLASS
-            )->will(
-                $this->returnValue($classExistsSecond)
-            );
+        $definedClassesMock->expects($this->at(0))
+            ->method('classLoadable')
+            ->with(self::SOURCE_CLASS)
+            ->willReturn($sourceClassExists);
+        if ($resultClassExists) {
+            $definedClassesMock->expects($this->at(1))
+                ->method('classLoadable')
+                ->with(self::RESULT_CLASS)
+                ->willReturn($resultClassExists);
         }
 
-        $expectedInvocations = 1;
-        if (!$classExistsFirst || $classExistsSecond) {
-            $expectedInvocations = 0;
-        }
-        $ioObject->expects(
-            $this->exactly($expectedInvocations)
-        )->method(
-            'makeGenerationDirectory'
-        )->will(
-            $this->returnValue($makeGeneration)
-        );
+        // Configure IoObject mock
+        $ioObject = $this->getMockBuilder('Magento\Framework\Code\Generator\Io')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_prepareIoObjectExpectations(
-            $ioObject,
-            $classExistsFirst,
-            $classExistsSecond,
-            $makeGeneration,
-            $makeResultFile,
-            $fileExists
-        );
+        $ioObject->expects($this->any())->method('getResultFileDirectory')->willReturn(self::RESULT_DIRECTORY);
+        $ioObject->expects($this->any())->method('fileExists')->willReturn($resultFileExists);
+        if ($sourceClassExists && !$resultClassExists) {
+            $ioObject->expects($this->once())
+                ->method('makeResultFileDirectory')
+                ->with(self::RESULT_CLASS)
+                ->willReturn($makeResultDirSuccess);
+        }
 
         return [
             'source_class' => self::SOURCE_CLASS,
@@ -331,89 +260,39 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $ioObject \PHPUnit_Framework_MockObject_MockObject
-     * @param bool $classExistsFirst
-     * @param bool $classExistsSecond
-     * @param bool $makeGeneration
-     * @param bool $makeResultFile
-     * @param bool $fileExists
-     */
-    protected function _prepareIoObjectExpectations(
-        $ioObject,
-        $classExistsFirst,
-        $classExistsSecond,
-        $makeGeneration,
-        $makeResultFile,
-        $fileExists
-    ) {
-        if ($classExistsFirst && !$classExistsSecond && $makeGeneration) {
-            $ioObject->expects(
-                $this->once()
-            )->method(
-                'makeResultFileDirectory'
-            )->with(
-                self::RESULT_CLASS
-            )->will(
-                $this->returnValue($makeResultFile)
-            );
-        }
-
-        if ($classExistsFirst && !$classExistsSecond && $makeGeneration && $makeResultFile) {
-            $ioObject->expects(
-                $this->once()
-            )->method(
-                'fileExists'
-            )->with(
-                self::RESULT_FILE
-            )->will(
-                $this->returnValue($fileExists)
-            );
-        }
-    }
-
-    /**
      * Prepares mocks for code generation test
      *
-     * @param bool $isValid
+     * @param bool $willWriteCode
      * @return array
      */
-    protected function _prepareMocksForGenerateCode($isValid)
+    protected function _prepareMocksForGenerateCode($willWriteCode)
     {
+        // Configure mocks for the validation step
         $mocks = $this->_prepareMocksForValidateData();
 
-        $codeGenerator = $this->getMock(
-            'Magento\Framework\Code\Generator\ClassGenerator',
-            ['setName', 'addProperties', 'addMethods', 'setClassDocBlock', 'generate'],
-            [],
-            '',
-            false
-        );
+        $codeGenerator = $this->getMockBuilder('Magento\Framework\Code\Generator\ClassGenerator')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $codeGenerator->expects($this->once())->method('setName')->with(self::RESULT_CLASS)->will($this->returnSelf());
         $codeGenerator->expects($this->once())->method('addProperties')->will($this->returnSelf());
         $codeGenerator->expects($this->once())->method('addMethods')->will($this->returnSelf());
-        $codeGenerator->expects(
-            $this->once()
-        )->method(
-            'setClassDocBlock'
-        )->with(
-            $this->isType('array')
-        )->will(
-            $this->returnSelf()
-        );
+        $codeGenerator->expects($this->once())
+            ->method('setClassDocBlock')
+            ->with($this->isType('array'))
+            ->will($this->returnSelf());
 
-        $codeGenerator->expects(
-            $this->once()
-        )->method(
-            'generate'
-        )->will(
-            $this->returnValue($isValid ? self::SOURCE_CODE : null)
-        );
+        $codeGenerator->expects($this->once())
+            ->method('generate')
+            ->will($this->returnValue($willWriteCode ? self::RESULT_CODE : null));
 
+        // Add configuration for the generation step
         /** @var $ioObject \PHPUnit_Framework_MockObject_MockObject */
         $ioObject = $mocks['io_object'];
-        if ($isValid) {
+        if ($willWriteCode) {
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);
         }
+        $ioObject->expects($this->any())->method('getResultFileName')->willReturn(self::RESULT_FILE);
 
         return [
             'source_class' => $mocks['source_class'],

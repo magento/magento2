@@ -75,13 +75,6 @@ interface EngineInterface
     public function prepareEntityIndex($index, $separator = ' ');
 
     /**
-     * Define if Layered Navigation is allowed
-     *
-     * @return bool
-     */
-    public function isLayeredNavigationAllowed();
-
-    /**
      * Define if engine is available
      *
      * @return bool

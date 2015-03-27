@@ -6,7 +6,8 @@
 namespace Magento\Framework\View\Test\Unit;
 
 /**
- * Class LayoutTest
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LayoutTest extends \PHPUnit_Framework_TestCase
 {
@@ -142,9 +143,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->readerContextMock);
         $this->generatorContextFactoryMock = $this->getMockBuilder(
-                'Magento\Framework\View\Layout\Generator\ContextFactory'
-            )->disableOriginalConstructor()
-            ->getMock();
+            'Magento\Framework\View\Layout\Generator\ContextFactory'
+        )->disableOriginalConstructor()
+        ->getMock();
 
         $this->model = new \Magento\Framework\View\Layout(
             $this->processorFactoryMock,
@@ -460,9 +461,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Layout::setBlock
-     * covers \Magento\Framework\View\Layout::getAllBlocks
-     * covers \Magento\Framework\View\Layout::unsetElement
+     * @covers \Magento\Framework\View\Layout::setBlock
+     * @covers \Magento\Framework\View\Layout::getAllBlocks
+     * @covers \Magento\Framework\View\Layout::unsetElement
      */
     public function testSetGetBlock()
     {

@@ -73,6 +73,6 @@ class Coupons extends \Magento\Backend\Block\Text\ListText implements \Magento\B
     protected function _isEditing()
     {
         $priceRule = $this->_coreRegistry->registry('current_promo_quote_rule');
-        return !is_null($priceRule->getRuleId());
+        return $priceRule->getRuleId() !== null;
     }
 }
