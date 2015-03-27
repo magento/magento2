@@ -24,6 +24,8 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testOverviewAction()
     {
+        $this->markTestSkipped('Skipped due to fails on Travis CI (MAGETWO-35405)');
+
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
