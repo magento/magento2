@@ -6,7 +6,7 @@
  */
 namespace Magento\Rss\Controller\Index;
 
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 
 class Index extends \Magento\Rss\Controller\Index
 {
@@ -14,7 +14,7 @@ class Index extends \Magento\Rss\Controller\Index
      * Index action
      *
      * @return void
-     * @throws NoSuchEntityException
+     * @throws NotFoundException
      */
     public function execute()
     {
@@ -22,7 +22,7 @@ class Index extends \Magento\Rss\Controller\Index
             $this->_view->loadLayout();
             $this->_view->renderLayout();
         } else {
-            throw new NoSuchEntityException();
+            throw new NotFoundException(__('Page not found.'));
         }
     }
 }

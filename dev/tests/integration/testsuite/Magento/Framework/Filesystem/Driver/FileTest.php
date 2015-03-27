@@ -60,7 +60,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     /**
      * test exception
      *
-     * @expectedException \Magento\Framework\Exception\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testReadDirectoryRecursivelyFailure()
     {

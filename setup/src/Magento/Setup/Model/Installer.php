@@ -17,7 +17,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Exception\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Module\ModuleList\DeploymentConfig;
 use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;
@@ -1209,7 +1209,7 @@ class Installer
             $this->log->log("{$dirPath}{$path}");
             try {
                 $dir->delete($path);
-            } catch (FilesystemException $e) {
+            } catch (FileSystemException $e) {
                 $this->log->log($e->getMessage());
             }
         }
@@ -1232,7 +1232,7 @@ class Installer
         try {
             $this->log->log($absolutePath);
             $configDir->delete($file);
-        } catch (FilesystemException $e) {
+        } catch (FileSystemException $e) {
             $this->log->log($e->getMessage());
         }
     }

@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Wishlist\Controller\IndexInterface;
 
@@ -50,7 +50,7 @@ class Update extends Action\Action implements IndexInterface
      * Update wishlist item comments
      *
      * @return ResponseInterface|void
-     * @throws NoSuchEntityException
+     * @throws NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -61,7 +61,7 @@ class Update extends Action\Action implements IndexInterface
         }
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {
-            throw new NoSuchEntityException();
+            throw new NotFoundException(__('Page not found.'));
         }
 
         $post = $this->getRequest()->getPostValue();

@@ -6,7 +6,7 @@
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\Exception\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 
 class Read implements ReadInterface
 {
@@ -67,12 +67,12 @@ class Read implements ReadInterface
      * Assert file existence
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function assertValid()
     {
         if (!$this->driver->isExists($this->path)) {
-            throw new FilesystemException(new \Magento\Framework\Phrase('The file "%1" doesn\'t exist', [$this->path]));
+            throw new FileSystemException(new \Magento\Framework\Phrase('The file "%1" doesn\'t exist', [$this->path]));
         }
         return true;
     }

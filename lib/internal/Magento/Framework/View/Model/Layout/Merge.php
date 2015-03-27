@@ -582,6 +582,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      *
      * @param string $handle
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDbUpdateString($handle)
     {
@@ -691,7 +693,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             }
             if (!$file->isBase() && $fileXml->xpath(self::XPATH_HANDLE_DECLARATION)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase("Theme layout update file '%1' must not declare page types.",
+                    new \Magento\Framework\Phrase(
+                        'Theme layout update file \'%1\' must not declare page types.',
                         [$file->getFileName()]
                     )
                 );
@@ -744,7 +747,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         }
         if (!$result) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("Unable to find a physical ancestor for a theme '%1'.",
+                new \Magento\Framework\Phrase(
+                    'Unable to find a physical ancestor for a theme \'%1\'.',
                     [$theme->getThemeTitle()]
                 )
             );

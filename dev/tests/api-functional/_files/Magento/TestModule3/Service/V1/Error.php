@@ -10,7 +10,7 @@ namespace Magento\TestModule3\Service\V1;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\TestModule3\Service\V1\Entity\Parameter;
 use Magento\TestModule3\Service\V1\Entity\ParameterFactory;
 
@@ -40,7 +40,7 @@ class Error implements \Magento\TestModule3\Service\V1\ErrorInterface
     /**
      * {@inheritdoc}
      */
-    public function resourceNoSuchEntityException()
+    public function resourceNotFoundException()
     {
         throw new NoSuchEntityException(
             __(

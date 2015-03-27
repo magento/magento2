@@ -18,7 +18,7 @@ class Noroute implements \Magento\Framework\App\ActionInterface
      *
      * @param RequestInterface $request
      * @return ResponseInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NotFoundException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

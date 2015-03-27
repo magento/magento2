@@ -6,7 +6,7 @@
 
 namespace Magento\Config\Controller\Adminhtml\System;
 
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 
 class ConfigSectionChecker
 {
@@ -31,7 +31,7 @@ class ConfigSectionChecker
      * @param string $sectionId
      * @throws \Exception
      * @return bool
-     * @throws NoSuchEntityException
+     * @throws NotFoundException
      */
     public function isSectionAllowed($sectionId)
     {
@@ -41,7 +41,7 @@ class ConfigSectionChecker
             }
             return true;
         } catch (\Zend_Acl_Exception $e) {
-            throw new NoSuchEntityException();
+            throw new NotFoundException(__('Page not found.'));
         } catch (\Exception $e) {
             return false;
         }

@@ -59,7 +59,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testInstanceFileNotExists()
     {
@@ -73,7 +73,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testInstanceFileAlreadyExists()
     {
@@ -121,7 +121,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testWriteException()
     {
@@ -130,13 +130,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
             ->method('fileWrite')
             ->with($this->resource, $data)
             ->willThrowException(
-                new \Magento\Framework\Exception\FilesystemException(new \Magento\Framework\Phrase(''))
+                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase(''))
             );
         $this->file->write($data);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testWriteCsvException()
     {
@@ -147,13 +147,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
             ->method('filePutCsv')
             ->with($this->resource, $data, $delimiter, $enclosure)
             ->willThrowException(
-                new \Magento\Framework\Exception\FilesystemException(new \Magento\Framework\Phrase(''))
+                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase(''))
             );
         $this->file->writeCsv($data, $delimiter, $enclosure);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      */
     public function testFlushException()
     {
@@ -161,7 +161,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
             ->method('fileFlush')
             ->with($this->resource)
             ->willThrowException(
-                new \Magento\Framework\Exception\FilesystemException(new \Magento\Framework\Phrase(''))
+                new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase(''))
             );
         $this->file->flush();
     }

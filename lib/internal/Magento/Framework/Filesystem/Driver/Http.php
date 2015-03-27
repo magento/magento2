@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Filesystem\Driver;
 
-use Magento\Framework\Exception\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Http
@@ -27,7 +27,7 @@ class Http extends File
      *
      * @param string $path
      * @return bool
-     * @throws FilesystemException
+     * @throws FileSystemException
      */
     public function isExists($path)
     {
@@ -82,14 +82,14 @@ class Http extends File
      * @param string|null $flags
      * @param resource|null $context
      * @return string
-     * @throws FilesystemException
+     * @throws FileSystemException
      */
     public function fileGetContents($path, $flags = null, $context = null)
     {
         clearstatcache();
         $result = @file_get_contents($this->getScheme() . $path, $flags, $context);
         if (false === $result) {
-            throw new FilesystemException(
+            throw new FileSystemException(
                 new \Magento\Framework\Phrase(
                     'Cannot read contents from file "%1" %2',
                     [$path, $this->getWarningMessage()]
@@ -107,13 +107,13 @@ class Http extends File
      * @param string|null $mode
      * @param resource|null $context
      * @return int The number of bytes that were written
-     * @throws FilesystemException
+     * @throws FileSystemException
      */
     public function filePutContents($path, $content, $mode = null, $context = null)
     {
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode, $context);
         if (!$result) {
-            throw new FilesystemException(
+            throw new FileSystemException(
                 new \Magento\Framework\Phrase(
                     'The specified "%1" file could not be written %2',
                     [$path, $this->getWarningMessage()]
@@ -129,7 +129,7 @@ class Http extends File
      * @param string $path
      * @param string $mode
      * @return resource file
-     * @throws FilesystemException
+     * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fileOpen($path, $mode)
@@ -137,7 +137,7 @@ class Http extends File
         $urlProp = $this->parseUrl($this->getScheme() . $path);
 
         if (false === $urlProp) {
-            throw new FilesystemException(new \Magento\Framework\Phrase('Please correct the download URL.'));
+            throw new FileSystemException(new \Magento\Framework\Phrase('Please correct the download URL.'));
         }
 
         $hostname = $urlProp['host'];
@@ -194,7 +194,7 @@ class Http extends File
      * @param int $length
      * @param string $ending [optional]
      * @return string
-     * @throws FilesystemException
+     * @throws FileSystemException
      */
     public function fileReadLine($resource, $length, $ending = null)
     {
@@ -234,14 +234,14 @@ class Http extends File
      *
      * @param string $hostname
      * @param int $port
-     * @throws \Magento\Framework\Exception\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @return array
      */
     protected function open($hostname, $port)
     {
         $result = @fsockopen($hostname, $port, $errorNumber, $errorMessage);
         if ($result === false) {
-            throw new FilesystemException(
+            throw new FileSystemException(
                 new \Magento\Framework\Phrase(
                     'Something went wrong connecting to the host. Error#%1 - %2.',
                     [$errorNumber, $errorMessage]

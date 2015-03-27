@@ -13,6 +13,8 @@ namespace Magento\Framework\Config;
 
 /**
  * Class Dom
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Dom
 {

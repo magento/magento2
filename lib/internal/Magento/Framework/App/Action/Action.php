@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Action;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Default implementation of application action controller
@@ -80,7 +81,7 @@ class Action extends AbstractAction
      *
      * @param RequestInterface $request
      * @return ResponseInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {

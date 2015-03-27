@@ -39,7 +39,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
     {
         $this->_directoryMock->expects($this->any())
             ->method('openFile')
-            ->willThrowException(new \Magento\Framework\Exception\FilesystemException(__('Error message')));
+            ->willThrowException(new \Magento\Framework\Exception\FileSystemException(__('Error message')));
         new \Magento\ImportExport\Model\Import\Source\Csv(__DIR__ . '/invalid_file', $this->_directoryMock);
     }
 

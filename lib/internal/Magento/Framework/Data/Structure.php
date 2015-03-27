@@ -108,7 +108,7 @@ class Structure
             if ($children !== array_flip(array_flip($children))) {
                 throw new LocalizedException(
                     new \Magento\Framework\Phrase('Invalid format of children: %1', [var_export($children, 1)])
-            );
+                );
             }
             foreach (array_keys($children) as $childId) {
                 $this->_assertElementExists($childId);

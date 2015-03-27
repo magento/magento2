@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Wishlist\Controller\IndexInterface;
 
 class Index extends Action\Action implements IndexInterface
@@ -33,12 +33,12 @@ class Index extends Action\Action implements IndexInterface
      * Display customer wishlist
      *
      * @return void
-     * @throws NoSuchEntityException
+     * @throws NotFoundException
      */
     public function execute()
     {
         if (!$this->wishlistProvider->getWishlist()) {
-            throw new NoSuchEntityException();
+            throw new NotFoundException(__('Page not found.'));
         }
         $this->_view->loadLayout();
         $this->_view->getLayout()->initMessages();

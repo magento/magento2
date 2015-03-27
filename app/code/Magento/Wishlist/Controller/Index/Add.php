@@ -8,6 +8,7 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Controller\IndexInterface;
 
@@ -50,7 +51,7 @@ class Add extends Action\Action implements IndexInterface
      * Adding new item
      *
      * @return void
-     * @throws NoSuchEntityException
+     * @throws NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
@@ -59,7 +60,7 @@ class Add extends Action\Action implements IndexInterface
     {
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {
-            throw new NoSuchEntityException();
+            throw new NotFoundException(__('Page not found.'));
         }
 
         $session = $this->_customerSession;
