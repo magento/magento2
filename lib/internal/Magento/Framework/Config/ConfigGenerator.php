@@ -160,10 +160,7 @@ class ConfigGenerator
         $prefixKey = isset($data[ConfigOptionsList::INPUT_KEY_DB_PREFIX])
             ? $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]
             : '';
-        $configData->set(
-            ConfigOptionsList::CONFIG_DB_KEY . '/' . self::$paramMap[ConfigOptionsList::INPUT_KEY_DB_PREFIX],
-            $prefixKey
-        );
+        $configData->set(ConfigOptionsList::CONFIG_PATH_DB_PREFIX, $prefixKey);
 
         foreach ($optional as $key) {
             if (isset($data[$key])) {
