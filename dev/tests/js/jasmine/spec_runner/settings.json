@@ -16,7 +16,7 @@
         "requireJs": "requirejs/require.js",
 
         /**
-         * Overriden "grunt-contrib-jasmine" SpecRunner template.
+         * Overridden "grunt-contrib-jasmine" SpecRunner template.
          */
         "template": "<%= root %>/spec_runner/template.html",
 
