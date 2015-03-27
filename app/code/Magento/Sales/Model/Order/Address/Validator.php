@@ -85,49 +85,71 @@ class Validator
      */
     public function validateForPayment(Address $address)
     {
-        $country = $this->countryFactory->create()->load($address->getCountryId());
-        $errors = [];
-        if (!\Zend_Validate::is($address->getFirstname(), 'NotEmpty')) {
-            $errors[] = __('Please enter the first name.');
-        }
-        if (!\Zend_Validate::is($address->getLastname(), 'NotEmpty')) {
-            $errors[] = __('Please enter the last name.');
-        }
-        if (!\Zend_Validate::is($address->getStreetLine(1), 'NotEmpty')) {
-            $errors[] = __('Please enter the street.');
-        }
-        if (!\Zend_Validate::is($address->getCity(), 'NotEmpty')) {
-            $errors[] = __('Please enter the city.');
-        }
-        if (!\Zend_Validate::is($address->getTelephone(), 'NotEmpty')) {
-            $errors[] = __('Please enter the phone number.');
-        }
-        $havingOptionalZip = $this->directoryHelper->getCountriesWithOptionalZip();
-        if (!in_array(
-                $address->getCountryId(),
-                $havingOptionalZip
-            ) && !\Zend_Validate::is(
-                $address->getPostcode(),
-                'NotEmpty'
-            )
-        ) {
-            $errors[] = __('Please enter the zip/postal code.');
-        }
-        if (!\Zend_Validate::is($address->getCountryId(), 'NotEmpty')) {
-            $errors[] = __('Please enter the country.');
-        }
-        if ($country->getRegionCollection()->getSize() && !\Zend_Validate::is(
-                $address->getRegionId(),
-                'NotEmpty'
-            ) && $this->directoryHelper->isRegionRequired(
-                $address->getCountryId()
-            )
-        ) {
-            $errors[] = __('Please enter the state/province.');
-        }
-        if (empty($errors) || $address->getShouldIgnoreValidation()) {
+        if ($address->getShouldIgnoreValidation()) {
             return true;
         }
-        return $errors;
+
+        $errors = [];
+
+        if ($this->isEmpty($address->getFirstname())) {
+            $errors[] = __('Please enter the first name.');
+        }
+        if ($this->isEmpty($address->getLastname())) {
+            $errors[] = __('Please enter the last name.');
+        }
+        if ($this->isEmpty($address->getStreetLine(1))) {
+            $errors[] = __('Please enter the street.');
+        }
+        if ($this->isEmpty($address->getCity())) {
+            $errors[] = __('Please enter the city.');
+        }
+        if ($this->isEmpty($address->getTelephone())) {
+            $errors[] = __('Please enter the phone number.');
+        }
+
+        $countryId = $address->getCountryId();
+
+        if ($this->isZipRequired($countryId)  && $this->isEmpty($address->getPostcode())) {
+            $errors[] = __('Please enter the zip/postal code.');
+        }
+        if ($this->isEmpty($countryId)) {
+            $errors[] = __('Please enter the country.');
+        }
+        if ($this->isStateRequired($countryId) && $this->isEmpty($address->getRegionId())) {
+            $errors[] = __('Please enter the state/province.');
+        }
+
+        return empty($errors) ? true : $errors;
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     * @throws \Exception
+     * @throws \Zend_Validate_Exception
+     */
+    protected function isEmpty($value)
+    {
+        return !\Zend_Validate::is($value, 'NotEmpty');
+    }
+
+    /**
+     * @param string $countryId
+     * @return bool
+     */
+    protected function isZipRequired($countryId)
+    {
+        return !in_array($countryId, $this->directoryHelper->getCountriesWithOptionalZip());
+    }
+
+    /**
+     * @param string $countryId
+     * @return bool
+     */
+    protected function isStateRequired($countryId)
+    {
+        $country = $this->countryFactory->create()->load($countryId);
+
+        return $this->directoryHelper->isRegionRequired($countryId) && $country->getRegionCollection()->getSize();
     }
 }

@@ -14,14 +14,17 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Address\Validator
      */
     protected $validator;
+
     /**
      * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $addressMock;
+
     /**
      * @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $directoryHelperMock;
+
     /**
      * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject
      */
