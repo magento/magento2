@@ -39,8 +39,10 @@ class Validator
      * @var CountryFactory
      */
     protected $countryFactory;
+
     /**
      * @param DirectoryHelper $directoryHelper
+     * @param CountryFactory $countryFactory
      */
     public function __construct(
         DirectoryHelper $directoryHelper,
