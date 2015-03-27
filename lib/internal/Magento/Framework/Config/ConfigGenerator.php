@@ -12,7 +12,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Creates deployment config data based on user input array
- * this class introduced to brake Magento\Framework\Config\ConfigOptionsList::createConfig
+ * this class introduced to break Magento\Framework\Config\ConfigOptionsList::createConfig
  */
 class ConfigGenerator
 {
@@ -66,7 +66,7 @@ class ConfigGenerator
         $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
 
         if (!$this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE)) {
-             $configData->set(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE, date('r'));
+            $configData->set(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE, date('r'));
         }
         return $configData;
     }
