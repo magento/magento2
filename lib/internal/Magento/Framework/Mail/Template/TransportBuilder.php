@@ -57,7 +57,7 @@ class TransportBuilder
     /**
      * Message
      *
-     * @var \Magento\Framework\Mail\Message
+     * @var \Magento\Framework\Mail\MessageInterface
      */
     protected $message;
 
@@ -75,14 +75,14 @@ class TransportBuilder
 
     /**
      * @param FactoryInterface $templateFactory
-     * @param \Magento\Framework\Mail\Message $message
+     * @param \Magento\Framework\Mail\MessageInterface $message
      * @param \Magento\Framework\Mail\Template\SenderResolverInterface $senderResolver
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Mail\TransportInterfaceFactory $mailTransportFactory
      */
     public function __construct(
         \Magento\Framework\Mail\Template\FactoryInterface $templateFactory,
-        \Magento\Framework\Mail\Message $message,
+        \Magento\Framework\Mail\MessageInterface $message,
         \Magento\Framework\Mail\Template\SenderResolverInterface $senderResolver,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Mail\TransportInterfaceFactory $mailTransportFactory
@@ -95,69 +95,22 @@ class TransportBuilder
     }
 
     /**
-     * Add cc address
-     *
-     * @param array|string $address
-     * @param string $name
-     * @return $this
+     * @return \Magento\Framework\Mail\MessageInterface
      */
-    public function addCc($address, $name = '')
+    public function getMessage()
     {
-        $this->message->addCc($address, $name);
-        return $this;
+        return $this->message;
     }
 
     /**
-     * Add to address
-     *
-     * @param array|string $address
-     * @param string $name
+     * @param \Magento\Framework\Mail\MessageInterface $message
      * @return $this
      */
-    public function addTo($address, $name = '')
+    public function setMessage(\Magento\Framework\Mail\MessageInterface $message)
     {
-        $this->message->addTo($address, $name);
+        $this->message  = $message;
         return $this;
     }
-
-    /**
-     * Add bcc address
-     *
-     * @param array|string $address
-     * @return $this
-     */
-    public function addBcc($address)
-    {
-        $this->message->addBcc($address);
-        return $this;
-    }
-
-    /**
-     * Set Reply-To Header
-     *
-     * @param string $email
-     * @param string|null $name
-     * @return $this
-     */
-    public function setReplyTo($email, $name = null)
-    {
-        $this->message->setReplyTo($email, $name);
-        return $this;
-    }
-
-    /**
-     * Set mail from address
-     *
-     * @param string|array $from
-     * @return $this
-     */
-    public function setFrom($from)
-    {
-        $result = $this->_senderResolver->resolve($from);
-        $this->message->setFrom($result['email'], $result['name']);
-        return $this;
-    }
-
     /**
      * Set template identifier
      *
