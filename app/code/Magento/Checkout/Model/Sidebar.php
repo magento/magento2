@@ -10,6 +10,7 @@ use Magento\Checkout\Model\Cart;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\Quote\Address\Total;
 
 class Sidebar
 {
@@ -56,25 +57,23 @@ class Sidebar
      */
     public function getResponseData($error = '')
     {
-        $response = [
-            'success' => empty($error) ? true : false,
-        ];
-        if ($response['success']) {
-            if (!$this->getSummaryQty()) {
-                $response['cleanup'] = true;
-            }
-            $response = array_merge($response, [
+        if (empty($error)) {
+            $response = [
+                'success' => true,
                 'data' => [
                     'summary_qty' => $this->getSummaryQty(),
                     'summary_text' => $this->getSummaryText(),
                     'subtotal' => $this->getSubtotalHtml(),
                 ],
-            ]);
-        }
-        if (!empty($error)){
-            $response = array_merge($response, [
+            ];
+            if (!$this->getSummaryQty()) {
+                $response['cleanup'] = true;
+            }
+        } else {
+            $response = [
+                'success' => false,
                 'error_message' => $error,
-            ]);
+            ];
         }
         return $response;
     }
@@ -171,7 +170,9 @@ class Sidebar
     protected function getSubtotalHtml()
     {
         $totals = $this->cart->getQuote()->getTotals();
-        $subtotal = isset($totals['subtotal']) ? $totals['subtotal']->getValue() : 0;
+        $subtotal = isset($totals['subtotal']) && $totals['subtotal'] instanceof Total
+            ? $totals['subtotal']->getValue()
+            : 0;
         return $this->helperData->formatPrice($subtotal);
     }
 }

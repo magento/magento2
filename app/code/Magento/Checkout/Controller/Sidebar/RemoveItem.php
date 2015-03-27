@@ -11,6 +11,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\View\Result\PageFactory;
 use Psr\Log\LoggerInterface;
 
 class RemoveItem extends Action
@@ -30,15 +31,22 @@ class RemoveItem extends Action
      */
     protected $jsonHelper;
 
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
     public function __construct(
         Context $context,
         Sidebar $sidebar,
         LoggerInterface $logger,
-        Data $jsonHelper
+        Data $jsonHelper,
+        PageFactory $resultPageFactory
     ) {
         $this->sidebar = $sidebar;
         $this->logger = $logger;
         $this->jsonHelper = $jsonHelper;
+        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
@@ -70,9 +78,8 @@ class RemoveItem extends Action
     {
         $response = $this->sidebar->getResponseData($error);
         if (isset($response['cleanup']) && (bool)$response['cleanup']) {
-            $this->_view->loadLayout(['default'], true, true, false);
-            $layout = $this->_view->getLayout();
-            $block = $layout->getBlock('minicart.content')->toHtml();
+            $resultPage = $this->resultPageFactory->create();
+            $block = $resultPage->getLayout()->getBlock('minicart.content')->toHtml();
             $response['content'] = $block;
         }
         return $this->getResponse()->representJson(
