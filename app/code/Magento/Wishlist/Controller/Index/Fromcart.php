@@ -32,8 +32,9 @@ class Fromcart extends Action\Action implements IndexInterface
     /**
      * Add cart item to wishlist and remove from cart
      *
-     * @return \Magento\Framework\App\Response\Http
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute()
@@ -46,39 +47,42 @@ class Fromcart extends Action\Action implements IndexInterface
 
         /* @var \Magento\Checkout\Model\Cart $cart */
         $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
-        $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
+        $this->_objectManager->get('Magento\Checkout\Model\Session');
 
-        try {
-            $item = $cart->getQuote()->getItemById($itemId);
-            if (!$item) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('The requested cart item doesn\'t exist.')
-                );
-            }
-
-            $productId = $item->getProductId();
-            $buyRequest = $item->getBuyRequest();
-
-            $wishlist->addNewItem($productId, $buyRequest);
-
-            $productIds[] = $productId;
-            $cart->getQuote()->removeItem($itemId);
-            $cart->save();
-            $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
-            $productName = $this->_objectManager->get('Magento\Framework\Escaper')
-                ->escapeHtml($item->getProduct()->getName());
-            $wishlistName = $this->_objectManager->get('Magento\Framework\Escaper')
-                ->escapeHtml($wishlist->getName());
-            $this->messageManager->addSuccess(__("%1 has been moved to wish list %2", $productName, $wishlistName));
-            $wishlist->save();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t move the item to the wish list.'));
+        $item = $cart->getQuote()->getItemById($itemId);
+        if (!$item) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The requested cart item doesn\'t exist.')
+            );
         }
 
-        return $this->getResponse()->setRedirect(
-            $this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl()
-        );
+        $productId = $item->getProductId();
+        $buyRequest = $item->getBuyRequest();
+
+        $wishlist->addNewItem($productId, $buyRequest);
+
+        $productIds[] = $productId;
+        $cart->getQuote()->removeItem($itemId);
+        $cart->save();
+        $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+        $productName = $this->_objectManager->get('Magento\Framework\Escaper')
+            ->escapeHtml($item->getProduct()->getName());
+        $wishlistName = $this->_objectManager->get('Magento\Framework\Escaper')
+            ->escapeHtml($wishlist->getName());
+        $this->messageManager->addSuccess(__("%1 has been moved to wish list %2", $productName, $wishlistName));
+        $wishlist->save();
+
+        return $this->getDefaultRedirect();
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function getDefaultRedirect()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setUrl($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl());
     }
 }
