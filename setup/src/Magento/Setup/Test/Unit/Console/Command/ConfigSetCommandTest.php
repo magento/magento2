@@ -45,6 +45,10 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteNoInteractive()
     {
+        $this->configModel
+            ->expects($this->once())
+            ->method('process')
+            ->with([]);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
         $this->assertSame(
