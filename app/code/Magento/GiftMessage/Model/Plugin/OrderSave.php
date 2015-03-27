@@ -24,8 +24,7 @@ class OrderSave
     public function __construct(
         \Magento\GiftMessage\Api\OrderRepositoryInterface $giftMessageOrderRepository,
         \Magento\GiftMessage\Api\OrderItemRepositoryInterface $giftMessageOrderItemRepository
-    )
-    {
+    ) {
         $this->giftMessageOrderRepository = $giftMessageOrderRepository;
         $this->giftMessageOrderItemRepository = $giftMessageOrderItemRepository;
     }
