@@ -12,7 +12,11 @@ use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Resource\Order\Creditmemo as CreditmemoResource;
+use Magento\Sales\Model\Order\Address\Renderer;
 
+/**
+ * Class CreditmemoSender
+ */
 class CreditmemoSender extends NotifySender
 {
     /**
@@ -26,22 +30,30 @@ class CreditmemoSender extends NotifySender
     protected $creditmemoResource;
 
     /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param Template $templateContainer
      * @param CreditmemoIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param PaymentHelper $paymentHelper
      * @param CreditmemoResource $creditmemoResource
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
         CreditmemoIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         PaymentHelper $paymentHelper,
-        CreditmemoResource $creditmemoResource
+        CreditmemoResource $creditmemoResource,
+        Renderer $addressRenderer
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->paymentHelper = $paymentHelper;
         $this->creditmemoResource = $creditmemoResource;
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -63,6 +75,8 @@ class CreditmemoSender extends NotifySender
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
+                'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
+                'formattedBillingAddress' => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
             ]
         );
 

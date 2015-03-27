@@ -10,20 +10,32 @@ use Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Address\Renderer;
 
+/**
+ * Class InvoiceCommentSender
+ */
 class InvoiceCommentSender extends NotifySender
 {
+    /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
     /**
      * @param Template $templateContainer
      * @param InvoiceCommentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
         InvoiceCommentIdentity $identityContainer,
-        \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
+        \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        Renderer $addressRenderer
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -44,6 +56,8 @@ class InvoiceCommentSender extends NotifySender
                 'comment' => $comment,
                 'billing' => $order->getBillingAddress(),
                 'store' => $order->getStore(),
+                'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
+                'formattedBillingAddress' => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
             ]
         );
         return $this->checkAndSend($order, $notify);
