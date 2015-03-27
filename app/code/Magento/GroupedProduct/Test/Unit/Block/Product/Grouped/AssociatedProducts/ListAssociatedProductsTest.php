@@ -72,11 +72,15 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
 
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
-        $this->block = new \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts($this->contextMock, $this->registryMock, $this->priceCurrency);
+        $this->block = new \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts(
+            $this->contextMock,
+            $this->registryMock,
+            $this->priceCurrency
+        );
     }
 
     /**
-     * covers Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts
+     * @covers \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts
      *     ::getAssociatedProducts
      */
     public function testGetAssociatedProducts()
