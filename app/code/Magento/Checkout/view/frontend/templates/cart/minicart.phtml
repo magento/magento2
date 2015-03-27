@@ -42,14 +42,18 @@
     {
         "[data-block='minicart']": {
             "sidebar": {
-                "checkoutUrl": "<?php echo $block->getCheckoutUrl();?>",
-                "checkoutButton": "#top-cart-btn-checkout",
-                "removeButton": "#mini-cart a.action.delete",
-                "confirmMessage": "<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>",
-                "closeButton": "#btn-minicart-close",
                 "targetElement": "div.block.block-minicart",
-                "updateItemQtyUrl": "<?php echo $block->getUpdateItemQtyUrl(); ?>",
-                "removeItemUrl": "<?php echo $block->getRemoveItemUrl(); ?>"
+                "url": {
+                    "checkout": "<?php echo $block->getCheckoutUrl();?>",
+                    "update": "<?php echo $block->getUpdateItemQtyUrl(); ?>",
+                    "remove": "<?php echo $block->getRemoveItemUrl(); ?>"
+                },
+                "button": {
+                    "checkout": "#top-cart-btn-checkout",
+                    "remove": "#mini-cart a.action.delete",
+                    "close": "#btn-minicart-close"
+                },
+                "confirmMessage": "<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>"
             }
         }
     }

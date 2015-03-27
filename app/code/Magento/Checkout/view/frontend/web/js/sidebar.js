@@ -31,29 +31,31 @@ define([
 
             this.element.decorate('list', this.options.isRecursive);
 
-            // Add event on "Go to Checkout" button click
-            $(this.options.checkoutButton).on('click', $.proxy(function() {
-                location.href = this.options.checkoutUrl;
+            $(this.options.button.checkout).on('click', $.proxy(function() {
+                location.href = this.options.url.checkout;
             }, this));
 
-            // Add event on "Remove item" click
-            $(this.options.removeButton).click(function(event) {
+            $(this.options.selectorItemQty).keyup(function(event) {
+                self._showButton($(this));
+            });
+
+            $(this.options.button.remove).click(function(event) {
                 event.stopPropagation();
                 if (confirm(self.options.confirmMessage)) {
                     self._removeItem($(this));
                 }
             });
 
-            // Add event on "Qty" field changed
-            $(this.options.selectorItemQty).change(function(event) {
-                event.stopPropagation();
-                self._showButton($(this));
-            });
-
-            // Add event on "Update Qty" button click
             $(this.options.selectorItemButton).click(function(event) {
                 event.stopPropagation();
                 self._updateQty($(this))
+            });
+
+            $('body').on('minicart.update', function(event, elem, response) {
+                event.stopPropagation();
+                self._refreshQty(response.data.summary_qty, response.data.summary_text);
+                self._refreshSubtotal(response.data.subtotal);
+                self._refreshShowcart(response.data.summary_qty, response.data.summary_text);
             });
 
             this._initCloseButton();
@@ -68,12 +70,17 @@ define([
          */
         _initCloseButton: function() {
             var self = this;
-            $(this.options.closeButton).click(function(event) {
+            $(this.options.button.close).click(function(event) {
                 event.stopPropagation();
                 $(self.options.targetElement).dropdownDialog("close");
             });
         },
 
+        /**
+         * Add 'overflowed' class to minicart items wrapper element
+         *
+         * @private
+         */
         _isOverflowed: function() {
             var list = $(this.options.selectorList);
             if (this.scrollHeight > list.innerHeight()) {
@@ -88,6 +95,9 @@ define([
             var itemQty = elem.data('item-qty');
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
+            } else if (elem.val() == 0) {
+                elem.val(itemQty);
+                this._hideButton(elem);
             } else {
                 this._hideButton(elem);
             }
@@ -113,35 +123,44 @@ define([
 
         _updateQty: function(elem) {
             var itemId = elem.data('cart-item');
-            this._ajax(this.options.updateItemQtyUrl, {
+            this._ajax(this.options.url.update, {
                 item_id: itemId,
                 item_qty: $('#cart-item-' + itemId + '-qty').val()
             }, elem, this._updateQtyAfter);
-
         },
 
+        /**
+         * Update content after update qty
+         *
+         * @param elem
+         * @param response
+         * @private
+         */
         _updateQtyAfter: function(elem, response) {
             if ($.type(response.data) === 'object') {
+                $('body').trigger('minicart.update', [elem, response]);
                 this._refreshItemQty(elem, response.data.summary_qty);
-                this._refreshSummaryQty(response.data.summary_qty, response.data.summary_text);
-                this._refreshSubtotal(response.data.subtotal);
-                this._refreshShowcartCounter(response.data.summary_qty, response.data.summary_text);
             }
             this._hideButton(elem);
         },
 
         _removeItem: function(elem) {
             var itemId = elem.data('cart-item');
-            this._ajax(this.options.removeItemUrl, {
+            this._ajax(this.options.url.remove, {
                 item_id: itemId
             }, elem, this._removeItemAfter);
         },
 
+        /**
+         * Update content after item remove
+         *
+         * @param elem
+         * @param response
+         * @private
+         */
         _removeItemAfter: function(elem, response) {
             if ($.type(response.data) === 'object') {
-                this._refreshSummaryQty(response.data.summary_qty, response.data.summary_text);
-                this._refreshSubtotal(response.data.subtotal);
-                this._refreshShowcartCounter(response.data.summary_qty, response.data.summary_text);
+                $('body').trigger('minicart.update', [elem, response]);
             }
             if (response.cleanup === true) {
                 $(this.options.selectorContentWrapper).replaceWith($.trim(response.content));
@@ -189,19 +208,19 @@ define([
                 });
         },
 
-        _refreshSummaryQty: function(qty, text) {
+        _refreshItemQty: function(elem, qty) {
+            if (qty != undefined) {
+                var itemId = elem.data('cart-item');
+                $('#cart-item-' + itemId + '-qty').data('item-qty', qty);
+            }
+        },
+
+        _refreshQty: function(qty, text) {
             if (qty != undefined && text != undefined) {
                 var self = this;
                 $(this.options.selectorSummaryQty).fadeOut('slow', function() {
                     $(self.options.selectorSummaryQty).text(qty + text);
                 }).fadeIn();
-            }
-        },
-
-        _refreshItemQty: function(elem, qty) {
-            if (qty != undefined) {
-                var itemId = elem.data('cart-item');
-                $('#cart-item-' + itemId + '-qty').data('item-qty', qty);
             }
         },
 
@@ -214,7 +233,7 @@ define([
             }
         },
 
-        _refreshShowcartCounter: function(qty, text) {
+        _refreshShowcart: function(qty, text) {
             if (qty != undefined && text != undefined) {
                 var self = this;
                 $(this.options.selectorShowcartNumber).fadeOut('slow', function() {
@@ -226,6 +245,11 @@ define([
             }
         },
 
+        /**
+         * Calculate height of minicart list
+         *
+         * @private
+         */
         _calcHeight: function() {
             var self = this,
                 height = 0,
