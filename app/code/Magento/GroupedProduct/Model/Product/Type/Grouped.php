@@ -328,8 +328,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @param \Magento\Framework\Object $buyRequest
-     * @param $product
-     * @param $isStrictProcessMode
+     * @param \Magento\Catalog\Model\Product $product
+     * @param bool $isStrictProcessMode
      * @return array|string
      */
     protected function getProductInfo(\Magento\Framework\Object $buyRequest, $product, $isStrictProcessMode)
