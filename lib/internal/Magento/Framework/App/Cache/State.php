@@ -93,7 +93,7 @@ class State implements StateInterface
     public function persist()
     {
         $this->load();
-        $this->writer->saveConfig($this->statuses);
+        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => [$this->statuses]]);
     }
 
     /**
