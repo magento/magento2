@@ -17,8 +17,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Invoice\Grid\Collec
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Registry $registryManager
      * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
+     * @param \Magento\Framework\Registry $registryManager
      * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -27,8 +27,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Invoice\Grid\Collec
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Registry $registryManager,
         \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
+        \Magento\Framework\Registry $registryManager,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
