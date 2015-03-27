@@ -21,20 +21,20 @@ class Page implements \Magento\Framework\Option\ArrayInterface
     protected $pageRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaInterfaceFactory
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $pageCriteriaFactory;
+    protected $pageCriteriaBuilder;
 
     /**
      * @param \Magento\Cms\Model\PageRepository $pageRepository
-     * @param \Magento\Framework\Api\SearchCriteriaInterfaceFactory $pageCriteriaFactory
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $pageCriteriaBuilder
      */
     public function __construct(
         \Magento\Cms\Model\PageRepository $pageRepository,
-        \Magento\Framework\Api\SearchCriteriaInterfaceFactory $pageCriteriaFactory
+        \Magento\Framework\Api\SearchCriteriaBuilder $pageCriteriaBuilder
     ) {
         $this->pageRepository = $pageRepository;
-        $this->pageCriteriaFactory = $pageCriteriaFactory;
+        $this->pageCriteriaBuilder = $pageCriteriaBuilder;
     }
 
     /**
@@ -45,7 +45,7 @@ class Page implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         if (!$this->options) {
-            $this->options = $this->pageRepository->getList($this->pageCriteriaFactory->create())->toOptionIdArray();
+            $this->options = $this->pageRepository->getList($this->pageCriteriaBuilder->create())->toOptionIdArray();
         }
         return $this->options;
     }
