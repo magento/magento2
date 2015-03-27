@@ -16,8 +16,8 @@ define([
             maxItemsVisible: 3,
             selectorItemQty: ':input.cart-item-qty',
             selectorItemButton: ':button.update-cart-item',
-            selectorSummaryQty: 'div.content > div.items-total',
-            selectorSubtotal: 'div.content > div.subtotal > div.amount span.price',
+            selectorSummaryQty: '.block-content > div.items-total',
+            selectorSubtotal: '.block-content > div.subtotal > div.amount span.price',
             selectorShowcartNumber: 'a.showcart > span.counter > span.counter-number',
             selectorShowcartLabel: 'a.showcart > span.counter > span.counter-label',
             selectorList: '#mini-cart'
