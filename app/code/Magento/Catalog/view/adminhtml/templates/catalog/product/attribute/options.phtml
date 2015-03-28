@@ -58,7 +58,7 @@
             <td id="delete_button_container_<%- data.id %>" class="col-delete">
                 <input type="hidden" class="delete-flag" name="option[delete][<%- data.id %>]" value="" />
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
-                    <button title="<?php echo __('Delete') ?>" type="button"
+                    <button id="delete_button_<%- data.id %>" title="<?php echo __('Delete') ?>" type="button"
                         class="action- scalable delete delete-option"
                         >
                         <span><?php echo __('Delete') ?></span>
@@ -100,7 +100,7 @@ require([
             if (isNewOption && !this.isReadOnly) {
                 this.enableNewOptionDeleteButton(data.id);
             }
-            this.bindRemoveButtons();
+            this.bindRemoveButton(data.id);
             this.itemCount++;
             this.totalItems++;
             this.updateItemsCountField();
@@ -139,18 +139,10 @@ require([
                 button.removeClassName('disabled');
             });
         },
-        bindRemoveButtons: function() {
-            var buttons = $$('.delete-option');
-            for (var i = 0; i < buttons.length; i++) {
-                if (!$(buttons[i]).binded) {
-                    $(buttons[i]).binded = true;
-                    Event.observe(buttons[i], 'click', this.remove.bind(this));
-                }
-            }
+        bindRemoveButton: function(id) {
+            $('delete_button_' + id).observe('click', this.remove.bind(this));
         }
     };
-
-    attributeOption.bindRemoveButtons();
 
     if ($('add_new_option_button')) {
         Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption));
