@@ -11,6 +11,11 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Class ProductRepositoryTest
+ * @package Magento\Catalog\Test\Unit\Model
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -173,13 +178,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
             ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
         $this->objectManager = new ObjectManager($this);
-
         $this->extensibleDataObjectConverterMock = $this
             ->getMockBuilder('\Magento\Framework\Api\ExtensibleDataObjectConverter')
             ->setMethods(['toNestedArray'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->fileSystemMock = $this->getMockBuilder('\Magento\Framework\Filesystem')
             ->disableOriginalConstructor()->getMock();
         $this->mimeTypeExtensionMapMock =
@@ -633,6 +636,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->initializedProductMock, $this->model->save($this->productMock));
     }
 
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function saveExistingWithOptionsDataProvider()
     {
         $data = [];

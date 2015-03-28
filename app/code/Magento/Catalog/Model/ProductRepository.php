@@ -19,9 +19,9 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterfaceFa
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
 {
@@ -260,6 +260,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($createNew) {
             $product = $this->productFactory->create();
         } else {
+            unset($this->instances[$productData['sku']]);
             $product = $this->get($productData['sku']);
             $this->initializationHelper->initialize($product);
         }
@@ -277,6 +278,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param array $newOptions
      * @return $this
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processOptions(\Magento\Catalog\Api\Data\ProductInterface $product, $newOptions)
     {
@@ -334,7 +336,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         return $this;
     }
 
-    /*
+    /**
      * Process product links, creating new links, updating and deleting existing links
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
@@ -383,6 +385,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * @param ProductInterface $product
      * @param array $newEntry
+     * @return $this
      * @throws InputException
      * @throws StateException
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -434,14 +437,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 'disabled' => $newEntry['disabled'],
             ]
         );
+        return $this;
     }
 
     /**
      * @param ProductInterface $product
-     * @param $mediaGalleryEntries
+     * @param array $mediaGalleryEntries
      * @return $this
      * @throws InputException
      * @throws StateException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processMediaGallery(ProductInterface $product, $mediaGalleryEntries)
     {
@@ -459,7 +464,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
             foreach ($existingMediaGallery as $key => &$existingEntry) {
                 if (isset($entriesById[$existingEntry['value_id']])) {
-                    $existingMediaGallery[$key] = $entriesById[$existingEntry['value_id']];
+                    $updatedEntry = $entriesById[$existingEntry['value_id']];
+                    $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
                 } else {
                     //set the removed flag
                     $existingEntry['removed'] = true;

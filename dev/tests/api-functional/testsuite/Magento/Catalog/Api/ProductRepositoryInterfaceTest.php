@@ -225,6 +225,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     public function testProductWithMediaGallery()
     {
+        $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        $encodedImage = base64_encode(file_get_contents($testImagePath));
         //create a product with media gallery
         $filename1 = 'tiny1' . time();
         $filename2 = 'tiny2' . time();
@@ -236,9 +238,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'label' => 'tiny1',
                 'types' => [],
                 'content' => [
-                    'mime_type' => 'image/png',
+                    'mime_type' => 'image/jpeg',
                     'name' => $filename1,
-                    'entry_data' => "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=",
+                    'entry_data' => $encodedImage,
                 ]
             ],
             [
@@ -247,9 +249,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'label' => 'tiny2',
                 'types' => ['image', 'small_image'],
                 'content' => [
-                    'mime_type' => 'image/png',
+                    'mime_type' => 'image/jpeg',
                     'name' => $filename2,
-                    'entry_data' => "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=",
+                    'entry_data' => $encodedImage,
                 ]
             ],
         ];
@@ -269,18 +271,17 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'position' => 1,
                 'disabled' => true,
                 'types' => [],
-                'file' => '/t/i/' . $filename1 . '.png',
+                'file' => '/t/i/' . $filename1 . '.jpg',
             ],
             [
                 'label' => 'tiny2',
                 'position' => 2,
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
-                'file' => '/t/i/' . $filename2 . '.png',
+                'file' => '/t/i/' . $filename2 . '.jpg',
             ],
         ];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
-
         //update the product media gallery
         $response['media_gallery_entries'] = [
             [
@@ -289,11 +290,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'position' => 1,
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
-                'file' => '/t/i/' . $filename1 . '.png',
+                'file' => '/t/i/' . $filename1 . '.jpg',
             ],
         ];
         $this->updateProduct($response);
-
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(1, count($mediaGalleryEntries));
@@ -304,11 +304,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'position' => 1,
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
-                'file' => '/t/i/' . $filename1 . '.png',
+                'file' => '/t/i/' . $filename1 . '.jpg',
             ]
         ];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
-
         //don't set the media_gallery_entries field, existing entry should not be touched
         unset($response['media_gallery_entries']);
         $this->updateProduct($response);
@@ -317,13 +316,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
-
         //pass empty array, delete all existing media gallery entries
         $response['media_gallery_entries'] = [];
         $this->updateProduct($response);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $this->assertEquals(true, empty($response['media_gallery_entries']));
-
         $this->deleteProduct($productData[ProductInterface::SKU]);
     }
 
