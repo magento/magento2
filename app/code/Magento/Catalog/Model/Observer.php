@@ -136,7 +136,7 @@ class Observer
 
             $tree = $parentCategoryNode->getTree();
 
-            $categoryData = $this->getMenuCategoryData($category);
+            $categoryData = $this->_getMenuCategoryData($category);
 
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
@@ -158,7 +158,7 @@ class Observer
      * @param \Magento\Framework\Data\Tree\Node $category
      * @return array
      */
-    public function getMenuCategoryData($category)
+    protected function _getMenuCategoryData($category)
     {
 
         $nodeId = 'category-node-' . $category->getId();
