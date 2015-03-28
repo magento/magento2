@@ -87,6 +87,26 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     */
+    protected $fileSystemMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap
+     */
+    protected $mimeTypeExtensionMapMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contentFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Gallery\ContentValidator
+     */
+    protected $contentValidatorMock;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
@@ -97,7 +117,17 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->initializedProductMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['setProductOptions', 'load', 'getOptions', 'getSku', 'getProductLinks', 'setProductLinks'],
+            [
+                'setProductOptions',
+                'load',
+                'getOptions',
+                'getSku',
+                'getGalleryAttributeBackend',
+                'getMediaConfig',
+                'getMediaAttributes',
+                'getProductLinks',
+                'setProductLinks',
+            ],
             [],
             '',
             false
@@ -150,6 +180,16 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->fileSystemMock = $this->getMockBuilder('\Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()->getMock();
+        $this->mimeTypeExtensionMapMock =
+            $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap')->getMock();
+        $this->contentFactoryMock = $this->getMockBuilder(
+            'Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterfaceFactory'
+        )->disableOriginalConstructor()->setMethods(['create'])->getMockForAbstractClass();
+        $this->contentValidatorMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\ContentValidator')
+            ->disableOriginalConstructor()
+            ->getMock();
         $optionConverter = $this->objectManager->getObject('Magento\Catalog\Model\Product\Option\Converter');
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
@@ -165,6 +205,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
                 'optionConverter' => $optionConverter,
                 'eavConfig' => $this->eavConfigMock,
+                'contentValidator' => $this->contentValidatorMock,
+                'fileSystem' => $this->fileSystemMock,
+                'contentFactory' => $this->contentFactoryMock,
+                'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
             ]
         );
     }
@@ -558,8 +602,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      * @param array $existingOptions
      * @param array $expectedData
      * @dataProvider saveExistingWithOptionsDataProvider
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
      */
     public function testSaveExistingWithOptions(array $newOptions, array $existingOptions, array $expectedData)
     {
@@ -843,5 +885,189 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
 
         return $data;
+    }
+
+    protected function setupProductMocksForSave()
+    {
+        $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')->will($this->returnValue(100));
+        $this->productFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->initializedProductMock));
+        $this->initializationHelperMock->expects($this->once())->method('initialize')
+            ->with($this->initializedProductMock);
+        $this->resourceModelMock->expects($this->once())->method('validate')->with($this->initializedProductMock)
+            ->willReturn(true);
+        $this->resourceModelMock->expects($this->once())->method('save')
+            ->with($this->initializedProductMock)->willReturn(true);
+    }
+
+    public function testSaveExistingWithNewMediaGalleryEntries()
+    {
+        $newEntriesData = [
+            [
+                "label" => "label_text",
+                'position' => 10,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'content' => [
+                    'name' => 'filename',
+                    'mime_type' => 'image/jpeg',
+                    'entry_data' => 'encoded_content',
+                ],
+            ],
+        ];
+
+        $this->setupProductMocksForSave();
+        //media gallery data
+        $this->productData['media_gallery_entries'] = $newEntriesData;
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
+
+        $this->initializedProductMock->setData('media_gallery', []);
+        $this->initializedProductMock->expects($this->any())
+            ->method('getMediaAttributes')
+            ->willReturn(["image" => "imageAttribute", "small_image" => "small_image_attribute"]);
+
+        //setup media attribute backend
+        $mediaTmpPath = '/tmp';
+        $relativePath = $mediaTmpPath . DIRECTORY_SEPARATOR . 'filename.jpg';
+        $absolutePath = '/a/b/filename.jpg';
+        $galleryAttributeBackendMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Attribute\Backend\Media')
+            ->disableOriginalConstructor()->getMock();
+        $galleryAttributeBackendMock->expects($this->once())->method('clearMediaAttribute')
+            ->with($this->initializedProductMock, ['image', 'small_image']);
+        $mediaConfigMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Media\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mediaConfigMock->expects($this->once())
+            ->method('getBaseTmpMediaPath')
+            ->willReturn($mediaTmpPath);
+        $directoryWriteMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
+            ->getMockForAbstractClass();
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->willReturn($directoryWriteMock);
+        $directoryWriteMock->expects($this->once())->method('create')->with($mediaTmpPath);
+        $this->mimeTypeExtensionMapMock->expects($this->once())->method('getMimeTypeExtension')
+            ->with('image/jpeg')
+            ->willReturn("jpg");
+        $directoryWriteMock->expects($this->once())->method('writeFile')
+            ->with($relativePath, false); //decoded value is false as it contains '_'
+        $directoryWriteMock->expects($this->once())->method('getAbsolutePath')->willReturn($absolutePath);
+        $this->initializedProductMock->expects($this->any())
+            ->method('getGalleryAttributeBackend')
+            ->willReturn($galleryAttributeBackendMock);
+        $this->initializedProductMock->expects($this->once())
+            ->method('getMediaConfig')
+            ->willReturn($mediaConfigMock);
+
+        //verify new entries
+        $contentDataObject = $this->getMockBuilder('Magento\Catalog\Model\Product\Media\GalleryEntryContent')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+        $this->contentFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($contentDataObject);
+
+        $this->contentValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+
+        $imageFileUri = "imageFileUri";
+        $galleryAttributeBackendMock->expects($this->once())->method('addImage')
+            ->with($this->initializedProductMock, $absolutePath, ['image', 'small_image'], true, false)
+            ->willReturn($imageFileUri);
+        $galleryAttributeBackendMock->expects($this->once())->method('updateImage')
+            ->with(
+                $this->initializedProductMock,
+                $imageFileUri,
+                [
+                    'label' => 'label_text',
+                    'position' => 10,
+                    'disabled' => false,
+                ]
+            );
+
+        $this->model->save($this->productMock);
+    }
+
+    public function testSaveExistingWithMediaGalleryEntries()
+    {
+        //update one entry, delete one entry
+        $newEntries = [
+            [
+                'id' => 5,
+                "label" => "new_label_text",
+                'file' => 'filename1',
+                'position' => 10,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+            ],
+        ];
+
+        $existingMediaGallery = [
+            'images' => [
+                [
+                    'value_id' => 5,
+                    "label" => "label_text",
+                    'file' => 'filename1',
+                    'position' => 10,
+                    'disabled' => true,
+                ],
+                [
+                    'value_id' => 6, //will be deleted
+                    'file' => 'filename2',
+                ],
+            ],
+        ];
+
+        $expectedResult = [
+            [
+                'id' => 5,
+                'value_id' => 5,
+                "label" => "new_label_text",
+                'file' => 'filename1',
+                'position' => 10,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+            ],
+            [
+                'value_id' => 6, //will be deleted
+                'file' => 'filename2',
+                'removed' => true,
+            ],
+        ];
+
+        $this->setupProductMocksForSave();
+        //media gallery data
+        $this->productData['media_gallery_entries'] = $newEntries;
+        $this->extensibleDataObjectConverterMock
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->will($this->returnValue($this->productData));
+
+        $this->initializedProductMock->setData('media_gallery', $existingMediaGallery);
+        $this->initializedProductMock->expects($this->any())
+            ->method('getMediaAttributes')
+            ->willReturn(["image" => "filename1", "small_image" => "filename2"]);
+
+        //setup media attribute backend
+        $galleryAttributeBackendMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Attribute\Backend\Media')
+            ->disableOriginalConstructor()->getMock();
+        $galleryAttributeBackendMock->expects($this->once())->method('clearMediaAttribute')
+            ->with($this->initializedProductMock, ['image', 'small_image']);
+        $this->initializedProductMock->expects($this->once())
+            ->method('getGalleryAttributeBackend')
+            ->willReturn($galleryAttributeBackendMock);
+        $galleryAttributeBackendMock->expects($this->once())
+            ->method('setMediaAttribute')
+            ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
+
+
+        $this->model->save($this->productMock);
+        $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));
     }
 }

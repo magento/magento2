@@ -13,24 +13,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface
 {
-    /**
-     * MIME type/extension map
-     *
-     * @var array
-     */
-    protected $mimeTypeExtensionMap = [
-        'image/jpg' => 'jpg',
-        'image/jpeg' => 'jpg',
-        'image/gif' => 'gif',
-        'image/png' => 'png',
-    ];
-
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
@@ -77,6 +66,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     protected $dataObjectHelper;
 
     /**
+     * @var MimeTypeExtensionMap
+     */
+    protected $mimeTypeExtensionMap;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
@@ -86,6 +80,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      * @param EntryResolver $entryResolver
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $entryFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery
+     * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -100,6 +95,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         EntryResolver $entryResolver,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $entryFactory,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery,
+        MimeTypeExtensionMap $mimeTypeExtensionMap,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->productRepository = $productRepository;
@@ -111,6 +107,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $this->entryResolver = $entryResolver;
         $this->entryFactory = $entryFactory;
         $this->mediaGallery = $mediaGallery;
+        $this->mimeTypeExtensionMap = $mimeTypeExtensionMap;
         $this->dataObjectHelper = $dataObjectHelper;
     }
 
@@ -123,31 +120,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      */
     protected function getGalleryAttributeBackend(Product $product)
     {
-        $attributes = $product->getTypeInstance()->getSetAttributes($product);
-        if (!isset($attributes['media_gallery'])
-            || !($attributes['media_gallery'] instanceof \Magento\Eav\Model\Entity\Attribute\AbstractAttribute)
-        ) {
+        $galleryAttributeBackend = $product->getGalleryAttributeBackend();
+        if ($galleryAttributeBackend == null) {
             throw new StateException(__('Requested product does not support images.'));
         }
-        /** @var $galleryAttribute \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
-        $galleryAttribute = $attributes['media_gallery'];
-        return $galleryAttribute->getBackend();
-    }
-
-    /**
-     * Retrieve assoc array that contains media attribute values of the given product
-     *
-     * @param Product $product
-     * @return array
-     */
-    protected function getMediaAttributeValues(Product $product)
-    {
-        $mediaAttributeCodes = array_keys($product->getMediaAttributes());
-        $mediaAttributeValues = [];
-        foreach ($mediaAttributeCodes as $attributeCode) {
-            $mediaAttributeValues[$attributeCode] = $product->getData($attributeCode);
-        }
-        return $mediaAttributeValues;
+        return $galleryAttributeBackend;
     }
 
     /**
@@ -173,7 +150,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $mediaTmpPath = $this->mediaConfig->getBaseTmpMediaPath();
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->create($mediaTmpPath);
-        $fileName = $entryContent->getName() . '.' . $this->mimeTypeExtensionMap[$entryContent->getMimeType()];
+        $extension = $this->mimeTypeExtensionMap->getMimeTypeExtension($entryContent->getMimeType());
+        $fileName = $entryContent->getName() . '.' . $extension;
         $relativeFilePath = $mediaTmpPath . DIRECTORY_SEPARATOR . $fileName;
         $absoluteFilePath = $mediaDirectory->getAbsolutePath($relativeFilePath);
         $mediaDirectory->writeFile($relativeFilePath, $fileContent);
@@ -281,7 +259,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         }
 
         $output = null;
-        $productImages = $this->getMediaAttributeValues($product);
+        $productImages = $product->getMediaAttributeValues();
         foreach ((array)$product->getMediaGallery('images') as $image) {
             if (intval($image['value_id']) == intval($imageId)) {
                 $image['types'] = array_keys($productImages, $image['file']);
@@ -316,7 +294,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $container = new \Magento\Framework\Object(['attribute' => $galleryAttribute]);
         $gallery = $this->mediaGallery->loadGallery($product, $container);
 
-        $productImages = $this->getMediaAttributeValues($product);
+        $productImages = $product->getMediaAttributeValues();
 
         foreach ($gallery as $image) {
             /** @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface $entry */

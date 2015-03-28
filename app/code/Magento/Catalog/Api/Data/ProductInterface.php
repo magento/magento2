@@ -257,4 +257,15 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setOptions(array $options = null);
+
+    /**
+     * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]|null
+     */
+    public function getMediaGalleryEntries();
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
+     * @return $this
+     */
+    public function setMediaGalleryEntries(array $mediaGalleryEntries = null);
 }

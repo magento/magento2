@@ -124,6 +124,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $mediaGalleryEntryFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $dataObjectHelperMock;
 
     /**
@@ -254,6 +259,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->mediaGalleryEntryFactoryMock =
+            $this->getMockBuilder('Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -274,6 +284,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'catalogProduct' => $this->_catalogProduct,
                 'imageCacheFactory' => $this->imageCacheFactory,
                 'productLinkFactory' => $this->productLinkFactory,
+                'mediaGalleryEntryFactory' => $this->mediaGalleryEntryFactoryMock,
                 'data' => ['id' => 1]
             ]
         );
@@ -762,5 +773,220 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productLinks = [$link];
         $this->model->setProductLinks($productLinks);
         $this->assertEquals($productLinks, $this->model->getProductLinks());
+    }
+
+    /**
+     * Set up two media attributes: image and small_image
+     */
+    protected function setupMediaAttributes()
+    {
+        $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+            ->setMethods(['getEditableAttributes'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
+            $this->returnValue($productType)
+        );
+
+        $frontendMock = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend')
+            ->disableOriginalConstructor()
+            ->setMethods(['getInputType'])
+            ->getMockForAbstractClass();
+        $frontendMock->expects($this->any())->method('getInputType')->willReturn('media_image');
+        $attributeImage = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['__wakeup', 'getFrontend', 'getAttributeCode'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attributeImage->expects($this->any())
+            ->method('getFrontend')
+            ->willReturn($frontendMock);
+        $attributeImage->expects($this->any())->method('getAttributeCode')->willReturn('image');
+        $attributeSmallImage = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['__wakeup', 'getFrontend', 'getAttributeCode'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attributeSmallImage->expects($this->any())
+            ->method('getFrontend')
+            ->willReturn($frontendMock);
+        $attributeSmallImage->expects($this->any())->method('getAttributeCode')->willReturn('small_image');
+
+        $productType->expects($this->any())->method('getEditableAttributes')->will(
+            $this->returnValue(['image' => $attributeImage, 'small_image' => $attributeSmallImage])
+        );
+
+        return [$attributeImage, $attributeSmallImage];
+    }
+
+    public function getMediaAttributes()
+    {
+        $expected = [];
+        $mediaAttributes = $this->setupMediaAttributes();
+        foreach ($mediaAttributes as $mediaAttribute) {
+            $expected[$mediaAttribute->getAttributeCode()] = $mediaAttribute;
+        }
+        $this->assertEquals($expected, $this->model->getMediaAttributes());
+    }
+
+    public function testGetMediaAttributeValues()
+    {
+        $this->setupMediaAttributes();
+
+        $this->model->setData('image', 'imageValue');
+        $this->model->setData('small_image', 'smallImageValue');
+
+        $expectedMediaAttributeValues = [
+            'image' => 'imageValue',
+            'small_image' => 'smallImageValue',
+        ];
+        $this->assertEquals($expectedMediaAttributeValues, $this->model->getMediaAttributeValues());
+    }
+
+    public function testGetGalleryAttributeBackendNon()
+    {
+        $this->setupMediaAttributes();
+        $this->assertNull($this->model->getGalleryAttributeBackend());
+    }
+
+    public function testGetGalleryAttributeBackend()
+    {
+        $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+            ->setMethods(['getEditableAttributes'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
+            $this->returnValue($productType)
+        );
+
+        $attributeMediaGallery = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['__wakeup', 'getAttributeCode', 'getBackend'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attributeMediaGallery->expects($this->any())->method('getAttributeCode')->willReturn('media_gallery');
+        $expectedValue = 'expected';
+        $attributeMediaGallery->expects($this->once())->method('getBackend')->willReturn($expectedValue);
+
+        $productType->expects($this->once())->method('getEditableAttributes')
+            ->willReturn(['media_gallery' => $attributeMediaGallery]);
+        $this->assertEquals($expectedValue, $this->model->getGalleryAttributeBackend());
+    }
+
+    public function testGetMediaGalleryEntriesNone()
+    {
+        $this->assertNull($this->model->getMediaGalleryEntries());
+    }
+
+    public function testGetMediaGalleryEntries()
+    {
+        $this->setupMediaAttributes();
+        $this->model->setData('image', 'imageFile.jpg');
+        $this->model->setData('small_image', 'smallImageFile.jpg');
+
+        $mediaEntries = [
+            'images' => [
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                ],
+                [
+                    'value_id' => 2,
+                    'file' => 'smallImageFile.jpg',
+                ],
+            ]
+        ];
+        $this->model->setData('media_gallery', $mediaEntries);
+
+        $entry1 = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
+            ->setMethods(['setId'])
+            ->getMockForAbstractClass();
+        $entry1->expects($this->once())->method('setId')->with(1);
+        $entry2 = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
+            ->setMethods(['setId'])
+            ->getMockForAbstractClass();
+        $entry2->expects($this->once())->method('setId')->with(2);
+
+        $this->mediaGalleryEntryFactoryMock->expects($this->at(0))
+            ->method('create')
+            ->willReturn($entry1);
+        $this->mediaGalleryEntryFactoryMock->expects($this->at(1))
+            ->method('create')
+            ->willReturn($entry2);
+
+        $this->dataObjectHelperMock->expects($this->at(0))
+            ->method('populateWithArray')
+            ->with(
+                $entry1,
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                    'types' => ['image'],
+                ],
+                '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface'
+            );
+        $this->dataObjectHelperMock->expects($this->at(1))
+            ->method('populateWithArray')
+            ->with(
+                $entry1,
+                [
+                    'value_id' => 2,
+                    'file' => 'smallImageFile.jpg',
+                    'types' => ['small_image'],
+                ],
+                '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface'
+            );
+
+        $this->assertEquals([$entry1, $entry2], $this->model->getMediaGalleryEntries());
+    }
+
+    public function testSetMediaGalleryEntries()
+    {
+        $expectedResult = [
+            'images' => [
+                [
+                    "value_id" => 1,
+                    'file' => 'file1.jpg',
+                    'label' => 'label_text',
+                    'position' => 4,
+                    'disabled' => false,
+                    'types' => ['image'],
+                    'content' => [
+                        'entry_data' => 'content_data',
+                        'mime_type' => 'image/jpg',
+                        'name' => 'product_image',
+                    ]
+                ]
+            ],
+        ];
+
+        $contentMock =
+            $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface')
+                ->setMethods(['getEntryData', 'getMimeType', 'getName'])
+                ->getMockForAbstractClass();
+        $contentMock->expects($this->once())->method('getEntryData')
+            ->willReturn($expectedResult['images'][0]['content']['entry_data']);
+        $contentMock->expects($this->once())->method('getMimeType')
+            ->willReturn($expectedResult['images'][0]['content']['mime_type']);
+        $contentMock->expects($this->once())->method('getName')
+            ->willReturn($expectedResult['images'][0]['content']['name']);
+
+        $entryMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
+            ->setMethods(['getId', 'getFile', 'getLabel', 'getPosition', 'isDisabled', 'types', 'getContent'])
+            ->getMockForAbstractClass();
+        $entryMock->expects($this->once())->method('getId')
+            ->willReturn($expectedResult['images'][0]['value_id']);
+        $entryMock->expects($this->once())->method('getFile')
+            ->willReturn($expectedResult['images'][0]['file']);
+        $entryMock->expects($this->once())->method('getLabel')
+            ->willReturn($expectedResult['images'][0]['label']);
+        $entryMock->expects($this->once())->method('getPosition')
+            ->willReturn($expectedResult['images'][0]['position']);
+        $entryMock->expects($this->once())->method('isDisabled')
+            ->willReturn($expectedResult['images'][0]['disabled']);
+        $entryMock->expects($this->once())->method('getTypes')
+            ->willReturn($expectedResult['images'][0]['types']);
+        $entryMock->expects($this->once())->method('getContent')
+            ->willReturn($contentMock);
+
+        $this->model->setMediaGalleryEntries([$entryMock]);
+        $this->assertEquals($expectedResult, $this->model->getMediaGallery());
     }
 }

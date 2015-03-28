@@ -206,6 +206,110 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($productData[ProductInterface::SKU]);
     }
 
+    public function testProductWithMediaGallery()
+    {
+        //create a product with media gallery
+        $filename1 = 'tiny1' . time();
+        $filename2 = 'tiny2' . time();
+        $productData = $this->getSimpleProductData();
+        $productData['media_gallery_entries'] = [
+            [
+                'position' => 1,
+                'disabled' => true,
+                'label' => 'tiny1',
+                'types' => [],
+                'content' => [
+                    'mime_type' => 'image/png',
+                    'name' => $filename1,
+                    'entry_data' => "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=",
+                ]
+            ],
+            [
+                'position' => 2,
+                'disabled' => false,
+                'label' => 'tiny2',
+                'types' => ['image', 'small_image'],
+                'content' => [
+                    'mime_type' => 'image/png',
+                    'name' => $filename2,
+                    'entry_data' => "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEX/TQBcNTh/AAAAAXRSTlPM0jRW/QAAAApJREFUeJxjYgAAAAYAAzY3fKgAAAAASUVORK5CYII=",
+                ]
+            ],
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+
+        $this->assertArrayHasKey('media_gallery_entries', $response);
+        $mediaGalleryEntries = $response['media_gallery_entries'];
+        $this->assertEquals(2, count($mediaGalleryEntries));
+        $id = $mediaGalleryEntries[0]['id'];
+        foreach ($mediaGalleryEntries as &$entry) {
+            unset($entry['id']);
+        }
+        $expectedValue = [
+            [
+                'label' => 'tiny1',
+                'position' => 1,
+                'disabled' => true,
+                'types' => [],
+                'file' => '/t/i/' . $filename1 . '.png',
+            ],
+            [
+                'label' => 'tiny2',
+                'position' => 2,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'file' => '/t/i/' . $filename2 . '.png',
+            ],
+        ];
+        $this->assertEquals($expectedValue, $mediaGalleryEntries);
+
+        //update the product media gallery
+        $response['media_gallery_entries'] = [
+            [
+                'id' => $id,
+                'label' => 'tiny1_new_label',
+                'position' => 1,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'file' => '/t/i/' . $filename1 . '.png',
+            ],
+        ];
+        $this->updateProduct($response);
+
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $mediaGalleryEntries = $response['media_gallery_entries'];
+        $this->assertEquals(1, count($mediaGalleryEntries));
+        unset($mediaGalleryEntries[0]['id']);
+        $expectedValue = [
+            [
+                'label' => 'tiny1_new_label',
+                'position' => 1,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'file' => '/t/i/' . $filename1 . '.png',
+            ]
+        ];
+        $this->assertEquals($expectedValue, $mediaGalleryEntries);
+
+        //don't set the media_gallery_entries field, existing entry should not be touched
+        unset($response['media_gallery_entries']);
+        $this->updateProduct($response);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $mediaGalleryEntries = $response['media_gallery_entries'];
+        $this->assertEquals(1, count($mediaGalleryEntries));
+        unset($mediaGalleryEntries[0]['id']);
+        $this->assertEquals($expectedValue, $mediaGalleryEntries);
+
+        //pass empty array, delete all existing media gallery entries
+        $response['media_gallery_entries'] = [];
+        $this->updateProduct($response);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $this->assertEquals(true, empty($response['media_gallery_entries']));
+
+        $this->deleteProduct($productData[ProductInterface::SKU]);
+    }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
