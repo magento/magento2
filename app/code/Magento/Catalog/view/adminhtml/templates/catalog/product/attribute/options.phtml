@@ -100,7 +100,6 @@ require([
             if (isNewOption && !this.isReadOnly) {
                 this.enableNewOptionDeleteButton(data.id);
             }
-            this.bindRemoveButton(data.id);
             this.itemCount++;
             this.totalItems++;
             this.updateItemsCountField();
@@ -139,14 +138,16 @@ require([
                 button.removeClassName('disabled');
             });
         },
-        bindRemoveButton: function(id) {
-            $('delete_button_' + id).observe('click', this.remove.bind(this));
-        }
     };
 
     if ($('add_new_option_button')) {
         Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption));
     }
+    
+    $('manage-options-panel').on('click', '.delete-option', function(event, element) {
+        attributeOption.remove(event);
+    });
+
     <?php foreach ($block->getOptionValues() as $_value): ?>
     attributeOption.add(<?php echo $_value->toJson() ?>);
     <?php endforeach; ?>
