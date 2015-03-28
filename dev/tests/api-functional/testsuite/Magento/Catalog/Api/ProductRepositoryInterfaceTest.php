@@ -157,6 +157,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     public function testProductOptions()
     {
+        //Create product with options
         $productData = $this->getSimpleProductData();
         $optionsDataInput = $this->getOptionsData();
         $productData['options'] = $optionsDataInput;
@@ -202,6 +203,22 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(1, count($options[1]['values']));
         $this->assertEquals($option1Id, $options[0]['option_id']);
         $this->assertTrue($option2Id < $options[1]['option_id']);
+
+        //update product without setting options field, option should not be changed
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        unset($response['options']);
+        $this->updateProduct($response);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $this->assertArrayHasKey('options', $response);
+        $options = $response['options'];
+        $this->assertEquals(2, count($options));
+
+        //update product with empty options, options should be removed
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response['options'] = [];
+        $this->updateProduct($response);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $this->assertArrayNotHasKey('options', $response);
 
         $this->deleteProduct($productData[ProductInterface::SKU]);
     }
