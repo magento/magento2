@@ -6,6 +6,7 @@
 namespace Magento\Framework\App\Test\Unit\Cache;
 
 use \Magento\Framework\App\Cache\State;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 class StateTest extends \PHPUnit_Framework_TestCase
 {
@@ -91,7 +92,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testPersist()
     {
         $model = new State($this->config, $this->writer);
-        $this->writer->expects($this->once())->method('saveConfig')->with([]);
+        $this->config->expects($this->once())->method('getConfigData')->willReturn(['cache_type' => true]);
+        $configValue = [ConfigFilePool::APP_CONFIG => [0 => ['cache_type' => true]]];
+        $this->writer->expects($this->once())->method('saveConfig')->with($configValue);
         $model->persist();
     }
 }
