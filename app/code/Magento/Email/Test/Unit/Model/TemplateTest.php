@@ -9,6 +9,11 @@ use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filter\Template as FilterTemplate;
 
+/**
+ * Covers \Magento\Email\Model\Template
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -107,33 +112,36 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $helper->getObject(
-            'Magento\Email\Model\Template',
-            [
-                'context' => $this->context,
-                'design' => $this->design,
-                'registry' => $this->registry,
-                'appEmulation' => $this->appEmulation,
-                'storeManager' => $this->storeManager,
-                'filesystem' => $this->filesystem,
-                'assetRepo' => $this->assetRepo,
-                'viewFileSystem' => $this->viewFileSystem,
-                'scopeConfig' => $this->scopeConfig,
-                'emailFilterFactory' => $this->emailFilterFactory,
-                'emailConfig' => $this->emailConfig,
-            ]
-        );
+        $this->model = $this->getMockBuilder('Magento\Email\Model\Template')
+            ->setMethods(['__wakeup', '__sleep', '_init'])
+            ->setConstructorArgs(
+                [
+                    $this->context,
+                    $this->design,
+                    $this->registry,
+                    $this->appEmulation,
+                    $this->storeManager,
+                    $this->filesystem,
+                    $this->assetRepo,
+                    $this->viewFileSystem,
+                    $this->scopeConfig,
+                    $this->emailFilterFactory,
+                    $this->emailConfig
+                ]
+            )
+            ->getMock();
     }
 
     /**
+     * Return the model under test with additional methods mocked.
+     *
      * @param $mockedMethods array
      * @return \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getModelMock(array $mockedMethods)
     {
         $model = $this->getMockBuilder('Magento\Email\Model\Template')
-            ->setMethods($mockedMethods)
+            ->setMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
             ->setConstructorArgs(
                 [
                     $this->context,
@@ -256,6 +264,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($parsedTemplateText, $this->model->getTemplateText());
         $this->assertEquals($expectedTemplateSubject, $this->model->getTemplateSubject());
         $this->assertEquals($expectedOrigTemplateVariables, $this->model->getData('orig_template_variables'));
+        $this->assertEquals($expectedTemplateStyles, $this->model->getTemplateStyles());
     }
 
     public function loadDefaultDataProvider()
@@ -367,7 +376,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedValue, $model->isValidForSend());
     }
 
-    public function isValidForSendDataProvider() {
+    public function isValidForSendDataProvider()
+    {
         return [
             'should be valid' => [
                 false,
@@ -599,7 +609,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $variables = [ 'key' => 'value' ];
         $filterTemplate->expects($this->once())
             ->method('setVariables')
-            ->with(array_merge($variables, [ 'this' => $model ] ));
+            ->with(array_merge($variables, ['this' => $model]));
         $this->assertEquals($expectedResult, $model->getProcessedTemplateSubject($variables));
     }
 
