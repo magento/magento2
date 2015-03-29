@@ -422,8 +422,17 @@ class Installer
         $userData = is_array($data) ? $data : $data->getArrayCopy();
 
         // TODO: remove this when moving install command to symfony
-        if (!isset($userData['db_pass'])) {
-            $userData['db_pass'] = '';
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
+            $userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] = ConfigOptionsList::SESSION_SAVE_FILES;
+        }
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PASS])) {
+            $userData[ConfigOptionsList::INPUT_KEY_DB_PASS] = '';
+        }
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_MODEL])) {
+            $userData[ConfigOptionsList::INPUT_KEY_DB_MODEL] = 'mysql4';
+        }
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS])) {
+            $userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS] = 'SET NAMES utf8;';
         }
 
         $this->setupConfigModel->process($userData);
