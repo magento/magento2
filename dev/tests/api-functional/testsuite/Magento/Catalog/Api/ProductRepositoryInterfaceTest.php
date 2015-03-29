@@ -143,6 +143,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 "product_sku" => "simple",
                 "title" => "CheckboxOption",
                 "type" => "checkbox",
+                "sort_order" => 1,
+                "is_require" => false,
                 "values" => [
                     [
                         "title" => "CheckBoxValue1",
@@ -170,12 +172,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(1, count($options[0]['values']));
         $this->assertEquals(1, count($options[1]['values']));
 
-        //update the product options
-        //Adding a value to option 1, delete an option and create a new option
+        //update the product options, adding a value to option 1, delete an option and create a new option
         $options[0]['values'][] = [
             "title" => "Value2",
             "price" => 6,
             "price_type" => "fixed",
+            'sort_order' => 3,
         ];
         $option1Id = $options[0]['option_id'];
         $option2Id = $options[1]['option_id'];
@@ -183,15 +185,17 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             "product_sku" => "simple",
             "title" => "DropdownOption2",
             "type" => "drop_down",
+            "sort_order" => 3,
+            "is_require" => false,
             "values" => [
                 [
                     "title" => "Value3",
                     "price" => 7,
                     "price_type" => "fixed",
+                    "sort_order" => 4,
                 ],
             ],
         ];
-
         $response['options'] = $options;
         $this->updateProduct($response);
 
