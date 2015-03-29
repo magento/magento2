@@ -218,7 +218,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response['options'] = [];
         $this->updateProduct($response);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
-        $this->assertArrayNotHasKey('options', $response);
+        $this->assertEmpty($response['options']);
 
         $this->deleteProduct($productData[ProductInterface::SKU]);
     }
@@ -257,7 +257,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $this->saveProduct($productData);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
-
         $this->assertArrayHasKey('media_gallery_entries', $response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(2, count($mediaGalleryEntries));

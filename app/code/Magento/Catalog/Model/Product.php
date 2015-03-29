@@ -124,7 +124,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @var array
      */
-    protected $_options = null;
+    protected $_options = [];
 
     /**
      * @var array
@@ -1841,6 +1841,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function setOptions(array $options = null)
     {
         $this->_options = $options;
+        if (is_array($options) && empty($options)) {
+            $this->setData('is_delete_options', true);
+        }
         return $this;
     }
 

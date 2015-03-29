@@ -511,6 +511,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($saveOptions) {
             $productOptions = $product->getProductOptions();
         }
+        $isDeleteOptions = $product->getIsDeleteOptions();
         $groupPrices = $product->getData('group_price');
         $tierPrices = $product->getData('tier_price');
 
@@ -522,8 +523,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $product = $this->initializeProductData($productDataArray, empty($productId));
 
         if (isset($productDataArray['options'])) {
-            $this->processOptions($product, $productDataArray['options']);
-            $product->setCanSaveCustomOptions(true);
+            if (!empty($productDataArray['options']) || $isDeleteOptions) {
+                $this->processOptions($product, $productDataArray['options']);
+                $product->setCanSaveCustomOptions(true);
+            }
         }
         if (isset($productDataArray['product_links'])) {
             $this->processLinks($product, $productLinks);
