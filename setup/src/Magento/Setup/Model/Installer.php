@@ -1127,8 +1127,8 @@ class Installer
             $connectionConfig[ConfigOptionsList::KEY_USER],
             $connectionConfig[ConfigOptionsList::KEY_PASS]
         );
-        if (isset($config[ConfigOptionsList::KEY_PREFIX])) {
-            $this->checkDatabaseTablePrefix($config[ConfigOptionsList::KEY_PREFIX]);
+        if (isset($connectionConfig[ConfigOptionsList::KEY_PREFIX])) {
+            $this->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsList::KEY_PREFIX]);
         }
     }
 
