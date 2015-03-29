@@ -379,7 +379,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     /**
      * Return true if this template can be used for sending queue as main template
      *
-     * @return boolean
+     * @return bool
      */
     public function isValidForSend()
     {
@@ -480,6 +480,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * Get exception, generated during send() method
      *
      * @return \Exception|null
+     * @codeCoverageIgnore
      */
     public function getSendingException()
     {
@@ -520,6 +521,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      *
      * @param string|array $bcc
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addBcc($bcc)
     {
@@ -532,6 +534,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      *
      * @param string $email
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setReturnPath($email)
     {
@@ -544,6 +547,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      *
      * @param string $email
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setReplyTo($email)
     {
