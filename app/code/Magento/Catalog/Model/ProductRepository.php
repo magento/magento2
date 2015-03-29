@@ -505,6 +505,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save(\Magento\Catalog\Api\Data\ProductInterface $product, $saveOptions = false)
     {
