@@ -332,7 +332,7 @@ class Installer
                 $result[$module] = 1;
             }
         }
-        $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]]);
+        $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
         return $result;
     }
 
