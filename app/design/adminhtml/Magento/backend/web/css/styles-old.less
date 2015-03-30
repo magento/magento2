@@ -2714,11 +2714,6 @@
         .style3();
     }
 
-    .order-sidebar {
-        float: left;
-        width: 22%;
-    }
-
     .customer-current-activity-inner {
         padding: 18px;
     }
@@ -2873,54 +2868,6 @@
     //
     //  Sales -> Create Order
     // --------------------------------------
-
-    .summary-total {
-        .summary-collapse {
-            cursor: pointer;
-            display: inline-block;
-            &:before {
-                @iconsize: 16px;
-                content: "\e02d";
-                color: #816063;
-                background: #f2ebde;
-                display: inline-block;
-                text-indent: 0;
-                font-size: @iconsize;
-                width:@iconsize;
-                height:@iconsize;
-                line-height: @iconsize;
-                overflow: hidden;
-                font-family: 'MUI-Icons';
-                border:1px solid #ada89e;
-                font-style: normal;
-                vertical-align: top;
-                margin-right:7px;
-                font-weight: normal;
-                speak: none;
-                -webkit-font-smoothing: antialiased;
-                border-radius: 2px;
-            }
-            &:hover:before {
-                background: #cac3b4;
-            }
-        }
-        &.show-details .summary-collapse:before {
-            content: "\e03a";
-        }
-    }
-
-    tr.row-totals:nth-child(even) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(even) td,
-    tr.row-totals:nth-child(even) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(even) ~ tr.row-totals:nth-child(even) td,
-    tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(odd) ~ tr.row-totals:nth-child(even) td {
-        background:  #fbfaf6;
-    }
-
-    tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(odd) ~ tr.row-totals:nth-child(odd) td,
-    tr.row-totals:nth-child(even) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(even) ~ tr.row-totals:nth-child(odd) td,
-    tr.row-totals:nth-child(odd) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(odd) td {
-        background: #fff;
-    }
-
 
     #order-data .page-actions {
         padding-top: 0;

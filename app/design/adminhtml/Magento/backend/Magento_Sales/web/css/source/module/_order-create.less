@@ -1,0 +1,92 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Layout
+//  ---------------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    #mix-grid .row();
+    .order-details {
+        #mix-grid .width(9,12);
+        float: right;
+        margin-left: 0;
+    }
+    .order-sidebar {
+        #mix-grid .column(3,12);
+    }
+
+    .order-billing-address,
+    .order-billing-method,
+    .order-history {
+        #mix-grid .width(6,12);
+        float: left;
+    }
+
+    .order-shipping-address,
+    .order-shipping-method,
+    .order-totals {
+        #mix-grid .width(6,12);
+        float: right;
+    }
+}
+
+.order-addresses,
+.order-methods,
+.order-gift-options,
+.order-summary {
+    .extend__clearfix();
+}
+
+//
+//  Table
+//  ---------------------------------------------
+
+.order-tables {
+    width: 100%;
+    th {
+        font-size: 1.3rem;
+    }
+}
+
+//
+//  Totals
+//  ---------------------------------------------
+
+//  ToDo UI: review the collapsible block
+.summary-total {
+    .summary-collapse {
+        cursor: pointer;
+        display: inline-block;
+        &:before {
+            @iconsize: 16px;
+            content: "\e02d";
+            color: #816063;
+            background: #f2ebde;
+            display: inline-block;
+            text-indent: 0;
+            font-size: @iconsize;
+            width:@iconsize;
+            height:@iconsize;
+            line-height: @iconsize;
+            overflow: hidden;
+            font-family: 'MUI-Icons';
+            border:1px solid #ada89e;
+            font-style: normal;
+            vertical-align: top;
+            margin-right:7px;
+            font-weight: normal;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            border-radius: 2px;
+        }
+        &:hover:before {
+            background: #cac3b4;
+        }
+    }
+    &.show-details .summary-collapse:before {
+        content: "\e03a";
+    }
+}
