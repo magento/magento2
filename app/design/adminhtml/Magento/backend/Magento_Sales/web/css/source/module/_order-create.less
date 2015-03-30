@@ -8,36 +8,29 @@
 //  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    #mix-grid .row();
     .order-details {
-        #mix-grid .width(9,12);
         float: right;
+        #mix-grid .width(9,12);
         margin-left: 0;
     }
     .order-sidebar {
         #mix-grid .column(3,12);
+        margin-left: 0;
     }
 
     .order-billing-address,
     .order-billing-method,
     .order-history {
-        #mix-grid .width(6,12);
         float: left;
+        #mix-grid .width(6,12);
     }
 
     .order-shipping-address,
     .order-shipping-method,
     .order-totals {
-        #mix-grid .width(6,12);
         float: right;
+        #mix-grid .width(6,12);
     }
-}
-
-.order-addresses,
-.order-methods,
-.order-gift-options,
-.order-summary {
-    .extend__clearfix();
 }
 
 //
@@ -47,8 +40,52 @@
 .order-tables {
     width: 100%;
     th {
+        border-top: 0;
         font-size: 1.3rem;
     }
+}
+
+//
+//  Blocks
+//  ---------------------------------------------
+
+.order-details {
+    .admin__fieldset-wrapper:not(:last-child) {
+        margin-bottom: 5rem;
+    }
+
+    .admin__fieldset-wrapper-content {
+        .extend__clearfix();
+    }
+
+    .admin__fieldset-wrapper-title {
+        border-bottom: 1px solid @color-gray80;
+        .extend__clearfix();
+        margin-bottom: 1.5rem;
+        padding-bottom: @indent__xs;
+        .actions {
+            float: right;
+            margin-top: -@indent__xs;
+            margin-bottom: 1.5rem;
+        }
+        .action-secondary {
+            margin-left: @indent__base;
+        }
+    }
+
+    .admin__legend {
+        font-size: 1.8rem;
+        font-weight: @font-weight__semibold;
+        margin-bottom: @indent__l;
+    }
+
+//    .admin__control-fields {
+//        .admin__field:nth-child(n+2):not(.admin__field-option) {
+//            > .admin__field-label {
+//                .extend__visually-hidden-reset()
+//            }
+//        }
+//    }
 }
 
 //
@@ -62,31 +99,32 @@
         display: inline-block;
         &:before {
             @iconsize: 16px;
-            content: "\e02d";
-            color: #816063;
+
             background: #f2ebde;
-            display: inline-block;
-            text-indent: 0;
-            font-size: @iconsize;
-            width:@iconsize;
-            height:@iconsize;
-            line-height: @iconsize;
-            overflow: hidden;
-            font-family: 'MUI-Icons';
-            border:1px solid #ada89e;
-            font-style: normal;
-            vertical-align: top;
-            margin-right:7px;
-            font-weight: normal;
-            speak: none;
-            -webkit-font-smoothing: antialiased;
+            border: 1px solid #ada89e;
             border-radius: 2px;
+            color: #816063;
+            content: '\e02d';
+            display: inline-block;
+            font-family: 'MUI-Icons';
+            font-size: @iconsize;
+            -webkit-font-smoothing: antialiased;
+            font-style: normal;
+            font-weight: normal;
+            height: @iconsize;
+            line-height: @iconsize;
+            margin-right: 7px;
+            overflow: hidden;
+            speak: none;
+            text-indent: 0;
+            vertical-align: top;
+            width: @iconsize;
         }
         &:hover:before {
             background: #cac3b4;
         }
     }
     &.show-details .summary-collapse:before {
-        content: "\e03a";
+        content: '\e03a';
     }
 }

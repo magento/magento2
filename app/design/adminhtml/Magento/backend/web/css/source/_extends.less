@@ -47,6 +47,16 @@
     &:extend(.abs-visually-hidden all);
 }
 
+//  Revert visually hidden
+.abs-visually-hidden-reset {
+    .visually-hidden-reset();
+}
+
+.extend__visually-hidden-reset() {
+    &:extend(.abs-visually-hidden-reset all);
+}
+
+
 //  Clearfix
 .abs-clearfix {
     .clearfix();

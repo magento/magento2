@@ -2738,18 +2738,6 @@
         float: right;
     }
 
-    .order-billing-address,
-    .order-billing-method {
-        float: left;
-        width: 49.5%;
-    }
-
-    .order-shipping-address,
-    .order-shipping-method {
-        float: right;
-        width: 49%;
-    }
-
     #order-data .order-account-information {
         float: none;
         width: auto;
@@ -4822,25 +4810,6 @@
     width: 100%;
 }
 
-[class*="-order-"] .admin__scope-old .order-billing-address .actions,
-[class*="-order-"] .admin__scope-old .order-shipping-address .actions {
-    margin: 17px 0;
-}
-
-[class*="-order-"] .admin__scope-old .order-billing-address .control + label,
-[class*="-order-"] .admin__scope-old .order-shipping-address .control + label {
-    margin: 17px 0 0;
-}
-
-.sales-order-create-index #order-message .admin__scope-old .messages .message,
-.sales-order-edit-index #order-message .admin__scope-old .messages .message {
-    margin: 0 0 60px;
-}
-
-.sales-order-create-index .admin__scope-old .order-items.fieldset-wrapper,
-.sales-order-create-index .admin__scope-old .order-search-items.fieldset-wrapper,
-.sales-order-create-index .admin__scope-old .order-additional-area.fieldset-wrapper,
-.sales-order-create-index .admin__scope-old .order-errors,
 .checkout-index-index .checkout-errors {
     .fieldset-wrapper-title {
         border-bottom: 0;
@@ -4850,86 +4819,6 @@
         border-bottom: 1px solid #cac3b4;
         margin: 0 0 18px;
         width: 100%;
-    }
-}
-
-[class*="-order-"] .admin__scope-old {
-    .fieldset-wrapper-title {
-        .actions {
-            float: right;
-            padding: 0;
-            a:link,
-            a:visited,
-            a:hover,
-            a:active {
-                color: #a29c94;
-            }
-        }
-    }
-    .order-customer-selector .fieldset-wrapper-title .actions {
-        padding-top: 8px;
-    }
-    .order-details .fieldset-wrapper-title .actions {
-        padding-bottom: 15px;
-    }
-}
-
-.sales-order-create-index {
-    .admin__scope-old {
-        // Configure product popup
-        .ui-dialog {
-            // Virtual and downloadable product
-            .downloadable.information .link {
-                .label {
-                    margin-left: 0;
-                }
-                .nested {
-                    margin-left: 8px;
-                }
-            }
-            // Bundle product
-            .fieldset.bundle {
-                .nested {
-                    padding-left: 6px;
-                    .field {
-                        margin: 0 0 5px;
-                    }
-                    .label {
-                        font-size: 13px;
-                        margin: 0;
-                    }
-                    .qty .control {
-                        display: inline-block;
-                        margin: 0 0 0 10px;
-                        width: 60px;
-                    }
-                }
-            }
-        }
-        .order-billing-method {
-            .payment-methods {
-                .fieldset {
-                    padding: 0;
-                    margin: 0;
-                    .field {
-                        margin: 0 0 12px 0;
-                    }
-                }
-            }
-        }
-        .grid .action-configure {
-            float: right;
-            &.disabled {
-                cursor: default;
-                opacity: .5;
-                &:hover {
-                    text-decoration: none;
-                }
-            }
-        }
-        .order-items.fieldset-wrapper {
-            .clearfix();
-        }
     }
 }
 

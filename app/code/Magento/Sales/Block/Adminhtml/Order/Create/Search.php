@@ -43,7 +43,7 @@ class Search extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         $addButtonData = [
             'label' => __('Add Selected Product(s) to Order'),
             'onclick' => 'order.productGridAddSelected()',
-            'class' => 'action-add',
+            'class' => 'action-add action-secondary',
         ];
         return $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'

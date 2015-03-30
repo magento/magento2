@@ -16,7 +16,7 @@
 <?php $_items = $block->getItems() ?>
 <?php if (empty($_items)): ?>
     <div class="grid" id="order-items_grid">
-        <table cellspacing="0" class="data-table order-tables">
+        <table cellspacing="0" class="data-table table order-tables">
             <thead>
                 <tr class="headings">
                     <th class="col-product"><span><?php echo __('Product') ?></span></th>
@@ -44,7 +44,7 @@
             <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?>
         </div>
     <?php endif; ?>
-        <table cellspacing="0" class="data-table order-tables">
+        <table cellspacing="0" class="data-table table order-tables">
             <thead>
                 <tr class="headings">
                     <th class="col-product" colspan="2"><span><?php echo __('Product') ?></span></th>
@@ -137,7 +137,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="100">
+                        <td colspan="100"> <!-- ToDo UI: remove the 100 -->
                             <?php foreach ($_item->getMessage(false) as $message):
                                 if (empty($message)) {
                                     continue;

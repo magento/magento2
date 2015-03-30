@@ -271,3 +271,20 @@
         }
     }
 }
+
+//
+//  Form legend
+//  _____________________________________________
+
+.admin__legend {
+    //  ToDo UI: add form legend styles. Check if they doon't conflict with create order page form legend styles
+    float: left;
+    position: static;
+    width: 100%;
+    & + br {
+        display: block;
+        height: 0;
+        overflow: hidden;
+        clear: left;
+    }
+}
