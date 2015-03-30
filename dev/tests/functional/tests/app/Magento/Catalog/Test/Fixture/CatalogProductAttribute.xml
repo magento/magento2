@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="catalogProductAttribute" module="Magento_Catalog" type="composite" collection="Magento\Catalog\Model\Resource\Attribute" repository_class="Magento\Catalog\Test\Repository\CatalogProductAttribute" handler_interface="Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface" class="Magento\Catalog\Test\Fixture\CatalogProductAttribute">
     <dataset name="default">
         <field name="frontend_label" xsi:type="string">attribute_label%isolation%</field>
