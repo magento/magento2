@@ -34,4 +34,11 @@ interface ActionInterface
      * @return ResponseInterface
      */
     public function getResponse();
+
+    /**
+     * Get default redirect object
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function getDefaultRedirect();
 }
