@@ -13,14 +13,14 @@ namespace Magento\Framework\Locale;
 interface CurrencyInterface
 {
     /**
-     * Retrieve currency code
+     * Retrieve default currency code
      *
      * @return string
      */
     public function getDefaultCurrency();
 
     /**
-     * Create \Magento\Framework\Currency object for current locale
+     * Create Currency object for current locale
      *
      * @param   string $currency
      * @return  \Magento\Framework\Currency

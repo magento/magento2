@@ -49,9 +49,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
     }
 
     /**
-     * Retrieve currency code
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getDefaultCurrency()
     {
@@ -59,10 +57,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
     }
 
     /**
-     * Create \Zend_Currency object for current locale
-     *
-     * @param   string $currency
-     * @return  \Magento\Framework\Currency
+     * @inheritdoc
      */
     public function getCurrency($currency)
     {
