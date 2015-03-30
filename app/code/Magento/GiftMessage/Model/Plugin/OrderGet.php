@@ -114,7 +114,7 @@ class OrderGet
                         $order->getEntityId(),
                         $orderItem->getItemId()
                     );
-                } catch (Exception $e) {
+                } catch (NoSuchEntityException $e) {
                     continue;
                 }
 
