@@ -25,7 +25,7 @@ class FrontendPool
     const KEY_FRONTEND_CACHE = 'frontend';
 
     /**
-     * Segment key for cache
+     * Config key for cache
      */
     const KEY_CACHE = 'cache';
 
