@@ -71,11 +71,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     private $emailConfig;
 
-    /**
-     * @var \Magento\Email\Model\Template
-     */
-    private $model;
-
     public function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
@@ -111,25 +106,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->model = $this->getMockBuilder('Magento\Email\Model\Template')
-            ->setMethods(['__wakeup', '__sleep', '_init'])
-            ->setConstructorArgs(
-                [
-                    $this->context,
-                    $this->design,
-                    $this->registry,
-                    $this->appEmulation,
-                    $this->storeManager,
-                    $this->filesystem,
-                    $this->assetRepo,
-                    $this->viewFileSystem,
-                    $this->scopeConfig,
-                    $this->emailFilterFactory,
-                    $this->emailConfig
-                ]
-            )
-            ->getMock();
     }
 
     /**
@@ -138,9 +114,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @param $mockedMethods array
      * @return \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getModelMock(array $mockedMethods)
+    protected function getModelMock(array $mockedMethods = [])
     {
-        $model = $this->getMockBuilder('Magento\Email\Model\Template')
+        return $this->getMockBuilder('Magento\Email\Model\Template')
             ->setMethods(array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']))
             ->setConstructorArgs(
                 [
@@ -158,25 +134,26 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        return $model;
     }
 
     public function testGetDefaultEmailLogo()
     {
+        $model = $this->getModelMock();
         $value = 'urlWithParamsValue';
         $this->assetRepo->method('getUrlWithParams')
             ->with('Magento_Email::logo_email.png', ['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
             ->will($this->returnValue($value));
-        $this->assertEquals($value, $this->model->getDefaultEmailLogo());
+        $this->assertEquals($value, $model->getDefaultEmailLogo());
     }
 
     public function testSetAndGetTemplateFilter()
     {
+        $model = $this->getModelMock();
         $filterTemplate = $this->getMockBuilder('Magento\Framework\Filter\Template')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model->setTemplateFilter($filterTemplate);
-        $this->assertSame($filterTemplate, $this->model->getTemplateFilter());
+        $model->setTemplateFilter($filterTemplate);
+        $this->assertSame($filterTemplate, $model->getTemplateFilter());
     }
 
     public function testGetTemplateFilterWithEmptyValue()
@@ -223,6 +200,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $expectedOrigTemplateVariables,
         $expectedTemplateStyles
     ) {
+        $model = $this->getModelMock();
+
         $templateId = 'templateId';
 
         $templateFile = 'templateFile';
@@ -253,70 +232,70 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\App\Filesystem\DirectoryList::MODULES)
             ->will($this->returnValue($modulesDir));
 
-        $this->model->loadDefault($templateId);
+        $model->loadDefault($templateId);
 
         if ($templateType === 'html') {
-            $this->assertEquals(\Magento\Email\Model\Template::TYPE_HTML, $this->model->getTemplateType());
+            $this->assertEquals(\Magento\Email\Model\Template::TYPE_HTML, $model->getTemplateType());
         } else {
-            $this->assertEquals(\Magento\Email\Model\Template::TYPE_TEXT, $this->model->getTemplateType());
+            $this->assertEquals(\Magento\Email\Model\Template::TYPE_TEXT, $model->getTemplateType());
         }
-        $this->assertEquals($templateId, $this->model->getId());
-        $this->assertEquals($parsedTemplateText, $this->model->getTemplateText());
-        $this->assertEquals($expectedTemplateSubject, $this->model->getTemplateSubject());
-        $this->assertEquals($expectedOrigTemplateVariables, $this->model->getData('orig_template_variables'));
-        $this->assertEquals($expectedTemplateStyles, $this->model->getTemplateStyles());
+        $this->assertEquals($templateId, $model->getId());
+        $this->assertEquals($parsedTemplateText, $model->getTemplateText());
+        $this->assertEquals($expectedTemplateSubject, $model->getTemplateSubject());
+        $this->assertEquals($expectedOrigTemplateVariables, $model->getData('orig_template_variables'));
+        $this->assertEquals($expectedTemplateStyles, $model->getTemplateStyles());
     }
 
     public function loadDefaultDataProvider()
     {
         return [
             'empty' => [
-                'html',
-                '',
-                '',
-                null,
-                null,
-                null,
+                'templateType' => 'html',
+                'templateText' => '',
+                'parsedTemplateText' => '',
+                'expectedTemplateSubject' => null,
+                'expectedOrigTemplateVariables' => null,
+                'expectedTemplateStyles' => null,
             ],
             'copyright in Plain Text Removed' => [
-                'text',
-                '<!-- Copyright © 2015 Magento. All rights reserved. -->',
-                '',
-                null,
-                null,
-                null,
+                'templateType' => 'text',
+                'templateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
+                'parsedTemplateText' => '',
+                'expectedTemplateSubject' => null,
+                'expectedOrigTemplateVariables' => null,
+                'expectedTemplateStyles' => null,
             ],
             'copyright in HTML Remains' => [
-                'html',
-                '<!-- Copyright © 2015 Magento. All rights reserved. -->',
-                '<!-- Copyright © 2015 Magento. All rights reserved. -->',
-                null,
-                null,
-                null,
+                'templateType' => 'html',
+                'templateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
+                'parsedTemplateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
+                'expectedTemplateSubject' => null,
+                'expectedOrigTemplateVariables' => null,
+                'expectedTemplateStyles' => null,
             ],
             'subject set' => [
-                'html',
-                '<!--@subject Email Subject @-->',
-                '',
-                'Email Subject',
-                null,
-                null,
+                'templateType' => 'html',
+                'templateText' => '<!--@subject Email Subject @-->',
+                'parsedTemplateText' => '',
+                'expectedTemplateSubject' => 'Email Subject',
+                'expectedOrigTemplateVariables' => null,
+                'expectedTemplateStyles' => null,
             ],
             'orig_template_variables set' => [
-                'html',
-                '<!--@vars {"store url=\"\"":"Store Url"} @-->Some Other Text',
-                'Some Other Text',
-                null,
-                '{"store url=\"\"":"Store Url"}',
-                null,
+                'templateType' => 'html',
+                'templateText' => '<!--@vars {"store url=\"\"":"Store Url"} @-->Some Other Text',
+                'parsedTemplateText' => 'Some Other Text',
+                'expectedTemplateSubject' => null,
+                'expectedOrigTemplateVariables' => '{"store url=\"\"":"Store Url"}',
+                'expectedTemplateStyles' => null,
             ],
             'styles' => [
-                'html',
-                '<!--@vars {"store url=\"\"":"Store Url"} @-->Some Other Text',
-                'Some Other Text',
-                null,
-                '{"store url=\"\"":"Store Url"}',
-                null,
+                'templateType' => 'html',
+                'templateText' => '<!--@vars {"store url=\"\"":"Store Url"} @-->Some Other Text',
+                'parsedTemplateText' => 'Some Other Text',
+                'expectedTemplateSubject' => null,
+                'expectedOrigTemplateVariables' => '{"store url=\"\"":"Store Url"}',
+                'expectedTemplateStyles' => null,
             ],
         ];
     }
@@ -345,9 +324,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAndSetId()
     {
+        $model = $this->getModelMock();
         $templateId = 'templateId';
-        $this->assertEquals($this->model, $this->model->setId($templateId));
-        $this->assertEquals($templateId, $this->model->getId());
+        $this->assertEquals($model, $model->setId($templateId));
+        $this->assertEquals($templateId, $model->getId());
     }
 
     /**
@@ -380,39 +360,39 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'should be valid' => [
-                false,
-                'sender name',
-                'email@example.com',
-                'template subject',
-                true
+                'isSMTPDisabled' => false,
+                'senderName' => 'sender name',
+                'senderEmail' => 'email@example.com',
+                'templateSubject' => 'template subject',
+                'expectedValue' => true
             ],
             'no smtp so not valid' => [
-                true,
-                'sender name',
-                'email@example.com',
-                'template subject',
-                false
+                'isSMTPDisabled' => true,
+                'senderName' => 'sender name',
+                'senderEmail' => 'email@example.com',
+                'templateSubject' => 'template subject',
+                'expectedValue' => false
             ],
             'no sender name so not valid' => [
-                false,
-                '',
-                'email@example.com',
-                'template subject',
-                false
+                'isSMTPDisabled' => false,
+                'senderName' => '',
+                'senderEmail' => 'email@example.com',
+                'templateSubject' => 'template subject',
+                'expectedValue' => false
             ],
             'no sender email so not valid' => [
-                false,
-                'sender name',
-                '',
-                'template subject',
-                false
+                'isSMTPDisabled' => false,
+                'senderName' => 'sender name',
+                'senderEmail' => '',
+                'templateSubject' => 'template subject',
+                'expectedValue' => false
             ],
             'no subject so not valid' => [
-                false,
-                'sender name',
-                'email@example.com',
-                '',
-                false
+                'isSMTPDisabled' => false,
+                'senderName' => 'sender name',
+                'senderEmail' => 'email@example.com',
+                'templateSubject' => '',
+                'expectedValue' => false
             ],
         ];
     }
@@ -502,27 +482,27 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'default' => [
-                [],
-                \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
-                1,
-                [
+                'variables' => [],
+                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
+                'storeId' => 1,
+                'expectedVariables' => [
                     'logo_url' => null,
                     'logo_alt' => 'frontendName',
                 ],
-                'expected result',
+                'expectedResult' => 'expected result',
             ],
             'logo variables set' => [
-                [
+                'variables' => [
                     'logo_url' => 'http://example.com/logo',
                     'logo_alt' => 'Logo Alt',
                 ],
-                \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
-                1,
-                [
+                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
+                'storeId' => 1,
+                'expectedVariables' => [
                     'logo_url' => 'http://example.com/logo',
                     'logo_alt' => 'Logo Alt',
                 ],
-                'expected result',
+                'expectedResult' => 'expected result',
             ],
         ];
     }
@@ -536,32 +516,33 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPreparedTemplateText($templateType, $templateStyles, $templateText, $expectedResult)
     {
-        $this->model->setTemplateType($templateType);
-        $this->model->setTemplateStyles($templateStyles);
-        $this->model->setTemplateText($templateText);
-        $this->assertEquals($expectedResult, $this->model->getPreparedTemplateText());
+        $model = $this->getModelMock();
+        $model->setTemplateType($templateType);
+        $model->setTemplateStyles($templateStyles);
+        $model->setTemplateText($templateText);
+        $this->assertEquals($expectedResult, $model->getPreparedTemplateText());
     }
 
     public function getPreparedTemplateTextProvider()
     {
         return [
             'plain text' => [
-                \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
-                '<style>',
-                'template text',
-                'template text',
+                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
+                'templateStyles' => '<style>',
+                'templateText' => 'template text',
+                'expectedResult' => 'template text',
             ],
             'html no style' => [
-                \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
-                '',
-                'template text',
-                'template text',
+                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
+                'templateStyles' => '',
+                'templateText' => 'template text',
+                'expectedResult' => 'template text',
             ],
             'html with style' => [
-                \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
-                '.body { color: orange }',
-                'template text',
-                '<style type="text/css">' . "\n.body { color: orange }\n</style>\n" . 'template text',
+                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
+                'templateStyles' => '.body { color: orange }',
+                'templateText' => 'template text',
+                'expectedResult' => '<style type="text/css">' . "\n.body { color: orange }\n</style>\n" . 'template text',
             ],
         ];
     }
@@ -621,28 +602,29 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVariablesOptionArray($withGroup, $templateVariables, $expectedResult)
     {
-        $this->model->setData('orig_template_variables', $templateVariables);
-        $this->assertEquals($expectedResult, $this->model->getVariablesOptionArray($withGroup));
+        $model = $this->getModelMock();
+        $model->setData('orig_template_variables', $templateVariables);
+        $this->assertEquals($expectedResult, $model->getVariablesOptionArray($withGroup));
     }
 
     public function getVariablesOptionArrayDataProvider()
     {
         return [
             'empty variables' => [
-                false,
-                '',
-                [],
+                'withGroup' => false,
+                'templateVariables' => '',
+                'expectedResult' => [],
             ],
             'empty variables with grouped option' => [
-                true,
-                '',
-                [],
+                'withGroup' => true,
+                'templateVariables' => '',
+                'expectedResult' => [],
             ],
             'customer account new variables' => [
-                false,
-                '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
+                'withGroup' => false,
+                'templateVariables' => '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
                 . '"escapehtml var=$customer.name":"Customer Name"}',
-                [
+                'expectedResult' => [
                     [
                         'value' => '{{store url=""}}',
                         'label' => __('%1', 'Store Url'),
@@ -658,10 +640,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'customer account new variables with grouped option' => [
-                true,
-                '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
+                'withGroup' => true,
+                'templateVariables' => '{"store url=\"\"":"Store Url","var logo_url":"Email Logo Image Url",'
                 . '"escapehtml var=$customer.name":"Customer Name"}',
-                [
+                'expectedResult' => [
                     'label' => __('Template Variables'),
                     'value' => [
                         [
@@ -720,12 +702,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'numeric id' => [
-                1,
-                'expected result',
+                'templateId' => 1,
+                'expectedResult' => 'expected result',
             ],
             'string id' => [
-                'my id',
-                'expected result',
+                'templateId' => 'my id',
+                'expectedResult' => 'expected result',
             ],
         ];
     }
