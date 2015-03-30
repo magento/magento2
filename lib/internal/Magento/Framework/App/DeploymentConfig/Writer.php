@@ -88,9 +88,10 @@ class Writer
      * Saves config
      *
      * @param array $data
+     * @param bool $override
      * @return void
      */
-    public function saveConfig(array $data)
+    public function saveConfig(array $data, $override = false)
     {
         $paths = $this->configFilePool->getPaths();
 
@@ -99,7 +100,11 @@ class Writer
 
                 if ($this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isExist($paths[$fileKey])) {
                     $currentData = $this->reader->load($paths[$fileKey]);
-                    $config = array_replace_recursive($currentData, $config);
+                    if ($override) {
+                        $config = array_merge($currentData, $config);
+                    } else {
+                        $config = array_replace_recursive($currentData, $config);
+                    }
                 }
 
                 $contents = $this->formatter->format($config);

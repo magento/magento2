@@ -59,7 +59,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--db_host' => 'host']);
         $this->assertSame(
-            'You saved the deployment config.' . PHP_EOL,
+            'You saved the new configuration.' . PHP_EOL,
             $commandTester->getDisplay()
         );
     }
@@ -116,9 +116,9 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--db_host' => 'host']);
         if ($interactionType) {
-            $message = 'You saved the deployment config.' . PHP_EOL;
+            $message = 'You saved the new configuration.' . PHP_EOL;
         } else {
-            $message = 'You did not save the deployment config.'.PHP_EOL;
+            $message = 'You made no changes to the configuration.'.PHP_EOL;
         }
         $this->assertSame(
             $message,

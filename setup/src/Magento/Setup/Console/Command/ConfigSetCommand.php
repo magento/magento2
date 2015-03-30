@@ -73,10 +73,12 @@ class ConfigSetCommand extends Command
     {
         $inputOptions = $input->getOptions();
         $optionCollection = $this->configModel->getAvailableOptions();
-        $optionsToChange = [];
+        $commandOptions = [];
         $optionsWithDefaultValues = [];
 
         foreach ($optionCollection as $option) {
+            $commandOptions[$option->getName()] = false;
+
             $currentValue = $this->deploymentConfig->get($option->getConfigPath());
             if (($currentValue !== null) && ($inputOptions[$option->getName()] !== null)) {
                 $dialog = $this->getHelperSet()->get('dialog');
@@ -85,14 +87,9 @@ class ConfigSetCommand extends Command
                     '<question>Overwrite the existing configuration for ' . $option->getName() . '?[Y|n]</question>'
                 )) {
                     $inputOptions[$option->getName()] = null;
-                } else {
-                    $optionsToChange[$option->getName()] = $inputOptions[$option->getName()];
-                }
-            } else {
-                if ($inputOptions[$option->getName()] !== null) {
-                    $optionsToChange[$option->getName()] = $inputOptions[$option->getName()];
                 }
             }
+
             if ($option->getDefault() === $inputOptions[$option->getName()]
                 && $inputOptions[$option->getName()] !== null
             ) {
@@ -107,17 +104,20 @@ class ConfigSetCommand extends Command
             }
         );
 
+        $optionsToChange = array_diff($inputOptions, $commandOptions);
+
         $this->configModel->process($inputOptions);
+
         if (count($optionsWithDefaultValues) > 0) {
             $defaultValuesMessage = implode(', ', $optionsWithDefaultValues);
             $output->writeln(
-                '<info>You saved default value(s) for the next option(s): ' . $defaultValuesMessage . '.</info>'
+                '<info>We saved default values for these options: ' . $defaultValuesMessage . '.</info>'
             );
         } else {
             if (count($optionsToChange) > 0) {
-                $output->writeln('<info>You saved the deployment config.</info>');
+                $output->writeln('<info>You saved the new configuration.</info>');
             } else {
-                $output->writeln('<info>You did not save the deployment config.</info>');
+                $output->writeln('<info>You made no changes to the configuration.</info>');
             }
         }
     }

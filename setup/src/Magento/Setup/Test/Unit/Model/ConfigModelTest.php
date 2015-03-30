@@ -80,7 +80,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
         $this->collector
             ->expects($this->exactly(2))
-            ->method('collectOptionLists')
+            ->method('collectOptionsLists')
             ->will($this->returnValue([$configOption]));
 
         $this->configModel->validate(['Fake' => null]);
@@ -136,7 +136,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
             'Fake_Module' => $configOption
         ];
         $this->collector->expects($this->once())
-            ->method('collectOptionLists')
+            ->method('collectOptionsLists')
             ->will($this->returnValue($configOptionsList));
 
         $this->writer->expects($this->once())->method('saveConfig')->with($testSetExpected);
@@ -159,7 +159,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
             'Fake_Module' => $configOption
         ];
 
-        $this->collector->expects($this->once())->method('collectOptionLists')->will($this->returnValue($wrongData));
+        $this->collector->expects($this->once())->method('collectOptionsLists')->will($this->returnValue($wrongData));
 
         $this->configModel->process([]);
     }
