@@ -13,15 +13,20 @@
 
 @import 'data-grid-header/_data-grid-filters.less';
 @import 'data-grid-header/_data-grid-pager.less';
+//  Actions group
+@import 'data-grid-header/_data-grid-action-bookmarks.less';
 @import 'data-grid-header/_data-grid-action-columns.less';
 
 //
 //  Variables
 //  ---------------------------------------------
 
-@data-grid-header-add-indent__size: .9rem;
+@data-grid-header-add-indent__bottom: .9rem;
+@data-grid-header-add-indent__top: .5rem;
+
 @data-grid-header-row__margin-bottom: @indent__base;
-@data-grid-action-default-view__z-index: @data-grid-action-columns__z-index - 10;
+
+@data-grid-action__z-index: @data-grid-header__z-index - 10;
 
 //
 
@@ -34,7 +39,7 @@
 .admin__data-grid-header-row {
     margin-bottom: @data-grid-header-row__margin-bottom;
     &:first-child {
-        margin-bottom: @data-grid-header-row__margin-bottom - @data-grid-header-add-indent__size;
+        margin-bottom: @data-grid-header-row__margin-bottom - @data-grid-header-add-indent__bottom;
     }
     .action-select-wrap {
         display: block;
@@ -44,13 +49,18 @@
     }
 }
 
-//  Data grid Header Actions
+//
+//  Data grid Header Actions group
+//  ---------------------------------------------
+
 .admin__data-grid-actions-wrap {
+    margin-top: -@data-grid-header-add-indent__top;
     text-align: right;
     .admin__action-dropdown-wrap {
         position: relative;
         text-align: left;
         &._active,
+        &._active + .admin__action-dropdown-wrap,
         &:first-child {
             &:after {
                 display: none;
@@ -68,25 +78,15 @@
             height: @action__height;
             left: 0;
             position: absolute;
-            top: 0;
+            top: @data-grid-header-add-indent__top;
             z-index: 3;
         }
     }
     .admin__action-dropdown {
-        padding-bottom: @action-dropdown__padding-bottom + @data-grid-header-add-indent__size;
+        padding-top: @action-dropdown__padding-top + @data-grid-header-add-indent__top;
+        padding-bottom: @action-dropdown__padding-bottom + @data-grid-header-add-indent__bottom;
         &:after {
-            margin-top: -.6rem;
-        }
-    }
-}
-
-//  Default view
-.admin__data-grid-action-default-view {
-    z-index: @data-grid-action-default-view__z-index;
-    .admin__action-dropdown {
-        &:before {
-            &:extend(.abs-icon all);
-            content: @icon-views__content;
+           margin-top: -.4rem;
         }
     }
 }

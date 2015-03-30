@@ -16,6 +16,7 @@
 @action-dropdown__border-color: @color-light-gray;
 @action-dropdown__font-size: round(@font-size__base - .1rem, 1);
 @action-dropdown__height: @action__height;
+@action-dropdown__padding-top: .7rem;
 @action-dropdown__padding-bottom: .8rem;
 @action-dropdown__padding-horizontal: 1.5rem;
 @action-dropdown__padding-right: @action-dropdown__padding-horizontal + @action-dropdown-menu__padding-horizontal + @button-marker-triangle__width;
@@ -29,8 +30,51 @@
 @action-dropdown-menu-link__padding-horizontal: @action-dropdown__padding-horizontal - @action-dropdown-menu__padding-horizontal;
 
 //
+//  Utilities
+//  ---------------------------------------------
+
+.admin__action-dropdown-menu__align(
+    @_align
+) when (@_align = left) {
+    .admin__action-dropdown-text {
+        &:after {
+            left: -(@component__shadow-size__base + 1);
+            right: 0;
+
+        }
+    }
+    .admin__action-dropdown-menu {
+        left: auto;
+        right: 0;
+    }
+}
+
+.admin__action-dropdown-menu__align(
+    @_align
+) when (@_align = right) {
+    .admin__action-dropdown-text {
+        &:after {
+            right: -(@component__shadow-size__base + 1);
+            left: 0;
+
+        }
+    }
+    .admin__action-dropdown-menu {
+        left: 0;
+        right: auto;
+    }
+}
+
+.action-dropdown-menu-link-pattern() {
+    color: @action-dropdown__color;
+    display: block;
+    text-decoration: none;
+}
+
+//
 
 .admin__action-dropdown-wrap {
+    .admin__action-dropdown-menu__align(left);
     display: inline-block;
     position: relative;
     &.active,
@@ -45,9 +89,7 @@
                 background-color: @action-dropdown__background-color;
                 content: '';
                 height: @component__shadow-size__base + 1;
-                left: -(@component__shadow-size__base + 1);
                 position: absolute;
-                right: 0;
                 top: 100%;
             }
         }
@@ -81,7 +123,7 @@
     font-size: @action-dropdown__font-size;
     font-weight: @font-weight__regular;
     letter-spacing: -.025em;
-    padding: .7rem @action-dropdown__padding-right @action-dropdown__padding-bottom @action-dropdown__padding-horizontal;
+    padding: @action-dropdown__padding-top @action-dropdown__padding-right @action-dropdown__padding-bottom @action-dropdown__padding-horizontal;
     position: relative;
     transition: border-color @appearing__transition-duration @apperaing__transition-timing-function;
     vertical-align: baseline;
@@ -111,18 +153,14 @@
     min-width: 120%;
     padding: @action-dropdown-menu__padding-vertical @action-dropdown-menu__padding-horizontal;
     position: absolute;
-    right: 0;
     top: 100%;
     transition: all @appearing__transition-duration @apperaing__transition-timing-function;
     z-index: 1;
     > li {
         display: block;
         > a {
-            color: @action-dropdown__color;
-            display: block;
+            .action-dropdown-menu-link-pattern();
             padding: @action-dropdown-menu-link__padding-vertical @action-dropdown-menu-link__padding-horizontal;
-            text-decoration: none;
-            transition: background-color .1s linear;
         }
     }
 }

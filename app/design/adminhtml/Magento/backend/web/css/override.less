@@ -1082,6 +1082,14 @@ fieldset[disabled] .address-list .action-delete {
   display: inline-block;
   position: relative;
 }
+.admin__action-dropdown-wrap .admin__action-dropdown-text:after {
+  left: -6px;
+  right: 0;
+}
+.admin__action-dropdown-wrap .admin__action-dropdown-menu {
+  left: auto;
+  right: 0;
+}
 .admin__action-dropdown-wrap.active .admin__action-dropdown,
 .admin__action-dropdown-wrap._active .admin__action-dropdown {
   border-color: #007bdb;
@@ -1092,9 +1100,7 @@ fieldset[disabled] .address-list .action-delete {
   background-color: #ffffff;
   content: '';
   height: 6px;
-  left: -6px;
   position: absolute;
-  right: 0;
   top: 100%;
 }
 .admin__action-dropdown-wrap.active .admin__action-dropdown-menu,
@@ -1172,7 +1178,6 @@ fieldset[disabled] .address-list .action-delete {
   min-width: 120%;
   padding: 0.5rem 1rem;
   position: absolute;
-  right: 0;
   top: 100%;
   transition: all 0.15s ease;
   z-index: 1;
@@ -1183,9 +1188,8 @@ fieldset[disabled] .address-list .action-delete {
 .admin__action-dropdown-menu > li > a {
   color: #41362f;
   display: block;
-  padding: 0.6rem 0.5rem;
   text-decoration: none;
-  transition: background-color 0.1s linear;
+  padding: 0.6rem 0.5rem;
 }
 .abs-actions-split-xl .action-default,
 .page-actions .actions-split .action-default {
@@ -1376,8 +1380,8 @@ fieldset[disabled] .address-list .action-delete {
 }
 .action-multiselect-wrap._disabled .admin__control-checkbox + label:before,
 .action-multiselect-wrap._disabled .action-multiselect-toggle {
-  opacity: 1;
   border-color: #adadad;
+  opacity: 1;
 }
 .action-multiselect-wrap .admin__control-checkbox,
 .action-multiselect-wrap .admin__control-checkbox + label,
@@ -2242,8 +2246,11 @@ table.table tbody tr:last-child td {
 .page-actions .page-actions-buttons > button.action-back:before,
 .action-previous:before,
 .action-next:before,
-.admin__data-grid-action-columns .admin__action-dropdown:before,
-.admin__data-grid-action-default-view .admin__action-dropdown:before {
+.admin__data-grid-action-bookmarks .admin__action-dropdown:before,
+.admin__data-grid-action-bookmarks .action-submit:before,
+.admin__data-grid-action-bookmarks .action-delete:before,
+.admin__data-grid-action-bookmarks .action-edit:before,
+.admin__data-grid-action-columns .admin__action-dropdown:before {
   -webkit-font-smoothing: antialiased;
   font-family: 'Admin Icons';
   line-height: 1;
@@ -3758,6 +3765,7 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   padding-right: 1.8rem;
   padding-left: .5em;
   white-space: nowrap;
+  transition: background-color 0.1s linear;
 }
 .admin-user .admin__action-dropdown-menu > li > a:hover {
   background-color: #e0f6fe;
@@ -3950,7 +3958,7 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   line-height: 1.4;
   padding: 0.6rem 2rem 0.8rem;
   position: relative;
-  transition: background-color 0.2s linear;
+  transition: background-color 0.1s linear;
 }
 .notifications-entry:hover {
   background-color: #e0f6fe;
@@ -4799,11 +4807,154 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
 .action-next:before {
   content: '\e62a';
 }
-.admin__data-grid-action-columns {
+.admin__data-grid-action-bookmarks .admin__action-dropdown-text:after {
+  right: -6px;
+  left: 0;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu {
+  left: 0;
+  right: auto;
+}
+.admin__data-grid-action-bookmarks._active {
   z-index: 290;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown:before {
+  content: '\e60f';
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu {
+  font-size: 1.3rem;
+  left: 0;
+  padding: 1rem 0 0;
+  right: auto;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu > li {
+  padding: 0 5rem 0 1rem;
+  position: relative;
+  white-space: nowrap;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu > li:not(.action-dropdown-menu-item-last) {
+  transition: background-color 0.1s linear;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu > li:not(.action-dropdown-menu-item-last):hover {
+  background-color: #e3e3e3;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .action-dropdown-menu-item {
+  max-width: 23rem;
+  min-width: 18rem;
+  white-space: normal;
+  word-break: break-all;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .action-dropdown-menu-item-edit {
+  display: none;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .action-dropdown-menu-item-edit .action-dropdown-menu-item-actions {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .action-dropdown-menu-item-last {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .action-dropdown-menu-item-last > a {
+  color: #007bdb;
+  text-decoration: none;
+  display: inline-block;
+  padding-left: 1.1rem;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .action-dropdown-menu-item-last > a:hover {
+  color: #007bdb;
+  text-decoration: underline;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu ._edit .action-dropdown-menu-item {
+  display: none;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu ._edit .action-dropdown-menu-item-edit {
+  display: block;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .admin__control-input {
+  font-size: 1.3rem;
+  min-width: 15rem;
+  width: ~" calc(100% - 4rem)";
+}
+.ie9 .admin__data-grid-action-bookmarks .admin__action-dropdown-menu .admin__control-input {
+  width: 15rem;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .action-dropdown-menu-item-actions {
+  border-left: 1px solid #ffffff;
+  bottom: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 5rem;
+}
+.admin__data-grid-action-bookmarks .admin__action-dropdown-menu .action-dropdown-menu-link {
+  color: #41362f;
+  display: block;
+  text-decoration: none;
+  padding: 1rem 1rem 1rem 1.1rem;
+}
+.admin__data-grid-action-bookmarks .action-submit,
+.admin__data-grid-action-bookmarks .action-delete,
+.admin__data-grid-action-bookmarks .action-edit {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+}
+.admin__data-grid-action-bookmarks .action-submit:hover,
+.admin__data-grid-action-bookmarks .action-delete:hover,
+.admin__data-grid-action-bookmarks .action-edit:hover {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+.admin__data-grid-action-bookmarks .action-submit:before,
+.admin__data-grid-action-bookmarks .action-delete:before,
+.admin__data-grid-action-bookmarks .action-edit:before {
+  font-size: 1.7rem;
+}
+.admin__data-grid-action-bookmarks .action-submit > span,
+.admin__data-grid-action-bookmarks .action-delete > span,
+.admin__data-grid-action-bookmarks .action-edit > span {
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+  position: absolute;
+}
+.admin__data-grid-action-bookmarks .action-delete,
+.admin__data-grid-action-bookmarks .action-edit {
+  padding: 0.6rem 1.4rem;
+}
+.admin__data-grid-action-bookmarks .action-delete:active,
+.admin__data-grid-action-bookmarks .action-edit:active {
+  transform: scale(0.9);
+}
+.admin__data-grid-action-bookmarks .action-submit {
+  padding: 0.6rem 1rem 0.6rem 0.8rem;
+}
+.admin__data-grid-action-bookmarks .action-submit:active {
+  position: relative;
+  right: -1px;
+}
+.admin__data-grid-action-bookmarks .action-submit:before {
+  content: '\e625';
+}
+.admin__data-grid-action-bookmarks .action-delete:before {
+  content: '\e630';
+}
+.admin__data-grid-action-bookmarks .action-edit {
+  padding-top: 0.8rem;
+}
+.admin__data-grid-action-bookmarks .action-edit:before {
+  content: '\e631';
 }
 .admin__data-grid-action-columns._active {
   opacity: .98;
+  z-index: 290;
 }
 .admin__data-grid-action-columns .admin__action-dropdown:before {
   content: '\e610';
@@ -4880,6 +5031,7 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   width: 100%;
 }
 .admin__data-grid-actions-wrap {
+  margin-top: -0.5rem;
   text-align: right;
 }
 .admin__data-grid-actions-wrap .admin__action-dropdown-wrap {
@@ -4887,6 +5039,7 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   text-align: left;
 }
 .admin__data-grid-actions-wrap .admin__action-dropdown-wrap._active:after,
+.admin__data-grid-actions-wrap .admin__action-dropdown-wrap._active + .admin__action-dropdown-wrap:after,
 .admin__data-grid-actions-wrap .admin__action-dropdown-wrap:first-child:after {
   display: none;
 }
@@ -4900,20 +5053,15 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   height: 3.3rem;
   left: 0;
   position: absolute;
-  top: 0;
+  top: 0.5rem;
   z-index: 3;
 }
 .admin__data-grid-actions-wrap .admin__action-dropdown {
+  padding-top: 1.2rem;
   padding-bottom: 1.7rem;
 }
 .admin__data-grid-actions-wrap .admin__action-dropdown:after {
-  margin-top: -0.6rem;
-}
-.admin__data-grid-action-default-view {
-  z-index: 280;
-}
-.admin__data-grid-action-default-view .admin__action-dropdown:before {
-  content: '\e60f';
+  margin-top: -0.4rem;
 }
 .admin__data-grid-loading-mask {
   z-index: 300;

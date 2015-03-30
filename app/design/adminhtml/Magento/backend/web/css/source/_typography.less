@@ -3,6 +3,19 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Utilities
+//  ---------------------------------------------
+
+.link-pattern() {
+    color: @link__color;
+    text-decoration: none;
+    &:hover {
+        color: @link__hover__color;
+        text-decoration: underline;
+    }
+}
+
 .font-face(
     @family-name: @font-family-name__base,
     @font-path: '@{baseDir}fonts/opensans/light/opensans-300',
@@ -30,6 +43,8 @@
     @font-weight: @font-weight__bold,
     @font-style: normal
 );
+
+//
 
 html,
 body {
@@ -105,10 +120,5 @@ p {
 
 //  Links
 a {
-    color: @link__color;
-    text-decoration: none;
-    &:hover {
-        color: @link__hover__color;
-        text-decoration: underline;
-    }
+    .link-pattern();
 }

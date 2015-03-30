@@ -17,7 +17,6 @@
 @data-grid-action-columns-menu-item__margin-bottom: 1.5rem;
 @data-grid-action-columns-menu-item__width: 15.8rem;
 @data-grid-action-columns-menu-item__height: round((@font-size__base * @line-height__base), 1);
-@data-grid-action-columns__z-index: @data-grid-header__z-index - 10;
 
 @data-grid-action-columns-menu-items-to-scroll: 18;
 @data-grid-action-columns-menu-scroll__width: 1.8rem;
@@ -25,9 +24,9 @@
 //
 
 .admin__data-grid-action-columns {
-    z-index: @data-grid-action-columns__z-index;
     &._active {
         opacity: .98;
+        z-index: @data-grid-action__z-index;
     }
     .admin__action-dropdown {
         &:before {
