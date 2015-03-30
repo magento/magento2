@@ -179,6 +179,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         $curl->close();
 
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+            $this->_eventManager->dispatchEvent(['curl_failed', [$response]]);
             throw new \Exception('Failed to update customer!');
         }
     }
