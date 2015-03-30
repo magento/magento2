@@ -39,11 +39,20 @@
 //  _____________________________________________
 
 .admin__fieldset-wrapper-title {
+    .extend__clearfix();
+    border-bottom: 1px solid @color-gray80;
     margin-bottom: 30px;
     padding: 14px 0 16px;
     strong,
     .title {
         &:extend(h2);
+    }
+    .title {
+        float: left;
+        margin: .7rem 0 0;
+    }
+    .actions {
+        float: right;
     }
 }
 
