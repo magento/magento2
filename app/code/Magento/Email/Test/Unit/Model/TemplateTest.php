@@ -542,7 +542,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
                 'templateStyles' => '.body { color: orange }',
                 'templateText' => 'template text',
-                'expectedResult' => '<style type="text/css">' . "\n.body { color: orange }\n</style>\n" . 'template text',
+                'expectedResult' =>
+                    '<style type="text/css">' . "\n.body { color: orange }\n</style>\n" . 'template text',
             ],
         ];
     }

@@ -61,7 +61,7 @@ class OrderSave
      */
     protected function saveOrderGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
-        if (!is_null($order->getExtensionAttributes())) {
+        if (null !== ($order->getExtensionAttributes())) {
             /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
             $giftMessage = $order->getExtensionAttributes()->getGiftMessage();
             try {
@@ -84,7 +84,7 @@ class OrderSave
         if (null !== $order->getItems()) {
             /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
             foreach ($order->getItems() as $orderItem) {
-                if (!is_null($orderItem->getExtensionAttributes())) {
+                if (null !== ($orderItem->getExtensionAttributes())) {
                     /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
                     $giftMessage = $orderItem->getExtensionAttributes()->getGiftMessage();
                     try {
