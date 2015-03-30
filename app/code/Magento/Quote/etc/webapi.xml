@@ -151,4 +151,10 @@
             <resource ref="self" />
         </resources>
     </route>
+    <route url="/V1/carts/:cartId/addresses" method="POST">
+        <service class="Magento\Quote\Api\AddressDetailsManagementInterface" method="saveAddresses"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+    </route>
 </routes>

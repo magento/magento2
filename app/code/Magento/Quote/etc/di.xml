@@ -25,4 +25,6 @@
     <preference for="Magento\Quote\Api\Data\TotalsInterface" type="\Magento\Quote\Model\Cart\Totals" />
     <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="\Magento\Quote\Model\Quote\Cart\Totals\Item" />
     <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="\Magento\Quote\Model\Cart\Currency" />
+    <preference for="Magento\Quote\Api\AddressDetailsManagementInterface" type="Magento\Quote\Model\AddressDetailsManagement" />
+    <preference for="Magento\Quote\Api\Data\AddressDetailsInterface" type="Magento\Quote\Model\AddressDetails" />
 </config>

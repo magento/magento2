@@ -42,7 +42,7 @@ define(
             setTotals: function(totalsData) {
                 totals(totalsData);
             },
-            setBillingAddress: function (address, useForShipping) {
+            setBillingAddress: function (address) {
                 billingAddress(address);
             },
             getBillingAddress: function() {

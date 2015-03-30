@@ -9,12 +9,9 @@ define(
         '../model/quote',
         '../model/addresslist',
         '../model/step-navigator',
-        '../model/url-builder',
-        'mage/storage',
-        'Magento_Ui/js/model/errorlist',
         './select-shipping-address'
     ],
-    function(quote, addressList, navigator, urlBuilder, storage, errorList, selectShippingAddress) {
+    function(quote, addressList, navigator, selectShippingAddress) {
         "use strict";
         return function(billingAddressId, useForShipping) {
             var billingAddress = addressList.getAddressById(billingAddressId);
@@ -23,33 +20,12 @@ define(
                 return false;
             }
 
-            storage.post(
-                urlBuilder.createUrl('/carts/:quoteId/billing-address', {quoteId: quote.getQuoteId()}),
-                JSON.stringify({
-                    "cartId": quote.getQuoteId(),
-                    "address": billingAddress,
-                    "useForShipping": useForShipping
-                })
-            ).success(
-                function (response) {
-                    billingAddress.id = response;
-                    quote.setBillingAddress(billingAddress, useForShipping);
-                    if (useForShipping === '1' && !quote.isVirtual()) {
-                        //TODO: need to use use_for_shipping key in saveBilling request instead additional request
-                        quote.setShippingAddress(1);
-                        navigator.setCurrent('shippingAddress').goNext();
-                        //selectShippingAddress(billingAddressId, true);
-                    } else {
-                        navigator.setCurrent('billingAddress').goNext();
-                    }
-                }
-            ).error(
-                function (response) {
-                    var error = JSON.parse(response.responseText);
-                    errorList.add(error.message);
-                    quote.setBillingAddress(null);
-                }
-            );
+            quote.setBillingAddress(billingAddress);
+            if (useForShipping === '1' && !quote.isVirtual()) {
+                selectShippingAddress(billingAddressId, true);
+            } else {
+                navigator.setCurrent('billingAddress').goNext();
+            }
         };
     }
 );

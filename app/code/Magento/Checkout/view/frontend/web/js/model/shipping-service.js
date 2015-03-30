@@ -5,47 +5,26 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    [
-        'ko',
-        'jquery',
-        'mage/storage',
-        '../model/quote',
-        '../model/url-builder'
-    ],
-    function (ko, $, storage, quote, urlBuilder) {
-        var rates = ko.observableArray([]);
-        quote.getShippingAddress().subscribe(function () {
-            storage.get(
-                urlBuilder.createUrl('/carts/:quoteId/shipping-methods', {quoteId: quote.getQuoteId()})
-            ).success(
-                function (data) {
-                    quote.setRates(data);
-                    var ratesData = [];
-                    rates.removeAll();
-                    $.each(data, function (key, entity) {
-                        if (!ratesData.hasOwnProperty(entity.carrier_code)) {
-                            ratesData[entity.carrier_code] = [];
-                            ratesData[entity.carrier_code]['items'] = [];
-                            ratesData[entity.carrier_code]['carrier_code'] = entity.carrier_code;
-                            ratesData[entity.carrier_code]['carrier_title'] = entity.carrier_title;
-                        }
-                        ratesData[entity.carrier_code]['items'].push(entity);
-
-                    });
-                    for (var i in ratesData) {
-                        rates.push(ratesData[i]);
-                    }
-                }
-            ).error(
-                function (data) {
-                    rates([]);
-                }
-            )
-
-        });
+    ['ko', 'jquery', '../model/quote'],
+    function (ko, $, quote) {
         return {
-            getRates: function () {
-                return rates;
+            shippingRates: ko.observableArray([]),
+            prepareRates: function(ratesData) {
+                var self = this;
+                $.each(ratesData, function (key, entity) {
+                    var rateEntity = [];
+                    rateEntity['items'] = [];
+                    if (!ratesData.hasOwnProperty(entity.carrier_code)) {
+                        rateEntity['carrier_code'] = entity.carrier_code;
+                        rateEntity['carrier_title'] = entity.carrier_title;
+                    }
+                    rateEntity['items'].push(entity);
+                    self.shippingRates.push(rateEntity);
+                });
+                quote.setRates(this.shippingRates());
+            },
+            getRates: function() {
+                return this.shippingRates;
             }
         }
     }

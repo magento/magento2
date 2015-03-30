@@ -87,7 +87,7 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
                 // do nothing if customer is not found by id
             }
             $shippingAddress->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
-            $shippingAddress->setSameAsBilling(0);
+            $shippingAddress->setSameAsBilling($address->getSameAsBilling());
         } else {
             //TODO: Logic for new address creation (from form)
         }
