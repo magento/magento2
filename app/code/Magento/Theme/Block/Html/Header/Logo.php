@@ -79,32 +79,6 @@ class Logo extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieve logo sizes (width and height))
-     *
-     * @return array
-     */
-    public function getLogoSizes()
-    {
-        $logoSrc = $this->getLogoSrc();
-        $logoExtension = strtolower(pathinfo($logoSrc, PATHINFO_EXTENSION));
-        $sizes = ['width' => 0, 'height' => 0];
-
-        if ($logoExtension == 'svg') {
-            $logoSvg = simplexml_load_file($logoSrc);
-            $logoAttr = $logoSvg->attributes();
-            $sizes['width'] = (int)$logoAttr->width;
-            $sizes['height'] = (int)$logoAttr->height;
-        } else {
-            $imageSize = getimagesize($logoSrc);
-            if (is_array($imageSize)) {
-                $sizes['width'] = (int)$imageSize[0];
-                $sizes['height'] = (int)$imageSize[1];
-            }
-        }
-        return $sizes;
-    }
-
-    /**
      * Retrieve logo image URL
      *
      * @return string
