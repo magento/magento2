@@ -82,7 +82,7 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
             throw new NoSuchEntityException(__('There is no item with provided id in the order'));
         };
 
-        if (!$this->helper->getIsMessagesAllowed('order_item', $orderItem, $this->storeManager->getStore())) {
+        if (!$this->helper->isMessagesAllowed('order_item', $orderItem, $this->storeManager->getStore())) {
             throw new NoSuchEntityException(
                 __('There is no item with provided id in the order or gift message isn\'t allowed')
             );
@@ -112,7 +112,7 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
         if ($order->getIsVirtual()) {
             throw new InvalidTransitionException(__('Gift Messages is not applicable for virtual products'));
         }
-        if (!$this->helper->getIsMessagesAllowed('order_item', $orderItem, $this->storeManager->getStore())) {
+        if (!$this->helper->isMessagesAllowed('order_item', $orderItem, $this->storeManager->getStore())) {
             throw new CouldNotSaveException(__('Gift Message is not available'));
         }
 

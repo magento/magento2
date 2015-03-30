@@ -211,19 +211,6 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Alias for isMessagesAllowed(...)
-     *
-     * @param string $type
-     * @param \Magento\Framework\Object $entity
-     * @param \Magento\Store\Model\Store|int|null $store
-     * @return bool|null|string
-     */
-    public function getIsMessagesAllowed($type, \Magento\Framework\Object $entity, $store = null)
-    {
-        return $this->isMessagesAllowed($type, $entity, $store);
-    }
-
-    /**
      * Retrieve escaped and preformated gift message text for specified entity
      *
      * @param \Magento\Framework\Object $entity

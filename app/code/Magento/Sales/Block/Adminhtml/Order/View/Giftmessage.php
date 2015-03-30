@@ -290,7 +290,7 @@ class Giftmessage extends \Magento\Backend\Block\Widget
      */
     public function canDisplayGiftmessage()
     {
-        return $this->_messageHelper->getIsMessagesAllowed(
+        return $this->_messageHelper->isMessagesAllowed(
             'order',
             $this->getEntity(),
             $this->getEntity()->getStoreId()
