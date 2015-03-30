@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="user" module="Magento_User" type="flat" entity_type="admin_user" collection="Magento\User\Model\Resource\User\Collection" repository_class="Magento\User\Test\Repository\User" handler_interface="Magento\User\Test\Handler\User\UserInterface" class="Magento\User\Test\Fixture\User">
     <dataset name="default">
         <field name="username" xsi:type="string">AdminUser%isolation%</field>

@@ -9,7 +9,7 @@
     <div class="admin__scope">
         <div
             class="action-multiselect-wrap"
-            data-bind="css: { '_active': menuVisible },
+            data-bind="css: { '_active': menuVisible, '_disabled': !totalRecords()},
                        outerClick: hideMenu">
             <input
                 id="mass-select-checkbox"

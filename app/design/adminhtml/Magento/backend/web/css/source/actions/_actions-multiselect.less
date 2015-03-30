@@ -13,8 +13,8 @@
     display: inline-block;
     position: relative;
     height: @control-checkbox-radio__size;
-    z-index: @action-multiselect__z-index;
     white-space: nowrap;
+    z-index: @action-multiselect__z-index;
     &:hover {
         .admin__control-checkbox + label:before,
         .action-multiselect-toggle {
@@ -28,6 +28,20 @@
         }
         .action-menu {
             .appearing__on();
+        }
+    }
+    &._disabled {
+        .admin__control-checkbox {
+            + label {
+                &:before {
+                    background-color: @control-checkbox-radio__background-color;
+                }
+            }
+        }
+        .admin__control-checkbox + label:before,
+        .action-multiselect-toggle {
+            opacity: 1;
+            border-color: @field-control__border-color;
         }
     }
     .admin__control-checkbox,
@@ -55,9 +69,6 @@
         &:after {
             right: .3rem;
         }
-        &[disabled] {
-            .disabled();
-        }
         > span {
             .visually-hidden();
         }
@@ -70,10 +81,5 @@
     }
     .action-menu-item {
         white-space: nowrap;
-    }
-    > .admin__control-checkbox {
-        &[disabled] {
-            .disabled();
-        }
     }
 }
