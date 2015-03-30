@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="downloadableProduct" module="Magento_Downloadable" type="eav" entity_type="catalog_product" product_type="downloadable" collection="Magento\Catalog\Model\Resource\Product\Collection" identifier="sku" repository_class="Magento\Downloadable\Test\Repository\DownloadableProduct" handler_interface="Magento\Downloadable\Test\Handler\DownloadableProduct\DownloadableProductInterface" class="Magento\Downloadable\Test\Fixture\DownloadableProduct">
     <dataset name="default">
         <field name="name" xsi:type="string">DownloadableProduct_%isolation%</field>

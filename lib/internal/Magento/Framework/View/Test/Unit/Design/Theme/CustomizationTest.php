@@ -77,8 +77,8 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\Customization::getFiles
-     * covers \Magento\Framework\View\Design\Theme\Customization::__construct
+     * @covers \Magento\Framework\View\Design\Theme\Customization::getFiles
+     * @covers \Magento\Framework\View\Design\Theme\Customization::__construct
      */
     public function testGetFiles()
     {
@@ -95,7 +95,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\Customization::getFilesByType
+     * @covers \Magento\Framework\View\Design\Theme\Customization::getFilesByType
      */
     public function testGetFilesByType()
     {
@@ -114,7 +114,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\Customization::generateFileInfo
+     * @covers \Magento\Framework\View\Design\Theme\Customization::generateFileInfo
      */
     public function testGenerationOfFileInfo()
     {
@@ -124,7 +124,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\Customization::getCustomizationPath
+     * @covers \Magento\Framework\View\Design\Theme\Customization::getCustomizationPath
      */
     public function testGetCustomizationPath()
     {
@@ -141,7 +141,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\Customization::getThemeFilesPath
+     * @covers \Magento\Framework\View\Design\Theme\Customization::getThemeFilesPath
      * @dataProvider getThemeFilesPathDataProvider
      * @param string $type
      * @param string $expectedMethod
@@ -174,7 +174,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\Customization::getCustomViewConfigPath
+     * @covers \Magento\Framework\View\Design\Theme\Customization::getCustomViewConfigPath
      */
     public function testGetCustomViewConfigPath()
     {
@@ -191,7 +191,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\Customization::reorder
+     * @covers \Magento\Framework\View\Design\Theme\Customization::reorder
      * @dataProvider customFileContent
      */
     public function testReorder($sequence, $filesContent)
@@ -267,7 +267,7 @@ class CustomizationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\Customization::delete
+     * @covers \Magento\Framework\View\Design\Theme\Customization::delete
      */
     public function testDelete()
     {
