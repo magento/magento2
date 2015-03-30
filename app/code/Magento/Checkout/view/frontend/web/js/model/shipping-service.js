@@ -9,7 +9,7 @@ define(
     function (ko, $, quote) {
         return {
             shippingRates: ko.observableArray([]),
-            prepareRates: function(ratesData) {
+            setShippingRates: function(ratesData) {
                 var self = this;
                 $.each(ratesData, function (key, entity) {
                     var rateEntity = [];

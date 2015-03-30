@@ -30,7 +30,7 @@ define(
             ).done(
                 function(result) {
                     quote.setShippingAddress(shippingAddress);
-                    shippingService.prepareRates(result.shipping_methods);
+                    shippingService.setShippingRates(result.shipping_methods);
                     paymentService.setPaymentMethods(result.payment_methods);
                     navigator.setCurrent('shippingAddress').goNext();
                 }
