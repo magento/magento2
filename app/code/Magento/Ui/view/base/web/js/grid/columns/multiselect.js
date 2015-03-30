@@ -43,9 +43,22 @@ define([
             }
         },
 
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Multiselect} Chainable.
+         */
         initObservable: function () {
             this._super()
-                .observe('menuVisible selected excluded excludeMode totalSelected allSelected indetermine');
+                .observe([
+                    'menuVisible',
+                    'selected',
+                    'excluded',
+                    'excludeMode',
+                    'totalSelected',
+                    'allSelected',
+                    'indetermine'
+                ]);
 
             return this;
         },
@@ -75,7 +88,7 @@ define([
         },
 
         /**
-         * Sets isAllSelected observable to false and deselects all items on current page.
+         * Deselects all grid records.
          */
         deselectAll: function () {
             this.excludeMode(false);
@@ -85,7 +98,7 @@ define([
         },
 
         /**
-         * If isAllSelected is true, deselects all, else selects all
+         * Selects or deselects all records.
          */
         toggleSelectAll: function () {
             return this.allSelected() ?
@@ -94,14 +107,14 @@ define([
         },
 
         /**
-         * Selects all items on current page, adding their ids to selected observable array.
+         * Selects all records on the current page.
          */
         selectPage: function () {
             this.selected(this.getIds());
         },
 
         /**
-         * Deselects all items on current page, emptying selected observable array
+         * Deselects all records on the current page.
          */
         deselectPage: function () {
             this.selected.removeAll();
@@ -109,7 +122,8 @@ define([
 
         /**
          * Clears the array of not selected records.
-         * @returns {MassActions} Chainable.
+         *
+         * @returns {Multiselect} Chainable.
          */
         clearExcluded: function () {
             this.excluded.removeAll();
@@ -119,6 +133,7 @@ define([
 
         /**
          * Retrieve all id's from available records.
+         *
          * @param {Boolean} [exclude] - Whether to exclude not selected ids' from result.
          * @returns {Array} An array of ids'.
          */
@@ -131,6 +146,12 @@ define([
                 ids;
         },
 
+        /**
+         * Recalculates list of the excluded records.
+         *
+         * @param {Array} selected - List of the currently selected records.
+         * @returns {Multiselect} Chainable.
+         */
         updateExcluded: function (selected) {
             var excluded = this.excluded(),
                 fromPage = _.difference(this.getIds(), selected);
@@ -143,6 +164,11 @@ define([
             return this;
         },
 
+        /**
+         * Calculates number of the selected records.
+         *
+         * @returns {Multiselect} Chainable.
+         */
         countSelected: function () {
             var total = this.totalRecords(),
                 excluded = this.excluded().length,
@@ -157,32 +183,28 @@ define([
             return this;
         },
 
+        /**
+         * Exports selections to the data provider.
+         */
         exportSelections: function () {
-            var data;
+            var data = {},
+                type;
 
-            if (this.excludeMode()) {
-                data = {
-                    all_selected: true,
-                    excluded: this.excluded()
-                };
-            } else {
-                data = {
-                    selected: this.selected()
-                };
-            }
+            type = this.excludeMode() ? 'excluded' : 'selected';
 
-            data.totalSelected = this.totalSelected();
+            data[type] = this[type]();
+            data.total = this.totalSelected();
 
             this.source.set('config.multiselect', data);
         },
 
         /**
-         * Defines if provided select action should be visible.
+         * Defines if provided select/deselect action is relevant.
          *
          * @param {String} actionId - Id of the action to be checked.
          * @returns {Boolean}
          */
-        isSelectVisible: function (actionId) {
+        isActionRelevant: function (actionId) {
             var pageIds = this.getIds().length,
                 multiplePages = pageIds < this.totalRecords();
 
@@ -204,11 +226,11 @@ define([
         },
 
         /**
-         * Defines if current page has selected items.
+         * Defines if current page has selected records on it.
          *
-         * @param {Boolean} [all=false] - If set as 'true' checks that every
-         *      item on the page is selected. Otherwise checks that
-         *      page has some selected items.
+         * @param {Boolean} [all=false] - If set to 'true' checks that every
+         *      record on the page is selected. Otherwise checks that
+         *      page has some selected records.
          * @returns {Boolean}
          */
         isPageSelected: function (all) {
