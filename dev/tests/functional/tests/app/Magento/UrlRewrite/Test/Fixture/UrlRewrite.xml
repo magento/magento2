@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="urlRewrite" module="Magento_UrlRewrite" type="virtual" entity_type="url_rewrite" collection="Magento\UrlRewrite\Model\Resource\UrlRewriteCollection" identifier="request_path" repository_class="Magento\UrlRewrite\Test\Repository\UrlRewrite" handler_interface="Magento\UrlRewrite\Test\Handler\UrlRewrite\UrlRewriteInterface" class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
     <dataset name="default">
         <field name="store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
