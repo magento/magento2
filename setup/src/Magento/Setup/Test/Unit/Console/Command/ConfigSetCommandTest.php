@@ -59,8 +59,7 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--db_host' => 'host']);
         $this->assertSame(
-            'No module configuration is available, so all modules are enabled.' . PHP_EOL
-            . 'You saved the deployment config.' . PHP_EOL,
+            'You saved the deployment config.' . PHP_EOL,
             $commandTester->getDisplay()
         );
     }
@@ -116,9 +115,13 @@ class ConfigSetCommandTest extends \PHPUnit_Framework_TestCase
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['--db_host' => 'host']);
+        if ($interactionType) {
+            $message = 'You saved the deployment config.' . PHP_EOL;
+        } else {
+            $message = 'You did not save the deployment config.'.PHP_EOL;
+        }
         $this->assertSame(
-            'No module configuration is available, so all modules are enabled.' . PHP_EOL
-            . 'You saved the deployment config.' . PHP_EOL,
+            $message,
             $commandTester->getDisplay()
         );
     }

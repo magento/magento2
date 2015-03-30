@@ -73,6 +73,9 @@ class ConfigSetCommand extends Command
     {
         $inputOptions = $input->getOptions();
         $optionCollection = $this->configModel->getAvailableOptions();
+        $optionsToChange = [];
+        $optionsWithDefaultValues = [];
+
         foreach ($optionCollection as $option) {
             $currentValue = $this->deploymentConfig->get($option->getConfigPath());
             if (($currentValue !== null) && ($inputOptions[$option->getName()] !== null)) {
@@ -82,17 +85,41 @@ class ConfigSetCommand extends Command
                     '<question>Overwrite the existing configuration for ' . $option->getName() . '?[Y|n]</question>'
                 )) {
                     $inputOptions[$option->getName()] = null;
+                } else {
+                    $optionsToChange[$option->getName()] = $inputOptions[$option->getName()];
+                }
+            } else {
+                if ($inputOptions[$option->getName()] !== null) {
+                    $optionsToChange[$option->getName()] = $inputOptions[$option->getName()];
                 }
             }
+            if ($option->getDefault() === $inputOptions[$option->getName()]
+                && $inputOptions[$option->getName()] !== null
+            ) {
+                $optionsWithDefaultValues[] = $option->getName();
+            }
         }
+
         $inputOptions = array_filter(
             $inputOptions,
             function ($value) {
                 return $value !== null;
             }
         );
+
         $this->configModel->process($inputOptions);
-        $output->writeln('<info>You saved the deployment config.</info>');
+        if (count($optionsWithDefaultValues) > 0) {
+            $defaultValuesMessage = implode(', ', $optionsWithDefaultValues);
+            $output->writeln(
+                '<info>You saved default value(s) for the next option(s): ' . $defaultValuesMessage . '.</info>'
+            );
+        } else {
+            if (count($optionsToChange) > 0) {
+                $output->writeln('<info>You saved the deployment config.</info>');
+            } else {
+                $output->writeln('<info>You did not save the deployment config.</info>');
+            }
+        }
     }
 
     /**
@@ -100,12 +127,6 @@ class ConfigSetCommand extends Command
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->moduleList->isModuleInfoAvailable()) {
-            $output->writeln(
-                '<info>No module configuration is available, so all modules are enabled.</info>'
-            );
-        }
-
         $inputOptions = $input->getOptions();
 
         $errors = $this->configModel->validate($inputOptions);
