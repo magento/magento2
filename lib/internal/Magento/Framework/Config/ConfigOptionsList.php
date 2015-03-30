@@ -143,21 +143,21 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 self::INPUT_KEY_DB_NAME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_NAME,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_NAME,
                 'Database name',
                 'magento2'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_USER,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_USER,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_USER,
                 'Database server username',
                 'root'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_PASS,
                 TextConfigOption::FRONTEND_WIZARD_PASSWORD,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_PASS,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_PASS,
                 'Database server password',
                 ''
             ),
@@ -170,14 +170,14 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 self::INPUT_KEY_DB_MODEL,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_MODEL,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_MODEL,
                 'Database type',
                 'mysql4'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_INIT_STATEMENTS,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::INPUT_KEY_DB_INIT_STATEMENTS,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_INIT_STATEMENTS,
                 'Database  initial set of commands',
                 'SET NAMES utf8;'
             ),
