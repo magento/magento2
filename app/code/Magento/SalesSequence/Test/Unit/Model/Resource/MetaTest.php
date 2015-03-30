@@ -3,14 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Test\Unit\Model\Resource\Sequence;
+namespace Magento\SalesSequence\Test\Unit\Model\Resource;
 
-use Magento\SalesSequence\Model\Resource\Sequence\Profile;
+use Magento\Framework\App\Resource;
+use Magento\SalesSequence\Model\Resource\Meta;
 
 /**
- * Class ProfileTest
+ * Class MetaTest
  */
-class ProfileTest extends \PHPUnit_Framework_TestCase
+class MetaTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
@@ -23,22 +24,27 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
     private $dbContext;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\ProfileFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\MetaFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $profileFactory;
+    private $metaFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit_Framework_MockObject_MockObject
      */
     private $meta;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\Profile | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Profile | \PHPUnit_Framework_MockObject_MockObject
      */
     private $profile;
 
     /**
-     * @var Profile
+     * @var \Magento\SalesSequence\Model\Resource\Profile | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resourceProfile;
+
+    /**
+     * @var Meta
      */
     private $resource;
 
@@ -73,9 +79,16 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->profileFactory = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\ProfileFactory',
+        $this->metaFactory = $this->getMock(
+            'Magento\SalesSequence\Model\MetaFactory',
             ['create'],
+            [],
+            '',
+            false
+        );
+        $this->resourceProfile = $this->getMock(
+            'Magento\SalesSequence\Model\Resource\Profile',
+            ['loadActiveProfile', 'save'],
             [],
             '',
             false
@@ -96,67 +109,75 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->meta = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\Meta',
+            'Magento\SalesSequence\Model\Meta',
             [],
             [],
             '',
             false
         );
         $this->profile = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\Profile',
+            'Magento\SalesSequence\Model\Profile',
             [],
             [],
             '',
             false
         );
-        $this->resource = new Profile(
+        $this->resource = new Meta(
             $this->dbContext,
-            $this->profileFactory
+            $this->metaFactory,
+            $this->resourceProfile
         );
     }
 
-    public function testLoadActiveProfile()
+    public function testLoadBy()
     {
-        $profileTableName = 'sequence_profile';
-        $profileIdFieldName = 'profile_id';
+        $metaTableName = 'sequence_meta';
+        $metaIdFieldName = 'meta_id';
+        $entityType = 'order';
+        $storeId = 1;
         $metaId = 1;
-        $profileId = 20;
-        $profileData = [
-            'profile_id' => 20,
-            'meta_id' => 1
+        $metaData = [
+            'meta_id' => 1,
+            'profile_id' => 2
         ];
-        $this->profileFactory->expects($this->once())->method('create')->willReturn($this->profile);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
-            ->willReturn($profileTableName);
+            ->willReturn($metaTableName);
         $this->adapter->expects($this->any())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))
             ->method('from')
-            ->with($profileTableName, [$profileIdFieldName])
+            ->with($metaTableName, [$metaIdFieldName])
             ->willReturn($this->select);
         $this->select->expects($this->at(1))
             ->method('where')
-            ->with('meta_id = :meta_id')
-            ->willReturn($this->select);
-        $this->select->expects($this->at(2))
-            ->method('where')
-            ->with('is_active = 1')
+            ->with('entity_type = :entity_type AND store_id = :store_id')
             ->willReturn($this->select);
         $this->adapter->expects($this->once())
             ->method('fetchOne')
-            ->with($this->select, ['meta_id' => $metaId])
-            ->willReturn($profileId);
-        $this->select->expects($this->at(3))
+            ->with($this->select, ['entity_type' => $entityType, 'store_id' => $storeId])
+            ->willReturn($metaId);
+        $this->metaFactory->expects($this->once())->method('create')->willReturn($this->meta);
+        $this->stepCheckSaveWithActiveProfile($metaData);
+        $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
+    }
+
+    /**
+     * @param $metaData
+     */
+    private function stepCheckSaveWithActiveProfile($metaData)
+    {
+        $this->select->expects($this->at(2))
             ->method('from')
-            ->with($profileTableName, '*', null)
+            ->with('sequence_meta', '*', null)
             ->willReturn($this->select);
         $this->adapter->expects($this->any())
             ->method('quoteIdentifier');
-        $this->adapter->expects($this->once())->method('fetchRow')->willReturn($profileData);
-        $this->profile->expects($this->at(0))->method('setData')->with($profileData);
-        $this->assertEquals($this->profile, $this->resource->loadActiveProfile($metaId));
+        $this->adapter->expects($this->once())->method('fetchRow')->willReturn($metaData);
+        $this->resourceProfile->expects($this->once())->method('loadActiveProfile')->willReturn($this->profile);
+        $this->meta->expects($this->at(0))->method('setData')->with($metaData);
+        $this->meta->expects($this->at(2))->method('setData')->with('active_profile', $this->profile);
     }
 }

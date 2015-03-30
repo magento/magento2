@@ -3,20 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Sequence;
+namespace Magento\SalesSequence\Model;
 
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * Class Profile
+ * Class Meta
  */
-class Profile extends AbstractModel
+class Meta extends AbstractModel
 {
     /**
      * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init('Magento\SalesSequence\Model\Resource\Sequence\Profile');
+        $this->_init('Magento\SalesSequence\Model\Resource\Meta');
     }
 }

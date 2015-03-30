@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\App\Resource;
-use Magento\SalesSequence\Model\Sequence\SequenceManager;
+use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\EntitySnapshot;
@@ -38,7 +38,7 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SequenceManager $sequenceManager
+     * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param InvoiceGrid $gridAggregator
      * @param null $resourcePrefix
@@ -46,7 +46,7 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
-        SequenceManager $sequenceManager,
+        Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         InvoiceGrid $gridAggregator,
         $resourcePrefix = null

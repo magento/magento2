@@ -7,7 +7,6 @@ namespace Magento\SalesSequence\Model;
 
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\DB\Sequence\SequenceInterface;
-use Magento\SalesSequence\Model\Sequence\Meta;
 
 /**
  * Class Sequence

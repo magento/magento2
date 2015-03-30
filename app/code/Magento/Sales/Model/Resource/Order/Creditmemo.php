@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\App\Resource as AppResource;
-use Magento\SalesSequence\Model\Sequence\SequenceManager;
+use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\EntitySnapshot;
@@ -42,7 +42,7 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SequenceManager $sequenceManager
+     * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param CreditmemoGrid $gridAggregator
      * @param string|null $resourcePrefix
@@ -50,7 +50,7 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
-        SequenceManager $sequenceManager,
+        Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         CreditmemoGrid $gridAggregator,
         $resourcePrefix = null

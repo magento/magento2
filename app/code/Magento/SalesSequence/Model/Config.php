@@ -12,6 +12,11 @@ class Config
 {
     /**
      * Default sequence values
+     * Prefix represents prefix for sequence: AA000
+     * Suffix represents suffix: 000AA
+     * startValue represents initial value
+     * warning value will be using for alert messages when increment closing to overflow
+     * maxValue represents last available increment id in system
      *
      * @var array
      */

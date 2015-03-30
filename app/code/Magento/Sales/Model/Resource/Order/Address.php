@@ -34,7 +34,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridPool $gridPool
@@ -44,7 +44,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,

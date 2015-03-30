@@ -102,7 +102,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 $this->equalTo(
                     [
                         'order' => $this->orderMock,
-                        'invoice' => $this->creditmemoMock,
+                        'creditmemo' => $this->creditmemoMock,
                         'comment' => $comment,
                         'billing' => $billingAddress,
                         'payment_html' => 'payment',
@@ -144,7 +144,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 $this->equalTo(
                     [
                         'order' => $this->orderMock,
-                        'invoice' => $this->creditmemoMock,
+                        'creditmemo' => $this->creditmemoMock,
                         'billing' => $billingAddress,
                         'payment_html' => 'payment',
                         'comment' => $comment,

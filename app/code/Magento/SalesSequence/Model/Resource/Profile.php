@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Resource\Sequence;
+namespace Magento\SalesSequence\Model\Resource;
 
-use Magento\SalesSequence\Model\Sequence\Meta as ModelMeta;
+use Magento\SalesSequence\Model\Meta as ModelMeta;
 use Magento\Framework\Model\Resource\Db\Context as DatabaseContext;
-use Magento\SalesSequence\Model\Sequence\ProfileFactory;
+use Magento\SalesSequence\Model\ProfileFactory;
 
 /**
  * Class Profile
@@ -54,7 +54,7 @@ class Profile extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Load active profile
      *
      * @param int $metadataId
-     * @return \Magento\SalesSequence\Model\Sequence\Profile
+     * @return \Magento\SalesSequence\Model\Profile
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadActiveProfile($metadataId)
