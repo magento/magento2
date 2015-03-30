@@ -98,7 +98,7 @@ class State implements StateInterface
     public function persist()
     {
         $this->load();
-        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => ['cache_type' => $this->statuses]]);
+        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => [self::CACHE_KEY => $this->statuses]]);
     }
 
     /**
