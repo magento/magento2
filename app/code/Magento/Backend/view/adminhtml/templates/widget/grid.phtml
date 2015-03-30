@@ -55,7 +55,7 @@ $numColumns = sizeof($block->getColumns());
                             <?php echo __('View') ?>
                             <select name="<?php echo $block->getVarNameLimit() ?>"
                                     onchange="<?php echo $block->getJsObjectName() ?>.loadByElement(this)" <?php echo $block->getUiId('per-page') ?>
-                                    class="select">
+                                    class="select admin__control-select">
                                 <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
                                     selected="selected"<?php endif; ?>>20
                                 </option>

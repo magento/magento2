@@ -12,11 +12,315 @@
 @import "../mui/styles/vars.less";
 @import (reference) "../mui/styles/abstract.less"; // Import some abstract
 
+/* DO NOT REMOVE! Can be dangerous (need for Product Creation) */
+.collapse.in,
+.no-js .collapse {
+    height: auto !important;
+    overflow: visible;
+}
+.hidden {
+    display: none;
+    visibility: hidden;
+}
+input.no-display,
+.no-display {
+    display: none;
+}
+.invisible {
+    visibility: hidden;
+}
+/* DO NOT REMOVE! Can be dangerous (need for Product Creation) */
+
 .admin__scope-old {
     box-sizing: content-box;
 
     @import "../mui/styles/base.less";
     @import "../mui/styles/table.less"; // Import table styles
+
+    .field {
+        position: relative;
+        box-sizing: border-box;
+        margin: 0 0 12px 0;
+    }
+
+    .field > .label {
+        margin: 0 0 6px;
+    }
+
+    /* TODO: remove after all templates refactoring */
+    span.required {
+        display: none;
+    }
+
+    .field.required > .label:after {
+        content: '*';
+        color: red;
+        margin-left: 3px;
+    }
+
+    /*
+        Control with added before and after content
+    -------------------------------------- */
+    .addon {
+        padding: 0;
+        display: table;
+        width: 100%;
+    }
+
+    .addon textarea,
+    .addon select,
+    .addon input {
+        width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        margin: 0;
+    }
+
+    .addon select {
+        width: auto;
+    }
+
+    .addon select + .addafter {
+        border: none;
+    }
+
+    .ie .addon textarea,
+    .ie .addon select {
+        display:inline-block;
+    }
+
+    .addon textarea:first-child,
+    .addon select:first-child,
+    .addon input[type=text]:first-child,
+    .addon .addbefore:first-child {
+        border-radius: 0;
+    }
+
+    .addon textarea:last-child,
+    .addon select:last-child,
+    .addon input[type=text]:last-child,
+    .addon .addafter:last-child {
+        border-radius: 0;
+    }
+
+    .addon .addbefore,
+    .addon .addafter {
+        background: #f5f5f5;
+        background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+        background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+        background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+        background-image: linear-gradient(top, #ffffff, #e6e6e6);
+        background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+        background-repeat: repeat-x;
+        vertical-align: middle;
+        width: 1px;
+        color: #666;
+        font-size: 11px;
+        font-weight: bold;
+        height: 0;
+        white-space: nowrap;
+        display: inline-block;
+        display: table-cell;
+        padding: 4px;
+        border: solid #ccc;
+        border-width: 1px 0 1px 1px;
+    }
+
+    /*.addon {direction: rtl; }
+    .addon > * {direction: ltr; }*/
+
+    .addon *:focus ~ .addafter {
+
+    }
+
+    .addon .addafter {
+        border-width: 1px 1px 1px 0;
+    }
+
+    .choice .addafter,
+    .choice .addbefore {
+        display: inline;
+    }
+
+    /* Addon left aligned */
+    .field-price .addon {
+        direction: rtl;
+    }
+
+    .field-price .addon > * {
+        direction: ltr;
+    }
+
+    .field-price .addon .addafter {
+        border-width: 1px 0 1px 1px;
+        border-radius: 1px 0 0 1px;
+    }
+
+    /*
+        Form actions
+    -------------------------------------- */
+    .form-actions {
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    /*
+        Default view for fields: Labels are above the controls
+    -------------------------------------- */
+    .form-inline .label,
+    .form-inline .control {
+        margin: 0;
+        float: left;
+        width: 55%;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .form-inline .label {
+        width: 45%;
+        text-align: right;
+        padding: 5px 15px 0 0;
+    }
+
+    .form-inline .choice {
+        position: relative;
+        z-index: 1;
+    }
+
+    .form-inline .choice .control {
+        position: absolute;
+        margin-top: 4px;
+        width: auto;
+        left: 45%;
+    }
+
+    .form-inline .choice .tooltip {
+        margin-left: 20px;
+        position: relative;
+        z-index: 1;
+        margin-top: 7px;
+    }
+
+    .form-inline .with-tooltip:not(.choice) {
+        padding-top: 20px;
+    }
+
+    .control .control-value {
+        display: inline-block;
+        padding: 6px 0 0;
+        vertical-align: top;
+    }
+
+    .control .control-value.special {
+        font-weight: bold;
+    }
+
+    /*
+        Field with multiple fields
+    -------------------------------------- */
+    /* TODO: rename 'fields-group' class. Propose - 'group' */
+
+    [class^="fields-group-"] .field {
+        vertical-align: top;
+        margin: 0;
+        display: inline-block;
+    }
+
+    [class^="fields-group-"] .field .label {
+        width: auto;
+        float: none;
+        text-align: left;
+        padding-right: 0;
+    }
+
+    [class^="fields-group-"] .choice .label {
+        display: inline;
+    }
+
+    [class^="fields-group-"] .field .control {
+        float: none;
+        width: auto;
+        margin-left: 0;
+    }
+
+    @media screen and (max-width: 960px) {
+        [class^="fields-group-"] .field {
+            width: 100% !important;
+            margin-bottom: 20px !important;
+        }
+    }
+
+    [class^="fields-group-"] {
+        letter-spacing: -0.31em; /* webkit */
+        word-spacing: -0.43em; /* IE < 8 && gecko */
+    }
+
+    [class^="fields-group-"] > * {
+        letter-spacing: normal;
+        word-spacing: normal;
+    }
+
+    /*
+        Form field with nested controls inside
+    -------------------------------------- */
+    .nested {
+        padding: 6px 0 0;
+    }
+
+    .nested .choice .label,
+    .nested .choice .control {
+        float: none;
+        width: auto;
+        position: static;
+        left: auto;
+        text-align: left;
+        display: inline;
+        padding: 0;
+    }
+
+    .control *:first-child {
+        /*margin-top: 0;*/
+    }
+
+    .nested .field {
+        width: auto;
+        padding: 0;
+        margin: 5px 0;
+        display: block;
+    }
+
+    .nested .field:first-child {
+        margin-top: 0;
+    }
+
+    .nested .field:last-child {
+        margin-bottom: 0;
+    }
+
+    /*
+        Clearfix
+    -------------------------------------- */
+    .buttons-set:before,
+    .buttons-set:after,
+    .form-inline .field:before,
+    .form-inline .field:after,
+    .form-actions:before,
+    .form-actions:after,
+    .clearfix:before,
+    .clearfix:after {
+        content: "";
+        display: table;
+    }
+
+    .buttons-set:after,
+    .form-inline .field:after,
+    .form-actions:after,
+    .clearfix:after {
+        clear: both;
+    }
+
 
     //
     //  Reset 'button view' for actions
@@ -624,11 +928,11 @@
     input[readonly],
     select[readonly],
     textarea[readonly] {
+        background-color: #e9e9e9;
+        border-color: #adadad;
+        color: #303030;
+        opacity: .5;
         cursor: not-allowed;
-        background-color: #fff;
-        border-color: #eee;
-        box-shadow: none;
-        color: #999;
     }
 
     select[disabled] option[selected] {
@@ -5723,5 +6027,70 @@
                 }
             }
         }
+    }
+}
+
+/* ==|== print styles =======================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+        filter: none !important;
+        -ms-filter: none !important;
+    }
+
+    /* Black prints faster: h5bp.com/s */
+    a, a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after {
+        content: "";
+    }
+
+    /* Don't show links for images, or javascript/internal links */
+    pre, blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    /* h5bp.com/t */
+    tr, img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2, h3 {
+        page-break-after: avoid;
     }
 }
