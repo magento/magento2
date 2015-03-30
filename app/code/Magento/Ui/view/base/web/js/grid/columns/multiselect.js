@@ -13,8 +13,9 @@ define([
             headerTmpl: 'ui/grid/columns/multiselect',
             bodyTmpl: 'ui/grid/cells/multiselect',
             menuVisible: false,
-            selectMode: 'selected',
+            excludeMode: false,
             allSelected: false,
+            indetermine: false,
             selected: [],
             excluded: [],
             actions: [{
@@ -38,23 +39,36 @@ define([
 
             listens: {
                 selected: 'onSelectedChange',
-                '<%= provider %>:data.items': 'onRowsChange'
+                rows: 'onRowsChange'
             }
         },
 
         initObservable: function () {
             this._super()
-                .observe('menuVisible selected excluded selectMode totalSelected allSelected');
+                .observe('menuVisible selected excluded excludeMode totalSelected allSelected indetermine');
 
             return this;
         },
 
         /**
-         * Sets isAllSelected observable to true and selects all items on current page.
+         * Toggles menu with a list of select actions.
+         */
+        toggleMenu: function () {
+            this.menuVisible(!this.menuVisible());
+        },
+
+        /**
+         * Hides menu with a list of select actions.
+         */
+        hideMenu: function () {
+            this.menuVisible(false);
+        },
+
+        /**
+         * Selects all grid records, even those that are not visible on the page.
          */
         selectAll: function () {
-            this.selectMode('all');
-            this.allSelected(true);
+            this.excludeMode(true);
 
             this.clearExcluded()
                 .selectPage();
@@ -64,41 +78,33 @@ define([
          * Sets isAllSelected observable to false and deselects all items on current page.
          */
         deselectAll: function () {
-            this.selectMode('selected');
-            this.allSelected(false);
-            this.deselectPage();
+            this.excludeMode(false);
+
+            this.clearExcluded()
+                .deselectPage();
         },
 
         /**
          * If isAllSelected is true, deselects all, else selects all
          */
-        toggle: function () {
-            var selectMode = this.selectMode(),
-                hasItems = this.totalRecords();
-
-            if (hasItems) {
-                selectMode === 'selected' ? this.selectAll() : this.deselectAll();
-            }
+        toggleSelectAll: function () {
+            return this.allSelected() ?
+                this.deselectAll() :
+                this.selectAll();
         },
 
         /**
          * Selects all items on current page, adding their ids to selected observable array.
-         * @returns {MassActions} Chainable.
          */
         selectPage: function () {
             this.selected(this.getIds());
-
-            return this;
         },
 
         /**
          * Deselects all items on current page, emptying selected observable array
-         * @returns {MassActions} Chainable.
          */
         deselectPage: function () {
             this.selected.removeAll();
-
-            return this;
         },
 
         /**
@@ -138,45 +144,23 @@ define([
         },
 
         countSelected: function () {
-            var totalCount = this.totalRecords(),
-                excludedCount = this.excluded().length,
-                count = this.selected().length,
-                selectMode = this.selectMode(),
-                hasNoExcluded = !excludedCount;
+            var total = this.totalRecords(),
+                excluded = this.excluded().length,
+                selected = this.selected().length;
 
-            if (selectMode === 'all') {
-                count = totalCount - excludedCount;
+            if (this.excludeMode()) {
+                selected = total - excluded;
             }
 
-            this.allSelected(hasNoExcluded);
-
-            this.totalSelected(count);
+            this.totalSelected(selected);
 
             return this;
         },
 
-        /**
-         * Toggles menu visible state
-         */
-        toggleMenu: function () {
-            this.menuVisible(!this.menuVisible());
-        },
-
-        /**
-         * Hides menu
-         */
-        hideMenu: function () {
-            this.menuVisible(false);
-        },
-
-        /**
-         * Exports component data to source by 'config.multiselect' namespace
-         */
         exportSelections: function () {
-            var data,
-                selectMode = this.selectMode();
+            var data;
 
-            if (selectMode === 'all') {
+            if (this.excludeMode()) {
                 data = {
                     all_selected: true,
                     excluded: this.excluded()
@@ -193,102 +177,110 @@ define([
         },
 
         /**
-         * Defines whether the action should be visible or not.
+         * Defines if provided select action should be visible.
+         *
+         * @param {String} actionId - Id of the action to be checked.
+         * @returns {Boolean}
          */
-        isSelectVisible: function (action) {
-            var ids                 = this.getIds(),
-                idsCount            = ids.length,
-                totalCount          = this.totalRecords(),
-                selected            = this.selected(),
-                selectMode          = this.selectMode(),
-                hasSelections       = selected.length,
-                pageIsNotSelected   = _.difference(ids, selected).length,
-                pageHasSelections   = _.intersection(ids, selected).length;
+        isSelectVisible: function (actionId) {
+            var pageIds = this.getIds().length,
+                multiplePages = pageIds < this.totalRecords();
 
-            if (!ids.length) {
-                return false;
-            }
-
-            switch (action) {
+            switch (actionId) {
                 case 'selectPage':
-                    return idsCount < totalCount && pageIsNotSelected;
-
-                case 'selectAll':
-                    return selectMode === 'selected';
-
-                case 'deselectAll':
-                    return hasSelections;
+                    return multiplePages && !this.isPageSelected(true);
 
                 case 'deselectPage':
-                    return pageHasSelections;
+                    return multiplePages && this.isPageSelected();
 
-                default:
-                    return true;
+                case 'selectAll':
+                    return !this.allSelected();
+
+                case 'deselectAll':
+                    return this.totalSelected() > 0;
             }
+
+            return true;
         },
 
         /**
-         * Is invoked when "selected" property has changed.
+         * Defines if current page has selected items.
          *
-         * @param   {Array} selected - The list of selected ids
+         * @param {Boolean} [all=false] - If set as 'true' checks that every
+         *      item on the page is selected. Otherwise checks that
+         *      page has some selected items.
+         * @returns {Boolean}
          */
-        onSelectedChange: function (selected) {
-            this.updateExcluded(selected)
-                .updateSelectMode()
-                .countSelected()
-                .exportSelections();
+        isPageSelected: function (all) {
+            var pageIds = this.getIds(),
+                selected = this.selected(),
+                excluded = this.excluded(),
+                iterator = all ? 'every' : 'some';
+
+            if (this.allSelected()) {
+                return true;
+            }
+
+            if (this.excludeMode()) {
+                return pageIds[iterator](function (id) {
+                    return !~excluded.indexOf(id);
+                });
+            }
+
+            return pageIds[iterator](function (id) {
+                return !!~selected.indexOf(id);
+            });
         },
 
         /**
-         * Sets "selectMode" to "selected", if all items have been unchecked
-         *     after "selectAll" action is performed.
-         *
-         * @returns {MassActions} Chainable.
+         * Updates values of the 'allSelected'
+         * and 'indetermine' properties.
          */
-        updateSelectMode: function () {
-            var excludedCount   = this.excluded().length,
-                noSelected      = !this.selected().length,
-                totalCount      = this.totalRecords(),
-                allExcluded     = excludedCount === totalCount,
-                selectAllMode   = this.selectMode() === 'all';
+        updateState: function () {
+            var selected        = this.selected().length,
+                excluded        = this.excluded().length,
+                totalSelected   = this.totalSelected(),
+                totalRecords    = this.totalRecords(),
+                allSelected     = totalSelected === totalRecords;
 
-            if (noSelected && allExcluded && selectAllMode) {
-                this.selectMode('selected');
+            if (this.excludeMode()) {
+                if (excluded === totalRecords) {
+                    this.deselectAll();
+                }
+            } else if (selected === totalRecords) {
+                this.selectAll();
             }
+
+            this.allSelected(allSelected);
+            this.indetermine(totalSelected > 0 && !allSelected);
 
             return this;
         },
 
         /**
-         * Is invoked when "provider.items" has changed. Recalculates selected items
-         *     based on "selectMode" property.
+         * Callback method to handle change of the selected items.
+         *
+         * @param {Array} selected - List of the currently selected items.
          */
-        onRowsChange: function () {
-            var selectMode          = this.selectMode(),
-                newIds              = this.getIds(true),
-                previouslySelected  = this.selected(),
-                newSelected;
-
-            if (selectMode === 'all') {
-                newSelected = _.union(newIds, previouslySelected);
-
-                this.selected(newSelected);
-            }
+        onSelectedChange: function (selected) {
+            this.updateExcluded(selected)
+                .countSelected()
+                .updateState()
+                .exportSelections();
         },
 
         /**
-         * Defines if the state of main checkbox shoud be 'indeterminated'.
-         *
-         * @returns {Boolean}
+         * Is invoked when rows has changed. Recalculates selected items
+         * based on "selectMode" property.
          */
-        isIndeterminate: function () {
-            var ids = this.getIds(),
-                hasFewItems = ids.length > 1,
-                selectMode = this.selectMode(),
-                hasSelected = this.selected().length,
-                hasExcluded = this.excluded().length;
+        onRowsChange: function () {
+            var newSelected;
 
-            return hasFewItems && (selectMode === 'all' ? hasExcluded : hasSelected);
+            if (this.excludeMode()) {
+                newSelected = _.union(this.getIds(true), this.selected());
+
+                this.selected(newSelected);
+            }
         }
     });
 });
