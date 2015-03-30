@@ -95,7 +95,8 @@ class OrderSave
                         );
                     } catch (\Exception $e) {
                         throw new CouldNotSaveException(
-                            __('Could not add gift message to order\'s item: "%1"', $e->getMessage()), $e
+                            __('Could not add gift message to order\'s item: "%1"', $e->getMessage()),
+                            $e
                         );
                     }
                 }
