@@ -422,18 +422,7 @@ class Installer
         $userData = is_array($data) ? $data : $data->getArrayCopy();
 
         // TODO: remove this when moving install command to symfony
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
-            $userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] = ConfigOptionsList::SESSION_SAVE_FILES;
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PASS])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_PASS] = '';
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_MODEL])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_MODEL] = 'mysql4';
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS] = 'SET NAMES utf8;';
-        }
+        $userData = $this->setDefaultValues($userData);
 
         $this->setupConfigModel->process($userData);
 
@@ -447,6 +436,29 @@ class Installer
         $this->objectManagerProvider->reset();
     }
 
+
+    /**
+     * Sets defaults if user input is missing
+     *
+     * @param array $userData
+     * @return array
+     */
+    private function setDefaultValues(array $userData)
+    {
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
+            $userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] = ConfigOptionsList::SESSION_SAVE_FILES;
+        }
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PASS])) {
+            $userData[ConfigOptionsList::INPUT_KEY_DB_PASS] = '';
+        }
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_MODEL])) {
+            $userData[ConfigOptionsList::INPUT_KEY_DB_MODEL] = 'mysql4';
+        }
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS])) {
+            $userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS] = 'SET NAMES utf8;';
+        }
+        return $userData;
+    }
     /**
      * Set up setup_module table to register modules' versions, skip this process if it already exists
      *
