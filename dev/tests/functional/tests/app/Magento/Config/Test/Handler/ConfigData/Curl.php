@@ -8,7 +8,6 @@ namespace Magento\Config\Test\Handler\ConfigData;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -118,7 +117,8 @@ class Curl extends AbstractCurl implements ConfigDataInterface
         $curl->close();
 
         if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
-            throw new \Exception("Settings are not applied! Response: $response");
+            $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
+            throw new \Exception("Configuration settings are not applied! Url: $url");
         }
     }
 
@@ -130,7 +130,6 @@ class Curl extends AbstractCurl implements ConfigDataInterface
      */
     protected function getUrl($section)
     {
-        return $_ENV['app_backend_url'] .
-        'admin/system_config/save/section/' . $section;
+        return $_ENV['app_backend_url'] . 'admin/system_config/save/section/' . $section;
     }
 }
