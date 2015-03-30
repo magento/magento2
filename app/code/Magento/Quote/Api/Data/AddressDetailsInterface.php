@@ -7,6 +7,15 @@ namespace Magento\Quote\Api\Data;
 
 interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const SHIPPING_METHODS = 'shipping_methods';
+
+    const PAYMENT_METHODS = 'payment_methods';
+
+    /**#@-*/
+
     /**
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[]
      */

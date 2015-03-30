@@ -5,6 +5,9 @@
  */
 namespace Magento\Quote\Model;
 
+/**
+ * @codeCoverageIgnoreStart
+ */
 class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel
     implements \Magento\Quote\Api\Data\AddressDetailsInterface
 {
@@ -13,15 +16,7 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function getShippingMethods()
     {
-        return $this->getData('shipping_methods');
-    }
-
-    /**
-     * @{inheritdoc}
-     */
-    public function getPaymentMethods()
-    {
-        return $this->getData('payment_methods');
+        return $this->getData(self::SHIPPING_METHODS);
     }
 
     /**
@@ -29,7 +24,15 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function setShippingMethods($shippingMethods)
     {
-        return $this->setData('shipping_methods', $shippingMethods);
+        return $this->setData(self::SHIPPING_METHODS, $shippingMethods);
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function getPaymentMethods()
+    {
+        return $this->getData(self::PAYMENT_METHODS);
     }
 
     /**
@@ -37,6 +40,6 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel
      */
     public function setPaymentMethods($paymentMethods)
     {
-        return $this->setData('payment_methods', $paymentMethods);
+        return $this->setData(self::PAYMENT_METHODS, $paymentMethods);
     }
 }
