@@ -62,7 +62,7 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
             ->method('setRefererOrBaseUrl')
             ->willReturn('/index');
 
-        $result = $this->action->getDefaultRedirect();
+        $result = $this->action->getDefaultResult();
         $this->assertSame($expectedResult, $result);
     }
 }

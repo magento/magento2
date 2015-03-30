@@ -210,7 +210,7 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->with($testUrl)
             ->willReturnSelf();
 
-        $this->model->getDefaultRedirect();
+        $this->model->getDefaultResult();
     }
 
     /**

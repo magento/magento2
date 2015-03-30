@@ -26,13 +26,13 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
         $txn->getOrderPaymentObject()->setOrder($txn->getOrder())->importTransactionInfo($txn);
         $txn->save();
         $this->messageManager->addSuccess(__('The transaction details have been updated.'));
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('sales/transactions/view', ['_current' => true]);

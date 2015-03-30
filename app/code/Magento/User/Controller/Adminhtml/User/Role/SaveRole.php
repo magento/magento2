@@ -74,7 +74,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         $role = $this->_initRole('role_id');
         if (!$role->getId() && $rid) {
             $this->messageManager->addError(__('This role no longer exists.'));
-            return $this->getDefaultRedirect();
+            return $this->getDefaultResult();
         }
 
         $roleName = $this->_filterManager->removeTags($this->getRequest()->getParam('rolename', false));
@@ -98,7 +98,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             $this->_addUserToRole($nRuid, $role->getId());
         }
         $this->messageManager->addSuccess(__('You saved the role.'));
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -106,7 +106,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*/');

@@ -30,7 +30,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $theme->delete();
             $this->messageManager->addSuccess(__('You deleted the theme.'));
         }
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -38,7 +38,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         /**
          * @todo Temporary solution. Theme module should not know about the existence of editor module.

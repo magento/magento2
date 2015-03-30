@@ -22,7 +22,7 @@ class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache
         $this->_eventManager->dispatch('clean_media_cache_after');
         $this->messageManager->addSuccess(__('The JavaScript/CSS cache has been cleaned.'));
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -30,7 +30,7 @@ class CleanMedia extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*');

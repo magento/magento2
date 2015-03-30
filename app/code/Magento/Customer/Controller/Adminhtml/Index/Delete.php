@@ -23,7 +23,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
             $this->_customerRepository->deleteById($customerId);
             $this->messageManager->addSuccess(__('You deleted the customer.'));
         }
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -31,7 +31,7 @@ class Delete extends \Magento\Customer\Controller\Adminhtml\Index
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('customer/index');

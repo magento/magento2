@@ -63,7 +63,7 @@ class Save extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
             );
         }
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -71,7 +71,7 @@ class Save extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*/index', ['store' => $this->_getStore()->getId()]);

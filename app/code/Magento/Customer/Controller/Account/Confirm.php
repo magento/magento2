@@ -114,7 +114,7 @@ class Confirm extends \Magento\Customer\Controller\Account
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);

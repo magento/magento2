@@ -21,7 +21,7 @@ class StockAll extends \Magento\ProductAlert\Controller\Unsubscribe
         );
         $this->messageManager->addSuccess(__('You will no longer receive stock alerts.'));
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -29,7 +29,7 @@ class StockAll extends \Magento\ProductAlert\Controller\Unsubscribe
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('customer/account/');

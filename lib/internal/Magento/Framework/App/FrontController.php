@@ -115,7 +115,7 @@ class FrontController implements FrontControllerInterface
                         throw $e;
                     } catch (\Exception $e) {
                         $this->handleException($e);
-                        $result = $actionInstance->getDefaultRedirect();
+                        $result = $actionInstance->getDefaultResult();
                     }
                     break;
                 }

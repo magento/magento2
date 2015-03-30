@@ -105,7 +105,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         return $this->_goBack();
     }

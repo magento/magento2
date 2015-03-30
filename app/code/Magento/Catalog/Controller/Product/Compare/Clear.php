@@ -30,6 +30,6 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
         $this->messageManager->addSuccess(__('You cleared the comparison list.'));
         $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 }

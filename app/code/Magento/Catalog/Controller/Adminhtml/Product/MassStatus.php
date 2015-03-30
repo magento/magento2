@@ -67,7 +67,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
         $this->_productPriceIndexerProcessor->reindexList($productIds);
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -75,7 +75,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath(

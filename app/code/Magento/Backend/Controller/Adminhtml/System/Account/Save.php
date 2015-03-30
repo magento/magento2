@@ -64,7 +64,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             }
         }
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -72,7 +72,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('*/*');

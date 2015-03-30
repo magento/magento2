@@ -22,7 +22,7 @@ class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
         $this->_eventManager->dispatch('clean_catalog_images_cache_after');
         $this->messageManager->addSuccess(__('The image cache was cleaned.'));
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -30,7 +30,7 @@ class CleanImages extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*');

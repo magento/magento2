@@ -72,7 +72,7 @@ class Fromcart extends Action\Action implements IndexInterface
         $this->messageManager->addSuccess(__("%1 has been moved to wish list %2", $productName, $wishlistName));
         $wishlist->save();
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -80,7 +80,7 @@ class Fromcart extends Action\Action implements IndexInterface
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setUrl($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl());

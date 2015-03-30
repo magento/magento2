@@ -60,7 +60,7 @@ class Email extends \Magento\Backend\App\Action
             $shipment->save();
             $this->messageManager->addSuccess(__('You sent the shipment.'));
         }
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -68,7 +68,7 @@ class Email extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('*/*/view', ['shipment_id' => $this->getRequest()->getParam('shipment_id')]);
