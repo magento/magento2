@@ -8,7 +8,7 @@ namespace Magento\Framework\Backup\Filesystem\Rollback;
 /**
  * Rollback worker for rolling back via ftp
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Ftp extends AbstractRollback
 {
