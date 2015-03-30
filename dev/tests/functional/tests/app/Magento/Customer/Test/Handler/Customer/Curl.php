@@ -199,7 +199,6 @@ class Curl extends AbstractCurl implements CustomerInterface
                 $curlData['address'][$key]['street'] = [];
                 $curlData['address'][$key]['street'][] = $street;
             }
-            $newKey = 'new_' . ($key);
             if (isset($curlData['address'][$key]['default_billing'])) {
                 $value = $curlData['address'][$key]['default_billing'] === 'Yes' ? 'true' : 'false';
                 $curlData['address'][$key]['default_billing'] = $value;

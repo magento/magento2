@@ -115,6 +115,8 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Get meta data
+     *
      * @return array
      */
     public function getMeta()
@@ -123,6 +125,8 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Get field meta info
+     *
      * @param string $fieldSetName
      * @param string $fieldName
      * @return array
@@ -132,35 +136,6 @@ class DataProvider implements DataProviderInterface
         return isset($this->meta[$fieldSetName]['fields'][$fieldName])
             ? $this->meta[$fieldSetName]['fields'][$fieldName]
             : [];
-    }
-
-    /**
-     * @param Type $entityType
-     * @return array
-     * @throws \Magento\Eav\Exception
-     */
-    protected function getAttributesMeta(Type $entityType)
-    {
-        $meta = [];
-        $attributes = $entityType->getAttributeCollection();
-        /* @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        foreach ($attributes as $attribute) {
-            $code = $attribute->getAttributeCode();
-            // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
-            foreach ($this->metaProperties as $metaName => $origName) {
-                $value = $attribute->getDataUsingMethod($origName);
-                $meta[$code][$metaName] = $value;
-                if ('frontend_input' === $origName) {
-                    $meta[$code]['formElement'] = isset($this->formElement[$value])
-                        ? $this->formElement[$value]
-                        : $value;
-                }
-                if ($attribute->usesSource()) {
-                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
-                }
-            }
-        }
-        return $meta;
     }
 
     /**
@@ -206,19 +181,7 @@ class DataProvider implements DataProviderInterface
                 $addressId = $address->getId();
                 $address->load($addressId);
                 $addresses[$addressId] = $address->getData();
-                if (isset($result['customer']['default_billing'])
-                    && $addressId == $result['customer']['default_billing']
-                ) {
-                    $addresses[$addressId]['default_billing'] = $result['customer']['default_billing'];
-                }
-                if (isset($result['customer']['default_shipping'])
-                    && $addressId == $result['customer']['default_shipping']
-                ) {
-                    $addresses[$addressId]['default_shipping'] = $result['customer']['default_shipping'];
-                }
-                if (isset($addresses[$addressId]['street'])) {
-                    $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
-                }
+                $this->prepareAddressData($addressId, $addresses, $result['customer']);
             }
             if (!empty($addresses)) {
                 $result['address'] = $addresses;
@@ -328,11 +291,69 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Get fields meta info
+     *
      * @param string $fieldSetName
      * @return array
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
         return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
+    }
+
+    /**
+     * Get attributes meta
+     *
+     * @param Type $entityType
+     * @return array
+     * @throws \Magento\Eav\Exception
+     */
+    protected function getAttributesMeta(Type $entityType)
+    {
+        $meta = [];
+        $attributes = $entityType->getAttributeCollection();
+        /* @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        foreach ($attributes as $attribute) {
+            $code = $attribute->getAttributeCode();
+            // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
+            foreach ($this->metaProperties as $metaName => $origName) {
+                $value = $attribute->getDataUsingMethod($origName);
+                $meta[$code][$metaName] = $value;
+                if ('frontend_input' === $origName) {
+                    $meta[$code]['formElement'] = isset($this->formElement[$value])
+                        ? $this->formElement[$value]
+                        : $value;
+                }
+                if ($attribute->usesSource()) {
+                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                }
+            }
+        }
+        return $meta;
+    }
+
+    /**
+     * Prepare address data
+     *
+     * @param int $addressId
+     * @param array $addresses
+     * @param array $customer
+     * @return void
+     */
+    protected function prepareAddressData($addressId, array &$addresses, array $customer)
+    {
+        if (isset($customer['default_billing'])
+            && $addressId == $customer['default_billing']
+        ) {
+            $addresses[$addressId]['default_billing'] = $customer['default_billing'];
+        }
+        if (isset($customer['default_shipping'])
+            && $addressId == $customer['default_shipping']
+        ) {
+            $addresses[$addressId]['default_shipping'] = $customer['default_shipping'];
+        }
+        if (isset($addresses[$addressId]['street'])) {
+            $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
+        }
     }
 }
