@@ -109,7 +109,7 @@ class Validator
 
         $countryId = $address->getCountryId();
 
-        if ($this->isZipRequired($countryId)  && $this->isEmpty($address->getPostcode())) {
+        if ($this->isZipRequired($countryId) && $this->isEmpty($address->getPostcode())) {
             $errors[] = __('Please enter the zip/postal code.');
         }
         if ($this->isEmpty($countryId)) {
