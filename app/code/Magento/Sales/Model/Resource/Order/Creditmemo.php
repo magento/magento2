@@ -96,6 +96,6 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
                 $comment->save();
             }
         }
-        return parent::_afterSave($object);
+        return parent::processRelations($object);
     }
 }
