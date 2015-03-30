@@ -797,6 +797,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->initializedProductMock->setData("product_links", $existingLinks);
 
         if (!empty($newLinks)) {
+            $this->initializedProductMock->setData("ignoreLinksFlag", false);
             $this->resourceModelMock
                 ->expects($this->any())->method('getProductsIdsBySkus')
                 ->willReturn([$newLinks['linked_product_sku'] => $newLinks['linked_product_sku']]);
@@ -810,7 +811,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
             $this->productData['product_links'] = [$inputLink];
 
-            $this->initializedProductMock->expects($this->once())
+            $this->initializedProductMock->expects($this->any())
                 ->method('getProductLinks')
                 ->willReturn([$inputLink]);
         } else {
@@ -820,7 +821,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
             $this->productData['product_links'] = [];
 
-            $this->initializedProductMock->expects($this->once())
+            $this->initializedProductMock->setData("ignoreLinksFlag", true);
+            $this->initializedProductMock->expects($this->never())
                 ->method('getProductLinks')
                 ->willReturn([]);
         }
@@ -830,8 +832,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
 
+        $outputLinks = [];
         if (!empty($expectedData)) {
-            $outputLinks = [];
             foreach ($expectedData as $link) {
                 $outputLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
                 $outputLink->setProductSku($link['product_sku']);
@@ -842,18 +844,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
                 $outputLinks[] = $outputLink;
             }
-
-            $this->initializedProductMock->expects($this->once())
-                ->method('setProductLinks')
-                ->with([$inputLink]);
-        } else {
-            $this->initializedProductMock->expects($this->once())
-                ->method('setProductLinks')
-                ->with([]);
         }
 
-        $this->assertEquals($this->initializedProductMock, $this->model->save($this->initializedProductMock));
-        $this->productData['product_links'] = [];
+        $results = $this->model->save($this->initializedProductMock);
+        $this->assertEquals($this->initializedProductMock, $results);
+        $this->assertEquals($outputLinks, $results['product_links']);
     }
 
     public function saveWithLinksDataProvider()
@@ -886,9 +881,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 "Simple Product 3", "linked_product_type" => "simple", "position" => 0],
             'expectedData' => [
                 ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
-                ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 3", "linked_product_type" => "simple", "position" => 0]]
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0]]
         ];
 
         return $data;

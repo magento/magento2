@@ -721,7 +721,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductLinks()
     {
-        $this->markTestSkipped('Skipped until MAGETWO-27266 is ready');
         $inputLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
         $inputLink->setProductSku("Simple Product 1");
         $inputLink->setLinkType("related");

@@ -346,6 +346,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private function processLinks(\Magento\Catalog\Api\Data\ProductInterface $product, $newLinks)
     {
+        if ($newLinks === null) {
+            // If product links were not specified, don't do anything
+            return $this;
+        }
+
         // Gather each linktype info
         if (!empty($newLinks)) {
             $productLinks = [];
@@ -376,6 +381,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
                 $this->linkInitializer->initializeLinks($product, [$type => $linksToInitialize]);
             }
+        } else {
+            // Clear all existing product links
+            $this->linkInitializer->initializeLinks($product, ['related' => []]);
+            $this->linkInitializer->initializeLinks($product, ['upsell' => []]);
+            $this->linkInitializer->initializeLinks($product, ['crossell' => []]);
         }
 
         $product->setProductLinks($newLinks);
@@ -518,10 +528,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tierPrices = $product->getData('tier_price');
 
         $productId = $this->resourceModel->getIdBySku($product->getSku());
+        $ignoreLinksFlag = $product->getData('ignoreLinksFlag');
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
 
-        $productLinks = $product->getProductLinks();
+        $productLinks = null;
+        if ($ignoreLinksFlag == false && !is_null($ignoreLinksFlag)) {
+            $productLinks = $product->getProductLinks();
+        }
+
         $product = $this->initializeProductData($productDataArray, empty($productId));
 
         if (isset($productDataArray['options'])) {
@@ -530,9 +545,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setCanSaveCustomOptions(true);
             }
         }
-        if (isset($productDataArray['product_links'])) {
-            $this->processLinks($product, $productLinks);
-        }
+
+        $this->processLinks($product, $productLinks);
         if (isset($productDataArray['media_gallery_entries'])) {
             $this->processMediaGallery($product, $productDataArray['media_gallery_entries']);
         }
