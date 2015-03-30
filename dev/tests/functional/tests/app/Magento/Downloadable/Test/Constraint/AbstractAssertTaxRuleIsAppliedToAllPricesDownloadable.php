@@ -57,11 +57,10 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPricesDownloadable extends Abs
         $this->checkoutCart = $checkoutCart;
         $actualPrices = [];
         //Assertion steps
-        $productName = $product->getName();
         $productCategory = $product->getCategoryIds()[0];
         $this->openCategory($productCategory);
-        $actualPrices = $this->getCategoryPrices($productName, $actualPrices);
-        $catalogCategoryView->getListProductBlock()->openProductViewPage($productName);
+        $actualPrices = $this->getCategoryPrices($product, $actualPrices);
+        $catalogCategoryView->getListProductBlock()->getProductItem($product)->open();
         $catalogProductView->getViewBlock()->fillOptions($product);
         $actualPrices = $this->getProductPagePrices($actualPrices);
         $catalogProductView->getViewBlock()->clickAddToCart();

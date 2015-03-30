@@ -36,10 +36,10 @@ class AssertUrlRewriteCustomSearchRedirect extends AbstractConstraint
             ? $urlRewrite->getRequestPath()
             : $initialRewrite->getRequestPath();
         $browser->open($_ENV['app_frontend_url'] . $urlRequestPath);
-        $entity = $urlRewrite->getDataFieldConfig('target_path')['source']->getEntity()->getName();
+        $entity = $urlRewrite->getDataFieldConfig('target_path')['source']->getEntity();
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $categoryView->getListProductBlock()->isProductVisible($entity),
+            $categoryView->getListProductBlock()->getProductItem($entity)->isVisible(),
             "Created entity '{$entity}' isn't found."
         );
     }

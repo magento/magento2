@@ -51,11 +51,11 @@ class AssertMsrpOnCategoryPage extends AbstractConstraint
             'Regular price on Category page is visible and not expected.'
         );
 
-        $catalogCategoryView->getListProductBlock()->openMapBlockOnCategoryPage($product->getName());
-        $mapBlock = $catalogCategoryView->getMapBlock();
-        \PHPUnit_Framework_Assert::assertContains(
+        $productBlock->openMapBlock();
+        $mapBlock = $productBlock->getMapBlock();
+        \PHPUnit_Framework_Assert::assertEquals(
             $product->getMsrp(),
-            $mapBlock->getMapOldPrice(),
+            $mapBlock->getOldPrice(),
             'Displayed on Category page MAP is incorrect.'
         );
         \PHPUnit_Framework_Assert::assertEquals(

@@ -111,7 +111,7 @@ class AssertProductPage extends AbstractAssertForm
         }
 
         $fixtureProductPrice = number_format($this->product->getPrice(), 2);
-        $formProductPrice = $this->productView->getPriceBlock()->getRegularPrice();
+        $formProductPrice = $this->productView->getPriceBlock()->getPrice();
 
         if ($fixtureProductPrice == $formProductPrice) {
             return null;

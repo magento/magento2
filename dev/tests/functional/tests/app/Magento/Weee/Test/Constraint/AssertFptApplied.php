@@ -12,6 +12,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Checks that prices with fpt on category, product and cart pages are equal to specified in dataset.
@@ -109,13 +110,12 @@ class AssertFptApplied extends AbstractConstraint
     protected function getPrices(CatalogProductSimple $product)
     {
         $actualPrices = [];
-        $productName = $product->getName();
         // Get prices with fpt on category page
         $this->cmsIndex->open();
         $this->cmsIndex->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
-        $actualPrices = $this->getCategoryPrice($productName, $actualPrices);
+        $actualPrices = $this->getCategoryPrice($product, $actualPrices);
         // Get prices with fpt on product page
-        $this->catalogCategoryView->getListProductBlock()->openProductViewPage($productName);
+        $this->catalogCategoryView->getListProductBlock()->getProductItem($product)->open();
         $actualPrices = $this->addToCart($product, $actualPrices);
         // Get prices with fpt on cart page
         $actualPrices = $this->getCartPrice($product, $actualPrices);
@@ -126,18 +126,18 @@ class AssertFptApplied extends AbstractConstraint
     /**
      * Get prices on category page
      *
-     * @param string $productName
+     * @param FixtureInterface $product
      * @param array $actualPrices
      * @return array
      */
-    protected function getCategoryPrice($productName, $actualPrices)
+    protected function getCategoryPrice(FixtureInterface $product, $actualPrices)
     {
         $productBlock = $this->catalogCategoryView->getListProductBlock();
-        $actualPrices['category_price'] = $productBlock->getProductPriceBlock($productName)->getEffectivePrice();
-        $productWeeeBlock = $this->catalogCategoryView->getWeeeListProductBlock();
-        $actualPrices['fpt_category'] = $productWeeeBlock->getProductFptBlock($productName, $this->fptLabel)->getFpt();
-        $actualPrices['fpt_total_category'] = $productWeeeBlock->getProductFptBlock($productName, $this->fptLabel)
-            ->getFptTotal();
+        $actualPrices['category_price'] = $productBlock->getProductItem($product)->getPriceBlock()->getPrice();
+        $productFtpBlock = $this->catalogCategoryView->getWeeeListProductBlock()
+            ->getProductFptBlock($product->getName(), $this->fptLabel);
+        $actualPrices['fpt_category'] = $productFtpBlock->getFpt();
+        $actualPrices['fpt_total_category'] = $productFtpBlock->getFptTotal();
 
         return $actualPrices;
     }
@@ -153,7 +153,7 @@ class AssertFptApplied extends AbstractConstraint
     {
         $viewBlock = $this->catalogProductView->getViewBlock();
         $viewBlock->fillOptions($product);
-        $actualPrices['product_page_price'] = $viewBlock->getPriceBlock()->getEffectivePrice();
+        $actualPrices['product_page_price'] = $viewBlock->getPriceBlock()->getPrice();
         $viewWeeeBlock = $this->catalogProductView->getWeeeViewBlock();
         $actualPrices['product_page_fpt'] = $viewWeeeBlock->getFptBlock($this->fptLabel)->getFpt();
         $actualPrices['product_page_fpt_total'] = $viewWeeeBlock->getFptBlock($this->fptLabel)->getFptTotal();

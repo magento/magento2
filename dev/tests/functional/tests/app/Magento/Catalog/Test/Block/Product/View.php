@@ -96,7 +96,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $mapPopup = '#map-popup-click-for-price';
+    protected $mapPopupBlock = '//ancestor::*[@id="map-popup-click-for-price"]/..';
 
     /**
      * Stock Availability control.
@@ -143,7 +143,7 @@ class View extends AbstractConfigureBlock
     /**
      * Get block price.
      *
-     * @return \Magento\Catalog\Test\Block\Product\Price
+     * @return Price
      */
     public function getPriceBlock()
     {
@@ -337,10 +337,23 @@ class View extends AbstractConfigureBlock
      *
      * @return void
      */
-    public function openMapBlockOnProductPage()
+    public function openMapBlock()
     {
         $this->_rootElement->find($this->clickForPrice, Locator::SELECTOR_CSS)->click();
-        $this->waitForElementVisible($this->mapPopup, Locator::SELECTOR_CSS);
+        $this->waitForElementVisible($this->mapPopupBlock, Locator::SELECTOR_XPATH);
+    }
+
+    /**
+     * Return MAP block.
+     *
+     * @return Map
+     */
+    public function getMapBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Product\Map',
+            ['element' => $this->_rootElement->find($this->mapPopupBlock, Locator::SELECTOR_XPATH)]
+        );
     }
 
     /**
