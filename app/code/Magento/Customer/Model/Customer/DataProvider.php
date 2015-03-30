@@ -203,10 +203,21 @@ class DataProvider implements DataProviderInterface
             $addresses = [];
             /** @var Address $address */
             foreach ($customer->getAddresses() as $address) {
-                $address->load($address->getId());
-                $addresses[$address->getId()] = $address->getData();
-                if (isset($addresses[$address->getId()]['street'])) {
-                    $addresses[$address->getId()]['street'] = explode("\n", $addresses[$address->getId()]['street']);
+                $addressId = $address->getId();
+                $address->load($addressId);
+                $addresses[$addressId] = $address->getData();
+                if (isset($result['customer']['default_billing'])
+                    && $addressId == $result['customer']['default_billing']
+                ) {
+                    $addresses[$addressId]['default_billing'] = $result['customer']['default_billing'];
+                }
+                if (isset($result['customer']['default_shipping'])
+                    && $addressId == $result['customer']['default_shipping']
+                ) {
+                    $addresses[$addressId]['default_shipping'] = $result['customer']['default_shipping'];
+                }
+                if (isset($addresses[$addressId]['street'])) {
+                    $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
                 }
             }
             if (!empty($addresses)) {
