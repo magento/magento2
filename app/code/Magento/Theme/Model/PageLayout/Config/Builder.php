@@ -13,9 +13,9 @@ namespace Magento\Theme\Model\PageLayout\Config;
 class Builder implements \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\Framework\View\PageLayout\ConfigFactory
      */
-    protected $objectManager;
+    protected $configFactory;
 
     /**
      * @var \Magento\Framework\View\PageLayout\File\Collector\Aggregated
@@ -28,18 +28,19 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     protected $themeCollection;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\View\PageLayout\ConfigFactory $configFactory
      * @param \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector
      * @param \Magento\Theme\Model\Resource\Theme\Collection $themeCollection
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Framework\View\PageLayout\ConfigFactory $configFactory,
         \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector,
         \Magento\Theme\Model\Resource\Theme\Collection $themeCollection
     ) {
-        $this->objectManager = $objectManager;
+        $this->configFactory = $configFactory;
         $this->fileCollector = $fileCollector;
         $this->themeCollection = $themeCollection;
+        $this->themeCollection->setItemObjectClass('Magento\Theme\Model\Theme\Data');
     }
 
     /**
@@ -47,10 +48,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
      */
     public function getPageLayoutsConfig()
     {
-        return $this->objectManager->create(
-            'Magento\Framework\View\PageLayout\Config',
-            ['configFiles' => $this->getConfigFiles()]
-        );
+        return $this->configFactory->create(['configFiles' => $this->getConfigFiles()]);
     }
 
     /**

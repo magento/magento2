@@ -97,7 +97,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      */
     public function loadChange($storeId, $date = null)
     {
-        if (is_null($date)) {
+        if ($date === null) {
             $date = $this->_dateTime->formatDate($this->_localeDate->scopeTimeStamp($storeId), false);
         }
 

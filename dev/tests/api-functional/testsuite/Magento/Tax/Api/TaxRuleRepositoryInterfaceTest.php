@@ -178,6 +178,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
 
     public function testCreateTaxRuleExistingCode()
     {
+        $expectedMessage = '%1 already exists.';
         $requestData = [
             'rule' => [
                 'code' => 'Test Rule ' . microtime(),
@@ -205,13 +206,16 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail('Expected exception was not raised');
-        } catch (\Exception $e) {
-            $expectedMessage = 'Code already exists.';
+        } catch (\SoapFault $e) {
             $this->assertContains(
                 $expectedMessage,
                 $e->getMessage(),
-                "Exception does not contain expected message."
+                'SoapFault does not contain expected message.'
             );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(['Code'], $errorObj['parameters']);
         }
 
         // Clean up the new tax rule so it won't affect other tests
@@ -545,7 +549,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
      */
     private function getFixtureTaxRates()
     {
-        if (is_null($this->fixtureTaxRates)) {
+        if ($this->fixtureTaxRates === null) {
             $this->fixtureTaxRates = [];
             if ($this->getFixtureTaxRules()) {
                 $taxRateIds = (array)$this->getFixtureTaxRules()[0]->getRates();
@@ -566,7 +570,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
      */
     private function getFixtureTaxClasses()
     {
-        if (is_null($this->fixtureTaxClasses)) {
+        if ($this->fixtureTaxClasses === null) {
             $this->fixtureTaxClasses = [];
             if ($this->getFixtureTaxRules()) {
                 $taxClassIds = array_merge(
@@ -590,7 +594,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
      */
     private function getFixtureTaxRules()
     {
-        if (is_null($this->fixtureTaxRules)) {
+        if ($this->fixtureTaxRules === null) {
             $this->fixtureTaxRules = [];
             $taxRuleCodes = ['Test Rule Duplicate', 'Test Rule'];
             foreach ($taxRuleCodes as $taxRuleCode) {

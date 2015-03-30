@@ -69,7 +69,7 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
-            throw new StateException('Shipping address not set.');
+            throw new StateException(__('Shipping address not set.'));
         }
 
         $shippingMethod = $shippingAddress->getShippingMethod();
@@ -101,7 +101,9 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     protected function divideNames($delimiter, $line)
     {
         if (strpos($line, $delimiter) === false) {
-            throw new InputException('Line "' .  $line . '" doesn\'t contain delimiter ' . $delimiter);
+            throw new InputException(
+                __('Line "%1" doesn\'t contain delimiter %2', $line, $delimiter)
+            );
         }
         return explode($delimiter, $line);
     }
@@ -123,7 +125,7 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
 
         $shippingAddress = $quote->getShippingAddress();
         if (!$shippingAddress->getCountryId()) {
-            throw new StateException('Shipping address not set.');
+            throw new StateException(__('Shipping address not set.'));
         }
         $shippingAddress->collectShippingRates();
         $shippingRates = $shippingAddress->getGroupedAllShippingRates();

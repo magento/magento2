@@ -12,6 +12,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
      */
     protected $_structure;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->_structure = new \Magento\Framework\Data\Structure();
@@ -19,6 +22,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $elements
+     * @return void
      * @dataProvider importExportElementsDataProvider
      */
     public function testConstructImportExportElements($elements)
@@ -63,6 +67,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $elements
+     * @return void
      * @dataProvider importExceptionDataProvider
      * @expectedException \Magento\Framework\Exception
      */
@@ -71,13 +76,13 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->_structure->importElements($elements);
     }
 
+    /**
+     * @return array
+     */
     public function importExceptionDataProvider()
     {
         return [
             'numeric id' => [['element']],
-            'non-existing parent' => [
-                ['element' => [\Magento\Framework\Data\Structure::PARENT => 'unknown']],
-            ],
             'completely missing nested set' => [
                 ['one' => [\Magento\Framework\Data\Structure::PARENT => 'two'], 'two' => []],
             ],
@@ -98,14 +103,6 @@ class StructureTest extends \PHPUnit_Framework_TestCase
                     ],
                     'two' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
                     'three' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
-                ],
-            ],
-            'missing child' => [
-                [
-                    'one' => [
-                        \Magento\Framework\Data\Structure::CHILDREN => ['two' => 't.w.o.', 'three' => 't.h.r.e.e.'],
-                    ],
-                    'two' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
                 ],
             ],
             'missing reference back to parent' => [
@@ -139,6 +136,40 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @param array $elements
+     * @return void
+     * @dataProvider importExceptionElementNotFoundDataProvider
+     * @expectedException \OutOfBoundsException
+     */
+    public function testImportExceptionElementNotFound($elements)
+    {
+        $this->_structure->importElements($elements);
+    }
+
+    /**
+     * @return array
+     */
+    public function importExceptionElementNotFoundDataProvider()
+    {
+        return [
+            'non-existing parent' => [
+                ['element' => [\Magento\Framework\Data\Structure::PARENT => 'unknown']],
+            ],
+            'missing child' => [
+                [
+                    'one' => [
+                        \Magento\Framework\Data\Structure::CHILDREN => ['two' => 't.w.o.', 'three' => 't.h.r.e.e.'],
+                    ],
+                    'two' => [\Magento\Framework\Data\Structure::PARENT => 'one'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return void
+     */
     public function testCreateGetHasElement()
     {
         $data = [uniqid() => uniqid()];
@@ -152,6 +183,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception
      */
     public function testCreateElementException()
@@ -161,6 +193,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->_structure->createElement($elementId, []);
     }
 
+    /**
+     * @return void
+     */
     public function testUnsetElement()
     {
         $this->_populateSampleStructure();
@@ -171,10 +206,14 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([5], $this->_structure->getElement('five'));
 
         // recursively
+        $this->assertTrue($this->_structure->unsetElement('three'));
         $this->assertTrue($this->_structure->unsetElement('four'));
         $this->assertSame(['one' => [], 'five' => [5]], $this->_structure->exportElements());
     }
 
+    /**
+     * @return void
+     */
     public function testSetGetAttribute()
     {
         $this->_populateSampleStructure();
@@ -187,7 +226,8 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @return void
+     * @expectedException \OutOfBoundsException
      */
     public function testSetAttributeNoElementException()
     {
@@ -195,9 +235,10 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $attribute
+     * @return void
      * @expectedException \InvalidArgumentException
      * @dataProvider setAttributeArgumentExceptionDataProvider
-     * @param string $attribute
      */
     public function testSetAttributeArgumentException($attribute)
     {
@@ -218,13 +259,17 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @return void
+     * @expectedException \OutOfBoundsException
      */
     public function testGetAttributeNoElementException()
     {
         $this->_structure->getAttribute('non-existing', 'foo');
     }
 
+    /**
+     * @return void
+     */
     public function testRenameElement()
     {
         $this->_populateSampleStructure();
@@ -253,6 +298,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['three.5' => 'th', 'two.5' => 'tw'], $this->_structure->getChildren('four.5'));
     }
 
+    /**
+     * @return void
+     */
     public function testSetAsChild()
     {
         $this->_populateSampleStructure();
@@ -272,6 +320,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $offset
      * @param int $expectedOffset
+     * @return void
      * @dataProvider setAsChildOffsetDataProvider
      */
     public function testSetAsChildOffset($offset, $expectedOffset)
@@ -315,6 +364,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $elementId
      * @param string $parentId
+     * @return void
      * @expectedException \Magento\Framework\Exception
      * @dataProvider setAsChildExceptionDataProvider
      */
@@ -336,6 +386,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         return [['one', 'three'], ['one', 'one']];
     }
 
+    /**
+     * @return void
+     */
     public function testUnsetChild()
     {
         $this->_populateSampleStructure();
@@ -355,6 +408,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
      * @param int $initialOffset
      * @param int $newOffset
      * @param int $expectedOffset
+     * @return void
      * @dataProvider reorderChildDataProvider
      */
     public function testReorderChild($initialOffset, $newOffset, $expectedOffset)
@@ -404,6 +458,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception
      */
     public function testReorderChildException()
@@ -418,6 +473,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
      * @param string $sibling
      * @param int $delta
      * @param int $expectedOffset
+     * @return void
      * @dataProvider reorderSiblingDataProvider
      */
     public function testReorderToSibling($initialOffset, $sibling, $delta, $expectedOffset)
@@ -427,6 +483,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedOffset, $this->_structure->reorderToSibling('parent', 'x', $sibling, $delta));
     }
 
+    /**
+     * @return array
+     */
     public function reorderSiblingDataProvider()
     {
         return [
@@ -456,6 +515,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception
      */
     public function testReorderToSiblingException()
@@ -467,6 +527,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->_structure->reorderToSibling('one', 'three', 'two', 1);
     }
 
+    /**
+     * @return void
+     */
     public function testGetChildId()
     {
         $this->_populateSampleStructure();
@@ -474,6 +537,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('five', $this->_structure->getChildId('six', 'f'));
     }
 
+    /**
+     * @return void
+     */
     public function testGetChildrenParentIdChildAlias()
     {
         $this->_structure->createElement('one', []);
@@ -499,8 +565,9 @@ class StructureTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Data\Structure::addToParentGroup
-     * covers \Magento\Framework\Data\Structure::getGroupChildNames
+     * @return void
+     * @covers \Magento\Framework\Data\Structure::addToParentGroup
+     * @covers \Magento\Framework\Data\Structure::getGroupChildNames
      */
     public function testGroups()
     {
@@ -542,6 +609,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Import a sample valid structure
+     * @return void
      */
     protected function _populateSampleStructure()
     {
@@ -559,6 +627,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Import a sample structure, suitable for testing elements sort order
+     * @return void
      */
     protected function _populateSampleSortStructure()
     {

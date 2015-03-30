@@ -169,7 +169,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
         $storeCode = null,
         $integration = null
     ) {
-        if (is_null($webApiAdapterCode)) {
+        if ($webApiAdapterCode === null) {
             /** Default adapter code is defined in PHPUnit configuration */
             $webApiAdapterCode = strtolower(TESTS_WEB_API_ADAPTER);
         }
@@ -301,7 +301,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
      */
     protected static function _setFixtureNamespace()
     {
-        if (!is_null(self::$_fixturesNamespace)) {
+        if (self::$_fixturesNamespace !== null) {
             throw new \RuntimeException('Fixture namespace is already set.');
         }
         self::$_fixturesNamespace = uniqid();
@@ -326,7 +326,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
     protected static function _getFixtureNamespace()
     {
         $fixtureNamespace = self::$_fixturesNamespace;
-        if (is_null($fixtureNamespace)) {
+        if ($fixtureNamespace === null) {
             throw new \RuntimeException('Fixture namespace must be set.');
         }
         return $fixtureNamespace;

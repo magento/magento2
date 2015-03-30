@@ -26,6 +26,9 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $validatorMock;
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
@@ -34,6 +37,9 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $this->model = new BillingAddressManagement($this->quoteRepositoryMock, $this->validatorMock, $logger);
     }
 
+    /**
+     * @return void
+     */
     public function testGetAddress()
     {
         $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
@@ -48,6 +54,7 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
 
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage error123
      */
@@ -61,11 +68,14 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($quoteMock));
 
         $this->validatorMock->expects($this->once())->method('validate')
-            ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException('error123')));
+            ->will($this->throwException(new \Magento\Framework\Exception\NoSuchEntityException(__('error123'))));
 
         $this->model->assign('cartId', $address);
     }
 
+    /**
+     * @return void
+     */
     public function testSetAddress()
     {
         $address = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false, false);
@@ -93,6 +103,7 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
      * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Unable to save address. Please, check input data.
      */

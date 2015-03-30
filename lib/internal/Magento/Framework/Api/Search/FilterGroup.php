@@ -23,7 +23,7 @@ class FilterGroup extends AbstractSimpleObject
     public function getFilters()
     {
         $filters = $this->_get(self::FILTERS);
-        return is_null($filters) ? [] : $filters;
+        return $filters === null ? [] : $filters;
     }
 
     /**

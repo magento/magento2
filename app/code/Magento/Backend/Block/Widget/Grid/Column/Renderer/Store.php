@@ -94,7 +94,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
         $skipEmptyStoresLabel = $this->_getShowEmptyStoresLabelFlag();
         $origStores = $row->getData($this->getColumn()->getIndex());
 
-        if (is_null($origStores) && $row->getStoreName()) {
+        if ($origStores === null && $row->getStoreName()) {
             $scopes = [];
             foreach (explode("\n", $row->getStoreName()) as $k => $label) {
                 $scopes[] = str_repeat('&nbsp;', $k * 3) . $label;
@@ -144,7 +144,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
         $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();
         $origStores = $row->getData($this->getColumn()->getIndex());
 
-        if (is_null($origStores) && $row->getStoreName()) {
+        if ($origStores === null && $row->getStoreName()) {
             $scopes = [];
             foreach (explode("\n", $row->getStoreName()) as $k => $label) {
                 $scopes[] = str_repeat(' ', $k * 3) . $label;

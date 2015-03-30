@@ -8,6 +8,8 @@
 namespace Magento\Tools\Di\Code\Generator;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Interception\Cache\CompiledConfig;
 use Magento\Framework\Interception\Config\Config as InterceptionConfig;
 use Magento\Tools\Di\Code\Reader\Type;
 
@@ -36,15 +38,26 @@ class InterceptionConfigurationBuilder
     private $typeReader;
 
     /**
+     * @var Manager
+     */
+    private $cacheManager;
+
+    /**
      * @param InterceptionConfig $interceptionConfig
      * @param PluginList $pluginList
      * @param Type $typeReader
+     * @param Manager $cacheManager
      */
-    public function __construct(InterceptionConfig $interceptionConfig, PluginList $pluginList, Type $typeReader)
-    {
+    public function __construct(
+        InterceptionConfig $interceptionConfig,
+        PluginList $pluginList,
+        Type $typeReader,
+        Manager $cacheManager
+    ) {
         $this->interceptionConfig = $interceptionConfig;
         $this->pluginList = $pluginList;
         $this->typeReader = $typeReader;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -102,6 +115,7 @@ class InterceptionConfigurationBuilder
      */
     private function getPluginsList($interceptedInstances)
     {
+        $this->cacheManager->setEnabled([CompiledConfig::TYPE_IDENTIFIER], true);
         $this->pluginList->setInterceptedClasses($interceptedInstances);
 
         $inheritedConfig = [];
@@ -128,7 +142,7 @@ class InterceptionConfigurationBuilder
     {
         $filteredData = [];
         foreach ($pluginInheritance as $instance => $plugins) {
-            if (is_null($plugins) || !$this->typeReader->isConcrete($instance)) {
+            if ($plugins === null || !$this->typeReader->isConcrete($instance)) {
                 continue;
             }
 

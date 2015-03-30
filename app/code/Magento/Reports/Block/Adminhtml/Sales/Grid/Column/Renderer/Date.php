@@ -35,7 +35,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
     {
         $format = $this->getColumn()->getFormat();
         if (!$format) {
-            if (is_null(self::$_format)) {
+            if (self::$_format === null) {
                 try {
                     $formats = (new DataBundle())->get(
                         $this->_localeResolver->getLocale()

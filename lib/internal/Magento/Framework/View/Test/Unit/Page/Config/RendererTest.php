@@ -6,10 +6,10 @@
 
 namespace Magento\Framework\View\Test\Unit\Page\Config;
 
-use \Magento\Framework\View\Page\Config\Renderer;
-use \Magento\Framework\View\Page\Config\Generator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\GroupedCollection;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Page\Config\Renderer;
+use Magento\Framework\View\Page\Config\Generator;
 
 /**
  * Test for page config renderer model
@@ -73,7 +73,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      */
     protected $titleMock;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManager
+     */
     protected $objectManagerHelper;
 
     protected function setUp()
@@ -119,7 +121,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->renderer = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\Page\Config\Renderer',
             [
@@ -333,7 +335,10 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->with('', ['_direct' => 'core/index/notFound'])
             ->willReturn($assetNoRoutUrl);
 
-        $this->assertEquals($expectedResult, $this->renderer->renderAssets());
+        $this->assertEquals(
+            $expectedResult,
+            $this->renderer->renderAssets($this->renderer->getAvailableResultGroups())
+        );
     }
 
     /**

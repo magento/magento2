@@ -10,6 +10,14 @@ namespace Magento\Framework\Mail;
 class Message extends \Zend_Mail implements MessageInterface
 {
     /**
+     * @param string $charset
+     */
+    public function __construct($charset = 'utf-8')
+    {
+        parent::__construct($charset);
+    }
+
+    /**
      * Message type
      *
      * @var string

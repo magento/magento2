@@ -44,7 +44,7 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getAllOptions()
     {
-        if (is_null($this->_options)) {
+        if ($this->_options === null) {
             $this->_options = [['label' => __('Position'), 'value' => 'position']];
             foreach ($this->_getCatalogConfig()->getAttributesUsedForSortBy() as $attribute) {
                 $this->_options[] = [

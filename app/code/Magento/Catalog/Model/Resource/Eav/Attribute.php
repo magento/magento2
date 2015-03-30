@@ -187,7 +187,9 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
                 try {
                     $this->attrLockValidator->validate($this);
                 } catch (\Magento\Framework\Exception\LocalizedException $exception) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Do not change the scope. ' . $exception->getMessage()));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Do not change the scope. %1', $exception->getMessage())
+                    );
                 }
             }
         }

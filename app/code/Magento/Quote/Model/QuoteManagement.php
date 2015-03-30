@@ -164,7 +164,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         try {
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Cannot create quote');
+            throw new CouldNotSaveException(__('Cannot create quote'));
         }
         return $quote->getId();
     }
@@ -179,14 +179,20 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $customerModel = $this->customerModelFactory->create();
 
         if (!in_array($storeId, $customerModel->load($customerId)->getSharedStoreIds())) {
-            throw new StateException('Cannot assign customer to the given cart. The cart belongs to different store.');
+            throw new StateException(
+                __('Cannot assign customer to the given cart. The cart belongs to different store.')
+            );
         }
         if ($quote->getCustomerId()) {
-            throw new StateException('Cannot assign customer to the given cart. The cart is not anonymous.');
+            throw new StateException(
+                __('Cannot assign customer to the given cart. The cart is not anonymous.')
+            );
         }
         try {
             $this->quoteRepository->getForCustomer($customerId);
-            throw new StateException('Cannot assign customer to the given cart. Customer already has active cart.');
+            throw new StateException(
+                __('Cannot assign customer to the given cart. Customer already has active cart.')
+            );
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
 
         }
@@ -225,7 +231,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         try {
             $this->quoteRepository->getActiveForCustomer($this->userContext->getUserId());
-            throw new CouldNotSaveException('Cannot create quote');
+            throw new CouldNotSaveException(__('Cannot create quote'));
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
 
         }

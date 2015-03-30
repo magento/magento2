@@ -91,7 +91,7 @@ class DataObjectHelper
             } elseif ($methodNames = array_intersect($possibleMethods, $dataObjectMethods)) {
                 $methodName = array_values($methodNames)[0];
                 if (!is_array($value)) {
-                    if ($methodName === 'setExtensionAttributes' && is_null($value)) {
+                    if ($methodName === 'setExtensionAttributes' && $value === null) {
                         // Cannot pass a null value to a method with a typed parameter
                     } else {
                         $dataObject->$methodName($value);

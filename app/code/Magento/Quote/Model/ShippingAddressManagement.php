@@ -74,7 +74,7 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                'Cart contains virtual product(s) only. Shipping address is not applicable'
+                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
             );
         }
 
@@ -100,7 +100,7 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException('Unable to save address. Please, check input data.');
+            throw new InputException(__('Unable to save address. Please, check input data.'));
         }
 
         if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
@@ -122,7 +122,7 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
-                'Cart contains virtual product(s) only. Shipping address is not applicable'
+                __('Cart contains virtual product(s) only. Shipping address is not applicable.')
             );
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="cart" module="Magento_Checkout" type="flat" entity_type="quote" repository_class="Magento\Checkout\Test\Repository\Cart" handler_interface="Magento\Checkout\Test\Handler\Cart\CartInterface" class="Magento\Checkout\Test\Fixture\Cart">
     <field name="entity_id" is_required="1">
       <default_value xsi:type="null"/>

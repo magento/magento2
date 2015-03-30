@@ -42,7 +42,7 @@ class OauthHelper
         $url = TESTS_BASE_URL;
         $consumer->setCallbackUrl($url);
         $consumer->setRejectedCallbackUrl($url);
-        if (!is_null($date)) {
+        if ($date !== null) {
             $consumer->setCreatedAt($date);
         }
         $consumer->save();
@@ -109,7 +109,7 @@ class OauthHelper
     public static function getApiAccessCredentials($resources = null, Integration $integrationModel = null)
     {
         if (!self::$_apiCredentials) {
-            $integration = is_null($integrationModel) ? self::_createIntegration($resources) : $integrationModel;
+            $integration = $integrationModel === null ? self::_createIntegration($resources) : $integrationModel;
             $objectManager = Bootstrap::getObjectManager();
             /** @var \Magento\Integration\Service\V1\Oauth $oauthService */
             $oauthService = $objectManager->get('Magento\Integration\Service\V1\Oauth');

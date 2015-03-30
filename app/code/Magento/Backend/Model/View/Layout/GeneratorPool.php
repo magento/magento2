@@ -22,6 +22,7 @@ class GeneratorPool extends \Magento\Framework\View\Layout\GeneratorPool
      * @param ScheduledStructure\Helper $helper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
+     * @param \Psr\Log\LoggerInterface $logger
      * @param Filter\Acl $aclFilter
      * @param array $generators
      */
@@ -29,6 +30,7 @@ class GeneratorPool extends \Magento\Framework\View\Layout\GeneratorPool
         ScheduledStructure\Helper $helper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
+        \Psr\Log\LoggerInterface $logger,
         Filter\Acl $aclFilter,
         array $generators = null
     ) {
@@ -37,6 +39,7 @@ class GeneratorPool extends \Magento\Framework\View\Layout\GeneratorPool
             $helper,
             $scopeConfig,
             $scopeResolver,
+            $logger,
             $generators
         );
     }

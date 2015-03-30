@@ -14,7 +14,7 @@
 @navigation-level0-item__font-weight: @font-weight__bold;
 @navigation-level0-item__line-height: false;
 @navigation-level0-item__margin: 0;
-@navigation-level0-item__padding: 8px @indent__base;
+@navigation-level0-item__padding: 8px @indent__xl 8px 15px;
 @navigation-level0-item__text-transform: uppercase;
 
 @navigation-level0-item__background: '';
@@ -23,24 +23,32 @@
 @navigation-level0-item__text-decoration: none;
 
 @navigation-level0-item__active__background: '';
-@navigation-level0-item__active__border: '';
+@navigation-level0-item__active__border-color: @color-orange-red1;
+@navigation-level0-item__active__border-style: solid;
+@navigation-level0-item__active__border-width: 0 0 0 8px;
 @navigation-level0-item__active__color: '';
 @navigation-level0-item__active__text-decoration: '';
 
 @submenu__background: '';
 @submenu__border: '';
-@submenu__padding: 0 0 0 @indent__base;
+@submenu__padding-top: @indent__s;
+@submenu__padding-right: 0;
+@submenu__padding-bottom: @indent__s;
+@submenu__padding-left: 15px;
 @submenu__font-size: '';
 @submenu__font-weight: @font-weight__regular;
+@submenu-item__line-height: 1.3;
 
-@submenu-item__padding: 8px 0;
 @submenu-item__background: '';
 @submenu-item__border: '';
 @submenu-item__color: @color-gray34;
 @submenu-item__text-decoration: '';
 
 @submenu-item__active__background: '';
-@submenu-item__active__border: '';
+@submenu-item__active__border: 8px;
+@submenu-item__active__border-color: @color-orange-red1;
+@submenu-item__active__border-style: solid;
+@submenu-item__active__border-width: 0 0 0 @submenu-item__active__border;
 @submenu-item__active__color: '';
 @submenu-item__active__text-decoration: '';
 
@@ -68,7 +76,9 @@
 @navigation-desktop-level0-item__hover__text-decoration: @navigation-desktop-level0-item__text-decoration;
 
 @navigation-desktop-level0-item__active__background: '';
-@navigation-desktop-level0-item__active__border: '';
+@navigation-desktop-level0-item__active__border-color: @color-orange-red1;
+@navigation-desktop-level0-item__active__border-style: solid;
+@navigation-desktop-level0-item__active__border-width: 0 0 3px;
 @navigation-desktop-level0-item__active__color: @navigation-desktop-level0-item__hover__color;
 @navigation-desktop-level0-item__active__text-decoration: @navigation-desktop-level0-item__text-decoration;
 
@@ -98,6 +108,8 @@
 @submenu-desktop-item__hover__text-decoration: @navigation-desktop-level0-item__text-decoration;
 
 @submenu-desktop-item__active__background: '';
-@submenu-desktop-item__active__border: '';
+@submenu-desktop-item__active__border-color: @color-orange-red1;
+@submenu-desktop-item__active__border-style: solid;
+@submenu-desktop-item__active__border-width: 0 0 0 3px;
 @submenu-desktop-item__active__color: '';
 @submenu-desktop-item__active__text-decoration: '';

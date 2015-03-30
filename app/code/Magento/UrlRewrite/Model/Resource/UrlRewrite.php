@@ -45,7 +45,7 @@ class UrlRewrite extends \Magento\Framework\Model\Resource\Db\AbstractDb
         /** @var $select \Magento\Framework\DB\Select */
         $select = parent::_getLoadSelect($field, $value, $object);
 
-        if (!is_null($object->getStoreId())) {
+        if ($object->getStoreId() !== null) {
             $select->where(
                 'store_id IN(?)',
                 [\Magento\Store\Model\Store::DEFAULT_STORE_ID, $object->getStoreId()]

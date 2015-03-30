@@ -65,7 +65,7 @@ class Match implements QueryInterface
         $queryBoost = $query->getBoost();
         $scoreBuilder->addCondition(
             $this->fulltextHelper->getMatchQuery($resolvedFieldList, $queryValue, Fulltext::FULLTEXT_MODE_BOOLEAN),
-            !is_null($queryBoost) ? $queryBoost : 1
+            $queryBoost !== null ? $queryBoost : 1
         );
         $select = $this->fulltextHelper->match(
             $select,

@@ -320,7 +320,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         }
 
         $customAttributes = $customer->getCustomAttributes();
-        if (!is_null($customAttributes)) {
+        if ($customAttributes !== null) {
             foreach ($customAttributes as $attribute) {
                 $this->setDataUsingMethod($attribute->getAttributeCode(), $attribute->getValue());
             }
@@ -725,7 +725,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
 
         $primaryShipping = $this->getPrimaryShippingAddress();
         if ($primaryShipping) {
-            if ($primaryBilling->getId() == $primaryShipping->getId()) {
+            if ($primaryBilling && $primaryBilling->getId() == $primaryShipping->getId()) {
                 $primaryBilling->setIsPrimaryShipping(true);
             } else {
                 $primaryShipping->setIsPrimaryShipping(true);

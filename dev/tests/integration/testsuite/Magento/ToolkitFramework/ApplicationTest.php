@@ -61,6 +61,14 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
             self::$_generatorWorkingDir . '/fixtures/tax_rates.csv.bak',
             self::$_generatorWorkingDir . '/fixtures/tax_rates.csv'
         );
+        /** @var $appCache \Magento\Framework\App\Cache */
+        $appCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache');
+        $appCache->clean(
+            [
+                \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
+            ]
+        );
     }
 
     /**

@@ -196,7 +196,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      */
     public function canReturnItemsToStock()
     {
-        if (is_null($this->_canReturnToStock)) {
+        if ($this->_canReturnToStock === null) {
             $this->_canReturnToStock = $this->canReturnToStock();
             if ($this->_canReturnToStock) {
                 $canReturnToStock = false;
