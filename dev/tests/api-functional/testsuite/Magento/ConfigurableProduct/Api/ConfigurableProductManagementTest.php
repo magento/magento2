@@ -65,6 +65,7 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
                 'status' => 1,
                 'visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE,
                 'options' => [],
+                'product_links' => [],
                 'custom_attributes' => [
                     [
                         'attribute_code' => 'test_configurable',
