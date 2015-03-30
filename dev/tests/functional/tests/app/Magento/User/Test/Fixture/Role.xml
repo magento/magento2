@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
     <fixture name="role" module="Magento_User" type="flat" entity_type="authorization_role" collection="Magento\User\Model\Resource\Role\User\Collection" repository_class="Magento\User\Test\Repository\Role" handler_interface="Magento\User\Test\Handler\Role\RoleInterface" class="Magento\User\Test\Fixture\Role">
         <dataset name="default">
             <field name="rolename" xsi:type="string">AdminRole%isolation%</field>
