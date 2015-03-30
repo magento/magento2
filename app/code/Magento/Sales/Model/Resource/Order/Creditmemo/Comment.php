@@ -33,7 +33,7 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Sequence\Manager $sequenceManager
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator
      * @param string|null $resourcePrefix
@@ -42,7 +42,7 @@ class Comment extends EntityAbstract implements CreditmemoCommentResourceInterfa
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Sequence\Manager $sequenceManager,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Creditmemo\Comment\Validator $validator,
         $resourcePrefix = null,

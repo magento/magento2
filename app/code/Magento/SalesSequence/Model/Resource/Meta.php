@@ -9,8 +9,8 @@ use Magento\Framework\Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Resource\Db\Context as DatabaseContext;
 use Magento\SalesSequence\Model\Resource\Profile as ResourceProfile;
-use Magento\SalesSequence\Model\Sequence\MetaFactory;
-use Magento\SalesSequence\Model\Sequence\Profile as ModelProfile;
+use Magento\SalesSequence\Model\MetaFactory;
+use Magento\SalesSequence\Model\Profile as ModelProfile;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 
 /**
@@ -66,7 +66,7 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param string $entityType
      * @param int $storeId
-     * @return \Magento\SalesSequence\Model\Sequence\Meta
+     * @return \Magento\SalesSequence\Model\Meta
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadByEntityTypeAndStore($entityType, $storeId)

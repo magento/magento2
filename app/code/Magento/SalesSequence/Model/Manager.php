@@ -3,10 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Sequence;
+namespace Magento\SalesSequence\Model;
 
 use Magento\SalesSequence\Model\Resource\Meta as ResourceSequenceMeta;
-use Magento\SalesSequence\Model\SequenceFactory;
 
 /**
  * Class Manager

@@ -24,17 +24,17 @@ class MetaTest extends \PHPUnit_Framework_TestCase
     private $dbContext;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\MetaFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\MetaFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     private $metaFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit_Framework_MockObject_MockObject
      */
     private $meta;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\Profile | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Profile | \PHPUnit_Framework_MockObject_MockObject
      */
     private $profile;
 
@@ -80,7 +80,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->metaFactory = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\MetaFactory',
+            'Magento\SalesSequence\Model\MetaFactory',
             ['create'],
             [],
             '',
@@ -109,14 +109,14 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->meta = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\Meta',
+            'Magento\SalesSequence\Model\Meta',
             [],
             [],
             '',
             false
         );
         $this->profile = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\Profile',
+            'Magento\SalesSequence\Model\Profile',
             [],
             [],
             '',

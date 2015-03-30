@@ -22,12 +22,12 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
     private $resource;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\Profile | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Profile | \PHPUnit_Framework_MockObject_MockObject
      */
     private $profile;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit_Framework_MockObject_MockObject
      */
     private $meta;
 
@@ -39,14 +39,14 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->meta = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\Meta',
+            'Magento\SalesSequence\Model\Meta',
             ['getSequenceTable', 'getActiveProfile'],
             [],
             '',
             false
         );
         $this->profile = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\Profile',
+            'Magento\SalesSequence\Model\Profile',
             ['getSuffix', 'getPrefix', 'getStep', 'getStartValue'],
             [],
             '',

@@ -33,7 +33,7 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Sequence\Manager $sequenceManager
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param \Magento\Sales\Model\Order\Shipment\Track\Validator $validator
      * @param null $resourcePrefix
@@ -42,7 +42,7 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Sequence\Manager $sequenceManager,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Shipment\Track\Validator $validator,
         $resourcePrefix = null,

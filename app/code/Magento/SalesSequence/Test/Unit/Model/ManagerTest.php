@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Test\Unit\Model\Sequence;
+namespace Magento\SalesSequence\Test\Unit\Model;
 
 /**
  * Class ManagerTest
@@ -21,7 +21,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     private $sequenceFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\Manager
+     * @var \Magento\SalesSequence\Model\Manager
      */
     private $sequenceManager;
 
@@ -31,7 +31,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     private $store;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit_Framework_MockObject_MockObject
      */
     private $meta;
 
@@ -70,7 +70,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->meta = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\Meta',
+            'Magento\SalesSequence\Model\Meta',
             [],
             [],
             '',
@@ -84,7 +84,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->sequenceManager = $helper->getObject(
-            'Magento\SalesSequence\Model\Sequence\Manager',
+            'Magento\SalesSequence\Model\Manager',
             [
                 'resourceSequenceMeta' => $this->resourceSequenceMeta,
                 'sequenceFactory' => $this->sequenceFactory

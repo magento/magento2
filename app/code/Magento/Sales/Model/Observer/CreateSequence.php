@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Observer;
 
 use Magento\Sales\Setup\SalesSetup;
 use Magento\SalesSequence\Model\Config;
-use Magento\SalesSequence\Model\Sequence\Builder;
+use Magento\SalesSequence\Model\Builder;
 use Magento\Framework\Event\Observer;
 
 /**

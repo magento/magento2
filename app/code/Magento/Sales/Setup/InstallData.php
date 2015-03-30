@@ -9,7 +9,7 @@ namespace Magento\Sales\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\SalesSequence\Model\Sequence\Builder;
+use Magento\SalesSequence\Model\Builder;
 use Magento\SalesSequence\Model\Config as SequenceConfig;
 
 /**
