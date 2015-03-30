@@ -8,6 +8,9 @@
 
 namespace Magento\Framework\App\Config;
 
+/**
+ * @api
+ */
 interface MutableScopeConfigInterface extends \Magento\Framework\App\Config\ScopeConfigInterface
 {
     /**

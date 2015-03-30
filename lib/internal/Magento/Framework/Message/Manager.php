@@ -15,6 +15,10 @@ use Psr\Log\LoggerInterface as Logger;
 class Manager implements ManagerInterface
 {
     /**
+     * Default message group
+     */
+    const DEFAULT_GROUP = 'default';
+    /**
      * @var Session
      */
     protected $session;
@@ -74,7 +78,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Retrieve default message group
+     * @inheritdoc
      *
      * @return string
      */
@@ -95,7 +99,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Retrieve messages
+     * @inheritdoc
      *
      * @param string|null $group
      * @param bool $clear
@@ -118,7 +122,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Adding new message to message collection
+     * @inheritdoc
      *
      * @param MessageInterface $message
      * @param string|null $group
@@ -133,7 +137,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Adding messages array to message collection
+     * @inheritdoc
      *
      * @param MessageInterface[] $messages
      * @param string|null $group
@@ -148,7 +152,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Adding new error message
+     * @inheritdoc
      *
      * @param string $message
      * @param string|null $group
@@ -161,7 +165,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Adding new warning message
+     * @inheritdoc
      *
      * @param string $message
      * @param string|null $group
@@ -174,7 +178,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Adding new notice message
+     * @inheritdoc
      *
      * @param string $message
      * @param string|null $group
@@ -187,7 +191,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Adding new success message
+     * @inheritdoc
      *
      * @param string $message
      * @param string|null $group
@@ -200,7 +204,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Adds messages array to message collection, but doesn't add duplicates to it
+     * @inheritdoc
      *
      * @param MessageInterface[]|MessageInterface $messages
      * @param string|null $group
@@ -244,7 +248,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * Not Magento exception handling
+     * @inheritdoc
      *
      * @param \Exception $exception
      * @param string $alternativeText

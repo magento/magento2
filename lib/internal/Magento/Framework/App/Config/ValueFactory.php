@@ -44,6 +44,8 @@ class ValueFactory
      * @param array $data
      * @return \Magento\Framework\App\Config\ValueInterface
      * @throws \InvalidArgumentException
+     *
+     * @api
      */
     public function create(array $data = [])
     {

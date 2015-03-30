@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Locale;
+use Magento\Framework\Locale\Resolver;
 
 /**
  * Locale manager model
@@ -68,7 +69,7 @@ class Manager
      */
     public function getUserInterfaceLocale()
     {
-        $interfaceLocale = \Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE;
+        $interfaceLocale = Resolver::DEFAULT_LOCALE;
 
         $userData = $this->_authSession->getUser();
         if ($userData && $userData->getInterfaceLocale()) {
