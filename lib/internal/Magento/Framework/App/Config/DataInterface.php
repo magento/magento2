@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\App\Config;
 
+/**
+ * @api
+ */
 interface DataInterface
 {
     /**
@@ -12,4 +15,11 @@ interface DataInterface
      * @return string|array
      */
     public function getValue($path);
+
+    /**
+     * @param string $path
+     * @param mixed $value
+     * @return void
+     */
+    public function setValue($path, $value);
 }
