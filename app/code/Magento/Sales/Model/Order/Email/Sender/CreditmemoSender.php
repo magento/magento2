@@ -70,7 +70,7 @@ class CreditmemoSender extends NotifySender
         $this->templateContainer->setTemplateVars(
             [
                 'order' => $creditmemo->getOrder(),
-                'invoice' => $creditmemo,
+                'creditmemo' => $creditmemo,
                 'comment' => $comment,
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
