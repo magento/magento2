@@ -8,7 +8,7 @@ namespace Magento\Quote\Api;
 class AddressDetailsManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'AddressDetailsManagementV1';
+    const SERVICE_NAME = 'quoteAddressDetailsManagementV1';
     const RESOURCE_PATH = '/V1/carts/';
 
     /**
