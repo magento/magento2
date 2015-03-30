@@ -6,8 +6,7 @@
 namespace Magento\SalesSequence\Model\Sequence;
 
 use Magento\Framework\Webapi\Exception;
-use Magento\SalesSequence\Model\Resource\Sequence\Meta as ResourceMetadata;
-use Magento\SalesSequence\Model\SequenceFactory;
+use Magento\SalesSequence\Model\Resource\Meta as ResourceMetadata;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 

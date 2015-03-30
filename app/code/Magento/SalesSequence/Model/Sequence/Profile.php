@@ -17,6 +17,6 @@ class Profile extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\SalesSequence\Model\Resource\Sequence\Profile');
+        $this->_init('Magento\SalesSequence\Model\Resource\Profile');
     }
 }

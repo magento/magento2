@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model\Resource\Sequence;
+namespace Magento\SalesSequence\Model\Resource;
 
 use Magento\Framework\Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\Resource\Db\Context as DatabaseContext;
-use Magento\SalesSequence\Model\Resource\Sequence\Profile as ResourceProfile;
+use Magento\SalesSequence\Model\Resource\Profile as ResourceProfile;
 use Magento\SalesSequence\Model\Sequence\MetaFactory;
 use Magento\SalesSequence\Model\Sequence\Profile as ModelProfile;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;

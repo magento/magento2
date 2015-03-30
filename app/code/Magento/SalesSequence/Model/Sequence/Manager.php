@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesSequence\Model\Sequence;
 
-use Magento\SalesSequence\Model\Resource\Sequence\Meta as ResourceSequenceMeta;
+use Magento\SalesSequence\Model\Resource\Meta as ResourceSequenceMeta;
 use Magento\SalesSequence\Model\SequenceFactory;
 
 /**
