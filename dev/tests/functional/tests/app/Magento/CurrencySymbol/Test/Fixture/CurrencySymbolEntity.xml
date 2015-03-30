@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="currencySymbolEntity" module="Magento_CurrencySymbol" type="flat" entity_type="core_config_data" repository_class="Magento\CurrencySymbol\Test\Repository\CurrencySymbolEntity" handler_interface="Magento\CurrencySymbol\Test\Handler\CurrencySymbolEntity\CurrencySymbolEntityInterface" class="Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity">
     <dataset name="default">
         <field name="inherit_custom_currency_symbol" xsi:type="string">Yes</field>
