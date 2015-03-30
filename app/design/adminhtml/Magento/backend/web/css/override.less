@@ -1356,8 +1356,8 @@ fieldset[disabled] .address-list .action-delete {
   display: inline-block;
   position: relative;
   height: 1.6rem;
-  z-index: 200;
   white-space: nowrap;
+  z-index: 200;
 }
 .action-multiselect-wrap:hover .admin__control-checkbox + label:before,
 .action-multiselect-wrap:hover .action-multiselect-toggle {
@@ -1370,6 +1370,14 @@ fieldset[disabled] .address-list .action-delete {
 .action-multiselect-wrap._active .action-menu {
   opacity: 1;
   visibility: visible;
+}
+.action-multiselect-wrap._disabled .admin__control-checkbox + label:before {
+  background-color: #ffffff;
+}
+.action-multiselect-wrap._disabled .admin__control-checkbox + label:before,
+.action-multiselect-wrap._disabled .action-multiselect-toggle {
+  opacity: 1;
+  border-color: #adadad;
 }
 .action-multiselect-wrap .admin__control-checkbox,
 .action-multiselect-wrap .admin__control-checkbox + label,
@@ -1418,12 +1426,6 @@ fieldset[disabled] .address-list .action-delete {
 .action-multiselect-wrap .action-multiselect-toggle:after {
   right: .3rem;
 }
-.action-multiselect-wrap .action-multiselect-toggle[disabled] {
-  box-shadow: none;
-  cursor: default;
-  opacity: .5;
-  outline: 0;
-}
 .action-multiselect-wrap .action-multiselect-toggle > span {
   border: 0;
   clip: rect(0, 0, 0, 0);
@@ -1442,12 +1444,6 @@ fieldset[disabled] .address-list .action-delete {
 }
 .action-multiselect-wrap .action-menu-item {
   white-space: nowrap;
-}
-.action-multiselect-wrap > .admin__control-checkbox[disabled] {
-  box-shadow: none;
-  cursor: default;
-  opacity: .5;
-  outline: 0;
 }
 .abs-action-reset,
 .action-close,
@@ -4823,11 +4819,21 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   padding: 2.2rem 3.5rem 1rem;
   z-index: 1;
 }
+.admin__data-grid-action-columns-menu._overflow .admin__action-dropdown-menu-header {
+  border-bottom: 1px solid #d1d1d1;
+}
+.admin__data-grid-action-columns-menu._overflow .admin__action-dropdown-menu-content {
+  width: 49.2rem;
+}
+.admin__data-grid-action-columns-menu._overflow .admin__action-dropdown-menu-footer {
+  border-top: 1px solid #d1d1d1;
+  padding-top: 2.5rem;
+}
 .admin__data-grid-action-columns-menu .admin__action-dropdown-menu-content {
-  max-height: 22rem;
-  margin-right: -5.3rem;
+  max-height: 23.5rem;
   overflow-y: auto;
-  width: 52.7rem;
+  padding-top: 1.5rem;
+  width: 47.4rem;
 }
 .admin__data-grid-action-columns-menu .admin__field-option {
   height: 2rem;
@@ -4843,13 +4849,10 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   display: block;
 }
 .admin__data-grid-action-columns-menu .admin__action-dropdown-menu-header {
-  border-bottom: 1px solid #d1d1d1;
-  margin-bottom: 1.5rem;
   padding-bottom: 1.5rem;
 }
 .admin__data-grid-action-columns-menu .admin__action-dropdown-menu-footer {
-  border-top: 1px solid #d1d1d1;
-  padding: 2.5rem 0 2rem;
+  padding: 1rem 0 2rem;
 }
 .admin__data-grid-action-columns-menu .admin__action-dropdown-footer-main-actions {
   margin-left: 25%;
