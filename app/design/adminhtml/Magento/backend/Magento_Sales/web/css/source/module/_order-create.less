@@ -4,6 +4,14 @@
 //  */
 
 //
+//  Variables
+//  _____________________________________________
+
+@page-order-sidebar__color: @color-very-dark-gray;
+@page-order-sidebar__margin: 2.4rem;
+@page-order-sidebar__border-color: @border__color;
+
+//
 //  Layout
 //  ---------------------------------------------
 
@@ -86,6 +94,48 @@
 //            }
 //        }
 //    }
+}
+
+//
+//  Order Sidebar
+//  ---------------------------------------------
+
+.order-sidebar {
+    &:extend(.admin__page-nav);
+    color: @page-order-sidebar__color;
+    padding: 3rem 2rem;
+
+    .order-currency {
+        float: none;
+        font-size: @font-size__base;
+        margin: 0 0 @page-order-sidebar__margin;
+        .label {
+            display: block;
+            margin: 0 0 .5rem;
+        }
+    }
+    .title {
+        border-bottom: 1px solid @page-order-sidebar__border-color;
+        font-size: 1.9rem;
+        font-weight: @font-weight__bold;
+        margin: 0 0 @page-order-sidebar__margin;
+        padding: 0 0 @page-order-sidebar__margin;
+    }
+    .admin__control-select {
+        width: 100%;
+        margin: 0 0 .5rem;
+    }
+    .order-sidebar-block {
+        border-bottom: 1px solid @page-order-sidebar__border-color;
+        margin: 0 0 @page-order-sidebar__margin;
+        padding: 0 0 @page-order-sidebar__margin;
+    }
+    .table {
+        th,
+        td {
+            padding: 1rem;
+        }
+    }
 }
 
 //

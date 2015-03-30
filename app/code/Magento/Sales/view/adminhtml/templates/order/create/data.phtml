@@ -95,8 +95,13 @@
     <?php if ($block->getCustomerId()): ?>
         <div class="order-sidebar">
             <div class="store-switcher order-currency">
-                <label for="currency_switcher"><?php echo __('Order Currency:') ?></label>
-                <select id="currency_switcher" name="order[currency]" onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
+                <label class="label" for="currency_switcher">
+                    <?php echo __('Order Currency:') ?>
+                </label>
+                <select id="currency_switcher"
+                        class="admin__control-select"
+                        name="order[currency]"
+                        onchange="order.setCurrencyId(this.value); order.setCurrencySymbol(this.options[this.selectedIndex].getAttribute('symbol'));">
                     <?php foreach ($block->getAvailableCurrencies() as $_code): ?>
                         <option value="<?php echo $_code ?>"<?php if ($_code == $block->getCurrentCurrencyCode()): ?> selected="selected"<?php endif; ?> symbol="<?php echo $block->getCurrencySymbol($_code) ?>">
                             <?php echo $block->getCurrencyName($_code) ?>

@@ -16,7 +16,7 @@
     <div class="content">
         <div class="auto-scroll">
         <?php if ($block->getItemCount()): ?>
-        <table class="data-table" cellspacing="0">
+        <table class="data-table table" cellspacing="0">
             <col />
             <?php if ($block->canDisplayItemQty()): ?>
             <col width="20" />
@@ -60,7 +60,14 @@
                     <td><?php echo $block->convertPrice($_item->getPrice()) ?></td>
                     <?php endif; ?>
                     <?php if ($block->canRemoveItems()): ?>
-                    <td class="a-center"><input type="checkbox" name="sidebar[remove][<?php echo $block->getItemId($_item) ?>]" value="<?php echo $block->getDataId() ?>" title="<?php echo __('Remove') ?>"/></td>
+                    <td class="a-center">
+                        <input type="checkbox"
+                               class="admin__control-checkbox"
+                               name="sidebar[remove][<?php echo $block->getItemId($_item) ?>]"
+                               value="<?php echo $block->getDataId() ?>"
+                               title="<?php echo __('Remove') ?>" />
+                        <label class="label"></label>
+                    </td>
                     <?php endif; ?>
                     <td class="a-center">
                         <?php if ($block->isConfigurationRequired($_item->getTypeId()) && $block->getDataId() == 'wishlist'): ?>
