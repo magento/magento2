@@ -25,7 +25,8 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
-        $fullModuleListMock->expects($this->once())->method('getNames');
+        $fullModuleListMock->expects($this->once())->method('getNames')->willReturn(['Magento_Backend']);
+
         /** @var \Magento\Setup\Model\ConfigOptionsListCollector $object */
         $object = $objectManager->create(
             'Magento\Setup\Model\ConfigOptionsListCollector',
