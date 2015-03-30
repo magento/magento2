@@ -8,6 +8,10 @@ namespace Magento\Framework\Locale;
 class Currency implements \Magento\Framework\Locale\CurrencyInterface
 {
     /**
+     * Default currency
+     */
+    const DEFAULT_CURRENCY = 'USD';
+    /**
      * @var array
      */
     protected static $_currencyCache = [];
@@ -51,7 +55,7 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
      */
     public function getDefaultCurrency()
     {
-        return \Magento\Framework\Locale\CurrencyInterface::DEFAULT_CURRENCY;
+        return self::DEFAULT_CURRENCY;
     }
 
     /**

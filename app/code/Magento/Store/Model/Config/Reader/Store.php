@@ -66,7 +66,7 @@ class Store implements \Magento\Framework\App\Config\Scope\ReaderInterface
     /**
      * Read configuration by code
      *
-     * @param string $code
+     * @param null|string $code
      * @return array
      * @throws NoSuchEntityException
      */

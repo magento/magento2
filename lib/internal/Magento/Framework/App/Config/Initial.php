@@ -50,8 +50,10 @@ class Initial
     /**
      * Get initial data by given scope
      *
-     * @param string $scope
+     * @param string $scope Format is scope type and scope code separated by pipe: e.g. "type|code"
      * @return array
+     *
+     * @api
      */
     public function getData($scope)
     {
@@ -69,6 +71,8 @@ class Initial
      * Get configuration metadata
      *
      * @return array
+     *
+     * @api
      */
     public function getMetadata()
     {

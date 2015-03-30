@@ -5,18 +5,13 @@
  */
 namespace Magento\Framework\Locale;
 
+/**
+ * Provides access to currency config information
+ *
+ * @api
+ */
 interface CurrencyInterface
 {
-    /**
-     * Default currency
-     */
-    const DEFAULT_CURRENCY = 'USD';
-
-    /**
-     * XML path to installed currencies
-     */
-    const XML_PATH_ALLOW_CURRENCIES_INSTALLED = 'system/currency/installed';
-
     /**
      * Retrieve currency code
      *
