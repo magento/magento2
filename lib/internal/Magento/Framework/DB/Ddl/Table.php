@@ -16,68 +16,147 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 class Table
 {
     /**
-     * Types of columns
+     * Column type boolean
+     * @api
      */
     const TYPE_BOOLEAN = 'boolean';
 
+    /**
+     * Column type smallint
+     * @api
+     */
     const TYPE_SMALLINT = 'smallint';
 
+    /**
+     * Column type integer
+     * @api
+     */
     const TYPE_INTEGER = 'integer';
 
+    /**
+     * Column type bigint
+     * @api
+     */
     const TYPE_BIGINT = 'bigint';
 
+    /**
+     * Column type float
+     * @api
+     */
     const TYPE_FLOAT = 'float';
 
+    /**
+     * Column type numeric
+     * @api
+     */
     const TYPE_NUMERIC = 'numeric';
 
+    /**
+     * Column type decimal
+     * @api
+     */
     const TYPE_DECIMAL = 'decimal';
 
+    /**
+     * Column type date
+     * @api
+     */
     const TYPE_DATE = 'date';
 
+    /**
+     * Column type timestamp
+     * @api
+     */
     const TYPE_TIMESTAMP = 'timestamp';
 
-    // Capable to support date-time from 1970 + auto-triggers in some RDBMS
+    /**
+     * Column type datetime, capable to support date-time from 1970 + auto-triggers in some RDBMS
+     * @api
+     */
     const TYPE_DATETIME = 'datetime';
 
-    // Capable to support long date-time before 1970
+    /**
+     * Column type text, capable to support long date-time before 1970
+     * @api
+     */
     const TYPE_TEXT = 'text';
 
+    /**
+     * Column type blob
+     * @api
+     */
     const TYPE_BLOB = 'blob';
 
-    // Used for back compatibility, when query param can't use statement options
+    /**
+     * Column type varbinary, used for back compatibility, when query param can't use statement options
+     * @api
+     */
     const TYPE_VARBINARY = 'varbinary';
 
-    // A real blob, stored as binary inside DB
-
     /**
-     * Default and maximal TEXT and BLOB columns sizes we can support for different DB systems.
+     * Default TEXT columns sizes
+     * @api
      */
     const DEFAULT_TEXT_SIZE = 1024;
 
+    /**
+     * Maximal TEXT columns sizes
+     * @api
+     */
     const MAX_TEXT_SIZE = 2147483648;
 
+    /**
+     * Maximal BLOB columns sizes
+     * @api
+     */
     const MAX_VARBINARY_SIZE = 2147483648;
 
     /**
-     * Default values for timestampses - fill with current timestamp on inserting record, on changing and both cases
+     * Default value for timestamps - fill with current timestamp on inserting record, on changing and both cases
+     * @api
      */
     const TIMESTAMP_INIT_UPDATE = 'TIMESTAMP_INIT_UPDATE';
 
+    /**
+     * Default value for timestamps - fill with current timestamp only on inserting record
+     * @api
+     */
     const TIMESTAMP_INIT = 'TIMESTAMP_INIT';
 
+    /**
+     * Default value for timestamps - fill with current timestamp only on changing record
+     * @api
+     */
     const TIMESTAMP_UPDATE = 'TIMESTAMP_UPDATE';
 
     /**
-     * Actions used for foreign keys
+     * Cascade action used for foreign keys
+     * @api
      */
     const ACTION_CASCADE = 'CASCADE';
 
+    /**
+     * Set null action used for foreign keys
+     * @api
+     */
     const ACTION_SET_NULL = 'SET NULL';
 
+    /**
+     * No action action used for foreign keys
+     * @api
+     */
     const ACTION_NO_ACTION = 'NO ACTION';
 
+    /**
+     * Restrict action used for foreign keys
+     * @api
+     */
     const ACTION_RESTRICT = 'RESTRICT';
 
+    /**
+     * Set default action used for foreign keys
+     * @api
+     */
     const ACTION_SET_DEFAULT = 'SET DEFAULT';
 
     /**
@@ -182,6 +261,7 @@ class Table
      *
      * @param string $name
      * @return $this
+     * @api
      */
     public function setName($name)
     {
@@ -197,6 +277,7 @@ class Table
      *
      * @param string $name
      * @return $this
+     * @api
      */
     public function setSchema($name)
     {
@@ -209,6 +290,7 @@ class Table
      *
      * @param string $comment
      * @return $this
+     * @api
      */
     public function setComment($comment)
     {
@@ -221,6 +303,7 @@ class Table
      *
      * @return string
      * @throws \Zend_Db_Exception
+     * @api
      */
     public function getName()
     {
@@ -234,6 +317,7 @@ class Table
      * Get schema name
      *
      * @return string|null
+     * @api
      */
     public function getSchema()
     {
@@ -244,6 +328,7 @@ class Table
      * Return comment for table
      *
      * @return string
+     * @api
      */
     public function getComment()
     {
@@ -273,6 +358,7 @@ class Table
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @api
      */
     public function addColumn($name, $type, $size = null, $options = [], $comment = null)
     {
@@ -409,6 +495,7 @@ class Table
      * @return $this
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @api
      */
     public function addForeignKey($fkName, $column, $refTable, $refColumn, $onDelete = null, $onUpdate = null)
     {
@@ -460,6 +547,7 @@ class Table
      * @return $this
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @api
      */
     public function addIndex($indexName, $fields, $options = [])
     {
@@ -527,6 +615,7 @@ class Table
      * @param bool $normalized
      * @see $this->_columns
      * @return array
+     * @api
      */
     public function getColumns($normalized = true)
     {
@@ -542,6 +631,7 @@ class Table
      * @param array $column
      * @see $this->_columns
      * @return $this
+     * @api
      */
     public function setColumn($column)
     {
@@ -555,6 +645,7 @@ class Table
      *
      * @see $this->_indexes
      * @return array
+     * @api
      */
     public function getIndexes()
     {
@@ -566,6 +657,7 @@ class Table
      *
      * @see $this->_foreignKeys
      * @return array
+     * @api
      */
     public function getForeignKeys()
     {
@@ -578,6 +670,7 @@ class Table
      * @param string $key
      * @param string $value
      * @return $this
+     * @api
      */
     public function setOption($key, $value)
     {
@@ -591,6 +684,7 @@ class Table
      *
      * @param string $key
      * @return null|string
+     * @api
      */
     public function getOption($key)
     {
@@ -604,6 +698,7 @@ class Table
      * Retrieve array of table options
      *
      * @return array
+     * @api
      */
     public function getOptions()
     {

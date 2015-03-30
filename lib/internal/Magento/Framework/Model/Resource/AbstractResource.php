@@ -47,6 +47,7 @@ abstract class AbstractResource
      * Retrieve connection for read data
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @api
      */
     abstract protected function _getReadAdapter();
 
@@ -54,6 +55,7 @@ abstract class AbstractResource
      * Retrieve connection for write data
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @api
      */
     abstract protected function _getWriteAdapter();
 
@@ -61,6 +63,7 @@ abstract class AbstractResource
      * Start resource transaction
      *
      * @return $this
+     * @api
      */
     public function beginTransaction()
     {
@@ -73,6 +76,7 @@ abstract class AbstractResource
      *
      * @param array $callback
      * @return $this
+     * @api
      */
     public function addCommitCallback($callback)
     {
@@ -85,6 +89,7 @@ abstract class AbstractResource
      * Commit resource transaction
      *
      * @return $this
+     * @api
      */
     public function commit()
     {
@@ -109,6 +114,7 @@ abstract class AbstractResource
      * Roll back resource transaction
      *
      * @return $this
+     * @api
      */
     public function rollBack()
     {
