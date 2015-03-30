@@ -54,12 +54,12 @@ class AssertMsrpOnProductView extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertContains(
             $product->getMsrp(),
             $mapBlock->getMapOldPrice(),
-            'Displayed on Product view page MAP is incorrect'
+            'Displayed on Product view page MAP is incorrect.'
         );
         \PHPUnit_Framework_Assert::assertEquals(
             $product->getPrice(),
             $mapBlock->getActualPrice(),
-            'Displayed on Product view page price is incorrect'
+            'Displayed on Product view page price is incorrect.'
         );
     }
 

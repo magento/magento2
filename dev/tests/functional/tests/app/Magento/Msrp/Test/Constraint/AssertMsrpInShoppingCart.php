@@ -50,7 +50,6 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
         $catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
         $checkoutCart->open();
-        sleep(3);
         $productPrice = $product->hasData('checkout_data')
             ? $product->getCheckoutData()['cartItem']['price']
             : $product->getPrice();
@@ -61,7 +60,6 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
     /**
      * Return string representation of object.
      *
-     * @return string
      * @return string
      */
     public function toString()

@@ -9,11 +9,9 @@ namespace Magento\Msrp\Test\TestCase;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Preconditions:
- * 1. Create product
- *
  * Steps:
- * 1. Perform all assertions
+ * 1. Create product.
+ * 2. Perform all assertions.
  *
  * @group MAP_(MX)
  * @ZephyrId MAGETWO-12430, MAGETWO-12847
@@ -21,6 +19,8 @@ use Magento\Mtf\TestCase\Injectable;
 class ApplyMapTest extends Injectable
 {
     /* tags */
+    const DOMAIN = 'MX';
+    const MVP = 'yes';
     const TEST_TYPE = 'acceptance_test';
     /* end tags */
 
@@ -40,9 +40,9 @@ class ApplyMapTest extends Injectable
         $product = $this->objectManager->create(
             'Magento\Catalog\Test\TestStep\CreateProductStep',
             ['product' => $product]
-        )->run()['product'];
+        )->run();
 
-        return ['product' => $product];
+        return $product;
     }
 
     /**
