@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="storeGroup" module="Magento_Store" type="flat" entity_type="store_group" collection="Magento\Store\Model\Resource\Group\Collection" identifier="" repository_class="Magento\Store\Test\Repository\StoreGroup" handler_interface="Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface" class="Magento\Store\Test\Fixture\StoreGroup">
     <dataset name="default">
         <field name="website_id" xsi:type="array">
