@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Resource;
 
 use Magento\Framework\Model\Resource\Db\AbstractDb;
 use Magento\Sales\Model\EntityInterface;
-use Magento\SalesSequence\Model\Sequence\SequenceManager;
+use Magento\SalesSequence\Model\Sequence\Manager;
 
 /**
  * Abstract sales entity provides to its children knowledge about eventPrefix and eventObject
@@ -48,7 +48,7 @@ abstract class EntityAbstract extends AbstractDb
     protected $attribute;
 
     /**
-     * @var SequenceManager
+     * @var Manager
      */
     protected $sequenceManager;
 
@@ -64,7 +64,7 @@ abstract class EntityAbstract extends AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SequenceManager $sequenceManager
+     * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param string|null $resourcePrefix
      * @param GridInterface|null $gridAggregator
@@ -72,7 +72,7 @@ abstract class EntityAbstract extends AbstractDb
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        SequenceManager $sequenceManager,
+        Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null

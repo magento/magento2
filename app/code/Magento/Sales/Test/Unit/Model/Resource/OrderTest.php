@@ -36,7 +36,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $stateHandlerMock;
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\SequenceManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Sequence\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $salesSequenceManagerMock;
     /**
@@ -104,7 +104,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
         $this->stateHandlerMock = $this->getMock('Magento\Sales\Model\Resource\Order\Handler\State', [], [], '', false);
         $this->salesSequenceManagerMock = $this->getMock(
-            'Magento\SalesSequence\Model\Sequence\SequenceManager',
+            'Magento\SalesSequence\Model\Sequence\Manager',
             [],
             [],
             '',

@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Observer;
 
 use Magento\Sales\Setup\SalesSetup;
 use Magento\SalesSequence\Model\Config;
-use Magento\SalesSequence\Model\Sequence\SequenceBuilder;
+use Magento\SalesSequence\Model\Sequence\Builder;
 use Magento\Framework\Event\Observer;
 
 /**
@@ -16,7 +16,7 @@ use Magento\Framework\Event\Observer;
 class CreateSequence
 {
     /**
-     * @var SequenceBuilder
+     * @var Builder
      */
     private $sequenceBuilder;
 
@@ -33,12 +33,12 @@ class CreateSequence
     /**
      * Initialization
      *
-     * @param SequenceBuilder $sequenceBuilder
+     * @param Builder $sequenceBuilder
      * @param SalesSetup $salesSetup
      * @param Config $sequenceConfig
      */
     public function __construct(
-        SequenceBuilder $sequenceBuilder,
+        Builder $sequenceBuilder,
         SalesSetup $salesSetup,
         Config $sequenceConfig
     ) {

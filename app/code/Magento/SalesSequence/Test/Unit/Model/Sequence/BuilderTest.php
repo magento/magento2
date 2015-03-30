@@ -6,12 +6,12 @@
 namespace Magento\SalesSequence\Test\Unit\Model\Sequence;
 
 /**
- * Class SequenceBuilderTest
+ * Class BuilderTest
  */
-class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
+class BuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\SequenceBuilder
+     * @var \Magento\SalesSequence\Model\Sequence\Builder
      */
     private $sequenceBuilder;
 
@@ -119,7 +119,7 @@ class SequenceBuilderTest extends \PHPUnit_Framework_TestCase
         $this->profileFactory->expects($this->any())->method('create')->willReturn($this->profile);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sequenceBuilder = $helper->getObject(
-            'Magento\SalesSequence\Model\Sequence\SequenceBuilder',
+            'Magento\SalesSequence\Model\Sequence\Builder',
             [
                 'resourceMetadata' => $this->resourceSequenceMeta,
                 'metaFactory' => $this->metaFactory,

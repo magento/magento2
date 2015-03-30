@@ -6,9 +6,9 @@
 namespace Magento\SalesSequence\Test\Unit\Model\Sequence;
 
 /**
- * Class SequenceManagerTest
+ * Class ManagerTest
  */
-class SequenceManagerTest extends \PHPUnit_Framework_TestCase
+class ManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\SalesSequence\Model\Resource\Sequence\Meta | \PHPUnit_Framework_MockObject_MockObject
@@ -21,7 +21,7 @@ class SequenceManagerTest extends \PHPUnit_Framework_TestCase
     private $sequenceFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\Sequence\SequenceManager
+     * @var \Magento\SalesSequence\Model\Sequence\Manager
      */
     private $sequenceManager;
 
@@ -84,7 +84,7 @@ class SequenceManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->sequenceManager = $helper->getObject(
-            'Magento\SalesSequence\Model\Sequence\SequenceManager',
+            'Magento\SalesSequence\Model\Sequence\Manager',
             [
                 'resourceSequenceMeta' => $this->resourceSequenceMeta,
                 'sequenceFactory' => $this->sequenceFactory

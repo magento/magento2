@@ -33,7 +33,7 @@ class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager
+     * @param \Magento\SalesSequence\Model\Sequence\Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
      * @param null $resourcePrefix
@@ -42,7 +42,7 @@ class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
-        \Magento\SalesSequence\Model\Sequence\SequenceManager $sequenceManager,
+        \Magento\SalesSequence\Model\Sequence\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
         $resourcePrefix = null,

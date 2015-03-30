@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Resource;
 
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
-use Magento\SalesSequence\Model\Sequence\SequenceManager;
+use Magento\SalesSequence\Model\Sequence\Manager;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
 use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
@@ -59,7 +59,7 @@ class Order extends SalesResource implements OrderResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SequenceManager $sequenceManager
+     * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param AddressHandler $addressHandler
      * @param StateHandler $stateHandler
@@ -69,7 +69,7 @@ class Order extends SalesResource implements OrderResourceInterface
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
-        SequenceManager $sequenceManager,
+        Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         AddressHandler $addressHandler,
         StateHandler $stateHandler,

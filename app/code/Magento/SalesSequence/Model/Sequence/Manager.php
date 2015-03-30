@@ -9,9 +9,9 @@ use Magento\SalesSequence\Model\Resource\Sequence\Meta as ResourceSequenceMeta;
 use Magento\SalesSequence\Model\SequenceFactory;
 
 /**
- * Class SequenceManager
+ * Class Manager
  */
-class SequenceManager
+class Manager
 {
     /**
      * @var ResourceSequenceMeta

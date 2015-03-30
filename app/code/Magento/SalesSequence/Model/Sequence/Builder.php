@@ -12,20 +12,10 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 
 /**
- * Class SequenceBuilder
+ * Class Builder
  */
-class SequenceBuilder
+class Builder
 {
-    /**
-     * MySql maximal integer for sequences
-     */
-    const MYSQL_MAX_UNSIGNED_INT = 4294967295;
-
-    /**
-     * Sequence warning value
-     */
-    const SEQUENCE_UNSIGNED_INT_WARNING_VALUE = 4294966295;
-
     /**
      * @var resourceMetadata
      */
