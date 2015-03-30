@@ -480,17 +480,15 @@ abstract class AbstractPdf extends \Magento\Framework\Object
 
         if (!$order->getIsVirtual()) {
             $this->y = $addressesStartY;
-            if (isset($shippingAddress)) {
-                foreach ($shippingAddress as $value) {
-                    if ($value !== '') {
-                        $text = [];
-                        foreach ($this->string->split($value, 45, true, true) as $_value) {
-                            $text[] = $_value;
-                        }
-                        foreach ($text as $part) {
-                            $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
-                            $this->y -= 15;
-                        }
+            foreach ($shippingAddress as $value) {
+                if ($value !== '') {
+                    $text = [];
+                    foreach ($this->string->split($value, 45, true, true) as $_value) {
+                        $text[] = $_value;
+                    }
+                    foreach ($text as $part) {
+                        $page->drawText(strip_tags(ltrim($part)), 285, $this->y, 'UTF-8');
+                        $this->y -= 15;
                     }
                 }
             }
