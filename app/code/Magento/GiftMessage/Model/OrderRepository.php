@@ -120,9 +120,10 @@ class OrderRepository implements \Magento\GiftMessage\Api\OrderRepositoryInterfa
         $message = [];
         $message[$orderId] = [
             'type' => 'order',
-            'sender' => $giftMessage->getSender(),
-            'recipient' => $giftMessage->getRecipient(),
-            'message' => $giftMessage->getMessage(),
+            $giftMessage::CUSTOMER_ID => $giftMessage->getCustomerId(),
+            $giftMessage::SENDER => $giftMessage->getSender(),
+            $giftMessage::RECIPIENT => $giftMessage->getRecipient(),
+            $giftMessage::MESSAGE => $giftMessage->getMessage(),
         ];
 
         $this->giftMessageSaveModel->setGiftmessages($message);
