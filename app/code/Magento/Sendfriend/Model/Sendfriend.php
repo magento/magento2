@@ -161,7 +161,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @api
      * @return $this
      * @throws CoreException
      */
@@ -221,7 +220,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate Form data
      *
-     * @api
      * @return bool|string[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -272,7 +270,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Set Recipients
      *
-     * @api
      * @param array $recipients
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -317,7 +314,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Recipients object
      *
-     * @api
      * @return \Magento\Framework\Object
      */
     public function getRecipients()
@@ -333,7 +329,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Set product instance
      *
-     * @api
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -345,7 +340,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Product instance
      *
-     * @api
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\Product
      */
@@ -361,7 +355,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Set Sender Information array
      *
-     * @api
      * @param array $sender
      * @return $this
      */
@@ -377,7 +370,6 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve Sender Information Object
      *
-     * @api
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Object
      */

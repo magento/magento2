@@ -149,7 +149,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
     /**
      * Set model type
      *
-     * @api
      * @param string $type
      * @return void
      */
@@ -183,7 +182,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
     /**
      * Set website id
      *
-     * @api
      * @param int $websiteId
      * @return $this
      */
@@ -196,7 +194,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
     /**
      * Set customer by id
      *
-     * @api
      * @param int $customerId
      * @return $this
      */
@@ -235,7 +232,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
     /**
      * Add product (price change) to collection
      *
-     * @api
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -248,7 +244,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
     /**
      * Add product (back in stock) to collection
      *
-     * @api
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -287,7 +282,6 @@ class Email extends \Magento\Framework\Model\AbstractModel
     /**
      * Send customer email
      *
-     * @api
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
