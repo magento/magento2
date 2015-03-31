@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\App\DeploymentConfig\Reader;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -161,9 +162,10 @@ class Application
     {
         if (null === $this->_db) {
             if ($this->isInstalled()) {
-                $reader = new \Magento\Framework\App\DeploymentConfig\Reader($this->dirList);
+                $reader = new Reader($this->dirList);
                 $deploymentConfig = new DeploymentConfig($reader, []);
-                $dbInfo = $deploymentConfig->getConfigData(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT);
+                $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
+                $dbInfo = $dbConfig['connection']['default'];
                 $host = $dbInfo['host'];
                 $user = $dbInfo['username'];
                 $password = $dbInfo['password'];
