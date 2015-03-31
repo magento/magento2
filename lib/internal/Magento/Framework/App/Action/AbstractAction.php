@@ -56,7 +56,7 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
     }
 
     /**
-     * Redirect user to the previous or main page
+     * Create redirect object, which can be used to redirect user to previous or main page
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
