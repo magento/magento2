@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Service\V1;
 
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class OrderCreateTest extends WebapiAbstract
@@ -38,30 +39,11 @@ class OrderCreateTest extends WebapiAbstract
         /** @var \Magento\Sales\Api\Data\OrderAddressFactory $orderAddressFactory */
         $orderAddressFactory = $this->objectManager->get('Magento\Sales\Model\Order\AddressFactory');
 
-        $orderExtensionAttributes = [
-            'gift_message' => [
-                'sender' => 'testSender',
-                'recipient' => 'testRecipient',
-                'message' => 'testMessage'
-            ]
-        ];
-        $orderItemExtensionAttributes = [
-            'gift_message' => [
-                'sender' => 'testSenderForOrderItem',
-                'recipient' => 'testRecipientForOrderItem',
-                'message' => 'testMessageForOrderItem'
-            ]
-        ];
         $order = $orderFactory->create(
-            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderInterface', $orderExtensionAttributes)]
+            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderInterface')]
         );
         $orderItem = $orderItemFactory->create(
-            [
-                'data' => $this->getDataStructure(
-                    'Magento\Sales\Api\Data\OrderItemInterface',
-                    $orderItemExtensionAttributes
-                )
-            ]
+            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderItemInterface')]
         );
         $orderPayment = $orderPaymentFactory->create(
             ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderPaymentInterface')]
@@ -116,19 +98,18 @@ class OrderCreateTest extends WebapiAbstract
         return $orderData;
     }
 
-    protected function getDataStructure($className, array $extensionAttributes = null)
+    protected function getDataStructure($className)
     {
         $refClass = new \ReflectionClass($className);
         $constants = $refClass->getConstants();
         $data = array_fill_keys($constants, null);
         unset($data['custom_attributes']);
-        $data['extension_attributes'] = $extensionAttributes;
         return $data;
     }
 
     public function testOrderCreate()
     {
-        $expectedOrderArray = $this->prepareOrder();
+        $order = $this->prepareOrder();
 
         $serviceInfo = [
             'rest' => [
@@ -141,57 +122,13 @@ class OrderCreateTest extends WebapiAbstract
                 'operation' => self::SERVICE_READ_NAME . 'save',
             ],
         ];
-        /** @var array $resultOrderArray */
-        $resultOrderArray = $this->_webApiCall($serviceInfo, ['entity' => $expectedOrderArray]);
-        $this->assertNotEmpty($resultOrderArray);
-        $this->assertTrue((bool)$resultOrderArray['entity_id']);
+        $this->assertNotEmpty($this->_webApiCall($serviceInfo, ['entity' => $order]));
 
-        /** @var \Magento\Sales\Api\Data\Order\Repository $repository */
-        $repository = $this->objectManager->get('Magento\Sales\Api\Data\Order\Repository');
-        /** @var \Magento\Sales\Api\Data\OrderInterface $actualOrder */
-        $actualOrder = $repository->get($resultOrderArray['entity_id']);
-        $this->assertInstanceOf('Magento\Sales\Api\Data\OrderInterface', $actualOrder);
-
-        $this->assertInstanceOf(
-            'Magento\Sales\Api\Data\OrderExtensionInterface',
-            $actualOrder->getExtensionAttributes()
-        );
-        $this->assertInstanceOf(
-            'Magento\GiftMessage\Api\Data\MessageInterface',
-            $actualOrder->getExtensionAttributes()->getGiftMessage()
-        );
-
-        /** @var \Magento\GiftMessage\Api\Data\MessageInterface $orderGiftMessage */
-        $orderGiftMessage = $actualOrder->getExtensionAttributes()->getGiftMessage();
-        /** @var \Magento\Sales\Api\Data\OrderItemInterface $actualItemOrder */
-        $actualOrderItem = $actualOrder->getItems();
-        $this->assertTrue(is_array($actualOrderItem));
-        $this->assertFalse(empty($actualOrderItem));
-        $actualOrderItem = array_pop($actualOrderItem);
-
-
-        $this->assertInstanceOf(
-            'Magento\Sales\Api\Data\OrderItemExtensionInterface',
-            $actualOrderItem->getExtensionAttributes()
-        );
-        $this->assertInstanceOf(
-            'Magento\GiftMessage\Api\Data\MessageInterface',
-            $actualOrderItem->getExtensionAttributes()->getGiftMessage()
-        );
-        /** @var \Magento\GiftMessage\Api\Data\MessageInterface $orderItemGiftMessage */
-        $orderItemGiftMessage = $actualOrderItem->getExtensionAttributes()->getGiftMessage();
-
-        $this->assertEquals($expectedOrderArray['base_grand_total'], $actualOrder->getBaseGrandTotal());
-        $this->assertEquals($expectedOrderArray['grand_total'], $actualOrder->getGrandTotal());
-
-        $expectedOrderGiftMessage = $expectedOrderArray['extension_attributes']['gift_message'];
-        $this->assertEquals($expectedOrderGiftMessage['message'], $orderGiftMessage->getMessage());
-        $this->assertEquals($expectedOrderGiftMessage['sender'], $orderGiftMessage->getSender());
-        $this->assertEquals($expectedOrderGiftMessage['recipient'], $orderGiftMessage->getRecipient());
-
-        $expectedOrderItemGiftMessage = $expectedOrderArray['items'][0]['extension_attributes']['gift_message'];
-        $this->assertEquals($expectedOrderItemGiftMessage['message'], $orderItemGiftMessage->getMessage());
-        $this->assertEquals($expectedOrderItemGiftMessage['sender'], $orderItemGiftMessage->getSender());
-        $this->assertEquals($expectedOrderItemGiftMessage['recipient'], $orderItemGiftMessage->getRecipient());
+        /** @var \Magento\Sales\Model\Order $model */
+        $model = $this->objectManager->get('Magento\Sales\Model\Order');
+        $model->load($order['customer_email'], 'customer_email');
+        $this->assertTrue((bool)$model->getId());
+        $this->assertEquals($order['base_grand_total'], $model->getBaseGrandTotal());
+        $this->assertEquals($order['grand_total'], $model->getGrandTotal());
     }
 }
