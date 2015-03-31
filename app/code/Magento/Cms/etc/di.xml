@@ -6,8 +6,14 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Cms\Model\PageCriteriaInterface" type="Magento\Cms\Model\Resource\PageCriteria" />
-    <preference for="Magento\Cms\Model\BlockCriteriaInterface" type="Magento\Cms\Model\Resource\BlockCriteria" />
+    <preference for="Magento\Cms\Api\Data\PageSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Cms\Api\Data\BlockSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Cms\Api\Data\PageInterface" type="Magento\Cms\Model\Page" />
+    <preference for="Magento\Cms\Api\Data\BlockInterface" type="Magento\Cms\Model\Block" />
+    <preference for="Magento\Cms\Api\BlockRepositoryInterface" type="Magento\Cms\Model\BlockRepository" />
+    <preference for="Magento\Cms\Api\PageRepositoryInterface" type="Magento\Cms\Model\PageRepository" />
     <type name="Magento\Cms\Model\Wysiwyg\Config">
         <arguments>
             <argument name="windowSize" xsi:type="array">

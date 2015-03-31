@@ -228,8 +228,10 @@ class Cart extends Object implements CartInterface
     {
         $quote = $this->getQuote()->setCheckoutMethod('');
         $this->_checkoutSession->setCartWasUpdated(true);
+        // TODO: Move this logic to Multishipping module as plug-in.
         // reset for multiple address checkout
-        if ($this->_checkoutSession->getCheckoutState() !== Session::CHECKOUT_STATE_BEGIN) {
+        if ($this->_checkoutSession->getCheckoutState() !== Session::CHECKOUT_STATE_BEGIN
+            && $this->_checkoutSession->getCheckoutState() !== null) {
             $quote->removeAllAddresses()->removePayment();
             $this->_checkoutSession->resetCheckout();
         }
