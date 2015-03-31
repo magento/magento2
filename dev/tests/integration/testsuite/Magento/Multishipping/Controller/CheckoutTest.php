@@ -57,11 +57,9 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
         $customerSession = $this->_objectManager->create('Magento\Customer\Model\Session', [$logger]);
         $customerSession->setCustomerDataAsLoggedIn($customer);
         $this->checkoutSession->setCheckoutState(State::STEP_BILLING);
-
         $this->getRequest()->setPostValue('payment', ['method' => 'checkmo']);
         $this->dispatch('multishipping/checkout/overview');
         $html = $this->getResponse()->getBody();
-
         $this->assertContains('<div class="box box-billing-method">', $html);
         $this->assertContains('<div class="box box-shipping-method">', $html);
         $this->assertContains(

@@ -188,7 +188,7 @@ class Listing extends AbstractView
     public function getCollectionItems()
     {
         $items = [];
-        $collection = $this->getDataCollection()->getResultCollection();
+        $collection = $this->getDataCollection();
         foreach ($collection->getItems() as $item) {
             $actualFields = [];
             $itemsData = $this->getDataFromDataProvider($item->getData());
@@ -230,8 +230,8 @@ class Listing extends AbstractView
         );
         $this->renderContext->getStorage()->addGlobalData('dump', ['extenders' => []]);
 
-        $collection = $this->getDataCollection()->getResultCollection();
-        $totalCount = $collection->getTotalCount();
+        $collection = $this->getDataCollection();
+        $totalCount = $collection->count();
         $this->renderContext->getStorage()->addDataSource(
             $this->getName(),
             [

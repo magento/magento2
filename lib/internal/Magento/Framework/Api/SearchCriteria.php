@@ -15,7 +15,7 @@ class SearchCriteria extends AbstractSimpleObject implements SearchCriteriaInter
     /**#@+
      * Constants for Data Object keys
      */
-    const FILTER_GROUPS = 'filterGroups';
+    const FILTER_GROUPS = 'filter_groups';
     const SORT_ORDERS = 'sort_orders';
     const PAGE_SIZE = 'page_size';
     const CURRENT_PAGE = 'current_page';

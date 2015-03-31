@@ -9,7 +9,7 @@
     <default>
         <dev>
             <template>
-                <minify_html>1</minify_html>
+                <minify_html>0</minify_html>
             </template>
         </dev>
         <system>
