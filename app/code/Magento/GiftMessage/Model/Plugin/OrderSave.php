@@ -61,13 +61,21 @@ class OrderSave
      */
     protected function saveOrderGiftMessage(\Magento\Sales\Api\Data\OrderInterface $order)
     {
-        if (null !== ($order->getExtensionAttributes())) {
+        if (
+            null !== $order->getExtensionAttributes() &&
+            null !== $order->getExtensionAttributes()->getGiftMessage()
+        ) {
             /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
             $giftMessage = $order->getExtensionAttributes()->getGiftMessage();
-            try {
-                $this->giftMessageOrderRepository->save($order->getEntityId(), $giftMessage);
-            } catch (\Exception $e) {
-                throw new CouldNotSaveException(__('Could not add gift message to order: "%1"', $e->getMessage()), $e);
+            if (null !== $giftMessage) {
+                try {
+                    $this->giftMessageOrderRepository->save($order->getEntityId(), $giftMessage);
+                } catch (\Exception $e) {
+                    throw new CouldNotSaveException(
+                        __('Could not add gift message to order: "%1"', $e->getMessage()),
+                        $e
+                    );
+                }
             }
         }
         return $order;
@@ -84,7 +92,10 @@ class OrderSave
         if (null !== $order->getItems()) {
             /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
             foreach ($order->getItems() as $orderItem) {
-                if (null !== ($orderItem->getExtensionAttributes())) {
+                if (
+                    null !== $orderItem->getExtensionAttributes() &&
+                    null !== $orderItem->getExtensionAttributes()->getGiftMessage()
+                ) {
                     /* @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
                     $giftMessage = $orderItem->getExtensionAttributes()->getGiftMessage();
                     try {
