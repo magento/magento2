@@ -153,7 +153,7 @@ class PagingTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['setLimit']
+            ['setPageSize', 'setCurPage']
         );
 
         $this->renderContextMock->expects($this->any())->method('getStorage')->willReturn($storageMock);
@@ -173,8 +173,12 @@ class PagingTest extends \PHPUnit_Framework_TestCase
             );
 
         $dataCollectionMock->expects($this->any())
-            ->method('setLimit')
-            ->with($paramsPage, $paramsSize)
+            ->method('setPageSize')
+            ->with($paramsSize)
+            ->willReturnSelf();
+        $dataCollectionMock->expects($this->any())
+            ->method('setCurPage')
+            ->with($paramsPage)
             ->willReturnSelf();
 
         $this->assertNull($this->view->prepare());
