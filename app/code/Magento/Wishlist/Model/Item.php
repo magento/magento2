@@ -176,7 +176,6 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Set quantity. If quantity is less than 0 - set it to 1
      *
-     * @api
      * @param int $qty
      * @return $this
      */
@@ -309,7 +308,6 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Validate wish list item data
      *
-     * @api
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -353,7 +351,6 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Load item by product, wishlist and shared stores
      *
-     * @api
      * @param int $wishlistId
      * @param int $productId
      * @param array $sharedStores
@@ -403,7 +400,6 @@ class Item extends AbstractModel implements ItemInterface
      * Return true if product was successful added or exception with code
      * Return false for disabled or unvisible products
      *
-     * @api
      * @param \Magento\Checkout\Model\Cart $cart
      * @param bool $delete  delete the item after successful add to cart
      * @return bool
@@ -475,7 +471,6 @@ class Item extends AbstractModel implements ItemInterface
      * Returns formatted buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @api
      * @return \Magento\Framework\Object
      */
     public function getBuyRequest()
@@ -577,7 +572,6 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Check product representation in item
      *
-     * @api
      * @param   \Magento\Catalog\Model\Product $product
      * @return  bool
      */
@@ -626,7 +620,6 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Initialize item options
      *
-     * @api
      * @param   array $options
      * @return  $this
      */
@@ -641,7 +634,6 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Get all item options
      *
-     * @api
      * @return Option[]
      */
     public function getOptions()
@@ -662,7 +654,6 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Add option to item
      *
-     * @api
      * @param   Option|\Magento\Framework\Object|array $option
      * @return  $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -694,7 +685,6 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Remove option from item options
      *
-     * @api
      * @param string $code
      * @return $this
      */
@@ -710,7 +700,6 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Get item option by code
      *
-     * @api
      * @param   string $code
      * @return  Option|null
      */
@@ -774,7 +763,6 @@ class Item extends AbstractModel implements ItemInterface
      * If we need to load only some of options, then option code or array of option codes
      * can be provided in $optionsFilter.
      *
-     * @api
      * @param int $id
      * @param null|string|array $optionsFilter
      *

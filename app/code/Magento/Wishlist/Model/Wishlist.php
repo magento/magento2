@@ -172,7 +172,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Load wishlist by customer id
      *
-     * @api
      * @param int $customerId
      * @param bool $create Create wishlist if don't exists
      * @return $this
@@ -197,7 +196,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Retrieve wishlist name
      *
-     * @api
      * @return string
      */
     public function getName()
@@ -212,7 +210,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Set random sharing code
      *
-     * @api
      * @return $this
      */
     public function generateSharingCode()
@@ -224,7 +221,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Load by sharing code
      *
-     * @api
      * @param string $code
      * @return $this
      */
@@ -339,7 +335,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Retrieve wishlist item collection
      *
-     * @api
      * @param int $itemId
      * @return false|Item
      */
@@ -354,7 +349,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Adding item to wishlist
      *
-     * @api
      * @param   Item $item
      * @return  $this
      */
@@ -372,7 +366,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      * Adds new product to wishlist.
      * Returns new item or string on error.
      *
-     * @api
      * @param int|\Magento\Catalog\Model\Product $product
      * @param \Magento\Framework\Object|array|string|null $buyRequest
      * @param bool $forciblySetQty
@@ -462,7 +455,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Set customer id
      *
-     * @api
      * @param int $customerId
      * @return $this
      */
@@ -474,7 +466,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Retrieve customer id
      *
-     * @api
      * @return int
      */
     public function getCustomerId()
@@ -533,7 +524,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Retrieve wishlist store object
      *
-     * @api
      * @return \Magento\Store\Model\Store
      */
     public function getStore()
@@ -547,7 +537,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Set wishlist store
      *
-     * @api
      * @param \Magento\Store\Model\Store $store
      * @return $this
      */
@@ -560,7 +549,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
     /**
      * Retrieve wishlist items count
      *
-     * @api
      * @return int
      */
     public function getItemsCount()
@@ -608,7 +596,6 @@ class Wishlist extends \Magento\Framework\Model\AbstractModel implements \Magent
      *
      * For more options see \Magento\Catalog\Helper\Product->addParamsToBuyRequest()
      *
-     * @api
      * @param int|Item $itemId
      * @param \Magento\Framework\Object $buyRequest
      * @param null|array|\Magento\Framework\Object $params
