@@ -15,14 +15,17 @@
         </referenceBlock>
         <referenceContainer name="header-wrapper">
             <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="cart/minicart.phtml">
-                <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.sidebar.item.renderers" as="renderer.list"/>
-                <container name="minicart.subtotal.container" as="subtotal" label="My Cart Subtotal">
-                    <block name="minicart.subtotal" class="Magento\Checkout\Block\Cart\Sidebar" template="cart/subtotal.phtml"/>
-                </container>
-                <container name="minicart.extra.info" as="minicart_info" label="My Cart Extra info"/>
-                <container name="topCart.extra_actions" as="extra_actions" label="My Cart Extra Actions">
-                    <block class="Magento\Catalog\Block\ShortcutButtons" name="topCart.shortcut.buttons"/>
-                </container>
+                <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart.content" as="minicart_content" template="cart/minicart/content.phtml">
+                    <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.sidebar.item.renderers" as="renderer.list"/>
+                    <container name="minicart.subtotal.container" as="subtotal" label="My Cart Subtotal">
+                        <block name="minicart.subtotal" class="Magento\Checkout\Block\Cart\Sidebar" template="cart/subtotal.phtml"/>
+                    </container>
+                    <container name="minicart.promotion" as="cart_promotion" label="Mini-cart promotion block"/>
+                    <container name="minicart.extra.info" as="minicart_info" label="My Cart Extra info"/>
+                    <container name="topCart.extra_actions" as="extra_actions" label="My Cart Extra Actions">
+                        <block class="Magento\Catalog\Block\ShortcutButtons" name="topCart.shortcut.buttons"/>
+                    </container>
+                </block>
             </block>
         </referenceContainer>
     </body>
