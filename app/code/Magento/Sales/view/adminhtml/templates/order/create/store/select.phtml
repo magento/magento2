@@ -19,12 +19,17 @@
                     <?php if ($showWebsite == false): ?>
                         <?php $showWebsite = true; ?>
                         <div class="admin__field field-website_label">
-                            <label class="admin__field-label" for=""><span><?php echo $block->escapeHtml($_website->getName()) ?></span></label>
-                            <?php if ($showHelpHint == 0):
-                                echo $block->getHintHtml();
-                                $showHelpHint = 1;
-                            endif; ?>
-                            <div class="admin__field-control"></div>
+                            <label class="admin__field-label" for="">
+                                <span><?php echo $block->escapeHtml($_website->getName()) ?></span>
+                            </label>
+                            <div class="admin__field-control">
+                                <div class="admin__field admin__field-option">
+                                    <?php if ($showHelpHint == 0):
+                                        echo $block->getHintHtml();
+                                        $showHelpHint = 1;
+                                    endif; ?>
+                                </div>
+                            </div>
                         </div>
                     <?php endif; ?>
 

@@ -7,9 +7,23 @@
 //  Variables
 //  _____________________________________________
 
+@page-order-sidebar-base__font-size: 1.5rem;
 @page-order-sidebar__color: @color-very-dark-gray;
 @page-order-sidebar__margin: 2.4rem;
+@page-order-sidebar__padding: 2rem;
+@page-order-sidebar__margin-reqular: 1.7rem;
+@page-order-sidebar__margin-small: .5rem;
 @page-order-sidebar__border-color: @border__color;
+
+@page-order-icon-refresh__font-size: 2rem;
+@page-order-icon-refresh__color: @color-gray83;
+@page-order-icon-refresh__hover__color: darken(@color-gray83, 10%);
+
+
+@page-order-icon-add__content: @icon-arrow-right__content;
+@page-order-icon-remove__content: @icon-delete__content;
+@page-order-icon-refresh__content: @icon-refresh__content;
+
 
 //
 //  Layout
@@ -69,12 +83,12 @@
     .admin__fieldset-wrapper-title {
         border-bottom: 1px solid @color-gray80;
         .extend__clearfix();
-        margin-bottom: 1.5rem;
+        margin-bottom: @page-order-sidebar__margin-reqular;
         padding-bottom: @indent__xs;
         .actions {
             float: right;
             margin-top: -@indent__xs;
-            margin-bottom: 1.5rem;
+            margin-bottom: @page-order-sidebar__margin-reqular;
         }
         .action-secondary {
             margin-left: @indent__base;
@@ -103,7 +117,7 @@
 .order-sidebar {
     &:extend(.admin__page-nav);
     color: @page-order-sidebar__color;
-    padding: 3rem 2rem;
+    padding: 3rem @page-order-sidebar__padding;
 
     .order-currency {
         float: none;
@@ -111,7 +125,8 @@
         margin: 0 0 @page-order-sidebar__margin;
         .label {
             display: block;
-            margin: 0 0 .5rem;
+            font-size: @page-order-sidebar-base__font-size;
+            margin: 0 0 1rem;
         }
     }
     .title {
@@ -123,7 +138,7 @@
     }
     .admin__control-select {
         width: 100%;
-        margin: 0 0 .5rem;
+        margin: 0 0 @page-order-sidebar__margin-small;
     }
     .order-sidebar-block {
         border-bottom: 1px solid @page-order-sidebar__border-color;
@@ -131,9 +146,79 @@
         padding: 0 0 @page-order-sidebar__margin;
     }
     .table {
+        color: @page-order-sidebar__color;
+        width: 100%;
         th,
         td {
-            padding: 1rem;
+            &:first-child {
+                padding-left: 0;
+            }
+        }
+        .icon {
+            &:extend(.abs-icon all);
+            display: inline-block;
+            font-size: @page-order-sidebar-base__font-size + 0.1rem;
+            vertical-align: middle;
+            &:after {
+                color: @page-order-sidebar__color;
+            }
+            &.icon-remove {
+                &:after {
+                    content: @page-order-icon-remove__content;
+                }
+            }
+            &.icon-add {
+                &:after {
+                    content: @page-order-icon-add__content;
+                }
+            }
+            > span {
+                &:extend(.abs-visually-hidden all);
+            }
+        }
+    }
+    .action-refresh {
+        &:extend(.abs-icon all);
+        display: inline-block;
+        font-size: @page-order-icon-refresh__font-size;
+        padding-right: @page-order-sidebar__margin-small;
+        vertical-align: middle;
+        &:after {
+            color: @page-order-icon-refresh__color;
+            content: @page-order-icon-refresh__content;
+        }
+        &:hover {
+            &:after {
+                color: @page-order-icon-refresh__hover__color;
+            }
+            text-decoration: none;
+        }
+        > span {
+            &:extend(.abs-visually-hidden all);
+        }
+    }
+    .create-order-sidebar-block {
+        .head {
+            margin: 0 0 @page-order-sidebar__margin;
+        }
+        .auto-scroll {
+            margin: 0 0 @page-order-sidebar__margin-small;
+            max-height: 17rem;
+            overflow: auto;
+        }
+    }
+    .create-order-sidebar-label {
+        display: inline-block;
+        font-size: @page-order-sidebar-base__font-size;
+        font-weight: @font-weight__regular;
+        margin: 0;
+        + .admin__control-select {
+            margin-top: @page-order-sidebar__margin-reqular;
+        }
+    }
+    .actions {
+        .action-secondary {
+            width: 100%;
         }
     }
 }
