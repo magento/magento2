@@ -139,6 +139,7 @@ class DeploymentConfig
 
     /**
      * Convert associative array of arbitrary depth to a flat associative array with concatenated key path as keys
+     * each level of array is accessible by path key
      *
      * @param array $params
      * @param string $path
@@ -149,20 +150,18 @@ class DeploymentConfig
     {
         $cache = [];
 
-        if (is_array($params)) {
-            foreach ($params as $key => $param) {
-                if ($path) {
-                    $newPath = $path . '/' . $key;
-                } else {
-                    $newPath = $key;
-                }
-                if (isset($cache[$newPath])) {
-                    throw new \Exception("Key collision {$newPath} is already defined.");
-                }
-                $cache[$newPath] = $param;
-                if (is_array($param)) {
-                    $cache = array_merge($cache, $this->flattenParams($param, $newPath));
-                }
+        foreach ($params as $key => $param) {
+            if ($path) {
+                $newPath = $path . '/' . $key;
+            } else {
+                $newPath = $key;
+            }
+            if (isset($cache[$newPath])) {
+                throw new \Exception("Key collision {$newPath} is already defined.");
+            }
+            $cache[$newPath] = $param;
+            if (is_array($param)) {
+                $cache = array_merge($cache, $this->flattenParams($param, $newPath));
             }
         }
 
