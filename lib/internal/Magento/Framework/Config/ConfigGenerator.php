@@ -157,10 +157,9 @@ class ConfigGenerator
             ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS,
         ];
 
-        $prefixKey = isset($data[ConfigOptionsList::INPUT_KEY_DB_PREFIX])
-            ? $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]
-            : '';
-        $configData->set(ConfigOptionsList::CONFIG_PATH_DB_PREFIX, $prefixKey);
+        if (isset($data[ConfigOptionsList::INPUT_KEY_DB_PREFIX])) {
+            $configData->set(ConfigOptionsList::CONFIG_PATH_DB_PREFIX, $data[ConfigOptionsList::INPUT_KEY_DB_PREFIX]);
+        }
 
         foreach ($optional as $key) {
             if (isset($data[$key])) {
