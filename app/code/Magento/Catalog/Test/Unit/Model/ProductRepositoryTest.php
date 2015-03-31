@@ -797,7 +797,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->initializedProductMock->setData("product_links", $existingLinks);
 
         if (!empty($newLinks)) {
-            $this->initializedProductMock->setData("ignoreLinksFlag", false);
+            $this->initializedProductMock->setData("ignore_links_flag", false);
             $this->resourceModelMock
                 ->expects($this->any())->method('getProductsIdsBySkus')
                 ->willReturn([$newLinks['linked_product_sku'] => $newLinks['linked_product_sku']]);
@@ -821,16 +821,23 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
             $this->productData['product_links'] = [];
 
-            $this->initializedProductMock->setData("ignoreLinksFlag", true);
+            $this->initializedProductMock->setData("ignore_links_flag", true);
             $this->initializedProductMock->expects($this->never())
                 ->method('getProductLinks')
                 ->willReturn([]);
         }
 
         $this->extensibleDataObjectConverterMock
-            ->expects($this->once())
+            ->expects($this->at(0))
             ->method('toNestedArray')
             ->will($this->returnValue($this->productData));
+
+        if (!empty($newLinks)) {
+            $this->extensibleDataObjectConverterMock
+                ->expects($this->at(1))
+                ->method('toNestedArray')
+                ->will($this->returnValue($newLinks));
+        }
 
         $outputLinks = [];
         if (!empty($expectedData)) {

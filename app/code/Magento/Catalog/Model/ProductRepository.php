@@ -351,6 +351,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             return $this;
         }
 
+        // Clear all existing product links and then set the ones we want
+        $this->linkInitializer->initializeLinks($product, ['related' => []]);
+        $this->linkInitializer->initializeLinks($product, ['upsell' => []]);
+        $this->linkInitializer->initializeLinks($product, ['crosssell' => []]);
+
         // Gather each linktype info
         if (!empty($newLinks)) {
             $productLinks = [];
@@ -368,24 +373,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
                 $linksToInitialize = [];
                 foreach ($linksByType as $link) {
-                    $data = $link->__toArray();
+                    $linkDataArray = $this->extensibleDataObjectConverter
+                        ->toNestedArray($link, [], 'Magento\Catalog\Api\Data\ProductLinkInterface');
                     $linkedSku = $link->getLinkedProductSku();
                     if (!isset($linkedProductIds[$linkedSku])) {
                         throw new NoSuchEntityException(
                             __('Product with SKU "%1" does not exist', $linkedSku)
                         );
                     }
-                    $data['product_id'] = $linkedProductIds[$linkedSku];
-                    $linksToInitialize[$linkedProductIds[$linkedSku]] = $data;
+                    $linkDataArray['product_id'] = $linkedProductIds[$linkedSku];
+                    $linksToInitialize[$linkedProductIds[$linkedSku]] = $linkDataArray;
                 }
 
                 $this->linkInitializer->initializeLinks($product, [$type => $linksToInitialize]);
             }
-        } else {
-            // Clear all existing product links
-            $this->linkInitializer->initializeLinks($product, ['related' => []]);
-            $this->linkInitializer->initializeLinks($product, ['upsell' => []]);
-            $this->linkInitializer->initializeLinks($product, ['crossell' => []]);
         }
 
         $product->setProductLinks($newLinks);
@@ -528,12 +529,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $tierPrices = $product->getData('tier_price');
 
         $productId = $this->resourceModel->getIdBySku($product->getSku());
-        $ignoreLinksFlag = $product->getData('ignoreLinksFlag');
+        $ignoreLinksFlag = $product->getData('ignore_links_flag');
         $productDataArray = $this->extensibleDataObjectConverter
             ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
 
         $productLinks = null;
-        if ($ignoreLinksFlag == false && !is_null($ignoreLinksFlag)) {
+        if (!$ignoreLinksFlag) {
             $productLinks = $product->getProductLinks();
         }
 

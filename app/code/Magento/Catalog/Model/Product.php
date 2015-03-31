@@ -1321,9 +1321,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function setProductLinks(array $links = null)
     {
         if ($links === null) {
-            $this->setData('ignoreLinksFlag', true);
+            $this->setData('ignore_links_flag', true);
         } else {
-            $this->setData('ignoreLinksFlag', false);
+            $this->setData('ignore_links_flag', false);
         }
         $this->_links = $links;
         return $this;
