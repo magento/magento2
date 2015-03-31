@@ -73,6 +73,9 @@ class UiComponentFactory extends Object
         $identifier
     ) {
         list($className, $arguments) = $this->argumentsResolver($identifier, $bundleComponents);
+        if (isset($arguments['data']['disabled']) && $arguments['data']['disabled'] === 'true') {
+            return null;
+        }
         $components = [];
         foreach ($bundleComponents['children'] as $childrenIdentifier => $childrenData) {
             $children = $this->createChildComponent(
@@ -82,7 +85,7 @@ class UiComponentFactory extends Object
             );
             $components[$childrenIdentifier] = $children;
         }
-
+        $components = array_filter($components);
         $arguments['components'] = $components;
         if (!isset($arguments['context'])) {
             $arguments['context'] = $renderContext;
@@ -150,6 +153,7 @@ class UiComponentFactory extends Object
                 );
                 $components[$childrenIdentifier] = $children;
             }
+            $components = array_filter($components);
             $componentArguments['components'] = $components;
 
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
