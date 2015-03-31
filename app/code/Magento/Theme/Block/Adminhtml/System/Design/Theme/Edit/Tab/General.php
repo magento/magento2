@@ -55,11 +55,11 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      */
     protected function _prepareForm()
     {
-        /** @var $session \Magento\Backend\Model\Session */
+        /** @var \Magento\Backend\Model\Session $session */
         $session = $this->_objectManager->get('Magento\Backend\Model\Session');
         $formDataFromSession = $session->getThemeData();
         $this->_isThemeEditable = $this->_getCurrentTheme()->isEditable();
-        /** @var $currentTheme ThemeInterface */
+        /** @var ThemeInterface $currentTheme */
         $currentTheme = $this->_getCurrentTheme();
         $formData = $currentTheme->getData();
         if ($formDataFromSession && isset($formData['theme_id'])) {
@@ -86,7 +86,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
      *
      * @param \Magento\Framework\Data\Form $form
      * @param array $formData
-     * @param \Magento\Core\Model\Theme|ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -99,11 +99,11 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
             $themeFieldset->addField('theme_id', 'hidden', ['name' => 'theme_id']);
         }
 
-        /** @var $themesCollections \Magento\Core\Model\Theme\Collection */
-        $themesCollections = $this->_objectManager->create('Magento\Core\Model\Theme\Collection');
+        /** @var \Magento\Theme\Model\Theme\Collection $themesCollections */
+        $themesCollections = $this->_objectManager->create('Magento\Theme\Model\Theme\Collection');
 
-        /** @var $helper \Magento\Core\Helper\Data */
-        $helper = $this->_objectManager->get('Magento\Core\Helper\Data');
+        /** @var \Magento\Framework\Json\Helper\Data $helper */
+        $helper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
 
         $onChangeScript = sprintf(
             'parentThemeOnChange(this.value, %s)',
@@ -114,7 +114,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
             )
         );
 
-        /** @var $parentTheme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var ThemeInterface $parentTheme */
         $parentTheme = $this->_objectManager->create('Magento\Framework\View\Design\ThemeInterface');
         if (!empty($formData['parent_id'])) {
             $parentTheme->load($formData['parent_id']);
@@ -245,7 +245,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     /**
      * Prepare label for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -285,7 +285,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     {
         $data = ['' => $this->_getDefaults()];
 
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var ThemeInterface $theme */
         foreach ($themesCollections as $theme) {
             $theme->load($theme->getThemePath(), 'theme_path');
             if (!$theme->getId()) {
@@ -300,7 +300,7 @@ class General extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Ab
     /**
      * Get note string for theme's preview image
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getPreviewImageNote()
     {

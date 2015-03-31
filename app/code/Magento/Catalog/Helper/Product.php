@@ -15,7 +15,7 @@ use Magento\Store\Model\Store;
  * Catalog category helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Product extends \Magento\Core\Helper\Url
+class Product extends \Magento\Framework\Url\Helper\Data
 {
     const XML_PATH_PRODUCT_URL_USE_CATEGORY = 'catalog/seo/product_use_categories';
 
@@ -63,23 +63,18 @@ class Product extends \Magento\Core\Helper\Url
     protected $_attributeConfig;
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_coreConfig;
-
-    /**
      * Catalog session
      *
      * @var \Magento\Catalog\Model\Session
      */
     protected $_catalogSession;
+
+    /**
+     * Invalidate product category indexer params
+     *
+     * @var array
+     */
+    protected $_reindexProductCategoryIndexerData;
 
     /**
      * Invalidate price indexer params
@@ -98,6 +93,9 @@ class Product extends \Magento\Core\Helper\Url
      */
     protected $categoryRepository;
 
+    /** @var \Magento\Store\Model\StoreManagerInterface */
+    protected $_storeManager;
+
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -105,10 +103,9 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param string $typeSwitcherLabel
      * @param array $reindexPriceIndexerData
+     * @param array $reindexProductCategoryIndexerData
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -120,10 +117,9 @@ class Product extends \Magento\Core\Helper\Url
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         $typeSwitcherLabel,
         $reindexPriceIndexerData,
+        $reindexProductCategoryIndexerData,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository
     ) {
@@ -131,13 +127,13 @@ class Product extends \Magento\Core\Helper\Url
         $this->_typeSwitcherLabel = $typeSwitcherLabel;
         $this->_attributeConfig = $attributeConfig;
         $this->_coreRegistry = $coreRegistry;
-        $this->_scopeConfig = $scopeConfig;
         $this->_assetRepo = $assetRepo;
-        $this->_coreConfig = $coreConfig;
         $this->_reindexPriceIndexerData = $reindexPriceIndexerData;
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
-        parent::__construct($context, $storeManager);
+        $this->_reindexProductCategoryIndexerData = $reindexProductCategoryIndexerData;
+        $this->_storeManager = $storeManager;
+        parent::__construct($context);
     }
 
     /**
@@ -164,6 +160,22 @@ class Product extends \Magento\Core\Helper\Url
                 if (isset($data[$param])) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retrieve data for product category indexer update
+     *
+     * @param \Magento\Catalog\Model\Product $data
+     * @return boolean
+     */
+    public function isDataForProductCategoryIndexerWasChanged(\Magento\Catalog\Model\Product $data)
+    {
+        foreach ($this->_reindexProductCategoryIndexerData['byDataChange'] as $param) {
+            if ($data->dataHasChangedFor($param)) {
+                return true;
             }
         }
         return false;
@@ -313,7 +325,7 @@ class Product extends \Magento\Core\Helper\Url
      */
     public function canUseCanonicalTag($store = null)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_USE_PRODUCT_CANONICAL_TAG,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
@@ -338,7 +350,7 @@ class Product extends \Magento\Core\Helper\Url
             'boolean' => ['source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'],
         ];
 
-        if (is_null($inputType)) {
+        if ($inputType === null) {
             return $inputTypes;
         } else {
             if (isset($inputTypes[$inputType])) {
@@ -454,7 +466,7 @@ class Product extends \Magento\Core\Helper\Url
                 'catalog_controller_product_init_after',
                 ['product' => $product, 'controller_action' => $controller]
             );
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_logger->critical($e);
             return false;
         }
@@ -558,7 +570,7 @@ class Product extends \Magento\Core\Helper\Url
      */
     public function getFieldsAutogenerationMasks()
     {
-        return $this->_coreConfig->getValue(Product::XML_PATH_AUTO_GENERATE_MASK, 'default');
+        return $this->scopeConfig->getValue(Product::XML_PATH_AUTO_GENERATE_MASK, 'default');
     }
 
     /**
@@ -574,7 +586,7 @@ class Product extends \Magento\Core\Helper\Url
     /**
      * Get label for virtual control
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTypeSwitcherControlLabel()
     {

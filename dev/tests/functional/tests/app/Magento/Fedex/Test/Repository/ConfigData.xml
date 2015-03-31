@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\ConfigData">
+        <dataset name="disable_shipping_all">
+            <field path="carriers/fedex/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="fedex">
+            <field path="carriers/fedex/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/fedex/account" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_FEDEX_ACCOUNT</field>
+            <field path="carriers/fedex/meter_number" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_FEDEX_METER_NUMBER</field>
+            <field path="carriers/fedex/key" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_FEDEX_KEY</field>
+            <field path="carriers/fedex/password" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_FEDEX_PASSWORD</field>
+            <field path="carriers/fedex/sandbox_mode" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+    </repository>
+</config>

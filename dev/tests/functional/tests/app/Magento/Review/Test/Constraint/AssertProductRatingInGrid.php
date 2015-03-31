@@ -15,10 +15,6 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertProductRatingInGrid extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'middle';
-    /* end tags */
-
     /**
      * Assert product Rating availability in product Rating grid
      *

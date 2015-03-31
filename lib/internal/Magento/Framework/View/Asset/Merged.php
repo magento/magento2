@@ -169,6 +169,6 @@ class Merged implements \Iterator
      */
     public static function getRelativeDir()
     {
-        return Minified::CACHE_VIEW_REL . '/merged';
+        return Minified\AbstractAsset::CACHE_VIEW_REL . '/merged';
     }
 }

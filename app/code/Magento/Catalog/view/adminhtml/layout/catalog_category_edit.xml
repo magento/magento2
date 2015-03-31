@@ -8,7 +8,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
-        <link src="Magento_Catalog::js/bootstrap/category-edit.js"/>
     </head>
     <update handle="editor"/>
     <body>

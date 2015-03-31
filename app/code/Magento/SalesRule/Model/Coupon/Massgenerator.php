@@ -139,7 +139,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Generate Coupons Pool
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function generatePool()
@@ -156,7 +156,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
             $attempt = 0;
             do {
                 if ($attempt >= $maxAttempts) {
-                    throw new \Magento\Framework\Model\Exception(
+                    throw new \Magento\Framework\Exception\LocalizedException(
                         __('We cannot create the requested Coupon Qty. Please check your settings and try again.')
                     );
                 }
@@ -165,10 +165,8 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
             } while ($this->getResource()->exists($code));
 
             $expirationDate = $this->getToDate();
-            if ($expirationDate instanceof \Zend_Date) {
-                $expirationDate = $expirationDate->toString(
-                    \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                );
+            if ($expirationDate instanceof \DateTime) {
+                $expirationDate = $expirationDate->format('Y-m-d H:i:s');
             }
 
             $coupon->setId(null)

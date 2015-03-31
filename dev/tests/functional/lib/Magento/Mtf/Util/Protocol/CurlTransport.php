@@ -1,6 +1,5 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -117,6 +116,7 @@ class CurlTransport implements CurlInterface
      * @param array $headers
      * @param array $params
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function write($method, $url, $httpVer = '1.1', $headers = [], $params = [])
     {
@@ -165,7 +165,7 @@ class CurlTransport implements CurlInterface
      */
     protected function _getResource()
     {
-        if (is_null($this->_resource)) {
+        if ($this->_resource === null) {
             $this->_resource = curl_init();
         }
         return $this->_resource;

@@ -130,13 +130,13 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
         $selectBlock = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setName(
-            'widget_instance[{{id}}][page_group]'
+            'widget_instance[<%- data.id %>][page_group]'
         )->setId(
-            'widget_instance[{{id}}][page_group]'
+            'widget_instance[<%- data.id %>][page_group]'
         )->setClass(
             'required-entry page_group_select select'
         )->setExtraParams(
-            "onchange=\"WidgetInstance.displayPageGroup(this.value+\'_{{id}}\')\""
+            "onchange=\"WidgetInstance.displayPageGroup(this.value+\'_<%- data.id %>\')\""
         )->setOptions(
             $this->_getDisplayOnOptions()
         );
@@ -244,7 +244,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
         $chooserBlock = $this->getLayout()->createBlock(
             'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout'
         )->setName(
-            'widget_instance[{{id}}][pages][layout_handle]'
+            'widget_instance[<%- data.id %>][pages][layout_handle]'
         )->setId(
             'layout_handle'
         )->setClass(
@@ -270,7 +270,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
         $chooserBlock = $this->getLayout()->createBlock(
             'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction'
         )->setName(
-            'widget_instance[{{id}}][page_layouts][layout_handle]'
+            'widget_instance[<%- data.id %>][page_layouts][layout_handle]'
         )->setId(
             'layout_handle'
         )->setClass(

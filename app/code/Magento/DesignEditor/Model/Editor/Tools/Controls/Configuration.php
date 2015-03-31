@@ -40,12 +40,12 @@ class Configuration
     protected $_filesystem;
 
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     protected $_theme;
 
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     protected $_parentTheme;
 
@@ -189,12 +189,14 @@ class Configuration
      *
      * @param string $controlName
      * @return array
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getControlData($controlName)
     {
         if (!isset($this->_controlList[$controlName])) {
-            throw new \Magento\Framework\Model\Exception("Unknown control: \"{$controlName}\"");
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unknown control: "%1"', $controlName)
+            );
         }
         return $this->_controlList[$controlName];
     }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\GiftMessage\Test\TestCase\CheckoutWithGiftMessagesTest">
+    <variation name="CheckoutWithGiftMessagesTestVariation1" firstConstraint="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" method="test">
+      <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+      <data name="customer/dataSet" xsi:type="string">customer_US</data>
+      <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+      <data name="checkoutMethod" xsi:type="string">login</data>
+      <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+      <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+      <data name="giftMessage/data/allow_gift_options" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_messages_for_order" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_options_for_items" xsi:type="string">-</data>
+      <data name="giftMessage/data/sender" xsi:type="string">John Doe</data>
+      <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
+      <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
+      <data name="payment/method" xsi:type="string">cashondelivery</data>
+      <data name="issue" xsi:type="string">Bug: MAGETWO-33079</data>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" next="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder"/>
+      <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder" prev="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+    </variation>
+    <variation name="CheckoutWithGiftMessagesTestVariation2" firstConstraint="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" method="test">
+      <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
+      <data name="customer/dataSet" xsi:type="string">customer_US</data>
+      <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+      <data name="checkoutMethod" xsi:type="string">login</data>
+      <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+      <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+      <data name="giftMessage/data/allow_gift_options" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/allow_gift_messages_for_order" xsi:type="string">-</data>
+      <data name="giftMessage/data/allow_gift_options_for_items" xsi:type="string">Yes</data>
+      <data name="giftMessage/data/sender" xsi:type="string">John Doe</data>
+      <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
+      <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
+      <data name="payment/method" xsi:type="string">cashondelivery</data>
+      <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" next="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrderItems"/>
+      <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrderItems" prev="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+    </variation>
+  </testCase>
+</config>

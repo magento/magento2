@@ -8,9 +8,9 @@
 
 ?>
 
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\ColorPicker */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\ColorPicker */ ?>
 <?php /** @var $element \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\ColorPicker */ ?>
-<?php $element = $this->getElement(); ?>
+<?php $element = $block->getElement(); ?>
 
 <div class="color-box" style="background-color:<?php echo $element->getValue() ?>;"></div>
-<?php echo $this->getHtml() ?>
+<?php echo $block->getHtml() ?>

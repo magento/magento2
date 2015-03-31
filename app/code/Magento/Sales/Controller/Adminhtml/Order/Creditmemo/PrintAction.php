@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -19,30 +18,35 @@ class PrintAction extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstrac
     /**
      * @param Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
-        parent::__construct($context, $fileFactory);
+        parent::__construct(
+            $context,
+            $fileFactory,
+            $resultForwardFactory
+        );
     }
 
     /**
      * Create pdf for current creditmemo
      *
-     * @return ResponseInterface|void
+     * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
      */
     public function execute()
     {
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Credit Memos'));
         $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
         $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
         $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
         $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
         $this->creditmemoLoader->load();
-        parent::execute();
+        return parent::execute();
     }
 }

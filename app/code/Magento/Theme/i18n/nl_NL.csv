@@ -135,3 +135,8 @@ Copyright,Copyright
 "2 columns with right bar","2 kolommen met rechterbalk"
 "3 columns","3 kolommen"
 "Skip to content","Skip to content"
+"Invalid regular expression: ""%1"".","Invalid regular expression: ""%1""."
+"Start date cannot be greater than end date.","Begin datum kan niet later zijn dan eind datum."
+"Your design change for the specified store intersects with another one, please specify another date range.","Uw ontwerp verandering voor de gespecificeerde store komt in conflict met een andere, specificeer a.u.b. een andere datumrange."
+Copy,Copy
+"Circular-reference in theme inheritance detected for ""%1""","Circular-reference in theme inheritance detected for ""%1"""

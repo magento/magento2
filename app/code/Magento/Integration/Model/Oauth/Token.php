@@ -66,7 +66,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     protected $_oauthData;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Consumer\Factory
+     * @var \Magento\Integration\Model\Oauth\ConsumerFactory
      */
     protected $_consumerFactory;
 
@@ -93,7 +93,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory
      * @param \Magento\Framework\Url\Validator $urlValidator
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory
+     * @param \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory
      * @param \Magento\Integration\Helper\Oauth\Data $oauthData
      * @param OauthHelper $oauthHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -107,7 +107,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
         \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory $keyLengthFactory,
         \Magento\Framework\Url\Validator $urlValidator,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Integration\Model\Oauth\Consumer\Factory $consumerFactory,
+        \Magento\Integration\Model\Oauth\ConsumerFactory $consumerFactory,
         \Magento\Integration\Helper\Oauth\Data $oauthData,
         OauthHelper $oauthHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -186,7 +186,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function convertToAccess()
     {
         if (self::TYPE_REQUEST != $this->getType()) {
-            throw new OauthException('Cannot convert to access token due to token is not request type');
+            throw new OauthException(__('Cannot convert to access token due to token is not request type'));
         }
         return $this->saveAccessToken(UserContextInterface::USER_TYPE_INTEGRATION);
     }
@@ -243,11 +243,10 @@ class Token extends \Magento\Framework\Model\AbstractModel
     /**
      * Get string representation of token
      *
-     * @param string $format
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function toString($format = '')
+    public function __toString()
     {
         return http_build_query(['oauth_token' => $this->getToken(), 'oauth_token_secret' => $this->getSecret()]);
     }
@@ -260,7 +259,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function beforeSave()
     {
         if ($this->isObjectNew() && null === $this->getCreatedAt()) {
-            $this->setCreatedAt($this->_dateTime->now());
+            $this->setCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
         }
         parent::beforeSave();
         return $this;
@@ -279,7 +278,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
         )
         ) {
             $messages = $this->_urlValidator->getMessages();
-            throw new OauthException(array_shift($messages));
+            throw new OauthException(__(array_shift($messages)));
         }
 
         /** @var $validatorLength \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength */
@@ -288,14 +287,14 @@ class Token extends \Magento\Framework\Model\AbstractModel
         $validatorLength->setName('Token Secret Key');
         if (!$validatorLength->isValid($this->getSecret())) {
             $messages = $validatorLength->getMessages();
-            throw new OauthException(array_shift($messages));
+            throw new OauthException(__(array_shift($messages)));
         }
 
         $validatorLength->setLength(OauthHelper::LENGTH_TOKEN);
         $validatorLength->setName('Token Key');
         if (!$validatorLength->isValid($this->getToken())) {
             $messages = $validatorLength->getMessages();
-            throw new OauthException(array_shift($messages));
+            throw new OauthException(__(array_shift($messages)));
         }
 
         if (null !== ($verifier = $this->getVerifier())) {
@@ -303,7 +302,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
             $validatorLength->setName('Verifier Key');
             if (!$validatorLength->isValid($verifier)) {
                 $messages = $validatorLength->getMessages();
-                throw new OauthException(array_shift($messages));
+                throw new OauthException(__(array_shift($messages)));
             }
         }
         return true;

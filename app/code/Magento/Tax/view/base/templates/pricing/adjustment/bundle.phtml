@@ -8,14 +8,14 @@
 
 ?>
 
-<?php /** @var \Magento\Tax\Pricing\Render\Adjustment $this */ ?>
-<?php if ($this->displayPriceIncludingTax()): ?>
-    <?php echo $this->getDisplayAmount() ?>
-<?php elseif ($this->displayPriceExcludingTax()): ?>
-    <?php echo $this->getDisplayAmountExclTax() ?>
-<?php elseif ($this->displayBothPrices()): ?>
-    <?php echo $this->getDisplayAmount() ?>
-    <?php if ($this->getDisplayAmountExclTax() !== $this->getDisplayAmount()): ?>
-        (+<?php echo $this->getDisplayAmountExclTax() ?> Excl. Tax)
+<?php /** @var \Magento\Tax\Pricing\Render\Adjustment $block */ ?>
+<?php if ($block->displayPriceIncludingTax()): ?>
+    <?php echo $block->getDisplayAmount() ?>
+<?php elseif ($block->displayPriceExcludingTax()): ?>
+    <?php echo $block->getDisplayAmountExclTax() ?>
+<?php elseif ($block->displayBothPrices()): ?>
+    <?php echo $block->getDisplayAmount() ?>
+    <?php if ($block->getDisplayAmountExclTax() !== $block->getDisplayAmount()): ?>
+        (+<?php echo $block->getDisplayAmountExclTax() ?> Excl. Tax)
     <?php endif; ?>
 <?php endif; ?>

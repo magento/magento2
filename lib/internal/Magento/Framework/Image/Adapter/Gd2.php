@@ -144,18 +144,26 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             }
         }
 
-        $functionParameters = [$this->_imageHandler, $fileName];
+        // Enable interlace
+        imageinterlace($this->_imageHandler, true);
 
-        $quality = $this->quality();
-        if ($quality !== null) {
-            if ($this->_fileType == IMAGETYPE_PNG) {
-                // for PNG files quality param must be from 0 to 10
-                $quality = ceil($quality / 10);
-                if ($quality > 10) {
-                    $quality = 10;
-                }
-                $quality = 10 - $quality;
-            }
+        // Set image quality value
+        switch ($this->_fileType) {
+            case IMAGETYPE_PNG:
+                $quality = 9;   // For PNG files compression level must be from 0 (no compression) to 9.
+                break;
+
+            case IMAGETYPE_JPEG:
+                $quality = $this->quality();
+                break;
+
+            default:
+                $quality = null;    // No compression.
+        }
+
+        // Prepare callback method parameters
+        $functionParameters = [$this->_imageHandler, $fileName];
+        if ($quality) {
             $functionParameters[] = $quality;
         }
 
@@ -371,6 +379,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function watermark($imagePath, $positionX = 0, $positionY = 0, $opacity = 30, $tile = false)
     {

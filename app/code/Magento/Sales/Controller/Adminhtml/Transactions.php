@@ -6,6 +6,10 @@
 namespace Magento\Sales\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Backend\Model\View\Result\RedirectFactory;
 
 /**
  * Adminhtml sales transactions controller
@@ -17,19 +21,43 @@ class Transactions extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var LayoutFactory
+     */
+    protected $resultLayoutFactory;
+
+    /**
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Registry $coreRegistry
+     * @param PageFactory $resultPageFactory
+     * @param LayoutFactory $resultLayoutFactory
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry
+        Registry $coreRegistry,
+        PageFactory $resultPageFactory,
+        LayoutFactory $resultLayoutFactory,
+        RedirectFactory $resultRedirectFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -48,7 +76,6 @@ class Transactions extends \Magento\Backend\App\Action
 
         if (!$txn->getId()) {
             $this->messageManager->addError(__('Please correct the transaction ID and try again.'));
-            $this->_redirect('sales/*/');
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }

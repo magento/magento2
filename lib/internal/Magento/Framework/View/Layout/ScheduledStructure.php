@@ -46,11 +46,25 @@ class ScheduledStructure
     protected $_scheduledRemoves;
 
     /**
+     * Scheduled structure elements with ifconfig attribute
+     *
+     * @var array
+     */
+    protected $_scheduledIfconfig;
+
+    /**
      * Materialized paths for overlapping workaround of scheduled structural elements
      *
      * @var array
      */
     protected $_scheduledPaths;
+
+    /**
+     * Elements with reference to non-existing parent element
+     *
+     * @var array
+     */
+    protected $_brokenParent = [];
 
     /**
      * @param array $data
@@ -64,6 +78,7 @@ class ScheduledStructure
         $this->_scheduledElements = isset($data['scheduledElements']) ? $data['scheduledElements'] : [];
         $this->_scheduledMoves = isset($data['scheduledMoves']) ? $data['scheduledMoves'] : [];
         $this->_scheduledRemoves = isset($data['scheduledRemoves']) ? $data['scheduledRemoves'] : [];
+        $this->_scheduledIfconfig = isset($data['scheduledIfconfig']) ? $data['scheduledIfconfig'] : [];
         $this->_scheduledPaths = isset($data['scheduledPaths']) ? $data['scheduledPaths'] : [];
     }
 
@@ -85,6 +100,16 @@ class ScheduledStructure
     public function getListToRemove()
     {
         return array_keys(array_intersect_key($this->_scheduledElements, $this->_scheduledRemoves));
+    }
+
+    /**
+     * Get elements to check ifconfig attribute
+     *
+     * @return array
+     */
+    public function getIfconfigList()
+    {
+        return array_keys(array_intersect_key($this->_scheduledElements, $this->_scheduledIfconfig));
     }
 
     /**
@@ -166,6 +191,18 @@ class ScheduledStructure
     }
 
     /**
+     * Get element to check by name
+     *
+     * @param string $elementName
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getIfconfigElement($elementName, $default = null)
+    {
+        return isset($this->_scheduledIfconfig[$elementName]) ? $this->_scheduledIfconfig[$elementName] : $default;
+    }
+
+    /**
      * Add element to move list
      *
      * @param string $elementName
@@ -197,6 +234,30 @@ class ScheduledStructure
     public function setElementToRemoveList($elementName)
     {
         $this->_scheduledRemoves[$elementName] = 1;
+    }
+
+    /**
+     * Unset element by name removed by ifconfig attribute
+     *
+     * @param string $elementName
+     * @return void
+     */
+    public function unsetElementFromIfconfigList($elementName)
+    {
+        unset($this->_scheduledIfconfig[$elementName]);
+    }
+
+    /**
+     * Set element value to check ifconfig attribute
+     *
+     * @param string $elementName
+     * @param string $configPath
+     * @param string $scopeType
+     * @return void
+     */
+    public function setElementToIfconfigList($elementName, $configPath, $scopeType)
+    {
+        $this->_scheduledIfconfig[$elementName] = [$configPath, $scopeType];
     }
 
     /**
@@ -344,6 +405,28 @@ class ScheduledStructure
     public function unsetPathElement($elementName)
     {
         unset($this->_scheduledPaths[$elementName]);
+    }
+
+    /**
+     * Remove element from broken parent list
+     *
+     * @param string $elementName
+     * @return void
+     */
+    public function unsetElementFromBrokenParentList($elementName)
+    {
+        unset($this->_brokenParent[$elementName]);
+    }
+
+    /**
+     * Set element to broken parent list
+     *
+     * @param string $elementName
+     * @return void
+     */
+    public function setElementToBrokenParentList($elementName)
+    {
+        $this->_brokenParent[$elementName] = 1;
     }
 
     /**

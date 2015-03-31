@@ -47,7 +47,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => "/V1/products/$sku/options/$optionId",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -55,7 +55,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'DeleteByIdentifier',
             ],
         ];
-        $this->assertTrue($this->_webApiCall($serviceInfo, ['productSku' => $sku, 'optionId' => $optionId]));
+        $this->assertTrue($this->_webApiCall($serviceInfo, ['sku' => $sku, 'optionId' => $optionId]));
         /** @var  \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create('Magento\Catalog\Model\Product');
         $product->load(1);
@@ -79,7 +79,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/' . $productSku . "/options/" . $optionId,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -87,7 +87,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Get',
             ],
         ];
-        $option = $this->_webApiCall($serviceInfo, ['productSku' => $productSku, 'optionId' => $optionId]);
+        $option = $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'optionId' => $optionId]);
         unset($option['product_sku']);
         unset($option['option_id']);
         $excepted = include '_files/product_options.php';
@@ -101,11 +101,12 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     public function testGetList()
     {
+        $this->_markTestAsRestOnly('Fix inconsistencies in WSDL and Data interfaces');
         $productSku = 'simple';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/' . $productSku . "/options",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -113,7 +114,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $options = $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
+        $options = $this->_webApiCall($serviceInfo, ['sku' => $productSku]);
 
         /** Unset dynamic data */
         foreach ($options as $key => $value) {
@@ -150,7 +151,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/options',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -196,7 +197,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => "/V1/products/options",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -256,7 +257,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/options/' . $optionId,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -334,7 +335,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/options/' . $fixtureOption->getId(),
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

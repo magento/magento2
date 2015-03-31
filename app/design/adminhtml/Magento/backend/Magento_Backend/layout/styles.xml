@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <remove src="mui/mui_legacy.css"/>
+        <remove src="css/styles-old.css"/>
+        <remove src="css/styles-migration.css"/>
+        <remove src="jquery/farbtastic/css/farbtastic.css"/>
+
+        <css src="css/styles.css"/>
+    </head>
+    <body/>
+</page>

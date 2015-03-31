@@ -8,9 +8,10 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Framework\UrlFactory;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
 class Confirmation extends \Magento\Customer\Controller\Account
@@ -21,44 +22,47 @@ class Confirmation extends \Magento\Customer\Controller\Account
     /** @var AccountManagementInterface  */
     protected $customerAccountManagement;
 
-    /** @var \Magento\Framework\UrlInterface */
-    protected $urlModel;
-
     /**
      * @param Context $context
      * @param Session $customerSession
+     * @param RedirectFactory $resultRedirectFactory
+     * @param PageFactory $resultPageFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
-     * @param UrlFactory $urlFactory
      */
     public function __construct(
         Context $context,
         Session $customerSession,
+        RedirectFactory $resultRedirectFactory,
+        PageFactory $resultPageFactory,
         StoreManagerInterface $storeManager,
-        AccountManagementInterface $customerAccountManagement,
-        UrlFactory $urlFactory
+        AccountManagementInterface $customerAccountManagement
     ) {
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
-        $this->urlModel = $urlFactory->create();
-        parent::__construct($context, $customerSession);
+        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
     }
 
     /**
      * Send confirmation link to specified email
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
     public function execute()
     {
         if ($this->_getSession()->isLoggedIn()) {
-            $this->_redirect('*/*/');
-            return;
+            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('*/*/');
+            return $resultRedirect;
         }
 
         // try to confirm by email
         $email = $this->getRequest()->getPost('email');
         if ($email) {
+            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+
             try {
                 $this->customerAccountManagement->resendConfirmation(
                     $email,
@@ -69,26 +73,20 @@ class Confirmation extends \Magento\Customer\Controller\Account
                 $this->messageManager->addSuccess(__('This email does not require confirmation.'));
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Wrong email.'));
-                $this->getResponse()->setRedirect(
-                    $this->urlModel->getUrl('*/*/*', ['email' => $email, '_secure' => true])
-                );
-                return;
+                $resultRedirect->setPath('*/*/*', ['email' => $email, '_secure' => true]);
+                return $resultRedirect;
             }
             $this->_getSession()->setUsername($email);
-            $this->getResponse()->setRedirect($this->urlModel->getUrl('*/*/index', ['_secure' => true]));
-            return;
+            $resultRedirect->setPath('*/*/index', ['_secure' => true]);
+            return $resultRedirect;
         }
 
-        // output form
-        $this->_view->loadLayout();
-
-        $this->_view->getLayout()->getBlock(
-            'accountConfirmation'
-        )->setEmail(
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getLayout()->getBlock('accountConfirmation')->setEmail(
             $this->getRequest()->getParam('email', $email)
         );
-
-        $this->_view->getLayout()->initMessages();
-        $this->_view->renderLayout();
+        $resultPage->getLayout()->initMessages();
+        return $resultPage;
     }
 }

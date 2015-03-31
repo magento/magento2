@@ -14,17 +14,16 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
     /**
      * Add order comment action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $order = $this->_initOrder();
         if ($order) {
             try {
-                $response = false;
                 $data = $this->getRequest()->getPost('history');
                 if (empty($data['comment']) && $data['status'] == $order->getDataByKey('status')) {
-                    throw new \Magento\Framework\Model\Exception(__('Comment text cannot be empty.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Comment text cannot be empty.'));
                 }
 
                 $notify = isset($data['is_customer_notified']) ? $data['is_customer_notified'] : false;
@@ -44,17 +43,18 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
 
                 $orderCommentSender->send($order, $notify, $comment);
 
-                $this->_view->loadLayout();
-                $this->_view->renderLayout();
-            } catch (\Magento\Framework\Model\Exception $e) {
+                return $this->resultPageFactory->create();
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $response = ['error' => true, 'message' => $e->getMessage()];
             } catch (\Exception $e) {
                 $response = ['error' => true, 'message' => __('We cannot add order history.')];
             }
             if (is_array($response)) {
-                $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
-                $this->getResponse()->representJson($response);
+                $resultJson = $this->resultJsonFactory->create();
+                $resultJson->setData($response);
+                return $resultJson;
             }
         }
+        return $this->resultRedirectFactory->create()->setPath('sales/*/');
     }
 }

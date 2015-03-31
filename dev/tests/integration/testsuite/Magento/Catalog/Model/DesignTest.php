@@ -37,7 +37,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      */
     public function getThemeModel()
     {

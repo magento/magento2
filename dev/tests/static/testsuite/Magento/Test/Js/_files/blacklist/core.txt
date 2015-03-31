@@ -1,4 +1,3 @@
-app/code/Magento/Backend/view/adminhtml/web/variables.js
 app/code/Magento/Captcha/view/frontend/web/onepage.js
 app/code/Magento/Catalog/view/adminhtml/web/catalog/category/edit.js
 app/code/Magento/Catalog/view/adminhtml/web/catalog/product.js
@@ -12,8 +11,9 @@ app/code/Magento/Sales/view/adminhtml/web/order/create/scripts.js
 app/code/Magento/Sales/view/adminhtml/web/order/giftoptions_tooltip.js
 app/code/Magento/Shipping/view/adminhtml/web/order/packaging.js
 app/code/Magento/Theme/view/frontend/web/menu.js
+app/code/Magento/Variable/view/adminhtml/web/variables.js
 dev/tests/js/testsuite/mage/translate_inline_vde/translate-inline-vde-test.js
 dev/tests/js/framework/qunit
 lib/web/mage/adminhtml
 lib/web/mage/captcha.js
-lib/web/mage/jquery-no-conflict.js
+lib/web/legacy-build.min.js

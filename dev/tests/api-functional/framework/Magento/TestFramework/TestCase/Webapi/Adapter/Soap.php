@@ -29,11 +29,6 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     protected $_soapConfig;
 
     /**
-     * @var \Magento\Webapi\Helper\Data
-     */
-    protected $_helper;
-
-    /**
      * @var SimpleDataObjectConverter
      */
     protected $_converter;
@@ -46,14 +41,13 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
         $this->_soapConfig = $objectManager->get('Magento\Webapi\Model\Soap\Config');
-        $this->_helper = $objectManager->get('Magento\Webapi\Helper\Data');
         $this->_converter = $objectManager->get('Magento\Framework\Api\SimpleDataObjectConverter');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function call($serviceInfo, $arguments = [], $storeCode = null)
+    public function call($serviceInfo, $arguments = [], $storeCode = null, $integration = null)
     {
         $soapOperation = $this->_getSoapOperation($serviceInfo);
         $arguments = $this->_converter->convertKeysToCamelCase($arguments);
@@ -128,9 +122,12 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         //TODO: This may change since same resource of multiple versions may be allowed after namespace changes
         ksort($services);
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeCode = !is_null($storeCode)
+        $storeCode = $storeCode !== null
             ? (string)$storeCode
-            : Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getCode();
+            : Bootstrap::getObjectManager()
+                ->get('Magento\Store\Model\StoreManagerInterface')
+                ->getStore()
+                ->getCode();
 
         /** TESTS_BASE_URL is initialized in PHPUnit configuration */
         $wsdlUrl = rtrim(TESTS_BASE_URL, '/') . self::WSDL_BASE_PATH . '/' . $storeCode . '?wsdl=1&services=';
@@ -211,7 +208,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         if (isset($serviceInfo['soap']['service'])) {
             $serviceName = $serviceInfo['soap']['service'];
         } elseif (isset($serviceInfo['serviceInterface'])) {
-            $serviceName = $this->_helper->getServiceName($serviceInfo['serviceInterface'], false);
+            $serviceName = $this->_soapConfig->getServiceName($serviceInfo['serviceInterface'], false);
         } else {
             throw new \LogicException("Service name cannot be identified.");
         }

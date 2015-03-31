@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
     <default>
         <carriers>
             <fedex>
-                <account backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
-                <meter_number backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
-                <key backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
-                <password backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
+                <account backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <meter_number backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <sandbox_mode>0</sandbox_mode>
                 <production_webservices_url><![CDATA[https://ws.fedex.com:443/web-services/]]></production_webservices_url>
                 <sandbox_webservices_url><![CDATA[https://wsbeta.fedex.com:443/web-services/]]></sandbox_webservices_url>

@@ -36,7 +36,7 @@ class Coupons extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {

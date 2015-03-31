@@ -3,23 +3,26 @@
  * See COPYING.txt for license details.
  */
 
-/* Magento/backend */
+//
+//  Admin  styles
+//  _____________________________________________
 
-//.magento-reset();   // Reset default styles with magento_reset
+//
+//  Global lib + theme styles
+//  ---------------------------------------------
 
-// Import theme vars overrides and mixins
-@import "source/lib/lib.less"; // Import all lib files
-@import "../less/styles/vars.less";
-@import "source/theme"; // import theme styles
-@import "source/table"; // import theme styles
-@import "source/icons";
+@import 'source/lib/_lib.less'; // Global lib
+@import 'source/_theme.less'; // Theme variables overrides
+@import 'source/_sources.less'; // Theme
 
-@baseDir: "../"; //default
+//
+//  Magento Import instructions
+//  ---------------------------------------------
 
-@import "source/navigation"; // import theme navigation
-@import "source/dashboard"; // import theme navigation
+//@magento_import "source/_module.less"; // import theme styles
 
-// Magento Import instructions
-//@magento_import "source/module.less"; // import theme styles
+//
+//  Media queries collector
+//  ---------------------------------------------
 
-@import (reference) "source/abstract"; // import theme styles
+@import 'source/_responsive.less';

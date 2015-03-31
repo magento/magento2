@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 ?>
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="design-edit-form">
-    <?php echo $this->getBlockHtml('formkey')?>
+<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="design-edit-form">
+    <?php echo $block->getBlockHtml('formkey')?>
 </form>
 <script>
 require([

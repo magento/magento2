@@ -1,61 +1,34 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture class="Magento\Store\Test\Fixture\Website">
-    <module>Magento_Store</module>
-    <type>flat</type>
-    <entity_type>store_website</entity_type>
-    <collection>Magento\Store\Model\Resource\Website\Collection</collection>
-    <identifier>code</identifier>
-    <fields>
-        <website_id>
-            <attribute_code>website_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </website_id>
-        <code>
-            <attribute_code>code</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </code>
-        <name>
-            <attribute_code>name</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </name>
-        <sort_order>
-            <attribute_code>sort_order</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </sort_order>
-        <default_group_id>
-            <attribute_code>default_group_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </default_group_id>
-        <is_default>
-            <attribute_code>is_default</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </is_default>
-    </fields>
-    <data_set></data_set>
-    <data_config></data_config>
-    <repository_class>Magento\Store\Test\Repository\Website</repository_class>
-</fixture>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="website" module="Magento_Store" type="flat" entity_type="store_website" collection="Magento\Store\Model\Resource\Website\Collection" identifier="code" repository_class="Magento\Store\Test\Repository\Website" handler_interface="Magento\Store\Test\Handler\Website\WebsiteInterface" class="Magento\Store\Test\Fixture\Website">
+    <dataset name="default">
+        <field name="name" xsi:type="string">Main Website</field>
+        <field name="code" xsi:type="string">base</field>
+        <field name="website_id" xsi:type="string">1</field>
+    </dataset>
+    <field name="website_id" is_required="1">
+      <default_value xsi:type="string">1</default_value>
+    </field>
+    <field name="code" is_required="">
+      <default_value xsi:type="string">base</default_value>
+    </field>
+    <field name="name" is_required="">
+      <default_value xsi:type="string">Main Website</default_value>
+    </field>
+    <field name="sort_order" is_required="">
+      <default_value xsi:type="number">0</default_value>
+    </field>
+    <field name="default_group_id" is_required="">
+      <default_value xsi:type="number">0</default_value>
+    </field>
+    <field name="is_default" is_required="">
+      <default_value xsi:type="number">0</default_value>
+    </field>
+  </fixture>
+</config>

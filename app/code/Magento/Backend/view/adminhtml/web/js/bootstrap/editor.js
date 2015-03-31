@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 require([
-    "Magento_Backend/variables",
-    "mage/adminhtml/browser",
-    "mage/adminhtml/wysiwyg/widget"
+    "Magento_Variable/variables",
+    "mage/adminhtml/browser"
 ]);

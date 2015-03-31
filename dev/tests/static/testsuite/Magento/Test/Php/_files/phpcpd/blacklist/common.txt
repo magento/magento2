@@ -1,3 +1,5 @@
+app/code/Magento
+lib/internal/Magento
 Magento/Adminhtml
 Magento/Authorizenet/Model
 Magento/Backend
@@ -56,6 +58,7 @@ Magento/Core/Model/Store
 Magento/Store/Model
 Magento/Cron/Model/Config/Backend/Product
 Magento/Customer/Block/Account/Dashboard
+Magento/Customer/Controller/Adminhtml/Index
 Magento/Customer/Model/Config/Backend/Show
 Magento/Customer/Model/Metadata
 Magento/Customer/Model/Resource/Customer
@@ -127,9 +130,12 @@ Magento/Usps/Model/Carrier
 Magento/Dhl/Model
 Magento/Shipping/Model
 Magento/Ui
-setup
 Magento/Sales/Service/V1
 Magento/Sales/Api
+Magento/Eav/Api/Data
+Magento/Customer/Api/Data
+Magento/Quote/Api/Data
+Magento/Catalog/Api/Data
 Magento/Sales/Spi
 Magento/Shipping/Controller/Adminhtml/Order/Shipment
 vendor
@@ -144,3 +150,19 @@ Magento/GroupedProduct/Model/Resource/Product/Type/Grouped
 lib/internal/Magento/Framework/Interception/ObjectManager/Config
 app/code/Magento/OfflinePayments/Model
 Magento/Weee/Model/Resource
+Magento/Theme/Model/Design/Backend
+Magento/Core/Model/Resource/Layout/Link
+Magento/Theme/Model/Resource/Design
+Magento/Integration/Block/Adminhtml/Integration/Edit/Tab
+Magento/Config/Model/Config/Backend
+Magento/Backup/Model/Config/Backend
+Magento/Catalog/Setup
+Magento/CatalogInventory/Setup
+Magento/Checkout/Setup
+Magento/Customer/Setup
+Magento/Eav/Setup
+Magento/Quote/Setup
+Magento/Reports/Setup
+Magento/Sales/Setup
+Magento/SalesRule/Setup
+Magento/Eav/Setup

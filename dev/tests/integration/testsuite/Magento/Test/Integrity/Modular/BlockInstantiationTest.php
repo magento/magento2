@@ -11,13 +11,13 @@ use Magento\Customer\Model\Context;
  * This test ensures that all blocks have the appropriate constructor arguments that allow
  * them to be instantiated via the objectManager.
  *
- * @magentoAppIsolation
+ * @magentoAppIsolation enabled
  */
 class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractIntegrity
 {
     public function testBlockInstantiation()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             function ($module, $class, $area) {
                 $this->assertNotEmpty($module);
@@ -65,7 +65,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
             $enabledModules = $this->_getEnabledModules();
             $skipBlocks = $this->_getBlocksToSkip();
             $templateBlocks = [];
-            $blockMods = \Magento\Framework\Test\Utility\Classes::collectModuleClasses('Block');
+            $blockMods = \Magento\Framework\App\Utility\Classes::collectModuleClasses('Block');
             foreach ($blockMods as $blockClass => $module) {
                 if (!isset($enabledModules[$module]) || isset($skipBlocks[$blockClass])) {
                     continue;
@@ -111,7 +111,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
     private function _addBlock($module, $blockClass, $class, $templateBlocks)
     {
         $area = 'frontend';
-        if ($module == 'Magento_Adminhtml' || strpos(
+        if ($module == 'Magento_Backend' || strpos(
             $blockClass,
             '\\Adminhtml\\'
         ) || strpos(

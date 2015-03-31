@@ -68,8 +68,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $moduleManager = $this->objectManager->get('Magento\Framework\Module\Manager');
         if ($moduleManager->isEnabled('Magento_PageCache')) {
-            $customerDataBuilder = $this->objectManager->create('Magento\Customer\Api\Data\CustomerDataBuilder');
-            $customerData = $customerDataBuilder->setGroupId($this->_customerSession->getCustomerGroupId())->create();
+            $customerDataFactory = $this->objectManager->create('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+            $customerData = $customerDataFactory->create()->setGroupId($this->_customerSession->getCustomerGroupId());
             $this->assertEquals($customerData, $this->_block->getCustomer());
         } else {
             $this->assertNull($this->_block->getCustomer());

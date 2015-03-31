@@ -19,13 +19,13 @@ class Validate extends \Magento\User\Controller\Adminhtml\User
         $response->setError(0);
         $errors = null;
         $userId = (int)$this->getRequest()->getParam('user_id');
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         try {
             /** @var $model \Magento\User\Model\User */
             $model = $this->_userFactory->create()->load($userId);
             $model->setData($this->_getAdminUserData($data));
             $errors = $model->validate();
-        } catch (\Magento\Framework\Model\Exception $exception) {
+        } catch (\Magento\Framework\Validator\Exception $exception) {
             /* @var $error Error */
             foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
                 $errors[] = $error->getText();

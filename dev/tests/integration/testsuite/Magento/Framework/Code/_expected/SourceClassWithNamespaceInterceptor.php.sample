@@ -35,13 +35,21 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
      */
     protected $subjectType = null;
 
-    public function __construct(\Magento\Framework\ObjectManagerInterface $pluginLocator, \Magento\Framework\Interception\PluginListInterface $pluginList, \Magento\Framework\Interception\ChainInterface $chain, $param1 = '', $param2 = '\\', $param3 = '\'')
+    public function __construct($param1 = '', $param2 = '\\', $param3 = '\'')
     {
-        $this->pluginLocator = $pluginLocator;
-        $this->pluginList = $pluginList;
-        $this->chain = $chain;
-        $this->subjectType = get_parent_class($this);
+        $this->___init();
         parent::__construct($param1, $param2, $param3);
+    }
+
+    public function ___init()
+    {
+        $this->pluginLocator = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->pluginList = $this->pluginLocator->get('Magento\Framework\Interception\PluginListInterface');
+        $this->chain = $this->pluginLocator->get('Magento\Framework\Interception\ChainInterface');
+        $this->subjectType = get_parent_class($this);
+        if (method_exists($this->subjectType, '___init')) {
+            parent::___init();
+        }
     }
 
     public function ___callParent($method, array $arguments)
@@ -60,10 +68,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
 
     public function __wakeup()
     {
-        $this->pluginLocator = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->pluginList = $this->pluginLocator->get('Magento\Framework\Interception\PluginListInterface');
-        $this->chain = $this->pluginLocator->get('Magento\Framework\Interception\ChainInterface');
-        $this->subjectType = get_parent_class($this);
+        $this->___init();
     }
 
     protected function ___callPlugins($method, array $arguments, array $pluginInfo)

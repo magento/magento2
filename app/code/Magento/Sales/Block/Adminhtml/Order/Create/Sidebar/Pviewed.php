@@ -68,7 +68,7 @@ class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
@@ -83,7 +83,7 @@ class Pviewed extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
     public function getItemCollection()
     {
         $productCollection = $this->getData('item_collection');
-        if (is_null($productCollection)) {
+        if ($productCollection === null) {
             $stores = [];
             $website = $this->_storeManager->getStore($this->getStoreId())->getWebsite();
             foreach ($website->getStores() as $store) {

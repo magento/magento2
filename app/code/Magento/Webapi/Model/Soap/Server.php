@@ -14,11 +14,9 @@ class Server
     /**#@+
      * Path in config to Webapi settings.
      */
-    const CONFIG_PATH_WSDL_CACHE_ENABLED = 'webapi/soap/wsdl_cache_enabled';
-
     const CONFIG_PATH_SOAP_CHARSET = 'webapi/soap/charset';
-
     /**#@-*/
+
     const REQUEST_PARAM_SERVICES = 'services';
 
     const REQUEST_PARAM_WSDL = 'wsdl';
@@ -49,7 +47,7 @@ class Server
     protected $_storeManager;
 
     /**
-     * @var \Magento\Webapi\Model\Soap\Server\Factory
+     * @var \Magento\Webapi\Model\Soap\ServerFactory
      */
     protected $_soapServerFactory;
 
@@ -71,10 +69,10 @@ class Server
      * @param \Magento\Webapi\Controller\Soap\Request $request
      * @param \Magento\Framework\DomDocument\Factory $domDocumentFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
+     * @param \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @throws \Magento\Webapi\Exception
+     * @throws \Magento\Framework\Webapi\Exception
      */
     public function __construct(
         \Magento\Framework\App\AreaList $areaList,
@@ -82,15 +80,15 @@ class Server
         \Magento\Webapi\Controller\Soap\Request $request,
         \Magento\Framework\DomDocument\Factory $domDocumentFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory,
+        \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         if (!extension_loaded('soap')) {
-            throw new \Magento\Webapi\Exception(
+            throw new \Magento\Framework\Webapi\Exception(
                 'SOAP extension is not loaded.',
                 0,
-                \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR
+                \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
             );
         }
         $this->_areaList = $areaList;
@@ -101,16 +99,6 @@ class Server
         $this->_soapServerFactory = $soapServerFactory;
         $this->_typeProcessor = $typeProcessor;
         $this->_scopeConfig = $scopeConfig;
-        /** Enable or disable SOAP extension WSDL cache depending on Magento configuration. */
-        $wsdlCacheEnabled = $this->_scopeConfig->isSetFlag(
-            self::CONFIG_PATH_WSDL_CACHE_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if ($wsdlCacheEnabled) {
-            ini_set('soap.wsdl_cache_enabled', '1');
-        } else {
-            ini_set('soap.wsdl_cache_enabled', '0');
-        }
     }
 
     /**
@@ -173,21 +161,25 @@ class Server
      * Generate exception if request is invalid.
      *
      * @param string $soapRequest
-     * @throws \Magento\Webapi\Exception With invalid SOAP extension
+     * @throws \Magento\Framework\Webapi\Exception With invalid SOAP extension
      * @return $this
      */
     protected function _checkRequest($soapRequest)
     {
         $dom = new \DOMDocument();
         if (strlen($soapRequest) == 0 || !$dom->loadXML($soapRequest)) {
-            throw new \Magento\Webapi\Exception(__('Invalid XML'), 0, \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR);
+            throw new \Magento\Framework\Webapi\Exception(
+                __('Invalid XML'),
+                0,
+                \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
+            );
         }
         foreach ($dom->childNodes as $child) {
             if ($child->nodeType === XML_DOCUMENT_TYPE_NODE) {
-                throw new \Magento\Webapi\Exception(
+                throw new \Magento\Framework\Webapi\Exception(
                     __('Invalid XML: Detected use of illegal DOCTYPE'),
                     0,
-                    \Magento\Webapi\Exception::HTTP_INTERNAL_ERROR
+                    \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
                 );
             }
         }

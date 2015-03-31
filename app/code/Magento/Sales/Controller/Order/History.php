@@ -7,25 +7,44 @@
 namespace Magento\Sales\Controller\Order;
 
 use Magento\Sales\Controller\OrderInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 class History extends \Magento\Framework\App\Action\Action implements OrderInterface
 {
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     */
+    public function __construct(
+        Context $context,
+        PageFactory $resultPageFactory
+    ) {
+        $this->resultPageFactory = $resultPageFactory;
+        parent::__construct($context);
+    }
+
+    /**
      * Customer order history
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getLayout()->initMessages();
+        $resultPage->getConfig()->getTitle()->set(__('My Orders'));
 
-        $this->_view->getPage()->getConfig()->getTitle()->set(__('My Orders'));
-
-        $block = $this->_view->getLayout()->getBlock('customer.account.link.back');
+        $block = $resultPage->getLayout()->getBlock('customer.account.link.back');
         if ($block) {
             $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Store\Test\Repository\Store">
+        <dataset name="default">
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Default Store View</field>
+            <field name="code" xsi:type="string">base</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+            <field name="store_id" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="custom">
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">Custom_Store_%isolation%</field>
+            <field name="code" xsi:type="string">code_%isolation%</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+        </dataset>
+
+        <dataset name="default_store_view">
+            <field name="name" xsi:type="string">Default Store View</field>
+            <field name="store_id" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="All Store Views">
+            <field name="name" xsi:type="string">All Store Views</field>
+            <field name="store_id" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="german">
+            <field name="group_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+            <field name="name" xsi:type="string">DE%isolation%</field>
+            <field name="code" xsi:type="string">de%isolation%</field>
+            <field name="is_active" xsi:type="string">Enabled</field>
+        </dataset>
+    </repository>
+</config>

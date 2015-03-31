@@ -24,7 +24,7 @@ class Product extends \Magento\Framework\App\Action\Action
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Core\App\Action\FormKeyValidator
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
     protected $_formKeyValidator;
 
@@ -39,14 +39,14 @@ class Product extends \Magento\Framework\App\Action\Action
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Sendfriend\Model\Sendfriend $sendFriend
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Sendfriend\Model\Sendfriend $sendFriend,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
@@ -79,19 +79,9 @@ class Product extends \Magento\Framework\App\Action\Action
         if (!$helper->isAllowForGuest() && !$session->authenticate($this)) {
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             if ($this->getRequest()->getActionName() == 'sendemail') {
-                $session->setBeforeAuthUrl(
-                    $this->_objectManager->create(
-                        'Magento\Framework\UrlInterface'
-                    )->getUrl(
-                        '*/*/send',
-                        ['_current' => true]
-                    )
-                );
-                $this->_objectManager->get(
-                    'Magento\Catalog\Model\Session'
-                )->setSendfriendFormData(
-                    $request->getPost()
-                );
+                $session->setBeforeAuthUrl($this->_url->getUrl('sendfriend/product/send', ['_current' => true]));
+                $this->_objectManager->get('Magento\Catalog\Model\Session')
+                    ->setSendfriendFormData($request->getPostValue());
             }
         }
         return parent::dispatch($request);
@@ -119,16 +109,5 @@ class Product extends \Magento\Framework\App\Action\Action
 
         $this->_coreRegistry->register('product', $product);
         return $product;
-    }
-
-    /**
-     * Initialize send friend model
-     *
-     * @return \Magento\Sendfriend\Model\Sendfriend
-     */
-    protected function _initSendToFriendModel()
-    {
-        $this->sendFriend->register();
-        return $this->sendFriend;
     }
 }

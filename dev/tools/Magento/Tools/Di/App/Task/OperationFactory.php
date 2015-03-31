@@ -15,7 +15,7 @@ class OperationFactory
     /**
      * Area
      */
-    const AREA = 'area';
+    const AREA_CONFIG_GENERATOR = 'area';
 
     /**
      * Interception
@@ -28,14 +28,26 @@ class OperationFactory
     const INTERCEPTION_CACHE = 'interception_cache';
 
     /**
+     * Repository generator
+     */
+    const REPOSITORY_GENERATOR = 'repository_generator';
+
+    /**
+     * Application code generator
+     */
+    const APPLICATION_CODE_GENERATOR = 'application_code_generator';
+
+    /**
      * Operations definitions
      *
      * @var array
      */
     private $operationsDefinitions = [
-        self::AREA => 'Magento\Tools\Di\App\Task\Operation\Area',
+        self::AREA_CONFIG_GENERATOR => 'Magento\Tools\Di\App\Task\Operation\Area',
+        self::APPLICATION_CODE_GENERATOR => 'Magento\Tools\Di\App\Task\Operation\ApplicationCodeGenerator',
         self::INTERCEPTION => 'Magento\Tools\Di\App\Task\Operation\Interception',
         self::INTERCEPTION_CACHE => 'Magento\Tools\Di\App\Task\Operation\InterceptionCache',
+        self::REPOSITORY_GENERATOR => 'Magento\Tools\Di\App\Task\Operation\RepositoryGenerator'
     ];
 
     /**
@@ -62,6 +74,7 @@ class OperationFactory
                 OperationException::UNAVAILABLE_OPERATION
             );
         }
+
         return $this->objectManager->create($this->operationsDefinitions[$operationAlias], ['data' => $arguments]);
     }
 }

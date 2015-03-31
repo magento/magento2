@@ -9,6 +9,8 @@ use Magento\Tools\Di\App\Task\OperationInterface;
 use Magento\Tools\Di\Code\Generator\InterceptionConfigurationBuilder;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\App;
+use Magento\Tools\Di\Code\GeneratorFactory;
+use Magento\Tools\Di\Code\Reader\ClassesScanner;
 
 class Interception implements OperationInterface
 {
@@ -23,23 +25,39 @@ class Interception implements OperationInterface
     private $interceptionConfigurationBuilder;
 
     /**
-     * @var string
+     * @var array
      */
-    private $data = '';
+    private $data = [];
+
+    /**
+     * @var ClassesScanner
+     */
+    private $classesScanner;
+
+    /**
+     * @var GeneratorFactory
+     */
+    private $generatorFactory;
 
     /**
      * @param InterceptionConfigurationBuilder $interceptionConfigurationBuilder
      * @param App\AreaList $areaList
-     * @param string $data
+     * @param ClassesScanner $classesScanner
+     * @param GeneratorFactory $generatorFactory
+     * @param array $data
      */
     public function __construct(
         InterceptionConfigurationBuilder $interceptionConfigurationBuilder,
         App\AreaList $areaList,
-        $data = ''
+        ClassesScanner $classesScanner,
+        GeneratorFactory $generatorFactory,
+        $data = []
     ) {
         $this->interceptionConfigurationBuilder = $interceptionConfigurationBuilder;
         $this->areaList = $areaList;
         $this->data = $data;
+        $this->classesScanner = $classesScanner;
+        $this->generatorFactory = $generatorFactory;
     }
 
     /**
@@ -56,17 +74,24 @@ class Interception implements OperationInterface
             $this->interceptionConfigurationBuilder->addAreaCode($areaCode);
         }
 
+        $classesList = [];
+        foreach ($this->data['intercepted_paths'] as $path) {
+            $classesList = array_merge($classesList, $this->classesScanner->getList($path));
+        }
+
         $generatorIo = new \Magento\Framework\Code\Generator\Io(
             new \Magento\Framework\Filesystem\Driver\File(),
-            $this->data
+            $this->data['path_to_store']
         );
-        $generator = new \Magento\Tools\Di\Code\Generator(
-            $generatorIo,
+        $generator = $this->generatorFactory->create(
             [
-                Interceptor::ENTITY_TYPE => 'Magento\Tools\Di\Code\Generator\Interceptor',
+                'ioObject' => $generatorIo,
+                'generatedEntities' => [
+                    Interceptor::ENTITY_TYPE => 'Magento\Tools\Di\Code\Generator\Interceptor',
+                ]
             ]
         );
-        $configuration = $this->interceptionConfigurationBuilder->getInterceptionConfiguration(get_declared_classes());
+        $configuration = $this->interceptionConfigurationBuilder->getInterceptionConfiguration($classesList);
         $generator->generateList($configuration);
     }
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="CheckoutAgreementNew" area="Adminhtml" mca="checkout/agreement/new" module="Magento_CheckoutAgreements">
+        <block name="pageActionsBlock" class="Magento\Backend\Test\Block\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
+        <block name="agreementsForm" class="Magento\CheckoutAgreements\Test\Block\Adminhtml\Block\Agreement\Edit\AgreementsForm" locator="#edit_form" strategy="css selector"/>
+    </page>
+</config>

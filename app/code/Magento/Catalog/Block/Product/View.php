@@ -148,6 +148,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         if ($this->_productHelper->canUseCanonicalTag()) {
             $this->pageConfig->addRemotePageAsset(
                 $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
+                'canonical',
                 ['attributes' => ['rel' => 'canonical']]
             );
         }
@@ -347,6 +348,18 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
     public function shouldRenderQuantity()
     {
         return !$this->productTypeConfig->isProductSet($this->getProduct()->getTypeId());
+    }
+
+    /**
+     * Get Validation Rules for Quantity field
+     *
+     * @return array
+     */
+    public function getQuantityValidators()
+    {
+        $validators = [];
+        $validators['required-number'] = true;
+        return $validators;
     }
 
     /**

@@ -7,6 +7,8 @@
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Registry;
 
 abstract class Reorder extends Action\Action
 {
@@ -16,36 +18,47 @@ abstract class Reorder extends Action\Action
     protected $orderLoader;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param Action\Context $context
      * @param OrderLoaderInterface $orderLoader
-     * @param \Magento\Framework\Registry $registry
+     * @param Registry $registry
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
-        \Magento\Framework\Registry $registry
+        Registry $registry,
+        RedirectFactory $resultRedirectFactory
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
     /**
      * Action for reorder
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-        if (!$this->orderLoader->load($this->_request, $this->_response)) {
-            return;
+        $result = $this->orderLoader->load($this->_request);
+        if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
+            return $result;
         }
         $order = $this->_coreRegistry->registry('current_order');
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
 
         /* @var $cart \Magento\Checkout\Model\Cart */
         $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
@@ -53,20 +66,20 @@ abstract class Reorder extends Action\Action
         foreach ($items as $item) {
             try {
                 $cart->addOrderItem($item);
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
                     $this->messageManager->addNotice($e->getMessage());
                 } else {
                     $this->messageManager->addError($e->getMessage());
                 }
-                $this->_redirect('*/*/history');
+                return $resultRedirect->setPath('*/*/history');
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We cannot add this item to your shopping cart.'));
-                $this->_redirect('checkout/cart');
+                return $resultRedirect->setPath('checkout/cart');
             }
         }
 
         $cart->save();
-        $this->_redirect('checkout/cart');
+        return $resultRedirect->setPath('checkout/cart');
     }
 }

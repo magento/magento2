@@ -8,10 +8,10 @@
 /**
  * Category layered navigation state
  *
- * @var $this \Magento\LayeredNavigation\Block\Navigation\State
+ * @var $block \Magento\LayeredNavigation\Block\Navigation\State
  */
 ?>
-<?php $_filters = $this->getActiveFilters() ?>
+<?php $_filters = $block->getActiveFilters() ?>
 <?php if (!empty($_filters)): ?>
 <div class="filter-current" data-mage-init='{"collapsible":{"openedState": "active", "collapsible": true, "active": false }}'>
     <strong class="block-subtitle filter-current-subtitle"
@@ -22,10 +22,11 @@
     <ol class="items">
         <?php foreach ($_filters as $_filter): ?>
             <li class="item">
-                <span class="filter-label"><?php echo $this->escapeHtml(__($_filter->getName())); ?></span>
-                <span class="filter-value"><?php echo $this->stripTags($_filter->getLabel()) ?></span>
+                <span class="filter-label"><?php echo $block->escapeHtml(__($_filter->getName())); ?></span>
+                <span class="filter-value"><?php echo $block->stripTags($_filter->getLabel()) ?></span>
                 <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
+                $currentFilterName = $block->escapeHtml(__($_filter->getName())) . " " . $block->stripTags($_filter->getLabel());
                 if ($clearLinkUrl):
                     ?>
                     <a class="action previous" href="<?php echo $_filter->getRemoveUrl() ?>"
@@ -33,13 +34,13 @@
                         <span><?php echo __('Previous') ?></span>
                     </a>
                     <a class="action remove"
-                       title="<?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
+                       title="<?php echo $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
                        href="<?php echo $clearLinkUrl ?>">
-                        <span><?php echo $this->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
+                        <span><?php echo $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
                     </a>
                 <?php else: ?>
                     <a class="action remove" href="<?php echo $_filter->getRemoveUrl() ?>"
-                       title="<?php echo __('Remove This Item') ?>">
+                       title="<?php echo $block->escapeHtml(__('Remove')) . " " . $currentFilterName;?>">
                         <span><?php echo __('Remove This Item') ?></span>
                     </a>
                 <?php endif; ?>

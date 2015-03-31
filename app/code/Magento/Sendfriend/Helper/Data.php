@@ -34,25 +34,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     const CHECK_COOKIE = 0;
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     */
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    ) {
-        $this->_scopeConfig = $scopeConfig;
-        parent::__construct($context);
-    }
-
-    /**
      * Check is enabled Module
      *
      * @param int $store
@@ -60,7 +41,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isEnabled($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(self::XML_PATH_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**
@@ -71,7 +52,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isAllowForGuest($store = null)
     {
-        return $this->_scopeConfig->isSetFlag(self::XML_PATH_ALLOW_FOR_GUEST, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_ALLOW_FOR_GUEST, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**
@@ -82,7 +63,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getMaxRecipients($store = null)
     {
-        return (int)$this->_scopeConfig->getValue(self::XML_PATH_MAX_RECIPIENTS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_MAX_RECIPIENTS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**
@@ -93,7 +74,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getMaxEmailPerPeriod($store = null)
     {
-        return (int)$this->_scopeConfig->getValue(self::XML_PATH_MAX_PER_HOUR, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_MAX_PER_HOUR, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**
@@ -114,7 +95,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getLimitBy($store = null)
     {
-        return (int)$this->_scopeConfig->getValue(self::XML_PATH_LIMIT_BY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_LIMIT_BY, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**
@@ -125,7 +106,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getEmailTemplate($store = null)
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
 
     /**

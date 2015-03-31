@@ -7,7 +7,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="webapi" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Magento Web API</label>
@@ -18,11 +18,6 @@
                 <field id="charset" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Response Charset</label>
                     <comment>If empty, UTF-8 will be used.</comment>
-                </field>
-                <field id="wsdl_cache_enabled" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable WSDL Cache</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                    <backend_model>Magento\Backend\Model\Config\Backend\Store</backend_model>
                 </field>
             </group>
         </section>

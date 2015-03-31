@@ -64,8 +64,9 @@ class AppIsolation
 
         /* Determine an isolation from doc comment */
         $annotations = $test->getAnnotations();
-        if (isset($annotations['method']['magentoAppIsolation'])) {
-            $isolation = $annotations['method']['magentoAppIsolation'];
+        $annotations = array_replace((array) $annotations['class'], (array) $annotations['method']);
+        if (isset($annotations['magentoAppIsolation'])) {
+            $isolation = $annotations['magentoAppIsolation'];
             if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
                 throw new \Magento\Framework\Exception(
                     'Invalid "@magentoAppIsolation" annotation, can be "enabled" or "disabled" only.'

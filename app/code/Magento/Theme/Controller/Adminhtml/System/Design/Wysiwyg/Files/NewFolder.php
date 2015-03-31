@@ -19,14 +19,14 @@ class NewFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwy
         try {
             $path = $this->storage->getCurrentPath();
             $result = $this->_getStorage()->createFolder($name, $path);
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => __('Sorry, there was an unknown error.')];
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
         );
     }
 }

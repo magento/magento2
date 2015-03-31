@@ -6,34 +6,33 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-
 class AddressSave extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
      * Save order address
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $addressId = $this->getRequest()->getParam('address_id');
         $address = $this->_objectManager->create('Magento\Sales\Model\Order\Address')->load($addressId);
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($data && $address->getId()) {
             $address->addData($data);
             try {
                 $address->save();
                 $this->messageManager->addSuccess(__('You updated the order address.'));
-                $this->_redirect('sales/*/view', ['order_id' => $address->getParentId()]);
-                return;
-            } catch (\Magento\Framework\Model\Exception $e) {
+                return $resultRedirect->setPath('sales/*/view', ['order_id' => $address->getParentId()]);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong updating the order address.'));
             }
-            $this->_redirect('sales/*/address', ['address_id' => $address->getId()]);
+            return $resultRedirect->setPath('sales/*/address', ['address_id' => $address->getId()]);
         } else {
-            $this->_redirect('sales/*/');
+            return $resultRedirect->setPath('sales/*/');
         }
     }
 }

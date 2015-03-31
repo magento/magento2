@@ -21,9 +21,9 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     protected $productRepository;
 
     /**
-     * @var \Magento\Bundle\Api\Data\LinkDataBuilder
+     * @var \Magento\Bundle\Api\Data\LinkInterfaceFactory
      */
-    protected $linkBuilder;
+    protected $linkFactory;
 
     /**
      * @var \Magento\Bundle\Model\Resource\BundleFactory
@@ -41,27 +41,35 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     protected $optionCollection;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Bundle\Api\Data\LinkDataBuilder $linkBuilder
+     * @param \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory
      * @param \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory
      * @param \Magento\Bundle\Model\SelectionFactory $bundleSelection
      * @param \Magento\Bundle\Model\Resource\Option\CollectionFactory $optionCollection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        \Magento\Bundle\Api\Data\LinkDataBuilder $linkBuilder,
+        \Magento\Bundle\Api\Data\LinkInterfaceFactory $linkFactory,
         \Magento\Bundle\Model\SelectionFactory $bundleSelection,
         \Magento\Bundle\Model\Resource\BundleFactory $bundleFactory,
         \Magento\Bundle\Model\Resource\Option\CollectionFactory $optionCollection,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->productRepository = $productRepository;
-        $this->linkBuilder = $linkBuilder;
+        $this->linkFactory = $linkFactory;
         $this->bundleFactory = $bundleFactory;
         $this->bundleSelection = $bundleSelection;
         $this->optionCollection = $optionCollection;
         $this->storeManager = $storeManager;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -71,10 +79,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     {
         $product = $this->productRepository->get($productSku);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new \Magento\Webapi\Exception(
-                'Only implemented for bundle product',
-                \Magento\Webapi\Exception::HTTP_FORBIDDEN
-            );
+            throw new InputException(__('Only implemented for bundle product'));
         }
 
         $childrenList = [];
@@ -93,10 +98,10 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * {@inheritdoc}
      */
-    public function addChildByProductSku($productSku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct)
+    public function addChildByProductSku($sku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct)
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         return $this->addChild($product, $optionId, $linkedProduct);
     }
 
@@ -110,24 +115,26 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
     ) {
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException('Product with specified sku: "%1" is not a bundle product', [$product->getSku()]);
+            throw new InputException(
+                __('Product with specified sku: "%1" is not a bundle product', [$product->getSku()])
+            );
         }
 
         /** @var \Magento\Catalog\Model\Product $linkProductModel */
         $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
         if ($linkProductModel->isComposite()) {
-            throw new InputException('Bundle product could not contain another composite product');
+            throw new InputException(__('Bundle product could not contain another composite product'));
         }
 
         if (!$linkedProduct->getId()) {
-            throw new InputException('Id field of product link is required');
+            throw new InputException(__('Id field of product link is required'));
         }
 
         /** @var \Magento\Bundle\Model\Selection $selectionModel */
         $selectionModel = $this->bundleSelection->create();
         $selectionModel->load($linkedProduct->getId());
         if (!$selectionModel->getId()) {
-            throw new InputException('Can not find product link with id "%1"', [$linkedProduct->getId()]);
+            throw new InputException(__('Can not find product link with id "%1"', [$linkedProduct->getId()]));
         }
 
         $selectionModel = $this->mapProductLinkToSelectionModel(
@@ -140,7 +147,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         try {
             $selectionModel->save();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save child: "%1"', [$e->getMessage()], $e);
+            throw new CouldNotSaveException(__('Could not save child: "%1"', [$e->getMessage()], $e));
         }
 
         return $selectionModel->getId();
@@ -195,7 +202,9 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
     ) {
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new InputException('Product with specified sku: "%1" is not a bundle product', [$product->getSku()]);
+            throw new InputException(
+                __('Product with specified sku: "%1" is not a bundle product', $product->getSku())
+            );
         }
 
         $options = $this->optionCollection->create();
@@ -204,8 +213,10 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
         if (!$existingOption->getId()) {
             throw new InputException(
-                'Product with specified sku: "%1" does not contain option: "%2"',
-                [$product->getSku(), $optionId]
+                __(
+                    'Product with specified sku: "%1" does not contain option: "%2"',
+                    [$product->getSku(), $optionId]
+                )
             );
         }
 
@@ -215,15 +226,17 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         /** @var \Magento\Catalog\Model\Product $linkProductModel */
         $linkProductModel = $this->productRepository->get($linkedProduct->getSku());
         if ($linkProductModel->isComposite()) {
-            throw new InputException('Bundle product could not contain another composite product');
+            throw new InputException(__('Bundle product could not contain another composite product'));
         }
         if ($selections) {
             foreach ($selections as $selection) {
                 if ($selection['option_id'] == $optionId &&
                     $selection['product_id'] == $linkProductModel->getId()) {
                     throw new CouldNotSaveException(
-                        'Child with specified sku: "%1" already assigned to product: "%2"',
-                        [$linkedProduct->getSku(), $product->getSku()]
+                        __(
+                            'Child with specified sku: "%1" already assigned to product: "%2"',
+                            [$linkedProduct->getSku(), $product->getSku()]
+                        )
                     );
                 }
             }
@@ -241,7 +254,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         try {
             $selectionModel->save();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save child: "%1"', [$e->getMessage()], $e);
+            throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
         }
 
         return $selectionModel->getId();
@@ -250,15 +263,12 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * {@inheritdoc}
      */
-    public function removeChild($productSku, $optionId, $childSku)
+    public function removeChild($sku, $optionId, $childSku)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
 
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-            throw new \Magento\Webapi\Exception(
-                sprintf('Product with specified sku: %s is not a bundle product', $productSku),
-                \Magento\Webapi\Exception::HTTP_FORBIDDEN
-            );
+            throw new InputException(__('Product with specified sku: %1 is not a bundle product', $sku));
         }
 
         $excludeSelectionIds = [];
@@ -277,7 +287,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         }
         if (empty($removeSelectionIds)) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
-                'Requested bundle option product doesn\'t exist'
+                __('Requested bundle option product doesn\'t exist')
             );
         }
         /* @var $resource \Magento\Bundle\Model\Resource\Bundle */
@@ -303,14 +313,20 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             $selectionPrice = $selection->getSelectionPriceValue();
         }
 
-        return $this->linkBuilder->populateWithArray($selection->getData())
+        /** @var \Magento\Bundle\Api\Data\LinkInterface $link */
+        $link = $this->linkFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $link,
+            $selection->getData(),
+            '\Magento\Bundle\Api\Data\LinkInterface'
+        );
+        $link->setIsDefault($selection->getIsDefault())
             ->setId($selection->getSelectionId())
-            ->setIsDefault($selection->getIsDefault())
             ->setQty($selection->getSelectionQty())
             ->setIsDefined($selection->getSelectionCanChangeQty())
             ->setPrice($selectionPrice)
-            ->setPriceType($selectionPriceType)
-            ->create();
+            ->setPriceType($selectionPriceType);
+        return $link;
     }
 
     /**

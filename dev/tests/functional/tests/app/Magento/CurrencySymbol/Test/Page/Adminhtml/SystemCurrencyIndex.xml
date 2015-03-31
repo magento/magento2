@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="SystemCurrencyIndex" area="Adminhtml" mca="admin/system_currency/index" module="Magento_CurrencySymbol">
+        <block name="gridPageActions" class="Magento\CurrencySymbol\Test\Block\Adminhtml\System\Currency\GridPageActions" locator=".grid-actions" strategy="css selector"/>
+        <block name="mainPageActions" class="Magento\CurrencySymbol\Test\Block\Adminhtml\System\Currency\MainPageActions" locator=".page-main-actions" strategy="css selector"/>
+    </page>
+</config>

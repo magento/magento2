@@ -190,7 +190,6 @@ class Config extends Widget implements TabInterface
                                         'attribute' => [
                                             'is_global' => 1,
                                             'frontend_input' => 'select',
-                                            'is_configurable' => 1,
                                         ],
                                     ]
                                 ]
@@ -331,7 +330,7 @@ class Config extends Widget implements TabInterface
     /**
      * Retrieve Tab label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -341,7 +340,7 @@ class Config extends Widget implements TabInterface
     /**
      * Retrieve Tab title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

@@ -42,7 +42,7 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * Core file storage database
      *
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDb = null;
 
@@ -64,7 +64,7 @@ class Links extends \Magento\Backend\Block\Template
     protected $_link;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_sourceModel;
 
@@ -81,10 +81,10 @@ class Links extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\Config\Source\Yesno $sourceModel
+     * @param \Magento\Config\Model\Config\Source\Yesno $sourceModel
      * @param \Magento\Downloadable\Model\Link $link
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Backend\Model\UrlFactory $urlFactory
@@ -94,10 +94,10 @@ class Links extends \Magento\Backend\Block\Template
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Core\Helper\File\Storage\Database $coreFileStorageDatabase,
+        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\Config\Source\Yesno $sourceModel,
+        \Magento\Config\Model\Config\Source\Yesno $sourceModel,
         \Magento\Downloadable\Model\Link $link,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Backend\Model\UrlFactory $urlFactory,
@@ -144,7 +144,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getPurchasedSeparatelyAttribute()
     {
-        if (is_null($this->_purchasedSeparatelyAttribute)) {
+        if ($this->_purchasedSeparatelyAttribute === null) {
             $_attributeCode = 'links_purchased_separately';
 
             $this->_purchasedSeparatelyAttribute = $this->_attributeFactory->create()->loadByCode(
@@ -438,7 +438,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
+        if ($this->_config === null) {
             $this->_config = new \Magento\Framework\Object();
         }
 

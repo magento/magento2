@@ -22,34 +22,12 @@
     <type name="Magento\Framework\Xml\Parser" shared="false" />
     <type name="Magento\Framework\Code\Scanner\DirectoryScanner" shared="false" />
     <type name="Magento\Server\Reflection" shared="false" />
-    <type name="Magento\Integration\Service\V1\Integration">
-        <plugin name="webapiIntegrationServiceV1" type="Magento\Webapi\Model\Plugin\Service\V1\Integration"/>
-    </type>
-    <type name="Magento\Webapi\Controller\Rest\Request\Deserializer\Factory">
-        <arguments>
-            <argument name="deserializers" xsi:type="array">
-                <item name="application_json" xsi:type="array">
-                    <item name="type" xsi:type="string">application/json</item>
-                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Json</item>
-                </item>
-                <item name="application_xml" xsi:type="array">
-                    <item name="type" xsi:type="string">application/xml</item>
-                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</item>
-                </item>
-                <item name="application_xhtml_xml" xsi:type="array">
-                    <item name="type" xsi:type="string">application/xhtml+xml</item>
-                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</item>
-                </item>
-                <item name="text_xml" xsi:type="array">
-                    <item name="type" xsi:type="string">text/xml</item>
-                    <item name="model" xsi:type="string">Magento\Webapi\Controller\Rest\Request\Deserializer\Xml</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Reflection\DataObjectProcessor">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Webapi\Model\Cache\Type</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Webapi</argument>
         </arguments>
+    </type>
+    <type name="Magento\Integration\Model\ConfigBasedIntegrationManager">
+        <plugin name="webapiSetup" type="Magento\Webapi\Model\Plugin\Manager" />
     </type>
 </config>

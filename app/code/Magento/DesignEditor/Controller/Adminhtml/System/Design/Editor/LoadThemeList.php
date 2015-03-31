@@ -15,20 +15,20 @@ class LoadThemeList extends \Magento\DesignEditor\Controller\Adminhtml\System\De
      */
     public function execute()
     {
-        /** @var $coreHelper \Magento\Core\Helper\Data */
-        $coreHelper = $this->_objectManager->get('Magento\Core\Helper\Data');
+        /** @var $jsonHelper \Magento\Framework\Json\Helper\Data */
+        $jsonHelper = $this->_objectManager->get('Magento\Framework\Json\Helper\Data');
 
         $page = $this->getRequest()->getParam('page', 1);
         $pageSize = $this->getRequest()->getParam(
             'page_size',
-            \Magento\Core\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE
+            \Magento\Theme\Model\Resource\Theme\Collection::DEFAULT_PAGE_SIZE
         );
 
         try {
             $this->_view->loadLayout();
-            /** @var $collection \Magento\Core\Model\Resource\Theme\Collection */
+            /** @var $collection \Magento\Theme\Model\Resource\Theme\Collection */
             $collection = $this->_objectManager->get(
-                'Magento\Core\Model\Resource\Theme\Collection'
+                'Magento\Theme\Model\Resource\Theme\Collection'
             )->filterPhysicalThemes(
                 $page,
                 $pageSize
@@ -45,6 +45,6 @@ class LoadThemeList extends \Magento\DesignEditor\Controller\Adminhtml\System\De
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $response = ['error' => __('Sorry, but we can\'t load the theme list.')];
         }
-        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
+        $this->getResponse()->representJson($jsonHelper->jsonEncode($response));
     }
 }

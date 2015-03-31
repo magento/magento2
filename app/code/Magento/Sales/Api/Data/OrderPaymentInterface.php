@@ -550,6 +550,14 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function getEntityId();
 
     /**
+     * Sets entity ID.
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId);
+
+    /**
      * Gets the last transaction ID for the order payment.
      *
      * @return string Last transaction ID.
@@ -611,4 +619,435 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @return float Shipping refunded.
      */
     public function getShippingRefunded();
+
+    /**
+     * Sets the parent ID for the order payment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setParentId($id);
+
+    /**
+     * Sets the base shipping captured for the order payment.
+     *
+     * @param float $baseShippingCaptured
+     * @return $this
+     */
+    public function setBaseShippingCaptured($baseShippingCaptured);
+
+    /**
+     * Sets the shipping captured for the order payment.
+     *
+     * @param float $shippingCaptured
+     * @return $this
+     */
+    public function setShippingCaptured($shippingCaptured);
+
+    /**
+     * Sets the amount refunded for the order payment.
+     *
+     * @param float $amountRefunded
+     * @return $this
+     */
+    public function setAmountRefunded($amountRefunded);
+
+    /**
+     * Sets the base amount paid for the order payment.
+     *
+     * @param float $baseAmountPaid
+     * @return $this
+     */
+    public function setBaseAmountPaid($baseAmountPaid);
+
+    /**
+     * Sets the amount canceled for the order payment.
+     *
+     * @param float $amountCanceled
+     * @return $this
+     */
+    public function setAmountCanceled($amountCanceled);
+
+    /**
+     * Sets the base amount authorized for the order payment.
+     *
+     * @param float $baseAmountAuthorized
+     * @return $this
+     */
+    public function setBaseAmountAuthorized($baseAmountAuthorized);
+
+    /**
+     * Sets the base amount paid online for the order payment.
+     *
+     * @param float $baseAmountPaidOnline
+     * @return $this
+     */
+    public function setBaseAmountPaidOnline($baseAmountPaidOnline);
+
+    /**
+     * Sets the base amount refunded online for the order payment.
+     *
+     * @param float $baseAmountRefundedOnline
+     * @return $this
+     */
+    public function setBaseAmountRefundedOnline($baseAmountRefundedOnline);
+
+    /**
+     * Sets the base shipping amount for the order payment.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setBaseShippingAmount($amount);
+
+    /**
+     * Sets the shipping amount for the order payment.
+     *
+     * @param float $amount
+     * @return $this
+     */
+    public function setShippingAmount($amount);
+
+    /**
+     * Sets the amount paid for the order payment.
+     *
+     * @param float $amountPaid
+     * @return $this
+     */
+    public function setAmountPaid($amountPaid);
+
+    /**
+     * Sets the amount authorized for the order payment.
+     *
+     * @param float $amountAuthorized
+     * @return $this
+     */
+    public function setAmountAuthorized($amountAuthorized);
+
+    /**
+     * Sets the base amount ordered for the order payment.
+     *
+     * @param float $baseAmountOrdered
+     * @return $this
+     */
+    public function setBaseAmountOrdered($baseAmountOrdered);
+
+    /**
+     * Sets the base shipping refunded amount for the order payment.
+     *
+     * @param float $baseShippingRefunded
+     * @return $this
+     */
+    public function setBaseShippingRefunded($baseShippingRefunded);
+
+    /**
+     * Sets the shipping refunded for the order payment.
+     *
+     * @param float $shippingRefunded
+     * @return $this
+     */
+    public function setShippingRefunded($shippingRefunded);
+
+    /**
+     * Sets the base amount refunded for the order payment.
+     *
+     * @param float $baseAmountRefunded
+     * @return $this
+     */
+    public function setBaseAmountRefunded($baseAmountRefunded);
+
+    /**
+     * Sets the amount ordered for the order payment.
+     *
+     * @param float $amountOrdered
+     * @return $this
+     */
+    public function setAmountOrdered($amountOrdered);
+
+    /**
+     * Sets the base amount canceled for the order payment.
+     *
+     * @param float $baseAmountCanceled
+     * @return $this
+     */
+    public function setBaseAmountCanceled($baseAmountCanceled);
+
+    /**
+     * Sets the quote payment ID for the order payment.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setQuotePaymentId($id);
+
+    /**
+     * Sets the additional data for the order payment.
+     *
+     * @param string $additionalData
+     * @return $this
+     */
+    public function setAdditionalData($additionalData);
+
+    /**
+     * Sets the credit card expiration month for the order payment.
+     *
+     * @param string $ccExpMonth
+     * @return $this
+     */
+    public function setCcExpMonth($ccExpMonth);
+
+    /**
+     * Sets the credit card SS start year for the order payment.
+     *
+     * @param string $ccSsStartYear
+     * @return $this
+     */
+    public function setCcSsStartYear($ccSsStartYear);
+
+    /**
+     * Sets the eCheck bank name for the order payment.
+     *
+     * @param string $echeckBankName
+     * @return $this
+     */
+    public function setEcheckBankName($echeckBankName);
+
+    /**
+     * Sets the method for the order payment.
+     *
+     * @param string $method
+     * @return $this
+     */
+    public function setMethod($method);
+
+    /**
+     * Sets the credit card debug request body for the order payment.
+     *
+     * @param string $ccDebugRequestBody
+     * @return $this
+     */
+    public function setCcDebugRequestBody($ccDebugRequestBody);
+
+    /**
+     * Sets the credit card secure verify for the order payment.
+     *
+     * @param string $ccSecureVerify
+     * @return $this
+     */
+    public function setCcSecureVerify($ccSecureVerify);
+
+    /**
+     * Sets the protection eligibility for the order payment.
+     *
+     * @param string $protectionEligibility
+     * @return $this
+     */
+    public function setProtectionEligibility($protectionEligibility);
+
+    /**
+     * Sets the credit card approval for the order payment.
+     *
+     * @param string $ccApproval
+     * @return $this
+     */
+    public function setCcApproval($ccApproval);
+
+    /**
+     * Sets the last four digits of the credit card for the order payment.
+     *
+     * @param string $ccLast4
+     * @return $this
+     */
+    public function setCcLast4($ccLast4);
+
+    /**
+     * Sets the credit card status description for the order payment.
+     *
+     * @param string $description
+     * @return $this
+     */
+    public function setCcStatusDescription($description);
+
+    /**
+     * Sets the eCheck type for the order payment.
+     *
+     * @param string $echeckType
+     * @return $this
+     */
+    public function setEcheckType($echeckType);
+
+    /**
+     * Sets the credit card debug response serialized for the order payment.
+     *
+     * @param string $ccDebugResponseSerialized
+     * @return $this
+     */
+    public function setCcDebugResponseSerialized($ccDebugResponseSerialized);
+
+    /**
+     * Sets the credit card SS start month for the order payment.
+     *
+     * @param string $ccSsStartMonth
+     * @return $this
+     */
+    public function setCcSsStartMonth($ccSsStartMonth);
+
+    /**
+     * Sets the eCheck account type for the order payment.
+     *
+     * @param string $echeckAccountType
+     * @return $this
+     */
+    public function setEcheckAccountType($echeckAccountType);
+
+    /**
+     * Sets the last transaction ID for the order payment.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setLastTransId($id);
+
+    /**
+     * Sets the credit card cid status for the order payment.
+     *
+     * @param string $ccCidStatus
+     * @return $this
+     */
+    public function setCcCidStatus($ccCidStatus);
+
+    /**
+     * Sets the credit card owner for the order payment.
+     *
+     * @param string $ccOwner
+     * @return $this
+     */
+    public function setCcOwner($ccOwner);
+
+    /**
+     * Sets the credit card type for the order payment.
+     *
+     * @param string $ccType
+     * @return $this
+     */
+    public function setCcType($ccType);
+
+    /**
+     * Sets the PO number for the order payment.
+     *
+     * @param string $poNumber
+     * @return $this
+     */
+    public function setPoNumber($poNumber);
+
+    /**
+     * Sets the credit card expiration year for the order payment.
+     *
+     * @param string $ccExpYear
+     * @return $this
+     */
+    public function setCcExpYear($ccExpYear);
+
+    /**
+     * Sets the credit card status for the order payment.
+     *
+     * @param string $ccStatus
+     * @return $this
+     */
+    public function setCcStatus($ccStatus);
+
+    /**
+     * Sets the eCheck routing number for the order payment.
+     *
+     * @param string $echeckRoutingNumber
+     * @return $this
+     */
+    public function setEcheckRoutingNumber($echeckRoutingNumber);
+
+    /**
+     * Sets the account status for the order payment.
+     *
+     * @param string $accountStatus
+     * @return $this
+     */
+    public function setAccountStatus($accountStatus);
+
+    /**
+     * Sets the anet transaction method for the order payment.
+     *
+     * @param string $anetTransMethod
+     * @return $this
+     */
+    public function setAnetTransMethod($anetTransMethod);
+
+    /**
+     * Sets the credit card debug response body for the order payment.
+     *
+     * @param string $ccDebugResponseBody
+     * @return $this
+     */
+    public function setCcDebugResponseBody($ccDebugResponseBody);
+
+    /**
+     * Sets the credit card SS issue for the order payment.
+     *
+     * @param string $ccSsIssue
+     * @return $this
+     */
+    public function setCcSsIssue($ccSsIssue);
+
+    /**
+     * Sets the eCheck account name for the order payment.
+     *
+     * @param string $echeckAccountName
+     * @return $this
+     */
+    public function setEcheckAccountName($echeckAccountName);
+
+    /**
+     * Sets the credit card avs status for the order payment.
+     *
+     * @param string $ccAvsStatus
+     * @return $this
+     */
+    public function setCcAvsStatus($ccAvsStatus);
+
+    /**
+     * Sets the encrypted credit card number for the order payment.
+     *
+     * @param string $ccNumberEnc
+     * @return $this
+     */
+    public function setCcNumberEnc($ccNumberEnc);
+
+    /**
+     * Sets the credit card transaction id for the order payment.
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setCcTransId($id);
+
+    /**
+     * Sets the address status for the order payment.
+     *
+     * @param string $addressStatus
+     * @return $this
+     */
+    public function setAddressStatus($addressStatus);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\OrderPaymentExtensionInterface $extensionAttributes);
 }

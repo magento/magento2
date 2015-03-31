@@ -11,7 +11,7 @@ namespace Magento\Catalog\Controller\Adminhtml;
 class CategoryTest extends \Magento\Backend\Utility\Controller
 {
     /**
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDbIsolation enabled
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      * @dataProvider saveActionDataProvider
@@ -26,7 +26,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
         $store->load('fixturestore', 'code');
         $storeId = $store->getId();
 
-        $this->getRequest()->setPost($inputData);
+        $this->getRequest()->setPostValue($inputData);
         $this->getRequest()->setParam('store', $storeId);
         $this->getRequest()->setParam('id', 2);
         $this->dispatch('backend/catalog/category/save');
@@ -72,7 +72,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionFromProductCreationPage($postData)
     {
-        $this->getRequest()->setPost($postData);
+        $this->getRequest()->setPostValue($postData);
 
         $this->dispatch('backend/catalog/category/save');
         $body = $this->getResponse()->getBody();
@@ -83,7 +83,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
             );
         } else {
             $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Core\Helper\Data'
+                'Magento\Framework\Json\Helper\Data'
             )->jsonDecode(
                 $body
             );
@@ -267,7 +267,7 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
 
     public function testSaveActionCategoryWithDangerRequest()
     {
-        $this->getRequest()->setPost(
+        $this->getRequest()->setPostValue(
             [
                 'general' => [
                     'path' => '1',
@@ -316,8 +316,8 @@ class CategoryTest extends \Magento\Backend\Utility\Controller
             }
         }
         $this->getRequest()
-            ->setPost('id', $grandChildId)
-            ->setPost('pid', $parentId);
+            ->setPostValue('id', $grandChildId)
+            ->setPostValue('pid', $parentId);
         $this->dispatch('backend/catalog/category/move');
         $jsonResponse = json_decode($this->getResponse()->getBody());
         $this->assertNotNull($jsonResponse);

@@ -11,7 +11,7 @@ require([
 	"mage/mage"
 ], function($){
 
-   	$($.mage.redirect("<?php echo $this->getUrl() ?>", "assign", 5000));
+   	$($.mage.redirect("<?php echo $block->getUrl() ?>", "assign", 5000));
 
 });
 </script>

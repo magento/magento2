@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\ConfigData">
+        <dataset name="config_currency_symbols_usd_and_uah">
+            <field path="currency/options/allow" scope="currency" scope_id="1" xsi:type="array">
+                <item label="US Dollar" xsi:type="string">USD</item>
+                <item label="Ukrainian Hryvnia" xsi:type="string">UAH</item>
+            </field>
+        </dataset>
+
+        <dataset name="config_currency_symbols_usd_and_uah_rollback">
+            <field path="currency/options/allow" scope="currency" scope_id="1" xsi:type="array">
+                <item label="US Dollar" xsi:type="string">USD</item>
+            </field>
+        </dataset>
+
+        <dataset name="config_currency_symbols_usd_and_chf">
+            <field path="currency/options/allow" scope="currency" scope_id="1" xsi:type="array">
+                <item label="US Dollar" xsi:type="string">USD</item>
+                <item label="Swiss Franc" xsi:type="string">CHF</item>
+            </field>
+        </dataset>
+
+        <dataset name="config_currency_symbols_usd">
+            <field path="currency/options/allow" scope="currency" scope_id="1" label="" xsi:type="array">
+                <item label="US Dollar" xsi:type="string">USD</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

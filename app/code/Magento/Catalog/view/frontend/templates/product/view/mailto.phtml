@@ -7,8 +7,8 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php $_product = $this->getProduct() ?>
-<?php if ($this->canEmailToFriend()): ?>
+<?php $_product = $block->getProduct() ?>
+<?php if ($block->canEmailToFriend()): ?>
     <a title="<?php echo __('Email') ?>"
        href="<?php echo $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>"
        class="action mailto friend"><span><?php echo __('Email') ?></span></a>

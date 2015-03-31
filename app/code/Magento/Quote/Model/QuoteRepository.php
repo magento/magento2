@@ -5,12 +5,15 @@
  */
 namespace Magento\Quote\Model;
 
-use \Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Quote\Model\Resource\Quote\Collection as QuoteCollection;
+use Magento\Framework\Exception\InputException;
 
-class QuoteRepository
+class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
 {
     /**
      * @var Quote[]
@@ -33,15 +36,31 @@ class QuoteRepository
     protected $storeManager;
 
     /**
+     * @var \Magento\Quote\Model\Resource\Quote\Collection
+     */
+    protected $quoteCollection;
+
+    /**
+     * @var \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory
+     */
+    protected $searchResultsDataFactory;
+
+    /**
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
+     * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection
+     * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
      */
     public function __construct(
         QuoteFactory $quoteFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection,
+        \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;
+        $this->searchResultsDataFactory = $searchResultsDataFactory;
+        $this->quoteCollection = $quoteCollection;
     }
 
     /**
@@ -61,7 +80,7 @@ class QuoteRepository
      * @param int $cartId
      * @param int[] $sharedStoreIds
      * @throws NoSuchEntityException
-     * @return Quote
+     * @return \Magento\Quote\Api\Data\CartInterface
      */
     public function get($cartId, array $sharedStoreIds = [])
     {
@@ -175,5 +194,57 @@ class QuoteRepository
             throw NoSuchEntityException::singleField($loadField, $identifier);
         }
         return $quote;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
+    {
+        $searchData = $this->searchResultsDataFactory->create();
+        $searchData->setSearchCriteria($searchCriteria);
+
+        foreach ($searchCriteria->getFilterGroups() as $group) {
+            $this->addFilterGroupToCollection($group, $this->quoteCollection);
+        }
+
+        $searchData->setTotalCount($this->quoteCollection->getSize());
+        $sortOrders = $searchCriteria->getSortOrders();
+        if ($sortOrders) {
+            foreach ($sortOrders as $sortOrder) {
+                $this->quoteCollection->addOrder(
+                    $sortOrder->getField(),
+                    $sortOrder->getDirection() == SearchCriteria::SORT_ASC ? 'ASC' : 'DESC'
+                );
+            }
+        }
+        $this->quoteCollection->setCurPage($searchCriteria->getCurrentPage());
+        $this->quoteCollection->setPageSize($searchCriteria->getPageSize());
+
+        $searchData->setItems($this->quoteCollection->getItems());
+
+        return $searchData;
+    }
+
+    /**
+     * Adds a specified filter group to the specified quote collection.
+     *
+     * @param FilterGroup $filterGroup The filter group.
+     * @param QuoteCollection $collection The quote collection.
+     * @return void
+     * @throws InputException The specified filter group or quote collection does not exist.
+     */
+    protected function addFilterGroupToCollection(FilterGroup $filterGroup, QuoteCollection $collection)
+    {
+        $fields = [];
+        $conditions = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+            $fields[] = $filter->getField();
+            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $conditions[] = [$condition => $filter->getValue()];
+        }
+        if ($fields) {
+            $collection->addFieldToFilter($fields, $conditions);
+        }
     }
 }

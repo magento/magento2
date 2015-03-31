@@ -31,7 +31,7 @@ class CustomerMetadataTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/attribute/$attributeCode",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -146,7 +146,7 @@ class CustomerMetadataTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -156,8 +156,6 @@ class CustomerMetadataTest extends WebapiAbstract
         ];
 
         $attributeMetadata = $this->_webApiCall($serviceInfo);
-
-        $this->assertCount(23, $attributeMetadata);
 
         $firstName = $this->getAttributeMetadataDataProvider()[Customer::FIRSTNAME][1];
         $validationResult = $this->checkMultipleAttributesValidationRules($firstName, $attributeMetadata);
@@ -178,7 +176,7 @@ class CustomerMetadataTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/custom',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -206,7 +204,7 @@ class CustomerMetadataTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/form/$formCode",
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

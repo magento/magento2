@@ -19,18 +19,18 @@ class Logo extends \Magento\Framework\View\Element\Template
     protected $_template = 'html/header/logo.phtml';
 
     /**
-     * @var \Magento\Core\Helper\File\Storage\Database
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_fileStorageHelper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageHelper
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Core\Helper\File\Storage\Database $fileStorageHelper,
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper,
         array $data = []
     ) {
         $this->_fileStorageHelper = $fileStorageHelper;
@@ -85,7 +85,7 @@ class Logo extends \Magento\Framework\View\Element\Template
      */
     protected function _getLogoUrl()
     {
-        $folderName = \Magento\Backend\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
+        $folderName = \Magento\Config\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
         $storeLogoPath = $this->_scopeConfig->getValue(
             'design/header/logo_src',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -94,12 +94,12 @@ class Logo extends \Magento\Framework\View\Element\Template
         $logoUrl = $this->_urlBuilder
                 ->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]) . $path;
 
-        if (!is_null($storeLogoPath) && $this->_isFile($path)) {
+        if ($storeLogoPath !== null && $this->_isFile($path)) {
             $url = $logoUrl;
         } elseif ($this->getLogoFile()) {
             $url = $this->getViewFileUrl($this->getLogoFile());
         } else {
-            $url = $this->getViewFileUrl('images/logo.gif');
+            $url = $this->getViewFileUrl('images/logo.svg');
         }
         return $url;
     }

@@ -1,51 +1,19 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="catalog/category/view" module="Magento_Catalog">
-    <blocks>
-        <listProductBlock>
-            <class>Magento\Catalog\Test\Block\Product\ListProduct</class>
-            <locator>.products.wrapper.grid</locator>
-            <strategy>css selector</strategy>
-        </listProductBlock>
-        <mapBlock>
-            <class>Magento\Catalog\Test\Block\Product\Price</class>
-            <locator>#map-popup-content</locator>
-            <strategy>css selector</strategy>
-        </mapBlock>
-        <layeredNavigationBlock>
-            <class>Magento\LayeredNavigation\Test\Block\Navigation</class>
-            <locator>.block.filter</locator>
-            <strategy>css selector</strategy>
-        </layeredNavigationBlock>
-        <topToolbar>
-            <class>Magento\Catalog\Test\Block\Product\ProductList\TopToolbar</class>
-            <locator>.//*[contains(@class,"toolbar-products")][1]</locator>
-            <strategy>xpath</strategy>
-        </topToolbar>
-        <bottomToolbar>
-            <class>Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar</class>
-            <locator>.//*[contains(@class,"toolbar-products")][2]</locator>
-            <strategy>xpath</strategy>
-        </bottomToolbar>
-        <titleBlock>
-            <class>Magento\Theme\Test\Block\Html\Title</class>
-            <locator>.page-title h1.title .base</locator>
-            <strategy>css selector</strategy>
-        </titleBlock>
-        <viewBlock>
-            <class>Magento\Catalog\Test\Block\Category\View</class>
-            <locator>#maincontent</locator>
-            <strategy>css selector</strategy>
-        </viewBlock>
-        <widgetView>
-            <class>Magento\Widget\Test\Block\WidgetView</class>
-            <locator>.widget</locator>
-            <strategy>css selector</strategy>
-        </widgetView>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CatalogCategoryView" area="Category" mca="catalog/category/view" module="Magento_Catalog">
+    <block name="listProductBlock" class="Magento\Catalog\Test\Block\Product\ListProduct" locator=".products.wrapper.grid" strategy="css selector"/>
+    <block name="mapBlock" class="Magento\Catalog\Test\Block\Product\Price" locator="#map-popup-content" strategy="css selector"/>
+    <block name="layeredNavigationBlock" class="Magento\LayeredNavigation\Test\Block\Navigation" locator=".block.filter" strategy="css selector"/>
+    <block name="topToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\TopToolbar" locator=".//*[contains(@class,'toolbar-products')][1]" strategy="xpath"/>
+    <block name="bottomToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar" locator=".//*[contains(@class,'toolbar-products')][2]" strategy="xpath"/>
+    <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper h1.page-title .base" strategy="css selector"/>
+    <block name="viewBlock" class="Magento\Catalog\Test\Block\Category\View" locator="#maincontent" strategy="css selector"/>
+    <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector"/>
+  </page>
+</config>

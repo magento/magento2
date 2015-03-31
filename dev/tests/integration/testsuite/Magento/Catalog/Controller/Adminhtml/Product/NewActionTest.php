@@ -22,17 +22,14 @@ class NewActionTest extends \Magento\Backend\Utility\Controller
      */
     public function testCustomerGroupArePresentInGroupPriceTemplate()
     {
-        $this->dispatch('backend/catalog/product/new/set/'
-            . \Magento\Catalog\Api\Data\ProductAttributeInterface::DEFAULT_ATTRIBUTE_SET_ID
-            . '/type/' . \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-        );
+        $this->dispatch('backend/catalog/product/new/set/4/type/' . \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
         $lines = explode(PHP_EOL, $this->getResponse()->getBody());
         foreach ($lines as $index => $line) {
-            if ($line && strpos($line, 'name="product[group_price][{{index}}][cust_group]"') !== false) {
+            if ($line && strpos($line, 'name="product[group_price][<%- data.index %>][cust_group]"') !== false) {
                 break;
             }
         }
-        $this->assertContains('name="product[group_price][{{index}}][cust_group]"', $lines[$index]);
+        $this->assertContains('name="product[group_price][<%- data.index %>][cust_group]"', $lines[$index]);
         $this->assertContains('<option value="0">NOT LOGGED IN</option>', $lines[$index + 1]);
         $this->assertContains('<option value="1">General</option>', $lines[$index + 2]);
         $this->assertContains('<option value="2">Wholesale</option>', $lines[$index + 3]);

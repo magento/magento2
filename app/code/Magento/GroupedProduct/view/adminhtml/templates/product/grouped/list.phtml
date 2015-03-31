@@ -3,26 +3,38 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* @var $this \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts */
+/* @var $block \Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts\ListAssociatedProducts */
 ?>
-<script type="text/x-jquery-tmpl" id="group-product-template">
+<script type="text/x-magento-template" id="group-product-template">
 <tr title="#" class="pointer" data-role="row">
     <td data-column="info" class="col-draggable col-info">
         <span class="draggable-handle"></span>
-        <input type="hidden" name="links[associated][${id}][id]" value="${id}" data-role="id" />
-        <input type="hidden" name="links[associated][${id}][position]" value="${position}" data-role="position" />
+        <input
+            type="hidden"
+            name="links[associated][<%- data.id %>][id]"
+            value="<%- data.id %>"
+            data-role="id" />
+        <input
+            type="hidden"
+            name="links[associated][<%- data.id %>][position]"
+            value="<%- data.position %>"
+            data-role="position" />
     </td>
     <td data-column="name" class="editable col-name">
-        ${name}
+        <%- data.name %>
     </td>
     <td data-column="sku" class="col-sku">
-        ${sku}
+        <%- data.sku %>
     </td>
     <td data-column="price" class="col-price">
-        ${price}
+        <%- data.price %>
     </td>
     <td data-column="qty" class="editable col-qty col-number">
-        <input type="text" class="input-text " name="links[associated][${id}][qty]" value="${qty}">
+        <input
+            type="text"
+            class="input-text "
+            name="links[associated][<%- data.id %>][qty]"
+            value="<%- data.qty %>">
     </td>
     <td data-column="actions" class="col-actions">
         <button type="button" class="action- delete" data-role="delete"></button>
@@ -31,8 +43,8 @@
 </script>
 <div class="grid-container" class="no-display">
     <table class="data-table" data-role="grouped-product-grid"
-        data-products="<?php echo $this->escapeHtml($this->helper('Magento\Core\Helper\Data')->jsonEncode(
-                $this->getAssociatedProducts()
+        data-products="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
+                $block->getAssociatedProducts()
         )); ?>">
         <thead>
             <tr class="headings">

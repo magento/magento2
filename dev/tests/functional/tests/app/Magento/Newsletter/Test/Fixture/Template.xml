@@ -1,102 +1,54 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture class="Magento\Newsletter\Test\Fixture\Template">
-    <module>Magento_Newsletter</module>
-    <type>flat</type>
-    <entity_type>newsletter_template</entity_type>
-    <collection>Magento\Newsletter\Model\Resource\Template\Collection</collection>
-    <identifier>template_id</identifier>
-    <fields>
-        <id>
-            <attribute_code>template_id</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value/>
-            <input/>
-        </id>
-        <code>
-            <attribute_code>template_code</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </code>
-        <text>
-            <attribute_code>template_text</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </text>
-        <text_preprocessed>
-            <attribute_code>template_text_preprocessed</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </text_preprocessed>
-        <styles>
-            <attribute_code>template_styles</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </styles>
-        <type>
-            <attribute_code>template_type</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </type>
-        <subject>
-            <attribute_code>template_subject</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </subject>
-        <sender_name>
-            <attribute_code>template_sender_name</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </sender_name>
-        <sender_email>
-            <attribute_code>template_sender_email</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </sender_email>
-        <actual>
-            <attribute_code>template_actual</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required/>
-            <default_value>1</default_value>
-            <input/>
-        </actual>
-        <added_at>
-            <attribute_code>added_at</attribute_code>
-            <backend_type>timestamp</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </added_at>
-        <modified_at>
-            <attribute_code>modified_at</attribute_code>
-            <backend_type>timestamp</backend_type>
-            <is_required/>
-            <default_value/>
-            <input/>
-        </modified_at>
-    </fields>
-    <repository_class>Magento\Newsletter\Test\Repository\Template</repository_class>
-    <handler_interface>Magento\Newsletter\Test\Handler\Newsletter\TemplateInterface</handler_interface>
-</fixture>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="template" module="Magento_Newsletter" type="flat" entity_type="newsletter_template" collection="Magento\Newsletter\Model\Resource\Template\Collection" identifier="template_id" repository_class="Magento\Newsletter\Test\Repository\Template" handler_interface="Magento\Newsletter\Test\Handler\Template\TemplateInterface" class="Magento\Newsletter\Test\Fixture\Template">
+    <dataset name="default">
+        <field name="code" xsi:type="string">TemplateName%isolation%</field>
+        <field name="subject" xsi:type="string">TemplateSubject%isolation%</field>
+        <field name="sender_name" xsi:type="string">SenderName%isolation%</field>
+        <field name="sender_email" xsi:type="string">SenderName%isolation%@example.com</field>
+        <field name="text" xsi:type="string">Some text %isolation%</field>
+    </dataset>
+    <field name="id" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="code" is_required="">
+      <default_value xsi:type="string">TemplateName%isolation%</default_value>
+    </field>
+    <field name="text" is_required="">
+      <default_value xsi:type="string">Some text %isolation%</default_value>
+    </field>
+    <field name="text_preprocessed" is_required="">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="styles" is_required="">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="type" is_required="">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="subject" is_required="">
+      <default_value xsi:type="string">TemplateSubject%isolation%</default_value>
+    </field>
+    <field name="sender_name" is_required="">
+      <default_value xsi:type="string">SenderName%isolation%</default_value>
+    </field>
+    <field name="sender_email" is_required="">
+      <default_value xsi:type="string">SenderName%isolation%@example.com</default_value>
+    </field>
+    <field name="actual" is_required="">
+      <default_value xsi:type="string">1</default_value>
+    </field>
+    <field name="added_at" is_required="">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="modified_at" is_required="">
+      <default_value xsi:type="null"/>
+    </field>
+  </fixture>
+</config>

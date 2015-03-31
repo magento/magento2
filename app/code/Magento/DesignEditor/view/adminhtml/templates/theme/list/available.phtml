@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Available */?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Available */?>
 
 <div class="infinite_scroll">
     <ul class="themes" id="available-themes-container"></ul>
@@ -20,13 +20,13 @@ require([
 ], function($){
 
         $( document ).ready(function( ) {
-            <?php if ($this->getTabId()): ?>
+            <?php if ($block->getTabId()): ?>
                 $('.infinite_scroll').infinite_scroll({
-                    url : '<?php echo $this->getUrl('*/*/loadthemelist') ?>',
+                    url : '<?php echo $block->getUrl('*/*/loadthemelist') ?>',
                     loadDataOnCreate : false
                 });
 
-                $('a[name="<?php echo $this->getTabId() ?>"]').on("click", function(event) {
+                $('a[name="<?php echo $block->getTabId() ?>"]').on("click", function(event) {
                     $('.infinite_scroll').infinite_scroll('loadDataIsContainerEmpty');
                 });
             <?php endif; ?>

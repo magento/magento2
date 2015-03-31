@@ -1,3 +1,0 @@
-"attribute/dataSet";"isRequired";"constraint"
-"attribute_type_text_field";"Yes";"assertProductAttributeSuccessDeleteMessage, assertProductAttributeAbsenceInGrid, assertProductAttributeAbsenceInSearchOnProductForm, assertProductAttributeAbsenceForExport"
-"attribute_type_dropdown";"No";"assertProductAttributeSuccessDeleteMessage, assertProductAttributeAbsenceInGrid, assertProductAttributeAbsenceInSearchOnProductForm, assertProductAttributeAbsenceForExport"

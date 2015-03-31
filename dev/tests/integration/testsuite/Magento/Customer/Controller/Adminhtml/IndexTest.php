@@ -66,7 +66,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionWithEmptyPostData()
     {
-        $this->getRequest()->setPost([]);
+        $this->getRequest()->setPostValue([]);
         $this->dispatch('backend/customer/index/save');
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl));
     }
@@ -77,7 +77,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     public function testSaveActionWithInvalidFormData()
     {
         $post = ['account' => ['middlename' => 'test middlename', 'group_id' => 1]];
-        $this->getRequest()->setPost($post);
+        $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/customer/index/save');
         /**
          * Check that errors was generated and set to session
@@ -113,7 +113,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                 'customer_address' => ['_item1' => []],
             ],
         ];
-        $this->getRequest()->setPost($post);
+        $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/customer/index/save');
         /**
          * Check that errors was generated and set to session
@@ -164,7 +164,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                 ],
             ],
         ];
-        $this->getRequest()->setPost($post);
+        $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('back', '1');
 
         // Emulate setting customer data to session in editAction
@@ -267,7 +267,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
 
             'subscription' => '',
         ];
-        $this->getRequest()->setPost($post);
+        $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/save');
         /**
@@ -332,7 +332,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $post = [
             'customer_id' => $customerId,
         ];
-        $this->getRequest()->setPost($post);
+        $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/save');
 
@@ -370,7 +370,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                 'password' => 'password',
             ],
         ];
-        $this->getRequest()->setPost($post);
+        $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/customer/index/save');
         /*
          * Check that error message is set
@@ -445,7 +445,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="title">new firstname new lastname</h1>', $body);
+        $this->assertContains('<h1 class="page-title">new firstname new lastname</h1>', $body);
     }
 
     /**
@@ -458,7 +458,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="title">test firstname test lastname</h1>', $body);
+        $this->assertContains('<h1 class="page-title">test firstname test lastname</h1>', $body);
     }
 
     public function testNewAction()
@@ -467,7 +467,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="title">New Customer</h1>', $body);
+        $this->assertContains('<h1 class="page-title">New Customer</h1>', $body);
     }
 
     /**
@@ -541,7 +541,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
      */
     public function testCartAction()
     {
-        $this->getRequest()->setParam('id', 1)->setParam('website_id', 1)->setPost('delete', 1);
+        $this->getRequest()->setParam('id', 1)->setParam('website_id', 1)->setPostValue('delete', 1);
         $this->dispatch('backend/customer/index/cart');
         $body = $this->getResponse()->getBody();
         $this->assertContains('<div id="customer_cart_grid1">', $body);
@@ -661,7 +661,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
      */
     public function testMassDeleteAction()
     {
-        $this->getRequest()->setPost('customer', [1]);
+        $this->getRequest()->setPostValue('customer', [1]);
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 1 record(s) were deleted.']),
@@ -675,7 +675,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
      */
     public function testInvalidIdMassDeleteAction()
     {
-        $this->getRequest()->setPost('customer', [1]);
+        $this->getRequest()->setPostValue('customer', [1]);
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $this->equalTo(['No such entity with customerId = 1']),
@@ -701,7 +701,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
      */
     public function testMassDeleteActionPartialUpdate()
     {
-        $this->getRequest()->setPost('customer', [1, 999, 2, 9999]);
+        $this->getRequest()->setPostValue('customer', [1, 999, 2, 9999]);
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 2 record(s) were deleted.']),
@@ -721,7 +721,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $customer = $this->customerRepository->getById(1);
         $this->assertEquals(1, $customer->getGroupId());
 
-        $this->getRequest()->setParam('group', 0)->setPost('customer', [1]);
+        $this->getRequest()->setParam('group', 0)->setPostValue('customer', [1]);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 1 record(s) were updated.']),
@@ -739,7 +739,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
      */
     public function testMassAssignGroupActionInvalidCustomerId()
     {
-        $this->getRequest()->setParam('group', 0)->setPost('customer', [1]);
+        $this->getRequest()->setParam('group', 0)->setPostValue('customer', [1]);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['No such entity with customerId = 1']),
@@ -769,7 +769,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals(1, $this->customerRepository->getById(1)->getGroupId());
         $this->assertEquals(1, $this->customerRepository->getById(2)->getGroupId());
 
-        $this->getRequest()->setParam('group', 0)->setPost('customer', [1, 4200, 2]);
+        $this->getRequest()->setParam('group', 0)->setPostValue('customer', [1, 4200, 2]);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 2 record(s) were updated.']),
@@ -983,11 +983,11 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         $this->assertContains('{"error":1,"html_message":', $body);
-        $this->assertContains('Please correct this email address: &quot;*&quot;.', $body);
-        $this->assertContains('&quot;First Name&quot; is a required value.', $body);
-        $this->assertContains('&quot;Last Name&quot; is a required value.', $body);
-        $this->assertContains('&quot;Phone Number&quot; is a required value.', $body);
-        $this->assertContains('&quot;Country&quot; is a required value.', $body);
+        $this->assertContains('Please correct this email address: \"*\".', $body);
+        $this->assertContains('\"First Name\" is a required value.', $body);
+        $this->assertContains('\"Last Name\" is a required value.', $body);
+        $this->assertContains('\"Phone Number\" is a required value.', $body);
+        $this->assertContains('\"Country\" is a required value.', $body);
     }
 
     /**
@@ -1006,7 +1006,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     public function testResetPasswordActionBadCustomerId()
     {
         // Bad customer ID in post, will just get redirected to base
-        $this->getRequest()->setPost(['customer_id' => '789']);
+        $this->getRequest()->setPostValue(['customer_id' => '789']);
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl));
     }
@@ -1016,7 +1016,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
      */
     public function testResetPasswordActionSuccess()
     {
-        $this->getRequest()->setPost(['customer_id' => '1']);
+        $this->getRequest()->setPostValue(['customer_id' => '1']);
         $this->dispatch('backend/customer/index/resetPassword');
         $this->assertSessionMessages(
             $this->equalTo(['Customer will receive an email with a link to reset password.']),

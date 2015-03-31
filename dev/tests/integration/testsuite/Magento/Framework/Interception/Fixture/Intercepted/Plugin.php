@@ -64,4 +64,68 @@ class Plugin
     {
         return '<P:aG>' . $result . '</P:aG>';
     }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeV(Intercepted $subject, $param1)
+    {
+        return ['<P:bV/>'];
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function aroundV(Intercepted $subject, \Closure $next, $param1)
+    {
+        return '<P:V>' . $param1 . '<P:V/>';
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeW(Intercepted $subject, $param1)
+    {
+        return ['<P:bW/>'];
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function aroundW(Intercepted $subject, \Closure $next, $param1)
+    {
+        return '<P:W>' . $param1 . '<P:W/>';
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterW(Intercepted $subject, $result)
+    {
+        return '<P:aW/>';
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeX(Intercepted $subject, $param1)
+    {
+        return ['<P:bX/>'];
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function aroundY(Intercepted $subject, \Closure $next, $param1)
+    {
+        return '<P:Y>' . $param1 . '<P:Y/>';
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterZ(Intercepted $subject, $result)
+    {
+        return '<P:aZ/>';
+    }
 }

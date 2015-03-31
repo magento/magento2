@@ -6,7 +6,7 @@
 
 namespace Magento\Checkout\Test\Block\Cart;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
+use Magento\Customer\Test\Fixture\Address;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
@@ -88,7 +88,7 @@ class Shipping extends Form
      */
     public function selectShippingMethod(array $shipping)
     {
-        $selector = sprintf($this->shippingMethod, $shipping['carrier'], $shipping['method']);
+        $selector = sprintf($this->shippingMethod, $shipping['shipping_service'], $shipping['shipping_method']);
         if (!$this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible()) {
             $this->openEstimateShippingAndTax();
         }
@@ -99,10 +99,10 @@ class Shipping extends Form
     /**
      * Fill shipping and tax form
      *
-     * @param AddressInjectable $address
+     * @param Address $address
      * @return void
      */
-    public function fillEstimateShippingAndTax(AddressInjectable $address)
+    public function fillEstimateShippingAndTax(Address $address)
     {
         $this->openEstimateShippingAndTax();
         $this->fill($address);

@@ -7,12 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
+    <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
     <preference for="Magento\Framework\Search\Request\Aggregation\StatusInterface" type="Magento\Framework\Search\Request\Aggregation\Status" />
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
-    <preference for="Magento\Framework\App\Http\RequestInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Framework\App\ResponseInterface" type="Magento\Framework\App\Response\Http" />
     <preference for="Magento\Framework\App\RouterListInterface" type="Magento\Framework\App\RouterList" />
@@ -21,10 +21,11 @@
     <preference for="Magento\Framework\App\Cache\StateInterface" type="Magento\Framework\App\Cache\State" />
     <preference for="Magento\Framework\App\Cache\TypeListInterface" type="Magento\Framework\App\Cache\TypeList" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
-    <preference for="Magento\Framework\View\DesignInterface" type="Magento\Core\Model\View\Design\Proxy" />
-    <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Core\Model\Theme" />
-    <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Core\Model\Theme\Resolver" />
+    <preference for="Magento\Framework\View\DesignInterface" type="Magento\Theme\Model\View\Design\Proxy" />
+    <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Theme\Model\Theme" />
+    <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Theme\Model\Theme\Resolver" />
     <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config" />
+    <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="\Magento\Framework\View\Asset\Bundle\Config" />
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\Lists" />
     <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <type name="Magento\Store\Model\Store">
@@ -48,14 +49,14 @@
     <preference for="Magento\Framework\Interception\PluginListInterface" type="Magento\Framework\Interception\PluginList\PluginList" />
     <preference for="Magento\Framework\Event\ManagerInterface" type="Magento\Framework\Event\Manager\Proxy" />
     <preference for="Magento\Framework\View\LayoutInterface" type="Magento\Framework\View\Layout" />
-    <preference for="Magento\Framework\View\Layout\ProcessorInterface" type="Magento\Core\Model\Layout\Merge" />
-    <preference for="Magento\Framework\View\Url\ConfigInterface" type="Magento\Core\Model\View\Url\Config" />
+    <preference for="Magento\Framework\View\Layout\ProcessorInterface" type="Magento\Framework\View\Model\Layout\Merge" />
+    <preference for="Magento\Framework\View\Url\ConfigInterface" type="Magento\Framework\View\Url\Config" />
     <preference for="Magento\Framework\App\Route\ConfigInterface" type="Magento\Framework\App\Route\Config" />
     <preference for="Magento\Framework\App\Resource\ConfigInterface" type="Magento\Framework\App\Resource\Config\Proxy" />
     <preference for="Magento\Framework\Oauth\OauthInterface" type="Magento\Framework\Oauth\Oauth"/>
-    <preference for="Magento\Framework\View\Design\Theme\Domain\PhysicalInterface" type="Magento\Core\Model\Theme\Domain\Physical" />
-    <preference for="Magento\Framework\View\Design\Theme\Domain\VirtualInterface" type="Magento\Core\Model\Theme\Domain\Virtual" />
-    <preference for="Magento\Framework\View\Design\Theme\Domain\StagingInterface" type="Magento\Core\Model\Theme\Domain\Staging" />
+    <preference for="Magento\Framework\View\Design\Theme\Domain\PhysicalInterface" type="Magento\Theme\Model\Theme\Domain\Physical" />
+    <preference for="Magento\Framework\View\Design\Theme\Domain\VirtualInterface" type="Magento\Theme\Model\Theme\Domain\Virtual" />
+    <preference for="Magento\Framework\View\Design\Theme\Domain\StagingInterface" type="Magento\Theme\Model\Theme\Domain\Staging" />
     <preference for="Magento\Framework\Json\EncoderInterface" type="Magento\Framework\Json\Encoder" />
     <preference for="Magento\Framework\Json\DecoderInterface" type="Magento\Framework\Json\Decoder" />
     <preference for="Magento\Framework\Message\ManagerInterface" type="Magento\Framework\Message\Manager" />
@@ -63,8 +64,9 @@
     <preference for="Magento\Framework\Interception\ChainInterface" type="Magento\Framework\Interception\Chain\Chain" />
     <preference for="Magento\Framework\Module\Output\ConfigInterface" type="Magento\Framework\Module\Output\Config" />
     <preference for="Magento\Framework\View\Design\Theme\CustomizationInterface" type="Magento\Framework\View\Design\Theme\Customization" />
+    <preference for="Magento\Framework\View\Asset\ConfigInterface" type="Magento\Framework\View\Asset\Config" />
     <preference for="Magento\Framework\Image\Adapter\ConfigInterface" type="Magento\Framework\Image\Adapter\Config" />
-    <preference for="Magento\Framework\View\Design\Theme\Image\PathInterface" type="Magento\Core\Model\Theme\Image\Path" />
+    <preference for="Magento\Framework\View\Design\Theme\Image\PathInterface" type="Magento\Theme\Model\Theme\Image\Path" />
     <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Framework\Session\Config" />
     <preference for="Magento\Framework\Session\SidResolverInterface" type="Magento\Framework\Session\SidResolver\Proxy" />
     <preference for="Magento\Framework\Stdlib\Cookie\CookieScopeInterface" type="\Magento\Framework\Stdlib\Cookie\CookieScope" />
@@ -72,7 +74,7 @@
     <preference for="Magento\Framework\Stdlib\CookieManagerInterface" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <preference for="Magento\Framework\TranslateInterface" type="Magento\Framework\Translate" />
     <preference for="Magento\Framework\Config\ScopeListInterface" type="interceptionConfigScope" />
-    <preference for="Magento\Framework\View\Design\Theme\Label\ListInterface" type="Magento\Core\Model\Resource\Theme\Collection" />
+    <preference for="Magento\Framework\View\Design\Theme\Label\ListInterface" type="Magento\Theme\Model\Resource\Theme\Collection" />
     <preference for="Magento\Framework\Mview\ConfigInterface" type="Magento\Framework\Mview\Config" />
     <preference for="Magento\Framework\Mview\ViewInterface" type="Magento\Framework\Mview\View" />
     <preference for="Magento\Framework\Mview\ProcessorInterface" type="Magento\Framework\Mview\Processor" />
@@ -80,13 +82,58 @@
     <preference for="Magento\Framework\Mview\View\SubscriptionInterface" type="Magento\Framework\Mview\View\Subscription" />
     <preference for="Magento\Framework\Mview\View\ChangelogInterface" type="Magento\Framework\Mview\View\Changelog" />
     <preference for="Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Flat"/>
-    <preference for="Magento\Framework\Api\AttributeMetadataBuilderInterface" type="Magento\Framework\Api\AttributeMetadataBuilder"/>
-    <preference for="Magento\Framework\Api\MetadataServiceInterface" type="Magento\Framework\Api\Config\MetadataConfig"/>
+    <preference for="Magento\Framework\Api\MetadataServiceInterface" type="Magento\Framework\Api\DefaultMetadataService"/>
+    <preference for="Magento\Framework\Api\MetadataObjectInterface" type="Magento\Framework\Api\AttributeMetadata"/>
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria"/>
     <preference for="Magento\Framework\App\Rss\UrlBuilderInterface" type="Magento\Framework\App\Rss\UrlBuilder"/>
     <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Null"/>
     <preference for="Magento\Framework\App\Resource\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
+    <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
+    <preference for="Magento\Framework\Acl\CacheInterface" type="Magento\Framework\Acl\Cache" />
+    <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
+    <preference for="Magento\Framework\Setup\ModuleDataSetupInterface" type="Magento\Setup\Module\DataSetup" />
+    <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
+    <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
+    <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator" />
+    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Framework\Session\Generic" />
+    <preference for="Magento\Framework\App\Config\ScopeConfigInterface" type="Magento\Framework\App\Config" />
+    <preference for="Magento\Framework\App\Config\ReinitableConfigInterface" type="Magento\Framework\App\ReinitableConfig" />
+    <preference for="Magento\Framework\App\Config\MutableScopeConfigInterface" type="Magento\Framework\App\MutableScopeConfig" />
+    <preference for="Magento\Framework\App\Config\Storage\WriterInterface" type="Magento\Framework\App\Config\Storage\Writer" />
+    <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\Config\Converter\Dom"/>
+    <preference for="Magento\Framework\App\DefaultPathInterface" type="Magento\Framework\App\DefaultPath\DefaultPath" />
+    <preference for="Magento\Framework\Encryption\EncryptorInterface" type="Magento\Framework\Encryption\Encryptor" />
+    <preference for="Magento\Framework\Filter\Encrypt\AdapterInterface" type="Magento\Framework\Filter\Encrypt\Basic" />
+    <preference for="Magento\Framework\Cache\ConfigInterface" type="Magento\Framework\Cache\Config" />
+    <preference for="Magento\Framework\View\Asset\MergeStrategyInterface" type="Magento\Framework\View\Asset\MergeStrategy\Direct" />
+    <preference for="Magento\Framework\App\ViewInterface" type="Magento\Framework\App\View" />
+    <preference for="Magento\Framework\Data\Collection\EntityFactoryInterface" type="Magento\Framework\Data\Collection\EntityFactory" />
+    <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
+    <preference for="Magento\Framework\Session\ValidatorInterface" type="Magento\Framework\Session\Validator" />
+    <preference for="Magento\Framework\Session\StorageInterface" type="Magento\Framework\Session\Storage" />
+    <preference for="Magento\Framework\Url\RouteParamsResolverInterface" type="Magento\Framework\Url\RouteParamsResolver" />
+    <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
+    <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
+    <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy" />
+    <preference for="Magento\Framework\Css\PreProcessor\AdapterInterface" type="Magento\Framework\Css\PreProcessor\Adapter\Oyejorge" />
+    <preference for="Magento\Framework\Locale\CurrencyInterface" type="Magento\Framework\Locale\Currency" />
+    <preference for="Magento\Framework\CurrencyInterface" type="Magento\Framework\Currency" />
+    <preference for="Magento\Framework\Locale\FormatInterface" type="Magento\Framework\Locale\Format" />
+    <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Framework\Locale\Resolver" />
+    <preference for="Magento\Framework\Stdlib\DateTime\TimezoneInterface" type="Magento\Framework\Stdlib\DateTime\Timezone" />
+    <preference for="Magento\Framework\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Less\PreProcessor\ErrorHandler" />
+    <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\Resource" />
+    <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
+    <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
+    <preference for="Magento\Framework\Model\Resource\Db\TransactionManagerInterface" type="Magento\Framework\Model\Resource\Db\TransactionManager" />
+    <type name="Magento\Framework\Model\Resource\Db\TransactionManager" shared="false" />
+    <type name="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Logger\Handler\System">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
@@ -96,15 +143,9 @@
         <arguments>
             <argument name="name" xsi:type="string">main</argument>
             <argument name="handlers"  xsi:type="array">
-                <item name="exception" xsi:type="object">Magento\Framework\Logger\Handler\Critical</item>
                 <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
                 <item name="debug" xsi:type="object">Magento\Framework\Logger\Handler\Debug</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Monolog\Handler\StreamHandler">
-        <arguments>
-            <argument name="stream" xsi:type="string">var/log/system.log</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Model\Context">
@@ -143,6 +184,16 @@
     <type name="Magento\Framework\App\State">
         <arguments>
             <argument name="mode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\Source">
+        <arguments>
+            <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Page\Config\Renderer">
+        <arguments>
+            <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Arguments\ValidationState">
@@ -200,7 +251,7 @@
     </type>
     <type name="Magento\Framework\Data\Structure" shared="false" />
     <type name="Magento\Framework\View\Layout\Data\Structure" shared="false" />
-    <type name="Magento\Core\Model\View\Design">
+    <type name="Magento\Theme\Model\View\Design">
         <arguments>
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager\Proxy</argument>
         </arguments>
@@ -254,7 +305,7 @@
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\Resource\Config\Reader\Proxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config\Proxy</argument>
-            <argument name="initialResources" xsi:type="init_parameter">Magento\Framework\App\Resource\Config::PARAM_INITIAL_RESOURCES</argument>
+            <argument name="initialResources" xsi:type="object">Magento\Framework\App\DeploymentConfig\ResourceConfig</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Resource\Config\Reader">
@@ -271,41 +322,68 @@
     <type name="Magento\Framework\Url">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Framework\Session\Generic\Proxy</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
-    <virtualType name="layoutArgumentInterpreterInternal" type="Magento\Framework\Data\Argument\Interpreter\Composite">
+    <virtualType name="layoutArgumentReaderInterpreter" type="Magento\Framework\Data\Argument\Interpreter\Composite">
         <arguments>
             <argument name="interpreters" xsi:type="array">
-                <item name="object" xsi:type="object">layoutObjectArgumentInterpreter</item>
                 <item name="options" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Options</item>
-                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
-                <item name="array" xsi:type="object">layoutArrayArgumentInterpreterProxy</item>
+                <item name="array" xsi:type="object">layoutArrayArgumentReaderInterpreterProxy</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
-                <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod</item>
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
                 <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
+                <item name="object" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
+                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
+                <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
             </argument>
-            <argument name="discriminator" xsi:type="const">Magento\Core\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
+            <argument name="discriminator" xsi:type="const">Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater">
+    <virtualType name="layoutArgumentGeneratorInterpreterInternal" type="Magento\Framework\Data\Argument\Interpreter\Composite">
         <arguments>
-            <argument name="subject" xsi:type="object">layoutArgumentInterpreterInternal</argument>
+            <argument name="interpreters" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Options</item>
+                <item name="array" xsi:type="object">layoutArrayArgumentGeneratorInterpreterProxy</item>
+                <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
+                <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
+                <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
+                <item name="object" xsi:type="object">layoutObjectArgumentInterpreter</item>
+                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
+                <item name="helper" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod</item>
+            </argument>
+            <argument name="discriminator" xsi:type="const">Magento\Framework\View\Model\Layout\Merge::TYPE_ATTRIBUTE</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutArrayArgumentInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
+    <virtualType name="layoutArgumentGeneratorInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater">
         <arguments>
-            <argument name="itemInterpreter" xsi:type="object">layoutArgumentInterpreter</argument>
+            <argument name="subject" xsi:type="object">layoutArgumentGeneratorInterpreterInternal</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutArrayArgumentReaderInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
+        <arguments>
+            <argument name="itemInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutArrayArgumentGeneratorInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
+        <arguments>
+            <argument name="itemInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreterInternal</argument>
         </arguments>
     </virtualType>
     <!--
     Array item can be of any type just like an argument, including array type itself, which creates circular dependency.
     Proxy is used to resolve the circular dependency, so that array items undergo the same interpretation as arguments.
     -->
-    <virtualType name="layoutArrayArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+    <virtualType name="layoutArrayArgumentReaderInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
         <arguments>
-            <argument name="instanceName" xsi:type="string">layoutArrayArgumentInterpreter</argument>
+            <argument name="instanceName" xsi:type="string">layoutArrayArgumentReaderInterpreter</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutArrayArgumentGeneratorInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">layoutArrayArgumentGeneratorInterpreter</argument>
         </arguments>
     </virtualType>
     <virtualType name="layoutObjectArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Object">
@@ -347,11 +425,13 @@
         <arguments>
             <argument name="readerPool" xsi:type="object">blockRenderPool</argument>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\Reader\UiComponent">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
         </arguments>
     </type>
     <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -387,6 +467,7 @@
     <type name="Magento\Framework\View\Layout">
         <arguments>
             <argument name="readerPool" xsi:type="object" shared="false">commonRenderPool</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
     <virtualType name="genericLayoutRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -445,12 +526,12 @@
     </type>
     <type name="Magento\Framework\View\Layout\Generator\Block">
         <arguments>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentInterpreter</argument>
+            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\Generator\UiComponent">
         <arguments>
-            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentInterpreter</argument>
+            <argument name="argumentInterpreter" xsi:type="object">layoutArgumentGeneratorInterpreter</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\View">
@@ -469,11 +550,43 @@
             <argument name="stateCollection" xsi:type="object" shared="false">Magento\Framework\Mview\View\State\CollectionInterface</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\View\Asset\Publisher" shared="false" />
     <type name="Magento\Framework\App\StaticResource">
         <arguments>
-            <argument name="response" xsi:type="object" shared="false">Magento\Core\Model\File\Storage\Response</argument>
+            <argument name="response" xsi:type="object" shared="false">Magento\MediaStorage\Model\File\Storage\Response</argument>
+            <argument name="publisher" xsi:type="object">developerPublisher</argument>
         </arguments>
     </type>
+    <virtualType name="developerPublisher" type="Magento\Framework\App\View\Asset\Publisher">
+        <arguments>
+            <argument name="materializationStrategyFactory" xsi:type="object">developerMaterialization</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="developerMaterialization" type="Magento\Framework\App\View\Asset\MaterializationStrategy\Factory">
+        <arguments>
+            <argument name="strategiesList" xsi:type="array">
+                <item name="view_preprocessed" xsi:type="object">Magento\Framework\App\View\Asset\MaterializationStrategy\Symlink</item>
+                <item name="default" xsi:type="object">Magento\Framework\App\View\Asset\MaterializationStrategy\Copy</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Asset\SourceFileGeneratorPool">
+        <arguments>
+            <argument name="fileGeneratorTypes" xsi:type="array">
+                <item name="less" xsi:type="object">fileassemblerFileGenerator</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="fileassemblerFileGenerator" type="Magento\Framework\Less\FileGenerator">
+        <arguments>
+            <argument name="relatedGenerator" xsi:type="object">fileassemblerRelatedFilesGenerator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="fileassemblerRelatedFilesGenerator" type="Magento\Developer\Model\Less\FileGenerator\PublicationDecorator">
+        <arguments>
+            <argument name="publisher" xsi:type="object">developerPublisher</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="fallbackResolverSimpleWithGroupedCache" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Grouped</argument>
@@ -544,6 +657,7 @@
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout\ScheduledStructure" shared="false" />
+    <type name="Magento\Framework\View\Page\Config\Structure" shared="false" />
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container">
         <arguments>
             <argument name="buckets" xsi:type="array">
@@ -559,6 +673,426 @@
                 <item name="auto" xsi:type="string">Magento\Framework\Search\Dynamic\Algorithm\Auto</item>
                 <item name="manual" xsi:type="string">Magento\Framework\Search\Dynamic\Algorithm\Manual</item>
                 <item name="improved" xsi:type="string">Magento\Framework\Search\Dynamic\Algorithm\Improved</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Model\Layout\Merge">
+        <arguments>
+            <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated\Proxy</argument>
+            <argument name="pageLayoutFileSource" xsi:type="object">pageLayoutFileCollectorAggregated</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
+        </arguments>
+    </type>
+    <type name="CSSmin">
+        <arguments>
+            <argument name="raise_php_limits" xsi:type="boolean">false</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\DefaultPath\DefaultPath">
+        <arguments>
+            <argument name="parts" xsi:type="array">
+                <item name="module" xsi:type="string">core</item>
+                <item name="controller" xsi:type="string">index</item>
+                <item name="action" xsi:type="string">index</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+            <argument name="cacheIdPrefix" xsi:type="string">collection_</argument>
+            <argument name="cacheLifetime" xsi:type="string">86400</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Event\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\Event\Config\Reader\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\Collection" shared="false" />
+    <virtualType name="layoutFileSourceBase" type="Magento\Framework\View\File\Collector\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">layout</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="layoutFileSourceTheme" type="Magento\Framework\View\File\Collector\ThemeModular">
+        <arguments>
+            <argument name="subDir" xsi:type="string">layout</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="layoutFileSourceOverrideBase" type="Magento\Framework\View\File\Collector\Override\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">layout/override/base</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceOverrideBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceOverrideBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceOverrideBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceOverrideBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="layoutFileSourceOverrideTheme" type="Magento\Framework\View\File\Collector\Override\ThemeModular">
+        <arguments>
+            <argument name="subDir" xsi:type="string">layout/override/theme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceOverrideThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceOverrideTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceOverrideThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceOverrideThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Layout\File\Collector\Aggregated">
+        <arguments>
+            <argument name="baseFiles" xsi:type="object">layoutFileSourceBaseSorted</argument>
+            <argument name="themeFiles" xsi:type="object">layoutFileSourceThemeSorted</argument>
+            <argument name="overrideBaseFiles" xsi:type="object">layoutFileSourceOverrideBaseSorted</argument>
+            <argument name="overrideThemeFiles" xsi:type="object">layoutFileSourceOverrideThemeSorted</argument>
+        </arguments>
+    </type>
+    <virtualType name="pageLayoutFileSourceBase" type="Magento\Framework\View\File\Collector\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">page_layout</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageLayoutFileSourceBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageLayoutFileSourceBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutFileSourceTheme" type="Magento\Framework\View\File\Collector\ThemeModular">
+        <arguments>
+            <argument name="subDir" xsi:type="string">page_layout</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageLayoutFileSourceTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageLayoutFileSourceThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageLayoutFileSourceOverrideBase" type="Magento\Framework\View\File\Collector\Override\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">page_layout/override/base</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutFileSourceOverrideBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageLayoutFileSourceOverrideBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutFileSourceOverrideBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageLayoutFileSourceOverrideBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageLayoutFileSourceOverrideTheme" type="Magento\Framework\View\File\Collector\Override\ThemeModular">
+        <arguments>
+            <argument name="subDir" xsi:type="string">page_layout/override/theme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutFileSourceOverrideThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageLayoutFileSourceOverrideTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutFileSourceOverrideThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageLayoutFileSourceOverrideThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageLayoutFileCollectorAggregated" type="Magento\Framework\View\Layout\File\Collector\Aggregated">
+        <arguments>
+            <argument name="baseFiles" xsi:type="object">pageLayoutFileSourceBaseSorted</argument>
+            <argument name="themeFiles" xsi:type="object">pageLayoutFileSourceThemeSorted</argument>
+            <argument name="overrideBaseFiles" xsi:type="object">pageLayoutFileSourceOverrideBaseSorted</argument>
+            <argument name="overrideThemeFiles" xsi:type="object">pageLayoutFileSourceOverrideThemeSorted</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageFileSourceBase" type="Magento\Framework\View\File\Collector\Base"/>
+    <virtualType name="pageFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageFileSourceTheme" type="Magento\Framework\View\File\Collector\ThemeModular"/>
+    <virtualType name="pageFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageFileSourceOverrideBase" type="Magento\Framework\View\File\Collector\Override\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">page/override</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceOverrideBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceOverrideBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceOverrideBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceOverrideBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageFileSourceOverrideTheme" type="Magento\Framework\View\File\Collector\Override\ThemeModular">
+        <arguments>
+            <argument name="subDir" xsi:type="string">override/theme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceOverrideThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceOverrideTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceOverrideThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceOverrideThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageLayoutRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
+                <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
+                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Page\Layout\Reader">
+        <arguments>
+            <argument name="pageLayoutFileSource" xsi:type="object">pageLayoutFileCollectorAggregated</argument>
+            <argument name="reader" xsi:type="object">pageLayoutRenderPool</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\PageLayout\File\Collector\Aggregated">
+        <arguments>
+            <argument name="baseFiles" xsi:type="object">pageFileSourceBaseSorted</argument>
+            <argument name="themeFiles" xsi:type="object">pageFileSourceThemeSorted</argument>
+            <argument name="overrideBaseFiles" xsi:type="object">pageFileSourceOverrideBaseSorted</argument>
+            <argument name="overrideThemeFiles" xsi:type="object">pageFileSourceOverrideThemeSorted</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Design\Theme\Image">
+        <arguments>
+            <argument name="uploader" xsi:type="object">Magento\Framework\View\Design\Theme\Image\Uploader\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\ScopePool">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\Initial">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\Config\Initial\Reader\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Config\Initial\Reader">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Framework\App\Config\Initial\Converter</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Route\Config">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\Route\Config\Reader\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\Validator">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="skippedUserAgentList" xsi:type="array">
+                <item name="flash" xsi:type="string">Shockwave Flash</item>
+                <item name="flash_mac" xsi:type="string"><![CDATA[Adobe Flash Player\s{1,}\w{1,10}]]></item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Object\Copy\Config\Reader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">fieldset.xml</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Framework\Object\Copy\Config\SchemaLocator</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Object\Copy\Config\SchemaLocator">
+        <arguments>
+            <argument name="schema" xsi:type="string">lib/internal/Magento/Framework/Object/etc/fieldset.xsd</argument>
+            <argument name="perFileSchema" xsi:type="string">lib/internal/Magento/Framework/Object/etc/fieldset_file.xsd</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Object\Copy\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\Object\Copy\Config\Reader\Proxy</argument>
+            <argument name="cacheId" xsi:type="string">fieldset_config</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Image">
+        <arguments>
+            <argument name="adapter" xsi:type="object">Magento\Framework\Image\Adapter\Gd2</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\PageType\Config\Reader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">page_types.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\Framework\View\Layout\PageType\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Framework\View\Layout\PageType\Config\SchemaLocator</argument>
+            <argument name="defaultScope" xsi:type="string">frontend</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Framework\View\Layout\PageType\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\View\Layout\PageType\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">page_types_config</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Layout\PageType\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Framework\View\Layout\PageType\Config\Data</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Framework\Message\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">message</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Message\Session">
+        <arguments>
+            <argument name="storage" xsi:type="object">Magento\Framework\Message\Session\Storage</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Url\ScopeResolver">
+        <arguments>
+            <argument name="areaCode" xsi:type="string">frontend</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Less\PreProcessor\Instruction\MagentoImport">
+        <arguments>
+            <argument name="fileSource" xsi:type="object">Magento\Framework\Less\File\Collector\Aggregated</argument>
+        </arguments>
+    </type>
+    <virtualType name="lessFileSourceBase" type="Magento\Framework\View\File\Collector\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">web</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="lessFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">lessFileSourceBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="lessFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">lessFileSourceBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="lessFileOverriddenBase" type="Magento\Framework\View\File\Collector\Override\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">web</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="lessFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">lessFileSourceTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="lessFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">lessFileSourceThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Less\File\Collector\Aggregated">
+        <arguments>
+            <argument name="libraryFiles" xsi:type="object">Magento\Framework\Less\File\Collector\Library</argument>
+            <argument name="baseFiles" xsi:type="object">lessFileSourceBaseSorted</argument>
+            <argument name="overriddenBaseFiles" xsi:type="object">lessFileOverriddenBase</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Module\Setup\MigrationData">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="plain" xsi:type="string"><![CDATA[/^(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)::.*?$/sui]]></item>
+                <item name="wiki" xsi:type="string"><![CDATA[/{{(block|widget).*?(class|type)=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?}}/sui]]></item>
+                <item name="xml" xsi:type="string"><![CDATA[/<block.*?class=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?>/sui]]></item>
+                <item name="serialized" xsi:type="string"><![CDATA[#(?P<string>s:\d+:"(?P<alias>[a-z]+[_a-z\d]*?/[a-z]+[_a-z\d]*?)")#sui]]></item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Webapi\Rest\Request\DeserializerFactory">
+        <arguments>
+            <argument name="deserializers" xsi:type="array">
+                <item name="application_json" xsi:type="array">
+                    <item name="type" xsi:type="string">application/json</item>
+                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Json</item>
+                </item>
+                <item name="application_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xml</item>
+                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</item>
+                </item>
+                <item name="application_xhtml_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">application/xhtml+xml</item>
+                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</item>
+                </item>
+                <item name="text_xml" xsi:type="array">
+                    <item name="type" xsi:type="string">text/xml</item>
+                    <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</item>
+                </item>
             </argument>
         </arguments>
     </type>

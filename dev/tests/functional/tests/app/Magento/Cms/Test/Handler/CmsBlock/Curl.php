@@ -8,26 +8,25 @@ namespace Magento\Cms\Test\Handler\CmsBlock;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\System\Config;
+use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Class Curl
- * Curl handler for creating CMS Block
+ * Curl handler for creating CMS Block.
  */
 class Curl extends AbstractCurl implements CmsBlockInterface
 {
     /**
-     * Url for saving data
+     * Url for saving data.
      *
      * @var string
      */
     protected $saveUrl = 'cms/block/save/back/edit';
 
     /**
-     * Mapping values for data
+     * Mapping values for data.
      *
      * @var array
      */
@@ -39,7 +38,7 @@ class Curl extends AbstractCurl implements CmsBlockInterface
     ];
 
     /**
-     * Mapping values for Stores
+     * Mapping values for Stores.
      *
      * @var array
      */
@@ -48,7 +47,7 @@ class Curl extends AbstractCurl implements CmsBlockInterface
     ];
 
     /**
-     * POST request for creating CMS Block
+     * POST request for creating CMS Block.
      *
      * @param FixtureInterface|null $fixture [optional]
      * @return array
@@ -58,7 +57,7 @@ class Curl extends AbstractCurl implements CmsBlockInterface
     {
         $data = $this->prepareData($fixture);
         $url = $_ENV['app_backend_url'] . $this->saveUrl;
-        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
         $curl->close();
@@ -73,7 +72,7 @@ class Curl extends AbstractCurl implements CmsBlockInterface
     }
 
     /**
-     * Prepare data from text to values
+     * Prepare data from text to values.
      *
      * @param FixtureInterface $fixture
      * @return array

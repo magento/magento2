@@ -20,7 +20,7 @@
         <remove name="report.bugs"/>
         <referenceBlock name="logo">
             <arguments>
-                <argument name="logo_file" xsi:type="string">images/logo.png</argument>
+                <argument name="logo_file" xsi:type="string">images/logo.svg</argument>
             </arguments>
         </referenceBlock>
         <move element="copyright" destination="before.body.end"/>

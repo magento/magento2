@@ -162,7 +162,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get theme module for custom static files
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws \InvalidArgumentException
      */
     protected function _getTheme()

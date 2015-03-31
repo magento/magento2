@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\Backend\Block\Template */ ?>
-<li class="item<?php echo $this->getIsActive() ? ' active' : '' ?>">
-    <a href="<?php echo $this->getHref() ?>" data-toggle="tab"><?php echo $this->getTitle(); ?></a>
+<?php /** @var $block \Magento\Backend\Block\Template */ ?>
+<li class="item<?php echo $block->getIsActive() ? ' active' : '' ?>">
+    <a href="<?php echo $block->getHref() ?>" data-toggle="tab"><?php echo $block->getTitle(); ?></a>
 </li>

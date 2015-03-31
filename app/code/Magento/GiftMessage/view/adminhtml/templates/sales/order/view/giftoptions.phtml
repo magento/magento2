@@ -8,9 +8,9 @@
 
 ?>
 
-<?php $_childHtml = trim($this->getChildHtml('', false)); ?>
+<?php $_childHtml = trim($block->getChildHtml('', false)); ?>
 <?php if ($_childHtml): ?>
-<?php $_item = $this->getItem() ?>
+<?php $_item = $block->getItem() ?>
 <tr>
     <td colspan="10" class="last">
         <a class="action-link" href="#" id="gift_options_link_<?php echo $_item->getId() ?>"><?php echo __('Gift Options') ?></a>

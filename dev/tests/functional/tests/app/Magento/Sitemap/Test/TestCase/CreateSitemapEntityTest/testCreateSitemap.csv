@@ -1,4 +1,0 @@
-"sitemap/data/sitemap_filename";"sitemap/data/sitemap_path";"constraint"
-"sitemap.xml";"/";"assertSitemapSuccessSaveMessage, assertSitemapInGrid"
-"%isolation%";"/";"assertSitemapFailPathSaveMessage"
-"sitemap.xml";"/%isolation%";"assertSitemapFailFolderSaveMessage"

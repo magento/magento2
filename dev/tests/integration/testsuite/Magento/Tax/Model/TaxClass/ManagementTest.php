@@ -5,7 +5,7 @@
  */
 namespace Magento\Tax\Model\TaxClass;
 
-use Magento\Tax\Api\Data\TaxClassDataBuilder;
+use Magento\Tax\Api\Data\TaxClassInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -23,21 +23,27 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     private $taxClassManagement;
 
     /**
-     * @var TaxClassDataBuilder
+     * @var TaxClassInterfaceFactory
      */
-    private $taxClassBuilder;
+    private $taxClassFactory;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    private $dataObjectHelper;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->taxClassRepository = $this->objectManager->create('Magento\Tax\Api\TaxClassRepositoryInterface');
         $this->taxClassManagement = $this->objectManager->create('Magento\Tax\Api\TaxClassManagementInterface');
-        $this->taxClassBuilder = $this->objectManager->create('Magento\Tax\Api\Data\TaxClassDataBuilder');
+        $this->taxClassFactory = $this->objectManager->create('Magento\Tax\Api\Data\TaxClassInterfaceFactory');
+        $this->dataObjectHelper = $this->objectManager->create('Magento\Framework\Api\DataObjectHelper');
     }
 
     /**
@@ -46,29 +52,35 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetTaxClassId()
     {
         $taxClassName = 'Get Me';
-        $taxClassDataObject = $this->taxClassBuilder
-            ->setClassName($taxClassName)
-            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER)
-            ->create();
+        $taxClassDataObject = $this->taxClassFactory->create();
+        $taxClassDataObject->setClassName($taxClassName)
+            ->setClassType(TaxClassManagementInterface::TYPE_CUSTOMER);
+
         $taxClassId = $this->taxClassRepository->save($taxClassDataObject);
-        /** @var \Magento\Tax\Api\Data\TaxClassKeyDataBuilder $taxClassKeyBuilder */
-        $taxClassKeyBuilder = $this->objectManager->create('Magento\Tax\Api\Data\TaxClassKeyDataBuilder');
-        $taxClassKeyTypeId = $taxClassKeyBuilder->populateWithArray(
+        /** @var \Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory $taxClassKeyFactory */
+        $taxClassKeyFactory = $this->objectManager->create('Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory');
+        $taxClassKeyTypeId = $taxClassKeyFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $taxClassKeyTypeId,
             [
                 TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
                 TaxClassKeyInterface::KEY_VALUE => $taxClassId,
-            ]
-        )->create();
+            ],
+            '\Magento\Tax\Api\Data\TaxClassKeyInterface'
+        );
         $this->assertEquals(
             $taxClassId,
             $this->taxClassManagement->getTaxClassId($taxClassKeyTypeId, TaxClassManagementInterface::TYPE_CUSTOMER)
         );
-        $taxClassKeyTypeName = $taxClassKeyBuilder->populateWithArray(
+        $taxClassKeyTypeName = $taxClassKeyFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $taxClassKeyTypeName,
             [
                 TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
                 TaxClassKeyInterface::KEY_VALUE => $taxClassName,
-            ]
-        )->create();
+            ],
+            '\Magento\Tax\Api\Data\TaxClassKeyInterface'
+        );
         $this->assertEquals(
             $taxClassId,
             $this->taxClassManagement->getTaxClassId($taxClassKeyTypeId, TaxClassManagementInterface::TYPE_CUSTOMER)

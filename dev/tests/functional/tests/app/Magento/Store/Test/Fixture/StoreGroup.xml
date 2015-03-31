@@ -1,51 +1,39 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture class="Magento\Store\Test\Fixture\StoreGroup">
-    <module>Magento_Store</module>
-    <type>flat</type>
-    <entity_type>store_group</entity_type>
-    <collection>Magento\Store\Model\Resource\Group\Collection</collection>
-    <identifier></identifier>
-    <fields>
-        <group_id>
-            <attribute_code>group_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </group_id>
-        <website_id>
-            <attribute_code>website_id</attribute_code>
-            <backend_type>virtual</backend_type>
-            <source>Magento\Store\Test\Fixture\StoreGroup\WebsiteId</source>
-        </website_id>
-        <name>
-            <attribute_code>name</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </name>
-        <root_category_id>
-            <attribute_code>root_category_id</attribute_code>
-            <backend_type>virtual</backend_type>
-            <source>Magento\Store\Test\Fixture\StoreGroup\CategoryId</source>
-        </root_category_id>
-        <default_store_id>
-            <attribute_code>default_store_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </default_store_id>
-    </fields>
-    <data_set></data_set>
-    <data_config></data_config>
-    <repository_class>Magento\Store\Test\Repository\StoreGroup</repository_class>
-    <handler_interface>Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface</handler_interface>
-</fixture>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="storeGroup" module="Magento_Store" type="flat" entity_type="store_group" collection="Magento\Store\Model\Resource\Group\Collection" identifier="" repository_class="Magento\Store\Test\Repository\StoreGroup" handler_interface="Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface" class="Magento\Store\Test\Fixture\StoreGroup">
+    <dataset name="default">
+        <field name="website_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">main_website</item>
+        </field>
+        <field name="name" xsi:type="string">StoreGroup%isolation%</field>
+        <field name="root_category_id" xsi:type="array">
+            <item name="dataSet" xsi:type="string">default_category</item>
+        </field>
+    </dataset>
+    <field name="group_id" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="website_id" source="Magento\Store\Test\Fixture\StoreGroup\WebsiteId">
+      <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">main_website</item>
+            </default_value>
+    </field>
+    <field name="name" is_required="">
+      <default_value xsi:type="string">StoreGroup%isolation%</default_value>
+    </field>
+    <field name="root_category_id" source="Magento\Store\Test\Fixture\StoreGroup\CategoryId">
+      <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="string">default_category</item>
+            </default_value>
+    </field>
+    <field name="default_store_id" is_required="">
+      <default_value xsi:type="number">0</default_value>
+    </field>
+  </fixture>
+</config>

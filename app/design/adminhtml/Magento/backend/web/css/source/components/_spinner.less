@@ -1,0 +1,67 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@spinner__base-size: 4rem;
+
+//  Size of spinner
+@spinner-border-radius: 6px;
+@spinner-spin-count: 8;
+@spinner-first-color: @color-brownie;
+@spinner-second-color: @color-white;
+@spinner-keyframe-name: fade;
+@spinner-animation-step: .09s;
+@spinner-animation-duration: @spinner-animation-step * @spinner-spin-count;
+@spinner-animation-transform: scale(.4);
+@spinner-animation-iteration-count: infinite;
+@spinner-animation-direction: linear;
+@spinner-rotate: 0;
+
+//  Degree for one elem
+@spinner-rotate-step: 45;
+
+//  One step in degree
+@spinner-delay: .9;
+
+//
+//  Spinner
+//  _____________________________________________
+
+//  Base spinner
+
+.spinner {
+    ._spinner-loop (
+    @spinner-spin-count,
+    @spinner-rotate,
+    @spinner-delay
+    );
+    ._spinner-keyframes();
+    display: inline-block;
+    font-size: @spinner__base-size;
+    height: 1em;
+    margin-right: 1.5rem;
+    position: relative;
+    width: 1em;
+    > span {
+        ._spinner_transform();
+        background-color: @spinner-second-color;
+        border-radius: @spinner-border-radius;
+        clip: rect(0 1em/3.5 .1em 0);
+        height: .1em;
+        margin-top: 1em / 2;
+        position: absolute;
+        width: 1em;
+    }
+
+    .ie9 & {
+        background: url('@{baseDir}images/ajax-loader.gif') no-repeat center;
+        > span {
+            display: none;
+        }
+    }
+}

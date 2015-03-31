@@ -16,7 +16,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     protected $resultRawFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -31,14 +31,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
         parent::__construct($context, $resultRedirectFactory);
@@ -85,7 +85,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $storeId = $this->getRequest()->getParam('store');
         $refreshTree = false;
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         if ($data) {
             $category->addData($this->_filterCategoryPostData($data['general']));
             if (!$category->getId()) {
@@ -149,16 +149,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                     foreach ($validate as $code => $error) {
                         if ($error === true) {
                             $attribute = $category->getResource()->getAttribute($code)->getFrontend()->getLabel();
-                            throw new \Magento\Framework\Model\Exception(__('Attribute "%1" is required.', $attribute));
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                __('Attribute "%1" is required.', $attribute)
+                            );
                         } else {
-                            throw new \Magento\Framework\Model\Exception($error);
+                            throw new \Magento\Framework\Exception\LocalizedException(__($error));
                         }
                     }
                 }
 
                 $category->unsetData('use_post_data_config');
                 if (isset($data['general']['entity_id'])) {
-                    throw new \Magento\Framework\Model\Exception(__('Unable to save the category'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save the category'));
                 }
 
                 $category->save();
@@ -178,7 +180,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             $block = $this->layoutFactory->create()->getMessagesBlock();
             $block->setMessages($this->messageManager->getMessages(true));
 
-            /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setData(
                 [

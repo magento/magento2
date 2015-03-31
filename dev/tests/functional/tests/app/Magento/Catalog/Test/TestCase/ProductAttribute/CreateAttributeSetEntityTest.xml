@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\CreateAttributeSetEntityTest">
+    <variation name="CreateAttributeSetEntityTestVariation1">
+      <data name="attributeSet/data/attribute_set_name" xsi:type="string">ProductTemplate%isolation%</data>
+      <data name="attributeSet/data/skeleton_set/dataSet" xsi:type="string">default</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductTemplateSuccessSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductTemplateForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductTemplateInGrid"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductTemplateOnProductForm"/>
+    </variation>
+  </testCase>
+</config>

@@ -9,6 +9,11 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 
+/**
+ * Product validate
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
@@ -22,7 +27,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productValidator;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -31,33 +36,39 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     protected $layoutFactory;
 
+    /** @var \Magento\Catalog\Model\ProductFactory */
+    protected $productFactory;
+
     /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param \Magento\Catalog\Model\Product\Validator $productValidator
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Catalog\Model\Product\Validator $productValidator,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Catalog\Model\ProductFactory $productFactory
     ) {
         $this->_dateFilter = $dateFilter;
         $this->productValidator = $productValidator;
         parent::__construct($context, $productBuilder);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->productFactory = $productFactory;
     }
 
     /**
      * Validate product
      *
-     * @return \Magento\Framework\Controller\Result\JSON
+     * @return \Magento\Framework\Controller\Result\Json
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -73,13 +84,13 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
                 $productData['stock_data']['use_config_manage_stock'] = 0;
             }
             /* @var $product \Magento\Catalog\Model\Product */
-            $product = $this->_objectManager->create('Magento\Catalog\Model\Product');
+            $product = $this->productFactory->create();
             $product->setData('_edit_mode', true);
             $storeId = $this->getRequest()->getParam('store');
             if ($storeId) {
                 $product->setStoreId($storeId);
             }
-            $setId = $this->getRequest()->getParam('set');
+            $setId = $this->getRequest()->getPost('set') ?: $this->getRequest()->getParam('set');
             if ($setId) {
                 $product->setAttributeSetId($setId);
             }
@@ -116,7 +127,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
             $response->setMessage($e->getMessage());
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {

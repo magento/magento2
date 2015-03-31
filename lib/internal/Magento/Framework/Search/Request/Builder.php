@@ -107,7 +107,7 @@ class Builder
      * Bind data to placeholder
      *
      * @param string $placeholder
-     * @param string $value
+     * @param mixed $value
      * @return $this
      */
     public function bind($placeholder, $value)
@@ -129,7 +129,7 @@ class Builder
         $requestName = $this->data['requestName'];
         /** @var array $data */
         $data = $this->config->get($requestName);
-        if (is_null($data)) {
+        if ($data === null) {
             throw new \InvalidArgumentException("Request name '{$requestName}' doesn't exist.");
         }
 

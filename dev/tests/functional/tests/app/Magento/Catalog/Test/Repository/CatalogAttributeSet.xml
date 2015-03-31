@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogAttributeSet">
+        <dataset name="default">
+            <field name="attribute_set_name" xsi:type="string">Default</field>
+            <field name="attribute_set_id" xsi:type="string">4</field>
+        </dataset>
+
+        <dataset name="custom_attribute_set">
+            <field name="attribute_set_name" xsi:type="string">Custom_attribute_set%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_attribute_set_with_fpt">
+            <field name="attribute_set_name" xsi:type="string">Custom_attribute_set%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="presets" xsi:type="string">attribute_type_fpt</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

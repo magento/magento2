@@ -7,8 +7,8 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if ($this->getIsProcessed()):?>
-    <?php if ($this->getIsSuccess()):?>
+<?php if ($block->getIsProcessed()):?>
+    <?php if ($block->getIsSuccess()):?>
         <h1><?php echo __('Verification Successful');?></h1>
         <p><?php echo __('Please continue with placing order.')?></p>
     <?php else:?>

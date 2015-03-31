@@ -31,7 +31,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_localeResolver;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -40,7 +40,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -76,7 +76,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected function _initSelect()
     {
         parent::_initSelect();
-        $locale = $this->_localeResolver->getLocaleCode();
+        $locale = $this->_localeResolver->getLocale();
 
         $this->addBindParam(':region_locale', $locale);
         $this->getSelect()->joinLeft(

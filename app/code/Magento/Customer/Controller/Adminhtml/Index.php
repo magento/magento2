@@ -8,12 +8,13 @@ namespace Magento\Customer\Controller\Adminhtml;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\AddressDataBuilder;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Message\Error;
 use Magento\Framework\ObjectFactory;
+use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Class Index
@@ -93,14 +94,14 @@ class Index extends \Magento\Backend\App\Action
     protected $addressRepository;
 
     /**
-     * @var CustomerDataBuilder
+     * @var CustomerInterfaceFactory
      */
-    protected $customerDataBuilder;
+    protected $customerDataFactory;
 
     /**
-     * @var AddressDataBuilder
+     * @var AddressInterfaceFactory
      */
-    protected $addressDataBuilder;
+    protected $addressDataFactory;
 
     /**
      * @var \Magento\Customer\Model\Customer\Mapper
@@ -111,6 +112,41 @@ class Index extends \Magento\Backend\App\Action
      * @var \Magento\Framework\Reflection\DataObjectProcessor
      */
     protected $dataObjectProcessor;
+
+    /**
+     * @var DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\LayoutFactory
+     */
+    protected $resultLayoutFactory;
+
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
+    protected $resultJsonFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
@@ -127,11 +163,18 @@ class Index extends \Magento\Backend\App\Action
      * @param Mapper $addressMapper
      * @param AccountManagementInterface $customerAccountManagement
      * @param AddressRepositoryInterface $addressRepository
-     * @param CustomerDataBuilder $customerDataBuilder
-     * @param AddressDataBuilder $addressDataBuilder
+     * @param CustomerInterfaceFactory $customerDataFactory
+     * @param AddressInterfaceFactory $addressDataFactory
      * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param DataObjectHelper $dataObjectHelper
      * @param ObjectFactory $objectFactory
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -150,11 +193,18 @@ class Index extends \Magento\Backend\App\Action
         Mapper $addressMapper,
         AccountManagementInterface $customerAccountManagement,
         AddressRepositoryInterface $addressRepository,
-        CustomerDataBuilder $customerDataBuilder,
-        AddressDataBuilder $addressDataBuilder,
+        CustomerInterfaceFactory $customerDataFactory,
+        AddressInterfaceFactory $addressDataFactory,
         \Magento\Customer\Model\Customer\Mapper $customerMapper,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        ObjectFactory $objectFactory
+        DataObjectHelper $dataObjectHelper,
+        ObjectFactory $objectFactory,
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
@@ -169,11 +219,18 @@ class Index extends \Magento\Backend\App\Action
         $this->addressMapper = $addressMapper;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->addressRepository = $addressRepository;
-        $this->customerDataBuilder = $customerDataBuilder;
-        $this->addressDataBuilder = $addressDataBuilder;
+        $this->customerDataFactory = $customerDataFactory;
+        $this->addressDataFactory = $addressDataFactory;
         $this->customerMapper = $customerMapper;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->_objectFactory = $objectFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->layoutFactory = $layoutFactory;
+        $this->resultLayoutFactory = $resultLayoutFactory;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
         parent::__construct($context);
     }
 
@@ -200,11 +257,12 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Prepare customer default title
      *
+     * @param \Magento\Backend\Model\View\Result\Page $resultPage
      * @return void
      */
-    protected function prepareDefaultCustomerTitle()
+    protected function prepareDefaultCustomerTitle(\Magento\Backend\Model\View\Result\Page $resultPage)
     {
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Customers'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Customers'));
     }
 
     /**

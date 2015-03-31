@@ -4,446 +4,206 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture class="Magento\Bundle\Test\Fixture\BundleProduct">
-    <module>Magento_Bundle</module>
-    <type>eav</type>
-    <entity_type>catalog_product</entity_type>
-    <product_type>bundle</product_type>
-    <collection>Magento\Catalog\Model\Resource\Product\Collection</collection>
-    <identifier>sku</identifier>
-    <fields>
-        <category_ids>
-            <attribute_code>category_ids</attribute_code>
-            <backend_type>static</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </category_ids>
-        <country_of_manufacture>
-            <attribute_code>country_of_manufacture</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>select</input>
-        </country_of_manufacture>
-        <created_at>
-            <attribute_code>created_at</attribute_code>
-            <backend_type>static</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </created_at>
-        <custom_design>
-            <attribute_code>custom_design</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>select</input>
-        </custom_design>
-        <custom_design_from>
-            <attribute_code>custom_design_from</attribute_code>
-            <backend_type>datetime</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>date</input>
-        </custom_design_from>
-        <custom_design_to>
-            <attribute_code>custom_design_to</attribute_code>
-            <backend_type>datetime</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>date</input>
-        </custom_design_to>
-        <custom_layout_update>
-            <attribute_code>custom_layout_update</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>textarea</input>
-        </custom_layout_update>
-        <description>
-            <attribute_code>description</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>textarea</input>
-        </description>
-        <enable_googlecheckout>
-            <attribute_code>enable_googlecheckout</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value>1</default_value>
-            <input>select</input>
-        </enable_googlecheckout>
-        <gallery>
-            <attribute_code>gallery</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>gallery</input>
-        </gallery>
-        <gift_message_available>
-            <attribute_code>gift_message_available</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>select</input>
-        </gift_message_available>
-        <group_price>
-            <attribute_code>group_price</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-            <group>advanced-pricing</group>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions</source>
-        </group_price>
-        <has_options>
-            <attribute_code>has_options</attribute_code>
-            <backend_type>static</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </has_options>
-        <image>
-            <attribute_code>image</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>media_image</input>
-        </image>
-        <image_label>
-            <attribute_code>image_label</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </image_label>
-        <media_gallery>
-            <attribute_code>media_gallery</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>gallery</input>
-        </media_gallery>
-        <meta_description>
-            <attribute_code>meta_description</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>textarea</input>
-        </meta_description>
-        <meta_keyword>
-            <attribute_code>meta_keyword</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>textarea</input>
-        </meta_keyword>
-        <meta_title>
-            <attribute_code>meta_title</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </meta_title>
-        <minimal_price>
-            <attribute_code>minimal_price</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>price</input>
-        </minimal_price>
-        <msrp>
-            <attribute_code>msrp</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>price</input>
-        </msrp>
-        <msrp_display_actual_price_type>
-            <attribute_code>msrp_display_actual_price_type</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value>4</default_value>
-            <input>select</input>
-        </msrp_display_actual_price_type>
-        <name>
-            <attribute_code>name</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </name>
-        <news_from_date>
-            <attribute_code>news_from_date</attribute_code>
-            <backend_type>datetime</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>date</input>
-        </news_from_date>
-        <news_to_date>
-            <attribute_code>news_to_date</attribute_code>
-            <backend_type>datetime</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>date</input>
-        </news_to_date>
-        <old_id>
-            <attribute_code>old_id</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </old_id>
-        <options_container>
-            <attribute_code>options_container</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value>container2</default_value>
-            <input>select</input>
-        </options_container>
-        <page_layout>
-            <attribute_code>page_layout</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>select</input>
-        </page_layout>
-        <price>
-            <attribute_code>price</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input>price</input>
-            <source>Magento\Bundle\Test\Fixture\BundleProduct\Price</source>
-        </price>
-        <price_type>
-            <attribute_code>price_type</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </price_type>
-        <price_view>
-            <attribute_code>price_view</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input>select</input>
-        </price_view>
-        <quantity_and_stock_status>
-            <attribute_code>quantity_and_stock_status</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value>1</default_value>
-            <input>select</input>
-        </quantity_and_stock_status>
-        <required_options>
-            <attribute_code>required_options</attribute_code>
-            <backend_type>static</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </required_options>
-        <shipment_type>
-            <attribute_code>shipment_type</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </shipment_type>
-        <short_description>
-            <attribute_code>short_description</attribute_code>
-            <backend_type>text</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>textarea</input>
-        </short_description>
-        <sku>
-            <attribute_code>sku</attribute_code>
-            <backend_type>static</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </sku>
-        <sku_type>
-            <attribute_code>sku_type</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </sku_type>
-        <small_image>
-            <attribute_code>small_image</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>media_image</input>
-        </small_image>
-        <small_image_label>
-            <attribute_code>small_image_label</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </small_image_label>
-        <special_price>
-            <attribute_code>special_price</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>price</input>
-            <group>advanced-pricing</group>
-        </special_price>
-        <special_from_date>
-            <attribute_code>special_from_date</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>price</input>
-            <group>advanced-pricing</group>
-            <source>Magento\Backend\Test\Fixture\Date</source>
-        </special_from_date>
-        <special_to_date>
-            <attribute_code>special_to_date</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>price</input>
-            <group>advanced-pricing</group>
-            <source>Magento\Backend\Test\Fixture\Date</source>
-        </special_to_date>
-        <status>
-            <attribute_code>status</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value>Product online</default_value>
-            <input>checkbox</input>
-            <group>product-details</group>
-        </status>
-        <tax_class_id>
-            <attribute_code>tax_class_id</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value>Taxable Goods</default_value>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
-            <input>select</input>
-            <group>product-details</group>
-        </tax_class_id>
-        <thumbnail>
-            <attribute_code>thumbnail</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>media_image</input>
-        </thumbnail>
-        <thumbnail_label>
-            <attribute_code>thumbnail_label</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </thumbnail_label>
-        <tier_price>
-            <attribute_code>tier_price</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </tier_price>
-        <updated_at>
-            <attribute_code>updated_at</attribute_code>
-            <backend_type>static</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </updated_at>
-        <url_key>
-            <attribute_code>url_key</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-            <group>search-engine-optimization</group>
-        </url_key>
-        <url_path>
-            <attribute_code>url_path</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>text</input>
-        </url_path>
-        <visibility>
-            <attribute_code>visibility</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value>4</default_value>
-            <input>select</input>
-        </visibility>
-        <weight>
-            <attribute_code>weight</attribute_code>
-            <backend_type>decimal</backend_type>
-            <is_required>0</is_required>
-            <default_value></default_value>
-            <input>weight</input>
-        </weight>
-        <weight_type>
-            <attribute_code>weight_type</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </weight_type>
-        <id>
-            <attribute_code>id</attribute_code>
-            <backend_type>virtual</backend_type>
-        </id>
-        <bundle_selections>
-            <attribute_code>bundle_selections</attribute_code>
-            <backend_type>virtual</backend_type>
-            <is_required>1</is_required>
-            <group>bundle</group>
-            <fixture>Magento\Bundle\Test\Fixture\Bundle\BundleSelections</fixture>
-        </bundle_selections>
-        <checkout_data>
-            <attribute_code>checkout_data</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group />
-            <fixture>Magento\Bundle\Test\Fixture\BundleProduct\CheckoutData</fixture>
-        </checkout_data>
-        <custom_options>
-            <attribute_code>custom_options</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>customer-options</group>
-            <is_required>0</is_required>
-            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</source>
-        </custom_options>
-        <type_id>
-            <attribute_code>type_id</attribute_code>
-            <backend_type>virtual</backend_type>
-        </type_id>
-    </fields>
-    <data_set>
-        <sku></sku>
-        <name></name>
-        <short_description></short_description>
-        <description></description>
-        <tax_class_id></tax_class_id>
-        <sku_type></sku_type>
-        <weight_type></weight_type>
-        <price_type></price_type>
-        <shipment_type></shipment_type>
-        <bundle_selections></bundle_selections>
-    </data_set>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="bundleProduct" module="Magento_Bundle" type="eav" entity_type="catalog_product" product_type="bundle" collection="Magento\Catalog\Model\Resource\Product\Collection" identifier="sku" repository_class="Magento\Bundle\Test\Repository\BundleProduct" handler_interface="Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface" class="Magento\Bundle\Test\Fixture\BundleProduct">
+    <dataset name="default">
+        <field name="name" xsi:type="string">BundleProduct %isolation%</field>
+        <field name="sku_type" xsi:type="string">Dynamic</field>
+        <field name="price_type" xsi:type="string">Dynamic</field>
+        <field name="weight_type" xsi:type="string">Dynamic</field>
+    </dataset>
     <data_config>
-        <create_url_params>
-            <type>bundle</type>
-            <set>4</set>
-        </create_url_params>
-        <input_prefix>product</input_prefix>
+        <item name="type_id" xsi:type="string">bundle</item>
+        <item name="create_url_params" xsi:type="array">
+            <item name="type" xsi:type="string">bundle</item>
+            <item name="set" xsi:type="string">4</item>
+        </item>
+        <item name="input_prefix" xsi:type="string">product</item>
     </data_config>
-    <repository_class>Magento\Bundle\Test\Repository\BundleProduct</repository_class>
-    <handler_interface>Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface</handler_interface>
-</fixture>
+    <field name="category_ids" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="country_of_manufacture" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="created_at" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="custom_design" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="custom_design_from" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="custom_design_to" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="custom_layout_update" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="description" is_required="0" group="product-details">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="enable_googlecheckout" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="gallery" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="gift_message_available" is_required="0" group="autosettings">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="use_config_gift_message_available" is_required="0" group="autosettings">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="group_price" is_required="0" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="has_options" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="image" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="image_label" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="media_gallery" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="meta_description" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="meta_keyword" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="meta_title" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="minimal_price" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="msrp" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="msrp_display_actual_price_type" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="name" is_required="1" group="product-details">
+      <default_value xsi:type="string">BundleProduct %isolation%</default_value>
+    </field>
+    <field name="news_from_date" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="news_to_date" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="old_id" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="options_container" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="page_layout" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="price" is_required="1" source="Magento\Bundle\Test\Fixture\BundleProduct\Price" group="product-details">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="price_from" is_required="1" group="product-details">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="price_to" is_required="1" group="product-details">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="price_type" is_required="1" group="product-details">
+      <default_value xsi:type="string">Dynamic</default_value>
+    </field>
+    <field name="status" is_required="0" group="product-details"/>
+    <field name="price_view" is_required="1" group="advanced-pricing">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="quantity_and_stock_status" is_required="0" group="product-details"/>
+    <field name="required_options" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="use_config_manage_stock" group="advanced-inventory"/>
+    <field name="manage_stock" group="advanced-inventory"/>
+    <field name="shipment_type" is_required="1" group="product-details">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="short_description" is_required="0" group="autosettings">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="sku" is_required="1" group="product-details">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="sku_type" is_required="1" group="product-details">
+      <default_value xsi:type="string">Dynamic</default_value>
+    </field>
+    <field name="weight_type" is_required="1" group="product-details">
+      <default_value xsi:type="string">Dynamic</default_value>
+    </field>
+    <field name="weight" is_required="0" group="product-details">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="small_image" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="small_image_label" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="special_price" is_required="0" group="advanced-pricing">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="special_from_date" is_required="0" group="advanced-pricing" source="Magento\Backend\Test\Fixture\Source\Date">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="special_to_date" is_required="0" group="advanced-pricing" source="Magento\Backend\Test\Fixture\Source\Date">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="tax_class_id" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass"/>
+    <field name="thumbnail" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="thumbnail_label" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="tier_price" is_required="0" group="advanced-pricing" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\TierPriceOptions">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="updated_at" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="url_key" is_required="0" group="search-engine-optimization">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="url_path" is_required="0">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="visibility" is_required="0" group="autosettings"/>
+    <field name="id"/>
+    <field name="bundle_selections" is_required="1" group="bundle" source="Magento\Bundle\Test\Fixture\BundleProduct\BundleSelections"/>
+    <field name="checkout_data" is_required="1" group="null" source="Magento\Bundle\Test\Fixture\BundleProduct\CheckoutData"/>
+    <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions"/>
+    <field name="type_id"/>
+    <field name="new_variations_attribute_set_id"/>
+    <field name="affect_bundle_product_selection"/>
+    <field name="stock_data" group="advanced-inventory"/>
+    <field name="category_id" group="product-details"/>
+    <field name="website_ids" group="websites"/>
+    <field name="cross_sell_products" 
+           group="crosssells"
+           source="Magento\Catalog\Test\Fixture\CatalogProductSimple\UpSellProducts"
+            />
+    <field name="up_sell_products"
+           group="upsells"
+           source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CrossSellProducts"
+            />
+    <field name="related_products" 
+           group="related-products" 
+           source="Magento\Catalog\Test\Fixture\CatalogProductSimple\RelatedProducts"
+            />
+  </fixture>
+</config>

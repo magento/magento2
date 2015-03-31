@@ -11,51 +11,17 @@ namespace Magento\Backend\Model;
 class Observer
 {
     /**
-     * @var \Magento\Backend\Model\Session
+     * @var \Magento\Framework\App\Cache\Frontend\Pool
      */
-    protected $_backendSession;
+    private $cacheFrontendPool;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface
-     */
-    protected $cache;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $_request;
-
-    /**
-     * @param Session $backendSession
-     * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      */
     public function __construct(
-        \Magento\Backend\Model\Session $backendSession,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Framework\App\RequestInterface $request
+        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
     ) {
-        $this->_backendSession = $backendSession;
-        $this->cache = $cache;
-        $this->_request = $request;
-    }
-
-    /**
-     * Bind locale
-     *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
-     */
-    public function bindLocale($observer)
-    {
-        $locale = $observer->getEvent()->getLocale();
-        if ($locale) {
-            $selectedLocale = $this->_backendSession->getLocale();
-            if ($selectedLocale) {
-                $locale->setLocaleCode($selectedLocale);
-            }
-        }
-        return $this;
+        $this->cacheFrontendPool = $cacheFrontendPool;
     }
 
     /**
@@ -66,5 +32,21 @@ class Observer
     public function clearCacheConfigurationFilesAccessLevelVerification()
     {
         return $this;
+    }
+
+    /**
+     * Cron job method to clean old cache resources
+     *
+     * @param \Magento\Cron\Model\Schedule $schedule
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function cleanCache(\Magento\Cron\Model\Schedule $schedule)
+    {
+        /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
+        foreach ($this->cacheFrontendPool as $cacheFrontend) {
+            // Magento cache frontend does not support the 'old' cleaning mode, that's why backend is used directly
+            $cacheFrontend->getBackend()->clean(\Zend_Cache::CLEANING_MODE_OLD);
+        }
     }
 }

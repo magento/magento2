@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,11 +12,13 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create
     /**
      * Start order create action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $this->_getSession()->clearStorage();
-        $this->_redirect('sales/*', ['customer_id' => $this->getRequest()->getParam('customer_id')]);
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('sales/*', ['customer_id' => $this->getRequest()->getParam('customer_id')]);
     }
 }

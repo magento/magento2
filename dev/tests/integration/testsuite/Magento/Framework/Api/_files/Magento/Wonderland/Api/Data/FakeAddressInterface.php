@@ -170,4 +170,21 @@ interface FakeAddressInterface extends ExtensibleDataInterface
      * @return bool|null
      */
     public function isDefaultBilling();
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Wonderland\Api\Data\FakeAddressExtensionInterface $extensionAttributes
+    );
 }

@@ -19,9 +19,9 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductGroupPriceDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory
      */
-    protected $groupPriceBuilder;
+    protected $groupPriceFactory;
 
     /**
      * @var GroupRepositoryInterface
@@ -46,21 +46,21 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Api\Data\ProductGroupPriceDataBuilder $groupPriceBuilder
+     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory
      * @param GroupRepositoryInterface $groupRepository
      * @param PriceModifier $priceModifier
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Api\Data\ProductGroupPriceDataBuilder $groupPriceBuilder,
+        \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory,
         GroupRepositoryInterface $groupRepository,
         \Magento\Catalog\Model\Product\PriceModifier $priceModifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->productRepository = $productRepository;
-        $this->groupPriceBuilder = $groupPriceBuilder;
+        $this->groupPriceFactory = $groupPriceFactory;
         $this->groupRepository = $groupRepository;
         $this->priceModifier = $priceModifier;
         $this->config = $config;
@@ -72,16 +72,17 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function add($productSku, $customerGroupId, $price)
+    public function add($sku, $customerGroupId, $price)
     {
         if (!\Zend_Validate::is($price, 'Float') || $price <= 0 || !\Zend_Validate::is($price, 'Float')) {
-            throw new InputException('Please provide valid data');
+            throw new InputException(__('Please provide valid data'));
         }
         $customerGroup = $this->groupRepository->getById($customerGroupId);
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         $groupPrices = $product->getData('group_price');
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $found = false;
@@ -107,13 +108,13 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
         if (is_array($errors) && count($errors)) {
             $errorAttributeCodes = implode(', ', array_keys($errors));
             throw new InputException(
-                sprintf('Values of following attributes are invalid: %s', $errorAttributeCodes)
+                __('Values of following attributes are invalid: %1', $errorAttributeCodes)
             );
         }
         try {
             $this->productRepository->save($product);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save group price');
+            throw new CouldNotSaveException(__('Could not save group price'));
         }
         return true;
     }
@@ -121,11 +122,12 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     /**
      * {@inheritdoc}
      */
-    public function remove($productSku, $customerGroupId)
+    public function remove($sku, $customerGroupId)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $this->priceModifier->removeGroupPrice($product, $customerGroupId, $websiteIdentifier);
@@ -135,23 +137,22 @@ class GroupPriceManagement implements \Magento\Catalog\Api\ProductGroupPriceMana
     /**
      * {@inheritdoc}
      */
-    public function getList($productSku, $websiteId = null)
+    public function getList($sku, $websiteId = null)
     {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
         $priceKey = 'website_price';
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) == 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
+        if ($value == 0) {
             $priceKey = 'price';
         }
 
         $prices = [];
         foreach ($product->getData('group_price') as $price) {
-            $this->groupPriceBuilder->populateWithArray(
-                [
-                    'customer_group_id' => $price['all_groups'] ? 'all' : $price['cust_group'],
-                    'value' => $price[$priceKey],
-                ]
-            );
-            $prices[] = $this->groupPriceBuilder->create();
+            /** @var \Magento\Catalog\Api\Data\ProductGroupPriceInterface $groupPrice */
+            $groupPrice = $this->groupPriceFactory->create();
+            $groupPrice->setCustomerGroupId($price['all_groups'] ? 'all' : $price['cust_group'])
+                ->setValue($price[$priceKey]);
+            $prices[] = $groupPrice;
         }
         return $prices;
     }

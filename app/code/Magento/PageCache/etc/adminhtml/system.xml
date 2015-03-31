@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="system">
             <group id="full_page_cache" translate="label" showInDefault="1" showInWebsite="0" showInStore="0" sortOrder="600">
@@ -41,9 +41,15 @@
                             <field id="caching_application">1</field>
                         </depends>
                     </field>
-                    <field id="export_button" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
-                        <label>Export Varnish Configuration</label>
-                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export</frontend_model>
+                    <field id="export_button_version3" type="button" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Export Configuration</label>
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish3</frontend_model>
+                        <depends>
+                            <field id="caching_application">1</field>
+                        </depends>
+                    </field>
+                    <field id="export_button_version4" type="button" sortOrder="36" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <frontend_model>Magento\PageCache\Block\System\Config\Form\Field\Export\Varnish4</frontend_model>
                         <depends>
                             <field id="caching_application">1</field>
                         </depends>

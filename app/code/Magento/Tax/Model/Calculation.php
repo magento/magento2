@@ -8,7 +8,6 @@ namespace Magento\Tax\Model;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Customer\Api\Data\CustomerInterface as CustomerDataObject;
-use Magento\Customer\Api\Data\CustomerDataBuilder;
 use Magento\Customer\Api\Data\RegionInterface as AddressRegion;
 use Magento\Customer\Api\AccountManagementInterface as CustomerAccountManagement;
 use Magento\Customer\Api\GroupManagementInterface as CustomerGroupManagement;
@@ -162,11 +161,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     protected $customerRepository;
 
     /**
-     * @var CustomerDataBuilder
-     */
-    protected $customerBuilder;
-
-    /**
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
@@ -185,7 +179,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param CustomerGroupManagement $customerGroupManagement
      * @param CustomerGroupRepository $customerGroupRepository
      * @param CustomerRepository $customerRepository
-     * @param CustomerDataBuilder $customerBuilder
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -205,7 +198,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         CustomerGroupManagement $customerGroupManagement,
         CustomerGroupRepository $customerGroupRepository,
         CustomerRepository $customerRepository,
-        CustomerDataBuilder $customerBuilder,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -220,7 +212,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         $this->customerGroupManagement = $customerGroupManagement;
         $this->customerGroupRepository = $customerGroupRepository;
         $this->customerRepository = $customerRepository;
-        $this->customerBuilder = $customerBuilder;
         $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -499,9 +490,9 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
             $basedOn = 'default';
         } else {
 
-            if ((is_null($billingAddress) || !$billingAddress->getCountryId())
+            if (($billingAddress === null || !$billingAddress->getCountryId())
                 && $basedOn == 'billing'
-                || (is_null($shippingAddress) || !$shippingAddress->getCountryId())
+                || ($shippingAddress === null || !$shippingAddress->getCountryId())
                 && $basedOn == 'shipping'
             ) {
                 if ($customerId) {
@@ -563,7 +554,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                 break;
         }
 
-        if (is_null($customerTaxClass) || $customerTaxClass === false) {
+        if ($customerTaxClass === null || $customerTaxClass === false) {
             if ($customerId) {
                 $customerData = $this->customerRepository->getById($customerId);
                 $customerTaxClass = $this->customerGroupRepository

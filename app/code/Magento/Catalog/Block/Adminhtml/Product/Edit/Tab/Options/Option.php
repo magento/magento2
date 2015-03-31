@@ -54,7 +54,7 @@ class Option extends Widget
     protected $_product;
 
     /**
-     * @var \Magento\Backend\Model\Config\Source\Yesno
+     * @var \Magento\Config\Model\Config\Source\Yesno
      */
     protected $_configYesNo;
 
@@ -65,7 +65,7 @@ class Option extends Widget
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Model\Config\Source\Yesno $configYesNo
+     * @param \Magento\Config\Model\Config\Source\Yesno $configYesNo
      * @param \Magento\Catalog\Model\Config\Source\Product\Options\Type $optionType
      * @param Product $product
      * @param \Magento\Framework\Registry $registry
@@ -74,7 +74,7 @@ class Option extends Widget
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Model\Config\Source\Yesno $configYesNo,
+        \Magento\Config\Model\Config\Source\Yesno $configYesNo,
         \Magento\Catalog\Model\Config\Source\Product\Options\Type $optionType,
         Product $product,
         \Magento\Framework\Registry $registry,
@@ -209,11 +209,11 @@ class Option extends Widget
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
             [
-                'id' => $this->getFieldId() . '_${id}_type',
+                'id' => $this->getFieldId() . '_<%- data.id %>_type',
                 'class' => 'select select-product-option-type required-option-select',
             ]
         )->setName(
-            $this->getFieldName() . '[${id}][type]'
+            $this->getFieldName() . '[<%- data.id %>][type]'
         )->setOptions(
             $this->_optionType->toOptionArray()
         );
@@ -229,9 +229,9 @@ class Option extends Widget
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setData(
-            ['id' => $this->getFieldId() . '_${id}_is_require', 'class' => 'select']
+            ['id' => $this->getFieldId() . '_<%- data.id %>_is_require', 'class' => 'select']
         )->setName(
-            $this->getFieldName() . '[${id}][is_require]'
+            $this->getFieldName() . '[<%- data.id %>][is_require]'
         )->setOptions(
             $this->_configYesNo->toOptionArray()
         );

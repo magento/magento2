@@ -145,6 +145,17 @@ interface DriverInterface
     public function copy($source, $destination, DriverInterface $targetDriver = null);
 
     /**
+     * Create symlink on source and place it into destination
+     *
+     * @param string $source
+     * @param string $destination
+     * @param DriverInterface|null $targetDriver
+     * @return bool
+     * @throws FilesystemException
+     */
+    public function symlink($source, $destination, DriverInterface $targetDriver = null);
+
+    /**
      * Delete file
      *
      * @param string $path
@@ -337,6 +348,14 @@ interface DriverInterface
      * @return mixed
      */
     public function getRealPath($path);
+
+    /**
+     * Return correct path for link
+     *
+     * @param string $path
+     * @return mixed
+     */
+    public function getRealPathSafety($path);
 
     /**
      * @param string $basePath

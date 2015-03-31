@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <route url="/V1/carts/:cartId" method="GET">
+        <service class="Magento\Quote\Api\CartRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts" method="GET">
+        <service class="Magento\Quote\Api\CartRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/" method="POST">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCart"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId" method="PUT">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="assignCustomer"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="set"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-shipping-method" method="GET">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/shipping-methods" method="GET">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/items" method="GET">
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/items" method="POST">
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/carts/items/:itemId" method="PUT">
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/items/:itemId" method="DELETE">
+        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-payment-methods" method="GET">
+        <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-payment-methods" method="PUT">
+        <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="set"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/payment-methods" method="GET">
+        <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/billing-address" method="GET">
+        <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/billing-address" method="POST">
+        <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons" method="GET">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons/:couponCode" method="PUT">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="set"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons" method="DELETE">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="remove"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/shipping-address" method="GET">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/shipping-address" method="POST">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/order" method="PUT">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="placeOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/totals" method="GET">
+        <service class="Magento\Quote\Api\CartTotalRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/customer/:customerId/cart" method="GET">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="getCartForCustomer"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+    </route>
+</routes>

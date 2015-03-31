@@ -6,17 +6,42 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
+use Magento\Framework\Registry;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+
 class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context, $coreRegistry);
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
      * Save status form processing
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost();
+        $data = $this->getRequest()->getPostValue();
         $isNew = $this->getRequest()->getParam('is_new');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $statusCode = $this->getRequest()->getParam('status');
 
@@ -36,8 +61,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
             if ($isNew && $status->getStatus()) {
                 $this->messageManager->addError(__('We found another order status with the same order status code.'));
                 $this->_getSession()->setFormData($data);
-                $this->_redirect('sales/*/new');
-                return;
+                return $resultRedirect->setPath('sales/*/new');
             }
 
             $status->setData($data)->setStatus($statusCode);
@@ -45,9 +69,8 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
             try {
                 $status->save();
                 $this->messageManager->addSuccess(__('You have saved the order status.'));
-                $this->_redirect('sales/*/');
-                return;
-            } catch (\Magento\Framework\Model\Exception $e) {
+                return $resultRedirect->setPath('sales/*/');
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(
@@ -57,12 +80,11 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
             }
             $this->_getSession()->setFormData($data);
             if ($isNew) {
-                $this->_redirect('sales/*/new');
+                return $resultRedirect->setPath('sales/*/new');
             } else {
-                $this->_redirect('sales/*/edit', ['status' => $this->getRequest()->getParam('status')]);
+                return $resultRedirect->setPath('sales/*/edit', ['status' => $this->getRequest()->getParam('status')]);
             }
-            return;
         }
-        $this->_redirect('sales/*/');
+        return $resultRedirect->setPath('sales/*/');
     }
 }

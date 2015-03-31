@@ -32,8 +32,8 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             ['fileService' => $cssService]
         );
         try {
-            if ($this->getRequest()->getPost()) {
-                /** @var $theme \Magento\Core\Model\Theme */
+            if ($this->getRequest()->getPostValue()) {
+                /** @var $theme \Magento\Theme\Model\Theme */
                 if (!empty($themeData['theme_id'])) {
                     $theme = $themeFactory->create($themeData['theme_id']);
                 } else {
@@ -45,7 +45,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                     );
                 }
                 if ($theme && !$theme->isEditable()) {
-                    throw new \Magento\Framework\Model\Exception(__('Theme isn\'t editable.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Theme isn\'t editable.'));
                 }
                 $theme->addData($themeData);
                 if (isset($themeData['preview']['delete'])) {
@@ -63,7 +63,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                 $singleFile->update($theme, $customCssData);
                 $this->messageManager->addSuccess(__('You saved the theme.'));
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setThemeData($themeData);
             $this->_getSession()->setThemeCustomCssData($customCssData);

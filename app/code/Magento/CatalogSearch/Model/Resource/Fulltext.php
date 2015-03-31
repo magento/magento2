@@ -34,21 +34,23 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param Helper $resourceHelper
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Filter\FilterManager $filter,
-        \Magento\Search\Model\Resource\Helper $resourceHelper
+        \Magento\Search\Model\Resource\Helper $resourceHelper,
+        $resourcePrefix = null
     ) {
         $this->_eventManager = $eventManager;
         $this->filter = $filter;
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

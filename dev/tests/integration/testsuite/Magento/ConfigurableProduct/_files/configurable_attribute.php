@@ -5,9 +5,9 @@
  */
 
 /* Create attribute */
-/** @var $installer \Magento\Catalog\Model\Resource\Setup */
+/** @var $installer \Magento\Catalog\Setup\CategorySetup */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\Resource\Setup',
+    'Magento\Catalog\Setup\CategorySetup',
     ['resourceName' => 'catalog_setup']
 );
 
@@ -24,7 +24,6 @@ $attribute->setData(
         'frontend_input' => 'select',
         'is_unique' => 0,
         'is_required' => 1,
-        'is_configurable' => 1,
         'is_searchable' => 0,
         'is_visible_in_advanced_search' => 0,
         'is_comparable' => 0,

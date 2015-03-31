@@ -11,11 +11,11 @@
 /**
  * Category view template
  *
- * @var $this \Magento\Catalog\Block\Category\View
+ * @var $block \Magento\Catalog\Block\Category\View
  */
 ?>
-<?php if ($_description = $this->getCurrentCategory()->getDescription()): ?>
+<?php if ($_description = $block->getCurrentCategory()->getDescription()): ?>
     <div class="category-description">
-        <?php echo $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($this->getCurrentCategory(), $_description, 'description') ?>
+        <?php echo $this->helper('Magento\Catalog\Helper\Output')->categoryAttribute($block->getCurrentCategory(), $_description, 'description') ?>
     </div>
 <?php endif; ?>

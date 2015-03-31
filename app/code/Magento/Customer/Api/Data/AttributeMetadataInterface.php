@@ -9,7 +9,7 @@ namespace Magento\Customer\Api\Data;
 /**
  * Customer attribute metadata interface.
  */
-interface AttributeMetadataInterface
+interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObjectInterface
 {
     /**#@+
      * Constants used as keys of data array
@@ -34,18 +34,19 @@ interface AttributeMetadataInterface
     /**#@-*/
 
     /**
-     * Retrieve code of the attribute.
-     *
-     * @return string
-     */
-    public function getAttributeCode();
-
-    /**
      * Frontend HTML for input element.
      *
      * @return string
      */
     public function getFrontendInput();
+
+    /**
+     * Set frontend HTML for input element.
+     *
+     * @param string $frontendInput
+     * @return $this
+     */
+    public function setFrontendInput($frontendInput);
 
     /**
      * Get template used for input (e.g. "date")
@@ -55,11 +56,27 @@ interface AttributeMetadataInterface
     public function getInputFilter();
 
     /**
+     * Set template used for input (e.g. "date")
+     *
+     * @param string $inputFilter
+     * @return $this
+     */
+    public function setInputFilter($inputFilter);
+
+    /**
      * Get label of the store.
      *
      * @return string
      */
     public function getStoreLabel();
+
+    /**
+     * Set label of the store.
+     *
+     * @param string $storeLabel
+     * @return $this
+     */
+    public function setStoreLabel($storeLabel);
 
     /**
      * Retrieve validation rules.
@@ -69,11 +86,27 @@ interface AttributeMetadataInterface
     public function getValidationRules();
 
     /**
+     * Set validation rules.
+     *
+     * @param \Magento\Customer\Api\Data\ValidationRuleInterface[] $validationRules
+     * @return $this
+     */
+    public function setValidationRules(array $validationRules);
+
+    /**
      * Number of lines of the attribute value.
      *
      * @return int
      */
     public function getMultilineCount();
+
+    /**
+     * Set number of lines of the attribute value.
+     *
+     * @param int $multilineCount
+     * @return $this
+     */
+    public function setMultilineCount($multilineCount);
 
     /**
      * Whether attribute is visible on frontend.
@@ -83,11 +116,27 @@ interface AttributeMetadataInterface
     public function isVisible();
 
     /**
+     * Set whether attribute is visible on frontend.
+     *
+     * @param bool $isVisible
+     * @return $this
+     */
+    public function setIsVisible($isVisible);
+
+    /**
      * Whether attribute is required.
      *
      * @return bool
      */
     public function isRequired();
+
+    /**
+     * Set whether attribute is required.
+     *
+     * @param bool $isRequired
+     * @return $this
+     */
+    public function setIsRequired($isRequired);
 
     /**
      * Get data model for attribute.
@@ -97,11 +146,27 @@ interface AttributeMetadataInterface
     public function getDataModel();
 
     /**
+     * Get data model for attribute.
+     *
+     * @param string $dataModel
+     * @return $this
+     */
+    public function setDataModel($dataModel);
+
+    /**
      * Return options of the attribute (key => value pairs for select)
      *
      * @return \Magento\Customer\Api\Data\OptionInterface[]
      */
     public function getOptions();
+
+    /**
+     * Set options of the attribute (key => value pairs for select)
+     *
+     * @param \Magento\Customer\Api\Data\OptionInterface[] $options
+     * @return $this
+     */
+    public function setOptions(array $options = null);
 
     /**
      * Get class which is used to display the attribute on frontend.
@@ -111,11 +176,27 @@ interface AttributeMetadataInterface
     public function getFrontendClass();
 
     /**
+     * Set class which is used to display the attribute on frontend.
+     *
+     * @param string $frontendClass
+     * @return $this
+     */
+    public function setFrontendClass($frontendClass);
+
+    /**
      * Whether current attribute has been defined by a user.
      *
      * @return bool
      */
     public function isUserDefined();
+
+    /**
+     * Set whether current attribute has been defined by a user.
+     *
+     * @param bool $isUserDefined
+     * @return $this
+     */
+    public function setIsUserDefined($isUserDefined);
 
     /**
      * Get attributes sort order.
@@ -125,11 +206,27 @@ interface AttributeMetadataInterface
     public function getSortOrder();
 
     /**
+     * Get attributes sort order.
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder);
+
+    /**
      * Get label which supposed to be displayed on frontend.
      *
      * @return string
      */
     public function getFrontendLabel();
+
+    /**
+     * Set label which supposed to be displayed on frontend.
+     *
+     * @param string $frontendLabel
+     * @return $this
+     */
+    public function setFrontendLabel($frontendLabel);
 
     /**
      * Get the note attribute for the element.
@@ -139,6 +236,14 @@ interface AttributeMetadataInterface
     public function getNote();
 
     /**
+     * Set the note attribute for the element.
+     *
+     * @param string $note
+     * @return $this
+     */
+    public function setNote($note);
+
+    /**
      * Whether this is a system attribute.
      *
      * @return bool
@@ -146,9 +251,25 @@ interface AttributeMetadataInterface
     public function isSystem();
 
     /**
+     * Set whether this is a system attribute.
+     *
+     * @param bool $isSystem
+     * @return $this
+     */
+    public function setIsSystem($isSystem);
+
+    /**
      * Get backend type.
      *
      * @return string
      */
     public function getBackendType();
+
+    /**
+     * Set backend type.
+     *
+     * @param string $backendType
+     * @return $this
+     */
+    public function setBackendType($backendType);
 }

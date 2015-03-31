@@ -145,7 +145,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
      */
     public function getSubscriptionObject()
     {
-        if (is_null($this->subscription)) {
+        if ($this->subscription === null) {
             $this->subscription =
                 $this->_createSubscriber()->loadByCustomerId($this->customerSession->getCustomerId());
         }
@@ -166,7 +166,7 @@ class Dashboard extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve subscription text, either subscribed or not.
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getSubscriptionText()
     {

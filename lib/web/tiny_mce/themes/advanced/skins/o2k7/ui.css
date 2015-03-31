@@ -11,7 +11,7 @@
 /* External */
 .o2k7Skin .mceExternalToolbar {position:absolute; border:1px solid #ABC6DD; border-bottom:0; display:none}
 .o2k7Skin .mceExternalToolbar td.mceToolbar {padding-right:13px;}
-.o2k7Skin .mceExternalClose {position:absolute; top:3px; right:3px; width:7px; height:7px; background:url(../../img/icons.gif) -820px 0}
+.o2k7Skin .mceExternalClose {position:absolute; top:3px; right:3px; width:7px; height:7px; background:url(../../img/icons.png) -820px 0}
 
 /* Layout */
 .o2k7Skin table.mceLayout {border:0; border-left:1px solid #ABC6DD; border-right:1px solid #ABC6DD}
@@ -22,7 +22,7 @@
 .o2k7Skin td.mceToolbar{background:#E5EFFD}
 .o2k7Skin .mceStatusbar {background:#E5EFFD; display:block; font-family:'MS Sans Serif',sans-serif,Verdana,Arial; font-size:9pt; line-height:16px; overflow:visible; color:#000; height:20px}
 .o2k7Skin .mceStatusbar div {float:left; padding:2px}
-.o2k7Skin .mceStatusbar a.mceResize {display:block; float:right; background:url(../../img/icons.gif) -800px 0; width:20px; height:20px; cursor:se-resize; outline:0}
+.o2k7Skin .mceStatusbar a.mceResize {display:block; float:right; background:url(../../img/icons.png) -800px 0; width:20px; height:20px; cursor:se-resize; outline:0}
 .o2k7Skin .mceStatusbar a:hover {text-decoration:underline}
 .o2k7Skin table.mceToolbar {margin-left:3px}
 .o2k7Skin .mceToolbar .mceToolbarStart span {display:block; background:url(img/button_bg.png) -22px 0; width:1px; height:22px; margin-left:3px;}
@@ -30,7 +30,7 @@
 .o2k7Skin .mceToolbar .mceToolbarEnd span {display:block; background:url(img/button_bg.png) -22px 0; width:1px; height:22px}
 .o2k7Skin .mceToolbar .mceToolbarEndListBox span, .o2k7Skin .mceToolbar .mceToolbarStartListBox span {display:none}
 .o2k7Skin span.mceIcon, .o2k7Skin img.mceIcon {display:block; width:20px; height:20px}
-.o2k7Skin .mceIcon {background:url(../../img/icons.gif) no-repeat 20px 20px}
+.o2k7Skin .mceIcon {background:url(../../img/icons.png) no-repeat 20px 20px}
 .o2k7Skin td.mceCenter {text-align:center;}
 .o2k7Skin td.mceCenter table {margin:0 auto; text-align:left;}
 .o2k7Skin td.mceRight table {margin:0 0 0 auto;}
@@ -66,7 +66,7 @@
 .o2k7Skin .mceSplitButton, .o2k7Skin .mceSplitButton a, .o2k7Skin .mceSplitButton span {display:block; height:22px; direction:ltr}
 .o2k7Skin .mceSplitButton {background:url(img/button_bg.png)}
 .o2k7Skin .mceSplitButton a.mceAction {width:22px}
-.o2k7Skin .mceSplitButton span.mceAction {width:22px; background-image:url(../../img/icons.gif)}
+.o2k7Skin .mceSplitButton span.mceAction {width:22px; background-image:url(../../img/icons.png)}
 .o2k7Skin .mceSplitButton a.mceOpen {width:10px; background:url(img/button_bg.png) -44px 0}
 .o2k7Skin .mceSplitButton span.mceOpen {display:none}
 .o2k7Skin table.mceSplitButtonEnabled:hover a.mceAction, .o2k7Skin .mceSplitButtonHover a.mceAction, .o2k7Skin .mceSplitButtonSelected {background:url(img/button_bg.png) 0 -22px}

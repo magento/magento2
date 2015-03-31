@@ -7,12 +7,12 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /* @var $this \Magento\Catalog\Block\Product\View\AbstractView */?>
-<?php $_product = $this->getProduct() ?>
+<?php /* @var $block \Magento\Catalog\Block\Product\View\AbstractView */?>
+<?php $_product = $block->getProduct() ?>
 
-<?php $_associatedProducts = $this->getAssociatedProducts(); ?>
+<?php $_associatedProducts = $block->getAssociatedProducts(); ?>
 <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
-<?php if ($this->displayProductStockStatus()): ?>
+<?php if ($block->displayProductStockStatus()): ?>
     <?php if ($_product->isAvailable() && $_hasAssociatedProducts): ?>
         <div class="stock available" title="<?php echo __('Availability') ?>">
             <span><?php echo __('In stock') ?></span>

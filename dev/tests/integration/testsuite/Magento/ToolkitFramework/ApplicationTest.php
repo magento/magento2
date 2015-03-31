@@ -35,12 +35,21 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
 
     public function testTest()
     {
-        $fixturesArray = \Magento\ToolkitFramework\FixtureSet::getInstance()->getFixtures();
         $config = \Magento\ToolkitFramework\Config::getInstance();
-        $config->loadConfig(self::$_generatorWorkingDir . '/profiles/small.xml');
+        $config->loadConfig(__DIR__ . '/_files/small.xml');
+        /** @var \Magento\TestFramework\Application $itfApplication */
+        $itfApplication = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication();
+        $shell = $this->getMock('Magento\Framework\Shell', [], [], '', false);
 
-        foreach ($fixturesArray as $fixture) {
-            $this->applyFixture(self::$_generatorWorkingDir . '/fixtures/' . $fixture['file']);
+        $application = new \Magento\ToolkitFramework\Application(
+            $itfApplication->getTempDir(),
+            $shell,
+            $itfApplication->getInitParams()
+        );
+
+        $application->bootstrap();
+        foreach ($application->loadFixtures()->getFixtures() as $fixture) {
+            $fixture->execute();
         }
     }
 
@@ -51,6 +60,14 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
         rename(
             self::$_generatorWorkingDir . '/fixtures/tax_rates.csv.bak',
             self::$_generatorWorkingDir . '/fixtures/tax_rates.csv'
+        );
+        /** @var $appCache \Magento\Framework\App\Cache */
+        $appCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache');
+        $appCache->clean(
+            [
+                \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
+            ]
         );
     }
 

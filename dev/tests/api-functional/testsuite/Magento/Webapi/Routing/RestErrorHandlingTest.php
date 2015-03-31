@@ -8,7 +8,7 @@
 namespace Magento\Webapi\Routing;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Webapi\Exception as WebapiException;
+use Magento\Framework\Webapi\Exception as WebapiException;
 
 class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -29,7 +29,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/errortest/success',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
 
@@ -45,16 +45,16 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/errortest/notfound',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
 
         // \Magento\Framework\Api\ResourceNotFoundException
         $this->_errorTest(
             $serviceInfo,
-            ['resource_id' => 'resourceY'],
+            ['resourceY'],
             WebapiException::HTTP_NOT_FOUND,
-            'Resource with ID "%resource_id" not found.'
+            'Resource with ID "%1" not found.'
         );
     }
 
@@ -63,7 +63,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/errortest/unauthorized',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
 
@@ -72,8 +72,8 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
             $serviceInfo,
             [],
             WebapiException::HTTP_UNAUTHORIZED,
-            'Consumer is not authorized to access %resources',
-            ['resources' => 'resourceN']
+            'Consumer is not authorized to access %1',
+            ['resourceN']
         );
     }
 
@@ -82,7 +82,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/errortest/otherexception',
-                'httpMethod' => \Magento\Webapi\Model\Rest\Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];
 
@@ -135,7 +135,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
                 $actualMessage = str_replace($matches[1], 'webapi-XXX', $actualMessage);
             }
             //make sure that the match for a report with an id is found if Internal error was reported
-            //Refer : \Magento\Webapi\Controller\ErrorProcessor::INTERNAL_SERVER_ERROR_MSG
+            //Refer : \Magento\Framework\Webapi\ErrorProcessor::INTERNAL_SERVER_ERROR_MSG
             if (count($matches) > 1) {
                 $this->assertTrue(!empty($matches[1]), 'Report id missing for internal error.');
             }

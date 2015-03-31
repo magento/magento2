@@ -22,17 +22,19 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
     /**
      * Construct
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        $resourcePrefix = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($resource, $eavConfig);
+        parent::__construct($context, $eavConfig, $resourcePrefix);
     }
 
     /**
@@ -196,7 +198,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\Resource\Product\Index
         )->group(
             ['l.parent_id', 'i.attribute_id', 'i.store_id', 'i.value']
         );
-        if (!is_null($parentIds)) {
+        if ($parentIds !== null) {
             $select->where('l.parent_id IN(?)', $parentIds);
         }
 

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -71,7 +70,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         $scope = null,
         \Magento\Customer\Model\Metadata\Form $metadataForm = null
     ) {
-        if (is_null($metadataForm)) {
+        if ($metadataForm === null) {
             $metadataForm = $this->_objectManager->get('Magento\Customer\Model\Metadata\FormFactory')->create(
                 $entityType,
                 $formCode,
@@ -82,7 +81,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         }
         $filteredData = $metadataForm->extractData($request, $scope);
 
-        $object = $this->_objectFactory->create(['data' => $request->getPost()]);
+        $object = $this->_objectFactory->create(['data' => $request->getPostValue()]);
         $requestData = $object->getData($scope);
         foreach ($additionalAttributes as $attributeCode) {
             $filteredData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
@@ -170,7 +169,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Save customer action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -179,7 +178,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     {
         $returnToEdit = false;
         $customerId = (int)$this->getRequest()->getParam('id');
-        $originalRequestData = $this->getRequest()->getPost();
+        $originalRequestData = $this->getRequest()->getPostValue();
         if ($originalRequestData) {
             try {
                 // optional fields might be set in request for future processing by observers in other modules
@@ -187,7 +186,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $addressesData = $this->_extractCustomerAddressData($customerData);
                 $request = $this->getRequest();
                 $isExistingCustomer = (bool)$customerId;
-                $customerBuilder = $this->customerDataBuilder;
+                $customer = $this->customerDataFactory->create();
                 if ($isExistingCustomer) {
                     $savedCustomerData = $this->_customerRepository->getById($customerId);
                     $customerData = array_merge(
@@ -197,7 +196,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $customerData['id'] = $customerId;
                 }
 
-                $customerBuilder->populateWithArray($customerData);
+                $this->dataObjectHelper->populateWithArray(
+                    $customer,
+                    $customerData,
+                    '\Magento\Customer\Api\Data\CustomerInterface'
+                );
                 $addresses = [];
                 foreach ($addressesData as $addressData) {
                     $region = isset($addressData['region']) ? $addressData['region'] : null;
@@ -206,15 +209,20 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                         'region' => $region,
                         'region_id' => $regionId,
                     ];
-                    $addresses[] = $this->addressDataBuilder->populateWithArray($addressData)->create();
+                    $addressDataObject = $this->addressDataFactory->create();
+                    $this->dataObjectHelper->populateWithArray(
+                        $addressDataObject,
+                        $addressData,
+                        '\Magento\Customer\Api\Data\AddressInterface'
+                    );
+                    $addresses[] = $addressDataObject;
                 }
 
                 $this->_eventManager->dispatch(
                     'adminhtml_customer_prepare_save',
-                    ['customer' => $customerBuilder, 'request' => $request]
+                    ['customer' => $customer, 'request' => $request]
                 );
-                $customerBuilder->setAddresses($addresses);
-                $customer = $customerBuilder->create();
+                $customer->setAddresses($addresses);
 
                 // Save customer
                 if ($isExistingCustomer) {
@@ -244,13 +252,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
                 $this->messageManager->addSuccess(__('You saved the customer.'));
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
-            } catch (\Magento\Framework\Validator\ValidatorException $exception) {
-                $this->_addSessionErrorMessages($exception->getMessages());
-                $this->_getSession()->setCustomerData($originalRequestData);
-                $returnToEdit = true;
-            } catch (\Magento\Framework\Model\Exception $exception) {
-                $messages = $exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR);
-                if (!count($messages)) {
+            } catch (\Magento\Framework\Validator\Exception $exception) {
+                $messages = $exception->getMessages();
+                if (empty($messages)) {
                     $messages = $exception->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
@@ -266,14 +270,22 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $returnToEdit = true;
             }
         }
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($returnToEdit) {
             if ($customerId) {
-                $this->_redirect('customer/*/edit', ['id' => $customerId, '_current' => true]);
+                $resultRedirect->setPath(
+                    'customer/*/edit',
+                    ['id' => $customerId, '_current' => true]
+                );
             } else {
-                $this->_redirect('customer/*/new', ['_current' => true]);
+                $resultRedirect->setPath(
+                    'customer/*/new',
+                    ['_current' => true]
+                );
             }
         } else {
-            $this->_redirect('customer/index');
+            $resultRedirect->setPath('customer/index');
         }
+        return $resultRedirect;
     }
 }

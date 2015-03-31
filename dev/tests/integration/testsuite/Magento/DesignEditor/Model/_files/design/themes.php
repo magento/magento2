@@ -22,8 +22,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
     ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
     ->load(\Magento\Framework\App\Area::PART_CONFIG);
 
-/** @var $registration \Magento\Core\Model\Theme\Registration */
+/** @var $registration \Magento\Theme\Model\Theme\Registration */
 $registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Core\Model\Theme\Registration'
+    'Magento\Theme\Model\Theme\Registration'
 );
 $registration->register('*/*/*/theme.xml');

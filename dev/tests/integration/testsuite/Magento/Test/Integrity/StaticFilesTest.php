@@ -151,7 +151,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function referencesFromStaticFilesDataProvider()
     {
-        return \Magento\Framework\Test\Utility\Files::init()->getStaticPreProcessingFiles('*.{less,css}');
+        return \Magento\Framework\App\Utility\Files::init()->getStaticPreProcessingFiles('*.{less,css}');
     }
 
     /**
@@ -191,7 +191,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function lessNotConfusedWithCssDataProvider()
     {
-        return \Magento\Framework\Test\Utility\Files::init()->getStaticPreProcessingFiles('*.{less,css}');
+        return \Magento\Framework\App\Utility\Files::init()->getStaticPreProcessingFiles('*.{less,css}');
     }
 
     /**
@@ -218,7 +218,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     public function referencesFromPhtmlFilesDataProvider()
     {
         $result = [];
-        foreach (\Magento\Framework\Test\Utility\Files::init()->getPhtmlFiles(true, false) as $info) {
+        foreach (\Magento\Framework\App\Utility\Files::init()->getPhtmlFiles(true, false) as $info) {
             list($area, $themePath, , , $file) = $info;
             foreach ($this->collectGetViewFileUrl($file) as $fileId) {
                 $result[] = [$file, $area, $themePath, $fileId];
@@ -228,7 +228,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Find invocations of $this->getViewFileUrl() and extract the first argument value
+     * Find invocations of $block->getViewFileUrl() and extract the first argument value
      *
      * @param string $file
      * @return array
@@ -236,7 +236,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     private function collectGetViewFileUrl($file)
     {
         $result = [];
-        if (preg_match_all('/\$this->getViewFileUrl\(\'([^\']+?)\'\)/', file_get_contents($file), $matches)) {
+        if (preg_match_all('/\$block->getViewFileUrl\(\'([^\']+?)\'\)/', file_get_contents($file), $matches)) {
             foreach ($matches[1] as $fileId) {
                 $result[] = $fileId;
             }
@@ -266,7 +266,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     public function referencesFromLayoutFilesDataProvider()
     {
         $result = [];
-        $files = \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles(['with_metainfo' => true], false);
+        $files = \Magento\Framework\App\Utility\Files::init()->getLayoutFiles(['with_metainfo' => true], false);
         foreach ($files as $metaInfo) {
             list($area, $themePath, , , $file) = $metaInfo;
             foreach ($this->collectFileIdsFromLayout($file) as $fileId) {

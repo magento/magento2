@@ -75,7 +75,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
     /**
      * Retrieve header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
@@ -84,7 +84,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
             $this->_txn->getTxnId(),
             $this->formatDate(
                 $this->_txn->getCreatedAt(),
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+                \IntlDateFormatter::MEDIUM,
                 true
             )
         );
@@ -119,7 +119,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
             $this->_txn->getCreatedAt()
         ) ? $this->formatDate(
             $this->_txn->getCreatedAt(),
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_MEDIUM,
+            \IntlDateFormatter::MEDIUM,
             true
         ) : __(
             'N/A'

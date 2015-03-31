@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,6 +11,11 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Pdfcreditmemos extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
@@ -19,12 +23,15 @@ class Pdfcreditmemos extends \Magento\Backend\App\Action
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
     ) {
         $this->_fileFactory = $fileFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -37,7 +44,7 @@ class Pdfcreditmemos extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return ResponseInterface|void
+     * @return ResponseInterface|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -66,6 +73,8 @@ class Pdfcreditmemos extends \Magento\Backend\App\Action
                 'application/pdf'
             );
         }
-        return $this->_redirect('sales/*/');
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('sales/*/');
+        return $resultRedirect;
     }
 }

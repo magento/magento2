@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     width="30px" height="60px" viewBox="0 0 30 60" enable-background="new 0 0 30 60" xml:space="preserve">
-<rect fill="#F2EBDE" fill-opacity="0.0" width="30" height="60"/>
-<line fill="none" stroke="#ADA89E" stroke-opacity="0.0" stroke-miterlimit="10" x1="0.5" y1="60" x2="0.5" y2="0"/>
-<g>
-    <g>
-        <polygon fill-rule="evenodd" clip-rule="evenodd" fill="#333333" points="15.676,33.037 20.778,27.934 20.071,26.848 15.58,31.34
-            11.09,26.848 10.383,27.934 15.485,33.037 15.561,33.152 15.58,33.133 15.601,33.152       "/>
-    </g>
-</g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="60" viewBox="0 0 30 60"><path fill="#F2EBDE" fill-opacity="0" d="M0 0h30v60H0z"/><path fill="none" stroke="#ADA89E" stroke-opacity="0" stroke-miterlimit="10" d="M.5 60V0"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#333" d="M15.676 33.037l5.102-5.103-.707-1.086-4.49 4.492-4.49-4.492-.702 1.086 5.102 5.103.075.115.02-.02.02.02z"/></svg>

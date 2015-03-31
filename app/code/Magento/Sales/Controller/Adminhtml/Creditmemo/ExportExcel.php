@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -17,14 +16,22 @@ class ExportExcel extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
+     * @var \Magento\Framework\View\Result\LayoutFactory
+     */
+    protected $resultLayoutFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
     ) {
         $this->_fileFactory = $fileFactory;
+        $this->resultLayoutFactory = $resultLayoutFactory;
         parent::__construct($context);
     }
 
@@ -43,13 +50,10 @@ class ExportExcel extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->_view->loadLayout(false);
         $fileName = 'creditmemos.xml';
-        $grid = $this->_view->getLayout()->getChildBlock('sales.creditmemo.grid', 'grid.export');
-        return $this->_fileFactory->create(
-            $fileName,
-            $grid->getExcelFile($fileName),
-            DirectoryList::VAR_DIR
-        );
+        $resultLayout = $this->resultLayoutFactory->create();
+        $grid = $resultLayout->getLayout()->getChildBlock('sales.creditmemo.grid', 'grid.export');
+        $excelFile = $grid->getExcelFile($fileName);
+        return $this->_fileFactory->create($fileName, $excelFile, DirectoryList::VAR_DIR);
     }
 }

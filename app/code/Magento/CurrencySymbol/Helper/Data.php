@@ -11,7 +11,7 @@
  */
 namespace Magento\CurrencySymbol\Helper;
 
-class Data extends \Magento\Core\Helper\Data
+class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
      * @var \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory
@@ -20,30 +20,15 @@ class Data extends \Magento\Core\Helper\Data
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory
-     * @param bool $dbCompatibleMode
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory,
-        $dbCompatibleMode = true
+        \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolFactory
     ) {
         $this->_symbolFactory = $symbolFactory;
         parent::__construct(
-            $context,
-            $scopeConfig,
-            $storeManager,
-            $appState,
-            $priceCurrency,
-            $dbCompatibleMode
+            $context
         );
     }
 

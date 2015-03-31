@@ -6,12 +6,12 @@
 
 namespace Magento\Framework\Api\Search;
 
-use Magento\Framework\Api\AbstractExtensibleObject;
+use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
  * Groups two or more filters together using a logical OR
  */
-class FilterGroup extends AbstractExtensibleObject
+class FilterGroup extends AbstractSimpleObject
 {
     const FILTERS = 'filters';
 
@@ -23,6 +23,18 @@ class FilterGroup extends AbstractExtensibleObject
     public function getFilters()
     {
         $filters = $this->_get(self::FILTERS);
-        return is_null($filters) ? [] : $filters;
+        return $filters === null ? [] : $filters;
+    }
+
+    /**
+     * Set filters
+     *
+     * @param \Magento\Framework\Api\Filter[] $filters
+     * @return $this
+     * @codeCoverageIgnore
+     */
+    public function setFilters(array $filters = null)
+    {
+        return $this->setData(self::FILTERS, $filters);
     }
 }

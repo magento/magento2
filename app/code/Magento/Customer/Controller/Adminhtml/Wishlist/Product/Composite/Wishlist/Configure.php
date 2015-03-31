@@ -13,7 +13,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\
     /**
      * Ajax handler to response configuration fieldset of composite product in customer's wishlist.
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
@@ -32,10 +32,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\
             $configureResult->setMessage($e->getMessage());
         }
 
-        $this->_objectManager->get(
-            'Magento\Catalog\Helper\Product\Composite'
-        )->renderConfigureResult(
-            $configureResult
-        );
+        return $this->_objectManager->get('Magento\Catalog\Helper\Product\Composite')
+            ->renderConfigureResult($configureResult);
     }
 }

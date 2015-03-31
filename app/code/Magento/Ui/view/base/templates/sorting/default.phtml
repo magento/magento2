@@ -6,11 +6,14 @@
 ?>
 <?php
 /**
- * @var \Magento\Ui\Component\Sorting $this
+ * @var \Magento\Ui\Component\Sorting $block
  */
 
 ?>
-
-<script data-mage-init='{ "Magento_Ui/js/listing/sorting": "" }' type="application/json">
-    <?php echo $this->getConfigBuilder()->toJson($this->getConfig()); ?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/listing/sorting": <?php echo $block->getConfigBuilder()->toJson($block->getConfig()); ?>
+        }
+    }
 </script>

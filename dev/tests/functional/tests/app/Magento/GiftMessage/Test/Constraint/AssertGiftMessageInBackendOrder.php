@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Constraint;
 
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
@@ -17,10 +17,6 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
  */
 class AssertGiftMessageInBackendOrder extends AbstractAssertForm
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Skipped fields for verify data.
      *
@@ -37,7 +33,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
      * Assert that message from dataSet is displayed on order(s) view page on backend.
      *
      * @param GiftMessage $giftMessage
-     * @param OrderView $orderView
+     * @param SalesOrderView $salesOrderView
      * @param OrderIndex $orderIndex
      * @param array $products
      * @param string $orderId
@@ -45,7 +41,7 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
      */
     public function processAssert(
         GiftMessage $giftMessage,
-        OrderView $orderView,
+        SalesOrderView $salesOrderView,
         OrderIndex $orderIndex,
         array $products,
         $orderId
@@ -54,13 +50,13 @@ class AssertGiftMessageInBackendOrder extends AbstractAssertForm
 
         if ($giftMessage->getAllowGiftMessagesForOrder()) {
             $expectedData[] = $giftMessage->getData();
-            $actualData[] = $orderView->getGiftOptionsBlock()->getData($giftMessage);
+            $actualData[] = $salesOrderView->getGiftOptionsBlock()->getData($giftMessage);
         }
 
         if ($giftMessage->getAllowGiftOptionsForItems()) {
             foreach ($products as $key => $product) {
                 $expectedData[] = $giftMessage->getItems()[$key]->getData();
-                $actualData[] = $orderView->getGiftItemsBlock()->getItemProduct($product)
+                $actualData[] = $salesOrderView->getGiftItemsBlock()->getItemProduct($product)
                     ->getGiftMessageFormData($giftMessage);
             }
         }

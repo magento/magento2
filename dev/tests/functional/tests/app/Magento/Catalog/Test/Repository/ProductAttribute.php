@@ -43,7 +43,6 @@ class ProductAttribute extends AbstractRepository
      */
     protected function buildNewAttributeData(array $defaultData)
     {
-        unset($defaultData['fields']['is_configurable']);
         unset($defaultData['fields']['attribute_code']);
         return $defaultData;
     }

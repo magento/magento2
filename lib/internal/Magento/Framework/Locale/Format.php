@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Locale;
 
+use Magento\Framework\Locale\Bundle\DataBundle;
+
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     /**
@@ -48,7 +50,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      */
     public function getNumber($value)
     {
-        if (is_null($value)) {
+        if ($value === null) {
             return null;
         }
 
@@ -80,11 +82,17 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      * Functions returns array with price formatting info
      *
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getPriceFormat()
     {
-        $format = \Zend_Locale_Data::getContent($this->_localeResolver->getLocaleCode(), 'currencynumber');
-        $symbols = \Zend_Locale_Data::getList($this->_localeResolver->getLocaleCode(), 'symbols');
+        $localeData = (new DataBundle())->get($this->_localeResolver->getLocale());
+        $format = $localeData['NumberElements']['latn']['patterns']['currencyFormat']
+            ?: explode(';', $localeData['NumberPatterns'][1])[0];
+        $decimalSymbol = $localeData['NumberElements']['latn']['symbols']['decimal']
+            ?: $localeData['NumberElements'][0];
+        $groupSymbol = $localeData['NumberElements']['latn']['symbols']['group']
+            ?: $localeData['NumberElements'][1];
 
         $pos = strpos($format, ';');
         if ($pos !== false) {
@@ -117,8 +125,8 @@ class Format implements \Magento\Framework\Locale\FormatInterface
             'pattern' => $this->_scopeResolver->getScope()->getCurrentCurrency()->getOutputFormat(),
             'precision' => $totalPrecision,
             'requiredPrecision' => $requiredPrecision,
-            'decimalSymbol' => $symbols['decimal'],
-            'groupSymbol' => $symbols['group'],
+            'decimalSymbol' => $decimalSymbol,
+            'groupSymbol' => $groupSymbol,
             'groupLength' => $group,
             'integerRequired' => $integerRequired,
         ];

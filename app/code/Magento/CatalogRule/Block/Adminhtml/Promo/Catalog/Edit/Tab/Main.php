@@ -67,7 +67,7 @@ class Main extends Generic implements TabInterface
     /**
      * Prepare content for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -77,7 +77,7 @@ class Main extends Generic implements TabInterface
     /**
      * Prepare title for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {
@@ -187,7 +187,7 @@ class Main extends Generic implements TabInterface
         );
 
         $dateFormat = $this->_localeDate->getDateFormat(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+            \IntlDateFormatter::SHORT
         );
         $fieldset->addField(
             'from_date',
@@ -196,7 +196,7 @@ class Main extends Generic implements TabInterface
                 'name' => 'from_date',
                 'label' => __('From Date'),
                 'title' => __('From Date'),
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             ]
@@ -208,7 +208,7 @@ class Main extends Generic implements TabInterface
                 'name' => 'to_date',
                 'label' => __('To Date'),
                 'title' => __('To Date'),
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             ]

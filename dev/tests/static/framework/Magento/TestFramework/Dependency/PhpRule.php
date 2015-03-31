@@ -52,7 +52,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
     {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
-        $this->_namespaces = implode('|', \Magento\Framework\Test\Utility\Files::init()->getNamespaces());
+        $this->_namespaces = implode('|', \Magento\Framework\App\Utility\Files::init()->getNamespaces());
     }
 
     /**
@@ -72,7 +72,7 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
 
         $pattern = '~\b(?<class>(?<module>(' . implode(
             '_|',
-            \Magento\Framework\Test\Utility\Files::init()->getNamespaces()
+            \Magento\Framework\App\Utility\Files::init()->getNamespaces()
         ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
         $dependenciesInfo = [];
@@ -208,10 +208,10 @@ class PhpRule implements \Magento\TestFramework\Dependency\RuleInterface
      */
     protected function _checkDependencyLayoutBlock($currentModule, $area, $block)
     {
-        if (isset($this->_mapLayoutBlocks[$area][$block]) || is_null($area)) {
+        if (isset($this->_mapLayoutBlocks[$area][$block]) || $area === null) {
             // CASE 1: No dependencies
             $modules = [];
-            if (is_null($area)) {
+            if ($area === null) {
                 foreach ($this->_mapLayoutBlocks as $blocks) {
                     if (array_key_exists($block, $blocks)) {
                         $modules += $blocks[$block];

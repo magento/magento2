@@ -11,20 +11,17 @@ class ForgotPassword extends \Magento\Customer\Controller\Account
     /**
      * Forgot customer password page
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
     {
-        $this->_view->loadLayout();
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getLayout()->getBlock('forgotPassword')->setEmailValue($this->_getSession()->getForgottenEmail());
 
-        $this->_view->getLayout()->getBlock(
-            'forgotPassword'
-        )->setEmailValue(
-            $this->_getSession()->getForgottenEmail()
-        );
         $this->_getSession()->unsForgottenEmail();
 
-        $this->_view->getLayout()->initMessages();
-        $this->_view->renderLayout();
+        $resultPage->getLayout()->initMessages();
+        return $resultPage;
     }
 }

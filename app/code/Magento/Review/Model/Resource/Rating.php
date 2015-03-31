@@ -32,26 +32,26 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_logger;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Review\Helper\Data $ratingData
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Resource\Review\Summary $reviewSummary
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Review\Helper\Data $ratingData,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Review\Model\Resource\Review\Summary $reviewSummary
+        \Magento\Review\Model\Resource\Review\Summary $reviewSummary,
+        $resourcePrefix = null
     ) {
         $this->moduleManager = $moduleManager;
         $this->_storeManager = $storeManager;
         $this->_logger = $logger;
         $this->_reviewSummary = $reviewSummary;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**

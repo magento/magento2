@@ -98,7 +98,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * Check for email duplicates before saving customers sharing options
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeSave()
     {
@@ -106,7 +106,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
         if ($value == self::SHARE_GLOBAL) {
             if ($this->_customerResource->findEmailDuplicates()) {
                 //@codingStandardsIgnoreStart
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'Cannot share customer accounts globally because some customer accounts with the same emails exist on multiple websites and cannot be merged.'
                     )

@@ -7,10 +7,10 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if ($this->getCanDisplayTotalPaid()): ?>
+<?php if ($block->getCanDisplayTotalPaid()): ?>
 <tr>
     <td class="label"><strong><?php echo __('Total Paid') ?></strong></td>
-    <td class="emph"><?php echo $this->displayPriceAttribute('total_paid', true) ?>
+    <td class="emph"><?php echo $block->displayPriceAttribute('total_paid', true) ?>
     </td>
 </tr>
 <?php endif; ?>

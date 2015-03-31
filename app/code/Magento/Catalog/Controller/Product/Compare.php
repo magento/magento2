@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Controller\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Core\App\Action\FormKeyValidator;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 
@@ -73,7 +73,7 @@ class Compare extends \Magento\Framework\App\Action\Action
     protected $_storeManager;
 
     /**
-     * @var FormKeyValidator
+     * @var Validator
      */
     protected $_formKeyValidator;
 
@@ -103,7 +103,7 @@ class Compare extends \Magento\Framework\App\Action\Action
      * @param \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param FormKeyValidator $formKeyValidator
+     * @param Validator $formKeyValidator
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param ProductRepositoryInterface $productRepository
@@ -118,7 +118,7 @@ class Compare extends \Magento\Framework\App\Action\Action
         \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList,
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        FormKeyValidator $formKeyValidator,
+        Validator $formKeyValidator,
         Result\RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         ProductRepositoryInterface $productRepository

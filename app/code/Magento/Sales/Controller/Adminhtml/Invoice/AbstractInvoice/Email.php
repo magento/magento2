@@ -14,6 +14,31 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 abstract class Email extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+    ) {
+        parent::__construct($context);
+        $this->resultForwardFactory = $resultForwardFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+    }
+
+    /**
      * Check if email sending is allowed for the current user
      *
      * @return bool
@@ -26,24 +51,24 @@ abstract class Email extends \Magento\Backend\App\Action
     /**
      * Notify user
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Forward|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $invoiceId = $this->getRequest()->getParam('invoice_id');
         if (!$invoiceId) {
-            return;
+            return $this->resultForwardFactory->create()->forward('noroute');
         }
         $invoice = $this->_objectManager->create('Magento\Sales\Model\Order\Invoice')->load($invoiceId);
         if (!$invoice) {
-            return;
+            return $this->resultForwardFactory->create()->forward('noroute');
         }
 
         $this->_objectManager->create('Magento\Sales\Model\Order\InvoiceNotifier')
             ->notify($invoice);
 
         $this->messageManager->addSuccess(__('We sent the message.'));
-        $this->_redirect(
+        return $this->resultRedirectFactory->create()->setPath(
             'sales/invoice/view',
             ['order_id' => $invoice->getOrder()->getId(), 'invoice_id' => $invoiceId]
         );

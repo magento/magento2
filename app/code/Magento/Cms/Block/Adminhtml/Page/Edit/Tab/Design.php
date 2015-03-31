@@ -22,7 +22,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_pageLayout;
 
     /**
-     * @var \Magento\Core\Model\PageLayout\Config\Builder
+     * @var \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
      */
     protected $pageLayoutBuilder;
 
@@ -32,7 +32,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Theme\Model\Layout\Source\Layout $pageLayout
      * @param \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory
-     * @param \Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder
+     * @param \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder
      * @param array $data
      */
     public function __construct(
@@ -41,7 +41,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Theme\Model\Layout\Source\Layout $pageLayout,
         \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory,
-        \Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder,
+        \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface $pageLayoutBuilder,
         array $data = []
     ) {
         $this->pageLayoutBuilder = $pageLayoutBuilder;
@@ -116,7 +116,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
         );
 
         $dateFormat = $this->_localeDate->getDateFormat(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+            \IntlDateFormatter::SHORT
         );
 
         $designFieldset->addField(
@@ -125,7 +125,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
             [
                 'name' => 'custom_theme_from',
                 'label' => __('Custom Design From'),
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'date_format' => $dateFormat,
                 'disabled' => $isElementDisabled,
                 'class' => 'validate-date validate-date-range date-range-custom_theme-from'
@@ -138,7 +138,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
             [
                 'name' => 'custom_theme_to',
                 'label' => __('Custom Design To'),
-                'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'date_format' => $dateFormat,
                 'disabled' => $isElementDisabled,
                 'class' => 'validate-date validate-date-range date-range-custom_theme-to'
@@ -191,7 +191,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Prepare label for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -201,7 +201,7 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Prepare title for tab
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

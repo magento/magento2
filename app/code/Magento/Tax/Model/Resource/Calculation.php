@@ -44,18 +44,20 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        $resourcePrefix = null
     ) {
         $this->_taxData = $taxData;
         $this->_storeManager = $storeManager;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**
@@ -135,7 +137,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getCalculationProcess($request, $rates = null)
     {
-        if (is_null($rates)) {
+        if ($rates === null) {
             $rates = $this->_getRates($request);
         }
 

@@ -1,7 +1,0 @@
-"user/dataSet";"install/dbTablePrefix";"install/admin";"install/httpsFront";"install/httpsAdmin";"install/apacheRewrites";"install/keyOwn";"install/keyValue";"install/language";"install/currency";"currencySymbol";"languageTemplate";"constraint";"description"
-"default";"-";"-";"-";"-";"-";"-";"-";"-";"-";"-";"-";"assertSuccessInstall, assertUserSuccessLogin";"install with default values"
-"default";"-";"custom";"-";"-";"-";"-";"-";"-";"-";"-";"-";"assertSuccessInstall, assertUserSuccessLogin";"install with custom admin path"
-"default";"-";"-";"-";"-";"-";"Yes";"123123qa";"German (Germany)";"Euro (EUR)";"€";"Suchbegriffe";"assertSuccessInstall, assertKeyCreated, assertUserSuccessLogin, assertCurrencySelected, assertLanguageSelected";"install with custom encryption key and changed currency and locale"
-"default";"prefix1_";"-";"-";"-";"-";"-";"-";"Chinese (China)";"-";"-";"-";"assertSuccessInstall, assertUserSuccessLogin";"install with table prefix"
-"default";"-";"-";"-";"-";"Yes";"-";"-";"-";"-";"-";"-";"assertSuccessInstall, assertUserSuccessLogin, assertRewritesEnabled";"install with enabled url rewrites"
-"default";"-";"-";"Yes";"Yes";"-";"-";"-";"-";"-";"-";"-";"assertSuccessInstall, assertUserSuccessLogin, assertSecureUrlEnabled";"install with enabled secure urls"

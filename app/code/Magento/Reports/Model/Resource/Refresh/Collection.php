@@ -24,12 +24,12 @@ class Collection extends \Magento\Framework\Data\Collection
     protected $_reportsFlagFactory;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory
     ) {
@@ -42,17 +42,14 @@ class Collection extends \Magento\Framework\Data\Collection
      * Get if updated
      *
      * @param string $reportCode
-     * @return string|\Magento\Framework\Stdlib\DateTime\DateInterface
+     * @return string|\DateTime
      */
     protected function _getUpdatedAt($reportCode)
     {
         $flag = $this->_reportsFlagFactory->create()->setReportFlagCode($reportCode)->loadSelf();
         return $flag->hasData() ? $this->_localeDate->scopeDate(
             0,
-            new \Magento\Framework\Stdlib\DateTime\Date(
-                $flag->getLastUpdate(),
-                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-            ),
+            $flag->getLastUpdate(),
             true
         ) : '';
     }
@@ -63,6 +60,7 @@ class Collection extends \Magento\Framework\Data\Collection
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function loadData($printQuery = false, $logQuery = false)
     {

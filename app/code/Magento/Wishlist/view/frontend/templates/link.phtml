@@ -6,10 +6,10 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var $this \Magento\Wishlist\Block\Link */
+/* @var $block \Magento\Wishlist\Block\Link */
 ?>
 <li class="link wishlist">
-    <a <?php echo $this->getLinkAttributes() ?>><?php echo $this->escapeHtml($this->getLabel())?>
-        <?php echo($this->getCounter()) ? '<span class="counter qty">' . $this->escapeHtml($this->getCounter()) . '</span>' : ''; ?>
+    <a <?php echo $block->getLinkAttributes() ?>><?php echo $block->escapeHtml($block->getLabel())?>
+        <?php echo($block->getCounter()) ? '<span class="counter qty">' . $block->escapeHtml($block->getCounter()) . '</span>' : ''; ?>
     </a>
 </li>

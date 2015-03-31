@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Review\Test\TestCase\CreateProductReviewFrontendEntityTest">
+    <variation name="CreateProductReviewFrontendEntityTestVariation1">
+      <data name="description" xsi:type="string">Create product review with rating</data>
+      <data name="review/data/customer" xsi:type="string">-</data>
+      <data name="review/data/nickname" xsi:type="string">name_%isolation%</data>
+      <data name="review/data/title" xsi:type="string">title_%isolation%</data>
+      <data name="review/data/detail" xsi:type="string">review_%isolation%</data>
+      <data name="review/data/ratings/1/dataSet" xsi:type="string">visibleOnDefaultWebsite</data>
+      <data name="review/data/ratings/1/rating" xsi:type="string">4</data>
+      <data name="review/data/entity_id/dataSet" xsi:type="string">catalogProductSimple::default</data>
+      <constraint name="Magento\Review\Test\Constraint\AssertReviewCreationSuccessMessage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewInGrid"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductRatingOnReviewPage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductRatingInProductPage"/>
+    </variation>
+    <variation name="CreateProductReviewFrontendEntityTestVariation2">
+      <data name="description" xsi:type="string">MAGETWO-12403 - Add Product Review from Customer's Prospective</data>
+      <data name="review/data/customer" xsi:type="string">Guest</data>
+      <data name="review/data/nickname" xsi:type="string">name_%isolation%</data>
+      <data name="review/data/title" xsi:type="string">title_%isolation%</data>
+      <data name="review/data/detail" xsi:type="string">review_%isolation%</data>
+      <data name="review/data/ratings/1/dataSet" xsi:type="string">-</data>
+      <data name="review/data/ratings/1/rating" xsi:type="string">-</data>
+      <data name="review/data/entity_id/dataSet" xsi:type="string">catalogProductSimple::default</data>
+      <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+      <constraint name="Magento\Review\Test\Constraint\AssertReviewCreationSuccessMessage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewIsAbsentOnProductPage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewForm"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertSetApprovedProductReview"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertReviewLinksIsPresentOnProductPage"/>
+      <constraint name="Magento\Review\Test\Constraint\AssertProductReviewOnProductPage"/>
+    </variation>
+  </testCase>
+</config>

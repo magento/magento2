@@ -6,7 +6,9 @@
  */
 namespace Magento\Sales\Controller\Guest;
 
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
 
 class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintShipment
 {
@@ -19,16 +21,26 @@ class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintSh
      * @param Context $context
      * @param OrderViewAuthorization $orderAuthorization
      * @param \Magento\Framework\Registry $registry
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $resultRedirectFactory
      * @param OrderLoader $orderLoader
      */
     public function __construct(
         Context $context,
         OrderViewAuthorization $orderAuthorization,
         \Magento\Framework\Registry $registry,
+        PageFactory $resultPageFactory,
+        RedirectFactory $resultRedirectFactory,
         OrderLoader $orderLoader
     ) {
         $this->orderLoader = $orderLoader;
-        parent::__construct($context, $orderAuthorization, $registry);
+        parent::__construct(
+            $context,
+            $orderAuthorization,
+            $registry,
+            $resultPageFactory,
+            $resultRedirectFactory
+        );
     }
 
     /**
@@ -36,8 +48,9 @@ class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintSh
      */
     public function execute()
     {
-        if (!$this->orderLoader->load($this->_request, $this->_response)) {
-            return;
+        $result = $this->orderLoader->load($this->_request);
+        if ($result instanceof \Magento\Framework\Controller\ResultInterface) {
+            return $result;
         }
 
         $shipmentId = (int)$this->getRequest()->getParam('shipment_id');
@@ -51,10 +64,9 @@ class PrintShipment extends \Magento\Sales\Controller\AbstractController\PrintSh
             if (isset($shipment)) {
                 $this->_coreRegistry->register('current_shipment', $shipment);
             }
-            $this->_view->loadLayout('print');
-            $this->_view->renderLayout();
+            return $this->resultPageFactory->create()->addHandle('print');
         } else {
-            $this->_redirect('sales/guest/form');
+            return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
         }
     }
 }

@@ -5,6 +5,10 @@
  */
 namespace Magento\Payment\Model\Method;
 
+/**
+ * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 {
     /**
@@ -40,26 +44,45 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_centinelService;
 
     /**
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($eventManager, $paymentData, $scopeConfig, $logger, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $paymentData,
+            $scopeConfig,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_moduleList = $moduleList;
         $this->_localeDate = $localeDate;
         $this->_centinelService = $centinelService;
@@ -121,7 +144,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      * Validate payment method information object
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -214,7 +237,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         }
 
         if ($errorMsg) {
-            throw new \Magento\Framework\Model\Exception($errorMsg);
+            throw new \Magento\Framework\Exception\LocalizedException($errorMsg);
         }
 
         //This must be after all validation conditions
@@ -231,7 +254,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     public function hasVerification()
     {
         $configData = $this->getConfigData('useccv');
-        if (is_null($configData)) {
+        if ($configData === null) {
             return true;
         }
         return (bool)$configData;
@@ -263,14 +286,9 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      */
     protected function _validateExpDate($expYear, $expMonth)
     {
-        $date = $this->_localeDate->date();
-        if (!$expYear || !$expMonth || $date->compareYear(
-            $expYear
-        ) == 1 || $date->compareYear(
-            $expYear
-        ) == 0 && $date->compareMonth(
-            $expMonth
-        ) == 1
+        $date = new \DateTime();
+        if (!$expYear || !$expMonth || (int)$date->format('Y') > $expYear
+            || (int)$date->format('Y') == $expYear && (int)$date->format('m') > $expMonth
         ) {
             return false;
         }

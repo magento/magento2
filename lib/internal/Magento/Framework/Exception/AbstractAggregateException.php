@@ -6,35 +6,23 @@
 
 namespace Magento\Framework\Exception;
 
+use Magento\Framework\Phrase;
+
 abstract class AbstractAggregateException extends LocalizedException
 {
     /**
-     * The array of errors that have been added via the addError() method.
+     * The array of errors that have been added via the addError() method
      *
-     * @var ErrorMessage[]
+     * @var \Magento\Framework\Exception\LocalizedException[]
      */
     protected $errors = [];
 
     /**
-     * The original message after being processed by the parent constructor
+     * The original phrase
      *
-     * @var string
+     * @var \Magento\Framework\Phrase
      */
-    protected $originalMessage;
-
-    /**
-     * The original raw message passed in via the constructor
-     *
-     * @var string
-     */
-    protected $originalRawMessage;
-
-    /**
-     * The original params passed in via the constructor
-     *
-     * @var array
-     */
-    protected $originalParams = [];
+    protected $originalPhrase;
 
     /**
      * An internal variable indicating how many time addError has been called
@@ -44,49 +32,44 @@ abstract class AbstractAggregateException extends LocalizedException
     private $addErrorCalls = 0;
 
     /**
-     * Initialize the exception.
+     * Initialize the exception
      *
-     * @param string     $message
-     * @param array      $params
+     * @param \Magento\Framework\Phrase $phrase
      * @param \Exception $cause
      */
-    public function __construct($message, array $params = [], \Exception $cause = null)
+    public function __construct(Phrase $phrase, \Exception $cause = null)
     {
-        $this->originalRawMessage = $message;
-        $this->originalParams = $params;
-        parent::__construct($message, $params, $cause);
-        $this->originalMessage = $this->message;
+        $this->originalPhrase = $phrase;
+        parent::__construct($phrase, $cause);
     }
 
     /**
-     * Create a new error raw message object for the message and its substitution parameters.
+     * Add new error into the list of exceptions
      *
-     * @param string $rawMessage Exception message
-     * @param array  $params  Substitution parameters and extra error debug information
-     *
+     * @param \Magento\Framework\Phrase $phrase
      * @return $this
      */
-    public function addError($rawMessage, array $params = [])
+    public function addError(Phrase $phrase)
     {
         $this->addErrorCalls++;
         if (empty($this->errors)) {
             if (1 === $this->addErrorCalls) {
-                // First call: simply overwrite the message and params
-                $this->rawMessage = $rawMessage;
-                $this->params = $params;
-                $this->message = __($rawMessage, $params);
+                // First call: simply overwrite the phrase and message
+                $this->phrase = $phrase;
+                $this->message = $phrase->render();
+                $this->logMessage = null;
             } elseif (2 === $this->addErrorCalls) {
                 // Second call: store the error from the first call and the second call in the array
-                // restore the message and params to their original value
-                $this->errors[] = new ErrorMessage($this->rawMessage, $this->params);
-                $this->errors[] = new ErrorMessage($rawMessage, $params);
-                $this->rawMessage = $this->originalRawMessage;
-                $this->params = $this->originalParams;
-                $this->message = $this->originalMessage;
+                // restore the phrase to its original value
+                $this->errors[] = new LocalizedException($this->phrase);
+                $this->errors[] = new LocalizedException($phrase);
+                $this->phrase = $this->originalPhrase;
+                $this->message = $this->originalPhrase->render();
+                $this->logMessage = null;
             }
         } else {
             // All subsequent calls after the second should reach here
-            $this->errors[] = new ErrorMessage($rawMessage, $params);
+            $this->errors[] = new LocalizedException($phrase);
         }
         return $this;
     }
@@ -102,9 +85,9 @@ abstract class AbstractAggregateException extends LocalizedException
     }
 
     /**
-     * Return the array of ErrorMessage objects. Return an empty array if no errors were added.
+     * Get the array of LocalizedException objects. Get an empty array if no errors were added.
      *
-     * @return ErrorMessage[]
+     * @return \Magento\Framework\Exception\LocalizedException[]
      */
     public function getErrors()
     {

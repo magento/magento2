@@ -5,17 +5,20 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <section id="catalog">
             <group id="seo">
                 <field id="search_terms" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Popular Search Terms</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Enabledisable</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
             </group>
             <group id="search" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Catalog Search</label>
+                <field id="engine">
+                    <backend_model>Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend\Engine</backend_model>
+                </field>
                 <field id="min_query_length" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minimal Query Length</label>
                     <validate>validate-digits</validate>

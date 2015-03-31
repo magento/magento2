@@ -131,9 +131,9 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\El
         $select = $this->getLayout()->createBlock(
             'Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Select'
         )->setId(
-            $this->getFieldId() . '_{{index}}_gattribute'
+            $this->getFieldId() . '_<%- data.index %>_gattribute'
         )->setName(
-            $this->getFieldName() . '[{{index}}][gcontent_attribute]'
+            $this->getFieldName() . '[<%- data.index %>][gcontent_attribute]'
         )->setOptions(
             $options
         );
@@ -152,9 +152,9 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\El
         $select = $this->getLayout()->createBlock(
             'Magento\Framework\View\Element\Html\Select'
         )->setId(
-            $this->getFieldId() . '_{{index}}_attribute'
+            $this->getFieldId() . '_<%- data.index %>_attribute'
         )->setName(
-            $this->getFieldName() . '[{{index}}][attribute_id]'
+            $this->getFieldName() . '[<%- data.index %>][attribute_id]'
         )->setOptions(
             $this->_getAttributes($this->getAttributeSetId(), $escapeJsQuotes)
         );

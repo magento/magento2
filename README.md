@@ -32,7 +32,7 @@ Use the following table to verify you have the correct prerequisites to install 
 		<td><a href="http://devdocs.magento.com/guides/v1.0/install-gde/prereq/apache.html">Apache</a></td>
 	</tr>
 	<tr>
-		<td>PHP 5.4.x (where x = 11 or later) or 5.5.x</td>
+		<td>PHP 5.5.x or 5.6.x</td>
 		<td><code>php -v</code></td>
 		<td><a href="http://devdocs.magento.com/guides/v1.0/install-gde/prereq/php-ubuntu.html">PHP Ubuntu</a><br><a href="http://devdocs.magento.com/guides/v1.0/install-gde/prereq/php-centos.html">PHP CentOS</a></td>
 	</tr>

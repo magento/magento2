@@ -13,7 +13,7 @@ use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 /**
  * Login controller
  *
- * @method \Zend_Controller_Request_Http getRequest()
+ * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
  */
 class Login extends \Magento\Framework\App\Action\Action
@@ -29,28 +29,44 @@ class Login extends \Magento\Framework\App\Action\Action
     protected $customerAccountManagement;
 
     /**
-     * @var \Magento\Core\Helper\Data $helper
+     * @var \Magento\Framework\Json\Helper\Data $helper
      */
     protected $helper;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RawFactory
+     */
+    protected $resultRawFactory;
 
     /**
      * Initialize Login controller
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Framework\Json\Helper\Data $helper
      * @param AccountManagementInterface $customerAccountManagement
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Helper\Data $helper,
-        AccountManagementInterface $customerAccountManagement
+        \Magento\Framework\Json\Helper\Data $helper,
+        AccountManagementInterface $customerAccountManagement,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         parent::__construct($context);
         $this->customerSession = $customerSession;
         $this->helper = $helper;
         $this->customerAccountManagement = $customerAccountManagement;
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->resultRawFactory = $resultRawFactory;
     }
 
     /**
@@ -58,7 +74,7 @@ class Login extends \Magento\Framework\App\Action\Action
      *
      * Expects a POST. ex for JSON {"username":"user@magento.com", "password":"userpassword"}
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
@@ -66,15 +82,15 @@ class Login extends \Magento\Framework\App\Action\Action
         $httpBadRequestCode = 400;
         $httpUnauthorizedCode = 401;
 
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultRawFactory->create();
         try {
-            $credentials = $this->helper->jsonDecode($this->getRequest()->getRawBody());
+            $credentials = $this->helper->jsonDecode($this->getRequest()->getContent());
         } catch (\Exception $e) {
-            $this->getResponse()->setHttpResponseCode($httpBadRequestCode);
-            return;
+            return $resultRaw->setHttpResponseCode($httpBadRequestCode);
         }
         if (!$credentials || $this->getRequest()->getMethod() !== 'POST' || !$this->getRequest()->isXmlHttpRequest()) {
-            $this->getResponse()->setHttpResponseCode($httpBadRequestCode);
-            return;
+            return $resultRaw->setHttpResponseCode($httpBadRequestCode);
         }
         $responseText = null;
         try {
@@ -92,10 +108,12 @@ class Login extends \Magento\Framework\App\Action\Action
             $responseText = __('There was an error validating the username and password.');
         }
         if ($responseText) {
-            $this->getResponse()->setHttpResponseCode($httpUnauthorizedCode);
+            return $resultRaw->setHttpResponseCode($httpUnauthorizedCode);
         } else {
             $responseText = __('Login successful.');
         }
-        $this->getResponse()->representJson($this->helper->jsonEncode(['message' => $responseText]));
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData(['message' => $responseText]);
     }
 }

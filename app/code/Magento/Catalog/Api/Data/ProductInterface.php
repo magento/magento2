@@ -7,7 +7,7 @@
 
 namespace Magento\Catalog\Api\Data;
 
-interface ProductInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**#@+
      * Constants defined for keys of  data array
@@ -43,11 +43,27 @@ interface ProductInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getId();
 
     /**
+     * Set product id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id);
+
+    /**
      * Product sku
      *
      * @return string
      */
     public function getSku();
+
+    /**
+     * Set product sku
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku);
 
     /**
      * Product name
@@ -57,11 +73,27 @@ interface ProductInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getName();
 
     /**
+     * Set product name
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
      * Product store id
      *
      * @return int|null
      */
     public function getStoreId();
+
+    /**
+     * Set product store id
+     *
+     * @param int $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId);
 
     /**
      * Product attribute set id
@@ -71,11 +103,27 @@ interface ProductInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getAttributeSetId();
 
     /**
+     * Set product attribute set id
+     *
+     * @param int $attributeSetId
+     * @return $this
+     */
+    public function setAttributeSetId($attributeSetId);
+
+    /**
      * Product price
      *
      * @return float|null
      */
     public function getPrice();
+
+    /**
+     * Set product price
+     *
+     * @param float $price
+     * @return $this
+     */
+    public function setPrice($price);
 
     /**
      * Product status
@@ -85,11 +133,27 @@ interface ProductInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getStatus();
 
     /**
+     * Set product status
+     *
+     * @param int $status
+     * @return $this
+     */
+    public function setStatus($status);
+
+    /**
      * Product visibility
      *
      * @return int|null
      */
     public function getVisibility();
+
+    /**
+     * Set product visibility
+     *
+     * @param int $visibility
+     * @return $this
+     */
+    public function setVisibility($visibility);
 
     /**
      * Product type id
@@ -99,11 +163,27 @@ interface ProductInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getTypeId();
 
     /**
+     * Set product type id
+     *
+     * @param string $typeId
+     * @return $this
+     */
+    public function setTypeId($typeId);
+
+    /**
      * Product created date
      *
      * @return string|null
      */
     public function getCreatedAt();
+
+    /**
+     * Set product created date
+     *
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
 
     /**
      * Product updated date
@@ -113,9 +193,40 @@ interface ProductInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getUpdatedAt();
 
     /**
+     * Set product updated date
+     *
+     * @param string $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt($updatedAt);
+
+    /**
      * Product weight
      *
      * @return float|null
      */
     public function getWeight();
+
+    /**
+     * Set product weight
+     *
+     * @param float $weight
+     * @return $this
+     */
+    public function setWeight($weight);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Catalog\Api\Data\ProductExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes);
 }

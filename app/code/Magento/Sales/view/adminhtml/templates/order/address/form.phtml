@@ -7,17 +7,20 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div class="message message-info">
-    <div class="message-inner">
-        <div class="message-content"><?php echo __('Changing address information will not recalculate shipping, tax or other order amount.') ?></div>
+<div class="admin__scope">
+    <div class="message message-notice">
+        <div class="message-inner">
+            <div class="message-content"><?php echo __('Changing address information will not recalculate shipping, tax or other order amount.') ?></div>
+        </div>
     </div>
 </div>
+
 <fieldset class="fieldset">
     <legend class="legend">
-        <span><?php echo $this->getHeaderText() ?></span>
+        <span><?php echo $block->getHeaderText() ?></span>
     </legend>
     <br>
     <div class="form-inline">
-        <?php echo $this->getForm()->toHtml() ?>
+        <?php echo $block->getForm()->toHtml() ?>
     </div>
 </fieldset>

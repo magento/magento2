@@ -116,7 +116,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
                 . "\n\$this->log->add(\$this->subject);",
         ];
 
-        $reflectionClass = new \ReflectionClass($this->_getSourceClassName());
+        $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $publicMethods   = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
         foreach ($publicMethods as $method) {
             if (!($method->isConstructor() || $method->isFinal() || $method->isStatic() || $method->isDestructor())
@@ -183,7 +183,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _generateCode()
     {
-        $typeName = $this->_getFullyQualifiedClassName($this->_getSourceClassName());
+        $typeName = $this->getSourceClassName();
         $reflection = new \ReflectionClass($typeName);
 
         if ($reflection->isInterface()) {
@@ -202,7 +202,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
         $result = parent::_validateData();
 
         if ($result) {
-            $sourceClassName = $this->_getSourceClassName();
+            $sourceClassName = $this->getSourceClassName();
             $resultClassName = $this->_getResultClassName();
 
             if ($resultClassName !== $sourceClassName . '\\Logger') {

@@ -52,6 +52,12 @@
             <resource ref="Magento_TestModule1::resource2" />
         </resources>
     </route>
+    <route method="GET" url="/V1/testmodule1/resource1/:itemId">
+        <service class="Magento\TestModule1\Service\V1\AllSoapAndRestInterface" method="item" />
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
     <route method="POST" url="/V1/testmodule1/itemAnyType">
         <service class="Magento\TestModule1\Service\V1\AllSoapAndRestInterface" method="itemAnyType" />
         <resources>

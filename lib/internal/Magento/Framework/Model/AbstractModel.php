@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Model;
 
+use Magento\Framework\Phrase;
+
 /**
  * Abstract model class
  *
@@ -218,7 +220,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected function _setResourceModel($resourceName, $collectionName = null)
     {
         $this->_resourceName = $resourceName;
-        if (is_null($collectionName)) {
+        if ($collectionName === null) {
             $collectionName = $resourceName . '\\' . 'Collection';
         }
         $this->_collectionName = $collectionName;
@@ -227,13 +229,15 @@ abstract class AbstractModel extends \Magento\Framework\Object
     /**
      * Get resource instance
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getResource()
     {
         if (empty($this->_resourceName) && empty($this->_resource)) {
-            throw new \Magento\Framework\Model\Exception(__('Resource is not set.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Resource is not set.')
+            );
         }
 
         return $this->_resource ?: \Magento\Framework\App\ObjectManager::getInstance()->get($this->_resourceName);
@@ -254,13 +258,15 @@ abstract class AbstractModel extends \Magento\Framework\Object
      *
      * @deprecated
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getResourceCollection()
     {
         if (empty($this->_resourceCollection) && empty($this->_collectionName)) {
-            throw new \Magento\Framework\Model\Exception(__('Model collection resource name is not defined.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Model collection resource name is not defined.')
+            );
         }
         return $this->_resourceCollection ? clone $this
             ->_resourceCollection : \Magento\Framework\App\ObjectManager::getInstance()
@@ -443,14 +449,16 @@ abstract class AbstractModel extends \Magento\Framework\Object
      * Validate model before saving it
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Validator\Exception
      */
     public function validateBeforeSave()
     {
         $validator = $this->_getValidatorBeforeSave();
         if ($validator && !$validator->isValid($this)) {
             $errors = $validator->getMessages();
-            $exception = new \Magento\Framework\Model\Exception(implode(PHP_EOL, $errors));
+            $exception = new \Magento\Framework\Validator\Exception(
+                new Phrase(implode(PHP_EOL, $errors))
+            );
             foreach ($errors as $errorMessage) {
                 $exception->addMessage(new \Magento\Framework\Message\Error($errorMessage));
             }
@@ -577,12 +585,14 @@ abstract class AbstractModel extends \Magento\Framework\Object
      * Processing object before delete data
      *
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function beforeDelete()
     {
         if (!$this->_actionValidator->isAllowed($this)) {
-            throw new Exception(__('Delete operation is forbidden for current area'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Delete operation is forbidden for current area')
+            );
         }
 
         $this->_eventManager->dispatch('model_delete_before', ['object' => $this]);
@@ -634,6 +644,17 @@ abstract class AbstractModel extends \Magento\Framework\Object
     public function getEntityId()
     {
         return $this->_getData('entity_id');
+    }
+
+    /**
+     * Set entity id
+     *
+     * @param int $entityId
+     * @return $this
+     */
+    public function setEntityId($entityId)
+    {
+        return $this->setData('entity_id', $entityId);
     }
 
     /**

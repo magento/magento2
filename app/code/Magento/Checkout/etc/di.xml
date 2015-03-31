@@ -6,13 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="checkout_setup" xsi:type="string">Magento\Checkout\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
-    </type>
     <virtualType name="Magento\Checkout\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">checkout</argument>
@@ -23,19 +16,4 @@
             <argument name="storage" xsi:type="object">Magento\Checkout\Model\Session\Storage</argument>
         </arguments>
     </type>
-    <preference for="Magento\Checkout\Service\V1\Item\ReadServiceInterface" type="Magento\Checkout\Service\V1\Item\ReadService" />
-    <preference for="\Magento\Checkout\Service\V1\Item\WriteServiceInterface" type="Magento\Checkout\Service\V1\Item\WriteService" />
-    <preference for="\Magento\Checkout\Service\V1\Address\Shipping\ReadServiceInterface" type="Magento\Checkout\Service\V1\Address\Shipping\ReadService" />
-    <preference for="\Magento\Checkout\Service\V1\Address\Shipping\WriteServiceInterface" type="Magento\Checkout\Service\V1\Address\Shipping\WriteService" />
-    <preference for="\Magento\Checkout\Service\V1\Address\Billing\ReadServiceInterface" type="Magento\Checkout\Service\V1\Address\Billing\ReadService" />
-    <preference for="\Magento\Checkout\Service\V1\Address\Billing\WriteServiceInterface" type="Magento\Checkout\Service\V1\Address\Billing\WriteService" />
-    <preference for="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" type="Magento\Checkout\Service\V1\Cart\ReadService" />
-    <preference for="Magento\Checkout\Service\V1\Cart\TotalsServiceInterface" type="Magento\Checkout\Service\V1\Cart\TotalsService" />
-    <preference for="\Magento\Checkout\Service\V1\Cart\WriteServiceInterface" type="Magento\Checkout\Service\V1\Cart\WriteService" />
-    <preference for="Magento\Checkout\Service\V1\ShippingMethod\WriteServiceInterface" type="Magento\Checkout\Service\V1\ShippingMethod\WriteService" />
-    <preference for="Magento\Checkout\Service\V1\Coupon\ReadServiceInterface" type="Magento\Checkout\Service\V1\Coupon\ReadService" />
-    <preference for="Magento\Checkout\Service\V1\Coupon\WriteServiceInterface" type="Magento\Checkout\Service\V1\Coupon\WriteService" />
-    <preference for="Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface" type="Magento\Checkout\Service\V1\ShippingMethod\ReadService" />
-    <preference for="Magento\Checkout\Service\V1\PaymentMethod\ReadServiceInterface" type="\Magento\Checkout\Service\V1\PaymentMethod\ReadService" />
-    <preference for="Magento\Checkout\Service\V1\PaymentMethod\WriteServiceInterface" type="\Magento\Checkout\Service\V1\PaymentMethod\WriteService" />
 </config>

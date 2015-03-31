@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\BackgroundUploader */ ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Renderer\BackgroundUploader */ ?>
 <?php
 /** @var $element \Magento\DesignEditor\Block\Adminhtml\Editor\Form\Element\BackgroundUploader */
-$element = $this->getElement();
+$element = $block->getElement();
 ?>
 
 <?php $imageUploader = $element->getImageUploaderElement(); ?>
@@ -23,7 +23,7 @@ $element = $this->getElement();
             <div class="no-display uploaded-image" id="<?php echo $imageUploader->getHtmlId(); ?>-template">
                 <div class="file-row">
                     <span class="label">{{name}}</span>
-                    <button class="action-delete" id="{{remove-id}}">
+                    <button type="button" class="action-delete" id="{{remove-id}}">
                         <span><?php echo __('Remove'); ?></span>
                     </button>
                 </div>
@@ -44,8 +44,8 @@ require([
         uploader_id: '<?php echo $imageUploader->getHtmlId(); ?>',
         container:   '<?php echo $imageUploader->getHtmlId(); ?>-uploader',
         value:       '<?php echo $imageUploader->getValue(); ?>',
-        url:         '<?php echo $this->getImageUploadUrl(); ?>',
-        remove_url:  '<?php echo $this->getImageRemoveUrl(); ?>',
+        url:         '<?php echo $block->getImageUploadUrl(); ?>',
+        remove_url:  '<?php echo $block->getImageRemoveUrl(); ?>',
         tile_available:'<?php echo $element->isTileAvailable(); ?>'
     });
 

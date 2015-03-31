@@ -6,6 +6,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="styles" />
     <body>
         <referenceContainer name="page.main.actions">
             <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher" as="store_switcher" template="Magento_Backend::store/switcher.phtml">
@@ -13,6 +14,7 @@
                     <argument name="params" xsi:type="string">0</argument>
                 </action>
             </block>
+            <block class="Magento\Backend\Block\Template" name="refresh_statistics" after="store_switcher" template="Magento_Backend::dashboard/totalbar/refreshstatistics.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Backend\Block\Dashboard" name="dashboard"/>

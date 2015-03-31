@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Status
@@ -75,15 +75,15 @@ class Status extends \Magento\Framework\Model\AbstractModel
     /**
      * @param string $state
      * @return void
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateBeforeUnassign($state)
     {
         if ($this->getResource()->checkIsStateLast($state)) {
-            throw new Exception(__('The last status can\'t be unassigned from its current state.'));
+            throw new LocalizedException(__('The last status can\'t be unassigned from its current state.'));
         }
         if ($this->getResource()->checkIsStatusUsed($this->getStatus())) {
-            throw new Exception(__('Status can\'t be unassigned, because it is used by existing order(s).'));
+            throw new LocalizedException(__('Status can\'t be unassigned, because it is used by existing order(s).'));
         }
     }
 
@@ -127,7 +127,7 @@ class Status extends \Magento\Framework\Model\AbstractModel
      * Get status label by store
      *
      * @param null|string|bool|int|\Magento\Store\Model\Store $store
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function getStoreLabel($store = null)
     {

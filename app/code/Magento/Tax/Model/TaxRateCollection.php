@@ -7,7 +7,7 @@
 namespace Magento\Tax\Model;
 
 use Magento\Tax\Api\TaxRateRepositoryInterface;
-use Magento\Core\Model\EntityFactory;
+use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\Api\AbstractServiceCollection;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;

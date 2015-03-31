@@ -3,12 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+// @codingStandardsIgnoreFile
 ?>
-<?php /** @var $this \Magento\Translation\Block\Js */ ?>
+<?php /** @var $block \Magento\Translation\Block\Js */ ?>
+<?php if ($block->dictionaryEnabled()): ?>
 <script>
-//<![CDATA[
-    require(
-        ["jquery", "mage/translate"], function($){ $.mage.translate.add( <?php echo $this->getTranslatedJson() ?> ); }
-    )
-// ]]>
+require([
+    "jquery",
+    "mage/translate",
+    "text!<?php echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>"
+], function($, translate, data) {
+    $.mage.translate.add(JSON.parse(data));
+});
 </script>
+<?php endif; ?>

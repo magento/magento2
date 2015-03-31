@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $this \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options */ ?>
+<?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options */ ?>
 
 <div class="fieldset-wrapper" id="product-custom-options-wrapper">
     <div class="fieldset-wrapper-title">
@@ -17,20 +17,24 @@
     </div>
     <div class="fieldset-wrapper-content" id="product-custom-options-content">
         <fieldset class="fieldset">
-            <div class="message message-error" id="dynamic-price-warning" style="display: none;">
-                <div class="message-inner">
-                    <div class="message-content"><?php echo __('Bundle with dynamic pricing cannot include custom defined options. Options will not be saved.') ?></div>
+            <div class="admin__scope">
+                <div class="messages">
+                    <div class="message message-error" id="dynamic-price-warning" style="display: none;">
+                        <div class="message-inner">
+                            <div class="message-content"><?php echo __('Bundle with dynamic pricing cannot include custom defined options. Options will not be saved.') ?></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div id="product_options_container">
                 <div id="product_options_container_top"></div>
-                <?php echo $this->getOptionsBoxHtml() ?>
+                <?php echo $block->getOptionsBoxHtml() ?>
             </div>
 
             <div class="actions">
-                <?php echo $this->getChildHtml('import_button') ?>
-                <?php echo $this->getAddButtonHtml() ?>
+                <?php echo $block->getChildHtml('import_button') ?>
+                <?php echo $block->getAddButtonHtml() ?>
             </div>
         </fieldset>
     </div>

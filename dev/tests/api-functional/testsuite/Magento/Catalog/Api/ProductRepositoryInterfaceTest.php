@@ -7,8 +7,7 @@ namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 class ProductRepositoryInterfaceTest extends WebapiAbstract
 {
@@ -40,7 +39,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productData[ProductInterface::SKU],
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -49,7 +48,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, ['productSku' => $productData[ProductInterface::SKU]]);
+        $response = $this->_webApiCall($serviceInfo, ['sku' => $productData[ProductInterface::SKU]]);
         foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
             $this->assertEquals($productData[$key], $response[$key]);
         }
@@ -61,7 +60,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $invalidSku,
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -73,7 +72,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $expectedMessage = 'Requested product doesn\'t exist';
 
         try {
-            $this->_webApiCall($serviceInfo, ['productSku' => $invalidSku]);
+            $this->_webApiCall($serviceInfo, ['sku' => $invalidSku]);
             $this->fail("Expected throwing exception");
         } catch (\SoapFault $e) {
             $this->assertContains(
@@ -132,7 +131,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productData[ProductInterface::SKU],
-                'httpMethod' => RestConfig::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -184,7 +183,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -242,7 +241,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => RestConfig::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -265,7 +264,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
-                'httpMethod' => RestConfig::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -275,6 +274,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
 
         return (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
-            $this->_webApiCall($serviceInfo, ['productSku' => $sku]) : $this->_webApiCall($serviceInfo);
+            $this->_webApiCall($serviceInfo, ['sku' => $sku]) : $this->_webApiCall($serviceInfo);
     }
 }

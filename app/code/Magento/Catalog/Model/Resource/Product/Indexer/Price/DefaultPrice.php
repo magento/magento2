@@ -42,20 +42,22 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     protected $_eventManager = null;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Module\Manager $moduleManager
+        \Magento\Framework\Module\Manager $moduleManager,
+        $resourcePrefix = null
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
-        parent::__construct($resource, $eavConfig);
+        parent::__construct($context, $eavConfig, $resourcePrefix);
     }
 
     /**
@@ -88,7 +90,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function getTypeId()
     {
-        if (is_null($this->_typeId)) {
+        if ($this->_typeId === null) {
             throw new \Magento\Catalog\Exception(__('A product type is not defined for the indexer.'));
         }
         return $this->_typeId;
@@ -297,7 +299,7 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             ]
         );
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 
@@ -316,28 +318,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
 
         $query = $select->insertFromSelect($this->_getDefaultFinalPriceTable(), [], false);
         $write->query($query);
-
-        /**
-         * Add possibility modify prices from external events
-         */
-        $select = $write->select()->join(
-            ['wd' => $this->_getWebsiteDateTable()],
-            'i.website_id = wd.website_id',
-            []
-        );
-        $this->_eventManager->dispatch(
-            'prepare_catalog_product_price_index_table',
-            [
-                'index_table' => ['i' => $this->_getDefaultFinalPriceTable()],
-                'select' => $select,
-                'entity_id' => 'i.entity_id',
-                'customer_group_id' => 'i.customer_group_id',
-                'website_id' => 'i.website_id',
-                'website_date' => 'wd.website_date',
-                'update_fields' => ['price', 'min_price', 'max_price']
-            ]
-        );
-
         return $this;
     }
 

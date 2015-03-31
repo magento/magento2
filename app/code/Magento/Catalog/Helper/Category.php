@@ -30,13 +30,6 @@ class Category extends AbstractHelper
     protected $_storeCategories = [];
 
     /**
-     * Scope config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -66,7 +59,6 @@ class Category extends AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
      * @param CategoryRepositoryInterface $categoryRepository
      */
@@ -74,14 +66,12 @@ class Category extends AbstractHelper
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Data\CollectionFactory $dataCollectionFactory,
         CategoryRepositoryInterface $categoryRepository
     ) {
         $this->_categoryFactory = $categoryFactory;
         $this->_storeManager = $storeManager;
         $this->_dataCollectionFactory = $dataCollectionFactory;
-        $this->_scopeConfig = $scopeConfig;
         $this->categoryRepository = $categoryRepository;
         parent::__construct($context);
     }
@@ -116,7 +106,7 @@ class Category extends AbstractHelper
 
         $recursionLevel = max(
             0,
-            (int)$this->_scopeConfig->getValue(
+            (int)$this->scopeConfig->getValue(
                 'catalog/navigation/max_depth',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
@@ -179,7 +169,7 @@ class Category extends AbstractHelper
      */
     public function canUseCanonicalTag($store = null)
     {
-        return $this->_scopeConfig->getValue(
+        return $this->scopeConfig->getValue(
             self::XML_PATH_USE_CATEGORY_CANONICAL_TAG,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store

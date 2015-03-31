@@ -28,4 +28,47 @@ class Key extends AbstractExtensibleModel implements TaxClassKeyInterface
     {
         return $this->getData(TaxClassKeyInterface::KEY_VALUE);
     }
+
+    /**
+     * Set type of tax class key
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setType($type)
+    {
+        return $this->setData(TaxClassKeyInterface::KEY_TYPE, $type);
+    }
+
+    /**
+     * Set value of tax class key
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        return $this->setData(TaxClassKeyInterface::KEY_VALUE, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxClassKeyExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

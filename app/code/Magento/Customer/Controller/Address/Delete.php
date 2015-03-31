@@ -9,7 +9,7 @@ namespace Magento\Customer\Controller\Address;
 class Delete extends \Magento\Customer\Controller\Address
 {
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -28,6 +28,6 @@ class Delete extends \Magento\Customer\Controller\Address
                 $this->messageManager->addException($other, __('An error occurred while deleting the address.'));
             }
         }
-        $this->getResponse()->setRedirect($this->_buildUrl('*/*/index'));
+        return $this->resultRedirectFactory->create()->setPath('*/*/index');
     }
 }

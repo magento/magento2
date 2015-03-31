@@ -133,7 +133,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_appState;
 
     /**
-     * @param \Magento\Core\Model\EntityFactory $entityFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -155,7 +155,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Model\EntityFactory $entityFactory,
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -445,23 +445,16 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
         $filter = [];
 
-        $now = $this->_date->date();
-        $gmtOffset = (int)$this->_date->getGmtOffset();
+        $gmtOffset = (new \DateTimeZone(date_default_timezone_get()))->getOffset(new \DateTime());
         if (isset($constraints['from'])) {
-            $lastDay = new \Magento\Framework\Stdlib\DateTime\Date(
-                $now,
-                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-            );
-            $lastDay->subSecond($gmtOffset)->subDay(intval($constraints['from']));
+            $lastDay = new \DateTime();
+            $lastDay->modify('-' . $gmtOffset . ' second')->modify('-' . $constraints['from'] . ' day');
             $filter['to'] = $lastDay;
         }
 
         if (isset($constraints['to'])) {
-            $firstDay = new \Magento\Framework\Stdlib\DateTime\Date(
-                $now,
-                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-            );
-            $firstDay->subSecond($gmtOffset)->subDay(intval($constraints['to']) + 1);
+            $firstDay = new \DateTime();
+            $firstDay->modify('-' . $gmtOffset . ' second')->modify('-' . (intval($constraints['to']) + 1) . ' day');
             $filter['from'] = $firstDay;
         }
 
@@ -493,9 +486,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 ' AND product_name_table.store_id=' .
                 $storeId .
                 ' AND product_name_table.attribute_id=' .
-                $attribute->getId() .
-                ' AND product_name_table.entity_type_id=' .
-                $entityTypeId,
+                $attribute->getId(),
                 []
             );
 
@@ -538,7 +529,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function getItemsQty()
     {
-        if (is_null($this->_itemsQty)) {
+        if ($this->_itemsQty === null) {
             $this->_itemsQty = 0;
             foreach ($this as $wishlistItem) {
                 $qty = $wishlistItem->getQty();

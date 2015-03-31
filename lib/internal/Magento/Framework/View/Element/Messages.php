@@ -219,7 +219,7 @@ class Messages extends Template
      * Retrieve messages array by message type
      *
      * @param   string $type
-     * @return  array
+     * @return  MessageInterface[]
      */
     public function getMessagesByType($type)
     {
@@ -281,9 +281,10 @@ class Messages extends Template
                 }
 
                 foreach ($messages as $message) {
-                    $html .= '<' . $this->secondLevelTagName . ' class="message ' . $type . '">';
+                    $html .= '<' . $this->secondLevelTagName . ' class="message ' . 'message-' . $type . ' ' . $type .
+                        '">';
                     $html .= '<' . $this->contentWrapTagName . $this->getUiId('message', $type) . '>';
-                    $html .= $this->_escaper->escapeHtml($message->getText());
+                    $html .= $message->getText();
                     $html .= '</' . $this->contentWrapTagName . '>';
                     $html .= '</' . $this->secondLevelTagName . '>';
                 }

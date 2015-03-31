@@ -7,7 +7,7 @@ return [
     'new_products' => [
         '@' => ['type' => 'Magento\Sales\Block\Widget\Guest\Form'],
         'is_email_compatible' => '1',
-        'placeholder_image' => 'Magento_Catalog::images/product_widget_new.gif',
+        'placeholder_image' => 'Magento_Catalog::images/product_widget_new.png',
         'name' => 'Orders and Returns',
         'description' => 'Orders and Returns Search Form',
         'parameters' => [
@@ -24,7 +24,7 @@ return [
                 'description' => 'All products - recently added products, New products - products marked as new',
             ],
             'show_pager' => [
-                'source_model' => "Magento\Backend\Model\Config\Source\Yesno",
+                'source_model' => "Magento\Config\Model\Config\Source\Yesno",
                 'type' => 'select',
                 'visible' => '1',
                 'label' => 'Display Page Control',

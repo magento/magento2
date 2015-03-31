@@ -7,6 +7,8 @@
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\Result\RedirectFactory;
 
 abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
 {
@@ -21,24 +23,40 @@ abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
     protected $_coreRegistry;
 
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @var RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param Context $context
      * @param OrderViewAuthorizationInterface $orderAuthorization
      * @param \Magento\Framework\Registry $registry
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Context $context,
         OrderViewAuthorizationInterface $orderAuthorization,
-        \Magento\Framework\Registry $registry
+        \Magento\Framework\Registry $registry,
+        PageFactory $resultPageFactory,
+        RedirectFactory $resultRedirectFactory
     ) {
         $this->orderAuthorization = $orderAuthorization;
         $this->_coreRegistry = $registry;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
     /**
      * Print Creditmemo Action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
     public function execute()
     {
@@ -56,14 +74,19 @@ abstract class PrintCreditmemo extends \Magento\Framework\App\Action\Action
             if (isset($creditmemo)) {
                 $this->_coreRegistry->register('current_creditmemo', $creditmemo);
             }
-            $this->_view->loadLayout('print');
-            $this->_view->renderLayout();
+            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->addHandle('print');
+            return $resultPage;
         } else {
+            /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
             if ($this->_objectManager->get('Magento\Customer\Model\Session')->isLoggedIn()) {
-                $this->_redirect('*/*/history');
+                $resultRedirect->setPath('*/*/history');
             } else {
-                $this->_redirect('sales/guest/form');
+                $resultRedirect->setPath('sales/guest/form');
             }
+            return $resultRedirect;
         }
     }
 }

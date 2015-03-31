@@ -28,7 +28,7 @@ interface PathInterface
     /**
      * Get path to preview image
      *
-     * @param \Magento\Core\Model\Theme|ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @return string
      */
     public function getPreviewImagePath(ThemeInterface $theme);

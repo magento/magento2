@@ -6,10 +6,8 @@
 var config = {
     map: {
         '*': {
-            systemMessageDialog: 'Magento_AdminNotification/system/notification'
+            systemMessageDialog: 'Magento_AdminNotification/system/notification',
+            toolbarEntry:   'Magento_AdminNotification/toolbar_entry'
         }
-    },
-    deps: [
-        "Magento_AdminNotification/toolbar_entry"
-    ]
+    }
 };

@@ -23,7 +23,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */

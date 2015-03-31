@@ -5,9 +5,12 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category;
 
+use Magento\Catalog\Model\Category;
+
 /**
  * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
  * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,12 +40,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/indexer_catalog_category.php
+     * @magentoDbIsolation enabled
+     */
     public function testReindexAll()
     {
         $categories = $this->getCategories(4);
         $products = $this->getProducts(2);
 
-        /** @var \Magento\Catalog\Model\Category $categoryFourth */
+        /** @var Category $categoryFourth */
         $categoryFourth = end($categories);
         foreach ($products as $product) {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -50,7 +57,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $product->save();
         }
 
-        /** @var \Magento\Catalog\Model\Category $categoryThird */
+        /** @var Category $categoryThird */
         $categoryThird = $categories[2];
         $categoryThird->setIsAnchor(true);
         $categoryThird->save();
@@ -76,22 +83,24 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
      * @magentoAppIsolation enabled
-     * @depends testReindexAll
+     * @magentoDbIsolation enabled
+     *
      */
     public function testCategoryMove()
     {
+        $this->testReindexAll();
         $categories = $this->getCategories(4);
         $products = $this->getProducts(2);
 
-        /** @var \Magento\Catalog\Model\Category $categoryFourth */
+        /** @var Category $categoryFourth */
         $categoryFourth = end($categories);
 
-        /** @var \Magento\Catalog\Model\Category $categorySecond */
+        /** @var Category $categorySecond */
         $categorySecond = $categories[1];
         $categorySecond->setIsAnchor(true);
         $categorySecond->save();
 
-        /** @var \Magento\Catalog\Model\Category $categoryThird */
+        /** @var Category $categoryThird */
         $categoryThird = $categories[2];
 
         /**
@@ -120,11 +129,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $categories = $this->getCategories(4);
         $products = $this->getProducts(2);
 
-        /** @var \Magento\Catalog\Model\Category $categoryFourth */
+        /** @var Category $categoryFourth */
         $categoryFourth = end($categories);
         $categoryFourth->delete();
 
-        /** @var \Magento\Catalog\Model\Category $categorySecond */
+        /** @var Category $categorySecond */
         $categorySecond = $categories[1];
 
         $categories = [$categorySecond->getId(), $categoryFourth->getId()];
@@ -141,22 +150,23 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexAll
+     *
      */
     public function testCategoryCreate()
     {
+        $this->testReindexAll();
         $categories = $this->getCategories(4);
         $products = $this->getProducts(3);
 
-        /** @var \Magento\Catalog\Model\Category $categorySecond */
+        /** @var Category $categorySecond */
         $categorySecond = $categories[1];
         $categorySecond->setIsAnchor(0);
         $categorySecond->save();
 
-        /** @var \Magento\Catalog\Model\Category $categoryFifth */
+        /** @var Category $categoryFifth */
         $categoryFifth = end($categories);
 
-        /** @var \Magento\Catalog\Model\Category $categorySixth */
+        /** @var Category $categorySixth */
         $categorySixth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category'
         );
@@ -190,11 +200,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int $count
-     * @return \Magento\Catalog\Model\Category[]
+     * @return Category[]
      */
     protected function getCategories($count)
     {
-        /** @var \Magento\Catalog\Model\Category $category */
+        /** @var Category $category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category'
         );

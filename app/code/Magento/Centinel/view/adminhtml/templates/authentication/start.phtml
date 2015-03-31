@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 ?>
-<form name="validation_form" id="validation_form" action="<?php echo $this->getAcsUrl();?>" method="post">
-    <input type="hidden" name="PaReq" value="<?php echo $this->getPaReq()?>" />
-    <input type="hidden" name="TermUrl" value="<?php echo $this->getTermUrl()?>" />
-    <input type="hidden" name="MD" value="<?php echo $this->getMd()?>" />
+<form name="validation_form" id="validation_form" action="<?php echo $block->getAcsUrl();?>" method="post">
+    <input type="hidden" name="PaReq" value="<?php echo $block->getPaReq()?>" />
+    <input type="hidden" name="TermUrl" value="<?php echo $block->getTermUrl()?>" />
+    <input type="hidden" name="MD" value="<?php echo $block->getMd()?>" />
 </form>
 <script>
 //<![CDATA[

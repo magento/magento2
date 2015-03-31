@@ -14,24 +14,22 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Search\Block\Recommendations">
-        <arguments>
-            <argument name="searchDataProvider" xsi:type="object">Magento\Search\Model\SearchDataProvider</argument>
-            <argument name="title" xsi:type="string">Related search terms</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Search\Block\Suggestions">
-        <arguments>
-            <argument name="searchDataProvider" xsi:type="object">Magento\Search\Model\SearchDataProvider</argument>
-            <argument name="title" xsi:type="string">Did you mean</argument>
-        </arguments>
-    </type>
     <type name="Magento\Search\Model\AdapterFactory">
         <arguments>
-            <argument name="path" xsi:type="string">catalog/search/adapter</argument>
-            <argument name="scopeType" xsi:type="const">\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT</argument>
+            <argument name="adapters" xsi:type="array">
+                <item name="mysql" xsi:type="string">Magento\Framework\Search\Adapter\Mysql\Adapter</item>
+            </argument>
         </arguments>
     </type>
     <preference for="Magento\Search\Model\QueryFactoryInterface" type="Magento\Search\Model\QueryFactory" />
     <preference for="Magento\Search\Model\QueryInterface" type="Magento\Search\Model\Query" />
+    <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="mysql" xsi:type="string">MySQL</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Search\Model\AutocompleteInterface" type="Magento\Search\Model\Autocomplete" />
+    <preference for="Magento\Search\Model\Autocomplete\ItemInterface" type="Magento\Search\Model\Autocomplete\Item" />
 </config>

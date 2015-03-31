@@ -134,7 +134,7 @@ class Emulation extends \Magento\Framework\Object
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
-        $this->_localeResolver->setLocaleCode($newLocaleCode);
+        $this->_localeResolver->setLocale($newLocaleCode);
         $this->_translate->setLocale($newLocaleCode);
         $this->_translate->loadData($area);
 
@@ -150,7 +150,7 @@ class Emulation extends \Magento\Framework\Object
      */
     public function stopEnvironmentEmulation()
     {
-        if (is_null($this->initialEnvironmentInfo)) {
+        if ($this->initialEnvironmentInfo === null) {
             return $this;
         }
 
@@ -182,7 +182,7 @@ class Emulation extends \Magento\Framework\Object
                 'store' => $this->_storeManager->getStore()->getStoreId(),
             ]
         )->setInitialLocaleCode(
-            $this->_localeResolver->getLocaleCode()
+            $this->_localeResolver->getLocale()
         );
     }
 
@@ -221,7 +221,7 @@ class Emulation extends \Magento\Framework\Object
         $initialLocaleCode,
         $initialArea = \Magento\Framework\App\Area::AREA_ADMIN
     ) {
-        $this->_localeResolver->setLocaleCode($initialLocaleCode);
+        $this->_localeResolver->setLocale($initialLocaleCode);
         $this->_translate->setLocale($initialLocaleCode);
         $this->_translate->loadData($initialArea);
 

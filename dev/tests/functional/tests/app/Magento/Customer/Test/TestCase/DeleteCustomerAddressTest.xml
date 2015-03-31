@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\Customer\Test\TestCase\DeleteCustomerAddressTest">
+    <variation name="DeleteCustomerAddressTestVariation1">
+      <data name="customer/dataSet" xsi:type="string">default</data>
+      <data name="customer/data/address/presets" xsi:type="string">US_address_default_billing,US_NY_address_billing</data>
+      <constraint name="Magento\Customer\Test\Constraint\AssertAddressDeletedFrontend"/>
+      <constraint name="Magento\Customer\Test\Constraint\AssertAddressDeletedBackend"/>
+    </variation>
+  </testCase>
+</config>

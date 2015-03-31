@@ -64,7 +64,7 @@ class Customization
      */
     public function getAssignedThemeCustomizations()
     {
-        if (is_null($this->_assignedTheme)) {
+        if ($this->_assignedTheme === null) {
             $this->_prepareThemeCustomizations();
         }
         return $this->_assignedTheme;
@@ -78,7 +78,7 @@ class Customization
      */
     public function getUnassignedThemeCustomizations()
     {
-        if (is_null($this->_unassignedTheme)) {
+        if ($this->_unassignedTheme === null) {
             $this->_prepareThemeCustomizations();
         }
         return $this->_unassignedTheme;
@@ -167,7 +167,7 @@ class Customization
      */
     protected function _prepareThemeCustomizations()
     {
-        /** @var \Magento\Core\Model\Resource\Theme\Collection $themeCollection */
+        /** @var \Magento\Theme\Model\Resource\Theme\Collection $themeCollection */
         $themeCollection = $this->themeProvider->getThemeCustomizations(\Magento\Framework\App\Area::AREA_FRONTEND);
 
         $assignedThemes = $this->getStoresByThemes();

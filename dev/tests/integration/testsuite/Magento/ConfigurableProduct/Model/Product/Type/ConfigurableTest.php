@@ -9,6 +9,7 @@
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 /**
+ * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
@@ -290,7 +291,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSpecifyOptionMessage()
     {
-        $this->assertEquals('Please specify the product\'s option(s).', $this->_model->getSpecifyOptionMessage());
+        $this->assertEquals(
+            'Please specify the product\'s option(s).',
+            (string)$this->_model->getSpecifyOptionMessage()
+        );
     }
 
     /**

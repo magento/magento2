@@ -1,25 +1,63 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\Result\RawFactory;
 
 class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
 {
     /**
+     * @var RawFactory
+     */
+    protected $resultRawFactory;
+
+    /**
+     * @param Action\Context $context
+     * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param \Magento\Framework\Escaper $escaper
+     * @param PageFactory $resultPageFactory
+     * @param RedirectFactory $resultRedirectFactory
+     * @param ForwardFactory $resultForwardFactory
+     * @param RawFactory $resultRawFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        \Magento\Catalog\Helper\Product $productHelper,
+        \Magento\Framework\Escaper $escaper,
+        PageFactory $resultPageFactory,
+        RedirectFactory $resultRedirectFactory,
+        ForwardFactory $resultForwardFactory,
+        RawFactory $resultRawFactory
+    ) {
+        $this->resultRawFactory = $resultRawFactory;
+        parent::__construct(
+            $context,
+            $productHelper,
+            $escaper,
+            $resultPageFactory,
+            $resultRedirectFactory,
+            $resultForwardFactory
+        );
+    }
+
+    /**
      * Loading page block
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
         $request = $this->getRequest();
         try {
             $this->_initSession()->_processData();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_reloadQuote();
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
@@ -30,11 +68,12 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
         $asJson = $request->getParam('json');
         $block = $request->getParam('block');
 
-        $update = $this->_view->getLayout()->getUpdate();
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
         if ($asJson) {
-            $update->addHandle('sales_order_create_load_block_json');
+            $resultPage->addHandle('sales_order_create_load_block_json');
         } else {
-            $update->addHandle('sales_order_create_load_block_plain');
+            $resultPage->addHandle('sales_order_create_load_block_plain');
         }
 
         if ($block) {
@@ -44,18 +83,15 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
             }
 
             foreach ($blocks as $block) {
-                $update->addHandle('sales_order_create_load_block_' . $block);
+                $resultPage->addHandle('sales_order_create_load_block_' . $block);
             }
         }
-        $this->_view->loadLayoutUpdates();
-        $this->_view->generateLayoutXml();
-        $this->_view->generateLayoutBlocks();
-        $result = $this->_view->getLayout()->renderElement('content');
+
+        $result = $resultPage->getLayout()->renderElement('content');
         if ($request->getParam('as_js_varname')) {
             $this->_objectManager->get('Magento\Backend\Model\Session')->setUpdateResult($result);
-            $this->_redirect('sales/*/showUpdateResult');
-        } else {
-            $this->getResponse()->setBody($result);
+            return $this->resultRedirectFactory->create()->setPath('sales/*/showUpdateResult');
         }
+        return $this->resultRawFactory->create()->setContents($result);
     }
 }

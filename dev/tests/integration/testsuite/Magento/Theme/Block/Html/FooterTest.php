@@ -10,7 +10,7 @@ use Magento\Customer\Model\Context;
 class FooterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Core\Model\Theme
+     * @var \Magento\Theme\Model\Theme
      */
     protected $_theme;
 

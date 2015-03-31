@@ -11,6 +11,7 @@ use Magento\TestFramework\Authentication\Rest\OauthClient;
 use Magento\TestFramework\Helper\Bootstrap;
 use OAuth\Common\Consumer\Credentials;
 use Zend\Stdlib\Exception\LogicException;
+use Magento\Integration\Model\Integration;
 
 class OauthHelper
 {
@@ -41,7 +42,7 @@ class OauthHelper
         $url = TESTS_BASE_URL;
         $consumer->setCallbackUrl($url);
         $consumer->setRejectedCallbackUrl($url);
-        if (!is_null($date)) {
+        if ($date !== null) {
             $consumer->setCreatedAt($date);
         }
         $consumer->save();
@@ -93,6 +94,7 @@ class OauthHelper
      * Create an access token, tied to integration which has permissions to all API resources in the system.
      *
      * @param array $resources list of resources to grant to the integration
+     * @param \Magento\Integration\Model\Integration|null $integrationModel
      * @return array
      * <pre>
      * array (
@@ -104,10 +106,10 @@ class OauthHelper
      * </pre>
      * @throws LogicException
      */
-    public static function getApiAccessCredentials($resources = null)
+    public static function getApiAccessCredentials($resources = null, Integration $integrationModel = null)
     {
         if (!self::$_apiCredentials) {
-            $integration = self::_createIntegration($resources);
+            $integration = $integrationModel === null ? self::_createIntegration($resources) : $integrationModel;
             $objectManager = Bootstrap::getObjectManager();
             /** @var \Magento\Integration\Service\V1\Oauth $oauthService */
             $oauthService = $objectManager->get('Magento\Integration\Service\V1\Oauth');

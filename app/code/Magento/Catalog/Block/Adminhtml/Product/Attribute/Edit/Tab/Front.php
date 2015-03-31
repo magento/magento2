@@ -13,7 +13,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form;
 use Magento\Backend\Block\Widget\Form\Generic;
-use Magento\Backend\Model\Config\Source\Yesno;
+use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Catalog\Model\Entity\Attribute;
 
 class Front extends Generic
@@ -24,20 +24,28 @@ class Front extends Generic
     protected $_yesNo;
 
     /**
+     * @var array
+     */
+    private $disableSearchable;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param Yesno $yesNo
      * @param array $data
+     * @param array $disableSearchable
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         Yesno $yesNo,
-        array $data = []
+        array $data = [],
+        array $disableSearchable = []
     ) {
         $this->_yesNo = $yesNo;
+        $this->disableSearchable = $disableSearchable;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -63,6 +71,7 @@ class Front extends Generic
             ['legend' => __('Frontend Properties'), 'collapsable' => $this->getRequest()->has('popup')]
         );
 
+        $attrCode = $attributeObject->getAttributeCode();
         $fieldset->addField(
             'is_searchable',
             'select',
@@ -71,6 +80,7 @@ class Front extends Generic
                 'label'    => __('Use in Search'),
                 'title'    => __('Use in Search'),
                 'values'   => $yesnoSource,
+                'disabled' => isset($this->disableSearchable[$attrCode]) && $this->disableSearchable[$attrCode] ? 1 : 0
             ]
         );
 

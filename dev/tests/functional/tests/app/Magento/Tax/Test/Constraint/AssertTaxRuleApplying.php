@@ -9,8 +9,8 @@ namespace Magento\Tax\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
+use Magento\Customer\Test\Fixture\Address;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Tax\Test\Fixture\TaxRule;
@@ -84,10 +84,10 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
      * @param TaxRule $taxRule
      * @param CustomerAccountLogin $customerAccountLogin
      * @param CustomerAccountLogout $customerAccountLogout
-     * @param CustomerInjectable $customer
+     * @param Customer $customer
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $checkoutCart
-     * @param AddressInjectable $address
+     * @param Address $address
      * @param array $shipping
      * @param BrowserInterface $browser
      * @param TaxRule $initialTaxRule
@@ -100,10 +100,10 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         TaxRule $taxRule,
         CustomerAccountLogin $customerAccountLogin,
         CustomerAccountLogout $customerAccountLogout,
-        CustomerInjectable $customer,
+        Customer $customer,
         CatalogProductView $catalogProductView,
         CheckoutCart $checkoutCart,
-        AddressInjectable $address,
+        Address $address,
         array $shipping,
         BrowserInterface $browser,
         TaxRule $initialTaxRule = null
@@ -126,7 +126,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         $this->productSimple = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => '100_dollar_product_for_tax_rule',
+                'dataSet' => 'product_100_dollar_for_tax_rule',
                 'data' => [
                     'tax_class_id' => ['tax_product_class' => $taxProductClass],
                 ]
@@ -141,7 +141,9 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         $checkoutCart->open()->getCartBlock()->clearShoppingCart();
         $browser->open($_ENV['app_frontend_url'] . $this->productSimple->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->clickAddToCart();
+        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
         // Estimate Shipping and Tax
+        $checkoutCart->open();
         $checkoutCart->getShippingBlock()->openEstimateShippingAndTax();
         $checkoutCart->getShippingBlock()->fill($address);
         $checkoutCart->getShippingBlock()->clickGetQuote();

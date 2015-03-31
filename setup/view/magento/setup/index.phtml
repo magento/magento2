@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<div ng-include="'index.php/navigation/menu'"></div>
+<div
+    id="main"
+    class="main {{class}}"
+    ng-controller="mainController"
+    >
+    <div ui-view="root">
+        <div ui-view></div>
+    </div>
+</div>

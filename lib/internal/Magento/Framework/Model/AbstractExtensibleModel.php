@@ -6,10 +6,7 @@
 
 namespace Magento\Framework\Model;
 
-use Magento\Framework\Api\AttributeDataBuilder;
-use Magento\Framework\Api\ExtensibleDataInterface;
-use Magento\Framework\Api\MetadataServiceInterface;
-use Symfony\Component\DependencyInjection\Exception\LogicException;
+use Magento\Framework\Api\AttributeValueFactory;
 
 /**
  * Abstract model with custom attributes support.
@@ -18,17 +15,23 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
  * Implementations may choose to process custom attributes as their persistence requires them to.
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractExtensibleModel extends AbstractModel implements ExtensibleDataInterface
+abstract class AbstractExtensibleModel extends AbstractModel implements
+    \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**
-     * @var MetadataServiceInterface
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory
      */
-    protected $metadataService;
+    protected $extensionAttributesFactory;
 
     /**
-     * @var AttributeDataBuilder
+     * @var \Magento\Framework\Api\ExtensionAttributesInterface
      */
-    protected $customAttributeBuilder;
+    protected $extensionAttributes;
+
+    /**
+     * @var AttributeValueFactory
+     */
+    protected $customAttributeFactory;
 
     /**
      * @var string[]
@@ -38,8 +41,8 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -47,14 +50,14 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        $this->metadataService = $metadataService;
-        $this->customAttributeBuilder = $customAttributeBuilder;
+        $this->extensionAttributesFactory = $extensionFactory;
+        $this->customAttributeFactory = $customAttributeFactory;
         $data = $this->filterCustomAttributes($data);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         if (isset($data['id'])) {
@@ -76,14 +79,13 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
         $customAttributesCodes = $this->getCustomAttributesCodes();
         $data[self::CUSTOM_ATTRIBUTES] = array_intersect_key(
             (array)$data[self::CUSTOM_ATTRIBUTES],
-            $customAttributesCodes
+            array_flip($customAttributesCodes)
         );
         foreach ($data[self::CUSTOM_ATTRIBUTES] as $code => $value) {
             if (!($value instanceof \Magento\Framework\Api\AttributeInterface)) {
-                $data[self::CUSTOM_ATTRIBUTES][$code] = $this->customAttributeBuilder
+                $data[self::CUSTOM_ATTRIBUTES][$code] = $this->customAttributeFactory->create()
                     ->setAttributeCode($code)
-                    ->setValue($value)
-                    ->create();
+                    ->setValue($value);
             }
         }
         return $data;
@@ -117,6 +119,30 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
 
     /**
      * {@inheritdoc}
+     */
+    public function setCustomAttributes(array $attributes)
+    {
+        return $this->setData(self::CUSTOM_ATTRIBUTES, $attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomAttribute($attributeCode, $attributeValue)
+    {
+        $customAttributesCodes = $this->getCustomAttributesCodes();
+        /* If key corresponds to custom attribute code, populate custom attributes */
+        if (in_array($attributeCode, $customAttributesCodes)) {
+            $attribute = $this->customAttributeFactory->create();
+            $attribute->setAttributeCode($attributeCode)
+                ->setValue($attributeValue);
+            $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] = $attribute;
+        }
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * Added custom attributes support.
      */
@@ -124,11 +150,12 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     {
         if (is_array($key)) {
             $key = $this->filterCustomAttributes($key);
-        } elseif ($key == self::CUSTOM_ATTRIBUTES) {
+        } else if ($key == self::CUSTOM_ATTRIBUTES) {
             $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
             $value = $filteredData[self::CUSTOM_ATTRIBUTES];
         }
-        return parent::setData($key, $value);
+        parent::setData($key, $value);
+        return $this;
     }
 
     /**
@@ -144,7 +171,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
      *
      * In addition to parent implementation custom attributes support is added.
      *
-     * @param string     $key
+     * @param string $key
      * @param string|int $index
      * @return mixed
      */
@@ -170,26 +197,35 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     }
 
     /**
-     * Fetch all custom attributes for the given extensible model
-     * //TODO : check if the custom attribute is already defined as a getter on the data interface
+     * Get a list of custom attribute codes.
+     *
+     * By default, entity can be extended only using extension attributes functionality.
      *
      * @return string[]
      */
     protected function getCustomAttributesCodes()
     {
-        if (!is_null($this->customAttributesCodes)) {
-            return $this->customAttributesCodes;
-        }
+        return [];
+    }
+
+    /**
+     * Receive a list of EAV attributes using provided metadata service.
+     *
+     * Can be used in child classes, which represent EAV entities.
+     *
+     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
+     * @return string[]
+     */
+    protected function getEavAttributesCodes(\Magento\Framework\Api\MetadataServiceInterface $metadataService)
+    {
         $attributeCodes = [];
-        $customAttributesMetadata = $this->metadataService->getCustomAttributesMetadata(get_class($this));
+        $customAttributesMetadata = $metadataService->getCustomAttributesMetadata(get_class($this));
         if (is_array($customAttributesMetadata)) {
             /** @var $attribute \Magento\Framework\Api\MetadataObjectInterface */
             foreach ($customAttributesMetadata as $attribute) {
-                // Create a map for easier processing
-                $attributeCodes[$attribute->getAttributeCode()] = $attribute->getAttributeCode();
+                $attributeCodes[] = $attribute->getAttributeCode();
             }
         }
-        $this->customAttributesCodes = $attributeCodes;
         return $attributeCodes;
     }
 
@@ -203,5 +239,27 @@ abstract class AbstractExtensibleModel extends AbstractModel implements Extensib
     {
         parent::setId($value);
         return $this->setData('id', $value);
+    }
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Framework\Api\ExtensionAttributesInterface $extensionAttributes
+     * @return $this
+     */
+    protected function _setExtensionAttributes(\Magento\Framework\Api\ExtensionAttributesInterface $extensionAttributes)
+    {
+        $this->_data[self::EXTENSION_ATTRIBUTES_KEY] = $extensionAttributes;
+        return $this;
+    }
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Framework\Api\ExtensionAttributesInterface
+     */
+    protected function _getExtensionAttributes()
+    {
+        return $this->getData(self::EXTENSION_ATTRIBUTES_KEY);
     }
 }

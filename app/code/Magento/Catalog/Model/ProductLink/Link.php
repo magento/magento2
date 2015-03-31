@@ -12,20 +12,15 @@ namespace Magento\Catalog\Model\ProductLink;
 class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Catalog\Api\Data\ProductLinkInterface
 {
-    /**
-     * @var array
+    /**#@+
+     * Constants
      */
-    protected $_data;
-
-    /**
-     * Initialize internal storage
-     *
-     * @param array $data
-     */
-    public function __construct(array $data)
-    {
-        $this->_data = $data;
-    }
+    const KEY_PRODUCT_SKU = 'product_sku';
+    const KEY_LINK_TYPE = 'link_type';
+    const KEY_LINKED_PRODUCT_SKU = 'linked_product_sku';
+    const KEY_LINKED_PRODUCT_TYPE = 'linked_product_type';
+    const KEY_POSITION = 'position';
+    /**#@-*/
 
     /**
      * Retrieves a value from the data array if set, or null otherwise.
@@ -73,7 +68,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getProductSku()
     {
-        return $this->_get('product_sku');
+        return $this->_get(self::KEY_PRODUCT_SKU);
     }
 
     /**
@@ -84,7 +79,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getLinkType()
     {
-        return $this->_get('link_type');
+        return $this->_get(self::KEY_LINK_TYPE);
     }
 
     /**
@@ -95,7 +90,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getLinkedProductSku()
     {
-        return $this->_get('linked_product_sku');
+        return $this->_get(self::KEY_LINKED_PRODUCT_SKU);
     }
 
     /**
@@ -105,7 +100,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getLinkedProductType()
     {
-        return $this->_get('linked_product_type');
+        return $this->_get(self::KEY_LINKED_PRODUCT_TYPE);
     }
 
     /**
@@ -115,6 +110,87 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function getPosition()
     {
-        return $this->_get('position');
+        return $this->_get(self::KEY_POSITION);
+    }
+
+    /**
+     * Set product SKU
+     *
+     * @param string $productSku
+     * @return $this
+     */
+    public function setProductSku($productSku)
+    {
+        return $this->setData(self::KEY_PRODUCT_SKU, $productSku);
+    }
+
+    /**
+     * Set link type
+     *
+     * @param string $linkType
+     * @return $this
+     */
+    public function setLinkType($linkType)
+    {
+        return $this->setData(self::KEY_LINK_TYPE, $linkType);
+    }
+
+    /**
+     * Set linked product sku
+     *
+     * @param string $linkedProductSku
+     * @return $this
+     */
+    public function setLinkedProductSku($linkedProductSku)
+    {
+        return $this->setData(self::KEY_LINKED_PRODUCT_SKU, $linkedProductSku);
+    }
+
+    /**
+     * Set linked product type (simple, virtual, etc)
+     *
+     * @param string $linkedProductType
+     * @return $this
+     */
+    public function setLinkedProductType($linkedProductType)
+    {
+        return $this->setData(self::KEY_LINKED_PRODUCT_TYPE, $linkedProductType);
+    }
+
+    /**
+     * Set linked item position
+     *
+     * @param int $position
+     * @return $this
+     */
+    public function setPosition($position)
+    {
+        return $this->setData(self::KEY_POSITION, $position);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Catalog\Api\Data\ProductLinkExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        if (!$this->_getExtensionAttributes()) {
+            $this->setExtensionAttributes(
+                $this->extensionAttributesFactory->create('Magento\Catalog\Model\ProductLink\Link')
+            );
+        }
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductLinkExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

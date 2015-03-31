@@ -83,6 +83,15 @@
                     <item name="tax_class_id" xsi:type="string">tax_class_id</item>
                 </item>
             </argument>
+            <argument name="reindexProductCategoryIndexerData" xsi:type="array">
+                <item name="byDataChange" xsi:type="array">
+                    <item name="category_ids" xsi:type="string">category_ids</item>
+                    <item name="entity_id" xsi:type="string">entity_id</item>
+                    <item name="store_id" xsi:type="string">store_id</item>
+                    <item name="visibility" xsi:type="string">visibility</item>
+                    <item name="status" xsi:type="string">status</item>
+                </item>
+            </argument>
             <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
@@ -125,13 +134,6 @@
     <type name="Magento\Catalog\Model\Config\Source\ListPerPage">
         <arguments>
             <argument name="options" xsi:type="string">5,10,15,20,25</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="catalog_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Product\Compare">
@@ -439,16 +441,6 @@
     </type>
     <type name="Magento\Catalog\Model\Resource\Config">
         <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\Resource\Config" />
-    </type>
-    <type name="Magento\Catalog\Api\Data\CategoryDataBuilder">
-        <arguments>
-            <argument name="metadataService" xsi:type="object">Magento\Catalog\Model\Category\AttributeRepository\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Api\Data\ProductDataBuilder">
-        <arguments>
-            <argument name="metadataService" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Repository\Proxy</argument>
-        </arguments>
     </type>
     <preference for="Magento\Catalog\Api\ProductLinkTypeListInterface" type="Magento\Catalog\Model\Product\LinkTypeProvider" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkAttributeInterface" type="\Magento\Catalog\Model\ProductLink\Attribute" />

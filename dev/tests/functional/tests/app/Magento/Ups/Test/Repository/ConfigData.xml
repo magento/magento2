@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\ConfigData">
+        <dataset name="disable_shipping_all">
+            <field path="carriers/ups/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="ups">
+            <field path="carriers/ups/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/ups/active_rma" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/ups/type" scope="carriers" scope_id="1" label="United Parcel Service XML" xsi:type="string">UPS_XML</field>
+            <field path="carriers/ups/is_account_live" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="carriers/ups/password" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_PASSWORD</field>
+            <field path="carriers/ups/username" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_USERNAME</field>
+            <field path="carriers/ups/mode_xml" scope="carriers" scope_id="1" label="Development" xsi:type="string">0</field>
+            <field path="carriers/ups/gateway_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Rate</field>
+            <field path="carriers/ups/origin_shipment" scope="carriers" scope_id="1" label="" xsi:type="string">Shipments Originating in United States</field>
+            <field path="carriers/ups/access_license_number" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_ACCESS_LICENSE_NUMBER</field>
+            <field path="carriers/ups/negotiated_active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="carriers/ups/shipper_number" scope="carriers" scope_id="1" label="" xsi:type="string">CARRIERS_UPS_SHIPPER_NUMBER</field>
+            <field path="carriers/ups/container" scope="carriers" scope_id="1" label="Customer Packaging" xsi:type="string">CP</field>
+            <field path="carriers/ups/dest_type" scope="carriers" scope_id="1" label="Residential" xsi:type="string">RES</field>
+            <field path="carriers/ups/tracking_xml_url" scope="carriers" scope_id="1" label="" xsi:type="string">https://wwwcie.ups.com/ups.app/xml/Track</field>
+            <field path="carriers/ups/unit_of_measure" scope="carriers" scope_id="1" label="LBS" xsi:type="string">LBS</field>
+            <field path="carriers/ups/allowed_methods" scope="carriers" scope_id="1" xsi:type="array">
+                <item label="UPS Standard" xsi:type="string">11</item>
+                <item label="UPS Three-Day Select" xsi:type="string">12</item>
+                <item label="UPS Next Day Air Early A.M." xsi:type="string">14</item>
+                <item label="UPS Worldwide Express Plus" xsi:type="string">54</item>
+                <item label="UPS Second Day Air A.M." xsi:type="string">59</item>
+                <item label="UPS Worldwide Saver" xsi:type="string">65</item>
+                <item label="UPS Next Day Air" xsi:type="string">01</item>
+                <item label="UPS Second Day Air" xsi:type="string">02</item>
+                <item label="UPS Ground" xsi:type="string">03</item>
+                <item label="UPS Worldwide Express" xsi:type="string">07</item>
+                <item label="UPS Worldwide Expedited" xsi:type="string">08</item>
+            </field>
+            <field path="carriers/ups/sallowspecific" scope="carriers" scope_id="1" label="All Allowed Countries" xsi:type="string">0</field>
+            <field path="carriers/ups/showmethod" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="carriers/ups/debug" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+    </repository>
+</config>

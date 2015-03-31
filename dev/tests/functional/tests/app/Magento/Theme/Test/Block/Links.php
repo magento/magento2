@@ -1,6 +1,5 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -56,6 +55,24 @@ class Links extends Block
     public function isLinkVisible($linkTitle)
     {
         return $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Wait for link is visible.
+     *
+     * @param string $linkTitle
+     * @return void
+     */
+    public function waitLinkIsVisible($linkTitle)
+    {
+        $browser = $this->_rootElement;
+        $selector = sprintf($this->link, $linkTitle);
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $element = $browser->find($selector, Locator::SELECTOR_XPATH);
+                return $element->isVisible() ? true : null;
+            }
+        );
     }
 
     /**

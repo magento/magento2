@@ -10,15 +10,12 @@
  * @method \Magento\Tax\Model\Resource\Calculation\Rate\Title _getResource()
  * @method \Magento\Tax\Model\Resource\Calculation\Rate\Title getResource()
  * @method int getTaxCalculationRateId()
- * @method \Magento\Tax\Model\Calculation\Rate\Title setTaxCalculationRateId(int $value)
- * @method int getStoreId()
- * @method \Magento\Tax\Model\Calculation\Rate\Title setStoreId(int $value)
- * @method string getValue()
- * @method \Magento\Tax\Model\Calculation\Rate\Title setValue(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\Calculation\Rate;
+
+use Magento\Tax\Api\Data\TaxRateTitleInterface;
 
 class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxRateTitleInterface
@@ -57,5 +54,47 @@ class Title extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         return $this->getData(self::KEY_VALUE_ID);
     }
+    /**
+     * Set store id
+     *
+     * @param string $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId)
+    {
+        return $this->setData(self::KEY_STORE_ID, $storeId);
+    }
+
+    /**
+     * Set title value
+     *
+     * @param string $value
+     * @return string
+     */
+    public function setValue($value)
+    {
+        return $this->setData(self::KEY_VALUE_ID, $value);
+    }
     // @codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Tax\Api\Data\TaxRateTitleExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

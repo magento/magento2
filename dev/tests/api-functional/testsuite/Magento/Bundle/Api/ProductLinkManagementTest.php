@@ -7,7 +7,6 @@
 namespace Magento\Bundle\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Webapi\Model\Rest\Config;
 
 class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -93,15 +92,15 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
      */
     private function addChild($productSku, $optionId, $linkedProduct)
     {
-        $resourcePath = self::RESOURCE_PATH . '/:productSku/links/:optionId';
+        $resourcePath = self::RESOURCE_PATH . '/:sku/links/:optionId';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => str_replace(
-                    [':productSku', ':optionId'],
+                    [':sku', ':optionId'],
                     [$productSku, $optionId],
                     $resourcePath
                 ),
-                'httpMethod' => Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -111,7 +110,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         ];
         return $this->_webApiCall(
             $serviceInfo,
-            ['productSku' => $productSku, 'optionId' => $optionId, 'linkedProduct' => $linkedProduct]
+            ['sku' => $productSku, 'optionId' => $optionId, 'linkedProduct' => $linkedProduct]
         );
     }
 
@@ -127,11 +126,11 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
 
     protected function removeChild($productSku, $optionId, $childSku)
     {
-        $resourcePath = self::RESOURCE_PATH . '/%s/option/%s/child/%s';
+        $resourcePath = self::RESOURCE_PATH . '/%s/options/%s/children/%s';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => sprintf($resourcePath, $productSku, $optionId, $childSku),
-                'httpMethod' => Config::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -139,7 +138,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
                 'operation' => self::SERVICE_NAME . 'removeChild',
             ],
         ];
-        $requestData = ['productSku' => $productSku, 'optionId' => $optionId, 'childSku' => $childSku];
+        $requestData = ['sku' => $productSku, 'optionId' => $optionId, 'childSku' => $childSku];
         return $this->_webApiCall($serviceInfo, $requestData);
     }
 
@@ -152,7 +151,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/children',
-                'httpMethod' => Config::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

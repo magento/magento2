@@ -1,0 +1,137 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\CatalogProductAttribute">
+        <dataset name="attribute_type_text_field">
+            <field name="frontend_label" xsi:type="string">attribute_text%isolation%</field>
+            <field name="attribute_code" xsi:type="string">attribute_text%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Field</field>
+            <field name="is_required" xsi:type="string">No</field>
+        </dataset>
+
+        <dataset name="attribute_type_dropdown">
+            <field name="frontend_label" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">black</item>
+                    <item name="view" xsi:type="string">option_0_%isolation%</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">white</item>
+                    <item name="view" xsi:type="string">option_1_%isolation%</item>
+                </item>
+                <item name="2" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">green</item>
+                    <item name="view" xsi:type="string">option_2_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="attribute_type_dropdown_two_options">
+            <field name="frontend_label" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">black</item>
+                    <item name="view" xsi:type="string">option_0_%isolation%</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">white</item>
+                    <item name="view" xsi:type="string">option_1_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="attribute_type_dropdown_one_option">
+            <field name="frontend_label" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">black</item>
+                    <item name="view" xsi:type="string">option_0_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="color">
+            <field name="frontend_label" xsi:type="string">color_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">color_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">black</item>
+                    <item name="view" xsi:type="string">black_%isolation%</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">white</item>
+                    <item name="view" xsi:type="string">white_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="size">
+            <field name="frontend_label" xsi:type="string">size_%isolation%</field>
+            <field name="attribute_code" xsi:type="string">size_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">No</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">xl</item>
+                    <item name="view" xsi:type="string">xl_%isolation%</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">xxl</item>
+                    <item name="view" xsi:type="string">xxl_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="attribute_type_fpt">
+            <field name="frontend_label" xsi:type="string">fpt_%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Fixed Product Tax</field>
+        </dataset>
+
+        <dataset name="filterable_dropdown_two_options">
+            <field name="frontend_label" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Dropdown</field>
+            <field name="is_required" xsi:type="string">Yes</field>
+            <field name="is_filterable" xsi:type="string">Filterable (with results)</field>
+            <field name="options" xsi:type="array">
+                <item name="0" xsi:type="array">
+                    <item name="is_default" xsi:type="string">Yes</item>
+                    <item name="admin" xsi:type="string">black</item>
+                    <item name="view" xsi:type="string">option_0_%isolation%</item>
+                </item>
+                <item name="1" xsi:type="array">
+                    <item name="is_default" xsi:type="string">No</item>
+                    <item name="admin" xsi:type="string">white</item>
+                    <item name="view" xsi:type="string">option_1_%isolation%</item>
+                </item>
+            </field>
+        </dataset>
+    </repository>
+</config>

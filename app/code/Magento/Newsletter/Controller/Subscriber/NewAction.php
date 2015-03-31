@@ -52,7 +52,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      * Validates that the email address isn't being used by a different account.
      *
      * @param string $email
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     protected function validateEmailAvailable($email)
@@ -61,14 +61,16 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
         if ($this->_customerSession->getCustomerDataObject()->getEmail() !== $email
             && !$this->customerAccountManagement->isEmailAvailable($email, $websiteId)
         ) {
-            throw new \Magento\Framework\Model\Exception(__('This email address is already assigned to another user.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('This email address is already assigned to another user.')
+            );
         }
     }
 
     /**
      * Validates that if the current user is a guest, that they can subscribe to a newsletter.
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     protected function validateGuestSubscription()
@@ -80,10 +82,9 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
                 ) != 1
             && !$this->_customerSession->isLoggedIn()
         ) {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'Sorry, but the administrator denied subscription for guests. '
-                    . 'Please <a href="%1">register</a>.',
+                    'Sorry, but the administrator denied subscription for guests. Please <a href="%1">register</a>.',
                     $this->_customerUrl->getRegisterUrl()
                 )
             );
@@ -94,20 +95,20 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      * Validates the format of the email address
      *
      * @param string $email
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     protected function validateEmailFormat($email)
     {
         if (!\Zend_Validate::is($email, 'EmailAddress')) {
-            throw new \Magento\Framework\Model\Exception(__('Please enter a valid email address.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a valid email address.'));
         }
     }
 
     /**
      * New subscription action
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function execute()
@@ -126,7 +127,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
                 } else {
                     $this->messageManager->addSuccess(__('Thank you for your subscription.'));
                 }
-            } catch (\Magento\Framework\Model\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addException(
                     $e,
                     __('There was a problem with the subscription: %1', $e->getMessage())

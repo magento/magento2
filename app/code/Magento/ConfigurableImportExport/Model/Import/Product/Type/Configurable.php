@@ -165,7 +165,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function _addAttributeParams($attrSetName, array $attrParams, $attribute)
     {
         // save super attributes for simplier and quicker search in future
-        if ('select' == $attrParams['type'] && 1 == $attrParams['is_global'] && $attribute->getIsConfigurable()) {
+        if ('select' == $attrParams['type'] && 1 == $attrParams['is_global']) {
             $this->_superAttributes[$attrParams['code']] = $attrParams;
         }
         return parent::_addAttributeParams($attrSetName, $attrParams, $attribute);

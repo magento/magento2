@@ -5,7 +5,7 @@
  */
 namespace Magento\DesignEditor\Controller\Adminhtml\System\Design;
 
-use Magento\Framework\Model\Exception as CoreException;
+use Magento\Framework\Exception\LocalizedException as CoreException;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Store\Model\Store;
 
@@ -55,7 +55,7 @@ class Editor extends \Magento\Backend\App\Action
      * Load theme by id
      *
      * @param int $themeId
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      * @throws CoreException
      */
     protected function _loadThemeById($themeId)
@@ -87,7 +87,7 @@ class Editor extends \Magento\Backend\App\Action
     protected function _isFirstEntrance()
     {
         $isCustomized = (bool)$this->_objectManager->get(
-            'Magento\Core\Model\Resource\Theme\CollectionFactory'
+            'Magento\Theme\Model\Resource\Theme\CollectionFactory'
         )->create()->addTypeFilter(
             ThemeInterface::TYPE_VIRTUAL
         )->getSize();

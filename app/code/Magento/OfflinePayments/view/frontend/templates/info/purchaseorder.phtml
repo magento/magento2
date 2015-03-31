@@ -5,9 +5,9 @@
  */
 ?>
 <dl class="payment-method purchase order">
-    <dt class="title"><?php echo $this->escapeHtml($this->getMethod()->getTitle()) ?></dt>
+    <dt class="title"><?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
     <dd class="content">
         <strong><?php echo __('Purchase Order Number') ?></strong>
-        <span class="number"><?php echo $this->escapeHtml($this->getInfo()->getPoNumber()) ?></span>
+        <span class="number"><?php echo $block->escapeHtml($block->getInfo()->getPoNumber()) ?></span>
     </dd>
 </dl>

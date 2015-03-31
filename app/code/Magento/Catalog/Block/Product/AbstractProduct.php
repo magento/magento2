@@ -251,7 +251,7 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getImageLabel($product = null, $mediaAttributeCode = 'image')
     {
-        if (is_null($product)) {
+        if ($product === null) {
             $product = $this->getProduct();
         }
 
@@ -584,5 +584,18 @@ class AbstractProduct extends \Magento\Framework\View\Element\Template
             $price = $priceRender->render($priceType, $product, $arguments);
         }
         return $price;
+    }
+
+    /**
+     * Whether redirect to cart enabled
+     *
+     * @return bool
+     */
+    public function isRedirectToCartEnabled()
+    {
+        return $this->_scopeConfig->getValue(
+            'checkout/cart/redirect_to_cart',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

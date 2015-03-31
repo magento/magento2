@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -23,17 +22,33 @@ class Save extends \Magento\Backend\App\Action
     protected $creditmemoSender;
 
     /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory
+     */
+    protected $resultForwardFactory;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param CreditmemoSender $creditmemoSender
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
-        CreditmemoSender $creditmemoSender
+        CreditmemoSender $creditmemoSender,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         $this->creditmemoSender = $creditmemoSender;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
 
@@ -49,12 +64,14 @@ class Save extends \Magento\Backend\App\Action
      * Save creditmemo
      * We can save only new creditmemo. Existing creditmemos are not editable
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Backend\Model\View\Result\Forward
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
+        $resultRedirect = $this->resultRedirectFactory->create();
         $data = $this->getRequest()->getPost('creditmemo');
         if (!empty($data['comment_text'])) {
             $this->_getSession()->setCommentText($data['comment_text']);
@@ -67,7 +84,9 @@ class Save extends \Magento\Backend\App\Action
             $creditmemo = $this->creditmemoLoader->load();
             if ($creditmemo) {
                 if (!$creditmemo->isValidGrandTotal()) {
-                    throw new \Magento\Framework\Model\Exception(__('Credit memo\'s total must be positive.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Credit memo\'s total must be positive.')
+                    );
                 }
 
                 $comment = '';
@@ -88,7 +107,7 @@ class Save extends \Magento\Backend\App\Action
                 if (isset($data['do_offline'])) {
                     //do not allow online refund for Refund to Store Credit
                     if (!$data['do_offline'] && !empty($data['refund_customerbalance_return_enable'])) {
-                        throw new \Magento\Framework\Model\Exception(
+                        throw new \Magento\Framework\Exception\LocalizedException(
                             __('Cannot create online refund for Refund to Store Credit.')
                         );
                     }
@@ -116,19 +135,21 @@ class Save extends \Magento\Backend\App\Action
 
                 $this->messageManager->addSuccess(__('You created the credit memo.'));
                 $this->_getSession()->getCommentText(true);
-                $this->_redirect('sales/order/view', ['order_id' => $creditmemo->getOrderId()]);
-                return;
+                $resultRedirect->setPath('sales/order/view', ['order_id' => $creditmemo->getOrderId()]);
+                return $resultRedirect;
             } else {
-                $this->_forward('noroute');
-                return;
+                $resultForward = $this->resultForwardFactory->create();
+                $resultForward->forward('noroute');
+                return $resultForward;
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->messageManager->addError(__('Cannot save the credit memo.'));
         }
-        $this->_redirect('sales/*/new', ['_current' => true]);
+        $resultRedirect->setPath('sales/*/new', ['_current' => true]);
+        return $resultRedirect;
     }
 }

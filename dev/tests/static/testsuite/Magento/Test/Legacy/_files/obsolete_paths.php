@@ -22,8 +22,6 @@ return [
     ],
     ['/dev/tests/unit/testsuite/Magento/Filesystem', '/dev/tests/unit/testsuite/Magento/Framework/Filesystem'],
     ['/lib/Magento/Config', '/lib/Magento/Framework/Config'],
-    ['/dev/tests/integration/testsuite/Magento/Config', '/dev/tests/integration/testsuite/Magento/Framework/Config'],
-    ['/dev/tests/unit/testsuite/Magento/Config', '/dev/tests/unit/testsuite/Magento/Framework/Config'],
     ['/lib/Magento/Model', '/lib/Magento/Framework/Model'],
     ['/dev/tests/integration/testsuite/Magento/Model', '/dev/tests/integration/testsuite/Magento/Framework/Model'],
     ['/dev/tests/unit/testsuite/Magento/Model', '/dev/tests/unit/testsuite/Magento/Framework/Model'],
@@ -221,7 +219,20 @@ return [
     ['/lib/Magento/Object', '/lib/Magento/Framework/Object'],
     ['/dev/tests/unit/testsuite/Magento/Object', '/dev/tests/unit/testsuite/Magento/Framework/Object'],
     ['/dev/tests/integration/testsuite/Magento/Object', '/dev/tests/integration/testsuite/Magento/Framework/Object'],
+    ['/dev/tests/unit/testsuite/Magento/Core/Model/View/Url', '/dev/tests/unit/testsuite/Magento/Framework/View/Url'],
+    ['/app/code/Magento/Core/Model/View/Url', '/lib/internal/Magento/Framework/View/Url'],
     ['/downloader'],
+    ['/app/code/Magento/Core/Model/Design/Backend', '/app/code/Magento/Theme/Model/Design/Backend'],
+    [
+        '/dev/tests/integration/testsuite/Magento/Core/Model/Design/Backend',
+        '/dev/tests/integration/testsuite/Magento/Theme/Model/Design/Backend'
+    ],
+    ['/app/code/Magento/Core/Model/Resource/Theme', '/app/code/Magento/Theme/Model/Resource/Theme'],
+    [
+        '/dev/tests/integration/testsuite/Magento/Core/Model/Resource/Theme',
+        '/dev/tests/integration/testsuite/Magento/Theme/Model/Resource/Theme'
+    ],
+    ['/dev/tests/unit/testsuite/Magento/Webapi/Service/Entity'],
     ['/app/code/Magento/Install'],
     ['/dev/tests/integration/testsuite/Magento/Install'],
     ['/dev/tests/static/testsuite/Magento/Test/Integrity/Magento/Install'],
@@ -242,4 +253,7 @@ return [
     ['/app/code/Magento/Sales/Model/Quote/Address/Total/Nominal'],
     ['/app/code/Magento/Checkout/Block/Total/Nominal.php'],
     ['/app/code/Magento/Checkout/etc/sales.xml'],
+    ['/app/code/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
+    ['/dev/tests/unit/testsuite/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
+    ['/dev/tests/unit/testsuite'],
 ];

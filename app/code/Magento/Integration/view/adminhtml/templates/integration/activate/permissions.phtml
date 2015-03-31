@@ -5,11 +5,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  *
- * @var \Magento\Backend\Block\Widget\Form\Container $this
+ * @var \Magento\Backend\Block\Widget\Form\Container $block
  */
 ?>
 <div><p><?php echo __('The integration you selected asks you to approve access to the following:'); ?></p></div>
-<div id="integration-activate-permissions-tabs">
-    <?php echo $this->getChildHtml('tabs'); ?>
+<div class="admin__scope">
+    <div id="integration-activate-permissions-tabs">
+        <?php echo $block->getChildHtml('tabs'); ?>
+    </div>
+    <div id="integrations-activate-permissions-content"></div>
 </div>
-<div id="integrations-activate-permissions-content"></div>

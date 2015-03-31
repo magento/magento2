@@ -4,7 +4,9 @@
  */
 
 var config = {
-    deps: [
-        'Magento_Weee/tax-toggle'
-    ]
+    map: {
+        "*": {
+            "taxToggle": "Magento_Weee/tax-toggle"
+        }
+    }
 };

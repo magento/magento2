@@ -30,21 +30,23 @@ class Comment extends Entity implements InvoiceCommentResourceInterface
     protected $validator;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
         \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator,
+        $resourcePrefix = null,
         \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($resource, $attribute, $salesIncrement, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
     }
 
     /**
@@ -62,7 +64,7 @@ class Comment extends Entity implements InvoiceCommentResourceInterface
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -74,8 +76,8 @@ class Comment extends Entity implements InvoiceCommentResourceInterface
         parent::_beforeSave($object);
         $errors = $this->validator->validate($object);
         if (!empty($errors)) {
-            throw new \Magento\Framework\Model\Exception(
-                __("Cannot save comment") . ":\n" . implode("\n", $errors)
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Cannot save comment:\n%1", implode("\n", $errors))
             );
         }
 

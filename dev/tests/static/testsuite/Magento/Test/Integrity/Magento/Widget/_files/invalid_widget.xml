@@ -8,7 +8,7 @@
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Widget/etc/widget.xsd">
     <widget id="new_products" class="Magento\Catalog\Block\Product\Widget\NewWidget" module="Magento_Catalog" is_email_compatible="true"
-            placeholder_image="Magento_Catalog::images/product_widget_new.gif" translate="label description">
+            placeholder_image="Magento_Catalog::images/product_widget_new.png" translate="label description">
         <label>Catalog New Products List</label>
         <description>List of Products that are set as New</description>
         <parameter name="display_type" type="select" required="true" visible="true" translate="label description">
@@ -21,7 +21,7 @@
                 <label>New products</label>
             </option>
         </parameter>
-        <parameter name="show_pager" type="select" visible="true" source_model="Magento\Backend\Model\Config\Source\Yesno"
+        <parameter name="show_pager" type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno"
                    translate="label" >
             <label>Display Page Control</label>
         </parameter>
@@ -76,7 +76,7 @@
     </widget>
 
     <widget id="catalog_product_link" class="Magento\Catalog\Block\Product\Widget\Link" module="Magento_Catalog" is_email_compatible="true"
-            placeholder_image="Magento_Catalog::images/product_widget_link.gif" translate="label description">
+            placeholder_image="Magento_Catalog::images/product_widget_link.png" translate="label description">
         <label>Catalog Product Link</label>
         <description>Link to a Specified Product</description>
         <parameter name="id_path" type="block" visible="true" required="true" sort_order="10" translate="label">
@@ -108,7 +108,7 @@
     </widget>
 
     <widget id="catalog_category_link" class="Magento\Catalog\Block\Category\Widget\Link" module="Magento_Catalog" is_email_compatible="true"
-            placeholder_image="Magento_Catalog::images/category_widget_link.gif" translate="label description">
+            placeholder_image="Magento_Catalog::images/category_widget_link.png" translate="label description">
         <label>Catalog Category Link</label>
         <description>Link to a Specified Category</description>
         <parameter name="id_path" type="block" visible="true" required="true" sort_order="10" translate="label">

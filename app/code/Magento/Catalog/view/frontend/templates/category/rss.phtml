@@ -7,6 +7,6 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if ($this->isRssAllowed() && $this->getLink() && $this->isTopCategory()): ?>
-    <a href="<?php echo $this->getLink() ?>" class="action link rss"><span><?php echo $this->getLabel() ?></span></a>
+<?php if ($block->isRssAllowed() && $block->getLink() && $block->isTopCategory()): ?>
+    <a href="<?php echo $block->getLink() ?>" class="action link rss"><span><?php echo $block->getLabel() ?></span></a>
 <?php endif; ?>

@@ -91,7 +91,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if visibility properly saved after import
      *
-     * magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoAppIsolation enabled
      */
     public function testSaveProductsVisibility()
     {
@@ -191,6 +192,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * Test if stock state properly changed after import
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoAppIsolation enabled
      */
     public function testStockState()
     {
@@ -225,6 +227,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @param string $behavior
      * @param string $importFile
      * @param string $sku
+     * @magentoAppIsolation enabled
      */
     public function testSaveCustomOptions($behavior, $importFile, $sku)
     {
@@ -286,6 +289,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * Test if datetime properly saved after import
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoAppIsolation enabled
      * TODO MAGETWO-31206
      */
     public function testSaveDatetimeAttribute()
@@ -318,7 +322,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->importData();
 
-        reset($source);
+        $source->rewind();
         foreach ($source as $row) {
             /** @var $productAfterImport \Magento\Catalog\Model\Product */
             $productBeforeImport = $productsBeforeImport[$row['sku']];
@@ -604,10 +608,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogImportExport\Model\Import\Uploader',
             ['init'],
             [
-                $objectManager->create('Magento\Core\Helper\File\Storage\Database'),
-                $objectManager->create('Magento\Core\Helper\File\Storage'),
+                $objectManager->create('Magento\MediaStorage\Helper\File\Storage\Database'),
+                $objectManager->create('Magento\MediaStorage\Helper\File\Storage'),
                 $objectManager->create('Magento\Framework\Image\AdapterFactory'),
-                $objectManager->create('Magento\Core\Model\File\Validator\NotProtectedExtension')
+                $objectManager->create('Magento\MediaStorage\Model\File\Validator\NotProtectedExtension')
             ]
         );
         $this->_uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($uploader));
@@ -743,6 +747,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     * @magentoAppIsolation enabled
      */
     public function testValidateInvalidMultiselectValues()
     {
@@ -774,9 +779,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
-     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
+     * @magentoAppIsolation enabled
      */
     public function testProductsWithMultipleStores()
     {

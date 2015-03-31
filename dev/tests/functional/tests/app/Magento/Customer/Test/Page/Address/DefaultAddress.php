@@ -1,6 +1,5 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -27,7 +26,7 @@ class DefaultAddress extends Page
      *
      * @var string
      */
-    protected $defaultAddressesSelector = '.block-addresses-default .box-billing-address';
+    protected $defaultAddressesSelector = '.block-addresses-default';
 
     /**
      * Get default addresses block

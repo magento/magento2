@@ -1,0 +1,65 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@base-table-color: @color-very-dark-gray-black;
+@base-table-border-th-color: @color-gray89;
+@base-table-border-td-color: @color-gray89;
+@base-table-background-tfoot: @color-white-fog;
+
+//
+//  Tables
+//  _____________________________________________
+
+table.table {
+    color: @base-table-color;
+    > caption {
+        margin-bottom: .5rem;
+    }
+    tfoot {
+        background: @base-table-background-tfoot;
+        th,
+        td {
+            text-align: left;
+        }
+    }
+    th {
+        background: transparent;
+        border-bottom: .1rem solid @base-table-border-th-color;
+        border-top: .1rem solid @base-table-border-th-color;
+        font-weight: @font-weight__bold;
+        padding: 1rem 1.5rem;
+        text-align: left;
+    }
+    td {
+        border-bottom: .1rem solid @base-table-border-td-color;
+        padding: 1rem 1.5rem;
+        vertical-align: top;
+    }
+    tbody {
+        td {
+            &:first-child {
+                input[type='checkbox'] {
+                    margin: 0;
+                }
+            }
+        }
+        tr {
+            &:last-child {
+                td {
+                    border-bottom-color: transparent;
+                }
+            }
+        }
+    }
+    th {
+        &.required {
+            &:extend(.validation-symbol all);
+        }
+    }
+}

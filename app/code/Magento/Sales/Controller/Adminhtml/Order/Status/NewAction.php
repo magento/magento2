@@ -6,12 +6,35 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Status;
 
+use Magento\Framework\Registry;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
+
 class NewAction extends \Magento\Sales\Controller\Adminhtml\Order\Status
 {
     /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
+
+    /**
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param PageFactory $resultPageFactory
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        PageFactory $resultPageFactory
+    ) {
+        parent::__construct($context, $coreRegistry);
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
+    /**
      * New status form
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
@@ -20,10 +43,12 @@ class NewAction extends \Magento\Sales\Controller\Adminhtml\Order\Status
             $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')->setData($data);
             $this->_coreRegistry->register('current_status', $status);
         }
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Sales::system_order_statuses');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Order Status'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Create New Order Status'));
-        $this->_view->renderLayout();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Sales::system_order_statuses');
+        $resultPage->getConfig()->getTitle()->prepend(__('Order Status'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Create New Order Status'));
+
+        return $resultPage;
     }
 }

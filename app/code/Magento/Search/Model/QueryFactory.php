@@ -52,13 +52,12 @@ class QueryFactory implements QueryFactoryInterface
     public function __construct(
         Context $context,
         ObjectManagerInterface $objectManager,
-        StdlibString $string,
-        ScopeConfigInterface $scopeConfig
+        StdlibString $string
     ) {
         $this->request = $context->getRequest();
         $this->objectManager = $objectManager;
         $this->string = $string;
-        $this->scopeConfig = $scopeConfig;
+        $this->scopeConfig = $context->getScopeConfig();
     }
 
     /**

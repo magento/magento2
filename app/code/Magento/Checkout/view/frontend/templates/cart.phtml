@@ -8,11 +8,11 @@
 /**
  * Shopping cart template
  *
- * @var $this \Magento\Checkout\Block\Cart
+ * @var $block \Magento\Checkout\Block\Cart
  */
 
-if ($this->getItemsCount()) {
-    echo $this->getChildHtml('with-items');
+if ($block->getItemsCount()) {
+    echo $block->getChildHtml('with-items');
 } else {
-    echo $this->getChildHtml('no-items');
+    echo $block->getChildHtml('no-items');
 }

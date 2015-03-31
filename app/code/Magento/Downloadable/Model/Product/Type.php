@@ -55,25 +55,29 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     protected $_linkFactory;
 
     /**
+     * @var TypeHandler\TypeHandlerInterface
+     */
+    private $typeHandler;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory
      * @param \Magento\Downloadable\Model\Resource\Link $linkResource
      * @param \Magento\Downloadable\Model\Resource\Link\CollectionFactory $linksFactory
      * @param \Magento\Downloadable\Model\Resource\Sample\CollectionFactory $samplesFactory
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
+     * @param TypeHandler\TypeHandlerInterface $typeHandler
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -81,33 +85,31 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Downloadable\Model\Resource\SampleFactory $sampleResFactory,
         \Magento\Downloadable\Model\Resource\Link $linkResource,
         \Magento\Downloadable\Model\Resource\Link\CollectionFactory $linksFactory,
         \Magento\Downloadable\Model\Resource\Sample\CollectionFactory $samplesFactory,
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
-        \Magento\Downloadable\Model\LinkFactory $linkFactory
+        \Magento\Downloadable\Model\LinkFactory $linkFactory,
+        \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler
     ) {
-        $this->_downloadableFile = $downloadableFile;
         $this->_sampleResFactory = $sampleResFactory;
         $this->_linkResource = $linkResource;
         $this->_linksFactory = $linksFactory;
         $this->_samplesFactory = $samplesFactory;
         $this->_sampleFactory = $sampleFactory;
         $this->_linkFactory = $linkFactory;
+        $this->typeHandler = $typeHandler;
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
             $catalogProductType,
             $eventManager,
-            $coreData,
             $fileStorageDb,
             $filesystem,
             $coreRegistry,
@@ -120,11 +122,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * Get downloadable product links
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return array
+     * @return \Magento\Downloadable\Model\Link[]
      */
     public function getLinks($product)
     {
-        if (is_null($product->getDownloadableLinks())) {
+        if ($product->getDownloadableLinks() === null) {
             $_linkCollection = $this->_linksFactory->create()->addProductToFilter(
                 $product->getId()
             )->addTitleToResult(
@@ -166,7 +168,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function hasOptions($product)
     {
-        //return true;
         return $product->getLinksPurchasedSeparately() || parent::hasOptions($product);
     }
 
@@ -178,10 +179,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function hasRequiredOptions($product)
     {
-        if (parent::hasRequiredOptions($product) || $product->getLinksPurchasedSeparately()) {
-            return true;
-        }
-        return false;
+        return (parent::hasRequiredOptions($product) || $product->getLinksPurchasedSeparately());
     }
 
     /**
@@ -204,7 +202,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function getSamples($product)
     {
-        if (is_null($product->getDownloadableSamples())) {
+        if ($product->getDownloadableSamples() === null) {
             $_sampleCollection = $this->_samplesFactory->create()->addProductToFilter(
                 $product->getId()
             )->addTitleToResult(
@@ -241,129 +239,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         parent::save($product);
 
         if ($data = $product->getDownloadableData()) {
-            if (isset($data['sample'])) {
-                $_deleteItems = [];
-                foreach ($data['sample'] as $sampleItem) {
-                    if ($sampleItem['is_delete'] == '1') {
-                        if ($sampleItem['sample_id']) {
-                            $_deleteItems[] = $sampleItem['sample_id'];
-                        }
-                    } else {
-                        unset($sampleItem['is_delete']);
-                        if (!$sampleItem['sample_id']) {
-                            unset($sampleItem['sample_id']);
-                        }
-                        $sampleModel = $this->_createSample();
-                        $files = [];
-                        if (isset($sampleItem['file'])) {
-                            $files = $this->_coreData->jsonDecode($sampleItem['file']);
-                            unset($sampleItem['file']);
-                        }
-
-                        $sampleModel->setData(
-                            $sampleItem
-                        )->setSampleType(
-                            $sampleItem['type']
-                        )->setProductId(
-                            $product->getId()
-                        )->setStoreId(
-                            $product->getStoreId()
-                        );
-
-                        if ($sampleModel->getSampleType() == \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE) {
-                            $sampleFileName = $this->_downloadableFile->moveFileFromTmp(
-                                $sampleModel->getBaseTmpPath(),
-                                $sampleModel->getBasePath(),
-                                $files
-                            );
-                            $sampleModel->setSampleFile($sampleFileName);
-                        }
-                        $sampleModel->save();
-                        $product->setLastAddedSampleId($sampleModel->getId());
-                    }
-                }
-                if ($_deleteItems) {
-                    $this->_sampleResFactory->create()->deleteItems($_deleteItems);
-                }
-            }
-            if (isset($data['link'])) {
-                $_deleteItems = [];
-                foreach ($data['link'] as $linkItem) {
-                    if (isset($linkItem['is_delete']) && $linkItem['is_delete'] == '1') {
-                        if ($linkItem['link_id']) {
-                            $_deleteItems[] = $linkItem['link_id'];
-                        }
-                    } else {
-                        unset($linkItem['is_delete']);
-                        if (isset($linkItem['link_id']) && !$linkItem['link_id']) {
-                            unset($linkItem['link_id']);
-                        }
-                        $files = [];
-                        if (isset($linkItem['file'])) {
-                            $files = $this->_coreData->jsonDecode($linkItem['file']);
-                            unset($linkItem['file']);
-                        }
-                        $sample = [];
-                        if (isset($linkItem['sample'])) {
-                            $sample = $linkItem['sample'];
-                            unset($linkItem['sample']);
-                        }
-                        $linkModel = $this->_createLink()->setData(
-                            $linkItem
-                        )->setLinkType(
-                            $linkItem['type']
-                        )->setProductId(
-                            $product->getId()
-                        )->setStoreId(
-                            $product->getStoreId()
-                        )->setWebsiteId(
-                            $product->getStore()->getWebsiteId()
-                        )->setProductWebsiteIds(
-                            $product->getWebsiteIds()
-                        );
-                        if (null === $linkModel->getPrice()) {
-                            $linkModel->setPrice(0);
-                        }
-                        if ($linkModel->getIsUnlimited()) {
-                            $linkModel->setNumberOfDownloads(0);
-                        }
-                        $sampleFile = [];
-                        if ($sample && isset($sample['type'])) {
-                            if ($sample['type'] == 'url' && $sample['url'] != '') {
-                                $linkModel->setSampleUrl($sample['url']);
-                            }
-                            $linkModel->setSampleType($sample['type']);
-                            if (isset($sample['file'])) {
-                                $sampleFile = $this->_coreData->jsonDecode($sample['file']);
-                            }
-                        }
-                        if ($linkModel->getLinkType() == \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE) {
-                            $linkFileName = $this->_downloadableFile->moveFileFromTmp(
-                                $this->_createLink()->getBaseTmpPath(),
-                                $this->_createLink()->getBasePath(),
-                                $files
-                            );
-                            $linkModel->setLinkFile($linkFileName);
-                        }
-                        if ($linkModel->getSampleType() == \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE) {
-                            $linkSampleFileName = $this->_downloadableFile->moveFileFromTmp(
-                                $this->_createLink()->getBaseSampleTmpPath(),
-                                $this->_createLink()->getBaseSamplePath(),
-                                $sampleFile
-                            );
-                            $linkModel->setSampleFile($linkSampleFileName);
-                        }
-                        $linkModel->save();
-                        $product->setLastAddedLinkId($linkModel->getId());
-                    }
-                }
-                if ($_deleteItems) {
-                    $this->_linkResource->deleteItems($_deleteItems);
-                }
-                if ($product->getLinksPurchasedSeparately()) {
-                    $product->setIsCustomOptionChanged();
-                }
-            }
+            $this->typeHandler->save($product, $data);
         }
 
         return $this;
@@ -374,7 +250,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function checkProductBuyState($product)
     {
@@ -388,7 +264,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
                     $buyRequest->setLinks($allLinksIds);
                     $product->addCustomOption('info_buyRequest', serialize($buyRequest->getData()));
                 } else {
-                    throw new \Magento\Framework\Model\Exception(__('Please specify product link(s).'));
+                    throw new \Magento\Framework\Exception\LocalizedException(__('Please specify product link(s).'));
                 }
             }
         }
@@ -567,7 +443,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param \Magento\Framework\Object $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
-     * @return array|string
+     * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -606,7 +482,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             return $result;
         }
         if ($this->getLinkSelectionRequired($product) && $this->_isStrictProcessMode($processMode)) {
-            return __('Please specify product link(s).');
+            return __('Please specify product link(s).')->render();
         }
         return $result;
     }

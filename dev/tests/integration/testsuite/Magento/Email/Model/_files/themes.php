@@ -20,9 +20,9 @@ $objectManger->get('Magento\Framework\App\AreaList')
 
 $objectManger->configure([
     'preferences' => [
-        'Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data',
+        'Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data',
     ],
 ]);
-/** @var $registration \Magento\Core\Model\Theme\Registration */
-$registration = $objectManger->create('Magento\Core\Model\Theme\Registration');
+/** @var $registration \Magento\Theme\Model\Theme\Registration */
+$registration = $objectManger->create('Magento\Theme\Model\Theme\Registration');
 $registration->register('*/*/theme.xml');

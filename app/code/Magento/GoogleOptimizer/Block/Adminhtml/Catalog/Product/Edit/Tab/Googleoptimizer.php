@@ -27,7 +27,7 @@ class Googleoptimizer extends \Magento\GoogleOptimizer\Block\Adminhtml\AbstractT
     /**
      * Return Tab label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabLabel()
     {
@@ -37,7 +37,7 @@ class Googleoptimizer extends \Magento\GoogleOptimizer\Block\Adminhtml\AbstractT
     /**
      * Return Tab title
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getTabTitle()
     {

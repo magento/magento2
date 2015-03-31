@@ -8,7 +8,7 @@
 namespace Magento\Tax\Model\Sales\Order;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxDataBuilder as TaxDetailsBuilder;
+use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterfaceFactory as TaxDetailsDataObjectFactory;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface as AppliedTax;
 use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface as Item;
 
@@ -25,69 +25,68 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
     protected $orderFactory;
 
     /**
-     * @var \Magento\Tax\Api\Data\OrderTaxDetailsDataBuilder
+     * @var \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory
      */
-    protected $orderTaxDetailsBuilder;
+    protected $orderTaxDetailsDataObjectFactory;
 
     /**
-     * @var \Magento\Tax\Api\Data\OrderTaxDetailsItemDataBuilder
+     * @var \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory
      */
-    protected $itemBuilder;
+    protected $itemDataObjectFactory;
 
     /**
-     * @var TaxDetailsBuilder
+     * @var TaxDetailsDataObjectFactory
      */
-    protected $appliedTaxBuilder;
+    protected $appliedTaxDataObjectFactory;
 
     /**
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $orderItemTaxFactory
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsDataBuilder $orderTaxDetailsBuilder
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemDataBuilder $itemBuilder
-     * @param TaxDetailsBuilder $appliedTaxBuilder
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory
+     * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $orderItemTaxFactory,
-        \Magento\Tax\Api\Data\OrderTaxDetailsDataBuilder $orderTaxDetailsBuilder,
-        \Magento\Tax\Api\Data\OrderTaxDetailsItemDataBuilder $itemBuilder,
-        TaxDetailsBuilder $appliedTaxBuilder
+        \Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory $orderTaxDetailsDataObjectFactory,
+        \Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory $itemDataObjectFactory,
+        TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
     ) {
         $this->orderFactory = $orderFactory;
         $this->orderItemTaxFactory = $orderItemTaxFactory;
-        $this->orderTaxDetailsBuilder = $orderTaxDetailsBuilder;
-        $this->itemBuilder = $itemBuilder;
-        $this->appliedTaxBuilder = $appliedTaxBuilder;
+        $this->orderTaxDetailsDataObjectFactory = $orderTaxDetailsDataObjectFactory;
+        $this->itemDataObjectFactory = $itemDataObjectFactory;
+        $this->appliedTaxDataObjectFactory = $appliedTaxDataObjectFactory;
     }
 
     /**
      * Convert applied tax from array to data object
      *
-     * @param TaxDetailsBuilder $appliedTaxBuilder
+     * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
      * @param array $itemAppliedTax
      * @return AppliedTax
      */
     protected function convertToAppliedTaxDataObject(
-        TaxDetailsBuilder $appliedTaxBuilder,
+        TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory,
         $itemAppliedTax
     ) {
-        $appliedTaxBuilder->setCode($itemAppliedTax['code']);
-        $appliedTaxBuilder->setTitle($itemAppliedTax['title']);
-        $appliedTaxBuilder->setPercent($itemAppliedTax['tax_percent']);
-        $appliedTaxBuilder->setAmount($itemAppliedTax['real_amount']);
-        $appliedTaxBuilder->setBaseAmount($itemAppliedTax['real_base_amount']);
-
-        return $appliedTaxBuilder->create();
+        return $appliedTaxDataObjectFactory->create()
+            ->setCode($itemAppliedTax['code'])
+            ->setTitle($itemAppliedTax['title'])
+            ->setPercent($itemAppliedTax['tax_percent'])
+            ->setAmount($itemAppliedTax['real_amount'])
+            ->setBaseAmount($itemAppliedTax['real_base_amount']);
     }
 
     /**
      * Aggregate item applied taxes to get order applied taxes
      *
-     * @param TaxDetailsBuilder $appliedTaxBuilder
+     * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
      * @param Item[] $items
      * @return AppliedTax[]
      */
-    protected function aggregateAppliedTaxes(TaxDetailsBuilder $appliedTaxBuilder, $items)
+    protected function aggregateAppliedTaxes(TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory, $items)
     {
         $orderAppliedTaxes = [];
         $orderAppliedTaxesData = [];
@@ -110,12 +109,12 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
             }
         }
         foreach ($orderAppliedTaxesData as $orderAppliedTaxData) {
-            $appliedTaxBuilder->setCode($orderAppliedTaxData[AppliedTax::KEY_CODE]);
-            $appliedTaxBuilder->setTitle($orderAppliedTaxData[AppliedTax::KEY_TITLE]);
-            $appliedTaxBuilder->setPercent($orderAppliedTaxData[AppliedTax::KEY_PERCENT]);
-            $appliedTaxBuilder->setAmount($orderAppliedTaxData[AppliedTax::KEY_AMOUNT]);
-            $appliedTaxBuilder->setBaseAmount($orderAppliedTaxData[AppliedTax::KEY_BASE_AMOUNT]);
-            $orderAppliedTaxes[] = $appliedTaxBuilder->create();
+            $orderAppliedTaxes[] = $appliedTaxDataObjectFactory->create()
+                ->setCode($orderAppliedTaxData[AppliedTax::KEY_CODE])
+                ->setTitle($orderAppliedTaxData[AppliedTax::KEY_TITLE])
+                ->setPercent($orderAppliedTaxData[AppliedTax::KEY_PERCENT])
+                ->setAmount($orderAppliedTaxData[AppliedTax::KEY_AMOUNT])
+                ->setBaseAmount($orderAppliedTaxData[AppliedTax::KEY_BASE_AMOUNT]);
         }
         return $orderAppliedTaxes;
     }
@@ -128,11 +127,13 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
         $order = $this->orderFactory->create()->load($orderId);
         if (!$order) {
             throw new NoSuchEntityException(
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                [
-                    'fieldName' => 'orderId',
-                    'fieldValue' => $orderId,
-                ]
+                __(
+                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    [
+                        'fieldName' => 'orderId',
+                        'fieldValue' => $orderId,
+                    ]
+                )
             );
         }
 
@@ -151,7 +152,7 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
                     ];
                 }
                 $itemsData[$itemId]['applied_taxes'][$itemAppliedTax['code']] =
-                    $this->convertToAppliedTaxDataObject($this->appliedTaxBuilder, $itemAppliedTax);
+                    $this->convertToAppliedTaxDataObject($this->appliedTaxDataObjectFactory, $itemAppliedTax);
             } elseif (isset($itemAppliedTax['associated_item_id'])) {
                 //The taxable is associated with a product, e.g., weee, gift wrapping etc.
                 $itemId = $itemAppliedTax['associated_item_id'];
@@ -164,7 +165,7 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
                     ];
                 }
                 $itemsData[$key]['applied_taxes'][$itemAppliedTax['code']] =
-                    $this->convertToAppliedTaxDataObject($this->appliedTaxBuilder, $itemAppliedTax);
+                    $this->convertToAppliedTaxDataObject($this->appliedTaxDataObjectFactory, $itemAppliedTax);
             } else {
                 //The taxable is not associated with a product, e.g., shipping
                 //Use item type as key
@@ -177,21 +178,21 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
                     ];
                 }
                 $itemsData[$key][Item::KEY_APPLIED_TAXES][$itemAppliedTax['code']] =
-                    $this->convertToAppliedTaxDataObject($this->appliedTaxBuilder, $itemAppliedTax);
+                    $this->convertToAppliedTaxDataObject($this->appliedTaxDataObjectFactory, $itemAppliedTax);
             }
         }
 
         $items = [];
         foreach ($itemsData as $itemData) {
-            $this->itemBuilder->setType($itemData[Item::KEY_TYPE]);
-            $this->itemBuilder->setItemId($itemData[Item::KEY_ITEM_ID]);
-            $this->itemBuilder->setAssociatedItemId($itemData[Item::KEY_ASSOCIATED_ITEM_ID]);
-            $this->itemBuilder->setAppliedTaxes($itemData[Item::KEY_APPLIED_TAXES]);
-            $items[] = $this->itemBuilder->create();
+            $items[] = $this->itemDataObjectFactory->create()
+                ->setType($itemData[Item::KEY_TYPE])
+                ->setItemId($itemData[Item::KEY_ITEM_ID])
+                ->setAssociatedItemId($itemData[Item::KEY_ASSOCIATED_ITEM_ID])
+                ->setAppliedTaxes($itemData[Item::KEY_APPLIED_TAXES]);
         }
-        $this->orderTaxDetailsBuilder->setItems($items);
-        $orderAppliedTaxesDOs = $this->aggregateAppliedTaxes($this->appliedTaxBuilder, $items);
-        $this->orderTaxDetailsBuilder->setAppliedTaxes($orderAppliedTaxesDOs);
-        return $this->orderTaxDetailsBuilder->create();
+        $orderAppliedTaxesDOs = $this->aggregateAppliedTaxes($this->appliedTaxDataObjectFactory, $items);
+        return $this->orderTaxDetailsDataObjectFactory->create()
+            ->setItems($items)
+            ->setAppliedTaxes($orderAppliedTaxesDOs);
     }
 }

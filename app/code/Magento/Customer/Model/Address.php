@@ -6,10 +6,9 @@
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressDataBuilder;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Customer\Api\Data\RegionDataBuilder;
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
 
 /**
  * Customer address model
@@ -38,18 +37,24 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $dataProcessor;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Directory\Helper\Data $directoryData
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Address\Config $addressConfig
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param AddressMetadataInterface $addressMetadataService
-     * @param AddressDataBuilder $addressBuilder
-     * @param RegionDataBuilder $regionBuilder
+     * @param AddressMetadataInterface $metadataService
+     * @param AddressInterfaceFactory $addressDataFactory
+     * @param RegionInterfaceFactory $regionDataFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param CustomerFactory $customerFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -60,16 +65,17 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Directory\Helper\Data $directoryData,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Customer\Model\Address\Config $addressConfig,
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        AddressMetadataInterface $addressMetadataService,
-        AddressDataBuilder $addressBuilder,
-        RegionDataBuilder $regionBuilder,
+        AddressMetadataInterface $metadataService,
+        AddressInterfaceFactory $addressDataFactory,
+        RegionInterfaceFactory $regionDataFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         CustomerFactory $customerFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -81,16 +87,17 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
+            $extensionFactory,
+            $customAttributeFactory,
             $directoryData,
             $eavConfig,
             $addressConfig,
             $regionFactory,
             $countryFactory,
-            $addressMetadataService,
-            $addressBuilder,
-            $regionBuilder,
+            $metadataService,
+            $addressDataFactory,
+            $regionDataFactory,
+            $dataObjectHelper,
             $resource,
             $resourceCollection,
             $data
@@ -134,7 +141,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
             $this->setAttributeSetId(AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS);
         }
         $customAttributes = $address->getCustomAttributes();
-        if (!is_null($customAttributes)) {
+        if ($customAttributes !== null) {
             foreach ($customAttributes as $attribute) {
                 $this->setData($attribute->getAttributeCode(), $attribute->getValue());
             }
@@ -219,7 +226,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getAttributes()
     {
         $attributes = $this->getData('attributes');
-        if (is_null($attributes)) {
+        if ($attributes === null) {
             $attributes = $this->_getResource()->loadAllAttributes($this)->getSortedAttributes();
             $this->setData('attributes', $attributes);
         }

@@ -12,7 +12,7 @@ class ProductTest extends \Magento\Backend\Utility\Controller
 {
     public function testSaveActionWithDangerRequest()
     {
-        $this->getRequest()->setPost(['product' => ['entity_id' => 15]]);
+        $this->getRequest()->setPostValue(['product' => ['entity_id' => 15]]);
         $this->dispatch('backend/catalog/product/save');
         $this->assertSessionMessages(
             $this->equalTo(['Unable to save product']),
@@ -26,7 +26,7 @@ class ProductTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionAndNew()
     {
-        $this->getRequest()->setPost(['back' => 'new']);
+        $this->getRequest()->setPostValue(['back' => 'new']);
         $this->dispatch('backend/catalog/product/save/id/1');
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/new/'));
         $this->assertSessionMessages(
@@ -40,7 +40,7 @@ class ProductTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionAndDuplicate()
     {
-        $this->getRequest()->setPost(['back' => 'duplicate']);
+        $this->getRequest()->setPostValue(['back' => 'duplicate']);
         $this->dispatch('backend/catalog/product/save/id/1');
         $this->assertRedirect($this->stringStartsWith('http://localhost/index.php/backend/catalog/product/edit/'));
         $this->assertRedirect(

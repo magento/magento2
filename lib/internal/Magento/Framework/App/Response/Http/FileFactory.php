@@ -66,43 +66,23 @@ class FileFactory
             if ($content['type'] == 'filename') {
                 $isFile = true;
                 $file = $content['value'];
+                if (!$dir->isFile($file)) {
+                    throw new \Exception((string)new \Magento\Framework\Phrase('File not found'));
+                }
                 $contentLength = $dir->stat($file)['size'];
             }
         }
 
-        $this->_response->setHttpResponseCode(
-            200
-        )->setHeader(
-            'Pragma',
-            'public',
-            true
-        )->setHeader(
-            'Cache-Control',
-            'must-revalidate, post-check=0, pre-check=0',
-            true
-        )->setHeader(
-            'Content-type',
-            $contentType,
-            true
-        )->setHeader(
-            'Content-Length',
-            is_null($contentLength) ? strlen($content) : $contentLength,
-            true
-        )->setHeader(
-            'Content-Disposition',
-            'attachment; filename="' . $fileName . '"',
-            true
-        )->setHeader(
-            'Last-Modified',
-            date('r'),
-            true
-        );
+        $this->_response->setHttpResponseCode(200)
+            ->setHeader('Pragma', 'public', true)
+            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
+            ->setHeader('Content-type', $contentType, true)
+            ->setHeader('Content-Length', $contentLength === null ? strlen($content) : $contentLength, true)
+            ->setHeader('Content-Disposition', 'attachment; filename="' . $fileName . '"', true)
+            ->setHeader('Last-Modified', date('r'), true);
 
-        if (!is_null($content)) {
+        if ($content !== null) {
             if ($isFile) {
-                if (!$dir->isFile($file)) {
-                    throw new \Exception(__('File not found'));
-                }
                 $this->_response->sendHeaders();
                 $stream = $dir->openFile($file, 'r');
                 while (!$stream->eof()) {
@@ -113,12 +93,23 @@ class FileFactory
                 if (!empty($content['rm'])) {
                     $dir->delete($file);
                 }
-                exit(0);
+                $this->callExit();
             } else {
                 $this->_response->clearBody();
                 $this->_response->setBody($content);
             }
         }
         return $this->_response;
+    }
+
+    /**
+     * Call exit
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     */
+    protected function callExit()
+    {
+        exit(0);
     }
 }

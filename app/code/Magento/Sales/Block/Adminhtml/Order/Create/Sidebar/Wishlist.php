@@ -34,7 +34,7 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
     /**
      * Get header text
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
@@ -49,7 +49,7 @@ class Wishlist extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstr
     public function getItemCollection()
     {
         $collection = $this->getData('item_collection');
-        if (is_null($collection)) {
+        if ($collection === null) {
             $collection = $this->getCreateOrderModel()->getCustomerWishlist(true);
             if ($collection) {
                 $collection = $collection->getItemCollection()->load();

@@ -34,15 +34,15 @@ class Factory
      * @param string $className
      * @param array $data
      * @return \Magento\Catalog\Model\Product\Option\Type\DefaultType
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create($className, array $data = [])
     {
         $option = $this->_objectManager->create($className, $data);
 
         if (!$option instanceof \Magento\Catalog\Model\Product\Option\Type\DefaultType) {
-            throw new \Magento\Framework\Model\Exception(
-                $className . ' doesn\'t extends \Magento\Catalog\Model\Product\Option\Type\DefaultType'
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('%1 doesn\'t extends \Magento\Catalog\Model\Product\Option\Type\DefaultType', $className)
             );
         }
         return $option;

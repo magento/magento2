@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 /**
@@ -21,7 +19,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
-    protected $_localeResolver;
+    protected $localeResolver;
 
     /**
      * @param \Magento\Backend\Block\Context $context
@@ -38,7 +36,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
         array $data = []
     ) {
         $this->mathRandom = $mathRandom;
-        $this->_localeResolver = $localeResolver;
+        $this->localeResolver = $localeResolver;
         parent::__construct($context, $resourceHelper, $data);
     }
 
@@ -48,7 +46,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     public function getHtml()
     {
         $htmlId = $this->mathRandom->getUniqueHash($this->_getHtmlId());
-        $format = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);
+        $format = $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT);
         $html = '<div class="range" id="' .
             $htmlId .
             '_range"><div class="range-line date">' .
@@ -87,7 +85,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             $this->_getHtmlName() .
             '[locale]"' .
             ' value="' .
-            $this->_localeResolver->getLocaleCode() .
+            $this->localeResolver->getLocale() .
             '"/>';
         $html .= '<script>
             require(["jquery", "mage/calendar"], function($){
@@ -99,7 +97,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             '",
                     buttonImage: "' .
             $this->getViewFileUrl(
-                'images/grid-cal.gif'
+                'images/grid-cal.png'
             ) . '",
                         buttonText: "' . $this->escapeHtml(__('Date selector')) .
             '",
@@ -126,9 +124,10 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     public function getEscapedValue($index = null)
     {
         $value = $this->getValue($index);
-        if ($value instanceof \Zend_Date) {
-            return $value->toString(
-                $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT)
+        if ($value instanceof \DateTime) {
+            return \IntlDateFormatter::formatObject(
+                $value,
+                $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
             );
         }
         return $value;
@@ -142,7 +141,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     {
         if ($index) {
             if ($data = $this->getData('value', 'orig_' . $index)) {
-                //date('Y-m-d', strtotime($data));
                 return $data;
             }
             return null;
@@ -173,11 +171,11 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
         if (isset($value['locale'])) {
             if (!empty($value['from'])) {
                 $value['orig_from'] = $value['from'];
-                $value['from'] = $this->_convertDate($value['from'], $value['locale']);
+                $value['from'] = $this->_convertDate($value['from']);
             }
             if (!empty($value['to'])) {
                 $value['orig_to'] = $value['to'];
-                $value['to'] = $this->_convertDate($value['to'], $value['locale']);
+                $value['to'] = $this->_convertDate($value['to']);
             }
         }
         if (empty($value['from']) && empty($value['to'])) {
@@ -191,36 +189,26 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
      * Convert given date to default (UTC) timezone
      *
      * @param string $date
-     * @param string $locale
-     * @return \Magento\Framework\Stdlib\DateTime\Date|null
+     * @return \DateTime|null
      */
-    protected function _convertDate($date, $locale)
+    protected function _convertDate($date)
     {
-        try {
-            $dateObj = $this->_localeDate->date(null, null, $locale, false);
-
-            //set default timezone for store (admin)
-            $dateObj->setTimezone(
-                $this->_scopeConfig->getValue(
-                    $this->_localeDate->getDefaultTimezonePath(),
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                )
-            );
-
-            //set beginning of day
-            $dateObj->setHour(00);
-            $dateObj->setMinute(00);
-            $dateObj->setSecond(00);
-
-            //set date with applying timezone of store
-            $dateObj->set($date, \Zend_Date::DATE_SHORT, $locale);
-
-            //convert store date to default date in UTC timezone without DST
-            $dateObj->setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::DEFAULT_TIMEZONE);
-
-            return $dateObj;
-        } catch (\Exception $e) {
-            return null;
-        }
+        $adminTimeZone = new \DateTimeZone(
+            $this->_scopeConfig->getValue(
+                $this->_localeDate->getDefaultTimezonePath(),
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
+        $formatter = new \IntlDateFormatter(
+            $this->localeResolver->getLocale(),
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
+            $adminTimeZone
+        );
+        $simpleRes = new \DateTime(null, $adminTimeZone);
+        $simpleRes->setTimestamp($formatter->parse($date));
+        $simpleRes->setTime(0, 0, 0);
+        $simpleRes->setTimezone(new \DateTimeZone('UTC'));
+        return $simpleRes;
     }
 }

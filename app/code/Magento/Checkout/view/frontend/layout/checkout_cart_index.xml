@@ -9,6 +9,9 @@
     <update handle="checkout_cart_item_renderers"/>
     <update handle="checkout_shipping_price_renderer"/>
     <body>
+        <referenceContainer name="page.messages">
+            <block class="Magento\Checkout\Block\Cart\ValidationMessages" name="checkout.cart.validationmessages"/>
+        </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml">
                 <container name="checkout.cart.items" as="with-items">
@@ -35,7 +38,7 @@
                     </block>
                 </container>
                 <container name="checkout.cart.noitems" as="no-items">
-                    <block class="Magento\Checkout\Block\Cart" name="checkout.cart.empty" before="-" template="cart/noItems.phtml"/>
+                    <block class="Magento\Checkout\Block\Cart\EmptyCart" name="checkout.cart.empty" before="-" template="cart/noItems.phtml"/>
                     <container name="checkout.cart.empty.widget" as="checkout_cart_empty_widget" label="Empty Shopping Cart Content Before"/>
                 </container>
             </block>

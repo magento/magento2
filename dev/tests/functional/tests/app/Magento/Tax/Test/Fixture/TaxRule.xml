@@ -1,60 +1,38 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture class="Magento\Tax\Test\Fixture\TaxRule">
-    <module>Magento_Tax</module>
-    <type>flat</type>
-    <entity_type>tax_calculation_rule</entity_type>
-    <collection>Magento\Tax\Model\Resource\Calculation\Rule\Collection</collection>
-    <identifier>code</identifier>
-    <fields>
-        <tax_calculation_rule_id>
-            <attribute_code>tax_calculation_rule_id</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value />
-            <input />
-        </tax_calculation_rule_id>
-        <code>
-            <attribute_code>code</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required />
-            <default_value />
-            <input />
-        </code>
-        <priority>
-            <attribute_code>priority</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required />
-            <default_value />
-            <input />
-        </priority>
-        <position>
-            <attribute_code>position</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required />
-            <default_value />
-            <input />
-        </position>
-        <tax_rate>
-            <attribute_code>tax_rate</attribute_code>
-            <backend_type>virtual</backend_type>
-        </tax_rate>
-        <tax_customer_class>
-            <attribute_code>tax_customer_class</attribute_code>
-            <backend_type>virtual</backend_type>
-        </tax_customer_class>
-        <tax_product_class>
-            <attribute_code>tax_product_class</attribute_code>
-            <backend_type>virtual</backend_type>
-        </tax_product_class>
-    </fields>
-    <data_set />
-    <data_config />
-    <repository_class>Magento\Tax\Test\Repository\TaxRule</repository_class>
-    <handler_interface>Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface</handler_interface>
-</fixture>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="taxRule" module="Magento_Tax" type="flat" entity_type="tax_calculation_rule" collection="Magento\Tax\Model\Resource\Calculation\Rule\Collection" identifier="code" repository_class="Magento\Tax\Test\Repository\TaxRule" handler_interface="Magento\Tax\Test\Handler\TaxRule\TaxRuleInterface" class="Magento\Tax\Test\Fixture\TaxRule">
+    <dataset name="default">
+        <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+        <field name="tax_rate" xsi:type="array">
+            <item name="dataSet" xsi:type="string">US-CA-Rate_1</item>
+        </field>
+    </dataset>
+    <field name="tax_calculation_rule_id" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="code" is_required="">
+      <default_value xsi:type="string">TaxIdentifier%isolation%</default_value>
+    </field>
+    <field name="priority" is_required="">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="position" is_required="">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="tax_rate" source="Magento\Tax\Test\Fixture\TaxRule\TaxRate">
+      <default_value xsi:type="array">
+                <item name="dataSet" xsi:type="array">
+                    <item name="0" xsi:type="string">US-CA-Rate_1</item>
+                </item>
+            </default_value>
+    </field>
+    <field name="tax_customer_class" source="Magento\Tax\Test\Fixture\TaxRule\TaxClass"/>
+    <field name="tax_product_class" source="Magento\Tax\Test\Fixture\TaxRule\TaxClass"/>
+  </fixture>
+</config>

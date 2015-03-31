@@ -10,7 +10,6 @@
         <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
         <css src="Magento_Catalog::catalog/category-selector.css"/>
         <css src="Magento_Catalog::product/product.css"/>
-        <link src="Magento_Catalog::js/bootstrap/product-new.js"/>
     </head>
     <update handle="editor"/>
     <body>

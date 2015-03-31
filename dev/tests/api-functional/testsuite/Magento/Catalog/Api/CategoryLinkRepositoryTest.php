@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config;
 
 class CategoryLinkRepositoryTest extends WebapiAbstract
 {
@@ -32,7 +31,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_SUFFIX
                     . '/' . $this->categoryId . '/' . self::RESOURCE_PATH_PREFIX,
-                'httpMethod' => Config::HTTP_METHOD_POST,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_WRITE_NAME,
@@ -74,7 +73,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_SUFFIX
                     . '/' . $this->categoryId . '/' . self::RESOURCE_PATH_PREFIX,
-                'httpMethod' => Config::HTTP_METHOD_PUT,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_WRITE_NAME,
@@ -112,7 +111,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_SUFFIX . '/' . $this->categoryId .
                     '/' . self::RESOURCE_PATH_PREFIX . '/simple',
-                'httpMethod' => Config::HTTP_METHOD_DELETE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_WRITE_NAME,
@@ -122,7 +121,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
         ];
         $result = $this->_webApiCall(
             $serviceInfo,
-            ['productSku' => 'simple', 'categoryId' => $this->categoryId]
+            ['sku' => 'simple', 'categoryId' => $this->categoryId]
         );
         $this->assertTrue($result);
         $this->assertFalse($this->isProductInCategory($this->categoryId, 333, 10));

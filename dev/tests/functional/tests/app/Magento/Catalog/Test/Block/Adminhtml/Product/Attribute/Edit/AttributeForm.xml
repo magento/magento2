@@ -48,9 +48,6 @@
             <is_unique>
                 <input>select</input>
             </is_unique>
-            <is_configurable>
-                <input>select</input>
-            </is_configurable>
         </fields>
     </advanced-properties>
     <manage-labels>

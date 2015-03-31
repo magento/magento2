@@ -93,7 +93,7 @@ class Data extends AbstractHelper
      */
     public function setPageHelpUrl($url = null)
     {
-        if (is_null($url)) {
+        if ($url === null) {
             $request = $this->_request;
             $frontModule = $request->getControllerModule();
             if (!$frontModule) {
@@ -105,7 +105,7 @@ class Data extends AbstractHelper
                 }
             }
             $url = 'http://www.magentocommerce.com/gethelp/';
-            $url .= $this->_locale->getLocaleCode() . '/';
+            $url .= $this->_locale->getLocale() . '/';
             $url .= $frontModule . '/';
             $url .= $request->getControllerName() . '/';
             $url .= $request->getActionName() . '/';

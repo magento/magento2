@@ -1,36 +1,16 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<page mca="customer/index/edit" module="Magento_Customer">
-    <blocks>
-        <titleBlock>
-            <class>Magento\Theme\Test\Block\Html\Title</class>
-            <locator>.page-title .title</locator>
-            <strategy>css selector</strategy>
-        </titleBlock>
-        <messagesBlock>
-            <class>Magento\Core\Test\Block\Messages</class>
-            <locator>#messages</locator>
-            <strategy>css selector</strategy>
-        </messagesBlock>
-        <pageActionsBlock>
-            <class>Magento\Customer\Test\Block\Adminhtml\Edit\FormPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </pageActionsBlock>
-        <customerForm>
-            <class>Magento\Customer\Test\Block\Adminhtml\Edit\CustomerForm</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </customerForm>
-        <configureProductBlock>
-            <class>Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure</class>
-            <locator>//*[@role="dialog" and ./*[@id="product_composite_configure"] and contains(@style,"display: block")]</locator>
-            <strategy>xpath</strategy>
-        </configureProductBlock>
-    </blocks>
-</page>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+  <page name="CustomerIndexEdit" area="Adminhtml" mca="customer/index/edit" module="Magento_Customer">
+    <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper .page-title" strategy="css selector"/>
+    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator="#messages" strategy="css selector"/>
+    <block name="pageActionsBlock" class="Magento\Customer\Test\Block\Adminhtml\Edit\FormPageActions" locator=".page-main-actions" strategy="css selector"/>
+    <block name="customerForm" class="Magento\Customer\Test\Block\Adminhtml\Edit\CustomerForm" locator="[id='page:main-container']" strategy="css selector"/>
+    <block name="configureProductBlock" class="Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure" locator="//*[@role='dialog' and ./*[@id='product_composite_configure'] and contains(@style,'display: block')]" strategy="xpath"/>
+  </page>
+</config>

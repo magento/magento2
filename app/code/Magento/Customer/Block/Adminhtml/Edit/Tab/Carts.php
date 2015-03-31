@@ -14,24 +14,32 @@ class Carts extends \Magento\Backend\Block\Template
     protected $_shareConfig;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerDataBuilder
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
      */
-    protected $_customerBuilder;
+    protected $customerDataFactory;
+
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    protected $dataObjectHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context          $context
      * @param \Magento\Customer\Model\Config\Share             $shareConfig
-     * @param \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder
+     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array                                            $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Customer\Model\Config\Share $shareConfig,
-        \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder,
+        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         array $data = []
     ) {
         $this->_shareConfig = $shareConfig;
-        $this->_customerBuilder = $customerBuilder;
+        $this->customerDataFactory = $customerDataFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
         parent::__construct($context, $data);
     }
 
@@ -76,8 +84,12 @@ class Carts extends \Magento\Backend\Block\Template
      */
     protected function _getCustomer()
     {
-        return $this->_customerBuilder->populateWithArray(
-            $this->_backendSession->getCustomerData()['account']
-        )->create();
+        $customerDataObject = $this->customerDataFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $customerDataObject,
+            $this->_backendSession->getCustomerData()['account'],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
+        return $customerDataObject;
     }
 }

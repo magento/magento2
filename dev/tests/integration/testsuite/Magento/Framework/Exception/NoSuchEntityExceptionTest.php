@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Exception;
 
+use Magento\Framework\Phrase;
+
 class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
@@ -15,21 +17,25 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('No such entity.', $exception->getLogMessage());
 
         $exception = new NoSuchEntityException(
-            NoSuchEntityException::MESSAGE_SINGLE_FIELD,
-            ['fieldName' => 'field', 'fieldValue' => 'value']
+            new Phrase(
+                NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                ['fieldName' => 'field', 'fieldValue' => 'value']
+            )
         );
         $this->assertEquals('No such entity with field = value', $exception->getMessage());
         $this->assertEquals(NoSuchEntityException::MESSAGE_SINGLE_FIELD, $exception->getRawMessage());
         $this->assertEquals('No such entity with field = value', $exception->getLogMessage());
 
         $exception = new NoSuchEntityException(
-            NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-            [
-                'fieldName' => 'field1',
-                'fieldValue' => 'value1',
-                'field2Name' => 'field2',
-                'field2Value' => 'value2'
-            ]
+            new Phrase(
+                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                [
+                    'fieldName' => 'field1',
+                    'fieldValue' => 'value1',
+                    'field2Name' => 'field2',
+                    'field2Value' => 'value2'
+                ]
+            )
         );
         $this->assertEquals(
             NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,

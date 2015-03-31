@@ -5,7 +5,11 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer;
 
+use Magento\CatalogSearch\Model\Resource\Fulltext\Collection;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
+ * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/CatalogSearch/_files/indexer_fulltext.php
  */
 class FulltextTest extends \PHPUnit_Framework_TestCase
@@ -60,24 +64,20 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         /** @var \Magento\Indexer\Model\IndexerInterface indexer */
-        $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->indexer = Bootstrap::getObjectManager()->create(
             'Magento\Indexer\Model\Indexer'
         );
         $this->indexer->load('catalogsearch_fulltext');
 
-        $this->engine = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->engine = Bootstrap::getObjectManager()->get(
             'Magento\CatalogSearch\Model\Resource\Engine'
         );
 
-        $this->resourceFulltext = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->resourceFulltext = Bootstrap::getObjectManager()->get(
             'Magento\CatalogSearch\Model\Resource\Fulltext'
         );
 
-        $this->fulltext = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\Fulltext'
-        );
-
-        $this->queryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->queryFactory = Bootstrap::getObjectManager()->get(
             'Magento\Search\Model\QueryFactory'
         );
 
@@ -108,10 +108,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexAll
+     *
      */
     public function testReindexRowAfterEdit()
     {
+        $this->testReindexAll();
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
 
@@ -132,10 +133,11 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexRowAfterEdit
+     *
      */
     public function testReindexRowAfterMassAction()
     {
+        $this->testReindexRowAfterEdit();
         $productIds = [
             $this->productApple->getId(),
             $this->productBanana->getId(),
@@ -145,7 +147,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         ];
 
         /** @var \Magento\Catalog\Model\Product\Action $action */
-        $action = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $action = Bootstrap::getObjectManager()->get(
             'Magento\Catalog\Model\Product\Action'
         );
         $action->updateAttributes($productIds, $attrData, 1);
@@ -174,11 +176,12 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testReindexRowAfterMassAction
      * @magentoAppArea adminhtml
      */
     public function testReindexRowAfterDelete()
     {
+        $this->testReindexRowAfterEdit();
+
         $this->productBanana->delete();
 
         $products = $this->search('Simple Product');
@@ -201,7 +204,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $query = $this->queryFactory->get();
         $query->unsetData()->setQueryText($text)->prepare();
         $products = [];
-        $collection = $this->engine->getResultCollection();
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
         $collection->addSearchFilter($text);
         foreach ($collection as $product) {
             $products[] = $product;
@@ -218,7 +221,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected function getProductBySku($sku)
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $product = Bootstrap::getObjectManager()->get(
             'Magento\Catalog\Model\Product'
         );
         return $product->loadByAttribute('sku', $sku);

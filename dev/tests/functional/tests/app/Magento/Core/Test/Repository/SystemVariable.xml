@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\SystemVariable">
+        <dataset name="custom_variable">
+            <field name="variable" xsi:type="array">
+                <item name="code" xsi:type="string">variableCode%isolation%</item>
+                <item name="name" xsi:type="string">variableName%isolation%</item>
+                <item name="html_value" xsi:type="string">&lt;p class="custom-variable-test-class-%isolation%">variableName%isolation%&lt;/p&gt;</item>
+                <item name="plain_value" xsi:type="string">variableName%isolation%</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

@@ -15,23 +15,23 @@ class Messages extends \Magento\Backend\Block\Template
     protected $_messages;
 
     /**
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreHelper;
+    protected $jsonHelper;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\AdminNotification\Model\Resource\System\Message\Collection\Synchronized $messages
-     * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\AdminNotification\Model\Resource\System\Message\Collection\Synchronized $messages,
-        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $data = []
     ) {
-        $this->_coreHelper = $coreHelper;
+        $this->jsonHelper = $jsonHelper;
         parent::__construct($context, $data);
         $this->_messages = $messages;
     }
@@ -117,12 +117,14 @@ class Messages extends \Magento\Backend\Block\Template
      */
     public function getSystemMessageDialogJson()
     {
-        return $this->_coreHelper->jsonEncode(
+        return $this->jsonHelper->jsonEncode(
             [
                 'systemMessageDialog' => [
                     'autoOpen' => false,
-                    'width' => 600,
-                    'ajaxUrl' => $this->_getMessagesUrl(),
+                    'width' => '75%',
+                    'modal' => true,
+                    'dialogClass' => 'ui-dialog-active ui-popup-message',
+                    'ajaxUrl' => $this->_getMessagesUrl()
                 ],
             ]
         );

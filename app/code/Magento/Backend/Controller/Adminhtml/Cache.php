@@ -6,7 +6,7 @@
 namespace Magento\Backend\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 class Cache extends Action
 {
@@ -64,7 +64,7 @@ class Cache extends Action
      *
      * @param array $types
      * @return void
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _validateTypes(array $types)
     {
@@ -74,7 +74,7 @@ class Cache extends Action
         $allTypes = array_keys($this->_cacheTypeList->getTypes());
         $invalidTypes = array_diff($types, $allTypes);
         if (count($invalidTypes) > 0) {
-            throw new Exception(__("Specified cache type(s) don't exist: " . join(', ', $invalidTypes)));
+            throw new LocalizedException(__('Specified cache type(s) don\'t exist: %1', join(', ', $invalidTypes)));
         }
     }
 
@@ -85,6 +85,6 @@ class Cache extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Adminhtml::cache');
+        return $this->_authorization->isAllowed('Magento_Backend::cache');
     }
 }

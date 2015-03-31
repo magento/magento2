@@ -1,6 +1,5 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -20,7 +19,7 @@ class AddressesDefault extends Block
      *
      * @var string
      */
-    protected $changeBillingAddressSelector = '.box-billing-address a';
+    protected $changeBillingAddressSelector = '.box-address-billing a';
 
     /**
      * Click on address book menu item

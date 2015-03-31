@@ -5,10 +5,9 @@
 /*jshint jquery:true*/
 define([
     "jquery",
-    "jquery/ui",
-    "mage/translate",
-    "jquery/template"
-], function($){
+    'mage/template',
+    "jquery/ui"
+], function($, mageTemplate){
 
     $.widget('vde.dialog', $.ui.dialog, {
         options: {
@@ -47,6 +46,8 @@ define([
                     return ['success', 'error', 'info'].indexOf(type) != -1;
                 },
                 _prepareMessage: function(message, type) {
+                    var tmpl = mageTemplate('<div class="<%- data.classes %>"><%- data.message %></div>');
+
                     if (typeof message != 'string' && message.message && message.type) {
                         type = message.type;
                         message = message.message;
@@ -65,7 +66,10 @@ define([
                             classes: classes.join(' '),
                             message: message
                         };
-                        message = $.tmpl('<div class="${classes}">${message}</div>', vars);
+                        
+                        message = $(tmpl({
+                            data: vars
+                        }));
                     }
                     return message;
                 }
@@ -95,9 +99,6 @@ define([
          * @param {Array.<Object>|Object} buttons
          */
         set: function (title, text, buttons) {
-            title = $.mage.__(title);
-            text = $.mage.__(text);
-
             this.text.set(text);
             this.title.set(title);
             this.setButtons(buttons);
@@ -116,9 +117,6 @@ define([
                 if ($.type(buttons) !== 'array') {
                     buttons = [buttons];
                 }
-                buttons.each(function(button){
-                    button.text = $.mage.__(button.text)
-                });
             }
 
             var hasToAddCancel = (addCancel == undefined && buttons.length <= 1) || addCancel == true;
@@ -142,8 +140,6 @@ define([
          * @param {number} position
          */
         addButton: function(button, position) {
-            button.text = $.mage.__(button.text)
-
             var buttons = this.options.buttons;
             buttons.splice(position, 0, button);
             this._setOption('buttons', buttons);
@@ -162,7 +158,7 @@ define([
                 position = buttonPointer;
             } else {
                 //Find 1st button with given title
-                var title = $.mage.__(buttonPointer);
+                var title = buttonPointer;
                 this.options.buttons.each(function(button, index) {
                     if (button.text == title) {
                         position = index;

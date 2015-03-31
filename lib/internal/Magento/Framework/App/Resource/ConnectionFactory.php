@@ -22,9 +22,11 @@ class ConnectionFactory extends ModelConnectionFactory
     public function create(array $connectionConfig)
     {
         $connection = parent::create($connectionConfig);
-        /** @var \Magento\Framework\App\Cache\Type\FrontendPool $pool */
-        $pool = $this->objectManager->get('Magento\Framework\App\Cache\Type\FrontendPool');
-        $connection->setCacheAdapter($pool->get(DdlCache::TYPE_IDENTIFIER));
+        if ($connection) {
+            /** @var \Magento\Framework\App\Cache\Type\FrontendPool $pool */
+            $pool = $this->objectManager->get('Magento\Framework\App\Cache\Type\FrontendPool');
+            $connection->setCacheAdapter($pool->get(DdlCache::TYPE_IDENTIFIER));
+        }
         return $connection;
     }
 }

@@ -7,18 +7,34 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
-        <css src="mui/reset.css"/>
-        <css src="mui/base.css"/>
-        <css src="mui/elements.css"/>
-        <css src="mui/form.css"/>
-        <css src="mui/components.css"/>
-        <css src="css/admin.css"/>
-        <css src="css/pages.css"/>
-        <css src="css/styles.css"/>
-        <css src="jquery/farbtastic/css/farbtastic.css"/>
-        <css src="mui/utils.css"/>
-        <css src="Magento_Core::prototype/magento.css"/>
-        <css src="mui/print.css" media="print"/>
+        <css src="mui/mui_legacy.css"/>
+        <css src="css/styles-old.css"/>
+        <css src="css/styles-migration.css"/> <!-- New styles scope -->
     </head>
-    <body/>
+
+    <body>
+
+        <referenceContainer name="page.wrapper">
+            <container name="header.wrapper.scope" before="-" htmlTag="div" htmlClass="admin__scope"/>
+            <container name="menu.wrapper.scope" before="-" htmlTag="div" htmlClass="admin__scope">
+                <container name="menu.wrapper" before="-" htmlTag="div" htmlClass="menu-wrapper"/>
+            </container>
+        </referenceContainer>
+
+        <referenceContainer name="header" htmlClass="page-header row">
+            <container name="header.inner.left" before="-" htmlTag="div" htmlClass="page-header-hgroup col-l-8 col-m-6"/>
+            <container name="header.inner.right" after="header.inner.left" htmlTag="div" htmlClass="page-header-actions col-l-4 col-m-6"/>
+        </referenceContainer>
+
+        <move element="page.menu" destination="menu.wrapper" />
+        <move element="logo" before="-" destination="menu.wrapper" />
+
+        <move element="header" destination="header.wrapper.scope" />
+        <move element="notices.wrapper" before="header" destination="header.wrapper.scope" />
+        <move element="page.title" before="-" destination="header.inner.left" />
+        <move element="user" before="-" destination="header.inner.right" />
+        <move element="notification.messages" after="user" destination="header.inner.right" />
+        <move element="global.search" after="notification.messages" destination="header.inner.right" />
+
+    </body>
 </page>

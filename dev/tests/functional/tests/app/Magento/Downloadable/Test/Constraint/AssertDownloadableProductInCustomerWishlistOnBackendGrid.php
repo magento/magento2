@@ -6,7 +6,7 @@
 
 namespace Magento\Downloadable\Test\Constraint;
 
-use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
+use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid;
 use Magento\Mtf\Fixture\FixtureInterface;
 
@@ -24,7 +24,7 @@ class AssertDownloadableProductInCustomerWishlistOnBackendGrid extends AssertPro
      */
     protected function prepareOptions(FixtureInterface $product)
     {
-        /** @var DownloadableProductInjectable $product */
+        /** @var DownloadableProduct $product */
         $productOptions = parent::prepareOptions($product);
         $checkoutData = $product->getCheckoutData()['options'];
         if (!empty($checkoutData['links'])) {

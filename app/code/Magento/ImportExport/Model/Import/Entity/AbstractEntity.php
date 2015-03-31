@@ -184,11 +184,11 @@ abstract class AbstractEntity
     protected $_importExportData;
 
     /**
-     * Core data
+     * Json Helper
      *
-     * @var \Magento\Core\Helper\Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
-    protected $_coreData;
+    protected $jsonHelper;
 
     /**
      * Magento string lib
@@ -203,7 +203,7 @@ abstract class AbstractEntity
     protected $_resourceHelper;
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
      * @param \Magento\Eav\Model\Config $config
@@ -212,7 +212,7 @@ abstract class AbstractEntity
      * @param \Magento\Framework\Stdlib\String $string
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
         \Magento\Eav\Model\Config $config,
@@ -220,7 +220,7 @@ abstract class AbstractEntity
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Stdlib\String $string
     ) {
-        $this->_coreData = $coreData;
+        $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
         $this->string = $string;
@@ -236,12 +236,12 @@ abstract class AbstractEntity
      * Inner source object getter.
      *
      * @return AbstractSource
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Model\Exception(__('Please specify a source.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a source.'));
         }
         return $this->_source;
     }
@@ -327,7 +327,7 @@ abstract class AbstractEntity
                 if ($this->validateRow($rowData, $source->key())) {
                     // add row to bunch for save
                     $rowData = $this->_prepareRowForDb($rowData);
-                    $rowSize = strlen($this->_coreData->jsonEncode($rowData));
+                    $rowSize = strlen($this->jsonHelper->jsonEncode($rowData));
 
                     $isBunchSizeExceeded = $bunchSize > 0 && count($bunchRows) >= $bunchSize;
 
@@ -465,7 +465,7 @@ abstract class AbstractEntity
         $messages = [];
         foreach ($this->_errors as $errorCode => $errorRows) {
             if (isset($this->_messageTemplates[$errorCode])) {
-                $errorCode = __($this->_messageTemplates[$errorCode]);
+                $errorCode = (string)__($this->_messageTemplates[$errorCode]);
             }
             foreach ($errorRows as $errorRowData) {
                 $key = $errorRowData[1] ? sprintf($errorCode, $errorRowData[1]) : $errorCode;
@@ -539,12 +539,12 @@ abstract class AbstractEntity
      * Source object getter.
      *
      * @return AbstractSource
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Model\Exception(__('Source is not set'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Source is not set'));
         }
         return $this->_source;
     }
@@ -696,14 +696,14 @@ abstract class AbstractEntity
      * Validate data.
      *
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function validateData()
     {
         if (!$this->_dataValidated) {
             // do all permanent columns exist?
             if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Cannot find required columns: %1', implode(', ', $absentColumns))
                 );
             }
@@ -724,12 +724,12 @@ abstract class AbstractEntity
             }
 
             if ($emptyHeaderColumns) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Columns number: "%1" have empty headers', implode('", "', $emptyHeaderColumns))
                 );
             }
             if ($invalidColumns) {
-                throw new \Magento\Framework\Model\Exception(
+                throw new \Magento\Framework\Exception\LocalizedException(
                     __('Column names: "%1" are invalid', implode('", "', $invalidColumns))
                 );
             }

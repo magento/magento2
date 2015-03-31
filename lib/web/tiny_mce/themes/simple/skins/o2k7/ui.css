@@ -11,7 +11,7 @@
 .o2k7SimpleSkin .mceToolbar .mceToolbarStart span {display:block; background:url(img/button_bg.png) -22px 0; width:1px; height:22px; }
 .o2k7SimpleSkin .mceToolbar .mceToolbarEnd span {display:block; background:url(img/button_bg.png) -22px 0; width:1px; height:22px}
 .o2k7SimpleSkin span.mceIcon, .o2k7SimpleSkin img.mceIcon {display:block; width:20px; height:20px}
-.o2k7SimpleSkin .mceIcon {background:url(../../img/icons.gif) no-repeat 20px 20px}
+.o2k7SimpleSkin .mceIcon {background:url(../../img/icons.png) no-repeat 20px 20px}
 
 /* Button */
 .o2k7SimpleSkin .mceButton {display:block; background:url(img/button_bg.png); width:22px; height:22px}

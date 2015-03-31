@@ -11,13 +11,14 @@ class Index extends \Magento\Customer\Controller\Account
     /**
      * Default customer account page
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
-        $this->_view->getPage()->getConfig()->getTitle()->set(__('My Account'));
-        $this->_view->renderLayout();
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getLayout()->initMessages();
+        $resultPage->getConfig()->getTitle()->set(__('My Account'));
+        return $resultPage;
     }
 }

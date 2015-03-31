@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\View\Asset\PreProcessor;
 
+use Magento\Framework\View\Asset\LocalInterface;
+
 /**
  * An object that's passed to preprocessors to carry current and original information for processing
  * Encapsulates complexity of all necessary context and parameters
@@ -13,7 +15,7 @@ namespace Magento\Framework\View\Asset\PreProcessor;
 class Chain
 {
     /**
-     * @var \Magento\Framework\View\Asset\LocalInterface
+     * @var LocalInterface
      */
     private $asset;
 
@@ -25,7 +27,7 @@ class Chain
     /**
      * @var string
      */
-    private $origContentType;
+    protected $origContentType;
 
     /**
      * @var string
@@ -40,27 +42,36 @@ class Chain
     /**
      * @var string
      */
-    private $targetContentType;
+    protected $targetContentType;
 
     /**
-     * @param \Magento\Framework\View\Asset\LocalInterface $asset
+     * @var null|string
+     */
+    protected $targetAssetPath;
+
+    /**
+     * @param LocalInterface $asset
      * @param string $origContent
      * @param string $origContentType
      */
-    public function __construct(\Magento\Framework\View\Asset\LocalInterface $asset, $origContent, $origContentType)
-    {
+    public function __construct(
+        LocalInterface $asset,
+        $origContent,
+        $origContentType
+    ) {
         $this->asset = $asset;
         $this->origContent = $origContent;
         $this->content = $origContent;
         $this->origContentType = $origContentType;
         $this->contentType = $origContentType;
         $this->targetContentType = $asset->getContentType();
+        $this->targetAssetPath = $asset->getPath();
     }
 
     /**
      * Get asset object
      *
-     * @return \Magento\Framework\View\Asset\LocalInterface
+     * @return LocalInterface
      */
     public function getAsset()
     {
@@ -137,6 +148,16 @@ class Chain
     public function getTargetContentType()
     {
         return $this->targetContentType;
+    }
+
+    /**
+     * Get the target asset path
+     *
+     * @return string
+     */
+    public function getTargetAssetPath()
+    {
+        return $this->targetAssetPath;
     }
 
     /**

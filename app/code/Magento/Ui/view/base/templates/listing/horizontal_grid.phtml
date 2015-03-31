@@ -6,29 +6,28 @@
 ?>
 <?php
 /**
- * @var \Magento\Ui\Component\Listing $this
+ * @var \Magento\Ui\Component\Listing $block
  */
 ?>
-<script>
-    var allowLocalCache = true;
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/lib/provider":
+                                    <?php echo $block->getRenderContext()
+                                                ->getConfigBuilder()
+                                                ->toJson($block->getRenderContext()->getStorage(), $block->getName());
+                                    ?>,
+        "Magento_Ui/js/listing/grid": <?php echo $block->getConfigBuilder()->toJson($block->getConfig()); ?>
+    }
+}
 </script>
-<script data-mage-init='{"Magento_Ui/js/lib/provider": ""}' type="application/json">
-    <?php
-        echo $this->getRenderContext()
-            ->getConfigBuilder()
-                ->toJson($this->getRenderContext()->getStorage(), $this->getName());
-    ?>
-</script>
-<script data-mage-init='{"Magento_Ui/js/listing/grid": ""}' type="application/json">
-    <?php echo $this->getConfigBuilder()->toJson($this->getConfig()); ?>
-</script>
-<?php echo $this->getChildHtml('listing_head'); ?>
+<?php echo $block->getChildHtml('listing_head'); ?>
 <div class="grid">
-    <?php echo $this->getChildHtml('listing_before'); ?>
-    <div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'">
+    <?php echo $block->getChildHtml('listing_before'); ?>
+    <div data-bind="scope: '<?php echo $block->getParentName(); ?>:<?php echo $block->getName(); ?>'">
         <!-- ko template: getTemplate() --><!-- /ko -->
     </div>
-    <?php echo $this->getChildHtml('listing_after'); ?>
+    <?php echo $block->getChildHtml('listing_after'); ?>
 </div>
 <div data-role="spinner" class="grid-loading-mask">
     <div class="grid-loader"></div>

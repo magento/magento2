@@ -127,12 +127,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $themes = ['frontend' => 'test_default', 'adminhtml' => 'test_default'];
-        $design = $objectManager->create('Magento\Core\Model\View\Design', ['themes' => $themes]);
-        $objectManager->addSharedInstance($design, 'Magento\Core\Model\View\Design');
+        $design = $objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
+        $objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 
-        $collection = $objectManager->create('Magento\Core\Model\Resource\Theme\Collection');
+        $collection = $objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
         $themeId = $collection->getThemeByFullPath('frontend/test_default')->getId();
         $objectManager->get(
             'Magento\Framework\App\Config\MutableScopeConfigInterface'
@@ -176,7 +176,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
             'custom parameter' => [
                 'frontend',
-                'handle="email_template_test_handle" template="Magento_Core::sample_email_content_custom.phtml"',
+                'handle="email_template_test_handle" template="Magento_Email::sample_email_content_custom.phtml"',
                 'Custom E-mail content for frontend/test_default theme',
             ],
         ];

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\User\Test\TestCase\CreateAdminUserRoleEntityTest">
+        <variation name="CreateAdminUserRoleEntityTestVariation1">
+            <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
+            <data name="role/data/resource_access" xsi:type="string">Custom</data>
+            <data name="role/data/roles_resources" xsi:type="string">Sales</data>
+            <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage"/>
+            <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid"/>
+        </variation>
+        <variation name="CreateAdminUserRoleEntityTestVariation2">
+            <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>
+            <data name="role/data/resource_access" xsi:type="string">All</data>
+            <constraint name="Magento\User\Test\Constraint\AssertRoleSuccessSaveMessage"/>
+            <constraint name="Magento\User\Test\Constraint\AssertRoleInGrid"/>
+        </variation>
+    </testCase>
+</config>

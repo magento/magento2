@@ -191,7 +191,7 @@ class Layer extends \Magento\Framework\Object
     public function getCurrentCategory()
     {
         $category = $this->getData('current_category');
-        if (is_null($category)) {
+        if ($category === null) {
             $category = $this->registry->registry('current_category');
             if ($category) {
                 $this->setData('current_category', $category);
@@ -209,7 +209,7 @@ class Layer extends \Magento\Framework\Object
      *
      * @param mixed $category
      * @return \Magento\Catalog\Model\Layer
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setCurrentCategory($category)
     {
@@ -217,14 +217,14 @@ class Layer extends \Magento\Framework\Object
             try {
                 $category = $this->categoryRepository->get($category);
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Model\Exception(__('Please correct the category.'), 0, $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'), $e);
             }
         } elseif ($category instanceof \Magento\Catalog\Model\Category) {
             if (!$category->getId()) {
-                throw new \Magento\Framework\Model\Exception(__('Please correct the category.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the category.'));
             }
         } else {
-            throw new \Magento\Framework\Model\Exception(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Must be category model instance or its id.')
             );
         }
@@ -254,7 +254,7 @@ class Layer extends \Magento\Framework\Object
     public function getState()
     {
         $state = $this->getData('state');
-        if (is_null($state)) {
+        if ($state === null) {
             \Magento\Framework\Profiler::start(__METHOD__);
             $state = $this->_layerStateFactory->create();
             $this->setData('state', $state);

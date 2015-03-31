@@ -20,7 +20,7 @@ class Search extends Block
      *
      * @var string
      */
-    protected $searchAutocomplete = './/div[@id="search_autocomplete"]//li[text()="%s"]';
+    protected $searchAutocomplete = './/div[@id="search_autocomplete"]//li[span[text()[normalize-space()="%s"]]]';
 
     /**
      * Selector number of matches for a given row

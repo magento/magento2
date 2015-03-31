@@ -22,7 +22,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             'select'
         );
         $html = $block->getPriceTypeSelectHtml();
-        $this->assertContains('select_${select_id}', $html);
-        $this->assertContains('[${select_id}]', $html);
+        $this->assertContains('select_<%- data.select_id %>', $html);
+        $this->assertContains('[<%- data.select_id %>]', $html);
     }
 }

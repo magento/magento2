@@ -15,6 +15,9 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Observer
 {
     /** @var \Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider */

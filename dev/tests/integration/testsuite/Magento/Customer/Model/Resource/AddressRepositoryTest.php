@@ -7,6 +7,7 @@
 namespace Magento\Customer\Model\Resource;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -27,22 +28,25 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Data\Address[] */
     private $_expectedAddresses;
 
-    /** @var \Magento\Customer\Api\Data\AddressDataBuilder */
-    private $_addressBuilder;
+    /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory */
+    private $_addressFactory;
+
+    /** @var  \Magento\Framework\Api\DataObjectHelper */
+    protected $dataObjectHelper;
 
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->repository = $this->_objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
-        $this->_addressBuilder = $this->_objectManager->create('Magento\Customer\Api\Data\AddressDataBuilder');
+        $this->_addressFactory = $this->_objectManager->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
+        $this->dataObjectHelper = $this->_objectManager->create('Magento\Framework\Api\DataObjectHelper');
 
-        $builder = $this->_objectManager->create('Magento\Customer\Api\Data\RegionDataBuilder');
-        $region = $builder
+        $regionFactory = $this->_objectManager->create('Magento\Customer\Api\Data\RegionInterfaceFactory');
+        $region = $regionFactory->create()
             ->setRegionCode('AL')
             ->setRegion('Alabama')
-            ->setRegionId(1)
-            ->create();
-        $this->_addressBuilder
+            ->setRegionId(1);
+        $address = $this->_addressFactory->create()
             ->setId('1')
             ->setCountryId('US')
             ->setCustomerId('1')
@@ -53,9 +57,9 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setCity('CityM')
             ->setFirstname('John')
             ->setLastname('Smith')
-            ->setCompany('CompanyName');
-        $address = $this->_addressBuilder->create();
-        $this->_addressBuilder
+            ->setCompany('CompanyName')
+            ->setCustomAttributes([]);
+        $address2 = $this->_addressFactory->create()
             ->setId('2')
             ->setCountryId('US')
             ->setCustomerId('1')
@@ -65,8 +69,8 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setCity('CityX')
             ->setTelephone('3234676')
             ->setFirstname('John')
-            ->setLastname('Smith');
-        $address2 = $this->_addressBuilder->create();
+            ->setLastname('Smith')
+            ->setCustomAttributes([]);
 
         $this->_expectedAddresses = [$address, $address2];
     }
@@ -89,11 +93,10 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $address = $this->repository->getById(2);
 
-        $proposedAddressBuilder = $this->_addressBuilder->populate($address);
-        $proposedAddressBuilder->setRegion($address->getRegion());
+        $proposedAddressObject = $address;
+        $proposedAddressObject->setRegion($address->getRegion());
         // change phone #
-        $proposedAddressBuilder->setTelephone('555' . $address->getTelephone());
-        $proposedAddressObject = $proposedAddressBuilder->create();
+        $proposedAddressObject->setTelephone('555' . $address->getTelephone());
         $proposedAddress = $this->repository->save($proposedAddressObject);
         $this->assertEquals(2, $proposedAddress->getId());
 
@@ -111,8 +114,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAddressesIdSetButNotAlreadyExisting()
     {
-        $proposedAddressBuilder = $this->_createSecondAddressBuilder()->setId(4200);
-        $proposedAddress = $proposedAddressBuilder->create();
+        $proposedAddress = $this->_createSecondAddress()->setId(4200);
         $this->repository->save($proposedAddress);
     }
 
@@ -146,17 +148,16 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveNewAddress()
     {
-        $proposedAddress = $this->_createSecondAddressBuilder()->setCustomerId(1)->create();
+        $proposedAddress = $this->_createSecondAddress()->setCustomerId(1);
 
         $returnedAddress = $this->repository->save($proposedAddress);
         $this->assertNotNull($returnedAddress->getId());
 
         $savedAddress = $this->repository->getById($returnedAddress->getId());
 
-        $expectedNewAddressBuilder = $this->_addressBuilder->populate($this->_expectedAddresses[1]);
-        $expectedNewAddressBuilder->setId($savedAddress->getId());
-        $expectedNewAddressBuilder->setRegion($this->_expectedAddresses[1]->getRegion());
-        $expectedNewAddress = $expectedNewAddressBuilder->create();
+        $expectedNewAddress = $this->_expectedAddresses[1];
+        $expectedNewAddress->setId($savedAddress->getId());
+        $expectedNewAddress->setRegion($this->_expectedAddresses[1]->getRegion());
         $this->assertEquals($expectedNewAddress, $savedAddress);
     }
 
@@ -167,13 +168,12 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveNewAddressWithAttributes()
     {
-        $addressBuilder = $this->_createFirstAddressBuilder()
+        $proposedAddress = $this->_createFirstAddress()
             ->setCustomAttribute('firstname', 'Jane')
             ->setCustomAttribute('id', 4200)
             ->setCustomAttribute('weird', 'something_strange_with_hair')
             ->setId(null)
             ->setCustomerId(1);
-        $proposedAddress = $addressBuilder->create();
 
         $returnedAddress = $this->repository->save($proposedAddress);
 
@@ -193,13 +193,12 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveNewInvalidAddress()
     {
-        $addressBuilder = $this->_createFirstAddressBuilder()
+        $address = $this->_createFirstAddress()
             ->setCustomAttribute('firstname', null)
             ->setId(null)
             ->setFirstname(null)
             ->setLastname(null)
             ->setCustomerId(1);
-        $address = $addressBuilder->create();
         try {
             $this->repository->save($address);
         } catch (InputException $exception) {
@@ -213,7 +212,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveAddressesCustomerIdNotExist()
     {
-        $proposedAddress = $this->_createSecondAddressBuilder()->setCustomerId(4200)->create();
+        $proposedAddress = $this->_createSecondAddress()->setCustomerId(4200);
         try {
             $this->repository->save($proposedAddress);
             $this->fail('Expected exception not thrown');
@@ -224,7 +223,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveAddressesCustomerIdInvalid()
     {
-        $proposedAddress = $this->_createSecondAddressBuilder()->setCustomerId('this_is_not_a_valid_id')->create();
+        $proposedAddress = $this->_createSecondAddress()->setCustomerId('this_is_not_a_valid_id');
         try {
             $this->repository->save($proposedAddress);
             $this->fail('Expected exception not thrown');
@@ -295,6 +294,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @param \Magento\Framework\Api\Filter[] $filters
      * @param \Magento\Framework\Api\Filter[] $filterGroup
+     * @param \Magento\Framework\Api\SortOrder[] $filterOrders
      * @param array $expectedResult array of expected results indexed by ID
      *
      * @dataProvider searchAddressDataProvider
@@ -303,36 +303,46 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
      */
-    public function testSearchAddresses($filters, $filterGroup, $expectedResult)
+    public function testSearchAddresses($filters, $filterGroup, $filterOrders, $expectedResult)
     {
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = $this->_objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
         foreach ($filters as $filter) {
             $searchBuilder->addFilter([$filter]);
         }
-        if (!is_null($filterGroup)) {
+        if ($filterGroup !== null) {
             $searchBuilder->addFilter($filterGroup);
+        }
+        if ($filterOrders !== null) {
+            foreach ($filterOrders as $order) {
+                $searchBuilder->addSortOrder($order);
+            }
         }
 
         $searchResults = $this->repository->getList($searchBuilder->create());
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
 
+        $i = 0;
         /** @var \Magento\Customer\Api\Data\AddressInterface $item*/
         foreach ($searchResults->getItems() as $item) {
             $this->assertEquals(
-                $expectedResult[$item->getId()]['city'],
+                $expectedResult[$i]['id'],
+                $item->getId()
+            );
+            $this->assertEquals(
+                $expectedResult[$i]['city'],
                 $item->getCity()
             );
             $this->assertEquals(
-                $expectedResult[$item->getId()]['postcode'],
+                $expectedResult[$i]['postcode'],
                 $item->getPostcode()
             );
             $this->assertEquals(
-                $expectedResult[$item->getId()]['firstname'],
+                $expectedResult[$i]['firstname'],
                 $item->getFirstname()
             );
-            unset($expectedResult[$item->getId()]);
+            $i++;
         }
     }
 
@@ -343,70 +353,98 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
          */
         $filterBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Api\FilterBuilder');
+        /**
+         * @var \Magento\Framework\Api\SortOrderBuilder $orderBuilder
+         */
+        $orderBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Api\SortOrderBuilder');
         return [
             'Address with postcode 75477' => [
                 [$filterBuilder->setField('postcode')->setValue('75477')->create()],
                 null,
-                [1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John']],
+                null,
+                [['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John']],
             ],
             'Address with city CityM' => [
                 [$filterBuilder->setField('city')->setValue('CityM')->create()],
                 null,
-                [1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John']],
+                null,
+                [['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John']],
             ],
-            'Addresses with firstname John' => [
+            'Addresses with firstname John sorted by firstname desc, city asc' => [
                 [$filterBuilder->setField('firstname')->setValue('John')->create()],
                 null,
                 [
-                    1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John']
+                    $orderBuilder->setField('firstname')->setDirection(SearchCriteriaInterface::SORT_DESC)->create(),
+                    $orderBuilder->setField('city')->setDirection(SearchCriteriaInterface::SORT_ASC)->create(),
+                ],
+                [
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
+                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
                 ],
             ],
-            'Addresses with postcode of either 75477 or 47676' => [
+            'Addresses with postcode of either 75477 or 47676 sorted by city desc' => [
                 [],
                 [
                     $filterBuilder->setField('postcode')->setValue('75477')->create(),
-                    $filterBuilder->setField('postcode')->setValue('47676')->create()
+                    $filterBuilder->setField('postcode')->setValue('47676')->create(),
                 ],
                 [
-                    1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John']
+                    $orderBuilder->setField('city')->setDirection(SearchCriteriaInterface::SORT_DESC)->create(),
+                ],
+                [
+                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
                 ],
             ],
-            'Addresses with postcode greater than 0' => [
+            'Addresses with postcode greater than 0 sorted by firstname asc, postcode desc' => [
                 [$filterBuilder->setField('postcode')->setValue('0')->setConditionType('gt')->create()],
                 null,
                 [
-                    1 => ['city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    2 => ['city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John']
+                    $orderBuilder->setField('firstname')->setDirection(SearchCriteriaInterface::SORT_ASC)->create(),
+                    $orderBuilder->setField('postcode')->setDirection(SearchCriteriaInterface::SORT_ASC)->create(),
                 ],
-            ]
+                [
+                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
+                ],
+            ],
         ];
     }
 
     /**
      * Helper function that returns an Address Data Object that matches the data from customer_address fixture
      *
-     * @return \Magento\Customer\Api\Data\AddressDataBuilder
+     * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    private function _createFirstAddressBuilder()
+    private function _createFirstAddress()
     {
-        $addressBuilder = $this->_addressBuilder->populate($this->_expectedAddresses[0]);
-        $addressBuilder->setId(null);
-        $addressBuilder->setRegion($this->_expectedAddresses[0]->getRegion());
-        return $addressBuilder;
+        $address = $this->_addressFactory->create();
+        $this->dataObjectHelper->mergeDataObjects(
+            '\Magento\Customer\Api\Data\AddressInterface',
+            $address,
+            $this->_expectedAddresses[0]
+        );
+        $address->setId(null);
+        $address->setRegion($this->_expectedAddresses[0]->getRegion());
+        return $address;
     }
 
     /**
      * Helper function that returns an Address Data Object that matches the data from customer_two_address fixture
      *
-     * @return \Magento\Customer\Api\Data\AddressDataBuilder
+     * @return \Magento\Customer\Api\Data\AddressInterface
      */
-    private function _createSecondAddressBuilder()
+    private function _createSecondAddress()
     {
-        $addressBuilder =  $this->_addressBuilder->populate($this->_expectedAddresses[1]);
-        $addressBuilder->setId(null);
-        $addressBuilder->setRegion($this->_expectedAddresses[1]->getRegion());
-        return $addressBuilder;
+        $address = $this->_addressFactory->create();
+        $this->dataObjectHelper->mergeDataObjects(
+            '\Magento\Customer\Api\Data\AddressInterface',
+            $address,
+            $this->_expectedAddresses[1]
+        );
+        $address->setId(null);
+        $address->setRegion($this->_expectedAddresses[1]->getRegion());
+        return $address;
     }
 }

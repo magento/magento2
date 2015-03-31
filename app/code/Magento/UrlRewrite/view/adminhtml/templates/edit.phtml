@@ -7,12 +7,12 @@
 // @codingStandardsIgnoreFile
 
 /**
- * @var $this \Magento\UrlRewrite\Block\Edit
+ * @var $block \Magento\UrlRewrite\Block\Edit
  */
 ?>
-<?php echo $this->getChildHtml() ?>
+<?php echo $block->getChildHtml() ?>
 
-<?php if ($this->getChildBlock('form')): ?>
+<?php if ($block->getChildBlock('form')): ?>
 <script>
 require([
     'jquery',
@@ -21,7 +21,7 @@ require([
 ], function($){
 
     $('#edit_form').form()
-        .validation({validationUrl: '<?php echo $this->getValidationUrl() ?>'});
+        .validation({validationUrl: '<?php echo $block->getValidationUrl() ?>'});
 
 });
 </script>

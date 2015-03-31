@@ -159,7 +159,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $element = $this->accountBlock->getForm()->getElement('firstname');
 
         // Make sure readonly has not been set (is null) or set to false
-        $this->assertTrue(is_null($element->getReadonly()) || !$element->getReadonly());
+        $this->assertTrue($element->getReadonly() === null || !$element->getReadonly());
     }
 
     /**
@@ -167,10 +167,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      */
     public function testNewCustomer()
     {
-        /** @var \Magento\Customer\Api\Data\CustomerDataBuilder $customerBuilder */
-        $customerBuilder = $this->objectManager->get('Magento\Customer\Api\Data\CustomerDataBuilder');
+        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        $customerFactory = $this->objectManager->get('Magento\Customer\Api\Data\CustomerInterfaceFactory');
         $customerData = $this->dataObjectProcessor
-            ->buildOutputDataArray($customerBuilder->create(), '\Magento\Customer\Api\Data\CustomerInterface');
+            ->buildOutputDataArray($customerFactory->create(), '\Magento\Customer\Api\Data\CustomerInterface');
         $this->backendSession->setCustomerData(
             ['customer_id' => 0, 'account' => $customerData]
         );

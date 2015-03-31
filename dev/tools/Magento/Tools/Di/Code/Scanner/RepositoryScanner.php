@@ -11,6 +11,11 @@ namespace Magento\Tools\Di\Code\Scanner;
 class RepositoryScanner implements ScannerInterface
 {
     /**
+     * @var bool
+     */
+    private $useAutoload = true;
+
+    /**
      * Get array of class names
      *
      * @param array $files
@@ -28,19 +33,17 @@ class RepositoryScanner implements ScannerInterface
                 $forType = $node->attributes->getNamedItem('for');
                 $replacementType = $node->attributes->getNamedItem('type');
                 if (
-                    !is_null($forType)
-                    && !is_null($replacementType)
+                    $forType !== null
+                    && $replacementType !== null
                     && (substr($forType->nodeValue, -19) == 'RepositoryInterface')
                 ) {
-                    if (!class_exists($replacementType->nodeValue)) {
+                    if (!class_exists($replacementType->nodeValue, $this->useAutoload)) {
                         $persistor = str_replace('\\Repository', 'InterfacePersistor', $replacementType->nodeValue);
                         $factory = str_replace('\\Repository', 'InterfaceFactory', $replacementType->nodeValue);
-                        $dataBuilder = str_replace('\\Repository', 'DataBuilder', $replacementType->nodeValue);
                         $searchResultFactory
                             = str_replace('\\Repository', 'SearchResultInterfaceFactory', $replacementType->nodeValue);
                         $repositoryClassNames[$persistor] = $persistor;
                         $repositoryClassNames[$factory] = $factory;
-                        $repositoryClassNames[$dataBuilder] = $dataBuilder;
                         $repositoryClassNames[$searchResultFactory] = $searchResultFactory;
                         $repositoryClassNames[$replacementType->nodeValue] = $replacementType->nodeValue;
                     }
@@ -48,5 +51,16 @@ class RepositoryScanner implements ScannerInterface
             }
         }
         return $repositoryClassNames;
+    }
+
+    /**
+     * Sets autoload flag
+     *
+     * @param boolean $useAutoload
+     * @return void
+     */
+    public function setUseAutoload($useAutoload)
+    {
+        $this->useAutoload = $useAutoload;
     }
 }

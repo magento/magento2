@@ -8,10 +8,12 @@
 namespace Magento\Webapi\Controller;
 
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Webapi\Model\PathProcessor;
+use Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\Response;
 
 /**
- * TODO: Consider warnings suppression removal
+ *
+ * SOAP Web API entry point.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -52,11 +54,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
     protected $_errorProcessor;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface
-     */
-    protected $_layout;
-
-    /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
@@ -72,27 +69,25 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
     protected $areaList;
 
     /**
+     * Initialize dependencies.
+     *
      * @param Soap\Request $request
      * @param Response $response
      * @param \Magento\Webapi\Model\Soap\Wsdl\Generator $wsdlGenerator
      * @param \Magento\Webapi\Model\Soap\Server $soapServer
      * @param ErrorProcessor $errorProcessor
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param PathProcessor $pathProcessor
      * @param \Magento\Framework\App\AreaList $areaList
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Webapi\Controller\Soap\Request $request,
-        Response $response,
+        \Magento\Framework\Webapi\Response $response,
         \Magento\Webapi\Model\Soap\Wsdl\Generator $wsdlGenerator,
         \Magento\Webapi\Model\Soap\Server $soapServer,
         ErrorProcessor $errorProcessor,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         PathProcessor $pathProcessor,
         \Magento\Framework\App\AreaList $areaList
@@ -104,7 +99,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
         $this->_errorProcessor = $errorProcessor;
         $this->_appState = $appState;
         $this->_localeResolver = $localeResolver;
-        $this->_layout = $layout;
         $this->_pathProcessor = $pathProcessor;
         $this->areaList = $areaList;
     }
@@ -119,8 +113,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
     {
         $path = $this->_pathProcessor->process($request->getPathInfo());
         $this->_request->setPathInfo($path);
-        $this->areaList->getArea($this->_appState->getAreaCode())
-            ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
+        $this->areaList->getArea($this->_appState->getAreaCode())->load(\Magento\Framework\App\Area::PART_TRANSLATE);
         try {
             if ($this->_isWsdlRequest()) {
                 $responseBody = $this->_wsdlGenerator->generate(
@@ -162,9 +155,9 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
             if (isset($token[1]) && is_string($token[1])) {
                 return $token[1];
             }
-            throw new AuthorizationException('Authentication header format is invalid.');
+            throw new AuthorizationException(__('Authentication header format is invalid.'));
         }
-        throw new AuthorizationException('Authentication header is absent.');
+        throw new AuthorizationException(__('Authentication header is absent.'));
     }
 
     /**
@@ -192,7 +185,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
             $this->_localeResolver,
             $this->_appState
         );
-        // TODO: Generate list of available URLs when invalid WSDL URL specified
         $this->_setResponseBody($soapFault->toXml());
     }
 

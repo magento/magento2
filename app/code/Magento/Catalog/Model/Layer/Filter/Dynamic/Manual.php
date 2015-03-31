@@ -49,6 +49,7 @@ class Manual implements AlgorithmInterface
      * @param int[] $intervals
      * @param string $additionalRequestData
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getItemsData(array $intervals = [], $additionalRequestData = '')
     {

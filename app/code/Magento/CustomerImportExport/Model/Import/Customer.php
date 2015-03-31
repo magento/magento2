@@ -118,7 +118,6 @@ class Customer extends AbstractCustomer
     protected $masterAttributeCode = 'email';
 
     /**
-     * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -134,7 +133,6 @@ class Customer extends AbstractCustomer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
@@ -160,7 +158,6 @@ class Customer extends AbstractCustomer
         }
 
         parent::__construct(
-            $coreData,
             $string,
             $scopeConfig,
             $importFactory,
@@ -295,11 +292,11 @@ class Customer extends AbstractCustomer
         $attributesToSave = [];
 
         // entity table data
-        $now = new \DateTime('@' . time());
+        $now = new \DateTime();
         if (empty($rowData['created_at'])) {
             $createdAt = $now;
         } else {
-            $createdAt = new \DateTime('@' . strtotime($rowData['created_at']));
+            $createdAt = (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
         }
         $entityRow = [
             'group_id' => empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'],
@@ -336,7 +333,7 @@ class Customer extends AbstractCustomer
                 if ('select' == $attributeParameters['type']) {
                     $value = $attributeParameters['options'][strtolower($value)];
                 } elseif ('datetime' == $attributeParameters['type']) {
-                    $value = new \DateTime('@' . strtotime($value));
+                    $value = (new \DateTime())->setTimestamp(strtotime($value));
                     $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
                 } elseif ($backendModel) {
                     $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));

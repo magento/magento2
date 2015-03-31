@@ -6,58 +6,58 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
-$elementName = $this->getElement()->getName() . '[images]';
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
+$elementName = $block->getElement()->getName() . '[images]';
 ?>
-<div id="<?php echo $this->getHtmlId() ?>"
+<div id="<?php echo $block->getHtmlId() ?>"
      class='gallery'
-     data-mage-init='{"productGallery":{"template":"#<?php echo $this->getHtmlId() ?>-template"}}'
-     data-images="<?php echo $this->escapeHtml($this->getImagesJson()) ?>"
-     data-types="<?php echo $this->escapeHtml(
-         $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getImageTypes())
+     data-mage-init='{"productGallery":{"template":"#<?php echo $block->getHtmlId() ?>-template"}}'
+     data-images="<?php echo $block->escapeHtml($block->getImagesJson()) ?>"
+     data-types="<?php echo $block->escapeHtml(
+         $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
      ) ?>"
     >
-    <?php if (!$this->getElement()->getReadonly()) {
+    <?php if (!$block->getElement()->getReadonly()) {
     ?>
         <div class="image image-placeholder">
-            <?php echo $this->getUploaderHtml();
+            <?php echo $block->getUploaderHtml();
     ?>
-            <img class="spacer" src="<?php echo $this->getViewFileUrl('images/spacer.gif')?>"/>
+            <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
             <p class="image-placeholder-text"><?php echo __('Click here or drag and drop to add images');
     ?></p>
         </div>
     <?php 
 } ?>
-    <?php foreach ($this->getImageTypes() as $typeData) {
+    <?php foreach ($block->getImageTypes() as $typeData) {
     ?>
-        <input name="<?php echo $this->escapeHtml($typeData['name']) ?>"
-               class="image-<?php echo $this->escapeHtml($typeData['code']) ?>"
+        <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
+               class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
-               value="<?php echo $this->escapeHtml($typeData['value']) ?>"/>
+               value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
     <?php 
 } ?>
 
 
-    <script id="<?php echo $this->getHtmlId() ?>-template" type="text/x-jquery-tmpl">
-        <div class="image item {{if disabled == 1 }}hidden-for-front{{/if}}"
+    <script id="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
+        <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
              data-role="image">
-            <input type="hidden" name="<?php echo $elementName ?>[${file_id}][position]" value="${position}" class="position"/>
-            <input type="hidden" name="<?php echo $elementName ?>[${file_id}][file]" value="${file}"/>
-            <input type="hidden" name="<?php echo $elementName ?>[${file_id}][value_id]" value="${value_id}"/>
-            <input type="hidden" name="<?php echo $elementName ?>[${file_id}][label]" value="${label}"/>
-            <input type="hidden" name="<?php echo $elementName ?>[${file_id}][disabled]" value="${disabled}"/>
-            <input type="hidden" name="<?php echo $elementName ?>[${file_id}][removed]" value="" class="is-removed"/>
+            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
+            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][file]" value="<%- data.file %>"/>
+            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
+            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][label]" value="<%- data.label %>"/>
+            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][disabled]" value="<%- data.disabled %>"/>
+            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][removed]" value="" class="is-removed"/>
             <ul class="type-labels" style="display: none">
-                <?php foreach ($this->getImageTypes() as $typeData) {
+                <?php foreach ($block->getImageTypes() as $typeData) {
     ?>
-                    <li class="type-<?php echo $this->escapeHtml(
+                    <li class="type-<?php echo $block->escapeHtml(
                         $typeData['code']
-                    ) ?>"><?php echo $this->escapeHtml($typeData['label']) ?></li>
+                    ) ?>"><?php echo $block->escapeHtml($typeData['label']) ?></li>
                 <?php 
 } ?>
             </ul>
-            <img class="spacer" src="<?php echo $this->getViewFileUrl('images/spacer.gif')?>"/>
-            <img class="product-image" src="${url}" alt="${label}"/>
+            <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
+            <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
             <div class="actions" >
                 <button type="button" class="action-delete" data-role="delete-button" title="<?php echo __('Delete image') ?>">
                     <span> <?php echo __('Delete image') ?></span >
@@ -71,13 +71,13 @@ $elementName = $this->getElement()->getName() . '[images]';
             <div class="image-fade"><span><?php echo __('Hidden') ?></span></div>
         </div>
     </script>
-    <script class="dialog-template" type="text/x-jquery-tmpl"  data-title="Image Options">
+    <script class="dialog-template" type="text/x-magento-template"  data-title="Image Options">
         <div class="image-panel" data-role="dialog">
             <div class="image-panel-preview">
-                <img src="${url}" alt="${label}" />
+                <img src="<%- data.url %>" alt="<%- data.label %>" />
             </div>
             <div class="image-panel-controls">
-                <strong class="image-name">${label}</strong>
+                <strong class="image-name"><%- data.label %></strong>
 
                 <button type="button" class="action-remove"
                         title="<?php echo __('Remove Image'); ?>">
@@ -92,7 +92,7 @@ $elementName = $this->getElement()->getName() . '[images]';
                         <div class="control">
                             <textarea id="image-description"
                                       rows="3"
-                                      name="<?php echo $elementName ?>[${file_id}][label]">${label}</textarea>
+                                      name="<?php echo $elementName ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
                         </div>
                     </div>
 
@@ -102,16 +102,16 @@ $elementName = $this->getElement()->getName() . '[images]';
                         </label>
                         <div class="control">
                             <ul class="multiselect-alt">
-                                <?php foreach ($this->getMediaAttributes() as $attribute) {
+                                <?php foreach ($block->getMediaAttributes() as $attribute) {
     ?>
                                     <li class="item">
                                         <label>
                                             <input class="image-type"
                                                    data-role="type-selector"
                                                    type="checkbox"
-                                                   value="<?php echo $this->escapeHtml($attribute->getAttributeCode()) ?>"
+                                                   value="<?php echo $block->escapeHtml($attribute->getAttributeCode()) ?>"
                                                 />
-                                            <?php echo $this->escapeHtml($attribute->getFrontendLabel()) ?>
+                                            <?php echo $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                         </label>
                                     </li>
                                 <?php 
@@ -125,8 +125,8 @@ $elementName = $this->getElement()->getName() . '[images]';
                             <input type="checkbox"
                                    data-role="visibility-trigger"
                                    value="1"
-                                   name="<?php echo $elementName ?>[${file_id}][disabled]"
-                            {{if disabled == 1 }}checked="checked"{{/if}} />
+                                   name="<?php echo $elementName ?>[<%- data.file_id %>][disabled]"
+                            <% if (data.disabled == 1) { %>checked="checked"<% } %> />
                             <span><?php echo __('Hide from Product Page')?></span>
                         </label>
                     </div>

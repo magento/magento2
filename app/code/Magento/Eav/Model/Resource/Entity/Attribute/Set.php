@@ -13,6 +13,11 @@ namespace Magento\Eav\Model\Resource\Entity\Attribute;
 class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
+     * EAV cache ids
+     */
+    const ATTRIBUTES_CACHE_ID = 'EAV_ENTITY_ATTRIBUTES_BY_SET_ID';
+
+    /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory
      */
     protected $_attrGroupFactory;
@@ -23,16 +28,18 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Resource\Entity\Attribute\GroupFactory $attrGroupFactory,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        $resourcePrefix = null
     ) {
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
         $this->_attrGroupFactory = $attrGroupFactory;
         $this->eavConfig = $eavConfig;
     }
@@ -88,7 +95,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\StateException
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _beforeDelete(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -97,7 +104,9 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->getEntityType($object->getEntityTypeId())
             ->getDefaultAttributeSetId();
         if ($object->getAttributeSetId() == $defaultAttributeSetId) {
-            throw new \Magento\Framework\Exception\StateException('Default attribute set can not be deleted');
+            throw new \Magento\Framework\Exception\StateException(
+                __('Default attribute set can not be deleted')
+            );
         }
         return parent::_beforeDelete($object);
     }
@@ -138,43 +147,38 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getSetInfo(array $attributeIds, $setId = null)
     {
-        $adapter = $this->_getReadAdapter();
-        $setInfo = [];
-        $attributeToSetInfo = [];
+        $cacheKey = self::ATTRIBUTES_CACHE_ID . $setId;
 
-        if (count($attributeIds) > 0) {
-            $select = $adapter->select()->from(
-                ['entity' => $this->getTable('eav_entity_attribute')],
-                ['attribute_id', 'attribute_set_id', 'attribute_group_id', 'sort_order']
-            )->joinLeft(
-                ['attribute_group' => $this->getTable('eav_attribute_group')],
-                'entity.attribute_group_id = attribute_group.attribute_group_id',
-                ['group_sort_order' => 'sort_order']
-            )->where(
-                'entity.attribute_id IN (?)',
-                $attributeIds
-            );
-            $bind = [];
-            if (is_numeric($setId)) {
-                $bind[':attribute_set_id'] = $setId;
-                $select->where('entity.attribute_set_id = :attribute_set_id');
-            }
-            $result = $adapter->fetchAll($select, $bind);
+        if ($this->eavConfig->isCacheEnabled() && ($cache = $this->eavConfig->getCache()->load($cacheKey))) {
+            $setInfoData = unserialize($cache);
+        } else {
+            $attributeSetData = $this->fetchAttributeSetData($setId);
 
-            foreach ($result as $row) {
+            $setInfoData = [];
+            foreach ($attributeSetData as $row) {
                 $data = [
                     'group_id' => $row['attribute_group_id'],
                     'group_sort' => $row['group_sort_order'],
                     'sort' => $row['sort_order'],
                 ];
-                $attributeToSetInfo[$row['attribute_id']][$row['attribute_set_id']] = $data;
+                $setInfoData[$row['attribute_id']][$row['attribute_set_id']] = $data;
+            }
+
+            if ($this->eavConfig->isCacheEnabled()) {
+                $this->eavConfig->getCache()->save(
+                    serialize($setInfoData),
+                    $cacheKey,
+                    [
+                        \Magento\Eav\Model\Cache\Type::CACHE_TAG,
+                        \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    ]
+                );
             }
         }
 
-        foreach ($attributeIds as $atttibuteId) {
-            $setInfo[$atttibuteId] = isset(
-                $attributeToSetInfo[$atttibuteId]
-            ) ? $attributeToSetInfo[$atttibuteId] : [];
+        $setInfo = [];
+        foreach ($attributeIds as $attributeId) {
+            $setInfo[$attributeId] = isset($setInfoData[$attributeId]) ? $setInfoData[$attributeId] : [];
         }
 
         return $setInfo;
@@ -201,5 +205,30 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
             1
         );
         return $adapter->fetchOne($select, $bind);
+    }
+
+    /**
+     * Returns data from eav_entity_attribute table for given $setId (or all if $setId is null)
+     *
+     * @param int $setId
+     * @return array
+     */
+    protected function fetchAttributeSetData($setId = null)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()->from(
+            ['entity' => $this->getTable('eav_entity_attribute')],
+            ['attribute_id', 'attribute_set_id', 'attribute_group_id', 'sort_order']
+        )->joinLeft(
+            ['attribute_group' => $this->getTable('eav_attribute_group')],
+            'entity.attribute_group_id = attribute_group.attribute_group_id',
+            ['group_sort_order' => 'sort_order']
+        );
+        $bind = [];
+        if (is_numeric($setId)) {
+            $bind[':attribute_set_id'] = $setId;
+            $select->where('entity.attribute_set_id = :attribute_set_id');
+        }
+        return $adapter->fetchAll($select, $bind);
     }
 }

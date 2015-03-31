@@ -73,7 +73,7 @@
                     </action>
                 </block>
             </block>
-            <block class="Magento\Core\Block\RequireCookie" name="require-cookie" template="Magento_Core::require_cookie.phtml">
+            <block class="Magento\Cookie\Block\RequireCookie" name="require-cookie" template="Magento_Cookie::require_cookie.phtml">
                 <arguments>
                     <argument name="triggers" xsi:type="array">
                         <item name="compareProductLink" xsi:type="string">.action.tocompare</item>
@@ -82,6 +82,10 @@
             </block>
         </referenceContainer>
         <referenceBlock name="page.main.title">
+            <arguments>
+                <argument name="id" xsi:type="string">page-title-heading</argument>
+                <argument name="add_base_attribute_aria" xsi:type="string">page-title-heading toolbar-amount</argument>
+            </arguments>
             <block class="Magento\Catalog\Block\Category\Rss\Link" name="rss.link" template="Magento_Catalog::category/rss.phtml"/>
         </referenceBlock>
     </body>

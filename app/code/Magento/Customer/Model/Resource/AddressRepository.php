@@ -10,6 +10,7 @@ namespace Magento\Customer\Model\Resource;
 use Magento\Customer\Model\Address as CustomerAddressModel;
 use Magento\Customer\Model\Resource\Address\Collection;
 use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 
@@ -46,9 +47,9 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     protected $addressResourceModel;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressSearchResultsDataBuilder
+     * @var \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory
      */
-    protected $addressSearchResultsBuilder;
+    protected $addressSearchResultsFactory;
 
     /**
      * @var \Magento\Customer\Model\Resource\Address\CollectionFactory
@@ -61,7 +62,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
      * @param \Magento\Customer\Model\Resource\Address $addressResourceModel
      * @param \Magento\Directory\Helper\Data $directoryData
-     * @param \Magento\Customer\Api\Data\AddressSearchResultsDataBuilder $addressSearchResultsBuilder
+     * @param \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory $addressSearchResultsFactory
      * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressCollectionFactory
      */
     public function __construct(
@@ -70,7 +71,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         \Magento\Customer\Model\CustomerRegistry $customerRegistry,
         \Magento\Customer\Model\Resource\Address $addressResourceModel,
         \Magento\Directory\Helper\Data $directoryData,
-        \Magento\Customer\Api\Data\AddressSearchResultsDataBuilder $addressSearchResultsBuilder,
+        \Magento\Customer\Api\Data\AddressSearchResultsInterfaceFactory $addressSearchResultsFactory,
         \Magento\Customer\Model\Resource\Address\CollectionFactory $addressCollectionFactory
     ) {
         $this->addressFactory = $addressFactory;
@@ -78,7 +79,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $this->customerRegistry = $customerRegistry;
         $this->addressResource = $addressResourceModel;
         $this->directoryData = $directoryData;
-        $this->addressSearchResultsBuilder = $addressSearchResultsBuilder;
+        $this->addressSearchResultsFactory = $addressSearchResultsFactory;
         $this->addressCollectionFactory = $addressCollectionFactory;
     }
 
@@ -97,7 +98,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
             $addressModel = $this->addressRegistry->retrieve($address->getId());
         }
 
-        if (is_null($addressModel)) {
+        if ($addressModel === null) {
             $addressModel = $this->addressFactory->create();
             $addressModel->updateData($address);
             $addressModel->setCustomer($customerModel);
@@ -135,13 +136,13 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     /**
      * Retrieve customers addresses matching the specified criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\AddressSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $this->addressSearchResultsBuilder->setSearchCriteria($searchCriteria);
+        $searchResults = $this->addressSearchResultsFactory->create();
 
         /** @var Collection $collection */
         $collection = $this->addressCollectionFactory->create();
@@ -149,29 +150,27 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
-        $this->addressSearchResultsBuilder->setTotalCount($collection->getSize());
-        $sortOrders = $searchCriteria->getSortOrders();
+        $searchResults->setTotalCount($collection->getSize());
         /** @var SortOrder $sortOrder */
-        if ($sortOrders) {
-            foreach ($searchCriteria->getSortOrders() as $sortOrder) {
-                $field = $sortOrder->getField();
-                $collection->addOrder(
-                    $field,
-                    ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
-                );
-            }
+        foreach ((array)$searchCriteria->getSortOrders() as $sortOrder) {
+            $field = $sortOrder->getField();
+            $collection->addOrder(
+                $field,
+                ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+            );
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
 
         /** @var \Magento\Customer\Api\Data\AddressInterface[] $addresses */
         $addresses = [];
-        $addressIds = $collection->getAllIds();
-        foreach ($addressIds as $addressId) {
-            $addresses[] = $this->getById($addressId);
+        /** @var \Magento\Customer\Model\Address $address */
+        foreach ($collection->getItems() as $address) {
+            $addresses[] = $this->getById($address->getId());
         }
-        $this->addressSearchResultsBuilder->setItems($addresses);
-        return $this->addressSearchResultsBuilder->create();
+        $searchResults->setItems($addresses);
+        $searchResults->setSearchCriteria($searchCriteria);
+        return $searchResults;
     }
 
     /**
@@ -249,41 +248,41 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getFirstname(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname']));
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getLastname(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname']));
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getStreetLine(1), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'street']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'street']));
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getCity(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'city']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'city']));
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getTelephone(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'telephone']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'telephone']));
         }
 
         $havingOptionalZip = $this->directoryData->getCountriesWithOptionalZip();
         if (!in_array($customerAddressModel->getCountryId(), $havingOptionalZip)
             && !\Zend_Validate::is($customerAddressModel->getPostcode(), 'NotEmpty')
         ) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'postcode']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'postcode']));
         }
 
         if (!\Zend_Validate::is($customerAddressModel->getCountryId(), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'countryId']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'countryId']));
         }
 
         if ($customerAddressModel->getCountryModel()->getRegionCollection()->getSize()
             && !\Zend_Validate::is($customerAddressModel->getRegionId(), 'NotEmpty')
             && $this->directoryData->isRegionRequired($customerAddressModel->getCountryId())
         ) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'regionId']);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'regionId']));
         }
 
         return $exception;

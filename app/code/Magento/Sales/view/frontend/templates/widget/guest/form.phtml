@@ -6,15 +6,15 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\Sales\Block\Widget\Guest\Form */
+/** @var $block \Magento\Sales\Block\Widget\Guest\Form */
 ?>
-<?php if ($this->isEnable()): ?>
+<?php if ($block->isEnable()): ?>
     <div class="widget block block-orders-returns">
         <div class="block-title">
             <strong role="heading" aria-level="2"><?php echo __('Orders and Returns') ?></strong>
         </div>
         <div class="block-content">
-            <form id="oar-widget-orders-and-returns-form" data-mage-init='{"ordersReturns":{},"validation":{}}' action="<?php echo $this->getActionUrl() ?>" method="post"
+            <form id="oar-widget-orders-and-returns-form" data-mage-init='{"ordersReturns":{},"validation":{}}' action="<?php echo $block->getActionUrl() ?>" method="post"
                   class="form form-orders-search" name="guest_post">
                 <fieldset class="fieldset">
                     <div class="field find required">
@@ -63,7 +63,7 @@
                 </fieldset>
                 <div class="actions-toolbar">
                     <div class="primary">
-                        <button type="submit" title="<?php echo $this->escapeHtml(__('Search')) ?>" class="action search">
+                        <button type="submit" title="<?php echo $block->escapeHtml(__('Search')) ?>" class="action search">
                             <span><?php echo __('Search') ?></span>
                         </button>
                     </div>

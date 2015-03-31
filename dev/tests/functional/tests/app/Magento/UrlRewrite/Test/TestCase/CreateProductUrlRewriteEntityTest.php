@@ -13,9 +13,8 @@ use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Product URL Rewrites Entity
- *
  * Test Flow:
+ *
  * Preconditions:
  * 1. Create custom storeView
  * 2. Create simple product

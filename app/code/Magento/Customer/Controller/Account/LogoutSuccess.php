@@ -11,11 +11,10 @@ class LogoutSuccess extends \Magento\Customer\Controller\Account
     /**
      * Logout success page
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Page
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
+        return $this->resultPageFactory->create();
     }
 }

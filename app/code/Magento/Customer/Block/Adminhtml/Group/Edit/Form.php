@@ -28,9 +28,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_groupRepository;
 
     /**
-     * @var \Magento\Customer\Api\Data\GroupDataBuilder
+     * @var \Magento\Customer\Api\Data\GroupInterfaceFactory
      */
-    protected $_groupBuilder;
+    protected $groupDataFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -39,7 +39,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Tax\Model\TaxClass\Source\Customer $taxCustomer
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @param \Magento\Customer\Api\Data\GroupDataBuilder $groupBuilder
+     * @param \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory
      * @param array $data
      */
     public function __construct(
@@ -49,13 +49,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Tax\Model\TaxClass\Source\Customer $taxCustomer,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Customer\Api\Data\GroupDataBuilder $groupBuilder,
+        \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory,
         array $data = []
     ) {
         $this->_taxCustomer = $taxCustomer;
         $this->_taxHelper = $taxHelper;
         $this->_groupRepository = $groupRepository;
-        $this->_groupBuilder = $groupBuilder;
+        $this->groupDataFactory = $groupDataFactory;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -72,9 +72,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create();
 
         $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
-        /** @var \Magento\Customer\Api\Data\GroupDataBuilder $customerGroup */
-        if (is_null($groupId)) {
-            $customerGroup = $this->_groupBuilder->create();
+        /** @var \Magento\Customer\Api\Data\GroupInterface $customerGroup */
+        if ($groupId === null) {
+            $customerGroup = $this->groupDataFactory->create();
             $defaultCustomerTaxClass = $this->_taxHelper->getDefaultCustomerTaxClass();
         } else {
             $customerGroup = $this->_groupRepository->getById($groupId);
@@ -120,7 +120,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        if (!is_null($customerGroup->getId())) {
+        if ($customerGroup->getId() !== null) {
             // If edit add id
             $form->addField('id', 'hidden', ['name' => 'id', 'value' => $customerGroup->getId()]);
         }

@@ -29,14 +29,32 @@ class Statistics extends \Magento\Backend\App\Action
     protected $_dateFilter;
 
     /**
+     * Codes for Refresh Statistics
+     *
+     * @var []
+     */
+    protected $reportTypes;
+
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+     * @param [] $reportTypes
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
+        array $reportTypes
     ) {
         $this->_dateFilter = $dateFilter;
+        $this->reportTypes = $reportTypes;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -72,19 +90,9 @@ class Statistics extends \Magento\Backend\App\Action
             $codes = explode(',', $codes);
         }
 
-        $aliases = [
-            'sales' => 'Magento\Sales\Model\Resource\Report\Order',
-            'tax' => 'Magento\Tax\Model\Resource\Report\Tax',
-            'shipping' => 'Magento\Sales\Model\Resource\Report\Shipping',
-            'invoiced' => 'Magento\Sales\Model\Resource\Report\Invoiced',
-            'refunded' => 'Magento\Sales\Model\Resource\Report\Refunded',
-            'coupons' => 'Magento\SalesRule\Model\Resource\Report\Rule',
-            'bestsellers' => 'Magento\Sales\Model\Resource\Report\Bestsellers',
-            'viewed' => 'Magento\Reports\Model\Resource\Report\Product\Viewed',
-        ];
         $out = [];
         foreach ($codes as $code) {
-            $out[] = $aliases[$code];
+            $out[] = $this->reportTypes[$code];
         }
         return $out;
     }
@@ -106,7 +114,7 @@ class Statistics extends \Magento\Backend\App\Action
      */
     protected function _getSession()
     {
-        if (is_null($this->_adminSession)) {
+        if ($this->_adminSession === null) {
             $this->_adminSession = $this->_objectManager->get('Magento\Backend\Model\Auth\Session');
         }
         return $this->_adminSession;

@@ -136,7 +136,7 @@
                             <argument name="header" xsi:type="string" translate="true">Web Site</argument>
                             <argument name="index" xsi:type="string">website_id</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="options" model="Magento\Backend\Model\Config\Source\Website\OptionHash"/>
+                            <argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Website\OptionHash"/>
                             <argument name="header_css_class" xsi:type="string">col-website</argument>
                             <argument name="column_css_class" xsi:type="string">col-website</argument>
                         </arguments>

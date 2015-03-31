@@ -36,22 +36,6 @@
             <path>dev/build/publication/extra_files/ce/CHANGELOG.md</path>
         </item>
         <item>
-            <path>app/code/Magento/User/data/user_setup/data-upgrade-1.6.1.1-1.6.1.2.php</path>
-            <word>xmlconnect</word>
-            <word>system/convert/gui</word>
-            <word>system/convert/profiles</word>
-            <word>Mage_Adminhtml::gui</word>
-            <word>Mage_Adminhtml::profiles</word>
-        </item>
-        <item>
-            <path>app/code/Magento/User/sql/user_setup/upgrade-1.6.1.2-1.6.1.3.php</path>
-            <word>xmlconnect</word>
-            <word>system/convert/gui</word>
-            <word>system/convert/profiles</word>
-            <word>Mage_Adminhtml::gui</word>
-            <word>Mage_Adminhtml::profiles</word>
-        </item>
-        <item>
             <path>dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd_ruleset.xsd</path>
             <word>dataflow</word>
         </item>
@@ -65,30 +49,6 @@
         <item>
             <path>dev/tests/api-functional/testsuite/Magento/Webapi/Routing/RequestIdOverrideTest.php</path>
             <word>overriden</word>
-        </item>
-        <item>
-            <path>app/code/Magento/Bundle/view/adminhtml/templates/product/edit/bundle.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>app/code/Magento/Webapi/view/adminhtml/templates/integration/activate/permissions/tab/webapi.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>app/code/Magento/GiftCard/view/adminhtml/templates/catalog/product/composite/fieldset/giftcard.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>app/code/Magento/GiftRegistry/view/adminhtml/templates/edit/attributes.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>app/code/Magento/GiftRegistry/view/adminhtml/templates/edit/type/select.phtml</path>
-            <word>head.js</word>
-        </item>
-        <item>
-            <path>lib/web/mage/mage.js</path>
-            <word>head.js</word>
         </item>
     </whitelist>
 </config>

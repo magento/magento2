@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Resource\Sale;
 
-use Magento\Core\Model\EntityFactory;
+use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -154,7 +154,7 @@ class Collection extends \Magento\Framework\Data\Collection\Db
             $this->addFieldToFilter('sales.customer_id', $this->_customerId);
         }
 
-        if (!is_null($this->_state)) {
+        if ($this->_state !== null) {
             $condition = '';
             switch ($this->_orderStateCondition) {
                 case 'IN':

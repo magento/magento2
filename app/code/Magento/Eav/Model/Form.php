@@ -149,7 +149,7 @@ abstract class Form
      * @param RequestInterface $httpRequest
      * @param \Magento\Framework\Validator\ConfigFactory $validatorConfigFactory
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -161,10 +161,10 @@ abstract class Form
         \Magento\Framework\Validator\ConfigFactory $validatorConfigFactory
     ) {
         if (empty($this->_moduleName)) {
-            throw new \Magento\Framework\Model\Exception(__('Current module pathname is undefined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Current module pathname is undefined'));
         }
         if (empty($this->_entityTypeCode)) {
-            throw new \Magento\Framework\Model\Exception(__('Current module EAV entity is undefined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Current module EAV entity is undefined'));
         }
         $this->_storeManager = $storeManager;
         $this->_eavConfig = $eavConfig;
@@ -261,7 +261,7 @@ abstract class Form
      */
     public function getStore()
     {
-        if (is_null($this->_store)) {
+        if ($this->_store === null) {
             $this->_store = $this->_storeManager->getStore();
         }
         return $this->_store;
@@ -270,13 +270,13 @@ abstract class Form
     /**
      * Return current form code
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
      */
     public function getFormCode()
     {
         if (empty($this->_formCode)) {
-            throw new \Magento\Framework\Model\Exception(__('Form code is not defined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Form code is not defined'));
         }
         return $this->_formCode;
     }
@@ -289,7 +289,7 @@ abstract class Form
      */
     public function getEntityType()
     {
-        if (is_null($this->_entityType)) {
+        if ($this->_entityType === null) {
             $this->setEntityType($this->_entityTypeCode);
         }
         return $this->_entityType;
@@ -298,13 +298,13 @@ abstract class Form
     /**
      * Return current entity instance
      *
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\AbstractModel
      */
     public function getEntity()
     {
-        if (is_null($this->_entity)) {
-            throw new \Magento\Framework\Model\Exception(__('Entity instance is not defined'));
+        if ($this->_entity === null) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('Entity instance is not defined'));
         }
         return $this->_entity;
     }
@@ -316,7 +316,7 @@ abstract class Form
      */
     public function getAttributes()
     {
-        if (is_null($this->_attributes)) {
+        if ($this->_attributes === null) {
             $this->_attributes = [];
             $this->_userAttributes = [];
             /** @var $attribute \Magento\Eav\Model\Attribute */
@@ -357,7 +357,7 @@ abstract class Form
      */
     public function getUserAttributes()
     {
-        if (is_null($this->_userAttributes)) {
+        if ($this->_userAttributes === null) {
             // load attributes
             $this->getAttributes();
         }
@@ -371,7 +371,7 @@ abstract class Form
      */
     public function getSystemAttributes()
     {
-        if (is_null($this->_systemAttributes)) {
+        if ($this->_systemAttributes === null) {
             // load attributes
             $this->getAttributes();
         }
@@ -385,7 +385,7 @@ abstract class Form
      */
     public function getAllowedAttributes()
     {
-        if (is_null($this->_allowedAttributes)) {
+        if ($this->_allowedAttributes === null) {
             // load attributes
             $this->getAttributes();
         }
@@ -415,10 +415,8 @@ abstract class Form
     public function prepareRequest(array $data)
     {
         $request = clone $this->_httpRequest;
-        $request->setParamSources();
         $request->clearParams();
         $request->setParams($data);
-
         return $request;
     }
 
@@ -451,7 +449,7 @@ abstract class Form
      */
     protected function _getValidator(array $data)
     {
-        if (is_null($this->_validator)) {
+        if ($this->_validator === null) {
             $configFiles = $this->_modulesReader->getConfigurationFiles('validation.xml');
             /** @var $validatorFactory \Magento\Framework\Validator\Config */
             $validatorFactory = $this->_validatorConfigFactory->create(['configFiles' => $configFiles]);

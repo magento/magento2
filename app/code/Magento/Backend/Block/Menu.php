@@ -165,7 +165,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _renderAnchorCssClass($menuItem, $level)
     {
-        return $this->_isItemActive($menuItem, $level) ? 'active' : '';
+        return $this->_isItemActive($menuItem, $level) ? '_active' : '';
     }
 
     /**
@@ -191,7 +191,7 @@ class Menu extends \Magento\Backend\Block\Template
         $output = ($this->_isItemActive(
             $menuItem,
             $level
-        ) ? 'active' : '') .
+        ) ? '_active' : '') .
             ' ' .
             ($menuItem->hasChildren() ? 'parent' : '') .
             ' ' .
@@ -210,16 +210,24 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _renderAnchor($menuItem, $level)
     {
-        return '<a href="' . $menuItem->getUrl() . '" ' . $this->_renderItemAnchorTitle(
-            $menuItem
-        ) . $this->_renderItemOnclickFunction(
-            $menuItem
-        ) . ' class="' . $this->_renderAnchorCssClass(
-            $menuItem,
-            $level
-        ) . '">' . '<span>' . $this->_getAnchorLabel(
-            $menuItem
-        ) . '</span>' . '</a>';
+        if ($level == 1 && $menuItem->getUrl() == '#') {
+            $output = '<strong class="submenu-group-title" role="presentation">'
+                . '<span>' . $this->_getAnchorLabel($menuItem) . '</span>'
+                . '</strong>';
+        } else {
+            $output = '<a href="' . $menuItem->getUrl() . '" ' . $this->_renderItemAnchorTitle(
+                $menuItem
+            ) . $this->_renderItemOnclickFunction(
+                $menuItem
+            ) . ' class="' . $this->_renderAnchorCssClass(
+                $menuItem,
+                $level
+            ) . '">' . '<span>' . $this->_getAnchorLabel(
+                $menuItem
+            ) . '</span>' . '</a>';
+        }
+
+        return $output;
     }
 
     /**
@@ -286,7 +294,7 @@ class Menu extends \Magento\Backend\Block\Template
             'admin_top_nav',
             $this->getActive(),
             $this->_authSession->getUser()->getId(),
-            $this->_localeResolver->getLocaleCode(),
+            $this->_localeResolver->getLocale(),
         ];
         // Add additional key parameters if needed
         $newCacheKeyInfo = $this->getAdditionalCacheKeyInfo();
@@ -315,7 +323,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     public function renderMenu($menu, $level = 0)
     {
-        $output = '<ul ' . (0 == $level ? 'id="nav"' : '') . ' >';
+        $output = '<ul ' . (0 == $level ? 'id="nav" role="menubar"' : '') . ' >';
 
         /** @var $menuItem \Magento\Backend\Model\Menu\Item  */
         foreach ($this->_getMenuIterator($menu) as $menuItem) {
@@ -326,7 +334,7 @@ class Menu extends \Magento\Backend\Block\Template
                 $level
             ) . '"' . $this->getUiId(
                 $menuItem->getId()
-            ) . '>';
+            ) . 'role="menuitem">';
 
             $output .= $this->_renderAnchor($menuItem, $level);
 
@@ -397,19 +405,23 @@ class Menu extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Model\Menu\Item $menuItem
      * @param int $level
      * @param int $limit
+     * @param $id int
      * @return string HTML code
      */
-    protected function _addSubMenu($menuItem, $level, $limit)
+    protected function _addSubMenu($menuItem, $level, $limit, $id = null)
     {
         $output = '';
         if (!$menuItem->hasChildren()) {
             return $output;
         }
-        $output .= '<div class="submenu">';
+        $output .= '<div class="submenu"' . ($level == 0 && isset($id) ? ' aria-labelledby="' . $id . '"' : '') . '>';
         $colStops = null;
         if ($level == 0 && $limit) {
             $colStops = $this->_columnBrake($menuItem->getChildren(), $limit);
+            $output .= '<strong class="submenu-title">' . $this->_getAnchorLabel($menuItem) . '</strong>';
+            $output .= '<a href="#" class="submenu-close _close" data-role="close-submenu"></a>';
         }
+
         $output .= $this->renderNavigation($menuItem->getChildren(), $level + 1, $limit, $colStops);
         $output .= '</div>';
         return $output;
@@ -423,11 +435,12 @@ class Menu extends \Magento\Backend\Block\Template
      * @param int $limit
      * @param array $colBrakes
      * @return string HTML
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function renderNavigation($menu, $level = 0, $limit = 0, $colBrakes = [])
     {
         $itemPosition = 1;
-        $outputStart = '<ul ' . (0 == $level ? 'id="nav"' : '') . ' >';
+        $outputStart = '<ul ' . (0 == $level ? 'id="nav" role="menubar"' : 'role="menu"') . ' >';
         $output = '';
 
         /** @var $menuItem \Magento\Backend\Model\Menu\Item  */
@@ -437,27 +450,30 @@ class Menu extends \Magento\Backend\Block\Template
             $itemClass = str_replace('_', '-', strtolower($itemName));
 
             if (count($colBrakes) && $colBrakes[$itemPosition]['colbrake']) {
-                $output .= '</ul></li><li class="column"><ul>';
+                $output .= '</ul></li><li class="column"><ul role="menu">';
             }
 
+            $id = $this->getJsId($menuItem->getId());
             $output .= '<li ' . $this->getUiId(
                 $menuItem->getId()
             ) . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass(
                 $menuItem,
                 $level
-            ) . '">' . $this->_renderAnchor(
+            ) . ($level == 0 ? '" id="' . $id . '" aria-haspopup="true' : '')
+                . '" role="menu-item">' . $this->_renderAnchor(
                 $menuItem,
                 $level
             ) . $this->_addSubMenu(
                 $menuItem,
                 $level,
-                $limit
+                $limit,
+                $id
             ) . '</li>';
             $itemPosition++;
         }
 
         if (count($colBrakes) && $limit) {
-            $output = '<li class="column"><ul>' . $output . '</ul></li>';
+            $output = '<li class="column"><ul role="menu">' . $output . '</ul></li>';
         }
 
         return $outputStart . $output . '</ul>';

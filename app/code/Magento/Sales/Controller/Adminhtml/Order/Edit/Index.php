@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -21,15 +20,17 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create\Index
     /**
      * Index page
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->_view->loadLayout();
+        $this->_initSession();
 
-        $this->_initSession()->_setActiveMenu('Magento_Sales::sales_order');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Orders'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Edit Order'));
-        $this->_view->renderLayout();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Magento_Sales::sales_order');
+        $resultPage->getConfig()->getTitle()->prepend(__('Orders'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Edit Order'));
+        return $resultPage;
     }
 }

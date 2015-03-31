@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
     <acl>
         <resources>
-            <resource id="Magento_Adminhtml::admin">
-                <resource id="Magento_Adminhtml::system">
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::system">
                     <resource id="Magento_User::acl" title="Permissions" sortOrder="60">
                         <resource id="Magento_User::acl_users" title="All Users" sortOrder="10" />
                         <resource id="Magento_User::acl_roles" title="User Roles" sortOrder="30" />

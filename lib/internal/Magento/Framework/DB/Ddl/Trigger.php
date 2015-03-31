@@ -86,7 +86,9 @@ class Trigger
     public function setName($name)
     {
         if (!is_string($name)) {
-            throw new \InvalidArgumentException(__('Trigger name should be a string'));
+            throw new \InvalidArgumentException(
+                (string)new \Magento\Framework\Phrase('Trigger name should be a string')
+            );
         }
 
         $this->name = strtolower($name);
@@ -102,7 +104,7 @@ class Trigger
     public function getName()
     {
         if (empty($this->name)) {
-            throw new \Zend_Db_Exception(__('Trigger name is not defined'));
+            throw new \Zend_Db_Exception((string)new \Magento\Framework\Phrase('Trigger name is not defined'));
         }
         return $this->name;
     }
@@ -119,7 +121,7 @@ class Trigger
         if (in_array($time, self::$listOfTimes)) {
             $this->time = strtoupper($time);
         } else {
-            throw new \InvalidArgumentException(__('Trigger unsupported time type'));
+            throw new \InvalidArgumentException((string)new \Magento\Framework\Phrase('Trigger unsupported time type'));
         }
         return $this;
     }
@@ -132,8 +134,8 @@ class Trigger
      */
     public function getTime()
     {
-        if (is_null($this->time)) {
-            throw new \Zend_Db_Exception(__('Trigger time is not defined'));
+        if ($this->time === null) {
+            throw new \Zend_Db_Exception((string)new \Magento\Framework\Phrase('Trigger time is not defined'));
         }
         return $this->time;
     }
@@ -150,7 +152,9 @@ class Trigger
         if (in_array($event, self::$listOfEvents)) {
             $this->event = strtoupper($event);
         } else {
-            throw new \InvalidArgumentException(__('Trigger unsupported event type'));
+            throw new \InvalidArgumentException(
+                (string)new \Magento\Framework\Phrase('Trigger unsupported event type')
+            );
         }
         return $this;
     }
@@ -163,8 +167,8 @@ class Trigger
      */
     public function getEvent()
     {
-        if (is_null($this->event)) {
-            throw new \Zend_Db_Exception(__('Trigger event is not defined'));
+        if ($this->event === null) {
+            throw new \Zend_Db_Exception((string)new \Magento\Framework\Phrase('Trigger event is not defined'));
         }
         return $this->event;
     }
@@ -179,7 +183,9 @@ class Trigger
     public function setTable($name)
     {
         if (!is_string($name)) {
-            throw new \InvalidArgumentException(__('Trigger table name should be a string'));
+            throw new \InvalidArgumentException(
+                (string)new \Magento\Framework\Phrase('Trigger table name should be a string')
+            );
         }
         $this->tableName = strtolower($name);
         return $this;
@@ -194,7 +200,7 @@ class Trigger
     public function getTable()
     {
         if (empty($this->tableName)) {
-            throw new \Zend_Db_Exception(__('Trigger table name is not defined'));
+            throw new \Zend_Db_Exception((string)new \Magento\Framework\Phrase('Trigger table name is not defined'));
         }
         return $this->tableName;
     }
@@ -209,7 +215,9 @@ class Trigger
     public function addStatement($statement)
     {
         if (!is_string($statement)) {
-            throw new \InvalidArgumentException(__('Trigger statement should be a string'));
+            throw new \InvalidArgumentException(
+                (string)new \Magento\Framework\Phrase('Trigger statement should be a string')
+            );
         }
 
         $statement = trim($statement);

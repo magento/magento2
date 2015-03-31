@@ -35,17 +35,19 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        $resourcePrefix = null
     ) {
         $this->_scopeConfig = $scopeConfig;
-        parent::__construct($resource, $eavConfig);
+        parent::__construct($context, $eavConfig, $resourcePrefix);
     }
 
     /**
@@ -106,12 +108,12 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * Retrieve active Product Type Id
      *
      * @return string
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getTypeId()
     {
-        if (is_null($this->_typeId)) {
-            throw new \Magento\Framework\Model\Exception(__('Undefined product type'));
+        if ($this->_typeId === null) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('Undefined product type'));
         }
         return $this->_typeId;
     }
@@ -202,7 +204,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
 
         $select->columns(['status' => $statusExpr]);
 
-        if (!is_null($entityIds)) {
+        if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 

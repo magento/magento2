@@ -46,7 +46,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $resetButton = '[title="Reset Filter"][class*=action]';
+    protected $resetButton = '.action-reset';
 
     /**
      * The first row in grid. For this moment we suggest that we should strictly define what we are going to search
@@ -455,6 +455,8 @@ abstract class Grid extends Block
      */
     protected function openFilterBlock()
     {
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+
         $button = $this->_rootElement->find($this->filterButton);
         if ($button->isVisible() && !$this->_rootElement->find($this->filterButton . $this->active)->isVisible()) {
             $button->click();

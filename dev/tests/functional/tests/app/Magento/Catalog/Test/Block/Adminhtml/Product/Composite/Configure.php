@@ -1,6 +1,5 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -31,7 +30,7 @@ class Configure extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $okButton = '.ui-dialog-buttonset button:nth-of-type(2)';
+    protected $okButton = '.ui-button.action-primary';
 
     /**
      * Backend abstract block
@@ -59,11 +58,8 @@ class Configure extends AbstractConfigureBlock
      */
     public function configProduct(FixtureInterface $product)
     {
-        $checkoutData = null;
-        if ($product instanceof InjectableFixture) {
-            /** @var CatalogProductSimple $product */
-            $checkoutData = $product->getCheckoutData();
-        }
+        /** @var CatalogProductSimple $product */
+        $checkoutData = $product->getCheckoutData();
 
         $this->fillOptions($product);
         if (isset($checkoutData['qty'])) {

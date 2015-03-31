@@ -25,10 +25,21 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
      */
     protected $httpFactoryMock;
 
+    /** @var int */
+    protected $maxFileSizeInMb;
+
+    /** @var int */
+    protected $maxFileSize;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->httpFactoryMock = $this->getMock('Magento\Framework\HTTP\Adapter\FileTransferFactory', ['create']);
+        /** @var \Magento\Framework\File\Size $fileSize */
+        $fileSize = $this->objectManager->create('Magento\Framework\File\Size');
+        $this->maxFileSize = $fileSize->getMaxFileSize();
+        $this->maxFileSizeInMb = $fileSize->getMaxFileSizeInMb();
+
         $this->model = $this->objectManager->create(
             'Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile',
             [
@@ -38,7 +49,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Model\Product\Option\Type\File\RunValidationException
+     * @expectedException \Magento\Framework\Validator\Exception
      * @return void
      */
     public function testRunValidationException()
@@ -53,14 +64,16 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException
-     * @expectedExceptionMessage The file you uploaded is larger than 2 Megabytes allowed by server
      * @return void
      */
     public function testLargeSizeException()
     {
+        $this->setExpectedException(
+            '\Magento\Framework\Exception\File\LargeSizeException',
+            sprintf('The file you uploaded is larger than %s Megabytes allowed by server', $this->maxFileSizeInMb)
+        );
         $this->prepareEnv();
-        $_SERVER['CONTENT_LENGTH'] = 2097153;
+        $_SERVER['CONTENT_LENGTH'] = $this->maxFileSize + 1;
         $httpAdapterMock = $this->getMock('Zend_File_Transfer_Adapter_Http', ['getFileInfo']);
         $exception = function () {
             throw new \Exception();
@@ -75,7 +88,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Model\Product\Option\Type\File\OptionRequiredException
+     * @expectedException \Magento\Catalog\Model\Product\Exception
      * @return void
      */
     public function testOptionRequiredException()
@@ -95,7 +108,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Model\Product\Option\Type\File\Exception
+     * @expectedException \Magento\Framework\Exception\File\ValidatorException
      * @expectedExceptionMessage Please specify the product's required option(s).
      * @return void
      */
@@ -118,11 +131,14 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     public function testInvalidateFile()
     {
         $this->setExpectedException(
-            '\Magento\Catalog\Model\Product\Option\Type\File\Exception',
+            '\Magento\Framework\Exception\File\ValidatorException',
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "Maximum allowed image size for 'MediaOption' is 2000x2000 px.\n"
-            . "The file 'test.jpg' you uploaded is larger than the 2 megabytes allowed by our server."
+            . sprintf(
+                "The file 'test.jpg' you uploaded is larger than the %s megabytes allowed by our server.",
+                $this->maxFileSizeInMb
+            )
         );
         $this->prepareEnv();
         $httpAdapterMock = $this->getMock('Zend_File_Transfer_Adapter_Http', ['isValid', 'getErrors']);
@@ -201,7 +217,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareEnv()
     {
-        $file     = 'magento_small_image.jpg';
+        $file = 'magento_small_image.jpg';
 
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $this->objectManager->get('Magento\Framework\Filesystem');
@@ -215,7 +231,6 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
             'error' => 0,
             'size' => 12500,
         ];
-        $_SERVER['CONTENT_LENGTH'] = 2097152;
     }
 
     /**
@@ -226,9 +241,9 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         return [
             'type' => 'image/jpeg',
             'title' => 'test.jpg',
-            'quote_path' => 'pub/media/custom_options/quote/t/e/9c198b6663f1e032365b8cfedfe7ad77.jpg',
-            'order_path' => 'pub/media/custom_options/order/t/e/9c198b6663f1e032365b8cfedfe7ad77.jpg',
-            'size' => '6747',
+            'quote_path' => 'pub/media/custom_options/quote/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
+            'order_path' => 'pub/media/custom_options/order/t/e/e1d601731b4b1a84163cd0e9370a4fcb.jpg',
+            'size' => '3300',
             'width' => 136,
             'height' => 131,
         ];

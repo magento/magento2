@@ -13,9 +13,9 @@
     <!-- Test suites definition -->
     <testsuites>
         <!-- Memory tests run first to prevent influence of other tests on accuracy of memory measurements -->
-        <!--<testsuite name="Memory Usage Tests">-->
-            <!--<file>testsuite/Magento/MemoryUsageTest.php</file>-->
-        <!--</testsuite>-->
+        <testsuite name="Memory Usage Tests">
+            <file>testsuite/Magento/MemoryUsageTest.php</file>
+        </testsuite>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
             <exclude>testsuite/Magento/Test/Integrity</exclude>
@@ -27,10 +27,6 @@
         <whitelist addUncoveredFilesFromWhiteList="true">
             <directory suffix=".php">../../../app/code/Magento</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
-            <exclude>
-                <directory suffix=".php">../../../app/code/Magento/*/sql</directory>
-                <directory suffix=".php">../../../app/code/Magento/*/data</directory>
-            </exclude>
         </whitelist>
     </filter>
     <!-- PHP INI settings and constants definition -->
@@ -41,6 +37,8 @@
         <ini name="xdebug.max_nesting_level" value="200"/>
         <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
         <const name="TESTS_INSTALL_CONFIG_FILE" value="etc/install-config-mysql.php"/>
+        <!-- Local XML configuration file ('.dist' extension will be added, if the specified file doesn't exist) -->
+        <const name="TESTS_GLOBAL_CONFIG_FILE" value="etc/config-global.php"/>
         <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
         <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
         <!-- Whether to cleanup the application before running tests or not -->
@@ -60,7 +58,7 @@
         <!--<const name="TESTS_BAMBOO_PROFILER_METRICS_FILE" value="../../build/profiler_metrics.php"/>-->
         <!-- Magento mode for tests execution. Possible values are "default", "developer" and "production". -->
         <const name="TESTS_MAGENTO_MODE" value="developer"/>
-        <!-- Minimum error log level to listen for. Possible values are \Zend_Log::EMERG(0) to \Zend_Log::DEBUG(7) respectively. -->
+        <!-- Minimum error log level to listen for. Possible values: -1 ignore all errors, and level constants form http://tools.ietf.org/html/rfc5424 standard -->
         <const name="TESTS_ERROR_LOG_LISTENER_LEVEL" value="-1"/>
         <!-- Connection parameters for MongoDB library tests -->
         <!--<const name="MONGODB_CONNECTION_STRING" value="mongodb://localhost:27017"/>-->

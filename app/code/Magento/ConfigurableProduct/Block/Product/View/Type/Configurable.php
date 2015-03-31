@@ -177,7 +177,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
         $config = [
             'attributes' => $attributes['priceOptions'],
-            'template' => str_replace('%s', '#{price}', $store->getCurrentCurrency()->getOutputFormat()),
+            'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
             'prices' => [
                 'oldPrice' => [
                     'amount' => $this->_registerJsPrice($this->_convertPrice($regularPrice->getAmount()->getValue())),

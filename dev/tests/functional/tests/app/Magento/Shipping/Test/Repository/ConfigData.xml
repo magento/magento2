@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\ConfigData">
+        <dataset name="shipping_origin_US_CA">
+            <field path="shipping/origin/country_id" scope="shipping" scope_id="1" label="United States" xsi:type="string">US</field>
+            <field path="shipping/origin/region_id" scope="shipping" scope_id="1" label="California" xsi:type="string">12</field>
+            <field path="shipping/origin/postcode" scope="shipping" scope_id="1" label="" xsi:type="string">90232</field>
+            <field path="shipping/origin/city" scope="shipping" scope_id="1" label="" xsi:type="string">Culver City</field>
+            <field path="shipping/origin/street_line1" scope="shipping" scope_id="1" label="" xsi:type="string">10441 Jefferson Blvd</field>
+            <field path="shipping/origin/street_line2" scope="shipping" scope_id="1" label="" xsi:type="string">Suite 200</field>
+        </dataset>
+
+        <dataset name="shipping_origin_US_LA">
+            <field path="shipping/origin/country_id" scope="carriers" scope_id="1" label="United States" xsi:type="string">US</field>
+            <field path="shipping/origin/region_id" scope="shipping" scope_id="1" label="California" xsi:type="string">12</field>
+            <field path="shipping/origin/postcode" scope="shipping" scope_id="1" label="" xsi:type="string">90024</field>
+            <field path="shipping/origin/city" scope="shipping" scope_id="1" label="" xsi:type="string">Los Angeles</field>
+            <field path="shipping/origin/street_line1" scope="shipping" scope_id="1" label="" xsi:type="string">1419 Westwood Blvd</field>
+        </dataset>
+    </repository>
+</config>

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,7 +10,7 @@ class MassDelete extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer mass delete action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -25,6 +24,8 @@ class MassDelete extends \Magento\Customer\Controller\Adminhtml\Index
         if ($customersDeleted) {
             $this->messageManager->addSuccess(__('A total of %1 record(s) were deleted.', $customersDeleted));
         }
-        $this->_redirect('customer/*/index');
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('customer/*/index');
+        return $resultRedirect;
     }
 }

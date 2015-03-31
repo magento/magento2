@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -21,28 +20,31 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
     /**
      * Start edit order initialization
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         $this->_getSession()->clearStorage();
         $orderId = $this->getRequest()->getParam('order_id');
         $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
 
         try {
             if ($order->getId()) {
                 $this->_getSession()->setUseOldShippingMethod(true);
                 $this->_getOrderCreateModel()->initFromOrder($order);
-                $this->_redirect('sales/*');
+                $resultRedirect->setPath('sales/*');
             } else {
-                $this->_redirect('sales/order/');
+                $resultRedirect->setPath('sales/order/');
             }
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
-            $this->_redirect('sales/order/view', ['order_id' => $orderId]);
+            $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         } catch (\Exception $e) {
             $this->messageManager->addException($e, $e->getMessage());
-            $this->_redirect('sales/order/view', ['order_id' => $orderId]);
+            $resultRedirect->setPath('sales/order/view', ['order_id' => $orderId]);
         }
+        return $resultRedirect;
     }
 }

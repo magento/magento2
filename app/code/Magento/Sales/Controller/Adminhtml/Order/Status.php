@@ -7,8 +7,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 /**
  * Order status management controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Status extends \Magento\Backend\App\Action
 {
@@ -23,8 +21,10 @@ class Status extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
-    {
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry
+    ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }

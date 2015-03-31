@@ -16,11 +16,8 @@
             <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Updater\SetupFactory">
-        <arguments>
-            <argument name="resourceTypes" xsi:type="array">
-                <item name="catalogurlrewrite_setup" xsi:type="string">Magento\Catalog\Model\Resource\Setup</item>
-            </argument>
-        </arguments>
+    <type name="Magento\Catalog\Model\Resource\Category">
+        <plugin name="category_move_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move"/>
+        <plugin name="category_delete_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove"/>
     </type>
 </config>

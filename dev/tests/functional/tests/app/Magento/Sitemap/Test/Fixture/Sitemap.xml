@@ -1,59 +1,33 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture class="Magento\Sitemap\Test\Fixture\Sitemap">
-    <module>Magento_Sitemap</module>
-    <type>flat</type>
-    <entity_type>sitemap</entity_type>
-    <collection>Magento\Sitemap\Model\Resource\Sitemap\Collection</collection>
-    <fields>
-        <sitemap_id>
-            <attribute_code>sitemap_id</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </sitemap_id>
-        <sitemap_type>
-            <attribute_code>sitemap_type</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </sitemap_type>
-        <sitemap_filename>
-            <attribute_code>sitemap_filename</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </sitemap_filename>
-        <sitemap_path>
-            <attribute_code>sitemap_path</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </sitemap_path>
-        <sitemap_time>
-            <attribute_code>sitemap_time</attribute_code>
-            <backend_type>timestamp</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-        </sitemap_time>
-        <store_id>
-            <attribute_code>store_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </store_id>
-    </fields>
-    <repository_class>Magento\Sitemap\Test\Repository\Sitemap</repository_class>
-    <handler_interface>Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface</handler_interface>
-</fixture>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="sitemap" module="Magento_Sitemap" type="flat" entity_type="sitemap" collection="Magento\Sitemap\Model\Resource\Sitemap\Collection" repository_class="Magento\Sitemap\Test\Repository\Sitemap" handler_interface="Magento\Sitemap\Test\Handler\Sitemap\SitemapInterface" class="Magento\Sitemap\Test\Fixture\Sitemap">
+    <dataset name="default">
+        <field name="sitemap_filename" xsi:type="string">sitemap.xml</field>
+        <field name="sitemap_path" xsi:type="string">/</field>
+    </dataset>
+    <field name="sitemap_id" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="sitemap_type" is_required="">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="sitemap_filename" is_required="">
+      <default_value xsi:type="string">sitemap.xml</default_value>
+    </field>
+    <field name="sitemap_path" is_required="">
+      <default_value xsi:type="string">/</default_value>
+    </field>
+    <field name="sitemap_time" is_required="">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="store_id" is_required="">
+      <default_value xsi:type="number">0</default_value>
+    </field>
+  </fixture>
+</config>

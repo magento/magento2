@@ -1,6 +1,5 @@
 <?php
 /**
- * @spi
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -25,7 +24,7 @@ class CreateCustomer extends Webapi
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        $configuration = $this->_configuration->getConfigParam('handler/webapi');
+        $configuration = $this->_configuration->getParameter('handler/webapi');
 
         $soap = new SoapTransport($configuration['soap']);
         return $soap->call('customerCustomerList', $fixture->getData());

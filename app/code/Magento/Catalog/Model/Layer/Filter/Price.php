@@ -210,7 +210,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Get 'clear price' link text
      *
-     * @return false|string
+     * @return \Magento\Framework\Phrase|bool
      */
     public function getClearLinkText()
     {
@@ -227,7 +227,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      *
      * @param float|string $fromPrice
      * @param float|string $toPrice
-     * @return string
+     * @return float|\Magento\Framework\Phrase
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
@@ -269,7 +269,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Get data for build price filter items
      * @return array
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getItemsData()
     {

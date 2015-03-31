@@ -2,7 +2,6 @@ app/code/Magento/CatalogImportExport
 app/code/Magento/CatalogUrlRewrite
 app/code/Magento/CmsUrlRewrite
 app/code/Magento/ConfigurableImportExport
-app/code/Magento/Core
 app/code/Magento/Doc
 app/code/Magento/GroupedImportExport
 app/code/Magento/Msrp
@@ -34,6 +33,7 @@ lib/internal/Magento/Framework/Serialization
 lib/internal/Magento/Framework/Simplexml
 lib/internal/Magento/Framework/System
 lib/internal/Magento/Framework/Test
+lib/internal/Magento/Framework/App/Utility
 lib/internal/Magento/Framework/Url
 lib/internal/Magento/Framework/Xml
 lib/internal/Magento/Framework

@@ -123,7 +123,7 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
     /**
      * Return Delete CheckBox Label
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getDeleteCheckboxLabel()
     {
@@ -215,7 +215,7 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
             return false;
         }
         $value = $this->getValue();
-        if (is_array($value) && is_null($index)) {
+        if (is_array($value) && $index === null) {
             $index = 'value';
         }
 

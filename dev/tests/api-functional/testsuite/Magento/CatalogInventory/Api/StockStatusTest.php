@@ -7,7 +7,6 @@ namespace Magento\CatalogInventory\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Webapi\Model\Rest\Config as RestConfig;
 
 /**
  * Class StockStatusTest
@@ -15,7 +14,7 @@ use Magento\Webapi\Model\Rest\Config as RestConfig;
 class StockStatusTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/stockStatus';
+    const RESOURCE_PATH = '/V1/stockStatuses';
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
@@ -31,7 +30,7 @@ class StockStatusTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/$productSku",
-                'httpMethod' => RestConfig::HTTP_METHOD_GET,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'catalogInventoryStockRegistryV1',

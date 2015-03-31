@@ -57,14 +57,4 @@ class Notices extends \Magento\Framework\View\Element\Template
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
-
-    /**
-     * Get Link to cookie restriction privacy policy page
-     *
-     * @return string
-     */
-    public function getPrivacyPolicyLink()
-    {
-        return $this->_urlBuilder->getUrl('privacy-policy-cookie-restriction-mode');
-    }
 }

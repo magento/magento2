@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
     <system>
         <tab id="customer" translate="label" sortOrder="300">
             <label>Customers</label>
@@ -28,8 +28,7 @@
                 <label>Create New Account Options</label>
                 <field id="auto_group_assign" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Automatic Assignment to Customer Group</label>
-                    <comment>To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="tax_calculation_address_type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Tax Calculation Based On</label>
@@ -72,66 +71,67 @@
                 </field>
                 <field id="viv_on_each_transaction" translate="label" type="select" sortOrder="56" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Validate on Each Transaction</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
                         <field id="auto_group_assign">1</field>
                     </depends>
                 </field>
                 <field id="viv_disable_auto_group_assign_default" translate="label" type="select" sortOrder="57" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Default Value for Disable Automatic Group Changes Based on VAT ID</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault</backend_model>
                 </field>
                 <field id="vat_frontend_visibility" translate="label" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show VAT Number on Frontend</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <comment>To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="email_domain" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Email Domain</label>
                 </field>
                 <field id="email_template" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Welcome Email</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="email_identity" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Email Sender</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Identity</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
                 <field id="confirm" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Require Emails Confirmation</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="email_confirmation_template" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Confirmation Link Email</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="email_confirmed_template" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Welcome Email</label>
                     <comment>This email will be sent instead of default welcome email, after account confirmation.</comment>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="generate_human_friendly_id" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Generate Human-Friendly Customer ID</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
             <group id="password" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Password Options</label>
                 <field id="forgot_email_template" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Forgot Email Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="remind_email_template" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Remind Email Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="reset_password_template" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Reset Password Template</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Template</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="forgot_email_identity" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Password Template Email Sender</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Email\Identity</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
                 <field id="reset_link_expiration_period" translate="label comment" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Recovery Link Expiration Period (days)</label>
@@ -149,7 +149,7 @@
                 </field>
                 <field id="prefix_show" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Prefix</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Nooptreq</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\Address</backend_model>
                     <comment>The title that goes before name (Mr., Mrs., etc.)</comment>
                 </field>
@@ -161,13 +161,13 @@
                 </field>
                 <field id="middlename_show" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Middle Name (initial)</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Always optional.</comment>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\Address</backend_model>
                 </field>
                 <field id="suffix_show" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Suffix</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Nooptreq</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
                     <comment>The suffix that goes after name (Jr., Sr., etc.)</comment>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\Address</backend_model>
                 </field>
@@ -179,17 +179,17 @@
                 </field>
                 <field id="dob_show" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Date of Birth</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Nooptreq</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\Customer</backend_model>
                 </field>
                 <field id="taxvat_show" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Tax/VAT Number</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Nooptreq</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\Customer</backend_model>
                 </field>
                 <field id="gender_show" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Gender</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Nooptreq</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\Customer</backend_model>
                 </field>
             </group>
@@ -197,7 +197,7 @@
                 <label>Login Options</label>
                 <field id="redirect_dashboard" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Redirect Customer to Account Dashboard after Logging in</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Customer will stay on the current page if "No" is selected.</comment>
                 </field>
             </group>

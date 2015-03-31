@@ -50,9 +50,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Sample test
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -96,9 +96,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Sample test
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -119,9 +119,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Sample test
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -140,9 +140,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Range filter test with all fields filled
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -159,9 +159,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Range filter test with all fields filled
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -177,9 +177,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Range filter test with all fields filled
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -195,9 +195,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Term filter test
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -214,9 +214,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Term filter test
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -232,9 +232,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Term filter test
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -250,9 +250,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Bool filter test
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -282,9 +282,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Test bool filter with nested negative bool filter
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -309,9 +309,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * Test range inside nested negative bool filter
      *
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
@@ -337,9 +337,9 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      * Sample Advanced search request test
      *
      * @dataProvider advancedSearchDataProvider
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Engine
+     * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2
      * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */

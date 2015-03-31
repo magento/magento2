@@ -8,8 +8,8 @@
 
 namespace Magento\Sales\Model\Order;
 
-use Magento\Framework\Api\AttributeDataBuilder;
-use Magento\Framework\Model\Exception;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\AbstractModel;
@@ -20,49 +20,7 @@ use Magento\Sales\Model\EntityInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo getResource()
- * @method \Magento\Sales\Model\Order\Creditmemo setStoreId(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseShippingTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setStoreToOrderRate(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseToOrderRate(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setGrandTotal(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseAdjustmentNegative(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseSubtotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setSubtotalInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseShippingAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setStoreToBaseRate(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseToGlobalRate(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseAdjustment(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseSubtotal(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setDiscountAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setSubtotal(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setAdjustment(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseGrandTotal(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseAdjustmentPositive(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setShippingTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setOrderId(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setEmailSent(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setCreditmemoStatus(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setState(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setShippingAddressId(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBillingAddressId(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setInvoiceId(int $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setStoreCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setOrderCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setGlobalCurrencyCode(string $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setTransactionId(string $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setIncrementId(string $value)
  * @method \Magento\Sales\Model\Order\Creditmemo setCreatedAt(string $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setUpdatedAt(string $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setShippingHiddenTaxAmount(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseShippingHiddenTaxAmnt(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setShippingInclTax(float $value)
- * @method \Magento\Sales\Model\Order\Creditmemo setBaseShippingInclTax(float $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -156,8 +114,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Creditmemo\Config $creditmemoConfig
@@ -176,8 +134,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\Order\Creditmemo\Config $creditmemoConfig,
@@ -203,8 +161,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
+            $extensionFactory,
+            $customAttributeFactory,
             $localeDate,
             $dateTime,
             $resource,
@@ -456,7 +414,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
 
     /**
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function refund()
     {
@@ -471,7 +429,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         if ($baseOrderRefund > $this->priceCurrency->round($this->getOrder()->getBaseTotalPaid())) {
             $baseAvailableRefund = $this->getOrder()->getBaseTotalPaid() - $this->getOrder()->getBaseTotalRefunded();
 
-            throw new Exception(
+            throw new LocalizedException(
                 __(
                     'The most money available to refund is %1.',
                     $this->getOrder()->formatBasePrice($baseAvailableRefund)
@@ -573,12 +531,12 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * Apply to order, order items etc.
      *
      * @return $this
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function register()
     {
         if ($this->getId()) {
-            throw new Exception(__('We cannot register an existing credit memo.'));
+            throw new LocalizedException(__('We cannot register an existing credit memo.'));
         }
 
         foreach ($this->getAllItems() as $item) {
@@ -643,7 +601,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * Retrieve Creditmemo state name by state identifier
      *
      * @param   int $stateId
-     * @return  string
+     * @return \Magento\Framework\Phrase
      */
     public function getStateName($stateId = null)
     {
@@ -673,8 +631,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         //        $amount = $this->getStore()->round(
         //            $amount*$this->getOrder()->getStoreToOrderRate()
         //        );
-        $this->setData('shipping_amount', $amount);
-        return $this;
+        return $this->setData(CreditmemoInterface::SHIPPING_AMOUNT, $amount);
     }
 
     /**
@@ -839,6 +796,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setItems($items)
+    {
+        return $this->setData(CreditmemoInterface::ITEMS, $items);
+    }
+
+    /**
      * Returns adjustment
      *
      * @return float
@@ -889,6 +854,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Set base_adjustment_negative
+     *
+     * @param float $baseAdjustmentNegative
+     * @return $this
+     */
+    public function setBaseAdjustmentNegative($baseAdjustmentNegative)
+    {
+        return $this->setData(CreditmemoInterface::BASE_ADJUSTMENT_NEGATIVE, $baseAdjustmentNegative);
+    }
+
+    /**
      * Returns base_adjustment_positive
      *
      * @return float
@@ -896,6 +872,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function getBaseAdjustmentPositive()
     {
         return $this->getData(CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE);
+    }
+
+    /**
+     * Set base_adjustment_positive
+     *
+     * @param float $baseAdjustmentPositive
+     * @return $this
+     */
+    public function setBaseAdjustmentPositive($baseAdjustmentPositive)
+    {
+        return $this->setData(CreditmemoInterface::BASE_ADJUSTMENT_POSITIVE, $baseAdjustmentPositive);
     }
 
     /**
@@ -1279,6 +1266,17 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     }
 
     /**
+     * Sets the credit memo transaction ID.
+     *
+     * @param string $transactionId
+     * @return $this
+     */
+    public function setTransactionId($transactionId)
+    {
+        return $this->setData(CreditmemoInterface::TRANSACTION_ID, $transactionId);
+    }
+
+    /**
      * Returns updated_at
      *
      * @return string
@@ -1303,4 +1301,355 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         }
         return $this->getData(CreditmemoInterface::COMMENTS);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setComments($comments)
+    {
+        return $this->setData(CreditmemoInterface::COMMENTS, $comments);
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($id)
+    {
+        return $this->setData(CreditmemoInterface::STORE_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingTaxAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::BASE_SHIPPING_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreToOrderRate($rate)
+    {
+        return $this->setData(CreditmemoInterface::STORE_TO_ORDER_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseDiscountAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::BASE_DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseToOrderRate($rate)
+    {
+        return $this->setData(CreditmemoInterface::BASE_TO_ORDER_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGrandTotal($amount)
+    {
+        return $this->setData(CreditmemoInterface::GRAND_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseSubtotalInclTax($amount)
+    {
+        return $this->setData(CreditmemoInterface::BASE_SUBTOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubtotalInclTax($amount)
+    {
+        return $this->setData(CreditmemoInterface::SUBTOTAL_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::BASE_SHIPPING_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreToBaseRate($rate)
+    {
+        return $this->setData(CreditmemoInterface::STORE_TO_BASE_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseToGlobalRate($rate)
+    {
+        return $this->setData(CreditmemoInterface::BASE_TO_GLOBAL_RATE, $rate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseAdjustment($baseAdjustment)
+    {
+        return $this->setData(CreditmemoInterface::BASE_ADJUSTMENT, $baseAdjustment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseSubtotal($amount)
+    {
+        return $this->setData(CreditmemoInterface::BASE_SUBTOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSubtotal($amount)
+    {
+        return $this->setData(CreditmemoInterface::SUBTOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAdjustment($adjustment)
+    {
+        return $this->setData(CreditmemoInterface::ADJUSTMENT, $adjustment);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseGrandTotal($amount)
+    {
+        return $this->setData(CreditmemoInterface::BASE_GRAND_TOTAL, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseTaxAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::BASE_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingTaxAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::SHIPPING_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTaxAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderId($id)
+    {
+        return $this->setData(CreditmemoInterface::ORDER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmailSent($emailSent)
+    {
+        return $this->setData(CreditmemoInterface::EMAIL_SENT, $emailSent);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreditmemoStatus($creditmemoStatus)
+    {
+        return $this->setData(CreditmemoInterface::CREDITMEMO_STATUS, $creditmemoStatus);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setState($state)
+    {
+        return $this->setData(CreditmemoInterface::STATE, $state);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingAddressId($id)
+    {
+        return $this->setData(CreditmemoInterface::SHIPPING_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBillingAddressId($id)
+    {
+        return $this->setData(CreditmemoInterface::BILLING_ADDRESS_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setInvoiceId($id)
+    {
+        return $this->setData(CreditmemoInterface::INVOICE_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreCurrencyCode($code)
+    {
+        return $this->setData(CreditmemoInterface::STORE_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderCurrencyCode($code)
+    {
+        return $this->setData(CreditmemoInterface::ORDER_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseCurrencyCode($code)
+    {
+        return $this->setData(CreditmemoInterface::BASE_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGlobalCurrencyCode($code)
+    {
+        return $this->setData(CreditmemoInterface::GLOBAL_CURRENCY_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIncrementId($id)
+    {
+        return $this->setData(CreditmemoInterface::INCREMENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt($timestamp)
+    {
+        return $this->setData(CreditmemoInterface::UPDATED_AT, $timestamp);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHiddenTaxAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseHiddenTaxAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingHiddenTaxAmount($amount)
+    {
+        return $this->setData(CreditmemoInterface::SHIPPING_HIDDEN_TAX_AMOUNT, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingHiddenTaxAmnt($amnt)
+    {
+        return $this->setData(CreditmemoInterface::BASE_SHIPPING_HIDDEN_TAX_AMNT, $amnt);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setShippingInclTax($amount)
+    {
+        return $this->setData(CreditmemoInterface::SHIPPING_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBaseShippingInclTax($amount)
+    {
+        return $this->setData(CreditmemoInterface::BASE_SHIPPING_INCL_TAX, $amount);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountDescription($description)
+    {
+        return $this->setData(CreditmemoInterface::DISCOUNT_DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\CreditmemoExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

@@ -8,6 +8,9 @@ namespace Magento\Customer\Controller\Address;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Index extends \Magento\Customer\Controller\Address
 {
     /**
@@ -18,24 +21,32 @@ class Index extends \Magento\Customer\Controller\Address
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
-     * @param \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder
-     * @param \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder
+     * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
+     * @param \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Customer\Api\Data\AddressDataBuilder $addressDataBuilder,
-        \Magento\Customer\Api\Data\RegionDataBuilder $regionDataBuilder,
+        \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
+        \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         CustomerRepositoryInterface $customerRepository
     ) {
         $this->customerRepository = $customerRepository;
@@ -45,31 +56,35 @@ class Index extends \Magento\Customer\Controller\Address
             $formKeyValidator,
             $formFactory,
             $addressRepository,
-            $addressDataBuilder,
-            $regionDataBuilder,
-            $dataProcessor
+            $addressDataFactory,
+            $regionDataFactory,
+            $dataProcessor,
+            $dataObjectHelper,
+            $resultRedirectFactory,
+            $resultForwardFactory,
+            $resultPageFactory
         );
     }
 
     /**
      * Customer addresses list
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $addresses = $this->customerRepository->getById($this->_getSession()->getCustomerId())->getAddresses();
         if (count($addresses)) {
-            $this->_view->loadLayout();
-            $this->_view->getLayout()->initMessages();
-
-            $block = $this->_view->getLayout()->getBlock('address_book');
+            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            $resultPage = $this->resultPageFactory->create();
+            $resultPage->getLayout()->initMessages();
+            $block = $resultPage->getLayout()->getBlock('address_book');
             if ($block) {
                 $block->setRefererUrl($this->_redirect->getRefererUrl());
             }
-            $this->_view->renderLayout();
+            return $resultPage;
         } else {
-            $this->getResponse()->setRedirect($this->_buildUrl('*/*/new'));
+            return $this->resultRedirectFactory->create()->setPath('*/*/new');
         }
     }
 }

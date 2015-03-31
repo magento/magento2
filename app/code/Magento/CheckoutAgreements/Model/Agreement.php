@@ -5,24 +5,10 @@
  */
 namespace Magento\CheckoutAgreements\Model;
 
-/**
- * @method \Magento\CheckoutAgreements\Model\Resource\Agreement _getResource()
- * @method \Magento\CheckoutAgreements\Model\Resource\Agreement getResource()
- * @method string getName()
- * @method \Magento\CheckoutAgreements\Model\Agreement setName(string $value)
- * @method string getContent()
- * @method \Magento\CheckoutAgreements\Model\Agreement setContent(string $value)
- * @method string getContentHeight()
- * @method \Magento\CheckoutAgreements\Model\Agreement setContentHeight(string $value)
- * @method string getCheckboxText()
- * @method \Magento\CheckoutAgreements\Model\Agreement setCheckboxText(string $value)
- * @method int getIsActive()
- * @method \Magento\CheckoutAgreements\Model\Agreement setIsActive(int $value)
- * @method int getIsHtml()
- * @method \Magento\CheckoutAgreements\Model\Agreement setIsHtml(int $value)
- *
- */
-class Agreement extends \Magento\Framework\Model\AbstractModel
+use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
+use Magento\Framework\Model\AbstractModel;
+
+class Agreement extends AbstractModel implements AgreementInterface
 {
     /**
      * Allowed CSS units for height field
@@ -77,4 +63,118 @@ class Agreement extends \Magento\Framework\Model\AbstractModel
 
         return parent::beforeSave();
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * @inheritdoc
+     */
+    public function getAgreementId()
+    {
+        return $this->getData(self::AGREEMENT_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAgreementId($id)
+    {
+        return $this->setData(self::AGREEMENT_ID, $id);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->getData(self::NAME);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::NAME, $name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContent()
+    {
+        return $this->getData(self::CONTENT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setContent($content)
+    {
+        return $this->setData(self::CONTENT, $content);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getContentHeight()
+    {
+        return $this->getData(self::CONTENT_HEIGHT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setContentHeight($height)
+    {
+        return $this->setData(self::CONTENT_HEIGHT, $height);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCheckboxText()
+    {
+        return $this->getData(self::CHECKBOX_TEXT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCheckboxText($text)
+    {
+        return $this->setData(self::CHECKBOX_TEXT, $text);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsActive()
+    {
+        return $this->getData(self::IS_ACTIVE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsActive($status)
+    {
+        return $this->setData(self::IS_ACTIVE, $status);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIsHtml()
+    {
+        return $this->getData(self::IS_HTML);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsHtml($isHtml)
+    {
+        return $this->setData(self::IS_HTML, $isHtml);
+    }
+    //@codeCoverageIgnoreEnd
 }

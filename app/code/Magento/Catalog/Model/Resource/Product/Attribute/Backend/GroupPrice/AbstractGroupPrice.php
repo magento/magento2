@@ -38,7 +38,7 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
 
         $this->_loadPriceDataSelect($select);
 
-        if (!is_null($websiteId)) {
+        if ($websiteId !== null) {
             if ($websiteId == '0') {
                 $select->where('website_id = ?', $websiteId);
             } else {
@@ -85,11 +85,11 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
 
         $conds = [$adapter->quoteInto('entity_id = ?', $productId)];
 
-        if (!is_null($websiteId)) {
+        if ($websiteId !== null) {
             $conds[] = $adapter->quoteInto('website_id = ?', $websiteId);
         }
 
-        if (!is_null($priceId)) {
+        if ($priceId !== null) {
             $conds[] = $adapter->quoteInto($this->getIdFieldName() . ' = ?', $priceId);
         }
 

@@ -4,12 +4,16 @@
  * See COPYING.txt for license details.
  */
 /**
- * @var \Magento\Ui\Component\FilterPool $this
+ * @var \Magento\Ui\Component\FilterPool $block
  */
 ?>
-<script data-mage-init='{"Magento_Ui/js/listing/filter": ""}' type="application/json">
-    <?php echo $this->getConfigBuilder()->toJson($this->getConfig()); ?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/listing/filter": <?php echo $block->getConfigBuilder()->toJson($block->getConfig()); ?>
+        }
+    }
 </script>
-<div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'">
+<div data-bind="scope: '<?php echo $block->getParentName(); ?>:<?php echo $block->getName(); ?>'">
     <!-- ko template: 'ui/filter' --><!-- /ko -->
 </div>

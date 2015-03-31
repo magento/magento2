@@ -16,7 +16,7 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     protected $attributeSetRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaDataBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -32,13 +32,13 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
 
     /**
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSetRepository
-     * @param \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Eav\Model\Config $eavConfig
      */
     public function __construct(
         \Magento\Eav\Api\AttributeSetRepositoryInterface $attributeSetRepository,
-        \Magento\Framework\Api\SearchCriteriaDataBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Eav\Model\Config $eavConfig
     ) {
@@ -115,7 +115,9 @@ class SetRepository implements \Magento\Catalog\Api\AttributeSetRepositoryInterf
     {
         $productEntityId = $this->eavConfig->getEntityType(\Magento\Catalog\Model\Product::ENTITY)->getId();
         if ($attributeSet->getEntityTypeId() != $productEntityId) {
-            throw new \Magento\Framework\Exception\StateException('Provided Attribute set non product Attribute set.');
+            throw new \Magento\Framework\Exception\StateException(
+                __('Provided Attribute set non product Attribute set.')
+            );
         }
     }
 }

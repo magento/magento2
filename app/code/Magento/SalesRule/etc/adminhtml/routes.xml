@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/App/etc/routes.xsd">
     <router id="admin">
         <route id="sales_rule" frontName="sales_rule">
-            <module name="Magento_SalesRule" before="Magento_Adminhtml" />
+            <module name="Magento_SalesRule" before="Magento_Backend" />
         </route>
     </router>
 </config>

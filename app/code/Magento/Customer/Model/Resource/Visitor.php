@@ -23,18 +23,20 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param string|null $resourcePrefix
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\Stdlib\DateTime $dateTime
+        \Magento\Framework\Stdlib\DateTime $dateTime,
+        $resourcePrefix = null
     ) {
         $this->date = $date;
         $this->dateTime = $dateTime;
-        parent::__construct($resource);
+        parent::__construct($context, $resourcePrefix);
     }
 
     /**
@@ -56,6 +58,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $visitor)
     {
         return [
+            'customer_id' => $visitor->getCustomerId(),
             'session_id' => $visitor->getSessionId(),
             'last_visit_at' => $visitor->getLastVisitAt()
         ];

@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Core\Test\Repository\ConfigData">
+        <dataset name="freeshipping">
+            <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="freeshipping_rollback">
+            <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="freeshipping_minimum_order_amount_100">
+            <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/freeshipping/free_shipping_subtotal" scope="carriers" scope_id="1" label="" xsi:type="string">100</field>
+        </dataset>
+
+        <dataset name="freeshipping_minimum_order_amount_100_rollback">
+            <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">0</field>
+            <field path="carriers/freeshipping/free_shipping_subtotal" scope="carriers" scope_id="1" label="" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="freeshipping_specificcountry_gb">
+            <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/freeshipping/sallowspecific" scope="carriers" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
+            <field path="carriers/freeshipping/specificcountry/active" scope="carriers" scope_id="1" label="United Kingdom" xsi:type="string">GB</field>
+        </dataset>
+
+        <dataset name="freeshipping_specificcountry_gb_rollback">
+            <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="carriers/freeshipping/sallowspecific" scope="carriers" scope_id="1" label="All Allowed Countries" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="disable_shipping_all">
+            <field path="carriers/flatrate/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="carriers/freeshipping/active" scope="carriers" scope_id="1" label="All Allowed Countries" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="flatrate">
+            <field path="carriers/flatrate/active" scope="carriers" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="carriers/flatrate/title" scope="carriers" scope_id="1" label="" xsi:type="string">Flat Rate</field>
+            <field path="carriers/flatrate/name" scope="carriers" scope_id="1" label="" xsi:type="string">Fixed</field>
+            <field path="carriers/flatrate/type" scope="carriers" scope_id="1" label="Per Item" xsi:type="string">I</field>
+            <field path="carriers/flatrate/price" scope="carriers" scope_id="1" label="" xsi:type="string">5</field>
+            <field path="carriers/flatrate/handling_type" scope="carriers" scope_id="1" label="Fixed" xsi:type="string">F</field>
+            <field path="carriers/flatrate/specificerrmsg" scope="carriers" scope_id="1" label="" xsi:type="string">This shipping method is not available. To use this shipping method, please contact us.</field>
+        </dataset>
+    </repository>
+</config>

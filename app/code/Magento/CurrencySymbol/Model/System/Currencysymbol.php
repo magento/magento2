@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CurrencySymbol\Model\System;
+
+use Magento\Framework\Locale\Bundle\CurrencyBundle;
 
 /**
  * Custom currency symbol model
@@ -74,7 +75,7 @@ class Currencysymbol
     protected $_cacheTypeList;
 
     /**
-     * @var \Magento\Backend\Model\Config\Factory
+     * @var \Magento\Config\Model\Config\Factory
      */
     protected $_configFactory;
 
@@ -89,9 +90,9 @@ class Currencysymbol
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\LocaleInterface
+     * @var \Magento\Framework\Locale\ResolverInterface
      */
-    protected $_locale;
+    protected $localeResolver;
 
     /**
      * @var \Magento\Framework\App\Config\ReinitableConfigInterface
@@ -108,7 +109,7 @@ class Currencysymbol
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig
-     * @param \Magento\Backend\Model\Config\Factory $configFactory
+     * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -118,7 +119,7 @@ class Currencysymbol
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Config\ReinitableConfigInterface $coreConfig,
-        \Magento\Backend\Model\Config\Factory $configFactory,
+        \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
@@ -129,7 +130,7 @@ class Currencysymbol
         $this->_configFactory = $configFactory;
         $this->_cacheTypeList = $cacheTypeList;
         $this->_storeManager = $storeManager;
-        $this->_locale = $localeResolver->getLocale();
+        $this->localeResolver = $localeResolver;
         $this->_systemStore = $systemStore;
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
@@ -196,13 +197,9 @@ class Currencysymbol
         $currentSymbols = $this->_unserializeStoreConfig(self::XML_PATH_CUSTOM_CURRENCY_SYMBOL);
 
         foreach ($allowedCurrencies as $code) {
-            if (!($symbol = $this->_locale->getTranslation($code, 'currencysymbol'))) {
-                $symbol = $code;
-            }
-            $name = $this->_locale->getTranslation($code, 'nametocurrency');
-            if (!$name) {
-                $name = $code;
-            }
+            $currencies = (new CurrencyBundle())->get($this->localeResolver->getLocale())['Currencies'];
+            $symbol = $currencies[$code][0] ?: $code;
+            $name = $currencies[$code][1] ?: $code;
             $this->_symbolsData[$code] = ['parentSymbol' => $symbol, 'displayName' => $name];
 
             if (isset($currentSymbols[$code]) && !empty($currentSymbols[$code])) {

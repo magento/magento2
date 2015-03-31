@@ -152,9 +152,9 @@
         <var name="customer_account_my_tags_tag_view:height">100</var>
 
         <var name="cart_cross_sell_products:type">thumbnail</var>
-        <var name="cart_cross_sell_products:width">235</var>
+        <var name="cart_cross_sell_products:width">152</var>
         <var name="cart_cross_sell_products:ratio">1</var>
-        <var name="cart_cross_sell_products:height">290</var>
+        <var name="cart_cross_sell_products:height">188</var>
 
         <var name="gift_messages_checkout_thumbnail:type">thumbnail</var>
         <var name="gift_messages_checkout_thumbnail:width">100</var>
@@ -189,4 +189,38 @@
     <vars module="Magento_Bundle">
         <var name="product_summary_image_size">58</var>         <!-- New Product image size used for summary block-->
     </vars>
+    <vars module="Js_Bundle">
+        <var name="bundle_size">1MB</var>
+    </vars>
+    <exclude>
+        <item type="file">jquery/jquery-ui-1.9.2.js</item>
+        <item type="file">jquery/jquery.ba-hashchange.min.js</item>
+        <item type="file">jquery/jquery.details.js</item>
+        <item type="file">jquery/jquery.details.min.js</item>
+        <item type="file">jquery/jquery.hoverIntent.js</item>
+        <item type="file">jquery/jquery.min.js</item>
+        <item type="file">mage/captcha.js</item>
+        <item type="file">mage/dropdown_old.js</item>
+        <item type="file">mage/list.js</item>
+        <item type="file">mage/loader_old.js</item>
+        <item type="file">mage/webapi.js</item>
+        <item type="file">moment.js</item>
+        <item type="file">requirejs/require.js</item>
+        <item type="file">date-format-normalizer.js</item>
+        <item type="file">legacy-build.min.js</item>
+        <item type="directory">modernizr</item>
+        <item type="directory">tiny_mce</item>
+        <item type="directory">varien</item>
+        <item type="directory">jquery/editableMultiselect</item>
+        <item type="directory">jquery/jstree</item>
+        <item type="directory">jquery/fileUploader</item>
+        <item type="directory">css</item>
+        <item type="directory">lib</item>
+        <item type="directory">extjs</item>
+        <item type="directory">prototype</item>
+        <item type="directory">scriptaculous</item>
+        <item type="directory">mage/requirejs</item>
+        <item type="directory">mage/adminhtml</item>
+        <item type="directory">mage/backend</item>
+    </exclude>
 </view>

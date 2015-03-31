@@ -80,7 +80,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     private $_isReadOnly = false;
 
     /**
-     * @var \Magento\Core\Model\Resource\Config\Data
+     * @var \Magento\Config\Model\Resource\Config\Data
      */
     protected $_configDataResource;
 
@@ -97,7 +97,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Store\Model\Store $store
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -107,7 +107,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Core\Model\Resource\Config\Data $configDataResource,
+        \Magento\Config\Model\Resource\Config\Data $configDataResource,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -188,7 +188,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getStores()
     {
-        if (is_null($this->_stores)) {
+        if ($this->_stores === null) {
             $this->_loadStores();
         }
         return $this->_stores;
@@ -201,7 +201,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getStoreIds()
     {
-        if (is_null($this->_stores)) {
+        if ($this->_stores === null) {
             $this->_loadStores();
         }
         return $this->_storeIds;
@@ -214,7 +214,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getStoreCodes()
     {
-        if (is_null($this->_stores)) {
+        if ($this->_stores === null) {
             $this->_loadStores();
         }
         return $this->_storeCodes;
@@ -225,7 +225,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getStoresCount()
     {
-        if (is_null($this->_stores)) {
+        if ($this->_stores === null) {
             $this->_loadStores();
         }
         return $this->_storesCount;
@@ -241,7 +241,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
         if (!$this->hasDefaultStoreId()) {
             return false;
         }
-        if (is_null($this->_stores)) {
+        if ($this->_stores === null) {
             $this->_loadStores();
         }
         return $this->_defaultStore;
@@ -305,7 +305,7 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function getWebsite()
     {
-        if (is_null($this->getWebsiteId())) {
+        if ($this->getWebsiteId() === null) {
             return false;
         }
         return $this->_storeManager->getWebsite($this->getWebsiteId());

@@ -6,56 +6,59 @@
 
 namespace Magento\Tax\Test\TestStep;
 
-use Mtf\Fixture\FixtureFactory;
-use Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Creating tax rule
+ * Creating tax rule.
  */
 class CreateTaxRuleStep implements TestStepInterface
 {
     /**
-     * Tax Rule
+     * Tax Rule.
      *
      * @var string
      */
     protected $taxRule;
 
     /**
-     * Factory for Fixture
+     * Factory for Fixture.
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Preparing step properties
+     * Preparing step properties.
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param string $taxRule
      */
-    public function __construct(FixtureFactory $fixtureFactory, $taxRule)
+    public function __construct(FixtureFactory $fixtureFactory, $taxRule = null)
     {
         $this->fixtureFactory = $fixtureFactory;
         $this->taxRule = $taxRule;
     }
 
     /**
-     * Create tax rule
+     * Create tax rule.
      *
      * @return array
      */
     public function run()
     {
         $result['taxRule'] = null;
-        if ($this->taxRule != '-') {
-            $taxRule = $this->fixtureFactory->createByCode(
-                'taxRule',
-                ['dataSet' => $this->taxRule]
-            );
-            $taxRule->persist();
-            $result['taxRule'] = $taxRule;
+        if ($this->taxRule !== null) {
+            $taxRuleDataSets = explode(',', $this->taxRule);
+            foreach ($taxRuleDataSets as $taxRuleDataSet) {
+                $taxRule = $this->fixtureFactory->createByCode(
+                    'taxRule',
+                    ['dataSet' => $taxRuleDataSet]
+                );
+                $taxRule->persist();
+                $result['taxRule'] = $taxRule;
+            }
         }
 
         return $result;

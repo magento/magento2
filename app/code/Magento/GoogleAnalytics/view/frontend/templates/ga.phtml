@@ -7,9 +7,9 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $this \Magento\GoogleAnalytics\Block\Ga */ ?>
-<?php if (!$this->helper('Magento\Store\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
-<?php $accountId = $this->getConfig(\Magento\GoogleAnalytics\Helper\Data::XML_PATH_ACCOUNT) ?>
+<?php /** @var $block \Magento\GoogleAnalytics\Block\Ga */ ?>
+<?php if (!$this->helper('Magento\Cookie\Helper\Cookie')->isUserNotAllowSaveCookie()): ?>
+<?php $accountId = $block->getConfig(\Magento\GoogleAnalytics\Helper\Data::XML_PATH_ACCOUNT) ?>
 <!-- BEGIN GOOGLE ANALYTICS CODE -->
 <script>
 //<![CDATA[
@@ -18,8 +18,8 @@
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    <?php echo $this->getPageTrackingCode($accountId) ?>
-    <?php echo $this->getOrdersTrackingCode() ?>
+    <?php echo $block->getPageTrackingCode($accountId) ?>
+    <?php echo $block->getOrdersTrackingCode() ?>
 
 //]]>
 </script>

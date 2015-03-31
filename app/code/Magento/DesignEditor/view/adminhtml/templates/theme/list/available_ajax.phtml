@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $this \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Available */ ?>
-<?php echo join("\n", $this->getListItems()) ?>
+<?php /** @var $block \Magento\DesignEditor\Block\Adminhtml\Theme\Selector\SelectorList\Available */ ?>
+<?php echo join("\n", $block->getListItems()) ?>
 
 <script>
 require([
@@ -13,7 +13,7 @@ require([
 	'Magento_DesignEditor/js/infinitescroll'
 ], function(jQuery){
 
-    jQuery('.infinite_scroll').infinite_scroll({url :'<?php echo $this->getNextPageUrl() ?>'});
+    jQuery('.infinite_scroll').infinite_scroll({url :'<?php echo $block->getNextPageUrl() ?>'});
 
 });
 </script>

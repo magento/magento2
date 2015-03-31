@@ -8,7 +8,7 @@ namespace Magento\Framework\Logger\Handler;
 
 use Monolog\Logger;
 
-class Debug extends System
+class Debug extends Base
 {
     /**
      * @var string

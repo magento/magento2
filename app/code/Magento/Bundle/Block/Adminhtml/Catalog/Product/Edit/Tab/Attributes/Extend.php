@@ -89,7 +89,8 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
                 $html;
         }
         if ($this->getDisableChild() && !$this->getElement()->getReadonly()) {
-            $html .= "<script type=\"text/javascript\">
+            $html .= "<script>
+            require(['prototype'], function(){
                 function " .
                 $switchAttributeCode .
                 "_change() {
@@ -155,6 +156,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
                 $html .= "$('" . $switchAttributeCode . "').observe('change', " . $switchAttributeCode . "_change);";
             }
             $html .= $switchAttributeCode . "_change();
+            });
             </script>";
         }
         return $html;

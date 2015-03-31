@@ -6,12 +6,16 @@
 ?>
 <?php
 /**
- * @var \Magento\Ui\Component\Paging $this
+ * @var \Magento\Ui\Component\Paging $block
  */
 ?>
-<script data-mage-init='{"Magento_Ui/js/listing/paging" : ""}' type="application/json">
-    <?php echo $this->getConfigBuilder()->toJson($this->getConfig()); ?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/listing/paging": <?php echo $block->getConfigBuilder()->toJson($block->getConfig()); ?>
+        }
+    }
 </script>
-<div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'" class="pager">
+<div data-bind="scope: '<?php echo $block->getParentName(); ?>:<?php echo $block->getName(); ?>'" class="pager">
     <!-- ko template: 'ui/pagination' --><!-- /ko -->
 </div>

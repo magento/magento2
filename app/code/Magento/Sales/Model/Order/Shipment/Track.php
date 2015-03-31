@@ -5,22 +5,14 @@
  */
 namespace Magento\Sales\Model\Order\Shipment;
 
-use Magento\Framework\Api\AttributeDataBuilder;
+use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\Sales\Model\AbstractModel;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Track getResource()
- * @method \Magento\Sales\Model\Order\Shipment\Track setParentId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Track setWeight(float $value)
- * @method \Magento\Sales\Model\Order\Shipment\Track setQty(float $value)
- * @method \Magento\Sales\Model\Order\Shipment\Track setOrderId(int $value)
- * @method \Magento\Sales\Model\Order\Shipment\Track setDescription(string $value)
- * @method \Magento\Sales\Model\Order\Shipment\Track setTitle(string $value)
- * @method \Magento\Sales\Model\Order\Shipment\Track setCarrierCode(string $value)
  * @method \Magento\Sales\Model\Order\Shipment\Track setCreatedAt(string $value)
- * @method \Magento\Sales\Model\Order\Shipment\Track setUpdatedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -60,8 +52,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -74,8 +66,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -87,8 +79,8 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
+            $extensionFactory,
+            $customAttributeFactory,
             $localeDate,
             $dateTime,
             $resource,
@@ -315,4 +307,99 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     {
         return $this->getData(ShipmentTrackInterface::WEIGHT);
     }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt($timestamp)
+    {
+        return $this->setData(ShipmentTrackInterface::UPDATED_AT, $timestamp);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setParentId($id)
+    {
+        return $this->setData(ShipmentTrackInterface::PARENT_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setWeight($weight)
+    {
+        return $this->setData(ShipmentTrackInterface::WEIGHT, $weight);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setQty($qty)
+    {
+        return $this->setData(ShipmentTrackInterface::QTY, $qty);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOrderId($id)
+    {
+        return $this->setData(ShipmentTrackInterface::ORDER_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTrackNumber($trackNumber)
+    {
+        return $this->setData(ShipmentTrackInterface::TRACK_NUMBER, $trackNumber);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription($description)
+    {
+        return $this->setData(ShipmentTrackInterface::DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(ShipmentTrackInterface::TITLE, $title);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCarrierCode($code)
+    {
+        return $this->setData(ShipmentTrackInterface::CARRIER_CODE, $code);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Sales\Api\Data\ShipmentTrackExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

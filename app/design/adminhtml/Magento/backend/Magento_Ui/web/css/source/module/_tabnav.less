@@ -1,0 +1,124 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@admin__section-nav-title__color: @color-very-dark-gray-black;
+@admin__section-nav-title__bg-color: @color-white-fog2;
+@admin__section-nav-title__border-color: @color-gray89;
+
+@admin__section-nav-item__border-color: @color-gray89;
+@admin__section-nav-item__active__color: @color-phoenix;
+
+@admin__section-nav-link__color: @color-very-dark-gray-black;
+@admin__section-nav-link__hover__color: @color-very-dark-gray-black;
+@admin__section-nav-link__changed__color: @color-phoenix;
+
+//
+//  Tab Left Navigation
+//  _____________________________________________
+
+.admin__section-nav {
+    padding-bottom: 1px + 50px;
+}
+.admin__section-nav-title {
+    padding: 0;
+    margin: 0 0 -1px;
+    color: @admin__section-nav-title__color;
+    display: block;
+    padding: 20px 13px;
+    background: @admin__section-nav-title__bg-color;
+    text-transform: uppercase;
+    border: 1px solid @admin__section-nav-title__border-color;
+    line-height: 1.2;
+    &._collapsible {
+        padding-right: 35px;
+        &:after {
+            content: '\e628';
+            font-family: @icons-admin__font-name;
+            -webkit-font-smoothing: antialiased;
+            font-weight: normal;
+            speak: none;
+            position: absolute;
+            right: 18px;
+            top: 22px;
+            font-size: 1.3rem;
+        }
+    }
+    strong {
+        font-weight: @font-weight__bold;
+    }
+}
+.admin__section-nav-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.admin__section-nav-item {
+    padding: 0;
+    border-left: 3px solid transparent;
+    margin: 0 0 -1px;
+    &._active {
+        border-color: @admin__section-nav-item__active__color;
+        .admin__section-nav-link {
+            border-color: @admin__section-nav-item__border-color;
+            margin: 0;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+    &._loading {
+        position: relative;
+        z-index: 1;
+        &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            z-index: 2;
+            background: url('../images/loader-2.gif') no-repeat 50% 50%;
+            background-size: 120px;
+            width: 2rem;
+            height: 2rem;
+            top: 2.1rem;
+            right: .5rem;
+        }
+    }
+}
+.admin__section-nav-link {
+    border: 1px solid transparent;
+    border-width: 1px 0;
+    line-height: 1.2;
+    font-weight: @font-weight__heavier;
+    color: @admin__section-nav-link__color;
+    display: block;
+    padding: 20px 30px 20px 10px;
+    &:hover {
+        color: @admin__section-nav-link__hover__color;
+        text-decoration: underline;
+    }
+    &._changed {
+        position: relative;
+        z-index: 1;
+        &:before {
+            content: '\e623';
+            font-family: @icons-admin__font-name;
+            -webkit-font-smoothing: antialiased;
+            font-style: normal;
+            font-weight: normal;
+            speak: none;
+            position: absolute;
+            z-index: 2;
+            font-size: 17px;
+            color: @admin__section-nav-link__changed__color;
+            width: 20px;
+            height: 20px;
+            top: 15px;
+            right: 5px;
+        }
+    }
+}

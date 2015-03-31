@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\GoogleShopping\Test\Repository\GoogleShoppingAttribute">
+        <dataset name="default">
+            <field name="target_country" xsi:type="string">United States</field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default</item>
+            </field>
+            <field name="category" xsi:type="string">Apparel &amp; Accessories</field>
+        </dataset>
+    </repository>
+</config>

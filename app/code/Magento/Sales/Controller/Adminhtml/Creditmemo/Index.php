@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,10 +10,10 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCredi
     /**
      * Index page
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        parent::execute();
+        return parent::execute();
     }
 }

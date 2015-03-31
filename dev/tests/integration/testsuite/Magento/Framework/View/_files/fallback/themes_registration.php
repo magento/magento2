@@ -13,6 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 ]);
 $objectManger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-/** @var $registration \Magento\Core\Model\Theme\Registration */
-$registration = $objectManger->create('Magento\Core\Model\Theme\Registration');
+/** @var $registration \Magento\Theme\Model\Theme\Registration */
+$registration = $objectManger->create('Magento\Theme\Model\Theme\Registration');
 $registration->register('*/*/*/theme.xml');

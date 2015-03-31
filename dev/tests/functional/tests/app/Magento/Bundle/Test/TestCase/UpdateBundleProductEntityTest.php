@@ -12,8 +12,6 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Update BundleProductEntity
- *
  * Test Flow:
  *
  * Precondition:
@@ -27,7 +25,6 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Edit test value(s) according to dataset.
  * 5. Click "Save".
  * 6. Perform asserts
- *
  *
  * @group Bundle_Product_(MX)
  * @ZephyrId MAGETWO-26195
@@ -73,15 +70,27 @@ class UpdateBundleProductEntityTest extends Injectable
      *
      * @param BundleProduct $product
      * @param BundleProduct $originalProduct
-     * @return void
+     * @return array
      */
     public function test(BundleProduct $product, BundleProduct $originalProduct)
     {
+        // Preconditions
         $originalProduct->persist();
-        $this->catalogProductIndex->open();
+        $originalCategory = $originalProduct->hasData('category_ids')
+            ? $originalProduct->getDataFieldConfig('category_ids')['source']->getCategories()
+            : null;
+        $category = $product->hasData('category_ids')
+            ? $product->getDataFieldConfig('category_ids')['source']->getCategories()
+            : $originalCategory;
+
+        // Steps
         $filter = ['sku' => $originalProduct->getSku()];
+
+        $this->catalogProductIndex->open();
         $this->catalogProductIndex->getProductGrid()->searchAndOpen($filter);
         $this->catalogProductEdit->getProductForm()->fill($product);
         $this->catalogProductEdit->getFormPageActions()->save();
+
+        return ['category' => $category];
     }
 }

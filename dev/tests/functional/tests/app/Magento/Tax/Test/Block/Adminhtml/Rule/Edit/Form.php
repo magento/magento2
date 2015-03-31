@@ -220,7 +220,7 @@ class Form extends FormInterface
                         return $input->isVisible() ? true : null;
                     }
                 );
-                $element->find($this->addNewInput)->setValue($taxClass);
+                $element->find($this->addNewInput)->keys([$taxClass]);
                 $element->find($this->saveButton)->click();
                 $this->waitUntilOptionIsVisible($element, $taxClass);
             }

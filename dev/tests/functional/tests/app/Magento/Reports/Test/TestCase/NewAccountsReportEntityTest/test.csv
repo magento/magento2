@@ -1,5 +1,0 @@
-"customer/dataSet";"total";"customersReport/report_from";"customersReport/report_to";"customersReport/report_period";"constraint"
-"default";"1";"m/d/Y";"m/d/Y";"Year";"assertNewAccountsReportTotalResult"
-"default";"1";"m/d/Y";"m/d/Y";"Month";"assertNewAccountsReportTotalResult"
-"default";"1";"m/d/Y";"m/d/Y";"Day";"assertNewAccountsReportTotalResult"
-"default";"0";"m/d/Y 12:00 a+1 day";"m/d/Y 12:00 a+1 day";"Day";"assertNewAccountsReportTotalResult"

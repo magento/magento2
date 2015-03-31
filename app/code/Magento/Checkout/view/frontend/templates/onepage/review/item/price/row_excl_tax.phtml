@@ -6,9 +6,9 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\Checkout\Block\Item\Price\Renderer */
+/** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
 <span class="cart-price">
     <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getRowTotal()) ?>

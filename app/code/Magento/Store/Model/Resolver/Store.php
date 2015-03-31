@@ -33,4 +33,14 @@ class Store implements \Magento\Framework\App\ScopeResolverInterface
 
         return $scope;
     }
+
+    /**
+     * Retrieve a list of available stores
+     *
+     * @return \Magento\Store\Model\Store[]
+     */
+    public function getScopes()
+    {
+        return $this->_storeManager->getStores();
+    }
 }

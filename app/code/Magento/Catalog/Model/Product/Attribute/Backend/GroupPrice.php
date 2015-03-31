@@ -61,7 +61,7 @@ class GroupPrice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupP
     /**
      * Error message when duplicates
      *
-     * @return string
+     * @return \Magento\Framework\Phrase
      */
     protected function _getDuplicateErrorMessage()
     {

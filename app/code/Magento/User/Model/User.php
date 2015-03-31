@@ -7,6 +7,7 @@ namespace Magento\User\Model;
 
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Admin user model
@@ -228,7 +229,7 @@ class User extends AbstractModel implements StorageInterface
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
             'email' => $this->getEmail(),
-            'modified' => $this->dateTime->now(),
+            'modified' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             'extra' => serialize($this->getExtra()),
         ];
 
@@ -244,7 +245,7 @@ class User extends AbstractModel implements StorageInterface
             $data['password'] = $this->_getEncodedPassword($this->getPassword());
         }
 
-        if (!is_null($this->getIsActive())) {
+        if ($this->getIsActive() !== null) {
             $data['is_active'] = intval($this->getIsActive());
         }
 
@@ -538,9 +539,7 @@ class User extends AbstractModel implements StorageInterface
      * @param string $username
      * @param string $password
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
-     * @throws \Magento\Backend\Model\Auth\Exception
-     * @throws \Magento\Backend\Model\Auth\Plugin\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function authenticate($username, $password)
     {
@@ -562,7 +561,7 @@ class User extends AbstractModel implements StorageInterface
                 'admin_user_authenticate_after',
                 ['username' => $username, 'password' => $password, 'user' => $this, 'result' => $result]
             );
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->unsetData();
             throw $e;
         }
@@ -578,17 +577,17 @@ class User extends AbstractModel implements StorageInterface
      *
      * @param string $password
      * @return bool
-     * @throws \Magento\Backend\Model\Auth\Exception
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     public function verifyIdentity($password)
     {
         $result = false;
         if ($this->_encryptor->validateHash($password, $this->getPassword())) {
             if ($this->getIsActive() != '1') {
-                throw new \Magento\Backend\Model\Auth\Exception(__('This account is inactive.'));
+                throw new AuthenticationException(__('This account is inactive.'));
             }
             if (!$this->hasAssigned2Role($this->getId())) {
-                throw new \Magento\Backend\Model\Auth\Exception(__('Access denied.'));
+                throw new AuthenticationException(__('Access denied.'));
             }
             $result = true;
         }
@@ -667,15 +666,15 @@ class User extends AbstractModel implements StorageInterface
      *
      * @param string $newToken
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function changeResetPasswordLinkToken($newToken)
     {
         if (!is_string($newToken) || empty($newToken)) {
-            throw new \Magento\Framework\Model\Exception(__('Please correct the password reset token.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the password reset token.'));
         }
         $this->setRpToken($newToken);
-        $this->setRpTokenCreatedAt($this->dateTime->now());
+        $this->setRpTokenCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
 
         return $this;
     }
@@ -696,8 +695,8 @@ class User extends AbstractModel implements StorageInterface
 
         $expirationPeriod = $this->_userData->getResetPasswordLinkExpirationPeriod();
 
-        $currentTimestamp = $this->dateTime->toTimestamp($this->dateTime->now());
-        $tokenTimestamp = $this->dateTime->toTimestamp($linkTokenCreatedAt);
+        $currentTimestamp = (new \DateTime())->getTimestamp();
+        $tokenTimestamp = (new \DateTime($linkTokenCreatedAt))->getTimestamp();
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }

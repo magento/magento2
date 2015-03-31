@@ -47,7 +47,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function getText()
     {
-        return $this->text;
+        return (string)$this->text;
     }
 
     /**

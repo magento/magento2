@@ -19,7 +19,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     protected $resultRedirectFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -28,14 +28,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context, $coreRegistry);
         $this->layoutFactory = $layoutFactory;
@@ -50,7 +50,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      */
     protected function _getEntityTypeId()
     {
-        if (is_null($this->_coreRegistry->registry('entityType'))) {
+        if ($this->_coreRegistry->registry('entityType') === null) {
             $this->_setTypeId();
         }
         return $this->_coreRegistry->registry('entityType');
@@ -89,9 +89,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                     $model->load($attributeSetId);
                 }
                 if (!$model->getId()) {
-                    throw new \Magento\Framework\Model\Exception(__('This attribute set no longer exists.'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('This attribute set no longer exists.')
+                    );
                 }
-                $data = $this->_objectManager->get('Magento\Core\Helper\Data')
+                $data = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
                     ->jsonDecode($this->getRequest()->getPost('data'));
 
                 //filter html tags
@@ -107,7 +109,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
             }
             $model->save();
             $this->messageManager->addSuccess(__('You saved the attribute set.'));
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $hasError = true;
         } catch (\Exception $e) {

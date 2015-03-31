@@ -9,9 +9,9 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
-use Magento\Customer\Model\AttributeMetadataDataBuilder;
-use Magento\Customer\Api\Data\OptionDataBuilder;
-use Magento\Customer\Api\Data\ValidationRuleDataBuilder;
+use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
+use Magento\Customer\Api\Data\OptionInterfaceFactory;
+use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 
 /**
  * Class AbstractTest
@@ -54,13 +54,13 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $formFactory = $objectManager->get('Magento\Framework\Data\FormFactory');
         $form = $formFactory->create();
         $fieldset = $form->addFieldset('test_fieldset', []);
-        /** @var \Magento\Customer\Model\AttributeMetadataDataBuilder $attributeBuilder */
-        $attributeBuilder = $objectManager->create('Magento\Customer\Model\AttributeMetadataDataBuilder');
-        $dateAttribute = $attributeBuilder->setAttributeCode('date')
+        /** @var \Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory $attributeMetadataFactory */
+        $attributeMetadataFactory =
+            $objectManager->create('Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory');
+        $dateAttribute = $attributeMetadataFactory->create()->setAttributeCode('date')
             ->setBackendType('datetime')
             ->setFrontendInput('date')
-            ->setFrontendLabel('Date')
-            ->create();
+            ->setFrontendLabel('Date');
         $attributes = ['date' => $dateAttribute];
         $method->invoke($block, $attributes, $fieldset);
 

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Test title</title>
+        <meta name="meta_name" content="meta_content"/>
+        <css src="path/file.css" media="all" />
+        <script src="path/file.js" defer="defer"/>
+        <remove src="path/remove/file.css"/>
+        <attribute name="head_attribute_name" value="head_attribute_value"/>
+    </head>
+</page>

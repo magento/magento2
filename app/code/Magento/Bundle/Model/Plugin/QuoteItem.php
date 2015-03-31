@@ -23,7 +23,7 @@ class QuoteItem
         \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,
         Closure $proceed,
         \Magento\Quote\Model\Quote\Item\AbstractItem $item,
-        $additional
+        $additional = []
     ) {
         /** @var $orderItem \Magento\Sales\Model\Order\Item */
         $orderItem = $proceed($item, $additional);

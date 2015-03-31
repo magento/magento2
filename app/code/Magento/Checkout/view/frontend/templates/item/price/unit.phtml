@@ -6,11 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
-/** @var $this \Magento\Checkout\Block\Item\Price\Renderer */
+/** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
 
-$_item = $this->getItem();
+$_item = $block->getItem();
 ?>
-<span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
+<span class="price-including-tax" data-label="<?php echo $block->escapeHtml(__('Excl. Tax')); ?>">
     <span class="cart-price">
         <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
     </span>

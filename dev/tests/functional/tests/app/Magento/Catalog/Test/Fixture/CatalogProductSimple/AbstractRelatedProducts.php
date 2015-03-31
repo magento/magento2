@@ -11,27 +11,26 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AbstractRelatedProducts
- * Base class for create related products
+ * Base class for create related products.
  */
 class AbstractRelatedProducts implements FixtureInterface
 {
     /**
-     * Data set configuration settings
+     * Data set configuration settings.
      *
      * @var array
      */
     protected $params;
 
     /**
-     * Data of the created products
+     * Data of the created products.
      *
      * @var array
      */
     protected $data = [];
 
     /**
-     * Products fixture
+     * Products fixture.
      *
      * @var array
      */
@@ -41,7 +40,7 @@ class AbstractRelatedProducts implements FixtureInterface
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
-     * @param array $data
+     * @param array $data [optional]
      */
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
@@ -51,29 +50,33 @@ class AbstractRelatedProducts implements FixtureInterface
             $presets = array_map('trim', explode(',', $data['presets']));
             foreach ($presets as $preset) {
                 list($fixtureCode, $dataSet) = explode('::', $preset);
-
-                /** @var CatalogProductSimple $product */
-                $product = $fixtureFactory->createByCode($fixtureCode, ['dataSet' => $dataSet]);
-                if (!$product->hasData('id')) {
-                    $product->persist();
-                }
-
+                $this->products[] = $fixtureFactory->createByCode($fixtureCode, ['dataSet' => $dataSet]);
+            }
+        }
+        if (isset($data['products'])) {
+            foreach ($data['products'] as $product) {
                 $this->products[] = $product;
-                $this->data[] = [
-                    'entity_id' => $product->getId(),
-                    'name' => $product->getName(),
-                    'sku' => $product->getSku(),
-                ];
             }
         }
 
+        foreach ($this->products as $product) {
+            if (!$product->hasData('id')) {
+                $product->persist();
+            }
+
+            $this->data[] = [
+                'entity_id' => $product->getId(),
+                'name' => $product->getName(),
+                'sku' => $product->getSku(),
+            ];
+        }
         if (isset($data['data'])) {
             $this->data = array_replace_recursive($this->data, $data['data']);
         }
     }
 
     /**
-     * Persist related products
+     * Persist related products.
      *
      * @return void
      */
@@ -83,7 +86,7 @@ class AbstractRelatedProducts implements FixtureInterface
     }
 
     /**
-     * Return prepared data set
+     * Return prepared data set.
      *
      * @param string|null $key
      * @return array
@@ -96,7 +99,7 @@ class AbstractRelatedProducts implements FixtureInterface
     }
 
     /**
-     * Return data set configuration settings
+     * Return data set configuration settings.
      *
      * @return array
      */
@@ -106,7 +109,7 @@ class AbstractRelatedProducts implements FixtureInterface
     }
 
     /**
-     * Return related products
+     * Return related products.
      *
      * @return array
      */

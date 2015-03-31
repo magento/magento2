@@ -9,7 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute
 {
     /**
-     * @var \Magento\Framework\Controller\Result\JSONFactory
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -21,13 +21,13 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attr
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
-     * @param \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
-        \Magento\Framework\Controller\Result\JSONFactory $resultJsonFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
         parent::__construct($context, $attributeHelper);
@@ -64,7 +64,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attr
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
             $response->setMessage($e->getMessage());
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {

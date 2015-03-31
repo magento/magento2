@@ -22,7 +22,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
-            ['preferences' => ['Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data']]
+            ['preferences' => ['Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data']]
         );
     }
 
@@ -96,7 +96,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleLabels()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param \Magento\Framework\View\Design\ThemeInterface $theme
@@ -130,7 +130,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testPageTypesDeclaration()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check whether page types are declared only in layout update files allowed for it - base ones
@@ -138,7 +138,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             function (\Magento\Framework\View\File $layout) {
                 $content = simplexml_load_file($layout->getFilename());
                 $this->assertEmpty(
-                    $content->xpath(\Magento\Core\Model\Layout\Merge::XPATH_HANDLE_DECLARATION),
+                    $content->xpath(\Magento\Framework\View\Model\Layout\Merge::XPATH_HANDLE_DECLARATION),
                     "Theme layout update '" . $layout->getFilename() . "' contains page type declaration(s)"
                 );
             },
@@ -162,9 +162,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\View\File\Collector\Override\ThemeModular',
                 ['subDir' => 'layout/override/theme']
             );
-        /** @var $themeCollection \Magento\Core\Model\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Theme\Collection'
+            'Magento\Theme\Model\Theme\Collection'
         );
         $themeCollection->addDefaultPattern('*');
         /** @var $themeLayouts \Magento\Framework\View\File[] */
@@ -183,7 +183,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testOverrideBaseFiles()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check, that for an overriding file ($themeFile) in a theme ($theme), there is a corresponding base file
@@ -210,7 +210,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testOverrideThemeFiles()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * Check, that for an ancestor-overriding file ($themeFile) in a theme ($theme),
@@ -319,9 +319,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected function _retrieveFilesForEveryTheme(\Magento\Framework\View\File\CollectorInterface $filesRetriever)
     {
         $result = [];
-        /** @var $themeCollection \Magento\Core\Model\Theme\Collection */
+        /** @var $themeCollection \Magento\Theme\Model\Theme\Collection */
         $themeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Core\Model\Theme\Collection'
+            'Magento\Theme\Model\Theme\Collection'
         );
         $themeCollection->addDefaultPattern('*');
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */

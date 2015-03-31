@@ -26,7 +26,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $viewFileSystem->expects($this->any())
             ->method('getLocaleFileName')
             ->will(
-                $this->returnValue(dirname(__DIR__) . '/Core/Model/_files/design/frontend/Test/default/i18n/en_US.csv')
+                $this->returnValue(dirname(__DIR__) . '/Theme/Model/_files/design/frontend/Test/default/i18n/en_US.csv')
             );
 
         /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
@@ -40,22 +40,26 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         /** @var $moduleReader \Magento\Framework\Module\Dir\Reader */
         $moduleReader = $objectManager->get('Magento\Framework\Module\Dir\Reader');
-        $moduleReader->setModuleDir('Magento_Core', 'i18n', dirname(__DIR__) . '/Core/Model/_files/Magento/Core/i18n');
+        $moduleReader->setModuleDir(
+            'Magento_Store',
+            'i18n',
+            dirname(__DIR__) . '/Translation/Model/_files/Magento/Store/i18n'
+        );
         $moduleReader->setModuleDir(
             'Magento_Catalog',
             'i18n',
-            dirname(__DIR__) . '/Core/Model/_files/Magento/Catalog/i18n'
+            dirname(__DIR__) . '/Translation/Model/_files/Magento/Catalog/i18n'
         );
 
-        /** @var \Magento\Core\Model\View\Design $designModel */
+        /** @var \Magento\Theme\Model\View\Design $designModel */
         $designModel = $this->getMock(
-            'Magento\Core\Model\View\Design',
+            'Magento\Theme\Model\View\Design',
             ['getDesignTheme'],
             [
                 $objectManager->get('Magento\Store\Model\StoreManagerInterface'),
                 $objectManager->get('Magento\Framework\View\Design\Theme\FlyweightFactory'),
                 $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $objectManager->get('Magento\Core\Model\ThemeFactory'),
+                $objectManager->get('Magento\Theme\Model\ThemeFactory'),
                 $objectManager->get('Magento\Framework\ObjectManagerInterface'),
                 $objectManager->get('Magento\Framework\App\State'),
                 ['frontend' => 'Test/default']
@@ -64,7 +68,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $designModel->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
-        $objectManager->addSharedInstance($designModel, 'Magento\Core\Model\View\Design\Proxy');
+        $objectManager->addSharedInstance($designModel, 'Magento\Theme\Model\View\Design\Proxy');
 
         $model = $objectManager->create('Magento\Framework\Translate');
         $objectManager->addSharedInstance($model, 'Magento\Framework\Translate');
@@ -79,7 +83,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
      */
     public function testTranslate($inputText, $expectedTranslation)
     {
-        $actualTranslation = __($inputText);
+        $actualTranslation = new \Magento\Framework\Phrase($inputText);
         $this->assertEquals($expectedTranslation, $actualTranslation);
     }
 

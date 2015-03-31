@@ -85,8 +85,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDb
+     * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Psr\Log\LoggerInterface $logger
@@ -104,8 +103,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Core\Helper\Data $coreData,
-        \Magento\Core\Helper\File\Storage\Database $fileStorageDb,
+        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
@@ -126,7 +124,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $eavConfig,
             $catalogProductType,
             $eventManager,
-            $coreData,
             $fileStorageDb,
             $filesystem,
             $coreRegistry,
@@ -265,7 +262,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (!$product->hasData($this->_keyStatusFilters)) {
             return [
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED,
-                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED
+                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
             ];
         }
         return $product->getData($this->_keyStatusFilters);
@@ -323,7 +320,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         parent::save($product);
 
         $data = $product->getGroupedLinkData();
-        if (!is_null($data)) {
+        if ($data !== null) {
             $this->productLinks->saveGroupedLinks($product, $data);
         }
         return $this;
@@ -336,7 +333,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Object $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
-     * @return array|string
+     * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
@@ -364,7 +361,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                             }
 
                             if (!isset($_result[0])) {
-                                return __('We cannot process the item.');
+                                return __('We cannot process the item.')->render();
                             }
 
                             if ($isStrictProcessMode) {
@@ -402,7 +399,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
 
-        return __('Please specify the quantity of product(s).');
+        return __('Please specify the quantity of product(s).')->render();
     }
 
     /**

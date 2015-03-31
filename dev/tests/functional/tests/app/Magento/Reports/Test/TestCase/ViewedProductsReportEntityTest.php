@@ -13,8 +13,6 @@ use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 
 /**
- * Test Creation for ViewedProductsReportEntity
- *
  * Test Flow:
  * Preconditions:
  * 1. Create products

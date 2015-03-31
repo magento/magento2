@@ -109,6 +109,7 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
     /**
      * @param null|int|string $index
      * @return null|string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getEscapedValue($index = null)
     {

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App;
 
+use Zend\Stdlib\Parameters;
+
 class AreaTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,7 +17,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\CacheInterface')
-            ->clean([\Magento\Core\Model\Design::CACHE_TAG]);
+            ->clean([\Magento\Theme\Model\Design::CACHE_TAG]);
     }
 
     protected function setUp()
@@ -70,7 +72,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->create('Magento\TestFramework\Request');
-        $request->setServer(['HTTP_USER_AGENT' => 'Mozilla Firefox']);
+        $request->setServer(new Parameters(['HTTP_USER_AGENT' => 'Mozilla Firefox']));
         $this->_model->detectDesign($request);
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\DesignInterface'
@@ -82,7 +84,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
      * @magentoConfigFixture current_store design/package/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
-     * @magentoDataFixture Magento/Core/_files/design_change.php
+     * @magentoDataFixture Magento/Theme/_files/design_change.php
      * @magentoAppIsolation enabled
      */
     // @codingStandardsIgnoreEnd
@@ -100,7 +102,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
      * Test that non-frontend areas are not affected neither by user-agent reg expressions, nor by the "design change"
      *
      * @magentoConfigFixture current_store design/theme/ua_regexp a:1:{s:1:"_";a:2:{s:6:"regexp";s:10:"/firefox/i";s:5:"value";s:13:"Magento/blank";}}
-     * magentoDataFixture Magento/Core/_files/design_change.php
+     * magentoDataFixture Magento/Theme/_files/design_change.php
      * @magentoAppIsolation enabled
      */
     // @codingStandardsIgnoreEnd
@@ -110,7 +112,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
         $model = $objectManager->create('Magento\Framework\App\Area', ['areaCode' => 'adminhtml']);
         /** @var $request \Magento\TestFramework\Request */
         $request = $objectManager->create('Magento\TestFramework\Request');
-        $request->setServer(['HTTP_USER_AGENT' => 'Mozilla Firefox']);
+        $request->setServer(new Parameters(['HTTP_USER_AGENT' => 'Mozilla Firefox']));
         $model->detectDesign($request);
         $design = $objectManager->get('Magento\Framework\View\DesignInterface');
         $this->assertNotEquals('Magento/blank', $design->getDesignTheme()->getThemePath());

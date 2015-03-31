@@ -6,9 +6,9 @@
  */
 namespace Magento\ConfigurableProduct\Model;
 
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Webapi\Exception;
 
 class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementInterface
 {
@@ -18,9 +18,9 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     private $productRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductInterfaceFactory
      */
-    private $productBuilder;
+    private $productFactory;
 
     /**
      * @var Resource\Product\Type\Configurable
@@ -28,27 +28,35 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     private $configurableType;
 
     /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    private $dataObjectHelper;
+
+    /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Api\Data\ProductDataBuilder $productBuilder
+     * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory
      * @param Resource\Product\Type\Configurable $configurableType
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Api\Data\ProductDataBuilder $productBuilder,
-        \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurableType
+        \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory,
+        \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurableType,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->productRepository = $productRepository;
-        $this->productBuilder = $productBuilder;
+        $this->productFactory = $productFactory;
         $this->configurableType = $configurableType;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getChildren($productSku)
+    public function getChildren($sku)
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         if ($product->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
             return [];
         }
@@ -69,7 +77,14 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
                 }
             }
             $attributes['store_id'] = $child->getStoreId();
-            $childrenList[] = $this->productBuilder->populateWithArray($attributes)->create();
+            /** @var \Magento\Catalog\Api\Data\ProductInterface $productDataObject */
+            $productDataObject = $this->productFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $productDataObject,
+                $attributes,
+                '\Magento\Catalog\Api\Data\ProductInterface'
+            );
+            $childrenList[] = $productDataObject;
         }
         return $childrenList;
     }
@@ -77,14 +92,14 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     /**
      * {@inheritdoc}
      */
-    public function addChild($productSku, $childSku)
+    public function addChild($sku, $childSku)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         $child = $this->productRepository->get($childSku);
 
         $childrenIds = array_values($this->configurableType->getChildrenIds($product->getId())[0]);
         if (in_array($child->getId(), $childrenIds)) {
-            throw new StateException('Product has been already attached');
+            throw new StateException(__('Product has been already attached'));
         }
 
         $childrenIds[] = $child->getId();
@@ -96,14 +111,13 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     /**
      * {@inheritdoc}
      */
-    public function removeChild($productSku, $childSku)
+    public function removeChild($sku, $childSku)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
 
         if ($product->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
-            throw new Exception(
-                sprintf('Product with specified sku: %s is not a configurable product', $productSku),
-                Exception::HTTP_FORBIDDEN
+            throw new InputException(
+                __('Product with specified sku: %1 is not a configurable product', $sku)
             );
         }
 
@@ -116,7 +130,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             $ids[] = $option->getId();
         }
         if (count($options) == count($ids)) {
-            throw new NoSuchEntityException('Requested option doesn\'t exist');
+            throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
         }
         $product->addData(['associated_product_ids' => $ids]);
         $product->save();

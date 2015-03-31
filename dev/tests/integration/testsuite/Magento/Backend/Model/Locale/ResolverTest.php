@@ -69,7 +69,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     {
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\App\RequestInterface');
-        $request->setPost(['locale' => 'de_DE']);
+        $request->setPostValue(['locale' => 'de_DE']);
         $this->_checkSetLocale('de_DE');
     }
 
@@ -82,7 +82,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
     protected function _checkSetLocale($localeCodeToCheck)
     {
         $this->_model->setLocale();
-        $localeCode = $this->_model->getLocaleCode();
+        $localeCode = $this->_model->getLocale();
         $this->assertEquals($localeCode, $localeCodeToCheck);
     }
 }

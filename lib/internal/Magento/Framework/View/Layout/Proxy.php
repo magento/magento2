@@ -477,7 +477,7 @@ class Proxy extends \Magento\Framework\View\Layout
      * Get block singleton
      *
      * @param string $type
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getBlockSingleton($type)
@@ -847,7 +847,7 @@ class Proxy extends \Magento\Framework\View\Layout
      * @param \DOMNode $dom
      * @return bool
      */
-    public function loadDom($dom)
+    public function loadDom(\DOMNode $dom)
     {
         return $this->getSubject()->loadDom($dom);
     }

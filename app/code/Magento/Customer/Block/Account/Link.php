@@ -29,7 +29,6 @@ class Link extends \Magento\Framework\View\Element\Html\Link
     ) {
         $this->_customerUrl = $customerUrl;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
     }
 
     /**

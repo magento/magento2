@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+  <testCase name="Magento\ConfigurableProduct\Test\TestCase\UpdateConfigurableProductEntityTest">
+    <variation name="UpdateConfigurableProductEntityTestVariation1">
+      <data name="description" xsi:type="string">Add new option to existed Attribute</data>
+      <data name="attributeTypeAction" xsi:type="string">addOptions</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+      <data name="updatedProduct/data/configurable_attributes_data/preset" xsi:type="string">one_new_options</data>
+      <data name="updatedProduct/data/checkout_data/preset" xsi:type="string">two_attributes</data>
+      <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">153</data>
+      <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
+      <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+      <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
+      <data name="updatedProduct/data/category_ids/presets" xsi:type="string">default_subcategory</data>
+      <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
+      <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
+      <data name="updatedProduct/data/weight" xsi:type="string">3</data>
+      <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductsInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertChildProductIsNotDisplayedSeparately"/>
+    </variation>
+    <variation name="UpdateConfigurableProductEntityTestVariation2">
+      <data name="description" xsi:type="string">Add new variations</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+      <data name="updatedProduct/data/configurable_attributes_data/preset" xsi:type="string">two_new_options</data>
+      <data name="updatedProduct/data/checkout_data/preset" xsi:type="string">three_attributes</data>
+      <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">154</data>
+      <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
+      <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+      <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
+      <data name="updatedProduct/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
+      <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
+      <data name="updatedProduct/data/weight" xsi:type="string">3</data>
+      <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">custom_attribute_set_%isolation%</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+    </variation>
+    <variation name="UpdateConfigurableProductEntityTestVariation3">
+      <data name="description" xsi:type="string">Delete one attribute and add another</data>
+      <data name="attributeTypeAction" xsi:type="string">deleteLast</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+      <data name="updatedProduct/data/configurable_attributes_data/preset" xsi:type="string">two_new_options</data>
+      <data name="updatedProduct/data/checkout_data/preset" xsi:type="string">two_attributes</data>
+      <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">112</data>
+      <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
+      <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+      <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
+      <data name="updatedProduct/data/category_ids/presets" xsi:type="string">default_subcategory</data>
+      <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
+      <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
+      <data name="updatedProduct/data/weight" xsi:type="string">3</data>
+      <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInStock"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInCart"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesAbsentOnProductPage"/>
+    </variation>
+    <variation name="UpdateConfigurableProductEntityTestVariation4">
+      <data name="description" xsi:type="string">Delete attribute and add another with products qty = 0</data>
+      <data name="attributeTypeAction" xsi:type="string">deleteAll</data>
+      <data name="product" xsi:type="string">configurableProduct::default</data>
+      <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+      <data name="updatedProduct/data/configurable_attributes_data/preset" xsi:type="string">two_new_options_with_zero_products</data>
+      <data name="updatedProduct/data/checkout_data/preset" xsi:type="string">two_attributes</data>
+      <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
+      <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+      <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
+      <data name="updatedProduct/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="updatedProduct/data/short_description" xsi:type="string">Configurable short description</data>
+      <data name="updatedProduct/data/description" xsi:type="string">Configurable Product description %isolation%</data>
+      <data name="updatedProduct/data/weight" xsi:type="string">3</data>
+      <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
+      <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductForm"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableAttributesBlockIsAbsentOnProductPage"/>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock"/>
+    </variation>
+    <variation name="UpdateConfigurableProductEntityTestVariation5" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
+      <data name="description" xsi:type="string">MAGETWO-12840: Edit Configurable Product</data>
+      <data name="attributeTypeAction" xsi:type="string">addOptions</data>
+      <data name="product" xsi:type="string">configurableProduct::two_options_with_fixed_price</data>
+      <data name="updatedProduct/data/url_key" xsi:type="string">configurable-product-%isolation%</data>
+      <data name="updatedProduct/data/configurable_attributes_data/preset" xsi:type="string">one_new_options</data>
+      <data name="updatedProduct/data/checkout_data/preset" xsi:type="string">-</data>
+      <data name="updatedProduct/data/checkout_data/cartItem/price" xsi:type="string">-</data>
+      <data name="updatedProduct/data/name" xsi:type="string">Configurable Product %isolation%</data>
+      <data name="updatedProduct/data/sku" xsi:type="string">configurable_sku_%isolation%</data>
+      <data name="updatedProduct/data/price/value" xsi:type="string">99</data>
+      <data name="updatedProduct/data/category_ids/presets" xsi:type="string">-</data>
+      <data name="updatedProduct/data/short_description" xsi:type="string">-</data>
+      <data name="updatedProduct/data/description" xsi:type="string">-</data>
+      <data name="updatedProduct/data/weight" xsi:type="string">-</data>
+      <data name="updatedProduct/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
+      <data name="updatedProduct/data/affected_attribute_set" xsi:type="string">-</data>
+      <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage"/>
+      <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage"/>
+    </variation>
+  </testCase>
+</config>

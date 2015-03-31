@@ -19,29 +19,40 @@ class TaxRuleFixtureFactory
      */
     private $objectManager;
 
+    /**
+     * @var \Magento\Framework\Api\DataObjectHelper
+     */
+    private $dataObjectHelper;
+
     public function __construct()
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->dataObjectHelper = $this->objectManager->create('Magento\Framework\Api\DataObjectHelper');
     }
 
     /**
      * Helper to create tax rules.
      *
-     * @param array $rulesData Keys match TaxRuleBuilder populateWithArray
+     * @param array $rulesData Keys match populateWithArray
      * @return array code => rule id
      */
     public function createTaxRules($rulesData)
     {
-        /** @var \Magento\Tax\Api\Data\TaxRuleDataBuilder $taxRuleBuilder */
-        $taxRuleBuilder = $this->objectManager->create('Magento\Tax\Api\Data\TaxRuleDataBuilder');
+        /** @var \Magento\Tax\Api\Data\TaxRuleInterfaceFactory $taxRuleFactory */
+        $taxRuleFactory = $this->objectManager->create('Magento\Tax\Api\Data\TaxRuleInterfaceFactory');
         /** @var \Magento\Tax\Api\TaxRuleRepositoryInterface $taxRuleService */
         $taxRuleService = $this->objectManager->create('Magento\Tax\Api\TaxRuleRepositoryInterface');
 
         $rules = [];
         foreach ($rulesData as $ruleData) {
-            $taxRuleBuilder->populateWithArray($ruleData);
+            $taxRule = $taxRuleFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $taxRule,
+                $ruleData,
+                '\Magento\Tax\Api\Data\TaxRuleInterface'
+            );
 
-            $rules[$ruleData['code']] = $taxRuleService->save($taxRuleBuilder->create())->getId();
+            $rules[$ruleData['code']] = $taxRuleService->save($taxRule)->getId();
         }
 
         return $rules;
@@ -72,8 +83,8 @@ class TaxRuleFixtureFactory
      */
     public function createTaxRates($ratesData)
     {
-        /** @var \Magento\Tax\Api\Data\TaxRateDataBuilder $taxRateBuilder */
-        $taxRateBuilder = $this->objectManager->create('Magento\Tax\Api\Data\TaxRateDataBuilder');
+        /** @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateFactory */
+        $taxRateFactory = $this->objectManager->create('Magento\Tax\Api\Data\TaxRateInterfaceFactory');
         /** @var \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateService */
         $taxRateService = $this->objectManager->create('Magento\Tax\Api\TaxRateRepositoryInterface');
 
@@ -85,14 +96,15 @@ class TaxRuleFixtureFactory
                 $postcode = $rateData['postcode'];
                 $code = $code . " - " . $postcode;
             }
-            $taxRateBuilder->setTaxCountryId($rateData['country'])
+
+            $taxRate = $taxRateFactory->create();
+            $taxRate->setTaxCountryId($rateData['country'])
                 ->setTaxRegionId($rateData['region'])
                 ->setTaxPostcode($postcode)
                 ->setCode($code)
                 ->setRate($rateData['percentage']);
 
-            $rates[$code] =
-                $taxRateService->save($taxRateBuilder->create())->getId();
+            $rates[$code] = $taxRateService->save($taxRate)->getId();
         }
         return $rates;
     }

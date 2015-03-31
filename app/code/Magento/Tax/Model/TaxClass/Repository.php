@@ -14,7 +14,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Model\Exception as ModelException;
+use Magento\Framework\Exception\LocalizedException as ModelException;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Model\ClassModelRegistry;
@@ -32,9 +32,9 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     protected $taxClassCollectionFactory;
 
     /**
-     * @var \Magento\Tax\Api\Data\TaxClassSearchResultsDataBuilder
+     * @var \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsFactory;
 
     /**
      * @var ClassModelRegistry
@@ -66,7 +66,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param TaxClassCollectionFactory $taxClassCollectionFactory
-     * @param \Magento\Tax\Api\Data\TaxClassSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory
      * @param ClassModelRegistry $classModelRegistry
      * @param \Magento\Tax\Model\Resource\TaxClass $taxClassResource
      */
@@ -74,14 +74,14 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         TaxClassCollectionFactory $taxClassCollectionFactory,
-        \Magento\Tax\Api\Data\TaxClassSearchResultsDataBuilder $searchResultsBuilder,
+        \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory,
         ClassModelRegistry $classModelRegistry,
         \Magento\Tax\Model\Resource\TaxClass $taxClassResource
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->taxClassCollectionFactory = $taxClassCollectionFactory;
-        $this->searchResultsBuilder = $searchResultsBuilder;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->classModelRegistry = $classModelRegistry;
         $this->taxClassResource = $taxClassResource;
     }
@@ -96,17 +96,19 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
 
             /* should not be allowed to switch the tax class type */
             if ($originalTaxClassModel->getClassType() !== $taxClass->getClassType()) {
-                throw new InputException('Updating classType is not allowed.');
+                throw new InputException(__('Updating classType is not allowed.'));
             }
         }
         $this->validateTaxClassData($taxClass);
         try {
             $this->taxClassResource->save($taxClass);
         } catch (ModelException $e) {
-            if (strpos($e->getMessage(), \Magento\Tax\Model\Resource\TaxClass::UNIQUE_TAX_CLASS_MSG) !== false) {
+            if (strpos($e->getMessage(), (string)__('Class name and class type')) !== false) {
                 throw new InputException(
-                    'A class with the same name already exists for ClassType %classType.',
-                    ['classType' => $taxClass->getClassType()]
+                    __(
+                        'A class with the same name already exists for ClassType %1.',
+                        $taxClass->getClassType()
+                    )
                 );
             } else {
                 throw $e;
@@ -162,18 +164,20 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $exception = new InputException();
 
         if (!\Zend_Validate::is(trim($taxClass->getClassName()), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_NAME]);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_NAME]));
         }
 
         $classType = $taxClass->getClassType();
         if (!\Zend_Validate::is(trim($classType), 'NotEmpty')) {
-            $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_TYPE]);
+            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => TaxClassInterface::KEY_TYPE]));
         } elseif ($classType !== TaxClassManagementInterface::TYPE_CUSTOMER
             && $classType !== TaxClassManagementInterface::TYPE_PRODUCT
         ) {
             $exception->addError(
-                InputException::INVALID_FIELD_VALUE,
-                ['fieldName' => TaxClassInterface::KEY_TYPE, 'value' => $classType]
+                __(
+                    InputException::INVALID_FIELD_VALUE,
+                    ['fieldName' => TaxClassInterface::KEY_TYPE, 'value' => $classType]
+                )
             );
         }
 
@@ -187,13 +191,14 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
         /** @var TaxClassCollection $collection */
         $collection = $this->taxClassCollectionFactory->create();
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
-        $this->searchResultsBuilder->setTotalCount($collection->getSize());
+        $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         /** @var SortOrder $sortOrder */
         if ($sortOrders) {
@@ -206,8 +211,8 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
-        $this->searchResultsBuilder->setItems($collection->getItems());
-        return $this->searchResultsBuilder->create();
+        $searchResults->setItems($collection->getItems());
+        return $searchResults;
     }
 
     /**

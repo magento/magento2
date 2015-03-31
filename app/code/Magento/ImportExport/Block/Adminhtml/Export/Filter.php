@@ -78,9 +78,9 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             'id' => $this->getFilterElementId($attribute->getAttributeCode()),
             'class' => 'input-text input-text-range-date',
             'date_format' => $this->_localeDate->getDateFormat(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT
+                \IntlDateFormatter::SHORT
             ),
-            'image' => $this->getViewFileUrl('images/grid-cal.gif'),
+            'image' => $this->getViewFileUrl('images/grid-cal.png'),
         ];
         /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
         $dateBlock = $this->_layout->createBlock(
@@ -131,7 +131,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $attribute
      * @param mixed $value
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     protected function _getMultiSelectHtmlWithValue(Attribute $attribute, $value)
     {
@@ -209,7 +209,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $attribute
      * @param mixed $value
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _getSelectHtmlWithValue(Attribute $attribute, $value)
@@ -379,6 +379,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @param Attribute $row
      * @return string|false
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getRowUrl($row)
     {

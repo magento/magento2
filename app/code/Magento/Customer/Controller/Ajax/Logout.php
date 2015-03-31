@@ -10,7 +10,7 @@ namespace Magento\Customer\Controller\Ajax;
 /**
  * Logout controller
  *
- * @method \Zend_Controller_Request_Http getRequest()
+ * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
  */
 class Logout extends \Magento\Framework\App\Action\Action
@@ -21,32 +21,31 @@ class Logout extends \Magento\Framework\App\Action\Action
     protected $session;
 
     /**
-     * @var \Magento\Core\Helper\Data $helper
+     * @var \Magento\Framework\Controller\Result\JsonFactory
      */
-    protected $helper;
+    protected $resultJsonFactory;
 
     /**
      * Initialize Logout controller
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Core\Helper\Data $helper
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Core\Helper\Data $helper
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         parent::__construct($context);
         $this->customerSession = $customerSession;
-        $this->helper = $helper;
-
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
      * Customer logout action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -55,6 +54,8 @@ class Logout extends \Magento\Framework\App\Action\Action
             ->setBeforeAuthUrl($this->_redirect->getRefererUrl())
             ->setLastCustomerId($lastCustomerId);
 
-        $this->getResponse()->representJson($this->helper->jsonEncode(['message' => 'Logout Successful']));
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultJsonFactory->create();
+        return $resultJson->setData(['message' => 'Logout Successful']);
     }
 }

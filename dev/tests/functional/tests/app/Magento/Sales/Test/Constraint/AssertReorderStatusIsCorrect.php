@@ -8,7 +8,7 @@ namespace Magento\Sales\Test\Constraint;
 
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
-use Magento\Sales\Test\Page\Adminhtml\OrderView;
+use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -17,31 +17,27 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertReorderStatusIsCorrect extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert that status is correct on order page in backend (same with value of orderStatus variable)
      *
      * @param string $previousOrderStatus
      * @param OrderInjectable $order
      * @param OrderIndex $salesOrder
-     * @param OrderView $salesOrderView
+     * @param SalesOrderView $salesOrderView
      * @return void
      */
     public function processAssert(
         $previousOrderStatus,
         OrderInjectable $order,
         OrderIndex $salesOrder,
-        OrderView $salesOrderView
+        SalesOrderView $salesOrderView
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $order->getId()]);
 
         \PHPUnit_Framework_Assert::assertEquals(
-            $salesOrderView->getOrderForm()->getOrderInfoBlock()->getOrderStatus(),
             $previousOrderStatus,
+            $salesOrderView->getOrderForm()->getOrderInfoBlock()->getOrderStatus(),
             'Order status is incorrect on order page in backend.'
         );
     }

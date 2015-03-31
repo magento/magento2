@@ -203,7 +203,11 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         $this->setChild(
             'reset_filter_button',
             $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->setData(
-                ['label' => __('Reset Filter'), 'onclick' => $this->getJsObjectName() . '.resetFilter()']
+                [
+                    'label' => __('Reset Filter'),
+                    'onclick' => $this->getJsObjectName() . '.resetFilter()',
+                    'class' => 'action-reset'
+                ]
             )
         );
         $this->setChild(
@@ -945,7 +949,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
             $collection->setPageSize($this->_exportPageSize);
             $collection->setCurPage($page);
             $collection->load();
-            if (is_null($count)) {
+            if ($count === null) {
                 $count = $collection->getSize();
                 $lPage = $collection->getLastPageNumber();
             }

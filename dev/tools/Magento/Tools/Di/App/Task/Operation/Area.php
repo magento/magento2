@@ -7,7 +7,6 @@ namespace Magento\Tools\Di\App\Task\Operation;
 
 use Magento\Tools\Di\App\Task\OperationInterface;
 use Magento\Framework\App;
-use Magento\Tools\Di\Code\Reader\ClassesScanner;
 use Magento\Tools\Di\Compiler\Config;
 use Magento\Tools\Di\Definition\Collection as DefinitionsCollection;
 
@@ -19,9 +18,9 @@ class Area implements OperationInterface
     private $areaList;
 
     /**
-     * @var ClassesScanner
+     * @var \Magento\Tools\Di\Code\Reader\Decorator\Area
      */
-    private $classesScanner;
+    private $areaInstancesNamesList;
 
     /**
      * @var Config\Reader
@@ -39,24 +38,32 @@ class Area implements OperationInterface
     private $data = [];
 
     /**
+     * @var \Magento\Tools\Di\Compiler\Config\ModificationChain
+     */
+    private $modificationChain;
+
+    /**
      * @param App\AreaList $areaList
-     * @param ClassesScanner $classesScanner
+     * @param \Magento\Tools\Di\Code\Reader\Decorator\Area $areaInstancesNamesList
      * @param Config\Reader $configReader
      * @param Config\WriterInterface $configWriter
+     * @param \Magento\Tools\Di\Compiler\Config\ModificationChain $modificationChain
      * @param array $data
      */
     public function __construct(
         App\AreaList $areaList,
-        ClassesScanner $classesScanner,
+        \Magento\Tools\Di\Code\Reader\Decorator\Area $areaInstancesNamesList,
         Config\Reader $configReader,
         Config\WriterInterface $configWriter,
+        Config\ModificationChain $modificationChain,
         $data = []
     ) {
         $this->areaList = $areaList;
-        $this->classesScanner = $classesScanner;
+        $this->areaInstancesNamesList = $areaInstancesNamesList;
         $this->configReader = $configReader;
         $this->configWriter = $configWriter;
         $this->data = $data;
+        $this->modificationChain = $modificationChain;
     }
 
     /**
@@ -75,9 +82,12 @@ class Area implements OperationInterface
 
         $areaCodes = array_merge([App\Area::AREA_GLOBAL], $this->areaList->getCodes());
         foreach ($areaCodes as $areaCode) {
+            $config = $this->configReader->generateCachePerScope($definitionsCollection, $areaCode);
+            $config = $this->modificationChain->modify($config);
+
             $this->configWriter->write(
                 $areaCode,
-                $this->configReader->generateCachePerScope($definitionsCollection, $areaCode)
+                $config
             );
         }
     }
@@ -91,7 +101,7 @@ class Area implements OperationInterface
     protected function getDefinitionsCollection($path)
     {
         $definitions = new DefinitionsCollection();
-        foreach ($this->classesScanner->getList($path) as $className => $constructorArguments) {
+        foreach ($this->areaInstancesNamesList->getList($path) as $className => $constructorArguments) {
             $definitions->addDefinition($className, $constructorArguments);
         }
         return $definitions;

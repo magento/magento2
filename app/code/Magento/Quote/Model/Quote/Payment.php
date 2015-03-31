@@ -5,8 +5,6 @@
  */
 namespace Magento\Quote\Model\Quote;
 
-use Magento\Framework\Api\AttributeDataBuilder;
-
 /**
  * Quote payment information
  *
@@ -18,10 +16,6 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method \Magento\Quote\Model\Quote\Payment setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Quote\Model\Quote\Payment setUpdatedAt(string $value)
- * @method string getMethod()
- * @method \Magento\Quote\Model\Quote\Payment setMethod(string $value)
- * @method string getCcType()
- * @method \Magento\Quote\Model\Quote\Payment setCcType(string $value)
  * @method string getCcNumberEnc()
  * @method \Magento\Quote\Model\Quote\Payment setCcNumberEnc(string $value)
  * @method string getCcLast4()
@@ -34,17 +28,13 @@ use Magento\Framework\Api\AttributeDataBuilder;
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartMonth(int $value)
  * @method int getCcSsStartYear()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsStartYear(int $value)
- * @method string getPoNumber()
- * @method \Magento\Quote\Model\Quote\Payment setPoNumber(string $value)
- * @method string getAdditionalData()
- * @method \Magento\Quote\Model\Quote\Payment setAdditionalData(string $value)
  * @method string getCcSsIssue()
  * @method \Magento\Quote\Model\Quote\Payment setCcSsIssue(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Payment extends \Magento\Payment\Model\Info
+class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\Data\PaymentInterface
 {
     /**
      * @var string
@@ -71,8 +61,8 @@ class Payment extends \Magento\Payment\Model\Info
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\MetadataServiceInterface $metadataService
-     * @param AttributeDataBuilder $customAttributeBuilder
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory
@@ -84,8 +74,8 @@ class Payment extends \Magento\Payment\Model\Info
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\MetadataServiceInterface $metadataService,
-        AttributeDataBuilder $customAttributeBuilder,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Payment\Model\Checks\SpecificationFactory $methodSpecificationFactory,
@@ -97,8 +87,8 @@ class Payment extends \Magento\Payment\Model\Info
         parent::__construct(
             $context,
             $registry,
-            $metadataService,
-            $customAttributeBuilder,
+            $extensionFactory,
+            $customAttributeFactory,
             $paymentData,
             $encryptor,
             $resource,
@@ -147,7 +137,7 @@ class Payment extends \Magento\Payment\Model\Info
      *
      * @param array $data
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function importData(array $data)
     {
@@ -169,7 +159,9 @@ class Payment extends \Magento\Payment\Model\Info
 
         $methodSpecification = $this->methodSpecificationFactory->create($data->getChecks());
         if (!$method->isAvailable($quote) || !$methodSpecification->isApplicable($method, $quote)) {
-            throw new \Magento\Framework\Model\Exception(__('The requested Payment Method is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The requested Payment Method is not available.')
+            );
         }
 
         $method->assignData($data);
@@ -192,7 +184,7 @@ class Payment extends \Magento\Payment\Model\Info
         }
         try {
             $method = $this->getMethodInstance();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             return parent::beforeSave();
         }
         $method->prepareSave();
@@ -236,5 +228,209 @@ class Payment extends \Magento\Payment\Model\Info
     {
         $method = parent::getMethodInstance();
         return $method->setStore($this->getQuote()->getStore());
+    }
+
+    /**
+     * @codeCoverageIgnoreStart
+     */
+
+    /**
+     * Get purchase order number
+     *
+     * @return string|null
+     */
+    public function getPoNumber()
+    {
+        return $this->getData(self::KEY_PO_NUMBER);
+    }
+
+    /**
+     * Set purchase order number
+     *
+     * @param string $poNumber
+     * @return $this
+     */
+    public function setPoNumber($poNumber)
+    {
+        return $this->setData(self::KEY_PO_NUMBER, $poNumber);
+    }
+
+    /**
+     * Get payment method code
+     *
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->getData(self::KEY_METHOD);
+    }
+
+    /**
+     * Set payment method code
+     *
+     * @param string $method
+     * @return $this
+     */
+    public function setMethod($method)
+    {
+        return $this->setData(self::KEY_METHOD, $method);
+    }
+
+    /**
+     * Get credit card owner
+     *
+     * @return string|null
+     */
+    public function getCcOwner()
+    {
+        return $this->getData(self::KEY_CC_OWNER);
+    }
+
+    /**
+     * Set credit card owner
+     *
+     * @param string $ccOwner
+     * @return $this
+     */
+    public function setCcOwner($ccOwner)
+    {
+        return $this->setData(self::KEY_CC_OWNER, $ccOwner);
+    }
+
+    /**
+     * Get credit card number
+     *
+     * @return string|null
+     */
+    public function getCcNumber()
+    {
+        return $this->getData(self::KEY_CC_NUMBER);
+    }
+
+    /**
+     * Set credit card number
+     *
+     * @param string $ccNumber
+     * @return $this
+     */
+    public function setCcNumber($ccNumber)
+    {
+        return $this->setData(self::KEY_CC_NUMBER, $ccNumber);
+    }
+
+    /**
+     * Get credit card type
+     *
+     * @return string|null
+     */
+    public function getCcType()
+    {
+        return $this->getData(self::KEY_CC_TYPE);
+    }
+
+    /**
+     * Set credit card type
+     *
+     * @param string $ccType
+     * @return $this
+     */
+    public function setCcType($ccType)
+    {
+        return $this->setData(self::KEY_CC_TYPE, $ccType);
+    }
+
+    /**
+     * Get credit card expiration year
+     *
+     * @return string|null
+     */
+    public function getCcExpYear()
+    {
+        $expirationYear = $this->getData(self::KEY_CC_EXP_YEAR) ?: null;
+        return $expirationYear;
+    }
+
+    /**
+     * Set credit card expiration year
+     *
+     * @param string $ccExpYear
+     * @return $this
+     */
+    public function setCcExpYear($ccExpYear)
+    {
+        return $this->setData(self::KEY_CC_EXP_YEAR, $ccExpYear);
+    }
+
+    /**
+     * Get credit card expiration month
+     *
+     * @return string|null
+     */
+    public function getCcExpMonth()
+    {
+        return $this->getData(self::KEY_CC_EXP_MONTH);
+    }
+
+    /**
+     * Set credit card expiration month
+     *
+     * @param string $ccExpMonth
+     * @return $this
+     */
+    public function setCcExpMonth($ccExpMonth)
+    {
+        return $this->setData(self::KEY_CC_EXP_MONTH, $ccExpMonth);
+    }
+
+    /**
+     * Get payment additional details
+     *
+     * @return string[]|null
+     */
+    public function getAdditionalData()
+    {
+        $additionalDataValue = $this->getData(self::KEY_ADDITIONAL_DATA);
+        if (is_string($additionalDataValue)) {
+            $additionalData = @unserialize($additionalDataValue);
+            if (is_array($additionalData)) {
+                return $additionalData;
+            }
+        } elseif (is_array($additionalDataValue)) {
+            return $additionalDataValue;
+        }
+        return null;
+    }
+
+    /**
+     * Set payment additional details
+     *
+     * @param string $additionalData
+     * @return $this
+     */
+    public function setAdditionalData($additionalData)
+    {
+        return $this->setData(self::KEY_ADDITIONAL_DATA, $additionalData);
+    }
+    //@codeCoverageIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Quote\Api\Data\PaymentExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Quote\Api\Data\PaymentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Quote\Api\Data\PaymentExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

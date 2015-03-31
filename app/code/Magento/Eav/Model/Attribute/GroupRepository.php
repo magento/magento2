@@ -33,29 +33,29 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     protected $groupListFactory;
 
     /**
-     * @var \Magento\Eav\Api\Data\AttributeGroupSearchResultsDataBuilder
+     * @var \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory
      */
-    protected $searchResultsBuilder;
+    protected $searchResultsFactory;
 
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupListFactory
      * @param \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository
-     * @param \Magento\Eav\Api\Data\AttributeGroupSearchResultsDataBuilder $searchResultsBuilder
+     * @param \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupListFactory,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory,
         \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository,
-        \Magento\Eav\Api\Data\AttributeGroupSearchResultsDataBuilder $searchResultsBuilder
+        \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory
     ) {
         $this->groupResource = $groupResource;
         $this->groupListFactory = $groupListFactory;
         $this->groupFactory = $groupFactory;
         $this->setRepository = $setRepository;
-        $this->searchResultsBuilder = $searchResultsBuilder;
+        $this->searchResultsFactory = $searchResultsFactory;
     }
 
     /**
@@ -78,14 +78,16 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
                 throw NoSuchEntityException::singleField('attributeGroupId', $existingGroup->getId());
             }
             if ($existingGroup->getAttributeSetId() != $group->getAttributeSetId()) {
-                throw new StateException('Attribute group does not belong to provided attribute set');
+                throw new StateException(
+                    __('Attribute group does not belong to provided attribute set')
+                );
             }
         }
 
         try {
             $this->groupResource->save($group);
         } catch (\Exception $e) {
-            throw new StateException('Cannot save attributeGroup');
+            throw new StateException(__('Cannot save attributeGroup'));
         }
         return $group;
     }
@@ -109,10 +111,11 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         $collection->setAttributeSetFilter($attributeSetId);
         $collection->setSortOrder();
 
-        $this->searchResultsBuilder->setSearchCriteria($searchCriteria);
-        $this->searchResultsBuilder->setItems($collection->getItems());
-        $this->searchResultsBuilder->setTotalCount($collection->getSize());
-        return $this->searchResultsBuilder->create();
+        $searchResult = $this->searchResultsFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
+        return $searchResult;
     }
 
     /**
@@ -124,7 +127,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         $group = $this->groupFactory->create();
         $this->groupResource->load($group, $groupId);
         if (!$group->getId()) {
-            throw new NoSuchEntityException(sprintf('Group with id "%s" does not exist.', $groupId));
+            throw new NoSuchEntityException(__('Group with id "%1" does not exist.', $groupId));
         }
         return $group;
     }
@@ -138,10 +141,10 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
             $this->groupResource->delete($group);
         } catch (\Exception $e) {
             throw new StateException(
-                'Cannot delete attributeGroup with id %attribute_group_id',
-                [
-                    'attribute_group_id' => $group->getId()
-                ],
+                __(
+                    'Cannot delete attributeGroup with id %1',
+                    $group->getId()
+                ),
                 $e
             );
         }

@@ -24,9 +24,9 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductTierPriceDataBuilder
+     * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory
      */
-    protected $priceBuilder;
+    protected $priceFactory;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -55,7 +55,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
 
     /**
      * @param ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Api\Data\ProductTierPriceDataBuilder $priceBuilder
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $priceFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param PriceModifier $priceModifier
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -64,7 +64,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Api\Data\ProductTierPriceDataBuilder $priceBuilder,
+        \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $priceFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\PriceModifier $priceModifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
@@ -72,7 +72,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         GroupRepositoryInterface $groupRepository
     ) {
         $this->productRepository = $productRepository;
-        $this->priceBuilder = $priceBuilder;
+        $this->priceFactory = $priceFactory;
         $this->storeManager = $storeManager;
         $this->priceModifier = $priceModifier;
         $this->config = $config;
@@ -85,15 +85,16 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function add($productSku, $customerGroupId, $price, $qty)
+    public function add($sku, $customerGroupId, $price, $qty)
     {
         if (!\Zend_Validate::is($price, 'Float') || $price <= 0 || !\Zend_Validate::is($qty, 'Float') || $qty <= 0) {
-            throw new InputException('Please provide valid data');
+            throw new InputException(__('Please provide valid data'));
         }
-        $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
+        $product = $this->productRepository->get($sku, ['edit_mode' => true]);
         $tierPrices = $product->getData('tier_price');
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $found = false;
@@ -130,13 +131,13 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         if (is_array($errors) && count($errors)) {
             $errorAttributeCodes = implode(', ', array_keys($errors));
             throw new InputException(
-                sprintf('Values of following attributes are invalid: %s', $errorAttributeCodes)
+                __('Values of following attributes are invalid: %1', $errorAttributeCodes)
             );
         }
         try {
             $this->productRepository->save($product);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not save group price');
+            throw new CouldNotSaveException(__('Could not save group price'));
         }
         return true;
     }
@@ -144,11 +145,12 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     /**
      * {@inheritdoc}
      */
-    public function remove($productSku, $customerGroupId, $qty)
+    public function remove($sku, $customerGroupId, $qty)
     {
-        $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
+        $product = $this->productRepository->get($sku, ['edit_mode' => true]);
         $websiteIdentifier = 0;
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
         $this->priceModifier->removeTierPrice($product, $customerGroupId, $qty, $websiteIdentifier);
@@ -158,12 +160,13 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     /**
      * {@inheritdoc}
      */
-    public function getList($productSku, $customerGroupId)
+    public function getList($sku, $customerGroupId)
     {
-        $product = $this->productRepository->get($productSku, ['edit_mode' => true]);
+        $product = $this->productRepository->get($sku, ['edit_mode' => true]);
 
         $priceKey = 'website_price';
-        if ($this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) == 0) {
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
+        if ($value == 0) {
             $priceKey = 'price';
         }
 
@@ -172,13 +175,11 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
             if ((is_numeric($customerGroupId) && intval($price['cust_group']) === intval($customerGroupId))
                 || ($customerGroupId === 'all' && $price['all_groups'])
             ) {
-                $this->priceBuilder->populateWithArray(
-                    [
-                        \Magento\Catalog\Api\Data\ProductTierPriceInterface::VALUE => $price[$priceKey],
-                        \Magento\Catalog\Api\Data\ProductTierPriceInterface::QTY => $price['price_qty'],
-                    ]
-                );
-                $prices[] = $this->priceBuilder->create();
+                /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
+                $tierPrice = $this->priceFactory->create();
+                $tierPrice->setValue($price[$priceKey])
+                    ->setQty($price['price_qty']);
+                $prices[] = $tierPrice;
             }
         }
         return $prices;

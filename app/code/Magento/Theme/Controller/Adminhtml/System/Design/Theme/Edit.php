@@ -21,7 +21,7 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         try {
             $theme->setType(\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL);
             if ($themeId && (!$theme->load($themeId)->getId() || !$theme->isVisible())) {
-                throw new \Magento\Framework\Model\Exception(__('We cannot find theme "%1".', $themeId));
+                throw new \Magento\Framework\Exception\LocalizedException(__('We cannot find theme "%1".', $themeId));
             }
             $this->_coreRegistry->register('current_theme', $theme);
 
@@ -29,14 +29,14 @@ class Edit extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             /** @var $tab \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css */
             $tab = $this->_view->getLayout()->getBlock('theme_edit_tabs_tab_css_tab');
             if ($tab && $tab->canShowTab()) {
-                /** @var $helper \Magento\Core\Helper\Theme */
-                $helper = $this->_objectManager->get('Magento\Core\Helper\Theme');
+                /** @var $helper \Magento\Theme\Helper\Theme */
+                $helper = $this->_objectManager->get('Magento\Theme\Helper\Theme');
                 $files = $helper->getCssAssets($theme);
                 $tab->setFiles($files);
             }
             $this->_setActiveMenu('Magento_Theme::system_design_theme');
             $this->_view->renderLayout();
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('adminhtml/*/');
         } catch (\Exception $e) {

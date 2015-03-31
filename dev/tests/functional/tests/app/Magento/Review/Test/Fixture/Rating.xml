@@ -1,66 +1,35 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-<fixture class="Magento\Review\Test\Fixture\Rating">
-    <module>Magento_Review</module>
-    <type>flat</type>
-    <entity_type>rating</entity_type>
-    <collection>Magento\Review\Model\Resource\Rating\Collection</collection>
-    <identifier>rating_code</identifier>
-    <fields>
-        <rating_id>
-            <attribute_code>rating_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required>1</is_required>
-            <default_value></default_value>
-            <input></input>
-        </rating_id>
-        <entity_id>
-            <attribute_code>entity_id</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-        </entity_id>
-        <rating_code>
-            <attribute_code>rating_code</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required></is_required>
-            <default_value></default_value>
-            <input></input>
-            <group>rating_information</group>
-        </rating_code>
-        <position>
-            <attribute_code>position</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>0</default_value>
-            <input></input>
-            <group>rating_information</group>
-        </position>
-        <is_active>
-            <attribute_code>is_active</attribute_code>
-            <backend_type>smallint</backend_type>
-            <is_required></is_required>
-            <default_value>1</default_value>
-            <input></input>
-            <group>rating_information</group>
-        </is_active>
-        <stores>
-            <attribute_code>stores</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>rating_information</group>
-        </stores>
-        <options>
-            <attribute_code>options</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>rating_information</group>
-        </options>
-    </fields>
-    <repository_class>Magento\Review\Test\Repository\Rating</repository_class>
-    <handler_interface>Magento\Review\Test\Handler\Rating\RatingInterface</handler_interface>
-</fixture>
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+  <fixture name="rating" module="Magento_Review" type="flat" entity_type="rating" collection="Magento\Review\Model\Resource\Rating\Collection" identifier="rating_code" repository_class="Magento\Review\Test\Repository\Rating" handler_interface="Magento\Review\Test\Handler\Rating\RatingInterface" class="Magento\Review\Test\Fixture\Rating">
+    <dataset name="default">
+        <field name="rating_code" xsi:type="string">Rating %isolation%</field>
+        <field name="stores" xsi:type="string">Main Website/Main Website Store/Default Store View</field>
+        <field name="is_active" xsi:type="string">Yes</field>
+    </dataset>
+    <field name="rating_id" is_required="1">
+      <default_value xsi:type="null"/>
+    </field>
+    <field name="entity_id" is_required="">
+      <default_value xsi:type="number">0</default_value>
+    </field>
+    <field name="rating_code" is_required="" group="rating_information">
+      <default_value xsi:type="string">Rating %isolation%</default_value>
+    </field>
+    <field name="position" is_required="" group="rating_information">
+      <default_value xsi:type="number">0</default_value>
+    </field>
+    <field name="is_active" is_required="" group="rating_information">
+      <default_value xsi:type="string">Yes</default_value>
+    </field>
+    <field name="stores" group="rating_information">
+      <default_value xsi:type="string">Main Website/Main Website Store/Default Store View</default_value>
+    </field>
+    <field name="options" group="rating_information"/>
+  </fixture>
+</config>

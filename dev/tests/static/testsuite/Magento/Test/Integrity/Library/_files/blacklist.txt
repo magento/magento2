@@ -57,7 +57,6 @@ lib/internal/Magento/Framework/View/Element/Context.php
 lib/internal/Magento/Framework/View/Element/Template/Context.php
 lib/internal/Magento/Framework/View/Element/Redirect.php
 
-lib/internal/Magento/Framework/App/Module/ResourceResolver.php
 lib/internal/Magento/Framework/Event/Invoker/InvokerDefault.php
 lib/internal/Magento/Framework/Phrase/Renderer/Translate.php
 lib/internal/Magento/Framework/Backup/Snapshot.php
@@ -73,3 +72,9 @@ lib/internal/Magento/Framework/Session/SidResolverInterface.php
 
 lib/internal/Magento/Framework/App/Filesystem/DirectoryList/Configuration.php
 lib/internal/Magento/Framework/Filesystem/Driver/Http.php
+
+lib/internal/Magento/Framework/Url/ScopeResolver.php
+lib/internal/Magento/Framework/Url/SecurityInfo.php
+lib/internal/Magento/Framework/Url/RouteParamsResolver.php
+lib/internal/Magento/Framework/View/Url/Config.php
+lib/internal/Magento/Framework/View/Asset/Config.php

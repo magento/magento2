@@ -566,13 +566,14 @@
           <hashTree/>
           <XPathAssertion guiclass="XPathAssertionGui" testclass="XPathAssertion" testname="XPath Assertion" enabled="true">
             <boolProp name="XPath.negate">false</boolProp>
-            <stringProp name="XPath.xpath">count(//*[@class=&apos;cart item&apos;])=1</stringProp>
+            <stringProp name="XPath.xpath">//*[@class=&apos;counter-number&apos;]/text()=1</stringProp>
             <boolProp name="XPath.validate">false</boolProp>
             <boolProp name="XPath.whitespace">false</boolProp>
             <boolProp name="XPath.tolerant">true</boolProp>
             <boolProp name="XPath.namespace">false</boolProp>
             <boolProp name="XPath.show_warnings">true</boolProp>
             <boolProp name="XPath.report_errors">true</boolProp>
+            <stringProp name="TestPlan.comments">Make sure that minicart was refreshed</stringProp>
           </XPathAssertion>
           <hashTree/>
         </hashTree>
@@ -623,7 +624,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extarct product attribute id" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">configurable_attribute_id</stringProp>
-            <stringProp name="RegexExtractor.regex">&quot;spConfig&quot;:\{&quot;attributes&quot;:\{&quot;(\d+)&quot;</stringProp>
+            <stringProp name="RegexExtractor.regex">&quot;spConfig&quot;:[\s]*\{&quot;attributes&quot;:\{&quot;(\d+)&quot;</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default"></stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -713,13 +714,14 @@
           <hashTree/>
           <XPathAssertion guiclass="XPathAssertionGui" testclass="XPathAssertion" testname="XPath Assertion" enabled="true">
             <boolProp name="XPath.negate">false</boolProp>
-            <stringProp name="XPath.xpath">count(//*[@class=&apos;cart item&apos;])=2</stringProp>
+            <stringProp name="XPath.xpath">//*[@class=&apos;counter-number&apos;]/text()=2</stringProp>
             <boolProp name="XPath.validate">false</boolProp>
             <boolProp name="XPath.whitespace">false</boolProp>
             <boolProp name="XPath.tolerant">true</boolProp>
             <boolProp name="XPath.namespace">false</boolProp>
             <boolProp name="XPath.show_warnings">true</boolProp>
             <boolProp name="XPath.report_errors">true</boolProp>
+            <stringProp name="TestPlan.comments">Make sure that minicart was refreshed</stringProp>
           </XPathAssertion>
           <hashTree/>
         </hashTree>

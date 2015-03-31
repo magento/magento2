@@ -43,8 +43,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_controller = 'Adminhtml_System_Design_Theme';
         $this->setId('theme_edit');
 
-        if (is_object($this->getLayout()->getBlock('page-title'))) {
-            $this->getLayout()->getBlock('page-title')->setPageTitle($this->getHeaderText());
+        if (is_object($this->getLayout()->getBlock('page.title'))) {
+            $this->getLayout()->getBlock('page.title')->setPageTitle($this->getHeaderText());
         }
 
         /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
@@ -107,7 +107,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Get current theme
      *
-     * @return \Magento\Core\Model\Theme
+     * @return \Magento\Theme\Model\Theme
      */
     protected function _getCurrentTheme()
     {

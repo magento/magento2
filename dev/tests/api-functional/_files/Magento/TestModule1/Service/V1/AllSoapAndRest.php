@@ -5,32 +5,32 @@
  */
 namespace Magento\TestModule1\Service\V1;
 
-use Magento\TestModule1\Service\V1\Entity\CustomAttributeDataObjectBuilder;
+use Magento\TestModuleMSC\Model\Data\CustomAttributeDataObjectFactory;
 use Magento\TestModule1\Service\V1\Entity\Item;
-use Magento\TestModule1\Service\V1\Entity\ItemBuilder;
+use Magento\TestModule1\Service\V1\Entity\ItemFactory;
 
 class AllSoapAndRest implements \Magento\TestModule1\Service\V1\AllSoapAndRestInterface
 {
     /**
-     * @var ItemBuilder
+     * @var ItemFactory
      */
-    protected $itemBuilder;
+    protected $itemFactory;
 
     /**
-     * @var CustomAttributeDataObjectBuilder
+     * @var CustomAttributeDataObjectFactory
      */
-    protected $customAttributeDataObjectBuilder;
+    protected $customAttributeDataObjectFactory;
 
     /**
-     * @param ItemBuilder $itemBuilder
-     * @param CustomAttributeDataObjectBuilder $customAttributeNestedDataObjectBuilder
+     * @param ItemFactory $itemFactory
+     * @param CustomAttributeDataObjectFactory $customAttributeNestedDataObjectFactory
      */
     public function __construct(
-        ItemBuilder $itemBuilder,
-        CustomAttributeDataObjectBuilder $customAttributeNestedDataObjectBuilder
+        ItemFactory $itemFactory,
+        CustomAttributeDataObjectFactory $customAttributeNestedDataObjectFactory
     ) {
-        $this->itemBuilder = $itemBuilder;
-        $this->customAttributeDataObjectBuilder = $customAttributeNestedDataObjectBuilder;
+        $this->itemFactory = $itemFactory;
+        $this->customAttributeDataObjectFactory = $customAttributeNestedDataObjectFactory;
     }
 
     /**
@@ -38,7 +38,7 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V1\AllSoapAndRestIn
      */
     public function item($itemId)
     {
-        return $this->itemBuilder->setItemId($itemId)->setName('testProduct1')->create();
+        return $this->itemFactory->create()->setItemId($itemId)->setName('testProduct1');
     }
 
     /**
@@ -46,8 +46,8 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V1\AllSoapAndRestIn
      */
     public function items()
     {
-        $result1 = $this->itemBuilder->setItemId(1)->setName('testProduct1')->create();
-        $result2 = $this->itemBuilder->setItemId(2)->setName('testProduct2')->create();
+        $result1 = $this->itemFactory->create()->setItemId(1)->setName('testProduct1');
+        $result2 = $this->itemFactory->create()->setItemId(2)->setName('testProduct2');
 
         return [$result1, $result2];
     }
@@ -57,7 +57,7 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V1\AllSoapAndRestIn
      */
     public function create($name)
     {
-        return $this->itemBuilder->setItemId(rand())->setName($name)->create();
+        return $this->itemFactory->create()->setItemId(rand())->setName($name);
     }
 
     /**
@@ -65,17 +65,16 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V1\AllSoapAndRestIn
      */
     public function update(Item $entityItem)
     {
-        return $this->itemBuilder->setItemId($entityItem->getItemId())
-            ->setName('Updated' . $entityItem->getName())
-            ->create();
+        return $this->itemFactory->create()->setItemId($entityItem->getItemId())
+            ->setName('Updated' . $entityItem->getName());
     }
 
     public function testOptionalParam($name = null)
     {
-        if (is_null($name)) {
-            return $this->itemBuilder->setItemId(3)->setName('No Name')->create();
+        if ($name === null) {
+            return $this->itemFactory->create()->setItemId(3)->setName('No Name');
         } else {
-            return $this->itemBuilder->setItemId(3)->setName($name)->create();
+            return $this->itemFactory->create()->setItemId(3)->setName($name);
         }
     }
 
@@ -92,17 +91,15 @@ class AllSoapAndRest implements \Magento\TestModule1\Service\V1\AllSoapAndRestIn
      */
     public function getPreconfiguredItem()
     {
-        $customAttributeDataObject = $this->customAttributeDataObjectBuilder
+        $customAttributeDataObject = $this->customAttributeDataObjectFactory->create()
             ->setName('nameValue')
-            ->setCustomAttribute('custom_attribute_int', 1)
-            ->create();
+            ->setCustomAttribute('custom_attribute_int', 1);
 
-        $item = $this->itemBuilder
+        $item = $this->itemFactory->create()
             ->setItemId(1)
             ->setName('testProductAnyType')
             ->setCustomAttribute('custom_attribute_data_object', $customAttributeDataObject)
-            ->setCustomAttribute('custom_attribute_string', 'someStringValue')
-            ->create();
+            ->setCustomAttribute('custom_attribute_string', 'someStringValue');
 
         return $item;
     }

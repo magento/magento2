@@ -13,22 +13,22 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 {
     public function testPhpCode()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $file
              */
             function ($file) {
-                $classes = \Magento\Framework\Test\Utility\Classes::collectPhpCodeClasses(file_get_contents($file));
+                $classes = \Magento\Framework\App\Utility\Classes::collectPhpCodeClasses(file_get_contents($file));
                 $this->_assertNonFactoryName($classes, $file);
             },
-            \Magento\Framework\Test\Utility\Files::init()->getPhpFiles()
+            \Magento\Framework\App\Utility\Files::init()->getPhpFiles()
         );
     }
 
     public function testConfiguration()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $path
@@ -36,46 +36,46 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             function ($path) {
                 $xml = simplexml_load_file($path);
 
-                $classes = \Magento\Framework\Test\Utility\Classes::collectClassesInConfig($xml);
+                $classes = \Magento\Framework\App\Utility\Classes::collectClassesInConfig($xml);
                 $this->_assertNonFactoryName($classes, $path);
 
-                $modules = \Magento\Framework\Test\Utility\Classes::getXmlAttributeValues($xml, '//@module', 'module');
+                $modules = \Magento\Framework\App\Utility\Classes::getXmlAttributeValues($xml, '//@module', 'module');
                 $this->_assertNonFactoryName(array_unique($modules), $path, false, true);
             },
-            \Magento\Framework\Test\Utility\Files::init()->getConfigFiles()
+            \Magento\Framework\App\Utility\Files::init()->getConfigFiles()
         );
     }
 
     public function testLayouts()
     {
-        $invoker = new \Magento\Framework\Test\Utility\AggregateInvoker($this);
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
              * @param string $path
              */
             function ($path) {
                 $xml = simplexml_load_file($path);
-                $classes = \Magento\Framework\Test\Utility\Classes::collectLayoutClasses($xml);
-                foreach (\Magento\Framework\Test\Utility\Classes::getXmlAttributeValues(
+                $classes = \Magento\Framework\App\Utility\Classes::collectLayoutClasses($xml);
+                foreach (\Magento\Framework\App\Utility\Classes::getXmlAttributeValues(
                     $xml,
                     '/layout//@helper',
                     'helper'
                 ) as $class) {
-                    $classes[] = \Magento\Framework\Test\Utility\Classes::getCallbackClass($class);
+                    $classes[] = \Magento\Framework\App\Utility\Classes::getCallbackClass($class);
                 }
                 $classes = array_merge(
                     $classes,
-                    \Magento\Framework\Test\Utility\Classes::getXmlAttributeValues($xml, '/layout//@module', 'module')
+                    \Magento\Framework\App\Utility\Classes::getXmlAttributeValues($xml, '/layout//@module', 'module')
                 );
                 $this->_assertNonFactoryName(array_unique($classes), $path);
 
-                $tabs = \Magento\Framework\Test\Utility\Classes::getXmlNodeValues(
+                $tabs = \Magento\Framework\App\Utility\Classes::getXmlNodeValues(
                     $xml,
                     '/layout//action[@method="addTab"]/block'
                 );
                 $this->_assertNonFactoryName(array_unique($tabs), $path, true);
             },
-            \Magento\Framework\Test\Utility\Files::init()->getLayoutFiles()
+            \Magento\Framework\App\Utility\Files::init()->getLayoutFiles()
         );
     }
 

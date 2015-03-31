@@ -8,8 +8,6 @@
 <page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="default_head_blocks"/>
     <body>
-        <!-- Temporary solution -->
-        <block name="require.js" class="Magento\Framework\View\Element\Template" template="Magento_Theme::js/require_js.phtml" />
         <referenceContainer name="after.body.start">
             <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
             <block class="Magento\Translation\Block\Js" name="translate" template="Magento_Translation::translate.phtml"/>
@@ -35,7 +33,7 @@
                 <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
                     <arguments>
                         <argument name="target" xsi:type="string">contentarea</argument>
-                        <argument name="label" translate="true" xsi:type="string">Skip to content</argument>
+                        <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
@@ -57,6 +55,7 @@
         <referenceContainer name="columns.top">
             <block class="Magento\Theme\Block\Html\Title" name="page.main.title" template="html/title.phtml"/>
             <container name="page.messages" htmlTag="div" htmlClass="page messages">
+                <block class="Magento\Framework\View\Element\Template" name="ajax.message.placeholder" template="Magento_Theme::html/messages.phtml"/>
                 <block class="Magento\Framework\View\Element\Messages" name="global_messages" as="global_messages"/>
                 <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
             </container>

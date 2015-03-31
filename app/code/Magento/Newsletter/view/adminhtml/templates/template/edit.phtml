@@ -6,27 +6,32 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var $this \Magento\Newsletter\Block\Adminhtml\Template\Edit */
+/* @var $block \Magento\Newsletter\Block\Adminhtml\Template\Edit */
 ?>
-<form action="<?php echo $this->getSaveUrl() ?>" method="post" id="newsletter_template_edit_form">
-    <?php echo $this->getBlockHtml('formkey')?>
+<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="newsletter_template_edit_form">
+    <?php echo $block->getBlockHtml('formkey')?>
     <div class="no-display">
         <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-        <input type="hidden" id="save_as_flag" name="_save_as_flag" value="<?php echo $this->getSaveAsFlag() ?>" />
+        <input type="hidden" id="save_as_flag" name="_save_as_flag" value="<?php echo $block->getSaveAsFlag() ?>" />
     </div>
-    <?php echo $this->getForm() ?>
+    <?php echo $block->getForm() ?>
 </form>
-<form action="<?php echo $this->getPreviewUrl() ?>" method="post" id="newsletter_template_preview_form" target="_blank">
-    <?php echo $this->getBlockHtml('formkey')?>
+<form action="<?php echo $block->getPreviewUrl() ?>" method="post" id="newsletter_template_preview_form" target="_blank">
+    <?php echo $block->getBlockHtml('formkey')?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php echo $this->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?php echo $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />
     </div>
 </form>
 <script>
-require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
+require([
+    'jquery',
+    'tinymce',
+    'mage/mage',
+    'prototype'
+], function(jQuery, tinyMCE){
 
 //<![CDATA[
     jQuery('#newsletter_template_edit_form').mage('form').mage('validation');
@@ -170,7 +175,7 @@ require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
 
         deleteTemplate: function() {
             if(window.confirm("<?php echo __('Are you sure that you want to delete this template?') ?>")) {
-                   window.location.href = '<?php echo $this->getDeleteUrl() ?>';
+                   window.location.href = '<?php echo $block->getDeleteUrl() ?>';
             }
         },
 
@@ -184,7 +189,7 @@ require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
     };
 
     templateControl.init();
-    templateControl.templateName = "<?php echo $this->getJsTemplateName() ?>";
+    templateControl.templateName = "<?php echo $block->getJsTemplateName() ?>";
 //]]>
 
 });
