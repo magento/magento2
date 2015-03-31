@@ -6,8 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\Framework\Exception\LocalizedException;
-
 class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
