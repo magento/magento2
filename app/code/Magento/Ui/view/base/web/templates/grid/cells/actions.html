@@ -5,9 +5,25 @@
  */
 -->
 <td>
+    <!-- ko if: getDisplayed(row[field.index]).length > 1 -->
+    <div class="action-select-wrap _active">
+        <button class="action-select">
+            <span data-bind="text: $t('Select')"></span>
+        </button>
+        <ul class="action-menu _active">
+            <li>
+                <a
+                    class="action-menu-item"
+                    data-bind="attr: {href: displayed[0].href},
+                               text: displayed[0].label"></a>
+            </li>
+        </ul>
+    </div>
+    <!-- /ko -->
     <!-- ko ifnot: getDisplayed(row[field.index]).length > 1 -->
-    <span>
-        <a data-bind="attr: {href: displayed[0].href}, text: displayed[0].label"></a>
-    </span>
+    <a
+        class="action-menu-item"
+        data-bind="attr: {href: displayed[0].href},
+                               text: displayed[0].label"></a>
     <!-- /ko -->
 </td>

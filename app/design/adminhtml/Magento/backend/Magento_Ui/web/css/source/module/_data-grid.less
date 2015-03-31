@@ -39,7 +39,7 @@
 
 @data-grid-th-marker__width: .7rem;
 
-@data-grid-checkbox-cell-inner__padding-top: .8rem;
+@data-grid-checkbox-cell-inner__padding-top: 1.1rem;
 @data-grid-checkbox-cell-inner__padding-horizontal: 1.8rem;
 
 @data-grid-row-parent-marker__size: 1rem;
@@ -85,6 +85,29 @@
         &:last-child {
             border-right-style: @data-grid-td__border-outer-style;
             width: 1%; // Making last action smallest column
+        }
+        //  Action select data grid styles (can be action-select-secondary in future)
+        .action-select {
+            .link-pattern();
+            background-color: transparent;
+            border: none;
+            font-size: @data-grid__font-size;
+            padding: 0 3rem 0 0;
+            &:hover {
+                &:after {
+                    border-color: @link__hover__color transparent transparent transparent;
+                }
+            }
+            &:after {
+                border-color: @link__color transparent transparent transparent;
+            }
+            &:before {
+                display: none;
+            }
+        }
+        .action-menu {
+            z-index: 1;
+            left: auto;
         }
     }
     th {
