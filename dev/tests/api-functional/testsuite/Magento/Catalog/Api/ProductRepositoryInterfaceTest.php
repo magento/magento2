@@ -390,7 +390,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->updateProduct($response);
 
         $response = $this->getProduct($productData[ProductInterface::SKU]);
-        $this->assertArrayNotHasKey(self::KEY_GROUP_PRICES, $response,"expected to not have any 'group_prices' data");
+        $this->assertArrayNotHasKey(self::KEY_GROUP_PRICES, $response, "expected to not have any 'group_prices' data");
 
         // delete the product with group prices; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);

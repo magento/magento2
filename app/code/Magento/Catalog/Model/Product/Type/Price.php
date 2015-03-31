@@ -277,7 +277,7 @@ class Price
                 'cust_group' => $price->getCustomerGroupId(),
                 'website_price' => $price->getValue(),
                 'price' => $price->getValue(),
-                'all_groups' => 0
+                'all_groups' => ($price->getCustomerGroupId() == \Magento\Customer\Model\Group::CUST_GROUP_ALL)
             ];
         }
         $product->setData('group_price', $prices);
