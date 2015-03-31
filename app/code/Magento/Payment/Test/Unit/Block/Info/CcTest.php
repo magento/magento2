@@ -131,16 +131,19 @@ class CcTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCcExpDate($ccExpMonth, $ccExpYear)
     {
-        $this->markTestSkipped('on develop');
         $paymentInfo = $this->getMock('Magento\Payment\Model\Info', ['getCcExpMonth', 'getCcExpYear'], [], '', false);
-        $paymentInfo->expects($this->any())
+        $paymentInfo
+            ->expects($this->any())
             ->method('getCcExpMonth')
             ->will($this->returnValue($ccExpMonth));
-        $paymentInfo->expects($this->any())
-            ->method('getCcExpYear')->will($this->returnValue($ccExpYear));
+        $paymentInfo
+            ->expects($this->any())
+            ->method('getCcExpYear')
+            ->will($this->returnValue($ccExpYear));
         $this->model->setData('info', $paymentInfo);
 
-        $this->localeDate->expects($this->exactly(2))
+        $this->localeDate
+            ->expects($this->exactly(2))
             ->method('getConfigTimezone')
             ->willReturn('America/Los_Angeles');
 

@@ -123,17 +123,19 @@ class Validator
     }
 
     /**
+     * Check if value is empty
+     *
      * @param mixed $value
      * @return bool
-     * @throws \Exception
-     * @throws \Zend_Validate_Exception
      */
     protected function isEmpty($value)
     {
-        return !\Zend_Validate::is($value, 'NotEmpty');
+        return empty($value);
     }
 
     /**
+     * Checks if zip for current country id is required
+     *
      * @param string $countryId
      * @return bool
      */
@@ -143,6 +145,8 @@ class Validator
     }
 
     /**
+     * Checks if state for current country id is required
+     *
      * @param string $countryId
      * @return bool
      */
