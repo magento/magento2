@@ -40,7 +40,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
         $this->versionStorage->expects($this->never())->method($this->anything());
-        $this->assertEquals(time(), $this->object->getValue(), '', 5);
+        $this->assertInternalType('integer', $this->object->getValue());
         $this->object->getValue(); // Ensure computation occurs only once and result is cached in memory
     }
 
