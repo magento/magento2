@@ -104,7 +104,7 @@ class ConfigSetCommand extends Command
             }
         );
 
-        $optionsToChange = array_diff($inputOptions, $commandOptions);
+        $optionsToChange = array_intersect(array_keys($inputOptions), array_keys($commandOptions));
 
         $this->configModel->process($inputOptions);
 
