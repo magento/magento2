@@ -7,6 +7,10 @@
 //  Variables
 //  _____________________________________________
 
+//
+//  Sidebar
+//  ---------------------------------------------
+
 @page-order-sidebar-base__font-size: 1.5rem;
 @page-order-sidebar__color: @color-very-dark-gray;
 @page-order-sidebar__margin: 2.4rem;
@@ -22,6 +26,8 @@
 @page-order-icon-add__content: @icon-arrow-right__content;
 @page-order-icon-remove__content: @icon-delete__content;
 @page-order-icon-refresh__content: @icon-refresh__content;
+@page-order-icon-plus__content: @icon-plus__content;
+@page-order-icon-plus__hover__color: @color-very-dark-gray-black2;
 
 //
 
@@ -60,10 +66,77 @@
 //  ---------------------------------------------
 
 .order-tables {
+    margin: 0 0 @page-order-sidebar__margin-reqular;
     width: 100%;
     th {
         border-top: 0;
         font-size: 1.3rem;
+    }
+    .col-qty {
+        .admin__control-text {
+            &:extend(.abs-control-qty all);
+        }
+    }
+    .price {
+        display: block;
+        margin: 0 0 @page-order-sidebar__margin-small;
+    }
+    .custom-price-block {
+        margin: 0 0 @page-order-sidebar__margin-small;
+        .admin__control-text {
+            width: auto;
+        }
+    }
+}
+
+//
+//  Add by SKU
+//  ---------------------------------------------
+
+.add-by-sku {
+    clear: both;
+    .admin__field-note {
+        margin: 1rem 0;
+    }
+    .table {
+        th {
+            border-top: none;
+        }
+        th,
+        td {
+            &:first-child {
+                padding-left: 0;
+            }
+        }
+    }
+    .action-default {
+        &:extend(.abs-action-reset all);
+        &:extend(.abs-icon all);
+        display: inline-block;
+        font-size: @page-order-sidebar-base__font-size + 0.1rem;
+        padding-top: @page-order-sidebar__margin-small;
+        vertical-align: middle;
+        &:after {
+            color: @page-order-sidebar__color;
+        }
+        > span {
+            &:extend(.abs-visually-hidden all);
+        }
+        &.add {
+            &:after {
+                content: @page-order-icon-plus__content;
+            }
+        }
+        &.delete {
+            &:after {
+                content: @page-order-icon-remove__content;
+            }
+        }
+        &:hover {
+            &:after {
+                color: @page-order-icon-plus__hover__color;
+            }
+        }
     }
 }
 
@@ -106,7 +179,7 @@
             }
 
             &:hover {
-                color: @color-very-dark-gray-black2;
+                color: @page-order-icon-plus__hover__color;
             }
         }
     }
@@ -224,7 +297,7 @@
                 }
             }
             > span {
-                &:extend(.abs-visually-hidden all);
+                .extend__visually-hidden();
             }
         }
     }
@@ -245,7 +318,7 @@
             text-decoration: none;
         }
         > span {
-            &:extend(.abs-visually-hidden all);
+            .extend__visually-hidden();
         }
     }
     .create-order-sidebar-block {
