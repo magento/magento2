@@ -341,7 +341,7 @@ return [
     [
         'getIsMessagesAvailable',
         'Magento\GiftMessage\Helper\Message',
-        'Magento\GiftMessage\Helper\Message::isMessageAllowed'
+        'Magento\GiftMessage\Helper\Message::isMessagesAllowed'
     ],
     ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
     ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
