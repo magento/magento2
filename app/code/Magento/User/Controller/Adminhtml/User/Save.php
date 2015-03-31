@@ -83,7 +83,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
     {
         $this->_getSession()->setUserData($data);
         $arguments = $model->getId() ? ['user_id' => $model->getId()] : [];
-        $arguments = array_merge($arguments, ['_current' => true]);
+        $arguments = array_merge($arguments, ['_current' => true, 'active_tab' => '']);
         $this->_redirect('adminhtml/*/edit', $arguments);
     }
 }
