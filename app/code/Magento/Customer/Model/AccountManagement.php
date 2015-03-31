@@ -839,6 +839,7 @@ class AccountManagement implements AccountManagementInterface
             $storeId = $this->getWebsiteStoreId($customer);
         }
 
+        $customerEmailData = $this->getFullCustomerObject($customer);
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->transportBuilder->setTemplateIdentifier(
             $this->scopeConfig->getValue(
@@ -849,7 +850,7 @@ class AccountManagement implements AccountManagementInterface
         )->setTemplateOptions(
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
-            ['customer' => $customer, 'store' => $this->storeManager->getStore($storeId)]
+            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($storeId)]
         )->setFrom(
             $this->scopeConfig->getValue(
                 self::XML_PATH_FORGOT_EMAIL_IDENTITY,
@@ -1046,12 +1047,13 @@ class AccountManagement implements AccountManagementInterface
         //TODO : Fix how template is built. Maybe Framework Object or create new Email template data model?
         // Check template to see what values need to be set in the data model to be passed
         // Need to set the reset_password_url property of the object
+        $store = $this->storeManager->getStore($customer->getStoreId());
         $resetUrl = $this->url->getUrl(
             'customer/account/createPassword',
             [
                 '_query' => ['id' => $customer->getId(), 'token' => $newPasswordToken],
                 '_store' => $customer->getStoreId(),
-                '_nosid' => true,
+                '_secure' => $store->isFrontUrlSecure(),
             ]
         );
 
@@ -1062,7 +1064,7 @@ class AccountManagement implements AccountManagementInterface
             $customer,
             self::XML_PATH_REMIND_EMAIL_TEMPLATE,
             self::XML_PATH_FORGOT_EMAIL_IDENTITY,
-            ['customer' => $customerEmailData, 'store' => $this->storeManager->getStore($customer->getStoreId())],
+            ['customer' => $customerEmailData, 'store' => $store],
             $customer->getStoreId()
         );
 

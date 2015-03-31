@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="catalogRule" module="Magento_CatalogRule" type="eav" entity_type="catalog_rule" collection="Magento\CatalogRule\Model\Resource\Rule\Product\Price\Collection" repository_class="Magento\CatalogRule\Test\Repository\CatalogRule" handler_interface="Magento\CatalogRule\Test\Handler\CatalogRule\CatalogRuleInterface" class="Magento\CatalogRule\Test\Fixture\CatalogRule">
     <dataset name="default">
         <field name="name" xsi:type="string">CatalogPriceRule %isolation%</field>
