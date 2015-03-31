@@ -22,11 +22,32 @@
                                         <item name="steps" xsi:type="array">
                                             <item name="component" xsi:type="string">Magento_Ui/js/form/component</item>
                                             <item name="children" xsi:type="array">
-                                                <item name="authentication" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item></item>
-                                                <item name="billingAddress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item></item>
-                                                <item name="shippingAddress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item></item>
-                                                <item name="shipping" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item></item>
-                                                <item name="payment" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item></item>
+                                                <item name="authentication" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item>
+                                                </item>
+                                                <item name="billingAddress" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item>
+                                                </item>
+                                                <item name="shippingAddress" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item>
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="firstName" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="label" xsi:type="string">First name</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="string">true</item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                                <item name="shipping" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item>
+                                                </item>
+                                                <item name="payment" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
+                                                </item>
                                                 <item name="review" xsi:type="array">
                                                     <item name="component" xsi:type="string">Magento_Checkout/js/view/review</item>
                                                     <item name="children" xsi:type="array">

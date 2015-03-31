@@ -14,6 +14,7 @@ define(
         'Magento_Checkout/js/model/step-navigator'
     ],
     function(Component, ko, selectShippingAddress, customer, quote, navigator) {
+        'use strict';
         var stepName = 'shippingAddress';
         return Component.extend({
             defaults: {
@@ -21,9 +22,10 @@ define(
             },
             stepNumber: navigator.getStepNumber(stepName),
             addresses: customer.getShippingAddressList(),
-            selectedAddressId: ko.observable(null),
+            selectedAddressId: ko.observable(1),
             sameAsBilling: ko.observable(null),
             quoteHasBillingAddress: quote.getBillingAddress(),
+            newAddressSelected: ko.observable(false),
             isVisible: navigator.isStepVisible(stepName),
             isActive: function() {
                 if (quote.isVirtual()) {
@@ -32,12 +34,17 @@ define(
                 return !quote.isVirtual();
             },
             selectShippingAddress: function() {
-                selectShippingAddress(this.selectedAddressId(), this.sameAsBilling());
+                if (!this.newAddressSelected()) {
+                    selectShippingAddress(this.selectedAddressId(), this.sameAsBilling());
+                } else {
+                    alert('save new address');
+                }
             },
             sameAsBillingClick: function() {
                 if (this.sameAsBilling()) {
                     var billingAddress = quote.getBillingAddress();
                     this.selectedAddressId(billingAddress().customerAddressId);
+                    this.newAddressSelected(false);
                 }
                 return true;
             },
@@ -45,6 +52,11 @@ define(
                 var billingAddress = quote.getBillingAddress();
                 if (this.selectedAddressId() != billingAddress().customerAddressId) {
                     this.sameAsBilling(false);
+                }
+                if (this.selectedAddressId() == null) {
+                    this.newAddressSelected(true);
+                } else {
+                    this.newAddressSelected(false);
                 }
             },
             // Checkout step navigation

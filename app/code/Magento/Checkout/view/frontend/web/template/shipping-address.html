@@ -14,16 +14,30 @@
          data-role="content"
          data-bind="fadeVisible: isVisible() && quoteHasBillingAddress()">
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
+            <!-- ko if: addresses.length > 0 -->
             <div class="field addresses">
                 <label class="label" for="shipping:address-select"><span>Select a shipping address from your address book or enter a new address.</span></label>
                 <div class="control">
-                    <select name="shipping_address_id"
-                            id="shipping:address-select"
-                            data-bind="options: addresses, optionsText: function(item) { return item.getFullAddress(); }, optionsValue: 'customerAddressId', value: selectedAddressId, event: {change: onAddressChange}"
-                            >
+                    <select name="shipping_address_id" id="shipping:address-select" data-bind="
+                    options: addresses,
+                    optionsText: function(item) { return item.getFullAddress(); },
+                    optionsValue: 'customerAddressId',
+                    value: selectedAddressId,
+                    event: {change: onAddressChange}
+                    ">
                     </select>
                 </div>
             </div>
+            <!-- /ko -->
+
+            <fieldset class="fieldset address" id="shipping-new-address-form" data-bind="fadeVisible: newAddressSelected()">
+                new address form
+                <!-- ko foreach: elems() -->
+                <label for="firstName"></label>
+                <input name="firstName" id="firstName"/>
+                <!-- /ko -->
+            </fieldset>
+
             <div class="choice field">
                 <input type="checkbox"
                        name="shipping[same_as_billing]"

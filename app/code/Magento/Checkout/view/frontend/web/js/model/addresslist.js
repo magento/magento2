@@ -22,12 +22,10 @@ define(['jquery'], function($) {
             return address;
         },
         getAddresses: function() {
-            if (addresses.indexOf(this.newAddress) !== -1) {
-                return addresses;
-            } else {
-                addresses.push(this.newAddress);
-                return addresses;
+            if (addresses.indexOf(this.newAddress) == -1) {
+                this.add(this.newAddress);
             }
+            return addresses;
         },
         newAddress: {
             getFullAddress: function() {
