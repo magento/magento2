@@ -8,6 +8,7 @@ namespace Magento\Email\Model;
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filter\Template as FilterTemplate;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -213,7 +214,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $store = $this->_storeManager->getStore($store);
         $fileName = $this->_scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($fileName) {
@@ -252,7 +253,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $store = $this->_storeManager->getStore($store);
         $alt = $this->_scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO_ALT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($alt) {
@@ -385,7 +386,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     {
         return !$this->_scopeConfig->isSetFlag(
             'system/smtp/disable',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         ) && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
     }
 
