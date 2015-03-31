@@ -17,20 +17,11 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 
     protected function setUp()
     {
-        $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $request = new \Magento\TestFramework\Request(
-            $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface'),
-            $this->getMock('Magento\Framework\App\Route\ConfigInterface\Proxy', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface'),
-            $this->getMock('Magento\Framework\ObjectManagerInterface')
-        );
-        $response = new \Magento\TestFramework\Response(
-            $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface'),
-            $this->getMock('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false),
-            $this->getMock('Magento\Framework\Stdlib\DateTime', [], [], '', false)
-        );
+        $testObjectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
+        $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
+        $request = $testObjectManager->get('Magento\TestFramework\Request');
+        $response = $testObjectManager->get('Magento\TestFramework\Response');
         $this->_objectManager = $this->getMock(
             'Magento\TestFramework\ObjectManager',
             ['get', 'create'],
