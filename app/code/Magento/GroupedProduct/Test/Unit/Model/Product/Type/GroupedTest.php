@@ -300,19 +300,81 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareForCartAdvancedEmpty()
     {
+        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $buyRequest = new \Magento\Framework\Object();
         $expectedMsg = "Please specify the quantity of product(s).";
 
+        $productCollection = $this->getMock(
+            'Magento\Catalog\Model\Resource\Product\Link\Product\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+        $productCollection
+            ->expects($this->atLeastOnce())
+            ->method('setFlag')
+            ->willReturnSelf();
+        $productCollection
+            ->expects($this->atLeastOnce())
+            ->method('setIsStrongMode')
+            ->willReturnSelf();
+        $productCollection
+            ->expects($this->atLeastOnce())
+            ->method('setProduct');
+        $productCollection
+            ->expects($this->atLeastOnce())
+            ->method('addAttributeToSelect')
+            ->willReturnSelf();
+        $productCollection
+            ->expects($this->atLeastOnce())
+            ->method('addFilterByRequiredOptions')
+            ->willReturnSelf();
+        $productCollection
+            ->expects($this->atLeastOnce())
+            ->method('setPositionOrder')
+            ->willReturnSelf();
+        $productCollection
+            ->expects($this->atLeastOnce())
+            ->method('addStoreFilter')
+            ->willReturnSelf();
+        $productCollection
+            ->expects($this->atLeastOnce())
+            ->method('addAttributeToFilter')
+            ->willReturnSelf();
+        $items = [
+            $this->getMock('Magento\Catalog\Model\Product', [], [], '', false),
+            $this->getMock('Magento\Catalog\Model\Product', [], [], '', false)
+        ];
+        $productCollection
+            ->expects($this->atLeastOnce())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($items));
+
+        $link = $this->getMock('Magento\Catalog\Model\Product\Link', [], [], '', false);
+        $link
+            ->expects($this->any())
+            ->method('setLinkTypeId');
+        $link
+            ->expects($this->atLeastOnce())
+            ->method('getProductCollection')
+            ->willReturn($productCollection);
+
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getLinkInstance')
+            ->willReturn($link);
+
+        $this->product
+            ->expects($this->any())
+            ->method('getData')
+            ->willReturn($items);
+
         $this->assertEquals(
             $expectedMsg,
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
         );
 
-        $buyRequest->setSuperGroup([]);
-        $this->assertEquals(
-            $expectedMsg,
-            $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
-        );
 
         $buyRequest->setSuperGroup(1);
         $this->assertEquals(
@@ -329,8 +391,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $cached = true;
         $associatedProducts = [];
-        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->once())->method('getData')->will($this->returnValue($associatedProducts));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue($associatedProducts));
 
         $this->assertEquals(
             $expectedMsg,
@@ -345,8 +413,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
         $cached = true;
         $associatedProducts = [];
-        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->once())->method('getData')->will($this->returnValue($associatedProducts));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue($associatedProducts));
 
         $this->assertEquals(
             [0 => $this->product],
@@ -358,7 +432,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $associatedId = 9384;
-        $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue($associatedId));
+        $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
         $typeMock = $this->getMock(
             'Magento\Catalog\Model\Product\Type\AbstractType',
@@ -376,8 +450,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
-        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([$associatedProduct]));
 
         $this->assertEquals(
             $associatedPrepareResult,
@@ -387,10 +467,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareForCartAdvancedWithProductsStrictFalseEmptyArrayResult()
     {
-        $expectedMsg = "We cannot process the item.";
+        $expectedMsg = "Cannot process the item.";
         $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $associatedId = 9384;
-        $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue($associatedId));
+        $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
         $typeMock = $this->getMock(
             'Magento\Catalog\Model\Product\Type\AbstractType',
@@ -408,8 +488,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
-        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
+        $this->product->
+        expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product->
+        expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([$associatedProduct]));
 
         $this->assertEquals(
             $expectedMsg,
@@ -421,7 +507,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $associatedId = 9384;
-        $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue($associatedId));
+        $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
         $typeMock = $this->getMock(
             'Magento\Catalog\Model\Product\Type\AbstractType',
@@ -439,8 +525,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
-        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([$associatedProduct]));
 
         $this->assertEquals(
             [$this->product],
@@ -452,7 +544,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $associatedId = 9384;
-        $associatedProduct->expects($this->once())->method('getId')->will($this->returnValue($associatedId));
+        $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
 
         $typeMock = $this->getMock(
             'Magento\Catalog\Model\Product\Type\AbstractType',
@@ -470,8 +562,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $buyRequest->setSuperGroup([$associatedId => 1]);
 
         $cached = true;
-        $this->product->expects($this->once())->method('hasData')->will($this->returnValue($cached));
-        $this->product->expects($this->once())->method('getData')->will($this->returnValue([$associatedProduct]));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([$associatedProduct]));
 
         $this->assertEquals(
             $associatedPrepareResult,
