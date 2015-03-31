@@ -22,7 +22,6 @@ define(
                 'grandtotal': quoteData.grandtotal
             }
         );
-        var rates = ko.observable([]);
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -74,12 +73,6 @@ define(
             },
             getStoreCode: function() {
                 return storeCode;
-            },
-            getRates: function() {
-                return rates;
-            },
-            setRates: function(ratesData) {
-                rates(ratesData);
             }
         };
     }

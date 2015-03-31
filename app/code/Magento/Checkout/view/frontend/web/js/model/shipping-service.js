@@ -5,12 +5,20 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['ko', 'jquery', '../model/quote'],
-    function (ko, $, quote) {
+    ['ko', 'jquery'],
+    function (ko, $) {
+        var rates = ko.observable([]);
         return {
             shippingRates: ko.observableArray([]),
+            getRates: function() {
+                return rates;
+            },
+            setRates: function(ratesData) {
+                rates(ratesData);
+            },
             setShippingRates: function(ratesData) {
                 var self = this;
+                this.setRates(ratesData);
                 $.each(ratesData, function (key, entity) {
                     var rateEntity = [];
                     rateEntity['items'] = [];
@@ -21,10 +29,22 @@ define(
                     rateEntity['items'].push(entity);
                     self.shippingRates.push(rateEntity);
                 });
-                quote.setRates(this.shippingRates());
+
             },
-            getRates: function() {
+            getSippingRates: function() {
                 return this.shippingRates;
+            },
+            getTitleByCode: function(code) {
+                var shippingMethodTitle = '';
+                if (code) {
+                    $.each(rates(), function (key, entity) {
+                        if (entity['carrier_code'] == code[0]
+                            && entity['method_code'] == code[1]) {
+                            shippingMethodTitle = "(" + entity['carrier_title'] + " - " + entity['method_title'] + ")";
+                        }
+                    });
+                }
+                return shippingMethodTitle;
             }
         }
     }

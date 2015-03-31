@@ -21,7 +21,7 @@ define(
                 template: 'Magento_Checkout/shipping-method'
             },
             stepNumber: navigator.getStepNumber(stepName),
-            rates: shippingService.getRates(),
+            rates: shippingService.getSippingRates(),
             // Checkout step navigation
             isVisible: navigator.isStepVisible(stepName),
             quoteHasShippingAddress: function() {

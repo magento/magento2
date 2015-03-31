@@ -11,29 +11,19 @@ define(
         'jquery',
         'Magento_Ui/js/form/component',
         'Magento_Checkout/js/model/quote',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Catalog/js/price-utils',
+        'Magento_Checkout/js/model/shipping-service'
     ],
-    function ($, Component, quote, priceUtils) {
+    function ($, Component, quote, priceUtils, shippingService) {
         return Component.extend({
             defaults: {
                 template: 'Magento_Tax/checkout/review/shipping',
             },
             getColspan: 3,
             style: "",
-            rates: quote.getRates(),
             selectedShippingMethod: quote.getShippingMethod(),
             getTitle: function() {
-                var shippingMethodTitle = '';
-                if (this.selectedShippingMethod()) {
-                    var code = this.selectedShippingMethod();
-                    $.each(this.rates(), function (key, entity) {
-                        if (entity['carrier_code'] == code[0]
-                            && entity['method_code'] == code[1]) {
-                            shippingMethodTitle = "(" + entity['carrier_title'] + " - " + entity['method_title'] + ")";
-                        }
-                    });
-                }
-                return "Shipping & Handling" + shippingMethodTitle;
+                return "Shipping & Handling" + shippingService.getTitleByCode(this.selectedShippingMethod());
             },
             totals: quote.getTotals(),
             getValue: function() {
