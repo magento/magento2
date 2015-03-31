@@ -6,7 +6,6 @@
 @product-name-text-decoration: none;
 @product-name-text-decoration-hover: @link__hover__text-decoration;
 
-
 //
 //    Common
 //--------------------------------------
@@ -29,7 +28,7 @@
     }
 }
 
-// Product Lists
+//  Product Lists
 .products {
     margin: @indent__l 0;
 }
@@ -51,7 +50,7 @@
             display: block;
             margin: @indent__xs 0;
             word-break: break-all;
-            // Non standard for webkit
+            //  Non standard for webkit
             word-break: break-word;
             -webkit-hyphens: auto;
             -moz-hyphens: auto;
@@ -248,8 +247,8 @@
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .products-list .product {
@@ -302,8 +301,8 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .page-products .products-grid .product-item { width: 100%/3 }
