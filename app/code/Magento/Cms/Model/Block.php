@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Model;
 
+use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Object\IdentityInterface;
 
 /**
@@ -12,27 +13,13 @@ use Magento\Framework\Object\IdentityInterface;
  *
  * @method \Magento\Cms\Model\Resource\Block _getResource()
  * @method \Magento\Cms\Model\Resource\Block getResource()
- * @method \Magento\Cms\Model\Block setTitle(string $value)
- * @method \Magento\Cms\Model\Block setIdentifier(string $value)
- * @method \Magento\Cms\Model\Block setContent(string $value)
- * @method \Magento\Cms\Model\Block setCreationTime(string $value)
- * @method \Magento\Cms\Model\Block setUpdateTime(string $value)
- * @method \Magento\Cms\Model\Block setIsActive(int $value)
  */
-class Block extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
+class Block extends \Magento\Framework\Model\AbstractModel implements BlockInterface, IdentityInterface
 {
     /**
      * CMS block cache tag
      */
     const CACHE_TAG = 'cms_block';
-
-    const ID = 'block_id';
-    const IDENTIFIER = 'identifier';
-    const TITLE = 'title';
-    const CONTENT = 'content';
-    const CREATION_TIME = 'creation_time';
-    const UPDATE_TIME ='update_time';
-    const IS_ACTIVE ='is_active';
 
     /**
      * @var string
@@ -88,7 +75,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements IdentityIn
      */
     public function getId()
     {
-        return $this->_getData(self::ID);
+        return $this->getData(self::BLOCK_ID);
     }
 
     /**
@@ -98,7 +85,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements IdentityIn
      */
     public function getIdentifier()
     {
-        return (string) $this->_getData(self::IDENTIFIER);
+        return (string)$this->getData(self::IDENTIFIER);
     }
 
     /**
@@ -108,7 +95,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements IdentityIn
      */
     public function getTitle()
     {
-        return $this->_getData(self::TITLE);
+        return $this->getData(self::TITLE);
     }
 
     /**
@@ -118,7 +105,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements IdentityIn
      */
     public function getContent()
     {
-        return $this->_getData(self::CONTENT);
+        return $this->getData(self::CONTENT);
     }
 
     /**
@@ -128,7 +115,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements IdentityIn
      */
     public function getCreationTime()
     {
-        return $this->_getData(self::CREATION_TIME);
+        return $this->getData(self::CREATION_TIME);
     }
 
     /**
@@ -138,16 +125,93 @@ class Block extends \Magento\Framework\Model\AbstractModel implements IdentityIn
      */
     public function getUpdateTime()
     {
-        return $this->_getData(self::UPDATE_TIME);
+        return $this->getData(self::UPDATE_TIME);
     }
 
     /**
-     * Retrieve block status
+     * Is active
      *
-     * @return int
+     * @return bool
      */
-    public function getIsActive()
+    public function isActive()
     {
-        return $this->_getData(self::IS_ACTIVE);
+        return (bool)$this->getData(self::IS_ACTIVE);
+    }
+
+    /**
+     * Set ID
+     *
+     * @param int $id
+     * @return BlockInterface
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::BLOCK_ID, $id);
+    }
+
+    /**
+     * Set identifier
+     *
+     * @param string $identifier
+     * @return BlockInterface
+     */
+    public function setIdentifier($identifier)
+    {
+        return $this->setData(self::IDENTIFIER, $identifier);
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return BlockInterface
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::TITLE, $title);
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     * @return BlockInterface
+     */
+    public function setContent($content)
+    {
+        return $this->setData(self::CONTENT, $content);
+    }
+
+    /**
+     * Set creation time
+     *
+     * @param string $creationTime
+     * @return BlockInterface
+     */
+    public function setCreationTime($creationTime)
+    {
+        return $this->setData(self::CREATION_TIME, $creationTime);
+    }
+
+    /**
+     * Set update time
+     *
+     * @param string $updateTime
+     * @return BlockInterface
+     */
+    public function setUpdateTime($updateTime)
+    {
+        return $this->setData(self::UPDATE_TIME, $updateTime);
+    }
+
+    /**
+     * Set is active
+     *
+     * @param bool|int $isActive
+     * @return BlockInterface
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData(self::IS_ACTIVE, $isActive);
     }
 }
