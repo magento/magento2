@@ -39,12 +39,12 @@ endif; ?>
         <span><?php echo $block->getHeaderText() ?></span>
     </legend><br>
 
-    <div id="<?php echo $_addressChoiceContainerId ?>" class="admin__field order-choose-address">
+    <fieldset id="<?php echo $_addressChoiceContainerId ?>" class="admin__fieldset order-choose-address">
     <?php if ($block->getIsShipping()): ?>
         <div class="admin__field admin__field-option">
             <input type="checkbox" id="order-shipping_same_as_billing" name="shipping_same_as_billing"
-                   onclick="order.setShippingAsBilling(this.checked)"
-                   <?php if ($block->getIsAsBilling()): ?>checked<?php endif; ?> class="admin__control-checkbox" />
+                   onclick="order.setShippingAsBilling(this.checked)" class="admin__control-checkbox"
+                   <?php if ($block->getIsAsBilling()): ?>checked<?php endif; ?> />
             <label for="order-shipping_same_as_billing" class="admin__field-label">
                 <?php echo __('Same As Billing Address') ?>
             </label>
@@ -70,7 +70,7 @@ endif; ?>
                 </select>
             </div>
         </div>
-    </div>
+    </fieldset>
 
     <div class="order-address" id="<?php echo $_fieldsContainerId ?>">
         <?php echo $block->getForm()->toHtml() ?>

@@ -19,11 +19,11 @@
 @page-order-icon-refresh__color: @color-gray83;
 @page-order-icon-refresh__hover__color: darken(@color-gray83, 10%);
 
-
 @page-order-icon-add__content: @icon-arrow-right__content;
 @page-order-icon-remove__content: @icon-delete__content;
 @page-order-icon-refresh__content: @icon-refresh__content;
 
+//
 
 //
 //  Layout
@@ -68,6 +68,51 @@
 }
 
 //
+//  Order discounts
+//  ---------------------------------------------
+
+.admin__order-discounts {
+    .extend__clearfix();
+    margin-top: @indent__base;
+    .action-secondary {
+        float: right;
+        margin-top: 2.8rem;
+    }
+    .order-coupons {
+        float: left;
+    }
+    .admin__field {
+        display: inline-block;
+        margin: 0 3.5rem 0 0;
+        vertical-align: top;
+
+        .admin__field-control {
+            padding-right: 35px;
+            position: relative;
+        }
+
+        .action-default {
+            &:extend(.abs-action-reset all);
+            position: absolute;
+            right: 0;
+            bottom: 7px;
+            span {
+                .extend__visually-hidden();
+            }
+
+            &:before {
+                &:extend(.abs-icon all);
+                content: @icon-arrow-right__content;
+            }
+
+            &:hover {
+                color: @color-very-dark-gray-black2;
+            }
+        }
+    }
+}
+
+//
 //  Blocks
 //  ---------------------------------------------
 
@@ -87,11 +132,14 @@
         padding-bottom: @indent__xs;
         .actions {
             float: right;
-            margin-top: -@indent__xs;
             margin-bottom: @page-order-sidebar__margin-reqular;
+            margin-top: -@indent__xs;
         }
         .action-secondary {
             margin-left: @indent__base;
+        }
+        .title {
+            margin: 0;
         }
     }
 
@@ -101,13 +149,16 @@
         margin-bottom: @indent__l;
     }
 
-//    .admin__control-fields {
-//        .admin__field:nth-child(n+2):not(.admin__field-option) {
-//            > .admin__field-label {
-//                .extend__visually-hidden-reset()
-//            }
-//        }
-//    }
+    .admin__field {
+        .extend__field-rows();
+    }
+
+    .admin__field-option {
+        .admin__field-label {
+            display: block;
+            width: auto;
+        }
+    }
 }
 
 //
@@ -126,7 +177,7 @@
         .label {
             display: block;
             font-size: @page-order-sidebar-base__font-size;
-            margin: 0 0 1rem;
+            margin: 0 0 @indent__s;
         }
     }
     .title {
@@ -137,8 +188,8 @@
         padding: 0 0 @page-order-sidebar__margin;
     }
     .admin__control-select {
-        width: 100%;
         margin: 0 0 @page-order-sidebar__margin-small;
+        width: 100%;
     }
     .order-sidebar-block {
         border-bottom: 1px solid @page-order-sidebar__border-color;

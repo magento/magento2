@@ -154,16 +154,20 @@
                 <?php endforeach; ?>
         </table>
         <p><small><?php echo $block->getInclExclTaxMessage(); ?></small></p>
-        <p><?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?></p>
     </div>
-    <div class="order-coupons" id="order-coupons"><?php echo $block->getChildHtml();?></div>
+
+    <div class="admin__order-discounts">
+        <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()', 'action-secondary'); ?>
+        <div id="order-coupons" class="order-coupons"><?php echo $block->getChildHtml();?></div>
+    </div>
+
     <script>
-require([
-    'Magento_Sales/order/create/form'
-], function(){
-    order.itemsOnchangeBind()
-});
-</script>
+        require([
+            'Magento_Sales/order/create/form'
+        ], function(){
+            order.itemsOnchangeBind()
+        });
+    </script>
 </div>
 
 <?php if ($block->isGiftMessagesAvailable()) : ?>

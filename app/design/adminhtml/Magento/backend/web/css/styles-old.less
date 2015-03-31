@@ -12,7 +12,7 @@
 @import "../mui/styles/vars.less";
 @import (reference) "../mui/styles/abstract.less"; // Import some abstract
 
-/* DO NOT REMOVE! Can be dangerous (need for Product Creation) */
+// DO NOT REMOVE! Can be dangerous (need for Product Creation)
 .collapse.in,
 .no-js .collapse {
     height: auto !important;
@@ -29,7 +29,7 @@ input.no-display,
 .invisible {
     visibility: hidden;
 }
-/* DO NOT REMOVE! Can be dangerous (need for Product Creation) */
+//  DO NOT REMOVE! Can be dangerous (need for Product Creation)
 
 .admin__scope-old {
     box-sizing: content-box;
@@ -47,7 +47,7 @@ input.no-display,
         margin: 0 0 6px;
     }
 
-    /* TODO: remove after all templates refactoring */
+    // TODO: remove after all templates refactoring
     span.required {
         display: none;
     }
@@ -58,9 +58,10 @@ input.no-display,
         margin-left: 3px;
     }
 
-    /*
-        Control with added before and after content
-    -------------------------------------- */
+    //
+    //  Control with added before and after content
+    //  ---------------------------------------------
+
     .addon {
         padding: 0;
         display: table;
@@ -127,8 +128,8 @@ input.no-display,
         border-width: 1px 0 1px 1px;
     }
 
-    /*.addon {direction: rtl; }
-    .addon > * {direction: ltr; }*/
+//    .addon {direction: rtl; }
+//    .addon > * {direction: ltr; }
 
     .addon *:focus ~ .addafter {
 
@@ -143,7 +144,7 @@ input.no-display,
         display: inline;
     }
 
-    /* Addon left aligned */
+    //  Addon left aligned
     .field-price .addon {
         direction: rtl;
     }
@@ -157,17 +158,19 @@ input.no-display,
         border-radius: 1px 0 0 1px;
     }
 
-    /*
-        Form actions
-    -------------------------------------- */
+    //
+    //  Form actions
+    //  ---------------------------------------------
+
     .form-actions {
         padding: 10px;
         margin: 10px 0;
     }
 
-    /*
-        Default view for fields: Labels are above the controls
-    -------------------------------------- */
+    //
+    //  Default view for fields: Labels are above the controls
+    //  ---------------------------------------------
+
     .form-inline .label,
     .form-inline .control {
         margin: 0;
@@ -217,10 +220,11 @@ input.no-display,
         font-weight: bold;
     }
 
-    /*
-        Field with multiple fields
-    -------------------------------------- */
-    /* TODO: rename 'fields-group' class. Propose - 'group' */
+    //
+    //  Field with multiple fields
+    //  ---------------------------------------------
+
+    // TODO: rename 'fields-group' class. Propose - 'group'
 
     [class^="fields-group-"] .field {
         vertical-align: top;
@@ -253,8 +257,8 @@ input.no-display,
     }
 
     [class^="fields-group-"] {
-        letter-spacing: -0.31em; /* webkit */
-        word-spacing: -0.43em; /* IE < 8 && gecko */
+        letter-spacing: -0.31em; // webkit
+        word-spacing: -0.43em; // IE < 8 && gecko
     }
 
     [class^="fields-group-"] > * {
@@ -262,9 +266,10 @@ input.no-display,
         word-spacing: normal;
     }
 
-    /*
-        Form field with nested controls inside
-    -------------------------------------- */
+    //
+    //  Form field with nested controls inside
+    //  ---------------------------------------------
+
     .nested {
         padding: 6px 0 0;
     }
@@ -278,10 +283,6 @@ input.no-display,
         text-align: left;
         display: inline;
         padding: 0;
-    }
-
-    .control *:first-child {
-        /*margin-top: 0;*/
     }
 
     .nested .field {
@@ -299,9 +300,10 @@ input.no-display,
         margin-bottom: 0;
     }
 
-    /*
-        Clearfix
-    -------------------------------------- */
+    //
+    //  Clearfix
+    //  ---------------------------------------------
+
     .buttons-set:before,
     .buttons-set:after,
     .form-inline .field:before,
@@ -6030,10 +6032,10 @@ input.no-display,
     }
 }
 
-/* ==|== print styles =======================================================
-   Print styles.
-   Inlined to avoid required HTTP connection: h5bp.com/r
-   ========================================================================== */
+// ==|== print styles =======================================================
+//   Print styles.
+//   Inlined to avoid required HTTP connection: h5bp.com/r
+//   ==========================================================================
 
 @media print {
     * {
@@ -6045,7 +6047,7 @@ input.no-display,
         -ms-filter: none !important;
     }
 
-    /* Black prints faster: h5bp.com/s */
+    // Black prints faster: h5bp.com/s
     a, a:visited {
         text-decoration: underline;
     }
@@ -6062,7 +6064,7 @@ input.no-display,
         content: "";
     }
 
-    /* Don't show links for images, or javascript/internal links */
+    // Don't show links for images, or javascript/internal links
     pre, blockquote {
         border: 1px solid #999;
         page-break-inside: avoid;
@@ -6072,7 +6074,7 @@ input.no-display,
         display: table-header-group;
     }
 
-    /* h5bp.com/t */
+    // h5bp.com/t
     tr, img {
         page-break-inside: avoid;
     }
