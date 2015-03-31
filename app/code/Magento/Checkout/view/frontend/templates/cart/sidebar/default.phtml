@@ -75,9 +75,23 @@ $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                     <?php echo $block->getSidebarItemPriceHtml($_item); ?>
                 <?php endif; //Can apply MSRP ?>
 
-                <div class="details-qty">
+                <div class="details-qty qty">
                     <span class="label"><?php echo __('Qty'); ?></span>
-                    <span class="value qty"><?php echo $block->getQty() ?></span>
+                    <input id="cart-item-<?php echo $_item->getId() ?>-qty"
+                           value="<?php echo $block->getQty() ?>"
+                           type="number"
+                           size="4"
+                           class="item-qty cart-item-qty"
+                           data-cart-item="<?php echo $_item->getId() ?>"
+                           data-item-qty="<?php echo $block->getQty() ?>"
+                           maxlength="12"/>
+                    <button id="update-cart-item-<?php echo $_item->getId() ?>"
+                            class="update-cart-item"
+                            data-cart-item="<?php echo $_item->getId() ?>"
+                            title="<?php echo $block->escapeHtml(__('Update')); ?>"
+                            style="display: none">
+                        <span><?php echo __('Update'); ?></span>
+                    </button>
                 </div>
             </div>
 
@@ -85,12 +99,17 @@ $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                 <?php if ($product->isVisibleInSiteVisibility()):?>
                 <div class="primary">
                     <a href="<?php echo $block->getConfigureUrl() ?>"
-                       title="<?php echo __('Edit item') ?>"
-                       class="action edit"><span><?php echo __('Edit')?></span></a>
+                       title="<?php echo $block->escapeHtml(__('Edit item')); ?>"
+                       class="action edit">
+                       <span><?php echo __('Edit')?></span>
+                   </a>
                 </div>
                 <?php endif ?>
                 <div class="secondary">
-                    <a href="#" data-post='<?php echo $this->helper('Magento\Checkout\Helper\Cart')->getDeletePostJson($_item); ?>' title="<?php echo __('Remove item') ?>" class="action delete">
+                    <a href="#"
+                       data-cart-item="<?php echo $_item->getId() ?>"
+                       title="<?php echo $block->escapeHtml(__('Remove item')); ?>"
+                       class="action delete">
                         <span><?php echo __('Remove')?></span>
                     </a>
                 </div>
