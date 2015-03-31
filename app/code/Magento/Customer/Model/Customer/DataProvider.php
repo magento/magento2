@@ -9,6 +9,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
+use Magento\Ui\DataProvider\EavValidationRul;
 use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -82,10 +83,16 @@ class DataProvider implements DataProviderInterface
     ];
 
     /**
+     * @var EavValidationRul
+     */
+    protected $eavValidationRul;
+
+    /**
      * Constructor
      *
      * @param string $primaryFieldName
      * @param string $requestFieldName
+     * @param EavValidationRul $eavValidationRul
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param array $meta
@@ -94,6 +101,7 @@ class DataProvider implements DataProviderInterface
     public function __construct(
         $primaryFieldName,
         $requestFieldName,
+        EavValidationRul $eavValidationRul,
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         array $meta = [],
@@ -101,6 +109,7 @@ class DataProvider implements DataProviderInterface
     ) {
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
+        $this->eavValidationRul = $eavValidationRul;
         $this->collection = $customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
@@ -327,6 +336,11 @@ class DataProvider implements DataProviderInterface
                 if ($attribute->usesSource()) {
                     $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
                 }
+            }
+
+            $rules = $this->eavValidationRul->build($attribute, $meta[$code]);
+            if (!empty($rules)) {
+                $meta[$code]['validation'] = $rules;
             }
         }
         return $meta;
