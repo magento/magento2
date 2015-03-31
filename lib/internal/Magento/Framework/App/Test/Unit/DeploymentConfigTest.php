@@ -26,7 +26,12 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
      */
     private static $flattenedFixture = [
         'configData1' => 'scalar_value',
+        'configData2' => [
+            'foo' => 1,
+            'bar' => ['baz' => 2],
+        ],
         'configData2/foo' => 1,
+        'configData2/bar' => ['baz' => 2],
         'configData2/bar/baz' => 2,
     ];
 

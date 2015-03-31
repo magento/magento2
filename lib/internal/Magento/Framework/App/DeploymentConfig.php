@@ -141,28 +141,31 @@ class DeploymentConfig
      * Convert associative array of arbitrary depth to a flat associative array with concatenated key path as keys
      *
      * @param array $params
+     * @param string $path
      * @return array
      * @throws \Exception
      */
-    private function flattenParams(array $params)
+    private function flattenParams(array $params, $path = null)
     {
-        $result = [];
-        foreach ($params as $key => $value) {
-            if (is_array($value)) {
-                $subParams = $this->flattenParams($value);
-                foreach ($subParams as $subKey => $subValue) {
-                    if (isset($result[$key . '/' . $subKey])) {
-                        throw new \Exception("Key collision {$subKey} is already defined.");
-                    }
-                    $result[$key . '/' . $subKey] = $subValue;
+        $cache = [];
+
+        if (is_array($params)) {
+            foreach ($params as $key => $param) {
+                if ($path) {
+                    $newPath = $path . '/' . $key;
+                } else {
+                    $newPath = $key;
                 }
-            } else {
-                if (isset($result[$key])) {
-                    throw new \Exception("Key collision {$subKey} is already defined.");
+                if (isset($cache[$newPath])) {
+                    throw new \Exception("Key collision {$newPath} is already defined.");
                 }
-                $result[$key] = $value;
+                $cache[$newPath] = $param;
+                if (is_array($param)) {
+                    $cache = array_merge($cache, $this->flattenParams($param, $newPath));
+                }
             }
         }
-        return $result;
+
+        return $cache;
     }
 }
