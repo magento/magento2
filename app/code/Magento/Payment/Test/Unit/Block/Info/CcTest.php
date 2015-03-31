@@ -131,8 +131,6 @@ class CcTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCcExpDate($ccExpMonth, $ccExpYear)
     {
-        $this->markTestIncomplete('Failing on the develop branch');
-
         $paymentInfo = $this->getMock('Magento\Payment\Model\Info', ['getCcExpMonth', 'getCcExpYear'], [], '', false);
         $paymentInfo
             ->expects($this->any())
@@ -159,7 +157,7 @@ class CcTest extends \PHPUnit_Framework_TestCase
     public function getCcExpDateDataProvider()
     {
         return [
-            [2, 2015],
+            [3, 2015],
             [12, 2011],
             [01, 2036]
         ];

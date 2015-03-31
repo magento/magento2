@@ -69,7 +69,7 @@ class Generator
      *
      * @param string $className
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      * @throws \InvalidArgumentException
      */
     public function generateClass($className)
@@ -102,9 +102,7 @@ class Generator
         $this->tryToLoadSourceClass($className, $generator);
         if (!($file = $generator->generate())) {
             $errors = $generator->getErrors();
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase(implode(' ', $errors))
-            );
+            throw new \Exception(implode(' ', $errors));
         }
         $this->includeFile($file);
         return self::GENERATION_SUCCESS;
@@ -169,18 +167,15 @@ class Generator
      * @param string $className
      * @param \Magento\Framework\Code\Generator\EntityAbstract $generator
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     protected function tryToLoadSourceClass($className, $generator)
     {
         $sourceClassName = $generator->getSourceClassName();
         if (!$this->definedClasses->classLoadable($sourceClassName)) {
             if ($this->generateClass($sourceClassName) !== self::GENERATION_SUCCESS) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    new \Magento\Framework\Phrase(
-                        'Source class "%1" for "%2" generation does not exist.',
-                        [$sourceClassName, $className]
-                    )
+                throw new \Exception(
+                    sprintf('Source class "%s" for "%s" generation does not exist.', $sourceClassName, $className)
                 );
             }
         }
