@@ -1285,10 +1285,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getProductLinks()
     {
-        if ($this->_links === null) {
-            return null;
-        }
-
         if (empty($this->_links)) {
             $productLinks = [];
 
@@ -1324,6 +1320,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setProductLinks(array $links = null)
     {
+        if ($links === null) {
+            $this->setData('ignoreLinksFlag', true);
+        } else {
+            $this->setData('ignoreLinksFlag', false);
+        }
         $this->_links = $links;
         return $this;
     }

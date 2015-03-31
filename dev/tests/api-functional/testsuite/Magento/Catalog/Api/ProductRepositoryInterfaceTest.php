@@ -121,6 +121,94 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($product[ProductInterface::SKU]);
     }
 
+    public function testProductLinks()
+    {
+        $this->markTestSkipped('Skipped until MAGETWO-35458 is ready');
+        // Create simple product
+        $productData =  [
+            ProductInterface::SKU => "product_simple_500",
+            ProductInterface::NAME => "Product Simple 500",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 1,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+        ];
+
+        $this->saveProduct($productData);
+        $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "related",
+                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
+                            "position" => 0];
+        $productWithRelatedData =  [
+            ProductInterface::SKU => "product_simple_with_related_500",
+            ProductInterface::NAME => "Product Simple with Related 500",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 1,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+            "product_links" => [$productLinkData]
+        ];
+
+        $this->saveProduct($productWithRelatedData);
+        $response = $this->getProduct("product_simple_with_related_500");
+
+        $this->assertArrayHasKey('product_links', $response);
+        $links = $response['product_links'];
+        $this->assertEquals(1, count($links));
+        $this->assertEquals($productLinkData, $links[0]);
+
+        // update link information
+        $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "upsell",
+                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
+                            "position" => 0];
+        $productWithUpsellData =  [
+            ProductInterface::SKU => "product_simple_with_related_500",
+            ProductInterface::NAME => "Product Simple with Related 500",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 1,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+            "product_links" => [$productLinkData]
+        ];
+
+        $this->saveProduct($productWithUpsellData);
+        $response = $this->getProduct("product_simple_with_related_500");
+
+        $this->assertArrayHasKey('product_links', $response);
+        $links = $response['product_links'];
+        $this->assertEquals(1, count($links));
+        $this->assertEquals($productLinkData, $links[0]);
+
+        // Remove link
+        $productWithNoLinkData =  [
+            ProductInterface::SKU => "product_simple_with_related_500",
+            ProductInterface::NAME => "Product Simple with Related 500",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 1,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+            "product_links" => []
+        ];
+
+        $this->saveProduct($productWithNoLinkData);
+        $response = $this->getProduct("product_simple_with_related_500");
+
+        $this->assertArrayHasKey('product_links', $response);
+        $links = $response['product_links'];
+        $this->assertEquals(1, count($links));
+        $this->assertEquals([], $links[0]);
+
+        $this->deleteProduct("product_simple_500");
+        $this->deleteProduct("product_simple_with_related_500");
+    }
+
     protected function getOptionsData()
     {
         return [
