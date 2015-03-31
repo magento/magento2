@@ -36,6 +36,7 @@ define([
             },
 
             listens: {
+                'pageSize': 'onSizeChange',
                 'pageSize current': 'reload',
                 'pageSize totalRecords': 'countPages'
             }
@@ -103,15 +104,17 @@ define([
 
         /**
          * Compares current and pages observables and returns boolean result
-         * @return {Boolean} is current equal to pages property
+         *
+         * @returns {Boolean} is current equal to pages property
          */
         isLast: function () {
             return this.current() === this.pages();
         },
 
         /**
-         * Compares current observable to 1
-         * @return {Boolean} is current page first
+         * Compares current observable to 1.
+         *
+         * @returns {Boolean} is current page first
          */
         isFirst: function () {
             return this.current() === 1;
@@ -121,6 +124,9 @@ define([
             this.source.reload();
         },
 
+        /**
+         * Calculates number of pages.
+         */
         countPages: function () {
             var pages = Math.ceil(this.totalRecords() / this.pageSize());
 

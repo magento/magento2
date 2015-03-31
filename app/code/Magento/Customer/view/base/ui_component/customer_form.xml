@@ -362,6 +362,9 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">address</item>
                     <item name="sortOrder" xsi:type="string">44</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="min_text_length" xsi:type="number">0</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -497,6 +500,9 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">address</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="min_text_length" xsi:type="number">0</item>
+                    </item>
                 </item>
             </argument>
         </field>

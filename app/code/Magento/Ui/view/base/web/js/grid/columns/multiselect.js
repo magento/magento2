@@ -18,6 +18,7 @@ define([
             indetermine: false,
             selected: [],
             excluded: [],
+            ns: '<%= provider %>:params',
             actions: [{
                 value: 'selectAll',
                 label: 'Select all'
@@ -38,6 +39,7 @@ define([
             },
 
             listens: {
+                '<%= ns %>.applyFilters': 'deselectAll',
                 selected: 'onSelectedChange',
                 rows: 'onRowsChange'
             }
@@ -263,13 +265,13 @@ define([
                 excluded        = this.excluded().length,
                 totalSelected   = this.totalSelected(),
                 totalRecords    = this.totalRecords(),
-                allSelected     = totalSelected === totalRecords;
+                allSelected     = totalRecords && totalSelected === totalRecords;
 
             if (this.excludeMode()) {
                 if (excluded === totalRecords) {
                     this.deselectAll();
                 }
-            } else if (selected === totalRecords) {
+            } else if (totalRecords && selected === totalRecords) {
                 this.selectAll();
             }
 

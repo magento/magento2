@@ -297,6 +297,7 @@
     </xs:complexType>
     <xs:complexType name="ui_element">
         <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
         <xs:attribute type="xs:string" name="layout" use="optional"/>
         <xs:attribute type="xs:string" name="dataSource" use="optional"/>
         <xs:attribute type="xs:string" name="class" use="optional"/>

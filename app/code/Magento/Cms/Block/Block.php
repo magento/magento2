@@ -68,7 +68,7 @@ class Block extends \Magento\Framework\View\Element\AbstractBlock implements \Ma
             /** @var \Magento\Cms\Model\Block $block */
             $block = $this->_blockFactory->create();
             $block->setStoreId($storeId)->load($blockId);
-            if ($block->getIsActive()) {
+            if ($block->isActive()) {
                 $html = $this->_filterProvider->getBlockFilter()->setStoreId($storeId)->filter($block->getContent());
             }
         }

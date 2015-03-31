@@ -165,6 +165,14 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrentStatus($status, $lastLoginAt, $lastVisitAt, $lastLogoutAt)
     {
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->with(
+                'customer/online_customers/online_minutes_interval',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+            ->willReturn(60); //TODO: it's value mocked because unit tests run data providers before all testsuite
+
         $this->customerLog->expects($this->any())->method('getLastLoginAt')->willReturn($lastLoginAt);
         $this->customerLog->expects($this->any())->method('getLastVisitAt')->willReturn($lastVisitAt);
         $this->customerLog->expects($this->any())->method('getLastLogoutAt')->willReturn($lastLogoutAt);
