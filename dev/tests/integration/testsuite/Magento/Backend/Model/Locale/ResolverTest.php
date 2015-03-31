@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Locale;
+
 use Magento\Framework\Locale\Resolver;
 
 /**
