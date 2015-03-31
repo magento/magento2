@@ -214,7 +214,7 @@ class Info extends AbstractModel implements InfoInterface
     }
 
     /**
-     * Initialize _additionalInformation with data from model aka $this->_data['additional_information']
+     * Initialize additional information container with data from model
      * if property empty
      *
      * @return void
