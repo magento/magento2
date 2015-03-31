@@ -162,7 +162,7 @@ class Status
                 $result[$name] = (int)$currentStatus;
             }
         }
-        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]]);
+        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
         $this->cleanup->clearCaches();
         $this->cleanup->clearCodeGeneratedFiles();
     }
