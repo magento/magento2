@@ -79,7 +79,10 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
             'sales_order_status_history',
             'Magento\Sales\Model\Resource\Order\Status\History'
         );
-
+        $eavEntityStoreTableName = $this->getTableName(
+            'eav_entity_store',
+            '\Magento\Eav\Model\Resource\Entity\Store'
+        );
         /** @var \Magento\Store\Model\StoreManager $storeManager */
         $storeManager = $this->application->getObjectManager()->create('Magento\Store\Model\StoreManager');
         /** @var $category \Magento\Catalog\Model\Category */
@@ -176,7 +179,7 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
         while ($entityId <= $ordersCount) {
             $queries = "";
 
-            $orderNumber = 100000000 + $entityId;
+            $orderNumber = 100000000 * $productStoreId($entityId) + $entityId;
             $email = 'order_' . $entityId . '@example.com';
             $firstName = 'First Name';
             $lastName = 'Last Name';
@@ -191,6 +194,8 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
 
             $simpleProductIdLen[0] = strlen($simpleProductId[0]($entityId));
             $simpleProductIdLen[1] = strlen($simpleProductId[1]($entityId));
+
+            $queries .= "INSERT INTO `{$eavEntityStoreTableName}` (`entity_store_id`, `entity_type_id`, `store_id`, `increment_prefix`, `increment_last_id`) VALUES ({$productStoreId($entityId)}, 5, {$productStoreId($entityId)}, '{$productStoreId($entityId)}', '{$orderNumber}') ON DUPLICATE KEY UPDATE `increment_last_id`='{$orderNumber}';";
 
             $quoteId = $entityId;
             $queries .= "INSERT INTO `{$quoteTableName}` (`entity_id`, `store_id`, `created_at`, `updated_at`, `converted_at`, `is_active`, `is_virtual`, `is_multi_shipping`, `items_count`, `items_qty`, `orig_order_id`, `store_to_base_rate`, `store_to_quote_rate`, `base_currency_code`, `store_currency_code`, `quote_currency_code`, `grand_total`, `base_grand_total`, `checkout_method`, `customer_id`, `customer_tax_class_id`, `customer_group_id`, `customer_email`, `customer_prefix`, `customer_firstname`, `customer_middlename`, `customer_lastname`, `customer_suffix`, `customer_dob`, `customer_note`, `customer_note_notify`, `customer_is_guest`, `remote_ip`, `applied_rule_ids`, `reserved_order_id`, `password_hash`, `coupon_code`, `global_currency_code`, `base_to_global_rate`, `base_to_quote_rate`, `customer_taxvat`, `customer_gender`, `subtotal`, `base_subtotal`, `subtotal_with_discount`, `base_subtotal_with_discount`, `is_changed`, `trigger_recollect`, `ext_shipping_info`, `is_persistent`, `gift_message_id`) VALUES ({$quoteId}, {$productStoreId($entityId)}, '{$time}', '1970-01-01 03:00:00', NULL, 0, 0, 0, 2, 2.0000, 0, 0.0000, 0.0000, 'USD', 'USD', 'USD', 25.3000, 25.3000, 'guest', NULL, 3, 0, '{$email}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, '127.0.0.1', '1', NULL, NULL, NULL, 'USD', 1.0000, 1.0000, NULL, NULL, 17.0000, 17.0000, 15.3000, 15.3000, 1, 0, NULL, 0, NULL);";
