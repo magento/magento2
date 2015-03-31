@@ -274,11 +274,11 @@ class Bootstrap
         $isOn = $this->maintenance->isOn(isset($this->server['REMOTE_ADDR']) ? $this->server['REMOTE_ADDR'] : '');
         if ($isOn && !$isExpected) {
             $this->errorCode = self::ERR_MAINTENANCE;
-            throw new \Exception('Unable to proceed: the maintenance mode is enabled.');
+            throw new \Exception('Unable to proceed: the maintenance mode is enabled. ');
         }
         if (!$isOn && $isExpected) {
             $this->errorCode = self::ERR_MAINTENANCE;
-            throw new \Exception('Unable to proceed: the maintenance mode must be enabled first.');
+            throw new \Exception('Unable to proceed: the maintenance mode must be enabled first. ');
         }
     }
 
@@ -298,11 +298,11 @@ class Bootstrap
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
-            throw new \Exception('Application is not installed yet. ');
+            throw new \Exception('Error: Application is not installed yet. ');
         }
         if ($isInstalled && !$isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
-            throw new \Exception('Application is already installed. ');
+            throw new \Exception('Error: Application is already installed. ');
         }
     }
 
@@ -406,7 +406,7 @@ class Bootstrap
         if ($this->isDeveloperMode()) {
             echo $e;
         } else {
-            $message = "An error has happened during application run. See debug log for details.\n";
+            $message = "An error has happened during application run. See exception log for details.\n";
             try {
                 if (!$this->objectManager) {
                     throw new \DomainException();
