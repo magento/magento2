@@ -46,7 +46,7 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
             $categoryName = $product->getCategoryIds()[0];
             $cmsIndexPage->getTopmenu()->selectCategoryByName($categoryName);
             $priceBlock = $catalogCategoryViewPage->getListProductBlock()->getProductItem($product)->getPriceBlock();
-            $actualPrice['regular'] = $priceBlock->getPrice();
+            $actualPrice['regular'] = $priceBlock->getOldPrice();
             $actualPrice['special'] = $priceBlock->getSpecialPrice();
             $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
             $diff = $this->verifyData($actualPrice, $productPrice[$key]);

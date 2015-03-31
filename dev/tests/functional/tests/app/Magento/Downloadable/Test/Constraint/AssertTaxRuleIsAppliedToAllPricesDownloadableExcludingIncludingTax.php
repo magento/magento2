@@ -45,9 +45,9 @@ class AssertTaxRuleIsAppliedToAllPricesDownloadableExcludingIncludingTax extends
      */
     public function getProductPagePrices($actualPrices)
     {
-        $viewBlock = $this->catalogProductView->getViewBlock();
-        $actualPrices['product_view_price_excl_tax'] = $viewBlock->getProductPriceExcludingTax();
-        $actualPrices['product_view_price_incl_tax'] = $viewBlock->getProductPriceIncludingTax();
+        $priceBlock = $this->catalogProductView->getViewBlock()->getPriceBlock();
+        $actualPrices['product_view_price_excl_tax'] = $priceBlock->getPriceExcludingTax();
+        $actualPrices['product_view_price_incl_tax'] = $priceBlock->getPriceIncludingTax();
 
         return $actualPrices;
     }

@@ -116,7 +116,7 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $productName = $product->getName();
         $productCategory = $product->getCategoryIds()[0];
         $this->openCategory($productCategory);
-        $actualPrices = $this->getCategoryPrices($productName, $actualPrices);
+        $actualPrices = $this->getCategoryPrices($product, $actualPrices);
         $catalogCategoryView->getListProductBlock()->getProductItem($product)->open();
         $catalogProductView->getViewBlock()->fillOptions($product);
         $actualPrices = $this->getProductPagePrices($actualPrices);

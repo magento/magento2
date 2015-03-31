@@ -32,7 +32,7 @@ abstract class AbstractPriceBlock extends Block
     protected function getTypePrice($type, $currency = '$')
     {
         $typePriceElement = $this->getTypePriceElement($type);
-        return $typePriceElement->isVisible() ? $this->escape($typePriceElement->getText(), $currency) : null;
+        return $typePriceElement->isVisible() ? $this->trimPrice($typePriceElement->getText(), $currency) : null;
     }
 
     /**
@@ -57,7 +57,7 @@ abstract class AbstractPriceBlock extends Block
      * @param string $currency
      * @return string
      */
-    protected function escape($price, $currency = '$')
+    protected function trimPrice($price, $currency = '$')
     {
         return str_replace([',', $currency], '', $price);
     }

@@ -129,7 +129,7 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
      */
     public function getPriceIncludingTax($currency = '$')
     {
-        return $this->getTypePrice('price_including_tax'. $currency);
+        return $this->getTypePrice('price_including_tax', $currency);
     }
 
     /**

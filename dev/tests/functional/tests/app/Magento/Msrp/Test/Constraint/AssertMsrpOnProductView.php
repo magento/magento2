@@ -49,8 +49,8 @@ class AssertMsrpOnProductView extends AbstractConstraint
             'Regular price on Product view page is visible and not expected.'
         );
 
-        $catalogProductView->getViewBlock()->openMapBlock();
-        $mapBlock = $catalogProductView->getViewBlock()->getMapBlock();
+        $catalogProductView->getMapViewBlock()->openMapBlock();
+        $mapBlock = $catalogProductView->getMapViewBlock()->getMapBlock();
         \PHPUnit_Framework_Assert::assertContains(
             $product->getMsrp(),
             $mapBlock->getOldPrice(),

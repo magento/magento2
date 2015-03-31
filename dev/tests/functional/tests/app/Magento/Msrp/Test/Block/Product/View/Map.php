@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Block\Product;
+namespace Magento\Msrp\Test\Block\Product\View;
 
 /**
  * Minimum Advertised Price block.

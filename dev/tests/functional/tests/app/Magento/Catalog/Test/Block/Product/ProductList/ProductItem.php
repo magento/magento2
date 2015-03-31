@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
-use Magento\Catalog\Test\Block\Product\Map;
 use Magento\Catalog\Test\Block\Product\Price;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
@@ -29,20 +28,6 @@ class ProductItem extends Block
      * @var string
      */
     protected $priceBox = '.price-box';
-
-    /**
-     * Click for Price link.
-     *
-     * @var string
-     */
-    protected $mapLink = ".map-show-info";
-
-    /**
-     * Popup map price.
-     *
-     * @var string
-     */
-    protected $mapPopupBlock = '//ancestor::*[@id="map-popup-click-for-price"]/..';
 
     /**
      * 'Add to Card' button.
@@ -111,30 +96,6 @@ class ProductItem extends Block
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Product\Price',
             ['element' => $this->_rootElement->find($this->priceBox)]
-        );
-    }
-
-    /**
-     * Open MAP block.
-     *
-     * @return void
-     */
-    public function openMapBlock()
-    {
-        $this->_rootElement->find($this->mapLink)->click();
-        $this->waitForElementVisible($this->mapPopupBlock, Locator::SELECTOR_XPATH);
-    }
-
-    /**
-     * Return MAP block.
-     *
-     * @return Map
-     */
-    public function getMapBlock()
-    {
-        return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Product\Map',
-            ['element' => $this->_rootElement->find($this->mapPopupBlock, Locator::SELECTOR_XPATH)]
         );
     }
 }

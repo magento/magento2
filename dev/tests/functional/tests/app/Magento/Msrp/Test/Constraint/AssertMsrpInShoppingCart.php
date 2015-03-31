@@ -44,8 +44,8 @@ class AssertMsrpInShoppingCart extends AbstractConstraint
         if ($product->hasData('checkout_data')) {
             $catalogProductView->getViewBlock()->addToCart($product);
         } else {
-            $catalogProductView->getViewBlock()->openMapBlock();
-            $catalogProductView->getViewBlock()->getMapBlock()->addToCart();
+            $catalogProductView->getMapViewBlock()->openMapBlock();
+            $catalogProductView->getMapViewBlock()->getMapBlock()->addToCart();
         }
         $catalogProductView->getMessagesBlock()->waitSuccessMessage();
 
