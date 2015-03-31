@@ -23,7 +23,7 @@ class MassDelete extends AbstractMassDelete
      *
      * @var string
      */
-    protected $collection = 'Magento\Cms\Model\Resource\Page\Grid\Collection';
+    protected $collection = 'Magento\Cms\Model\Resource\Page\Collection';
 
     /**
      * Page model
