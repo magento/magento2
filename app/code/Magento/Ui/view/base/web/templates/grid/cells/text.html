@@ -5,10 +5,8 @@
  */
 -->
 <!-- ko if: isClickable(row) -->
-<td data-bind="click: redirect.bind($data, getClickUrl(row)), html: getLabel(row[field.index])">
-</td>
+<td data-bind="click: redirect.bind($data, getClickUrl(row)), html: getLabel(row[field.index])"></td>
 <!-- /ko -->
 <!-- ko ifnot: isClickable(row) -->
-<td data-bind="html: getLabel(row[field.index])">
-</td>
+<td data-bind="html: getLabel(row[field.index])"></td>
 <!-- /ko -->

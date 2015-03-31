@@ -4,8 +4,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<td class="col-select col-massaction">
-    <label class="select-box">
-        <input type="checkbox" class="massaction-checkbox" data-bind="checked: selected, value: row[indexField]">
+
+<td class="data-grid-checkbox-cell">
+    <label class="data-grid-checkbox-cell-inner">
+        <input
+            class="admin__control-checkbox"
+            type="checkbox"
+            data-bind="checked: selected,
+                   value: row[indexField],
+                   attr: {id: 'check' + row[indexField]}">
+        <label data-bind="attr: {for: 'check' + row[indexField]}"></label>
     </label>
 </td>

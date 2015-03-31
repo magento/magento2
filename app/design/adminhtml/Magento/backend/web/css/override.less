@@ -1948,37 +1948,12 @@ button:hover {
   padding: .6875em 1em;
   cursor: pointer;
 }
-table.table {
+table {
+  background-color: transparent;
   color: #303030;
 }
-table.table > caption {
-  margin-bottom: .5rem;
-}
-table.table tfoot {
-  background: #f8f8f8;
-}
-table.table tfoot th,
-table.table tfoot td {
-  text-align: left;
-}
-table.table th {
-  background: transparent;
-  border-bottom: 0.1rem solid #e3e3e3;
-  border-top: 0.1rem solid #e3e3e3;
-  font-weight: 700;
-  padding: 1rem 1.5rem;
-  text-align: left;
-}
-table.table td {
-  border-bottom: 0.1rem solid #e3e3e3;
-  padding: 1rem 1.5rem;
-  vertical-align: top;
-}
-table.table tbody td:first-child input[type='checkbox'] {
-  margin: 0;
-}
-table.table tbody tr:last-child td {
-  border-bottom-color: transparent;
+table > caption {
+  margin-bottom: .5em;
 }
 .messages {
   margin: 0 0 2rem;
@@ -2250,7 +2225,8 @@ table.table tbody tr:last-child td {
 .admin__data-grid-action-bookmarks .action-submit:before,
 .admin__data-grid-action-bookmarks .action-delete:before,
 .admin__data-grid-action-bookmarks .action-edit:before,
-.admin__data-grid-action-columns .admin__action-dropdown:before {
+.admin__data-grid-action-columns .admin__action-dropdown:before,
+.data-grid-row-parent > td .data-grid-checkbox-cell-inner:before {
   -webkit-font-smoothing: antialiased;
   font-family: 'Admin Icons';
   line-height: 1;
@@ -2258,8 +2234,7 @@ table.table tbody tr:last-child td {
   font-weight: normal;
   speak: none;
 }
-.validation-symbol:after,
-table.table th.required:after {
+.validation-symbol:after {
   content: '*';
   color: #e22626;
   font-weight: 400;
@@ -4508,6 +4483,25 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
 }
 .dashboard-data th,
 .dashboard-data td {
+  padding: 1rem 1.5rem;
+}
+.dashboard-data th {
+  border-bottom: 1px solid #e3e3e3;
+  border-top: 1px solid #e3e3e3;
+  font-weight: 700;
+}
+.dashboard-data td {
+  border-bottom: 1px solid #e3e3e3;
+  vertical-align: top;
+}
+.dashboard-data tbody tr:last-child td {
+  border-bottom-color: transparent;
+}
+.dashboard-data tfoot {
+  background: #f8f8f8;
+}
+.dashboard-data th,
+.dashboard-data td {
   padding: 1rem 0 1rem 1rem;
 }
 .dashboard-data th:first-child,
@@ -5065,6 +5059,155 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
 }
 .admin__data-grid-loading-mask {
   z-index: 300;
+}
+.data-grid {
+  border: none;
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  max-width: 100%;
+  width: 100%;
+}
+.data-grid thead {
+  background-color: transparent;
+  color: #41362f;
+}
+.data-grid tr:nth-child(even) td {
+  background-color: #f5f5f5;
+}
+.data-grid th,
+.data-grid td {
+  font-size: 1.3rem;
+  line-height: 1.4;
+  vertical-align: top;
+}
+.data-grid td {
+  background-color: #ffffff;
+  border-left: 1px dashed #d6d6d6;
+  border-right: 1px dashed #d6d6d6;
+  color: #303030;
+  padding: 1rem 1rem;
+}
+.data-grid td:first-child {
+  border-left-style: solid;
+}
+.data-grid td:last-child {
+  border-right-style: solid;
+  width: 1%;
+}
+.data-grid th {
+  background-color: #514943;
+  border: 1px solid #8a837f;
+  border-left-color: transparent;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 0;
+  text-align: left;
+}
+.data-grid th:first-child {
+  border-left-color: #8a837f;
+}
+.data-grid th:last-child .data-grid-th-inner,
+.data-grid td:last-child {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.data-grid .data-grid-th-inner {
+  color: #ffffff;
+  display: block;
+  padding: 1rem 1rem;
+}
+.data-grid a.data-grid-th-inner {
+  padding-right: 2.7rem;
+  position: relative;
+  transition: background-color 0.1s linear;
+}
+.data-grid a.data-grid-th-inner:focus,
+.data-grid a.data-grid-th-inner:hover {
+  background-color: #5f564f;
+  text-decoration: none;
+}
+.data-grid a.data-grid-th-inner:active {
+  padding-bottom: 0.9rem;
+  padding-top: 1.1rem;
+}
+.data-grid .data-grid-checkbox-cell {
+  padding: 0;
+}
+.data-grid .data-grid-multiselect-cell {
+  padding: 1rem 1rem 0.9rem;
+  text-align: center;
+  width: 5.2rem;
+}
+.data-grid .data-grid-row-parent._active > td {
+  background-color: #fff1ad;
+  border-bottom: 1px solid #d6d6d6;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top: 1px solid #d6d6d6;
+}
+.data-grid .data-grid-row-parent._active > td:first-child {
+  border-left-color: #d6d6d6;
+}
+.data-grid .data-grid-row-parent._active > td:last-child {
+  border-right-color: #d6d6d6;
+}
+.data-grid .data-grid-row-child {
+  display: none;
+}
+.data-grid .data-grid-row-child._active {
+  display: table-row;
+}
+.data-grid .data-grid-row-child._active + tr:not(.data-grid-row-child) td {
+  border-top: 1px solid #d6d6d6;
+}
+.data-grid .data-grid-row-child td,
+.data-grid .data-grid-row-parent ~ .data-grid-row-child td {
+  background-color: #fffbe6;
+  border-color: transparent;
+}
+.data-grid .data-grid-row-child td:first-child,
+.data-grid .data-grid-row-parent ~ .data-grid-row-child td:first-child {
+  border-left-color: #d6d6d6;
+}
+.data-grid .data-grid-row-child td:last-child,
+.data-grid .data-grid-row-parent ~ .data-grid-row-child td:last-child {
+  border-right-color: #d6d6d6;
+}
+.data-grid tr:last-child.data-grid-row-child td {
+  border-bottom-color: #d6d6d6;
+}
+.data-grid-th-inner._ascend:before,
+.data-grid-th-inner._descend:before {
+  position: absolute;
+  right: 1rem;
+  top: 0.9rem;
+}
+.data-grid-th-inner._ascend:before {
+  content: '↓';
+}
+.data-grid-th-inner._descend:before {
+  content: '↑';
+}
+.data-grid-checkbox-cell-inner {
+  cursor: pointer;
+  display: block;
+  padding: 0.8rem 1.8rem 0.9rem;
+  text-align: right;
+}
+.data-grid-row-parent._active > td .data-grid-checkbox-cell-inner:before {
+  content: '\e62b';
+}
+.data-grid-row-parent > td .data-grid-checkbox-cell-inner {
+  padding-left: 3.7rem;
+  position: relative;
+}
+.data-grid-row-parent > td .data-grid-checkbox-cell-inner:before {
+  content: '\e628';
+  font-size: 1rem;
+  font-weight: 700;
+  left: 1.35rem;
+  position: absolute;
+  top: 1.3rem;
 }
 @media all and (max-width: 1023px) {
   .admin__menu .submenu li {

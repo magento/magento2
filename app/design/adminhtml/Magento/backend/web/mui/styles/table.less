@@ -115,60 +115,6 @@ table {
 }
 
 //
-//    Grid table header filters and settings
-//--------------------------------------
-
-.not-sort {
-    padding-right: 10px;
-}
-
-.sort-arrow-asc,
-.sort-arrow-desc {
-    padding-right: 10px;
-    position: relative;
-    &:after {
-        right: -11px;
-        top: -1px;
-        position: absolute;
-        width: 23px;
-    }
-    &:hover:after {
-        color: @grid-headings-color-darker;
-    }
-}
-
-.sort-arrow-asc {
-    .icon-font(
-        @icon-arrow-down-thin,
-        @_icon-font-color: @grid-headings-color,
-        @_icon-font-color-hover: @grid-headings-color-darker,
-        @_icon-font-size: 13px,
-        @_icon-font-position: after
-    );
-}
-
-.sort-arrow-desc {
-    .icon-font(
-        @icon-arrow-up-thin,
-        @_icon-font-color: @grid-headings-color,
-        @_icon-font-color-hover: @grid-headings-color-darker,
-        @_icon-font-size: 13px,
-        @_icon-font-position: after
-    );
-}
-
-.grid-actions,
-.pager,
-.massaction,
-.filter {
-    .input-text,
-    select,
-    .select {
-        margin: 0 10px 0 0;
-    }
-}
-
-//
 //    Table Filters
 //--------------------------------------
 .filter {

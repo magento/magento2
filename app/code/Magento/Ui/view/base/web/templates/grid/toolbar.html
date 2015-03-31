@@ -4,22 +4,21 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__scope">
-    <div class="admin__data-grid-header">
-        <div class="admin__data-grid-header-row row row-gutter">
-            <!-- ko foreach: getRegion('topLeft') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-            <div class="admin__data-grid-actions-wrap col-xs-6">
-            <!-- ko foreach: getRegion('topRight') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-            </div>
+
+<div class="admin__data-grid-header">
+    <div class="admin__data-grid-header-row row row-gutter">
+        <!-- ko foreach: getRegion('topLeft') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+        <div class="admin__data-grid-actions-wrap col-xs-6">
+        <!-- ko foreach: getRegion('topRight') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
         </div>
-        <div class="admin__data-grid-header-row row row-gutter">
-            <!-- ko foreach: getRegion('bottom') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-        </div>
+    </div>
+    <div class="admin__data-grid-header-row row row-gutter">
+        <!-- ko foreach: getRegion('bottom') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
     </div>
 </div>
