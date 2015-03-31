@@ -27,7 +27,7 @@ class EavValidationRul
      *
      * @param AbstractAttribute $attribute
      * @param array $data
-     * @return array|null
+     * @return array
      */
     public function build(AbstractAttribute $attribute, array $data)
     {
