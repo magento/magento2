@@ -96,7 +96,7 @@ class InstallData implements InstallDataInterface
                         $mapNew[] = $shippingMethod;
                     }
                 }
-                $mapNew = implode($mapNew, ',');
+                $mapNew = implode(',', $mapNew);
             } else {
                 continue;
             }
