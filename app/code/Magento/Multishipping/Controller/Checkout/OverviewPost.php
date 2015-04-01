@@ -114,13 +114,17 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->_redirect('*/*/billing');
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
-            )->sendPaymentFailedEmail(
-                $this->_getCheckout()->getQuote(),
-                $e->getMessage(),
-                'multi-shipping'
-            );
+            try {
+                $this->_objectManager->get(
+                    'Magento\Checkout\Helper\Data'
+                )->sendPaymentFailedEmail(
+                    $this->_getCheckout()->getQuote(),
+                    $e->getMessage(),
+                    'multi-shipping'
+                );
+            } catch (\Exception $e) {
+                // doing nothing if message sending failed
+            }
             $this->messageManager->addError(__('Order place error'));
             $this->_redirect('*/*/billing');
         }
