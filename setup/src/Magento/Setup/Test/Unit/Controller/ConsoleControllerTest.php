@@ -31,11 +31,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     private $installer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\MaintenanceMode
-     */
-    private $maintenanceMode;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Mvc\MvcEvent
      */
     private $mvcEvent;
@@ -69,7 +64,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
             $this->installer
         );
         $this->options = $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
-        $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
 
         $this->request = $this->getMock('Zend\Console\Request', [], [], '', false);
         $response = $this->getMock('Zend\Console\Response', [], [], '', false);
@@ -95,7 +89,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
             $this->consoleLogger,
             $this->options,
             $installerFactory,
-            $this->maintenanceMode,
             $objectManagerProvider
         );
         $this->controller->setEvent($this->mvcEvent);
@@ -182,74 +175,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         $this->installer->expects($this->once())->method('uninstall');
         $this->controller->uninstallAction();
-    }
-
-    /**
-     * @param int $maintenanceMode
-     * @param int $setCount
-     * @param int $logCount
-     *
-     * @dataProvider maintenanceActionDataProvider
-     */
-    public function testMaintenanceAction($maintenanceMode, $setCount, $logCount)
-    {
-        $mapGetParam = [
-            ['set', null, $maintenanceMode],
-            ['addresses', null, null],
-        ];
-        $this->request->expects($this->exactly(2))->method('getParam')->will($this->returnValueMap($mapGetParam));
-        $this->maintenanceMode->expects($this->exactly($setCount))->method('set');
-        $this->maintenanceMode->expects($this->exactly(0))->method('setAddresses');
-        $this->maintenanceMode->expects($this->once())->method('isOn')->willReturn($maintenanceMode);
-        $this->maintenanceMode->expects($this->once())->method('getAddressInfo')->willReturn([]);
-        $this->consoleLogger->expects($this->exactly($logCount))->method('log');
-        $this->controller->maintenanceAction();
-    }
-
-    /**
-     * @return array
-     */
-    public function maintenanceActionDataProvider()
-    {
-        return [
-            [1, 1, 2],
-            [0, 1, 2],
-            [null, 0, 1],
-        ];
-    }
-
-    /**
-     * @param array $addresses
-     * @param int $logCount
-     * @param int $setAddressesCount
-     *
-     * @dataProvider maintenanceActionWithAddressDataProvider
-     */
-    public function testMaintenanceActionWithAddress($addresses, $logCount, $setAddressesCount)
-    {
-        $mapGetParam = [
-            ['set', null, true],
-            ['addresses', null, $addresses],
-        ];
-        $this->request->expects($this->exactly(2))->method('getParam')->will($this->returnValueMap($mapGetParam));
-        $this->maintenanceMode->expects($this->exactly(1))->method('set');
-        $this->maintenanceMode->expects($this->exactly($setAddressesCount))->method('setAddresses');
-        $this->maintenanceMode->expects($this->once())->method('isOn')->willReturn(true);
-        $this->maintenanceMode->expects($this->once())->method('getAddressInfo')->willReturn($addresses);
-        $this->consoleLogger->expects($this->exactly($logCount))->method('log');
-        $this->controller->maintenanceAction();
-    }
-
-    /**
-     * @return array
-     */
-    public function maintenanceActionWithAddressDataProvider()
-    {
-        return [
-            [['address1', 'address2'], 3, 1],
-            [[], 2, 1],
-            [null, 2, 0],
-        ];
     }
 
     /**
@@ -345,7 +270,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
             ['install-data', $noParameters],
             ['install-user-configuration', ''],
             ['install-admin-user', ''],
-            ['maintenance', ''],
             ['help', ''],
         ];
     }

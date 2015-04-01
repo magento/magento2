@@ -49,9 +49,7 @@ class MaintenanceStatusCommand extends Command
             ($this->maintenanceMode->isOn() ? 'active' : 'not active') . '</info>'
         );
         $addressInfo = $this->maintenanceMode->getAddressInfo();
-        if (!empty($addressInfo)) {
-            $addresses = implode(', ', $addressInfo);
-            $output->writeln('<info>List of exempt IP-addresses: ' . ($addresses ? $addresses : 'none') . '</info>');
-        }
+        $addresses = implode(', ', $addressInfo);
+        $output->writeln('<info>List of exempt IP-addresses: ' . ($addresses ? $addresses : 'none') . '</info>');
     }
 }

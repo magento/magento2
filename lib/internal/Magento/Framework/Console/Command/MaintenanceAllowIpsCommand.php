@@ -84,22 +84,18 @@ class MaintenanceAllowIpsCommand extends Command
     {
         if (!$input->getOption('none')) {
             $addresses = $input->getArgument('ip');
-
             if (!empty($addresses)) {
                 $this->maintenanceMode->setAddresses($addresses);
+                $output->writeln(
+                    '<info>Set exempt IP-addresses: ' . implode(', ', $this->maintenanceMode->getAddressInfo()) .
+                    '</info>'
+                );
             }
         } else {
-            $this->maintenanceMode->setAddresses('none');
+            $this->maintenanceMode->setAddresses('');
+            $output->writeln('<info>Set exempt IP-addresses: none</info>');
         }
 
-        $output->writeln(
-            '<info>Status: maintenance mode is ' .
-            ($this->maintenanceMode->isOn() ? 'active' : 'not active') . '</info>'
-        );
-        $addressInfo = $this->maintenanceMode->getAddressInfo();
-        if (!empty($addressInfo)) {
-            $addresses = implode(', ', $addressInfo);
-            $output->writeln('<info>List of exempt IP-addresses: ' . ($addresses ? $addresses : 'none') . '</info>');
-        }
+
     }
 }
