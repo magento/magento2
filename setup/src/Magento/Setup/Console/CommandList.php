@@ -44,6 +44,7 @@ class CommandList
             'Magento\Setup\Console\Command\DbStatusCommand',
             'Magento\Setup\Console\Command\ModuleEnableCommand',
             'Magento\Setup\Console\Command\ModuleDisableCommand',
+            'Magento\Setup\Console\Command\ModuleStatusCommand',
         ];
     }
 

@@ -42,11 +42,6 @@ class ConsoleController extends AbstractActionController
     /**#@- */
 
     /**
-     * Help option for retrieving list of modules
-     */
-    const HELP_LIST_OF_MODULES = 'module-list';
-
-    /**
      * Map of controller actions exposed in CLI
      *
      * @var string[]
@@ -78,7 +73,6 @@ class ConsoleController extends AbstractActionController
         UserConfig::KEY_LANGUAGE,
         UserConfig::KEY_CURRENCY,
         UserConfig::KEY_TIMEZONE,
-        self::HELP_LIST_OF_MODULES,
     ];
 
     /**
@@ -406,8 +400,6 @@ class ConsoleController extends AbstractActionController
                 return $this->arrayToString($this->options->getCurrencyList());
             case UserConfig::KEY_TIMEZONE:
                 return $this->arrayToString($this->options->getTimezoneList());
-            case self::HELP_LIST_OF_MODULES:
-                return $this->getModuleListMsg();
             default:
                 $usages = self::getCommandUsage();
                 if (isset($usages[$type])) {
@@ -486,36 +478,6 @@ class ConsoleController extends AbstractActionController
         foreach ($input as $key => $value) {
             $result .= "$key => $value\n";
         }
-        return $result;
-    }
-
-    /**
-     * Get formatted message containing list of enabled and disabled modules
-     *
-     * @return string
-     */
-    private function getModuleListMsg()
-    {
-        $moduleList = $this->objectManagerProvider->get()->create('Magento\Framework\Module\ModuleList');
-        $result = "\nList of enabled modules:\n";
-        $enabledModuleList = $moduleList->getNames();
-        foreach ($enabledModuleList as $moduleName) {
-            $result .= "$moduleName\n";
-        }
-        if (count($enabledModuleList) === 0) {
-            $result .= "None\n";
-        }
-
-        $fullModuleList = $this->objectManagerProvider->get()->create('Magento\Framework\Module\FullModuleList');
-        $result .= "\nList of disabled modules:\n";
-        $disabledModuleList = array_diff($fullModuleList->getNames(), $enabledModuleList);
-        foreach ($disabledModuleList as $moduleName) {
-            $result .= "$moduleName\n";
-        }
-        if (count($disabledModuleList) === 0) {
-            $result .= "None\n";
-        }
-
         return $result;
     }
 }

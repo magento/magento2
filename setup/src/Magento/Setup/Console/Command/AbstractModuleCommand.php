@@ -87,15 +87,15 @@ abstract class AbstractModuleCommand extends Command
                     . "dependencies and conflicts of this module(s).</error>");
             }
             $status->setIsEnabled($isEnable, $modulesToChange);
-            $updateAfterEnableMessage = '';
             if ($isEnable) {
                 $output->writeln('<info>The following modules have been enabled:</info>');
-                $updateAfterEnableMessage = "To make sure that the enabled modules are properly registered,"
-                    . " run 'update' command.";
+                $output->writeln('<info>' . implode(', ', $modulesToChange) . '</info>');
+                $output->writeln('<info>To make sure that the enabled modules are properly registered,'
+                    . " run 'update' command.</info>");
             } else {
-                $output->write('<info>The following modules have been disabled:</info>');
+                $output->writeln('<info>The following modules have been disabled:</info>');
+                $output->writeln('<info>' . implode(', ', $modulesToChange) . '</info>');
             }
-            $output->writeln('<info>' . implode(', ', $modulesToChange) . $updateAfterEnableMessage . '</info>');
         } else {
             $output->writeln('<info>There have been no changes to any modules.</info>');
         }
