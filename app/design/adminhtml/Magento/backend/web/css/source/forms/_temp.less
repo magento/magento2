@@ -34,21 +34,6 @@
     }
 }
 
-.col-2-left-layout {
-    #mix-grid .row();
-    margin-top: 50px;
-    width: auto;
-
-    .main-col {
-        #mix-grid .width(9);
-        float: right;
-    }
-
-    .side-col {
-        #mix-grid .column(9);
-    }
-}
-
 //
 //  Admin section wrapper title @todo ui - find the right place
 //  _____________________________________________
@@ -61,14 +46,22 @@
     }
 }
 
-// @todo ui Move to other place:
+// @todo ui Move to other place - will be done in upcoming task "Address Tabs":
+
 .address-item-edit-content {
+    background: #fff;
+    border: 1px solid #dad1c8;
+    box-shadow: 0 2px 1px 0 rgba(217, 210, 202, .5);
+    margin-left: 359px;
+    max-width: 500px;
     padding: 15px 30px;
     .admin__field {
         .extend__field-rows();
     }
+    .admin__legend {
+        display: none;
+    }
 }
-
 
 .address-list {
     float: left;
@@ -76,8 +69,67 @@
     margin:0;
     padding: 0;
     width: 360px;
+    .address-list-item-actions {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+    }
     .address-list-item {
-        margin-bottom: 30px;
+        background: #f1f1f1;
+        border: 1px solid #d9d2ca;
+        cursor: pointer;
+        margin-bottom: -1px;
+        padding: 10px 10px 15px;
+        position: relative;
+        z-index: 1;
+        &.ui-state-active {
+            background: #fff;
+            box-shadow: 0 1px 1px 0 rgba(217, 210, 202, 1);
+            margin-left: -2px;
+            padding-left: 12px;
+            position: relative;
+            z-index: 2;
+
+            &:before,
+            &:after {
+                color: #fff;
+                content: "\e02a";
+                font-family: 'MUI-Icons';
+                font-size: 18px;
+                font-style: normal;
+                font-weight: normal;
+                line-height: 11px;
+                margin-top: -5px;
+                position: absolute;
+                right: -9px;
+                speak: none;
+                text-indent: -6px;
+                top: 50%;
+                width: 10px;
+                z-index: 2;
+            }
+            &:before {
+                color: #d9d2ca;
+                right: -11px;
+                z-index: 1;
+            }
+        }
+    }
+    address:first-line {
+        //  its not work  if First Name and Last Name in two lines
+        font-weight: bold;
+    }
+    address {
+        font-style: normal;
+        line-height: 1.5;
+        margin: 0 20px 15px 0;
+    }
+    .address-list-actions {
+        background: none;
+        border: 0;
+        box-shadow: none;
+        cursor: default;
+        padding: 20px 0 0;
     }
     .action-delete {
         .button-reset();
@@ -123,14 +175,6 @@
             }
         }
     }
-}
-
-.address-item-edit {
-    margin-left: 359px;
-    .admin__legend {
-        display: none;
-    }
-    max-width: 500px;
 }
 
 //
@@ -186,3 +230,8 @@
     }
 }
 
+//
+//  Selectbox in calendar @todo ui - Remove after default select styles set
+//  _____________________________________________
+
+.ui-datepicker .ui-datepicker-title select:extend(.admin__control-select all) {};

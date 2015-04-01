@@ -19,7 +19,9 @@ class Grid extends AbstractGrid
     protected $gridTableName = 'sales_order_grid';
 
     /**
-     * Refresh grid row
+     * Adds new orders to the grid.
+     *
+     * Only orders that correspond to $value and $field parameters will be added.
      *
      * @param int|string $value
      * @param null|string $field
@@ -29,6 +31,30 @@ class Grid extends AbstractGrid
     {
         $select = $this->getGridOriginSelect()
             ->where(($field ?: 'sfo.entity_id') . ' = ?', $value);
+
+        return $this->getConnection()->query(
+            $this->getConnection()
+                ->insertFromSelect(
+                    $select,
+                    $this->getTable($this->gridTableName),
+                    [],
+                    AdapterInterface::INSERT_ON_DUPLICATE
+                )
+        );
+    }
+
+    /**
+     * Adds new orders to the grid.
+     *
+     * Only orders created/updated since the last method call will be added.
+     *
+     * @return \Zend_Db_Statement_Interface
+     */
+    public function refreshBySchedule()
+    {
+        $select = $this->getGridOriginSelect()
+            ->where('sfo.updated_at >= ?', $this->getLastUpdatedAtValue());
+
         return $this->getConnection()->query(
             $this->getConnection()
                 ->insertFromSelect(

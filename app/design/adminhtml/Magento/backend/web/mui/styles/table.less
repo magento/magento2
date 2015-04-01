@@ -194,30 +194,38 @@ table {
             vertical-align: top;
             width: 99%;
         }
-        img {
-            cursor: pointer;
-            height: 25px;
-            width: 25px;
-            right: 0;
-            position: absolute;
-            vertical-align: middle;
-            z-index: 2;
-            opacity: 0;
-        }
-        .icon-font(
-            @icon-calendar,
-            @_icon-font-color: @grid-headings-color,
-            @_icon-font-color-hover: @grid-headings-color-darker,
-            @_icon-font-size: 42px,
-            @_icon-font-line-height: 30px
-        );
-        &:before {
-            height: 29px;
-            margin-left: 5px;
+        .ui-datepicker-trigger {
+            .icon-font(
+                @icon-calendar,
+                @_icon-font-color: @grid-headings-color,
+                @_icon-font-color-hover: @grid-headings-color-darker,
+                @_icon-font-size: 42px,
+                @_icon-font-line-height: 30px
+            );
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            padding: 0;
             position: absolute;
             right: -3px;
             top: -3px;
-            width: 35px;
+            > span {
+                position: absolute;
+                visibility: hidden;
+                z-index: -1;
+            }
+            &:active {
+                top: -2px;
+            }
+            &:focus {
+                outline: 0;
+                box-shadow: none;
+            }
+            &:before {
+                width: 35px;
+                height: 29px;
+                margin-left: 5px;
+            }
         }
     }
 
@@ -226,11 +234,6 @@ table {
         margin: 0;
         padding: 0;
         width: 99%;
-        &:not([multiple]) {
-            .ie9 & {
-                padding-right: 0;
-            }
-        }
     }
 
     input.input-text {
@@ -539,25 +542,6 @@ td.col-type {
         }
     }
 
-    .accordion .config & {
-        thead th,
-        tfoot td {
-            &:extend(.data-table thead all);
-        }
-
-        td {
-            &:extend(.data-table td all);
-        }
-
-        tbody tr:nth-child(odd) td {
-            &:extend(.data-table tbody tr:nth-child(odd) td);
-        }
-
-        tfoot tr:last-child td {
-            &:extend(tfoot tr:last-child td all);
-        }
-    }
-
     input[type="text"] {
         width: 98%;
         padding-left: 1%;
@@ -647,6 +631,25 @@ td.col-type {
     }
 }
 
+.accordion .config .data-table {
+    thead th,
+    tfoot td {
+        &:extend(.data-table thead all);
+    }
+
+    td {
+        &:extend(.data-table td all);
+    }
+
+    tbody tr:nth-child(odd) td {
+        &:extend(.data-table tbody tr:nth-child(odd) td);
+    }
+
+    tfoot tr:last-child td {
+        &:extend(tfoot tr:last-child td all);
+    }
+}
+
 //
 //    Grid - Pager and Buttons row
 // --------------------------------------
@@ -693,12 +696,16 @@ td.col-type {
             float: left;
             margin: 0 15px 0 0;
             position: relative;
-            &:before {
-                color: @color-middle;
-                top: 1px;
-            }
-            &:hover:before {
-                color: @color-dark;
+            .ui-datepicker-trigger {
+                &:before {
+                    color: @color-middle;
+                    top: 1px;
+                }
+                &:hover {
+                    &:before {
+                        color: @color-dark;
+                    }
+                }
             }
         }
         .label {
@@ -759,18 +766,14 @@ td.col-type {
     .link-feed {
         white-space: nowrap;
     }
-    .form-inline & {
-        &:extend(.massaction-form-inline-label-reset all);
-    }
+}
+
+.form-inline .grid-actions {
+    &:extend(.massaction-form-inline-label-reset all);
 }
 
 .pager {
     font-size: 13px;
-    .grid & {
-        margin: 15px 0 0;
-        position: relative;
-        text-align: center;
-    }
     .pages-total-found {
         margin-right: 25px;
     }
@@ -832,6 +835,12 @@ td.col-type {
     }
 }
 
+.grid .pager {
+    margin: 15px 0 0;
+    position: relative;
+    text-align: center;
+}
+
 //
 //    Grid - Mass Action
 // --------------------------------------
@@ -868,9 +877,10 @@ td.col-type {
         border: @validation-border;
         background: @validation-background-color;
     }
-    .form-inline & {
-        &:extend(.massaction-form-inline-label-reset all);
-    }
+}
+
+.form-inline .massaction {
+    &:extend(.massaction-form-inline-label-reset all);
 }
 
 //
@@ -969,31 +979,6 @@ td.col-type {
 //
 //    Sales
 // --------------------------------------
-[class^=' sales-order-'] .grid .col-name {
-    &:extend(.col-220-max all);
-}
-
-.sales-order-view .grid  {
-    .col-name {
-        &:extend(.col-150-max all);
-    }
-    .col-period {
-        &:extend(.col-70-max all);
-    }
-}
-
-.sales-order-index .grid .col-name {
-    &:extend(.col-110-max all);
-}
-
-.sales-order-create-index {
-    .col-phone {
-        &:extend(.col-70-max all);
-    }
-    .col-in_products {
-        &:extend(.col-70);
-    }
-}
 
 .product-options .grouped-items-table {
     .col-name,
@@ -1017,258 +1002,8 @@ td.col-type {
 //    Sales -> Create Order
 //--------------------------------------
 
-.sales-order-create-index,
-.sales-order-edit-index {
-    .grid,
-    .grid-actions {
-        &:extend(.side-paddings-0);
-        table .action-configure {
-            float: right;
-            &.disabled {
-                cursor: default;
-                opacity: .5;
-                &:hover {
-                    text-decoration: none;
-                }
-            }
-        }
-    }
-    .data-table {
-        .border td {
-            padding-bottom: 15px;
-        }
-        .col-product {
-            &:extend(.ellipsis all);
-            &:extend(.col-150-max all);
-        }
-    }
-    .actions.update {
-        margin: 10px 0;
-    }
-}
-
 .order-account-information {
     &:extend(.data-table-td-max all);
-}
-
-//
-//    Sales -> View order
-//--------------------------------------
-
-[class^=' sales-order-view'] {
-    .grid .col-customer_name {
-        &:extend(.col-110-max all);
-    }
-}
-
-//
-//    Sales -> Create Shipment
-//--------------------------------------
-
-.adminhtml-order-shipment-new .grid .col-product {
-    max-width: 770px;
-    width: 770px;
-}
-
-//
-//    Sales -> Return
-//--------------------------------------
-
-[class^=' adminhtml-rma-'] {
-    .fieldset-wrapper .data-table td {
-        &:extend(.ellipsis all);
-        &:extend(.col-670-max);
-    }
-    .grid {
-        .col-product_sku {
-            &:extend(.ellipsis all);
-            &:extend(.col-70-max all);
-        }
-        .col-name,
-        .col-product {
-            &:extend(.col-150-max all);
-        }
-        .col-product_name {
-            &:extend(.ellipsis all);
-            &:extend(.col-110-max all);
-        }
-    }
-    .col-actions {
-        a {
-            &:extend(.col-actions-links);
-        }
-    }
-    .rma-request-details {
-        &:extend(.data-table-td-max all);
-    }
-    #rma_items_grid_table .headings th {
-        &:extend(.nowrap all);
-    }
-}
-
-.adminhtml-rma-edit {
-    .col-product,
-    .col-sku {
-        &:extend(.col-70-max all);
-    }
-}
-
-//
-//    Products
-// --------------------------------------
-.catalog-product-index {
-    .grid .col-name {
-        &:extend(.col-110-max all);
-    }
-}
-
-.catalog-product-edit .ui-tabs-panel .grid {
-    .hor-scroll {
-        &:extend(.h-scroll);
-    }
-    .col-name,
-    .col-type,
-    .col-sku {
-        &:extend(.col-70-max all);
-    }
-    .col-price,
-    .col-position {
-        &:extend(.col-50 all);
-    }
-}
-
-.catalog-product-index .grid .hor-scroll {
-    &:extend(.h-scroll);
-}
-
-.catalog-product-review-index {
-    .grid {
-        .col-name,
-        .col-title {
-            &:extend(.col-110-max all);
-        }
-    }
-}
-
-//
-//    Products -> Categories
-// --------------------------------------
-.catalog-category-edit {
-    .grid {
-        .col-name {
-            &:extend(.col-220-max all);
-        }
-    }
-}
-
-//
-//    Customer
-// --------------------------------------
-.customer-index-index {
-    .grid {
-        .col-name {
-            max-width: 90px;
-            width: 90px;
-        }
-        .col-customer_since,
-        .col-billing_country_id {
-            &:extend(.col-70-max all);
-        }
-        .col-billing_region {
-            width: 70px;
-        }
-    }
-}
-
-[class^=' customer-index-'] {
-    .fieldset-wrapper,
-    .accordion {
-        .grid .col-created_at {
-            &:extend(.col-70-max all);
-        }
-    }
-    .col-action a {
-        &:extend(.col-actions-links);
-    }
-}
-
-.customer-index-edit {
-    .ui-tabs-panel .grid .col-name {
-        &:extend(.col-110-max all);
-    }
-}
-
-//
-//  Customer -> Customer Segments
-// --------------------------------------
-.col-grid_segment_name {
-    &:extend(.col-570-max all);
-    &:extend(.ellipsis all);
-}
-
-//
-//    Marketing -> Catalog Event
-// --------------------------------------
-.adminhtml-catalog-event-index .col-category {
-    &:extend(.ellipsis all);
-    &:extend(.col-220-max all);
-}
-
-//
-//    Marketing -> Search Terms
-// --------------------------------------
-[class^=' catalog-search'] {
-    .col-search_query,
-    .col-synonym_for,
-    .col-redirect {
-        &:extend(.ellipsis all);
-        &:extend(.col-150-max all);
-    }
-}
-
-//
-//    Marketing -> URL Rewrites
-// --------------------------------------
-.adminhtml-urlrewrite-index .col-request_path {
-    &:extend(.ellipsis all);
-    &:extend(.col-150-max all);
-}
-
-//
-//    Marketing -> Reviews
-// --------------------------------------
-.review-product-index {
-    .grid {
-        .hor-scroll {
-            &:extend(.h-scroll);
-        }
-        .col-name {
-            &:extend(.col-110-max all);
-        }
-    }
-}
-
-//
-//    Content -> Pages
-// --------------------------------------
-.adminhtml-cms-page-index {
-    .col-title,
-    .col-identifier {
-        &:extend(.ellipsis all);
-        &:extend(.col-110-max all);
-    }
-}
-
-//
-//    Content -> Hierarchy
-// --------------------------------------
-.adminhtml-cms-hierarchy-index {
-    .col-title,
-    .col-identifier {
-        &:extend(.ellipsis all);
-        max-width: 410px;
-        width: 410px;
-    }
 }
 
 //
@@ -1276,317 +1011,5 @@ td.col-type {
 // --------------------------------------
 .col-banner_name {
     &:extend(.col-370-max all);
-    &:extend(.ellipsis all);
-}
-.adminhtml-banner-edit {
-    .grid .col-name {
-        &:extend(.col-220-max all);
-    }
-}
-
-//
-//  Content -> Frontend Apps
-// --------------------------------------
-.adminhtml-widget-instance-index {
-    .col-title {
-        &:extend(.col-370-max all);
-        &:extend(.ellipsis all);
-    }
-}
-.adminhtml-widget-instance-edit {
-    .grid-chooser .control {
-        margin-top: -19px;
-        width: 80%;
-        .eq-ie9 & {
-            margin-top: -18px;
-        }
-        .grid-actions {
-            padding: 0 0 15px;
-        }
-        .grid {
-            padding: 0;
-        }
-        .addon {
-            input:last-child,
-            select:last-child{
-                border-radius: 0;
-            }
-        }
-    }
-}
-
-//
-//    Reports -> Low Stock
-// --------------------------------------
-.reports-report-product-lowstock {
-    .grid {
-        .col-name {
-            &:extend(.col-670-max all);
-        }
-        .col-sku {
-            &:extend(.col-220-max all);
-        }
-    }
-}
-
-.reports-report-shopcart-product,
-.reports-report-review-customer {
-    .grid .col-name {
-        &:extend(.col-670-max all);
-    }
-}
-.reports-report-shopcart-abandoned {
-    .grid .col-name {
-        &:extend(.col-150-max all);
-    }
-}
-
-//
-//    Reports
-// --------------------------------------
-[class^=' reports-'] [class^='col-total'],
-[class^=' reports-'] [class^='col-average'],
-[class^=' reports-'] [class^='col-ref-'],
-[class^=' reports-'] [class^='col-rate'],
-[class^=' reports-'] [class^='col-tax-amount'] {
-    &:extend(.col-70 all);
-}
-
-.reports-report-sales-invoiced,
-.reports-report-sales-refunde {
-    .grid .col-period {
-        &:extend(.col-auto all);
-    }
-}
-
-//
-//    Reports -> Search Terms
-// --------------------------------------
-.reports-index-search .col-query_text {
-    &:extend(.col-570-max all);
-    &:extend(.ellipsis all);
-}
-
-//
-//    Reports -> Ordered Products Report
-// --------------------------------------
-.reports-report-product-sold .grid .col-name {
-    max-width: 720px;
-    width: 720px;
-}
-
-//
-//    Reports -> Newsletter Problem Reports
-// --------------------------------------
-.newsletter-problem-index .grid {
-    .col-name,
-    .col-subject,
-    .col-product {
-        &:extend(.col-220-max all);
-    }
-}
-
-
-//
-//    Stroes -> Tax rules
-// --------------------------------------
-.tax-rule-index {
-    .grid .col-title {
-        &:extend(.col-150-max all);
-    }
-}
-
-//
-//    Stores -> Returns Attributes
-// --------------------------------------
-.adminhtml-rma-item-attribute-index {
-    .grid {
-        .col-label {
-            &:extend(.col-220-max all);
-        }
-        .col-attr-code {
-            &:extend(.ellipsis);
-            &:extend(.col-150-max all);
-        }
-    }
-}
-.adminhtml-rma-edit {
-    .hor-scroll {
-        &:extend(.h-scroll);
-    }
-}
-
-//
-//    Stores -> All Stores
-// --------------------------------------
-.adminhtml-system-store-index .grid td {
-    &:extend(.ellipsis all);
-    max-width: 310px;
-}
-
-//
-//    Stores -> Currency
-// --------------------------------------
-.adminhtml-system-currency-index {
-    .grid {
-        padding-top: 0;
-    }
-    .col-currency-edit-rate {
-        min-width: 40px;
-    }
-    .col__base-currency {
-        font-weight: bold;
-    }
-    .old-rate {
-        display: block;
-        margin-top: 3px;
-        text-align: center;
-    }
-    .hor-scroll {
-        overflow-x: auto;
-        min-width: 970px;
-    }
-}
-
-//
-//    Stores -> Currency symbol
-// --------------------------------------
-.adminhtml-system-currencysymbol-index {
-    .col-currency {
-        width: 35%;
-    }
-    .grid .input-text {
-        margin: 0 10px 0 0;
-        width: 50%;
-    }
-}
-
-//
-//    Stores -> Customer attributes
-// --------------------------------------
-[class^=' adminhtml-customer-'],
-.adminhtml-rma-item-attribute-index {
-    .col-label {
-        &:extend(.col-370-max all);
-    }
-    .col-required,
-    .col-system,
-    .col-is_visible,
-    .col-sort_order {
-        &:extend(.col-70 all);
-    }
-}
-
-//
-//    Stores -> Product Attribute
-// --------------------------------------
-.catalog-product-attribute-index {
-    .col-attr-code,
-    .col-label {
-        &:extend(.col-110-max all);
-        &:extend(.ellipsis);
-    }
-    [class^=' col-is_'],
-    .col-required,
-    .col-system {
-        &:extend(.col-70 all);
-    }
-}
-
-.catalog-product-set-index .col-set_name {
-    max-width: 930px;
-    width: 930px;
-}
-
-//
-//    System -> Export
-// --------------------------------------
-.adminhtml-export-index {
-    .grid-actions,
-    .grid {
-        &:extend(.side-paddings-0);
-    }
-    .col-label,
-    .col-code {
-        &:extend(.col-220-max all);
-    }
-    .col-code {
-        &:extend(.ellipsis all);
-    }
-    .grid {
-        td {
-            vertical-align: middle;
-        }
-        .input-text-range {
-            margin: 0 10px 0 5px;
-            width: 37%;
-        }
-        .input-text-range-date {
-            margin: 0 5px;
-            width: 32%;
-        }
-    }
-    .ui-datepicker-trigger {
-        display: inline-block;
-        margin: -3px 10px 0 0;
-        vertical-align: middle;
-    }
-}
-
-//
-//    System -> Scheduled Imports/Exports
-// --------------------------------------
-.adminhtml-scheduled-operation-index .grid .col-name {
-    &:extend(.col-220-max all);
-}
-
-//
-//    System -> Report
-// --------------------------------------
-.adminhtml-logging-index .grid .col-fullaction {
-    &:extend(.ellipsis all);
-    &:extend(.col-220-max all);
-}
-
-//
-//    System -> Notifications
-// --------------------------------------
-.adminhtml-notification-index .col-actions a {
-    &:extend(.col-actions-links);
-}
-
-.adminhtml-process-list .col-action a,
-.adminhtml-process-list .col-mode {
-    &:extend(.nowrap all);
-}
-
-.adminhtml-notification-index,
-.adminhtml-cache-index,
-.adminhtml-process-list,
-.indexer-indexer-list {
-    .grid .col-select {
-        width: 10px;
-    }
-}
-
-//
-//    System -> Locked Users
-// --------------------------------------
-.adminhtml-locks-index .grid .col-name {
-    &:extend(.col-570 all);
-}
-
-//
-//    System -> Custom Variables
-// --------------------------------------
-.adminhtml-system-variable-index {
-    .grid .col-code {
-        &:extend(.col-370-max all);
-        &:extend(.ellipsis all);
-    }
-}
-
-.adminhtml-logging-index .grid .col-info {
-    &:extend(.col-110-max all);
     &:extend(.ellipsis all);
 }

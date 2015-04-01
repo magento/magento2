@@ -21,13 +21,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $installer = $setup;
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
-        $connection = $installer->getConnection();
         if (version_compare($context->getVersion(), '2.0.1') < 0) {
+
+            $installer = $setup;
+
             /**
              * update columns created_at and updated_at in sales entities tables
              */
+
             $tables = [
                 'sales_creditmemo',
                 'sales_creditmemo_comment',
@@ -41,6 +42,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'sales_shipment_comment',
                 'sales_shipment_track'
             ];
+            /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+            $connection = $installer->getConnection();
             foreach ($tables as $table) {
                 $columns = $connection->describeTable($installer->getTable($table));
                 if (isset($columns['created_at'])) {
@@ -56,51 +59,53 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     $connection->modifyColumn($installer->getTable($table), 'updated_at', $updatedAt);
                 }
             }
-            $dropIncrementIndexTables = [
-                'sales_creditmemo',
-                'sales_invoice',
-                'sales_order',
-                'sales_shipment',
-                'sales_creditmemo_grid',
-                'sales_invoice_grid',
-                'sales_order_grid',
-                'sales_shipment_grid',
-            ];
-            foreach ($dropIncrementIndexTables as $table) {
-                $connection->dropIndex(
-                    $installer->getTable($table),
-                    $installer->getIdxName(
-                        $installer->getTable($table),
-                        ['increment_id'],
-                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                    )
-                );
-            }
         }
+
         if (version_compare($context->getVersion(), '2.0.2') < 0) {
-            $createIncrementIndexTables = [
-                'sales_creditmemo',
-                'sales_invoice',
-                'sales_order',
-                'sales_shipment',
-                'sales_creditmemo_grid',
-                'sales_invoice_grid',
-                'sales_order_grid',
-                'sales_shipment_grid',
-            ];
-            foreach ($createIncrementIndexTables as $table) {
-                $connection->addIndex(
-                    $installer->getTable($table),
-                    $installer->getIdxName(
-                        $installer->getTable($table),
-                        ['increment_id', 'store_id'],
-                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                    ),
-                    ['increment_id', 'store_id'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                );
+
+            /**
+             * Adding 'updated_at' columns.
+             */
+
+            $tables = ['sales_shipment_grid', 'sales_invoice_grid', 'sales_creditmemo_grid'];
+
+            foreach ($tables as $table) {
+                $table = $setup->getTable($table);
+
+                $setup->getConnection()
+                    ->addColumn(
+                        $table,
+                        'updated_at',
+                        [
+                            'type' => Table::TYPE_TIMESTAMP,
+                            'after' => 'created_at',
+                            'comment' => 'Updated At'
+                        ]
+                    );
+
+                $setup->getConnection()
+                    ->addIndex($table, $setup->getIdxName($table, ['updated_at']), 'updated_at');
+            }
+
+            /**
+             * Modifying default value of 'updated_at' columns.
+             */
+
+            $tables = ['sales_order', 'sales_shipment', 'sales_invoice', 'sales_creditmemo'];
+
+            foreach ($tables as $table) {
+                $table = $setup->getTable($table);
+
+                $setup->getConnection()
+                    ->modifyColumn(
+                        $table,
+                        'updated_at',
+                        [
+                            'type' => Table::TYPE_TIMESTAMP,
+                            'default' => Table::TIMESTAMP_INIT_UPDATE
+                        ]
+                    );
             }
         }
-        $setup->endSetup();
     }
 }

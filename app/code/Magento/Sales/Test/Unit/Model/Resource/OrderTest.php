@@ -103,14 +103,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->stateHandlerMock = $this->getMock('Magento\Sales\Model\Resource\Order\Handler\State', [], [], '', false);
-        $this->salesSequenceManagerMock = $this->getMock(
-            'Magento\SalesSequence\Model\Manager',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->salesSequenceMock = $this->getMock('Magento\SalesSequence\Model\Sequence', [], [], '', false);
+        $this->salesIncrementMock = $this->getMock('Magento\Sales\Model\Increment', [], [], '', false);
         $this->gridAggregatorMock = $this->getMock('Magento\Sales\Model\Resource\Order\Grid', [], [], '', false);
         $this->orderMock = $this->getMock(
             'Magento\Sales\Model\Order',
@@ -176,8 +169,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             $this->salesSequenceManagerMock,
             $this->entitySnapshotMock,
             $this->addressHandlerMock,
-            $this->stateHandlerMock,
-            $this->gridAggregatorMock
+            $this->stateHandlerMock
         );
     }
 

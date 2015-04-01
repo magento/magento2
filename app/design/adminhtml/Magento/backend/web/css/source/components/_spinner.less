@@ -65,3 +65,78 @@
         }
     }
 }
+
+
+//  ToDo UI: remove old loaders style while loaders redesign
+
+.popup-loading {
+    position: fixed;
+    z-index: 1003;
+    width: 200px;
+    background: rgba(255, 255, 255, .8);
+    left: 50%;
+    top: 40%;
+    margin-left: -100px;
+    color: #d85909;
+    border-color: #d85909;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    padding: 100px 0 10px;
+}
+
+.popup-loading:after {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    background-image: url('../mui/images/ajax-loader-big.gif');
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
+    content: '';
+    z-index: 2;
+}
+
+//  Loading mask
+.loading-old,
+.loading-mask {
+    background: rgba(255, 255, 255, .4);
+    z-index: 999;
+}
+
+.loading-old,
+.loading-mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.loading-old .loader,
+.loading-mask .loader {
+    position: absolute;
+    margin: auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 160px;
+    height: 160px;
+    color: #5e5b56;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    background: #e5e2dd url(../mui/images/ajax-loader-big.gif) no-repeat 50% 30%;
+    border-radius: 5px;
+    opacity: .95;
+}
+
+.loading-mask img {
+    display: none;
+}
+
+.loading-old p,
+.loading-mask p {
+    margin-top: 118px;
+}

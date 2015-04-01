@@ -9,7 +9,6 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
 use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
-use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
 use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
 use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
@@ -73,12 +72,11 @@ class Order extends SalesResource implements OrderResourceInterface
         EntitySnapshot $entitySnapshot,
         AddressHandler $addressHandler,
         StateHandler $stateHandler,
-        OrderGrid $gridAggregator,
         $resourcePrefix = null
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix);
     }
 
     /**

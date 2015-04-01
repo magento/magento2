@@ -10,7 +10,6 @@ use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\EntitySnapshot;
-use Magento\Sales\Model\Resource\Order\Creditmemo\Grid as CreditmemoGrid;
 use Magento\Sales\Model\Spi\CreditmemoResourceInterface;
 
 /**
@@ -38,24 +37,20 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
     }
 
     /**
-     * Constructor
-     *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
-     * @param CreditmemoGrid $gridAggregator
-     * @param string|null $resourcePrefix
+     * @param null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
         Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
-        CreditmemoGrid $gridAggregator,
         $resourcePrefix = null
     ) {
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
     }
 
     /**

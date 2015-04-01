@@ -10,7 +10,6 @@ use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\EntitySnapshot;
-use Magento\Sales\Model\Resource\Order\Invoice\Grid as InvoiceGrid;
 use Magento\Sales\Model\Spi\InvoiceResourceInterface;
 
 /**
@@ -40,7 +39,6 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
-     * @param InvoiceGrid $gridAggregator
      * @param null $resourcePrefix
      */
     public function __construct(
@@ -48,10 +46,9 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
         Attribute $attribute,
         Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
-        InvoiceGrid $gridAggregator,
         $resourcePrefix = null
     ) {
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
     }
 
     /**

@@ -15,12 +15,10 @@ $formConfig = $block->getRenderContext()->getConfigBuilder()->toJsonNew($block->
         }
     }
 </script>
-<div class="admin__scope">
 <div data-role="spinner" data-component="<?php echo $block->getDataScope(); ?>.areas" class="grid-loading-mask">
     <div class="spinner">
         <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
     </div>
-</div>
 </div>
 <div data-bind="scope: '<?php echo $block->getDataScope(); ?>.areas'">
     <!-- ko template: getTemplate() --><!-- /ko -->

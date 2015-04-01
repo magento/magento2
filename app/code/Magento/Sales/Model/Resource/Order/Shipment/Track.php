@@ -37,7 +37,6 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
      * @param EntitySnapshot $entitySnapshot
      * @param \Magento\Sales\Model\Order\Shipment\Track\Validator $validator
      * @param null $resourcePrefix
-     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -45,11 +44,10 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
         \Magento\Sales\Model\Order\Shipment\Track\Validator $validator,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix);
     }
 
     /**

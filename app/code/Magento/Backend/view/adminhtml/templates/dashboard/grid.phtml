@@ -14,7 +14,7 @@ $numColumns = sizeof($block->getColumns());
 <?php if ($block->getCollection()): ?>
 <div class="dashboard-item-content">
     <?php if ($block->getCollection()->getSize()>0): ?>
-        <table class="dashboard-data" id="<?php echo $block->getId() ?>_table">
+        <table class="table dashboard-data" id="<?php echo $block->getId() ?>_table">
             <?php
             /* This part is commented to remove all <col> tags from the code. */
             /* foreach ($block->getColumns() as $_column): ?>

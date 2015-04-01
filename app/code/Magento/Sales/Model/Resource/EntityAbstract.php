@@ -47,20 +47,17 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected $attribute;
 
+
     /**
      * @var Manager
      */
     protected $sequenceManager;
 
     /**
-     * @var \Magento\Sales\Model\Resource\GridInterface
-     */
-    protected $gridAggregator;
-
-    /**
      * @var EntitySnapshot
      */
     protected $entitySnapshot;
+
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
@@ -99,6 +96,25 @@ abstract class EntityAbstract extends AbstractDb
     }
 
     /**
+     * Prepares data for saving and removes update time (if exists).
+     * This prevents saving same update time on each entity update.
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return array
+     */
+    protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $data = parent::_prepareDataForTable($object, $this->getMainTable());
+
+        if (isset($data['updated_at'])) {
+            unset($data['updated_at']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Perform actions before object save
      * Perform actions before object save, calculate next sequence value for increment Id
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
@@ -155,9 +171,6 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($this->gridAggregator) {
-            $this->gridAggregator->purge($object->getId());
-        }
         parent::_afterDelete($object);
         return $this;
     }
@@ -184,9 +197,6 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($this->gridAggregator) {
-            $this->gridAggregator->refresh($object->getId());
-        }
         return $this;
     }
 

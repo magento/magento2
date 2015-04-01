@@ -49,7 +49,6 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
-     * @param ShipmentGrid $gridAggregator
      * @param null $resourcePrefix
      */
     public function __construct(
@@ -57,10 +56,9 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
         Attribute $attribute,
         Manager $sequenceManager,
         EntitySnapshot $entitySnapshot,
-        ShipmentGrid $gridAggregator,
         $resourcePrefix = null
     ) {
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
     }
 
     /**
