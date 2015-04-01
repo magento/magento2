@@ -42,7 +42,7 @@ class Factory
 
         if (!$price instanceof \Magento\Catalog\Model\Product\Type\Price) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                $className . ' doesn\'t extends \Magento\Catalog\Model\Product\Type\Price'
+                __('%1 doesn\'t extends \Magento\Catalog\Model\Product\Type\Price', $className)
             );
         }
         return $price;

@@ -37,7 +37,10 @@ class Paging extends AbstractView
         $offset = $this->renderContext->getRequestParam('page', $defaultPage);
         $defaultLimit = $this->config->getData('pageSize');
         $size = $this->renderContext->getRequestParam('limit', $defaultLimit);
-        $this->renderContext->getStorage()->getDataCollection($this->getParentName())->setLimit($offset, $size);
+        $this->renderContext->getStorage()
+            ->getDataCollection($this->getParentName())
+            ->setPageSize($size)
+            ->setCurPage($offset);
     }
 
     /**

@@ -60,6 +60,13 @@ class ScheduledStructure
     protected $_scheduledPaths;
 
     /**
+     * Elements with reference to non-existing parent element
+     *
+     * @var array
+     */
+    protected $_brokenParent = [];
+
+    /**
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -246,6 +253,7 @@ class ScheduledStructure
      * @param string $elementName
      * @param string $configPath
      * @param string $scopeType
+     * @return void
      */
     public function setElementToIfconfigList($elementName, $configPath, $scopeType)
     {
@@ -397,6 +405,28 @@ class ScheduledStructure
     public function unsetPathElement($elementName)
     {
         unset($this->_scheduledPaths[$elementName]);
+    }
+
+    /**
+     * Remove element from broken parent list
+     *
+     * @param string $elementName
+     * @return void
+     */
+    public function unsetElementFromBrokenParentList($elementName)
+    {
+        unset($this->_brokenParent[$elementName]);
+    }
+
+    /**
+     * Set element to broken parent list
+     *
+     * @param string $elementName
+     * @return void
+     */
+    public function setElementToBrokenParentList($elementName)
+    {
+        $this->_brokenParent[$elementName] = 1;
     }
 
     /**

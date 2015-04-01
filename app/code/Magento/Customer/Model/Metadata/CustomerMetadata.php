@@ -73,18 +73,20 @@ class CustomerMetadata implements CustomerMetadataInterface
     {
         /** @var AbstractAttribute $attribute */
         $attribute = $this->attributeMetadataDataProvider->getAttribute(self::ENTITY_TYPE_CUSTOMER, $attributeCode);
-        if ($attribute && ($attributeCode === 'id' || !is_null($attribute->getId()))) {
+        if ($attribute && ($attributeCode === 'id' || $attribute->getId() !== null)) {
             $attributeMetadata = $this->attributeMetadataConverter->createMetadataAttribute($attribute);
             return $attributeMetadata;
         } else {
             throw new NoSuchEntityException(
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
-                [
-                    'fieldName' => 'entityType',
-                    'fieldValue' => self::ENTITY_TYPE_CUSTOMER,
-                    'field2Name' => 'attributeCode',
-                    'field2Value' => $attributeCode,
-                ]
+                __(
+                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    [
+                        'fieldName' => 'entityType',
+                        'fieldValue' => self::ENTITY_TYPE_CUSTOMER,
+                        'field2Name' => 'attributeCode',
+                        'field2Value' => $attributeCode,
+                    ]
+                )
             );
         }
     }

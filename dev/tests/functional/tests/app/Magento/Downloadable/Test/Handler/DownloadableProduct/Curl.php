@@ -8,7 +8,8 @@ namespace Magento\Downloadable\Test\Handler\DownloadableProduct;
 
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Config;
+use Magento\Mtf\Config\DataInterface;
+use Magento\Mtf\System\Event\EventManagerInterface;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -22,11 +23,12 @@ class Curl extends ProductCurl implements DownloadableProductInterface
     /**
      * Constructor
      *
-     * @param Config $configuration
+     * @param DataInterface $configuration
+     * @param EventManagerInterface $eventManager
      */
-    public function __construct(Config $configuration)
+    public function __construct(DataInterface $configuration, EventManagerInterface $eventManager)
     {
-        parent::__construct($configuration);
+        parent::__construct($configuration, $eventManager);
 
         $this->mappingData += [
             'links_purchased_separately' => [

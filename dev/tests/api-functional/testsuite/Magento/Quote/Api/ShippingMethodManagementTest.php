@@ -68,22 +68,30 @@ class ShippingMethodManagementTest extends WebapiAbstract
      */
     public function testSetMethodWrongMethod()
     {
+        $expectedMessage = 'Carrier with such method not found: %1, %2';
         $this->quote->load('test_order_1', 'reserved_order_id');
         $serviceInfo = $this->getServiceInfo();
+        $carrierCode = 'flatrate';
+        $methodCode = 'wrongMethod';
 
         $requestData = [
             'cartId' => $this->quote->getId(),
-            'carrierCode' => 'flatrate',
-            'methodCode' => 'wrongMethod',
+            'carrierCode' => $carrierCode,
+            'methodCode' => $methodCode,
         ];
         try {
             $this->_webApiCall($serviceInfo, $requestData);
         } catch (\SoapFault $e) {
-            $message = $e->getMessage();
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
         } catch (\Exception $e) {
-            $message = json_decode($e->getMessage())->message;
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals([$carrierCode, $methodCode], $errorObj['parameters']);
         }
-        $this->assertEquals('Carrier with such method not found: flatrate, wrongMethod', $message);
     }
 
     /**

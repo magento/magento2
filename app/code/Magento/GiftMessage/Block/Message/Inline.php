@@ -211,7 +211,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function getMessage($entity = null)
     {
-        if (is_null($this->_giftMessage)) {
+        if ($this->_giftMessage === null) {
             $this->_initMessage();
         }
 
@@ -317,7 +317,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      */
     public function isMessagesAvailable()
     {
-        return $this->_giftMessageMessage->isMessagesAvailable('quote', $this->getEntity());
+        return $this->_giftMessageMessage->isMessagesAllowed('quote', $this->getEntity());
     }
 
     /**
@@ -329,7 +329,7 @@ class Inline extends \Magento\Framework\View\Element\Template
     public function isItemMessagesAvailable($item)
     {
         $type = substr($this->getType(), 0, 5) == 'multi' ? 'address_item' : 'item';
-        return $this->_giftMessageMessage->isMessagesAvailable($type, $item);
+        return $this->_giftMessageMessage->isMessagesAllowed($type, $item);
     }
 
     /**

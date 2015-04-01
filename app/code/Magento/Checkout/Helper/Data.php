@@ -278,7 +278,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 [
                     'reason' => $message,
                     'checkoutType' => $checkoutType,
-                    'dateAndTime' => $this->_localeDate->date(),
+                    'dateAndTime' => $this->_localeDate->formatDateTime(
+                        new \DateTime(),
+                        \IntlDateFormatter::MEDIUM,
+                        \IntlDateFormatter::MEDIUM
+                    ),
                     'customer' => $checkout->getCustomerFirstname() . ' ' . $checkout->getCustomerLastname(),
                     'customerEmail' => $checkout->getCustomerEmail(),
                     'billingAddress' => $checkout->getBillingAddress(),

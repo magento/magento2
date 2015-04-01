@@ -570,6 +570,23 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\View\Asset\SourceFileGeneratorPool">
+        <arguments>
+            <argument name="fileGeneratorTypes" xsi:type="array">
+                <item name="less" xsi:type="object">fileassemblerFileGenerator</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="fileassemblerFileGenerator" type="Magento\Framework\Less\FileGenerator">
+        <arguments>
+            <argument name="relatedGenerator" xsi:type="object">fileassemblerRelatedFilesGenerator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="fileassemblerRelatedFilesGenerator" type="Magento\Developer\Model\Less\FileGenerator\PublicationDecorator">
+        <arguments>
+            <argument name="publisher" xsi:type="object">developerPublisher</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="fallbackResolverSimpleWithGroupedCache" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Grouped</argument>

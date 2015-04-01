@@ -111,7 +111,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
         $attributeData = [
             'attribute' => [
-                'attribute_code' => $attributeCode,
+                'attribute_id' => $attribute['attribute_id'],
                 'frontend_labels' => [
                     ['store_id' => 0, 'label' => 'front_lbl_new'],
                 ],
@@ -123,7 +123,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $attribute['attribute_id'],
+                'resourcePath' => self::RESOURCE_PATH . '/' . $attributeCode,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -134,7 +134,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         ];
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $attributeData['attribute']['attributeId'] = $attribute['attribute_id'];
+            $attributeData['attribute']['attributeCode'] = $attributeCode;
         }
         $result = $this->_webApiCall($serviceInfo, $attributeData);
 
@@ -159,7 +159,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     public function testDeleteNoSuchEntityException()
     {
         $attributeCode = 'some_test_code';
-        $expectedMessage = 'Attribute with attributeCode "' . $attributeCode . '" does not exist.';
+        $expectedMessage = 'Attribute with attributeCode "%1" does not exist.';
 
         $serviceInfo = [
             'rest' => [
@@ -185,6 +185,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals([$attributeCode], $errorObj['parameters']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
     }

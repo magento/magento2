@@ -234,7 +234,7 @@ class Price
     public function getRangeItemCounts($range)
     {
         $items = array_key_exists($range, $this->rangeItemCounts) ? $this->rangeItemCounts[$range] : null;
-        if (is_null($items)) {
+        if ($items === null) {
             $items = $this->resource->getCount($range);
             // checking max number of intervals
             $i = 0;
@@ -264,7 +264,7 @@ class Price
     public function getMaxPrice()
     {
         $maxPrice = $this->maxPrice;
-        if (is_null($maxPrice)) {
+        if ($maxPrice === null) {
             $maxPrice = $this->getLayer()
                 ->getProductCollection()
                 ->getMaxPrice();

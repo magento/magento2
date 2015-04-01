@@ -618,14 +618,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!($model = $this->_productTypeFactory->create($productTypeConfig['model'], ['params' => $params]))
             ) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("Entity type model '%1' is not found", $productTypeConfig['model'])
+                    __('Entity type model \'%1\' is not found', $productTypeConfig['model'])
                 );
             }
             if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
-                        'Entity type model must be an instance of ' .
-                        'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
+                        'Entity type model must be an instance of '
+                        . 'Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType'
                     )
                 );
             }
@@ -1086,7 +1086,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $storeIds = [0];
 
                     if ('datetime' == $attribute->getBackendType() && strtotime($attrValue)) {
-                        $attrValue = new \DateTime('@' . strtotime($attrValue));
+                        $attrValue = (new \DateTime())->setTimestamp(strtotime($attrValue));
                         $attrValue = $attrValue->format(DateTime::DATETIME_PHP_FORMAT);
                     } elseif ($backModel) {
                         $attribute->getBackend()->beforeSave($product);
@@ -1233,7 +1233,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $tmpPath = $this->_mediaDirectory->getAbsolutePath('import');
             if (!$this->_fileUploader->setTmpDir($tmpPath)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("File directory '%1' is not readable.", $tmpPath)
+                    __('File directory \'%1\' is not readable.', $tmpPath)
                 );
             }
             $destinationDir = "catalog/product";
@@ -1242,7 +1242,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_mediaDirectory->create($destinationDir);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __("File directory '%1' is not writable.", $destinationPath)
+                    __('File directory \'%1\' is not writable.', $destinationPath)
                 );
             }
         }

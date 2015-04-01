@@ -173,7 +173,7 @@ class Listing extends AbstractView
     {
         if ($this->hasData(static::ROW_DATA_PROVIDER_KEY)) {
             foreach ($this->getData(static::ROW_DATA_PROVIDER_KEY) as $field => $data) {
-                $dataRow[$field] = $this->dataProviderRowPool->get($data['class'])->getData($dataRow);
+                $dataRow[$field] = $this->dataProviderRowPool->get($data['class'])->getData($dataRow, $data);
             }
         }
 
@@ -188,7 +188,7 @@ class Listing extends AbstractView
     public function getCollectionItems()
     {
         $items = [];
-        $collection = $this->getDataCollection()->getResultCollection();
+        $collection = $this->getDataCollection();
         foreach ($collection->getItems() as $item) {
             $actualFields = [];
             $itemsData = $this->getDataFromDataProvider($item->getData());
@@ -230,8 +230,8 @@ class Listing extends AbstractView
         );
         $this->renderContext->getStorage()->addGlobalData('dump', ['extenders' => []]);
 
-        $collection = $this->getDataCollection()->getResultCollection();
-        $totalCount = $collection->getTotalCount();
+        $collection = $this->getDataCollection();
+        $totalCount = $collection->count();
         $this->renderContext->getStorage()->addDataSource(
             $this->getName(),
             [

@@ -1,4 +1,9 @@
 ############################################
+## uncomment the line below to enable developer mode
+
+#   SetEnv MAGE_MODE developer
+
+############################################
 ## uncomment these lines for CGI mode
 ## make sure to specify the correct cgi php binary file name
 ## it might be /cgi-bin/php-cgi
@@ -164,14 +169,10 @@
 ## http://developer.yahoo.com/performance/rules.html#expires
 
     ExpiresDefault "access plus 1 year"
+    ExpiresByType text/html A0
+    ExpiresByType text/plain A0
 
 </IfModule>
-
-############################################
-## By default allow all access
-
-    Order allow,deny
-    Allow from all
 
 ###########################################
 ## Deny access to release notes to prevent disclosure of the installed Magento version

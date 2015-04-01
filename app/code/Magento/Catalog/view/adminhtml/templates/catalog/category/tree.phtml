@@ -32,10 +32,12 @@
 
 <div data-id="information-dialog-tree" class="messages admin__scope" style="display: none;">
     <div class="message message-notice">
-       <div><?php echo __('This operation can take much time'); ?></div>
+       <div><?php echo __('This operation can take a long time'); ?></div>
     </div>
 </div>
-
+<!--[if IE]>
+<script id="ie-deferred-loader" defer="defer" src=""></script>
+<![endif]-->
 <script>
 var tree;
 require([

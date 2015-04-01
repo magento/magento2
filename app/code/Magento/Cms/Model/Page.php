@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Model;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Framework\Object\IdentityInterface;
 
 /**
@@ -12,41 +13,9 @@ use Magento\Framework\Object\IdentityInterface;
  *
  * @method \Magento\Cms\Model\Resource\Page _getResource()
  * @method \Magento\Cms\Model\Resource\Page getResource()
- * @method \Magento\Cms\Model\Page setTitle(string $value)
- * @method string getPageLayout()
- * @method \Magento\Cms\Model\Page setPageLayout(string $value)
- * @method string getMetaKeywords()
- * @method \Magento\Cms\Model\Page setMetaKeywords(string $value)
- * @method string getMetaDescription()
- * @method \Magento\Cms\Model\Page setMetaDescription(string $value)
- * @method \Magento\Cms\Model\Page setIdentifier(string $value)
- * @method string getContentHeading()
- * @method \Magento\Cms\Model\Page setContentHeading(string $value)
- * @method string getContent()
- * @method \Magento\Cms\Model\Page setContent(string $value)
- * @method string getCreationTime()
- * @method \Magento\Cms\Model\Page setCreationTime(string $value)
- * @method string getUpdateTime()
- * @method \Magento\Cms\Model\Page setUpdateTime(string $value)
- * @method int getIsActive()
- * @method \Magento\Cms\Model\Page setIsActive(int $value)
- * @method int getSortOrder()
- * @method \Magento\Cms\Model\Page setSortOrder(int $value)
- * @method string getLayoutUpdateXml()
- * @method \Magento\Cms\Model\Page setLayoutUpdateXml(string $value)
- * @method string getCustomTheme()
- * @method \Magento\Cms\Model\Page setCustomTheme(string $value)
- * @method string getCustomPageLayout()
- * @method \Magento\Cms\Model\Page setCustomPageLayout(string $value)
- * @method string getCustomLayoutUpdateXml()
- * @method \Magento\Cms\Model\Page setCustomLayoutUpdateXml(string $value)
- * @method string getCustomThemeFrom()
- * @method \Magento\Cms\Model\Page setCustomThemeFrom(string $value)
- * @method string getCustomThemeTo()
- * @method \Magento\Cms\Model\Page setCustomThemeTo(string $value)
  * @method int[] getStores()
  */
-class Page extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
+class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
 {
     /**
      * No route page id
@@ -58,14 +27,6 @@ class Page extends \Magento\Framework\Model\AbstractModel implements IdentityInt
      */
     const STATUS_ENABLED = 1;
     const STATUS_DISABLED = 0;
-    /**#@-*/
-
-    /**#@+
-     * Data object constants
-     */
-    const PAGE_ID = 'page_id';
-    const IDENTIFIER = 'identifier';
-    const TITLE = 'title';
     /**#@-*/
 
     /**
@@ -96,30 +57,6 @@ class Page extends \Magento\Framework\Model\AbstractModel implements IdentityInt
     }
 
     /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->_getData(self::PAGE_ID);
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentifier()
-    {
-        return (string) $this->_getData(self::IDENTIFIER);
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->_getData(self::TITLE);
-    }
-
-    /**
      * Load object data
      *
      * @param int|null $id
@@ -128,7 +65,7 @@ class Page extends \Magento\Framework\Model\AbstractModel implements IdentityInt
      */
     public function load($id, $field = null)
     {
-        if (is_null($id)) {
+        if ($id === null) {
             return $this->noRoutePage();
         }
         return parent::load($id, $field);
@@ -176,5 +113,383 @@ class Page extends \Magento\Framework\Model\AbstractModel implements IdentityInt
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * Get ID
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return parent::getData(self::PAGE_ID);
+    }
+
+    /**
+     * Get identifier
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return $this->getData(self::IDENTIFIER);
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getData(self::TITLE);
+    }
+
+    /**
+     * Get page layout
+     *
+     * @return string
+     */
+    public function getPageLayout()
+    {
+        return $this->getData(self::PAGE_LAYOUT);
+    }
+
+    /**
+     * Get meta keywords
+     *
+     * @return string
+     */
+    public function getMetaKeywords()
+    {
+        return $this->getData(self::META_KEYWORDS);
+    }
+
+    /**
+     * Get meta description
+     *
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->getData(self::META_DESCRIPTION);
+    }
+
+    /**
+     * Get content heading
+     *
+     * @return string
+     */
+    public function getContentHeading()
+    {
+        return $this->getData(self::CONTENT_HEADING);
+    }
+
+    /**
+     * Get content
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->getData(self::CONTENT);
+    }
+
+    /**
+     * Get creation time
+     *
+     * @return string
+     */
+    public function getCreationTime()
+    {
+        return $this->getData(self::CREATION_TIME);
+    }
+
+    /**
+     * Get update time
+     *
+     * @return string
+     */
+    public function getUpdateTime()
+    {
+        return $this->getData(self::UPDATE_TIME);
+    }
+
+    /**
+     * Get sort order
+     *
+     * @return string
+     */
+    public function getSortOrder()
+    {
+        return $this->getData(self::SORT_ORDER);
+    }
+
+    /**
+     * Get layout update xml
+     *
+     * @return string
+     */
+    public function getLayoutUpdateXml()
+    {
+        return $this->getData(self::LAYOUT_UPDATE_XML);
+    }
+
+    /**
+     * Get custom theme
+     *
+     * @return string
+     */
+    public function getCustomTheme()
+    {
+        return $this->getData(self::CUSTOM_THEME);
+    }
+
+    /**
+     * Get custom root template
+     *
+     * @return string
+     */
+    public function getCustomRootTemplate()
+    {
+        return $this->getData(self::CUSTOM_ROOT_TEMPLATE);
+    }
+
+    /**
+     * Get custom layout update xml
+     *
+     * @return string
+     */
+    public function getCustomLayoutUpdateXml()
+    {
+        return $this->getData(self::CUSTOM_LAYOUT_UPDATE_XML);
+    }
+
+    /**
+     * Get custom theme from
+     *
+     * @return string
+     */
+    public function getCustomThemeFrom()
+    {
+        return $this->getData(self::CUSTOM_THEME_FROM);
+    }
+
+    /**
+     * Get custom theme to
+     *
+     * @return string
+     */
+    public function getCustomThemeTo()
+    {
+        return $this->getData(self::CUSTOM_THEME_TO);
+    }
+
+    /**
+     * Is active
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        return (bool)$this->getData(self::IS_ACTIVE);
+    }
+
+    /**
+     * Set ID
+     *
+     * @param int $id
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::PAGE_ID, $id);
+    }
+
+    /**
+     * Set identifier
+     *
+     * @param string $identifier
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setIdentifier($identifier)
+    {
+        return $this->setData(self::IDENTIFIER, $identifier);
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::TITLE, $title);
+    }
+
+    /**
+     * Set page layout
+     *
+     * @param string $pageLayout
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setPageLayout($pageLayout)
+    {
+        return $this->setData(self::PAGE_LAYOUT, $pageLayout);
+    }
+
+    /**
+     * Set meta keywords
+     *
+     * @param string $metaKeywords
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setMetaKeywords($metaKeywords)
+    {
+        return $this->setData(self::META_KEYWORDS, $metaKeywords);
+    }
+
+    /**
+     * Set meta description
+     *
+     * @param string $metaDescription
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setMetaDescription($metaDescription)
+    {
+        return $this->setData(self::META_DESCRIPTION, $metaDescription);
+    }
+
+    /**
+     * Set content heading
+     *
+     * @param string $contentHeading
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setContentHeading($contentHeading)
+    {
+        return $this->setData(self::CONTENT_HEADING, $contentHeading);
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setContent($content)
+    {
+        return $this->setData(self::CONTENT, $content);
+    }
+
+    /**
+     * Set creation time
+     *
+     * @param string $creationTime
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setCreationTime($creationTime)
+    {
+        return $this->setData(self::CREATION_TIME, $creationTime);
+    }
+
+    /**
+     * Set update time
+     *
+     * @param string $updateTime
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setUpdateTime($updateTime)
+    {
+        return $this->setData(self::UPDATE_TIME, $updateTime);
+    }
+
+    /**
+     * Set sort order
+     *
+     * @param string $sortOrder
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * Set layout update xml
+     *
+     * @param string $layoutUpdateXml
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setLayoutUpdateXml($layoutUpdateXml)
+    {
+        return $this->setData(self::LAYOUT_UPDATE_XML, $layoutUpdateXml);
+    }
+
+    /**
+     * Set custom theme
+     *
+     * @param string $customTheme
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setCustomTheme($customTheme)
+    {
+        return $this->setData(self::CUSTOM_THEME, $customTheme);
+    }
+
+    /**
+     * Set custom root template
+     *
+     * @param string $customRootTemplate
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setCustomRootTemplate($customRootTemplate)
+    {
+        return $this->setData(self::CUSTOM_ROOT_TEMPLATE, $customRootTemplate);
+    }
+
+    /**
+     * Set custom layout update xml
+     *
+     * @param string $customLayoutUpdateXml
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setCustomLayoutUpdateXml($customLayoutUpdateXml)
+    {
+        return $this->setData(self::CUSTOM_LAYOUT_UPDATE_XML, $customLayoutUpdateXml);
+    }
+
+    /**
+     * Set custom theme from
+     *
+     * @param string $customThemeFrom
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setCustomThemeFrom($customThemeFrom)
+    {
+        return $this->setData(self::CUSTOM_THEME_FROM, $customThemeFrom);
+    }
+
+    /**
+     * Set custom theme to
+     *
+     * @param string $customThemeTo
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setCustomThemeTo($customThemeTo)
+    {
+        return $this->setData(self::CUSTOM_THEME_TO, $customThemeTo);
+    }
+
+    /**
+     * Set is active
+     *
+     * @param int|bool $isActive
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData(self::IS_ACTIVE, $isActive);
     }
 }

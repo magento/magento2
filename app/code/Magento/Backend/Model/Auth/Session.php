@@ -103,7 +103,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function refreshAcl($user = null)
     {
-        if (is_null($user)) {
+        if ($user === null) {
             $user = $this->getUser();
         }
         if (!$user) {
@@ -197,7 +197,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function isFirstPageAfterLogin()
     {
-        if (is_null($this->_isFirstAfterLogin)) {
+        if ($this->_isFirstAfterLogin === null) {
             $this->_isFirstAfterLogin = $this->getData('is_first_visit', true);
         }
         return $this->_isFirstAfterLogin;
@@ -253,6 +253,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @param string $path
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function isValidForPath($path)
     {

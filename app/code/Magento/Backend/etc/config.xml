@@ -7,6 +7,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
     <default>
+        <dev>
+            <template>
+                <minify_html>0</minify_html>
+            </template>
+        </dev>
         <system>
             <media_storage_configuration>
                 <allowed_resources>

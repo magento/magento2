@@ -184,7 +184,7 @@ class Cart extends Object implements CartInterface
     public function getQuoteProductIds()
     {
         $products = $this->getData('product_ids');
-        if (is_null($products)) {
+        if ($products === null) {
             $products = [];
             foreach ($this->getQuote()->getAllItems() as $item) {
                 $products[$item->getProductId()] = $item->getProductId();
@@ -228,8 +228,10 @@ class Cart extends Object implements CartInterface
     {
         $quote = $this->getQuote()->setCheckoutMethod('');
         $this->_checkoutSession->setCartWasUpdated(true);
+        // TODO: Move this logic to Multishipping module as plug-in.
         // reset for multiple address checkout
-        if ($this->_checkoutSession->getCheckoutState() !== Session::CHECKOUT_STATE_BEGIN) {
+        if ($this->_checkoutSession->getCheckoutState() !== Session::CHECKOUT_STATE_BEGIN
+            && $this->_checkoutSession->getCheckoutState() !== null) {
             $quote->removeAllAddresses()->removePayment();
             $this->_checkoutSession->resetCheckout();
         }
@@ -246,7 +248,7 @@ class Cart extends Object implements CartInterface
     public function addOrderItem($orderItem, $qtyFlag = null)
     {
         /* @var $orderItem \Magento\Sales\Model\Order\Item */
-        if (is_null($orderItem->getParentItem())) {
+        if ($orderItem->getParentItem() === null) {
             $storeId = $this->_storeManager->getStore()->getId();
             try {
                 $product = $this->productRepository->getById($orderItem->getProductId(), false, $storeId);
@@ -255,7 +257,7 @@ class Cart extends Object implements CartInterface
             }
             $info = $orderItem->getProductOptionByCode('info_buyRequest');
             $info = new \Magento\Framework\Object($info);
-            if (is_null($qtyFlag)) {
+            if ($qtyFlag === null) {
                 $info->setQty($orderItem->getQtyOrdered());
             } else {
                 $info->setQty(1);
@@ -286,7 +288,7 @@ class Cart extends Object implements CartInterface
             try {
                 $product = $this->productRepository->getById($productInfo, false, $storeId);
             } catch (NoSuchEntityException $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'), [], $e);
+                throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'), $e);
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the product.'));
@@ -372,7 +374,7 @@ class Cart extends Object implements CartInterface
                 if ($this->_checkoutSession->getUseNotice() === null) {
                     $this->_checkoutSession->setUseNotice(true);
                 }
-                throw new \Magento\Framework\Exception\LocalizedException($result);
+                throw new \Magento\Framework\Exception\LocalizedException(__($result));
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('The product does not exist.'));
@@ -502,7 +504,7 @@ class Cart extends Object implements CartInterface
                 $itemInQuote = $this->getQuote()->getItemById($item->getId());
 
                 if (!$itemInQuote && $item->getHasError()) {
-                    throw new \Magento\Framework\Exception\LocalizedException($item->getMessage());
+                    throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
                 }
 
                 if (isset($itemInfo['before_suggest_qty']) && $itemInfo['before_suggest_qty'] != $qty) {
@@ -698,7 +700,7 @@ class Cart extends Object implements CartInterface
             if ($this->_checkoutSession->getUseNotice() === null) {
                 $this->_checkoutSession->setUseNotice(true);
             }
-            throw new \Magento\Framework\Exception\LocalizedException($result);
+            throw new \Magento\Framework\Exception\LocalizedException(__($result));
         }
 
         $this->_eventManager->dispatch(

@@ -225,7 +225,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Cms\Model\Wysiwyg\Images\Storage::getResizeWidth
+     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::getResizeWidth
      */
     public function testGetResizeWidth()
     {
@@ -233,7 +233,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Cms\Model\Wysiwyg\Images\Storage::getResizeHeight
+     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::getResizeHeight
      */
     public function testGetResizeHeight()
     {
@@ -241,7 +241,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
+     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
      */
     public function testDeleteDirectoryOverRoot()
     {
@@ -253,7 +253,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
+     * @covers \Magento\Cms\Model\Wysiwyg\Images\Storage::deleteDirectory
      */
     public function testDeleteRootDirectory()
     {

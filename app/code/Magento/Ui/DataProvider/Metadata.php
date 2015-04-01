@@ -180,7 +180,7 @@ class Metadata implements \Iterator, \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->config['fields'][] = $value;
         } else {
             $this->config['fields'][$offset] = $value;

@@ -164,7 +164,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                 $ratesTotal += count($regions);
                 if ($ratesTotal > self::RATES_MAX) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __("Google shopping only supports %1 tax rates per product", self::RATES_MAX)
+                        __('Google shopping only supports %1 tax rates per product', self::RATES_MAX)
                     );
                 }
                 foreach ($regions as $region) {
@@ -246,7 +246,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      */
     private function _getDefaultCustomerTaxClassId($store = null)
     {
-        if (is_null($this->_defaultCustomerTaxClassId)) {
+        if ($this->_defaultCustomerTaxClassId === null) {
             // Not catching the exception here since default group is expected
             $defaultCustomerGroup = $this->groupManagement->getDefaultGroup($store);
             $this->_defaultCustomerTaxClassId = $defaultCustomerGroup->getTaxClassId();
@@ -265,7 +265,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     {
         $regions = [];
         $regionCode = $this->_regionFactory->create()->load($regionId)->getCode();
-        if (!is_null($regionCode)) {
+        if ($regionCode !== null) {
             $regions = Zip::parseRegions($regionCode, $postalCode);
         }
         return $regions;

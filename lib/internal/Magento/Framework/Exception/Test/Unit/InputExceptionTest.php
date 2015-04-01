@@ -6,10 +6,8 @@
 namespace Magento\Framework\Exception\Test\Unit;
 
 use \Magento\Framework\Exception\InputException;
+use Magento\Framework\Phrase;
 
-/**
- * @covers \Magento\Framework\Exception\InputException
- */
 class InputExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -21,7 +19,9 @@ class InputExceptionTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $params = ['fieldName' => 'quantity', 'value' => -100, 'minValue' => 0];
-        $inputException = new InputException(InputException::INVALID_FIELD_MIN_VALUE, $params);
+        $inputException = new InputException(
+            new Phrase(InputException::INVALID_FIELD_MIN_VALUE, $params)
+        );
 
         $this->assertEquals(InputException::INVALID_FIELD_MIN_VALUE, $inputException->getRawMessage());
         $this->assertStringMatchesFormat('%s greater than or equal to %s', $inputException->getMessage());
@@ -51,8 +51,10 @@ class InputExceptionTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $inputException->getErrors());
 
         $inputException->addError(
-            InputException::INVALID_FIELD_MIN_VALUE,
-            ['fieldName' => 'weight', 'value' => -100, 'minValue' => 1]
+            new Phrase(
+                InputException::INVALID_FIELD_MIN_VALUE,
+                ['fieldName' => 'weight', 'value' => -100, 'minValue' => 1]
+            )
         );
         $this->assertTrue($inputException->wasErrorAdded());
         $this->assertCount(0, $inputException->getErrors());
@@ -67,7 +69,7 @@ class InputExceptionTest extends \PHPUnit_Framework_TestCase
             $inputException->getLogMessage()
         );
 
-        $inputException->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'name']);
+        $inputException->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => 'name']));
         $this->assertTrue($inputException->wasErrorAdded());
         $this->assertCount(2, $inputException->getErrors());
 
@@ -106,20 +108,20 @@ class InputExceptionTest extends \PHPUnit_Framework_TestCase
         $rawMessage = 'Foo "%var"';
         $params = ['var' => 'Bar'];
         $expectedProcessedMessage = 'Foo "Bar"';
-        $inputException = new InputException($rawMessage, $params);
+        $inputException = new InputException(new Phrase($rawMessage, $params));
         $this->assertEquals($rawMessage, $inputException->getRawMessage());
         $this->assertEquals($expectedProcessedMessage, $inputException->getMessage());
         $this->assertEquals($expectedProcessedMessage, $inputException->getLogMessage());
         $this->assertFalse($inputException->wasErrorAdded());
         $this->assertCount(0, $inputException->getErrors());
 
-        $inputException->addError($rawMessage, $params);
+        $inputException->addError(new Phrase($rawMessage, $params));
         $this->assertEquals($expectedProcessedMessage, $inputException->getMessage());
         $this->assertEquals($expectedProcessedMessage, $inputException->getLogMessage());
         $this->assertTrue($inputException->wasErrorAdded());
         $this->assertCount(0, $inputException->getErrors());
 
-        $inputException->addError($rawMessage, $params);
+        $inputException->addError(new Phrase($rawMessage, $params));
         $this->assertEquals($expectedProcessedMessage, $inputException->getMessage());
         $this->assertEquals($expectedProcessedMessage, $inputException->getLogMessage());
         $this->assertTrue($inputException->wasErrorAdded());

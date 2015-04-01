@@ -295,7 +295,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
      */
     public function getAttributeTabBlock()
     {
-        if (is_null($this->_helperCatalog->getAttributeTabBlock())) {
+        if ($this->_helperCatalog->getAttributeTabBlock() === null) {
             return $this->_attributeTabBlock;
         }
         return $this->_helperCatalog->getAttributeTabBlock();

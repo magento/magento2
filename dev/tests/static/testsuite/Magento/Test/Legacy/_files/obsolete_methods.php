@@ -157,6 +157,7 @@ return [
     ['_parseDescription', 'Magento\Sales\Model\Order\Pdf\Items\AbstractItems'],
     ['_parsePackageTheme', 'Magento\Widget\Model\Widget\Instance'],
     ['_parseXmlTrackingResponse', 'Magento\Fedex\Model\Carrier'],
+    ['_parseXml', 'Magento\Fedex\Model\Carrier'],
     ['_prepareCondition', 'Magento\CatalogSearch\Model\Advanced'],
     ['_prepareConfigurableProductData', 'Magento\CatalogImportExport\Model\Export\Product'],
     ['_prepareConfigurableProductPrice', 'Magento\CatalogImportExport\Model\Export\Product'],
@@ -337,6 +338,11 @@ return [
     ['_getItemPosition', 'Magento\Catalog\Block\Navigation'],
     ['_renderCategoryMenuItemHtml', 'Magento\Catalog\Block\Navigation'],
     ['getCurrentCategoryPath', 'Magento\Catalog\Block\Navigation'],
+    [
+        'getIsMessagesAvailable',
+        'Magento\GiftMessage\Helper\Message',
+        'Magento\GiftMessage\Helper\Message::isMessagesAllowed'
+    ],
     ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
     ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
     ['dropKey', 'Magento\Framework\DB\Adapter\Pdo\Mysql'],
@@ -1905,7 +1911,7 @@ return [
     ['_isVatValidationEnabled', 'Magento\Customer\Controller\Account'],
     ['_createUrl', 'Magento\Customer\Controller\Account'],
     ['_extractAddress', 'Magento\Customer\Controller\Account\CreatePost', 'Magento\Customer\Controller\Account\CreatePost::extractAddress'],
-    ['_loginPostRedirect', 'Magento\Customer\Controller\Account\LoginPost', 'Magento\Customer\Controller\Account\LoginPost::loginPostRedirect'],
+    ['_loginPostRedirect', 'Magento\Customer\Controller\Account\LoginPost', 'Magento\Customer\Model\Account\Redirect::getRedirect'],
     ['_getAllowedActions', 'Magento\Customer\Controller\Account', 'Magento\Customer\Controller\Account::getAllowedActions'],
     ['isRegistrationAllowed', 'Magento\Customer\Controller\Account\CreatePost'],
     ['isRegistrationAllowed', 'Magento\Invitation\Controller\Customer\Account\CreatePost'],
@@ -2105,6 +2111,13 @@ return [
         'Magento\Integration\Helper\Validator',
         'Magento\Integration\Model\CredentialsValidator::validate'
     ],
+    ['getGlobalIcon', '\Magento\Backend\Block\Widget'],
+    ['getSuccessRedirect', 'Magento\Customer\Controller\Account\CreatePost'],
+    [
+        'loginPostRedirect',
+        'Magento\Customer\Controller\Account\LoginPost',
+        'Magento\Customer\Model\Account\Redirect::getRedirect'
+    ],
     ['isReviewOwner', 'Magento\Review\Block\Customer\View'],
     ['getRegistration', 'Magento\Customer\Block\Form\Login', 'Magento\Customer\Block\Form\Login\Info::getRegistration'],
     ['getCreateAccountUrl', 'Magento\Customer\Block\Form\Login', 'Magento\Customer\Block\Form\Login\Info::getCreateAccountUrl'],
@@ -2141,4 +2154,5 @@ return [
     ['loadCollectionAttributes', 'Magento\Eav\Model\Config'],
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
     ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
+    ['prepareCatalogProductPriceIndexTable', 'Magento\CatalogRule\Model\Observer'],
 ];

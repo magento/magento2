@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Exception;
 
+use Magento\Framework\Phrase;
+
 /**
  * Exception to be thrown when there is an issue with the Input to a function call.
  */
@@ -20,13 +22,15 @@ class InputException extends AbstractAggregateException
     /**
      * Initialize the input exception.
      *
-     * @param string     $message Exception message
-     * @param array      $params  Substitution parameters
-     * @param \Exception $cause   Cause of the InputException
+     * @param \Magento\Framework\Phrase $phrase
+     * @param \Exception $cause
      */
-    public function __construct($message = self::DEFAULT_MESSAGE, $params = [], \Exception $cause = null)
+    public function __construct(Phrase $phrase = null, \Exception $cause = null)
     {
-        parent::__construct($message, $params, $cause);
+        if ($phrase === null) {
+            $phrase = new Phrase(self::DEFAULT_MESSAGE);
+        }
+        parent::__construct($phrase, $cause);
     }
 
     /**
@@ -35,13 +39,12 @@ class InputException extends AbstractAggregateException
      * @param string $fieldName Name of the field which had an invalid value provided.
      * @param string $fieldValue The invalid value that was provided for the field.
      * @param \Exception $cause   Cause of the InputException
-     * @return InputException
+     * @return \Magento\Framework\Exception\InputException
      */
     public static function invalidFieldValue($fieldName, $fieldValue, \Exception $cause = null)
     {
-        return new InputException(
-            self::INVALID_FIELD_VALUE,
-            ['fieldName' => $fieldName, 'value' => $fieldValue],
+        return new self(
+            new Phrase(self::INVALID_FIELD_VALUE, ['fieldName' => $fieldName, 'value' => $fieldValue]),
             $cause
         );
     }
@@ -50,10 +53,12 @@ class InputException extends AbstractAggregateException
      * Creates an InputException for a missing required field.
      *
      * @param string $fieldName Name of the missing required field.
-     * @return InputException
+     * @return \Magento\Framework\Exception\InputException
      */
     public static function requiredField($fieldName)
     {
-        return new InputException(self::REQUIRED_FIELD, ['fieldName' => $fieldName]);
+        return new self(
+            new Phrase(self::REQUIRED_FIELD, ['fieldName' => $fieldName])
+        );
     }
 }

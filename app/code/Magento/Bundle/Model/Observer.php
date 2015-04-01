@@ -97,7 +97,7 @@ class Observer
         $resource = $this->_bundleSelection;
 
         $productIds = array_keys($collection->getItems());
-        if (!is_null($limit) && $limit <= count($productIds)) {
+        if ($limit !== null && $limit <= count($productIds)) {
             return $this;
         }
 
@@ -117,7 +117,7 @@ class Observer
             $this->_productVisibility->getVisibleInCatalogIds()
         );
 
-        if (!is_null($limit)) {
+        if ($limit !== null) {
             $bundleCollection->setPageSize($limit);
         }
         $bundleCollection->addFieldToFilter(

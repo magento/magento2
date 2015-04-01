@@ -53,7 +53,7 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
         try {
             $this->_validateRequestPath($requestPath);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage());
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
         }
         return true;
     }

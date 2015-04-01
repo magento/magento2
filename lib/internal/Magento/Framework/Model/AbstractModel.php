@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Model;
 
+use Magento\Framework\Phrase;
+
 /**
  * Abstract model class
  *
@@ -218,7 +220,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected function _setResourceModel($resourceName, $collectionName = null)
     {
         $this->_resourceName = $resourceName;
-        if (is_null($collectionName)) {
+        if ($collectionName === null) {
             $collectionName = $resourceName . '\\' . 'Collection';
         }
         $this->_collectionName = $collectionName;
@@ -447,14 +449,16 @@ abstract class AbstractModel extends \Magento\Framework\Object
      * Validate model before saving it
      *
      * @return $this
-     * @throws \Magento\Framework\Validator\ValidatorException
+     * @throws \Magento\Framework\Validator\Exception
      */
     public function validateBeforeSave()
     {
         $validator = $this->_getValidatorBeforeSave();
         if ($validator && !$validator->isValid($this)) {
             $errors = $validator->getMessages();
-            $exception = new \Magento\Framework\Validator\ValidatorException(implode(PHP_EOL, $errors));
+            $exception = new \Magento\Framework\Validator\Exception(
+                new Phrase(implode(PHP_EOL, $errors))
+            );
             foreach ($errors as $errorMessage) {
                 $exception->addMessage(new \Magento\Framework\Message\Error($errorMessage));
             }

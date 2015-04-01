@@ -37,7 +37,7 @@ class Radios extends AbstractElement
     public function getSeparator()
     {
         $separator = $this->getData('separator');
-        if (is_null($separator)) {
+        if ($separator === null) {
             $separator = '&nbsp;';
         }
         return $separator;

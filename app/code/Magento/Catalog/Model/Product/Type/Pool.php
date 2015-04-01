@@ -42,7 +42,7 @@ class Pool
 
         if (!$product instanceof \Magento\Catalog\Model\Product\Type\AbstractType) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                $className . ' doesn\'t extends \Magento\Catalog\Model\Product\Type\AbstractType'
+                __('%1 doesn\'t extends \Magento\Catalog\Model\Product\Type\AbstractType', $className)
             );
         }
         return $product;

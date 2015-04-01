@@ -98,11 +98,9 @@ class Save extends \Magento\Framework\Object
             return $this;
         }
 
-        // types are 'quote', 'quote_item', etc
-        foreach ($giftMessages as $type => $giftMessageEntities) {
-            foreach ($giftMessageEntities as $entityId => $giftmessage) {
-                $this->_saveOne($entityId, $giftmessage, $type);
-            }
+        foreach ($giftMessages as $entityId => $giftMessage) {
+            $entityType = $this->getMappedType($giftMessage['type']);
+            $this->_saveOne($entityId, $giftMessage, $entityType);
         }
 
         return $this;
@@ -170,7 +168,7 @@ class Save extends \Magento\Framework\Object
      */
     protected function _deleteOne($entityModel, $giftmessageModel = null)
     {
-        if (is_null($giftmessageModel)) {
+        if ($giftmessageModel === null) {
             $giftmessageModel = $this->_messageFactory->create()->load($entityModel->getGiftMessageId());
         }
         $giftmessageModel->delete();
@@ -267,7 +265,7 @@ class Save extends \Magento\Framework\Object
      */
     public function isGiftMessagesAvailable($item)
     {
-        return $this->_giftMessageMessage->getIsMessagesAvailable('item', $item, $item->getStore());
+        return $this->_giftMessageMessage->isMessagesAllowed('item', $item, $item->getStore());
     }
 
     /**

@@ -7,6 +7,7 @@ namespace Magento\Backend\Model;
 
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\Plugin\AuthenticationException as PluginAuthenticationException;
+use Magento\Framework\Phrase;
 
 /**
  * Backend Auth model
@@ -81,7 +82,7 @@ class Auth
     public function setAuthStorage($storage)
     {
         if (!$storage instanceof \Magento\Backend\Model\Auth\StorageInterface) {
-            self::throwException('Authentication storage is incorrect.');
+            self::throwException(__('Authentication storage is incorrect.'));
         }
         $this->_authStorage = $storage;
         return $this;
@@ -92,6 +93,7 @@ class Auth
      * If auth storage was not defined outside - returns default object of auth storage
      *
      * @return \Magento\Backend\Model\Auth\StorageInterface
+     * @codeCoverageIgnore
      */
     public function getAuthStorage()
     {
@@ -125,6 +127,7 @@ class Auth
      * Return credential storage object
      *
      * @return null|\Magento\Backend\Model\Auth\Credential\StorageInterface
+     * @codeCoverageIgnore
      */
     public function getCredentialStorage()
     {
@@ -199,14 +202,14 @@ class Auth
     /**
      * Throws specific Backend Authentication \Exception
      *
-     * @param string $msg
+     * @param \Magento\Framework\Phrase $msg
      * @return void
      * @throws \Magento\Framework\Exception\AuthenticationException
      * @static
      */
-    public static function throwException($msg = null)
+    public static function throwException(Phrase $msg = null)
     {
-        if (is_null($msg)) {
+        if ($msg === null) {
             $msg = __('Authentication error occurred.');
         }
         throw new AuthenticationException($msg);

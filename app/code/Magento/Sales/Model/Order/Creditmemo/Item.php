@@ -126,7 +126,7 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
      */
     public function getOrderItem()
     {
-        if (is_null($this->_orderItem)) {
+        if ($this->_orderItem === null) {
             if ($this->getCreditmemo()) {
                 $this->_orderItem = $this->getCreditmemo()->getOrder()->getItemById($this->getOrderItemId());
             } else {
@@ -167,7 +167,7 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
     /**
      * Applying qty to order item
      *
-     * @return \Magento\Sales\Model\Order\Shipment\Item
+     * @return \Magento\Sales\Model\Order\Creditmemo\Item
      */
     public function register()
     {

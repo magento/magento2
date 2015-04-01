@@ -132,7 +132,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      */
     public function getStoreId()
     {
-        if (is_null($this->_storeId)) {
+        if ($this->_storeId === null) {
             return (int)$this->_storeManager->getStore()->getId();
         }
         return $this->_storeId;
@@ -420,7 +420,7 @@ class Flat extends \Magento\Indexer\Model\Resource\AbstractResource
      */
     public function getNodeById($nodeId, $nodes = null)
     {
-        if (is_null($nodes)) {
+        if ($nodes === null) {
             $nodes = $this->getNodes($nodeId);
         }
         if (isset($nodes[$nodeId])) {

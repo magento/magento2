@@ -276,7 +276,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     public function getValueOption($option = null)
     {
         $this->_prepareValueOptions();
-        return $this->getData('value_option' . (!is_null($option) ? '/' . $option : ''));
+        return $this->getData('value_option' . ($option !== null ? '/' . $option : ''));
     }
 
     /**
@@ -583,7 +583,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 }
             }
 
-            if (is_null($oldAttrValue)) {
+            if ($oldAttrValue === null) {
                 $model->unsetData($attrCode);
             } else {
                 $model->setData($attrCode, $oldAttrValue);

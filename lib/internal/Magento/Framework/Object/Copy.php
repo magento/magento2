@@ -54,7 +54,7 @@ class Copy
             return null;
         }
         $fields = $this->_fieldsetConfig->getFieldset($fieldset, $root);
-        if (is_null($fields)) {
+        if ($fields === null) {
             return $target;
         }
         $targetIsArray = is_array($target);
@@ -98,7 +98,7 @@ class Copy
             return null;
         }
         $fields = $this->_fieldsetConfig->getFieldset($fieldset, $root);
-        if (is_null($fields)) {
+        if ($fields === null) {
             return null;
         }
 

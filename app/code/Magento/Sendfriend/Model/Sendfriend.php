@@ -432,7 +432,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
      */
     public function getSentCount($useCache = true)
     {
-        if ($useCache && !is_null($this->_sentCount)) {
+        if ($useCache && $this->_sentCount !== null) {
             return $this->_sentCount;
         }
 
