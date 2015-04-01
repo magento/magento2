@@ -11,6 +11,11 @@ use \Magento\Framework\App\View\Deployment\Version;
 class VersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Current timestamp for test
+     */
+    const CURRENT_TIMESTAMP = 360;
+
+    /**
      * @var Version
      */
     private $object;
@@ -25,21 +30,35 @@ class VersionTest extends \PHPUnit_Framework_TestCase
      */
     private $versionStorage;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dateModel;
+
     protected function setUp()
     {
         $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->versionStorage = $this->getMock('Magento\Framework\App\View\Deployment\Version\StorageInterface');
-        $this->object = new Version($this->appState, $this->versionStorage);
+        $this->dateModel = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
+        $this->object = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+            'Magento\Framework\App\View\Deployment\Version',
+            [
+                'appState' => $this->appState,
+                'versionStorage' => $this->versionStorage,
+                'dateModel' => $this->dateModel
+            ]
+        );
     }
 
     public function testGetValueDeveloperMode()
     {
+        $this->dateModel->expects($this->once())->method('gmtTimestamp')->willReturn(self::CURRENT_TIMESTAMP);
         $this->appState
             ->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
         $this->versionStorage->expects($this->never())->method($this->anything());
-        $this->assertEquals(time(), $this->object->getValue(), '', 5);
+        $this->assertEquals(self::CURRENT_TIMESTAMP, $this->object->getValue());
         $this->object->getValue(); // Ensure computation occurs only once and result is cached in memory
     }
 
@@ -79,8 +98,9 @@ class VersionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('load')
             ->will($this->throwException($storageException));
-        $this->versionStorage->expects($this->once())->method('save')->with($this->equalTo(time(), 5));
-        $this->assertEquals(time(), $this->object->getValue());
+        $this->dateModel->expects($this->once())->method('gmtTimestamp')->willReturn(self::CURRENT_TIMESTAMP);
+        $this->versionStorage->expects($this->once())->method('save')->with(self::CURRENT_TIMESTAMP);
+        $this->assertEquals(self::CURRENT_TIMESTAMP, $this->object->getValue());
         $this->object->getValue(); // Ensure caching in memory
     }
 }

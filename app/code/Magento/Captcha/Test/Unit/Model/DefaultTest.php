@@ -8,6 +8,11 @@ namespace Magento\Captcha\Test\Unit\Model;
 class DefaultTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Expiration date
+     */
+    const EXPIRATION_TIMESTAMP = 86400;
+
+    /**
      * Captcha default config data
      * @var array
      */
@@ -67,12 +72,17 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_session;
+    protected $session;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_resLogFactory;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dateModel;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -127,11 +137,17 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_getResourceModelStub())
         );
 
-        $this->_object = new \Magento\Captcha\Model\DefaultModel(
-            $this->session,
-            $this->_getHelperStub(),
-            $this->_resLogFactory,
-            'user_create'
+        $this->dateModel = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
+
+        $this->_object = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+            'Magento\Captcha\Model\DefaultModel',
+            [
+                'session' => $this->session,
+                'captchaData' => $this->_getHelperStub(),
+                'resLogFactory' => $this->_resLogFactory,
+                'formId' => 'user_create',
+                'dateModel' => $this->dateModel
+            ]
         );
     }
 
@@ -186,7 +202,8 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         self::$_defaultConfig['case_sensitive'] = '1';
         $this->assertFalse($this->_object->isCorrect('abcdef5'));
-        $sessionData = ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + 600]];
+        $sessionData = ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => self::EXPIRATION_TIMESTAMP]];
+        $this->dateModel->expects($this->once())->method('gmtTimestamp')->willReturn(self::EXPIRATION_TIMESTAMP - 1);
         $this->_object->getSession()->setData($sessionData);
         self::$_defaultConfig['case_sensitive'] = '0';
         $this->assertTrue($this->_object->isCorrect('abcdef5'));
@@ -208,16 +225,8 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     public function testLogAttempt()
     {
-        $captcha = new \Magento\Captcha\Model\DefaultModel(
-            $this->session,
-            $this->_getHelperStub(),
-            $this->_resLogFactory,
-            'user_create'
-        );
-
-        $captcha->logAttempt('admin');
-
-        $this->assertEquals($captcha->getSession()->getData('user_create_show_captcha'), 1);
+        $this->_object->logAttempt('admin');
+        $this->assertEquals($this->_object->getSession()->getData('user_create_show_captcha'), 1);
     }
 
     /**
@@ -226,9 +235,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     public function testGetWord()
     {
         $this->assertEquals($this->_object->getWord(), 'AbCdEf5');
-        $this->_object->getSession()->setData(
-            ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() - 360]]
-        );
+        $this->dateModel->expects($this->once())->method('gmtTimestamp')->willReturn(self::EXPIRATION_TIMESTAMP + 1);
         $this->assertNull($this->_object->getWord());
     }
 
@@ -251,7 +258,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         );
         $session->expects($this->any())->method('isLoggedIn')->will($this->returnValue(false));
 
-        $session->setData(['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + 600]]);
+        $session->setData(['user_create_word' => ['data' => 'AbCdEf5', 'expires' => self::EXPIRATION_TIMESTAMP]]);
         return $session;
     }
 
@@ -350,11 +357,14 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsShownToLoggedInUser($expectedResult, $formId)
     {
-        $captcha = new \Magento\Captcha\Model\DefaultModel(
-            $this->session,
-            $this->_getHelperStub(),
-            $this->_resLogFactory,
-            $formId
+        $captcha = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+            'Magento\Captcha\Model\DefaultModel',
+            [
+                'session' => $this->session,
+                'captchaData' => $this->_getHelperStub(),
+                'resLogFactory' => $this->_resLogFactory,
+                'formId' => $formId
+            ]
         );
         $this->assertEquals($expectedResult, $captcha->isShownToLoggedInUser());
     }
