@@ -338,6 +338,11 @@ return [
     ['_getItemPosition', 'Magento\Catalog\Block\Navigation'],
     ['_renderCategoryMenuItemHtml', 'Magento\Catalog\Block\Navigation'],
     ['getCurrentCategoryPath', 'Magento\Catalog\Block\Navigation'],
+    [
+        'getIsMessagesAvailable',
+        'Magento\GiftMessage\Helper\Message',
+        'Magento\GiftMessage\Helper\Message::isMessagesAllowed'
+    ],
     ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
     ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
     ['dropKey', 'Magento\Framework\DB\Adapter\Pdo\Mysql'],

@@ -31,6 +31,7 @@ class ActivateIntegrationEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'PS';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

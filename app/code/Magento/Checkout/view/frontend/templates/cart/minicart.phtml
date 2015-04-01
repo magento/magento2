@@ -8,104 +8,71 @@
 
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 ?>
-<?php if ($block->getInList()): ?>
-    <li data-block="minicart" class="minicart-wrapper">
-<?php else:  ?>
-    <div data-block="minicart" class="minicart-wrapper">
-<?php endif; ?>
+
 <?php $_cartQty = (float) $block->getSummaryCount() ?>
-<?php if (!$block->getIsLinkMode() || !$block->getIsNeedToDisplaySideBar()): ?>
-    <a class="action showcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
+<div data-block="minicart" class="minicart-wrapper">
+    <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>">
         <span class="text"><?php echo __('My Cart'); ?></span>
         <span class="counter qty<?php echo($_cartQty > 0) ? '' : ' empty'; ?>">
             <span class="counter-number">
                 <?php echo $_cartQty;?>
             </span>
             <span class="counter-label">
-                <?php if ($_cartQty == 1):?>
-                    <?php echo __('item');?>
-                <?php else:?>
-                    <?php echo __('items');?>
-                <?php endif;?>
+                <?php echo $block->getSummaryText($_cartQty); ?>
             </span>
         </span>
     </a>
     <?php if ($block->getIsNeedToDisplaySideBar()): ?>
-        <div class="block block-minicart<?php echo($_cartQty > 0) ? '' : ' empty'; ?>" <?php if ($block->getIsNeedToDisplaySideBar()): ?> data-mage-init='{"dropdownDialog":{"appendTo":"[data-block=minicart]", "triggerTarget":".showcart", "timeout": "2000", "triggerClass":"active", "parentClass":"active"}}'<?php endif ?>>
-            <div class="title">
-                <strong>
-                    <span class="text"><?php echo __('My Cart'); ?></span>
-                    <span title="<?php echo __('Items in Cart'); ?>"
-                          class="qty<?php echo($_cartQty > 0) ? '' : ' empty'; ?>"
-                        ><?php echo $_cartQty ?></span>
-                </strong>
-            </div>
-            <div class="content">
-                <?php if ($_cartQty || $block->getAllowCartLink()): ?>
-                    <div class="items-total">
-                        <?php echo($_cartQty == 1) ? __('1 item ') : __('%1 items ', $_cartQty) ?>
-                    </div>
-                    <?php $isPossibleOnepageCheckout = $_cartQty && $block->isPossibleOnepageCheckout() ?>
-                    <?php if ($isPossibleOnepageCheckout): ?>
-                        <?php echo $block->getChildHtml('subtotal'); ?>
-                    <?php endif; ?>
-                    <?php echo $block->getChildHtml('minicart_info') ?>
-                    <div class="actions">
-                        <div class="primary">
-                            <?php if ($isPossibleOnepageCheckout): ?>
-                                <button
-                                    id="top-cart-btn-checkout"
-                                    type="button"
-                                    class="action checkout primary"
-                                    title="<?php echo __('Go to Checkout') ?>">
-                                    <span><?php echo __('Go to Checkout') ?></span>
-                                </button>
-                                <?php echo $block->getChildHtml('extra_actions') ?>
-                            <?php endif; ?>
-                        </div>
-                        <div class="secondary">
-                            <a class="action viewcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
-                                <span><?php echo __('Go to Shopping Cart') ?></span>
-                            </a>
-                        </div>
-                    </div>
-                <?php endif ?>
-                <?php $_items = $block->getRecentItems() ?>
-                <?php if (count($_items)): ?>
-                    <strong class="subtitle"><?php echo __('Recently added item(s)') ?></strong>
-                    <div data-action="scroll" class="products minilist">
-                        <ol id="mini-cart" class="minilist items">
-                            <?php foreach ($_items as $_item): ?>
-                            <?php echo $block->getItemHtml($_item) ?>
-                            <?php endforeach; ?>
-                        </ol>
-                    </div>
-                <?php else: ?>
-                    <strong class="subtitle empty">
-                        <?php echo __('You have no items in your shopping cart.') ?>
-                    </strong>
-                    <?php if ($block->getCartEmptyMessage()): ?>
-                        <p class="minicart empty text"><?php echo $block->getCartEmptyMessage(); ?></p>
-                    <?php endif; ?>
-                <?php endif ?>
+        <div class="block block-minicart<?php echo($_cartQty > 0) ? '' : ' empty'; ?>"
+             data-mage-init='{"dropdownDialog":{
+                "appendTo":"[data-block=minicart]",
+                "triggerTarget":".showcart",
+                "timeout": "2000",
+                "closeOnMouseLeave": false,
+                "closeOnEscape": true,
+                "triggerClass":"active",
+                "parentClass":"active",
+                "buttons":[]}}'>
+            <div id="minicart-content-wrapper">
+                <?php echo $block->getChildHtml('minicart_content') ?>
             </div>
         </div>
     <?php endif ?>
-<?php endif; ?>
-<script type="text/x-magento-init">
+    <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
             "sidebar": {
-                "checkoutUrl": "<?php echo $block->getCheckoutUrl();?>",
-                "checkoutButton": "#top-cart-btn-checkout",
-                "removeButton": "#mini-cart a.action.delete",
+                "targetElement": "div.block.block-minicart",
+                "url": {
+                    "checkout": "<?php echo $block->getCheckoutUrl();?>",
+                    "update": "<?php echo $block->getUpdateItemQtyUrl(); ?>",
+                    "remove": "<?php echo $block->getRemoveItemUrl(); ?>"
+                },
+                "button": {
+                    "checkout": "#top-cart-btn-checkout",
+                    "remove": "#mini-cart a.action.delete",
+                    "close": "#btn-minicart-close"
+                },
+                "showcart": {
+                    "parent": "span.counter",
+                    "qty": "span.counter-number",
+                    "label": "span.counter-label"
+                },
+                "minicart": {
+                    "list": "#mini-cart",
+                    "content": "#minicart-content-wrapper",
+                    "qty": "div.items-total",
+                    "subtotal": "div.subtotal span.price"
+                },
+                "item": {
+                    "qty": ":input.cart-item-qty",
+                    "button": ":button.update-cart-item"
+                },
                 "confirmMessage": "<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>"
             }
         }
     }
-</script>
-<?php if ($block->getInList()): ?>
-    </li>
-<?php else:  ?>
-    </div>
-<?php endif; ?>
+    </script>
+</div>
+
+

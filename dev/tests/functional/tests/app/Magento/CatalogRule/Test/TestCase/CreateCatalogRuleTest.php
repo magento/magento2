@@ -33,7 +33,7 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
     const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
-    const STABLE = 'yes';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

@@ -41,9 +41,9 @@ class AssertProductInCategory extends AbstractConstraint
         $cmsIndex->open();
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
 
-        $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
+        $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {
-            $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
+            $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         }
 
         \PHPUnit_Framework_Assert::assertTrue(
@@ -64,8 +64,7 @@ class AssertProductInCategory extends AbstractConstraint
      */
     protected function assertPrice(FixtureInterface $product, CatalogCategoryView $catalogCategoryView)
     {
-        $price = $catalogCategoryView->getListProductBlock()->getProductPriceBlock($product->getName())
-            ->getRegularPrice();
+        $price = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock()->getPrice();
 
         \PHPUnit_Framework_Assert::assertEquals(
             number_format($product->getPrice(), 2),

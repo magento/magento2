@@ -85,20 +85,6 @@ class View extends AbstractConfigureBlock
     protected $productShortDescription = '.product.attibute.overview';
 
     /**
-     * Click for Price link on Product page.
-     *
-     * @var string
-     */
-    protected $clickForPrice = '[id*=msrp-popup]';
-
-    /**
-     * MAP popup on Product page.
-     *
-     * @var string
-     */
-    protected $mapPopup = '#map-popup-click-for-price';
-
-    /**
      * Stock Availability control.
      *
      * @var string
@@ -143,7 +129,7 @@ class View extends AbstractConfigureBlock
     /**
      * Get block price.
      *
-     * @return \Magento\Catalog\Test\Block\Product\Price
+     * @return Price
      */
     public function getPriceBlock()
     {
@@ -246,26 +232,6 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Return product price excluding tax displayed on page.
-     *
-     * @return string
-     */
-    public function getProductPriceExcludingTax()
-    {
-        return $this->getPriceBlock()->getPriceExcludingTax();
-    }
-
-    /**
-     * Return product price including tax displayed on page.
-     *
-     * @return string
-     */
-    public function getProductPriceIncludingTax()
-    {
-        return $this->getPriceBlock()->getPriceIncludingTax();
-    }
-
-    /**
      * Return product short description on page.
      *
      * @return string|null
@@ -330,17 +296,6 @@ class View extends AbstractConfigureBlock
     public function clickAddToCartButton()
     {
         $this->_rootElement->find($this->addToCart, Locator::SELECTOR_CSS)->click();
-    }
-
-    /**
-     * Open MAP block on Product View page.
-     *
-     * @return void
-     */
-    public function openMapBlockOnProductPage()
-    {
-        $this->_rootElement->find($this->clickForPrice, Locator::SELECTOR_CSS)->click();
-        $this->waitForElementVisible($this->mapPopup, Locator::SELECTOR_CSS);
     }
 
     /**

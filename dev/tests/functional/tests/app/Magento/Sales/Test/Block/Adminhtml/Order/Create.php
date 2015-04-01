@@ -289,6 +289,7 @@ class Create extends Block
      */
     public function selectPaymentMethod(array $paymentCode)
     {
+        $this->_rootElement->click();
         $this->getBillingMethodBlock()->selectPaymentMethod($paymentCode);
         $this->getTemplateBlock()->waitLoader();
     }
