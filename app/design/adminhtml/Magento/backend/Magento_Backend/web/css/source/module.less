@@ -17,15 +17,6 @@
     background-color: #fff;
     border: 1px solid #ada89e;
     border-radius: 2px;
-    .search-global-field & {
-        position: static;
-        display: block;
-        vertical-align: baseline;
-        width: auto;
-        background-color: transparent;
-        border: none;
-        border-radius: 0;
-    }
     &:after {
         position: absolute;
         top: 3px;
@@ -41,9 +32,6 @@
         content: '\e01f'; // search icon
         font-size: 18px;
         color: #b2b2b2;
-        .search-global-field & {
-            display: none;
-        }
     }
     input[type="search"],
     input.search {
@@ -57,6 +45,19 @@
         input.search {
             height: 26px;
         }
+    }
+}
+
+.search-global-field .mage-suggest {
+    position: static;
+    display: block;
+    vertical-align: baseline;
+    width: auto;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    &:after {
+        display: none;
     }
 }
 
@@ -92,6 +93,7 @@
         padding: 6px 12px 5px;
         text-decoration: none;
         color: #333;
+        height: inherit !important;
     }
     .jstree {
         li a:hover,

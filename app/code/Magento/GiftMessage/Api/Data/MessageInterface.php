@@ -18,14 +18,14 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**#@-*/
 
     /**
-     * Returns the gift message ID.
+     * Return the gift message ID.
      *
      * @return int|null Gift message ID. Otherwise, null.
      */
     public function getGiftMessageId();
 
     /**
-     * Sets the gift message ID.
+     * Set the gift message ID.
      *
      * @param int|null $id
      * @return $this
@@ -33,14 +33,14 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setGiftMessageId($id);
 
     /**
-     * Returns the customer ID.
+     * Return the customer ID.
      *
      * @return int|null Customer ID. Otherwise, null.
      */
     public function getCustomerId();
 
     /**
-     * Sets the customer ID.
+     * Set the customer ID.
      *
      * @param int|null $id
      * @return $this
@@ -48,14 +48,14 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setCustomerId($id);
 
     /**
-     * Returns the sender name.
+     * Return the sender name.
      *
      * @return string Sender name.
      */
     public function getSender();
 
     /**
-     * Sets the sender name.
+     * Set the sender name.
      *
      * @param string $sender
      * @return $this
@@ -63,14 +63,14 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setSender($sender);
 
     /**
-     * Returns the recipient name.
+     * Return the recipient name.
      *
      * @return string Recipient name.
      */
     public function getRecipient();
 
     /**
-     * Gets the recipient name.
+     * Get the recipient name.
      *
      * @param string $recipient
      * @return $this
@@ -78,14 +78,14 @@ interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setRecipient($recipient);
 
     /**
-     * Returns the message text.
+     * Return the message text.
      *
      * @return string Message text.
      */
     public function getMessage();
 
     /**
-     * Sets the message text.
+     * Set the message text.
      *
      * @param string $message
      * @return $this

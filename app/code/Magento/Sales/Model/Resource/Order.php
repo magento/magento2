@@ -9,7 +9,6 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
 use Magento\Sales\Model\Increment as SalesIncrement;
 use Magento\Sales\Model\Resource\Entity as SalesResource;
-use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
 use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
 use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
@@ -61,7 +60,6 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param SalesIncrement $salesIncrement
      * @param AddressHandler $addressHandler
      * @param StateHandler $stateHandler
-     * @param OrderGrid $gridAggregator
      * @param string|null $resourcePrefix
      */
     public function __construct(
@@ -70,12 +68,11 @@ class Order extends SalesResource implements OrderResourceInterface
         SalesIncrement $salesIncrement,
         AddressHandler $addressHandler,
         StateHandler $stateHandler,
-        OrderGrid $gridAggregator,
         $resourcePrefix = null
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix);
     }
 
     /**
@@ -199,6 +196,7 @@ class Order extends SalesResource implements OrderResourceInterface
             $relatedObject->save();
             $relatedObject->setOrder($object);
         }
+
         return parent::_afterSave($object);
     }
 }

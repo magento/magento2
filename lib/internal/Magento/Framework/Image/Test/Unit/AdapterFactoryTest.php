@@ -85,7 +85,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Image\AdapterFactory::create
+     * @covers \Magento\Framework\Image\AdapterFactory::create
      */
     public function testCreateWithoutName()
     {
@@ -120,7 +120,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Image\AdapterFactory::create
+     * @covers \Magento\Framework\Image\AdapterFactory::create
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Image adapter is not selected.
      */
@@ -139,7 +139,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Image\AdapterFactory::create
+     * @covers \Magento\Framework\Image\AdapterFactory::create
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Image adapter for 'test' is not setup.
      */
@@ -159,7 +159,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Image\AdapterFactory::create
+     * @covers \Magento\Framework\Image\AdapterFactory::create
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage stdClass is not instance of \Magento\Framework\Image\Adapter\AdapterInterface
      */
