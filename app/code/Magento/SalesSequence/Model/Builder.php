@@ -237,9 +237,12 @@ class Builder
         $metadata->setHasDataChanges(true);
         try {
             $this->resourceMetadata->save($metadata);
-            $this->appResource->getConnection('write')->query(
-                $this->ddlSequence->getCreateSequenceDdl($this->data['sequence_table'], $this->data['start_value'])
-            );
+            $adapter = $this->appResource->getConnection('write');
+            if (!$adapter->isTableExists($this->data['sequence_table'])) {
+                $this->appResource->getConnection('write')->query(
+                    $this->ddlSequence->getCreateSequenceDdl($this->data['sequence_table'], $this->data['start_value'])
+                );
+            }
         } catch (Exception $e) {
             $this->resourceMetadata->delete($metadata);
             throw $e;
