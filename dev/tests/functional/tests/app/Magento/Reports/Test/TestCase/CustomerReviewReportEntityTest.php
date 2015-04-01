@@ -152,8 +152,10 @@ class CustomerReviewReportEntityTest extends Injectable
         $product->persist();
         $this->cmsIndex->open();
         if ($customerLogin == 'Yes') {
-            $this->cmsIndex->getLinksBlock()->openLink("Log In");
-            $this->customerAccountLogin->getLoginBlock()->login($customer);
+            $this->objectManager->create(
+                'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+                ['customer' => $customer]
+            )->run();
         }
         // Steps
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');

@@ -99,6 +99,7 @@ class ProductForm extends FormTabs
      */
     public function fill(FixtureInterface $product, SimpleElement $element = null, FixtureInterface $category = null)
     {
+        $this->waitLoadPage();
         $dataConfig = $product->getDataConfig();
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
 
@@ -160,6 +161,18 @@ class ProductForm extends FormTabs
     }
 
     /**
+     * Open tab.
+     *
+     * @param string $tabName
+     * @return Tab
+     */
+    public function openTab($tabName)
+    {
+        $this->showAdvancedSettings();
+        return parent::openTab($tabName);
+    }
+
+    /**
      * Show Advanced Setting.
      *
      * @return void
@@ -174,15 +187,20 @@ class ProductForm extends FormTabs
     }
 
     /**
-     * Open tab.
+     * Wait for load page.
      *
-     * @param string $tabName
-     * @return Tab
+     * @return void
      */
-    public function openTab($tabName)
+    protected function waitLoadPage()
     {
-        $this->showAdvancedSettings();
-        return parent::openTab($tabName);
+        $browser = $this->browser;
+        $element = $this->advancedSettingContent;
+        $this->waitForElementVisible($this->advancedSettingTrigger);
+        $this->_rootElement->waitUntil(
+            function () use ($browser, $element) {
+                return $browser->find($element)->isVisible() == false ? true : null;
+            }
+        );
     }
 
     /**

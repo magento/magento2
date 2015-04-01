@@ -30,6 +30,7 @@ class DeleteProductsFromWishlistOnFrontendTest extends AbstractWishlistTest
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'CS';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
