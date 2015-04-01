@@ -1,0 +1,268 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@data-grid-temp__font-size: 1.3rem;
+
+@data-grid-temp-cell__border-width: 1px;
+@data-grid-temp-cell__padding-horizontal: 1rem;
+@data-grid-temp-cell__padding-vertical: 1rem;
+
+@data-grid-temp-td__border-color: @color-gray84;
+@data-grid-temp-td__border-inner-style: dashed;
+@data-grid-temp-td__border-outer-style: solid;
+@data-grid-temp-td__even__background-color: @color-white-smoke;
+@data-grid-temp-td__hover__background-color: darken(@data-grid-temp-td__even__background-color, 2%);
+@data-grid-temp-td__odd__background-color: @page__background-color;
+
+@data-grid-temp-th__border-color: #8a837f;
+@data-grid-temp-th__border-style: solid;
+@data-grid-temp-th__background-color: @color-brownie;
+@data-grid-temp-th__color: @color-white;
+@data-grid-temp-th__padding-horizontal: @data-grid-temp-cell__padding-horizontal;
+@data-grid-temp-th__padding-vertical: @data-grid-temp-cell__padding-vertical;
+@data-grid-temp-th__hover__background-color: lighten(@data-grid-temp-th__background-color, 5%);
+
+//
+//    Temporary grid styles
+// --------------------------------------
+
+.grid {
+    table {
+        &:not(.data-table) {
+            border: none;
+            font-size: @data-grid-temp__font-size;
+            margin-bottom: 2rem;
+            max-width: 100%;
+            width: 100%;
+
+            thead {
+                background-color: transparent;
+                color: @text__color;
+            }
+
+            tr {
+                &:nth-child(even) {
+                    td {
+                        background-color: @data-grid-temp-td__even__background-color;
+                    }
+                }
+                &:last-child {
+                    td {
+                        border-bottom: @data-grid-temp-cell__border-width @data-grid-temp-td__border-outer-style @data-grid-temp-td__border-color;
+                    }
+                }
+                &:hover {
+                    td {
+                        background-color: @data-grid-temp-td__hover__background-color;
+                    }
+                }
+            }
+
+            th,
+            td {
+                font-size: @data-grid-temp__font-size;
+                line-height: @line-height__base;
+                transition: background-color .3s;
+                vertical-align: top;
+            }
+
+            td {
+                background-color: @data-grid-temp-td__odd__background-color;
+                border-left: @data-grid-temp-cell__border-width @data-grid-temp-td__border-inner-style @data-grid-temp-td__border-color;
+                border-right: @data-grid-temp-cell__border-width @data-grid-temp-td__border-inner-style @data-grid-temp-td__border-color;
+                color: @table__color;
+                padding: @data-grid-temp-cell__padding-vertical @data-grid-temp-cell__padding-horizontal;
+                &:first-child {
+                    border-left-style: @data-grid-temp-td__border-outer-style;
+                }
+                &:last-child {
+                    border-right-style: @data-grid-temp-td__border-outer-style;
+                    width: 1%; // Making last action smallest column
+                }
+                .action-menu {
+                    left: auto;
+                    z-index: 1;
+                }
+            }
+
+            th {
+                background-color: @data-grid-temp-th__background-color;
+                border-left-color: transparent;
+                border: @data-grid-temp-cell__border-width @data-grid-temp-th__border-style @data-grid-temp-th__border-color;
+                color: @data-grid-temp-th__color;
+                font-weight: @font-weight__semibold;
+                padding: @data-grid-temp-cell__padding-vertical @data-grid-temp-cell__padding-horizontal;;
+                text-align: left;
+                &:first-child {
+                    border-left-color: @data-grid-temp-th__border-color;
+                }
+                a {
+                    color: @data-grid-temp-th__color;
+                    &:active,
+                    &:visited {
+                        color: @data-grid-temp-th__color;
+                    }
+                    &:hover {
+                        color: @data-grid-temp-th__color;
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            th:last-child,
+            td:last-child {
+                padding-left: @data-grid-temp-cell__padding-horizontal * 2;
+                padding-right: @data-grid-temp-cell__padding-horizontal * 2;
+            }
+
+            //  Filters from mui/table.less
+            .filter {
+                th {
+                    padding: 6px 3px;
+                    vertical-align: top;
+                }
+                .ui-datepicker-trigger {
+                    cursor: pointer;
+                    margin-top: 2px;
+                    img {
+                        display: none;
+                    }
+                }
+                .range-line:not(:last-child) {
+                    margin-bottom: 5px;
+                }
+                .date {
+                    padding-right: 28px;
+                    position: relative;
+                    .hasDatepicker {
+                        vertical-align: top;
+                        width: 99%;
+                    }
+                    .ui-datepicker-trigger {
+                        .icon-font(
+                        @icon-calendar,
+                            @_icon-font-color: @data-grid-temp-td__even__background-color,
+                            @_icon-font-color-hover: @data-grid-temp-td__hover__background-color,
+                            @_icon-font-size: 42px,
+                            @_icon-font-line-height: 30px
+                        );
+                        background-color: transparent;
+                        border: none;
+                        margin: 0;
+                        padding: 0;
+                        position: absolute;
+                        right: -3px;
+                        top: -3px;
+                        > span {
+                            position: absolute;
+                            visibility: hidden;
+                            z-index: -1;
+                        }
+                        &:active {
+                            top: -2px;
+                        }
+                        &:focus {
+                            box-shadow: none;
+                            outline: 0;
+                        }
+                        &:before {
+                            height: 29px;
+                            margin-left: 5px;
+                            width: 35px;
+                        }
+                    }
+                }
+            }
+            //  Filters from mui/table.less
+        }
+    }
+
+    .not-sort {
+        padding-right: 1rem;
+    }
+
+    .sort-arrow-asc,
+    .sort-arrow-desc {
+        padding-right: 2rem;
+        position: relative;
+        &:after {
+            position: absolute;
+            right: 0;
+            top: 1px;
+        }
+        &:hover:after {
+            color: @data-grid-temp-td__hover__background-color;
+        }
+    }
+
+    .sort-arrow-asc {
+        .icon-font(
+        @icon-caret-down__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-color: @data-grid-temp-td__even__background-color,
+        @_icon-font-color-hover: @data-grid-temp-td__hover__background-color,
+        @_icon-font-size: 13px,
+        @_icon-font-position: after
+        );
+    }
+
+    .sort-arrow-desc {
+        .icon-font(
+        @icon-caret-up__content,
+        @_icon-font: @icons-admin__font-name,
+        @_icon-font-color: @data-grid-temp-td__even__background-color,
+        @_icon-font-color-hover: @data-grid-temp-td__hover__background-color,
+        @_icon-font-size: 13px,
+        @_icon-font-position: after
+        );
+    }
+
+    .pager {
+        float: none;
+        text-align: center;
+    }
+}
+
+//
+//    Grid actions
+// --------------------------------------
+
+.grid-actions {
+    &:extend(.abs-clearfix all);
+    margin: 0 0 2rem;
+    position: relative;
+
+    .export,
+    .filter-actions {
+        float: right;
+        margin-left: 1rem;
+        vertical-align: top;
+    }
+}
+
+//
+//    Pager
+// --------------------------------------
+
+.pager {
+    float: left;
+    margin: 0 1.5rem 0 0;
+    position: relative;
+
+    .pages-total-found {
+        margin-right: 2.5rem
+    }
+    .view-pages {
+        .admin__control-select {
+            margin: 0 1rem;
+        }
+    }
+}
+
+

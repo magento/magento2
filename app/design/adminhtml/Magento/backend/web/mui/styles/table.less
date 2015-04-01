@@ -12,54 +12,22 @@ table {
     }
 
     thead {
-        background: @grid-filters-background-color;
-        color: @grid-headings-color;
-        .headings {
-            background: @grid-headings-background-color;
-        }
         a {
-            color: @grid-headings-color;
             display: block;
             label {
-                color: @grid-headings-color;
                 cursor: pointer;
-                display: block;
-            }
-        }
-        a:hover,
-        a:focus {
-            color: @grid-headings-color-darker;
-            text-decoration: none;
-        }
-        tr th {
-            &:extend(.delete-first-last-border all);
-        }
-    }
-
-    tfoot {
-        background: @grid-tfoot-background-color;
-        color: @grid-tfoot-color;
-        tr {
-            th,
-            td {
-                text-align: left;
-                &:extend(.delete-first-last-border all);
             }
         }
     }
 
     th {
         background: transparent;
-        border: solid @grid-headings-border;
-        border-width: 0 1px;
         font-size: 14px;
         padding: 6px 10px;
         text-align: center;
     }
 
     td {
-        border: solid @grid-td-border;
-        border-width: 0 1px;
         padding: 6px 10px 7px;
         vertical-align: top;
     }
@@ -67,33 +35,17 @@ table {
     tbody {
         tr {
             td {
-                background: @grid-td-light;
-                color: @grid-td-color;
                 padding-top: 12px;
                 &:first-child {
-                    border-left: 0;
                     input[type="checkbox"] {
                         margin: 0;
                     }
-                }
-                &:last-child {
-                    border-right: 0;
                 }
             }
             &:last-child th,
             &:last-child td {
                 border-bottom-width: 1px;
             }
-            &:nth-child(odd) td,
-            &:nth-child(odd) th {
-                background-color: @grid-td-dark;
-            }
-        }
-        &.even tr td {
-            background: @grid-td-light;
-        }
-        &.odd tr td {
-            background: @grid-td-dark;
         }
     }
 
@@ -118,127 +70,14 @@ table {
 //    Grid table header filters and settings
 //--------------------------------------
 
-.not-sort {
-    padding-right: 10px;
-}
-
-.sort-arrow-asc,
-.sort-arrow-desc {
-    padding-right: 10px;
-    position: relative;
-    &:after {
-        right: -11px;
-        top: -1px;
-        position: absolute;
-        width: 23px;
-    }
-    &:hover:after {
-        color: @grid-headings-color-darker;
-    }
-}
-
-.sort-arrow-asc {
-    .icon-font(
-        @icon-arrow-down-thin,
-        @_icon-font-color: @grid-headings-color,
-        @_icon-font-color-hover: @grid-headings-color-darker,
-        @_icon-font-size: 13px,
-        @_icon-font-position: after
-    );
-}
-
-.sort-arrow-desc {
-    .icon-font(
-        @icon-arrow-up-thin,
-        @_icon-font-color: @grid-headings-color,
-        @_icon-font-color-hover: @grid-headings-color-darker,
-        @_icon-font-size: 13px,
-        @_icon-font-position: after
-    );
-}
-
-.grid-actions,
-.pager,
-.massaction,
-.filter {
-    .input-text,
-    select,
-    .select {
-        margin: 0 10px 0 0;
-    }
-}
-
 //
 //    Table Filters
 //--------------------------------------
 .filter {
-    th {
-        border: 0 solid @grid-filters-border;
-        padding: 6px 3px;
-        vertical-align: top;
-    }
-    .ui-datepicker-trigger {
-        cursor: pointer;
-        margin-top: 2px;
-    }
-    .input-text {
-        padding: 0 5px;
-    }
-    .range-line:not(:last-child) {
-        margin-bottom: 5px;
-    }
-    .date {
-        padding-right: 28px;
-        position: relative;
-        .hasDatepicker {
-            vertical-align: top;
-            width: 99%;
-        }
-        .ui-datepicker-trigger {
-            .icon-font(
-                @icon-calendar,
-                @_icon-font-color: @grid-headings-color,
-                @_icon-font-color-hover: @grid-headings-color-darker,
-                @_icon-font-size: 42px,
-                @_icon-font-line-height: 30px
-            );
-            background-color: transparent;
-            border: none;
-            margin: 0;
-            padding: 0;
-            position: absolute;
-            right: -3px;
-            top: -3px;
-            > span {
-                position: absolute;
-                visibility: hidden;
-                z-index: -1;
-            }
-            &:active {
-                top: -2px;
-            }
-            &:focus {
-                outline: 0;
-                box-shadow: none;
-            }
-            &:before {
-                width: 35px;
-                height: 29px;
-                margin-left: 5px;
-            }
-        }
-    }
-
     select {
-        border-color: @grid-headings-border;
-        margin: 0;
-        padding: 0;
         width: 99%;
     }
-
     input.input-text {
-        border-color: @grid-headings-border;
-        margin: 0;
         width: 99%;
         &::-webkit-input-placeholder {
             color: @grid-filters-placeholder-color !important;
@@ -278,17 +117,14 @@ table {
         &:hover td,
         &:nth-child(odd):hover th,
         &:nth-child(odd):hover td {
-            background-color: @grid-td-background-color-hover;
             cursor: pointer;
             &.empty-text {
-                background-color: @grid-td-dark;
                 cursor: default;
             }
         }
     }
 
     .empty-text {
-        font: @h2font;
         text-align: center;
         white-space: nowrap;
     }
@@ -461,57 +297,20 @@ td.col-type {
 //    Data table
 //--------------------------------------
 .data-table {
-    border-collapse: separate; // do not remove this! without this rule in FF when table has only 1 row bottom and side borders disappear
     width: 100%;
-    thead,
-    tfoot,
-    th {
-        background: @grid-td-light;
-        .style2();
-    }
 
     th {
         text-align: left;
     }
 
     thead th {
-        border: solid @data-table-th-border-color;
-        border-width: 0 0 1px;
         padding: 7px;
     }
 
     td,
     tbody tr th,
     tbody tr td {
-        background: @data-table-td-background-color;
-        border-width: 0;
-        padding: 5px 7px;
         vertical-align: middle;
-    }
-
-    tbody {
-        tr {
-            &:nth-child(odd) th,
-            &:nth-child(odd) td {
-                background: @data-table-td-background-color-odd;
-            }
-        }
-        &.odd {
-            tr {
-                th,
-                td {
-                    background: @data-table-td-background-color-odd;
-                }
-            }
-        }
-        &.even {
-            tr {
-                th,
-                td {
-                    background: @data-table-td-background-color;
-                }
-            }
-        }
     }
 
     tfoot  {
@@ -520,25 +319,6 @@ td.col-type {
             &:last-child td {
                 border: 0;
             }
-        }
-    }
-
-    &.order-tables {
-        tbody {
-            td {
-                vertical-align: top;
-            }
-            &:hover tr {
-                th,
-                td {
-                    background: @data-table-td-background-color-hover;
-                }
-            }
-        }
-
-        tfoot td {
-            background: @grid-tfoot-background-color;
-            .style2();
         }
     }
 

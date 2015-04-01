@@ -16,7 +16,7 @@
 <?php $_items = $block->getItems() ?>
 <?php if (empty($_items)): ?>
     <div class="grid" id="order-items_grid">
-        <table class="data-table table order-tables">
+        <table class="data-table table-info order-tables">
             <thead>
                 <tr class="headings">
                     <th class="col-product"><span><?php echo __('Product') ?></span></th>
@@ -44,7 +44,7 @@
             <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?>
         </div>
     <?php endif; ?>
-        <table class="data-table table order-tables">
+        <table class="data-table table-info order-tables">
             <thead>
                 <tr class="headings">
                     <th class="col-product" colspan="2"><span><?php echo __('Product') ?></span></th>
@@ -106,9 +106,11 @@
                             <?php endif; ?>
                             <input id="item_custom_price_<?php echo $_item->getId() ?>"
                                    name="item[<?php echo $_item->getId() ?>][custom_price]"
-                                   value="<?php echo sprintf("%.2f", $block->getOriginalEditablePrice($_item))?>"<?php if (!$_isCustomPrice): ?>
+                                   value="<?php echo sprintf("%.2f", $block->getOriginalEditablePrice($_item))?>"
+                                   <?php if (!$_isCustomPrice): ?>
                                    style="display:none"
-                                   disabled="disabled"<?php endif; ?>
+                                   disabled="disabled"
+                                   <?php endif; ?>
                                    class="input-text item-price admin__control-text"/>
                         </td>
                         <td class="col-qty">
@@ -156,14 +158,13 @@
                         </td>
                     </tr>
 
-                    <?php
-                    $hasMessageError = false;
-                    foreach ($_item->getMessage(false) as $message) {
-                        if (!empty($message)) {
+                    <?php $hasMessageError = false; ?>
+                    <?php foreach ($_item->getMessage(false) as $messageError):?>
+                        <?php if (!empty($messageError)) {
                             $hasMessageError = true;
                         }
-                    }
-                    ?>
+                        ?>
+                    <?php endforeach; ?>
 
                     <?php if ($hasMessageError):?>
                         <tr class="col-messages-error">
@@ -181,7 +182,7 @@
                                 </div>
                             </td>
                         </tr>
-                    <?endif;?>
+                    <?php endif;?>
 
                     <?php echo $block->getItemExtraInfo($_item)->toHtml(); ?>
                 </tbody>

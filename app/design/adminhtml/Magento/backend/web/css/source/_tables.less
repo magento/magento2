@@ -7,48 +7,42 @@
 //  Variables
 //  _____________________________________________
 
-@base-table-color: @color-very-dark-gray-black;
-@base-table-border-th-color: @color-gray89;
-@base-table-border-td-color: @color-gray89;
-@base-table-background-tfoot: @color-white-fog;
+@table__color: @color-very-dark-gray-black;
+@table__border-color: @color-gray89;
+
+@table-th__border-color: @table__border-color;
+
+@table-td__border-color: @table__border-color;
+
+@table-tfoot__background-color: @color-white-fog;
+
+@table-info__padding-vertical: 1rem;
+@table-info__padding-horizontal: 1.5rem;
 
 //
 //  Tables
 //  _____________________________________________
 
-.table {
-    color: @base-table-color;
-    > caption {
-        margin-bottom: .5rem;
-    }
-    tfoot {
-        background: @base-table-background-tfoot;
-        th,
-        td {
-            text-align: left;
-        }
-    }
-    th {
-        background: transparent;
-        border-bottom: .1rem solid @base-table-border-th-color;
-        border-top: .1rem solid @base-table-border-th-color;
-        font-weight: @font-weight__bold;
-        padding: 1rem 1.5rem;
+//
+//  Utilities
+//  ---------------------------------------------
+
+.table-info {
+    th,
+    td {
+        padding: @table-info__padding-vertical @table-info__padding-horizontal;
         text-align: left;
     }
+    th {
+        border-bottom: 1px solid @table-th__border-color;
+        border-top: 1px solid @table-th__border-color;
+        font-weight: @font-weight__bold;
+    }
     td {
-        border-bottom: .1rem solid @base-table-border-td-color;
-        padding: 1rem 1.5rem;
+        border-bottom: 1px solid @table-td__border-color;
         vertical-align: top;
     }
     tbody {
-        td {
-            &:first-child {
-                input[type='checkbox'] {
-                    margin: 0;
-                }
-            }
-        }
         tr {
             &:last-child {
                 td {
@@ -57,9 +51,17 @@
             }
         }
     }
-    th {
-        &.required {
-            &:extend(.validation-symbol all);
-        }
+    tfoot {
+        background: @table-tfoot__background-color;
+    }
+}
+
+//
+
+table {
+    background-color: transparent;
+    color: @table__color;
+    > caption {
+        margin-bottom: .5em;
     }
 }
