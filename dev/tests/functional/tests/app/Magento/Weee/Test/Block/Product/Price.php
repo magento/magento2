@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Weee\Test\Block;
+namespace Magento\Weee\Test\Block\Product;
 
 /**
  * This class is used to access the fpt price from the storefront.

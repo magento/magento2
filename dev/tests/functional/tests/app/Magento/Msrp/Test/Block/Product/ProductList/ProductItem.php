@@ -4,24 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Msrp\Test\Block\Category;
+namespace Magento\Msrp\Test\Block\Product\ProductList;
 
-use Magento\Msrp\Test\Block\Product\View\Map;
-use Magento\Mtf\Block\Block;
+use Magento\Msrp\Test\Block\Product\Map;
 use Magento\Mtf\Client\Locator;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Category view block on the category page.
+ * Product item block on frontend category view.
  */
-class View extends Block
+class ProductItem extends \Magento\Catalog\Test\Block\Product\ProductList\ProductItem
 {
     /**
      * Click for Price link.
      *
      * @var string
      */
-    protected $mapLink = './/*[@class="product-item-info" and contains(.,"%s")]//*[contains(@class,"map-show-info")]';
+    protected $mapLink = '.map-show-info';
 
     /**
      * Popup MAP Block.
@@ -33,12 +31,11 @@ class View extends Block
     /**
      * Open MAP block.
      *
-     * @param FixtureInterface $product
      * @return void
      */
-    public function openMapBlock(FixtureInterface $product)
+    public function openMapBlock()
     {
-        $this->_rootElement->find(sprintf($this->mapLink, $product->getName()), Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find($this->mapLink)->click();
         $this->waitForElementVisible($this->mapPopupBlock, Locator::SELECTOR_XPATH);
     }
 
@@ -50,7 +47,7 @@ class View extends Block
     public function getMapBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Msrp\Test\Block\Product\View\Map',
+            'Magento\Msrp\Test\Block\Product\Map',
             ['element' => $this->_rootElement->find($this->mapPopupBlock, Locator::SELECTOR_XPATH)]
         );
     }

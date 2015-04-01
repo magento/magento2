@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Msrp\Test\Block\Product\View;
+namespace Magento\Msrp\Test\Block\Product;
 
 /**
  * Minimum Advertised Price block.
@@ -43,7 +43,7 @@ class Map extends \Magento\Catalog\Test\Block\AbstractPriceBlock
      * Get actual Price value on frontend.
      *
      * @param string $currency
-     * @return null|string
+     * @return string|null
      */
     public function getActualPrice($currency = '$')
     {
@@ -54,7 +54,7 @@ class Map extends \Magento\Catalog\Test\Block\AbstractPriceBlock
      * Get old Price value on frontend.
      *
      * @param string $currency
-     * @return null|string
+     * @return string|null
      */
     public function getOldPrice($currency = '$')
     {

@@ -4,20 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Weee\Test\Block\Product;
+namespace Magento\Weee\Test\Block\Product\ProductList;
+
+use Magento\Weee\Test\Block\Product\Price;
 
 /**
- * Product view block on the product page.
+ * Product item block on frontend category view.
  */
-class View extends \Magento\Catalog\Test\Block\Category\View
+class ProductItem extends \Magento\Catalog\Test\Block\Product\ProductList\ProductItem
 {
-    /**
-     * Price block.
-     *
-     * @var string
-     */
-    protected $priceBox = '.price-box';
-
     /**
      * Return price block.
      *

@@ -6,14 +6,12 @@
 
 namespace Magento\Msrp\Test\Block\Product;
 
-use Magento\Msrp\Test\Block\Product\View\Map;
-use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
  * Product view block on the product page.
  */
-class View extends Block
+class View extends \Magento\Catalog\Test\Block\Product\View
 {
     /**
      * Click for Price link on Product page.
@@ -48,7 +46,7 @@ class View extends Block
     public function getMapBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Msrp\Test\Block\Product\View\Map',
+            'Magento\Msrp\Test\Block\Product\Map',
             ['element' => $this->_rootElement->find($this->mapPopupBlock, Locator::SELECTOR_XPATH)]
         );
     }
