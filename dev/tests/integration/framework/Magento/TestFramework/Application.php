@@ -426,6 +426,8 @@ class Application
         if (!$db->isDbDumpExists()) {
             $this->getDbInstance()->storeDbDump();
         }
+        $this->getDbInstance()->pregenerateSequences();
+
     }
 
     /**

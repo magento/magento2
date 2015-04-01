@@ -29,5 +29,3 @@ if ($product->getId()) {
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-
-require __DIR__ . '/configurable_attribute_rollback.php';
