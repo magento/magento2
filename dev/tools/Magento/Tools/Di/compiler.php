@@ -247,11 +247,6 @@ try {
         . ' in the "var" directory. For instance, if you run the Magento application using Apache,'
         . ' the owner of the files in the "var" directory should be the Apache user (example command:'
         . ' "chown -R www-data:www-data <MAGENTO_ROOT>/var" where MAGENTO_ROOT is the Magento root directory).' . "\n";
-    /** TODO: Temporary solution before having necessary changes on bamboo to overcome issue described above */
-    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($rootDir . '/var'));
-    foreach ($iterator as $item) {
-        chmod($item, 0777);
-    }
 
 } catch (Zend_Console_Getopt_Exception $e) {
     echo $e->getUsageMessage();

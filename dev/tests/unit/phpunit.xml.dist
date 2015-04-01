@@ -44,5 +44,8 @@
         <!--coverage_clover_placeholder
             <log type="coverage-clover" target="{{coverage_dir}}/test-reports/phpunit.coverage.xml"/>
         coverage_clover_placeholder-->
+        <!--coverage_crap4j_placeholder
+            <log type="coverage-crap4j" target="{{coverage_dir}}/test-reports/phpunit.crap4j.xml"/>
+        coverage_crap4j_placeholder-->
     </logging>
 </phpunit>

@@ -9,7 +9,6 @@ use Magento\Framework\App\Resource;
 use Magento\Sales\Model\Increment as SalesIncrement;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\Entity as SalesResource;
-use Magento\Sales\Model\Resource\Order\Invoice\Grid as InvoiceGrid;
 use Magento\Sales\Model\Spi\InvoiceResourceInterface;
 
 /**
@@ -38,17 +37,15 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param SalesIncrement $salesIncrement
-     * @param InvoiceGrid $gridAggregator
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
         SalesIncrement $salesIncrement,
-        InvoiceGrid $gridAggregator,
         $resourcePrefix = null
     ) {
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix);
     }
 
     /**
@@ -93,6 +90,7 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
                 $comment->save();
             }
         }
+
         return parent::_afterSave($object);
     }
 }

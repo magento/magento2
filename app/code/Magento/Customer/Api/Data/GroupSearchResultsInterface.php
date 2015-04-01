@@ -14,6 +14,7 @@ interface GroupSearchResultsInterface extends \Magento\Framework\Api\SearchResul
     /**
      * Get customer groups list.
      *
+     * @api
      * @return \Magento\Customer\Api\Data\GroupInterface[]
      */
     public function getItems();
@@ -21,6 +22,7 @@ interface GroupSearchResultsInterface extends \Magento\Framework\Api\SearchResul
     /**
      * Set customer groups list.
      *
+     * @api
      * @param \Magento\Customer\Api\Data\GroupInterface[] $items
      * @return $this
      */

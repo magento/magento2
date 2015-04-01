@@ -8,6 +8,7 @@ namespace Magento\Email\Model;
 use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filter\Template as FilterTemplate;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -213,7 +214,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $store = $this->_storeManager->getStore($store);
         $fileName = $this->_scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($fileName) {
@@ -252,7 +253,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $store = $this->_storeManager->getStore($store);
         $alt = $this->_scopeConfig->getValue(
             self::XML_PATH_DESIGN_EMAIL_LOGO_ALT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
         if ($alt) {
@@ -379,7 +380,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     /**
      * Return true if this template can be used for sending queue as main template
      *
-     * @return boolean
+     * @return bool
      */
     public function isValidForSend()
     {
@@ -480,6 +481,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * Get exception, generated during send() method
      *
      * @return \Exception|null
+     * @codeCoverageIgnore
      */
     public function getSendingException()
     {
@@ -520,6 +522,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      *
      * @param string|array $bcc
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addBcc($bcc)
     {
@@ -532,6 +535,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      *
      * @param string $email
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setReturnPath($email)
     {
@@ -544,6 +548,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      *
      * @param string $email
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setReplyTo($email)
     {

@@ -61,9 +61,13 @@ if ($isField) {
         <?php endif; ?>
     <?php endif; ?>
 
-    <?php if ($element->getComment() && !$isField): ?>
-        <div class="comment"><?php echo $block->escapeHtml($element->getComment()) ?></div>
-    <?php endif; ?>
+
+    <div class="messages">
+        <?php if ($element->getComment() && !$isField): ?>
+            <div class="message message-notice"><?php echo $block->escapeHtml($element->getComment()) ?></div>
+        <?php endif; ?>
+    </div>
+
 
     <?php echo($isField) ? '<div class="control">' : ''; ?>
 
