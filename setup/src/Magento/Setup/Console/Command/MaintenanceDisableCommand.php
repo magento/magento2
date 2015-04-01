@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Console\Command;
+namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\MaintenanceMode;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MaintenanceEnableCommand extends Command
+class MaintenanceDisableCommand extends Command
 {
     /**
      * @var MaintenanceMode $maintenanceMode
@@ -52,8 +52,8 @@ class MaintenanceEnableCommand extends Command
     protected function configure()
     {
         $options = $this->getOptions();
-        $this->setName('maintenance:enable')
-            ->setDescription('Enable maintenance mode')
+        $this->setName('maintenance:disable')
+            ->setDescription('Disable maintenance mode')
             ->setDefinition($options);
 
         $this->ignoreValidationErrors();
@@ -66,7 +66,7 @@ class MaintenanceEnableCommand extends Command
     {
         $addresses = $input->getOption('ip');
         $this->maintenanceMode->set(false);
-        $output->writeln('<info>Enabled maintenance mode</info>');
+        $output->writeln('<info>Disabled maintenance mode</info>');
         if (!empty($addresses)) {
             $addresses = implode(',', $addresses);
             $addresses = ('none' == $addresses) ? '' : $addresses;

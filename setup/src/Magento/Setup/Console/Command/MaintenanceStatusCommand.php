@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Console\Command;
+namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\MaintenanceMode;

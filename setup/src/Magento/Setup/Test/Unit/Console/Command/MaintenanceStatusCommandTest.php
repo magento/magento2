@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Console\Test\Unit\Command;
+namespace Magento\Setup\Console\Test\Unit\Command;
 
-use Magento\Framework\Console\Command\MaintenanceStatusCommand;
+use Magento\Setup\Console\Command\MaintenanceStatusCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase

@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Console\Test\Unit\Command;
+namespace Magento\Setup\Console\Test\Unit\Command;
 
-use Magento\Framework\Console\Command\MaintenanceEnableCommand;
+use Magento\Setup\Console\Command\MaintenanceAllowIpsCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MaintenanceEnableCommandTest extends \PHPUnit_Framework_TestCase
+class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
@@ -17,14 +17,14 @@ class MaintenanceEnableCommandTest extends \PHPUnit_Framework_TestCase
     private $maintenanceMode;
 
     /**
-     * @var MaintenanceEnableCommand
+     * @var MaintenanceAllowIpsCommand
      */
     private $command;
 
     public function setUp()
     {
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
-        $this->command = new MaintenanceEnableCommand($this->maintenanceMode);
+        $this->command = new MaintenanceAllowIpsCommand($this->maintenanceMode);
     }
 
     /**
@@ -34,11 +34,12 @@ class MaintenanceEnableCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute(array $input, $expectedMessage)
     {
-        $return = isset($input['--ip']) ? ($input['--ip'] !== ['none'] ? $input['--ip'] : []) : [];
-        $this->maintenanceMode
-            ->expects($this->any())
-            ->method('getAddressInfo')
-            ->willReturn($return);
+        if (isset($input['--none']) && !$input['--none'] && isset($input['ip'])) {
+            $this->maintenanceMode
+                ->expects($this->once())
+                ->method('getAddressInfo')
+                ->willReturn(explode(',', $input['ip']));
+        }
         $tester = new CommandTester($this->command);
         $tester->execute($input);
         $this->assertEquals($expectedMessage, $tester->getDisplay());
@@ -52,19 +53,21 @@ class MaintenanceEnableCommandTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                ['--ip' => ['127.0.0.1', '127.0.0.2']],
-                "Enabled maintenance mode\n" .
+                ['ip' => '127.0.0.1,127.0.0.2', '--none' => false],
                 "Set exempt IP-addresses: 127.0.0.1, 127.0.0.2\n"
             ],
             [
-                ['--ip' => ['none']],
-                "Enabled maintenance mode\n" .
+                ['--none' => true],
+                "Set exempt IP-addresses: none\n"
+            ],
+            [
+                ['ip' => '127.0.0.1,127.0.0.2', '--none' => true],
                 "Set exempt IP-addresses: none\n"
             ],
             [
                 [],
-                "Enabled maintenance mode\n"
-            ],
+                ''
+            ]
         ];
     }
 }
