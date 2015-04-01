@@ -23,6 +23,13 @@ class History extends EntityAbstract implements OrderStatusHistoryResourceInterf
     protected $validator;
 
     /**
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Sales\Model\Resource\Attribute $attribute
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
+     * @param EntitySnapshot $entitySnapshot
+     * @param Validator $validator
+     * @param null $resourcePrefix
+     */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
@@ -32,7 +39,7 @@ class History extends EntityAbstract implements OrderStatusHistoryResourceInterf
         $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix;
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
     }
 
     /**

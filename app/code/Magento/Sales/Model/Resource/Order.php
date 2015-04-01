@@ -62,7 +62,6 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param EntitySnapshot $entitySnapshot
      * @param AddressHandler $addressHandler
      * @param StateHandler $stateHandler
-     * @param OrderGrid $gridAggregator
      * @param null $resourcePrefix
      */
     public function __construct(
@@ -76,7 +75,7 @@ class Order extends SalesResource implements OrderResourceInterface
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
     }
 
     /**
