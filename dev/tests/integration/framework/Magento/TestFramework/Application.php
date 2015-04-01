@@ -331,7 +331,7 @@ class Application
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
         );
-        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\RendererInterface'));
+        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\Renderer\Placeholder'));
     }
 
     /**
