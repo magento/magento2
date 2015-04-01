@@ -102,7 +102,7 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
     {
         /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
         $cacheState = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\StateInterface');
-        foreach (array_keys(self::$typesConfig->getData()) as $type) {
+        foreach (array_keys(self::$typesConfig) as $type) {
             $cacheState->setEnabled($type, $isEnabled);
         }
         $cacheState->persist();
