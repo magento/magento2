@@ -21,6 +21,12 @@ define([
             return this.elems().length > this.viewportSize;
         },
 
+        isLastVisible: function (elem) {
+            var visible = this.countVisible();
+
+            return elem.visible() && visible === 1;
+        },
+
         countVisible: function () {
             return this.elems().filter(function (elem) {
                 return elem.visible();
