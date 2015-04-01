@@ -153,6 +153,14 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->salesSequenceManagerMock = $this->getMock(
+            'Magento\SalesSequence\Model\Manager',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->salesSequenceMock = $this->getMock('Magento\SalesSequence\Sequence', [], [], '', false);
         $this->entitySnapshotMock = $this->getMock(
             'Magento\Sales\Model\Resource\EntitySnapshot',
             [],
