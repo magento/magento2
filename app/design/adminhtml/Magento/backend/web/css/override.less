@@ -1296,7 +1296,7 @@ fieldset[disabled] .address-list .action-delete {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  background-color: transparent;
+  background-color: #ffffff;
   font-weight: 400;
   text-align: left;
 }
@@ -1793,6 +1793,12 @@ button.tertiary:hover,
   display: block;
   border: none;
   padding: 0;
+  transition: background-color 0.1s linear;
+}
+.abs-action-menu > li > a:hover,
+.actions-split .dropdown-menu > li > a:hover,
+.actions-split .action-menu > li > a:hover {
+  text-decoration: none;
 }
 .abs-action-menu > li:hover,
 .actions-split .dropdown-menu > li:hover,
@@ -1935,6 +1941,10 @@ button:hover {
   display: block;
   border: none;
   padding: 0;
+  transition: background-color 0.1s linear;
+}
+.action-menu > li > a:hover {
+  text-decoration: none;
 }
 .action-menu > li:hover {
   background-color: #e3e3e3;
@@ -5094,6 +5104,31 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   border-right-style: solid;
   width: 1%;
 }
+.data-grid td .action-select {
+  color: #007bdb;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+  font-size: 1.3rem;
+  padding: 0 3rem 0 0;
+}
+.data-grid td .action-select:hover {
+  color: #007bdb;
+  text-decoration: underline;
+}
+.data-grid td .action-select:hover:after {
+  border-color: #007bdb transparent transparent transparent;
+}
+.data-grid td .action-select:after {
+  border-color: #007bdb transparent transparent transparent;
+}
+.data-grid td .action-select:before {
+  display: none;
+}
+.data-grid td .action-menu {
+  left: auto;
+  z-index: 1;
+}
 .data-grid th {
   background-color: #514943;
   border: 1px solid #8a837f;
@@ -5191,7 +5226,7 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
 .data-grid-checkbox-cell-inner {
   cursor: pointer;
   display: block;
-  padding: 0.8rem 1.8rem 0.9rem;
+  padding: 1.1rem 1.8rem 0.9rem;
   text-align: right;
 }
 .data-grid-row-parent._active > td .data-grid-checkbox-cell-inner:before {
@@ -5207,7 +5242,7 @@ fieldset[disabled] .admin__control-input + .ui-datepicker-trigger {
   font-weight: 700;
   left: 1.35rem;
   position: absolute;
-  top: 1.3rem;
+  top: 1.6rem;
 }
 @media all and (max-width: 1023px) {
   .admin__menu .submenu li {
