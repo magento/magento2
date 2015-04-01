@@ -39,8 +39,6 @@ class ConsoleController extends AbstractActionController
     const CMD_INSTALL_ADMIN_USER = 'install-admin-user';
     const CMD_UPDATE = 'update';
     const CMD_UNINSTALL = 'uninstall';
-    const CMD_MODULE_ENABLE = 'module-enable';
-    const CMD_MODULE_DISABLE = 'module-disable';
     /**#@- */
 
     /**
@@ -62,8 +60,6 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_ADMIN_USER => 'installAdminUser',
         self::CMD_UPDATE => 'update',
         self::CMD_UNINSTALL => 'uninstall',
-        self::CMD_MODULE_ENABLE => 'module',
-        self::CMD_MODULE_DISABLE => 'module',
     ];
 
     /**
@@ -79,8 +75,6 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_ADMIN_USER,
         self::CMD_UPDATE,
         self::CMD_UNINSTALL,
-        self::CMD_MODULE_ENABLE,
-        self::CMD_MODULE_DISABLE,
         UserConfig::KEY_LANGUAGE,
         UserConfig::KEY_CURRENCY,
         UserConfig::KEY_TIMEZONE,
@@ -247,18 +241,6 @@ class ConsoleController extends AbstractActionController
                 'usage_short' => self::CMD_INSTALL_ADMIN_USER . ' <options>',
                 'usage_desc' => 'Install admin user account',
             ],
-            self::CMD_MODULE_ENABLE => [
-                'route' => self::CMD_MODULE_ENABLE . ' --modules= [--force]',
-                'usage' => '--modules=Module_Foo,Module_Bar [--force]',
-                'usage_short' => self::CMD_MODULE_ENABLE,
-                'usage_desc' => 'Enable specified modules'
-            ],
-            self::CMD_MODULE_DISABLE => [
-                'route' => self::CMD_MODULE_DISABLE . ' --modules= [--force]',
-                'usage' => '--modules=Module_Foo,Module_Bar [--force]',
-                'usage_short' => self::CMD_MODULE_DISABLE,
-                'usage_desc' => 'Disable specified modules'
-            ],
             self::CMD_HELP => [
                 'route' => self::CMD_HELP . ' [' . implode('|', self::$helpOptions) . ']:type',
                 'usage' => '<' . implode('|', self::$helpOptions) . '>',
@@ -400,51 +382,6 @@ class ConsoleController extends AbstractActionController
     public function uninstallAction()
     {
         $this->installer->uninstall();
-    }
-
-    /**
-     * Action for enabling or disabling modules
-     *
-     * @return void
-     * @throws \Magento\Setup\Exception
-     */
-    public function moduleAction()
-    {
-        /** @var \Zend\Console\Request $request */
-        $request = $this->getRequest();
-        $isEnable = $request->getParam(0) == self::CMD_MODULE_ENABLE;
-        $modules = explode(',', $request->getParam('modules'));
-        /** @var \Magento\Framework\Module\Status $status */
-        $status = $this->objectManagerProvider->get()->create('Magento\Framework\Module\Status');
-
-        $modulesToChange = $status->getModulesToChange($isEnable, $modules);
-        $message = '';
-        if (!empty($modulesToChange)) {
-            if (!$request->getParam('force')) {
-                $constraints = $status->checkConstraints($isEnable, $modulesToChange);
-                if ($constraints) {
-                    $message .= "Unable to change status of modules because of the following constraints:\n"
-                        . implode("\n", $constraints);
-                    throw new \Magento\Setup\Exception($message);
-                }
-            } else {
-                $message .= 'Alert: Your store may not operate properly because of '
-                    . "dependencies and conflicts of this module(s).\n";
-            }
-            $status->setIsEnabled($isEnable, $modulesToChange);
-            $updateAfterEnableMessage = '';
-            if ($isEnable) {
-                $message .= 'The following modules have been enabled:';
-                $updateAfterEnableMessage = "\nTo make sure that the enabled modules are properly registered,"
-                    . " run 'update' command.";
-            } else {
-                $message .= 'The following modules have been disabled:';
-            }
-            $message .= ' ' . implode(', ', $modulesToChange) . $updateAfterEnableMessage;
-        } else {
-            $message .= 'There have been no changes to any modules.';
-        }
-        $this->log->log($message);
     }
 
     /**
