@@ -24,7 +24,10 @@ class Grid extends AbstractGrid
     protected $shipmentTableName = 'sales_shipment';
 
     /**
-     * Refresh grid row
+     * Adds new order shipments to the grid.
+     *
+     * Only order shipments that correspond to $value and $field
+     * parameters will be added.
      *
      * @param int|string $value
      * @param null|string $field
@@ -34,6 +37,31 @@ class Grid extends AbstractGrid
     {
         $select = $this->getGridOriginSelect()
             ->where(($field ?: 'sfs.entity_id') . ' = ?', $value);
+
+        return $this->getConnection()->query(
+            $this->getConnection()
+                ->insertFromSelect(
+                    $select,
+                    $this->getTable($this->gridTableName),
+                    [],
+                    AdapterInterface::INSERT_ON_DUPLICATE
+                )
+        );
+    }
+
+    /**
+     * Adds new order shipments to the grid.
+     *
+     * Only order shipments created/updated since the last method call
+     * will be added.
+     *
+     * @return \Zend_Db_Statement_Interface
+     */
+    public function refreshBySchedule()
+    {
+        $select = $this->getGridOriginSelect()
+            ->where('sfs.updated_at >= ?', $this->getLastUpdatedAtValue());
+
         return $this->getConnection()->query(
             $this->getConnection()
                 ->insertFromSelect(
@@ -70,6 +98,7 @@ class Grid extends AbstractGrid
                     'increment_id' => 'sfs.increment_id',
                     'order_increment_id' => 'sfo.increment_id',
                     'created_at' => 'sfs.created_at',
+                    'updated_at' => 'sfs.updated_at',
                     'order_created_at' => 'sfo.created_at',
                     'shipping_name' => "trim(concat(ifnull(ssa.firstname, ''), ' ' ,ifnull(ssa.lastname, '')))",
                 ]
