@@ -17,11 +17,11 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 
     protected function setUp()
     {
-        $testObjectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $testObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $request = $testObjectManager->get('Magento\TestFramework\Request');
-        $response = $testObjectManager->get('Magento\TestFramework\Response');
+        $request = $testObjectManager->getObject('Magento\TestFramework\Request');
+        $response = $testObjectManager->getObject('Magento\TestFramework\Response');
         $this->_objectManager = $this->getMock(
             'Magento\TestFramework\ObjectManager',
             ['get', 'create'],
