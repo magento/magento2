@@ -173,6 +173,8 @@ class Links extends \Magento\Backend\Block\Template
             $this->_sourceModel->toOptionArray()
         )->setValue(
             $this->getProduct()->getLinksPurchasedSeparately()
+        )->setClass(
+            'admin__control-select'
         );
 
         return $select->getHtml();
