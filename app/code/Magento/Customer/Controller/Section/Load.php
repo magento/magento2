@@ -7,7 +7,7 @@ namespace Magento\Customer\Controller\Section;
 
 use Magento\Customer\Model\Section\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\Controller\Result\JSONFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -17,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
 class Load extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var JSONFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
@@ -33,13 +33,13 @@ class Load extends \Magento\Framework\App\Action\Action
 
     /**
      * @param Context $context
-     * @param JSONFactory $resultJsonFactory
+     * @param JsonFactory $resultJsonFactory
      * @param RedirectFactory $redirectFactory
      * @param SectionPoolInterface $sectionPool
      */
     public function __construct(
         Context $context,
-        JSONFactory $resultJsonFactory,
+        JsonFactory $resultJsonFactory,
         RedirectFactory $redirectFactory,
         SectionPoolInterface $sectionPool
     ) {
@@ -50,7 +50,7 @@ class Load extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\JSON|\Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -58,7 +58,7 @@ class Load extends \Magento\Framework\App\Action\Action
             // TODO: MAGETWO-34824 redirect correct url
             return $this->redirectFactory->create()->setPath('*/*/index');
         }
-        /** @var \Magento\Framework\Controller\Result\JSON $resultJson */
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         try {
             $sectionNames = $this->getRequest()->getParam('sections');
