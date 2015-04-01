@@ -39,7 +39,7 @@ class QuoteItem
     ) {
         /** @var $orderItem Item */
         $orderItem = $proceed($item, $additional);
-        $isAvailable = $this->_helper->isMessagesAvailable('item', $item, $item->getStoreId());
+        $isAvailable = $this->_helper->isMessagesAllowed('item', $item, $item->getStoreId());
 
         $orderItem->setGiftMessageId($item->getGiftMessageId());
         $orderItem->setGiftMessageAvailable($isAvailable);

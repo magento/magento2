@@ -5,261 +5,296 @@
  */
 namespace Magento\Cms\Test\Unit\Model;
 
+use Magento\Cms\Model\PageRepository;
+use Magento\Framework\Api\SearchCriteriaInterface;
+
 /**
- * Class PageRepositoryTest
+ * Test for Magento\Cms\Model\PageRepository
  */
 class PageRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Cms\Model\Resource\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageRepository
      */
-    protected $resourceMock;
+    protected $repository;
 
     /**
-     * @var \Magento\Cms\Model\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Resource\Page
      */
-    protected $pageFactoryMock;
+    protected $pageResource;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Page
      */
-    protected $pageCollectionFactoryMock;
+    protected $page;
 
     /**
-     * @var \Magento\Framework\DB\QueryBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\PageInterface
      */
-    protected $queryBuilderFactoryMock;
+    protected $pageData;
 
     /**
-     * @var \Magento\Framework\DB\MapperFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Api\Data\PageSearchResultsInterface
      */
-    protected $mapperFactoryMock;
+    protected $pageSearchResult;
 
     /**
-     * @var \Magento\Cms\Model\PageRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
      */
-    protected $pageRepository;
+    protected $dataHelper;
 
     /**
-     * Set up
-     *
-     * @return void
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Resource\Page\Collection
      */
-    protected function setUp()
+    protected $collection;
+
+    /**
+     * Initialize repository
+     */
+    public function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->pageResource = $this->getMockBuilder('Magento\Cms\Model\Resource\Page')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pageFactory = $this->getMockBuilder('Magento\Cms\Model\PageFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $pageDataFactory = $this->getMockBuilder('Magento\Cms\Api\Data\PageInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $pageSearchResultFactory = $this->getMockBuilder('Magento\Cms\Api\Data\PageSearchResultsInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $collectionFactory = $this->getMockBuilder('Magento\Cms\Model\Resource\Page\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
-        $this->resourceMock = $this->getMock(
-            'Magento\Cms\Model\Resource\Page',
-            ['save', 'load', 'delete'],
-            [],
-            '',
-            false
-        );
-        $this->pageFactoryMock = $this->getMock(
-            'Magento\Cms\Model\PageFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->pageCollectionFactoryMock = $this->getMock(
-            'Magento\Cms\Model\Resource\Page\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->queryBuilderFactoryMock = $this->getMock(
-            'Magento\Framework\DB\QueryBuilderFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->mapperFactoryMock = $this->getMock(
-            'Magento\Framework\DB\MapperFactory',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->page = $this->getMockBuilder('Magento\Cms\Model\Page')->disableOriginalConstructor()->getMock();
+        $this->pageData = $this->getMockBuilder('Magento\Cms\Api\Data\PageInterface')
+            ->getMock();
+        $this->pageSearchResult = $this->getMockBuilder('Magento\Cms\Api\Data\PageSearchResultsInterface')
+            ->getMock();
+        $this->collection = $this->getMockBuilder('Magento\Cms\Model\Resource\Page\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['addFieldToFilter', 'getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
+            ->getMock();
 
-        $this->pageRepository = $objectManager->getObject(
-            'Magento\Cms\Model\PageRepository',
-            [
-                'resource' => $this->resourceMock,
-                'pageFactory' => $this->pageFactoryMock,
-                'pageCollectionFactory' => $this->pageCollectionFactoryMock,
-                'queryBuilderFactory' => $this->queryBuilderFactoryMock,
-                'mapperFactory' => $this->mapperFactoryMock
-            ]
+        $pageFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->page);
+        $pageDataFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->pageData);
+        $pageSearchResultFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->pageSearchResult);
+        $collectionFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->collection);
+        /**
+         * @var \Magento\Cms\Model\PageFactory $pageFactory
+         * @var \Magento\Cms\Api\Data\PageInterfaceFactory $pageDataFactory
+         * @var \Magento\Cms\Api\Data\PageSearchResultsInterfaceFactory $pageSearchResultFactory
+         * @var \Magento\Cms\Model\Resource\Page\CollectionFactory $collectionFactory
+         */
+
+        $this->dataHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->repository = new PageRepository(
+            $this->pageResource,
+            $pageFactory,
+            $pageDataFactory,
+            $collectionFactory,
+            $pageSearchResultFactory,
+            $this->dataHelper
         );
     }
 
     /**
-     * Run test save method
-     *
-     * @return void
+     * @test
      */
     public function testSave()
     {
-        $pageMock = $this->getMock(
-            'Magento\Cms\Model\Page',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->resourceMock->expects($this->once())
+        $this->pageResource->expects($this->once())
             ->method('save')
-            ->with($pageMock);
-
-        $this->assertEquals($pageMock, $this->pageRepository->save($pageMock));
+            ->with($this->page)
+            ->willReturnSelf();
+        $this->assertEquals($this->page, $this->repository->save($this->page));
     }
 
     /**
-     * Run test get method
-     *
-     * @return void
-     */
-    public function testGet()
-    {
-        $id = 20;
-        $pageMock = $this->getMockForAbstractClass(
-            'Magento\Cms\Model\Page',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getId']
-        );
-
-        $pageMock->expects($this->atLeastOnce())
-            ->method('getId')
-            ->will($this->returnValue($id));
-        $this->pageFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($pageMock));
-        $this->resourceMock->expects($this->once())
-            ->method('load')
-            ->with($pageMock, $id);
-
-        $this->assertEquals($pageMock, $this->pageRepository->get($id));
-    }
-
-    /**
-     * Run test getList method
-     *
-     * @return void
-     */
-    public function testGetList()
-    {
-        $criteriaMock = $this->getMock(
-            'Magento\Cms\Model\Resource\PageCriteria',
-            [],
-            [],
-            '',
-            false
-        );
-        $queryBuilderMock = $this->getMock(
-            'Magento\Framework\DB\QueryBuilder',
-            ['setCriteria', 'setResource', 'create'],
-            [],
-            '',
-            false
-        );
-        $queryMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\QueryInterface',
-            [],
-            '',
-            false
-        );
-        $collectionMock = $this->getMock(
-            'Magento\Cms\Model\Resource\Page\Collection',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->queryBuilderFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($queryBuilderMock));
-        $queryBuilderMock->expects($this->once())
-            ->method('setCriteria')
-            ->with($criteriaMock);
-        $queryBuilderMock->expects($this->once())
-            ->method('setResource')
-            ->with($this->resourceMock);
-        $queryBuilderMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($queryMock));
-        $this->pageCollectionFactoryMock->expects($this->once())
-            ->method('create')
-            ->with(['query' => $queryMock])
-            ->will($this->returnValue($collectionMock));
-
-        $this->assertEquals($collectionMock, $this->pageRepository->getList($criteriaMock));
-    }
-
-    /**
-     * Run test delete method
-     *
-     * @return void
-     */
-    public function testDelete()
-    {
-        $pageMock = $this->getMockForAbstractClass(
-            'Magento\Cms\Model\Page',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getPageId']
-        );
-
-        $this->resourceMock->expects($this->once())
-            ->method('delete')
-            ->with($pageMock);
-
-        $this->assertTrue($this->pageRepository->delete($pageMock));
-    }
-
-    /**
-     * Run test deleteById method
-     *
-     * @return void
+     * @test
      */
     public function testDeleteById()
     {
-        $id = 20;
-        $pageMock = $this->getMockForAbstractClass(
-            'Magento\Cms\Model\Page',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getId']
-        );
+        $pageId = '123';
 
-        $this->pageFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($pageMock));
-        $this->resourceMock->expects($this->once())
-            ->method('load')
-            ->with($pageMock, $id);
-        $pageMock->expects($this->once())
+        $this->page->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($id));
-        $this->resourceMock->expects($this->once())
+            ->willReturn(true);
+        $this->pageResource->expects($this->once())
+            ->method('load')
+            ->with($this->page, $pageId)
+            ->willReturn($this->page);
+        $this->pageResource->expects($this->once())
             ->method('delete')
-            ->with($pageMock);
+            ->with($this->page)
+            ->willReturnSelf();
 
-        $this->assertTrue($this->pageRepository->deleteById($id));
+        $this->assertTrue($this->repository->deleteById($pageId));
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     */
+    public function testSaveException()
+    {
+        $this->pageResource->expects($this->once())
+            ->method('save')
+            ->with($this->page)
+            ->willThrowException(new \Exception());
+        $this->repository->save($this->page);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
+     */
+    public function testDeleteException()
+    {
+        $this->pageResource->expects($this->once())
+            ->method('delete')
+            ->with($this->page)
+            ->willThrowException(new \Exception());
+        $this->repository->delete($this->page);
+    }
+
+    /**
+     * @test
+     *
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetByIdException()
+    {
+        $pageId = '123';
+
+        $this->page->expects($this->once())
+            ->method('getId')
+            ->willReturn(false);
+        $this->pageResource->expects($this->once())
+            ->method('load')
+            ->with($this->page, $pageId)
+            ->willReturn($this->page);
+        $this->repository->getById($pageId);
+    }
+
+    /**
+     * @test
+     */
+    public function testGetList()
+    {
+        $field = 'name';
+        $value = 'magento';
+        $condition = 'eq';
+        $total = 10;
+        $currentPage = 3;
+        $pageSize = 2;
+        $sortField = 'id';
+
+        $criteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteriaInterface')->getMock();
+        $filterGroup = $this->getMockBuilder('Magento\Framework\Api\Search\FilterGroup')->getMock();
+        $filter = $this->getMockBuilder('Magento\Framework\Api\Filter')->getMock();
+        $storeFilter = $this->getMockBuilder('Magento\Framework\Api\Filter')->getMock();
+        $sortOrder = $this->getMockBuilder('Magento\Framework\Api\SortOrder')->getMock();
+
+        $criteria->expects($this->once())
+            ->method('getFilterGroups')
+            ->willReturn([$filterGroup]);
+        $criteria->expects($this->once())
+            ->method('getSortOrders')
+            ->willReturn([$sortOrder]);
+        $criteria->expects($this->once())
+            ->method('getCurrentPage')
+            ->willReturn($currentPage);
+        $criteria->expects($this->once())
+            ->method('getPageSize')
+            ->willReturn($pageSize);
+        $filterGroup->expects($this->once())
+            ->method('getFilters')
+            ->willReturn([$storeFilter, $filter]);
+        $filter->expects($this->once())
+            ->method('getConditionType')
+            ->willReturn($condition);
+        $filter->expects($this->any())
+            ->method('getField')
+            ->willReturn($field);
+        $filter->expects($this->once())
+            ->method('getValue')
+            ->willReturn($value);
+        $storeFilter->expects($this->any())
+            ->method('getField')
+            ->willReturn('store_id');
+        $storeFilter->expects($this->once())
+            ->method('getValue')
+            ->willReturn(1);
+        $sortOrder->expects($this->once())
+            ->method('getField')
+            ->willReturn($sortField);
+        $sortOrder->expects($this->once())
+            ->method('getDirection')
+            ->willReturn(SearchCriteriaInterface::SORT_DESC);
+
+        /** @var \Magento\Framework\Api\SearchCriteriaInterface $criteria */
+
+        $this->collection->addItem($this->page);
+        $this->pageSearchResult->expects($this->once())
+            ->method('setSearchCriteria')
+            ->with($criteria)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with([['attribute' => $field, $condition => $value]], [])
+            ->willReturnSelf();
+        $this->pageSearchResult->expects($this->once())
+            ->method('setTotalCount')
+            ->with($total)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('getSize')
+            ->willReturn($total);
+        $this->collection->expects($this->once())
+            ->method('setCurPage')
+            ->with($currentPage)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('setPageSize')
+            ->with($pageSize)
+            ->willReturnSelf();
+        $this->collection->expects($this->once())
+            ->method('addOrder')
+            ->with($sortField, 'DESC')
+            ->willReturnSelf();
+        $this->page->expects($this->once())
+            ->method('getData')
+            ->willReturn(['data']);
+        $this->pageSearchResult->expects($this->once())
+            ->method('setItems')
+            ->with(['someData'])
+            ->willReturnSelf();
+        $this->dataHelper->expects($this->once())
+            ->method('populateWithArray')
+            ->with($this->pageData, ['data'], 'Magento\Cms\Api\Data\PageInterface')
+            ->willReturn('someData');
+
+        $this->assertEquals($this->pageSearchResult, $this->repository->getList($criteria));
     }
 }
