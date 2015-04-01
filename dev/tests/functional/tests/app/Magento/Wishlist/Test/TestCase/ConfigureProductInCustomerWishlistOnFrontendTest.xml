@@ -28,6 +28,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
         </variation>
         <variation name="ConfigureProductInCustomerWishlistOnFrontendTestVariation5">
+            <data name="issue" xsi:type="string">Bug: MAGETWO-35273</data>
             <data name="product" xsi:type="string">groupedProduct::three_simple_products</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />

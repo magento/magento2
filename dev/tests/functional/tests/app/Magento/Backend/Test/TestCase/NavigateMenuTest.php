@@ -22,7 +22,6 @@ class NavigateMenuTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'CS, MX, PS';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
