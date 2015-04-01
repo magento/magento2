@@ -31,6 +31,13 @@ class Comment extends EntityAbstract implements ShipmentCommentResourceInterface
     protected $validator;
 
     /**
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Sales\Model\Resource\Attribute $attribute
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
+     * @param EntitySnapshot $entitySnapshot
+     * @param \Magento\Sales\Model\Order\Shipment\Comment\Validator $validator
+     * @param null $resourcePrefix
+     */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,

@@ -47,7 +47,7 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
         $resourcePrefix = null
     ) {
         $this->validator = $validator;
-        parent::__construct($context, $attribute, $sequenceManager,$entitySnapshot, $resourcePrefix);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
     }
 
     /**
