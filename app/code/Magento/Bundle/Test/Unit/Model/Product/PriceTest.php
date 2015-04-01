@@ -78,6 +78,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->groupManagement = $this->getMockBuilder('Magento\Customer\Api\GroupManagementInterface')
             ->getMockForAbstractClass();
         $gpFactory = $this->getMock('Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory', [], [], '', false);
+        $tpFactory = $this->getMock('Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory', [], [], '', false);
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -92,6 +93,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                 'priceCurrency' => $this->priceCurrency,
                 'groupManagement' => $this->groupManagement,
                 'groupPriceFactory' => $gpFactory,
+                'tierPriceFactory' => $tpFactory,
                 'config' => $scopeConfig,
                 'catalogData' => $this->catalogHelperMock
             ]

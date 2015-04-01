@@ -986,7 +986,33 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get product tier price by qty
+     * Gets list of product tier prices
+     *
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null
+     */
+    public function getTierPrices()
+    {
+        $tierPrices = $this->getPriceModel()->getTierPrices($this);
+        if (empty($tierPrices)) {
+            $tierPrices = null;
+        }
+        return $tierPrices;
+    }
+
+    /**
+     * Sets list of product tier prices
+     *
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
+     * @return $this
+     */
+    public function setTierPrices(array $tierPrices = null)
+    {
+        $this->getPriceModel()->setTierPrices($this, $tierPrices);
+        return $this;
+    }
+
+    /**
+     * Get product tier price for the customer, based on qty of this product
      *
      * @param   float $qty
      * @return  float|array

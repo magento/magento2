@@ -244,4 +244,19 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setGroupPrices(array $groupPrices = null);
+
+    /**
+     * Gets list of product tier prices
+     *
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null
+     */
+    public function getTierPrices();
+
+    /**
+     * Sets list of product tier prices
+     *
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
+     * @return $this
+     */
+    public function setTierPrices(array $tierPrices = null);
 }

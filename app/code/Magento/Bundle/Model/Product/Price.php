@@ -48,6 +48,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param PriceCurrencyInterface $priceCurrency
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Helper\Data $catalogData
      *
@@ -62,6 +63,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         PriceCurrencyInterface $priceCurrency,
         GroupManagementInterface $groupManagement,
         \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory,
+        \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Helper\Data $catalogData
     ) {
@@ -75,6 +77,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             $priceCurrency,
             $groupManagement,
             $groupPriceFactory,
+            $tierPriceFactory,
             $config
         );
     }
