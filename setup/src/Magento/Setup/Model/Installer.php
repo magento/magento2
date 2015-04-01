@@ -435,8 +435,7 @@ class Installer
         // reset object manager now that there is a deployment config
         $this->objectManagerProvider->reset();
     }
-
-
+    
     /**
      * Sets defaults if user input is missing
      *
@@ -457,8 +456,12 @@ class Installer
         if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS])) {
             $userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS] = 'SET NAMES utf8;';
         }
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PREFIX])) {
+            $userData[ConfigOptionsList::INPUT_KEY_DB_PREFIX] = '';
+        }
         return $userData;
     }
+
     /**
      * Set up setup_module table to register modules' versions, skip this process if it already exists
      *

@@ -65,7 +65,7 @@ class ConfigGenerator
     {
         $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
 
-        if (!$this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE)) {
+        if ($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE) === null) {
             $configData->set(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE, date('r'));
         }
         return $configData;
@@ -82,7 +82,7 @@ class ConfigGenerator
 
         $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
         if (isset($data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY])) {
-            if ($currentKey) {
+            if ($currentKey !== null) {
                 $key = $currentKey . "\n" . $data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY];
             } else {
                 $key = $data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY];
@@ -170,10 +170,11 @@ class ConfigGenerator
             }
         }
 
-        if ($this->deploymentConfig->get(
-                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_ACTIVE
-            ) === null
-        ) {
+        $currentStatus = $this->deploymentConfig->get(
+            ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_ACTIVE
+        );
+
+        if ($currentStatus === null) {
             $configData->set(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_ACTIVE, '1');
         }
 
@@ -189,7 +190,7 @@ class ConfigGenerator
     {
         $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
 
-        if (!$this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_RESOURCE_DEFAULT_SETUP)) {
+        if ($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_RESOURCE_DEFAULT_SETUP) === null) {
             $configData->set(ConfigOptionsList::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');
         }
 
