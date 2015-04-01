@@ -208,13 +208,7 @@ class Builder
         if ($metadata->getSequenceTable() == $this->getSequenceName()) {
             return;
         }
-        $this->data['sequence_table'] = $this->appResource->getTableName(
-            sprintf(
-                'sequence_%s_%s',
-                $this->data['entity_type'],
-                $this->data['store_id']
-            )
-        );
+        $this->data['sequence_table'] = $this->getSequenceName();
         $this->data['is_active'] = 1;
         $profile = $this->profileFactory->create(
             [
@@ -244,8 +238,11 @@ class Builder
             $this->resourceMetadata->save($metadata);
             $adapter = $this->appResource->getConnection('write');
             if (!$adapter->isTableExists($this->data['sequence_table'])) {
-                $this->appResource->getConnection('write')->query(
-                    $this->ddlSequence->getCreateSequenceDdl($this->data['sequence_table'], $this->data['start_value'])
+                $adapter->query(
+                    $this->ddlSequence->getCreateSequenceDdl(
+                        $this->data['sequence_table'],
+                        $this->data['start_value']
+                    )
                 );
             }
         } catch (Exception $e) {

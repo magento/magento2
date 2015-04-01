@@ -75,7 +75,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         );
         $this->meta = $this->getMock(
             'Magento\SalesSequence\Model\Meta',
-            ['getId', 'setData', 'save'],
+            ['getId', 'setData', 'save', 'getSequenceTable'],
             [],
             '',
             false
@@ -117,6 +117,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->profileFactory->expects($this->any())->method('create')->willReturn($this->profile);
+        $this->resourceMock->expects($this->atLeastOnce())
+            ->method('getTableName')
+            ->willReturn('sequence_lalalka_1');
+
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sequenceBuilder = $helper->getObject(
             'Magento\SalesSequence\Model\Builder',
@@ -139,9 +143,10 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->with($entityType, $storeId)
             ->willReturn($this->meta);
         $this->meta->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
-        $this->setExpectedException('Magento\Framework\Exception\AlreadyExistsException');
+            ->method('getSequenceTable')
+            ->willReturn('sequence_lalalka_1');
+        $this->profileFactory->expects($this->never())
+            ->method('create');
         $this->sequenceBuilder->setEntityType($entityType)
             ->setStoreId($storeId)
             ->setSuffix('SUFF')
@@ -168,7 +173,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->with($entityType, $storeId)
             ->willReturn($this->meta);
         $this->meta->expects($this->once())
-            ->method('getId')
+            ->method('getSequenceTable')
             ->willReturn(null);
         $this->profileFactory->expects($this->once())
             ->method('create')
@@ -216,6 +221,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     private function stepCreateSequence($sequenceName, $startNumber)
     {
         $sql = "some sql";
+        $this->resourceMock->expects($this->atLeastOnce())
+            ->method('getTableName');
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->with('write')
