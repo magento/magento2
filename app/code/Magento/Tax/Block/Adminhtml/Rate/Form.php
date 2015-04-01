@@ -166,7 +166,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
 
         $legend = $this->getShowLegend() ? __('Tax Rate Information') : '';
-        $fieldset = $form->addFieldset('base_fieldset', ['legend' => $legend]);
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => $legend, 'class' => 'form-inline']);
 
         if (isset($formData['tax_calculation_rate_id']) && $formData['tax_calculation_rate_id'] > 0) {
             $fieldset->addField(

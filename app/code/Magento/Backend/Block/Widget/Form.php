@@ -226,7 +226,6 @@ class Form extends \Magento\Backend\Block\Widget
                 $element->setCanBeEmpty(true);
                 break;
             case 'date':
-                $element->setImage($this->getViewFileUrl('images/grid-cal.png'));
                 $element->setDateFormat($this->_localeDate->getDateFormatWithLongYear());
                 break;
             case 'multiline':

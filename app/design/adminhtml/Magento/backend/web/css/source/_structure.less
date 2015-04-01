@@ -17,6 +17,7 @@
 @page-wrapper__background-color: @color-white;
 
 @page-content__padding-horizontal: @content__indent;
+@page-content__padding-vertical: @content__indent;
 
 @notices-wrapper__border-color: @color-gray83;
 
@@ -32,6 +33,8 @@ body {
 }
 
 .page-content {
+    .extend__clearfix();
+    padding-bottom: @page-content__padding-vertical;
     padding-left: @page-content__padding-horizontal;
     padding-right: @page-content__padding-horizontal;
 }
@@ -43,23 +46,17 @@ body {
     }
 }
 
-//
-//  Popups
-//  ---------------------------------------------
-
-@popup__background-color: @color-white;
-@popup__padding__horizontal: 3rem;
-@popup__padding__vertical: 3rem;
-
-@popup-title__color: @color-gray20;
-@popup-title__font-size: 2.4rem;
-
-@popup-close-icon__color: @color-brownie-vanilla;
-@popup-close-icon__hover__color: @color-gray68;
-@popup-close-icon__font: @icons-admin__font-name;
-@popup-close-icon__font-size: 2rem;
-@popup-close-icon__content: @icon-close-mage__content;
-@popup-close-icon__right: 3rem;
-@popup-close-icon__top: 3rem;
-
-@popup-overlay__background-color: rgba(0, 0, 0, .35);
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .page-layout-admin-2columns-left {
+        .page-columns {
+            #mix-grid .row();
+            .main-col {
+                #mix-grid .width(9,12);
+                float: right;
+            }
+            .side-col {
+                #mix-grid .column(3,12);
+            }
+        }
+    }
+}
