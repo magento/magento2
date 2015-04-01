@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="importExport" module="Magento_ImportExport" type="flat" entity_type="importexport_importdata" class="Magento\ImportExport\Test\Fixture\ImportExport">
     <dataset name="default">
         <field name="entity" xsi:type="string">Products</field>
