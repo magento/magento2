@@ -121,7 +121,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'period'    => 'month',
-                'table'     => 'report_viewed_product_aggregated_monthly',
+                'table'     => 'report_viewed_product_aggregated_yearly',
                 'date_from' => null,
                 'date_to'   => $dateNow,
             ],
