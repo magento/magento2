@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Model\Section;
+namespace Magento\Customer\Model\PrivateData\Section;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Helper\View;
@@ -12,7 +12,7 @@ use Magento\Customer\Helper\View;
 /**
  * Customer section
  */
-class Customer implements SectionInterface
+class Customer implements SectionSourceInterface
 {
     /**
      * @var CurrentCustomer

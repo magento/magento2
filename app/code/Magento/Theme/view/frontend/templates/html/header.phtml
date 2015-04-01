@@ -13,7 +13,7 @@
 <?php switch ($block->getShowPart()):
     case 'welcome': ?>
         <li class="greet welcome" data-bind="scope: 'welcome'">
-                <span data-bind="text: customer().username"></span>
+                <span data-bind="text: customer().username"><?php echo $block->getWelcome() ?></span>
         </li>
         <script type="text/x-magento-init">
         {

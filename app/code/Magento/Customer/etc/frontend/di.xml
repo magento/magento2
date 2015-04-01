@@ -28,8 +28,8 @@
                 <item name="/config/action/section" xsi:type="string">name</item>
             </argument>
             <argument name="fileName" xsi:type="string">sections.xml</argument>
-            <argument name="converter" xsi:type="object">Magento\Customer\Model\Section\Config\Converter</argument>
-            <argument name="schemaLocator" xsi:type="object">Magento\Customer\Model\Section\Config\SchemaLocator</argument>
+            <argument name="converter" xsi:type="object">Magento\Customer\Model\PrivateData\Section\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Customer\Model\PrivateData\Section\Config\SchemaLocator</argument>
             <argument name="defaultScope" xsi:type="string">frontend</argument>
         </arguments>
     </virtualType>
@@ -44,10 +44,12 @@
             <argument name="sectionConfig" xsi:type="object">SectionInvalidationConfigData</argument>
         </arguments>
     </type>
-    <type name="Magento\Customer\Model\Section\SectionPoolInterface">
+    <preference for="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface"
+                type="Magento\Customer\Model\PrivateData\Section\SectionPool"/>
+    <type name="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface">
         <arguments>
             <argument name="sectionMap" xsi:type="array">
-                <item name="customer" xsi:type="string">Magento\Customer\Model\Section\Customer</item>
+                <item name="customer" xsi:type="string">Magento\Customer\Model\PrivateData\Section\Customer</item>
             </argument>
         </arguments>
     </type>

@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Controller\Section;
 
-use Magento\Customer\Model\Section\SectionPoolInterface;
+use Magento\Customer\Model\PrivateData\Section\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\RedirectFactory;
@@ -62,14 +62,11 @@ class Load extends \Magento\Framework\App\Action\Action
         $resultJson = $this->resultJsonFactory->create();
         try {
             $sectionNames = $this->getRequest()->getParam('sections');
-            $sections = $sectionNames ? $this->sectionPool->getSections(\explode(',', $sectionNames))
-                : $this->sectionPool->getAllSections();
+            $sectionNames = $sectionNames ? \explode(',', $sectionNames) : null;
 
-            $response = [];
-            foreach ($sections as $sectionName => $section) {
-                $response[$sectionName] = $section->getData();
-            }
+            $response = $this->sectionPool->getSectionsData($sectionNames);
         } catch (LocalizedException $e) {
+            // TODO: MAGETWO-34824 replace on const
             $resultJson->setStatusHeader(400, \Zend\Http\AbstractMessage::VERSION_11, 'Bad request');
             $response = ['message' => $e->getMessage()];
         }

@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Model\Section\Config;
+namespace Magento\Customer\Model\PrivateData\Section\Config;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Customer\Model\Section\Config\Converter */
+    /** @var \Magento\Customer\Model\PrivateData\Section\Config\Converter */
     protected $converter;
 
     /** @var ObjectManagerHelper */
@@ -23,7 +23,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $this->source = new \DOMDocument();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->converter = $this->objectManagerHelper->getObject('Magento\Customer\Model\Section\Config\Converter');
+        $this->converter = $this->objectManagerHelper->getObject(
+            'Magento\Customer\Model\PrivateData\Section\Config\Converter'
+        );
     }
 
     public function testConvert()

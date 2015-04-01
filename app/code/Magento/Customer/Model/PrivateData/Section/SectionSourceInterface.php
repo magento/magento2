@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Model\Section;
+namespace Magento\Customer\Model\PrivateData\Section;
 
 /**
- * Section interface
+ * Section source interface
  */
-interface SectionInterface
+interface SectionSourceInterface
 {
     /**
      * Get data
