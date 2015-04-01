@@ -39,14 +39,18 @@ define([
                 dataOrigin = $.extend({}, dataOrigin, self._getElementData(element, 1));
                 if ($(element).is(':checked') || $(element).find(':checked').length) {
                     dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                } else {
+                    dataToAdd = dataOrigin;
                 }
             });
             $('[data-action="add-to-wishlist"]').each(function(index, element) {
                 var params = $(element).data('post');
                 if (!params)
                     params = {};
+
                 self._removeExcessiveData(params, dataOrigin, dataToAdd);
                 params.data = $.extend({}, params.data, dataToAdd, {'qty': $(self.options.qtyInfo).val()});
+
                 $(element).data('post', params);
             });
             event.stopPropagation();

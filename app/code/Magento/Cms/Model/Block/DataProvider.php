@@ -5,8 +5,8 @@
  */
 namespace Magento\Cms\Model\Block;
 
-use Magento\Cms\Model\Resource\Block\Grid\Collection;
-use Magento\Cms\Model\Resource\Block\Grid\CollectionFactory;
+use Magento\Cms\Model\Resource\Block\Collection;
+use Magento\Cms\Model\Resource\Block\CollectionFactory;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
 /**
