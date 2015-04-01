@@ -113,7 +113,6 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
         $shipping = ['shipping_service' => 'Flat Rate', 'shipping_method' => 'Fixed'];
         $actualPrices = [];
         //Assertion steps
-        $productName = $product->getName();
         $productCategory = $product->getCategoryIds()[0];
         $this->openCategory($productCategory);
         $actualPrices = $this->getCategoryPrices($product, $actualPrices);

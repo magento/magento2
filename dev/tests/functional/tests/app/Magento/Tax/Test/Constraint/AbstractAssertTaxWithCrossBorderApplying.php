@@ -96,7 +96,6 @@ abstract class AbstractAssertTaxWithCrossBorderApplying extends AbstractConstrai
         $prices = [];
         foreach ($customers as $customer) {
             $this->loginCustomer($customer);
-            $productName = $product->getName();
             $this->openCategory($product);
             $actualPrices = [];
             $actualPrices = $this->getCategoryPrice($product, $actualPrices);
