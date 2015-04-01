@@ -9,7 +9,6 @@
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?php echo $block->getViewFileUrl('prototype/windows/themes/default.css') ?>"/>
-<link rel="stylesheet" type="text/css" href="<?php echo $block->getViewFileUrl('Magento_Theme::prototype/magento.css') ?>"/>
 <link rel="stylesheet" type="text/css" href="<?php echo $block->getViewFileUrl('mage/translate-inline.css') ?>"/>
 
 <script id="translate-inline-icon" type="text/x-magento-template">
@@ -18,7 +17,8 @@
 <script id="translate-form-template" type="text/x-magento-template">
     <form id="<%- data.id %>">
         <% _.each(data.items, function(item, i) { %>
-            <div class="magento_table_container"><table cellspacing="0">
+            <div class="magento_table_container">
+                <table cellspacing="0" class="table">
                     <% _.each(item, function(value, index) { %>
                         <tr>
                             <th class="label" style="text-transform: capitalize;"><%- index %>:</th>

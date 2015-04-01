@@ -145,7 +145,8 @@ button {
     color: @button-primary__color;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, .25);
     &:hover,
-    &:active {
+    &:active,
+    &:focus {
         background-color: @button-primary__hover__background-color;
         border-color: @button-primary__hover__border-color;
         box-shadow: @button__hover__box-shadow;
@@ -171,7 +172,8 @@ button {
     color: @button-secondary__color;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
     &:hover,
-    &:active {
+    &:active,
+    &:focus {
         background-color: @button-secondary__hover__background-color;
         box-shadow: @button__hover__box-shadow;
         color: @button-secondary__color;
@@ -193,7 +195,8 @@ button {
     border-color: transparent;
     text-shadow: none;
     &:active,
-    &:hover {
+    &:hover,
+    &:focus {
         background-color: transparent;
         border-color: transparent;
         box-shadow: none;
@@ -203,7 +206,8 @@ button {
 .action-tertiary {
     color: @link__color;
     &:active,
-    &:hover {
+    &:hover,
+    &:focus {
         color: @link__hover__color;
         text-decoration: underline;
     }
@@ -212,7 +216,8 @@ button {
 .action-quaternary {
     color: @text__color;
     &:active,
-    &:hover {
+    &:hover,
+    &:focus {
         color: darken(@text__color, 10%);
     }
 }
