@@ -298,6 +298,8 @@ class Application
         );
         $objectManager->removeSharedInstance('Magento\Framework\Logger\Monolog');
         $objectManager->addSharedInstance($logger, 'Magento\Framework\Logger\Monolog');
+        $sequenceBuilder = $objectManager->get('\Magento\TestFramework\Db\Sequence\Builder');
+        $objectManager->addSharedInstance($sequenceBuilder, 'Magento\SalesSequence\Model\Builder');
 
         Helper\Bootstrap::setObjectManager($objectManager);
 
@@ -332,6 +334,9 @@ class Application
             $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
         );
         \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\RendererInterface'));
+        /** @var \Magento\TestFramework\Db\Sequence $sequence */
+        $sequence = $objectManager->get('Magento\TestFramework\Db\Sequence');
+        $sequence->generateSequences();
     }
 
     /**
@@ -426,8 +431,6 @@ class Application
         if (!$db->isDbDumpExists()) {
             $this->getDbInstance()->storeDbDump();
         }
-        $this->getDbInstance()->pregenerateSequences();
-
     }
 
     /**

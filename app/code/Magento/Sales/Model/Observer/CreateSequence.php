@@ -63,7 +63,8 @@ class CreateSequence
                 ->setStep($this->sequenceConfig->get('step'))
                 ->setWarningValue($this->sequenceConfig->get('warningValue'))
                 ->setMaxValue($this->sequenceConfig->get('maxValue'))
-                ->setEntityType($entityType)->create();
+                ->setEntityType($entityType)
+                ->create();
         }
         return $this;
     }

@@ -3,17 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSequence\Model;
+namespace Magento\TestFramework\Db\Sequence;
 
 use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\Resource\Meta as ResourceMetadata;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
+use Magento\SalesSequence\Model\ProfileFactory;
+use Magento\SalesSequence\Model\MetaFactory;
 
 /**
  * Class Builder
  */
-class Builder
+class Builder extends \Magento\SalesSequence\Model\Builder
 {
     /**
      * @var resourceMetadata
@@ -94,7 +96,6 @@ class Builder
         $this->ddlSequence = $ddlSequence;
         $this->data = array_flip($this->pattern);
     }
-
 
     /**
      * @param string $entityType
@@ -177,10 +178,25 @@ class Builder
     }
 
     /**
-     * Returns sequence table name
+     * Validate sequence before save
      *
-     * @return string
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @return void
      */
+    protected function validate()
+    {
+        $metadata = $this->resourceMetadata->loadByEntityTypeAndStore(
+            $this->data['entity_type'],
+            $this->data['store_id']
+        );
+        $adapter = $this->appResource->getConnection('write');
+        if ($metadata->getId() && !$adapter->isTableExists($this->getSequenceName())) {
+            throw new \Magento\Framework\Exception\AlreadyExistsException(
+                __('Sequence with this metadata already exists')
+            );
+        }
+    }
+
     protected function getSequenceName()
     {
         return $this->appResource->getTableName(
@@ -208,13 +224,8 @@ class Builder
         if ($metadata->getSequenceTable() == $this->getSequenceName()) {
             return;
         }
-        $this->data['sequence_table'] = $this->appResource->getTableName(
-            sprintf(
-                'sequence_%s_%s',
-                $this->data['entity_type'],
-                $this->data['store_id']
-            )
-        );
+
+        $this->data['sequence_table'] = $this->getSequenceName();
         $this->data['is_active'] = 1;
         $profile = $this->profileFactory->create(
             [
@@ -242,12 +253,6 @@ class Builder
         $metadata->setHasDataChanges(true);
         try {
             $this->resourceMetadata->save($metadata);
-            $adapter = $this->appResource->getConnection('write');
-            if (!$adapter->isTableExists($this->data['sequence_table'])) {
-                $this->appResource->getConnection('write')->query(
-                    $this->ddlSequence->getCreateSequenceDdl($this->data['sequence_table'], $this->data['start_value'])
-                );
-            }
         } catch (Exception $e) {
             $this->resourceMetadata->delete($metadata);
             throw $e;

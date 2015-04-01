@@ -95,19 +95,6 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      * {@inheritdoc}
      * @throws \LogicException
      */
-    public function pregenerateSequences()
-    {
-        $dump = rtrim(dirname(dirname($this->_varPath)), '\\/') . '/sequences.sql';
-        $this->_shell->execute(
-            'mysql --defaults-extra-file=%s --host=%s %s < %s',
-            [$this->_defaultsExtraFile, $this->_host, $this->_schema, $dump]
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     * @throws \LogicException
-     */
     public function restoreFromDbDump()
     {
         $this->ensureDefaultsExtraFile();
