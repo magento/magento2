@@ -39,7 +39,7 @@ class AdminAuthLogin extends Page
      *
      * @var string
      */
-    protected $messagesBlock = '.messages .message';
+    protected $messagesBlock = '.messages';
 
     /**
      * Constructor.

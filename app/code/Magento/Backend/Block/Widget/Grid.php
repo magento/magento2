@@ -391,6 +391,10 @@ class Grid extends \Magento\Backend\Block\Widget
      */
     protected function _prepareGrid()
     {
+        $this->_eventManager->dispatch(
+            'backend_block_widget_grid_prepare_grid_before',
+            ['grid' => $this, 'collection' => $this->getCollection()]
+        );
         if ($this->getChildBlock('grid.massaction') && $this->getChildBlock('grid.massaction')->isAvailable()) {
             $this->getChildBlock('grid.massaction')->prepareMassactionColumn();
         }
