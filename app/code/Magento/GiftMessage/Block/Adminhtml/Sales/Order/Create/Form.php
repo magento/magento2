@@ -47,6 +47,6 @@ class Form extends \Magento\Backend\Block\Template
     public function canDisplayGiftmessageForm()
     {
         $quote = $this->_sessionQuote->getQuote();
-        return $this->_messageHelper->getIsMessagesAvailable('items', $quote, $quote->getStore());
+        return $this->_messageHelper->isMessagesAllowed('items', $quote, $quote->getStore());
     }
 }

@@ -191,7 +191,7 @@ class Menu extends \Magento\Backend\Block\Template
         $output = ($this->_isItemActive(
             $menuItem,
             $level
-        ) ? '_active' : '') .
+        ) ? '_current _active' : '') .
             ' ' .
             ($menuItem->hasChildren() ? 'parent' : '') .
             ' ' .

@@ -51,27 +51,19 @@ abstract class Entity extends AbstractDb
     protected $salesIncrement;
 
     /**
-     * @var \Magento\Sales\Model\Resource\GridInterface
-     */
-    protected $gridAggregator;
-
-    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param string|null $resourcePrefix
-     * @param GridInterface|null $gridAggregator
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\Sales\Model\Increment $salesIncrement,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
+        $resourcePrefix = null
     ) {
         $this->attribute = $attribute;
         $this->salesIncrement = $salesIncrement;
-        $this->gridAggregator = $gridAggregator;
         parent::__construct($context, $resourcePrefix);
     }
 
@@ -87,6 +79,24 @@ abstract class Entity extends AbstractDb
     {
         $this->attribute->saveAttribute($object, $attribute);
         return $this;
+    }
+
+    /**
+     * Prepares data for saving and removes update time (if exists).
+     * This prevents saving same update time on each entity update.
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return array
+     */
+    protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $data = parent::_prepareDataForTable($object, $this->getMainTable());
+
+        if (isset($data['updated_at'])) {
+            unset($data['updated_at']);
+        }
+
+        return $data;
     }
 
     /**
@@ -127,10 +137,6 @@ abstract class Entity extends AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($this->gridAggregator) {
-            $this->gridAggregator->refresh($object->getId());
-        }
-
         $adapter = $this->_getReadAdapter();
         $columns = $adapter->describeTable($this->getMainTable());
 
@@ -158,9 +164,6 @@ abstract class Entity extends AbstractDb
      */
     protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($this->gridAggregator) {
-            $this->gridAggregator->purge($object->getId());
-        }
         parent::_afterDelete($object);
         return $this;
     }
