@@ -71,8 +71,8 @@ class Price
     protected $_groupManagement;
 
     /**
- * @var \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory
- */
+     * @var \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory
+     */
     protected $groupPriceFactory;
 
     /**
@@ -96,6 +96,8 @@ class Price
      * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
