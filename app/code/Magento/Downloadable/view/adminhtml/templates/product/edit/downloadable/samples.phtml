@@ -15,48 +15,46 @@
 $_product = $block->getProduct();
 $block->getConfigJson();
 ?>
-<div class="admin__scope">
-    <fieldset class="admin__fieldset  downloadable-form">
-        <div class="admin__field"<?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
-            <label class="admin__field-label" for="downloadable_samples_title"><span><?php echo __('Title')?></span></label>
-            <div class="admin__field-control">
-                <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?php echo $block->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
-                <?php if ($_product->getStoreId()): ?>
-                    <div class="admin__field admin__field-option">
-                        <input id="sample_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
-                        <label class="admin__field-label" for="sample_title_default"><span>Use Default Value</span></label>
-                    </div>
-                <?php endif; ?>
+<fieldset class="admin__fieldset downloadable-form">
+    <div class="admin__field"<?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
+        <label class="admin__field-label" for="downloadable_samples_title"><span><?php echo __('Title')?></span></label>
+        <div class="admin__field-control">
+            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?php echo $block->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <?php if ($_product->getStoreId()): ?>
+                <div class="admin__field admin__field-option">
+                    <input id="sample_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
+                    <label class="admin__field-label" for="sample_title_default"><span>Use Default Value</span></label>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="admin__field admin__field-wide">
+        <div class="admin__field-control">
+            <div class="admin__control-table-wrapper">
+                <table cellspacing="0" class="admin__control-table">
+                    <thead>
+                        <tr>
+                            <th class="_required col-title"><span><?php echo __('Title') ?></span></th>
+                            <th class="col-file"><span><?php echo __('File') ?></span></th>
+                            <th class="col-sort"><span><?php echo __('Sort Order') ?></span></th>
+                            <th class="col-actions">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="col-actions"><?php echo $block->getAddButtonHtml() ?></td>
+                        </tr>
+                    </tfoot>
+                    <tbody id="sample_items_body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="admin__field-note">
+                <span><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
             </div>
         </div>
-        <div class="admin__field admin__field-wide">
-            <div class="admin__field-control">
-                <div class="admin__control-table-wrapper">
-                    <table cellspacing="0" class="admin__control-table">
-                        <thead>
-                            <tr>
-                                <th class="_required col-title"><span><?php echo __('Title') ?></span></th>
-                                <th class="col-file"><span><?php echo __('File') ?></span></th>
-                                <th class="col-sort"><span><?php echo __('Sort Order') ?></span></th>
-                                <th class="col-actions">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <td colspan="4" class="col-actions"><?php echo $block->getAddButtonHtml() ?></td>
-                            </tr>
-                        </tfoot>
-                        <tbody id="sample_items_body">
-                        </tbody>
-                    </table>
-                </div>
-                <div class="admin__field-note">
-                    <span><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
-                </div>
-            </div>
-        </div>
-    </fieldset>
-</div>
+    </div>
+</fieldset>
 <script>
 require([
     'jquery',

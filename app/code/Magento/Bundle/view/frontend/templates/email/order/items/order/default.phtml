@@ -14,7 +14,7 @@
 <?php $parentItem = $block->getItem() ?>
 <?php $items = array_merge([$parentItem], $parentItem->getChildrenItems()); ?>
 
-<?php if ($block->getItemOptions() || $_item->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
+<?php if ($block->getItemOptions() || $_item->getDescription() || $this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order_item', $_item) && $_item->getGiftMessageId()): ?>
     <?php $_showlastRow = true ?>
 <?php else: ?>
     <?php $_showlastRow = false ?>

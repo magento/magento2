@@ -95,10 +95,6 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
                     dateFormat: "' .
             $format .
             '",
-                    buttonImage: "' .
-            $this->getViewFileUrl(
-                'images/grid-cal.png'
-            ) . '",
                         buttonText: "' . $this->escapeHtml(__('Date selector')) .
             '",
                     from: {
