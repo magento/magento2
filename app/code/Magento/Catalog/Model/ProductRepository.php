@@ -534,7 +534,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             ->toNestedArray($product, [], 'Magento\Catalog\Api\Data\ProductInterface');
 
         $productLinks = null;
-        if (!$ignoreLinksFlag) {
+        if (!$ignoreLinksFlag && !is_null($ignoreLinksFlag)) {
             $productLinks = $product->getProductLinks();
         }
 
