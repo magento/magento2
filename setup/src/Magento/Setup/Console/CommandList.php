@@ -41,6 +41,7 @@ class CommandList
     {
         return [
             'Magento\Setup\Console\Command\ConfigSetCommand',
+            'Magento\Setup\Console\Command\DbStatusCommand',
         ];
     }
 

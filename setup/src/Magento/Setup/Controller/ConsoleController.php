@@ -41,7 +41,6 @@ class ConsoleController extends AbstractActionController
     const CMD_INSTALL_USER_CONFIG = 'install-user-configuration';
     const CMD_INSTALL_ADMIN_USER = 'install-admin-user';
     const CMD_UPDATE = 'update';
-    const CMD_DB_STATUS = 'db-status';
     const CMD_UNINSTALL = 'uninstall';
     const CMD_MAINTENANCE = 'maintenance';
     const CMD_MODULE_ENABLE = 'module-enable';
@@ -66,7 +65,6 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_USER_CONFIG => 'installUserConfig',
         self::CMD_INSTALL_ADMIN_USER => 'installAdminUser',
         self::CMD_UPDATE => 'update',
-        self::CMD_DB_STATUS => 'dbStatus',
         self::CMD_UNINSTALL => 'uninstall',
         self::CMD_MAINTENANCE => 'maintenance',
         self::CMD_MODULE_ENABLE => 'module',
@@ -85,7 +83,6 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_USER_CONFIG,
         self::CMD_INSTALL_ADMIN_USER,
         self::CMD_UPDATE,
-        self::CMD_DB_STATUS,
         self::CMD_UNINSTALL,
         self::CMD_MAINTENANCE,
         self::CMD_MODULE_ENABLE,
@@ -225,12 +222,6 @@ class ConsoleController extends AbstractActionController
                 'usage' => '',
                 'usage_short' => self::CMD_UPDATE,
                 'usage_desc' => 'Update database schema and data',
-            ],
-            self::CMD_DB_STATUS => [
-                'route' => self::CMD_DB_STATUS,
-                'usage' => '',
-                'usage_short' => self::CMD_DB_STATUS,
-                'usage_desc' => 'Check if update of DB schema or data is required',
             ],
             self::CMD_UNINSTALL => [
                 'route' => self::CMD_UNINSTALL,
@@ -390,51 +381,6 @@ class ConsoleController extends AbstractActionController
         $this->installer->updateModulesSequence();
         $this->installer->installSchema();
         $this->installer->installDataFixtures();
-    }
-
-    /**
-     * Checks if DB schema or data upgrade is required
-     *
-     * @return void
-     */
-    public function dbStatusAction()
-    {
-        /** @var DbVersionInfo $dbVersionInfo */
-        $dbVersionInfo = $this->objectManagerProvider->get()
-            ->get('Magento\Framework\Module\DbVersionInfo');
-        $outdated = $dbVersionInfo->getDbVersionErrors();
-        if (!empty($outdated)) {
-            $this->log->log("The module code base doesn't match the DB schema and data.");
-            $versionParser = new VersionParser();
-            $codebaseUpdateNeeded = false;
-            foreach ($outdated as $row) {
-                if (!$codebaseUpdateNeeded && $row[DbVersionInfo::KEY_CURRENT] !== 'none') {
-                    // check if module code base update is needed
-                    $currentVersion = $versionParser->parseConstraints($row[DbVersionInfo::KEY_CURRENT]);
-                    $requiredVersion = $versionParser->parseConstraints('>' . $row[DbVersionInfo::KEY_REQUIRED]);
-                    if ($requiredVersion->matches($currentVersion)) {
-                        $codebaseUpdateNeeded = true;
-                    };
-                }
-                $this->log->log(sprintf(
-                    "%20s %10s: %11s  ->  %-11s",
-                    $row[DbVersionInfo::KEY_MODULE],
-                    $row[DbVersionInfo::KEY_TYPE],
-                    $row[DbVersionInfo::KEY_CURRENT],
-                    $row[DbVersionInfo::KEY_REQUIRED]
-                ));
-            }
-            if ($codebaseUpdateNeeded) {
-                $this->log->log(
-                    'Some modules use code versions newer or older than the database. ' .
-                    'First update the module code, then run the "Update" command.'
-                );
-            } else {
-                $this->log->log('Run the "Update" command to update your DB schema and data');
-            }
-        } else {
-            $this->log->log('All modules are up to date');
-        }
     }
 
     /**
