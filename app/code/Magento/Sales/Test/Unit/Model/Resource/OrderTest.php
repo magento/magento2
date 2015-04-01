@@ -40,10 +40,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $salesIncrementMock;
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Grid|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $gridAggregatorMock;
-    /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderMock;
@@ -96,7 +92,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
         $this->stateHandlerMock = $this->getMock('Magento\Sales\Model\Resource\Order\Handler\State', [], [], '', false);
         $this->salesIncrementMock = $this->getMock('Magento\Sales\Model\Increment', [], [], '', false);
-        $this->gridAggregatorMock = $this->getMock('Magento\Sales\Model\Resource\Order\Grid', [], [], '', false);
         $this->orderMock = $this->getMock(
             'Magento\Sales\Model\Order',
             [],
@@ -154,8 +149,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             $this->attributeMock,
             $this->salesIncrementMock,
             $this->addressHandlerMock,
-            $this->stateHandlerMock,
-            $this->gridAggregatorMock
+            $this->stateHandlerMock
         );
     }
 

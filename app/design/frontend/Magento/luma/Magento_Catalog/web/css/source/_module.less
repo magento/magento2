@@ -256,6 +256,39 @@
                 .css(margin-top, @indent__xs);
             }
         }
+
+    }
+    .fieldset-product-options-inner {
+        .legend {
+            border: none;
+            .css(font-weight, @font-weight__semibold);
+            display: inline-block;
+            .font-size(14px);
+            float: none;
+            padding: 0;
+            margin: 0 0 8px;
+        }
+        &.required {
+            .legend {
+                &:after {
+                    content: '*';
+                    .typography(
+                    @_font-size: @form-field-label-asterisk__font-size,
+                    @_color: @form-field-label-asterisk__color,
+                    @_font-family: @form-field-label-asterisk__font-family,
+                    @_font-weight: @form-field-label-asterisk__font-weight,
+                    @_line-height: @form-field-label-asterisk__line-height,
+                    @_font-style: @form-field-label-asterisk__font-style
+                    );
+                    .css(margin, @form-field-label-asterisk__margin);
+                }
+            }
+        }
+        .datetime-picker {
+            + .time-picker {
+                .css(margin-left, @indent__xs);
+            }
+        }
     }
 }
 
