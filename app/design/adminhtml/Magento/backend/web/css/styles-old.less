@@ -52,10 +52,14 @@ input.no-display,
         display: none;
     }
 
-    .field.required > .label:after {
-        content: '*';
-        color: red;
-        margin-left: 3px;
+    .field.required > .label {
+        &:not(.admin__field-label) {
+            :after {
+                content: '*';
+                color: red;
+                margin-left: 3px;
+            }
+        }
     }
 
     //
@@ -176,8 +180,6 @@ input.no-display,
         margin: 0;
         float: left;
         width: 55%;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
         box-sizing: border-box;
     }
 
@@ -977,9 +979,16 @@ input.no-display,
         width: 20%;
         padding-top: 8px;
         padding-right: 30px;
+        &.admin__field-label {
+            padding-top: 0;
+            padding-right: 30px;
+            width: 20%;
+            margin-left: 0;
+        }
     }
 
     .form-inline .label ~ .control {
+        margin: 0;
         width: 60%;
     }
 

@@ -13,15 +13,15 @@
 ?>
 <?php if ($block->displayBoth()):?>
 <tr class="row-totals">
-    <td style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <?php echo __('Subtotal (Excl. Tax)') ?>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="amount">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <?php echo $block->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
 <tr class="row-totals">
-    <td style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <?php echo __('Subtotal (Incl. Tax)') ?>
     </td>
     <td style="<?php echo $block->getStyle() ?>" class="amount">
@@ -30,10 +30,10 @@
 </tr>
 <?php else : ?>
 <tr class="row-totals">
-    <td style="<?php echo $block->getStyle() ?>" class="mark" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <?php echo $block->getTotal()->getTitle() ?>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="amount">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <?php echo $block->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>

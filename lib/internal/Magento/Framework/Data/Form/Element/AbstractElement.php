@@ -449,7 +449,7 @@ abstract class AbstractElement extends AbstractForm
     public function getHtml()
     {
         if ($this->getRequired()) {
-            $this->addClass('required-entry');
+            $this->addClass('required-entry _required');
         }
         if ($this->_renderer) {
             $html = $this->_renderer->render($this);
