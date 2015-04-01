@@ -683,7 +683,7 @@ class Item extends AbstractModel implements ItemInterface
     }
 
     /**
-     *Remove option from item options
+     * Remove option from item options
      *
      * @param string $code
      * @return $this
