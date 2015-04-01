@@ -31,6 +31,7 @@ class CreateTermEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     // TODO: Move set up configuration to "__prepare" method after fix bug MAGETWO-29331
