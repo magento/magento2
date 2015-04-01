@@ -12,9 +12,10 @@ define(
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/action/place-order',
         'Magento_Checkout/js/model/review',
+        'Magento_Checkout/js/view/columns',
         'Magento_Catalog/js/price-utils'
     ],
-    function (Component, quote, url, navigator, orderAction, review, priceUtils) {
+    function (Component, quote, url, navigator, orderAction, review, columns, priceUtils) {
         var stepName = 'review';
         var itemsBefore = [];
         var itemsAfter = [];
@@ -26,8 +27,19 @@ define(
             quoteHasPaymentMethod: quote.getPaymentMethod(),
             itemsBefore: itemsBefore,
             itemsAfter: itemsAfter,
+
+            initProperties: function () {
+                this._super();
+
+                this.regions = ['columns'];
+
+                return this;
+            },
             getItems: function() {
                 return quote.getItems();
+            },
+            getColHeaders: function() {
+                return ['name', 'price', 'qty', 'subtotal'];
             },
             getAgreementsTemplate: function() {},
             isVisible: navigator.isStepVisible(stepName),

@@ -23,20 +23,23 @@
                 <table class="data table table-order-review items" id="checkout-review-table">
                     <caption class="table-caption">Order Review</caption>
                     <thead>
-                    <tr>
-                        <th class="col item" scope="col">Product Name</th>
-                        <th class="col price" scope="col">Price</th>
-                        <th class="col qty" scope="col">Qty</th>
-                        <th class="col subtotal" scope="col">Subtotal</th>
-                    </tr>
+                        <tr data-bind="foreach: { data: getColHeaders() } ">
+                            <th data-bind="text: $data"></th>
+                        </tr>
                     </thead>
                     <tbody>
                     <!-- ko foreach: { data: getItems(), as: 'item' } -->
-                        <!-- ko template: 'Magento_Checkout/review/item' --><!-- /ko -->
+                    <tr>
+                        <!-- ko foreach: $parent.columns -->
+                            <!-- ko foreach: { data: elems, as: 'column' } -->
+                                <!-- ko template: column.getTemplate() --><!-- /ko -->
+                            <!--/ko-->
+                        <!-- /ko -->
+                    </tr>
                     <!-- /ko -->
                     </tbody>
                     <tfoot>
-                        <!-- ko template: 'Magento_Checkout/review/totals' --><!-- /ko -->
+                    <!-- ko template: 'Magento_Checkout/review/totals' --><!-- /ko -->
                     </tfoot>
                 </table>
             </div>

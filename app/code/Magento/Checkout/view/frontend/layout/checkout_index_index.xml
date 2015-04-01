@@ -51,6 +51,15 @@
                                                 <item name="review" xsi:type="array">
                                                     <item name="component" xsi:type="string">Magento_Checkout/js/view/review</item>
                                                     <item name="children" xsi:type="array">
+                                                        <item name="columns" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Magento_Checkout/js/view/columns</item>
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="name" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/name</item></item>
+                                                                <item name="price" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/price</item></item>
+                                                                <item name="qty" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/qty</item></item>
+                                                                <item name="subtotal" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/subtotal</item></item>
+                                                            </item>
+                                                        </item>
                                                         <item name="totals" xsi:type="array">
                                                             <item name="component" xsi:type="string">Magento_Checkout/js/view/totals</item>
                                                         </item>
