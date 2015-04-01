@@ -45,7 +45,7 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
         }
 
         $backendSession->setRates($rates);
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -53,7 +53,7 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*/');

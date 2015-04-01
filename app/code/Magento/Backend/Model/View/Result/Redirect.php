@@ -49,7 +49,7 @@ class Redirect extends \Magento\Framework\Controller\Result\Redirect
      */
     public function setRefererOrBaseUrl()
     {
-        $this->url = $this->redirect->getRedirectUrl($this->urlBuilder->getUrl('adminhtml/index'));
+        $this->url = $this->redirect->getRedirectUrl($this->urlBuilder->getUrl($this->urlBuilder->getStartupPageUrl()));
         return $this;
     }
 

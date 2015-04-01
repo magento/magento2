@@ -27,7 +27,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
 
         $this->_initRole()->delete();
         $this->messageManager->addSuccess(__('You deleted the role.'));
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -35,7 +35,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User\Role
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath("*/*/");

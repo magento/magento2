@@ -36,9 +36,12 @@ interface ActionInterface
     public function getResponse();
 
     /**
-     * Get default redirect object
+     * Get default result object
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * Method is invoked to return default result of action execution within controllers.
+     * Can be used to generate 'execute' method result in action controllers.
+     *
+     * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function getDefaultRedirect();
+    public function getDefaultResult();
 }

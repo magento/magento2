@@ -24,7 +24,7 @@ class Delete extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping
         }
         $this->messageManager->addSuccess(__('Attribute set mapping was deleted'));
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -32,7 +32,7 @@ class Delete extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*/index', ['store' => $this->_getStore()->getId()]);

@@ -60,7 +60,7 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
             $this->messageManager->addError(__('Please select item(s).'));
         }
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -68,7 +68,7 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath(static::REDIRECT_URL);

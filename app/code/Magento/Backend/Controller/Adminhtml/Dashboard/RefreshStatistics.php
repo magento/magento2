@@ -36,7 +36,7 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
         }
         $this->messageManager->addSuccess(__('We updated lifetime statistic.'));
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -44,7 +44,7 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('*/*');

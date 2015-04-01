@@ -29,7 +29,7 @@ class Delete extends \Magento\Review\Controller\Adminhtml\Product
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('review/*/edit/', ['id' => $this->getRequest()->getParam('id', false)]);

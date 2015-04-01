@@ -36,7 +36,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
             $this->messageManager->addSuccess(__("%1 cache type(s) disabled.", $updatedTypes));
         }
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -44,7 +44,7 @@ class MassDisable extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*');

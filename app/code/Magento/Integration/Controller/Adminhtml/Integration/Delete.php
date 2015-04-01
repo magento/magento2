@@ -29,7 +29,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
                         $this->escaper->escapeHtml($integrationData[Info::DATA_NAME])
                     )
                 );
-                return $this->getDefaultRedirect();
+                return $this->getDefaultResult();
             }
             $integrationData = $this->_integrationService->delete($integrationId);
             if (!$integrationData[Info::DATA_ID]) {
@@ -51,7 +51,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->messageManager->addError(__('Integration ID is not specified or is invalid.'));
         }
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -59,7 +59,7 @@ class Delete extends \Magento\Integration\Controller\Adminhtml\Integration
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('*/*/');

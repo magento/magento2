@@ -6,8 +6,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Cache;
 
-use Magento\Framework\Exception\LocalizedException;
-
 class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
 {
     /**
@@ -33,7 +31,7 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
             $this->messageManager->addSuccess(__("%1 cache type(s) refreshed.", $updatedTypes));
         }
 
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -41,7 +39,7 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath('adminhtml/*');

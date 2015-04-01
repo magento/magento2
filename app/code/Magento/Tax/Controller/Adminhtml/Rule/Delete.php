@@ -24,7 +24,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
             $this->_redirect('tax/*/');
             return;
         }
-        return $this->getDefaultRedirect();
+        return $this->getDefaultResult();
     }
 
     /**
@@ -32,7 +32,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function getDefaultRedirect()
+    public function getDefaultResult()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));

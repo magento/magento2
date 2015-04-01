@@ -194,7 +194,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(
                 new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase($message))
             );
-        $controllerInstance->expects($this->once())->method('getDefaultRedirect')->willReturn($this->resultRedirect);
+        $controllerInstance->expects($this->once())->method('getDefaultResult')->willReturn($this->resultRedirect);
 
         $this->router->expects($this->once())
             ->method('match')
@@ -238,7 +238,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch')
             ->with($this->request)
             ->willThrowException(new \Exception(new \Magento\Framework\Phrase($exceptionMessage)));
-        $controllerInstance->expects($this->once())->method('getDefaultRedirect')->willReturn($this->resultRedirect);
+        $controllerInstance->expects($this->once())->method('getDefaultResult')->willReturn($this->resultRedirect);
 
         $this->router->expects($this->once())
             ->method('match')
