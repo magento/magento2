@@ -13,43 +13,28 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class AllowedIpsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
-
-    /**
      * @var \Magento\Developer\Model\Config\Backend\AllowedIps
      */
     protected $model;
 
-    /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $contextMock;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $eventMangerMock;
-
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('\Magento\Framework\Model\Context')
+        $contextMock = $this->getMockBuilder('\Magento\Framework\Model\Context')
             ->disableOriginalConstructor()
             ->getMock();
         $eventMangerMock = $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock->expects($this->any())
+        $contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->willReturn($eventMangerMock);
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->model = $this->objectManagerHelper->getObject(
+        $this->model = $objectManagerHelper->getObject(
             'Magento\Developer\Model\Config\Backend\AllowedIps',
             [
-                'context' => $this->contextMock,
+                'context' => $contextMock,
             ]
         );
     }
