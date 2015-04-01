@@ -6,7 +6,7 @@
 /*global alert*/
 define(
     [
-        'Magento_Ui/js/form/component',
+        'uiComponent',
         '../model/quote',
         'mage/url',
         'Magento_Checkout/js/model/step-navigator',

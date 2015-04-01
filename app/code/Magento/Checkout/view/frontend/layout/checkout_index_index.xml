@@ -11,58 +11,45 @@
             <block class="Magento\Checkout\Block\Checkout" name="checkout.root" template="checkout.phtml" cacheable="false">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
-                        <item name="renderer" xsi:type="array">
-                            <item name="types" xsi:type="array" />
-                            <item name="layout" xsi:type="array">
-                                <item name="checkout" xsi:type="array">
-                                    <item name="component" xsi:type="string">Magento_Ui/js/form/component</item>
-                                    <item name="children" xsi:type="array">
-                                        <item name="errors" xsi:type="array"><item name="component" xsi:type="string">Magento_Ui/js/view/errors</item></item>
-                                        <!--<item name="progress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/progress</item></item>-->
-                                        <item name="steps" xsi:type="array">
-                                            <item name="component" xsi:type="string">Magento_Ui/js/form/component</item>
-                                            <item name="children" xsi:type="array">
-                                                <item name="authentication" xsi:type="array">
-                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item>
-                                                </item>
-                                                <item name="billingAddress" xsi:type="array">
-                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item>
-                                                </item>
-                                                <item name="shippingAddress" xsi:type="array">
-                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item>
-                                                    <item name="children" xsi:type="array">
-                                                        <item name="firstName" xsi:type="array">
-                                                            <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
-                                                            <item name="config" xsi:type="array">
-                                                                <item name="label" xsi:type="string">First name</item>
-                                                                <item name="validation" xsi:type="array">
-                                                                    <item name="required-entry" xsi:type="string">true</item>
-                                                                </item>
-                                                            </item>
+                        <item name="types" xsi:type="array" />
+                        <item name="components" xsi:type="array">
+                            <item name="checkout" xsi:type="array">
+                                <item name="component" xsi:type="string">uiComponent</item>
+                                <item name="children" xsi:type="array">
+                                    <item name="errors" xsi:type="array"><item name="component" xsi:type="string">Magento_Ui/js/view/errors</item></item>
+                                    <!--<item name="progress" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/progress</item></item>-->
+                                    <item name="steps" xsi:type="array">
+                                        <item name="component" xsi:type="string">uiComponent</item>
+                                        <item name="children" xsi:type="array">
+                                            <item name="authentication" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item>
+                                            </item>
+                                            <item name="billingAddress" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item>
+                                            </item>
+                                            <item name="shippingAddress" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item>
+                                            </item>
+                                            <item name="shipping" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item>
+                                            </item>
+                                            <item name="payment" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
+                                            </item>
+                                            <item name="review" xsi:type="array">
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/review</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="columns" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/columns</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <item name="name" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/name</item></item>
+                                                            <item name="price" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/price</item></item>
+                                                            <item name="qty" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/qty</item></item>
+                                                            <item name="subtotal" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/subtotal</item></item>
                                                         </item>
                                                     </item>
-                                                </item>
-                                                <item name="shipping" xsi:type="array">
-                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item>
-                                                </item>
-                                                <item name="payment" xsi:type="array">
-                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
-                                                </item>
-                                                <item name="review" xsi:type="array">
-                                                    <item name="component" xsi:type="string">Magento_Checkout/js/view/review</item>
-                                                    <item name="children" xsi:type="array">
-                                                        <item name="columns" xsi:type="array">
-                                                            <item name="component" xsi:type="string">Magento_Checkout/js/view/columns</item>
-                                                            <item name="children" xsi:type="array">
-                                                                <item name="name" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/name</item></item>
-                                                                <item name="price" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/price</item></item>
-                                                                <item name="qty" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/qty</item></item>
-                                                                <item name="subtotal" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/review/item/columns/subtotal</item></item>
-                                                            </item>
-                                                        </item>
-                                                        <item name="totals" xsi:type="array">
-                                                            <item name="component" xsi:type="string">Magento_Checkout/js/view/totals</item>
-                                                        </item>
+                                                    <item name="totals" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/totals</item>
                                                     </item>
                                                 </item>
                                             </item>

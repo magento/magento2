@@ -29,7 +29,7 @@ define(
 );
 */
 
-define(['Magento_Ui/js/form/component', '../model/errorlist'], function (Component, errors) {
+define(['uiComponent', '../model/errorlist'], function (Component, errors) {
     return Component.extend({
         errorList: errors.getAll(),
         defaults: {

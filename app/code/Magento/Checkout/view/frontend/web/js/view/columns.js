@@ -8,7 +8,7 @@
 /*global alert*/
 define(
     [
-        'Magento_Ui/js/form/component',
+        'uiComponent',
         '../model/quote'
     ],
     function (Component, quote) {

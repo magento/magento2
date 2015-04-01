@@ -7,7 +7,7 @@
 define(
     [
         'jquery',
-        'Magento_Ui/js/form/component',
+        'uiComponent',
         '../model/quote',
         '../model/shipping-service',
         '../action/select-shipping-method',

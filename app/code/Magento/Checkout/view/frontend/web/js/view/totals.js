@@ -6,7 +6,7 @@
 /*global alert*/
 define(
     [
-        'Magento_Ui/js/form/component'
+        'uiComponent'
     ],
     function (Component) {
         return Component.extend({

@@ -6,7 +6,7 @@
 /*global alert*/
 define(
     [
-        'Magento_Ui/js/form/component',
+        'uiComponent',
         'ko',
         'Magento_Checkout/js/action/select-shipping-address',
         'Magento_Customer/js/model/customer',

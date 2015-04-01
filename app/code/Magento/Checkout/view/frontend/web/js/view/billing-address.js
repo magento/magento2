@@ -6,7 +6,7 @@
 /*global define*/
 define(
     [
-        'Magento_Ui/js/form/component',
+        'uiComponent',
         'Magento_Customer/js/model/customer',
         '../action/select-billing-address',
         'Magento_Checkout/js/model/step-navigator',

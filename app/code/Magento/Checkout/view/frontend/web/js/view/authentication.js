@@ -7,7 +7,7 @@
 define(
     [
         'ko',
-        'Magento_Ui/js/form/component',
+        'uiComponent',
         'Magento_Customer/js/action/login',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/step-navigator'

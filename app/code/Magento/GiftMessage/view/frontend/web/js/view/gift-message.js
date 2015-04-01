@@ -6,7 +6,7 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-define(['Magento_Ui/js/form/component'],
+define(['uiComponent'],
     function (Component) {
         return Component.extend({
             defaults: {

@@ -10,25 +10,23 @@
         <referenceBlock name="checkout.root">
             <arguments>
                 <argument name="jsLayout" xsi:type="array">
-                    <item name="renderer" xsi:type="array">
-                        <item name="layout" xsi:type="array">
-                            <item name="checkout" xsi:type="array">
-                                <item name="children" xsi:type="array">
-                                    <item name="steps" xsi:type="array">
-                                        <item name="children" xsi:type="array">
-                                            <item name="review" xsi:type="array">
-                                                <item name="children" xsi:type="array">
-                                                    <item name="totals" xsi:type="array">
-                                                        <item name="children" xsi:type="array">
-                                                            <item name="subtotal" xsi:type="array">
-                                                                <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/subtotal</item>
-                                                            </item>
-                                                            <item name="shipping" xsi:type="array">
-                                                                <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/shipping</item>
-                                                            </item>
-                                                            <item name="grandtotal" xsi:type="array">
-                                                                <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/grandtotal</item>
-                                                            </item>
+                    <item name="components" xsi:type="array">
+                        <item name="checkout" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="steps" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="review" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="totals" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="subtotal" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/subtotal</item>
+                                                        </item>
+                                                        <item name="shipping" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/shipping</item>
+                                                        </item>
+                                                        <item name="grandtotal" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/grandtotal</item>
                                                         </item>
                                                     </item>
                                                 </item>
