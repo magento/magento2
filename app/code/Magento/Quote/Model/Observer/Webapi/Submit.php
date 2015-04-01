@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Observer\Webapi;
+
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 class Submit

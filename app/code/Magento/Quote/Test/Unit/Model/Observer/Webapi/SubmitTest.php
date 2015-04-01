@@ -79,7 +79,8 @@ class SubmitTest extends \PHPUnit_Framework_TestCase
         $this->paymentMock->expects($this->once())->method('getOrderPlaceRedirectUrl')->willReturn('');
         $this->orderMock->expects($this->once())->method('getCanSendNewEmailFlag')->willReturn(true);
         $this->orderSenderMock->expects($this->once())->method('send')->willThrowException(
-            new \Exception('Some email sending Error'));
+            new \Exception('Some email sending Error')
+        );
         $this->loggerMock->expects($this->once())->method('critical');
         $this->model->sendEmail($this->observerMock);
     }
