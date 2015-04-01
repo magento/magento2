@@ -69,21 +69,29 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     protected $_session;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $dateModel;
+
+    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param \Magento\Captcha\Model\Resource\LogFactory $resLogFactory
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateModel
      * @param string $formId
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Captcha\Helper\Data $captchaData,
         \Magento\Captcha\Model\Resource\LogFactory $resLogFactory,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateModel,
         $formId
     ) {
         $this->_session = $session;
         $this->_captchaData = $captchaData;
         $this->_resLogFactory = $resLogFactory;
         $this->_formId = $formId;
+        $this->dateModel = $dateModel;
     }
 
     /**
@@ -452,7 +460,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     public function getWord()
     {
         $sessionData = $this->_session->getData($this->_getFormIdKey(self::SESSION_WORD));
-        return time() < $sessionData['expires'] ? $sessionData['data'] : null;
+        return $this->dateModel->gmtTimestamp() < $sessionData['expires'] ? $sessionData['data'] : null;
     }
 
     /**
@@ -465,7 +473,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     {
         $this->_session->setData(
             $this->_getFormIdKey(self::SESSION_WORD),
-            ['data' => $word, 'expires' => time() + $this->getTimeout()]
+            ['data' => $word, 'expires' => $this->dateModel->gmtTimestamp() + $this->getTimeout()]
         );
         $this->_word = $word;
         return $this;

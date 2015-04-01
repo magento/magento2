@@ -27,15 +27,23 @@ class Version
     private $cachedValue;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $dateModel;
+
+    /**
      * @param \Magento\Framework\App\State $appState
      * @param Version\StorageInterface $versionStorage
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateModel
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage
+        \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateModel
     ) {
         $this->appState = $appState;
         $this->versionStorage = $versionStorage;
+        $this->dateModel = $dateModel;
     }
 
     /**
@@ -64,13 +72,13 @@ class Version
                 try {
                     $result = $this->versionStorage->load();
                 } catch (\UnexpectedValueException $e) {
-                    $result = (new \DateTime())->getTimestamp();
+                    $result = $this->dateModel->gmtTimestamp();
                     $this->versionStorage->save($result);
                 }
                 break;
 
             case \Magento\Framework\App\State::MODE_DEVELOPER:
-                $result = (new \DateTime())->getTimestamp();
+                $result = $this->dateModel->gmtTimestamp();
                 break;
 
             default:
