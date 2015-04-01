@@ -128,13 +128,13 @@ TabsTest.prototype.testOnContentChange = function() {
         tabs = jQuery('#tabs').tabs();
 
     tabs.data("tabs")._onContentChange(eventMock);
-    assertTrue(jQuery('#tab1').hasClass('changed'));
+    assertTrue(jQuery('#tab1').hasClass('_changed'));
 };
 
 TabsTest.prototype.testOnInvalid = function() {
     /*:DOC += <div id="tabs"><ul>
          <li>
-             <a href="www.site.com" id="tab1">Tab 1<span class="error">&nbsp;</span></a>
+             <a href="www.site.com" id="tab1">Tab 1<span class="_error">&nbsp;</span></a>
              <div id="tab1_content"></div>
          </li>
      </ul></div>
@@ -145,13 +145,13 @@ TabsTest.prototype.testOnInvalid = function() {
             }
         },
         tabs = jQuery('#tabs').tabs(),
-        errorIcon = jQuery('#tab1').find('.error');
+        errorIcon = jQuery('#tab1').find('._error');
 
     errorIcon.hide();
     assertTrue(errorIcon.is(':hidden'));
 
     tabs.data("tabs")._onInvalid(eventMock);
-    assertTrue(jQuery('#tab1').hasClass('error'));
+    assertTrue(jQuery('#tab1').hasClass('_error'));
     assertTrue(errorIcon.is(':visible'));
 };
 
@@ -174,10 +174,10 @@ TabsTest.prototype.testOnFocus = function() {
         },
         tabs = jQuery('#tabs').tabs();
 
-    assertNotEquals(tabs.tabs('option', 'active'), eventMock.data.index);
+    assertNotEquals(tabs.tabs('option', '_active'), eventMock.data.index);
 
     tabs.data("tabs")._onFocus(eventMock);
-    assertEquals(tabs.tabs('option', 'active'), eventMock.data.index);
+    assertEquals(tabs.tabs('option', '_active'), eventMock.data.index);
 };
 
 TabsTest.prototype.testOnBeforeSubmit = function() {

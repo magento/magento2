@@ -137,4 +137,24 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Sales\Model\Observer\Order\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Shipment\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Creditmemo\Grid</argument>
+        </arguments>
+    </virtualType>
 </config>
