@@ -34,7 +34,7 @@
         <?php echo $block->getChildHtml('order_totals') ?>
     </tbody>
 </table>
-<?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAvailable('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
+<?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>
     <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessage($_order->getGiftMessageId()); ?>
     <?php if ($_giftMessage): ?>
 <br />

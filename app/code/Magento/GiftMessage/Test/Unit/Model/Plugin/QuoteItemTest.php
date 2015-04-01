@@ -60,7 +60,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $this->subjectMock = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
         $this->helperMock = $this->getMock(
             'Magento\GiftMessage\Helper\Message',
-            ['setGiftMessageId', 'isMessagesAvailable'],
+            ['setGiftMessageId', 'isMessagesAllowed'],
             [],
             '',
             false
@@ -86,7 +86,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $this->helperMock->expects(
             $this->once()
         )->method(
-            'isMessagesAvailable'
+            'isMessagesAllowed'
         )->with(
             'item',
             $this->quoteItemMock,
