@@ -402,6 +402,18 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->with($customer, '\Magento\Customer\Api\Data\CustomerInterface')
             ->willReturn($customerData);
 
+        $this->prepareEmailSend($email, $templateIdentifier, $sender, $storeId, $customerName);
+    }
+
+    /**
+     * @param $email
+     * @param $templateIdentifier
+     * @param $sender
+     * @param $storeId
+     * @param $customerName
+     */
+    protected function prepareEmailSend($email, $templateIdentifier, $sender, $storeId, $customerName)
+    {
         $transport = $this->getMockBuilder('Magento\Framework\Mail\TransportInterface')
             ->getMock();
 
