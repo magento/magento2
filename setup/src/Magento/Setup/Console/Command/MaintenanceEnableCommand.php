@@ -65,7 +65,7 @@ class MaintenanceEnableCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $addresses = $input->getOption('ip');
-        $this->maintenanceMode->set(false);
+        $this->maintenanceMode->set(true);
         $output->writeln('<info>Enabled maintenance mode</info>');
         if (!empty($addresses)) {
             $addresses = implode(',', $addresses);
