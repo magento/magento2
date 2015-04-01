@@ -267,25 +267,16 @@
         margin: -(@submenu-heading-group__indent-bottom) @submenu__padding-horizontal * 2 + @submenu-action-close__indent-right 3.8rem @submenu__padding-horizontal * 2;
     }
 
-    .submenu-close {
-        &:extend(.abs-action-reset all);
+    .action-close {
         padding: 2.4rem @submenu-action-close__indent-right;
         position: absolute;
         right: 0;
         top: 0;
-        &:active {
-            .scale();
-        }
         &:before {
-            &:extend(.abs-icon all);
             color: @submenu-section-label__color;
-            content: @icon-close-mage__content;
             font-size: 1.7rem;
-            .transition(color);
         }
         &:hover {
-            cursor: pointer;
-            text-decoration: none;
             &:before {
                 color: @color-white;
             }

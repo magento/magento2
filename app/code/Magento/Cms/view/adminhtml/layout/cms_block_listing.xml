@@ -10,7 +10,7 @@
         <referenceBlock name="listing">
             <arguments>
                 <argument name="name" xsi:type="string">cms_block_listing</argument>
-                <argument name="dataSource" xsi:type="object">Magento\Cms\Model\DataSource\BlockCollection</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Cms\Model\Resource\Block\Collection</argument>
                 <argument name="save_parameters_in_session" xsi:type="string">1</argument>
                 <argument name="configuration" xsi:type="array">
                     <item name="page_actions" xsi:type="array">
@@ -90,14 +90,6 @@
                             <item name="sortable" xsi:type="boolean">false</item>
                             <item name="visible" xsi:type="boolean">false</item>
                         </item>
-                    </item>
-                </argument>
-                <argument name="row_data_provider" xsi:type="array">
-                    <item name="actions" xsi:type="array">
-                        <item name="class" xsi:type="string">Magento\Cms\Ui\DataProvider\Block\Row\Actions</item>
-                    </item>
-                    <item name="store_id" xsi:type="array">
-                        <item name="class" xsi:type="string">Magento\Store\Ui\DataProvider\Row</item>
                     </item>
                 </argument>
             </arguments>

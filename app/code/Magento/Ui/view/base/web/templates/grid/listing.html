@@ -1,0 +1,38 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="hor-scroll">
+    <table class="data">
+        <thead data-part="head">
+            <tr class="headings" data-part="head.row">
+                <!-- ko foreach: elems -->
+                    <!-- ko if: visible -->
+                        <!-- ko template: getHeader() --><!-- /ko -->
+                    <!-- /ko -->
+                <!-- /ko -->
+            </tr>
+        </thead>
+        <tbody data-part="body">
+            <!-- ko if: hasData() -->
+                <!-- ko foreach: { data: rows, as: 'row' } -->
+                    <tr data-part="body.row" class="even pointer">
+                        <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
+                            <!-- ko if: visible -->
+                                <!-- ko template: getBody() --><!-- /ko -->
+                            <!-- /ko -->
+                        <!-- /ko -->
+                    </tr>
+                <!-- /ko -->
+            <!-- /ko -->
+
+            <!-- ko ifnot: hasData() -->
+                <tr class="even">
+                    <td class="empty-text" data-bind="attr: { colspan: getColspan() }, text: $t('We couldn\'t find any records.')"></td>
+                </tr>
+            <!-- /ko -->
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,92 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  UI -> Data Grid -> Header
+//  _____________________________________________
+
+//
+//  Components
+//  ---------------------------------------------
+
+@import 'data-grid-header/_data-grid-filters.less';
+@import 'data-grid-header/_data-grid-pager.less';
+@import 'data-grid-header/_data-grid-action-columns.less';
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@data-grid-header-add-indent__size: .9rem;
+@data-grid-header-row__margin-bottom: @indent__base;
+@data-grid-action-default-view__z-index: @data-grid-action-columns__z-index - 10;
+
+//
+
+.admin__data-grid-header {
+    font-size: @font-size__base; // ToDo UI: should be deleted, added to prevent fz override with .grid
+    position: relative;
+    z-index: @data-grid-header__z-index - 1;
+}
+
+.admin__data-grid-header-row {
+    margin-bottom: @data-grid-header-row__margin-bottom;
+    &:first-child {
+        margin-bottom: @data-grid-header-row__margin-bottom - @data-grid-header-add-indent__size;
+    }
+    .action-select-wrap {
+        display: block;
+    }
+    .action-select {
+        width: 100%;
+    }
+}
+
+//  Data grid Header Actions
+.admin__data-grid-actions-wrap {
+    text-align: right;
+    .admin__action-dropdown-wrap {
+        position: relative;
+        text-align: left;
+        &._active,
+        &:first-child {
+            &:after {
+                display: none;
+            }
+        }
+        &._active {
+            .admin__action-dropdown,
+            .admin__action-dropdown-menu {
+                border-color: @action__border-color;
+            }
+        }
+        &:after {
+            border-left: 1px solid @color-gray80;
+            content: '';
+            height: @action__height;
+            left: 0;
+            position: absolute;
+            top: 0;
+            z-index: 3;
+        }
+    }
+    .admin__action-dropdown {
+        padding-bottom: @action-dropdown__padding-bottom + @data-grid-header-add-indent__size;
+        &:after {
+            margin-top: -.6rem;
+        }
+    }
+}
+
+//  Default view
+.admin__data-grid-action-default-view {
+    z-index: @data-grid-action-default-view__z-index;
+    .admin__action-dropdown {
+        &:before {
+            &:extend(.abs-icon all);
+            content: @icon-views__content;
+        }
+    }
+}

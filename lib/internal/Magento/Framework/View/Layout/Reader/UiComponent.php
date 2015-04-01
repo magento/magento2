@@ -6,14 +6,19 @@
 namespace Magento\Framework\View\Layout\Reader;
 
 use Magento\Framework\App;
+use Magento\Framework\Exception;
 use Magento\Framework\View\Layout;
+use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 
+/**
+ * Class UiComponent
+ */
 class UiComponent implements Layout\ReaderInterface
 {
     /**#@+
      * Supported types
      */
-    const TYPE_UI_COMPONENT = 'ui_component';
+    const TYPE_UI_COMPONENT = 'uiComponent';
     /**#@-*/
 
     /**
@@ -39,18 +44,14 @@ class UiComponent implements Layout\ReaderInterface
      * @param Layout\ScheduledStructure\Helper $helper
      * @param string|null $scopeType
      */
-    public function __construct(
-        Layout\ScheduledStructure\Helper $helper,
-        $scopeType = null
-    ) {
+    public function __construct(Layout\ScheduledStructure\Helper $helper, $scopeType = null)
+    {
         $this->layoutHelper = $helper;
         $this->scopeType = $scopeType;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return string[]
      */
     public function getSupportedNodes()
     {
@@ -59,27 +60,24 @@ class UiComponent implements Layout\ReaderInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param Context $readerContext
-     * @param Layout\Element $currentElement
-     * @return $this
      */
     public function interpret(Context $readerContext, Layout\Element $currentElement)
     {
+        $attributes = $this->getAttributes($currentElement);
         $scheduledStructure = $readerContext->getScheduledStructure();
         $referenceName = $this->layoutHelper->scheduleStructure(
-            $readerContext->getScheduledStructure(),
+            $scheduledStructure,
             $currentElement,
             $currentElement->getParent(),
-            ['attributes' => $this->getAttributes($currentElement)]
+            ['attributes' => $attributes]
         );
-        $scheduledStructure->setStructureElementData($referenceName, [
-            'attributes' => $this->getAttributes($currentElement)
-        ]);
+
+        $scheduledStructure->setStructureElementData($referenceName, ['attributes' => $attributes]);
         $configPath = (string)$currentElement->getAttribute('ifconfig');
         if (!empty($configPath)) {
             $scheduledStructure->setElementToIfconfigList($referenceName, $configPath, $this->scopeType);
         }
+
         return $this;
     }
 
@@ -95,6 +93,7 @@ class UiComponent implements Layout\ReaderInterface
         foreach ($this->attributes as $attributeName) {
             $attributes[$attributeName] = (string)$element->getAttribute($attributeName);
         }
+
         return $attributes;
     }
 }
