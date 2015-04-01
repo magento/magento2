@@ -24,6 +24,11 @@ class OrderSenderTest extends AbstractSenderTest
      */
     protected $orderResource;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->stepMockSetup();
@@ -46,11 +51,19 @@ class OrderSenderTest extends AbstractSenderTest
             false
         );
         $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\OrderIdentity');
+        $this->loggerMock = $this->getMock(
+            '\Psr\Log\LoggerInterface',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->sender = new OrderSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
+            $this->loggerMock,
             $this->paymentHelper,
             $this->orderResource,
             $this->addressRendererMock
