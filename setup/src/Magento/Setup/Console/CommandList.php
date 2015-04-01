@@ -45,6 +45,10 @@ class CommandList
             'Magento\Setup\Console\Command\ModuleEnableCommand',
             'Magento\Setup\Console\Command\ModuleDisableCommand',
             'Magento\Setup\Console\Command\ModuleStatusCommand',
+            'Magento\Setup\Console\Command\MaintenanceAllowIpsCommand',
+            'Magento\Setup\Console\Command\MaintenanceDisableCommand',
+            'Magento\Setup\Console\Command\MaintenanceEnableCommand',
+            'Magento\Setup\Console\Command\MaintenanceStatusCommand',
         ];
     }
 

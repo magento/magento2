@@ -54,11 +54,11 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [true, []],
-                "Status: maintenance mode is active\n"
+                "Status: maintenance mode is active\nList of exempt IP-addresses: none\n"
             ],
             [
                 [false, []],
-                "Status: maintenance mode is not active\n"
+                "Status: maintenance mode is not active\nList of exempt IP-addresses: none\n"
             ],
             [
                 [false, ['127.0.0.1', '127.0.0.2']],
