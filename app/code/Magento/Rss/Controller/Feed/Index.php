@@ -6,7 +6,7 @@
  */
 namespace Magento\Rss\Controller\Feed;
 
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Class Index
@@ -23,14 +23,14 @@ class Index extends \Magento\Rss\Controller\Feed
     public function execute()
     {
         if (!$this->scopeConfig->getValue('rss/config/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found.'));
         }
 
         $type = $this->getRequest()->getParam('type');
         try {
             $provider = $this->rssManager->getProvider($type);
         } catch (\InvalidArgumentException $e) {
-            throw new NotFoundException($e->getMessage());
+            throw new NotFoundException(__($e->getMessage()));
         }
 
         if ($provider->isAuthRequired() && !$this->auth()) {
@@ -38,7 +38,7 @@ class Index extends \Magento\Rss\Controller\Feed
         }
 
         if (!$provider->isAllowed()) {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found.'));
         }
 
         /** @var $rss \Magento\Rss\Model\Rss */

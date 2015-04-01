@@ -282,7 +282,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->_validator->validate($className);
-        } catch (\Magento\Framework\Code\ValidationException $exceptions) {
+        } catch (\Magento\Framework\Exception\ValidatorException $exceptions) {
             $this->fail($exceptions->getMessage());
         } catch (\ReflectionException $exceptions) {
             $this->fail($exceptions->getMessage());
@@ -366,7 +366,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             if (\Magento\Framework\App\Utility\Files::init()->isModuleExists($module)) {
                 $this->pluginValidator->validate($plugin, $type);
             }
-        } catch (\Magento\Framework\Interception\Code\ValidatorException $exception) {
+        } catch (\Magento\Framework\Exception\ValidatorException $exception) {
             $this->fail($exception->getMessage());
         }
     }
@@ -411,7 +411,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->_shell->execute($this->_command, [$this->_generationDir, $this->_compilationDir]);
-        } catch (\Magento\Framework\Exception $exception) {
+        } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             $this->fail($exception->getPrevious()->getMessage());
         }
     }

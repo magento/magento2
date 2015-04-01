@@ -42,7 +42,7 @@ class Shell implements ShellInterface
      * @param string $command Command with optional argument markers '%s'
      * @param string[] $arguments Argument values to substitute markers with
      * @return string Output of an executed command
-     * @throws \Magento\Framework\Exception If a command returns non-zero exit code
+     * @throws \Magento\Framework\Exception\LocalizedException If a command returns non-zero exit code
      */
     public function execute($command, array $arguments = [])
     {
@@ -51,7 +51,7 @@ class Shell implements ShellInterface
 
         $disabled = explode(',', ini_get('disable_functions'));
         if (in_array('exec', $disabled)) {
-            throw new Exception("exec function is disabled.");
+            throw new Exception\LocalizedException(new \Magento\Framework\Phrase("exec function is disabled."));
         }
 
         exec($command, $output, $exitCode);
@@ -59,7 +59,10 @@ class Shell implements ShellInterface
         $this->log($output);
         if ($exitCode) {
             $commandError = new \Exception($output, $exitCode);
-            throw new Exception("Command returned non-zero exit code:\n`{$command}`", 0, $commandError);
+            throw new Exception\LocalizedException(
+                new \Magento\Framework\Phrase("Command returned non-zero exit code:\n`%1`", [$command]),
+                $commandError
+            );
         }
         return $output;
     }

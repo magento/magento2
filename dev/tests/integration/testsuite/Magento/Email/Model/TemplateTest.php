@@ -181,7 +181,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider setDesignConfigExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSetDesignConfigException($config)
     {
