@@ -6,9 +6,7 @@
 
 namespace Magento\Setup\Controller;
 
-use Composer\Package\Version\VersionParser;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Framework\App\MaintenanceMode;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use Magento\Setup\Model\ConsoleLogger;
@@ -21,7 +19,6 @@ use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\Module\DbVersionInfo;
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -42,7 +39,6 @@ class ConsoleController extends AbstractActionController
     const CMD_INSTALL_ADMIN_USER = 'install-admin-user';
     const CMD_UPDATE = 'update';
     const CMD_UNINSTALL = 'uninstall';
-    const CMD_MAINTENANCE = 'maintenance';
     const CMD_MODULE_ENABLE = 'module-enable';
     const CMD_MODULE_DISABLE = 'module-disable';
     /**#@- */
@@ -66,7 +62,6 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_ADMIN_USER => 'installAdminUser',
         self::CMD_UPDATE => 'update',
         self::CMD_UNINSTALL => 'uninstall',
-        self::CMD_MAINTENANCE => 'maintenance',
         self::CMD_MODULE_ENABLE => 'module',
         self::CMD_MODULE_DISABLE => 'module',
     ];
@@ -84,7 +79,6 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_ADMIN_USER,
         self::CMD_UPDATE,
         self::CMD_UNINSTALL,
-        self::CMD_MAINTENANCE,
         self::CMD_MODULE_ENABLE,
         self::CMD_MODULE_DISABLE,
         UserConfig::KEY_LANGUAGE,
@@ -253,12 +247,6 @@ class ConsoleController extends AbstractActionController
                 'usage_short' => self::CMD_INSTALL_ADMIN_USER . ' <options>',
                 'usage_desc' => 'Install admin user account',
             ],
-            self::CMD_MAINTENANCE => [
-                'route' => self::CMD_MAINTENANCE . ' [--set=] [--addresses=]',
-                'usage' => '[--set=1|0] [--addresses=127.0.0.1,...|none]',
-                'usage_short' => self::CMD_MAINTENANCE,
-                'usage_desc' => 'Set maintenance mode, optionally for specified addresses',
-            ],
             self::CMD_MODULE_ENABLE => [
                 'route' => self::CMD_MODULE_ENABLE . ' --modules= [--force]',
                 'usage' => '--modules=Module_Foo,Module_Bar [--force]',
@@ -286,20 +274,17 @@ class ConsoleController extends AbstractActionController
      * @param ConsoleLogger $consoleLogger
      * @param Lists $options
      * @param InstallerFactory $installerFactory
-     * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
         ConsoleLogger $consoleLogger,
         Lists $options,
         InstallerFactory $installerFactory,
-        MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider
     ) {
         $this->log = $consoleLogger;
         $this->options = $options;
         $this->installer = $installerFactory->create($consoleLogger);
-        $this->maintenanceMode = $maintenanceMode;
         $this->objectManagerProvider = $objectManagerProvider;
         // By default we use our customized error handler, but for CLI we want to display all errors
         restore_error_handler();
@@ -415,42 +400,6 @@ class ConsoleController extends AbstractActionController
     public function uninstallAction()
     {
         $this->installer->uninstall();
-    }
-
-    /**
-     * Action for "maintenance" command
-     *
-     * @return void
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
-     */
-    public function maintenanceAction()
-    {
-        /** @var \Zend\Console\Request $request */
-        $request = $this->getRequest();
-        $set = $request->getParam('set');
-        $addresses = $request->getParam('addresses');
-
-        if (null !== $set) {
-            if (1 == $set) {
-                $this->log->log('Enabling maintenance mode...');
-                $this->maintenanceMode->set(true);
-            } else {
-                $this->log->log('Disabling maintenance mode...');
-                $this->maintenanceMode->set(false);
-            }
-        }
-        if (null !== $addresses) {
-            $addresses = ('none' == $addresses) ? '' : $addresses;
-            $this->maintenanceMode->setAddresses($addresses);
-        }
-
-        $this->log->log('Status: maintenance mode is ' . ($this->maintenanceMode->isOn() ? 'active' : 'not active'));
-        $addressInfo = $this->maintenanceMode->getAddressInfo();
-        if (!empty($addressInfo)) {
-            $addresses = implode(', ', $addressInfo);
-            $this->log->log('List of exempt IP-addresses: ' . ($addresses ? $addresses : 'none'));
-        }
     }
 
     /**

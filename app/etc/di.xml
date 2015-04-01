@@ -1103,4 +1103,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="maintenance:enable" xsi:type="object">Magento\Framework\Console\Command\MaintenanceEnableCommand</item>
+                <item name="maintenance:disable" xsi:type="object">Magento\Framework\Console\Command\MaintenanceDisableCommand</item>
+                <item name="maintenance:status" xsi:type="object">Magento\Framework\Console\Command\MaintenanceStatusCommand</item>
+                <item name="maintenance:allow-ips" xsi:type="object">Magento\Framework\Console\Command\MaintenanceAllowIpsCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
