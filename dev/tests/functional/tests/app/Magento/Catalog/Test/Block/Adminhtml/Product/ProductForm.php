@@ -99,7 +99,7 @@ class ProductForm extends FormTabs
      */
     public function fill(FixtureInterface $product, SimpleElement $element = null, FixtureInterface $category = null)
     {
-        $this->waitLoadPage();
+        $this->waitPageToLoad();
         $dataConfig = $product->getDataConfig();
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
 
@@ -187,15 +187,22 @@ class ProductForm extends FormTabs
     }
 
     /**
-     * Wait for load page.
+     * Wait page to load.
      *
      * @return void
      */
-    protected function waitLoadPage()
+    protected function waitPageToLoad()
     {
         $browser = $this->browser;
         $element = $this->advancedSettingContent;
-        $this->waitForElementVisible($this->advancedSettingTrigger);
+        $advancedSettingTrigger = $this->advancedSettingTrigger;
+
+        $this->_rootElement->waitUntil(
+            function () use ($browser, $advancedSettingTrigger) {
+                return $browser->find($advancedSettingTrigger)->isVisible() == true ? true : null;
+            }
+        );
+
         $this->_rootElement->waitUntil(
             function () use ($browser, $element) {
                 return $browser->find($element)->isVisible() == false ? true : null;
