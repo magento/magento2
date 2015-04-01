@@ -48,7 +48,7 @@
                 type="Magento\Customer\Model\PrivateData\Section\SectionPool"/>
     <type name="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface">
         <arguments>
-            <argument name="sectionMap" xsi:type="array">
+            <argument name="sectionSourceMap" xsi:type="array">
                 <item name="customer" xsi:type="string">Magento\Customer\Model\PrivateData\Section\Customer</item>
             </argument>
         </arguments>
