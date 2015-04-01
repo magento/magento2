@@ -165,7 +165,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 self::INPUT_KEY_DB_PREFIX,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH_DB_PREFIX,
-                'Database table prefix'
+                'Database table prefix',
+                ''
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_MODEL,

@@ -170,7 +170,12 @@ class ConfigGenerator
             }
         }
 
-        $configData->set(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_ACTIVE, '1');
+        if ($this->deploymentConfig->get(
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_ACTIVE
+            ) === null
+        ) {
+            $configData->set(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_ACTIVE, '1');
+        }
 
         return $configData;
     }
@@ -184,7 +189,9 @@ class ConfigGenerator
     {
         $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
 
-        $configData->set(ConfigOptionsList::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');
+        if (!$this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_RESOURCE_DEFAULT_SETUP)) {
+            $configData->set(ConfigOptionsList::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');
+        }
 
         return $configData;
     }
