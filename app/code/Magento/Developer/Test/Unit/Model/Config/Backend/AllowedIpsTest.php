@@ -55,17 +55,17 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $fieldSetData
+     * @param string $value
      * @param string $expected
      * @dataProvider beforeSaveDataProvider
      * @return void
      */
-    public function testBeforeSave($fieldSetData, $expected)
+    public function testBeforeSave($value, $expected)
     {
-        $this->assertNull($this->model->getFieldsetDataValue('allow_ips'));
-        $this->model->setFieldsetData($fieldSetData);
+        $this->assertNull($this->model->getValue());
+        $this->model->setValue($value);
         $this->model->beforeSave();
-        $this->assertEquals($expected, $this->model->getData('value'));
+        $this->assertEquals($expected, trim($this->model->getValue()));
     }
 
     /**
@@ -74,39 +74,15 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
     public function beforeSaveDataProvider()
     {
         return [
-            [
-                ['allow_ips' => ''],
-                '',
-            ],
-            [
-                ['allow_ips' => ', 10.64.206.85, 10. 64.85.206 '],
-                '10.64.206.85,10.64.85.206',
-            ],
-            [
-                ['allow_ips' => '10.64.206.85, 10.64.1a.x'],
-                '10.64.206.85',
-            ],
-            [
-                ['allow_ips' => ' 10.64. 206.85, 10.49.a. b  '], /* with whitespaces */
-                '10.64.206.85',
-            ],
-            [
-                ['allow_ips' => '2001:db8:0:1234:0:567:8:1, '], /* valid IPV6 address */
-                '2001:db8:0:1234:0:567:8:1',
-            ],
-
-            [
-                ['allow_ips' => '2001:0cb8:25a3:04c1:1324:8a2b:0471:8221'], /* valid IPV6 address */
-                '2001:0cb8:25a3:04c1:1324:8a2b:0471:8221',
-            ],
-            [
-                ['allow_ips' => '255.255.255.255'], /* valid private ip */
-                '255.255.255.255',
-            ],
-            [
-                ['allow_ips' => '127.0.0.1, ::1'], /* valid reserved ip */
-                '127.0.0.1,::1',
-            ],
+            [ '', '' ],
+            [ ', 10.64.206.85, 10. 64.85.206 ', '10.64.206.85' ],
+            [ '10.64.206.85, 10.64.1a.x, ,,', '10.64.206.85' ],
+            [ ' ,, 10.64.206.85, 10.49.206.85 , ', '10.64.206.85, 10.49.206.85' ],
+            [ '2001:db8:0:1234:0:567:8:1, ', '2001:db8:0:1234:0:567:8:1' ], /* valid IPV6 address */
+            [ '2001:0cb8:25a3:04c1:1324:8a2b:0471:8221', '2001:0cb8:25a3:04c1:1324:8a2b:0471:8221'], /* valid IPV6 address */
+            [ '255.255.255.255', '255.255.255.255'], /* valid private ip */
+            [ '127.0.0.1, ::1', '127.0.0.1, ::1'], /* valid reserved ip */
+            ['*[789bo88n=], 12.34.56.78,[,q 049cq9840@@', '12.34.56.78']
         ];
     }
 }

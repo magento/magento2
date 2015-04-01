@@ -48,7 +48,7 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
      */
     public function beforeSave()
     {
-        $allowedIpsRaw = $this->getFieldsetDataValue('allow_ips');
+        $allowedIpsRaw = $this->getValue();
         $noticeMsgArray = [];
         $allowedIpsArray = [];
 
@@ -56,10 +56,9 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
             return parent::beforeSave();
         }
 
-        $dataArray = preg_split('#\s*,\s*#', $allowedIpsRaw, null, PREG_SPLIT_NO_EMPTY);
+        $dataArray = explode(',', $allowedIpsRaw);
         foreach ($dataArray as $k => $data) {
-            $data = trim(preg_replace('/\s+/','', $data));
-            if ( filter_var($data, FILTER_VALIDATE_IP) ) {
+            if ( filter_var(trim($data), FILTER_VALIDATE_IP) ) {
                 $allowedIpsArray[] = $data;
             } else {
                 $noticeMsgArray[] = $data;
