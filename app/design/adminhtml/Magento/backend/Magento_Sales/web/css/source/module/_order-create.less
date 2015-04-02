@@ -11,10 +11,11 @@
 //  Sidebar
 //  ---------------------------------------------
 
-@page-order-sidebar-base__font-size: 1.5rem;
+@page-order-sidebar__font-size: 1.5rem;
+@page-order-sidebar__font-size-xs: 1.1rem;
 @page-order-sidebar__color: @color-very-dark-gray;
 @page-order-sidebar__margin: 2.4rem;
-@page-order-sidebar__padding: 2rem;
+@page-order-sidebar__padding: @indent__base;
 @page-order-sidebar__margin-reqular: 1.7rem;
 @page-order-sidebar__margin-small: .5rem;
 @page-order-sidebar__border-color: @border__color;
@@ -28,6 +29,8 @@
 @page-order-icon-refresh__content: @icon-refresh__content;
 @page-order-icon-plus__content: @icon-plus__content;
 @page-order-icon-plus__hover__color: @color-very-dark-gray-black2;
+
+@page-order-table__border-color: @table-td__border-color;
 
 //
 
@@ -61,8 +64,6 @@
     }
 }
 
-
-
 //
 //  Table
 //  ---------------------------------------------
@@ -74,9 +75,32 @@
         border-top: 0;
         font-size: 1.3rem;
     }
+    td {
+        border-bottom: none;
+        padding-top: @page-order-sidebar__padding;
+    }
+    tbody {
+        tr {
+            &:last-child {
+                td {
+                    border-bottom: 1px solid @page-order-table__border-color;
+                }
+            }
+            &.border {
+                td {
+                    padding-top: 0;
+                }
+            }
+        }
+    }
     .col-qty {
         .admin__control-text {
             &:extend(.abs-control-qty all);
+        }
+    }
+    .col-actions {
+        .admin__control-select {
+            width: 13rem;
         }
     }
     .price {
@@ -84,9 +108,19 @@
         margin: 0 0 @page-order-sidebar__margin-small;
     }
     .custom-price-block {
+        font-size: @page-order-sidebar__font-size-xs;
         margin: 0 0 @page-order-sidebar__margin-small;
-        .admin__control-text {
-            width: auto;
+        + .admin__control-text {
+            &:extend(.abs-control-price);
+        }
+    }
+    .discount-price-block {
+        font-size: @page-order-sidebar__font-size-xs;
+    }
+    .product-configure-block {
+        margin: 1rem 0 0;
+        .disabled {
+            display: none;
         }
     }
 }
@@ -135,7 +169,7 @@
         &:extend(.abs-action-reset all);
         &:extend(.abs-icon all);
         display: inline-block;
-        font-size: @page-order-sidebar-base__font-size + 0.1rem;
+        font-size: @page-order-sidebar__font-size + 0.1rem;
         padding-top: @page-order-sidebar__margin-small;
         vertical-align: middle;
         &:after {
@@ -188,9 +222,9 @@
 
         .action-default {
             &:extend(.abs-action-reset all);
+            bottom: 7px;
             position: absolute;
             right: 0;
-            bottom: 7px;
             > span {
                 .extend__visually-hidden();
             }
@@ -212,6 +246,14 @@
 //  ---------------------------------------------
 
 .order-details {
+    .order-search-items {
+        .col-qty {
+            .admin__control-text {
+                &:extend(.abs-control-qty);
+            }
+        }
+    }
+
     .admin__fieldset-wrapper:not(:last-child) {
         margin-bottom: 5rem;
     }
@@ -325,13 +367,8 @@
         float: none;
         font-size: @font-size__base;
         margin: 0 0 @page-order-sidebar__margin;
-        .label {
-            display: block;
-            font-size: @page-order-sidebar-base__font-size;
-            margin: 0 0 @indent__s;
-        }
     }
-    .title {
+    .customer-activity-title {
         border-bottom: 1px solid @page-order-sidebar__border-color;
         font-size: 1.9rem;
         font-weight: @font-weight__bold;
@@ -359,7 +396,7 @@
         .icon {
             &:extend(.abs-icon all);
             display: inline-block;
-            font-size: @page-order-sidebar-base__font-size + 0.1rem;
+            font-size: @page-order-sidebar__font-size + 0.1rem;
             vertical-align: middle;
             &:after {
                 color: @page-order-sidebar__color;
@@ -411,7 +448,7 @@
     }
     .create-order-sidebar-label {
         display: inline-block;
-        font-size: @page-order-sidebar-base__font-size;
+        font-size: @page-order-sidebar__font-size;
         font-weight: @font-weight__regular;
         margin: 0;
         + .admin__control-select {

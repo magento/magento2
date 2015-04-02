@@ -9,7 +9,7 @@
 /** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar */
 ?>
 <div class="customer-current-activity-inner">
-    <h4 class="title"><?php echo __('Customer\'s Activities') ?></h4>
+    <h4 class="customer-activity-title"><?php echo __('Customer\'s Activities') ?></h4>
     <div class="create-order-sidebar-container">
     <?php echo $block->getChildHtml('top_button'); ?>
     <?php foreach ($block->getLayout()->getChildBlocks($block->getNameInLayout()) as $_alias => $_child): ?>

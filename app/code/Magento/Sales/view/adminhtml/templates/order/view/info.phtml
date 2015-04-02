@@ -36,7 +36,7 @@ $orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDate
                     <?php endif; ?>
                 </span>
             </div>
-            <table class="data-table table">
+            <table class="data-table table-info">
                 <tr>
                     <th><?php echo __('Order Date') ?></th>
                     <td><?php echo $orderAdminDate ?></td>
@@ -102,7 +102,7 @@ $orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDate
                 <div class="actions"><?php echo $block->getAccountEditLink()?></div>
                 <strong class="title"><?php echo __('Account Information') ?></strong>
             </div>
-            <table cellspacing="0" class="data-table">
+            <table class="data-table table-info">
                 <tr>
                     <th><?php echo __('Customer Name') ?></th>
                     <td>

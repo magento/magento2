@@ -70,6 +70,17 @@ table {
 //    Grid table header filters and settings
 //--------------------------------------
 
+.grid-actions,
+.pager,
+.massaction,
+.filter {
+    .input-text,
+    select,
+    .select {
+        margin: 0 10px 0 0;
+    }
+}
+
 //
 //    Table Filters
 //--------------------------------------
@@ -102,8 +113,6 @@ table {
 //    Table Grid
 //--------------------------------------
 .grid {
-    background: @grid-frame-background-color;
-    .style18();
     padding: 15px;
 
     table {
@@ -553,13 +562,6 @@ td.col-type {
 }
 
 .pager {
-    font-size: 13px;
-    .pages-total-found {
-        margin-right: 25px;
-    }
-    .view-pages .select {
-        margin: 0 7px;
-    }
     .link-feed {
         font-size: 12px;
         margin: 7px 15px 0 0;
@@ -567,58 +569,6 @@ td.col-type {
         right: 0;
         top: 0;
     }
-    .action-previous,
-    .action-next {
-        .button-as-link();
-        line-height: .6;
-        overflow: hidden;
-        width: 20px;
-        &:before {
-            margin-left: -10px;
-        }
-        &.disabled {
-            opacity: .3;
-        }
-    }
-    .action-previous {
-        .icon-font(
-            @icon-prev,
-            @_icon-font-color: @pager-actions__color,
-            @_icon-font-color-hover: @pager-actions__color-hover,
-            @_icon-font-size: 40px,
-            @_icon-font-text-hide: true
-        );
-    }
-    .action-next {
-        .icon-font(
-            @icon-next,
-            @_icon-font-color: @pager-actions__color,
-            @_icon-font-color-hover: @pager-actions__color-hover,
-            @_icon-font-size: 40px,
-            @_icon-font-text-hide: true
-        );
-    }
-    .input-text {
-        height: 25px;
-        line-height: 16px;
-        margin-right: 5px;
-        text-align: center;
-        width: 25px;
-        vertical-align: top;
-    }
-    label.page {
-        &:extend(.visually-hidden all);
-    }
-    .pages-total {
-        line-height: 25px;
-        vertical-align: top;
-    }
-}
-
-.grid .pager {
-    margin: 15px 0 0;
-    position: relative;
-    text-align: center;
 }
 
 //
