@@ -35,13 +35,15 @@
     margin: 0;
     min-width: 0;
     padding: 0;
-
     > .admin__field {
         border: 0;
         margin: 0;
         padding: 0;
         #mix-grid .row();
 
+        &.admin__field-wide {
+            .extend__field-rows();
+        }
         > .admin__field-control {
             #mix-grid .column(4,9);
         }
@@ -78,6 +80,7 @@
         line-height: 3.2rem;
         padding: 0;
         white-space: nowrap;
+        word-break: break-all;
 
         &:before {
             .appearing__off();
@@ -152,9 +155,11 @@
             color: @field-scope__color;
             content: attr(data-config-scope);
             display: inline-block;
-            position: absolute;
+            font-size: @font-size__s;
             left: @_length;
+            line-height: 3.2rem;
             margin-left: 2 * @temp_gutter;
+            position: absolute;
 
             & {
                 #mix-grid .return_length(2,9);

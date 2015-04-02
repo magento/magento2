@@ -28,8 +28,10 @@
             padding-left: 0;
         }
     }
-    th {
-        border-top: 0;
+    &.table {
+        th {
+            border-top: 0;
+        }
     }
 
     //  Primary column
@@ -162,6 +164,7 @@
 .dashboard-store-stats {
     .ui-tabs {
         .extend__clearfix();
+        margin-bottom: 0;
         position: relative;
         &:before {
             .background-gradient(

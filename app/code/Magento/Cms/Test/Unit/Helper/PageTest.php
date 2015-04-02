@@ -6,7 +6,7 @@
 namespace Magento\Cms\Test\Unit\Helper;
 
 /**
- * covers \Magento\Cms\Helper\Page
+ * @covers \Magento\Cms\Helper\Page
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -208,7 +208,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Cms\Helper\Page::prepareResultPage
+     * @covers \Magento\Cms\Helper\Page::prepareResultPage
      * @param integer|null $pageId
      * @param integer|null $internalPageId
      * @param integer $pageLoadResultIndex
@@ -422,7 +422,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Cms\Helper\Page::getPageUrl
+     * @covers \Magento\Cms\Helper\Page::getPageUrl
      * @param integer|null $pageId
      * @param integer|null $internalPageId
      * @param integer $pageLoadResultIndex

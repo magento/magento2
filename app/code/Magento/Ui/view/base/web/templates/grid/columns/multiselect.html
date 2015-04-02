@@ -15,9 +15,9 @@
             class="admin__control-checkbox"
             type="checkbox"
             data-bind="checked: allSelected,
-                       event: { change: toggle },
-                       enable: totalRecords,
-                       css: { '_indeterminate': isIndeterminate() }">
+                       event: { change: toggleSelectAll },
+                       css: { '_indeterminate': indetermine },
+                       enable: totalRecords">
         <label for="mass-select-checkbox"></label>
         <button
             class="action-multiselect-toggle"
@@ -32,7 +32,7 @@
             data-bind="click: hideMenu">
             <!-- ko foreach: actions -->
             <li data-bind="click: $parent[value].bind($parent),
-                           visible: $parent.isSelectVisible(value)">
+                           visible: $parent.isActionRelevant(value)">
                 <span class="action-menu-item" data-bind="text: label"></span>
             </li>
             <!-- /ko -->

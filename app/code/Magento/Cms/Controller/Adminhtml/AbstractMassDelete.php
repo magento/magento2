@@ -63,11 +63,10 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
 
         $selected = $this->getRequest()->getParam('selected');
-        $allSelected = $this->getRequest()->getParam('all_selected');
         $excluded = $this->getRequest()->getParam('excluded');
 
         try {
-            if (isset($allSelected) && $allSelected === 'true') {
+            if (isset($excluded)) {
                 if (!empty($excluded)) {
                     $this->excludedDelete($excluded);
                 } else {

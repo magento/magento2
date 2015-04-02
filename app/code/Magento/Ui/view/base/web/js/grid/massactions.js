@@ -17,9 +17,9 @@ define([
 
         applyAction: function (action) {
             var proceed = true,
-                data = this.source.get('config.multiselect');
+                selections = this.source.get('config.multiselect');
 
-            if (!data || !data.totalSelected) {
+            if (!selections || !selections.total) {
                 proceed = false;
 
                 alert(this.noItems);
@@ -32,7 +32,7 @@ define([
             if (proceed) {
                 utils.submit({
                     url: action.url,
-                    data: data
+                    data: selections
                 });
             }
         }

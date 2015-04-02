@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-session_start();
 defined('MTF_BOOT_FILE') || define('MTF_BOOT_FILE', __FILE__);
 defined('MTF_BP') || define('MTF_BP', str_replace('\\', '/', (__DIR__)));
 require_once __DIR__ . '/../../../app/bootstrap.php';
