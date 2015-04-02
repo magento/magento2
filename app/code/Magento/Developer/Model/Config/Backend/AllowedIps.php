@@ -57,21 +57,22 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
         }
 
         $dataArray = explode(',', $allowedIpsRaw);
-        foreach ($dataArray as $k => $data) {
+        foreach ($dataArray as $data) {
             if ( filter_var(trim($data), FILTER_VALIDATE_IP) ) {
                 $allowedIpsArray[] = $data;
             } else {
                 $noticeMsgArray[] = $data;
-             }
+            }
         }
 
         $noticeMsg = implode(',', $noticeMsgArray);
-        if (!empty($noticeMsgArray))
+        if (!empty($noticeMsgArray)) {
             $this->messageManager->addNotice(
                 __(
                     __('The following invalid values cannot be saved: %values', ['values' => $noticeMsg])
                 )
             );
+        }
 
         $this->setValue(implode(',', $allowedIpsArray));
         return parent::beforeSave();
