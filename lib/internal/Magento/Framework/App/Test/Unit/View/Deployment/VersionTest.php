@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Test\Unit\View\Deployment;
 
 use \Magento\Framework\App\View\Deployment\Version;
 
-
 class VersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
