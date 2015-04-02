@@ -7,6 +7,13 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
 
     var ns = $.initNamespaceStorage('mage-cache-storage');
     var storage = ns.localStorage;
+    storage.invalidate_sections = 'invalidate_sections';
+    storage.getInvalidateSections = function() {
+        return this.get(this.invalidate_sections) || [];
+    };
+    storage.setInvalidateSections = function(sections) {
+        return this.set(this.invalidate_sections, sections);
+    };
 
     if (!ns.cookieStorage.isSet('mage-cache-sessid')) {
         ns.cookieStorage.set('mage-cache-sessid', true);
@@ -20,7 +27,7 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
     };
 
     $(document).on('ajaxComplete', function (event, xhr, settings) {
-        if (settings.type == 'POST') {
+        if (settings.type.match(/post/i)) {
             var sections = sectionConfig.get(canonize(settings.url));
             if (sections) {
                 customerData.reload(sections);
@@ -29,7 +36,7 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
     });
 
     $(document).on('submit', function (event) {
-        if (event.target.method == 'post') {
+        if (event.target.method.match(/post/i)) {
             var sections = sectionConfig.get(canonize(event.target.action));
             if (sections) {
                 customerData.invalidate(sections);
@@ -55,7 +62,7 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
     var buffer = {
         data: {},
         bind: function (sectionName) {
-            this.data[sectionName] = ko.observable();
+            this.data[sectionName] = ko.observable({});
         },
         get: function (sectionName) {
             if (!this.data[sectionName]) {
@@ -79,10 +86,12 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
             });
         },
         remove: function (sections) {
+            var invalidateSegments = storage.getInvalidateSections();
             _.each(sections, function (sectionName) {
                 buffer.notify(sectionName, '');
-                storage.remove(sectionName);
+                invalidateSegments.push(sectionName);
             });
+            storage.setInvalidateSections(invalidateSegments);
         }
     };
 
@@ -96,6 +105,13 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
                 _.each(getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
+                var invalidateSegments = storage.getInvalidateSections();
+                if (invalidateSegments.length) {
+                    storage.setInvalidateSections([]);
+                    getFromServer(invalidateSegments).done(function (sections) {
+                        buffer.update(sections);
+                    });
+                }
             }
         },
         get: function (sectionName) {
