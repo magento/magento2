@@ -48,11 +48,18 @@ abstract class AbstractMaintenanceCommand extends Command
     }
 
     /**
-     * Is it "enable" or "disable" command
+     * Get maintenance mode to set
      *
      * @return bool
      */
-    abstract protected function isEnable();
+    abstract protected function getModeToSet();
+
+    /**
+     * Get display string after mode is set
+     *
+     * @return string
+     */
+    abstract protected function getDisplayString();
 
     /**
      * {@inheritdoc}
@@ -60,9 +67,8 @@ abstract class AbstractMaintenanceCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $addresses = $input->getOption(self::INPUT_KEY_IP);
-        $this->maintenanceMode->set($this->isEnable());
-        $displayString = $this->isEnable() ? 'Enabled' : 'Disabled';
-        $output->writeln("<info>$displayString maintenance mode</info>");
+        $this->maintenanceMode->set($this->getModeToSet());
+        $output->writeln($this->getDisplayString());
 
         if (!empty($addresses)) {
             $addresses = implode(',', $addresses);

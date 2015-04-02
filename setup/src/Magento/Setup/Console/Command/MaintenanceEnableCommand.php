@@ -27,8 +27,18 @@ class MaintenanceEnableCommand extends AbstractMaintenanceCommand
      *
      * @return bool
      */
-    protected function isEnable()
+    protected function getModeToSet()
     {
         return true;
+    }
+
+    /**
+     * Get enabled maintenance mode display string
+     *
+     * @return string
+     */
+    protected function getDisplayString()
+    {
+        return '<info>Enabled maintenance mode</info>';
     }
 }
