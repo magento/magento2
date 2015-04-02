@@ -6,8 +6,8 @@
 
 namespace Magento\Setup\Model;
 
-use Zend\Console\ColorInterface;
-use Zend\Console\Console;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 /**
  * Console Logger
@@ -26,16 +26,21 @@ class ConsoleLogger implements LoggerInterface
     /**
      * Console
      *
-     * @var \Zend\Console\Adapter\AdapterInterface
+     * @var \Symfony\Component\Console\Output\Output
      */
     protected $console;
 
     /**
      * Constructor
+     *
+     * @param OutputInterface $output
      */
-    public function __construct()
+    public function __construct(OutputInterface $output)
     {
-        $this->console = Console::getInstance();
+        $this->console = $output;
+        $outputFormatter = $output->getFormatter();
+        $outputFormatter->setStyle('detail', new OutputFormatterStyle('blue'));
+        $outputFormatter->setStyle('metadata', new OutputFormatterStyle('cyan'));
     }
 
     /**
@@ -44,7 +49,7 @@ class ConsoleLogger implements LoggerInterface
     public function logSuccess($message)
     {
         $this->terminateLine();
-        $this->console->writeLine("[SUCCESS]" . ($message ? ": $message" : ''), ColorInterface::LIGHT_GREEN);
+        $this->console->writeln("<info>[SUCCESS]" . ($message ? ": $message" : '') . '</info>');
     }
 
     /**
@@ -53,7 +58,7 @@ class ConsoleLogger implements LoggerInterface
     public function logError(\Exception $e)
     {
         $this->terminateLine();
-        $this->console->writeLine("[ERROR]: " . $e, ColorInterface::LIGHT_RED);
+        $this->console->writeln("<error>[ERROR]: " . $e . '</error>');
     }
 
     /**
@@ -62,7 +67,7 @@ class ConsoleLogger implements LoggerInterface
     public function log($message)
     {
         $this->terminateLine();
-        $this->console->writeLine($message, ColorInterface::LIGHT_BLUE);
+        $this->console->writeln('<detail>' . $message . '</detail>');
     }
 
     /**
@@ -71,7 +76,7 @@ class ConsoleLogger implements LoggerInterface
     public function logInline($message)
     {
         $this->isInline = true;
-        $this->console->write($message, ColorInterface::LIGHT_BLUE);
+        $this->console->write('<detail>' . $message . '</detail>');
     }
 
     /**
@@ -80,7 +85,7 @@ class ConsoleLogger implements LoggerInterface
     public function logMeta($message)
     {
         $this->terminateLine();
-        $this->console->writeLine($message, ColorInterface::GRAY);
+        $this->console->writeln('<metadata>' . $message . '</metadata>');
     }
 
     /**
@@ -92,7 +97,7 @@ class ConsoleLogger implements LoggerInterface
     {
         if ($this->isInline) {
             $this->isInline = false;
-            $this->console->writeLine('');
+            $this->console->writeln('');
         }
     }
 }

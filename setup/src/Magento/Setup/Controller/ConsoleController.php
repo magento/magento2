@@ -19,6 +19,7 @@ use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Symfony\Component\Console\Output\StreamOutput;
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -247,20 +248,20 @@ class ConsoleController extends AbstractActionController
     /**
      * Constructor
      *
-     * @param ConsoleLogger $consoleLogger
      * @param Lists $options
      * @param InstallerFactory $installerFactory
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
-        ConsoleLogger $consoleLogger,
         Lists $options,
         InstallerFactory $installerFactory,
         ObjectManagerProvider $objectManagerProvider
     ) {
-        $this->log = $consoleLogger;
+        $stdOutput = fopen('php://stdout', 'w');
+        $output = new StreamOutput($stdOutput);
+        $this->log = new ConsoleLogger($output);
         $this->options = $options;
-        $this->installer = $installerFactory->create($consoleLogger);
+        $this->installer = $installerFactory->create($this->log);
         $this->objectManagerProvider = $objectManagerProvider;
         // By default we use our customized error handler, but for CLI we want to display all errors
         restore_error_handler();
