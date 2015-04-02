@@ -109,12 +109,12 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             'enable, do not clear static content' => [
                 true,
                 false,
-                '%amodules have been enabled%aMagento_Module1%aGenerated static view files have not been removed%a'
+                '%amodules have been enabled%aMagento_Module1%aGenerated static view files were not cleared%a'
             ],
             'disable, do not clear static content' => [
                 false,
                 false,
-                '%amodules have been disabled%aMagento_Module1%aGenerated static view files have not been removed%a'
+                '%amodules have been disabled%aMagento_Module1%aGenerated static view files were not cleared%a'
             ],
             'enable, clear static content' => [
                 true,
@@ -238,7 +238,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
         $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2'], '--force' => true]);
         $this->assertStringMatchesFormat(
-            $expectedMessage . '%aYour store may not operate properly because of dependencies and conflicts%a',
+            $expectedMessage . '%amodules might not function properly%a',
             $commandTester->getDisplay()
         );
     }
@@ -274,7 +274,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
         $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2']]);
         $this->assertStringMatchesFormat(
-            'There have been no changes to any modules%a',
+            'No modules were changed%a',
             $commandTester->getDisplay()
         );
     }

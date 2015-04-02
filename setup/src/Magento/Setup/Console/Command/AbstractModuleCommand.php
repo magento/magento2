@@ -114,7 +114,7 @@ abstract class AbstractModuleCommand extends Command
                 $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
                 $output->writeln('');
                 $output->writeln('<info>To make sure that the enabled modules are properly registered,'
-                    . " run 'update' command.</info>");
+                    . " run 'setup:update' command.</info>");
             } else {
                 $output->writeln('<info>The following modules have been disabled:</info>');
                 $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
@@ -122,11 +122,13 @@ abstract class AbstractModuleCommand extends Command
             }
             $this->cleanup($input, $output);
             if ($force) {
-                $output->writeln('<error>Alert: You used --force option. Your store may not operate properly because of'
-                    . " dependencies and conflicts of this module(s).</error>");
+                $output->writeln(
+                    '<error>Alert: You used the --force option.'
+                    . ' As a result, modules might not function properly</error>'
+                );
             }
         } else {
-            $output->writeln('<info>There have been no changes to any modules.</info>');
+            $output->writeln('<info>No modules were changed.</info>');
         }
     }
 
@@ -150,19 +152,19 @@ abstract class AbstractModuleCommand extends Command
         /** @var \Magento\Framework\App\Cache $cache */
         $cache = $objectManager->get('Magento\Framework\App\Cache');
         $cache->clean();
-        $output->writeln('Cache cleared.');
+        $output->writeln('Cache cleared successfully.');
         /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
         $cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
         $cleanupFiles->clearCodeGeneratedClasses();
-        $output->writeln('Generated classes cleared.');
+        $output->writeln('Generated classes cleared successfully.');
         if ($input->getOption(self::INPUT_KEY_CLEAR_STATIC_CONTENT)) {
             $cleanupFiles->clearMaterializedViewFiles();
-            $output->writeln('Generated static view files cleared.');
+            $output->writeln('Generated static view files cleared successfully.');
         } else {
             $output->writeln(
-                '<error>Alert: Generated static view files have not been removed. '
-                . 'Please, consider running the command with ' . '--' . self::INPUT_KEY_CLEAR_STATIC_CONTENT
-                . ' option to ensure your store works properly.</error>'
+                '<error>Alert: Generated static view files were not cleared.'
+                . ' You can clear them using the –-' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
+                . ' Failure to clear static view files might mean cause display issues in the Admin and storefront. '
             );
         }
     }
