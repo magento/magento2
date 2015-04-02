@@ -166,12 +166,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->controller->installAdminUserAction();
     }
 
-    public function testUninstallAction()
-    {
-        $this->installer->expects($this->once())->method('uninstall');
-        $this->controller->uninstallAction();
-    }
-
     /**
      * @param string $type
      * @param string $method
@@ -259,7 +253,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $noParameters = 'This command has no parameters.';
         return [
             ['install',''],
-            ['uninstall', $noParameters],
             ['install-schema', $noParameters],
             ['install-data', $noParameters],
             ['install-user-configuration', ''],
