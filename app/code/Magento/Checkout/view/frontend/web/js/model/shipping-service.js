@@ -13,6 +13,7 @@ define(
             setShippingRates: function(ratesData) {
                 var self = this;
                 rates(ratesData);
+                self.shippingRates([]);
                 $.each(ratesData, function (key, entity) {
                     var rateEntity = {};
                     rateEntity.items = [];
