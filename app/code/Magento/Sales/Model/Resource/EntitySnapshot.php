@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\Resource;
 use Magento\Framework\Model\AbstractModel;
 
 /**
- * Class EntitySnapshot
+ * Class EntitySnapshot register snapshot of entity data, for tracking changes
  */
 class EntitySnapshot
 {

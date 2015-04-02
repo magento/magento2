@@ -30,8 +30,8 @@ interface InfoInterface
     /**
      * Set Additional information about payment into Payment model
      *
-     * @param mixed $key
-     * @param mixed|null $value
+     * @param string $key
+     * @param string|null $value
      * @return mixed
      */
     public function setAdditionalInformation($key, $value = null);
@@ -47,7 +47,7 @@ interface InfoInterface
     /**
      * Unsetter for entire additional_information value or one of its element by key
      *
-     * @param string $key
+     * @param string|null $key
      * @return $this
      */
     public function unsAdditionalInformation($key = null);
@@ -55,8 +55,8 @@ interface InfoInterface
     /**
      * Getter for entire additional_information value or one of its element by key
      *
-     * @param string $key
-     * @return array|null|mixed
+     * @param string|null $key
+     * @return mixed
      */
     public function getAdditionalInformation($key = null);
 

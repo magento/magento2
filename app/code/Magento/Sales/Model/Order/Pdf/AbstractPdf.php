@@ -404,7 +404,8 @@ abstract class AbstractPdf extends \Magento\Framework\Object
                     $order->getCreatedAt(),
                     true
                 ),
-                \IntlDateFormatter::MEDIUM, false
+                \IntlDateFormatter::MEDIUM,
+                false
             ),
             35,
             $top -= 15,

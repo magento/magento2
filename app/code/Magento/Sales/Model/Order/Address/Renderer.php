@@ -11,7 +11,7 @@ use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Sales\Model\Order\Address;
 
 /**
- * Class Renderer
+ * Class Renderer using for formatting of order address
  */
 class Renderer
 {
@@ -48,7 +48,8 @@ class Renderer
      */
     public function format(Address $address, $type)
     {
-        if (!($formatType = $this->addressConfig->getFormatByCode($type)) || !$formatType->getRenderer()) {
+        $formatType = $this->addressConfig->getFormatByCode($type);
+        if (!$formatType || !$formatType->getRenderer()) {
             return null;
         }
         $this->eventManager->dispatch('customer_address_format', ['type' => $formatType, 'address' => $address]);
