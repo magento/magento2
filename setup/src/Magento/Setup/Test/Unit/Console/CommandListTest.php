@@ -31,6 +31,8 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
         $commands = [
             'Magento\Setup\Console\Command\AdminUserCreateCommand',
             'Magento\Setup\Console\Command\ConfigSetCommand',
+            'Magento\Setup\Console\Command\DbDataUpgradeCommand',
+            'Magento\Setup\Console\Command\DbSchemaUpgradeCommand',
             'Magento\Setup\Console\Command\DbStatusCommand',
             'Magento\Setup\Console\Command\ModuleEnableCommand',
             'Magento\Setup\Console\Command\ModuleDisableCommand',

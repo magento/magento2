@@ -40,6 +40,8 @@ class CommandList
         return [
             'Magento\Setup\Console\Command\AdminUserCreateCommand',
             'Magento\Setup\Console\Command\ConfigSetCommand',
+            'Magento\Setup\Console\Command\DbDataUpgradeCommand',
+            'Magento\Setup\Console\Command\DbSchemaUpgradeCommand',
             'Magento\Setup\Console\Command\DbStatusCommand',
             'Magento\Setup\Console\Command\ModuleEnableCommand',
             'Magento\Setup\Console\Command\ModuleDisableCommand',
@@ -49,8 +51,6 @@ class CommandList
             'Magento\Setup\Console\Command\MaintenanceEnableCommand',
             'Magento\Setup\Console\Command\MaintenanceStatusCommand',
             'Magento\Setup\Console\Command\UpdateCommand',
-            'Magento\Setup\Console\Command\DbSchemaUpgradeCommand',
-            'Magento\Setup\Console\Command\DbDataUpgradeCommand',
             'Magento\Setup\Console\Command\UninstallCommand',
         ];
     }
