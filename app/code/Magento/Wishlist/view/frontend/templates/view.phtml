@@ -21,9 +21,9 @@
           "addAllToCartSelector":".primary > .action.tocart",
           "commentInputType":"textarea",
           "infoList":false,
-          "addToCartUrl":"<?php echo $block->getItemAddToCartUrl("%item%");?>",
+          "addToCartUrl":<?php echo $block->getItemAddToCartParams("%item%");?>,
           "confirmRemoveMessage":"<?php echo __("Are you sure you want to remove this product from your wishlist?") ?>",
-          "addAllToCartUrl":"<?php echo $block->getAddAllToCartUrl(); ?>",
+          "addAllToCartUrl":<?php echo $block->getAddAllToCartParams(); ?>,
           "commentString":""},
           "validation": {}}' action="<?php echo $block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()]) ?>" method="post">
         <?php echo $block->getChildHtml('top'); ?>

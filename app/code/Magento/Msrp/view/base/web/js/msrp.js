@@ -154,6 +154,9 @@ define([
          */
         _addToCartSubmit: function () {
             this.element.trigger('addToCart', this.element);
+            if (this.element.data('stop-processing')) {
+                return false;
+            }
 
             if (this.options.addToCartButton) {
                 $(this.options.addToCartButton).click();

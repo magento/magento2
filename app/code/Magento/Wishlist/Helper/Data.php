@@ -359,7 +359,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Retrieve URL for adding item to shopping cart
+     * Retrieve params for adding item to shopping cart
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return  string
@@ -370,6 +370,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Retrieve URL for adding item to shopping cart
+     *
+     * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
+     * @return  string
+     */
+    public function getAddToCartParams($item)
+    {
+        return $this->_postDataHelper->getPostData(
+            $this->_getUrlStore($item)->getUrl('wishlist/index/cart'),
+            $this->_getCartUrlParameters($item)
+        );
+    }
+
+    /**
      * Retrieve URL for adding item to shopping cart from shared wishlist
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
@@ -377,7 +391,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getSharedAddToCartUrl($item)
     {
-        return $this->_getUrlStore($item)->getUrl('wishlist/shared/cart', $this->_getCartUrlParameters($item));
+        return $this->_postDataHelper->getPostData(
+            $this->_getUrlStore($item)->getUrl('wishlist/shared/cart'),
+            $this->_getCartUrlParameters($item)
+        );
     }
 
     /**
@@ -386,21 +403,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getCartUrlParameters($item)
     {
-        $continueUrl = $this->urlEncoder->encode(
-            $this->_getUrl(
-                'wishlist/index/index',
-                [
-                    '_current' => true,
-                    '_use_rewrite' => true,
-                    '_scope_to_url' => true
-                ]
-            )
-        );
-
-        return [
-            'item' => is_string($item) ? $item : $item->getWishlistItemId(),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $continueUrl
-        ];
+        return ['item' => is_string($item) ? $item : $item->getWishlistItemId()];
     }
 
     /**

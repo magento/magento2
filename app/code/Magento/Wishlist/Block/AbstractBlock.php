@@ -136,14 +136,14 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     }
 
     /**
-     * Retrieve Add Item to shopping cart URL
+     * Retrieve Add Item to shopping cart params for POST request
      *
      * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
      * @return string
      */
-    public function getItemAddToCartUrl($item)
+    public function getItemAddToCartParams($item)
     {
-        return $this->_getHelper()->getAddToCartUrl($item);
+        return $this->_getHelper()->getAddToCartParams($item);
     }
 
     /**
