@@ -28,23 +28,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <!-- ko foreach: { data: getItems(), as: 'item' } -->
-                    <tr>
-                        <!-- ko foreach: $parent.columns -->
-                            <!-- ko foreach: { data: elems, as: 'column' } -->
-                                <!-- ko template: column.getTemplate() --><!-- /ko -->
-                            <!--/ko-->
-                        <!-- /ko -->
-                    </tr>
+                    <!-- ko foreach: {data: getItems(), as: 'item'} -->
+                        <tr>
+                            <!-- ko foreach: $parent.getRegion('columns') -->
+                                <!-- ko template: getTemplate() --!><!-- /ko -->
+                            <!-- /ko -->
+                        </tr>
                     <!-- /ko -->
                     </tbody>
                     <tfoot>
-                    <!-- ko template: 'Magento_Checkout/review/totals' --><!-- /ko -->
+                    <!-- ko foreach: getRegion('totals') -->
+                        <!-- ko template: getTemplate() --><!-- /ko -->
+                    <!-- /ko -->
                     </tfoot>
                 </table>
             </div>
             <!-- ko foreach: { data: itemsAfter, as: 'element' } -->
-            <!-- ko template: element.getTemplate() --><!-- /ko -->
+                <!-- ko template: element.getTemplate() --><!-- /ko -->
             <!-- /ko -->
             <div id="checkout-review-submit" data-mage-init='{"paymentAuthentication":{}}' class="checkout-submit-order">
                 <div class="actions-toolbar" id="review-buttons-container">

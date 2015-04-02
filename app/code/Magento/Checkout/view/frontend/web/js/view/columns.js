@@ -1,20 +1,18 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/*browser:true*/
+/*global define*/
 define(
     [
-        'uiComponent',
-        '../model/quote'
+        'uiComponent'
     ],
-    function (Component, quote) {
+    function (Component) {
+        "use strict";
         return Component.extend({
             defaults: {
-                template: '',
+                template: 'Magento_Checkout/review/columns',
                 displayArea: 'columns'
             }
         });

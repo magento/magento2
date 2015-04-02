@@ -2,8 +2,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/*browser:true jquery:true*/
+/*global define*/
 define(
     [
         'uiComponent',
@@ -16,6 +16,7 @@ define(
         'Magento_Catalog/js/price-utils'
     ],
     function (Component, quote, url, navigator, orderAction, review, columns, priceUtils) {
+        "use strict";
         var stepName = 'review';
         var itemsBefore = [];
         var itemsAfter = [];
@@ -27,14 +28,6 @@ define(
             quoteHasPaymentMethod: quote.getPaymentMethod(),
             itemsBefore: itemsBefore,
             itemsAfter: itemsAfter,
-
-            initProperties: function () {
-                this._super();
-
-                this.regions = ['columns'];
-
-                return this;
-            },
             getItems: function() {
                 return quote.getItems();
             },
@@ -51,7 +44,7 @@ define(
             getTotals: review.getTotals(),
             getFormattedPrice: function (price) {
                 //todo add format data further
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
+                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
             }
         });
     }
