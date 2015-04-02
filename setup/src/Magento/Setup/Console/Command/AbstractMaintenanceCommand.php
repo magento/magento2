@@ -47,6 +47,11 @@ abstract class AbstractMaintenanceCommand extends Command
         $this->setDefinition($options);
     }
 
+    /**
+     * Is it "enable" or "disable" command
+     *
+     * @return bool
+     */
     abstract protected function isEnable();
 
     /**

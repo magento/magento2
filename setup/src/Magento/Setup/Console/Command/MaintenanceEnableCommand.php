@@ -22,6 +22,11 @@ class MaintenanceEnableCommand extends AbstractMaintenanceCommand
         parent::configure();
     }
 
+    /**
+     * Enable maintenance mode
+     *
+     * @return bool
+     */
     protected function isEnable()
     {
         return true;
