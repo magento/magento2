@@ -19,6 +19,7 @@ abstract class AbstractModuleCommand extends Command
      */
     const INPUT_KEY_MODULES = 'module';
     const INPUT_KEY_FORCE = 'force';
+    const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
     /**
      * Object manager provider
@@ -50,11 +51,17 @@ abstract class AbstractModuleCommand extends Command
                     'Name of the module'
                 ),
                 new InputOption(
+                    self::INPUT_KEY_CLEAR_STATIC_CONTENT,
+                    null,
+                    InputOption::VALUE_NONE,
+                    'Clear generated static view files. Necessary, if the module(s) have static view files'
+                ),
+                new InputOption(
                     self::INPUT_KEY_FORCE,
                     'f',
                     InputOption::VALUE_NONE,
                     'Bypass dependencies check'
-                )
+                ),
             ]);
     }
 
@@ -68,8 +75,7 @@ abstract class AbstractModuleCommand extends Command
         /**
          * @var \Magento\Framework\Module\Status $status
          */
-        $status = $this->objectManagerProvider->get()->create('Magento\Framework\Module\Status');
-
+        $status = $this->objectManagerProvider->get()->get('Magento\Framework\Module\Status');
         $modulesToChange = $status->getModulesToChange($isEnable, $modules);
         if (!empty($modulesToChange)) {
             $force = $input->getOption(self::INPUT_KEY_FORCE);
@@ -82,24 +88,63 @@ abstract class AbstractModuleCommand extends Command
                     $output->writeln('<error>' . implode("\n", $constraints) . '</error>');
                     return;
                 }
-            } else {
-                $output->writeln('<error>Alert: Your store may not operate properly because of '
-                    . "dependencies and conflicts of this module(s).</error>");
             }
             $status->setIsEnabled($isEnable, $modulesToChange);
             if ($isEnable) {
                 $output->writeln('<info>The following modules have been enabled:</info>');
-                $output->writeln('<info>' . implode(', ', $modulesToChange) . '</info>');
+                $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
+                $output->writeln('');
                 $output->writeln('<info>To make sure that the enabled modules are properly registered,'
                     . " run 'update' command.</info>");
             } else {
                 $output->writeln('<info>The following modules have been disabled:</info>');
-                $output->writeln('<info>' . implode(', ', $modulesToChange) . '</info>');
+                $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
+                $output->writeln('');
+            }
+            $this->cleanup($input, $output);
+            if ($force) {
+                $output->writeln('<error>Alert: You used --force option. Your store may not operate properly because of'
+                    . " dependencies and conflicts of this module(s).</error>");
             }
         } else {
             $output->writeln('<info>There have been no changes to any modules.</info>');
         }
     }
 
+    /**
+     * Is it "enable" or "disable" command
+     *
+     * @return bool
+     */
     abstract protected function isEnable();
+
+    /**
+     * Cleanup after updated modules status
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function cleanup(InputInterface $input, OutputInterface $output)
+    {
+        $objectManager = $this->objectManagerProvider->get();
+        /** @var \Magento\Framework\App\Cache $cache */
+        $cache = $objectManager->get('Magento\Framework\App\Cache');
+        $cache->clean();
+        $output->writeln('Cache cleared.');
+        /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
+        $cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
+        $cleanupFiles->clearCodeGeneratedClasses();
+        $output->writeln('Generated classes cleared.');
+        if ($input->getOption(self::INPUT_KEY_CLEAR_STATIC_CONTENT)) {
+            $cleanupFiles->clearMaterializedViewFiles();
+            $output->writeln('Generated static view files cleared.');
+        } else {
+            $output->writeln(
+                '<error>Alert: Generated static view files have not been removed. '
+                . 'Please, consider running the command with ' . '--' . self::INPUT_KEY_CLEAR_STATIC_CONTENT
+                . ' option to ensure your store works properly.</error>'
+            );
+        }
+    }
 }

@@ -22,6 +22,16 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     private $status;
 
     /**
+     * @var \Magento\Framework\App\Cache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cache;
+
+    /**
+     * @var \Magento\Framework\App\State\CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cleanupFiles;
+
+    /**
      * @var ModuleDisableCommand
      */
     protected function setUp()
@@ -32,18 +42,25 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($objectManager));
         $this->status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
+        $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $objectManager->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->status));
+            ->method('get')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\Module\Status', $this->status],
+                ['Magento\Framework\App\Cache', $this->cache],
+                ['Magento\Framework\App\State\CleanupFiles', $this->cleanupFiles],
+            ]));
     }
 
     /**
      * @param bool $isEnable
+     * @param bool $clearStaticContent
      * @param string $expectedMessage
      *
      * @dataProvider executeDataProvider
      */
-    public function testExecute($isEnable, $expectedMessage)
+    public function testExecute($isEnable, $clearStaticContent, $expectedMessage)
     {
         $this->status->expects($this->once())
             ->method('getModulesToChange')
@@ -58,10 +75,21 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->method('setIsEnabled')
             ->with($isEnable, ['Magento_Module1']);
 
+        $this->cache->expects($this->once())
+            ->method('clean');
+        $this->cleanupFiles->expects($this->once())
+            ->method('clearCodeGeneratedClasses');
+        $this->cleanupFiles->expects($clearStaticContent ? $this->once() : $this->never())
+            ->method('clearMaterializedViewFiles');
+
         $commandTester = $isEnable
             ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
             : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
-        $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2']]);
+        $input = ['module' => ['Magento_Module1', 'Magento_Module2']];
+        if ($clearStaticContent) {
+            $input['--clear-static-content'] = true;
+        }
+        $commandTester->execute($input);
         $this->assertStringMatchesFormat($expectedMessage, $commandTester->getDisplay());
     }
 
@@ -71,8 +99,26 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     public function executeDataProvider()
     {
         return [
-            'enable'  => [true, '%amodules have been enabled%aMagento_Module1%a'],
-            'disable' => [false, '%amodules have been disabled%aMagento_Module1%a'],
+            'enable, do not clear static content' => [
+                true,
+                false,
+                '%amodules have been enabled%aMagento_Module1%aGenerated static view files have not been removed%a'
+            ],
+            'disable, do not clear static content' => [
+                false,
+                false,
+                '%amodules have been disabled%aMagento_Module1%aGenerated static view files have not been removed%a'
+            ],
+            'enable, clear static content' => [
+                true,
+                true,
+                '%amodules have been enabled%aMagento_Module1%aGenerated static view files cleared%a'
+            ],
+            'disable, clear static content' => [
+                false,
+                true,
+                '%amodules have been disabled%aMagento_Module1%aGenerated static view files cleared%a'
+            ],
         ];
     }
 
@@ -141,7 +187,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
         $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2'], '--force' => true]);
         $this->assertStringMatchesFormat(
-            '%aYour store may not operate properly because of dependencies and conflicts' . $expectedMessage,
+            $expectedMessage . '%aYour store may not operate properly because of dependencies and conflicts%a',
             $commandTester->getDisplay()
         );
     }
@@ -156,7 +202,6 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             'disable' => [false, '%amodules have been disabled%aMagento_Module1%a'],
         ];
     }
-
 
     /**
      * @param bool $isEnable

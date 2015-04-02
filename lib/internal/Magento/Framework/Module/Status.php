@@ -7,9 +7,7 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\App\Cache;
 
 /**
  * A service for controlling module status
@@ -40,18 +38,6 @@ class Status
     private $writer;
 
     /**
-     * Application state file cleanup service
-     *
-     * @var CleanupFiles
-     */
-    private $cleanupFiles;
-
-    /**
-     * @var Cache
-     */
-    private $cache;
-
-    /**
      * Dependency Checker
      *
      * @var DependencyChecker
@@ -71,8 +57,6 @@ class Status
      * @param ModuleList\Loader $loader
      * @param ModuleList $list
      * @param Writer $writer
-     * @param CleanupFiles $cleanupFiles
-     * @param Cache $cache
      * @param ConflictChecker $conflictChecker
      * @param DependencyChecker $dependencyChecker
      */
@@ -80,16 +64,12 @@ class Status
         ModuleList\Loader $loader,
         ModuleList $list,
         Writer $writer,
-        CleanupFiles $cleanupFiles,
-        Cache $cache,
         ConflictChecker $conflictChecker,
         DependencyChecker $dependencyChecker
     ) {
         $this->loader = $loader;
         $this->list = $list;
         $this->writer = $writer;
-        $this->cleanupFiles = $cleanupFiles;
-        $this->cache = $cache;
         $this->conflictChecker = $conflictChecker;
         $this->dependencyChecker = $dependencyChecker;
     }
@@ -172,8 +152,6 @@ class Status
             }
         }
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
-        $this->cache->clean();
-        $this->cleanupFiles->clearCodeGeneratedFiles();
     }
 
     /**
