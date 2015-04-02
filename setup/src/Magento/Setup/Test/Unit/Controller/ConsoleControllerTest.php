@@ -142,18 +142,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->controller->installAction();
     }
 
-    public function testInstallSchemaAction()
-    {
-        $this->installer->expects($this->once())->method('installSchema');
-        $this->controller->installSchemaAction();
-    }
-
-    public function testInstallDataAction()
-    {
-        $this->installer->expects($this->once())->method('installDataFixtures');
-        $this->controller->installDataAction();
-    }
-
     public function testInstallUserConfigAction()
     {
         $this->installer->expects($this->once())->method('installUserConfig')->with($this->parameters);
@@ -253,8 +241,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $noParameters = 'This command has no parameters.';
         return [
             ['install',''],
-            ['install-schema', $noParameters],
-            ['install-data', $noParameters],
             ['install-user-configuration', ''],
             ['install-admin-user', ''],
             ['help', ''],
