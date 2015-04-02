@@ -321,13 +321,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->cleanupFiles->expects($this->once())->method('clearCacheFiles')->will(
-            $this->returnValue(
-                [
-                    "The directory '/cache' doesn't exist - skipping cleanup",
-                ]
-            )
-        );
+        $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $cache->expects($this->once())->method('clean');
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\Cache', [], $cache],
+            ]));
 
         $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
 
@@ -347,8 +347,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->configReader->expects($this->once())->method('load')
             ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
         $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
-        $this->logger->expects($this->at(0))->method('log')->with('File system cleanup:');
-        $this->logger->expects($this->at(1))->method('log')
+        $this->logger->expects($this->at(0))->method('log')->with('Cache cleared successfully');
+        $this->logger->expects($this->at(1))->method('log')->with('File system cleanup:');
+        $this->logger->expects($this->at(2))->method('log')
             ->with('The directory \'/generation\' doesn\'t exist - skipping cleanup');
         $this->logger->expects($this->at(3))->method('log')->with('Updating modules:');
         $newObject->updateModulesSequence();
@@ -377,7 +378,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap([
                 ['Magento\Framework\App\Cache', [], $cache],
             ]));
-        $this->logger->expects($this->at(2))->method('log')->with('Cache is cleared');
+        $this->logger->expects($this->at(2))->method('log')->with('Cache cleared successfully');
         $this->logger->expects($this->at(3))->method('log')->with('File system cleanup:');
         $this->logger
             ->expects($this->at(4))

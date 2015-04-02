@@ -55,16 +55,6 @@ class CleanupFiles
     }
 
     /**
-     * Clears cache files
-     *
-     * @return \string[]
-     */
-    public function clearCacheFiles()
-    {
-        return $this->emptyDir(DirectoryList::CACHE);
-    }
-
-    /**
      * Clears materialized static view files
      *
      * @return string[]

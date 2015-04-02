@@ -918,11 +918,11 @@ class Installer
     public function updateModulesSequence()
     {
         $this->assertDeploymentConfigExists();
+
+        $this->clearCache();
+
         $this->log->log('File system cleanup:');
-        $messages = array_merge(
-            $this->cleanupFiles->clearCodeGeneratedClasses(),
-            $this->cleanupFiles->clearCacheFiles()
-        );
+        $messages = $this->cleanupFiles->clearCodeGeneratedClasses();
         foreach ($messages as $message) {
             $this->log->log($message);
         }
@@ -940,10 +940,7 @@ class Installer
         $this->log->log('Starting Magento uninstallation:');
 
         $this->cleanupDb();
-
-        $cache = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache');
-        $cache->clean();
-        $this->log->log('Cache is cleared');
+        $this->clearCache();
 
         $this->log->log('File system cleanup:');
         $messages = $this->cleanupFiles->clearAllFiles();
@@ -954,6 +951,16 @@ class Installer
         $this->deleteDeploymentConfig();
 
         $this->log->logSuccess('Magento uninstallation complete.');
+    }
+
+    /**
+     * Clears cache
+     */
+    private function clearCache()
+    {
+        $cache = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache');
+        $cache->clean();
+        $this->log->log('Cache cleared successfully');
     }
 
     /**
