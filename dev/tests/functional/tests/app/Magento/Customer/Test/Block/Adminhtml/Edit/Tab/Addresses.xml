@@ -70,11 +70,11 @@
             <strategy>css selector</strategy>
         </vat_id>
         <default_billing>
-            <selector>#address_list [aria-selected="true"] [name^="account"][name$="[default_billing]"]</selector>
+            <selector>.ui-state-active [name$="[default_billing]"]</selector>
             <input>checkbox</input>
         </default_billing>
         <default_shipping>
-            <selector>#address_list [aria-selected="true"] [name^="account"][name$="[default_shipping]"]</selector>
+            <selector>.ui-state-active [name$="[default_shipping]"]</selector>
             <input>checkbox</input>
         </default_shipping>
     </fields>

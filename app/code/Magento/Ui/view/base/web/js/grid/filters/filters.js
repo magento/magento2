@@ -44,6 +44,8 @@ define([
 
         apply: function () {
             this.extractActive();
+            
+            this.source.trigger('params.applyFilters');
             this.source.reload();
         },
 

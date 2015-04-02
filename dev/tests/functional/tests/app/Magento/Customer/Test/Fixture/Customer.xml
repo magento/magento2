@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="customer" module="Magento_Customer" type="eav" entity_type="customer" collection="Magento\Customer\Model\Resource\Customer\Collection" identifier="email" repository_class="Magento\Customer\Test\Repository\Customer" handler_interface="Magento\Customer\Test\Handler\Customer\CustomerInterface" class="Magento\Customer\Test\Fixture\Customer">
     <dataset name="default">
         <field name="firstname" xsi:type="string">John</field>

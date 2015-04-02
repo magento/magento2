@@ -4,6 +4,7 @@
 //  */
 
 @import (reference) '_extends.less';
+@import '_control-table.less';
 
 //
 //  Variables
@@ -253,7 +254,7 @@ option:empty {
         &[disabled] + [class*='admin__addon-']:before {
             &:extend(.__form-control-styles[disabled]);
         }
-        &:focus + label:before {
+        &:focus + [class*='admin__addon-']:before {
             &:extend(.__form-control-styles:focus);
         }
     }

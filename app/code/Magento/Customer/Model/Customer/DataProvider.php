@@ -9,6 +9,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
+use Magento\Ui\DataProvider\EavValidationRul;
 use Magento\Customer\Model\Resource\Customer\Collection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Customer\Model\Resource\Customer\CollectionFactory as CustomerCollectionFactory;
@@ -82,10 +83,16 @@ class DataProvider implements DataProviderInterface
     ];
 
     /**
+     * @var EavValidationRul
+     */
+    protected $eavValidationRul;
+
+    /**
      * Constructor
      *
      * @param string $primaryFieldName
      * @param string $requestFieldName
+     * @param EavValidationRul $eavValidationRul
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param array $meta
@@ -94,6 +101,7 @@ class DataProvider implements DataProviderInterface
     public function __construct(
         $primaryFieldName,
         $requestFieldName,
+        EavValidationRul $eavValidationRul,
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         array $meta = [],
@@ -101,6 +109,7 @@ class DataProvider implements DataProviderInterface
     ) {
         $this->primaryFieldName = $primaryFieldName;
         $this->requestFieldName = $requestFieldName;
+        $this->eavValidationRul = $eavValidationRul;
         $this->collection = $customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
@@ -115,6 +124,8 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Get meta data
+     *
      * @return array
      */
     public function getMeta()
@@ -123,6 +134,8 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Get field meta info
+     *
      * @param string $fieldSetName
      * @param string $fieldName
      * @return array
@@ -132,35 +145,6 @@ class DataProvider implements DataProviderInterface
         return isset($this->meta[$fieldSetName]['fields'][$fieldName])
             ? $this->meta[$fieldSetName]['fields'][$fieldName]
             : [];
-    }
-
-    /**
-     * @param Type $entityType
-     * @return array
-     * @throws \Magento\Eav\Exception
-     */
-    protected function getAttributesMeta(Type $entityType)
-    {
-        $meta = [];
-        $attributes = $entityType->getAttributeCollection();
-        /* @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        foreach ($attributes as $attribute) {
-            $code = $attribute->getAttributeCode();
-            // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
-            foreach ($this->metaProperties as $metaName => $origName) {
-                $value = $attribute->getDataUsingMethod($origName);
-                $meta[$code][$metaName] = $value;
-                if ('frontend_input' === $origName) {
-                    $meta[$code]['formElement'] = isset($this->formElement[$value])
-                        ? $this->formElement[$value]
-                        : $value;
-                }
-                if ($attribute->usesSource()) {
-                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
-                }
-            }
-        }
-        return $meta;
     }
 
     /**
@@ -203,11 +187,10 @@ class DataProvider implements DataProviderInterface
             $addresses = [];
             /** @var Address $address */
             foreach ($customer->getAddresses() as $address) {
-                $address->load($address->getId());
-                $addresses[$address->getId()] = $address->getData();
-                if (isset($addresses[$address->getId()]['street'])) {
-                    $addresses[$address->getId()]['street'] = explode("\n", $addresses[$address->getId()]['street']);
-                }
+                $addressId = $address->getId();
+                $address->load($addressId);
+                $addresses[$addressId] = $address->getData();
+                $this->prepareAddressData($addressId, $addresses, $result['customer']);
             }
             if (!empty($addresses)) {
                 $result['address'] = $addresses;
@@ -317,11 +300,74 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
+     * Get fields meta info
+     *
      * @param string $fieldSetName
      * @return array
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
         return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
+    }
+
+    /**
+     * Get attributes meta
+     *
+     * @param Type $entityType
+     * @return array
+     * @throws \Magento\Eav\Exception
+     */
+    protected function getAttributesMeta(Type $entityType)
+    {
+        $meta = [];
+        $attributes = $entityType->getAttributeCollection();
+        /* @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        foreach ($attributes as $attribute) {
+            $code = $attribute->getAttributeCode();
+            // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
+            foreach ($this->metaProperties as $metaName => $origName) {
+                $value = $attribute->getDataUsingMethod($origName);
+                $meta[$code][$metaName] = $value;
+                if ('frontend_input' === $origName) {
+                    $meta[$code]['formElement'] = isset($this->formElement[$value])
+                        ? $this->formElement[$value]
+                        : $value;
+                }
+                if ($attribute->usesSource()) {
+                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
+                }
+            }
+
+            $rules = $this->eavValidationRul->build($attribute, $meta[$code]);
+            if (!empty($rules)) {
+                $meta[$code]['validation'] = $rules;
+            }
+        }
+        return $meta;
+    }
+
+    /**
+     * Prepare address data
+     *
+     * @param int $addressId
+     * @param array $addresses
+     * @param array $customer
+     * @return void
+     */
+    protected function prepareAddressData($addressId, array &$addresses, array $customer)
+    {
+        if (isset($customer['default_billing'])
+            && $addressId == $customer['default_billing']
+        ) {
+            $addresses[$addressId]['default_billing'] = $customer['default_billing'];
+        }
+        if (isset($customer['default_shipping'])
+            && $addressId == $customer['default_shipping']
+        ) {
+            $addresses[$addressId]['default_shipping'] = $customer['default_shipping'];
+        }
+        if (isset($addresses[$addressId]['street'])) {
+            $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
+        }
     }
 }

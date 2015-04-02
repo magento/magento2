@@ -15,6 +15,7 @@
 
 @action-dropdown-menu-item__background-color: @page-wrapper__background-color;
 @action-dropdown-menu-item__padding-vertical: 1rem;
+@action-dropdown-menu-item__padding-left: 2rem;
 @action-dropdown-menu-item__hover__background-color: @color-gray89;
 
 @action-dropdown-menu-item-actions__size: 1.7rem;
@@ -42,7 +43,7 @@
         padding: 1rem 0 0;
         right: auto;
         > li {
-            padding: 0 @action-dropdown-menu-item-actions__width 0 1rem;
+            padding: 0 @action-dropdown-menu-item-actions__width 0 0;
             position: relative;
             white-space: nowrap;
             &:not(.action-dropdown-menu-item-last) {
@@ -61,6 +62,7 @@
         .action-dropdown-menu-item-edit {
             display: none;
             padding-bottom: @action-dropdown-menu-item__padding-vertical;
+            padding-left: @action-dropdown-menu-item__padding-left / 2;
             padding-top: @action-dropdown-menu-item__padding-vertical;
             .action-dropdown-menu-item-actions {
                 padding-bottom: @action-dropdown-menu-item__padding-vertical;
@@ -70,6 +72,7 @@
         //  Save action
         .action-dropdown-menu-item-last {
             padding-bottom: @action-dropdown-menu-item__padding-vertical;
+            padding-left: @action-dropdown-menu-item__padding-left / 2;
             padding-top: @action-dropdown-menu-item__padding-vertical;
             > a {
                 .link-pattern();
@@ -105,7 +108,7 @@
         }
         .action-dropdown-menu-link {
             .action-dropdown-menu-link-pattern();
-            padding: @action-dropdown-menu-item__padding-vertical 1rem @action-dropdown-menu-item__padding-vertical 1.1rem;
+            padding: @action-dropdown-menu-item__padding-vertical 1rem @action-dropdown-menu-item__padding-vertical @action-dropdown-menu-item__padding-left + .1rem;
         }
     }
     //  Icon actions

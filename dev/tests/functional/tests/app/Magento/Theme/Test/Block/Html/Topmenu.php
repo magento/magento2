@@ -60,7 +60,6 @@ class Topmenu extends Block
                 }
             );
         }
-        sleep(1); // TODO: sleep should be removed after fix with category sliding
         $category[0]->click();
     }
 

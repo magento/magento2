@@ -21,6 +21,37 @@
 
 //@magento_import "source/_module.less"; // import theme styles
 
+
+//
+//  Temporary
+//  ---------------------------------------------
+
+// ToDo UI: Hiding menu (should be fixed in layouts)
+.attribute-popup {
+    .page-wrapper {
+        margin-left: 0;
+    }
+    .menu-wrapper,
+    .page-header-hgroup,
+    .page-header-actions {
+        display: none;
+    }
+}
+
+[class*='admin__'] {
+    + label,
+    + label:after,
+    + label:before,
+    &:before,
+    &:after {
+        box-sizing: border-box;
+    }
+}
+
+// ToDo UI: Temporary. Should be changed
+@import 'source/components/_calendar-temp.less';
+@import 'source/components/_tooltip-temp.less';
+
 //
 //  Media queries collector
 //  ---------------------------------------------
