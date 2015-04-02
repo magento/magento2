@@ -26,7 +26,7 @@ class ConsoleLogger implements LoggerInterface
     /**
      * Console
      *
-     * @var \Symfony\Component\Console\Output\Output
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $console;
 
@@ -38,7 +38,7 @@ class ConsoleLogger implements LoggerInterface
     public function __construct(OutputInterface $output)
     {
         $this->console = $output;
-        $outputFormatter = $output->getFormatter();
+        $outputFormatter = $this->console->getFormatter();
         $outputFormatter->setStyle('detail', new OutputFormatterStyle('blue'));
         $outputFormatter->setStyle('metadata', new OutputFormatterStyle('cyan'));
     }
