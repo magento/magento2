@@ -17,6 +17,8 @@
 @field-note__font-size: @font-size__s;
 @field-scope__color: @color-dark-gray;
 
+@field-option__padding-top: .8rem;
+
 @field-error-control__border-color: @color-tomato-brick;
 @field-error-message__background-color: @color-lazy-sun;
 @field-error-message__border-color: @color-apricot;
@@ -166,6 +168,12 @@
     }
 }
 
+.admin__field-control {
+    & + & {
+        margin-top: 1.5rem;
+    }
+}
+
 //  Field error message
 .admin__field-error {
     background: @field-error-message__background-color;
@@ -190,7 +198,7 @@
 
 //  Field containing checkbox or radio
 .admin__field-option {
-    padding-top: 8px;
+    padding-top: @field-option__padding-top;
 
     .admin__field-label {
         text-align: left;

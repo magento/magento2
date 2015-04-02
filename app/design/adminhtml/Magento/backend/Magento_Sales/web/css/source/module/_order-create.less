@@ -166,12 +166,12 @@
 //  Order discounts
 //  ---------------------------------------------
 
-.admin__order-discounts {
+.order-discounts {
     .extend__clearfix();
     margin-top: @indent__base;
     .action-secondary {
         float: right;
-        margin-top: 2.8rem;
+        margin-top: 2.1rem;
     }
     .order-coupons {
         float: left;
@@ -191,7 +191,7 @@
             position: absolute;
             right: 0;
             bottom: 7px;
-            span {
+            > span {
                 .extend__visually-hidden();
             }
 
@@ -208,7 +208,7 @@
 }
 
 //
-//  Blocks
+//  Order Address Information
 //  ---------------------------------------------
 
 .order-details {
@@ -254,6 +254,62 @@
             width: auto;
         }
     }
+}
+
+.admin__vat-number {
+    .action-default {
+        &:extend(.abs-action-tertiary all);
+        font-weight: @font-weight__regular;
+        margin-top: @indent__s;
+        padding: 0;
+    }
+}
+
+//
+//  Order Payment & Shipping Information
+//  ---------------------------------------------
+
+.order-methods { //  ToDo UI: add styles for 3d secure
+    .admin__legend {
+        margin-bottom: 1.5rem;
+    }
+    .admin__field {
+        &:extend(.abs-field-rows all);
+    }
+}
+
+.admin__payment-method-wapper {
+    margin: 0;
+    .admin__fieldset {
+        padding: 1.5rem 0 @indent__base @field-control-option-label__padding-left;
+    }
+    .admin__field {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.admin__order-shipment-methods {
+    //  ToDo UI: add styles for shipping methods
+}
+
+.admin__order-shipment-methods-title {
+    font-weight: @font-weight__bold;
+    margin: 0 0 @indent__xs;
+}
+
+.admin__order-shipment-methods-options {
+    margin: 0 0 @indent__base @field-control-option-label__padding-left;
+}
+
+.admin__order-shipment-methods-options-list {
+    list-style: none;
+    margin: 0;
+}
+
+.order-shipping-method-summary {
+    padding-top: @field-option__padding-top;
 }
 
 //

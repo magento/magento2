@@ -11,60 +11,68 @@
 <?php $_shippingRateGroups = $block->getShippingRates(); ?>
 <?php if ($_shippingRateGroups): ?>
     <div id="order-shipping-method-choose" style="display:none">
-    <dl class="shipment-methods">
-    <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
-        <dt><strong><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></strong></dt>
-        <dd>
-            <ul>
-            <?php foreach ($_rates as $_rate): ?>
-                <?php $_radioProperty = 'name="order[shipping_method]" type="radio" onclick="order.setShippingMethod(this.value)"' ?>
-                <?php $_code = $_rate->getCode() ?>
-                <li>
-                   <?php if ($_rate->getErrorMessage()): ?>
-                       <div class="messages">
-                           <div class="message message-error error">
-                               <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
+        <dl class="admin__order-shipment-methods">
+        <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
+            <dt class="admin__order-shipment-methods-title"><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></dt>
+            <dd class="admin__order-shipment-methods-options">
+                <ul class="admin__order-shipment-methods-options-list">
+                <?php foreach ($_rates as $_rate): ?>
+                    <?php $_radioProperty = 'name="order[shipping_method]" type="radio" onclick="order.setShippingMethod(this.value)"' ?>
+                    <?php $_code = $_rate->getCode() ?>
+                    <li class="admin__field-option">
+                       <?php if ($_rate->getErrorMessage()): ?>
+                           <div class="messages">
+                               <div class="message message-error error">
+                                   <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
+                               </div>
                            </div>
-                       </div>
-                   <?php else: ?>
-                        <?php $_checked = $block->isMethodActive($_code) ? 'checked="checked"' : '' ?>
-                        <input <?php echo $_radioProperty ?> value="<?php echo $_code ?>" id="s_method_<?php echo $_code ?>" <?php echo $_checked ?>/>
-                        <label class="normal" for="s_method_<?php echo $_code ?>">
-                            <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
-                            <strong>
-                                <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
-                                <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>
+                       <?php else: ?>
+                            <?php $_checked = $block->isMethodActive($_code) ? 'checked="checked"' : '' ?>
+                            <input <?php echo $_radioProperty ?> value="<?php echo $_code ?>"
+                                                                 id="s_method_<?php echo $_code ?>" <?php echo $_checked ?>
+                                                                 class="admin__control-radio"/>
+                            <label class="admin__field-label" for="s_method_<?php echo $_code ?>">
+                                <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
+                                <strong>
+                                    <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
+                                    <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>
 
-                                <?php echo $_excl; ?>
-                                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                    (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                                <?php endif; ?>
-                            </strong>
-                        </label>
-                   <?php endif ?>
-                </li>
-            <?php endforeach; ?>
-            </ul>
-        </dd>
-    <?php endforeach; ?>
-    </dl>
+                                    <?php echo $_excl; ?>
+                                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                        (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                                    <?php endif; ?>
+                                </strong>
+                            </label>
+                       <?php endif ?>
+                    </li>
+                <?php endforeach; ?>
+                </ul>
+            </dd>
+        <?php endforeach; ?>
+        </dl>
     </div>
     <?php if ($_rate = $block->getActiveMethodRate()): ?>
         <div id="order-shipping-method-info">
-            <strong><?php echo $block->escapeHtml($block->getCarrierName($_rate->getCarrier())) ?></strong><br/>
-            <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
-            <strong>
-                <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
-                <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>
+            <dl class="admin__order-shipment-methods">
+                <dt class="admin__order-shipment-methods-title">
+                    <?php echo $block->escapeHtml($block->getCarrierName($_rate->getCarrier())) ?>
+                </dt>
+                <dd class="admin__order-shipment-methods-options">
+                    <?php echo $block->escapeHtml($_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()) ?> -
+                    <strong>
+                        <?php $_excl = $block->getShippingPrice($_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
+                        <?php $_incl = $block->getShippingPrice($_rate->getPrice(), true); ?>
 
-                <?php echo $_excl; ?>
-                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                    (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                <?php endif; ?>
-            </strong>
-            <!--input type="text" class="input-text" style="width:70px"/-->
-            <br/>
-            <a href="#" onclick="$('order-shipping-method-info').hide();$('order-shipping-method-choose').show();return false">
+                        <?php echo $_excl; ?>
+                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                            (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                        <?php endif; ?>
+                    </strong>
+                </dd>
+            </dl>
+            <a href="#"
+               onclick="$('order-shipping-method-info').hide();$('order-shipping-method-choose').show();return false"
+               class="action-tertiary">
                 <?php echo __('Click to change shipping method') ?>
             </a>
         </div>
@@ -76,10 +84,12 @@ require(['prototype'], function(){
 </script>
     <?php endif; ?>
 <?php elseif ($block->getIsRateRequest()): ?>
-    <strong><?php echo __('Sorry, no quotes are available for this order.') ?></strong>
+    <div class="order-shipping-method-summary">
+        <strong><?php echo __('Sorry, no quotes are available for this order.') ?></strong>
+    </div>
 <?php else: ?>
-    <div id="order-shipping-method-summary">
-        <a href="#" onclick="order.loadShippingRates();return false">
+    <div id="order-shipping-method-summary" class="order-shipping-method-summary">
+        <a href="#" onclick="order.loadShippingRates();return false" class="action-tertiary">
             <?php echo __('Get shipping methods and rates') ?>
         </a>
         <input type="hidden" name="order[has_shipping]" value="" class="required-entry" />
