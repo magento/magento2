@@ -11,6 +11,7 @@
     </head>
     <update handle="editor"/>
     <body>
+        <referenceContainer name="left" htmlClass="admin__scope-old" htmlTag="div" />
         <referenceContainer name="page.main.actions">
             <block class="Magento\Backend\Block\Store\Switcher" name="category.store.switcher" template="Magento_Backend::store/switcher.phtml">
                 <!--<arguments>-->

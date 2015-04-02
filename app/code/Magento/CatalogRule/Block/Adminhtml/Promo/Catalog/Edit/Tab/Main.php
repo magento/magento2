@@ -196,7 +196,6 @@ class Main extends Generic implements TabInterface
                 'name' => 'from_date',
                 'label' => __('From Date'),
                 'title' => __('From Date'),
-                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             ]
@@ -208,7 +207,6 @@ class Main extends Generic implements TabInterface
                 'name' => 'to_date',
                 'label' => __('To Date'),
                 'title' => __('To Date'),
-                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'input_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT,
                 'date_format' => $dateFormat
             ]

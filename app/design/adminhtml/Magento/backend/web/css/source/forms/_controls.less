@@ -188,8 +188,8 @@ option:empty {
     }
     &:focus {
          + label {
-            .keyfocus & {
-                &:extend(.keyfocus *:focus);
+            ._keyfocus & {
+                &:extend(._keyfocus *:focus);
             }
             &:before {
                 border-color: @field-control__focus__border-color;

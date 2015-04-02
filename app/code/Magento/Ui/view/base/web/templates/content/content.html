@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 -->
-<div data-bind="html: content"></div>
+<div data-bind="html: content, attr: {class: element.cssclass ? element.cssclass : 'admin__scope-old'}"></div>
 
 <!--ko if: showSpinner -->
-<div class="admin__scope">
 <div data-role="spinner" class="grid-loading-mask" data-bind="visible: loading">
     <div class="spinner"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-</div>
 </div>
 <!-- /ko -->

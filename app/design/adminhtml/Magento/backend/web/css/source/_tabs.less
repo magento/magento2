@@ -48,12 +48,16 @@
         display: block;
         padding: 1.5rem 1.8rem 1.3rem;
         text-decoration: none;
+        &:hover { // ToDo UI: should be deleted with old styles
+            color: @color-brown-darkie;
+            text-decoration: none;
+        }
     }
 }
 
 //  Tabs content
 .ui-tabs-panel {
-    border-top: .1rem solid @color-gray68;
-    margin-top: -.1rem;
+    border-top: 1px solid @color-gray68;
+    margin-top: -1px;
     padding: 2rem;
 }
