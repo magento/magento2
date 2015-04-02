@@ -466,7 +466,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
         }
         $result = false;
         if ($this->_filterEvalRendered) {
-            eval('$result = ' . $this->_filterEvalRendered . ';');
+            $result = eval('return ' . $this->_filterEvalRendered . ';');
         }
         return $result;
     }
