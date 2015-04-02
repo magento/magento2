@@ -13,7 +13,7 @@ define(
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/review/iterator',
-                displayArea: 'columns'
+                displayArea: 'itemsAfter'
             }
         });
     }
