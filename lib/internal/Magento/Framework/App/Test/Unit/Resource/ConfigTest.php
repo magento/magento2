@@ -65,9 +65,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(serialize($this->_resourcesConfig))
         );
 
-        $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $deploymentConfigMock->expects($this->once())
-            ->method('getSegment')
+        $deploymentConfig = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig->expects($this->once())
+            ->method('getConfigData')
             ->with('resource')
             ->willReturn($this->_initialResources);
 
@@ -75,7 +75,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->_readerMock,
             $this->_scopeMock,
             $this->_cacheMock,
-            $deploymentConfigMock,
+            $deploymentConfig,
             'cacheId'
         );
     }
@@ -95,9 +95,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionConstructor()
     {
-        $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $deploymentConfigMock->expects($this->once())
-            ->method('getSegment')
+        $deploymentConfig = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig->expects($this->once())
+            ->method('getConfigData')
             ->with('resource')
             ->willReturn(['validResource' => ['somekey' => 'validConnectionName']]);
 
@@ -105,7 +105,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->_readerMock,
             $this->_scopeMock,
             $this->_cacheMock,
-            $deploymentConfigMock,
+            $deploymentConfig,
             'cacheId'
         );
     }

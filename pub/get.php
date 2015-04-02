@@ -8,7 +8,6 @@
 
 use Magento\Framework\App\Cache\Frontend\Factory;
 use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\Module\ModuleList\DeploymentConfig;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
 
