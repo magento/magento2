@@ -8,7 +8,7 @@ namespace Magento\Sales\Model\Resource;
 use Magento\Sales\Model\AbstractModel;
 
 /**
- * Class EntityMetadata
+ * Class EntityMetadata represents a list of entity fields that are applicable for persistence operations
  */
 class EntityMetadata
 {

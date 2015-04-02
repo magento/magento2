@@ -6,7 +6,7 @@
 namespace Magento\SalesSequence\Model;
 
 /**
- * Class Config
+ * Class Config - configuration container for sequence
  */
 class Config
 {

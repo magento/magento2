@@ -9,7 +9,7 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\DB\Sequence\SequenceInterface;
 
 /**
- * Class Sequence
+ * Class Sequence represents sequence in logic
  */
 class Sequence implements SequenceInterface
 {

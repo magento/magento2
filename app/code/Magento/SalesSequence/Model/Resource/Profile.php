@@ -10,7 +10,7 @@ use Magento\Framework\Model\Resource\Db\Context as DatabaseContext;
 use Magento\SalesSequence\Model\ProfileFactory;
 
 /**
- * Class Profile
+ * Class Profile represents profile data for sequence as prefix, suffix, start value etc.
  */
 class Profile extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {

@@ -127,6 +127,8 @@ class Invoice extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Formats order address to html, pdf and etc. formats
+     *
      * @param \Magento\Sales\Model\Order\Address $address
      * @param string $format
      * @return null|string

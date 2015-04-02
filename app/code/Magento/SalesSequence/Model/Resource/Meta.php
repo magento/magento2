@@ -14,7 +14,7 @@ use Magento\SalesSequence\Model\Profile as ModelProfile;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 
 /**
- * Class Meta
+ * Class Meta represents metadata for sequence as sequence table and store id
  */
 class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
@@ -39,7 +39,6 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param DatabaseContext $context
      * @param MetaFactory $metaFactory
      * @param ResourceProfile $resourceProfile
-     * @param DdlSequence $ddlSequence
      * @param string $resourcePrefix
      */
     public function __construct(
@@ -64,6 +63,8 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
+     * Retrieves Metadata for entity by entity type and store id
+     *
      * @param string $entityType
      * @param int $storeId
      * @return \Magento\SalesSequence\Model\Meta
@@ -89,6 +90,8 @@ class Meta extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
+     * Using for load sequence profile and setting it into metadata
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
