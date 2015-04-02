@@ -12,6 +12,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Command for checking if DB version is in sync with the code base version
+ */
 class DbStatusCommand extends Command
 {
     /**
