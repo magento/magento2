@@ -17,7 +17,7 @@ define(
                 columnTitle: 'Subtotal'
             },
             getValue: function(quoteItem) {
-                return quoteItem.row_total;
+                return this.getFormattedPrice(quoteItem.row_total);
             }
         });
     }

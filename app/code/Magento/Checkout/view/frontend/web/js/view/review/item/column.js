@@ -6,9 +6,11 @@
 /*global define*/
 define(
     [
-        'uiComponent'
+        'uiComponent',
+        '../../../model/quote',
+        'Magento_Catalog/js/price-utils'
     ],
-    function (Component) {
+    function (Component, quote, priceUtils) {
         "use strict";
         var ownClass = '';
         var columnTitle = '';
@@ -26,6 +28,10 @@ define(
             },
             getValue: function(quoteItem) {
                 return quoteItem.name;
+            },
+            getFormattedPrice: function (price) {
+                //todo add format data further
+                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
             }
         });
     }

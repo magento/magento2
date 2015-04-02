@@ -17,7 +17,7 @@ define(
                 columnTitle: 'Price'
             },
             getValue: function(quoteItem) {
-                return quoteItem.price;
+                return this.getFormattedPrice(quoteItem.price);
             }
         });
     }
