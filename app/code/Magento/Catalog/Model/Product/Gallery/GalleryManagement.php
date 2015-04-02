@@ -68,21 +68,20 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     /**
      * {@inheritdoc}
      */
-    public function create($product)
+    public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry, $storeId = 0)
     {
         try {
-            $this->storeManager->getStore($product->getStoreId());
+            $this->storeManager->getStore($storeId);
         } catch (\Exception $exception) {
             throw new NoSuchEntityException(__('There is no store with provided ID.'));
         }
         /** @var $entry ProductAttributeMediaGalleryEntryInterface */
-        $entry = $product->getCustomAttribute('media_gallery')->getValue();
         $entryContent = $entry->getContent();
 
         if (!$this->contentValidator->isValid($entryContent)) {
             throw new InputException(__('The image content is not valid.'));
         }
-        $product = $this->productRepository->get($product->getSku());
+        $product = $this->productRepository->get($sku);
 
         $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
         $existingEntryIds = [];
@@ -96,14 +95,13 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         }
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
         try {
-            $this->productRepository->save($product);
+            $product = $this->productRepository->save($product);
         } catch (InputException $inputException) {
             throw $inputException;
         } catch (\Exception $e) {
             throw new StateException(__('Cannot save product.'));
         }
 
-        $product = $this->productRepository->get($product->getSku());
         foreach ($product->getMediaGalleryEntries() as $entry) {
             if (!isset($existingEntryIds[$entry->getId()])) {
                 return $entry->getId();

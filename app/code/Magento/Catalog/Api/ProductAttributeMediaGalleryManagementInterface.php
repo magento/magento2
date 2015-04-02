@@ -7,6 +7,8 @@
  */
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+
 /**
  * @todo implement this interface as a \Magento\Catalog\Model\Product\Attribute\Media\GalleryManagement.
  * Move logic from service there.
@@ -16,13 +18,15 @@ interface ProductAttributeMediaGalleryManagementInterface
     /**
      * Create new gallery entry
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param string $sku
+     * @param ProductAttributeMediaGalleryEntryInterface $entry
+     * @param int $storeId
      * @return int gallery entry ID
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function create($product);
+    public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry, $storeId = 0);
 
     /**
      * Update gallery entry
