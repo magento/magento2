@@ -131,7 +131,7 @@ class Install extends AbstractActionController
         $result[SetupConfigOptionsList::INPUT_KEY_DB_HOST] = isset($source['db']['host']) ? $source['db']['host'] : '';
         $result[SetupConfigOptionsList::INPUT_KEY_DB_NAME] = isset($source['db']['name']) ? $source['db']['name'] : '';
         $result[SetupConfigOptionsList::INPUT_KEY_DB_USER] = isset($source['db']['user']) ? $source['db']['user'] :'';
-        $result[SetupConfigOptionsList::INPUT_KEY_DB_PASS] =
+        $result[SetupConfigOptionsList::INPUT_KEY_DB_PASSWORD] =
             isset($source['db']['password']) ? $source['db']['password'] : '';
         $result[SetupConfigOptionsList::INPUT_KEY_DB_PREFIX] =
             isset($source['db']['tablePrefix']) ? $source['db']['tablePrefix'] : '';

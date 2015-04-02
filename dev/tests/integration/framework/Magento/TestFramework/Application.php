@@ -174,7 +174,7 @@ class Application
                 $installConfig = $this->getInstallConfig();
                 $host = $installConfig['db_host'];
                 $user = $installConfig['db_user'];
-                $password = $installConfig['db_pass'];
+                $password = $installConfig['db_password'];
                 $dbName = $installConfig['db_name'];
             }
             $this->_db = new Db\Mysql(

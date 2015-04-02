@@ -456,8 +456,8 @@ class Installer
         if (!isset($userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
             $userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] = ConfigOptionsList::SESSION_SAVE_FILES;
         }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PASS])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_PASS] = '';
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PASSWORD])) {
+            $userData[ConfigOptionsList::INPUT_KEY_DB_PASSWORD] = '';
         }
         if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_MODEL])) {
             $userData[ConfigOptionsList::INPUT_KEY_DB_MODEL] = 'mysql4';
@@ -1135,7 +1135,7 @@ class Installer
             $connectionConfig[ConfigOptionsList::KEY_NAME],
             $connectionConfig[ConfigOptionsList::KEY_HOST],
             $connectionConfig[ConfigOptionsList::KEY_USER],
-            $connectionConfig[ConfigOptionsList::KEY_PASS]
+            $connectionConfig[ConfigOptionsList::KEY_PASSWORD]
         );
         if (isset($connectionConfig[ConfigOptionsList::KEY_PREFIX])) {
             $this->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsList::KEY_PREFIX]);
@@ -1152,7 +1152,7 @@ class Installer
      */
     private function installSampleData($request)
     {
-        $userName = isset($request[AdminAccount::KEY_USERNAME]) ? $request[AdminAccount::KEY_USERNAME] : '';
+        $userName = isset($request[AdminAccount::KEY_USER]) ? $request[AdminAccount::KEY_USER] : '';
         $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
     }
 

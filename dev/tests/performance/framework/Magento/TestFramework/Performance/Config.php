@@ -113,7 +113,7 @@ class Config
         }
 
         // Validate admin options data
-        $requiredAdminKeys = ['admin_username', 'admin_password', 'backend_frontname'];
+        $requiredAdminKeys = ['admin_user', 'admin_password', 'backend_frontname'];
         foreach ($requiredAdminKeys as $requiredKeyName) {
             if (empty($configData['application']['installation']['options'][$requiredKeyName])) {
                 throw new \Magento\Framework\Exception(
@@ -274,7 +274,7 @@ class Config
             \Magento\TestFramework\Performance\Scenario::ARG_PATH => $this->getApplicationUrlPath(),
             \Magento\TestFramework\Performance\Scenario::ARG_BASEDIR => $this->getApplicationBaseDir(),
             \Magento\TestFramework\Performance\Scenario::ARG_BACKEND_FRONTNAME => $options['backend_frontname'],
-            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USERNAME => $options['admin_username'],
+            \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_USER => $options['admin_user'],
             \Magento\TestFramework\Performance\Scenario::ARG_ADMIN_PASSWORD => $options['admin_password'],
             'jmeter.save.saveservice.output_format' => 'xml',
         ];

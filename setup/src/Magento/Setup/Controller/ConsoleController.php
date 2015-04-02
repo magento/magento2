@@ -165,7 +165,7 @@ class ConsoleController extends AbstractActionController
             . ' --' . SetupConfigOptionsList::INPUT_KEY_DB_NAME . '='
             . ' --' . SetupConfigOptionsList::INPUT_KEY_DB_USER . '='
             . ' --' . BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME . '='
-            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_PASS . '=]'
+            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_PASSWORD . '=]'
             . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_PREFIX . '=]'
             . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_MODEL . '=]'
             . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS . '=]'
@@ -182,7 +182,7 @@ class ConsoleController extends AbstractActionController
             . ' [--' . UserConfig::KEY_BASE_URL_SECURE . '=]'
             . ' [--' . UserConfig::KEY_IS_SECURE_ADMIN . '=]'
             . ' [--' . UserConfig::KEY_ADMIN_USE_SECURITY_KEY . '=]';
-        $adminUser = '--' . AdminAccount::KEY_USERNAME . '='
+        $adminUser = '--' . AdminAccount::KEY_USER . '='
             . ' --' . AdminAccount::KEY_PASSWORD . '='
             . ' --' . AdminAccount::KEY_EMAIL . '='
             . ' --' . AdminAccount::KEY_FIRST_NAME . '='
