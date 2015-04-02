@@ -5,10 +5,12 @@
  */
 -->
 
-<div class="col-xs-6 admin__old-scope">
+<div class="col-xs-6">
+    <div class="admin__scope-old">
+
 <div class="filters">
 
-    <button data-bind="click: toggleOpened, css: { active: opened }" disabled>
+    <button data-bind="click: toggleOpened, css: { active: opened }" >
         <span data-bind="text: $t('Filter')"></span>
     </button>
 
@@ -18,22 +20,22 @@
                 <span data-bind="text: $t('Advanced filter')"></span>
             </legend><br />
             <!-- ko foreach: elems -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
         </fieldset>
         <div class="actions filters-actions">
-            <button class="action-tertiary" type="button">
+            <button class="action secondary action-reset" type="button">
                 <span data-bind="click: reset, text: $t('Reset')"></span>
             </button>
-            <button class="action-secondary" type="button">
+            <button class="action primary action-apply" type="button">
                 <span data-bind="click: apply, text: $t('Apply')"></span>
             </button>
             <button
-                class="action-close"
+                class="action secondary action-close"
                 type="button"
                 data-bind="click: close" >
                 <span data-bind="text: $t('Close')"></span>
-            </button>
+                    </button>
         </div>
         <div class="filters-current" data-bind="css: {active: active().length}">
             <ul class="filters-items items">
@@ -53,4 +55,6 @@
         </div>
     </div>
 </div>
+
+    </div>
 </div>
