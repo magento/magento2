@@ -738,10 +738,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $expectedResultIsNull = (empty($originalPrices) ? true : false);
+        $expectedResultIsEmpty = (empty($originalPrices) ? true : false);
         $groupPrices = $productModel->$getter();
-        $actualResultIsNull = (empty($groupPrices) ? true : false);
-        $this->assertEquals($expectedResultIsNull,$actualResultIsNull );
+        $actualResultIsEmpty = (empty($groupPrices) ? true : false);
+        $this->assertEquals($expectedResultIsEmpty, $actualResultIsEmpty);
     }
 
     /**

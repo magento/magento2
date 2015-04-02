@@ -962,15 +962,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Gets list of product group prices
      *
-     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
+     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]
      */
     public function getGroupPrices()
     {
-        $groupPrices = $this->getPriceModel()->getGroupPrices($this);
-        if (empty($groupPrices)) {
-            $groupPrices = null;
-        }
-        return $groupPrices;
+        return $this->getPriceModel()->getGroupPrices($this);
     }
 
     /**
@@ -988,15 +984,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Gets list of product tier prices
      *
-     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
      */
     public function getTierPrices()
     {
-        $tierPrices = $this->getPriceModel()->getTierPrices($this);
-        if (empty($tierPrices)) {
-            $tierPrices = null;
-        }
-        return $tierPrices;
+        return $this->getPriceModel()->getTierPrices($this);
     }
 
     /**

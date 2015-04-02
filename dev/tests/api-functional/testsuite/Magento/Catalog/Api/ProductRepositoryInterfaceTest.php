@@ -358,9 +358,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'value' => 2.10,
         ];
         $response[self::KEY_GROUP_PRICES] = $groupPrices;
-        $this->updateProduct($response);
+        $response = $this->updateProduct($response);
 
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
         $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
         $groupPrices = $response[self::KEY_GROUP_PRICES];
         $this->assertNotNull($groupPrices, "UPDATE 1: expected to have group prices");
@@ -373,9 +372,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // update the product without any mention of group prices; no change expected for group pricing
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         unset($response[self::KEY_GROUP_PRICES]);
-        $this->updateProduct($response);
+        $response = $this->updateProduct($response);
 
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
         $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
         $groupPrices = $response[self::KEY_GROUP_PRICES];
         $this->assertNotNull($groupPrices, "UPDATE 2: expected to have group prices");
@@ -388,10 +386,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // update the product with empty group prices; expect to have the existing group prices removed
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $response[self::KEY_GROUP_PRICES] = [];
-        $this->updateProduct($response);
-
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
-        $this->assertArrayNotHasKey(self::KEY_GROUP_PRICES, $response, "expected to not have any 'group_prices' data");
+        $response = $this->updateProduct($response);
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response, "expected to have the 'group_prices' key");
+        $this->assertEmpty($response[self::KEY_GROUP_PRICES], "expected to have an empty array of 'group_prices'");
 
         // delete the product with group prices; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
@@ -440,9 +437,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'qty' => 12,
         ];
         $response[self::KEY_TIER_PRICES] = $tierPrices;
-        $this->updateProduct($response);
+        $response = $this->updateProduct($response);
 
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
         $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
         $tierPrices = $response[self::KEY_TIER_PRICES];
         $this->assertNotNull($tierPrices, "UPDATE 1: expected to have tier prices");
@@ -457,9 +453,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // update the product without any mention of tier prices; no change expected for tier pricing
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         unset($response[self::KEY_TIER_PRICES]);
-        $this->updateProduct($response);
+        $response = $this->updateProduct($response);
 
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
         $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
         $tierPrices = $response[self::KEY_TIER_PRICES];
         $this->assertNotNull($tierPrices, "UPDATE 2: expected to have tier prices");
@@ -474,10 +469,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // update the product with empty tier prices; expect to have the existing tier prices removed
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $response[self::KEY_TIER_PRICES] = [];
-        $this->updateProduct($response);
-
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
-        $this->assertArrayNotHasKey(self::KEY_TIER_PRICES, $response, "expected to not have any 'tier_prices' data");
+        $response = $this->updateProduct($response);
+        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response, "expected to have the 'tier_prices' key");
+        $this->assertEmpty($response[self::KEY_TIER_PRICES], "expected to have an empty array of 'tier_prices'");
 
         // delete the product with tier prices; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
