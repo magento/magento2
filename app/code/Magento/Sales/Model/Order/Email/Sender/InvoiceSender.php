@@ -67,6 +67,12 @@ class InvoiceSender extends NotifySender
     public function send(Invoice $invoice, $notify = true, $comment = '')
     {
         $order = $invoice->getOrder();
+        if ($order->getShippingAddress()) {
+            $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
+        } else {
+            $formattedShippingAddress = '';
+        }
+        $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
         $this->templateContainer->setTemplateVars(
             [
                 'order' => $order,
@@ -75,8 +81,8 @@ class InvoiceSender extends NotifySender
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
-                'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
-                'formattedBillingAddress' => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
+                'formattedShippingAddress' => $formattedShippingAddress,
+                'formattedBillingAddress' => $formattedBillingAddress,
             ]
         );
         $result = $this->checkAndSend($order, $notify);

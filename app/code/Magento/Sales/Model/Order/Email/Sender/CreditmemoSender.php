@@ -67,6 +67,12 @@ class CreditmemoSender extends NotifySender
     public function send(Creditmemo $creditmemo, $notify = true, $comment = '')
     {
         $order = $creditmemo->getOrder();
+        if ($order->getShippingAddress()) {
+            $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
+        } else {
+            $formattedShippingAddress = '';
+        }
+        $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
         $this->templateContainer->setTemplateVars(
             [
                 'order' => $creditmemo->getOrder(),
@@ -75,8 +81,8 @@ class CreditmemoSender extends NotifySender
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
-                'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
-                'formattedBillingAddress' => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
+                'formattedShippingAddress' => $formattedShippingAddress,
+                'formattedBillingAddress' => $formattedBillingAddress,
             ]
         );
 
