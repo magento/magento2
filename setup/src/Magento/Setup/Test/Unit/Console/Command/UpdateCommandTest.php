@@ -27,9 +27,7 @@ class UpdateCommandTest  extends \PHPUnit_Framework_TestCase
         $installer->expects($this->at(0))->method('updateModulesSequence');
         $installer->expects($this->at(1))->method('installSchema');
         $installer->expects($this->at(2))->method('installDataFixtures');
-        $installerFactory->expects($this->once())->method('create')->with($consoleLogger)->willReturn(
-            $installer
-        );
+        $installerFactory->expects($this->once())->method('create')->with($consoleLogger)->willReturn($installer);
         $commandTester = new CommandTester(new UpdateCommand($objectManagerProvider, $installerFactory));
         $commandTester->execute([]);
     }

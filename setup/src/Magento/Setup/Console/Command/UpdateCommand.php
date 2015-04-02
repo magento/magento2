@@ -36,8 +36,7 @@ class UpdateCommand extends Command
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
         InstallerFactory $installerFactory
-    )
-    {
+    ) {
         $this->objectManagerProvider = $objectManagerProvider;
         $this->installerFactory = $installerFactory;
         parent::__construct();
