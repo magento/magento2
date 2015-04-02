@@ -19,7 +19,6 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
         </variation>
         <variation name="UpdateShoppingCartTestVariation2">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-35274</data>
             <data name="product/dataSet" xsi:type="string">with_two_custom_option</data>
             <data name="product/data/price/value" xsi:type="string">50</data>
             <data name="product/data/checkout_data/qty" xsi:type="string">11</data>

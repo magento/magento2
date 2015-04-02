@@ -151,4 +151,14 @@ class Price extends \Magento\Catalog\Test\Block\AbstractPriceBlock
     {
         return $this->getTypePriceElement('special_price')->isVisible();
     }
+
+    /**
+     * This method returns if the old price is visible.
+     *
+     * @return bool
+     */
+    public function isOldPriceVisible()
+    {
+        return $this->getTypePriceElement('old_price')->isVisible();
+    }
 }
