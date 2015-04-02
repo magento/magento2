@@ -52,7 +52,7 @@ class Sequence
     public function generateSequences($n = 10)
     {
         $connection = $this->appResource->getConnection('write');
-        for($i = 0; $i < $n; $i++) {
+        for ($i = 0; $i < $n; $i++) {
             foreach ($this->entities as $entityName) {
                 $sequenceName = $this->appResource->getTableName(sprintf('sequence_%s_%s', $entityName, $i));
                 if (!$connection->isTableExists($sequenceName)) {
