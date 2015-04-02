@@ -58,7 +58,7 @@ class AllowedIps extends \Magento\Framework\App\Config\Value
 
         $dataArray = explode(',', $allowedIpsRaw);
         foreach ($dataArray as $data) {
-            if ( filter_var(trim($data), FILTER_VALIDATE_IP) ) {
+            if (filter_var(trim($data), FILTER_VALIDATE_IP)) {
                 $allowedIpsArray[] = $data;
             } else {
                 $noticeMsgArray[] = $data;
