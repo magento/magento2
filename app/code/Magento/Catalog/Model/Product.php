@@ -962,7 +962,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Gets list of product group prices
      *
-     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]
+     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
      */
     public function getGroupPrices()
     {
@@ -984,7 +984,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Gets list of product tier prices
      *
-     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null
      */
     public function getTierPrices()
     {
