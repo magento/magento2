@@ -12,12 +12,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Abstract class for Enable and Disable commands to consolidate common logic
+ */
 abstract class AbstractModuleCommand extends Command
 {
     /**
      * Names of input arguments or options
      */
     const INPUT_KEY_MODULES = 'module';
+    const INPUT_KEY_ALL = 'all';
     const INPUT_KEY_FORCE = 'force';
     const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
@@ -47,7 +51,7 @@ abstract class AbstractModuleCommand extends Command
         $this->setDefinition([
                 new InputArgument(
                     self::INPUT_KEY_MODULES,
-                    InputArgument::IS_ARRAY | InputArgument::REQUIRED,
+                    InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
                     'Name of the module'
                 ),
                 new InputOption(
@@ -62,6 +66,12 @@ abstract class AbstractModuleCommand extends Command
                     InputOption::VALUE_NONE,
                     'Bypass dependencies check'
                 ),
+                new InputOption(
+                    self::INPUT_KEY_ALL,
+                    null,
+                    InputOption::VALUE_NONE,
+                    ($this->isEnable() ? 'Enable' : 'Disable') . ' all modules'
+                ),
             ]);
     }
 
@@ -71,7 +81,16 @@ abstract class AbstractModuleCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $isEnable = $this->isEnable();
-        $modules = $input->getArgument(self::INPUT_KEY_MODULES);
+        if ($input->getOption(self::INPUT_KEY_ALL)) {
+            /** @var \Magento\Framework\Module\FullModuleList $fullModulesList */
+            $fullModulesList = $this->objectManagerProvider->get()->get('Magento\Framework\Module\FullModuleList');
+            $modules = $fullModulesList->getNames();
+        } else {
+            $modules = $input->getArgument(self::INPUT_KEY_MODULES);
+        }
+        if (empty($modules)) {
+            throw new \InvalidArgumentException('No modules specified. Specify list of modules or use --all option');
+        }
         /**
          * @var \Magento\Framework\Module\Status $status
          */

@@ -32,6 +32,11 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     private $cleanupFiles;
 
     /**
+     * @var \Magento\Framework\Module\FullModuleList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fullModuleList;
+
+    /**
      * @var ModuleDisableCommand
      */
     protected function setUp()
@@ -44,12 +49,14 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $this->status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
         $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
+        $this->fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
                 ['Magento\Framework\Module\Status', $this->status],
                 ['Magento\Framework\App\Cache', $this->cache],
                 ['Magento\Framework\App\State\CleanupFiles', $this->cleanupFiles],
+                ['Magento\Framework\Module\FullModuleList', $this->fullModuleList],
             ]));
     }
 
@@ -119,6 +126,50 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
                 true,
                 '%amodules have been disabled%aMagento_Module1%aGenerated static view files cleared%a'
             ],
+        ];
+    }
+
+    /**
+     * @param bool $isEnable
+     * @param string $expectedMessage
+     *
+     * @dataProvider ExecuteAllDataProvider
+     */
+    public function testExecuteAll($isEnable, $expectedMessage)
+    {
+        $this->fullModuleList->expects($this->once())
+            ->method('getNames')
+            ->will($this->returnValue(['Magento_Module1', 'Magento_Module2']));
+
+        $this->status->expects($this->once())
+            ->method('getModulesToChange')
+            ->with($isEnable, ['Magento_Module1', 'Magento_Module2'])
+            ->will($this->returnValue(['Magento_Module1']));
+
+        $this->status->expects($this->any())
+            ->method('checkConstraints')
+            ->will($this->returnValue([]));
+
+        $this->status->expects($this->once())
+            ->method('setIsEnabled')
+            ->with($isEnable, ['Magento_Module1']);
+
+        $commandTester = $isEnable
+            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
+            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+        $input = ['--all' => true];
+        $commandTester->execute($input);
+        $this->assertStringMatchesFormat($expectedMessage, $commandTester->getDisplay());
+    }
+
+    /**
+     * @return array
+     */
+    public function ExecuteAllDataProvider()
+    {
+        return [
+            'enable'  => [true, '%amodules have been enabled%aMagento_Module1%a'],
+            'disable' => [false, '%amodules have been disabled%aMagento_Module1%a'],
         ];
     }
 
