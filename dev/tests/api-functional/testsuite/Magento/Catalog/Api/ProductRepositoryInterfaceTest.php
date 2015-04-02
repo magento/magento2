@@ -285,9 +285,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $response['options'] = $options;
-        $this->updateProduct($response);
-
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response = $this->updateProduct($response);
         $this->assertArrayHasKey('options', $response);
         $options = $response['options'];
         $this->assertEquals(2, count($options));
@@ -297,7 +295,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue($option2Id < $options[1]['option_id']);
 
         //update product without setting options field, option should not be changed
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
         unset($response['options']);
         $this->updateProduct($response);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
@@ -306,10 +303,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(2, count($options));
 
         //update product with empty options, options should be removed
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
         $response['options'] = [];
-        $this->updateProduct($response);
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response = $this->updateProduct($response);
         $this->assertEmpty($response['options']);
 
         $this->deleteProduct($productData[ProductInterface::SKU]);
@@ -347,8 +342,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 ]
             ],
         ];
-        $this->saveProduct($productData);
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response = $this->saveProduct($productData);
         $this->assertArrayHasKey('media_gallery_entries', $response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(2, count($mediaGalleryEntries));
@@ -384,8 +378,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'file' => '/t/i/' . $filename1 . '.jpg',
             ],
         ];
-        $this->updateProduct($response);
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response = $this->updateProduct($response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
@@ -401,16 +394,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //don't set the media_gallery_entries field, existing entry should not be touched
         unset($response['media_gallery_entries']);
-        $this->updateProduct($response);
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response = $this->updateProduct($response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //pass empty array, delete all existing media gallery entries
         $response['media_gallery_entries'] = [];
-        $this->updateProduct($response);
-        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response = $this->updateProduct($response);
         $this->assertEquals(true, empty($response['media_gallery_entries']));
         $this->deleteProduct($productData[ProductInterface::SKU]);
     }
