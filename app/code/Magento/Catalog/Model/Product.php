@@ -2447,7 +2447,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param ProductAttributeMediaGalleryEntryInterface $entry
      * @return array
      */
-    protected function convertFromMediaGalleryInterface(ProductAttributeMediaGalleryEntryInterface $entry = null)
+    protected function convertFromMediaGalleryInterface(ProductAttributeMediaGalleryEntryInterface $entry)
     {
         $entryArray = [
             "value_id" => $entry->getId(),
