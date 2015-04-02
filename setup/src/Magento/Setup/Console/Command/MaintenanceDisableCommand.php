@@ -9,7 +9,7 @@ namespace Magento\Setup\Console\Command;
 /**
  * Command for disabling maintenance mode
  */
-class MaintenanceDisableCommand extends AbstractMainTenanceCommand
+class MaintenanceDisableCommand extends AbstractMaintenanceCommand
 {
     /**
      * Initialization of the command
