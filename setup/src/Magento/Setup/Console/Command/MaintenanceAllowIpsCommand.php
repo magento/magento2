@@ -47,7 +47,7 @@ class MaintenanceAllowIpsCommand extends Command
     }
 
     /**
-     * Gets input arguments for the command
+     * Gets input options for the command
      *
      * @return InputOption[]
      */
