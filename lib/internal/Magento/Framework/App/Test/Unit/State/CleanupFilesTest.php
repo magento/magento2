@@ -61,6 +61,7 @@ class CleanupFilesTest extends \PHPUnit_Framework_TestCase
         $dir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $dir->expects($this->once())->method('search')->with('*', $subPath)->willReturn(['one', 'two']);
         $dir->expects($this->exactly(2))->method('delete');
+        $dir->expects($this->once())->method('isExist')->will($this->returnValue(true));
         return $dir;
     }
 }
