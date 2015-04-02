@@ -71,6 +71,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueDefaultModeSaving()
     {
+        $this->markTestSkipped('MAGETWO-35794');
         $this->appState
             ->expects($this->once())
             ->method('getMode')
