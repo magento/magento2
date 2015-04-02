@@ -40,7 +40,7 @@ class AssertUrlRewriteCustomSearchRedirect extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertTrue(
             $categoryView->getListProductBlock()->getProductItem($entity)->isVisible(),
-            "Created entity '{$entity}' isn't found."
+            "Created entity '{$entity->getName()}' isn't found."
         );
     }
 

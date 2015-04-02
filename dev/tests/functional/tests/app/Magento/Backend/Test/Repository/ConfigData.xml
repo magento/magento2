@@ -17,5 +17,9 @@
             <field path="general/store_information/street_line1" scope="general" scope_id="1" label="" xsi:type="string">10441 Jefferson Blvd</field>
             <field path="general/store_information/street_line2" scope="general" scope_id="1" label="" xsi:type="string">Suite 200</field>
         </dataset>
+
+        <dataset name="admin_session_lifetime_1_hour">
+            <field path="admin/security/session_lifetime" scope="default" scope_id="0" label="3600" xsi:type="string">3600</field>
+        </dataset>
     </repository>
 </config>

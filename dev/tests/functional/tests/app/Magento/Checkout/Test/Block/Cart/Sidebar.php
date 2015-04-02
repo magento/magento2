@@ -42,7 +42,7 @@ class Sidebar extends Block
      *
      * @var string
      */
-    protected $cartItemByProductName = './/*[contains(@class,"products minilist")]//li[.//a[.="%s"]]';
+    protected $cartProductName = './/*[@id="mini-cart"]//li[.//a[normalize-space(text())="%s"]]';
 
     /**
      * Counter qty locator
@@ -110,7 +110,7 @@ class Sidebar extends Block
             $cartItem = $this->callRender($typeId, 'getCartItem', ['product' => $product]);
         } else {
             $cartItemBlock = $this->_rootElement->find(
-                sprintf($this->cartItemByProductName, $product->getName()),
+                sprintf($this->cartProductName, $product->getName()),
                 Locator::SELECTOR_XPATH
             );
             $cartItem = $this->blockFactory->create(

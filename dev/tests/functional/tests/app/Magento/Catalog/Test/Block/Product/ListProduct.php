@@ -21,7 +21,7 @@ class ListProduct extends Block
      *
      * @var string
      */
-    protected $productItem = './/*[contains(@class,"product-item-link") and text()="%s"]/ancestor::li';
+    protected $productItem = './/*[contains(@class,"product-item-link") and normalize-space(text())="%s"]/ancestor::li';
 
     /**
      * Sorter dropdown selector.
