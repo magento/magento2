@@ -9,7 +9,7 @@ namespace Magento\Setup\Console\Test\Unit\Command;
 use Magento\Setup\Console\Command\MaintenanceStatusCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
+class MaintenanceStatusCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
