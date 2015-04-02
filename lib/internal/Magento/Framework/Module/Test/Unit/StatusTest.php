@@ -27,9 +27,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     private $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $cleanup;
+    private $cleanupFiles;
+
+    /**
+     * @var Cache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cache;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -51,14 +56,16 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->loader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
         $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
         $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
-        $this->cleanup = $this->getMock('Magento\Framework\App\State\Cleanup', [], [], '', false);
+        $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
+        $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $this->conflictChecker = $this->getMock('Magento\Framework\Module\ConflictChecker', [], [], '', false);
         $this->dependencyChecker = $this->getMock('Magento\Framework\Module\DependencyChecker', [], [], '', false);
         $this->object = new Status(
             $this->loader,
             $this->moduleList,
             $this->writer,
-            $this->cleanup,
+            $this->cleanupFiles,
+            $this->cache,
             $this->conflictChecker,
             $this->dependencyChecker
         );
@@ -171,8 +178,8 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $expectedModules = ['Module_Foo' => 1, 'Module_Bar' => 1, 'Module_Baz' => 0];
         $this->writer->expects($this->once())->method('saveConfig')
             ->with([ConfigFilePool::APP_CONFIG => ['modules' => $expectedModules]]);
-        $this->cleanup->expects($this->once())->method('clearCaches');
-        $this->cleanup->expects($this->once())->method('clearCodeGeneratedFiles');
+        $this->cache->expects($this->once())->method('clean');
+        $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedFiles');
         $this->object->setIsEnabled(true, ['Module_Foo', 'Module_Bar']);
     }
 

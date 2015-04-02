@@ -29,6 +29,7 @@ use Magento\Store\Model\Store;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\App\State\CleanupFiles;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -194,6 +195,11 @@ class Installer
     private $setupConfigModel;
 
     /**
+     * @var CleanupFiles
+     */
+    private $cleanupFiles;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -211,7 +217,8 @@ class Installer
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Context $context
      * @param SetupConfigModel $setupConfigModel
-     * 
+     * @param CleanupFiles $cleanupFiles
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -229,7 +236,8 @@ class Installer
         SampleData $sampleData,
         ObjectManagerProvider $objectManagerProvider,
         Context $context,
-        SetupConfigModel $setupConfigModel
+        SetupConfigModel $setupConfigModel,
+        CleanupFiles $cleanupFiles
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -247,6 +255,7 @@ class Installer
         $this->objectManagerProvider = $objectManagerProvider;
         $this->context = $context;
         $this->setupConfigModel = $setupConfigModel;
+        $this->cleanupFiles = $cleanupFiles;
     }
 
     /**
@@ -910,8 +919,13 @@ class Installer
     {
         $this->assertDeploymentConfigExists();
         $this->log->log('File system cleanup:');
-        $this->deleteDirContents(DirectoryList::GENERATION);
-        $this->deleteDirContents(DirectoryList::CACHE);
+        $messages = array_merge(
+            $this->cleanupFiles->clearCodeGeneratedClasses(),
+            $this->cleanupFiles->clearCacheFiles()
+        );
+        foreach ($messages as $message) {
+            $this->log->log($message);
+        }
         $this->log->log('Updating modules:');
         $this->createModulesConfig([]);
     }
@@ -926,9 +940,17 @@ class Installer
         $this->log->log('Starting Magento uninstallation:');
 
         $this->cleanupDb();
+
+        $cache = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache');
+        $cache->clean();
+        $this->log->log('Cache is cleared');
+
         $this->log->log('File system cleanup:');
-        $this->deleteDirContents(DirectoryList::VAR_DIR);
-        $this->deleteDirContents(DirectoryList::STATIC_VIEW);
+        $messages = $this->cleanupFiles->clearAllFiles();
+        foreach ($messages as $message) {
+            $this->log->log($message);
+        }
+
         $this->deleteDeploymentConfig();
 
         $this->log->logSuccess('Magento uninstallation complete.');
@@ -1063,33 +1085,6 @@ class Installer
             }
         }
         $this->log->log('No database connection defined - skipping database cleanup');
-    }
-
-    /**
-     * Removes contents of a directory
-     *
-     * @param string $type
-     * @return void
-     */
-    private function deleteDirContents($type)
-    {
-        $dir = $this->filesystem->getDirectoryWrite($type);
-        $dirPath = $dir->getAbsolutePath();
-        if (!$dir->isExist()) {
-            $this->log->log("The directory '{$dirPath}' doesn't exist - skipping cleanup");
-            return;
-        }
-        foreach ($dir->read() as $path) {
-            if (preg_match('/^\./', $path)) {
-                continue;
-            }
-            $this->log->log("{$dirPath}{$path}");
-            try {
-                $dir->delete($path);
-            } catch (FilesystemException $e) {
-                $this->log->log($e->getMessage());
-            }
-        }
     }
 
     /**
