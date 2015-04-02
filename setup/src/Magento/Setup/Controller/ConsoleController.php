@@ -34,8 +34,6 @@ class ConsoleController extends AbstractActionController
     const CMD_HELP = 'help';
     const CMD_INSTALL = 'install';
     const CMD_INSTALL_CONFIG = 'install-configuration';
-    const CMD_INSTALL_SCHEMA = 'install-schema';
-    const CMD_INSTALL_DATA = 'install-data';
     const CMD_INSTALL_USER_CONFIG = 'install-user-configuration';
     const CMD_INSTALL_ADMIN_USER = 'install-admin-user';
     const CMD_UNINSTALL = 'uninstall';
@@ -49,8 +47,6 @@ class ConsoleController extends AbstractActionController
     private static $actions = [
         self::CMD_HELP => 'help',
         self::CMD_INSTALL => 'install',
-        self::CMD_INSTALL_SCHEMA => 'installSchema',
-        self::CMD_INSTALL_DATA => 'installData',
         self::CMD_INSTALL_USER_CONFIG => 'installUserConfig',
         self::CMD_INSTALL_ADMIN_USER => 'installAdminUser',
         self::CMD_UNINSTALL => 'uninstall',
@@ -63,8 +59,6 @@ class ConsoleController extends AbstractActionController
      */
     private static $helpOptions = [
         self::CMD_INSTALL,
-        self::CMD_INSTALL_SCHEMA,
-        self::CMD_INSTALL_DATA,
         self::CMD_INSTALL_USER_CONFIG,
         self::CMD_INSTALL_ADMIN_USER,
         self::CMD_UNINSTALL,
@@ -203,18 +197,6 @@ class ConsoleController extends AbstractActionController
                 'usage_short' => self::CMD_UNINSTALL,
                 'usage_desc' => 'Uninstall Magento application',
             ],
-            self::CMD_INSTALL_SCHEMA => [
-                'route' => self::CMD_INSTALL_SCHEMA,
-                'usage' => '',
-                'usage_short' => self::CMD_INSTALL_SCHEMA,
-                'usage_desc' => 'Install DB schema',
-            ],
-            self::CMD_INSTALL_DATA => [
-                'route' => self::CMD_INSTALL_DATA,
-                'usage' => '',
-                'usage_short' => self::CMD_INSTALL_DATA,
-                'usage_desc' => 'Install data fixtures',
-            ],
             self::CMD_INSTALL_USER_CONFIG => [
                 'route' => self::CMD_INSTALL_USER_CONFIG . ' ' . $userConfig,
                 'usage' => $userConfig,
@@ -306,26 +288,6 @@ class ConsoleController extends AbstractActionController
         /** @var \Zend\Console\Request $request */
         $request = $this->getRequest();
         $this->installer->install($request->getParams());
-    }
-
-    /**
-     * Installs and updates database schema
-     *
-     * @return void
-     */
-    public function installSchemaAction()
-    {
-        $this->installer->installSchema();
-    }
-
-    /**
-     * Installs and updates data fixtures
-     *
-     * @return void
-     */
-    public function installDataAction()
-    {
-        $this->installer->installDataFixtures();
     }
 
     /**

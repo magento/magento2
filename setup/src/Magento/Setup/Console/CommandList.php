@@ -49,6 +49,8 @@ class CommandList
             'Magento\Setup\Console\Command\MaintenanceEnableCommand',
             'Magento\Setup\Console\Command\MaintenanceStatusCommand',
             'Magento\Setup\Console\Command\UpdateCommand',
+            'Magento\Setup\Console\Command\DbSchemaUpgradeCommand',
+            'Magento\Setup\Console\Command\DbDataUpgradeCommand',
         ];
     }
 
