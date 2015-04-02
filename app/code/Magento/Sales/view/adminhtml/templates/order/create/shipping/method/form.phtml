@@ -21,11 +21,9 @@
                 <?php $_code = $_rate->getCode() ?>
                 <li>
                    <?php if ($_rate->getErrorMessage()): ?>
-                       <div class="admin__scope">
-                           <div class="messages">
-                               <div class="message message-error error">
-                                   <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
-                               </div>
+                       <div class="messages">
+                           <div class="message message-error error">
+                               <div><?php echo $block->escapeHtml($_rate->getErrorMessage()) ?></div>
                            </div>
                        </div>
                    <?php else: ?>

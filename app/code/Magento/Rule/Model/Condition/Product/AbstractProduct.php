@@ -416,27 +416,6 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     }
 
     /**
-     * Retrieve value element
-     *
-     * @return \Magento\Framework\Data\Form\Element\AbstractElement
-     */
-    public function getValueElement()
-    {
-        $element = parent::getValueElement();
-        if (is_object($this->getAttributeObject())) {
-            switch ($this->getAttributeObject()->getFrontendInput()) {
-                case 'date':
-                    $element->setImage($this->_assetRepo->getUrl('images/grid-cal.png'));
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        return $element;
-    }
-
-    /**
      * Retrieve value element chooser URL
      *
      * @return string
