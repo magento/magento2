@@ -14,7 +14,8 @@ define(
         return column.extend({
             defaults: {
                 ownClass: 'price',
-                columnTitle: 'Price'
+                columnTitle: 'Price',
+                template: 'Magento_Checkout/review/item/columns/price'
             },
             getValue: function(quoteItem) {
                 return this.getFormattedPrice(quoteItem.price);

@@ -23,8 +23,12 @@
                 <table class="data table table-order-review items" id="checkout-review-table">
                     <caption class="table-caption">Order Review</caption>
                     <thead>
-                        <tr data-bind="foreach: { data: getColHeaders() } ">
-                            <th data-bind="text: $data"></th>
+                        <tr>
+                            <!-- ko foreach: getRegion('columns') -->
+                                <!-- ko foreach: elems() -->
+                                    <th class="col" scope="col" data-bind=" text: getColName() , attr: { class: getClass() }" ></th>
+                                <!-- /ko -->
+                            <!-- /ko -->
                         </tr>
                     </thead>
                     <tbody>
