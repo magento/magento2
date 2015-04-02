@@ -52,17 +52,17 @@ class MaintenanceDisableCommandTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 ['--ip' => ['127.0.0.1', '127.0.0.2']],
-                "Disabled maintenance mode\n" .
-                "Set exempt IP-addresses: 127.0.0.1, 127.0.0.2\n"
+                'Disabled maintenance mode' . PHP_EOL .
+                'Set exempt IP-addresses: 127.0.0.1, 127.0.0.2' . PHP_EOL
             ],
             [
                 [],
-                "Disabled maintenance mode\n"
+                'Disabled maintenance mode' . PHP_EOL
             ],
             [
                 ['--ip' => ['none']],
-                "Disabled maintenance mode\n" .
-                "Set exempt IP-addresses: none\n"
+                'Disabled maintenance mode' . PHP_EOL .
+                'Set exempt IP-addresses: none' . PHP_EOL
             ],
         ];
     }

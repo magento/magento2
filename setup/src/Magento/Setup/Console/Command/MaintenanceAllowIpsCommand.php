@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Module\ModuleList;
 use Symfony\Component\Console\Command\Command;
@@ -15,6 +14,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Command for setting allowed IPs in maintenance mode
+ */
 class MaintenanceAllowIpsCommand extends Command
 {
     /**
@@ -47,7 +49,7 @@ class MaintenanceAllowIpsCommand extends Command
     /**
      * Gets input arguments for the command
      *
-     * @return InputArgument[]
+     * @return InputOption[]
      */
     public function getOptions()
     {
@@ -95,7 +97,5 @@ class MaintenanceAllowIpsCommand extends Command
             $this->maintenanceMode->setAddresses('');
             $output->writeln('<info>Set exempt IP-addresses: none</info>');
         }
-
-
     }
 }

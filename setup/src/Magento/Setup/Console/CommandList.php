@@ -10,8 +10,6 @@ use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class CommandList contains predefined list of commands for Setup
- *
- * @package Magento\Setup\Console
  */
 class CommandList
 {
@@ -40,6 +38,7 @@ class CommandList
     protected function getCommandsClasses()
     {
         return [
+            'Magento\Setup\Console\Command\AdminUserCreateCommand',
             'Magento\Setup\Console\Command\ConfigSetCommand',
             'Magento\Setup\Console\Command\DbStatusCommand',
             'Magento\Setup\Console\Command\ModuleEnableCommand',
