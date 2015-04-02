@@ -10,6 +10,7 @@ use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use Magento\Setup\Model\ConsoleLogger;
+use Magento\Setup\Model\ConsoleLoggerFactory;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Lists;
@@ -248,18 +249,20 @@ class ConsoleController extends AbstractActionController
     /**
      * Constructor
      *
+     * @param ConsoleLoggerFactory $consoleLoggerFactory
      * @param Lists $options
      * @param InstallerFactory $installerFactory
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
+        ConsoleLoggerFactory $consoleLoggerFactory,
         Lists $options,
         InstallerFactory $installerFactory,
         ObjectManagerProvider $objectManagerProvider
     ) {
         $stdOutput = fopen('php://stdout', 'w');
         $output = new StreamOutput($stdOutput);
-        $this->log = new ConsoleLogger($output);
+        $this->log = $consoleLoggerFactory->create($output);
         $this->options = $options;
         $this->installer = $installerFactory->create($this->log);
         $this->objectManagerProvider = $objectManagerProvider;

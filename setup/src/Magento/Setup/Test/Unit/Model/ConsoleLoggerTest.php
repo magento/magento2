@@ -82,7 +82,4 @@ class ConsoleLoggerTest extends \PHPUnit_Framework_TestCase
             ->with('<metadata>Meta message.</metadata>');
         $this->consoleLoggerModel->logMeta('Meta message.');
     }
-
-
-
 }
