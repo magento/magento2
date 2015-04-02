@@ -38,7 +38,6 @@ class ConsoleController extends AbstractActionController
     const CMD_INSTALL_DATA = 'install-data';
     const CMD_INSTALL_USER_CONFIG = 'install-user-configuration';
     const CMD_INSTALL_ADMIN_USER = 'install-admin-user';
-    const CMD_UPDATE = 'update';
     const CMD_UNINSTALL = 'uninstall';
     /**#@- */
 
@@ -54,7 +53,6 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_DATA => 'installData',
         self::CMD_INSTALL_USER_CONFIG => 'installUserConfig',
         self::CMD_INSTALL_ADMIN_USER => 'installAdminUser',
-        self::CMD_UPDATE => 'update',
         self::CMD_UNINSTALL => 'uninstall',
     ];
 
@@ -69,7 +67,6 @@ class ConsoleController extends AbstractActionController
         self::CMD_INSTALL_DATA,
         self::CMD_INSTALL_USER_CONFIG,
         self::CMD_INSTALL_ADMIN_USER,
-        self::CMD_UPDATE,
         self::CMD_UNINSTALL,
         UserConfig::KEY_LANGUAGE,
         UserConfig::KEY_CURRENCY,
@@ -200,12 +197,6 @@ class ConsoleController extends AbstractActionController
                 'usage_short' => self::CMD_INSTALL . ' <options>',
                 'usage_desc' => 'Install Magento application',
             ],
-            self::CMD_UPDATE => [
-                'route' => self::CMD_UPDATE,
-                'usage' => '',
-                'usage_short' => self::CMD_UPDATE,
-                'usage_desc' => 'Update database schema and data',
-            ],
             self::CMD_UNINSTALL => [
                 'route' => self::CMD_UNINSTALL,
                 'usage' => '',
@@ -334,18 +325,6 @@ class ConsoleController extends AbstractActionController
      */
     public function installDataAction()
     {
-        $this->installer->installDataFixtures();
-    }
-
-    /**
-     * Updates database schema and data
-     *
-     * @return void
-     */
-    public function updateAction()
-    {
-        $this->installer->updateModulesSequence();
-        $this->installer->installSchema();
         $this->installer->installDataFixtures();
     }
 
