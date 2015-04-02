@@ -26,7 +26,7 @@ class DbDataUpgradeCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with($consoleLogger)
             ->will($this->returnValue($installer));
-        $installer->expects($this->once())->method('installDataFixture');
+        $installer->expects($this->once())->method('installDataFixtures');
 
         $commandTester = new CommandTester(new DbDataUpgradeCommand($installerFactory, $objectManagerProvider));
         $commandTester->execute([]);
