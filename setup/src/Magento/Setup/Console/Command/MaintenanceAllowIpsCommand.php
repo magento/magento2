@@ -20,6 +20,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 class MaintenanceAllowIpsCommand extends Command
 {
     /**
+     * Names of input arguments or options
+     */
+    const INPUT_KEY_IP = 'ip';
+    const INPUT_KEY_NONE = 'none';
+
+    /**
      * @var MaintenanceMode $maintenanceMode
      */
     private $maintenanceMode;
@@ -31,52 +37,30 @@ class MaintenanceAllowIpsCommand extends Command
     }
 
     /**
-     * Gets input arguments for the command
-     *
-     * @return InputArgument[]
-     */
-    public function getArguments()
-    {
-        return [
-            new InputArgument(
-                'ip',
-                InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-                'Allowed IP addresses'
-            ),
-        ];
-    }
-
-    /**
-     * Gets input options for the command
-     *
-     * @return InputOption[]
-     */
-    public function getOptions()
-    {
-        return [
-            new InputOption(
-                'none',
-                null,
-                InputOption::VALUE_NONE,
-                'Clear allowed IP addresses'
-            ),
-        ];
-    }
-
-    /**
      * Initialization of the command
      *
      * @return void
      */
     protected function configure()
     {
-        $arguments = $this->getArguments();
-        $options = $this->getOptions();
+        $arguments = [
+            new InputArgument(
+                self::INPUT_KEY_IP,
+                InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
+                'Allowed IP addresses'
+            ),
+        ];
+        $options = [
+            new InputOption(
+                self::INPUT_KEY_NONE,
+                null,
+                InputOption::VALUE_NONE,
+                'Clear allowed IP addresses'
+            ),
+        ];
         $this->setName('maintenance:allow-ips')
             ->setDescription('Set maintenance mode exempt IPs')
             ->setDefinition(array_merge($arguments, $options));
-
-        $this->ignoreValidationErrors();
     }
 
     /**
@@ -84,8 +68,8 @@ class MaintenanceAllowIpsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$input->getOption('none')) {
-            $addresses = $input->getArgument('ip');
+        if (!$input->getOption(self::INPUT_KEY_NONE)) {
+            $addresses = $input->getArgument(self::INPUT_KEY_IP);
             if (!empty($addresses)) {
                 $this->maintenanceMode->setAddresses(implode(',', $addresses));
                 $output->writeln(

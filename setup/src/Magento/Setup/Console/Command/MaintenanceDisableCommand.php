@@ -6,46 +6,11 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\Module\ModuleList;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-
 /**
  * Command for disabling maintenance mode
  */
-class MaintenanceDisableCommand extends Command
+class MaintenanceDisableCommand extends AbstractMainTenanceCommand
 {
-    /**
-     * @var MaintenanceMode $maintenanceMode
-     */
-    private $maintenanceMode;
-
-    public function __construct(MaintenanceMode $maintenanceMode)
-    {
-        $this->maintenanceMode = $maintenanceMode;
-        parent::__construct();
-    }
-
-    /**
-     * Gets input options for the command
-     *
-     * @return InputOption[]
-     */
-    public function getOptions()
-    {
-        return [
-            new InputOption(
-                'ip',
-                null,
-                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED,
-                'Allowed IP addresses'
-            ),
-        ];
-    }
-
     /**
      * Initialization of the command
      *
@@ -53,30 +18,12 @@ class MaintenanceDisableCommand extends Command
      */
     protected function configure()
     {
-        $options = $this->getOptions();
-        $this->setName('maintenance:disable')
-            ->setDescription('Disable maintenance mode')
-            ->setDefinition($options);
-
-        $this->ignoreValidationErrors();
+        $this->setName('maintenance:disable')->setDescription('Disable maintenance mode');
+        parent::configure();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function isEnable()
     {
-        $addresses = $input->getOption('ip');
-        $this->maintenanceMode->set(false);
-        $output->writeln('<info>Disabled maintenance mode</info>');
-        if (!empty($addresses)) {
-            $addresses = implode(',', $addresses);
-            $addresses = ('none' == $addresses) ? '' : $addresses;
-            $this->maintenanceMode->setAddresses($addresses);
-            $output->writeln(
-                '<info>Set exempt IP-addresses: ' . (implode(', ', $this->maintenanceMode->getAddressInfo()) ?: 'none')
-                . '</info>'
-            );
-        }
+        return false;
     }
 }

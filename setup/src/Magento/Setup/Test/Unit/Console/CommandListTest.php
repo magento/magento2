@@ -28,9 +28,26 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCommands()
     {
-        $this->serviceManager->expects($this->at(0))
-            ->method('create')
-            ->with('Magento\Setup\Console\Command\ConfigSetCommand');
+        $commands = [
+            'Magento\Setup\Console\Command\AdminUserCreateCommand',
+            'Magento\Setup\Console\Command\ConfigSetCommand',
+            'Magento\Setup\Console\Command\DbStatusCommand',
+            'Magento\Setup\Console\Command\ModuleEnableCommand',
+            'Magento\Setup\Console\Command\ModuleDisableCommand',
+            'Magento\Setup\Console\Command\ModuleStatusCommand',
+            'Magento\Setup\Console\Command\MaintenanceAllowIpsCommand',
+            'Magento\Setup\Console\Command\MaintenanceDisableCommand',
+            'Magento\Setup\Console\Command\MaintenanceEnableCommand',
+            'Magento\Setup\Console\Command\MaintenanceStatusCommand',
+            'Magento\Setup\Console\Command\UpdateCommand',
+        ];
+        $index = 0;
+        foreach ($commands as $command) {
+            $this->serviceManager->expects($this->at($index++))
+                ->method('create')
+                ->with($command);
+        }
+
         $this->commandList->getCommands();
     }
 }

@@ -37,8 +37,6 @@ class MaintenanceStatusCommand extends Command
     {
         $this->setName('maintenance:status')
             ->setDescription('Maintenance mode status');
-
-        $this->ignoreValidationErrors();
     }
 
     /**
