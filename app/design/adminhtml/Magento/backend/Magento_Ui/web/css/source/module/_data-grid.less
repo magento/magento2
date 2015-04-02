@@ -19,6 +19,9 @@
 
 @data-grid__font-size: 1.3rem;
 
+@data-grid-tr__active__background-color: @action__hover__background-color;
+@data-grid-tr__hover__background-color: lighten(@action__hover__background-color, 1%);
+
 @data-grid-cell__border-width: 1px;
 @data-grid-cell__padding-horizontal: 1rem;
 @data-grid-cell__padding-vertical: 1rem;
@@ -56,7 +59,10 @@
 }
 
 .data-grid {
-    border: none;
+    border-bottom: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
+    border-left: none;
+    border-right: none;
+    border-top: none;
     font-size: @data-grid__font-size;
     margin-bottom: 2rem;
     max-width: 100%;
@@ -71,11 +77,31 @@
                 background-color: @data-grid-td__even__background-color;
             }
         }
+        &:active {
+            td {
+                background-color: @data-grid-tr__active__background-color;
+            }
+        }
+        &:hover {
+            td {
+                background-color: @data-grid-tr__hover__background-color;
+                cursor: pointer;
+            }
+        }
+        &:only-child {
+            &:hover {
+                td {
+                    cursor: default;
+                    background-color: @data-grid-td__odd__background-color;
+                }
+            }
+        }
     }
     th,
     td {
         font-size: @data-grid__font-size; // ToDo UI: Rewrite old styles. Should be deleted afterwards
         line-height: @line-height__base;
+        transition: @smooth__background-color;
         vertical-align: top;
     }
     td {
@@ -202,15 +228,6 @@
             }
             &:last-child {
                 border-right-color: @data-grid-td__border-color;
-            }
-        }
-    }
-    tr {
-        &:last-child {
-            &.data-grid-row-child {
-                td {
-                    border-bottom-color: @data-grid-td__border-color;
-                }
             }
         }
     }
