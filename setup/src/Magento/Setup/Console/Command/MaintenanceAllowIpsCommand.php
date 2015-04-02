@@ -40,7 +40,7 @@ class MaintenanceAllowIpsCommand extends Command
         return [
             new InputArgument(
                 'ip',
-                InputArgument::OPTIONAL,
+                InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
                 'Allowed IP addresses'
             ),
         ];
@@ -87,7 +87,7 @@ class MaintenanceAllowIpsCommand extends Command
         if (!$input->getOption('none')) {
             $addresses = $input->getArgument('ip');
             if (!empty($addresses)) {
-                $this->maintenanceMode->setAddresses($addresses);
+                $this->maintenanceMode->setAddresses(implode(',', $addresses));
                 $output->writeln(
                     '<info>Set exempt IP-addresses: ' . implode(', ', $this->maintenanceMode->getAddressInfo()) .
                     '</info>'

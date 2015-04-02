@@ -38,7 +38,7 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
             $this->maintenanceMode
                 ->expects($this->once())
                 ->method('getAddressInfo')
-                ->willReturn(explode(',', $input['ip']));
+                ->willReturn($input['ip']);
         }
         $tester = new CommandTester($this->command);
         $tester->execute($input);
@@ -53,7 +53,7 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                ['ip' => '127.0.0.1,127.0.0.2', '--none' => false],
+                ['ip' => ['127.0.0.1', '127.0.0.2'], '--none' => false],
                 'Set exempt IP-addresses: 127.0.0.1, 127.0.0.2' . PHP_EOL
             ],
             [
@@ -61,7 +61,7 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
                 'Set exempt IP-addresses: none' . PHP_EOL
             ],
             [
-                ['ip' => '127.0.0.1,127.0.0.2', '--none' => true],
+                ['ip' => ['127.0.0.1', '127.0.0.2'], '--none' => true],
                 'Set exempt IP-addresses: none' . PHP_EOL
             ],
             [
