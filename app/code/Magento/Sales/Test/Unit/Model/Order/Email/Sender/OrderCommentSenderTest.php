@@ -14,15 +14,28 @@ class OrderCommentSenderTest extends AbstractSenderTest
      */
     protected $sender;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity');
+        $this->loggerMock = $this->getMock(
+            '\Psr\Log\LoggerInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $this->sender = new OrderCommentSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
-            $this->addressRendererMock
+            $this->addressRendererMock,
+            $this->loggerMock
         );
     }
 

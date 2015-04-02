@@ -19,6 +19,11 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
      */
     protected $creditmemoMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->stepMockSetup();
@@ -36,11 +41,19 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
         $this->creditmemoMock->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
+        $this->loggerMock = $this->getMock(
+            '\Psr\Log\LoggerInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $this->sender = new CreditmemoCommentSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
-            $this->addressRendererMock
+            $this->addressRendererMock,
+            $this->loggerMock
         );
     }
 
