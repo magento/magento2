@@ -10,7 +10,6 @@ use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use Magento\Setup\Model\ConsoleLogger;
-use Magento\Setup\Model\ConsoleLoggerFactory;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Lists;
@@ -249,23 +248,25 @@ class ConsoleController extends AbstractActionController
     /**
      * Constructor
      *
-     * @param ConsoleLoggerFactory $consoleLoggerFactory
      * @param Lists $options
      * @param InstallerFactory $installerFactory
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
-        ConsoleLoggerFactory $consoleLoggerFactory,
         Lists $options,
         InstallerFactory $installerFactory,
         ObjectManagerProvider $objectManagerProvider
     ) {
+        $this->objectManagerProvider = $objectManagerProvider;
         $stdOutput = fopen('php://stdout', 'w');
         $output = new StreamOutput($stdOutput);
-        $this->log = $consoleLoggerFactory->create($output);
+        $this->log = $this->objectManagerProvider->get()->create(
+            'Magento\Setup\Model\ConsoleLogger',
+            ['output' => $output]
+        );
         $this->options = $options;
         $this->installer = $installerFactory->create($this->log);
-        $this->objectManagerProvider = $objectManagerProvider;
+
         // By default we use our customized error handler, but for CLI we want to display all errors
         restore_error_handler();
     }

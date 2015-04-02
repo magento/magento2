@@ -57,7 +57,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->consoleLogger = $this->getMock('Magento\Setup\Model\ConsoleLogger', [], [], '', false);
         $installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
         $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
         $installerFactory->expects($this->once())->method('create')->with($this->consoleLogger)->willReturn(
@@ -86,7 +85,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
 
         $this->controller = new ConsoleController(
-            $this->consoleLogger,
             $this->options,
             $installerFactory,
             $objectManagerProvider
