@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class Initial
 {
     /**
@@ -52,14 +54,12 @@ class Initial
      *
      * @param string $scope Format is scope type and scope code separated by pipe: e.g. "type|code"
      * @return array
-     *
-     * @api
      */
     public function getData($scope)
     {
         list($scopeType, $scopeCode) = array_pad(explode('|', $scope), 2, null);
 
-        if (\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT == $scopeType) {
+        if (ScopeConfigInterface::SCOPE_TYPE_DEFAULT == $scopeType) {
             return isset($this->_data[$scopeType]) ? $this->_data[$scopeType] : [];
         } elseif ($scopeCode) {
             return isset($this->_data[$scopeType][$scopeCode]) ? $this->_data[$scopeType][$scopeCode] : [];
@@ -71,8 +71,6 @@ class Initial
      * Get configuration metadata
      *
      * @return array
-     *
-     * @api
      */
     public function getMetadata()
     {

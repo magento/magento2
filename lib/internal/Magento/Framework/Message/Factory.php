@@ -47,12 +47,11 @@ class Factory
     /**
      * Create a message instance of a given type with given text.
      *
-     * @param string $type The message type to create, must implement \Magento\Framework\Message\MessageInterface
+     * @param string $type The message type to create, must correspond to a message type under the
+     * namespace Magento\Framework\Message\
      * @param string $text The text to inject into the message
-     * @throws \InvalidArgumentException Exception gets thrown if given type does not implement MessageInterface
+     * @throws \InvalidArgumentException Exception gets thrown if type does not correspond to a valid Magento message
      * @return MessageInterface
-     *
-     * @api
      */
     public function create($type, $text)
     {

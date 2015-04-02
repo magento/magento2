@@ -78,9 +78,7 @@ class Manager implements ManagerInterface
     }
 
     /**
-     * @inheritdoc
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getDefaultGroup()
     {

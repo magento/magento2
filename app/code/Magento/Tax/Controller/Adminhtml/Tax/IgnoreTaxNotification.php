@@ -6,6 +6,8 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Tax;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
 {
     /**
@@ -41,7 +43,7 @@ class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
             try {
                 $path = 'tax/notification/ignore_' . $section;
                 $this->_objectManager->get('Magento\Config\Model\Resource\Config')
-                    ->saveConfig($path, 1, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, 0);
+                    ->saveConfig($path, 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
             }

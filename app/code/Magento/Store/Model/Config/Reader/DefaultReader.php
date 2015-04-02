@@ -48,10 +48,10 @@ class DefaultReader implements \Magento\Framework\App\Config\Scope\ReaderInterfa
      * @throws \Magento\Framework\Exception Exception is thrown when scope other than default is given
      * @return array
      */
-    public function read($scope = ScopeConfigInterface::SCOPE_DEFAULT)
+    public function read($scope = null)
     {
-        $scope = $scope === null ? ScopeConfigInterface::SCOPE_DEFAULT : $scope;
-        if ($scope !== ScopeConfigInterface::SCOPE_DEFAULT) {
+        $scope = $scope === null ? ScopeConfigInterface::SCOPE_TYPE_DEFAULT : $scope;
+        if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
             throw new \Magento\Framework\Exception("Only default scope allowed");
         }
 

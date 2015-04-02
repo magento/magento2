@@ -7,8 +7,6 @@ namespace Magento\Framework\App\Config\Resource;
 
 /**
  * Resource for storing store configuration values
- *
- * @api
  */
 interface ConfigInterface
 {

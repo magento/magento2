@@ -5,6 +5,7 @@
  */
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Tax;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
@@ -40,7 +41,7 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $config->expects($this->once())
             ->method('saveConfig')
-            ->with('tax/notification/ignore_tax', 1, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, 0)
+            ->with('tax/notification/ignore_tax', 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0)
             ->will($this->returnValue(null));
 
         $manager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')

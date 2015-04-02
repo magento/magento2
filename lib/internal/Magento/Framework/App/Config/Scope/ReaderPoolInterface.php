@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\App\Config\Scope;
 
-/**
- * @api
- */
 interface ReaderPoolInterface
 {
     /**
