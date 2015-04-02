@@ -86,7 +86,6 @@ class Resource
      *
      * @param string $resourceName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
-     * @api
      */
     public function getConnection($resourceName)
     {

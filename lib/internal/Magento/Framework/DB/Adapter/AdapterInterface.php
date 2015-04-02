@@ -11,7 +11,6 @@ use Magento\Framework\DB\Ddl\Table;
  * Magento Database Adapter Interface
  *
  * @author      Magento Core Team <core@magentocommerce.com>
- * @api
  */
 interface AdapterInterface
 {

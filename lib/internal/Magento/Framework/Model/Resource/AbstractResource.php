@@ -47,7 +47,6 @@ abstract class AbstractResource
      * Retrieve connection for read data
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @api
      */
     abstract protected function _getReadAdapter();
 
@@ -55,7 +54,6 @@ abstract class AbstractResource
      * Retrieve connection for write data
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     * @api
      */
     abstract protected function _getWriteAdapter();
 
