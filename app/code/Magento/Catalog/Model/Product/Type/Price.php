@@ -237,9 +237,10 @@ class Price
      *
      * @param Product $product
      * @param string $key
+     * @param bool $returnRawData
      * @return array
      */
-    protected function getExistingPrices($product, $key)
+    protected function getExistingPrices($product, $key, $returnRawData = false)
     {
         $prices = $product->getData($key);
 
@@ -252,7 +253,7 @@ class Price
         }
 
         if ($prices === null || !is_array($prices)) {
-            return [];
+            return ($returnRawData ? $prices : []);
         }
 
         return $prices;
@@ -371,19 +372,20 @@ class Price
     {
         $allGroupsId = $this->getAllCustomerGroupsId();
 
-        $prices = $this->getExistingPrices($product, 'tier_price');
-        if (empty($prices)) {
+        $prices = $this->getExistingPrices($product, 'tier_price', true);
+        if ($prices === null || !is_array($prices)) {
             if ($qty !== null) {
                 return $product->getPrice();
+            } else {
+                return [
+                    [
+                        'price' => $product->getPrice(),
+                        'website_price' => $product->getPrice(),
+                        'price_qty' => 1,
+                        'cust_group' => $allGroupsId,
+                    ]
+                ];
             }
-            return [
-                [
-                    'price' => $product->getPrice(),
-                    'website_price' => $product->getPrice(),
-                    'price_qty' => 1,
-                    'cust_group' => $allGroupsId,
-                ]
-            ];
         }
 
         $custGroup = $this->_getCustomerGroupId($product);
