@@ -85,6 +85,8 @@ class Sequence implements SequenceInterface
     }
 
     /**
+     * Calculate current value depends on start value
+     *
      * @return string
      */
     private function calculateCurrentValue()
