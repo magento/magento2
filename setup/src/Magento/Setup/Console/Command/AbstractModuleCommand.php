@@ -113,8 +113,10 @@ abstract class AbstractModuleCommand extends Command
                 $output->writeln('<info>The following modules have been enabled:</info>');
                 $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
                 $output->writeln('');
-                $output->writeln('<info>To make sure that the enabled modules are properly registered,'
-                    . " run 'setup:update' command.</info>");
+                $output->writeln(
+                    '<info>To make sure that the enabled modules are properly registered,'
+                    . " run 'setup:update' command.</info>"
+                );
             } else {
                 $output->writeln('<info>The following modules have been disabled:</info>');
                 $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');

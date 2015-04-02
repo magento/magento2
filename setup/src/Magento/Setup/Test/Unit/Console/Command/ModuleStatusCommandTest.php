@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Setup\Console\Command\ModuleStatusCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class ModuleStatusCommandTest  extends \PHPUnit_Framework_TestCase
+class ModuleStatusCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {

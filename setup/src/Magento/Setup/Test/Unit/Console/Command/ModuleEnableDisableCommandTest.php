@@ -133,7 +133,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      * @param bool $isEnable
      * @param string $expectedMessage
      *
-     * @dataProvider ExecuteAllDataProvider
+     * @dataProvider executeAllDataProvider
      */
     public function testExecuteAll($isEnable, $expectedMessage)
     {
@@ -165,7 +165,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function ExecuteAllDataProvider()
+    public function executeAllDataProvider()
     {
         return [
             'enable'  => [true, '%amodules have been enabled%aMagento_Module1%a'],
