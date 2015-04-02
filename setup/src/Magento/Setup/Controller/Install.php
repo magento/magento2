@@ -189,11 +189,11 @@ class Install extends AbstractActionController
     {
         $source = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $result = [];
-        $result[AdminAccount::KEY_USERNAME] = isset($source['admin']['username']) ? $source['admin']['username'] : '';
+        $result[AdminAccount::KEY_USER] = isset($source['admin']['username']) ? $source['admin']['username'] : '';
         $result[AdminAccount::KEY_PASSWORD] = isset($source['admin']['password']) ? $source['admin']['password'] : '';
         $result[AdminAccount::KEY_EMAIL] = isset($source['admin']['email']) ? $source['admin']['email'] : '';
-        $result[AdminAccount::KEY_FIRST_NAME] = $result[AdminAccount::KEY_USERNAME];
-        $result[AdminAccount::KEY_LAST_NAME] = $result[AdminAccount::KEY_USERNAME];
+        $result[AdminAccount::KEY_FIRST_NAME] = $result[AdminAccount::KEY_USER];
+        $result[AdminAccount::KEY_LAST_NAME] = $result[AdminAccount::KEY_USER];
         return $result;
     }
 }
