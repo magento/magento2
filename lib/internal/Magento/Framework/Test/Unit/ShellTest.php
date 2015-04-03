@@ -111,7 +111,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Command returned non-zero exit code:
      * @expectedExceptionCode 0
      */
@@ -133,7 +133,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
             /* Force command to return non-zero exit code */
             $commandArgs[count($commandArgs) - 1] .= ' exit(42);';
             $this->testExecute($command, $commandArgs, ''); // no result is expected in a case of a command failure
-        } catch (\Magento\Framework\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->assertInstanceOf('Exception', $e->getPrevious());
             $this->assertEquals($expectedError, $e->getPrevious()->getMessage());
             $this->assertEquals(42, $e->getPrevious()->getCode());

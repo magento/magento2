@@ -1538,8 +1538,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         /**
          * Error message
          */
-        if (is_string($cartCandidates)) {
-            return $cartCandidates;
+        if (is_string($cartCandidates) || $cartCandidates instanceof \Magento\Framework\Phrase) {
+            return strval($cartCandidates);
         }
 
         /**
@@ -2042,9 +2042,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             return $this;
         }
 
-        if (is_string($message)) {
-            $message = $this->messageFactory->create(\Magento\Framework\Message\MessageInterface::TYPE_ERROR, $message);
-        }
+        $message = $this->messageFactory->create(\Magento\Framework\Message\MessageInterface::TYPE_ERROR, $message);
 
         $messages[$index] = $message;
         $this->setData('messages', $messages);

@@ -338,6 +338,11 @@ return [
     ['_getItemPosition', 'Magento\Catalog\Block\Navigation'],
     ['_renderCategoryMenuItemHtml', 'Magento\Catalog\Block\Navigation'],
     ['getCurrentCategoryPath', 'Magento\Catalog\Block\Navigation'],
+    [
+        'getIsMessagesAvailable',
+        'Magento\GiftMessage\Helper\Message',
+        'Magento\GiftMessage\Helper\Message::isMessagesAllowed'
+    ],
     ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
     ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
     ['dropKey', 'Magento\Framework\DB\Adapter\Pdo\Mysql'],
@@ -2149,4 +2154,5 @@ return [
     ['loadCollectionAttributes', 'Magento\Eav\Model\Config'],
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
     ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
+    ['prepareCatalogProductPriceIndexTable', 'Magento\CatalogRule\Model\Observer'],
 ];

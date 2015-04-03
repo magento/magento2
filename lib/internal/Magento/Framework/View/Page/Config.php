@@ -433,13 +433,15 @@ class Config
      * @param string $attribute
      * @param mixed $value
      * @return $this
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setElementAttribute($elementType, $attribute, $value)
     {
         $this->build();
         if (array_search($elementType, $this->allowedTypes) === false) {
-            throw new \Magento\Framework\Exception($elementType . ' isn\'t allowed');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('%1 isn\'t allowed', [$elementType])
+            );
         }
         $this->elements[$elementType][$attribute] = $value;
         return $this;

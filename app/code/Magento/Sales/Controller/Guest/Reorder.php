@@ -8,4 +8,5 @@ namespace Magento\Sales\Controller\Guest;
 
 class Reorder extends \Magento\Sales\Controller\AbstractController\Reorder
 {
+
 }

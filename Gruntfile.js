@@ -8,18 +8,24 @@ module.exports = function (grunt) {
     'use strict';
 
     var _ = require('underscore'),
-        path = require('path');
+        path = require('path'),
+        configDir = './dev/tools/grunt/configs',
+        taskDir = './dev/tools/grunt/tasks';
 
-    require('./dev/tools/grunt/tasks/mage-minify')(grunt);
-    require('time-grunt')(grunt);
+    [
+        taskDir + '/mage-minify',
+        taskDir + '/deploy',
+        'time-grunt'
+    ].forEach(function (task) {
+        require(task)(grunt);
+    });
 
     require('load-grunt-config')(grunt, {
-        configPath: path.join(process.cwd(), 'dev/tools/grunt/configs'),
+        configPath: path.join(__dirname, configDir),
         init: true,
         loadGruntTasks: {
             pattern: [
-                'grunt-*',
-                '!grunt-template-jasmine-requirejs'
+                'grunt-*'
             ]
         }
     });
@@ -61,14 +67,6 @@ module.exports = function (grunt) {
             'less:backend'
         ],
         /**
-         * Styles for backend theme
-         */
-        backend: [
-            'less:backend',
-            'replace:escapeCalc',
-            'less:override'
-        ],
-        /**
          * Documentation
          */
         documentation: [
@@ -76,24 +74,6 @@ module.exports = function (grunt) {
             'styledocco:documentation',
             'clean:var',
             'clean:pub'
-        ],
-
-        spec: [
-            'specRunner:lib',
-            'specRunner:backend',
-            'specRunner:frontend'
-        ],
-
-        unit: [
-            'jasmine:lib-unit',
-            'jasmine:backend-unit',
-            'jasmine:frontend-unit'
-        ],
-
-        integration: [
-            'jasmine:lib-integration',
-            'jasmine:backend-integration',
-            'jasmine:frontend-integration'
         ],
 
         'legacy-build': [
@@ -104,7 +84,15 @@ module.exports = function (grunt) {
             'usebanner:documentationCss',
             'usebanner:documentationLess',
             'usebanner:documentationHtml'
-        ]
+        ],
+
+        spec: function (theme) {
+            var runner = require('./dev/tests/js/jasmine/spec_runner');
+
+            runner.init(grunt, { theme: theme });
+
+            grunt.task.run(runner.getTasks());
+        }
     }, function (task, name) {
         grunt.registerTask(name, task);
     });

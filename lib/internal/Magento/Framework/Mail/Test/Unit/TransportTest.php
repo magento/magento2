@@ -34,8 +34,8 @@ class TransportTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\Mail\Transport::sendMessage
-     * @expectedException \Magento\Framework\Mail\Exception
+     * @covers \Magento\Framework\Mail\Transport::sendMessage
+     * @expectedException \Magento\Framework\Exception\MailException
      * @expectedExceptionMessage No body specified
      */
     public function testSendMessageBrokenMessage()

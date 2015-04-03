@@ -75,12 +75,12 @@ class Application
      *
      * @param string $path
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function _assertPath($path)
     {
         if (!is_file($path)) {
-            throw new \Magento\Framework\Exception("File '{$path}' is not found.");
+            throw new \Magento\Framework\Exception\LocalizedException(__("File '%1' is not found.", $path));
         }
         return realpath($path);
     }
@@ -142,14 +142,16 @@ class Application
      * Install application according to installation options
      *
      * @return \Magento\TestFramework\Application
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _install()
     {
         $installOptions = $this->_config->getInstallOptions();
         $installOptionsNoValue = $this->_config->getInstallOptionsNoValue();
         if (!$installOptions) {
-            throw new \Magento\Framework\Exception('Trying to install Magento, but installation options are not set');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Trying to install Magento, but installation options are not set')
+            );
         }
 
         // Populate install options with global options

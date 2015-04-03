@@ -103,7 +103,7 @@ class Environment extends AbstractActionController
             'responseType' => $responseType,
             'data' => [
                 'version' => PHP_VERSION,
-                'ini' => ini_get('always_populate_raw_post_data')
+                'ini' => $iniSetting
             ]
         ];
 
