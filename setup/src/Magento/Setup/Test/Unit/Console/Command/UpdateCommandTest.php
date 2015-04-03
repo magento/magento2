@@ -8,7 +8,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Setup\Console\Command\UpdateCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class UpdateCommandTest  extends \PHPUnit_Framework_TestCase
+class UpdateCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
