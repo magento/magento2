@@ -35,7 +35,7 @@ class UninstallCommand extends Command
     protected function configure()
     {
         $this->setName('setup:uninstall')
-            ->setDescription('Uninstall Magento application');
+            ->setDescription('Uninstalls Magento application');
     }
 
     /**

@@ -10,7 +10,6 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\ConsoleController;
 
-use Magento\Framework\Module\DbVersionInfo;
 use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
 
 class ConsoleControllerTest extends \PHPUnit_Framework_TestCase

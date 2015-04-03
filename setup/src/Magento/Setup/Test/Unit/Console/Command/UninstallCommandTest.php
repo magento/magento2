@@ -13,7 +13,6 @@ use Magento\Setup\Model\Installer;
 
 class UninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -52,8 +51,8 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function checkInteraction($answer)
     {
-        $dialog = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper', [], [], '', false);
-        $dialog
+        $question = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper', [], [], '', false);
+        $question
             ->expects($this->once())
             ->method('ask')
             ->will($this->returnValue($answer));
@@ -64,7 +63,7 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($dialog));
+            ->will($this->returnValue($question));
         $this->command->setHelperSet($helperSet);
 
         $tester = new CommandTester($this->command);
