@@ -1,3 +1,34 @@
+0.74.0-beta3
+=============
+* API
+   * The orders were extended with the gift messages
+   * The page and block data and repository interfaces
+   * Updated the public API list
+* Framework improvements
+    * Improved the profile generator 
+    * Introduced the new environment for Jasmine tests
+* Design
+    * Inverted the new admin area styles scope, clean up the old styles
+    * New Side Panels on Admin Area
+* Various
+    * Asynchronous indexing for sales grids
+    * Advanced Mini Cart
+    * The HTML minification management on Admin Area
+    * Minor UI improvements
+    * The GitHub contribution process was updated in the Read.me file
+* Fixed bugs
+    * Fixed the assets deployment tool with the minification
+    * Fixed the JMeter scenario for the performance toolkit
+    * Fixed the static files caching on Varnish
+    * Fixed Admin user creation with the duplicated email or name (incorrect URL)
+    * Fixed the link on Reset password email for secure URL case
+    * Fixed the configured product adding from the wish-list to shopping cart
+    * Fixed the long labels display on Admin Area
+    * Fixed the Navigation Menu items on Admin Area
+    * Various unit and integration tests bugs
+* GitHub issues and requests
+    [#675] (https://github.com/magento/magento2/issues/675) -- Fix for Textarea element cols and rows #675
+
 0.74.0-beta2
 =============
 * Fixed bugs
