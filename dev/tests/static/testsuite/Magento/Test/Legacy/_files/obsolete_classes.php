@@ -3117,4 +3117,5 @@ return [
     ['Magento\LocaleFactory'],
     ['Magento\Framework\LocaleFactory'],
     ['Magento\Core\Helper\Data', 'Magento\Framework\Json\Helper\Data'],
+    ['Magento\Framework\Filesystem\Io\IoException'],
 ];
