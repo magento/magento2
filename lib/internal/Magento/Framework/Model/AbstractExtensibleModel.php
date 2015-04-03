@@ -205,7 +205,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         return parent::unsetData($key);
     }
 
-        /**
+    /**
      * Object data getter
      *
      * If $key is not defined will return all the data as an array.
