@@ -13,6 +13,32 @@
 
 @import 'data-grid/_data-grid-header.less';
 
+.admin__data-grid {
+    position: relative;
+}
+
 .admin__data-grid-loading-mask {
     z-index: @data-grid-header__z-index;
+}
+
+.admin__data-grid-loading-mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, .5);
+    z-index: @overlay__z-index;
+
+    .grid-loader {
+        position: absolute;
+        margin: auto;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 218px;
+        height: 149px;
+        background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
+    }
 }

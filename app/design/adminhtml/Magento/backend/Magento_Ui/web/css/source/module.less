@@ -344,14 +344,27 @@
     .filters-form {
         position: relative;
         z-index: 1;
-        margin: 14px 0;
+        margin: 30px 0 14px;
         background: #fff;
         border: 1px solid #bbb;
         box-shadow: 0 3px 3px rgba(0, 0, 0, .15);
+        width: 200%;
         .action-close {
             position: absolute;
             top: 3px;
             right: 7px;
+            background-color: transparent;
+            border: 0;
+            color: #676056;
+            box-shadow: none;
+            &:hover {
+                border: none;
+                box-shadow: none;
+            }
+        }
+        .action-apply {
+            vertical-align: top;
+            padding: 6px 13px 7px;
         }
     }
     .filters-actions {
@@ -425,7 +438,6 @@
 
 // Loading mask
 .admin__data-grid-loading-mask {
-    //  ToDo UI: Refactore this to spinner
     position: absolute;
     left: 0;
     top: 0;
