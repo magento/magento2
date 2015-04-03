@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Session;
+namespace Magento\Framework\Exception;
 
 /**
- * Save handler exception
+ * Session exception
  */
-class SaveHandlerException extends \Exception
+class SessionException extends LocalizedException
 {
 }

@@ -83,7 +83,7 @@ class Status extends \Magento\MediaStorage\Controller\Adminhtml\System\Config\Sy
                             $this->_objectManager->get(
                                 'Psr\Log\LoggerInterface'
                             )->critical(
-                                new \Magento\Framework\Exception(
+                                new \Magento\Framework\Exception\LocalizedException(
                                     __('The timeout limit for response from synchronize process was reached.')
                                 )
                             );

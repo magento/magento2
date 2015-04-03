@@ -7,7 +7,7 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\App\RequestInterface;
 
 /**
@@ -86,7 +86,6 @@ class Onepage extends Action
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
@@ -105,7 +104,6 @@ class Onepage extends Action
         \Magento\Customer\Model\Session $customerSession,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $accountManagement,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Translate\InlineInterface $translateInline,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
@@ -131,8 +129,7 @@ class Onepage extends Action
             $context,
             $customerSession,
             $customerRepository,
-            $accountManagement,
-            $resultRedirectFactory
+            $accountManagement
         );
     }
 
@@ -141,7 +138,7 @@ class Onepage extends Action
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @throws \Magento\Framework\App\Action\NotFoundException
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {
@@ -158,7 +155,7 @@ class Onepage extends Action
         }
 
         if (!$this->_canShowForUnregisteredUsers()) {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found.'));
         }
         return parent::dispatch($request);
     }

@@ -17,7 +17,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param null|array $ids
      *
      * @return \Magento\Catalog\Model\Indexer\Product\Flat\Action\Full
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

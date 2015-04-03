@@ -12,7 +12,6 @@ use Magento\Framework\Registry;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -35,28 +34,20 @@ class Save extends \Magento\Backend\App\Action
     protected $registry;
 
     /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param InvoiceCommentSender $invoiceCommentSender
      * @param ShipmentSender $shipmentSender
-     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
         InvoiceCommentSender $invoiceCommentSender,
-        ShipmentSender $shipmentSender,
-        RedirectFactory $resultRedirectFactory
+        ShipmentSender $shipmentSender
     ) {
         $this->registry = $registry;
         $this->invoiceCommentSender = $invoiceCommentSender;
         $this->shipmentSender = $shipmentSender;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 
@@ -129,11 +120,13 @@ class Save extends \Magento\Backend\App\Action
             /** @var \Magento\Sales\Model\Order $order */
             $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
             if (!$order->getId()) {
-                throw new \Magento\Framework\Exception(__('The order no longer exists.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('The order no longer exists.'));
             }
 
             if (!$order->canInvoice()) {
-                throw new \Magento\Framework\Exception(__('The order does not allow an invoice to be created.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The order does not allow an invoice to be created.')
+                );
             }
 
             /** @var \Magento\Sales\Model\Order\Invoice $invoice */
@@ -145,7 +138,9 @@ class Save extends \Magento\Backend\App\Action
             }
 
             if (!$invoice->getTotalQty()) {
-                throw new \Magento\Framework\Exception(__('Cannot create an invoice without products.'));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Cannot create an invoice without products.')
+                );
             }
             $this->registry->register('current_invoice', $invoice);
             if (!empty($data['capture_case'])) {

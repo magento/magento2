@@ -37,6 +37,6 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
         $request = $this->_objectManager->create('Magento\Framework\App\Request\Http');
         /* empty action */
         $request->setRequestUri('core/index/index');
-        $this->assertEmpty($this->_model->dispatch($request)->getBody());
+        $this->assertInstanceOf('Magento\Framework\Controller\ResultInterface', $this->_model->dispatch($request));
     }
 }

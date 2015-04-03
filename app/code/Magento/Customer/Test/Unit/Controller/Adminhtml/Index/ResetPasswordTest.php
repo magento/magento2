@@ -171,44 +171,29 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'getResponse',
             'getTitle',
             'getView',
+            'getResultRedirectFactory'
         ];
         $contextMock = $this->getMockBuilder(
             '\Magento\Backend\App\Action\Context'
         )->disableOriginalConstructor()->setMethods(
             $contextArgs
         )->getMock();
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->_request));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->_response));
-        $contextMock->expects(
-            $this->any()
-        )->method(
-            'getObjectManager'
-        )->will(
-            $this->returnValue($this->_objectManager)
-        );
-        $contextMock->expects(
-            $this->any()
-        )->method(
-            'getFrontController'
-        )->will(
-            $this->returnValue($frontControllerMock)
-        );
-        $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
-
-        $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($this->_helper));
-        $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->_session));
-        $contextMock->expects(
-            $this->any()
-        )->method(
-            'getMessageManager'
-        )->will(
-            $this->returnValue($this->messageManager)
-        );
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_request);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_response);
+        $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManager);
+        $contextMock->expects($this->any())->method('getFrontController')->willReturn($frontControllerMock);
+        $contextMock->expects($this->any())->method('getActionFlag')->willReturn($actionFlagMock);
+        $contextMock->expects($this->any())->method('getHelper')->willReturn($this->_helper);
+        $contextMock->expects($this->any())->method('getSession')->willReturn($this->_session);
+        $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManager);
         $titleMock =  $this->getMockBuilder('\Magento\Framework\App\Action\Title')->getMock();
-        $contextMock->expects($this->any())->method('getTitle')->will($this->returnValue($titleMock));
+        $contextMock->expects($this->any())->method('getTitle')->willReturn($titleMock);
         $viewMock =  $this->getMockBuilder('\Magento\Framework\App\ViewInterface')->getMock();
-        $viewMock->expects($this->any())->method('loadLayout')->will($this->returnSelf());
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($viewMock));
+        $viewMock->expects($this->any())->method('loadLayout')->willReturnSelf();
+        $contextMock->expects($this->any())->method('getView')->willReturn($viewMock);
+        $contextMock->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactoryMock);
 
         $this->_customerAccountManagementMock = $this->getMockBuilder(
             'Magento\Customer\Api\AccountManagementInterface'
@@ -222,7 +207,6 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             'context' => $contextMock,
             'customerAccountManagement' => $this->_customerAccountManagementMock,
             'customerRepository' => $this->_customerRepositoryMock,
-            'resultRedirectFactory' => $this->resultRedirectFactoryMock
         ];
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

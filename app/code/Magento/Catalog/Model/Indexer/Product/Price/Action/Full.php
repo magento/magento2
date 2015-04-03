@@ -16,7 +16,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      *
      * @param array|int|null $ids
      * @return void
-     * @throws \Magento\Catalog\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute($ids = null)
     {
@@ -32,7 +32,7 @@ class Full extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
             }
             $this->_syncData();
         } catch (\Exception $e) {
-            throw new \Magento\Catalog\Exception($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 }

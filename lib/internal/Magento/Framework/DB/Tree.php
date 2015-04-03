@@ -97,7 +97,9 @@ class Tree
 
             // make sure it's a \Zend_Db_Adapter
             if (!$connection instanceof \Zend_Db_Adapter_Abstract) {
-                throw new TreeException('db object does not implement \Zend_Db_Adapter_Abstract');
+                throw new TreeException(
+                    new \Magento\Framework\Phrase('db object does not implement \Zend_Db_Adapter_Abstract')
+                );
             }
 
             // save the connection
@@ -107,7 +109,7 @@ class Tree
                 $conn->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
             }
         } else {
-            throw new TreeException('db object is not set in config');
+            throw new TreeException(new \Magento\Framework\Phrase('db object is not set in config'));
         }
 
         if (!empty($config['table'])) {

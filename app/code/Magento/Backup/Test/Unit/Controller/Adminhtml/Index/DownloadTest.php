@@ -126,7 +126,8 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
             [
                 'objectManager' => $this->objectManagerMock,
                 'request' => $this->requestMock,
-                'response' => $this->responseMock
+                'response' => $this->responseMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
         $this->downloadController = $this->objectManager->getObject(
@@ -136,7 +137,6 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
                 'backupModelFactory' => $this->backupModelFactoryMock,
                 'fileFactory' => $this->fileFactoryMock,
                 'resultRawFactory' => $this->resultRawFactoryMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
     }

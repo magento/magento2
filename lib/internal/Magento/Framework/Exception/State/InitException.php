@@ -3,12 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\Exception\State;
 
-namespace Magento\Framework\App;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * An exception that indicates application initialization error
  */
-class InitException extends \Exception
+class InitException extends LocalizedException
 {
 }

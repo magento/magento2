@@ -17,7 +17,7 @@ interface ValidatorInterface
      *
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @return void
-     * @throws \Magento\Framework\Session\Exception
+     * @throws \Magento\Framework\Exception\SessionException
      */
     public function validate(\Magento\Framework\Session\SessionManagerInterface $session);
 }
