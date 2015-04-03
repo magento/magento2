@@ -242,6 +242,25 @@
 }
 
 //
+//  Order Account Information
+//  ---------------------------------------------
+
+.order-account-information {
+    .admin__fieldset {
+        &:extend(.abs-clearfix all);
+    }
+    .admin__field {
+        margin-bottom: 0;
+    }
+    .field-group_id {
+        float: left;
+    }
+    .field-email {
+        overflow: hidden;
+    }
+}
+
+//
 //  Order Address Information
 //  ---------------------------------------------
 
@@ -281,9 +300,7 @@
     }
 
     .admin__legend {
-        font-size: 1.8rem;
-        font-weight: @font-weight__semibold;
-        margin-bottom: @indent__l;
+        &:extend(.abs-fieldset-legend all);
     }
 
     .admin__field {
@@ -298,12 +315,10 @@
     }
 }
 
-.admin__vat-number {
+.field-vat-number {
     .action-default {
-        &:extend(.abs-action-tertiary all);
-        font-weight: @font-weight__regular;
+        &:extend(.abs-action-tertiary-as-link all);
         margin-top: @indent__s;
-        padding: 0;
     }
 }
 
@@ -312,11 +327,16 @@
 //  ---------------------------------------------
 
 .order-methods { //  ToDo UI: add styles for 3d secure
-    .admin__legend {
-        margin-bottom: 1.5rem;
-    }
     .admin__field {
         &:extend(.abs-field-rows all);
+    }
+    .admin__fieldset-wrapper-content {
+        .admin__fieldset-wrapper-title {
+            &:extend(.abs-fieldset-legend all);
+            border-bottom: 0;
+            margin-bottom: 1.5rem;
+            padding: 0;
+        }
     }
 }
 
@@ -352,6 +372,9 @@
 
 .order-shipping-method-summary {
     padding-top: @field-option__padding-top;
+    .action-default {
+        &:extend(.abs-action-tertiary-as-link all);
+    }
 }
 
 //

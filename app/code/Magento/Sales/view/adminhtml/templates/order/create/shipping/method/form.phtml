@@ -72,8 +72,8 @@
             </dl>
             <a href="#"
                onclick="$('order-shipping-method-info').hide();$('order-shipping-method-choose').show();return false"
-               class="action-tertiary">
-                <?php echo __('Click to change shipping method') ?>
+               class="action-default">
+                <span><?php echo __('Click to change shipping method') ?></span>
             </a>
         </div>
     <?php else: ?>
@@ -85,12 +85,12 @@ require(['prototype'], function(){
     <?php endif; ?>
 <?php elseif ($block->getIsRateRequest()): ?>
     <div class="order-shipping-method-summary">
-        <strong><?php echo __('Sorry, no quotes are available for this order.') ?></strong>
+        <strong class="order-shipping-method-not-available"><?php echo __('Sorry, no quotes are available for this order.') ?></strong>
     </div>
 <?php else: ?>
     <div id="order-shipping-method-summary" class="order-shipping-method-summary">
-        <a href="#" onclick="order.loadShippingRates();return false" class="action-tertiary">
-            <?php echo __('Get shipping methods and rates') ?>
+        <a href="#" onclick="order.loadShippingRates();return false" class="action-default">
+            <span><?php echo __('Get shipping methods and rates') ?></span>
         </a>
         <input type="hidden" name="order[has_shipping]" value="" class="required-entry" />
     </div>
