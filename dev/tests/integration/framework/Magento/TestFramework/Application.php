@@ -370,8 +370,8 @@ class Application
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            'php -f %s uninstall --magento_init_params=%s',
-            [BP . '/setup/index.php', $this->getInitParamsQuery()]
+            'php -f %s setup:uninstall -n --magento_init_params=%s',
+            [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
 

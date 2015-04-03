@@ -63,9 +63,9 @@ class Application
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Shell $shell
     ) {
-        $shellDir = $config->getApplicationBaseDir() . '/setup';
+        $shellDir = $config->getApplicationBaseDir() . '/bin';
         $this->_objectManager = $objectManager;
-        $this->_script = $this->_assertPath($shellDir . '/index.php');
+        $this->_script = $this->_assertPath($shellDir . '/magento');
         $this->_config = $config;
         $this->_shell = $shell;
     }
@@ -130,7 +130,7 @@ class Application
      */
     protected function _uninstall()
     {
-        $this->_shell->execute('php -f %s uninstall', [$this->_script]);
+        $this->_shell->execute('php -f %s setup:uninstall -n', [$this->_script]);
 
         $this->_isInstalled = false;
         $this->_fixtures = [];

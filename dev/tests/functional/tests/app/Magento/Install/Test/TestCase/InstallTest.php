@@ -91,7 +91,7 @@ class InstallTest extends Injectable
     {
         $magentoBaseDir = dirname(dirname(dirname(MTF_BP)));
         // Uninstall Magento.
-        shell_exec("php -f $magentoBaseDir/setup/index.php uninstall");
+        shell_exec("php -f $magentoBaseDir/bin/magento setup:uninstall -n");
         $this->installPage = $installPage;
         $this->homePage = $homePage;
     }
