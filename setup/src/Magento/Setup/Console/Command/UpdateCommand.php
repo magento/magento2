@@ -8,18 +8,11 @@ namespace Magento\Setup\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\ConsoleLogger;
 
 class UpdateCommand extends Command
 {
-    /**
-     * Object manager provider
-     *
-     * @var ObjectManagerProvider
-     */
-    private $objectManagerProvider;
-
     /**
      * Installer service factory
      *
@@ -30,14 +23,10 @@ class UpdateCommand extends Command
     /**
      * Constructor
      *
-     * @param ObjectManagerProvider $objectManagerProvider
      * @param InstallerFactory $installerFactory
      */
-    public function __construct(
-        ObjectManagerProvider $objectManagerProvider,
-        InstallerFactory $installerFactory
-    ) {
-        $this->objectManagerProvider = $objectManagerProvider;
+    public function __construct(InstallerFactory $installerFactory)
+    {
         $this->installerFactory = $installerFactory;
         parent::__construct();
     }
@@ -48,8 +37,10 @@ class UpdateCommand extends Command
     protected function configure()
     {
         $this->setName('setup:update')
-            ->setDescription('Updates installed application after the code base has changed, '
-                . 'including DB schema and data install/upgrade');
+            ->setDescription(
+                'Updates installed application after the code base has changed, '
+                . 'including DB schema and data install/upgrade'
+            );
     }
 
     /**
@@ -57,11 +48,7 @@ class UpdateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $consoleLogger = $this->objectManagerProvider->get()->create(
-            'Magento\Setup\Model\ConsoleLogger',
-            ['output' => $output]
-        );
-        $installer = $this->installerFactory->create($consoleLogger);
+        $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->updateModulesSequence();
         $installer->installSchema();
         $installer->installDataFixtures();
