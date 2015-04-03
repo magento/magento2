@@ -11,7 +11,8 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\SalesSequence\Model\Builder;
 use Magento\SalesSequence\Model\Config as SequenceConfig;
-
+use Magento\Store\Model\Resource\Store\CollectionFactory;
+use Magento\Framework\Event\ManagerInterface;
 /**
  * Class InstallData
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -37,6 +38,15 @@ class InstallData implements InstallDataInterface
     private $sequenceConfig;
 
     /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+    /**
      * Init
      *
      * @param SalesSetupFactory $salesSetupFactory
@@ -46,11 +56,16 @@ class InstallData implements InstallDataInterface
     public function __construct(
         SalesSetupFactory $salesSetupFactory,
         Builder $sequenceBuilder,
-        SequenceConfig $sequenceConfig
+        SequenceConfig $sequenceConfig,
+        CollectionFactory $collectionFactory,
+        ManagerInterface $eventManager
+
     ) {
         $this->salesSetupFactory = $salesSetupFactory;
         $this->sequenceBuilder = $sequenceBuilder;
         $this->sequenceConfig = $sequenceConfig;
+        $this->collectionFactory = $collectionFactory;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -185,6 +200,9 @@ class InstallData implements InstallDataInterface
                 ->setWarningValue($this->sequenceConfig->get('warningValue'))
                 ->setMaxValue($this->sequenceConfig->get('maxValue'))
                 ->setEntityType($entityType)->create();
+        }
+        foreach ($this->collectionFactory->create()->getItems() as $store) {
+            $this->eventManager->dispatch('add_store', ['store' => $store]);
         }
     }
 }
