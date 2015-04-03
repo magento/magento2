@@ -8,14 +8,13 @@ namespace Magento\Setup\Console\Command;
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\Module\DbVersionInfo;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for checking if DB version is in sync with the code base version
  */
-class DbStatusCommand extends Command
+class DbStatusCommand extends AbstractSetupCommand
 {
     /**
      * Object manager provider
@@ -42,6 +41,7 @@ class DbStatusCommand extends Command
     {
         $this->setName('setup:db:status')
             ->setDescription('Checks if update of DB schema or data is required');
+        parent::configure();
     }
 
     /**

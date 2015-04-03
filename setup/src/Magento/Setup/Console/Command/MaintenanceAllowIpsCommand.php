@@ -8,7 +8,6 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Module\ModuleList;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -17,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command for setting allowed IPs in maintenance mode
  */
-class MaintenanceAllowIpsCommand extends Command
+class MaintenanceAllowIpsCommand extends AbstractSetupCommand
 {
     /**
      * Names of input arguments or options
@@ -66,6 +65,7 @@ class MaintenanceAllowIpsCommand extends Command
         $this->setName('maintenance:allow-ips')
             ->setDescription('Sets maintenance mode exempt IPs')
             ->setDefinition(array_merge($arguments, $options));
+        parent::configure();
     }
 
     /**

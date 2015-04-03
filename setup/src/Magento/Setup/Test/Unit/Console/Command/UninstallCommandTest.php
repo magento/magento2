@@ -35,14 +35,16 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->command = new UninstallCommand($this->installerFactory);
     }
 
-    public function testExecuteInteractionYes() {
+    public function testExecuteInteractionYes()
+    {
         $this->installer->expects($this->once())->method('uninstall');
         $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($this->installer));
 
         $this->checkInteraction(true);
     }
 
-    public function testExecuteInteractionNo() {
+    public function testExecuteInteractionNo()
+    {
         $this->installer->expects($this->exactly(0))->method('uninstall');
         $this->installerFactory->expects($this->exactly(0))->method('create');
 
@@ -70,4 +72,3 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
         $tester->execute([]);
     }
 }
-

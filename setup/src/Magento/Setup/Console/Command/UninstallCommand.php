@@ -6,14 +6,13 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\ConsoleLogger;
 
-class UninstallCommand extends Command
+class UninstallCommand extends AbstractSetupCommand
 {
     /**
      * @var InstallerFactory
@@ -36,6 +35,7 @@ class UninstallCommand extends Command
     {
         $this->setName('setup:uninstall')
             ->setDescription('Uninstalls Magento application');
+        parent::configure();
     }
 
     /**

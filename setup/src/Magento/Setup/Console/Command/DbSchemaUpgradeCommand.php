@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command for install and update of DB schema
  */
-class DbSchemaUpgradeCommand extends Command
+class DbSchemaUpgradeCommand extends AbstractSetupCommand
 {
     /**
      * Factory to create installer
@@ -43,6 +43,7 @@ class DbSchemaUpgradeCommand extends Command
     protected function configure()
     {
         $this->setName('setup:db-schema:upgrade')->setDescription('Installs and upgrades DB schema');
+        parent::configure();
     }
 
     /**

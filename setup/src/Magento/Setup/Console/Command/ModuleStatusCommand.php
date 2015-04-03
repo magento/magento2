@@ -6,14 +6,13 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Setup\Model\ObjectManagerProvider;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for displaying status of modules
  */
-class ModuleStatusCommand extends Command
+class ModuleStatusCommand extends AbstractSetupCommand
 {
     /**
      * Object manager provider
@@ -40,6 +39,7 @@ class ModuleStatusCommand extends Command
     {
         $this->setName('module:status')
             ->setDescription('Displays status of modules');
+        parent::configure();
     }
 
     /**

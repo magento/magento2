@@ -6,12 +6,11 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class AbstractMaintenanceCommand extends Command
+abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
 {
     /**
      * Names of input option
@@ -50,6 +49,7 @@ abstract class AbstractMaintenanceCommand extends Command
             ),
         ];
         $this->setDefinition($options);
+        parent::configure();
     }
 
     /**

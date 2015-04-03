@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Console\Test\Unit\Command;
+namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\MaintenanceDisableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
