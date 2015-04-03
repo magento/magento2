@@ -23,9 +23,9 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
      * @param SystemConfig $systemConfig
      * @param Store $store
      * @param CmsIndex $cmsIndex
+     * @param AdminCache $adminCache
      * @param string $locale
      * @param string $welcomeText
-     * @return void
      */
     public function processAssert(
         SystemConfig $systemConfig,
