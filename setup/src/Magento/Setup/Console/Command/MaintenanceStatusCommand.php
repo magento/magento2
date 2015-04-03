@@ -36,7 +36,7 @@ class MaintenanceStatusCommand extends Command
     protected function configure()
     {
         $this->setName('maintenance:status')
-            ->setDescription('Maintenance mode status');
+            ->setDescription('Checks maintenance mode status');
     }
 
     /**

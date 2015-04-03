@@ -59,7 +59,7 @@ class MaintenanceAllowIpsCommand extends Command
             ),
         ];
         $this->setName('maintenance:allow-ips')
-            ->setDescription('Set maintenance mode exempt IPs')
+            ->setDescription('Sets maintenance mode exempt IPs')
             ->setDefinition(array_merge($arguments, $options));
     }
 

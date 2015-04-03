@@ -18,7 +18,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      */
     protected function configure()
     {
-        $this->setName('maintenance:disable')->setDescription('Disable maintenance mode');
+        $this->setName('maintenance:disable')->setDescription('Disables maintenance mode');
         parent::configure();
     }
 
