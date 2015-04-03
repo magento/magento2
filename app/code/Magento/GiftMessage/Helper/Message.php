@@ -109,7 +109,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getInline($type, \Magento\Framework\Object $entity, $dontDisplayContainer = false)
     {
-        if (!$this->skipPage($type) && !$this->isMessagesAvailable($type, $entity)) {
+        if (!$this->skipPage($type) && !$this->isMessagesAllowed($type, $entity)) {
             return '';
         }
         return $this->_layoutFactory->create()->createBlock('Magento\GiftMessage\Block\Message\Inline')
@@ -129,7 +129,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Check availability of giftmessages for specified entity.
+     * Check if giftmessages is allowed for specified entity.
      *
      * @param string $type
      * @param \Magento\Framework\Object $entity
@@ -137,12 +137,16 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      * @return bool|string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function isMessagesAvailable($type, \Magento\Framework\Object $entity, $store = null)
+    public function isMessagesAllowed($type, \Magento\Framework\Object $entity, $store = null)
     {
         if ($type == 'items') {
             $items = $entity->getAllItems();
             if (!is_array($items) || empty($items)) {
-                return $this->scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+                return $this->scopeConfig->getValue(
+                    self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                );
             }
             if ($entity instanceof \Magento\Quote\Model\Quote) {
                 $_type = $entity->getIsMultiShipping() ? 'address_item' : 'item';
@@ -153,7 +157,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
                 if ($item->getParentItem()) {
                     continue;
                 }
-                if ($this->isMessagesAvailable($_type, $item, $store)) {
+                if ($this->isMessagesAllowed($_type, $item, $store)) {
                     return true;
                 }
             }
@@ -177,7 +181,11 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
                 $store
             );
         } else {
-            return $this->scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+            return $this->scopeConfig->getValue(
+                self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $store
+            );
         }
         return false;
     }
@@ -191,25 +199,15 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getDependenceFromStoreConfig($productGiftMessageAllow, $store = null)
     {
-        $result = $this->scopeConfig->getValue(self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        $result = $this->scopeConfig->getValue(
+            self::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store
+        );
         if ($productGiftMessageAllow === '' || is_null($productGiftMessageAllow)) {
             return $result;
         } else {
             return $productGiftMessageAllow;
         }
-    }
-
-    /**
-     * Alias for isMessagesAvailable(...)
-     *
-     * @param string $type
-     * @param \Magento\Framework\Object $entity
-     * @param \Magento\Store\Model\Store|int|null $store
-     * @return bool|null|string
-     */
-    public function getIsMessagesAvailable($type, \Magento\Framework\Object $entity, $store = null)
-    {
-        return $this->isMessagesAvailable($type, $entity, $store);
     }
 
     /**
@@ -293,7 +291,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAvailableForQuoteItems($quote, $store = null)
     {
         foreach ($quote->getAllItems() as $item) {
-            if ($this->isMessagesAvailable('item', $item, $store)) {
+            if ($this->isMessagesAllowed('item', $item, $store)) {
                 return true;
             }
         }
@@ -311,7 +309,7 @@ class Message extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAvailableForAddressItems($items, $store = null)
     {
         foreach ($items as $item) {
-            if ($this->isMessagesAvailable('address_item', $item, $store)) {
+            if ($this->isMessagesAllowed('address_item', $item, $store)) {
                 return true;
             }
         }
