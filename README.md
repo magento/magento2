@@ -27,7 +27,7 @@ Use the following table to verify you have the correct prerequisites to install 
 		</tr>
 	<tr>
 		<td>Apache 2.2 or 2.4</td>
-		<td>Ubuntu: <code>apache -v</code><br>
+		<td>Ubuntu: <code>apache2 -v</code><br>
 		CentOS: <code>httpd -v</code></td>
 		<td><a href="http://devdocs.magento.com/guides/v1.0/install-gde/prereq/apache.html">Apache</a></td>
 	</tr>
@@ -57,3 +57,17 @@ After verifying your prerequisites, perform the following tasks in order to prep
 	*	<a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/install-web.html">Install Magento software using the web interface</a>
 	*	<a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/install-cli.html">Install Magento software using the command line</a>
 2.	<a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/verify.html">Verify the installation</a>
+
+<h2>Contributing to the Magento 2 code base</h2>
+Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes, optimizations, or just good suggestions.
+
+To make learn about how to make a contribution, click [here][1].
+
+To learn about issues, click [here][2]. To open an issue, click [here][3].
+
+To suggest documentation improvements, click [here][4].
+
+[1]: <http://devdocs.magento.com/guides/v1.0/contributor-guide/CONTRIBUTING.html>
+[2]: <http://devdocs.magento.com/guides/v1.0/contributor-guide/CONTRIBUTING.html#report>
+[3]: <https://github.com/magento/magento2/issues>
+[4]: <http://devdocs.magento.com>
