@@ -22,7 +22,7 @@
 @data-grid-tr__active__background-color: @action__hover__background-color;
 @data-grid-tr__hover__background-color: lighten(@action__hover__background-color, 1%);
 
-@data-grid-cell__border-width: 1px;
+@data-grid-cell__border-width: .1rem;
 @data-grid-cell__padding-horizontal: 1rem;
 @data-grid-cell__padding-vertical: 1rem;
 
@@ -49,6 +49,11 @@
 
 //
 
+.admin__data-grid-wrap {
+    padding-top: 0;
+    position: relative;
+}
+
 .admin__data-grid-loading-mask {
     background: rgba(255, 255, 255, .5);
     bottom: 0;
@@ -69,15 +74,6 @@
         top: 0;
         width: 218px;
     }
-}
-
-.admin__data-grid-wrap {
-    padding-top: 0;
-    position: relative;
-}
-
-.admin__data-grid-loading-mask {
-    z-index: @data-grid-header__z-index;
 }
 
 .data-grid {
@@ -265,12 +261,12 @@
         }
         &._ascend {
             &:before {
-                content: '↓';
+                content: '\2193';
             }
         }
         &._descend {
             &:before {
-                content: '↑';
+                content: '\2191';
             }
         }
     }
