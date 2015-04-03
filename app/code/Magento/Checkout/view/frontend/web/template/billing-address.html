@@ -22,7 +22,9 @@
                     "></select>
                 </div>
             </div>
-
+            <!-- ko foreach: getRegion('additional-fieldsets') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
             <!-- ko if: quoteIsVirtual == 0 -->
             <div class="field choice">
                 <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1" checked="checked" class="radio" data-bind="checked: useForShipping" />
