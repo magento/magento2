@@ -6,7 +6,7 @@
 /*global define*/
 define(
     [
-        'uiComponent',
+        'Magento_Ui/js/form/form',
         'ko',
         'Magento_Customer/js/model/customer',
         '../action/select-billing-address',
@@ -14,6 +14,7 @@ define(
         '../model/quote'
     ],
     function (Component, ko,  customer, selectBillingAddress, navigator, quote) {
+        "use strict";
         var stepName = 'billingAddress';
         var newAddressSelected = ko.observable(false);
         return Component.extend({
@@ -30,7 +31,11 @@ define(
                 return item.getFullAddress();
             },
             submitBillingAddress: function() {
-                selectBillingAddress(this.selectedBillingAddressId, this.useForShipping);
+                this.validate();
+
+                if (!this.source.get('params.invalid')) {
+                    selectBillingAddress(this.selectedBillingAddressId, this.useForShipping);
+                }
             },
             navigateToCurrentStep: function() {
                 if (!navigator.isStepVisible(stepName)()) {
@@ -41,11 +46,11 @@ define(
                 return newAddressSelected();
             },
             onAddressChange: function (value) {
-                if (value == null)
+                if (value === null) {
                     newAddressSelected(true);
-                else
-                    newAddressSelected(false)
-
+                } else {
+                    newAddressSelected(false);
+                }
             }
         });
     }

@@ -197,6 +197,11 @@ define([
 
             this.error(msg);
 
+            //TODO: Implement proper result propagation for form
+            if (!isValid) {
+                this.source.set('params.invalid', true);
+            }
+
             return {
                 valid: isValid,
                 target: this
