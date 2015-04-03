@@ -59,7 +59,7 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $method
-     * @expectedException \Magento\Framework\Filesystem\FilesystemException
+     * @expectedException \Magento\Framework\Exception\FileSystemException
      * @expectedExceptionMessage Unknown directory type: 'foo'
      * @dataProvider assertCodeDataProvider
      */

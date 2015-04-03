@@ -204,13 +204,9 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ]
         )->getMock();
 
-        $wsdlGeneratorMock->expects(
-            $this->once()
-        )->method(
-            '_collectCallInfo'
-        )->will(
-            $this->throwException(new \Magento\Framework\Webapi\Exception($exceptionMsg))
-        );
+        $wsdlGeneratorMock->expects($this->once())
+            ->method('_collectCallInfo')
+            ->willThrowException(new \Magento\Framework\Webapi\Exception(__($exceptionMsg)));
 
         $this->assertEquals($genWSDL, $wsdlGeneratorMock->generate($requestedService, 'http://magento.host'));
     }

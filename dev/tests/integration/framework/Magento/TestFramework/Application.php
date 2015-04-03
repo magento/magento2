@@ -331,7 +331,7 @@ class Application
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
         );
-        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\RendererInterface'));
+        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\Renderer\Placeholder'));
     }
 
     /**
@@ -380,7 +380,7 @@ class Application
      * Install an application
      *
      * @return void
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function install()
     {
@@ -509,7 +509,7 @@ class Application
      *
      * @param string $dir
      * @return void
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _ensureDirExists($dir)
     {
@@ -518,7 +518,7 @@ class Application
             mkdir($dir, 0777);
             umask($old);
         } elseif (!is_dir($dir)) {
-            throw new \Magento\Framework\Exception("'$dir' is not a directory.");
+            throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
         }
     }
 

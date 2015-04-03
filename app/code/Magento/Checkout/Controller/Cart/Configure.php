@@ -22,7 +22,6 @@ class Configure extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
@@ -32,7 +31,6 @@ class Configure extends \Magento\Checkout\Controller\Cart
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Checkout\Model\Cart $cart,
-        Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         Framework\View\Result\PageFactory $resultPageFactory
     ) {
         parent::__construct(
@@ -41,8 +39,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart,
-            $resultRedirectFactory
+            $cart
         );
         $this->resultPageFactory = $resultPageFactory;
     }
@@ -51,6 +48,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
      * Action to reconfigure cart item
      *
      * @return \Magento\Framework\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -62,30 +60,34 @@ class Configure extends \Magento\Checkout\Controller\Cart
             $quoteItem = $this->cart->getQuote()->getItemById($id);
         }
 
-        try {
-            if (!$quoteItem || $productId != $quoteItem->getProduct()->getId()) {
-                $this->messageManager->addError(__("We can't find the quote item."));
-                return $this->resultRedirectFactory->create()->setPath('checkout/cart');
-            }
-
-            $params = new \Magento\Framework\Object();
-            $params->setCategoryId(false);
-            $params->setConfigureMode(true);
-            $params->setBuyRequest($quoteItem->getBuyRequest());
-
-            $resultPage = $this->resultPageFactory->create();
-            $this->_objectManager->get('Magento\Catalog\Helper\Product\View')
-                ->prepareAndRender(
-                    $resultPage,
-                    $quoteItem->getProduct()->getId(),
-                    $this,
-                    $params
-                );
-            return $resultPage;
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('We cannot configure the product.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            return $this->_goBack();
+        if (!$quoteItem || $productId != $quoteItem->getProduct()->getId()) {
+            $this->messageManager->addError(__("We can't find the quote item."));
+            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
         }
+
+        $params = new \Magento\Framework\Object();
+        $params->setCategoryId(false);
+        $params->setConfigureMode(true);
+        $params->setBuyRequest($quoteItem->getBuyRequest());
+
+        $resultPage = $this->resultPageFactory->create();
+        $this->_objectManager->get('Magento\Catalog\Helper\Product\View')
+            ->prepareAndRender(
+                $resultPage,
+                $quoteItem->getProduct()->getId(),
+                $this,
+                $params
+            );
+        return $resultPage;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function getDefaultResult()
+    {
+        return $this->_goBack();
     }
 }

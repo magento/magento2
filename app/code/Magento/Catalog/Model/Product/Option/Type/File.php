@@ -79,7 +79,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param File\ValidatorInfo $validatorInfo
      * @param File\ValidatorFile $validatorFile
      * @param array $data
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
