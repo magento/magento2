@@ -13,23 +13,14 @@ define([
             bodyTmpl: 'ui/grid/cells/text',
             sortable: false,
             visible: true,
+            defaultVisible: '<%= visible %>',
             imports: {
                 visible: '<%= provider %>:config.columns.<%= index %>.visible'
             }
         },
 
-        initConfig: function () {
-            this._super();
-
-            this.initialState = {
-                visible: this.visible
-            };
-
-            return this;
-        },
-
         resetVisible: function () {
-            this.visible(this.initialState.visible);
+            this.visible(this.defaultVisible);
         },
 
         getClickUrl: function (row) {

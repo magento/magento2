@@ -45,6 +45,7 @@ define([
 
                 elem.visible(config.visible);
             });
+            this.close();
         },
 
         hasOverflow: function () {

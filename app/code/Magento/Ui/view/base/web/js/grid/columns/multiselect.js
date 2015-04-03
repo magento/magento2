@@ -4,8 +4,9 @@
  */
 define([
     'underscore',
+    'mage/translate',
     './column'
-], function (_, Column) {
+], function (_, $t, Column) {
     'use strict';
 
     return Column.extend({
@@ -21,16 +22,16 @@ define([
             ns: '<%= provider %>:params',
             actions: [{
                 value: 'selectAll',
-                label: 'Select all'
+                label: $t('Select all')
             }, {
                 value: 'deselectAll',
-                label: 'Deselect all'
+                label: $t('Deselect all')
             }, {
                 value: 'selectPage',
-                label: 'Select all on this page'
+                label: $t('Select all on this page')
             }, {
                 value: 'deselectPage',
-                label: 'Deselect all on this page'
+                label: $t('Deselect all on this page')
             }],
 
             imports: {
