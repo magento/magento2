@@ -29,9 +29,13 @@
                 </div>
             </div>
             <!-- /ko -->
+            <fieldset id="shipping-new-address-form" class="fieldset address"
+                      data-bind="fadeVisible: isNewAddressSelected()">
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
+            </fieldset>
+
             <div class="choice field">
                 <input type="checkbox"
                        name="shipping[same_as_billing]"

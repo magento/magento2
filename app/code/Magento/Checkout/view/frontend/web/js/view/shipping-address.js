@@ -67,6 +67,9 @@ define(
                 if (!navigator.isStepVisible(stepName)()) {
                     navigator.goToStep(stepName);
                 }
+            },
+            isNewAddressSelected: function() {
+                return this.newAddressSelected();
             }
         });
     }

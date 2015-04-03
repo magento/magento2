@@ -7,13 +7,15 @@
 define(
     [
         'uiComponent',
+        'ko',
         'Magento_Customer/js/model/customer',
         '../action/select-billing-address',
         'Magento_Checkout/js/model/step-navigator',
         '../model/quote'
     ],
-    function (Component, customer, selectBillingAddress, navigator, quote) {
+    function (Component, ko,  customer, selectBillingAddress, navigator, quote) {
         var stepName = 'billingAddress';
+        var newAddressSelected = ko.observable(false);
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/billing-address'
@@ -34,6 +36,16 @@ define(
                 if (!navigator.isStepVisible(stepName)()) {
                     navigator.goToStep(stepName);
                 }
+            },
+            isNewAddressSelected: function() {
+                return newAddressSelected();
+            },
+            onAddressChange: function (value) {
+                if (value == null)
+                    newAddressSelected(true);
+                else
+                    newAddressSelected(false)
+
             }
         });
     }
