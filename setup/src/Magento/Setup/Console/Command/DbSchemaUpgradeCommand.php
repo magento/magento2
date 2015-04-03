@@ -8,14 +8,13 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command for install and update of DB schema
  */
-class DbSchemaUpgradeCommand extends Command
+class DbSchemaUpgradeCommand extends AbstractSetupCommand
 {
     /**
      * Factory to create logger
@@ -52,6 +51,7 @@ class DbSchemaUpgradeCommand extends Command
     protected function configure()
     {
         $this->setName('setup:db-schema:upgrade')->setDescription('Install and upgrade DB schema');
+        parent::configure();
     }
 
     /**

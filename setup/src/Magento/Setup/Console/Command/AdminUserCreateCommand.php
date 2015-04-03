@@ -9,12 +9,11 @@ namespace Magento\Setup\Console\Command;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AdminUserCreateCommand extends Command
+class AdminUserCreateCommand extends AbstractSetupCommand
 {
     /**
      * @var InstallerFactory
@@ -48,6 +47,7 @@ class AdminUserCreateCommand extends Command
         $this->setName('admin:user:create')
             ->setDescription('Creates admin user')
             ->setDefinition($arguments);
+        parent::configure();
     }
 
     /**

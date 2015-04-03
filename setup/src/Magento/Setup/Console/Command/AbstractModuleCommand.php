@@ -6,7 +6,6 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Setup\Model\ObjectManagerProvider;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Abstract class for Enable and Disable commands to consolidate common logic
  */
-abstract class AbstractModuleCommand extends Command
+abstract class AbstractModuleCommand extends AbstractSetupCommand
 {
     /**
      * Names of input arguments or options
@@ -73,6 +72,7 @@ abstract class AbstractModuleCommand extends Command
                     ($this->isEnable() ? 'Enable' : 'Disable') . ' all modules'
                 ),
             ]);
+        parent::configure();
     }
 
     /**

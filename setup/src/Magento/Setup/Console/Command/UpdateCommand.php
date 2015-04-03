@@ -5,13 +5,12 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\ConsoleLogger;
 
-class UpdateCommand extends Command
+class UpdateCommand extends AbstractSetupCommand
 {
     /**
      * Installer service factory
@@ -41,6 +40,7 @@ class UpdateCommand extends Command
                 'Updates installed application after the code base has changed, '
                 . 'including DB schema and data install/upgrade'
             );
+        parent::configure();
     }
 
     /**
