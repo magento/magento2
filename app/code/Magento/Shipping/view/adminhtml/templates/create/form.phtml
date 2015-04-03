@@ -56,11 +56,12 @@
 <script>
 require([
     "jquery",
+    "Magento_Ui/js/lib/registry/registry",
     "mage/mage",
     "prototype"
-], function(jQuery){
+], function(jQuery, registry){
 
-    jQuery('body').one('packageInitialized', function(){
+    registry.get('packaging', function(packaging){
         packaging.setConfirmPackagingCallback(function(){
             packaging.setParamsCreateLabelRequest($('edit_form').serialize(true));
             packaging.sendCreateLabelRequest();
