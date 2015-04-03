@@ -366,6 +366,10 @@ class Application
      */
     public function cleanup()
     {
+        $this->_ensureDirExists($this->installDir);
+        $this->_ensureDirExists($this->_configDir);
+
+        $this->copyAppConfigFiles();
         /**
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
