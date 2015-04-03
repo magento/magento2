@@ -10,6 +10,7 @@ use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfig;
 use Magento\Cms\Test\Page\CmsIndex;
+use Magento\Backend\Test\Page\Adminhtml\AdminCache;
 
 /**
  * Assert that store can be localized.
@@ -26,8 +27,14 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
      * @param string $welcomeText
      * @return void
      */
-    public function processAssert(SystemConfig $systemConfig, Store $store, CmsIndex $cmsIndex, $locale, $welcomeText)
-    {
+    public function processAssert(
+        SystemConfig $systemConfig,
+        Store $store,
+        CmsIndex $cmsIndex,
+        AdminCache $adminCache,
+        $locale,
+        $welcomeText
+    ) {
         // Set locale options
         $systemConfig->open();
         $systemConfig->getPageActions()->selectStore($store->getGroupId() . "/" . $store->getName());
@@ -36,6 +43,11 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
         $configGroup->setValue('select-groups-locale-fields-code-value', $locale);
         $systemConfig->getPageActions()->save();
         $systemConfig->getMessagesBlock()->waitSuccessMessage();
+
+        // Flush cache
+        $adminCache->open();
+        $adminCache->getActionsBlock()->flushMagentoCache();
+        $adminCache->getMessagesBlock()->waitSuccessMessage();
 
         // Check presents income text on index page
         $cmsIndex->open();
