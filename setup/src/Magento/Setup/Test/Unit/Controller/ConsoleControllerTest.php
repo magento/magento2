@@ -237,7 +237,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function helpActionDataProvider()
     {
-        $noParameters = 'This command has no parameters.';
         return [
             ['install',''],
             ['install-user-configuration', ''],

@@ -7,7 +7,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Setup\Model\InstallerFactory;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\ConsoleLogger;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,13 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DbDataUpgradeCommand extends Command
 {
-    /**
-     * Factory to create logger
-     *
-     * @var ObjectManagerProvider
-     */
-    private $objectManagerProvider;
-
     /**
      * Factory to create installer
      *
@@ -35,11 +28,9 @@ class DbDataUpgradeCommand extends Command
      * Inject dependencies
      *
      * @param InstallerFactory $installFactory
-     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(InstallerFactory $installFactory, ObjectManagerProvider $objectManagerProvider)
+    public function __construct(InstallerFactory $installFactory)
     {
-        $this->objectManagerProvider = $objectManagerProvider;
         $this->installFactory = $installFactory;
         parent::__construct();
     }
@@ -51,7 +42,7 @@ class DbDataUpgradeCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('setup:db-data:upgrade')->setDescription('Install and upgrade data in DB');
+        $this->setName('setup:db-data:upgrade')->setDescription('Installs and upgrades data in DB');
     }
 
     /**
@@ -59,8 +50,7 @@ class DbDataUpgradeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $log = $this->objectManagerProvider->get()->create('Magento\Setup\Model\ConsoleLogger', ['output' => $output]);
-        $installer = $this->installFactory->create($log);
+        $installer = $this->installFactory->create(new ConsoleLogger($output));
         $installer->installDataFixtures();
     }
 }
