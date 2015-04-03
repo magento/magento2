@@ -27,7 +27,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      *
      * @return bool
      */
-    protected function getModeToSet()
+    protected function isEnable()
     {
         return false;
     }

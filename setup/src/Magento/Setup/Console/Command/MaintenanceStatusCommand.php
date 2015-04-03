@@ -22,6 +22,11 @@ class MaintenanceStatusCommand extends Command
      */
     private $maintenanceMode;
 
+    /**
+     * Constructor
+     *
+     * @param MaintenanceMode $maintenanceMode
+     */
     public function __construct(MaintenanceMode $maintenanceMode)
     {
         $this->maintenanceMode = $maintenanceMode;
