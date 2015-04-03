@@ -42,7 +42,7 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $this->setName('setup:db-schema:upgrade')->setDescription('Installs and upgrades DB schema');
+        $this->setName('setup:db-schema:upgrade')->setDescription('Installs and upgrades the DB schema');
         parent::configure();
     }
 

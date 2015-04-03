@@ -42,7 +42,7 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $this->setName('setup:db-data:upgrade')->setDescription('Installs and upgrades data in DB');
+        $this->setName('setup:db-data:upgrade')->setDescription('Installs and upgrades data in the DB');
         parent::configure();
     }
 
