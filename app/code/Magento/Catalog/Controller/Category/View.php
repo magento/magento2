@@ -58,11 +58,6 @@ class View extends \Magento\Framework\App\Action\Action
     protected $resultForwardFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * Catalog Layer Resolver
      *
      * @var Resolver
@@ -85,7 +80,6 @@ class View extends \Magento\Framework\App\Action\Action
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -99,7 +93,6 @@ class View extends \Magento\Framework\App\Action\Action
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
         PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository
     ) {
@@ -111,7 +104,6 @@ class View extends \Magento\Framework\App\Action\Action
         $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->layerResolver = $layerResolver;
         $this->categoryRepository = $categoryRepository;
     }

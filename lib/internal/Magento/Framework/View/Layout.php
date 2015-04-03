@@ -480,7 +480,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _renderBlock($name)
     {
@@ -493,7 +493,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _renderUiComponent($name)
     {
@@ -906,12 +906,14 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $type
      * @return \Magento\Framework\App\Helper\AbstractHelper
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getBlockSingleton($type)
     {
         if (empty($type)) {
-            throw new \Magento\Framework\Exception('Invalid block type');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Invalid block type')
+            );
         }
         if (!isset($this->sharedBlocks[$type])) {
             $this->sharedBlocks[$type] = $this->createBlock($type);

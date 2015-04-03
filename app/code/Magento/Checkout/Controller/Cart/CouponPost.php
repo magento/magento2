@@ -21,7 +21,6 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Checkout\Model\Cart $cart
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
@@ -31,7 +30,6 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Checkout\Model\Cart $cart,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         parent::__construct(
@@ -40,8 +38,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart,
-            $resultRedirectFactory
+            $cart
         );
         $this->quoteRepository = $quoteRepository;
     }
@@ -50,6 +47,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * Initialize coupon
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -71,41 +69,44 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
             return $this->_goBack();
         }
 
-        try {
-            $codeLength = strlen($couponCode);
-            $isCodeLengthValid = $codeLength && $codeLength <= \Magento\Checkout\Helper\Cart::COUPON_CODE_MAX_LENGTH;
+        $codeLength = strlen($couponCode);
+        $isCodeLengthValid = $codeLength && $codeLength <= \Magento\Checkout\Helper\Cart::COUPON_CODE_MAX_LENGTH;
 
-            $this->cart->getQuote()->getShippingAddress()->setCollectShippingRates(true);
-            $this->cart->getQuote()->setCouponCode($isCodeLengthValid ? $couponCode : '')->collectTotals();
-            $this->quoteRepository->save($this->cart->getQuote());
+        $this->cart->getQuote()->getShippingAddress()->setCollectShippingRates(true);
+        $this->cart->getQuote()->setCouponCode($isCodeLengthValid ? $couponCode : '')->collectTotals();
+        $this->quoteRepository->save($this->cart->getQuote());
 
-            if ($codeLength) {
-                if ($isCodeLengthValid && $couponCode == $this->cart->getQuote()->getCouponCode()) {
-                    $this->messageManager->addSuccess(
-                        __(
-                            'The coupon code "%1" was applied.',
-                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
-                        )
-                    );
-                } else {
-                    $this->messageManager->addError(
-                        __(
-                            'The coupon code "%1" is not valid.',
-                            $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
-                        )
-                    );
-                    $this->cart->save();
-                }
+        if ($codeLength) {
+            if ($isCodeLengthValid && $couponCode == $this->cart->getQuote()->getCouponCode()) {
+                $this->messageManager->addSuccess(
+                    __(
+                        'The coupon code "%1" was applied.',
+                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                    )
+                );
             } else {
-                $this->messageManager->addSuccess(__('The coupon code was canceled.'));
+                $this->messageManager->addError(
+                    __(
+                        'The coupon code "%1" is not valid.',
+                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($couponCode)
+                    )
+                );
+                $this->cart->save();
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('We cannot apply the coupon code.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+        } else {
+            $this->messageManager->addSuccess(__('The coupon code was canceled.'));
         }
 
+        return $this->_goBack();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function getDefaultResult()
+    {
         return $this->_goBack();
     }
 }

@@ -9,11 +9,6 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 class Edit extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
@@ -21,16 +16,13 @@ class Edit extends \Magento\Cms\Controller\Adminhtml\Block
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context, $coreRegistry);
     }

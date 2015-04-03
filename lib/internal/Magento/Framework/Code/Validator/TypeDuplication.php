@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\Code\Validator;
 
-use Magento\Framework\Code\ValidationException;
 use Magento\Framework\Code\ValidatorInterface;
 
 class TypeDuplication implements ValidatorInterface
@@ -37,7 +36,7 @@ class TypeDuplication implements ValidatorInterface
      *
      * @param string $className
      * @return bool
-     * @throws ValidationException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function validate($className)
     {
@@ -62,15 +61,15 @@ class TypeDuplication implements ValidatorInterface
         if (!empty($errors)) {
             if (false == $this->_ignoreWarning($class)) {
                 $classPath = str_replace('\\', '/', $class->getFileName());
-                throw new ValidationException(
-                    'Argument type duplication in class ' .
-                    $class->getName() .
-                    ' in ' .
-                    $classPath .
-                    PHP_EOL .
-                    implode(
-                        PHP_EOL,
-                        $errors
+                throw new \Magento\Framework\Exception\ValidatorException(
+                    new \Magento\Framework\Phrase(
+                        'Argument type duplication in class %1 in %2%3%4',
+                        [
+                            $class->getName(),
+                            $classPath,
+                            PHP_EOL,
+                            implode(PHP_EOL, $errors)
+                        ]
                     )
                 );
             }

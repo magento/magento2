@@ -134,11 +134,6 @@ class Index extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
@@ -172,7 +167,6 @@ class Index extends \Magento\Backend\App\Action
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      *
@@ -202,7 +196,6 @@ class Index extends \Magento\Backend\App\Action
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
@@ -228,7 +221,6 @@ class Index extends \Magento\Backend\App\Action
         $this->layoutFactory = $layoutFactory;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->resultPageFactory = $resultPageFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         parent::__construct($context);

@@ -135,7 +135,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     public function testDispatchWithException()
     {
         $exceptionMessage = 'some error message';
-        $exception = new \Magento\Framework\Webapi\Exception($exceptionMessage);
+        $exception = new \Magento\Framework\Webapi\Exception(__($exceptionMessage));
         $this->_soapServerMock->expects($this->any())->method('handle')->will($this->throwException($exception));
         $this->_errorProcessorMock->expects(
             $this->any()
