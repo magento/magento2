@@ -10,7 +10,7 @@
 <?php /** @var $block \Magento\AdminNotification\Block\System\Messages */ ?>
 
 <?php $lastCritical = $block->getLastCritical();?>
-<div id="system_messages" class="message-system<?php if ($lastCritical): ?> message-system-unread<?php endif; ?> admin__scope">
+<div id="system_messages" class="message-system<?php if ($lastCritical): ?> message-system-unread<?php endif; ?>">
     <div class="message-system-inner">
         <?php if ($lastCritical): ?>
             <ul class="message-system-list">

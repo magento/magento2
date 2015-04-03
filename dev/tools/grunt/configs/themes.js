@@ -45,8 +45,7 @@ module.exports = {
         locale: 'en_US',
         files: [
             'css/styles-old',
-            'css/styles',
-            'css/styles-migration'
+            'css/styles'
         ],
         dsl: 'less'
     }
