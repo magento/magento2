@@ -30,9 +30,7 @@
 
         <!-- ko ifnot: hasData() -->
             <tr>
-                <td
-                    class="empty-text"
-                    data-bind="attr: { colspan: getColspan() },
+                <td data-bind="attr: { colspan: getColspan() },
                                text: $t('We couldn\'t find any records.')"></td>
             </tr>
         <!-- /ko -->

@@ -50,31 +50,26 @@
 //
 
 .admin__data-grid-loading-mask {
-    z-index: @data-grid-header__z-index;
-}
-
-.admin__data-grid-loading-mask {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
     background: rgba(255, 255, 255, .5);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    position: absolute;
     z-index: @overlay__z-index;
 
     .grid-loader {
-        position: absolute;
-        margin: auto;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 218px;
-        height: 149px;
         background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
+        bottom: 0;
+        height: 149px;
+        left: 0;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 218px;
     }
 }
-
 
 .admin__data-grid-wrap {
     padding-top: 0;
@@ -115,7 +110,7 @@
                 cursor: pointer;
             }
         }
-        &:only-child {
+        &.data-grid-tr-no-data {
             &:hover {
                 td {
                     cursor: default;
@@ -180,25 +175,22 @@
             border-left-color: @data-grid-th__border-color;
         }
     }
-    th:last-child .data-grid-th-inner,
+    th:last-child .data-grid-th,
     td:last-child {
         padding-left: @data-grid-cell__padding-horizontal * 2;
         padding-right: @data-grid-cell__padding-horizontal * 2;
     }
-    .data-grid-th-inner {
+    .data-grid-th {
         color: @data-grid-th__color;
-        display: block;
         padding: @data-grid-th__padding-vertical @data-grid-th__padding-horizontal;
-    }
-    a {
-        &.data-grid-th-inner {
+        &._sortable {
+            cursor: pointer;
             padding-right: @data-grid-th__padding-horizontal * 2 + @data-grid-th-marker__width;
             position: relative;
             transition: @smooth__background-color;
             &:focus,
             &:hover {
                 background-color: @data-grid-th__hover__background-color;
-                text-decoration: none;
             }
             &:active {
                 padding-bottom: @data-grid-th__padding-vertical - .1rem;
@@ -261,23 +253,25 @@
 }
 
 //  Ascend & Descend sort marker
-.data-grid-th-inner {
-    &._ascend,
-    &._descend {
-        &:before {
-            position: absolute;
-            right: @data-grid-th__padding-horizontal;
-            top: @data-grid-th__padding-vertical - .1rem;
+.data-grid-th {
+    &._sortable {
+        &._ascend,
+        &._descend {
+            &:before {
+                position: absolute;
+                right: @data-grid-th__padding-horizontal;
+                top: @data-grid-th__padding-vertical - .1rem;
+            }
         }
-    }
-    &._ascend {
-        &:before {
-            content: '↓';
+        &._ascend {
+            &:before {
+                content: '↓';
+            }
         }
-    }
-    &._descend {
-        &:before {
-            content: '↑';
+        &._descend {
+            &:before {
+                content: '↑';
+            }
         }
     }
 }
