@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Test\Unit\View\Deployment;
 
 use \Magento\Framework\App\View\Deployment\Version;
 
-
 class VersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -71,6 +70,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueDefaultModeSaving()
     {
+        $this->markTestSkipped('MAGETWO-35794');
         $this->appState
             ->expects($this->once())
             ->method('getMode')
