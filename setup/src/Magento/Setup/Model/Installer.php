@@ -13,7 +13,7 @@ use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Resource\Config;
 use Magento\Framework\Config\ConfigOptionsList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Model\Resource\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
