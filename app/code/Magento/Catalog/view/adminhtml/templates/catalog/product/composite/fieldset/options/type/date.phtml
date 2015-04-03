@@ -10,12 +10,12 @@
 <?php /* @var $block \Magento\Catalog\Block\Product\View\Options\Type\Date */ ?>
 <?php $_option = $block->getOption(); ?>
 <?php $_optionId = $_option->getId(); ?>
-<div class="field<?php if ($_option->getIsRequire()) echo ' required' ?>">
-  <label class="label">
+<div class="admin__field field<?php if ($_option->getIsRequire()) echo ' required _required' ?>">
+  <label class="label admin__field-label">
       <?php echo  $block->escapeHtml($_option->getTitle()) ?>
       <?php echo $block->getFormatedPrice() ?>
   </label>
-  <div class="control">
+  <div class="admin__field-control control">
 
   <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
       || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE): ?>

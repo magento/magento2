@@ -132,10 +132,7 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
-        z-index: 1;
-        &:hover {
-            z-index: 2;
-        }
+        // No z-index here please (in ui dialogs then not works!)
     }
 
     &[data-config-scope] {
