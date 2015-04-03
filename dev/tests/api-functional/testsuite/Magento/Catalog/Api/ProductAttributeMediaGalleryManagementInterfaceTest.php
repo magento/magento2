@@ -116,7 +116,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             ]
         ];
 
-        $actualResult = $this->_webApiCall($this->createServiceInfo, ['entry' => $requestData]);
+        $actualResult = $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
         $targetProduct = $this->getTargetSimpleProduct();
         $mediaGallery = $targetProduct->getData('media_gallery');
 
@@ -151,6 +151,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         $actualResult = $this->_webApiCall(
             $this->createServiceInfo,
             [
+                'sku' => 'simple',
                 'entry' => $requestData,
                 'storeId' => 1,
             ]
@@ -288,7 +289,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['entry' => $requestData, 'storeId' => 99999]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData, 'storeId' => 99999]);
     }
 
     /**
@@ -312,7 +313,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['entry' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**
@@ -336,7 +337,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['entry' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**
@@ -360,7 +361,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['entry' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**
@@ -384,7 +385,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['entry' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**
@@ -407,7 +408,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             ]
         ];
 
-        $this->_webApiCall($this->createServiceInfo, ['entry' => $requestData]);
+        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
     }
 
     /**
