@@ -9,7 +9,7 @@ use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\Resource\Meta as ResourceMetadata;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
-
+use Psr\Log\LoggerInterface as Logger;
 /**
  * Class Builder
  */
@@ -74,24 +74,32 @@ class Builder
     protected $data = [];
 
     /**
+     * @var Logger
+     */
+    protected $logger;
+
+    /**
      * @param ResourceMetadata $resourceMetadata
      * @param MetaFactory $metaFactory
      * @param ProfileFactory $profileFactory
      * @param AppResource $appResource
      * @param DdlSequence $ddlSequence
+     * @param Logger $logger
      */
     public function __construct(
         ResourceMetadata $resourceMetadata,
         MetaFactory $metaFactory,
         ProfileFactory $profileFactory,
         AppResource $appResource,
-        DdlSequence $ddlSequence
+        DdlSequence $ddlSequence,
+        Logger $logger
     ) {
         $this->resourceMetadata = $resourceMetadata;
         $this->metaFactory = $metaFactory;
         $this->profileFactory = $profileFactory;
         $this->appResource = $appResource;
         $this->ddlSequence = $ddlSequence;
+        $this->logger = $logger;
         $this->data = array_flip($this->pattern);
     }
 
@@ -247,6 +255,7 @@ class Builder
             }
         } catch (Exception $e) {
             $this->resourceMetadata->delete($metadata);
+            $this->logger->critical($e);
             throw $e;
         }
         $this->data = array_flip($this->pattern);
