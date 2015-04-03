@@ -57,7 +57,7 @@ abstract class AbstractMaintenanceCommand extends Command
      *
      * @return bool
      */
-    abstract protected function getModeToSet();
+    abstract protected function isEnable();
 
     /**
      * Get display string after mode is set
@@ -72,7 +72,7 @@ abstract class AbstractMaintenanceCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $addresses = $input->getOption(self::INPUT_KEY_IP);
-        $this->maintenanceMode->set($this->getModeToSet());
+        $this->maintenanceMode->set($this->isEnable());
         $output->writeln($this->getDisplayString());
 
         if (!empty($addresses)) {
