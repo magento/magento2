@@ -26,7 +26,7 @@ class ConsoleLogger implements LoggerInterface
     /**
      * Console
      *
-     * @var \Symfony\Component\Console\Output\OutputInterface
+     * @var OutputInterface
      */
     protected $console;
 
