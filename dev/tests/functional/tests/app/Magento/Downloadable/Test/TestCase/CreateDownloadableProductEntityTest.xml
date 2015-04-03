@@ -122,6 +122,7 @@
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductForm" />
         </variation>
         <variation name="CreateDownloadableProductEntityTestVariation7">
+            <data name="tag" xsi:type="string">stable:no</data>
             <data name="description" xsi:type="string">Create product with manage stock</data>
             <data name="product/data/name" xsi:type="string">DownloadableProduct_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">DownloadableProduct_%isolation%</data>

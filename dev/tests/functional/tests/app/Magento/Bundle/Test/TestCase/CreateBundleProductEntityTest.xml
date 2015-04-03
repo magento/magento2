@@ -145,7 +145,7 @@
             <data name="product/data/status" xsi:type="string">Product online</data>
             <data name="product/data/price_type" xsi:type="string">Fixed</data>
             <data name="product/data/price/value" xsi:type="string">10</data>
-            <data name="product/data/price/preset" xsi:type="string">fixed-1</data>
+            <data name="product/data/price/preset" xsi:type="string">fixed-10</data>
             <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/weight_type" xsi:type="string">Fixed</data>
