@@ -16,6 +16,7 @@ class Bookmark extends AbstractModel
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
     const BOOKMARK_ID      = 'bookmark_id';
+    const USER_ID          = 'user_id';
     const IDENTIFIER       = 'identifier';
     const TITLE            = 'title';
     const CONFIG           = 'config';
@@ -31,6 +32,16 @@ class Bookmark extends AbstractModel
     public function getId()
     {
         return $this->getData(self::BOOKMARK_ID);
+    }
+
+    /**
+     * Get user Id
+     *
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->getData(self::USER_ID);
     }
 
     /**
@@ -92,6 +103,17 @@ class Bookmark extends AbstractModel
     public function setId($id)
     {
         return $this->setData(self::BOOKMARK_ID, $id);
+    }
+
+    /**
+     * Set user Id
+     *
+     * @param int $userId
+     * @return $this
+     */
+    public function setUserId($userId)
+    {
+        return $this->setData(self::USER_ID, $userId);
     }
 
     /**

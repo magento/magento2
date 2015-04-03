@@ -37,6 +37,13 @@ class InstallSchema implements InstallSchemaInterface
                 'Bookmark identifier'
             )
             ->addColumn(
+                'user_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false],
+                'User Id'
+            )
+            ->addColumn(
                 'identifier',
                 Table::TYPE_TEXT,
                 255,
@@ -48,6 +55,13 @@ class InstallSchema implements InstallSchemaInterface
             ->addColumn('created_at', Table::TYPE_DATETIME, null, ['nullable' => false], 'Bookmark created at')
             ->addColumn('updated_at', Table::TYPE_DATETIME, null, ['nullable' => false], 'Bookmark updated at')
             ->addIndex($setup->getIdxName('ui_bookmark', ['identifier']), ['identifier'])
+            ->addForeignKey(
+                $setup->getFkName('ui_bookmark', 'user_id', 'admin_user', 'user_id'),
+                'user_id',
+                'admin_user',
+                'user_id',
+                Table::ACTION_CASCADE
+            )
             ->setComment('Bookmark');
         $connection->createTable($table);
         $setup->endSetup();
