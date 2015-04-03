@@ -3118,4 +3118,7 @@ return [
     ['Magento\Framework\LocaleFactory'],
     ['Magento\Core\Helper\Data', 'Magento\Framework\Json\Helper\Data'],
     ['Magento\Framework\DB\DBException'],
+    ['Magento\Framework\DB\Tree\TreeException'],
+    ['Magento\Framework\DB\Tree\Node\NodeException'],
+    ['Magento\Framework\DB\Tree\NodeSet\NodeSetException'],
 ];
