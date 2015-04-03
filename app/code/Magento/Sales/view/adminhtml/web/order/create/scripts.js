@@ -668,6 +668,7 @@ AdminOrder.prototype = {
         if (confirm(confirmMessage)) {
             this.collectElementsValue = false;
             order.sidebarApplyChanges({'sidebar[empty_customer_cart]': 1});
+            this.collectElementsValue = true;
         }
     },
 
