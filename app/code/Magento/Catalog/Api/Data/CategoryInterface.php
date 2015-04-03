@@ -107,6 +107,12 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
     public function getCreatedAt();
 
     /**
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
+    /**
      * @return string|null
      */
     public function getUpdatedAt();

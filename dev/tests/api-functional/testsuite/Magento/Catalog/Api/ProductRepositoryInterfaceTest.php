@@ -505,6 +505,51 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals('simple', $response['items'][0]['sku']);
     }
 
+    protected function convertCustomAttributesToAssociativeArray($customAttributes)
+    {
+        $converted = [];
+        foreach ($customAttributes as $customAttribute) {
+            $converted[$customAttribute['attribute_code']] = $customAttribute['value'];
+        }
+        return $converted;
+    }
+
+    protected function convertAssociativeArrayToCustomAttributes($data)
+    {
+        $customAttributes = [];
+        foreach ($data as $attributeCode => $attributeValue) {
+            $customAttributes[] = ['attribute_code' => $attributeCode, 'value' => $attributeValue];
+        }
+        return $customAttributes;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testEavAttributes()
+    {
+        $response = $this->getProduct('simple');
+
+        $this->assertNotEmpty($response['custom_attributes']);
+        $customAttributesData = $this->convertCustomAttributesToAssociativeArray($response['custom_attributes']);
+        $this->assertNotTrue(isset($customAttributesData['name']));
+        $this->assertNotTrue(isset($customAttributesData['tier_price']));
+
+        //Set description
+        $descriptionValue = "new description";
+        $customAttributesData['description'] = $descriptionValue;
+        $response['custom_attributes'] = $this->convertAssociativeArrayToCustomAttributes($customAttributesData);
+
+        $response = $this->updateProduct($response);
+        $this->assertNotEmpty($response['custom_attributes']);
+
+        $customAttributesData = $this->convertCustomAttributesToAssociativeArray($response['custom_attributes']);
+        $this->assertTrue(isset($customAttributesData['description']));
+        $this->assertEquals($descriptionValue, $customAttributesData['description']);
+
+        $this->deleteProduct('simple');
+    }
+
     /**
      * Get Simple Product Data
      *

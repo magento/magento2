@@ -137,6 +137,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $dataObjectHelperMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataServiceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $attributeValueFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -269,6 +279,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->metadataServiceMock = $this->getMock('\Magento\Catalog\Api\ProductAttributeRepositoryInterface');
+        $this->attributeValueFactory = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+            ->disableOriginalConstructor()->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -290,6 +304,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'imageCacheFactory' => $this->imageCacheFactory,
                 'productLinkFactory' => $this->productLinkFactory,
                 'mediaGalleryEntryFactory' => $this->mediaGalleryEntryFactoryMock,
+                'metadataService' => $this->metadataServiceMock,
+                'customAttributeFactory' => $this->attributeValueFactory,
                 'data' => ['id' => 1]
             ]
         );
@@ -993,5 +1009,44 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->model->setMediaGalleryEntries([$entryMock]);
         $this->assertEquals($expectedResult, $this->model->getMediaGallery());
+    }
+
+    public function testGetCustomAttributes()
+    {
+        $priceCode = 'price';
+        $colorAttributeCode = 'color';
+        $interfaceAttribute = $this->getMock('\Magento\Framework\Api\MetadataObjectInterface');
+        $interfaceAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($priceCode);
+        $colorAttribute = $this->getMock('\Magento\Framework\Api\MetadataObjectInterface');
+        $colorAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($colorAttributeCode);
+        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
+
+        $this->metadataServiceMock->expects($this->once())
+            ->method('getCustomAttributesMetadata')
+            ->willReturn($customAttributesMetadata);
+        $this->model->setData($priceCode, 10);
+
+        //The color attribute is not set, expect empty custom attribute array
+        $this->assertEquals([], $this->model->getCustomAttributes());
+
+        //Set the color attribute;
+        $this->model->setData($colorAttributeCode, "red");
+        $attributeValue = new \Magento\Framework\Api\AttributeValue();
+        $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
+        $this->attributeValueFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
+        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
+        $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+
+        //Change the attribute value, should reflect in getCustomAttribute
+        $this->model->setData($colorAttributeCode, "blue");
+        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
+        $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
     }
 }

@@ -270,6 +270,27 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $dataObjectHelper;
 
     /**
+     * List of attributes in ProductInterface
+     * @var array
+     */
+    protected $interfaceAttributes = [
+        ProductInterface::SKU,
+        ProductInterface::NAME,
+        ProductInterface::PRICE,
+        ProductInterface::WEIGHT,
+        ProductInterface::STATUS,
+        ProductInterface::VISIBILITY,
+        ProductInterface::ATTRIBUTE_SET_ID,
+        ProductInterface::TYPE_ID,
+        ProductInterface::CREATED_AT,
+        ProductInterface::UPDATED_AT,
+        ProductInterface::STORE_ID,
+        'media_gallery',
+        'tier_price',
+        'group_price',
+    ];
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -392,6 +413,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         if ($this->customAttributesCodes === null) {
             $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+            $this->customAttributesCodes = array_diff($this->customAttributesCodes, $this->interfaceAttributes);
         }
         return $this->customAttributesCodes;
     }
