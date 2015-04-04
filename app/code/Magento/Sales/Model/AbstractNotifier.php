@@ -7,7 +7,6 @@
 namespace Magento\Sales\Model;
 
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Framework\Mail\Exception;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory;
 
@@ -52,7 +51,7 @@ abstract class AbstractNotifier extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractModel $model
      * @return bool
-     * @throws \Magento\Framework\Mail\Exception
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function notify(\Magento\Sales\Model\AbstractModel $model)
     {
@@ -67,7 +66,7 @@ abstract class AbstractNotifier extends \Magento\Framework\Model\AbstractModel
                 $historyItem->setIsCustomerNotified(1);
                 $historyItem->save();
             }
-        } catch (Exception $e) {
+        } catch (\Magento\Framework\Exception\MailException $e) {
             $this->logger->critical($e);
             return false;
         }
