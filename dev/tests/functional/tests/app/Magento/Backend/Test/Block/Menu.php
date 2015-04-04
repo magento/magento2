@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Backend\Test\Block;
 
 use Magento\Mtf\Block\Block;
@@ -18,21 +19,21 @@ class Menu extends Block
      *
      * @var string
      */
-    protected $mainMenu = './/li/a[span="%s"]';
+    protected $mainMenu = './/li[@role="menu-item"]/a[span="%s"]';
 
     /**
      * Submenu selector.
      *
      * @var string
      */
-    protected $subMenu = './/li[a[span="%s"]]/div[@class="submenu" and @style="display: block;"]';
+    protected $subMenu = './/li[@role="menu-item" and a[span="%s"]]/div[@class="submenu"]';
 
     /**
      * Submenu item selector.
      *
      * @var string
      */
-    protected $subMenuItem = './/a[span="%s"]';
+    protected $subMenuItem = '//li[@role="menu-item"]//a[span="%s"]';
 
     /**
      * Parent menu item.
@@ -89,12 +90,9 @@ class Menu extends Block
         }
         $subMenuSelector = sprintf($this->subMenu, $mainMenu);
         $this->waitForElementVisible($subMenuSelector, Locator::SELECTOR_XPATH);
-        $subMenuItem = $this->_rootElement->find($subMenuSelector, Locator::SELECTOR_XPATH)
-            ->find(sprintf($this->subMenuItem, $subMenu), Locator::SELECTOR_XPATH);
-        if (!$subMenuItem->isVisible()) {
-            throw new \Exception('Submenu item "' . $subMenu . '" is not visible in "' . $mainMenu . '"');
-        }
-        $subMenuItem->click();
+        $subMenuItem = $subMenuSelector . sprintf($this->subMenuItem, $subMenu);
+        $this->waitForElementVisible($subMenuItem, Locator::SELECTOR_XPATH);
+        $this->_rootElement->find($subMenuItem, Locator::SELECTOR_XPATH)->click();
         $this->waitForElementNotVisible($subMenuSelector, Locator::SELECTOR_XPATH);
     }
 }
