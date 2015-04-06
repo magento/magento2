@@ -80,7 +80,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage More than one node matching the query: /root/node/subnode
      */
     public function testMergeException()

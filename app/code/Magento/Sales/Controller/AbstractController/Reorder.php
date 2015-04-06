@@ -7,7 +7,6 @@
 namespace Magento\Sales\Controller\AbstractController;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Registry;
 
 abstract class Reorder extends Action\Action
@@ -23,25 +22,17 @@ abstract class Reorder extends Action\Action
     protected $_coreRegistry;
 
     /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Action\Context $context
      * @param OrderLoaderInterface $orderLoader
      * @param Registry $registry
-     * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Action\Context $context,
         OrderLoaderInterface $orderLoader,
-        Registry $registry,
-        RedirectFactory $resultRedirectFactory
+        Registry $registry
     ) {
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

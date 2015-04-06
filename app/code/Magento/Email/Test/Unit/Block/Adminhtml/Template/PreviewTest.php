@@ -118,7 +118,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
     /**
      * Test exception with no store found
      *
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Design config must have area and store.
      */
     public function testToHtmlWithException()

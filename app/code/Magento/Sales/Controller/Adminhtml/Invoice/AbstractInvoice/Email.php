@@ -19,23 +19,15 @@ abstract class Email extends \Magento\Backend\App\Action
     protected $resultForwardFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

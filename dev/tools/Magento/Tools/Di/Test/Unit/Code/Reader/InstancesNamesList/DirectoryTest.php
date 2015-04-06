@@ -189,7 +189,7 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
     public function getListExceptionDataProvider()
     {
         return [
-            [new \Magento\Framework\Code\ValidationException('Not Valid!')],
+            [new \Magento\Framework\Exception\ValidatorException(new \Magento\Framework\Phrase('Not Valid!'))],
             [new \ReflectionException('Not Valid!')]
         ];
     }
