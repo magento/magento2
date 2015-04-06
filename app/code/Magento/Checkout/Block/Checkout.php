@@ -55,6 +55,11 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $shippingMethodManagement;
 
     /**
+     * @var \Magento\Quote\Model\Quote\AddressDataProvider
+     */
+    protected $addressDataProvider;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
@@ -90,6 +95,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
         \Magento\Quote\Api\CartItemRepositoryInterface $cartItemRepository,
+        \Magento\Quote\Model\Quote\AddressDataProvider $addressDataProvider,
         array $data = []
     ) {
         parent::__construct(
@@ -113,6 +119,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         $this->localeCurrency = $localeCurrency;
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->cartItemRepository = $cartItemRepository;
+        $this->addressDataProvider = $addressDataProvider;
     }
 
 
@@ -121,8 +128,19 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getJsLayout()
     {
+        if (isset($this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
+            ['children']['billing-address-fieldset']['children']
+        )) {
+            $fields = $this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
+                ['children']['billing-address-fieldset']['children'];
+            $this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
+                ['children']['billing-address-fieldset']['children']
+                = $this->addressDataProvider->getAdditionalAddressFields('billingAddressProvider', $fields);
+        }
         return \Zend_Json::encode($this->jsLayout);
     }
+
+
 
     /**
      * Get 'one step checkout' step data
