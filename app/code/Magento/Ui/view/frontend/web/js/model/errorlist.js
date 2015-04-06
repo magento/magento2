@@ -1,12 +1,10 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/*global define*/
 define(['ko'], function(ko) {
+    "use strict";
     var errors = ko.observableArray([]);
     return {
         add: function (error) {
@@ -17,6 +15,9 @@ define(['ko'], function(ko) {
         },
         getAll: function () {
             return errors;
+        },
+        clear: function() {
+            errors.removeAll();
         }
-    }
+    };
 });

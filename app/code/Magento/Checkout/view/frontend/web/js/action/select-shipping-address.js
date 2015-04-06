@@ -17,6 +17,7 @@ define(
     function(quote, addressList, urlBuilder, navigator, shippingService, paymentService, storage, errorList) {
         "use strict";
         return function(shippingAddress, sameAsBilling) {
+            errorList.clear();
             shippingAddress.sameAsBilling = sameAsBilling;
             quote.setShippingAddress(shippingAddress);
             storage.post(
@@ -27,12 +28,11 @@ define(
                 })
             ).done(
                 function(result) {
-                    quote.setShippingAddress(shippingAddress);
                     shippingService.setShippingRates(result.shipping_methods);
                     paymentService.setPaymentMethods(result.payment_methods);
                     navigator.setCurrent('shippingAddress').goNext();
                 }
-            ).error(
+            ).fail(
                 function(response) {
                     var error = JSON.parse(response.responseText);
                     errorList.add(error.message);
