@@ -119,9 +119,9 @@ class Price implements FixtureInterface
                 'cart_price' => '80.00',
             ],
             // Bundle fixed
-            'fixed-1' => [
-                'price_from' => '1.00',
-                'price_to' => '10.00',
+            'fixed-10' => [
+                'price_from' => '10.00',
+                'price_to' => '100.00',
                 'cart_price' => '80.00',
             ],
             'fixed-15' => [
