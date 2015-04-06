@@ -28,11 +28,6 @@ var lessOptions = {
     backend: {
         files: combo.lessFiles('backend')
     },
-    override: {
-        files: {
-            '<%= combo.autopath("backend","pub") %>css/styles-migration.css': '<%= combo.autopath("backend","pub") %>css/styles-migration.less'
-        }
-    },
     blank: {
         files: combo.lessFiles('blank')
     },

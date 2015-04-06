@@ -65,7 +65,7 @@ class LiselectstoreElement extends SimpleElement
     public function setValue($value)
     {
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-        $this->driver->find($this->toggleSelector)->click();
+        $this->context->find($this->toggleSelector)->click();
 
         $value = explode('/', $value);
         $optionSelector = [];

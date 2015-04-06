@@ -20,7 +20,7 @@
         <div class="admin__action-dropdown-menu-content">
             <!-- ko foreach: elems -->
             <div class="admin__field-option">
-                <input data-bind="attr: {id: index}, checked: visible" class="admin__control-checkbox" type="checkbox"/>
+                <input data-bind="attr: {id: index}, disable: $parent.isLastVisible($data), checked: visible" class="admin__control-checkbox" type="checkbox"/>
                 <label data-bind="text: label, attr: {for: index}" class="admin__field-label"></label>
             </div>
             <!-- /ko -->
@@ -32,10 +32,10 @@
                 </button>
             </div>
             <div class="admin__action-dropdown-footer-main-actions">
-                <button class="action-tertiary" type="button">
+                <button data-bind="click: cancel" class="action-tertiary" type="button">
                     <span>Cancel</span>
                 </button>
-                <button data-bind="click: close" class="action-secondary" type="button">
+                <button data-bind="click: apply" class="action-secondary" type="button">
                     <span>Apply</span>
                 </button>
             </div>

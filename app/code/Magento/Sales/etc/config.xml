@@ -94,5 +94,10 @@
         <dashboard>
             <use_aggregated_data>0</use_aggregated_data>
         </dashboard>
+        <dev>
+            <grid>
+                <async_indexing>0</async_indexing>
+            </grid>
+        </dev>
     </default>
 </config>

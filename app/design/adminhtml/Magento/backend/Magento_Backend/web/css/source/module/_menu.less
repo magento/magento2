@@ -15,9 +15,9 @@
 
 @menu__background-color: @color-very-dark-grayish-orange;
 
-@menu-logo__margin-bottom: 2.2rem;
-@menu-logo__outer-size: @menu-logo__padding-vertical + @menu-logo-img__height + @menu-logo__margin-bottom;
-@menu-logo__padding-vertical: 1.2rem;
+@menu-logo__padding-bottom: 2.2rem;
+@menu-logo__outer-size: @menu-logo__padding-top + @menu-logo-img__height + @menu-logo__padding-bottom;
+@menu-logo__padding-top: 1.2rem;
 @menu-logo-img__height: 4.1rem;
 @menu-logo-img__width: 3.5rem;
 
@@ -68,12 +68,27 @@
     }
     .logo {
         display: block;
-        height: @menu-logo-img__height + @menu-logo__padding-vertical * 2;
-        margin-bottom: @menu-logo__margin-bottom - @menu-logo__padding-vertical;
-        padding: @menu-logo__padding-vertical 0;
+        height: @menu-logo-img__height + @menu-logo__padding-top + @menu-logo__padding-bottom;
+        padding: @menu-logo__padding-top 0 @menu-logo__padding-bottom;
         position: relative;
         text-align: center;
         z-index: @menu__z-index;
+        &:focus {
+            background-color: @menu-item__active__background-color;
+            box-shadow: none;
+            + .admin__menu {
+                .level-0 {
+                    &:first-child {
+                        > a {
+                            background-color: @menu__background-color;
+                            &:after {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         &:hover {
             .logo-img {
                 -webkit-filter: brightness(1.1);
@@ -133,7 +148,6 @@
         }
         //  Hover & active state for menu level 0 item
         &._active,
-        &._hover,
         &:hover {
             > a {
                 background-color: @menu-item__active__background-color;
@@ -185,17 +199,11 @@
             transition: all .5s ease;
             visibility: hidden;
             z-index: @submenu__z-index;
-            &._show {
+        }
+        &._show  {
+            > .submenu {
                 left: 100%;
                 visibility: visible;
-            }
-        }
-        &._recent {
-            &._hover {
-                .submenu {
-                    left: 100%;
-                    visibility: visible;
-                }
             }
         }
     }
@@ -220,13 +228,13 @@
         }
         a {
             color: @submenu-link__color;
-            .keyfocus & {
+            ._keyfocus & {
                 text-decoration: none;
             }
             &:active,
             &:focus {
                 box-shadow: none;
-                .keyfocus & {
+                ._keyfocus & {
                     background-color: @submenu-link__focus__background-color;
                 }
             }
