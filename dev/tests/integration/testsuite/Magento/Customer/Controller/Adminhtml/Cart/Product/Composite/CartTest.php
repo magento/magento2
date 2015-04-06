@@ -58,7 +58,7 @@ class CartTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParam('id', $itemId);
         $this->dispatch('backend/customer/cart_product_composite_cart/configure');
         $this->assertContains(
-            '<input id="product_composite_configure_input_qty" class="input-text admin__control-text"'
+            '<input id="product_composite_configure_input_qty" class="input-text admin__control-text qty"'
             . ' type="text" name="qty" value="1">',
             $this->getResponse()->getBody()
         );
