@@ -12,7 +12,9 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     /**
      * Fixture XML instruction(s) to be used in tests
      */
+    // @codingStandardsIgnoreStart
     const FIXTURE_LAYOUT_XML = '<block class="Magento\Framework\View\Element\Template" template="fixture_template_one.phtml"/>';
+    // @codingStandardsIgnoreEnd
 
     /**
      * @var \Magento\Framework\View\Model\Layout\Merge
@@ -291,7 +293,10 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $handles = ['fixture_handle_one'];
         $this->_model->load($handles);
         $this->assertEquals($handles, $this->_model->getHandles());
-        $this->assertXmlStringEqualsXmlString('<body>' . self::FIXTURE_LAYOUT_XML . '</body>', $this->_model->asString());
+        $this->assertXmlStringEqualsXmlString(
+            '<body>' . self::FIXTURE_LAYOUT_XML . '</body>',
+            $this->_model->asString()
+        );
     }
 
     public function testGetFileLayoutUpdatesXml()
@@ -378,7 +383,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException        \Magento\Framework\Exception
+     * @expectedException        \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid layout update handle
      */
     public function testLoadWithInvalidArgumentThrowsException()

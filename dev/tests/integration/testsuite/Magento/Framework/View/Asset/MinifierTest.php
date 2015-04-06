@@ -58,7 +58,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
      * @param string $requestedFilePath
      * @param string $testFile
      * @param callable $assertionCallback
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _testCssMinification($requestedUri, $requestedFilePath, $testFile, $assertionCallback)
     {

@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Model;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Mail\Exception as MailException;
+use Magento\Framework\Exception\MailException;
 
 /**
  * Subscriber model

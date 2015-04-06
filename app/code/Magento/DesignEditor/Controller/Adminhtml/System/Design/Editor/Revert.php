@@ -44,7 +44,9 @@ class Revert extends \Magento\DesignEditor\Controller\Adminhtml\System\Design\Ed
                     break;
 
                 default:
-                    throw new \Magento\Framework\Exception('Invalid revert mode "%s"', $revertTo);
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Invalid revert mode "%1"', $revertTo)
+                    );
             }
             $response = ['message' => $message];
         } catch (\Exception $e) {

@@ -32,13 +32,18 @@ class QueryFactory
      * @param string $className
      * @param array $arguments
      * @return QueryInterface
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create($className, array $arguments = [])
     {
         $query = $this->objectManager->create($className, $arguments);
         if (!$query instanceof QueryInterface) {
-            throw new \Magento\Framework\Exception($className . ' doesn\'t implement \Magento\Framework\DB\QueryInterface');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase(
+                    '%1 doesn\'t implement \Magento\Framework\DB\QueryInterface',
+                    [$className]
+                )
+            );
         }
         return $query;
     }

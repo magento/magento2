@@ -25,7 +25,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\CatalogInventory\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Could not rebuild index for empty products array
      */
     public function testEmptyIds()

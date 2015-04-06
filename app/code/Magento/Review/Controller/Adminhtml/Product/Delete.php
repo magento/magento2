@@ -14,22 +14,24 @@ class Delete extends \Magento\Review\Controller\Adminhtml\Product
     public function execute()
     {
         $reviewId = $this->getRequest()->getParam('id', false);
-        try {
-            $this->_reviewFactory->create()->setId($reviewId)->aggregate()->delete();
+        $this->_reviewFactory->create()->setId($reviewId)->aggregate()->delete();
 
-            $this->messageManager->addSuccess(__('The review has been deleted.'));
-            if ($this->getRequest()->getParam('ret') == 'pending') {
-                $this->getResponse()->setRedirect($this->getUrl('review/*/pending'));
-            } else {
-                $this->getResponse()->setRedirect($this->getUrl('review/*/'));
-            }
-            return;
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong  deleting this review.'));
+        $this->messageManager->addSuccess(__('The review has been deleted.'));
+        if ($this->getRequest()->getParam('ret') == 'pending') {
+            $this->getResponse()->setRedirect($this->getUrl('review/*/pending'));
+        } else {
+            $this->getResponse()->setRedirect($this->getUrl('review/*/'));
         }
+    }
 
-        $this->_redirect('review/*/edit/', ['id' => $reviewId]);
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultResult()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('review/*/edit/', ['id' => $this->getRequest()->getParam('id', false)]);
     }
 }
