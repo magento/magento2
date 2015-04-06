@@ -10,7 +10,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 
 abstract class Pdfshipments extends \Magento\Backend\App\Action
 {
@@ -20,22 +19,12 @@ abstract class Pdfshipments extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Context $context
      * @param FileFactory $fileFactory
-     * @param RedirectFactory $resultRedirectFactory
      */
-    public function __construct(
-        Context $context,
-        FileFactory $fileFactory,
-        RedirectFactory $resultRedirectFactory
-    ) {
+    public function __construct(Context $context, FileFactory $fileFactory)
+    {
         $this->_fileFactory = $fileFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

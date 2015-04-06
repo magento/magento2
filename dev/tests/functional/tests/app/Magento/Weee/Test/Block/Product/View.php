@@ -6,31 +6,28 @@
 
 namespace Magento\Weee\Test\Block\Product;
 
-use Magento\Mtf\Client\Locator;
-
 /**
- * Product view block on the product page
+ * Product view block on the product page.
  */
-class View extends \Magento\Catalog\Test\Block\Product\View
+class View extends \Magento\Catalog\Test\Block\Category\View
 {
     /**
-     * Selector for fpt block
+     * Price block.
      *
      * @var string
      */
-    protected $fptBlock = '.price-box .weee [data-label="%s"]';
+    protected $priceBox = '.price-box';
 
     /**
-     * Get block fpt
+     * Return price block.
      *
-     * @param string $fptLabel
-     * @return \Magento\Weee\Test\Block\Product\Fpt
+     * @return Price
      */
-    public function getFptBlock($fptLabel)
+    public function getPriceBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Weee\Test\Block\Product\Fpt',
-            ['element' => $this->_rootElement->find(sprintf($this->fptBlock, $fptLabel), Locator::SELECTOR_CSS)]
+            'Magento\Weee\Test\Block\Product\Price',
+            ['element' => $this->_rootElement->find($this->priceBox)]
         );
     }
 }

@@ -21,7 +21,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Catalog\Exception
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Could not rebuild index for undefined product
      */
     public function testEmptyId()

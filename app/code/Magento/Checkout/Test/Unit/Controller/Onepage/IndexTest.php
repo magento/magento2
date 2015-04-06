@@ -167,6 +167,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->basicMock('\Magento\Framework\Message\ManagerInterface'));
         $this->basicStub($this->contextMock, 'getRedirect')->willReturn($this->redirectMock);
         $this->basicStub($this->contextMock, 'getUrl')->willReturn($this->url);
+        $this->basicStub($this->contextMock, 'getResultRedirectFactory')->willReturn($resultRedirectFactoryMock);
 
         // SUT
         $this->model = $this->objectManager->getObject(

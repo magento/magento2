@@ -19,9 +19,12 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
-     *  Init context object
+     * Init context object
+     *
+     * @param array $additionalParams
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function initContext()
+    protected function initContext(array $additionalParams = [])
     {
         $productActionMock = $this->getMock('Magento\Catalog\Model\Product\Action', [], [], '', false);
         $objectManagerMock = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
@@ -70,7 +73,8 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
                 'getActionFlag',
                 'getHelper',
                 'getTitle',
-                'getView'
+                'getView',
+                'getResultRedirectFactory'
             ],
             [],
             '',
@@ -88,6 +92,10 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getSession')->will($this->returnValue($sessionMock));
         $this->context->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
         $this->context->expects($this->any())->method('getHelper')->will($this->returnValue($helperDataMock));
+
+        foreach ($additionalParams as $property => $object) {
+            $this->context->expects($this->any())->method('get' . ucfirst($property))->willReturn($object);
+        }
 
         $this->session = $sessionMock;
         $this->request = $requestInterfaceMock;
