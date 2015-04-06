@@ -96,6 +96,11 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $_escaper;
 
+    /**
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectFactory;
+
     /** Sample integration ID */
     const INTEGRATION_ID = 1;
 
@@ -210,6 +215,11 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->pageTitleMock);
         $this->_escaper->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
 
+        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $contextParameters = [
             'view' => $this->_viewMock,
             'objectManager' => $this->_objectManagerMock,
@@ -218,6 +228,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             'request' => $this->_requestMock,
             'response' => $this->_responseMock,
             'messageManager' => $this->_messageManager,
+            'resultRedirectFactory' => $this->resultRedirectFactory
         ];
 
         $this->_backendActionCtxMock = $this->_objectManagerHelper->getObject(

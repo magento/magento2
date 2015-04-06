@@ -30,6 +30,7 @@ class ConfigureProductInCustomerWishlistOnFrontendTest extends AbstractWishlistT
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'CS';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
@@ -61,7 +62,7 @@ class ConfigureProductInCustomerWishlistOnFrontendTest extends AbstractWishlistT
 
         // Steps
         $this->cmsIndex->getLinksBlock()->openLink('My Wish List');
-        $this->wishlistIndex->getItemsBlock()->getItemProduct($product)->clickEdit();
+        $this->wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)->clickEdit();
         $this->catalogProductView->getViewBlock()->addToWishlist($product);
 
         return ['product' => $product];

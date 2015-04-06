@@ -96,7 +96,7 @@ class Directory implements \Magento\Tools\Di\Code\Reader\ClassesScannerInterface
                     $this->validator->validate($className);
                 }
                 $this->relations[$className] = $this->classReader->getParents($className);
-            } catch (\Magento\Framework\Code\ValidationException $exception) {
+            } catch (\Magento\Framework\Exception\ValidatorException $exception) {
                 $this->log->add(Log::COMPILATION_ERROR, $className, $exception->getMessage());
             } catch (\ReflectionException $e) {
                 $this->log->add(Log::COMPILATION_ERROR, $className, $e->getMessage());

@@ -13,23 +13,6 @@ namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 class Email extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
-        parent::__construct($context);
-    }
-
-    /**
      * @return bool
      */
     protected function _isAllowed()

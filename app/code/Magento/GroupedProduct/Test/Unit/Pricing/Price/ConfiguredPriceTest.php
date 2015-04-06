@@ -197,4 +197,25 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($result, $this->model->getValue());
     }
+
+    public function testGetAmount()
+    {
+        $resultPrice = rand(1, 9);
+
+        $this->price->expects($this->once())
+            ->method('getValue')
+            ->willReturn($resultPrice);
+
+        $this->priceInfo->expects($this->once())
+            ->method('getPrice')
+            ->with(BasePrice::PRICE_CODE)
+            ->willReturn($this->price);
+
+        $this->calculator->expects($this->once())
+            ->method('getAmount')
+            ->with($resultPrice, $this->saleableItem)
+            ->willReturn($resultPrice);
+
+        $this->assertEquals($resultPrice, $this->model->getAmount());
+    }
 }

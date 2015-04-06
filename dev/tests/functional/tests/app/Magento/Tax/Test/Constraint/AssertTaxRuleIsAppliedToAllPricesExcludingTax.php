@@ -7,6 +7,7 @@
 namespace Magento\Tax\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Checks that prices incl tax on category, product and cart pages are equal to specified in dataset.
@@ -23,14 +24,14 @@ class AssertTaxRuleIsAppliedToAllPricesExcludingTax extends AbstractAssertTaxRul
     /**
      * Get prices on category page.
      *
-     * @param $productName
+     * @param FixtureInterface $product
      * @param array $actualPrices
      * @return array
      */
-    public function getCategoryPrices($productName, $actualPrices)
+    public function getCategoryPrices(FixtureInterface $product, $actualPrices)
     {
-        $priceBlock = $this->catalogCategoryView->getListProductBlock()->getProductPriceBlock($productName);
-        $actualPrices['category_price_excl_tax'] = $priceBlock->getEffectivePrice();
+        $priceBlock = $this->catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
+        $actualPrices['category_price_excl_tax'] = $priceBlock->getPriceExcludingTax();
         $actualPrices['category_price_incl_tax'] = null;
 
         return $actualPrices;
@@ -45,7 +46,7 @@ class AssertTaxRuleIsAppliedToAllPricesExcludingTax extends AbstractAssertTaxRul
     public function getProductPagePrices($actualPrices)
     {
         $viewBlock = $this->catalogProductView->getViewBlock();
-        $actualPrices['product_view_price_excl_tax'] = $viewBlock->getPriceBlock()->getEffectivePrice();
+        $actualPrices['product_view_price_excl_tax'] = $viewBlock->getPriceBlock()->getPriceExcludingTax();
         $actualPrices['product_view_price_incl_tax'] = null;
 
         return $actualPrices;

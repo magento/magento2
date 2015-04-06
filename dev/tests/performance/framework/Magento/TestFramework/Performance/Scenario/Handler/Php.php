@@ -50,7 +50,7 @@ class Php implements \Magento\TestFramework\Performance\Scenario\HandlerInterfac
      *
      * @param \Magento\TestFramework\Performance\Scenario $scenario
      * @param string|null $reportFile Report file to write results to, NULL disables report creation
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\TestFramework\Performance\Scenario\FailureException
      *
      * @todo Implement execution in concurrent threads defined by the "users" scenario argument
@@ -72,7 +72,7 @@ class Php implements \Magento\TestFramework\Performance\Scenario\HandlerInterfac
         if ($reportErrors) {
             throw new \Magento\TestFramework\Performance\Scenario\FailureException(
                 $scenario,
-                implode(PHP_EOL, $reportErrors)
+                new \Magento\Framework\Phrase(implode(PHP_EOL, $reportErrors))
             );
         }
     }
@@ -97,7 +97,7 @@ class Php implements \Magento\TestFramework\Performance\Scenario\HandlerInterfac
         $executionTime = microtime(true);
         try {
             $result['output'] = $this->_shell->execute($scenarioCmd, $scenarioCmdArgs);
-        } catch (\Magento\Framework\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result['success'] = false;
             $result['exit_code'] = $e->getPrevious()->getCode();
             $result['output'] = $e->getPrevious()->getMessage();

@@ -9,7 +9,6 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
@@ -26,7 +25,6 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param Escaper $escaper
@@ -34,14 +32,13 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
-        RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         AccountManagementInterface $customerAccountManagement,
         Escaper $escaper
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
         $this->escaper = $escaper;
-        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
+        parent::__construct($context, $customerSession, $resultPageFactory);
     }
 
     /**

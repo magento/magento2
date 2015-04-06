@@ -53,7 +53,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Interception\Code\ValidatorException
+     * @expectedException \Magento\Framework\Exception\ValidatorException
      * @expectedExceptionMessage Incorrect interface in
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      */
@@ -66,7 +66,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Interception\Code\ValidatorException
+     * @expectedException \Magento\Framework\Exception\ValidatorException
      * @expectedExceptionMessage Invalid [\Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item] $subject type
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      */
@@ -79,7 +79,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Interception\Code\ValidatorException
+     * @expectedException \Magento\Framework\Exception\ValidatorException
      * @expectedExceptionMessage Invalid method signature. Invalid method parameters count
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validateMethodsParameters
@@ -94,7 +94,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Interception\Code\ValidatorException
+     * @expectedException \Magento\Framework\Exception\ValidatorException
      * @expectedExceptionMessage Incompatible parameter type
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validateMethodsParameters
@@ -109,7 +109,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Interception\Code\ValidatorException
+     * @expectedException \Magento\Framework\Exception\ValidatorException
      * @expectedExceptionMessage Invalid method signature. Detected extra parameters
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      */
@@ -122,7 +122,7 @@ class InterfaceValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Interception\Code\ValidatorException
+     * @expectedException \Magento\Framework\Exception\ValidatorException
      * @expectedExceptionMessage Invalid [] $name type in
      * @covers \Magento\Framework\Interception\Code\InterfaceValidator::validate
      */

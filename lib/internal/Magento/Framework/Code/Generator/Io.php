@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Code\Generator;
 
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 
 class Io
 {
@@ -84,7 +84,7 @@ class Io
     /**
      * @param string $fileName
      * @param string $content
-     * @throws FilesystemException
+     * @throws FileSystemException
      * @return bool
      */
     public function writeResultFile($fileName, $content)
@@ -101,7 +101,7 @@ class Io
 
         try {
             $success = $this->filesystemDriver->rename($tmpFile, $fileName);
-        } catch (FilesystemException $e) {
+        } catch (FileSystemException $e) {
             if (!file_exists($fileName)) {
                 throw $e;
             } else {
@@ -164,7 +164,7 @@ class Io
                 $this->filesystemDriver->createDirectory($directory, self::DIRECTORY_PERMISSION);
             }
             return true;
-        } catch (FilesystemException $e) {
+        } catch (FileSystemException $e) {
             return false;
         }
     }

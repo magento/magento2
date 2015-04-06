@@ -26,17 +26,10 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
             $items->setVisitorId($this->_customerVisitor->getId());
         }
 
-        try {
-            $items->clear();
-            $this->messageManager->addSuccess(__('You cleared the comparison list.'));
-            $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong  clearing the comparison list.'));
-        }
+        $items->clear();
+        $this->messageManager->addSuccess(__('You cleared the comparison list.'));
+        $this->_objectManager->get('Magento\Catalog\Helper\Product\Compare')->calculate();
 
-        $resultRedirect = $this->resultRedirectFactory->create();
-        return $resultRedirect->setRefererOrBaseUrl();
+        return $this->getDefaultResult();
     }
 }

@@ -60,7 +60,7 @@ class Generator extends FrameworkGenerator
      * Generates list of classes
      *
      * @param array $classesToGenerate
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function generateList($classesToGenerate)

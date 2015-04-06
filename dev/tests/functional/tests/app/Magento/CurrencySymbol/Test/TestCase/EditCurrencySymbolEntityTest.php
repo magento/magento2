@@ -14,7 +14,6 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Create simple product
  *
@@ -36,7 +35,7 @@ class EditCurrencySymbolEntityTest extends Injectable
     /* end tags */
 
     /**
-     * System Currency Symbol grid page
+     * System Currency Symbol grid page.
      *
      * @var SystemCurrencySymbolIndex
      */
@@ -76,7 +75,7 @@ class EditCurrencySymbolEntityTest extends Injectable
     }
 
     /**
-     * Edit Currency Symbol Entity test
+     * Edit Currency Symbol Entity test.
      *
      * @param CurrencySymbolEntity $currencySymbol
      * @param string $configData
@@ -102,7 +101,7 @@ class EditCurrencySymbolEntityTest extends Injectable
     protected function importCurrencyRate($configData)
     {
         $this->objectManager->getInstance()->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => $configData]
         )->run();
 
@@ -120,7 +119,7 @@ class EditCurrencySymbolEntityTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->getInstance()->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => 'config_currency_symbols_usd']
         )->run();
     }

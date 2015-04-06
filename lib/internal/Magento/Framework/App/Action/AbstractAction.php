@@ -20,15 +20,19 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
     protected $_response;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\App\ResponseInterface $response
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\App\ResponseInterface $response
+        \Magento\Framework\App\Action\Context $context
     ) {
-        $this->_request = $request;
-        $this->_response = $response;
+        $this->_request = $context->getRequest();
+        $this->_response = $context->getResponse();
+        $this->resultRedirectFactory = $context->getResultRedirectFactory();
     }
 
     /**
@@ -49,5 +53,16 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
     public function getResponse()
     {
         return $this->_response;
+    }
+
+    /**
+     * Create redirect object, which can be used to redirect user to previous or main page
+     *
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
+    public function getDefaultResult()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setRefererOrBaseUrl();
     }
 }

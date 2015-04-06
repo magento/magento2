@@ -29,7 +29,6 @@ class Index extends \Magento\Customer\Controller\Address
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -44,7 +43,6 @@ class Index extends \Magento\Customer\Controller\Address
         \Magento\Customer\Api\Data\RegionInterfaceFactory $regionDataFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         CustomerRepositoryInterface $customerRepository
@@ -60,7 +58,6 @@ class Index extends \Magento\Customer\Controller\Address
             $regionDataFactory,
             $dataProcessor,
             $dataObjectHelper,
-            $resultRedirectFactory,
             $resultForwardFactory,
             $resultPageFactory
         );
