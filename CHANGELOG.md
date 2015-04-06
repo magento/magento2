@@ -15,7 +15,7 @@
     * Advanced Mini Cart
     * The HTML minification management on Admin Area
     * Minor UI improvements
-    * The GitHub contribution process was updated in the Read.me file
+    * The GitHub contribution process was updated in the README.md file
 * Fixed bugs
     * Fixed the assets deployment tool with the minification
     * Fixed the JMeter scenario for the performance toolkit
