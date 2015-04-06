@@ -55,7 +55,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
                 ),
                 new InputOption(
                     self::INPUT_KEY_CLEAR_STATIC_CONTENT,
-                    null,
+                    'c',
                     InputOption::VALUE_NONE,
                     'Clear generated static view files. Necessary, if the module(s) have static view files'
                 ),
@@ -165,7 +165,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
         } else {
             $output->writeln(
                 '<error>Alert: Generated static view files were not cleared.'
-                . ' You can clear them using the –-' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
+                . ' You can clear them using the --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
                 . ' Failure to clear static view files might mean cause display issues in the Admin and storefront. '
             );
         }
