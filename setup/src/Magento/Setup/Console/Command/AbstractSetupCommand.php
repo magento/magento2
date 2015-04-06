@@ -10,6 +10,11 @@ use Symfony\Component\Console\Input\InputOption;
 
 abstract class AbstractSetupCommand extends Command
 {
+    /**
+     * Initialize basic Magento Setup command
+     *
+     * @return void
+     */
     protected function configure()
     {
         $this->addOption(
