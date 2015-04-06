@@ -13,7 +13,7 @@ use Magento\Setup\Model\ConsoleLogger;
 /**
  * Command for updating installed application after the code base has changed
  */
-class UpdateCommand extends AbstractSetupCommand
+class UpgradeCommand extends AbstractSetupCommand
 {
     /**
      * Installer service factory
@@ -38,10 +38,10 @@ class UpdateCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $this->setName('setup:update')
+        $this->setName('setup:upgrade')
             ->setDescription(
-                'Updates installed application after the code base has changed, '
-                . 'including DB schema and data install/upgrade'
+                'Upgrades installed application after the code base has changed, '
+                . 'including DB schema and data'
             );
         parent::configure();
     }

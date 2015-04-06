@@ -41,7 +41,7 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
             'Magento\Setup\Console\Command\MaintenanceDisableCommand',
             'Magento\Setup\Console\Command\MaintenanceEnableCommand',
             'Magento\Setup\Console\Command\MaintenanceStatusCommand',
-            'Magento\Setup\Console\Command\UpdateCommand',
+            'Magento\Setup\Console\Command\UpgradeCommand',
         ];
         $index = 0;
         foreach ($commands as $command) {

@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\UpdateCommand;
+use Magento\Setup\Console\Command\UpgradeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class UpdateCommandTest extends \PHPUnit_Framework_TestCase
+class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
@@ -18,7 +18,7 @@ class UpdateCommandTest extends \PHPUnit_Framework_TestCase
         $installer->expects($this->at(1))->method('installSchema');
         $installer->expects($this->at(2))->method('installDataFixtures');
         $installerFactory->expects($this->once())->method('create')->willReturn($installer);
-        $commandTester = new CommandTester(new UpdateCommand($installerFactory));
+        $commandTester = new CommandTester(new UpgradeCommand($installerFactory));
         $commandTester->execute([]);
     }
 }
