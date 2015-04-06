@@ -44,7 +44,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     ) {
         try {
             $this->_file = $directory->openFile($directory->getRelativePath($file), 'r');
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \LogicException("Unable to open file: '{$file}'");
         }
         $this->_delimiter = $delimiter;

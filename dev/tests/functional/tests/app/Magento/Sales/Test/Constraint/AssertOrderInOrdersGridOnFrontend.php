@@ -14,8 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
 
 /**
- * Class AssertOrderInOrdersGridOnFrontend
- * Assert that order is present in Orders grid on frontend
+ * Assert that order is present in Orders grid on frontend.
  */
 class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
 {
@@ -24,7 +23,7 @@ class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
     /* end tags */
 
     /**
-     * Assert that order is present in Orders grid on frontend
+     * Assert that order is present in Orders grid on frontend.
      *
      * @param OrderInjectable $order
      * @param Customer $customer
@@ -64,7 +63,7 @@ class AssertOrderInOrdersGridOnFrontend extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

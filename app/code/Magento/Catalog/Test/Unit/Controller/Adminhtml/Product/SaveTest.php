@@ -90,14 +90,14 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
             false
         );
 
+        $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
         $this->action = (new ObjectManagerHelper($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Save',
             [
-                'context' => $this->initContext(),
+                'context' => $this->initContext($additionalParams),
                 'productBuilder' => $this->productBuilder,
                 'resultPageFactory' => $resultPageFactory,
                 'resultForwardFactory' => $resultForwardFactory,
-                'resultRedirectFactory' => $this->resultRedirectFactory,
                 'initializationHelper' => $this->initializationHelper,
             ]
         );

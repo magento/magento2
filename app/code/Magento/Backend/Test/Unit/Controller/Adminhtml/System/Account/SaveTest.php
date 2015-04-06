@@ -94,35 +94,26 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->_requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->_responseMock));
-        $contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->_objectManagerMock));
-        $contextMock->expects($this->any())
-            ->method('getFrontController')
-            ->will($this->returnValue($frontControllerMock));
-
-        $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($this->_helperMock));
-        $contextMock->expects($this->any())
-            ->method('getMessageManager')
-            ->will($this->returnValue($this->_messagesMock));
-        $contextMock->expects($this->any())->method('getTranslator')->will($this->returnValue($this->_translatorMock));
-
-        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultRedirectFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($resultRedirect);
+        $resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resultRedirectFactory->expects($this->atLeastOnce())->method('create')->willReturn($resultRedirect);
 
-        $args = ['context' => $contextMock, 'resultRedirectFactory' => $resultRedirectFactory];
+        $contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_responseMock);
+        $contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManagerMock);
+        $contextMock->expects($this->any())->method('getFrontController')->willReturn($frontControllerMock);
+        $contextMock->expects($this->any())->method('getHelper')->willReturn($this->_helperMock);
+        $contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->_messagesMock);
+        $contextMock->expects($this->any())->method('getTranslator')->willReturn($this->_translatorMock);
+        $contextMock->expects($this->once())->method('getResultRedirectFactory')->willReturn($resultRedirectFactory);
+
+        $args = ['context' => $contextMock];
 
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_controller = $testHelper->getObject('Magento\Backend\Controller\Adminhtml\System\Account\Save', $args);

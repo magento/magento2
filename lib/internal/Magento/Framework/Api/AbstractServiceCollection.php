@@ -7,7 +7,7 @@
 namespace Magento\Framework\Api;
 
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Base for service collections
@@ -101,13 +101,15 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      *
      * @param string|array $field
      * @param string|int|array $condition
-     * @throws Exception if some error in the input could be detected.
+     * @throws LocalizedException if some error in the input could be detected.
      * @return $this
      */
     public function addFieldToFilter($field, $condition)
     {
         if (is_array($field) && count($field) != count($condition)) {
-            throw new Exception('When passing in a field array there must be a matching condition array.');
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('When passing in a field array there must be a matching condition array.')
+            );
         }
         $this->fieldFilters[] = ['field' => $field, 'condition' => $condition];
         return $this;

@@ -73,7 +73,7 @@ class Filesystem
      * @param string $directoryCode
      * @param string $driverCode
      * @return \Magento\Framework\Filesystem\Directory\WriteInterface
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function getDirectoryWrite($directoryCode, $driverCode = DriverPool::FILE)
     {
