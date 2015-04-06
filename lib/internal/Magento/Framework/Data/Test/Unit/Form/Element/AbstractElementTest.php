@@ -326,10 +326,10 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Data\Form\AbstractForm', [], [], '', false)
         );
         $expectedHtml = '<span class="field-row">' . "\n"
-            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry"/></span>' . "\n";
+            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"/></span>' . "\n";
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
-        $this->assertEquals(' required-entry', $this->_model->getClass());
+        $this->assertEquals(' required-entry _required', $this->_model->getClass());
     }
 
     /**
@@ -351,7 +351,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->_model->setRenderer($rendererMock);
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
-        $this->assertEquals(' required-entry', $this->_model->getClass());
+        $this->assertEquals(' required-entry _required', $this->_model->getClass());
     }
 
     /**
