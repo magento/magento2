@@ -35,7 +35,6 @@ class ConsoleController extends AbstractActionController
     const CMD_INSTALL = 'install';
     const CMD_INSTALL_CONFIG = 'install-configuration';
     const CMD_INSTALL_USER_CONFIG = 'install-user-configuration';
-    const CMD_INSTALL_ADMIN_USER = 'install-admin-user';
     /**#@- */
 
     /**
@@ -47,7 +46,6 @@ class ConsoleController extends AbstractActionController
         self::CMD_HELP => 'help',
         self::CMD_INSTALL => 'install',
         self::CMD_INSTALL_USER_CONFIG => 'installUserConfig',
-        self::CMD_INSTALL_ADMIN_USER => 'installAdminUser',
     ];
 
     /**
@@ -58,7 +56,6 @@ class ConsoleController extends AbstractActionController
     private static $helpOptions = [
         self::CMD_INSTALL,
         self::CMD_INSTALL_USER_CONFIG,
-        self::CMD_INSTALL_ADMIN_USER,
         UserConfig::KEY_LANGUAGE,
         UserConfig::KEY_CURRENCY,
         UserConfig::KEY_TIMEZONE,
@@ -194,12 +191,6 @@ class ConsoleController extends AbstractActionController
                 'usage_short' => self::CMD_INSTALL_USER_CONFIG . ' <options>',
                 'usage_desc' => 'Install user configuration',
             ],
-            self::CMD_INSTALL_ADMIN_USER => [
-                'route' => self::CMD_INSTALL_ADMIN_USER . ' ' . $adminUser,
-                'usage' => $adminUser,
-                'usage_short' => self::CMD_INSTALL_ADMIN_USER . ' <options>',
-                'usage_desc' => 'Install admin user account',
-            ],
             self::CMD_HELP => [
                 'route' => self::CMD_HELP . ' [' . implode('|', self::$helpOptions) . ']:type',
                 'usage' => '<' . implode('|', self::$helpOptions) . '>',
@@ -291,18 +282,6 @@ class ConsoleController extends AbstractActionController
         /** @var \Zend\Console\Request $request */
         $request = $this->getRequest();
         $this->installer->installUserConfig($request->getParams());
-    }
-
-    /**
-     * Installs admin user
-     *
-     * @return void
-     */
-    public function installAdminUserAction()
-    {
-        /** @var \Zend\Console\Request $request */
-        $request = $this->getRequest();
-        $this->installer->installAdminUser($request->getParams());
     }
 
     /**

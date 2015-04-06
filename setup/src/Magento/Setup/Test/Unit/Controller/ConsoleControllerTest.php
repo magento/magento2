@@ -147,12 +147,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->controller->installUserConfigAction();
     }
 
-    public function testInstallAdminUserAction()
-    {
-        $this->installer->expects($this->once())->method('installAdminUser')->with($this->parameters);
-        $this->controller->installAdminUserAction();
-    }
-
     /**
      * @param string $type
      * @param string $method
@@ -240,7 +234,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         return [
             ['install',''],
             ['install-user-configuration', ''],
-            ['install-admin-user', ''],
             ['help', ''],
         ];
     }
