@@ -306,20 +306,57 @@ td.col-type {
 //    Data table
 //--------------------------------------
 .data-table {
+    border-collapse: separate; // do not remove this! without this rule in FF when table has only 1 row bottom and side borders disappear
     width: 100%;
+    thead,
+    tfoot,
+    th {
+        background: @grid-td-light;
+        .style2();
+    }
 
     th {
         text-align: left;
     }
 
     thead th {
+        border: solid @data-table-th-border-color;
+        border-width: 0 0 1px;
         padding: 7px;
     }
 
     td,
     tbody tr th,
     tbody tr td {
+        background: @data-table-td-background-color;
+        border-width: 0;
+        padding: 5px 7px;
         vertical-align: middle;
+    }
+
+    tbody {
+        tr {
+            &:nth-child(odd) th,
+            &:nth-child(odd) td {
+                background: @data-table-td-background-color-odd;
+            }
+        }
+        &.odd {
+            tr {
+                th,
+                td {
+                    background: @data-table-td-background-color-odd;
+                }
+            }
+        }
+        &.even {
+            tr {
+                th,
+                td {
+                    background: @data-table-td-background-color;
+                }
+            }
+        }
     }
 
     tfoot  {
@@ -328,6 +365,25 @@ td.col-type {
             &:last-child td {
                 border: 0;
             }
+        }
+    }
+
+    &.order-tables {
+        tbody {
+            td {
+                vertical-align: top;
+            }
+            &:hover tr {
+                th,
+                td {
+                    background: @data-table-td-background-color-hover;
+                }
+            }
+        }
+
+        tfoot td {
+            background: @grid-tfoot-background-color;
+            .style2();
         }
     }
 
