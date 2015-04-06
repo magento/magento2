@@ -162,7 +162,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
         ) {
             $this->_idFieldName = $this->_getResource()->getIdFieldName();
         }
-        $this->updateStoredData();
+
         parent::__construct($data);
         $this->_construct();
     }
@@ -620,7 +620,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
         $this->_eventManager->dispatch('model_delete_after', ['object' => $this]);
         $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_delete_after', $this->_getEventData());
-        $this->updateStoredData();
+        $this->storedData = [];
         return $this;
     }
 
