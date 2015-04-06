@@ -10,6 +10,6 @@ namespace Magento\Framework\DB;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class DBException extends \Magento\Framework\Exception
+class DBException extends \Magento\Framework\Exception\LocalizedException
 {
 }

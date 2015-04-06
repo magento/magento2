@@ -23,6 +23,7 @@ interface OptionInterface
     /**
      * Get option label
      *
+     * @api
      * @return string
      */
     public function getLabel();
@@ -30,6 +31,7 @@ interface OptionInterface
     /**
      * Set option label
      *
+     * @api
      * @param string $label
      * @return $this
      */
@@ -38,6 +40,7 @@ interface OptionInterface
     /**
      * Get option value
      *
+     * @api
      * @return string|null
      */
     public function getValue();
@@ -45,6 +48,7 @@ interface OptionInterface
     /**
      * Set option value
      *
+     * @api
      * @param string $value
      * @return $this
      */
@@ -53,6 +57,7 @@ interface OptionInterface
     /**
      * Get nested options
      *
+     * @api
      * @return \Magento\Customer\Api\Data\OptionInterface[]|null
      */
     public function getOptions();
@@ -60,6 +65,7 @@ interface OptionInterface
     /**
      * Set nested options
      *
+     * @api
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
      */

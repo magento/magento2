@@ -9,6 +9,6 @@ namespace Magento\Framework\Filesystem\Io;
 /**
  * Io exception
  */
-class IoException extends \Magento\Framework\Exception
+class IoException extends \Magento\Framework\Exception\LocalizedException
 {
 }

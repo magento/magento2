@@ -7,7 +7,7 @@ namespace Magento\Tools\Di\Code\Reader\Decorator;
 
 use Magento\Tools\Di\Code\Reader\ClassesScanner;
 use Magento\Tools\Di\Code\Reader\ClassReaderDecorator;
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 
 /**
  * Class Area
@@ -44,7 +44,7 @@ class Area implements \Magento\Tools\Di\Code\Reader\ClassesScannerInterface
      * @param string $path path to dir with files
      *
      * @return array
-     * @throws FilesystemException
+     * @throws FileSystemException
      */
     public function getList($path)
     {

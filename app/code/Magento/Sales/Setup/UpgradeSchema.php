@@ -60,5 +60,52 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 }
             }
         }
+
+        if (version_compare($context->getVersion(), '2.0.2') < 0) {
+
+            /**
+             * Adding 'updated_at' columns.
+             */
+
+            $tables = ['sales_shipment_grid', 'sales_invoice_grid', 'sales_creditmemo_grid'];
+
+            foreach ($tables as $table) {
+                $table = $setup->getTable($table);
+
+                $setup->getConnection()
+                    ->addColumn(
+                        $table,
+                        'updated_at',
+                        [
+                            'type' => Table::TYPE_TIMESTAMP,
+                            'after' => 'created_at',
+                            'comment' => 'Updated At'
+                        ]
+                    );
+
+                $setup->getConnection()
+                    ->addIndex($table, $setup->getIdxName($table, ['updated_at']), 'updated_at');
+            }
+
+            /**
+             * Modifying default value of 'updated_at' columns.
+             */
+
+            $tables = ['sales_order', 'sales_shipment', 'sales_invoice', 'sales_creditmemo'];
+
+            foreach ($tables as $table) {
+                $table = $setup->getTable($table);
+
+                $setup->getConnection()
+                    ->modifyColumn(
+                        $table,
+                        'updated_at',
+                        [
+                            'type' => Table::TYPE_TIMESTAMP,
+                            'default' => Table::TIMESTAMP_INIT_UPDATE
+                        ]
+                    );
+            }
+        }
     }
 }
