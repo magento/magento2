@@ -222,10 +222,11 @@ class AddTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     */
     public function testExecuteWithoutWishList()
     {
-        $this->setExpectedException('Magento\Framework\App\Action\NotFoundException');
-
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')

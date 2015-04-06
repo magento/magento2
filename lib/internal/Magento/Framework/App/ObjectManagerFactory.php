@@ -224,7 +224,7 @@ class ObjectManagerFactory
      * @param mixed $argumentMapper
      * @param string $appMode
      * @return array
-     * @throws \Magento\Framework\App\InitException
+     * @throws \Magento\Framework\Exception\State\InitException
      */
     protected function _loadPrimaryConfig(DirectoryList $directoryList, $driverPool, $argumentMapper, $appMode)
     {
@@ -249,7 +249,10 @@ class ObjectManagerFactory
             );
             $configData = $reader->read('primary');
         } catch (\Exception $e) {
-            throw new \Magento\Framework\App\InitException($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\State\InitException(
+                new \Magento\Framework\Phrase($e->getMessage()),
+                $e
+            );
         }
         return $configData;
     }

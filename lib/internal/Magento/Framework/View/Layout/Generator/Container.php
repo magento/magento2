@@ -101,7 +101,7 @@ class Container implements Layout\GeneratorInterface
     /**
      * @param array $options
      * @return void
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateOptions($options)
     {
@@ -111,11 +111,10 @@ class Container implements Layout\GeneratorInterface
                 $this->allowedTags
             )
         ) {
-            throw new \Magento\Framework\Exception(
-                sprintf(
-                    'Html tag "%s" is forbidden for usage in containers. Consider to use one of the allowed: %s.',
-                    $options[Layout\Element::CONTAINER_OPT_HTML_TAG],
-                    implode(', ', $this->allowedTags)
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase(
+                    'Html tag "%1" is forbidden for usage in containers. Consider to use one of the allowed: %2.',
+                    [$options[Layout\Element::CONTAINER_OPT_HTML_TAG], implode(', ', $this->allowedTags)]
                 )
             );
         }
@@ -126,8 +125,8 @@ class Container implements Layout\GeneratorInterface
                 || !empty($options[Layout\Element::CONTAINER_OPT_HTML_CLASS])
             )
         ) {
-            throw new \Magento\Framework\Exception(
-                'HTML ID or class will not have effect, if HTML tag is not specified.'
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('HTML ID or class will not have effect, if HTML tag is not specified.')
             );
         }
     }

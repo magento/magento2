@@ -6,6 +6,7 @@
 
 namespace Magento\Mtf\Client\Element;
 
+use Magento\Framework\Webapi\Exception;
 use Magento\Mtf\Client\Locator;
 
 /**
@@ -69,8 +70,13 @@ class SuggestElement extends SimpleElement
             $this->waitResult();
             $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
             if ($searchedItem->isVisible()) {
-                $searchedItem->click();
-                break;
+                try {
+                    $searchedItem->click();
+                    break;
+                } catch (\Exception $e) {
+                    // In parallel run on windows change the focus is lost on element
+                    // that causes disappearing of category suggest list.
+                }
             }
         }
     }

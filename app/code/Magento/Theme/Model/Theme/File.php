@@ -122,13 +122,13 @@ class File extends AbstractModel implements FileInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getTheme()
     {
         $theme = $this->_themeFactory->create($this->getData('theme_id'));
         if (!$theme) {
-            throw new \Magento\Framework\Exception('Theme id should be set');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Theme id should be set'));
         }
         return $theme;
     }

@@ -11,36 +11,42 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param array $reportTypes
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         array $reportTypes,
         \Psr\Log\LoggerInterface $logger
     ) {
-        parent::__construct($context, $dateFilter, $resultRedirectFactory, $reportTypes);
+        parent::__construct($context, $dateFilter, $reportTypes);
         $this->logger = $logger;
     }
 
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
-        try {
-            $collectionsNames = array_values($this->reportTypes);
-            foreach ($collectionsNames as $collectionName) {
-                $this->_objectManager->create($collectionName)->aggregate();
-            }
-            $this->messageManager->addSuccess(__('We updated lifetime statistic.'));
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t refresh lifetime statistics.'));
-            $this->logger->critical($e);
+        $collectionsNames = array_values($this->reportTypes);
+        foreach ($collectionsNames as $collectionName) {
+            $this->_objectManager->create($collectionName)->aggregate();
         }
-        return $this->resultRedirectFactory->create()->setPath('*/*');
+        $this->messageManager->addSuccess(__('We updated lifetime statistic.'));
+
+        return $this->getDefaultResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultResult()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath('*/*');
     }
 }

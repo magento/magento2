@@ -19,19 +19,21 @@ class Rows extends \Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction
      * Execute Rows reindex
      *
      * @param array $ids
-     * @throws \Magento\CatalogInventory\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return void
      */
     public function execute($ids)
     {
         if (empty($ids)) {
-            throw new \Magento\CatalogInventory\Exception(__('Could not rebuild index for empty products array'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Could not rebuild index for empty products array')
+            );
         }
         try {
             $this->_reindexRows($ids);
         } catch (\Exception $e) {
-            throw new \Magento\CatalogInventory\Exception($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage(), $e->getCode(), $e);
         }
     }
 }
