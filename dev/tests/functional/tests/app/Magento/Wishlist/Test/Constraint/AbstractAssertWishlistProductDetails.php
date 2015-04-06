@@ -29,7 +29,8 @@ abstract class AbstractAssertWishlistProductDetails extends AbstractAssertForm
         InjectableFixture $product,
         FixtureFactory $fixtureFactory
     ) {
-        $actualOptions = $wishlistIndex->getItemsBlock()->getItemProduct($product)->getOptions();
+        $productBlock = $wishlistIndex->getWishlistBlock()->getProductItemsBlock();
+        $actualOptions = $productBlock->getItemProduct($product)->getOptions();
         $cartFixture = $fixtureFactory->createByCode('cart', ['data' => ['items' => ['products' => [$product]]]]);
         $expectedOptions = $cartFixture->getItems()[0]->getData()['options'];
 

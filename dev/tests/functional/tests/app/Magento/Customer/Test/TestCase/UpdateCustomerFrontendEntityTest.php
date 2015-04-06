@@ -12,13 +12,11 @@ use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountEdit;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
-use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAddressEdit;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Default test customer is created
  *
@@ -59,13 +57,6 @@ class UpdateCustomerFrontendEntityTest extends Injectable
     protected $cmsIndex;
 
     /**
-     * CustomerAccountLogin page
-     *
-     * @var CustomerAccountLogin
-     */
-    protected $customerAccountLogin;
-
-    /**
      * CustomerAccountIndex page
      *
      * @var CustomerAccountIndex
@@ -91,7 +82,6 @@ class UpdateCustomerFrontendEntityTest extends Injectable
      *
      * @param CmsIndex $cmsIndex
      * @param FixtureFactory $fixtureFactory
-     * @param CustomerAccountLogin $customerAccountLogin
      * @param CustomerAccountIndex $customerAccountIndex
      * @param CustomerAccountEdit $customerAccountEdit
      * @param CustomerAddressEdit $customerAddressEdit
@@ -100,14 +90,12 @@ class UpdateCustomerFrontendEntityTest extends Injectable
     public function __inject(
         CmsIndex $cmsIndex,
         FixtureFactory $fixtureFactory,
-        CustomerAccountLogin $customerAccountLogin,
         CustomerAccountIndex $customerAccountIndex,
         CustomerAccountEdit $customerAccountEdit,
         CustomerAddressEdit $customerAddressEdit
     ) {
         $this->cmsIndex = $cmsIndex;
         $this->fixtureFactory = $fixtureFactory;
-        $this->customerAccountLogin = $customerAccountLogin;
         $this->customerAccountIndex = $customerAccountIndex;
         $this->customerAccountEdit = $customerAccountEdit;
         $this->customerAddressEdit = $customerAddressEdit;
@@ -132,18 +120,17 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         $initialCustomer->persist();
 
         // Steps
-        $this->cmsIndex->open();
-        $this->cmsIndex->getLinksBlock()->openLink('Log In');
-        sleep(3);
-        $this->customerAccountLogin->getLoginBlock()->fill($initialCustomer);
-        $this->customerAccountLogin->getLoginBlock()->submit();
-
+        $this->objectManager->create(
+            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            ['customer' => $initialCustomer]
+        )->run();
         $this->customerAccountIndex->getInfoBlock()->openEditContactInfo();
         $this->customerAccountEdit->getAccountInfoForm()->fill($customer);
         $this->customerAccountEdit->getAccountInfoForm()->submit();
 
         \PHPUnit_Framework_Assert::assertThat($this->getName(), $assertCustomerInfoSuccessSavedMessage);
 
+        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->customerAccountIndex->getDashboardAddress()->editBillingAddress();
         $this->customerAddressEdit->getEditForm()->fill($address);
         $this->customerAddressEdit->getEditForm()->saveAddress();
@@ -156,8 +143,6 @@ class UpdateCustomerFrontendEntityTest extends Injectable
      */
     public function tearDown()
     {
-        if ($this->cmsIndex->getLinksBlock()->isVisible()) {
-            $this->cmsIndex->getLinksBlock()->openLink('Log Out');
-        }
+        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
     }
 }

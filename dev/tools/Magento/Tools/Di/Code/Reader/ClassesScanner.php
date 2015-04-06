@@ -5,7 +5,7 @@
  */
 namespace Magento\Tools\Di\Code\Reader;
 
-use Magento\Framework\Filesystem\FilesystemException;
+use Magento\Framework\Exception\FileSystemException;
 use Zend\Code\Scanner\FileScanner;
 
 class ClassesScanner implements ClassesScannerInterface
@@ -39,13 +39,13 @@ class ClassesScanner implements ClassesScannerInterface
      *
      * @param string $path
      * @return array
-     * @throws FilesystemException
+     * @throws FileSystemException
      */
     public function getList($path)
     {
         $realPath = realpath($path);
         if (!(bool)$realPath) {
-            throw new FilesystemException();
+            throw new FileSystemException(new \Magento\Framework\Phrase('Invalid path: %1', $path));
         }
 
         $recursiveIterator = new \RecursiveIteratorIterator(

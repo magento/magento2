@@ -6,11 +6,10 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
-
 class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect|void
      */
     public function execute()
     {
@@ -24,12 +23,18 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rule
             $this->messageManager->addError(__('This rule no longer exists.'));
             $this->_redirect('tax/*/');
             return;
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('Something went wrong deleting this tax rule.'));
         }
+        return $this->getDefaultResult();
+    }
 
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultResult()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
     }
 }

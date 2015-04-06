@@ -51,6 +51,12 @@ class AssertStoreCanBeLocalized extends AbstractConstraint
 
         // Check presents income text on index page
         $cmsIndex->open();
+        if ($cmsIndex->getFooterBlock()->isStoreGroupSwitcherVisible()
+            && $cmsIndex->getFooterBlock()->isStoreGroupVisible($store)
+        ) {
+            $cmsIndex->getFooterBlock()->selectStoreGroup($store);
+        }
+
         $cmsIndex->getStoreSwitcherBlock()->selectStoreView($store->getName());
 
         \PHPUnit_Framework_Assert::assertTrue(

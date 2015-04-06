@@ -365,13 +365,13 @@ abstract class AbstractAction
      *
      * @param string $productTypeId
      * @return \Magento\Catalog\Model\Resource\Product\Indexer\Price\PriceInterface
-     * @throws \Magento\Catalog\Exception
+     * @throws \Magento\Framework\Exception\InputException
      */
     protected function _getIndexer($productTypeId)
     {
         $this->getTypeIndexers();
         if (!isset($this->_indexers[$productTypeId])) {
-            throw new \Magento\Catalog\Exception(__('Unsupported product type "%1".', $productTypeId));
+            throw new \Magento\Framework\Exception\InputException(__('Unsupported product type "%1".', $productTypeId));
         }
         return $this->_indexers[$productTypeId];
     }

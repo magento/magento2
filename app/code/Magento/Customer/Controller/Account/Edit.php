@@ -9,7 +9,6 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
@@ -24,7 +23,6 @@ class Edit extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param DataObjectHelper $dataObjectHelper
@@ -32,14 +30,13 @@ class Edit extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
-        RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         CustomerRepositoryInterface $customerRepository,
         DataObjectHelper $dataObjectHelper
     ) {
         $this->customerRepository = $customerRepository;
         $this->dataObjectHelper = $dataObjectHelper;
-        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
+        parent::__construct($context, $customerSession, $resultPageFactory);
     }
 
     /**
