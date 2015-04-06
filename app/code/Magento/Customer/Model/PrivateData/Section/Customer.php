@@ -34,7 +34,7 @@ class Customer implements SectionSourceInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getSectionData()
     {
         return [
             'username' => $this->currentCustomer->getCustomerId()

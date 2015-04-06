@@ -62,7 +62,7 @@ class SectionPool implements SectionPoolInterface
             if (!isset($this->sectionSourceMap[$sectionName])) {
                 throw new LocalizedException('"' . $sectionName . '" section source is not supported');
             }
-            $data[$sectionName] = $this->get($this->sectionSourceMap[$sectionName])->getData();
+            $data[$sectionName] = $this->get($this->sectionSourceMap[$sectionName])->getSectionData();
         }
         return $data;
     }
@@ -76,7 +76,7 @@ class SectionPool implements SectionPoolInterface
     {
         $data = [];
         foreach ($this->sectionSourceMap as $sectionName => $sectionClass) {
-            $data[$sectionName] = $this->get($sectionClass)->getData();
+            $data[$sectionName] = $this->get($sectionClass)->getSectionData();
         }
         return $data;
     }

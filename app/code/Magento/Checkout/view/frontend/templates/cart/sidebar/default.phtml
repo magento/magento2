@@ -16,6 +16,8 @@ $helper = $this->helper('Magento\Msrp\Helper\Data');
 $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
 $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')
 ?>
+<?php // MAGETWO-34827: check all usages of this file ?>
+
 <li class="item product product-item">
     <div class="product">
         <?php if ($block->hasProductUrl()): ?>

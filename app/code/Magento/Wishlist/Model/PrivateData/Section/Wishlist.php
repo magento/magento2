@@ -29,7 +29,7 @@ class Wishlist implements SectionSourceInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getSectionData()
     {
         return [
             'counter' => $this->getCounter(),

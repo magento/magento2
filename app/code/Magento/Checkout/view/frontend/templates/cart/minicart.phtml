@@ -9,21 +9,19 @@
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
 ?>
 
-<?php $_cartQty = (float) $block->getSummaryCount() ?>
-<div data-block="minicart" class="minicart-wrapper">
-    <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>">
+<div data-block="minicart" class="minicart-wrapper" >
+    <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>" data-bind="scope: 'minicart'">
         <span class="text"><?php echo __('My Cart'); ?></span>
-        <span class="counter qty<?php echo($_cartQty > 0) ? '' : ' empty'; ?>">
-            <span class="counter-number">
-                <?php echo $_cartQty;?>
-            </span>
+        <span class="counter qty" data-bind="css: { empty: cart().summary_count <= 0 }">
+            <span class="counter-number" data-bind="text: cart().summary_count">0</span>
             <span class="counter-label">
-                <?php echo $block->getSummaryText($_cartQty); ?>
+                <?php echo $block->getSummaryText(0); ?>
             </span>
         </span>
     </a>
+    <?php // TODO: MAGETWO-34824: need to add conditions to js view model ?>
     <?php if ($block->getIsNeedToDisplaySideBar()): ?>
-        <div class="block block-minicart<?php echo($_cartQty > 0) ? '' : ' empty'; ?>"
+        <div class="block block-minicart empty"
              data-mage-init='{"dropdownDialog":{
                 "appendTo":"[data-block=minicart]",
                 "triggerTarget":".showcart",
@@ -72,6 +70,21 @@
             }
         }
     }
+    </script>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "renderer": {
+                        "layout": {
+                            "minicart": {
+                                "component": "Magento_Checkout/js/view/minicart"
+                            }
+                        }
+                    }
+                }
+            }
+        }
     </script>
 </div>
 

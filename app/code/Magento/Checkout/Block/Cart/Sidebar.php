@@ -12,7 +12,7 @@ use Magento\Framework\View\Block\IdentityInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Wishlist sidebar block
+ * Cart sidebar block
  */
 class Sidebar extends AbstractCart implements IdentityInterface
 {
@@ -125,7 +125,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
     /**
      * Get shopping cart subtotal.
      *
-      * @return  float
+     * @return  float
      */
     public function getSubtotal()
     {

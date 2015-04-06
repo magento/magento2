@@ -33,6 +33,8 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
     protected $_itemRenders = [];
 
     /**
+     * MAGETWO-34827: unused object?
+     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;

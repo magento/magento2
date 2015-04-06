@@ -17,4 +17,11 @@
         <plugin name="checkout-session-depersonalize"
                 type="Magento\Checkout\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
     </type>
+    <type name="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="cart" xsi:type="string">Magento\Checkout\Model\PrivateData\Section\Cart</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
