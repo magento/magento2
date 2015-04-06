@@ -20,7 +20,7 @@
 @data-grid-temp-td__border-inner-style: dashed;
 @data-grid-temp-td__border-outer-style: solid;
 @data-grid-temp-td__even__background-color: @color-white-smoke;
-@data-grid-temp-td__hover__background-color: darken(@data-grid-temp-td__even__background-color, 2%);
+@data-grid-temp-td__hover__background-color: #e5f7fe;
 @data-grid-temp-td__odd__background-color: @page__background-color;
 
 @data-grid-temp-th__border-color: #8a837f;
@@ -64,6 +64,12 @@
                 &:last-child {
                     td {
                         border-bottom: @data-grid-temp-cell__border-width @data-grid-temp-td__border-outer-style @data-grid-temp-td__border-color;
+                    }
+                }
+                &:hover {
+                    td {
+                        background-color: @data-grid-temp-td__hover__background-color;
+                        cursor: pointer;
                     }
                 }
             }
@@ -196,10 +202,7 @@
         &:after {
             position: absolute;
             right: 0;
-            top: 1px;
-        }
-        &:hover:after {
-            color: @data-grid-temp-td__hover__background-color;
+            top: -1px;
         }
     }
 
@@ -207,9 +210,8 @@
         .icon-font(
         @icon-caret-down__content,
         @_icon-font: @icons-admin__font-name,
-        @_icon-font-color: @data-grid-temp-td__even__background-color,
-        @_icon-font-color-hover: @data-grid-temp-td__hover__background-color,
-        @_icon-font-size: 13px,
+        @_icon-font-color: @data-grid-temp-th__color,
+        @_icon-font-size: 15px,
         @_icon-font-position: after
         );
     }
@@ -218,9 +220,8 @@
         .icon-font(
         @icon-caret-up__content,
         @_icon-font: @icons-admin__font-name,
-        @_icon-font-color: @data-grid-temp-td__even__background-color,
-        @_icon-font-color-hover: @data-grid-temp-td__hover__background-color,
-        @_icon-font-size: 13px,
+        @_icon-font-color: @data-grid-temp-th__color,
+        @_icon-font-size: 15px,
         @_icon-font-position: after
         );
     }

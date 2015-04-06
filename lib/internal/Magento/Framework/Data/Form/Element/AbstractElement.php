@@ -413,7 +413,8 @@ abstract class AbstractElement extends AbstractForm
     public function getLabelHtml($idSuffix = '')
     {
         if ($this->getLabel() !== null) {
-            $html = '<label class="label admin__field-label" for="' . $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId(
+            $html = '<label class="label admin__field-label" for="' .
+                $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId(
                 'label'
             ) . '><span>' . $this->_escape(
                 $this->getLabel()

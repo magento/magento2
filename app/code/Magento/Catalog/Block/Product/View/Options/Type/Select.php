@@ -38,7 +38,10 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             $select = $this->getLayout()->createBlock(
                 'Magento\Framework\View\Element\Html\Select'
             )->setData(
-                ['id' => 'select_' . $_option->getId(), 'class' => $require . ' product-custom-option admin__control-select']
+                [
+                    'id' => 'select_' . $_option->getId(),
+                    'class' => $require . ' product-custom-option admin__control-select'
+                ]
             );
             if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DROP_DOWN) {
                 $select->setName('options[' . $_option->getid() . ']')->addOption('', __('-- Please Select --'));

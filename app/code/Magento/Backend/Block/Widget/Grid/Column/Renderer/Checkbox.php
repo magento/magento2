@@ -113,8 +113,10 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         $html .= 'value="' . $this->escapeHtml($value) . '" ';
         $html .= 'class="' .
             ($this->getColumn()->getInlineCss() ? $this->getColumn()->getInlineCss() : 'checkbox') .
+            ' admin__control-checkbox' .
             '"';
         $html .= $checked . $this->getDisabled() . '/>';
+        $html .= '<label></label>';
         return $html;
     }
 

@@ -41,7 +41,6 @@
     font-weight: @font-weight__regular;
     height: @field-control__height;
     max-width: 100%;
-    min-width: 10rem;
     padding: 0 1rem;
     transition: border-color .1s ease-in;
 }
@@ -167,6 +166,7 @@ option:empty {
 //  Checkboxes and radios
 .admin__control-radio,
 .admin__control-checkbox {
+    cursor: pointer;
     margin: .3rem 0 0;
     opacity: 0.01; // hack for successful selenium tests
     overflow: hidden;
@@ -178,7 +178,7 @@ option:empty {
         padding-left: @field-control-option-label__padding-left;
 
         &:before {
-            background: none;
+            background: @field-control__background-color;
             border-radius: .2rem;
             border: 1px solid @field-control__border-color;
             color: transparent;
