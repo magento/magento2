@@ -128,6 +128,13 @@ abstract class AbstractModel extends \Magento\Framework\Object
     protected $_actionValidator;
 
     /**
+     * Array to store object's original data
+     *
+     * @var array
+     */
+    private $storedData = [];
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -155,7 +162,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
         ) {
             $this->_idFieldName = $this->_getResource()->getIdFieldName();
         }
-
+        $this->updateStoredData();
         parent::__construct($data);
         $this->_construct();
     }
@@ -354,6 +361,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
     {
         $this->getResource()->afterLoad($this);
         $this->_afterLoad();
+        $this->updateStoredData();
         return $this;
     }
 
@@ -566,6 +574,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
         $this->_eventManager->dispatch('model_save_after', ['object' => $this]);
         $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_save_after', $this->_getEventData());
+        $this->updateStoredData();
         return $this;
     }
 
@@ -611,6 +620,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
         $this->_eventManager->dispatch('model_delete_after', ['object' => $this]);
         $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         $this->_eventManager->dispatch($this->_eventPrefix . '_delete_after', $this->_getEventData());
+        $this->updateStoredData();
         return $this;
     }
 
@@ -687,6 +697,21 @@ abstract class AbstractModel extends \Magento\Framework\Object
      */
     protected function _clearData()
     {
+        return $this;
+    }
+
+    /**
+     * Synchronize object's stored data with the actual data
+     *
+     * @return $this
+     */
+    protected function updateStoredData()
+    {
+        if (isset($this->_data)) {
+            $this->storedData = $this->_data;
+        } else {
+            $this->storedData = [];
+        }
         return $this;
     }
 }
