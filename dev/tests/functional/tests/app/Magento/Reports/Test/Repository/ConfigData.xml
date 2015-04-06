@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Core\Test\Repository\ConfigData">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="compare_products">
             <field path="catalog/recently_products/scope" scope="catalog" scope_id="1" label="Website" xsi:type="string">Website</field>
             <field path="catalog/recently_products/viewed_count" scope="catalog" scope_id="1" label="" xsi:type="string">5</field>

@@ -494,7 +494,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     $this->_varDirectory->getRelativePath($uploadedFile),
                     $sourceFileRelative
                 );
-            } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+            } catch (\Magento\Framework\Exception\FileSystemException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Source file moving failed'));
             }
         }

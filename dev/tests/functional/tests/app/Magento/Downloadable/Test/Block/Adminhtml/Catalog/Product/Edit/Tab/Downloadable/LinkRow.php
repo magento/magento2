@@ -19,7 +19,7 @@ class LinkRow extends Form
      *
      * @var string
      */
-    protected $deleteButton = '.delete-link-item';
+    protected $deleteButton = '.action-remove';
 
     /**
      * Fill item link
