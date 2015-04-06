@@ -33,7 +33,7 @@ class AssertProductDetailsInWishlist extends AbstractAssertWishlistProductDetail
         FixtureFactory $fixtureFactory
     ) {
         $cmsIndex->getLinksBlock()->openLink('My Wish List');
-        $this->assertProductDetails($wishlistIndex, $fixtureFactory, $product);
+        $this->assertProductDetails($wishlistIndex, $product, $fixtureFactory);
     }
 
     /**
