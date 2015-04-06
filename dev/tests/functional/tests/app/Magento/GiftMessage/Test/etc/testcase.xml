@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
     <scenario name="CheckoutWithGiftMessagesTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Core" next="createProducts">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts">
             <item name="configData" value="cashondelivery, enable_gift_messages" />
         </step>
         <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
@@ -22,7 +22,7 @@
         <step name="placeOrder" module="Magento_Checkout" />
     </scenario>
     <scenario name="CreateGiftMessageOnBackendTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Core" next="createProducts">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts">
             <item name="configData" value="cashondelivery, enable_gift_messages" />
         </step>
         <step name="createProducts" module="Magento_Catalog" next="createCustomer" />

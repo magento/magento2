@@ -733,7 +733,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                     /** @var \Magento\Eav\Model\Entity\Attribute\Exception $e */
                     $e = $this->_universalFactory->create(
                         'Magento\Eav\Model\Entity\Attribute\Exception',
-                        ['message' => $e->getMessage()]
+                        ['phrase' => __($e->getMessage())]
                     );
                     $e->setAttributeCode($attrCode)->setPart($part);
                     throw $e;

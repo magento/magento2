@@ -9,11 +9,6 @@ namespace Magento\Config\Controller\Adminhtml\System\Config;
 class Edit extends AbstractScopeConfig
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
@@ -23,7 +18,6 @@ class Edit extends AbstractScopeConfig
      * @param \Magento\Config\Model\Config\Structure $configStructure
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config $backendConfig
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
@@ -31,11 +25,9 @@ class Edit extends AbstractScopeConfig
         \Magento\Config\Model\Config\Structure $configStructure,
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config $backendConfig,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         parent::__construct($context, $configStructure, $sectionChecker, $backendConfig);
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultPageFactory = $resultPageFactory;
     }
 

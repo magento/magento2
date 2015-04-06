@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\Code\Validator;
 
-use Magento\Framework\Code\ValidationException;
 use Magento\Framework\Code\ValidatorInterface;
 
 class ContextAggregation implements ValidatorInterface
@@ -30,7 +29,7 @@ class ContextAggregation implements ValidatorInterface
      *
      * @param string $className
      * @return bool
-     * @throws ValidationException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function validate($className)
     {
@@ -62,10 +61,15 @@ class ContextAggregation implements ValidatorInterface
 
         if (false == empty($errors)) {
             $classPath = str_replace('\\', '/', $class->getFileName());
-            throw new ValidationException(
-                'Incorrect dependency in class ' . $className . ' in ' . $classPath . PHP_EOL . implode(
-                    PHP_EOL,
-                    $errors
+            throw new \Magento\Framework\Exception\ValidatorException(
+                new \Magento\Framework\Phrase(
+                    'Incorrect dependency in class %1 in %2%3%4',
+                    [
+                        $className,
+                        $classPath,
+                        PHP_EOL,
+                        implode(PHP_EOL, $errors)
+                    ]
                 )
             );
         }

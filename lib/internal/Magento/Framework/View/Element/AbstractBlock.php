@@ -261,12 +261,14 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      * Retrieve layout object
      *
      * @return \Magento\Framework\View\LayoutInterface
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getLayout()
     {
         if (!$this->_layout) {
-            throw new \Magento\Framework\Exception('Layout must be initialized');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Layout must be initialized')
+            );
         }
         return $this->_layout;
     }
@@ -744,7 +746,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         try {
             $params = array_merge(['_secure' => $this->getRequest()->isSecure()], $params);
             return $this->_assetRepo->getUrlWithParams($fileId, $params);
-        } catch (\Magento\Framework\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_logger->critical($e);
             return $this->_getNotFoundUrl();
         }

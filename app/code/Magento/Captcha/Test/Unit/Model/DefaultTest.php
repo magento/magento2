@@ -8,6 +8,11 @@ namespace Magento\Captcha\Test\Unit\Model;
 class DefaultTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Expiration frame
+     */
+    const EXPIRE_FRAME = 86400;
+
+    /**
      * Captcha default config data
      * @var array
      */
@@ -67,7 +72,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_session;
+    protected $session;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -186,7 +191,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
     {
         self::$_defaultConfig['case_sensitive'] = '1';
         $this->assertFalse($this->_object->isCorrect('abcdef5'));
-        $sessionData = ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + 600]];
+        $sessionData = ['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + self::EXPIRE_FRAME]];
         $this->_object->getSession()->setData($sessionData);
         self::$_defaultConfig['case_sensitive'] = '0';
         $this->assertTrue($this->_object->isCorrect('abcdef5'));
@@ -251,7 +256,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
         );
         $session->expects($this->any())->method('isLoggedIn')->will($this->returnValue(false));
 
-        $session->setData(['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + 600]]);
+        $session->setData(['user_create_word' => ['data' => 'AbCdEf5', 'expires' => time() + self::EXPIRE_FRAME]]);
         return $session;
     }
 

@@ -9,25 +9,6 @@ namespace Magento\Search\Controller\Adminhtml\Term;
 class Save extends \Magento\Search\Controller\Adminhtml\Term
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
-        parent::__construct($context, $resultPageFactory);
-        $this->resultRedirectFactory = $resultRedirectFactory;
-    }
-
-    /**
      * Save search query
      *
      * @return \Magento\Backend\Model\View\Result\Redirect

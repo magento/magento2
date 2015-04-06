@@ -31,11 +31,10 @@ class AssertCatalogPriceRuleNotAppliedCatalogPage extends AbstractConstraint
         $cmsIndexPage->open();
         foreach ($products as $product) {
             $categoryName = $product->getCategoryIds()[0];
-            $productName = $product->getName();
             $cmsIndexPage->getTopmenu()->selectCategoryByName($categoryName);
-            $productPriceBlock = $catalogCategoryViewPage->getListProductBlock()->getProductPriceBlock($productName);
+            $priceBlock = $catalogCategoryViewPage->getListProductBlock()->getProductItem($product)->getPriceBlock();
             \PHPUnit_Framework_Assert::assertFalse(
-                $productPriceBlock->isSpecialPriceVisible(),
+                $priceBlock->isSpecialPriceVisible(),
                 "Catalog price rule is applied!\n"
             );
         }
