@@ -2,8 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/*global define*/
 define(
     [
         '../model/quote',
@@ -16,17 +15,16 @@ define(
         'Magento_Ui/js/model/errorlist'
     ],
     function(quote, addressList, urlBuilder, navigator, shippingService, paymentService, storage, errorList) {
-        return function(shippingAddressId, sameAsBilling) {
-            if (!shippingAddressId) {
-                alert('Currently adding a new address is not supported.');
-                return false;
-            }
-            var shippingAddress = addressList.getAddressById(shippingAddressId);
+        "use strict";
+        return function(shippingAddress, sameAsBilling) {
             shippingAddress.sameAsBilling = sameAsBilling;
-
+            quote.setShippingAddress(shippingAddress);
             storage.post(
                 urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()}),
-                JSON.stringify({shippingAddress: shippingAddress, billingAddress: quote.getBillingAddress()()})
+                JSON.stringify({
+                    shippingAddress: quote.getShippingAddress()(),
+                    billingAddress: quote.getBillingAddress()()
+                })
             ).done(
                 function(result) {
                     quote.setShippingAddress(shippingAddress);
@@ -42,6 +40,6 @@ define(
                     quote.setBillingAddress(null);
                 }
             );
-        }
+        };
     }
 );

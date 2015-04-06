@@ -26,6 +26,7 @@
                                             </item>
                                             <item name="billingAddress" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item>
+                                                <item name="dataScope" xsi:type="string">billingAddress</item>
                                                 <item name="provider" xsi:type="string">billingAddressProvider</item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="billing-address-fieldset" xsi:type="array">
@@ -38,7 +39,7 @@
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
                                                                 </item>
-                                                                <item name="dataScope" xsi:type="string">first_name</item>
+                                                                <item name="dataScope" xsi:type="string">firstname</item>
                                                                 <item name="label" xsi:type="string">First Name</item>
                                                                 <item name="provider" xsi:type="string">billingAddressProvider</item>
                                                                 <item name="validation" xsi:type="array">
@@ -51,7 +52,7 @@
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
                                                                 </item>
-                                                                <item name="dataScope" xsi:type="string">last_name</item>
+                                                                <item name="dataScope" xsi:type="string">lastname</item>
                                                                 <item name="label" xsi:type="string">Last Name</item>
                                                                 <item name="provider" xsi:type="string">billingAddressProvider</item>
                                                                 <item name="validation" xsi:type="array">
@@ -64,6 +65,8 @@
                                             </item>
                                             <item name="shippingAddress" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item>
+                                                <item name="dataScope" xsi:type="string">shippingAddress</item>
+                                                <item name="provider" xsi:type="string">shippingAddressProvider</item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="shipping-address-fieldset" xsi:type="array">
                                                         <item name="component" xsi:type="string">uiComponent</item>
@@ -75,7 +78,7 @@
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
                                                                 </item>
-                                                                <item name="dataScope" xsi:type="string">first_name</item>
+                                                                <item name="dataScope" xsi:type="string">firstname</item>
                                                                 <item name="label" xsi:type="string">First Name</item>
                                                                 <item name="provider" xsi:type="string">shippingAddressProvider</item>
                                                                 <item name="validation" xsi:type="array">
@@ -88,7 +91,7 @@
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
                                                                 </item>
-                                                                <item name="dataScope" xsi:type="string">last_name</item>
+                                                                <item name="dataScope" xsi:type="string">lastname</item>
                                                                 <item name="label" xsi:type="string">Last Name</item>
                                                                 <item name="provider" xsi:type="string">shippingAddressProvider</item>
                                                                 <item name="validation" xsi:type="array">

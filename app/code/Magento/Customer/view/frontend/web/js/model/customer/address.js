@@ -9,7 +9,7 @@
 define([], function() {
     return function (addressData) {
         return {
-            id: null,
+            id: addressData.id,
             email: addressData.email,
             countryId: addressData.country_id,
             regionId: addressData.region.region_id,

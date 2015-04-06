@@ -11,9 +11,10 @@ define(
         'Magento_Customer/js/model/customer',
         '../action/select-billing-address',
         'Magento_Checkout/js/model/step-navigator',
-        '../model/quote'
+        '../model/quote',
+        '../model/addresslist'
     ],
-    function (Component, ko,  customer, selectBillingAddress, navigator, quote) {
+    function (Component, ko,  customer, selectBillingAddress, navigator, quote, addressList) {
         "use strict";
         var stepName = 'billingAddress';
         var newAddressSelected = ko.observable(false);
@@ -31,10 +32,17 @@ define(
                 return item.getFullAddress();
             },
             submitBillingAddress: function() {
-                this.validate();
-
-                if (!this.source.get('params.invalid')) {
-                    selectBillingAddress(this.selectedBillingAddressId, this.useForShipping);
+                if (this.selectedBillingAddressId) {
+                    selectBillingAddress(
+                        addressList.getAddressById(this.selectedBillingAddressId),
+                        this.useForShipping
+                    );
+                } else {
+                    this.validate();
+                    if (!this.source.get('params.invalid')) {
+                        var addressData = this.source.get('billingAddress');
+                        selectBillingAddress(addressData, this.useForShipping);
+                    }
                 }
             },
             navigateToCurrentStep: function() {

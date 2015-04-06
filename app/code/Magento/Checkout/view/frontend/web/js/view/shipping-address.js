@@ -3,17 +3,18 @@
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
-/*global alert*/
+/*global define*/
 define(
     [
-        'uiComponent',
+        'Magento_Ui/js/form/form',
         'ko',
         'Magento_Checkout/js/action/select-shipping-address',
         'Magento_Customer/js/model/customer',
         '../model/quote',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Checkout/js/model/step-navigator',
+        '../model/addresslist'
     ],
-    function(Component, ko, selectShippingAddress, customer, quote, navigator) {
+    function(Component, ko, selectShippingAddress, customer, quote, navigator, addressList) {
         'use strict';
         var stepName = 'shippingAddress';
         return Component.extend({
@@ -35,9 +36,13 @@ define(
             },
             selectShippingAddress: function() {
                 if (!this.newAddressSelected()) {
-                    selectShippingAddress(this.selectedAddressId(), this.sameAsBilling());
+                    selectShippingAddress(addressList.getAddressById(this.selectedAddressId()), this.sameAsBilling());
                 } else {
-                    alert('save new address');
+                    this.validate();
+                    if (!this.source.get('params.invalid')) {
+                        var addressData = this.source.get('shippingAddress');
+                        selectShippingAddress(addressData, this.sameAsBilling());
+                    }
                 }
             },
             sameAsBillingClick: function() {
