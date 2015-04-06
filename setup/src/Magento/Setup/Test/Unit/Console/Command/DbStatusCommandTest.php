@@ -17,6 +17,11 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
     private $dbVersionInfo;
 
     /**
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfig;
+
+    /**
      * @var DbStatusCommand
      */
     private $command;
@@ -32,7 +37,8 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValue($this->dbVersionInfo));
-        $this->command = new DbStatusCommand($objectManagerProvider);
+        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->command = new DbStatusCommand($objectManagerProvider, $this->deploymentConfig);
     }
 
     /**
@@ -43,6 +49,9 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute(array $outdatedInfo, $expectedMessage)
     {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
         $this->dbVersionInfo->expects($this->once())
             ->method('getDbVersionErrors')
             ->will($this->returnValue($outdatedInfo));
@@ -68,7 +77,7 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 '%amodule_a%aschema%a1%a->%a2'
-                . '%aRun the "Update" command to update your DB schema and data%a',
+                . "%aRun 'setup:upgrade' to update your DB schema and data%a",
             ],
             'code is outdated' => [
                 [
@@ -102,5 +111,20 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
                 . '%aSome modules use code versions newer or older than the database%a',
             ],
         ];
+    }
+
+    public function testExecuteNotInstalled()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(false));
+        $this->dbVersionInfo->expects($this->never())
+            ->method('getDbVersionErrors');
+        $tester = new CommandTester($this->command);
+        $tester->execute([]);
+        $this->assertStringMatchesFormat(
+            'No information is available: the application is not installed.%w',
+            $tester->getDisplay()
+        );
     }
 }

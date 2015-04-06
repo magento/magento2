@@ -6,6 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Composer\Package\Version\VersionParser;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Module\DbVersionInfo;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,13 +25,22 @@ class DbStatusCommand extends AbstractSetupCommand
     private $objectManagerProvider;
 
     /**
+     * Deployment configuration
+     *
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Inject dependencies
      *
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(ObjectManagerProvider $objectManagerProvider)
+    public function __construct(ObjectManagerProvider $objectManagerProvider, DeploymentConfig $deploymentConfig)
     {
         $this->objectManagerProvider = $objectManagerProvider;
+        $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
 
@@ -49,6 +59,10 @@ class DbStatusCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->deploymentConfig->isAvailable()) {
+            $output->writeln("<info>No information is available: the application is not installed.</info>");
+            return;
+        }
         /** @var DbVersionInfo $dbVersionInfo */
         $dbVersionInfo = $this->objectManagerProvider->get()
             ->get('Magento\Framework\Module\DbVersionInfo');
@@ -77,13 +91,13 @@ class DbStatusCommand extends AbstractSetupCommand
             if ($codebaseUpdateNeeded) {
                 $output->writeln(
                     '<info>Some modules use code versions newer or older than the database. ' .
-                    'First update the module code, then run the "Update" command.</info>'
+                    "First update the module code, then run 'setup:upgrade'.</info>"
                 );
             } else {
-                $output->writeln('<info>Run the "Update" command to update your DB schema and data</info>');
+                $output->writeln("<info>Run 'setup:upgrade' to update your DB schema and data.</info>");
             }
         } else {
-            $output->writeln('<info>All modules are up to date</info>');
+            $output->writeln('<info>All modules are up to date.</info>');
         }
     }
 }
