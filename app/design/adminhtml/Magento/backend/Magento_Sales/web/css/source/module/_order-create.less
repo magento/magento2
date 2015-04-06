@@ -201,7 +201,7 @@
 //  ---------------------------------------------
 
 .order-discounts {
-    .extend__clearfix();
+    &:extend(.abs-clearfix all);
     margin-top: @indent__base;
     .action-secondary {
         float: right;
@@ -278,12 +278,12 @@
     }
 
     .admin__fieldset-wrapper-content {
-        .extend__clearfix();
+        &:extend(.abs-clearfix all);
     }
 
     .admin__fieldset-wrapper-title {
+        &:extend(.abs-clearfix all);
         border-bottom: 1px solid @color-gray80;
-        .extend__clearfix();
         margin-bottom: @page-order-sidebar__margin-reqular;
         padding-bottom: @indent__xs;
         .actions {
@@ -326,7 +326,7 @@
 //  Order Payment & Shipping Information
 //  ---------------------------------------------
 
-.order-methods { //  ToDo UI: add styles for 3d secure
+.order-methods {
     .admin__field {
         &:extend(.abs-field-rows all);
     }
@@ -336,6 +336,9 @@
             border-bottom: 0;
             margin-bottom: 1.5rem;
             padding: 0;
+            strong {
+                font-weight: @font-weight__semibold;
+            }
         }
     }
 }
@@ -352,17 +355,13 @@
     }
 }
 
-.admin__order-shipment-methods {
-    //  ToDo UI: add styles for shipping methods
-}
-
 .admin__order-shipment-methods-title {
     font-weight: @font-weight__bold;
     margin: 0 0 @indent__xs;
 }
 
 .admin__order-shipment-methods-options {
-    margin: 0 0 @indent__base @field-control-option-label__padding-left;
+    margin: 0 0 @indent__base;
 }
 
 .admin__order-shipment-methods-options-list {
@@ -372,9 +371,31 @@
 
 .order-shipping-method-summary {
     padding-top: @field-option__padding-top;
-    .action-default {
-        &:extend(.abs-action-tertiary-as-link all);
+}
+
+//
+//  Gift options
+//  ---------------------------------------------
+
+.order-gift-options {
+    &:extend(.abs-clearfix all);
+    .card-price-box {
+        display: none;
+        &._active {
+            display: block;
+        }
     }
+
+    .price-box {
+        .price {
+            font-weight: @font-weight__bold;
+        }
+    }
+}
+
+.giftmessage-order-create {
+    float: left;
+    #mix-grid .width(6,12);
 }
 
 //

@@ -60,14 +60,14 @@
     cursor: not-allowed;
 }
 
-// Input text styles
+//  Input text styles
 .admin__control-text {
     .extend__form-control-styles();
     line-height: @field-control__height;
     width: 100%;
 }
 
-// Select styles
+//  Select styles
 .admin__control-select {
     .extend__form-control-styles();
     .css(appearance, none, 1);
@@ -114,14 +114,14 @@ option:empty {
     display: none;
 }
 
-// Multiple select
+//  Multiple select
 .admin__control-multiselect {
     .extend__form-control-styles();
     height: auto;
     padding: .6rem 1rem;
 }
 
-// File uploader
+//  File uploader
 .admin__control-file-wrapper {
     display: inline-block;
     padding: .5rem 1rem;
@@ -154,16 +154,17 @@ option:empty {
     width: auto;
 }
 
-// Textarea
+//  Textarea
 .admin__control-textarea {
     .extend__form-control-styles();
     height: 8.48rem;
     line-height: 1.18;
     padding-top: .8rem;
+    resize: vertical;
     width: 100%;
 }
 
-// Checkboxes and radios
+//  Checkboxes and radios
 .admin__control-radio,
 .admin__control-checkbox {
     margin: .3rem 0 0;
@@ -242,7 +243,7 @@ option:empty {
     }
 }
 
-// Control with additional prefix or suffix label
+//  Control with additional prefix or suffix label
 .admin__control-addon {
     .vendor-prefix-display(inline-flex);
     .vendor-prefix-flex-direction(row);
