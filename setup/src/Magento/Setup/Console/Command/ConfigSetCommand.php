@@ -84,7 +84,7 @@ class ConfigSetCommand extends AbstractSetupCommand
                 $dialog = $this->getHelperSet()->get('dialog');
                 if (!$dialog->askConfirmation(
                     $output,
-                    '<question>Overwrite the existing configuration for ' . $option->getName() . '?[Y|n]</question>'
+                    '<question>Overwrite the existing configuration for ' . $option->getName() . '?[Y/n]</question>'
                 )) {
                     $inputOptions[$option->getName()] = null;
                 }
