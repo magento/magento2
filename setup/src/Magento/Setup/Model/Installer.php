@@ -955,6 +955,8 @@ class Installer
 
     /**
      * Clears cache
+     *
+     * @return void
      */
     private function clearCache()
     {
