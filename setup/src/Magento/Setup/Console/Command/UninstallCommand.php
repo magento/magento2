@@ -46,7 +46,7 @@ class UninstallCommand extends AbstractSetupCommand
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('Are you sure you want to uninstall Magento?[y/N]', false);
 
-        if ($helper->ask($input, $output, $question)) {
+        if ($helper->ask($input, $output, $question) || !$input->isInteractive()) {
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->uninstall();
         }
