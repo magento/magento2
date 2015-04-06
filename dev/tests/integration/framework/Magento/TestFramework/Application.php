@@ -406,8 +406,8 @@ class Application
 
         // run install script
         $this->_shell->execute(
-            'php -f %s install ' . implode(' ', array_keys($installParams)),
-            array_merge([BP . '/setup/index.php'], array_values($installParams))
+            'php -f %s setup:install ' . implode(' ', array_keys($installParams)),
+            array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
         // enable only specified list of caches
