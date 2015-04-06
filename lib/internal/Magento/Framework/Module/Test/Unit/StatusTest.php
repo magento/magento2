@@ -88,13 +88,13 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ));
         $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], false);
         $expect = [
-            'Cannot enable Module_Foo, depending on disabled modules:',
+            'Cannot enable Module_Foo because it depends on disabled modules:',
             "Module_Baz: Module_Foo->Module_Baz",
-            'Cannot enable Module_Bar, depending on disabled modules:',
+            'Cannot enable Module_Bar because it depends on disabled modules:',
             "Module_Baz: Module_Bar->Module_Baz",
-            'Cannot enable Module_Foo, conflicting with other modules:',
+            'Cannot enable Module_Foo because it conflicts with other modules:',
             "Module_Bar",
-            'Cannot enable Module_Bar, conflicting with other modules:',
+            'Cannot enable Module_Bar because it conflicts with other modules:',
             "Module_Foo",
         ];
         $this->assertEquals($expect, $result);
@@ -117,9 +117,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $expect = [
             'Cannot enable Module_Foo',
             'Cannot enable Module_Bar',
-            'Cannot enable Module_Foo, conflicting with other modules:',
+            'Cannot enable Module_Foo because it conflicts with other modules:',
             "Module_Bar",
-            'Cannot enable Module_Bar, conflicting with other modules:',
+            'Cannot enable Module_Bar because it conflicts with other modules:',
             "Module_Foo",
         ];
         $this->assertEquals($expect, $result);
@@ -146,9 +146,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ));
         $result = $this->object->checkConstraints(false, ['Module_Foo' => '', 'Module_Bar' => '']);
         $expect = [
-            'Cannot disable Module_Foo, modules depending on it:',
+            'Cannot disable Module_Foo because modules depend on it:',
             "Module_Baz: Module_Baz->Module_Foo",
-            'Cannot disable Module_Bar, modules depending on it:',
+            'Cannot disable Module_Bar because modules depend on it:',
             "Module_Baz: Module_Baz->Module_Bar",
         ];
         $this->assertEquals($expect, $result);

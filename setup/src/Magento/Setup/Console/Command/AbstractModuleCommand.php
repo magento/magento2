@@ -89,7 +89,9 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
             $modules = $input->getArgument(self::INPUT_KEY_MODULES);
         }
         if (empty($modules)) {
-            throw new \InvalidArgumentException('No modules specified. Specify list of modules or use --all option');
+            throw new \InvalidArgumentException(
+                'No modules specified. Specify a space-separated list of modules or use the --all option'
+            );
         }
         /**
          * @var \Magento\Framework\Module\Status $status
@@ -115,7 +117,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
                 $output->writeln('');
                 $output->writeln(
                     '<info>To make sure that the enabled modules are properly registered,'
-                    . " run 'setup:update' command.</info>"
+                    . " run 'setup:upgrade'.</info>"
                 );
             } else {
                 $output->writeln('<info>The following modules have been disabled:</info>');
@@ -126,7 +128,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
             if ($force) {
                 $output->writeln(
                     '<error>Alert: You used the --force option.'
-                    . ' As a result, modules might not function properly</error>'
+                    . ' As a result, modules might not function properly.</error>'
                 );
             }
         } else {
@@ -166,7 +168,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
             $output->writeln(
                 '<error>Alert: Generated static view files were not cleared.'
                 . ' You can clear them using the --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
-                . ' Failure to clear static view files might mean cause display issues in the Admin and storefront. '
+                . ' Failure to clear static view files might cause display issues in the Admin and storefront.'
             );
         }
     }
