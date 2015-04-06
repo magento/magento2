@@ -20,7 +20,7 @@ return [
     'admin_lastname'               => 'Admin',
     'admin_firstname'              => 'Admin',
     'admin_email'                  => 'admin@example.com',
-    'admin_user'               => 'admin',
+    'admin_user'                   => 'admin',
     'admin_password'               => '123123q',
     'admin_use_security_key'       => '0',
     /* PayPal has limitation for order number - 20 characters. 10 digits prefix + 8 digits number is good enough */
