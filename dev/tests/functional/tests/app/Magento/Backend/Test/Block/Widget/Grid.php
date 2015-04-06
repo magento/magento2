@@ -226,7 +226,7 @@ abstract class Grid extends Block
                     : null;
                 $this->_rootElement->find($selector, $strategy, $typifiedElement)->setValue($value);
             } else {
-                throw new \Exception('Such column is absent in the grid or not described yet.');
+                throw new \Exception("Column $key is absent in the grid or not described yet.");
             }
         }
     }

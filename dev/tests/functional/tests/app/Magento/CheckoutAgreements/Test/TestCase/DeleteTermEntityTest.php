@@ -63,7 +63,7 @@ class DeleteTermEntityTest extends Injectable
 
         // TODO: Move set up configuration to "__prepare" method after fix bug MAGETWO-29331
         $this->objectManager->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => 'checkout_term_condition']
         )->run();
     }
@@ -93,7 +93,7 @@ class DeleteTermEntityTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => 'checkout_term_condition', 'rollback' => true]
         )->run();
     }

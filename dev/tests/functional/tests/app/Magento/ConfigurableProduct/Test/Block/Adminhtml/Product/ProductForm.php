@@ -12,13 +12,12 @@ use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class ProductForm
- * Product creation form
+ * Product creation form.
  */
 class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm
 {
     /**
-     * Fill the product form
+     * Fill the product form.
      *
      * @param FixtureInterface $product
      * @param SimpleElement|null $element [optional]
@@ -36,64 +35,5 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
 
         $this->showAdvancedSettings();
         return $this->fillTabs($tabs, $element);
-    }
-
-    /**
-     * Normalize data in DataFixture
-     *
-     * @param array $tabs
-     * @return array
-     */
-    protected function normalizeDeprecateData(array $tabs)
-    {
-        if (!isset($tabs['variations'])) {
-            return $tabs;
-        }
-
-        $variations = $tabs['variations'];
-
-        $attributesData = [];
-        if (isset($variations['configurable_attributes_data']['value'])) {
-            foreach ($variations['configurable_attributes_data']['value'] as $key => $attribute) {
-                $attributesData[$key] = [
-                    'frontend_label' => $attribute['label']['value'],
-                ];
-                unset($attribute['label']);
-
-                foreach ($attribute as $optionKey => $option) {
-                    foreach ($option as $name => $field) {
-                        $option[$name] = $field['value'];
-                    }
-
-                    $option['label'] = $option['option_label'];
-                    unset($option['option_label']);
-
-                    $attribute[$optionKey] = $option;
-                }
-
-                $attributesData[$key]['options'] = $attribute;
-            }
-        }
-
-        $matrix = [];
-        if (isset($variations['variations-matrix'])) {
-            foreach ($variations['variations-matrix']['value'] as $key => $variation) {
-                foreach ($variation['value'] as $name => $field) {
-                    $matrix[$key][$name] = $field['value'];
-                }
-            }
-        }
-
-        $tabs['variations'] = [
-            'configurable_attributes_data' => [
-                'value' => [
-                    'attributes_data' => $attributesData,
-                    'matrix' => $matrix,
-                ],
-            ],
-        ];
-        unset($tabs['variations']['variations-matrix']);
-
-        return $tabs;
     }
 }
