@@ -6,7 +6,7 @@
  */
 namespace Magento\Shipping\Controller\Tracking;
 
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NotFoundException;
 
 class Popup extends \Magento\Framework\App\Action\Action
 {
@@ -57,7 +57,7 @@ class Popup extends \Magento\Framework\App\Action\Action
         $shippingInfoModel = $this->_shippingInfoFactory->create()->loadByHash($this->getRequest()->getParam('hash'));
         $this->_coreRegistry->register('current_shipping_info', $shippingInfoModel);
         if (count($shippingInfoModel->getTrackingInfo()) == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found.'));
         }
         $this->_view->loadLayout();
         $this->_view->getPage()->getConfig()->getTitle()->set(__('Tracking Information'));

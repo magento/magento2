@@ -27,31 +27,23 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productTypeManager;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         Initialization\Helper $initializationHelper,
         \Magento\Catalog\Model\Product\Copier $productCopier,
-        \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
         parent::__construct($context, $productBuilder);
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

@@ -11,7 +11,7 @@ interface SenderResolverInterface
 {
     /**
      * Resolve sender data
-     * @throws \Magento\Framework\Mail\Exception
+     * @throws \Magento\Framework\Exception\MailException
      * @param string|array $sender
      * @param int|null $scopeId
      * @return array

@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Stdlib\DateTime\Timezone;
 
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Phrase;
+
 class Validator
 {
     /**
@@ -39,18 +42,22 @@ class Validator
      * @param int|string $timestamp
      * @param int|string $toDate
      * @return void
-     * @throws ValidationException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function validate($timestamp, $toDate)
     {
         $transitionYear = date('Y', $timestamp);
 
         if ($transitionYear > $this->_yearMaxValue || $transitionYear < $this->_yearMinValue) {
-            throw new ValidationException('Transition year is out of system date range.');
+            throw new ValidatorException(
+                new Phrase('Transition year is out of system date range.')
+            );
         }
 
         if ((int) $timestamp > (int) $toDate) {
-            throw new ValidationException('Transition year is out of specified date range.');
+            throw new ValidatorException(
+                new Phrase('Transition year is out of specified date range.')
+            );
         }
     }
 }

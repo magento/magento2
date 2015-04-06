@@ -41,7 +41,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
         $webapiException = new \Magento\Framework\Webapi\Exception(
-            $message,
+            __($message),
             $code,
             \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR,
             $details
@@ -211,7 +211,7 @@ XML;
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
         $webapiException = new \Magento\Framework\Webapi\Exception(
-            $message,
+            __($message),
             $code,
             \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR,
             $details

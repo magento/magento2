@@ -111,14 +111,14 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
             ->getMock();
         $this->resultJsonFactory->expects($this->any())->method('create')->willReturn($this->resultJson);
 
+        $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
         $this->action = (new ObjectManagerHelper($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Validate',
             [
-                'context' => $this->initContext(),
+                'context' => $this->initContext($additionalParams),
                 'productBuilder' => $this->productBuilder,
                 'resultPageFactory' => $resultPageFactory,
                 'resultForwardFactory' => $resultForwardFactory,
-                'resultRedirectFactory' => $this->resultRedirectFactory,
                 'initializationHelper' => $this->initializationHelper,
                 'resultJsonFactory' => $this->resultJsonFactory,
                 'productFactory' => $this->productFactory,

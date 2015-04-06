@@ -65,10 +65,10 @@ class Node
     public function __construct($nodeData, $keys)
     {
         if (empty($nodeData)) {
-            throw new NodeException('Empty array of node information');
+            throw new NodeException(new \Magento\Framework\Phrase('Empty array of node information'));
         }
         if (empty($keys)) {
-            throw new NodeException('Empty keys array');
+            throw new NodeException(new \Magento\Framework\Phrase('Empty keys array'));
         }
 
         $this->id = $nodeData[$keys['id']];

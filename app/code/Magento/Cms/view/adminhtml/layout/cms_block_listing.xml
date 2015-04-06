@@ -10,7 +10,7 @@
         <referenceBlock name="listing">
             <arguments>
                 <argument name="name" xsi:type="string">cms_block_listing</argument>
-                <argument name="dataSource" xsi:type="object">Magento\Cms\Model\DataSource\BlockCollection</argument>
+                <argument name="dataSource" xsi:type="object">Magento\Cms\Model\Resource\Block\Collection</argument>
                 <argument name="save_parameters_in_session" xsi:type="string">1</argument>
                 <argument name="configuration" xsi:type="array">
                     <item name="page_actions" xsi:type="array">
