@@ -59,6 +59,202 @@
                                                                     <item name="required-entry" xsi:type="string">true</item>
                                                                 </item>
                                                             </item>
+
+                                                            <item name="email" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
+                                                                </item>
+                                                                <item name="label" xsi:type="string">Email</item>
+                                                                <item name="dataScope" xsi:type="string">email</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="boolean">true</item>
+                                                                    <item name="validate-email" xsi:type="boolean">true</item>
+                                                                </item>
+                                                            </item>
+
+                                                            <item name="company" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                </item>
+                                                                <item name="dataScope" xsi:type="string">company</item>
+                                                                <item name="label" xsi:type="string">Company</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="street_container" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/group/group</item>
+                                                                </item>
+                                                                <item name="label" xsi:type="string" translate="true">Address</item>
+                                                                <item name="dataScope" xsi:type="string">street</item>
+                                                                <item name="sortOrder" xsi:type="string">45</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="type" xsi:type="string">group</item>
+                                                                <item name="required" xsi:type="boolean">true</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <item name="street" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                        <item name="config" xsi:type="array">
+                                                                        <item name="template" xsi:type="string">ui/form/field</item>
+                                                                        <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                    </item>
+                                                                    <item name="dataScope" xsi:type="string">address</item>
+                                                                    <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                    <item name="validation" xsi:type="array">
+                                                                        <item name="required-entry" xsi:type="string">true</item>
+                                                                    </item>
+                                                                </item>
+                                                                    <item name="street_second" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                    <item name="config" xsi:type="array">
+                                                                        <item name="template" xsi:type="string">ui/form/field</item>
+                                                                        <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                    </item>
+                                                                    <item name="dataScope" xsi:type="string">address</item>
+                                                                    <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                    <item name="validation" xsi:type="array">
+                                                                        <item name="required-entry" xsi:type="string">false</item>
+                                                                    </item>
+                                                                </item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="city" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                </item>
+                                                                <item name="dataScope" xsi:type="string">city</item>
+                                                                <item name="label" xsi:type="string">City</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="string">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="region" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                </item>
+                                                                <item name="dataScope" xsi:type="string">region</item>
+                                                                <item name="visible" xsi:type="boolean">false</item>
+                                                                <item name="label" xsi:type="string">State/Province</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="source" xsi:type="string">address</item>
+                                                            </item>
+                                                            <item name="region_id" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
+                                                                </item>
+                                                                <item name="label" xsi:type="string">State/Province</item>
+                                                                <item name="dataScope" xsi:type="string">region_id</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="customEntry" xsi:type="string">region_id</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="boolean">true</item>
+                                                                </item>
+                                                                <item name="filterBy" xsi:type="array">
+                                                                    <item name="target" xsi:type="string"><![CDATA[<%= provider %>:<%= parentScope %>.country_id]]></item>
+                                                                    <item name="field" xsi:type="string">country_id</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="postcode" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                </item>
+                                                                <item name="dataScope" xsi:type="string">postcode</item>
+                                                                <item name="label" xsi:type="string">Zip/Postal Code</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="string">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="country_id" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
+                                                                </item>
+                                                                <item name="dataScope" xsi:type="string">country_id</item>
+                                                                <item name="label" xsi:type="string">Country</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="string">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="telephone" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                </item>
+                                                                <item name="label" xsi:type="string">Phone Number</item>
+                                                                <item name="dataScope" xsi:type="string">telephone</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="required-entry" xsi:type="string">true</item>
+                                                                </item>
+                                                            </item>
+
+                                                            <item name="fax" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                                                                </item>
+                                                                <item name="label" xsi:type="string">Fax</item>
+                                                                <item name="dataScope" xsi:type="string">fax</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
+                                                                </item>
+                                                            </item>
+
+                                                            <!--<item name="password" xsi:type="array">-->
+                                                                <!--<item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>-->
+                                                                <!--<item name="config" xsi:type="array">-->
+                                                                    <!--<item name="template" xsi:type="string">ui/form/field</item>-->
+                                                                    <!--<item name="elementTmpl" xsi:type="string">ui/form/element/input</item>-->
+                                                                <!--</item>-->
+                                                                <!--<item name="label" xsi:type="string">Password</item>-->
+                                                                <!--<item name="type" xsi:type="string">password</item>-->
+                                                                <!--<item name="dataScope" xsi:type="string">password</item>-->
+                                                                <!--<item name="provider" xsi:type="string">billingAddressProvider</item>-->
+                                                                <!--<item name="validation" xsi:type="array">-->
+                                                                    <!--<item name="required-entry" xsi:type="string">true</item>-->
+                                                                    <!--<item name="validate-password" xsi:type="string">true</item>-->
+                                                                <!--</item>-->
+                                                            <!--</item>-->
+
+                                                            <!--<item name="confirm_password" xsi:type="array">-->
+                                                                <!--<item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>-->
+                                                                <!--<item name="config" xsi:type="array">-->
+                                                                    <!--<item name="template" xsi:type="string">ui/form/field</item>-->
+                                                                    <!--<item name="elementTmpl" xsi:type="string">ui/form/element/input</item>-->
+                                                                <!--</item>-->
+                                                                <!--<item name="label" xsi:type="string">Confirm Password</item>-->
+                                                                <!--<item name="type" xsi:type="string">password</item>-->
+                                                                <!--<item name="dataScope" xsi:type="string">password</item>-->
+                                                                <!--<item name="provider" xsi:type="string">billingAddressProvider</item>-->
+                                                                <!--<item name="validation" xsi:type="array">-->
+                                                                    <!--<item name="required-entry" xsi:type="string">true</item>-->
+                                                                    <!--<item name="validate-cpassword" xsi:type="string">true</item>-->
+                                                                    <!--<item name="equalTo" xsi:type="string">#billing\\:customer_password/item>-->
+                                                                <!--</item>-->
+                                                            <!--</item>-->
                                                         </item>
                                                     </item>
                                                 </item>
