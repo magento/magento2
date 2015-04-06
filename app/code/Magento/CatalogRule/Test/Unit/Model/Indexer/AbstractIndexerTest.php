@@ -74,7 +74,7 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\CatalogRule\CatalogRuleException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Could not rebuild index for empty products array
      *
      * @return void
@@ -85,7 +85,7 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @throws \Magento\CatalogRule\CatalogRuleException
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return void
      */
@@ -98,7 +98,7 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\CatalogRule\CatalogRuleException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Could not rebuild index for undefined product
      *
      * @return void
@@ -109,7 +109,7 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @throws \Magento\CatalogRule\CatalogRuleException
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @return void
      */

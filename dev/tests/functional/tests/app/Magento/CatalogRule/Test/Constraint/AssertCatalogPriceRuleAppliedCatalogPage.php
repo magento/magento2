@@ -44,11 +44,10 @@ class AssertCatalogPriceRuleAppliedCatalogPage extends AbstractConstraint
         $cmsIndexPage->open();
         foreach ($products as $key => $product) {
             $categoryName = $product->getCategoryIds()[0];
-            $productName = $product->getName();
             $cmsIndexPage->getTopmenu()->selectCategoryByName($categoryName);
-            $productPriceBlock = $catalogCategoryViewPage->getListProductBlock()->getProductPriceBlock($productName);
-            $actualPrice['regular'] = $productPriceBlock->getRegularPrice();
-            $actualPrice['special'] = $productPriceBlock->getSpecialPrice();
+            $priceBlock = $catalogCategoryViewPage->getListProductBlock()->getProductItem($product)->getPriceBlock();
+            $actualPrice['regular'] = $priceBlock->getOldPrice();
+            $actualPrice['special'] = $priceBlock->getSpecialPrice();
             $actualPrice['discount_amount'] = $actualPrice['regular'] - $actualPrice['special'];
             $diff = $this->verifyData($actualPrice, $productPrice[$key]);
             \PHPUnit_Framework_Assert::assertTrue(

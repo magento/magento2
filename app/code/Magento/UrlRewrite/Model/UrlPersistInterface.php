@@ -15,7 +15,7 @@ interface UrlPersistInterface
      *
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return void
-     * @throws \Magento\UrlRewrite\Model\Storage\DuplicateEntryException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function replace(array $urls);
 

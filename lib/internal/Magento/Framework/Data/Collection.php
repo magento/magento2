@@ -164,13 +164,13 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param string|array $field
      * @param string|int|array $condition
-     * @throws \Magento\Framework\Exception if some error in the input could be detected.
+     * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addFieldToFilter($field, $condition)
     {
-        throw new \Magento\Framework\Exception('Not implemented');
+        throw new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Not implemented'));
     }
 
     /**

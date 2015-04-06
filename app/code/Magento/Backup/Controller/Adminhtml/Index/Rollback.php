@@ -44,7 +44,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
             }
 
             if (!$backup->getTime()) {
-                throw new \Magento\Framework\Backup\Exception\CantLoadSnapshot();
+                throw new \Magento\Framework\Backup\Exception\CantLoadSnapshot(__('Can\'t load snapshot archive'));
             }
 
             $type = $backup->getType();

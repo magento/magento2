@@ -86,7 +86,8 @@ class EmailTest extends \PHPUnit_Framework_TestCase
                 'getObjectManager',
                 'getSession',
                 'getActionFlag',
-                'getHelper'
+                'getHelper',
+                'getResultRedirectFactory'
             ],
             [],
             '',
@@ -120,34 +121,22 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
+        $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
+        $this->context->expects($this->once())->method('getResponse')->willReturn($this->response);
+        $this->context->expects($this->once())->method('getObjectManager')->willReturn($this->objectManager);
+        $this->context->expects($this->once())->method('getSession')->willReturn($this->session);
+        $this->context->expects($this->once())->method('getActionFlag')->willReturn($this->actionFlag);
+        $this->context->expects($this->once())->method('getHelper')->willReturn($this->helper);
         $this->context->expects($this->once())
-            ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManager));
-        $this->context->expects($this->once())
-            ->method('getRequest')
-            ->will($this->returnValue($this->request));
-        $this->context->expects($this->once())
-            ->method('getResponse')
-            ->will($this->returnValue($this->response));
-        $this->context->expects($this->once())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManager));
-        $this->context->expects($this->once())
-            ->method('getSession')
-            ->will($this->returnValue($this->session));
-        $this->context->expects($this->once())
-            ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlag));
-        $this->context->expects($this->once())
-            ->method('getHelper')
-            ->will($this->returnValue($this->helper));
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactoryMock);
         $this->creditmemoEmail = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email',
             [
                 'context' => $this->context,
                 'request' => $this->request,
                 'response' => $this->response,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
     }
