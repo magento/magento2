@@ -241,18 +241,14 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     /**
      * Get select count sql
      *
-     * @return string
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {
-        $countSelect = clone $this->getSelect();
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-        $countSelect->resetJoinLeft();
-        $countSelect->columns("COUNT(DISTINCT main_table.entity_id)");
+        $countSelect = clone $this->prepareActiveCartItems();
+        $countSelect->reset(\Zend_Db_Select::COLUMNS)
+            ->reset(\Zend_Db_Select::GROUP)
+            ->columns('COUNT(DISTINCT quote_items.product_id)');
         return $countSelect;
     }
 
