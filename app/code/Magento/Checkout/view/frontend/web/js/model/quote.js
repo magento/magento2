@@ -15,13 +15,7 @@ define(
         var currencySymbol = window.currencySymbol;
         var selectedShippingMethod = ko.observable(window.selectedShippingMethod);
         var storeCode = window.storeCode;
-        var totals = ko.observable(
-            {
-                'subtotal': quoteData.subtotal,
-                'subtotal_with_discount': quoteData.subtotal_with_discount,
-                'grandtotal': quoteData.grandtotal
-            }
-        );
+        var totals = ko.observable({});
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
