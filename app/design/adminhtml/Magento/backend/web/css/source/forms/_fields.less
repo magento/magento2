@@ -132,7 +132,6 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
-        // No z-index here please (in ui dialogs then not works!)
     }
 
     &[data-config-scope] {
@@ -221,6 +220,11 @@
             }
         }
     }
+}
+
+//  Field containing value (like price or something else)
+.admin__field-value {
+    padding-top: @field-option__padding-top;
 }
 
 //

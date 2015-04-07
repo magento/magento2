@@ -170,32 +170,34 @@
             }
         }
     }
-    .action-default {
-        &:extend(.abs-action-reset all);
-        &:extend(.abs-icon all);
-        display: inline-block;
-        font-size: @page-order-sidebar__font-size + 0.1rem;
-        padding-top: @page-order-sidebar__margin-small;
-        vertical-align: middle;
-        &:after {
-            color: @page-order-sidebar__color;
-        }
-        > span {
-            &:extend(.abs-visually-hidden all);
-        }
-        &.add {
+    .col-actions {
+        .action-default {
+            &:extend(.abs-action-reset all);
+            &:extend(.abs-icon all);
+            display: inline-block;
+            font-size: @page-order-sidebar__font-size + 0.1rem;
+            padding-top: @page-order-sidebar__margin-small;
+            vertical-align: middle;
             &:after {
-                content: @page-order-icon-plus__content;
+                color: @page-order-sidebar__color;
             }
-        }
-        &.delete {
-            &:after {
-                content: @page-order-icon-remove__content;
+            > span {
+                &:extend(.abs-visually-hidden all);
             }
-        }
-        &:hover {
-            &:after {
-                color: @page-order-icon-plus__hover__color;
+            &.add {
+                &:after {
+                    content: @page-order-icon-plus__content;
+                }
+            }
+            &.delete {
+                &:after {
+                    content: @page-order-icon-remove__content;
+                }
+            }
+            &:hover {
+                &:after {
+                    color: @page-order-icon-plus__hover__color;
+                }
             }
         }
     }
@@ -417,6 +419,10 @@
         float: none;
         font-size: @font-size__base;
         margin: 0 0 @page-order-sidebar__margin;
+        .admin__field-label {
+            display: block;
+            text-align: left;
+        }
     }
     .customer-activity-title {
         border-bottom: 1px solid @page-order-sidebar__border-color;
@@ -494,6 +500,10 @@
             margin: 0 0 @page-order-sidebar__margin-small;
             max-height: 17rem;
             overflow: auto;
+            position: relative;
+        }
+        .admin__field-option {
+            padding-top: 0;
         }
     }
     .create-order-sidebar-label {

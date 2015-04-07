@@ -78,6 +78,7 @@ require(['prototype'], function(){
             <?php endif; ?>
         <?php endif; ?>
         <div class="input-box" <?php echo $_fileExists ? 'style="display:none"' : '' ?>>
+            <!-- ToDo UI: add appropriate file class when z-index issue in ui dialog will be resolved  -->
             <input type="file" name="<?php echo $_fileName; ?>" class="product-custom-option<?php echo $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?php echo $block->getCurrencyPrice($_option->getPrice(true)) ?>" <?php echo $_fileExists ? 'disabled="disabled"' : '' ?>/>
             <input type="hidden" name="<?php echo $_fieldNameAction; ?>" value="<?php echo $_fieldValueAction; ?>" />
 
