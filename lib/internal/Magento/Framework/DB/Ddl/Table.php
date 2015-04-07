@@ -428,23 +428,12 @@ class Table
                 $onDelete = self::ACTION_NO_ACTION;
         }
 
-        switch ($onUpdate) {
-            case self::ACTION_CASCADE:
-            case self::ACTION_RESTRICT:
-            case self::ACTION_SET_DEFAULT:
-            case self::ACTION_SET_NULL:
-                break;
-            default:
-                $onUpdate = self::ACTION_NO_ACTION;
-        }
-
         $this->_foreignKeys[$upperName] = [
             'FK_NAME' => $fkName,
             'COLUMN_NAME' => $column,
             'REF_TABLE_NAME' => $refTable,
             'REF_COLUMN_NAME' => $refColumn,
-            'ON_DELETE' => $onDelete,
-            'ON_UPDATE' => $onUpdate,
+            'ON_DELETE' => $onDelete
         ];
 
         return $this;
