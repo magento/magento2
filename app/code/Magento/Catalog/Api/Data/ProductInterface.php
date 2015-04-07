@@ -253,19 +253,55 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     public function getOptions();
 
     /**
+     * Set list of product options
+     *
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
      */
     public function setOptions(array $options = null);
 
     /**
+     * Get media gallery entries
+     *
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]|null
      */
     public function getMediaGalleryEntries();
 
     /**
+     * Set media gallery entries
+     *
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
      * @return $this
      */
     public function setMediaGalleryEntries(array $mediaGalleryEntries = null);
+
+    /**
+     * Gets list of product group prices
+     *
+     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
+     */
+    public function getGroupPrices();
+
+    /**
+     * Sets list of product group prices
+     *
+     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterface[] $groupPrices
+     * @return $this
+     */
+    public function setGroupPrices(array $groupPrices = null);
+
+    /**
+     * Gets list of product tier prices
+     *
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null
+     */
+    public function getTierPrices();
+
+    /**
+     * Sets list of product tier prices
+     *
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
+     * @return $this
+     */
+    public function setTierPrices(array $tierPrices = null);
 }

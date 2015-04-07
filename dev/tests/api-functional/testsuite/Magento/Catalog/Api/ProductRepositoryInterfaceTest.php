@@ -15,6 +15,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products';
 
+    const KEY_GROUP_PRICES = 'group_prices';
+    const KEY_TIER_PRICES = 'tier_prices';
+
     private $productData = [
         [
             ProductInterface::SKU => 'simple',
@@ -41,6 +44,24 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
             $this->assertEquals($productData[$key], $response[$key]);
         }
+    }
+
+    protected function getProduct($sku)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+
+        $response = $this->_webApiCall($serviceInfo, ['sku' => $sku]);
+        return $response;
     }
 
     protected function getProduct($sku)
@@ -447,6 +468,30 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         return $response;
     }
 
+    protected function updateProduct($product)
+    {
+        $sku = $product[ProductInterface::SKU];
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            $product[ProductInterface::SKU] = null;
+        }
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $requestData = ['product' => $product];
+        $response =  $this->_webApiCall($serviceInfo, $requestData);
+        return $response;
+    }
+
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
@@ -619,5 +664,161 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         return (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
             $this->_webApiCall($serviceInfo, ['sku' => $sku]) : $this->_webApiCall($serviceInfo);
+    }
+
+    public function testGroupPrices()
+    {
+        // create a product with group prices
+        $custGroup1 = \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
+        $custGroup2 = \Magento\Customer\Model\Group::CUST_GROUP_ALL;
+        $productData = $this->getSimpleProductData();
+        $productData[self::KEY_GROUP_PRICES] = [
+            [
+                'customer_group_id' => $custGroup1,
+                'value' => 3.14
+            ],
+            [
+                'customer_group_id' => $custGroup2,
+                'value' => 3.45,
+            ]
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
+        $groupPrices = $response[self::KEY_GROUP_PRICES];
+        $this->assertNotNull($groupPrices, "CREATE: expected to have group prices");
+        $this->assertCount(2, $groupPrices, "CREATE: expected to have 2 'group_prices' objects");
+        $this->assertEquals(3.14, $groupPrices[0]['value']);
+        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
+        $this->assertEquals(3.45, $groupPrices[1]['value']);
+        $this->assertEquals($custGroup2, $groupPrices[1]['customer_group_id']);
+
+        // update the product's group prices: update 1st group price, (delete the 2nd group price), add a new one
+        $custGroup3 = 1;
+        $groupPrices[0]['value'] = 3.33;
+        $groupPrices[1] = [
+            'customer_group_id' => $custGroup3,
+            'value' => 2.10,
+        ];
+        $response[self::KEY_GROUP_PRICES] = $groupPrices;
+        $response = $this->updateProduct($response);
+
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
+        $groupPrices = $response[self::KEY_GROUP_PRICES];
+        $this->assertNotNull($groupPrices, "UPDATE 1: expected to have group prices");
+        $this->assertCount(2, $groupPrices, "UPDATE 1: expected to have 2 'group_prices' objects");
+        $this->assertEquals(3.33, $groupPrices[0]['value']);
+        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
+        $this->assertEquals(2.10, $groupPrices[1]['value']);
+        $this->assertEquals($custGroup3, $groupPrices[1]['customer_group_id']);
+
+        // update the product without any mention of group prices; no change expected for group pricing
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        unset($response[self::KEY_GROUP_PRICES]);
+        $response = $this->updateProduct($response);
+
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
+        $groupPrices = $response[self::KEY_GROUP_PRICES];
+        $this->assertNotNull($groupPrices, "UPDATE 2: expected to have group prices");
+        $this->assertCount(2, $groupPrices, "UPDATE 2: expected to have 2 'group_prices' objects");
+        $this->assertEquals(3.33, $groupPrices[0]['value']);
+        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
+        $this->assertEquals(2.10, $groupPrices[1]['value']);
+        $this->assertEquals($custGroup3, $groupPrices[1]['customer_group_id']);
+
+        // update the product with empty group prices; expect to have the existing group prices removed
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response[self::KEY_GROUP_PRICES] = [];
+        $response = $this->updateProduct($response);
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response, "expected to have the 'group_prices' key");
+        $this->assertEmpty($response[self::KEY_GROUP_PRICES], "expected to have an empty array of 'group_prices'");
+
+        // delete the product with group prices; expect that all goes well
+        $response = $this->deleteProduct($productData[ProductInterface::SKU]);
+        $this->assertTrue($response);
+    }
+
+    public function testTierPrices()
+    {
+        // create a product with tier prices
+        $custGroup1 = \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
+        $custGroup2 = \Magento\Customer\Model\Group::CUST_GROUP_ALL;
+        $productData = $this->getSimpleProductData();
+        $productData[self::KEY_TIER_PRICES] = [
+            [
+                'customer_group_id' => $custGroup1,
+                'value' => 3.14,
+                'qty' => 5,
+            ],
+            [
+                'customer_group_id' => $custGroup2,
+                'value' => 3.45,
+                'qty' => 10,
+            ]
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+
+        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
+        $tierPrices = $response[self::KEY_TIER_PRICES];
+        $this->assertNotNull($tierPrices, "CREATE: expected to have tier prices");
+        $this->assertCount(2, $tierPrices, "CREATE: expected to have 2 'tier_prices' objects");
+        $this->assertEquals(3.14, $tierPrices[0]['value']);
+        $this->assertEquals(5, $tierPrices[0]['qty']);
+        $this->assertEquals($custGroup1, $tierPrices[0]['customer_group_id']);
+        $this->assertEquals(3.45, $tierPrices[1]['value']);
+        $this->assertEquals(10, $tierPrices[1]['qty']);
+        $this->assertEquals($custGroup2, $tierPrices[1]['customer_group_id']);
+
+        // update the product's tier prices: update 1st tier price, (delete the 2nd tier price), add a new one
+        $custGroup3 = 1;
+        $tierPrices[0]['value'] = 3.33;
+        $tierPrices[0]['qty'] = 6;
+        $tierPrices[1] = [
+            'customer_group_id' => $custGroup3,
+            'value' => 2.10,
+            'qty' => 12,
+        ];
+        $response[self::KEY_TIER_PRICES] = $tierPrices;
+        $response = $this->updateProduct($response);
+
+        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
+        $tierPrices = $response[self::KEY_TIER_PRICES];
+        $this->assertNotNull($tierPrices, "UPDATE 1: expected to have tier prices");
+        $this->assertCount(2, $tierPrices, "UPDATE 1: expected to have 2 'tier_prices' objects");
+        $this->assertEquals(3.33, $tierPrices[0]['value']);
+        $this->assertEquals(6, $tierPrices[0]['qty']);
+        $this->assertEquals($custGroup1, $tierPrices[0]['customer_group_id']);
+        $this->assertEquals(2.10, $tierPrices[1]['value']);
+        $this->assertEquals(12, $tierPrices[1]['qty']);
+        $this->assertEquals($custGroup3, $tierPrices[1]['customer_group_id']);
+
+        // update the product without any mention of tier prices; no change expected for tier pricing
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        unset($response[self::KEY_TIER_PRICES]);
+        $response = $this->updateProduct($response);
+
+        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
+        $tierPrices = $response[self::KEY_TIER_PRICES];
+        $this->assertNotNull($tierPrices, "UPDATE 2: expected to have tier prices");
+        $this->assertCount(2, $tierPrices, "UPDATE 2: expected to have 2 'tier_prices' objects");
+        $this->assertEquals(3.33, $tierPrices[0]['value']);
+        $this->assertEquals(6, $tierPrices[0]['qty']);
+        $this->assertEquals($custGroup1, $tierPrices[0]['customer_group_id']);
+        $this->assertEquals(2.10, $tierPrices[1]['value']);
+        $this->assertEquals(12, $tierPrices[1]['qty']);
+        $this->assertEquals($custGroup3, $tierPrices[1]['customer_group_id']);
+
+        // update the product with empty tier prices; expect to have the existing tier prices removed
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response[self::KEY_TIER_PRICES] = [];
+        $response = $this->updateProduct($response);
+        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response, "expected to have the 'tier_prices' key");
+        $this->assertEmpty($response[self::KEY_TIER_PRICES], "expected to have an empty array of 'tier_prices'");
+
+        // delete the product with tier prices; expect that all goes well
+        $response = $this->deleteProduct($productData[ProductInterface::SKU]);
+        $this->assertTrue($response);
     }
 }

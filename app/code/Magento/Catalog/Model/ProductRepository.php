@@ -563,8 +563,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setProductOptions($productOptions);
                 $product->setCanSaveCustomOptions(true);
             }
-            $product->setData('group_price', $groupPrices);
-            $product->setData('tier_price', $tierPrices);
+            if ($groupPrices !== null) {
+                $product->setData('group_price', $groupPrices);
+            }
+            if ($tierPrices !== null) {
+                $product->setData('tier_price', $tierPrices);
+            }
             $this->resourceModel->save($product);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $exception) {
             throw \Magento\Framework\Exception\InputException::invalidFieldValue(
