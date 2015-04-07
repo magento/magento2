@@ -38,49 +38,39 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
     protected $model = 'Magento\Framework\Model\AbstractModel';
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
-    ) {
-        $this->resultRedirectFactory = $resultRedirectFactory;
-        parent::__construct($context);
-    }
-
-    /**
      * Execute action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
         $data = $this->getRequest()->getParam('massaction', '[]');
         $data = json_decode($data, true);
-        $resultRedirect = $this->resultRedirectFactory->create();
 
-        try {
-            if (isset($data['all_selected']) && $data['all_selected'] === true) {
-                if (!empty($data['excluded'])) {
-                    $this->excludedDelete($data['excluded']);
-                } else {
-                    $this->deleteAll();
-                }
-            } elseif (!empty($data['selected'])) {
-                $this->selectedDelete($data['selected']);
+        if (isset($data['all_selected']) && $data['all_selected'] === true) {
+            if (!empty($data['excluded'])) {
+                $this->excludedDelete($data['excluded']);
             } else {
-                $this->messageManager->addError(__('Please select item(s).'));
+                $this->deleteAll();
             }
-        } catch (\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
+        } elseif (!empty($data['selected'])) {
+            $this->selectedDelete($data['selected']);
+        } else {
+            $this->messageManager->addError(__('Please select item(s).'));
         }
 
+        return $this->getDefaultResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultResult()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
         return $resultRedirect->setPath(static::REDIRECT_URL);
     }
 

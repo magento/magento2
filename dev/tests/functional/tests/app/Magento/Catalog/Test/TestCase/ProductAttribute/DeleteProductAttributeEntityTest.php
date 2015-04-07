@@ -32,6 +32,7 @@ class DeleteProductAttributeEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'MX';
+    const STABLE = 'no';
     /* end tags */
 
     /**

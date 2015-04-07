@@ -58,16 +58,11 @@ class ViewedProductsReportEntityTest extends Injectable
     protected $browser;
 
     /**
-     * Delete all products
+     * Catalog product index page
      *
-     * @param CatalogProductIndex $catalogProductIndexPage
-     * @return void
+     * @var CatalogProductIndex
      */
-    public function __prepare(CatalogProductIndex $catalogProductIndexPage)
-    {
-        $catalogProductIndexPage->open();
-        $catalogProductIndexPage->getProductGrid()->massaction([], 'Delete', true, 'Select All');
-    }
+    protected $catalogProductIndexPage;
 
     /**
      * Inject pages
@@ -75,16 +70,19 @@ class ViewedProductsReportEntityTest extends Injectable
      * @param ProductReportView $productReportView
      * @param FixtureFactory $fixtureFactory
      * @param BrowserInterface $browser
+     * @param CatalogProductIndex $catalogProductIndexPage
      * @return void
      */
     public function __inject(
         ProductReportView $productReportView,
         FixtureFactory $fixtureFactory,
-        BrowserInterface $browser
+        BrowserInterface $browser,
+        CatalogProductIndex $catalogProductIndexPage
     ) {
         $this->productReportView = $productReportView;
         $this->fixtureFactory = $fixtureFactory;
         $this->browser = $browser;
+        $this->catalogProductIndexPage = $catalogProductIndexPage;
     }
 
     /**
@@ -98,6 +96,8 @@ class ViewedProductsReportEntityTest extends Injectable
     public function test($products, array $viewsReport, $total)
     {
         // Preconditions
+        $this->catalogProductIndexPage->open();
+        $this->catalogProductIndexPage->getProductGrid()->massaction([], 'Delete', true, 'Select All');
         $productsList = $this->prepareProducts($products);
         $this->openProducts($productsList, $total);
         $this->productReportView->open();

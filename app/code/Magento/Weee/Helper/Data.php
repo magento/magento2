@@ -400,12 +400,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\Object[] $attributes Result from getProductWeeeAttributes()
      * @return float
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAmountInclTaxes($attributes)
     {
         if (!is_array($attributes)) {
-            throw new \Magento\Framework\Exception('$attributes must be an array');
+            throw new \Magento\Framework\Exception\LocalizedException(__('$attributes must be an array'));
         }
 
         $amount = 0;

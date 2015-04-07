@@ -334,7 +334,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)
-            ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception('123'));
+            ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception(__('123')));
         $this->productMock->expects($this->never())->method('getId');
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())

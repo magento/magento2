@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Session\SaveHandler;
 
+use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Phrase;
+
 /**
  * Data base session save handler
  */
@@ -40,15 +43,15 @@ class DbTable extends \SessionHandler
      * Check DB connection
      *
      * @return void
-     * @throws \Magento\Framework\Session\SaveHandlerException
+     * @throws \Magento\Framework\Exception\SessionException
      */
     protected function checkConnection()
     {
         if (!$this->_write) {
-            throw new \Magento\Framework\Session\SaveHandlerException('Write DB connection is not available');
+            throw new SessionException(new Phrase('Write DB connection is not available'));
         }
         if (!$this->_write->isTableExists($this->_sessionTable)) {
-            throw new \Magento\Framework\Session\SaveHandlerException('DB storage table does not exist');
+            throw new SessionException(new Phrase('DB storage table does not exist'));
         }
     }
 

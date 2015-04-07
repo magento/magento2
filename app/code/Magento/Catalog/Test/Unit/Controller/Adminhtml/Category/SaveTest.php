@@ -94,7 +94,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'getObjectManager',
                 'getEventManager',
                 'getResponse',
-                'getMessageManager'
+                'getMessageManager',
+                'getResultRedirectFactory'
             ],
             [],
             '',
@@ -165,30 +166,20 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ['addSuccess', 'getMessages']
         );
 
+        $this->contextMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
+        $this->contextMock->expects($this->any())->method('getEventManager')->willReturn($this->eventManagerMock);
+        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
+        $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->any())
-            ->method('getTitle')
-            ->will($this->returnValue($this->titleMock));
-        $this->contextMock->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
-        $this->contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
-        $this->contextMock->expects($this->any())
-            ->method('getEventManager')
-            ->will($this->returnValue($this->eventManagerMock));
-        $this->contextMock->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
-        $this->contextMock->expects($this->any())
-            ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactoryMock);
 
         $this->save = $this->objectManager->getObject(
             'Magento\Catalog\Controller\Adminhtml\Category\Save',
             [
                 'context' => $this->contextMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
                 'resultRawFactory' => $this->resultRawFactoryMock,
                 'resultJsonFactory' => $this->resultJsonFactoryMock,
                 'layoutFactory' => $this->layoutFactoryMock

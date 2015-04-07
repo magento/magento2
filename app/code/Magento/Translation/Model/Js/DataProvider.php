@@ -65,7 +65,7 @@ class DataProvider implements DataProviderInterface
      * @param string $themePath
      * @return string[]
      * @throws \Exception
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getData($themePath)
     {

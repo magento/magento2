@@ -93,12 +93,14 @@ class RefreshStatisticsTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())->method('getResponse')->willReturn($this->response);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
         $this->context->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
+        $this->context->expects($this->once())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactory);
 
         $this->refreshStatisticsController = $objectManagerHelper->getObject(
             'Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics',
             [
                 'context' => $this->context,
-                'resultRedirectFactory' => $this->resultRedirectFactory,
                 'reportTypes' => $reportTypes
             ]
         );

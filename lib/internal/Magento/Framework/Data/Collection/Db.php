@@ -159,12 +159,14 @@ class Db extends \Magento\Framework\Data\Collection
      *
      * @param \Zend_Db_Adapter_Abstract $conn
      * @return $this
-     * @throws \Zend_Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setConnection($conn)
     {
         if (!$conn instanceof \Zend_Db_Adapter_Abstract) {
-            throw new \Zend_Exception('dbModel read resource does not implement \Zend_Db_Adapter_Abstract');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('dbModel read resource does not implement \Zend_Db_Adapter_Abstract')
+            );
         }
 
         $this->_conn = $conn;

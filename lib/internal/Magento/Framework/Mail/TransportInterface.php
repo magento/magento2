@@ -13,7 +13,7 @@ interface TransportInterface
      * Send a mail using this transport
      *
      * @return void
-     * @throws \Magento\Framework\Mail\Exception
+     * @throws \Magento\Framework\Exception\MailException
      */
     public function sendMessage();
 }

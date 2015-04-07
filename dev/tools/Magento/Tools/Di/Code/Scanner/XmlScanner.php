@@ -68,7 +68,7 @@ class XmlScanner implements ScannerInterface
             $isClassExists = false;
             try {
                 $isClassExists = class_exists($className);
-            } catch (\Magento\Framework\Exception $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
             }
             if (false === $isClassExists) {
                 if (class_exists($entityName) || interface_exists($entityName)) {

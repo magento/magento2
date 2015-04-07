@@ -30,7 +30,6 @@ class Add extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
@@ -40,7 +39,6 @@ class Add extends \Magento\Checkout\Controller\Cart
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         ProductRepositoryInterface $productRepository
     ) {
         parent::__construct(
@@ -49,8 +47,7 @@ class Add extends \Magento\Checkout\Controller\Cart
             $checkoutSession,
             $storeManager,
             $formKeyValidator,
-            $cart,
-            $resultRedirectFactory
+            $cart
         );
         $this->productRepository = $productRepository;
     }
