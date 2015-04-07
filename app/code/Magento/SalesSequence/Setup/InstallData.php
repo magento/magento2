@@ -47,7 +47,7 @@ class InstallData implements InstallDataInterface
         Builder $sequenceBuilder,
         SequenceConfig $sequenceConfig
     ) {
-        $this->salesSetupFactory = $entityPool;
+        $this->entityPool = $entityPool;
         $this->sequenceBuilder = $sequenceBuilder;
         $this->sequenceConfig = $sequenceConfig;
     }

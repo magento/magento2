@@ -40,6 +40,6 @@
         <observer name="sales_grid_order_creditmemo_async_insert" instance="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" method="asyncInsert" />
     </event>
     <event name="store_add">
-        <observer name="magento_sequence" instance="Magento\Sales\Model\Observer\CreateSequence" method="execute" />
+        <observer name="magento_sequence" instance="Magento\SalesSequence\Model\Observer" method="execute" />
     </event>
 </config>
