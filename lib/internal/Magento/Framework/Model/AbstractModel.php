@@ -714,4 +714,14 @@ abstract class AbstractModel extends \Magento\Framework\Object
         }
         return $this;
     }
+
+    /**
+     * Model StoredData getter
+     *
+     * @return array
+     */
+    public function getStoredData()
+    {
+        return $this->storedData;
+    }
 }

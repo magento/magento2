@@ -419,7 +419,10 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                     if ($this->_isPkAutoIncrement) {
                         $data = $this->_prepareDataForSave($object);
                         unset($data[$this->getIdFieldName()]);
-                        $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                        $data = $this->prepareDataForUpdate($data, $object->getStoredData());
+                        if (!empty($data)) {
+                            $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                        }
                     } else {
                         $select = $this->_getWriteAdapter()->select()->from(
                             $this->getMainTable(),
@@ -430,6 +433,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                         if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
                             $data = $this->_prepareDataForSave($object);
                             unset($data[$this->getIdFieldName()]);
+                            $data = $this->prepareDataForUpdate($data, $object->getStoredData());
                             if (!empty($data)) {
                                 $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
                             }
@@ -769,5 +773,22 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             return $checksum[$table];
         }
         return $checksum;
+    }
+
+    /**
+     * Get the array of data fields that was changed or added
+     *
+     * @param array $data
+     * @param array $storedData
+     * @return array
+     */
+    protected function prepareDataForUpdate($data, $storedData)
+    {
+        foreach ($storedData as $key => $value) {
+            if(array_key_exists($key, $data) && $data[$key] == $value) {
+                unset($data[$key]);
+            }
+        }
+        return $data;
     }
 }
