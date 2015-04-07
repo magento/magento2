@@ -5,14 +5,28 @@
 define([], function () {
     'use strict';
 
-    var sections = {};
+    var baseUrls, sections;
 
     return {
-        get: function (actionName) {
-            return sections[actionName];
+        getAffectedSections: function (url) {
+            var route = url;
+            for (var key in baseUrls) {
+                var route = url.replace(baseUrls[key], '');
+                if (route != url) {
+                    break;
+                }
+            }
+
+            route = route.replace(/^\/?index.php\/?/) + '/';
+            for (var key in sections) {
+                if (route.indexOf(key + '/') === 0) {
+                    return sections[key];
+                }
+            }
         },
-        sectionConfig: function(config) {
-            sections = config
+        'Magento_Customer/js/section-config': function(options) {
+            baseUrls = options.baseUrls;
+            sections = options.sections;
         }
     };
 });

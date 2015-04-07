@@ -2,11 +2,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi'], function ($, _, ko, sectionConfig) {
+define([
+    'jquery',
+    'underscore',
+    'ko',
+    'Magento_Customer/js/section-config',
+    'jquery/jquery-storageapi'
+], function ($, _, ko, sectionConfig) {
     'use strict';
 
+    var options;
     var ns = $.initNamespaceStorage('mage-cache-storage');
     var storage = ns.localStorage;
+
     storage.invalidate_sections = 'invalidate_sections';
     storage.getInvalidateSections = function() {
         return this.get(this.invalidate_sections) || [];
@@ -20,15 +28,9 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
         storage.removeAll();
     }
 
-    var canonize = function (url) {
-        var a = document.createElement('a');
-        a.href = url;
-        return a.pathname.replace(/^\/(?:index.php\/)?|\/$/ig,'');
-    };
-
     $(document).on('ajaxComplete', function (event, xhr, settings) {
         if (settings.type.match(/post/i)) {
-            var sections = sectionConfig.get(canonize(settings.url));
+            var sections = sectionConfig.getAffectedSections(settings.url);
             if (sections) {
                 customerData.reload(sections);
             }
@@ -37,7 +39,7 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
 
     $(document).on('submit', function (event) {
         if (event.target.method.match(/post/i)) {
-            var sections = sectionConfig.get(canonize(event.target.action));
+            var sections = sectionConfig.getAffectedSections(event.target.action);
             if (sections) {
                 customerData.invalidate(sections);
             }
@@ -54,7 +56,7 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
 
     var getFromServer = function (sectionsName) {
         var parameters = _.isArray(sectionsName) ? {sections: sectionsName.join(',')} : [];
-        return $.getJSON('/customer/section/load/', parameters).fail(function(jqXHR) {
+        return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
             throw new Error(jqXHR.responseJSON.message);
         });
     };
@@ -118,16 +120,18 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
             return buffer.get(sectionName);
         },
         reload: function (sectionNames) {
-            getFromServer(sectionNames == '*' ? buffer.keys() : sectionNames).done(function (sections) {
+            getFromServer(sectionNames).done(function (sections) {
                 buffer.update(sections);
             });
         },
         invalidate: function (sectionNames) {
             buffer.remove(sectionNames == '*' ? buffer.keys() : sectionNames);
+        },
+        'Magento_Customer/js/customer-data': function (settings) {
+            options = settings;
+            customerData.init();
         }
     };
-
-    customerData.init();
 
     return customerData;
 });
