@@ -256,9 +256,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'name' => $this->_getFieldName('message'),
                 'label' => __('Message'),
-                'class' => 'admin__control-textarea',
-                'rows' => '5',
-                'cols' => '20'
+                'class' => 'admin__control-textarea'
             ]
         );
         return $this;

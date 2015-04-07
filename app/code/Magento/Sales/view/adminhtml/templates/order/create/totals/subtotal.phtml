@@ -24,7 +24,7 @@
     <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <?php echo __('Subtotal (Incl. Tax)') ?>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="amount">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <?php echo $block->formatPrice($block->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>

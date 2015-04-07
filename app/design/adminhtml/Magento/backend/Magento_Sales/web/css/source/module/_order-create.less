@@ -399,11 +399,24 @@
             font-weight: @font-weight__bold;
         }
     }
+
+    > .giftmessage-order-create {
+        float: left;
+        #mix-grid .width(6, 12);
+    }
 }
 
 .giftmessage-order-create {
-    float: left;
-    #mix-grid .width(6,12);
+    .field-sender {
+        margin-top: 1.4rem;
+    }
+    .admin__field { // ToDo UI: remove when /app/code/Magento/Backend/view/adminhtml/templates/widget/form.phtml refactored (the wrapping div removed)
+        margin-bottom: 3rem;
+        position: relative;
+        + .admin__field {
+            margin-top: 1.5rem;
+        }
+    }
 }
 
 //
@@ -526,39 +539,66 @@
 //  Totals
 //  ---------------------------------------------
 
-//  ToDo UI: review the collapsible block
-.summary-total {
-    .summary-collapse {
-        cursor: pointer;
-        display: inline-block;
-        &:before {
-            @iconsize: 16px;
-
-            background: #f2ebde;
-            border: 1px solid #ada89e;
-            border-radius: 2px;
-            color: #816063;
-            content: '\e02d';
-            display: inline-block;
-            font-family: 'MUI-Icons';
-            font-size: @iconsize;
-            -webkit-font-smoothing: antialiased;
-            font-style: normal;
-            font-weight: normal;
-            height: @iconsize;
-            line-height: @iconsize;
-            margin-right: 7px;
-            overflow: hidden;
-            speak: none;
-            text-indent: 0;
-            vertical-align: top;
-            width: @iconsize;
-        }
-        &:hover:before {
-            background: #cac3b4;
-        }
+.admin__table-secondary {
+    width: 100%;
+    td {
+        padding: .7rem @indent__s;
     }
-    &.show-details .summary-collapse:before {
-        content: '\e03a';
+    tr:nth-child(2n+1) td {
+        background-color: @color-white-fog2;
+    }
+    .admin__total-amount {
+        text-align: right;
+    }
+    tr:last-child td {
+        border-bottom: 1px solid @color-gray80;
+        padding-bottom: @indent__s;
     }
 }
+
+.order-totals-actions {
+    margin-top: @indent__s;
+    .actions {
+        margin-top: @indent__l;
+        text-align: right;
+    }
+    .action-default {
+        &:extend(.abs-action-l all);
+    }
+}
+
+//  ToDo UI: review the collapsible block
+//.order-subtotal {
+//    .summary-collapse {
+//        cursor: pointer;
+//        display: inline-block;
+//        &:before {
+//            @iconsize: 16px;
+//
+//            background: #f2ebde;
+//            border: 1px solid #ada89e;
+//            border-radius: 2px;
+//            color: #816063;
+//            content: '+';
+//            display: inline-block;
+//            font-size: @iconsize;
+//            -webkit-font-smoothing: antialiased;
+//            font-style: normal;
+//            font-weight: normal;
+//            height: @iconsize;
+//            line-height: @iconsize;
+//            margin-right: 7px;
+//            overflow: hidden;
+//            speak: none;
+//            text-indent: 0;
+//            vertical-align: top;
+//            width: @iconsize;
+//        }
+//        &:hover:before {
+//            background: #cac3b4;
+//        }
+//    }
+//    &.show-details .summary-collapse:before {
+//        content: '\e03a';
+//    }
+//}
