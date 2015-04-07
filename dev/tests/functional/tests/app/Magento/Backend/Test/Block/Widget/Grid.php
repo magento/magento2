@@ -32,7 +32,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $searchButton = '[title=Search][class*=action]';
+    protected $searchButton = '[data-action="grid-filter-apply"]';
 
     /**
      * Locator for 'Sort' link
@@ -137,7 +137,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $filterButton = '.action.filters-toggle';
+    protected $filterButton = '.filters > button';
 
     /**
      * Active class
