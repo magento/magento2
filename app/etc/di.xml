@@ -401,7 +401,7 @@
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -417,7 +417,7 @@
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
                 <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -441,7 +441,7 @@
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
                 <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -460,7 +460,7 @@
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
                 <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -477,7 +477,7 @@
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
                 <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -502,7 +502,7 @@
                 <item name="body" xsi:type="object">Magento\Framework\View\Page\Config\Generator\Body</item>
                 <item name="block" xsi:type="object">Magento\Framework\View\Layout\Generator\Block</item>
                 <item name="container" xsi:type="object">Magento\Framework\View\Layout\Generator\Container</item>
-                <item name="ui_component" xsi:type="object">Magento\Framework\View\Layout\Generator\UiComponent</item>
+                <item name="uiComponent" xsi:type="object">Magento\Framework\View\Layout\Generator\UiComponent</item>
             </argument>
         </arguments>
     </type>
@@ -513,7 +513,7 @@
                 <item name="body" xsi:type="object">Magento\Framework\View\Page\Config\Generator\Body</item>
                 <item name="block" xsi:type="object">Magento\Framework\View\Layout\Generator\Block</item>
                 <item name="container" xsi:type="object">Magento\Framework\View\Layout\Generator\Container</item>
-                <item name="ui_component" xsi:type="object">Magento\Framework\View\Layout\Generator\UiComponent</item>
+                <item name="uiComponent" xsi:type="object">Magento\Framework\View\Layout\Generator\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -1072,6 +1072,12 @@
                 <item name="xml" xsi:type="string"><![CDATA[/<block.*?class=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?>/sui]]></item>
                 <item name="serialized" xsi:type="string"><![CDATA[#(?P<string>s:\d+:"(?P<alias>[a-z]+[_a-z\d]*?/[a-z]+[_a-z\d]*?)")#sui]]></item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\FrontController">
+        <arguments>
+            <argument name="appState" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+            <argument name="messageManager" xsi:type="object">Magento\Framework\Message\ManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Webapi\Rest\Request\DeserializerFactory">

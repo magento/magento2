@@ -138,13 +138,15 @@ abstract class AbstractBackup implements BackupInterface
      * Set root directory of Magento installation
      *
      * @param string $rootDir
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function setRootDir($rootDir)
     {
         if (!is_dir($rootDir)) {
-            throw new \Magento\Framework\Exception('Bad root directory');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Bad root directory')
+            );
         }
 
         $this->_rootDir = $rootDir;

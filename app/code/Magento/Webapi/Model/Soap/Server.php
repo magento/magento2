@@ -86,7 +86,7 @@ class Server
     ) {
         if (!extension_loaded('soap')) {
             throw new \Magento\Framework\Webapi\Exception(
-                'SOAP extension is not loaded.',
+                __('SOAP extension is not loaded.'),
                 0,
                 \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
             );

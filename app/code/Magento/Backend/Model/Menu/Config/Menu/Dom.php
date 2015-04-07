@@ -15,7 +15,8 @@ class Dom extends \Magento\Framework\Config\Dom
      *
      * @param string $nodePath
      * @return \DOMElement|null
-     * @throws \Magento\Framework\Exception an exception is possible if original document contains multiple fixed nodes
+     * @throws \Magento\Framework\Exception\LocalizedException an exception is possible if original document contains
+     * multiple fixed nodes
      */
     protected function _getMatchedNode($nodePath)
     {

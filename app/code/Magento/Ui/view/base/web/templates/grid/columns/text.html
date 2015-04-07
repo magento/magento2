@@ -1,0 +1,15 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<th>
+    <!-- ko if: sortable -->
+        <a href="#" data-bind="text: label, css: sortClass, click: sort"></a>
+    <!-- /ko -->
+
+    <!-- ko ifnot: sortable -->
+        <span data-bind="text: label"></span>
+    <!-- /ko -->
+</th>

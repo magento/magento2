@@ -49,7 +49,7 @@ class Grid extends ParentGrid
      */
     protected $filters = [
         'title' => [
-            'selector' => '#title',
+            'selector' => '[name="params[filters][title]"]',
         ],
     ];
 

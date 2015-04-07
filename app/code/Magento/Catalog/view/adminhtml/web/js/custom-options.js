@@ -137,6 +137,8 @@ define([
 
                             var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 135;
                             $(this).closest('.ui-dialog').css('margin-top', topMargin);
+
+                            $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
                         },
                         close: function () {
                             $(this).closest('.ui-dialog').removeClass('ui-dialog-active');

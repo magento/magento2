@@ -43,6 +43,17 @@ class Redirect extends \Magento\Framework\Controller\Result\Redirect
     }
 
     /**
+     * Set referer url or dashboard if referer does not exist
+     *
+     * @return $this
+     */
+    public function setRefererOrBaseUrl()
+    {
+        $this->url = $this->redirect->getRedirectUrl($this->urlBuilder->getUrl($this->urlBuilder->getStartupPageUrl()));
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function render(App\ResponseInterface $response)

@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
+use Magento\Catalog\Test\Block\Product\Price;
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
@@ -20,6 +21,13 @@ class ProductItem extends Block
      * @var string
      */
     protected $link = 'a.product-item-link';
+
+    /**
+     * Locator for price box.
+     *
+     * @var string
+     */
+    protected $priceBox = '.price-box';
 
     /**
      * 'Add to Card' button.
@@ -59,7 +67,7 @@ class ProductItem extends Block
     }
 
     /**
-     * Checking that "Add to Card" button is visible
+     * Checking that "Add to Card" button is visible.
      *
      * @return bool
      */
@@ -76,5 +84,18 @@ class ProductItem extends Block
     public function clickAddToCart()
     {
         $this->_rootElement->find($this->addToCard, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Return price block.
+     *
+     * @return Price
+     */
+    public function getPriceBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Product\Price',
+            ['element' => $this->_rootElement->find($this->priceBox)]
+        );
     }
 }

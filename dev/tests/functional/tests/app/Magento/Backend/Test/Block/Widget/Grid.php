@@ -32,7 +32,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $searchButton = '[title=Search][class*=action]';
+    protected $searchButton = '[data-action="grid-filter-apply"]';
 
     /**
      * Locator for 'Sort' link
@@ -137,7 +137,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $filterButton = '.action.filters-toggle';
+    protected $filterButton = '.filters > button';
 
     /**
      * Active class
@@ -226,7 +226,7 @@ abstract class Grid extends Block
                     : null;
                 $this->_rootElement->find($selector, $strategy, $typifiedElement)->setValue($value);
             } else {
-                throw new \Exception('Such column is absent in the grid or not described yet.');
+                throw new \Exception("Column $key is absent in the grid or not described yet.");
             }
         }
     }

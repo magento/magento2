@@ -9,7 +9,7 @@ use Magento\Framework\Api\Code\Generator\SearchResults;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Code\Generator;
 use Magento\Framework\Code\Generator\Io;
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
@@ -96,6 +96,6 @@ try {
     } else {
         print "Can't generate class {$className}. This class either not generated entity, or it already exists.\n";
     }
-} catch (Exception $e) {
+} catch (LocalizedException $e) {
     print "Error! {$e->getMessage()}\n";
 }

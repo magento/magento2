@@ -7,8 +7,8 @@ define([
 ], function ($) {
     'use strict';
 
-    var selector    = '[data-role="spinner"]',
-        spinner     = $(selector);
+    var selector = '[data-role="spinner"]',
+        spinner = $(selector);
 
     return {
         show: function () {
@@ -22,5 +22,5 @@ define([
         get: function (id) {
             return $(selector + '[data-component="' + id + '"]');
         }
-    }
+    };
 });

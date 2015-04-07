@@ -123,28 +123,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
         $this->_cacheMock = $this->getMock('Magento\Framework\App\Cache\Type\Layout', [], [], '', false);
 
-        $configStructureMock->expects($this->any())->method('getElement')
-            ->will($this->returnValue($this->_sectionMock));
+        $configStructureMock->expects($this->any())->method('getElement')->willReturn($this->_sectionMock);
 
-        $helperMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
+        $helperMock->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $arguments = [
-            'request' => $this->_requestMock,
-            'response' => $this->_responseMock,
-            'helper' => $helperMock,
-            'eventManager' => $this->_eventManagerMock,
-            'auth' => $this->_authMock,
-            'messageManager' => $this->messageManagerMock,
-        ];
-
-        $this->_sectionCheckerMock = $this->getMock(
-            'Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker',
-            [],
-            [],
-            '',
-            false
-        );
 
         $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
@@ -161,6 +144,24 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->resultRedirect);
 
+        $arguments = [
+            'request' => $this->_requestMock,
+            'response' => $this->_responseMock,
+            'helper' => $helperMock,
+            'eventManager' => $this->_eventManagerMock,
+            'auth' => $this->_authMock,
+            'messageManager' => $this->messageManagerMock,
+            'resultRedirectFactory' => $resultRedirectFactory
+        ];
+
+        $this->_sectionCheckerMock = $this->getMock(
+            'Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker',
+            [],
+            [],
+            '',
+            false
+        );
+
         $context = $helper->getObject('Magento\Backend\App\Action\Context', $arguments);
         $this->_controller = $this->getMock(
             'Magento\Config\Controller\Adminhtml\System\Config\Save',
@@ -172,7 +173,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 $this->_configFactoryMock,
                 $this->_cacheMock,
                 new \Magento\Framework\Stdlib\String(),
-                $resultRedirectFactory
             ]
         );
     }

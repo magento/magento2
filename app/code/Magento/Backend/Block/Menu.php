@@ -191,7 +191,7 @@ class Menu extends \Magento\Backend\Block\Template
         $output = ($this->_isItemActive(
             $menuItem,
             $level
-        ) ? '_active' : '') .
+        ) ? '_current _active' : '') .
             ' ' .
             ($menuItem->hasChildren() ? 'parent' : '') .
             ' ' .
@@ -419,7 +419,7 @@ class Menu extends \Magento\Backend\Block\Template
         if ($level == 0 && $limit) {
             $colStops = $this->_columnBrake($menuItem->getChildren(), $limit);
             $output .= '<strong class="submenu-title">' . $this->_getAnchorLabel($menuItem) . '</strong>';
-            $output .= '<a href="#" class="submenu-close _close" data-role="close-submenu"></a>';
+            $output .= '<a href="#" class="action-close _close" data-role="close-submenu"></a>';
         }
 
         $output .= $this->renderNavigation($menuItem->getChildren(), $level + 1, $limit, $colStops);

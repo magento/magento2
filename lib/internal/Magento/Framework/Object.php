@@ -494,7 +494,7 @@ class Object implements \ArrayAccess
      * @param   string $method
      * @param   array $args
      * @return  mixed
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __call($method, $args)
     {
@@ -514,8 +514,8 @@ class Object implements \ArrayAccess
                 $key = $this->_underscore(substr($method, 3));
                 return isset($this->_data[$key]);
         }
-        throw new \Magento\Framework\Exception(
-            sprintf('Invalid method %s::%s(%s)', get_class($this), $method, print_r($args, 1))
+        throw new \Magento\Framework\Exception\LocalizedException(
+            new \Magento\Framework\Phrase('Invalid method %1::%2(%3)', [get_class($this), $method, print_r($args, 1)])
         );
     }
 

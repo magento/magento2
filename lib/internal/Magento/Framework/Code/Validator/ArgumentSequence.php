@@ -7,7 +7,6 @@
  */
 namespace Magento\Framework\Code\Validator;
 
-use Magento\Framework\Code\ValidationException;
 use Magento\Framework\Code\ValidatorInterface;
 
 class ArgumentSequence implements ValidatorInterface
@@ -39,7 +38,7 @@ class ArgumentSequence implements ValidatorInterface
      *
      * @param string $className
      * @return bool
-     * @throws ValidationException
+     * @throws \Magento\Framework\Exception\ValidatorException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate($className)
@@ -78,20 +77,19 @@ class ArgumentSequence implements ValidatorInterface
 
         if (false == $this->_checkArgumentSequence($classArguments, $requiredSequence)) {
             $classPath = str_replace('\\', '/', $class->getFileName());
-            throw new ValidationException(
-                'Incorrect argument sequence in class ' .
-                $className .
-                ' in ' .
-                $classPath .
-                PHP_EOL .
-                'Required: $' .
-                implode(
-                    ', $',
-                    array_keys($requiredSequence)
-                ) . PHP_EOL . 'Actual  : $' . implode(
-                    ', $',
-                    array_keys($classArguments)
-                ) . PHP_EOL
+            throw new \Magento\Framework\Exception\ValidatorException(
+                new \Magento\Framework\Phrase(
+                    'Incorrect argument sequence in class %1 in %2%3Required: $%4%5Actual  : $%6%7',
+                    [
+                        $className,
+                        $classPath,
+                        PHP_EOL,
+                        implode(', $', array_keys($requiredSequence)),
+                        PHP_EOL,
+                        implode(', $', array_keys($classArguments)),
+                        PHP_EOL
+                    ]
+                )
             );
         }
 
