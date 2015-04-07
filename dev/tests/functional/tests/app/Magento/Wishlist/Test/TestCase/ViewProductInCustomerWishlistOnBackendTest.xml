@@ -8,7 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Wishlist\Test\TestCase\ViewProductInCustomerWishlistOnBackendTest">
         <variation name="ViewProductInCustomerWishlistOnBackendTestVariation1">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-35274</data>
             <data name="product" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductInCustomerWishlistOnBackendGrid" />
         </variation>

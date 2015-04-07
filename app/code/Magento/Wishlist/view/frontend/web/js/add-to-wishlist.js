@@ -67,9 +67,6 @@ define([
             var data = {},
                 elementName = $(element).attr('name'),
                 elementValue = $(element).val();
-            if (origin && $(element).is('select')) {
-                elementValue = $(element).find('option');
-            }
             if ($(element).is('select[multiple]')) {
                 $.each(elementValue, function(key, option) {
                     var value = origin ? option.value : option;
