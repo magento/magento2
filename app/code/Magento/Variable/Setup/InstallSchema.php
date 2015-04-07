@@ -135,7 +135,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         );
         $connection->addForeignKey(
@@ -144,7 +143,6 @@ class InstallSchema implements InstallSchemaInterface
             'variable_id',
             $installer->getTable('variable'),
             'variable_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         );
 

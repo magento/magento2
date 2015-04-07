@@ -102,14 +102,12 @@ class InstallSchema implements InstallSchemaInterface
             'block_id',
             $installer->getTable('cms_block'),
             'block_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('cms_block_store', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'CMS Block To Store Linkage Table'
@@ -262,14 +260,12 @@ class InstallSchema implements InstallSchemaInterface
             'page_id',
             $installer->getTable('cms_page'),
             'page_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('cms_page_store', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'CMS Page To Store Linkage Table'

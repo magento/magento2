@@ -405,12 +405,11 @@ class Table
      * @param string $refTable      the reference table name
      * @param string $refColumn     the reference table column name
      * @param string $onDelete      the action on delete row
-     * @param string $onUpdate      the action on update
      * @return $this
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function addForeignKey($fkName, $column, $refTable, $refColumn, $onDelete = null, $onUpdate = null)
+    public function addForeignKey($fkName, $column, $refTable, $refColumn, $onDelete = null)
     {
         $upperName = strtoupper($fkName);
 
