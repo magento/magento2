@@ -16,8 +16,9 @@
 @page-order-sidebar__color: @color-very-dark-gray;
 @page-order-sidebar__margin: 2.4rem;
 @page-order-sidebar__padding: @indent__base;
-@page-order-sidebar__margin-reqular: 1.7rem;
 @page-order-sidebar__margin-small: .5rem;
+@page-order-sidebar__margin-m: 1rem;
+@page-order-sidebar__margin-reqular: 1.7rem;
 @page-order-sidebar__border-color: @border__color;
 
 @page-order-icon-refresh__font-size: 2rem;
@@ -31,6 +32,7 @@
 @page-order-icon-plus__hover__color: @color-very-dark-gray-black2;
 
 @page-order-table__border-color: @table-td__border-color;
+@page-order-sidebar-scroll__height: 24rem;
 
 //
 
@@ -459,7 +461,7 @@
         th,
         td {
             &:first-child {
-                padding-left: 0;
+                padding-left: @page-order-sidebar__padding;
             }
         }
         .icon {
@@ -471,6 +473,7 @@
                 color: @page-order-sidebar__color;
             }
             &.icon-remove {
+                margin-left: -3px;
                 &:after {
                     content: @page-order-icon-remove__content;
                 }
@@ -484,12 +487,18 @@
                 .extend__visually-hidden();
             }
         }
+        .col-add {
+            text-align: right;
+            .icon-add {
+                margin-right: @page-order-sidebar__margin-m;
+            }
+        }
     }
     .action-refresh {
         &:extend(.abs-icon all);
-        display: inline-block;
+        display: table-cell;
         font-size: @page-order-icon-refresh__font-size;
-        padding-right: @page-order-sidebar__margin-small;
+        padding-right: @page-order-sidebar__margin-m;
         vertical-align: middle;
         &:after {
             color: @page-order-icon-refresh__color;
@@ -510,20 +519,27 @@
             margin: 0 0 @page-order-sidebar__margin;
         }
         .auto-scroll {
-            margin: 0 0 @page-order-sidebar__margin-small;
-            max-height: 17rem;
+            margin: 0 -@page-order-sidebar__padding @page-order-sidebar__margin-small;
+            max-height: @page-order-sidebar-scroll__height;
             overflow: auto;
             position: relative;
+            + .action-default {
+                margin-top: @page-order-sidebar__margin-reqular;
+            }
+            .no-items {
+                padding-left: @page-order-sidebar__padding;
+            }
         }
         .admin__field-option {
             padding-top: 0;
         }
     }
     .create-order-sidebar-label {
-        display: inline-block;
+        display: table-cell;
         font-size: @page-order-sidebar__font-size;
         font-weight: @font-weight__regular;
         margin: 0;
+        vertical-align: middle;
         + .admin__control-select {
             margin-top: @page-order-sidebar__margin-reqular;
         }

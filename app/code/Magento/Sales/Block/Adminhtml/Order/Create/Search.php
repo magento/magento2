@@ -30,7 +30,7 @@ class Search extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getHeaderText()
     {
-        return __('Please select products.');
+        return __('Please select products');
     }
 
     /**

@@ -116,7 +116,8 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
             ' admin__control-checkbox' .
             '"';
         $html .= $checked . $this->getDisabled() . '/>';
-        $html .= '<label class="admin__field-label"></label>';
+        $html .= '<label></label>';
+        /* ToDo UI: add class="admin__field-label" after some refactoring _fields.less */
         return $html;
     }
 
