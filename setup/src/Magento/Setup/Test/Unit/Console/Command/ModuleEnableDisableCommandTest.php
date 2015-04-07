@@ -36,9 +36,6 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $fullModuleList;
 
-    /**
-     * @var ModuleDisableCommand
-     */
     protected function setUp()
     {
         $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
