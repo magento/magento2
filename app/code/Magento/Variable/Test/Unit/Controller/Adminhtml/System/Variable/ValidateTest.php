@@ -103,7 +103,6 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
                 [
                     $contextMock,
                     $coreRegistryMock,
-                    $this->getMock('Magento\Backend\Model\View\Result\RedirectFactory', [], [], '', false),
                     $this->getMock('Magento\Backend\Model\View\Result\ForwardFactory', [], [], '', false),
                     $resultJsonFactoryMock,
                     $this->getMock('Magento\Framework\View\Result\PageFactory', [], [], '', false),
@@ -138,7 +137,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->willReturn($result);
 
-        if (is_bool($result)===false) {
+        if ($result instanceof \Magento\Framework\Phrase) {
             $this->messageManagerMock->expects($this->once())
                 ->method('addError')
                 ->with($result->getText());
