@@ -64,24 +64,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         return $response;
     }
 
-    protected function getProduct($sku)
-    {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Get',
-            ],
-        ];
-
-        $response = $this->_webApiCall($serviceInfo, ['sku' => $sku]);
-        return $response;
-    }
-
     public function testGetNoSuchEntityException()
     {
         $invalidSku = '(nonExistingSku)';
@@ -467,30 +449,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response =  $this->_webApiCall($serviceInfo, $requestData);
         return $response;
     }
-
-    protected function updateProduct($product)
-    {
-        $sku = $product[ProductInterface::SKU];
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
-            $product[ProductInterface::SKU] = null;
-        }
-
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
-        ];
-        $requestData = ['product' => $product];
-        $response =  $this->_webApiCall($serviceInfo, $requestData);
-        return $response;
-    }
-
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
