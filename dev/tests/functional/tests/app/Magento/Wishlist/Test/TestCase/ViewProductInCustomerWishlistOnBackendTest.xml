@@ -26,7 +26,6 @@
             <constraint name="Magento\Downloadable\Test\Constraint\AssertDownloadableProductInCustomerWishlistOnBackendGrid" />
         </variation>
         <variation name="ViewProductInCustomerWishlistOnBackendTestVariation5">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-35273</data>
             <data name="product" xsi:type="string">groupedProduct::three_simple_products</data>
             <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductInCustomerWishlistOnBackendGrid" />
         </variation>
