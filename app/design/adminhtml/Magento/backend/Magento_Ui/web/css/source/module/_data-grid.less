@@ -133,7 +133,6 @@
         }
         &:last-child {
             border-right-style: @data-grid-td__border-outer-style;
-            width: 1%; // Making last action smallest column
         }
         //  Action select data grid styles (can be action-select-secondary in future)
         .action-select {
@@ -171,11 +170,6 @@
             border-left-color: @data-grid-th__border-color;
         }
     }
-    th:last-child .data-grid-th,
-    td:last-child {
-        padding-left: @data-grid-cell__padding-horizontal * 2;
-        padding-right: @data-grid-cell__padding-horizontal * 2;
-    }
     .data-grid-th {
         color: @data-grid-th__color;
         padding: @data-grid-th__padding-vertical @data-grid-th__padding-horizontal;
@@ -201,6 +195,11 @@
         padding: @data-grid-th__padding-horizontal @data-grid-th__padding-vertical @data-grid-th__padding-horizontal - .1rem;
         text-align: center;
         width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
+    }
+    .data-grid-actions-cell {
+        padding-left: @data-grid-cell__padding-horizontal * 2;
+        padding-right: @data-grid-cell__padding-horizontal * 2;
+        width: 1%;
     }
     //  Nested rows
     .data-grid-row-parent {
