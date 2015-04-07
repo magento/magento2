@@ -3,17 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Observer;
+namespace Magento\SalesSequence\Model;
 
-use Magento\Sales\Setup\SalesSetup;
-use Magento\SalesSequence\Model\Config;
-use Magento\SalesSequence\Model\Builder;
-use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Class CreateSequence
  */
-class CreateSequence
+class Observer
 {
     /**
      * @var Builder
@@ -21,9 +18,9 @@ class CreateSequence
     private $sequenceBuilder;
 
     /**
-     * @var SalesSetup
+     * @var EntityPool
      */
-    private $salesSetup;
+    private $entityPool;
 
     /**
      * @var Config
@@ -34,28 +31,27 @@ class CreateSequence
      * Initialization
      *
      * @param Builder $sequenceBuilder
-     * @param SalesSetup $salesSetup
+     * @param EntityPool $entityPool
      * @param Config $sequenceConfig
      */
     public function __construct(
         Builder $sequenceBuilder,
-        SalesSetup $salesSetup,
+        EntityPool $entityPool,
         Config $sequenceConfig
     ) {
         $this->sequenceBuilder = $sequenceBuilder;
-        $this->salesSetup = $salesSetup;
+        $this->entityPool = $entityPool;
         $this->sequenceConfig = $sequenceConfig;
     }
 
     /**
-     * @param Observer $observer
+     * @param EventObserver $observer
      * @return $this
      */
-    public function execute(Observer $observer)
+    public function execute(EventObserver $observer)
     {
         $storeId = $observer->getData('store')->getId();
-        $defaultEntities = array_keys($this->salesSetup->getDefaultEntities());
-        foreach ($defaultEntities as $entityType) {
+        foreach ($this->entityPool->getEntities() as $entityType) {
             $this->sequenceBuilder->setPrefix($this->sequenceConfig->get('prefix'))
                 ->setSuffix($this->sequenceConfig->get('suffix'))
                 ->setStartValue($this->sequenceConfig->get('startValue'))

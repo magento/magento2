@@ -173,26 +173,5 @@ class InstallData implements InstallDataInterface
                 ['state = ?' => $state]
             );
         }
-        $defaultEntityTypes = array_keys($salesSetup->getDefaultEntities());
-        foreach ($defaultEntityTypes as $entityType) {
-            $this->sequenceBuilder->setPrefix($this->sequenceConfig->get('prefix'))
-                ->setSuffix($this->sequenceConfig->get('suffix'))
-                ->setStartValue($this->sequenceConfig->get('startValue'))
-                ->setStoreId(0)
-                ->setStep($this->sequenceConfig->get('step'))
-                ->setWarningValue($this->sequenceConfig->get('warningValue'))
-                ->setMaxValue($this->sequenceConfig->get('maxValue'))
-                ->setEntityType($entityType)->create();
-        }
-        foreach ($defaultEntityTypes as $entityType) {
-            $this->sequenceBuilder->setPrefix($this->sequenceConfig->get('prefix'))
-                ->setSuffix($this->sequenceConfig->get('suffix'))
-                ->setStartValue($this->sequenceConfig->get('startValue'))
-                ->setStoreId(1)
-                ->setStep($this->sequenceConfig->get('step'))
-                ->setWarningValue($this->sequenceConfig->get('warningValue'))
-                ->setMaxValue($this->sequenceConfig->get('maxValue'))
-                ->setEntityType($entityType)->create();
-        }
     }
 }
