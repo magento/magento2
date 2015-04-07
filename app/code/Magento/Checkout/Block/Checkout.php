@@ -134,8 +134,8 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $fields = $this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
                 ['children']['billing-address-fieldset']['children'];
             $this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
-                ['children']['billing-address-fieldset']['children']
-                = $this->addressDataProvider->getAdditionalAddressFields('billingAddressProvider', $fields);
+                ['children']['billing-address-fieldset']['children'] = $this->addressDataProvider
+                    ->getAdditionalAddressFields('billingAddressProvider', 'billingAddress', $fields);
         }
         return \Zend_Json::encode($this->jsLayout);
     }

@@ -295,16 +295,22 @@ class AddressDataProvider implements DataProviderInterface
      * Retrieve additional address fields for given provider
      *
      * @param string $providerName name of the storage container used by UI component
+     * @param string $dataScopePrefix
      * @param array $fields
      * @return array
      */
-    public function getAdditionalAddressFields($providerName, array $fields = array())
+    public function getAdditionalAddressFields($providerName, $dataScopePrefix, array $fields = array())
     {
         foreach ($this->getFieldsMetaInfo('address') as $attributeCode => $attributeConfig) {
             if (!$this->isFieldVisible($attributeCode, $attributeConfig)) {
                 continue;
             }
-            $fields[$attributeCode] = $this->getFieldConfig($attributeCode, $attributeConfig, $providerName);
+            $fields[$attributeCode] = $this->getFieldConfig(
+                $attributeCode,
+                $attributeConfig,
+                $providerName,
+                $dataScopePrefix
+            );
         }
         return $fields;
     }
@@ -315,13 +321,14 @@ class AddressDataProvider implements DataProviderInterface
      * @param string $attributeCode
      * @param array $attributeConfig
      * @param string $providerName name of the storage container used by UI component
+     * @param string $dataScopePrefix
      * @return array
      */
-    protected function getFieldConfig($attributeCode, array $attributeConfig, $providerName)
+    protected function getFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
     {
-        // street attribute is unique in terms of configuration, so it has it own configuration builder
+        // street attribute is unique in terms of configuration, so it has its own configuration builder
         if ($attributeCode == 'street') {
-            return $this->getStreetFieldConfig($attributeCode, $attributeConfig, $providerName);
+            return $this->getStreetFieldConfig($attributeCode, $attributeConfig, $providerName, $dataScopePrefix);
         }
 
         $uiComponent = $attributeConfig['formElement'] == 'select'
@@ -330,13 +337,20 @@ class AddressDataProvider implements DataProviderInterface
         $elementTemplate = $attributeConfig['formElement'] == 'select'
             ? 'ui/form/element/select'
             : 'ui/form/element/input';
+
+        if (empty($attributeConfig['validation']['required-entry'])
+            && isset($attributeConfig['validation']['min_text_length'])
+        ) {
+            // if attribute is not required its minimum length restriction can be ignored
+            $attributeConfig['validation']['min_text_length'] = 0;
+        }
         return [
             'component' => $uiComponent,
             'config' => [
                 'template' => 'ui/form/field',
                 'elementTmpl' => $elementTemplate,
             ],
-            'dataScope' => $attributeCode,
+            'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'label' => $attributeConfig['label'],
             'provider' => $providerName,
             'sortOrder' => $attributeConfig['sortOrder'],
@@ -370,9 +384,10 @@ class AddressDataProvider implements DataProviderInterface
      * @param string $attributeCode
      * @param array $attributeConfig
      * @param string $providerName name of the storage container used by UI component
+     * @param string $dataScopePrefix
      * @return array
      */
-    protected function getStreetFieldConfig($attributeCode, array $attributeConfig, $providerName)
+    protected function getStreetFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
     {
         $streetLines = [];
         for ($lineIndex = 0; $lineIndex < $this->addressHelper->getStreetLines(); $lineIndex++) {
@@ -392,7 +407,7 @@ class AddressDataProvider implements DataProviderInterface
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => __('Address'),
             'required' => true,
-            'dataScope' => $attributeCode,
+            'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'provider' => $providerName,
             'sortOrder' => $attributeConfig['sortOrder'],
             'type' => 'group',
