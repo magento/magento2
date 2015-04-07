@@ -758,10 +758,7 @@ return [
     ],
     ['Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\Exception'],
-    [
-        'Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException',
-        'Magento\Framework\Exception\File\LargeSizeException'
-    ],
+    ['Magento\Framework\Exception\File\LargeSizeException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\NotImageException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\OptionRequiredException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\RunValidationException'],
@@ -3138,4 +3135,5 @@ return [
     ['Magento\CatalogRule\CatalogRuleException'],
     ['Magento\Payment\Exception'],
     ['Magento\UrlRewrite\Model\Storage\DuplicateEntryException'],
+    ['Magento\Framework\Exception\File\ValidatorException'],
 ];
