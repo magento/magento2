@@ -27,7 +27,6 @@
 @data-grid-header-row__margin-bottom: @indent__base;
 
 @data-grid-action__z-index: @data-grid-header__z-index - 10;
-@data-grid-action__opacity: .98;
 
 //
 
@@ -38,6 +37,7 @@
 }
 
 .admin__data-grid-header-row {
+    &:extend(.abs-clearfix all);
     margin-bottom: @data-grid-header-row__margin-bottom;
     &:first-child {
         margin-bottom: @data-grid-header-row__margin-bottom - @data-grid-header-add-indent__bottom;
@@ -55,6 +55,8 @@
 //  ---------------------------------------------
 
 .admin__data-grid-actions-wrap {
+    float: right;
+    margin-left: 1.1rem;
     margin-top: -@data-grid-header-add-indent__top;
     text-align: right;
     .admin__action-dropdown-wrap {

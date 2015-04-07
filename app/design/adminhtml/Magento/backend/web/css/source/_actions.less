@@ -353,6 +353,15 @@ button {
         padding: .6875em 1em;
         cursor: pointer;
     }
+    a {
+        &.action-menu-item {
+            color: @text__color;
+            &:focus {
+                background-color: @action-menu__hover__background-color;
+                box-shadow: none;
+            }
+        }
+    }
 }
 
 //

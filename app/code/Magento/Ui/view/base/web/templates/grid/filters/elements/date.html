@@ -4,20 +4,24 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="field">
-    <label class="label admin__control-text" data-bind="attr: {for: uid}">
+
+<div class="admin__form-field">
+    <label
+        class="admin__form-field-label"
+        data-bind="attr: {for: uid}">
         <span data-bind="text: label"></span>
     </label>
-    <div class="control">
-        <input class="control-text" type="text" data-bind="
-            hasFocus: focused,
-            datepicker: { storage: value, options: options },
-            attr: {
-                value: value,
-                name: inputName,
-                placeholder: placeholder,
-                'aria-describedby': noticeId,
-                disabled: disabled
-            }" />
+    <div class="admin__form-field-control">
+        <input
+            class="admin__control-input"
+            type="text"
+            data-bind="hasFocus: focused,
+                       datepicker: { storage: value, options: options },
+                       attr: {
+                           value: value,
+                           name: inputName,
+                           'aria-describedby': noticeId,
+                           disabled: disabled
+                       }" />
     </div>
 </div>
