@@ -34,6 +34,10 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
             'Magento\Setup\Console\Command\DbDataUpgradeCommand',
             'Magento\Setup\Console\Command\DbSchemaUpgradeCommand',
             'Magento\Setup\Console\Command\DbStatusCommand',
+            'Magento\Setup\Console\Command\InfoCurrencyListCommand',
+            'Magento\Setup\Console\Command\InfoLanguageListCommand',
+            'Magento\Setup\Console\Command\InfoTimezoneListCommand',
+            'Magento\Setup\Console\Command\InstallUserConfigurationCommand',
             'Magento\Setup\Console\Command\ModuleEnableCommand',
             'Magento\Setup\Console\Command\ModuleDisableCommand',
             'Magento\Setup\Console\Command\ModuleStatusCommand',
@@ -42,6 +46,8 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
             'Magento\Setup\Console\Command\MaintenanceEnableCommand',
             'Magento\Setup\Console\Command\MaintenanceStatusCommand',
             'Magento\Setup\Console\Command\UpgradeCommand',
+            'Magento\Setup\Console\Command\UninstallCommand',
+            'Magento\Setup\Console\Command\InstallCommand',
         ];
         $index = 0;
         foreach ($commands as $command) {
