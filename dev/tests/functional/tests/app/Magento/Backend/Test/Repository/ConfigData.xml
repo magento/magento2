@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Core\Test\Repository\ConfigData">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="store_information">
             <field path="general/store_information/name" scope="general" scope_id="1" label="" xsi:type="string">Store 1</field>
             <field path="general/store_information/phone" scope="general" scope_id="1" label="" xsi:type="string">1234-123-123</field>
@@ -16,6 +16,10 @@
             <field path="general/store_information/city" scope="general" scope_id="1" label="" xsi:type="string">Culver City</field>
             <field path="general/store_information/street_line1" scope="general" scope_id="1" label="" xsi:type="string">10441 Jefferson Blvd</field>
             <field path="general/store_information/street_line2" scope="general" scope_id="1" label="" xsi:type="string">Suite 200</field>
+        </dataset>
+
+        <dataset name="admin_session_lifetime_1_hour">
+            <field path="admin/security/session_lifetime" scope="default" scope_id="0" label="3600" xsi:type="string">3600</field>
         </dataset>
     </repository>
 </config>
