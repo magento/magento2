@@ -35,7 +35,7 @@ define(
             ).fail(
                 function(response) {
                     var error = JSON.parse(response.responseText);
-                    errorList.add(error.message);
+                    errorList.add(error);
                     quote.setShippingAddress(null);
                     quote.setBillingAddress(null);
                 }

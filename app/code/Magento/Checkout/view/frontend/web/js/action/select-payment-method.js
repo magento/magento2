@@ -2,8 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/*global define*/
 define(
     [
         '../model/quote',
@@ -13,6 +12,7 @@ define(
         'mage/storage'
     ],
     function(quote, urlBuilder, navigator, errorList, storage) {
+        "use strict";
         return function (paymentMethodCode, additionalData) {
             // TODO add support of additional payment data for more complex payments
             var paymentMethodData = {
@@ -39,10 +39,10 @@ define(
             ).error(
                 function(response) {
                     var error = JSON.parse(response.responseText);
-                    errorList.add(error.message);
+                    errorList.add(error);
                     quote.setPaymentMethod(null);
                 }
-            )
-        }
+            );
+        };
     }
 );

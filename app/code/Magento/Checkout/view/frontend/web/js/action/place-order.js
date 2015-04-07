@@ -2,8 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/*global define*/
 define(
     [
         '../model/quote',
@@ -13,6 +12,7 @@ define(
         'Magento_Ui/js/model/errorlist'
     ],
     function(quote, urlBuilder, storage, url, errorList) {
+        "use strict";
         return function() {
             storage.put(
                 urlBuilder.createUrl('/carts/:quoteId/order', {quoteId: quote.getQuoteId()})
@@ -23,9 +23,9 @@ define(
             ).error(
                 function(response) {
                     var error = JSON.parse(response.responseText);
-                    errorList.add(error.message);
+                    errorList.add(error);
                 }
             );
-        }
+        };
     }
 );

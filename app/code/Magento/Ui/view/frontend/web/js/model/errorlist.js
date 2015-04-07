@@ -8,7 +8,21 @@ define(['ko'], function(ko) {
     var errors = ko.observableArray([]);
     return {
         add: function (error) {
-            errors.push(error);
+            var expr = /([%])\w+/g,
+                errorMessage;
+            if (!error.hasOwnProperty('parameters')) {
+                errors.push(error.message);
+                return true;
+            }
+            errorMessage = error.message.replace(expr, function(varName) {
+                varName = varName.substr(1);
+                if (error.parameters.hasOwnProperty(varName)) {
+                    return error.parameters[varName];
+                }
+                return error.parameters.shift();
+            });
+            errors.push(errorMessage);
+            return true;
         },
         remove: function() {
             errors.shift();

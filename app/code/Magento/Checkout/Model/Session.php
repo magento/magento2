@@ -226,12 +226,10 @@ class Session extends \Magento\Framework\Session\SessionManager
                 }
             }
 
-            if ($this->getQuoteId()) {
-                if ($this->_customer) {
-                    $quote->setCustomer($this->_customer);
-                } elseif ($this->_customerSession->isLoggedIn()) {
-                    $quote->setCustomer($this->customerRepository->getById($this->_customerSession->getCustomerId()));
-                }
+            if ($this->_customer) {
+                $quote->setCustomer($this->_customer);
+            } elseif ($this->_customerSession->isLoggedIn()) {
+                $quote->setCustomer($this->customerRepository->getById($this->_customerSession->getCustomerId()));
             }
 
             $quote->setStore($this->_storeManager->getStore());
