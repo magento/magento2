@@ -91,6 +91,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected $generatorContextFactoryMock;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     protected function setUp()
     {
         $this->structureMock = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
@@ -147,6 +152,12 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()
         ->getMock();
 
+        $this->appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+            ->getMockForAbstractClass();
+
         $this->model = new \Magento\Framework\View\Layout(
             $this->processorFactoryMock,
             $this->eventManagerMock,
@@ -158,6 +169,8 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             $this->cacheMock,
             $this->readerContextFactoryMock,
             $this->generatorContextFactoryMock,
+            $this->appStateMock,
+            $this->loggerMock,
             true
         );
     }
@@ -811,5 +824,79 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->willReturn($elements);
 
         $this->model->generateElements();
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testRenderElementWithExceptionDeveloperMode()
+    {
+        $blockName = 'custom.developer.block';
+
+        $this->prepareBlockWithException($blockName);
+
+        $this->appStateMock->expects($this->any($blockName))
+            ->method('getMode')
+            ->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
+
+        $this->model->renderElement($blockName);
+    }
+
+    public function testRenderElementWithExceptionDefaultMode()
+    {
+        $blockName = 'custom.default.block';
+        $exceptionMessage = 'Block can\'t be rendered.';
+
+        $this->prepareBlockWithException($blockName, $exceptionMessage);
+
+        $this->appStateMock->expects($this->any($blockName))
+            ->method('getMode')
+            ->willReturn(\Magento\Framework\App\State::MODE_DEFAULT);
+
+        $this->loggerMock->expects($this->any())
+            ->method('critical')
+            ->with($exceptionMessage)
+            ->willReturnSelf();
+
+        $this->model->renderElement($blockName);
+    }
+
+    protected function prepareBlockWithException($blockName, $exceptionMessage = 'Error')
+    {
+        $this->structureMock->expects($this->any())
+            ->method('hasElement')
+            ->with($blockName)
+            ->willReturn(true);
+
+        $this->structureMock->expects($this->any())
+            ->method('getAttribute')
+            ->with($blockName, 'type')
+            ->willReturn(\Magento\Framework\View\Layout\Element::TYPE_BLOCK);
+
+        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
+            ->setMethods(['toHtml'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $blockMock->expects($this->any())
+            ->method('toHtml')
+            ->willThrowException(
+                new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase($exceptionMessage)
+                )
+            );
+
+        $this->structureMock->expects($this->once())
+            ->method('createStructuralElement')
+            ->with(
+                $blockName,
+                \Magento\Framework\View\Layout\Element::TYPE_BLOCK,
+                'Magento\Framework\View\Element\AbstractBlock'
+            )->willReturn($blockName);
+        $this->generatorBlockMock->expects($this->once())
+            ->method('createBlock')
+            ->willReturn($blockMock);
+
+        $this->model->createBlock('Magento\Framework\View\Element\AbstractBlock', $blockName, []);
     }
 }
