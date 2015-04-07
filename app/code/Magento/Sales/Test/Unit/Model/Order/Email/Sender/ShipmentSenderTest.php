@@ -33,6 +33,9 @@ class ShipmentSenderTest extends AbstractSenderTest
      */
     protected $loggerMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->stepMockSetup();
