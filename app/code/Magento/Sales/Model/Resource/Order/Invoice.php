@@ -39,7 +39,7 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
-     * @param null $resourcePrefix
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

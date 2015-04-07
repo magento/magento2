@@ -36,7 +36,7 @@ class Comment extends EntityAbstract implements InvoiceCommentResourceInterface
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param \Magento\Sales\Model\Order\Invoice\Comment\Validator $validator
-     * @param null $resourcePrefix
+     * @param string|null $resourcePrefix
      * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(

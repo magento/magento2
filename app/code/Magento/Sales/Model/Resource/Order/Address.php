@@ -38,7 +38,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * @param EntitySnapshot $entitySnapshot
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridPool $gridPool
-     * @param null $resourcePrefix
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

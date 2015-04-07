@@ -10,6 +10,7 @@ use Magento\SalesSequence\Model\Resource\Meta as ResourceMetadata;
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 use Psr\Log\LoggerInterface as Logger;
+
 /**
  * Class Builder
  */

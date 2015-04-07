@@ -28,7 +28,7 @@ class History extends EntityAbstract implements OrderStatusHistoryResourceInterf
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
      * @param Validator $validator
-     * @param null $resourcePrefix
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

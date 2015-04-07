@@ -41,7 +41,7 @@ class Creditmemo extends SalesResource implements CreditmemoResourceInterface
      * @param Attribute $attribute
      * @param Manager $sequenceManager
      * @param EntitySnapshot $entitySnapshot
-     * @param null $resourcePrefix
+     * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
