@@ -16,17 +16,18 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
      *
      * @param array $ids
      * @return void
-     * @throws \Magento\Catalog\Exception
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute($ids)
     {
         if (empty($ids)) {
-            throw new \Magento\Catalog\Exception(__('Bad value was supplied.'));
+            throw new \Magento\Framework\Exception\InputException(__('Bad value was supplied.'));
         }
         try {
             $this->_reindexRows($ids);
         } catch (\Exception $e) {
-            throw new \Magento\Catalog\Exception($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 }

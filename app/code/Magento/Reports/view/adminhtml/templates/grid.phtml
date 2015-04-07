@@ -69,7 +69,6 @@ require([
 
     $("#<?php echo $block->getSuffixId('period_date_range') ?>").dateRange({
         dateFormat:"<?php echo $block->getDateFormat() ?>",
-        buttonImage:"<?php echo $block->getViewFileUrl('images/grid-cal.png') ?>",
         buttonText:"<?php echo __('Select Date') ?>",
         from:{
             id:"<?php echo $block->getSuffixId('period_date_from')?>"

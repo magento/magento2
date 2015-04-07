@@ -8,7 +8,6 @@ namespace Magento\Wishlist\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Wishlist\Test\Page\WishlistIndex;
-use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\InjectableFixture;
 
@@ -33,7 +32,7 @@ class AssertProductDetailsInWishlist extends AbstractAssertWishlistProductDetail
         FixtureFactory $fixtureFactory
     ) {
         $cmsIndex->getLinksBlock()->openLink('My Wish List');
-        $this->assertProductDetails($wishlistIndex, $fixtureFactory, $product);
+        $this->assertProductDetails($wishlistIndex, $product, $fixtureFactory);
     }
 
     /**

@@ -102,32 +102,6 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $contextMock->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
-        $contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
-        $contextMock->expects($this->any())
-            ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
-        $contextMock->expects($this->any())
-            ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
-        $contextMock->expects($this->any())
-            ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlagMock));
-        $contextMock->expects($this->any())
-            ->method('getHelper')
-            ->will($this->returnValue($this->helperMock));
-
         $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -138,11 +112,39 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $contextMock->expects($this->any())
+            ->method('getRequest')
+            ->willReturn($this->requestMock);
+        $contextMock->expects($this->any())
+            ->method('getResponse')
+            ->willReturn($this->responseMock);
+        $contextMock->expects($this->any())
+            ->method('getObjectManager')
+            ->willReturn($this->objectManagerMock);
+        $contextMock->expects($this->any())
+            ->method('getMessageManager')
+            ->willReturn($this->messageManagerMock);
+        $contextMock->expects($this->any())
+            ->method('getSession')
+            ->willReturn($this->sessionMock);
+        $contextMock->expects($this->any())
+            ->method('getActionFlag')
+            ->willReturn($this->actionFlagMock);
+        $contextMock->expects($this->any())
+            ->method('getHelper')
+            ->willReturn($this->helperMock);
+        $contextMock->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactoryMock);
+
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\Cancel',
             [
                 'context' => $contextMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
                 'resultForwardFactory' => $this->resultForwardFactoryMock
             ]
         );

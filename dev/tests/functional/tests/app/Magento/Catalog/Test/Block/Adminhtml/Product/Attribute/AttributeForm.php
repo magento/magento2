@@ -81,6 +81,7 @@ class AttributeForm extends FormTabs
             }
         );
         parent::fill($fixture, $element);
+        $this->browser->switchToFrame();
     }
 
     /**
@@ -112,5 +113,6 @@ class AttributeForm extends FormTabs
     public function saveAttributeForm()
     {
         $this->browser->find($this->saveButton)->click();
+        $this->browser->switchToFrame();
     }
 }

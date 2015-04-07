@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
     <scenario name="OnePageCheckoutTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Core" next="createProducts"/>
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts"/>
         <step name="createProducts" module="Magento_Catalog" next="createTaxRule"/>
         <step name="createTaxRule" module="Magento_Tax" next="addProductsToTheCart"/>
         <step name="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTax"/>

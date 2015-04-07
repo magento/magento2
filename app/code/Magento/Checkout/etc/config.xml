@@ -21,7 +21,7 @@
             </cart_link>
             <sidebar>
                 <display>1</display>
-                <count>3</count>
+                <count>5</count>
             </sidebar>
             <payment_failed>
                 <identity>general</identity>

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="integration" module="Magento_Integration" type="composite" entity_type="integration" collection="Magento\Integration\Model\Resource\Integration\Collection" repository_class="Magento\Integration\Test\Repository\Integration" handler_interface="Magento\Integration\Test\Handler\Integration\IntegrationInterface" class="Magento\Integration\Test\Fixture\Integration">
     <dataset name="default">
         <field name="name" xsi:type="string">default_integration_%isolation%</field>

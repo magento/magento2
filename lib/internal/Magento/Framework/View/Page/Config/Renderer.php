@@ -363,7 +363,7 @@ class Renderer implements RendererInterface
             foreach ($assets as $asset) {
                 $result .= sprintf($template, $asset->getUrl());
             }
-        } catch (\Magento\Framework\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->logger->critical($e);
             $result .= sprintf($template, $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']));
         }

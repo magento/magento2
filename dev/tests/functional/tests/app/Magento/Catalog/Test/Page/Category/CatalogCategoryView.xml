@@ -6,14 +6,13 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
-  <page name="CatalogCategoryView" area="Category" mca="catalog/category/view" module="Magento_Catalog">
-    <block name="listProductBlock" class="Magento\Catalog\Test\Block\Product\ListProduct" locator=".products.wrapper.grid" strategy="css selector"/>
-    <block name="mapBlock" class="Magento\Catalog\Test\Block\Product\Price" locator="#map-popup-content" strategy="css selector"/>
-    <block name="layeredNavigationBlock" class="Magento\LayeredNavigation\Test\Block\Navigation" locator=".block.filter" strategy="css selector"/>
-    <block name="topToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\TopToolbar" locator=".//*[contains(@class,'toolbar-products')][1]" strategy="xpath"/>
-    <block name="bottomToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar" locator=".//*[contains(@class,'toolbar-products')][2]" strategy="xpath"/>
-    <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper h1.page-title .base" strategy="css selector"/>
-    <block name="viewBlock" class="Magento\Catalog\Test\Block\Category\View" locator="#maincontent" strategy="css selector"/>
-    <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector"/>
-  </page>
+    <page name="CatalogCategoryView" area="Category" mca="catalog/category/view" module="Magento_Catalog">
+        <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper h1.page-title .base" strategy="css selector"/>
+        <block name="layeredNavigationBlock" class="Magento\LayeredNavigation\Test\Block\Navigation" locator=".block.filter" strategy="css selector"/>
+        <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector"/>
+        <block name="viewBlock" class="Magento\Catalog\Test\Block\Category\View" locator="#maincontent" strategy="css selector"/>
+        <block name="listProductBlock" class="Magento\Catalog\Test\Block\Product\ListProduct" locator=".products.wrapper.grid" strategy="css selector"/>
+        <block name="topToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\TopToolbar" locator=".//*[contains(@class,'toolbar-products')][1]" strategy="xpath"/>
+        <block name="bottomToolbar" class="Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar" locator=".//*[contains(@class,'toolbar-products')][2]" strategy="xpath"/>
+    </page>
 </config>

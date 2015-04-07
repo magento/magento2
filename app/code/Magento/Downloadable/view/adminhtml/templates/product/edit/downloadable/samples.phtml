@@ -15,41 +15,46 @@
 $_product = $block->getProduct();
 $block->getConfigJson();
 ?>
-<div class="form-inline">
-    <div class="field">
-        <label class="label" for="name"><span><?php echo __('Title')?></span></label>
-        <div class="control">
-            <input type="text" class="input-text" name="product[samples_title]" value="<?php echo $block->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+<fieldset class="admin__fieldset downloadable-form">
+    <div class="admin__field"<?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
+        <label class="admin__field-label" for="downloadable_samples_title"><span><?php echo __('Title')?></span></label>
+        <div class="admin__field-control">
+            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?php echo $block->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()): ?>
-                <input id="sample_title_default" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
-                <label class="normal" for="sample_title_default">Use Default Value</label>
+                <div class="admin__field admin__field-option">
+                    <input id="sample_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
+                    <label class="admin__field-label" for="sample_title_default"><span>Use Default Value</span></label>
+                </div>
             <?php endif; ?>
         </div>
-        <div class="field-service">
-            <?php echo !$block->isSingleStoreMode() ? __('[STORE VIEW]') : ''; ?>
+    </div>
+    <div class="admin__field admin__field-wide">
+        <div class="admin__field-control">
+            <div class="admin__control-table-wrapper">
+                <table cellspacing="0" class="admin__control-table">
+                    <thead>
+                        <tr>
+                            <th class="_required col-title"><span><?php echo __('Title') ?></span></th>
+                            <th class="col-file"><span><?php echo __('File') ?></span></th>
+                            <th class="col-sort"><span><?php echo __('Sort Order') ?></span></th>
+                            <th class="col-actions">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="col-actions"><?php echo $block->getAddButtonHtml() ?></td>
+                        </tr>
+                    </tfoot>
+                    <tbody id="sample_items_body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="admin__field-note">
+                <span><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
+            </div>
         </div>
     </div>
-
-    <table cellspacing="0" class="data-table">
-        <thead>
-            <tr>
-                <th><?php echo __('Title') ?> <span class="required">*</span></th>
-                <th><?php echo __('File') ?></th>
-                <th><?php echo __('Sort Order') ?></th>
-                <th class="col-delete">&nbsp;</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <td colspan="4" class="col-actions-add"><?php echo $block->getAddButtonHtml() ?></td>
-            </tr>
-        </tfoot>
-        <tbody id="sample_items_body">
-        </tbody>
-    </table>
-
-    <div><small><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></small></div>
-</div>
+</fieldset>
 <script>
 require([
     'jquery',
@@ -60,13 +65,13 @@ require([
 ], function (jQuery, registry, mageTemplate) {
     registry.get('downloadable', function (Downloadable) {
         var sampleTemplate = '<tr>'+
-                            '<td>'+
+                            '<td class="col-title">'+
                                 '<input type="hidden" class="__delete__" name="downloadable[sample][<%- data.id %>][is_delete]" value="" />'+
                                 '<input type="hidden" name="downloadable[sample][<%- data.id %>][sample_id]" value="<%- data.sample_id %>" />'+
-                                '<input type="text" class="required-entry input-text" name="downloadable[sample][<%- data.id %>][title]" value="<%- data.title %>" />'+
+                                '<input type="text" class="required-entry input-text admin__control-text" name="downloadable[sample][<%- data.id %>][title]" value="<%- data.title %>" />'+
                                 '<?php echo $_product->getStoreId() ? '<br /><input type="checkbox" id="downloadable_sample_<%- data.id %>_title" name="downloadable[sample][<%- data.id %>][use_default_title]" value="1" /><label class="normal" for="downloadable_sample_<%- data.id %>_title">Use Default Value</label>' : '' ?>'+
                             '</td>'+
-                            '<td>'+
+                            '<td class="col-file">'+
                                 '<div class="files-wide">'+
                                     '<div class="row">'+
                                         '<label for="downloadable_sample_<%- data.id %>_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_file_type" name="downloadable[sample][<%- data.id %>][type]" value="file"<%- data.file_checked %> /> File:</label>'+
@@ -87,7 +92,7 @@ require([
                                         '</div>'+
                                     '</div>'+
                                     '<div class="row">'+
-                                        '<label for="downloadable_sample_<%- data.id %>_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_url_type" name="downloadable[sample][<%- data.id %>][type]" value="url"<%- data.url_checked %> /> URL:</label> <input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[sample][<%- data.id %>][sample_url]" value="<%- data.sample_url %>" />'+
+                                        '<label for="downloadable_sample_<%- data.id %>_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_url_type" name="downloadable[sample][<%- data.id %>][type]" value="url"<%- data.url_checked %> /> URL:</label> <input type="text" class="validate-downloadable-url validate-url input-text admin__control-text" name="downloadable[sample][<%- data.id %>][sample_url]" value="<%- data.sample_url %>" />'+
                                     '</div>'+
                                     '<div>'+
                                         '<span id="downloadable_sample_<%- data.id %>_container"></span>'+
@@ -95,9 +100,9 @@ require([
                                 '</div>'+
 
                             '</td>'+
-                            '<td><input type="text" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text sort" /></td>'+
-                            '<td class="col-delete">'+
-                                '<button type="button" class="action- scalable delete icon-btn delete-sample-item"><span>Delete</span></button>'+
+                            '<td class="col-sort"><input type="text" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text sort admin__control-text" /></td>'+
+                            '<td class="col-actions">'+
+                                '<button type="button" class="action-remove"><span>Delete</span></button>'+
                             '</td>'+
                         '</tr>';
         sampleItems = {
@@ -178,7 +183,7 @@ require([
                 }
             },
             bindRemoveButtons: function() {
-                var buttons = $$('tbody#sample_items_body .delete-sample-item');
+                var buttons = $$('tbody#sample_items_body .action-remove');
                 for(var i=0;i<buttons.length;i++){
                     if(!$(buttons[i]).binded){
                         $(buttons[i]).binded = true;

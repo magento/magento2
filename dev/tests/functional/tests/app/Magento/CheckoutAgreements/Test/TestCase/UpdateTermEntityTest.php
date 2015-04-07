@@ -13,10 +13,6 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test creation for UpdateTermEntityTest.
- *
- * Test Flow:
- *
  * Preconditions:
  * 1. Enable "Terms and Conditions": Stores > Configuration > Sales > Checkout > Checkout Options
  * 2. Create term according to dataSet
@@ -47,7 +43,7 @@ class UpdateTermEntityTest extends Injectable
     public function __inject()
     {
         $this->objectManager->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => 'checkout_term_condition']
         )->run();
     }
@@ -88,7 +84,7 @@ class UpdateTermEntityTest extends Injectable
 
         // TODO: Move set default configuration to "tearDownAfterClass" method after fix bug MAGETWO-29331
         ObjectManager::getInstance()->create(
-            'Magento\Core\Test\TestStep\SetupConfigurationStep',
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => 'checkout_term_condition', 'rollback' => true]
         )->run();
     }
