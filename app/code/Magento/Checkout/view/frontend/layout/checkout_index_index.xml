@@ -65,7 +65,7 @@
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
                                                                 </item>
                                                                 <item name="label" xsi:type="string">Email</item>
-                                                                <item name="dataScope" xsi:type="string">email</item>
+                                                                <item name="dataScope" xsi:type="string">customerDetails.email</item>
                                                                 <item name="provider" xsi:type="string">billingAddressProvider</item>
                                                                 <item name="validation" xsi:type="array">
                                                                     <item name="required-entry" xsi:type="boolean">true</item>
@@ -226,7 +226,7 @@
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/password</item>
                                                                 </item>
                                                                 <item name="label" xsi:type="string">Password</item>
-                                                                <item name="dataScope" xsi:type="string">password</item>
+                                                                <item name="dataScope" xsi:type="string">customerDetails.password</item>
                                                                 <item name="provider" xsi:type="string">billingAddressProvider</item>
                                                                 <!--<item name="id" xsi:type="string">customer_password</item>-->
                                                                 <item name="validation" xsi:type="array">
@@ -241,7 +241,7 @@
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/password</item>
                                                                 </item>
                                                                 <item name="label" xsi:type="string">Confirm Password</item>
-                                                                <item name="dataScope" xsi:type="string">confirm_password</item>
+                                                                <item name="dataScope" xsi:type="string">customerDetails.confirm_password</item>
                                                                 <item name="provider" xsi:type="string">billingAddressProvider</item>
                                                                 <item name="validation" xsi:type="array">
                                                                     <item name="required-entry" xsi:type="string">true</item>
@@ -250,6 +250,17 @@
                                                                     <!--<item name="equalTo" xsi:type="string">#customer_password/item>-->
                                                                 </item>
                                                             </item>
+                                                            <item name="save_in_address_book" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
+                                                                </item>
+                                                                <item name="description" xsi:type="string">Save in address book</item>
+                                                                <item name="dataScope" xsi:type="string">customerDetails.save_in_address_book</item>
+                                                                <item name="provider" xsi:type="string">billingAddressProvider</item>
+                                                            </item>
+
                                                         </item>
                                                     </item>
                                                 </item>
@@ -288,6 +299,16 @@
                                                                 <item name="validation" xsi:type="array">
                                                                     <item name="required-entry" xsi:type="string">true</item>
                                                                 </item>
+                                                            </item>
+                                                            <item name="save_in_address_book" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
+                                                                </item>
+                                                                <item name="description" xsi:type="string">Save in address book</item>
+                                                                <item name="dataScope" xsi:type="string">customerDetails.save_in_address_book</item>
+                                                                <item name="provider" xsi:type="string">shippingAddressProvider</item>
                                                             </item>
                                                         </item>
                                                     </item>
