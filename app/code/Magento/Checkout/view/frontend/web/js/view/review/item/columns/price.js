@@ -8,9 +8,10 @@
 /*global alert*/
 define(
     [
-        '../column',
+        '../column'
     ],
     function (column) {
+        "use strict";
         return column.extend({
             defaults: {
                 ownClass: 'price',

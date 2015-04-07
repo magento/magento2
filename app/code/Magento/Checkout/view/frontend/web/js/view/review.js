@@ -11,7 +11,7 @@ define(
         'mage/url',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/action/place-order',
-        'Magento_Checkout/js/model/review',
+        'Magento_Checkout/js/model/review'
     ],
     function (Component, quote, url, navigator, orderAction, review) {
         "use strict";
