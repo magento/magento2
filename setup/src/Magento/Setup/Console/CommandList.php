@@ -56,6 +56,7 @@ class CommandList
             'Magento\Setup\Console\Command\MaintenanceStatusCommand',
             'Magento\Setup\Console\Command\UpgradeCommand',
             'Magento\Setup\Console\Command\UninstallCommand',
+            'Magento\Setup\Console\Command\InstallCommand',
         ];
     }
 

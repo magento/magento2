@@ -44,7 +44,29 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $options = [
+        $this->setName('setup:user-config:set')
+            ->setDescription('Installs admin user account')
+            ->setDefinition($this->getOptionsList());
+        parent::configure();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $installer = $this->installerFactory->create(new ConsoleLogger($output));
+        $installer->installUserConfig($input->getArguments());
+    }
+
+    /**
+     * Get list of options for the command
+     *
+     * @return array
+     */
+    public function getOptionsList()
+    {
+        return [
             new InputOption(
                 self::INPUT_BASE_URL,
                 null,
@@ -88,20 +110,5 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
                 'Base URL secure'
             ),
         ];
-
-        $this->setName('setup:user-config:set')
-            ->setDescription('Installs admin user account')
-            ->setDefinition($options);
-
-        parent::configure();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $installer = $this->installerFactory->create(new ConsoleLogger($output));
-        $installer->installUserConfig($input->getArguments());
     }
 }

@@ -30,6 +30,7 @@ use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
+use Magento\Setup\Console\Command\InstallCommand;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -40,11 +41,6 @@ use Magento\Framework\App\State\CleanupFiles;
  */
 class Installer
 {
-    /**
-     * Parameter indicating command whether to cleanup database in the install routine
-     */
-    const CLEANUP_DB = 'cleanup_database';
-
     /**#@+
      * Parameters for enabling/disabling modules
      */
@@ -56,11 +52,6 @@ class Installer
      * Parameter indicating command whether to install Sample Data
      */
     const USE_SAMPLE_DATA = 'use_sample_data';
-
-    /**
-     * Parameter to specify an order_increment_prefix
-     */
-    const SALES_ORDER_INCREMENT_PREFIX = 'sales_order_increment_prefix';
 
     /**#@+
      * Formatting for progress log
@@ -270,22 +261,22 @@ class Installer
         $script[] = ['File permissions check...', 'checkInstallationFilePermissions', []];
         $script[] = ['Enabling Maintenance Mode...', 'setMaintenanceMode', [1]];
         $script[] = ['Installing deployment configuration...', 'installDeploymentConfig', [$request]];
-        if (!empty($request[self::CLEANUP_DB])) {
+        if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
         $script[] = ['Installing database schema:', 'installSchema', []];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Installing data...', 'installDataFixtures', []];
-        if (!empty($request[self::SALES_ORDER_INCREMENT_PREFIX])) {
+        if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
                 'Creating sales order increment prefix...',
                 'installOrderIncrementPrefix',
-                [$request[self::SALES_ORDER_INCREMENT_PREFIX]],
+                [$request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX]],
             ];
         }
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
-        if (!empty($request[Installer::USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
+        if (!empty($request[self::USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
             $script[] = ['Installing sample data:', 'installSampleData', [$request]];
         }
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];

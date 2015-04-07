@@ -36,17 +36,9 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $arguments = [
-            new InputArgument(AdminAccount::KEY_USER, InputArgument::REQUIRED, 'Admin user'),
-            new InputArgument(AdminAccount::KEY_PASSWORD, InputArgument::REQUIRED, 'Admin password'),
-            new InputArgument(AdminAccount::KEY_EMAIL, InputArgument::REQUIRED, 'Admin email'),
-            new InputArgument(AdminAccount::KEY_FIRST_NAME, InputArgument::REQUIRED, 'Admin firstname'),
-            new InputArgument(AdminAccount::KEY_LAST_NAME, InputArgument::REQUIRED, 'Admin lastname'),
-        ];
-
         $this->setName('admin:user:create')
             ->setDescription('Creates admin user')
-            ->setDefinition($arguments);
+            ->setDefinition($this->getArgumentsList());
         parent::configure();
     }
 
@@ -58,5 +50,21 @@ class AdminUserCreateCommand extends AbstractSetupCommand
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->installAdminUser($input->getArguments());
         $output->writeln('<info>Created admin user ' . $input->getArgument(AdminAccount::KEY_USER) . '</info>');
+    }
+
+    /**
+     * Get list of arguments for the command
+     *
+     * @return array
+     */
+    public function getArgumentsList()
+    {
+        return [
+            new InputArgument(AdminAccount::KEY_USER, InputArgument::REQUIRED, 'Admin user'),
+            new InputArgument(AdminAccount::KEY_PASSWORD, InputArgument::REQUIRED, 'Admin password'),
+            new InputArgument(AdminAccount::KEY_EMAIL, InputArgument::REQUIRED, 'Admin email'),
+            new InputArgument(AdminAccount::KEY_FIRST_NAME, InputArgument::REQUIRED, 'Admin firstname'),
+            new InputArgument(AdminAccount::KEY_LAST_NAME, InputArgument::REQUIRED, 'Admin lastname'),
+        ];
     }
 }

@@ -20,6 +20,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Output\StreamOutput;
+use Magento\Setup\Console\Command\InstallCommand;
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -172,15 +173,15 @@ class ConsoleController extends AbstractActionController
             . ' --' . AdminAccount::KEY_EMAIL . '='
             . ' --' . AdminAccount::KEY_FIRST_NAME . '='
             . ' --' . AdminAccount::KEY_LAST_NAME . '=';
-        $salesConfig = '[--' . Installer::SALES_ORDER_INCREMENT_PREFIX . '=]';
+        $salesConfig = '[--' . InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX . '=]';
         return [
             self::CMD_INSTALL => [
                 'route' => self::CMD_INSTALL
                     . " {$deployConfig} {$userConfig} {$adminUser} {$salesConfig}"
-                    . ' [--' . Installer::CLEANUP_DB . ']'
+                    . ' [--' . InstallCommand::INPUT_KEY_CLEANUP_DB . ']'
                     . ' [--' . Installer::USE_SAMPLE_DATA . '=]',
                 'usage' => "{$deployConfig} {$userConfig} {$adminUser} {$salesConfig}"
-                    . ' [--' . Installer::CLEANUP_DB . ']'
+                    . ' [--' . InstallCommand::INPUT_KEY_CLEANUP_DB . ']'
                     . ' [--' . Installer::USE_SAMPLE_DATA . '=]',
                 'usage_short' => self::CMD_INSTALL . ' <options>',
                 'usage_desc' => 'Install Magento application',
