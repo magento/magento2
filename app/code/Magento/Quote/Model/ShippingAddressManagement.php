@@ -73,28 +73,23 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $this->addressValidator->validate($address);
+
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
                 __('Cart contains virtual product(s) only. Shipping address is not applicable.')
             );
         }
 
-        $shippingAddress = $quote->getShippingAddress();
         if (!empty($address->getId())) {
-            $addressData = null;
-            try {
-                $addressData = $this->addressRepository->getById($address->getCustomerAddressId());
-            } catch (NoSuchEntityException $e) {
-                // do nothing if customer is not found by id
-            }
-            $shippingAddress->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
-            $shippingAddress->setSameAsBilling($address->getSameAsBilling());
-        } else {
-            //TODO: Logic for new address creation (from form)
+            $address = $quote->getShippingAddress();
+            $addressData = $this->addressRepository->getById($address->getCustomerAddressId());
+
+            $address->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
+            $address->setSameAsBilling($address->getSameAsBilling());
         }
 
-        $shippingAddress->setCollectShippingRates(true);
-        $quote->setShippingAddress($shippingAddress);
+        $address->setCollectShippingRates(true);
+        $quote->setShippingAddress($address);
         $quote->setDataChanges(true);
         try {
             $this->quoteRepository->save($quote);
