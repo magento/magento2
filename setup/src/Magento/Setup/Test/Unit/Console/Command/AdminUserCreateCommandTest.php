@@ -40,8 +40,8 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
         $installerMock = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
         $installerMock->expects($this->once())->method('installAdminUser')->with($arguments);
         $this->installerFactoryMock->expects($this->once())->method('create')->willReturn($installerMock);
-        $commandTester ->execute($arguments);
-        $this->assertEquals('Created admin user user' . PHP_EOL, $commandTester ->getDisplay());
+        $commandTester->execute($arguments);
+        $this->assertEquals('Created admin user user' . PHP_EOL, $commandTester->getDisplay());
     }
 
     public function testGetArgumentsList()
