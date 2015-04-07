@@ -87,6 +87,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
             foreach ($items as $item) {
                 $itemsData = [];
                 // TODO: set data
+                // TODO: do not miss to check $_cartQty || $block->getAllowCartLink()
             }
         }
         return $itemsData;

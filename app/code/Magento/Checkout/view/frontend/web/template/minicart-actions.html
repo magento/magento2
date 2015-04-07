@@ -1,0 +1,9 @@
+<?php if ($_cartQty || $block->getAllowCartLink()): ?>
+<div class="actions">
+    <div class="secondary">
+        <a class="action viewcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
+            <span><?php echo __('View and edit cart') ?></span>
+        </a>
+    </div>
+</div>
+<?php endif ?>

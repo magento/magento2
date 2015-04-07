@@ -26,6 +26,23 @@
             <span><?php echo __('Close') ?></span>
         </button>
 
+        <!-- ko if: true -->
+            <!-- ko template: 'Magento_Checkout/minicart-info' --><!-- /ko -->
+        <!-- /ko -->
+
+        <div class="minicart-items-private-data">placeholder2</div>
+        <!-- need to replace on next block -->
+        <strong class="subtitle empty">
+            <?php echo __('You have no items in your shopping cart.') ?>
+        </strong>
+        <?php if ($block->getCartEmptyMessage()): ?>
+            <p class="minicart empty text"><?php echo $block->getCartEmptyMessage(); ?></p>
+        <?php endif; ?>
+
+        <!-- ko if: true -->
+            <!-- ko template: 'Magento_Checkout/minicart-actions' --><!-- /ko -->
+        <!-- /ko -->
+
         <div id="minicart-widgets" class="minicart-widgets">
             <?php echo $block->getChildHtml('cart_promotion') ?>
         </div>
