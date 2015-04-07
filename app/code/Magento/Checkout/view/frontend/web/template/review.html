@@ -17,7 +17,7 @@
          data-bind="fadeVisible: isVisible() && quoteHasPaymentMethod()">
         <div class="order-review" id="checkout-review-load">
             <!-- ko foreach: getRegion('itemsBefore') -->
-                <!-- ko template: getTemplate() --!><!-- /ko -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
             <div id="checkout-review-table-wrapper" class="order-review-wrapper table-wrapper">
                 <table class="data table table-order-review items" id="checkout-review-table">
@@ -35,20 +35,20 @@
                     <!-- ko foreach: {data: getItems(), as: 'item'} -->
                         <tr>
                             <!-- ko foreach: $parent.getRegion('columns') -->
-                                <!-- ko template: getTemplate() --!><!-- /ko -->
+                                <!-- ko template: getTemplate() --><!-- /ko -->
                             <!-- /ko -->
                         </tr>
                     <!-- /ko -->
                     </tbody>
                     <tfoot>
                     <!-- ko foreach: getRegion('totals') -->
-                        <!-- ko template: getTemplate() --><!-- /ko -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
                     <!-- /ko -->
                     </tfoot>
                 </table>
             </div>
             <!-- ko foreach: getRegion('itemsAfter') -->
-                <!-- ko template: getTemplate() --!><!-- /ko -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
             <div id="checkout-review-submit" data-mage-init='{"paymentAuthentication":{}}' class="checkout-submit-order">
                 <div class="actions-toolbar" id="review-buttons-container">
