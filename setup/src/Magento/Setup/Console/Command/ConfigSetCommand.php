@@ -62,7 +62,6 @@ class ConfigSetCommand extends AbstractSetupCommand
             ->setDescription('Sets deployment configuration')
             ->setDefinition($options);
 
-        $this->ignoreValidationErrors();
         parent::configure();
     }
 
