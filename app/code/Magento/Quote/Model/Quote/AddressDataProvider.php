@@ -308,6 +308,7 @@ class AddressDataProvider implements DataProviderInterface
             $fields[$attributeCode] = $this->getFieldConfig(
                 $attributeCode,
                 $attributeConfig,
+                isset($fields[$attributeCode]) ? $fields[$attributeCode] : [],
                 $providerName,
                 $dataScopePrefix
             );
@@ -320,12 +321,18 @@ class AddressDataProvider implements DataProviderInterface
      *
      * @param string $attributeCode
      * @param array $attributeConfig
+     * @param array $additionalConfig field configuration provided via layout XML
      * @param string $providerName name of the storage container used by UI component
      * @param string $dataScopePrefix
      * @return array
      */
-    protected function getFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
-    {
+    protected function getFieldConfig(
+        $attributeCode,
+        array $attributeConfig,
+        array $additionalConfig,
+        $providerName,
+        $dataScopePrefix
+    ) {
         // street attribute is unique in terms of configuration, so it has its own configuration builder
         if ($attributeCode == 'street') {
             return $this->getStreetFieldConfig($attributeCode, $attributeConfig, $providerName, $dataScopePrefix);
@@ -338,25 +345,42 @@ class AddressDataProvider implements DataProviderInterface
             ? 'ui/form/element/select'
             : 'ui/form/element/input';
 
-        if (empty($attributeConfig['validation']['required-entry'])
-            && isset($attributeConfig['validation']['min_text_length'])
-        ) {
-            // if attribute is not required its minimum length restriction can be ignored
-            $attributeConfig['validation']['min_text_length'] = 0;
-        }
         return [
-            'component' => $uiComponent,
+            'component' => isset($additionalConfig['component']) ? $additionalConfig['component'] : $uiComponent,
             'config' => [
+                'customEntry' => isset($additionalConfig['config']['customEntry'])
+                    ? $additionalConfig['config']['customEntry']
+                    : null,
                 'template' => 'ui/form/field',
-                'elementTmpl' => $elementTemplate,
+                'elementTmpl' => isset($additionalConfig['config']['elementTmpl'])
+                    ? $additionalConfig['config']['elementTmpl']
+                    : $elementTemplate,
             ],
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'label' => $attributeConfig['label'],
             'provider' => $providerName,
             'sortOrder' => $attributeConfig['sortOrder'],
-            'validation' => isset($attributeConfig['validation']) ? $attributeConfig['validation'] : [],
+            'validation' => $this->mergeConfigurationNode('validation', $additionalConfig, $attributeConfig),
             'options' => isset($attributeConfig['options']) ? $attributeConfig['options'] : [],
+            'filterBy' => isset($additionalConfig['filterBy']) ? $additionalConfig['filterBy'] : null,
+            'customEntry' => isset($additionalConfig['customEntry']) ? $additionalConfig['customEntry'] : null,
+            'visible' => isset($additionalConfig['visible']) ? $additionalConfig['visible'] : true,
         ];
+    }
+
+    /**
+     * Merge two configuration nodes recursively
+     *
+     * @param string $nodeName
+     * @param array $mainSource
+     * @param array $additionalSource
+     * @return array
+     */
+    protected function mergeConfigurationNode($nodeName, array $mainSource, array $additionalSource)
+    {
+        $mainData = isset($mainSource[$nodeName]) ? $mainSource[$nodeName] : [];
+        $additionalData = isset($additionalSource[$nodeName]) ? $additionalSource[$nodeName] : [];
+        return array_replace_recursive($additionalData, $mainData);
     }
 
     /**
