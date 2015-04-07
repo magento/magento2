@@ -78,7 +78,6 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
             );
         }
 
-        $shippingAddress = $quote->getShippingAddress();
         if (!empty($address->getCustomerAddressId())) {
             $addressData = null;
             try {
@@ -86,15 +85,15 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
             } catch (NoSuchEntityException $e) {
                 // do nothing if customer is not found by id
             }
-            $shippingAddress->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
-            $shippingAddress->setSameAsBilling($address->getSameAsBilling());
+            $address->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
+            $address->setSameAsBilling($address->getSameAsBilling());
         } else {
             //TODO: Logic for new address creation (from form)
         }
 
-        $this->addressValidator->validate($shippingAddress);
-        $shippingAddress->setCollectShippingRates(true);
-        $quote->setShippingAddress($shippingAddress);
+        $this->addressValidator->validate($address);
+        $address->setCollectShippingRates(true);
+        $quote->setShippingAddress($address);
         $quote->setDataChanges(true);
         try {
             $this->quoteRepository->save($quote);

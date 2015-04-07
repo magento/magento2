@@ -44,6 +44,11 @@ define(
                         selectBillingAddress(addressData, this.useForShipping);
                     }
                 }
+                if (this.source.get('customerDetails')) {
+                    customer.setDetails('email', this.source.get('customerDetails.email'));
+                    customer.setDetails('password', this.source.get('customerDetails.password'));
+                    customer.setDetails('confirm_password', this.source.get('customerDetails.confirm_password'));
+                }
             },
             navigateToCurrentStep: function() {
                 if (!navigator.isStepVisible(stepName)()) {

@@ -1,11 +1,8 @@
-<!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
--->
-/*jshint browser:true jquery:true*/
-/*global alert*/
+/*global define*/
 define(
     [
         'jquery',
@@ -15,8 +12,9 @@ define(
         './customer/address'
     ],
     function($, ko, storage, addressList, address) {
-        var isLoggedIn = ko.observable(window.isLoggedIn);
-        var customerData = {};
+        "use strict";
+        var isLoggedIn = ko.observable(window.isLoggedIn),
+            customerData = {};
 
         if (isLoggedIn()) {
             customerData = window.customerData;
@@ -28,6 +26,7 @@ define(
         }
         return {
             customerData: customerData,
+            customerDetails: {},
             isLoggedIn: function() {
                 return isLoggedIn;
             },
@@ -39,7 +38,22 @@ define(
             },
             getShippingAddressList: function () {
                 return addressList.getAddresses();
+            },
+            setDetails: function (fieldName, value) {
+                if (fieldName) {
+                    this.customerDetails[fieldName] = value;
+                }
+            },
+            getDetails: function (fieldName) {
+                if (fieldName) {
+                    if (this.customerDetails.hasOwnProperty(fieldName)) {
+                        return this.customerDetails[fieldName];
+                    }
+                    return undefined;
+                } else {
+                    return this.customerDetails;
+                }
             }
-        }
+        };
     }
 );
