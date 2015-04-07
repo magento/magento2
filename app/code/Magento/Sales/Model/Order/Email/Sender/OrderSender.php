@@ -25,38 +25,66 @@ class OrderSender extends Sender
     protected $orderResource;
 
     /**
+     * Global configuration storage.
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $globalConfig;
+
+    /**
      * @param Template $templateContainer
      * @param OrderIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param PaymentHelper $paymentHelper
      * @param OrderResource $orderResource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      */
     public function __construct(
         Template $templateContainer,
         OrderIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         PaymentHelper $paymentHelper,
-        OrderResource $orderResource
+        OrderResource $orderResource,
+        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->paymentHelper = $paymentHelper;
         $this->orderResource = $orderResource;
+        $this->globalConfig = $globalConfig;
     }
 
     /**
-     * Send email to customer
+     * Sends order email to the customer.
+     *
+     * Email will be sent immediately in two cases:
+     *
+     * - if asynchronous email sending is disabled in global settings
+     * - if $forceSyncMode parameter is set to TRUE
+     *
+     * Otherwise, email will be sent later during running of
+     * corresponding cron job.
      *
      * @param Order $order
+     * @param bool $forceSyncMode
      * @return bool
      */
-    public function send(Order $order)
+    public function send(Order $order, $forceSyncMode = false)
     {
-        $result = $this->checkAndSend($order);
-        if ($result) {
-            $order->setEmailSent(true);
-            $this->orderResource->saveAttribute($order, 'email_sent');
+        $order->setSendEmail(true);
+
+        if (!$this->globalConfig->getValue('path/to/value/async_emails') || $forceSyncMode) {
+            if ($this->checkAndSend($order)) {
+                $order->setEmailSent(true);
+
+                $this->orderResource->saveAttribute($order, ['send_email', 'email_sent']);
+
+                return true;
+            }
         }
-        return $result;
+
+        $this->orderResource->saveAttribute($order, 'send_email');
+
+        return false;
     }
 
     /**

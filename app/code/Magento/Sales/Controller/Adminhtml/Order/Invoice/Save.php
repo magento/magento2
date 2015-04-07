@@ -9,7 +9,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
-use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Backend\Model\View\Result\RedirectFactory;
@@ -20,9 +20,9 @@ use Magento\Backend\Model\View\Result\RedirectFactory;
 class Save extends \Magento\Backend\App\Action
 {
     /**
-     * @var InvoiceCommentSender
+     * @var InvoiceSender
      */
-    protected $invoiceCommentSender;
+    protected $invoiceSender;
 
     /**
      * @var ShipmentSender
@@ -42,19 +42,19 @@ class Save extends \Magento\Backend\App\Action
     /**
      * @param Action\Context $context
      * @param Registry $registry
-     * @param InvoiceCommentSender $invoiceCommentSender
+     * @param InvoiceSender $invoiceSender
      * @param ShipmentSender $shipmentSender
      * @param RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
-        InvoiceCommentSender $invoiceCommentSender,
+        InvoiceSender $invoiceSender,
         ShipmentSender $shipmentSender,
         RedirectFactory $resultRedirectFactory
     ) {
         $this->registry = $registry;
-        $this->invoiceCommentSender = $invoiceCommentSender;
+        $this->invoiceSender = $invoiceSender;
         $this->shipmentSender = $shipmentSender;
         $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
@@ -160,11 +160,10 @@ class Save extends \Magento\Backend\App\Action
                 );
             }
 
-            $invoice->register();
+            $invoice->setCustomerNote($data['comment_text']);
+            $invoice->setCustomerNoteNotify(isset($data['comment_customer_notify']));
 
-            if (!empty($data['send_email'])) {
-                $invoice->setEmailSent(true);
-            }
+            $invoice->register();
 
             $invoice->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
             $invoice->getOrder()->setIsInProcess(true);
@@ -180,7 +179,6 @@ class Save extends \Magento\Backend\App\Action
             if (!empty($data['do_shipment']) || (int)$invoice->getOrder()->getForcedShipmentWithInvoice()) {
                 $shipment = $this->_prepareShipment($invoice);
                 if ($shipment) {
-                    $shipment->setEmailSent($invoice->getEmailSent());
                     $transactionSave->addObject($shipment);
                 }
             }
@@ -200,19 +198,19 @@ class Save extends \Magento\Backend\App\Action
             }
 
             // send invoice/shipment emails
-            $comment = '';
-            if (isset($data['comment_customer_notify'])) {
-                $comment = $data['comment_text'];
-            }
             try {
-                $this->invoiceCommentSender->send($invoice, !empty($data['send_email']), $comment);
+                if (!empty($data['send_email'])) {
+                    $this->invoiceSender->send($invoice);
+                }
             } catch (\Exception $e) {
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->messageManager->addError(__('We can\'t send the invoice email.'));
             }
             if ($shipment) {
                 try {
-                    $this->shipmentSender->send($shipment, !empty($data['send_email']));
+                    if (!empty($data['send_email'])) {
+                        $this->shipmentSender->send($shipment);
+                    }
                 } catch (\Exception $e) {
                     $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                     $this->messageManager->addError(__('We can\'t send the shipment.'));
