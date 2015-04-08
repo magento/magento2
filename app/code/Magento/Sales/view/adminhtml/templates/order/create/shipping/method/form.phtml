@@ -95,7 +95,9 @@ require(['prototype'], function(){
         <input type="hidden" name="order[has_shipping]" value="" class="required-entry" />
     </div>
 <?php endif; ?>
-<div style="display:none;" id="shipping-method-overlay" class="overlay"><span><?php echo __('You don\'t need to select a shipping method.') ?></span></div>
+<div style="display: none;" id="shipping-method-overlay" class="order-methods-overlay">
+    <span><?php echo __('You don\'t need to select a shipping method.') ?></span>
+</div>
 <script>
     require(["Magento_Sales/order/create/form"], function(){
 
