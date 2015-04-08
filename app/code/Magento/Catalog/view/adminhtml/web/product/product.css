@@ -401,11 +401,6 @@
     padding-top: 3px;
 }
 
-.admin__scope-old .field-weight .choice input {
-    margin-right: 5px;
-    vertical-align: bottom;
-}
-
 .admin__scope-old .field-price .addon > input {
     width: 99px;
     float: left;
