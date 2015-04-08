@@ -2155,4 +2155,8 @@ return [
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
     ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
     ['prepareCatalogProductPriceIndexTable', 'Magento\CatalogRule\Model\Observer'],
+    ['joinOrders', 'Magento\Reports\Model\Resource\Customer\Collection'],
+    ['addOrdersCount', 'Magento\Reports\Model\Resource\Customer\Collection'],
+    ['addSumAvgTotals', 'Magento\Reports\Model\Resource\Customer\Collection'],
+    ['orderByTotalAmount', 'Magento\Reports\Model\Resource\Customer\Collection'],
 ];
