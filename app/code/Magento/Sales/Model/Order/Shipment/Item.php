@@ -9,15 +9,15 @@
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Item getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Item extends AbstractExtensibleModel implements ShipmentItemInterface
+class Item extends AbstractModel implements ShipmentItemInterface
 {
     /**
      * @var string
