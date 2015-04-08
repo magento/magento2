@@ -7,6 +7,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Setup\Model\ConsoleLogger;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,11 +32,24 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
     private $installerFactory;
 
     /**
-     * @param InstallerFactory $installerFactory
+     * Deployment configuration
+     *
+     * @var DeploymentConfig
      */
-    public function __construct(InstallerFactory $installerFactory)
-    {
+    private $deploymentConfig;
+
+    /**
+     * Inject dependencies
+     *
+     * @param InstallerFactory $installerFactory
+     * @param DeploymentConfig $deploymentConfig
+     */
+    public function __construct(
+        InstallerFactory $installerFactory,
+        DeploymentConfig $deploymentConfig
+    ) {
         $this->installerFactory = $installerFactory;
+        $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
 
@@ -55,8 +69,12 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->deploymentConfig->isAvailable()) {
+            $output->writeln("<info>User settings can't be saved: the application is not installed.</info>");
+            return;
+        }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
-        $installer->installUserConfig($input->getArguments());
+        $installer->installUserConfig($input->getOptions());
     }
 
     /**
