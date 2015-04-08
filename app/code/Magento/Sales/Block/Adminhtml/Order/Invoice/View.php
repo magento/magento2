@@ -198,7 +198,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $this->getInvoice()->getIncrementId(),
             $this->getInvoice()->getStateName(),
             $emailSent,
-            $this->formatDate($this->getInvoice()->getCreatedAtDate(), \IntlDateFormatter::MEDIUM, true)
+            $this->formatDate(
+                $this->_localeDate->date(new \DateTime($this->getInvoice()->getCreatedAt())),
+                \IntlDateFormatter::MEDIUM,
+                true
+            )
         );
     }
 

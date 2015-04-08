@@ -9,7 +9,7 @@ use Magento\Payment\Model\Method\Substitution;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Payment\Block\Form;
-use Magento\Payment\Model\Info;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\LayoutFactory;
@@ -182,11 +182,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve payment information block
      *
-     * @param Info $info
+     * @param InfoInterface $info
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return Template
      */
-    public function getInfoBlock(Info $info, LayoutInterface $layout = null)
+    public function getInfoBlock(InfoInterface $info, LayoutInterface $layout = null)
     {
         $layout = $layout ?: $this->_layout;
         $blockType = $info->getMethodInstance()->getInfoBlockType();
@@ -198,12 +198,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Render payment information block
      *
-     * @param Info $info
+     * @param InfoInterface $info
      * @param int $storeId
      * @return string
      * @throws \Exception
      */
-    public function getInfoBlockHtml(Info $info, $storeId)
+    public function getInfoBlockHtml(InfoInterface $info, $storeId)
     {
         $this->_appEmulation->startEnvironmentEmulation($storeId);
 
