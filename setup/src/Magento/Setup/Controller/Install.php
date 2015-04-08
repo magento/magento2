@@ -18,6 +18,7 @@ use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Magento\Setup\Console\Command\InstallCommand;
 
 /**
  * Install controller
@@ -175,7 +176,7 @@ class Install extends AbstractActionController
             ? $source['store']['timezone'] : '';
         $result[UserConfig::KEY_CURRENCY] = isset($source['store']['currency'])
             ? $source['store']['currency'] : '';
-        $result[Installer::USE_SAMPLE_DATA] = isset($source['store']['useSampleData'])
+        $result[InstallCommand::USE_SAMPLE_DATA] = isset($source['store']['useSampleData'])
             ? $source['store']['useSampleData'] : '';
         return $result;
     }

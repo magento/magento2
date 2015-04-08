@@ -48,11 +48,6 @@ class Installer
     const DISABLE_MODULES = 'disable_modules';
     /**#@- */
 
-    /**
-     * Parameter indicating command whether to install Sample Data
-     */
-    const USE_SAMPLE_DATA = 'use_sample_data';
-
     /**#@+
      * Formatting for progress log
      */
@@ -276,7 +271,7 @@ class Installer
         }
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
-        if (!empty($request[self::USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
+        if (!empty($request[InstallCommand::USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
             $script[] = ['Installing sample data:', 'installSampleData', [$request]];
         }
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];

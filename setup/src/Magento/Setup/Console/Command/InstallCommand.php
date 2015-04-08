@@ -28,6 +28,11 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX = 'sales_order_increment_prefix';
 
     /**
+     * Parameter indicating command whether to install Sample Data
+     */
+    const USE_SAMPLE_DATA = 'use_sample_data';
+
+    /**
      * Installer service factory
      *
      * @var InstallerFactory
@@ -90,6 +95,12 @@ class InstallCommand extends AbstractSetupCommand
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Provide order number prefix'
+            ),
+            new InputOption(
+                self::USE_SAMPLE_DATA,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Use sample data'
             )
         ]);
         $this->setName('setup:install')

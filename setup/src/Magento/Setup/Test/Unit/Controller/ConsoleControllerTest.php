@@ -135,13 +135,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->controller->onDispatch($event);
     }
 
-    public function testInstallAction()
-    {
-        $this->installer->expects($this->once())->method('install')->with($this->parameters);
-        $this->controller->installAction();
-    }
-
-
     public function testHelpActionNoType()
     {
         $beginHelpString = "\n==-------------------==\n"
@@ -179,7 +172,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     public function helpActionDataProvider()
     {
         return [
-            ['install',''],
             ['help', ''],
         ];
     }

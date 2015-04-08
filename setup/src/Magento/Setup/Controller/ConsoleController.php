@@ -6,21 +6,16 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Setup\Model\AdminAccount;
-use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use Magento\Setup\Model\ConsoleLogger;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Lists;
-use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Output\StreamOutput;
-use Magento\Setup\Console\Command\InstallCommand;
 
 /**
  * Controller that handles all setup commands via command line interface.
@@ -34,7 +29,6 @@ class ConsoleController extends AbstractActionController
      */
     const CMD_HELP = 'help';
     const CMD_INSTALL = 'install';
-    const CMD_INSTALL_CONFIG = 'install-configuration';
     /**#@- */
 
     /**
@@ -44,7 +38,6 @@ class ConsoleController extends AbstractActionController
      */
     private static $actions = [
         self::CMD_HELP => 'help',
-        self::CMD_INSTALL => 'install',
     ];
 
     /**
@@ -141,45 +134,7 @@ class ConsoleController extends AbstractActionController
      */
     private static function getCliConfig()
     {
-        $deployConfig = '--' . SetupConfigOptionsList::INPUT_KEY_DB_HOST . '='
-            . ' --' . SetupConfigOptionsList::INPUT_KEY_DB_NAME . '='
-            . ' --' . SetupConfigOptionsList::INPUT_KEY_DB_USER . '='
-            . ' --' . BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME . '='
-            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_PASSWORD . '=]'
-            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_PREFIX . '=]'
-            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_MODEL . '=]'
-            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS . '=]'
-            . ' [--' . SetupConfigOptionsList::INPUT_KEY_SESSION_SAVE . '=]'
-            . ' [--' . SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY . '=]'
-            . ' [--' . Installer::ENABLE_MODULES . '=]'
-            . ' [--' . Installer::DISABLE_MODULES . '=]';
-        $userConfig = '[--' . UserConfig::KEY_BASE_URL . '=]'
-            . ' [--' . UserConfig::KEY_LANGUAGE . '=]'
-            . ' [--' . UserConfig::KEY_TIMEZONE . '=]'
-            . ' [--' . UserConfig::KEY_CURRENCY . '=]'
-            . ' [--' . UserConfig::KEY_USE_SEF_URL . '=]'
-            . ' [--' . UserConfig::KEY_IS_SECURE . '=]'
-            . ' [--' . UserConfig::KEY_BASE_URL_SECURE . '=]'
-            . ' [--' . UserConfig::KEY_IS_SECURE_ADMIN . '=]'
-            . ' [--' . UserConfig::KEY_ADMIN_USE_SECURITY_KEY . '=]';
-        $adminUser = '--' . AdminAccount::KEY_USER . '='
-            . ' --' . AdminAccount::KEY_PASSWORD . '='
-            . ' --' . AdminAccount::KEY_EMAIL . '='
-            . ' --' . AdminAccount::KEY_FIRST_NAME . '='
-            . ' --' . AdminAccount::KEY_LAST_NAME . '=';
-        $salesConfig = '[--' . InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX . '=]';
         return [
-            self::CMD_INSTALL => [
-                'route' => self::CMD_INSTALL
-                    . " {$deployConfig} {$userConfig} {$adminUser} {$salesConfig}"
-                    . ' [--' . InstallCommand::INPUT_KEY_CLEANUP_DB . ']'
-                    . ' [--' . Installer::USE_SAMPLE_DATA . '=]',
-                'usage' => "{$deployConfig} {$userConfig} {$adminUser} {$salesConfig}"
-                    . ' [--' . InstallCommand::INPUT_KEY_CLEANUP_DB . ']'
-                    . ' [--' . Installer::USE_SAMPLE_DATA . '=]',
-                'usage_short' => self::CMD_INSTALL . ' <options>',
-                'usage_desc' => 'Install Magento application',
-            ],
             self::CMD_HELP => [
                 'route' => self::CMD_HELP . ' [' . implode('|', self::$helpOptions) . ']:type',
                 'usage' => '<' . implode('|', self::$helpOptions) . '>',
@@ -247,18 +202,6 @@ class ConsoleController extends AbstractActionController
             $this->log->log($exception->getMessage());
             return $this->getResponse();
         }
-    }
-
-    /**
-     * Controller for Install Command
-     *
-     * @return void
-     */
-    public function installAction()
-    {
-        /** @var \Zend\Console\Request $request */
-        $request = $this->getRequest();
-        $this->installer->install($request->getParams());
     }
 
     /**
@@ -341,20 +284,5 @@ class ConsoleController extends AbstractActionController
         }
 
         return wordwrap(implode(' ', $result['required']) . "\n" . implode(' ', $result['optional']), 120);
-    }
-
-    /**
-     * Convert an array to string
-     *
-     * @param array $input
-     * @return string
-     */
-    private function arrayToString($input)
-    {
-        $result = '';
-        foreach ($input as $key => $value) {
-            $result .= "$key => $value\n";
-        }
-        return $result;
     }
 }
