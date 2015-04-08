@@ -9,11 +9,14 @@
 /**
  * Reports quote collection
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\Resource\Quote;
 
+/**
+ * Class Collection
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
 {
     const SELECT_COUNT_SQL_TYPE_CART = 1;
