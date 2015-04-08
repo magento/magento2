@@ -21,6 +21,7 @@ class BundleSaveOptions
 
     /**
      * @param \Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository
+     * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productInterfaceFactory
      */
     public function __construct(
         \Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository,

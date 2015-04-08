@@ -208,16 +208,16 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     /**
      * Convert custom values if necessary
      *
-     * @param $customAttributes
+     * @param array $customAttributes
+     * @return void
      */
-    protected function convertCustomAttributeValues(&$customAttributes)
+    protected function convertCustomAttributeValues(array &$customAttributes)
     {
         foreach ($customAttributes as $attributeCode => $attributeValue) {
             if ($attributeValue instanceof \Magento\Framework\Api\AttributeValue) {
                 $customAttributes[$attributeCode] = $attributeValue->getValue();
             }
         }
-        return;
     }
 
     /**

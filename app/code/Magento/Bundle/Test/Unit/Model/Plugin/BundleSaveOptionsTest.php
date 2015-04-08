@@ -75,7 +75,7 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
         );
         $this->productExtensionMock = $this->getMock(
             'Magento\Catalog\Api\Data\ProductExtension',
-            ['getBundleProductOptions'],
+            ['getBundleProductOptions', 'setBundleProductOptions'],
             [],
             '',
             false

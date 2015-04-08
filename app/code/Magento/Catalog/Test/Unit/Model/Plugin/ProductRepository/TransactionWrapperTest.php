@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Plugin\ProductRepository;
+namespace Magento\Catalog\Test\Unit\Model\Plugin\ProductRepository;
 
 class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
 {

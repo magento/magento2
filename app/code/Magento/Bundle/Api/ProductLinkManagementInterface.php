@@ -12,7 +12,7 @@ interface ProductLinkManagementInterface
      * Get all children for Bundle product
      *
      * @param string $productSku
-     * @param int|null $optionId
+     * @param int $optionId
      * @return \Magento\Bundle\Api\Data\LinkInterface[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\InputException

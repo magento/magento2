@@ -159,6 +159,6 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
                 'operation' => self::SERVICE_NAME . 'getChildren',
             ],
         ];
-        return $this->_webApiCall($serviceInfo, ['productId' => $productSku]);
+        return $this->_webApiCall($serviceInfo, ['productSku' => $productSku]);
     }
 }

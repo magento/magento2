@@ -208,6 +208,9 @@ class ProductServiceTest extends WebapiAbstract
         $bundleProductOptions[0]['product_links'][] = [
             'sku' => 'simple2',
             'qty' => 2,
+            "price" => 20,
+            "price_type" => 1,
+            "is_default" => false,
         ];
         $this->setBundleProductOptions($bundleProduct, $bundleProductOptions);
         $updatedProduct = $this->saveProduct($bundleProduct);
@@ -242,6 +245,9 @@ class ProductServiceTest extends WebapiAbstract
                 [
                     'sku' => 'simple2',
                     'qty' => 2,
+                    "price" => 20,
+                    "price_type" => 1,
+                    "is_default" => false,
                 ],
             ],
         ];
@@ -302,6 +308,9 @@ class ProductServiceTest extends WebapiAbstract
                     [
                         "sku" => 'simple',
                         "qty" => 1,
+                        "is_default" => true,
+                        "price" => 10,
+                        "price_type" => 1,
                     ],
                 ],
             ],
@@ -363,6 +372,7 @@ class ProductServiceTest extends WebapiAbstract
                         "qty" => 1,
                         "price" => 20,
                         "price_type" => 1,
+                        "is_default" => true,
                     ],
                 ],
             ],
@@ -479,10 +489,10 @@ class ProductServiceTest extends WebapiAbstract
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save',
+                'operation' => self::SERVICE_NAME . 'deleteById',
             ],
         ];
-        $requestData = [];
+        $requestData = ["sku" => $productSku];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
     }

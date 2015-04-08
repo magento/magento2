@@ -22,7 +22,7 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Set id
      *
-     * @param $id
+     * @param string $id
      * @return $this
      */
     public function setId($id);

@@ -84,7 +84,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
         $childrenList = [];
         foreach ($this->getOptions($product) as $option) {
-            if (!is_null($optionId) && $option->getOptionId() != $optionId) {
+            if ($optionId !== null && $option->getOptionId() != $optionId) {
                 continue;
             }
             /** @var \Magento\Catalog\Model\Product $selection */
@@ -147,7 +147,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         try {
             $selectionModel->save();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Could not save child: "%1"', [$e->getMessage()], $e));
+            throw new CouldNotSaveException(__('Could not save child: "%1"', $e->getMessage()), $e);
         }
 
         return $selectionModel->getId();
@@ -168,25 +168,25 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     ) {
         $selectionModel->setProductId($linkedProductId);
         $selectionModel->setParentProductId($parentProductId);
-        if (!is_null($productLink->getOptionId())) {
+        if (($productLink->getOptionId() !== null)) {
             $selectionModel->setOptionId($productLink->getOptionId());
         }
-        if (!is_null($productLink->getPosition())) {
+        if ($productLink->getPosition() !== null) {
             $selectionModel->setPosition($productLink->getPosition());
         }
-        if (!is_null($productLink->getQty())) {
+        if ($productLink->getQty() !== null) {
             $selectionModel->setSelectionQty($productLink->getQty());
         }
-        if (!is_null($productLink->getPriceType())) {
+        if ($productLink->getPriceType() !== null) {
             $selectionModel->setSelectionPriceType($productLink->getPriceType());
         }
-        if (!is_null($productLink->getPrice())) {
+        if ($productLink->getPrice() !== null) {
             $selectionModel->setSelectionPriceValue($productLink->getPrice());
         }
-        if (!is_null($productLink->getCanChangeQuantity())) {
+        if ($productLink->getCanChangeQuantity() !== null) {
             $selectionModel->setSelectionCanChangeQty($productLink->getCanChangeQuantity());
         }
-        if (!is_null($productLink->getIsDefault())) {
+        if ($productLink->getIsDefault() !== null) {
             $selectionModel->setIsDefault($productLink->getIsDefault());
         }
 

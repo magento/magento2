@@ -36,6 +36,9 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
         return $this->getData(self::KEY_ID);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setId($id)
     {
         return $this->setData(self::KEY_ID, $id);
