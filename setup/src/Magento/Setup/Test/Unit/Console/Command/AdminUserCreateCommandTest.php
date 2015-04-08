@@ -59,4 +59,31 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
         $argsList = $this->command->getOptionsList();
         $this->assertEquals(AdminAccount::KEY_EMAIL, $argsList[2]->getName());
     }
+
+    /**
+     * @dataProvider validateDataProvider
+     * @param bool[] $options
+     * @param string[] $errors
+     */
+    public function testValidate(array $options, array $errors)
+    {
+        $inputMock = $this->getMockForAbstractClass('Symfony\Component\Console\Input\InputInterface', [], '' ,false);
+        $index = 0;
+        foreach ($options as $option) {
+            $inputMock->expects($this->at($index++))->method('getOption')->willReturn($option);
+        }
+        $this->assertEquals($errors, $this->command->validate($inputMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function validateDataProvider()
+    {
+        return [
+            [[false, true, true, true, true], [AdminAccount::KEY_USER]],
+            [[true, false, false, true, true], [AdminAccount::KEY_PASSWORD, AdminAccount::KEY_EMAIL]],
+            [[true, true, true, true, true], []],
+        ];
+    }
 }
