@@ -11,6 +11,7 @@
         "magento/module-checkout": "0.74.0-beta3",
         "magento/module-theme": "0.74.0-beta3",
         "magento/module-sales-rule": "0.74.0-beta3",
+        "magento/module-sales-sequence": "0.74.0-beta3",
         "magento/module-backend": "0.74.0-beta3",
         "magento/module-widget": "0.74.0-beta3",
         "magento/module-directory": "0.74.0-beta3",

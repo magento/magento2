@@ -60,7 +60,7 @@
                 </div>
                 <div class="box-content">
                     <?php $_shipping = $_creditmemo->getShippingAddress() ?>
-                    <address><?php echo $_shipping->format('html') ?></address>
+                    <address><?php echo $block->formatAddress($_shipping, 'html') ?></address>
                 </div>
             </div>
             <div class="box box-order-shipping-method">
@@ -78,7 +78,7 @@
                 </div>
                 <div class="box-content">
                     <?php $_billing = $_creditmemo->getbillingAddress() ?>
-                    <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+                    <address><?php echo $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
                 </div>
             </div>
             <div class="box box-order-billing-method">
