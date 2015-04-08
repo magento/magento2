@@ -147,13 +147,6 @@ abstract class Grid extends Block
     protected $active = '.active';
 
     /**
-     * Base part of row locator template for getRow() method
-     *
-     * @var string
-     */
-    protected $location = '//div[@class="grid"]//tr[';
-
-    /**
      * Secondary part of row locator template for getRow() method
      *
      * @var string
@@ -381,16 +374,12 @@ abstract class Grid extends Block
         if ($isSearchable) {
             $this->search($filter);
         }
-        $location = '//div[@class="grid"]//tr[';
-        $rowTemplate = 'td[contains(.,normalize-space("%s"))]';
-        if ($isStrict) {
-            $rowTemplate = 'td[text()[normalize-space()="%s"]]';
-        }
+        $rowTemplate = ($isStrict) ? $this->rowTemplateStrict : $this->rowTemplate;
         $rows = [];
         foreach ($filter as $value) {
             $rows[] = sprintf($rowTemplate, $value);
         }
-        $location = $location . implode(' and ', $rows) . ']';
+        $location = '//tr[' . implode(' and ', $rows) . ']';
         return $this->_rootElement->find($location, Locator::SELECTOR_XPATH);
     }
 
