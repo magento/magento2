@@ -45,6 +45,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $gridPoolMock;
 
+    /**
+     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entitySnapshotMock;
+
     public function setUp()
     {
         $this->addressMock = $this->getMock(
@@ -89,6 +94,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Sales\Model\Resource\EntitySnapshot',
+            [],
+            [],
+            '',
+            false
+        );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($this->adapterMock));
@@ -105,7 +117,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             [
                 'resource' => $this->appResourceMock,
                 'validator' => $this->validatorMock,
-                'gridPool' => $this->gridPoolMock
+                'gridPool' => $this->gridPoolMock,
+                'entitySnapshot' => $this->entitySnapshotMock
             ]
         );
     }
@@ -119,9 +132,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->equalTo($this->addressMock))
             ->will($this->returnValue([]));
-        $this->addressMock->expects($this->any())
-            ->method('hasDataChanges')
-            ->will($this->returnValue(true));
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->addressMock)
+            ->willReturn(true);
         $this->addressMock->expects($this->exactly(2))
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
@@ -147,6 +161,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveValidationFailed()
     {
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->addressMock)
+            ->willReturn(true);
         $this->addressMock->expects($this->any())
             ->method('hasDataChanges')
             ->will($this->returnValue(true));
