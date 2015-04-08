@@ -337,7 +337,7 @@ class DomMerger implements DomMergerInterface
      * @param \DOMDocument $domDocument
      * @param string|null $schemaFilePath
      * @return array of errors
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     protected function validateDomDocument(\DOMDocument $domDocument, $schemaFilePath = null)
     {
@@ -356,7 +356,7 @@ class DomMerger implements DomMergerInterface
                     $errors[] = 'Unknown validation error';
                 }
             }
-        } catch (\LocalizedException $exception) {
+        } catch (\Exception $exception) {
             libxml_use_internal_errors(false);
             throw $exception;
         }
