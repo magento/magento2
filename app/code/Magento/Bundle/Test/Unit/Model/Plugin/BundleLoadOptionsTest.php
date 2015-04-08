@@ -60,7 +60,6 @@ class BundleLoadOptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundLoad()
     {
-        $this->markTestSkipped('MAGETWO-34577');
         $productMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
             ['getTypeId', 'setExtensionAttributes'],

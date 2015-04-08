@@ -9,6 +9,9 @@ namespace Magento\Bundle\Api\Data;
 
 interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    const PRICE_TYPE_FIXED = 0;
+    const PRICE_TYPE_PERCENT = 1;
+
     /**
      * Get the identifier
      *
