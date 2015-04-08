@@ -77,7 +77,7 @@ class InstallCommand extends AbstractSetupCommand
     {
         $inputOptionsArgs = $this->configModel->getAvailableOptions();
         $inputOptionsArgs = array_merge($inputOptionsArgs, $this->userConfig->getOptionsList());
-        $inputOptionsArgs = array_merge($inputOptionsArgs, $this->adminUser->getArgumentsList());
+        $inputOptionsArgs = array_merge($inputOptionsArgs, $this->adminUser->getOptionsList());
         $inputOptionsArgs = array_merge($inputOptionsArgs, [
             new InputOption(
                 self::INPUT_KEY_CLEANUP_DB,

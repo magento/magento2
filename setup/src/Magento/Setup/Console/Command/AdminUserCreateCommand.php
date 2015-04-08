@@ -9,7 +9,7 @@ namespace Magento\Setup\Console\Command;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -38,7 +38,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     {
         $this->setName('admin:user:create')
             ->setDescription('Creates admin user')
-            ->setDefinition($this->getArgumentsList());
+            ->setDefinition($this->getOptionsList());
         parent::configure();
     }
 
@@ -47,9 +47,13 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $errors = $this->validate($input);
+        if ($errors) {
+            throw new \InvalidArgumentException("Missing option(s):\n" . implode("\n", $errors));
+        }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
-        $installer->installAdminUser($input->getArguments());
-        $output->writeln('<info>Created admin user ' . $input->getArgument(AdminAccount::KEY_USER) . '</info>');
+        $installer->installAdminUser($input->getOptions());
+        $output->writeln('<info>Created admin user ' . $input->getOption(AdminAccount::KEY_USER) . '</info>');
     }
 
     /**
@@ -57,14 +61,38 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      *
      * @return InputArgument[]
      */
-    public function getArgumentsList()
+    public function getOptionsList()
     {
         return [
-            new InputArgument(AdminAccount::KEY_USER, InputArgument::REQUIRED, 'Admin user'),
-            new InputArgument(AdminAccount::KEY_PASSWORD, InputArgument::REQUIRED, 'Admin password'),
-            new InputArgument(AdminAccount::KEY_EMAIL, InputArgument::REQUIRED, 'Admin email'),
-            new InputArgument(AdminAccount::KEY_FIRST_NAME, InputArgument::REQUIRED, 'Admin firstname'),
-            new InputArgument(AdminAccount::KEY_LAST_NAME, InputArgument::REQUIRED, 'Admin lastname'),
+            new InputOption(AdminAccount::KEY_USER, null, InputOption::VALUE_REQUIRED, 'Admin user'),
+            new InputOption(AdminAccount::KEY_PASSWORD, null, InputOption::VALUE_REQUIRED, 'Admin password'),
+            new InputOption(AdminAccount::KEY_EMAIL, null, InputOption::VALUE_REQUIRED, 'Admin email'),
+            new InputOption(AdminAccount::KEY_FIRST_NAME, null, InputOption::VALUE_REQUIRED, 'Admin first name'),
+            new InputOption(AdminAccount::KEY_LAST_NAME, null, InputOption::VALUE_REQUIRED, 'Admin last name'),
         ];
+    }
+
+    /**
+     * Check if all admin options are provided
+     *
+     * @param InputInterface $input
+     * @return string[]
+     */
+    private function validate(InputInterface $input)
+    {
+        $errors = [];
+        $required = [
+            AdminAccount::KEY_USER,
+            AdminAccount::KEY_PASSWORD,
+            AdminAccount::KEY_EMAIL,
+            AdminAccount::KEY_FIRST_NAME,
+            AdminAccount::KEY_LAST_NAME,
+        ];
+        foreach ($required as $key) {
+            if ($input->getOption($key)) {
+                $error[] = $key;
+            }
+        }
+        return $errors;
     }
 }

@@ -7,6 +7,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Console\Command\AdminUserCreateCommand;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
@@ -29,25 +30,33 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $arguments = [
+        $options = [
+            '--' . AdminAccount::KEY_USER => 'user',
+            '--' . AdminAccount::KEY_PASSWORD => '123123q',
+            '--' . AdminAccount::KEY_EMAIL => 'test@test.com',
+            '--' . AdminAccount::KEY_FIRST_NAME => 'John',
+            '--' . AdminAccount::KEY_LAST_NAME => 'Doe',
+        ];
+        $data = [
             AdminAccount::KEY_USER => 'user',
             AdminAccount::KEY_PASSWORD => '123123q',
             AdminAccount::KEY_EMAIL => 'test@test.com',
             AdminAccount::KEY_FIRST_NAME => 'John',
             AdminAccount::KEY_LAST_NAME => 'Doe',
+            InitParamListener::BOOTSTRAP_PARAM => '',
         ];
         $commandTester = new CommandTester($this->command);
         $installerMock = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
-        $installerMock->expects($this->once())->method('installAdminUser')->with($arguments);
+        $installerMock->expects($this->once())->method('installAdminUser')->with($data);
         $this->installerFactoryMock->expects($this->once())->method('create')->willReturn($installerMock);
-        $commandTester->execute($arguments);
+        $commandTester->execute($options);
         $this->assertEquals('Created admin user user' . PHP_EOL, $commandTester->getDisplay());
     }
 
-    public function testGetArgumentsList()
+    public function testGetOptionsList()
     {
         /* @var $argsList \Symfony\Component\Console\Input\InputArgument[] */
-        $argsList = $this->command->getArgumentsList();
+        $argsList = $this->command->getOptionsList();
         $this->assertEquals(AdminAccount::KEY_EMAIL, $argsList[2]->getName());
     }
 }
