@@ -6,24 +6,28 @@
 /*global alert*/
 define(
     [
+        "jquery",
         'ko',
         'uiComponent',
         'Magento_Customer/js/action/login',
         'Magento_Customer/js/model/customer',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Checkout/js/model/step-navigator',
+        '../model/quote'
     ],
-    function(ko, Component, login, customer, navigator) {
+    function($, ko, Component, login, customer, navigator, quote) {
+        "use strict";
         var stepName = 'authentication';
         return Component.extend({
             stepNumber: navigator.getStepNumber(stepName),
-            isAllowedGuestCheckout: true,
-            isRegistrationAllowed: true,
-            isMethodRegister: false,
-            isCustomerMustBeLogged: false,
-            registerUrl: '',
+            isAllowedGuestCheckout: window.isAllowedGuestCheckout,
+            isRegistrationAllowed: window.isAllowedGuestCheckout,
+            isMethodRegister: window.isMethodRegister,
+            isCustomerMustBeLogged: window.isCustomerMustBeLogged,
+            registerUrl: window.getRegisterUrl,
             forgotPasswordUrl: '',
             username: '',
             password: '',
+            isVisible: navigator.isStepVisible(stepName),
             defaults: {
                 template: 'Magento_Checkout/authentication'
             },
@@ -35,6 +39,27 @@ define(
                     navigator.setStepEnabled(stepName, false);
                 }
                 return !customer.isLoggedIn()();
+            },
+            isChecked: function() {
+                if (isMethodRegister || !isAllowedGuestCheckout) {
+                    return 'register';
+                }
+                return false;
+            },
+            setCheckoutMethod: function() {
+                var guestChecked    = $( '[data-role=checkout-method-guest]' ).is( ':checked' );
+                var registerChecked = $( '[data-role=checkout-method-register]').is( ':checked' );
+                if( !guestChecked && !registerChecked ){
+                    alert('Please choose to register or to checkout as a guest.');
+                    return false;
+                }
+                if (guestChecked) {
+                    quote.setCheckoutMethod('guest')
+                }
+                if (registerChecked) {
+                    quote.setCheckoutMethod('register')
+                }
+                navigator.setCurrent('authentication').goNext();
             }
         });
     }

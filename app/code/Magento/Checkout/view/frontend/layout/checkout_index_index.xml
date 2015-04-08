@@ -65,7 +65,7 @@
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
                                                                 </item>
                                                                 <item name="label" xsi:type="string">Email</item>
-                                                                <item name="dataScope" xsi:type="string">customerDetails.email</item>
+                                                                <item name="dataScope" xsi:type="string">billingAddress.email</item>
                                                                 <item name="provider" xsi:type="string">billingAddressProvider</item>
                                                                 <item name="validation" xsi:type="array">
                                                                     <item name="required-entry" xsi:type="boolean">true</item>

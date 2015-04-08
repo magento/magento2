@@ -7,12 +7,12 @@
 <li id="opc-billing" class="section allow active">
     <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <span class="number" data-bind="text: stepNumber()"></span>
-        <h2>Billing Information</h2>
+        <h2 data-bind="text: $t('Billing Information')"></h2>
     </div>
     <div id="checkout-step-billing" class="step-content" data-role="content" data-bind="fadeVisible: isVisible()">
         <form class="form billing" id="co-billing-form" data-hasrequired="* Required Fields">
             <div class="field addresses">
-                <label class="label" for="billing:address-select"><span>Select a billing address from your address book or enter a new address.</span></label>
+                <label class="label" for="billing:address-select"><span data-bind="text: $t('Select a billing address from your address book or enter a new address.')"></span></label>
                 <div class="control">
                     <select name="billing_address_id" id="billing:address-select" data-bind="
                         options: billingAddresses,

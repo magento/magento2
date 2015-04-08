@@ -23,6 +23,11 @@
             window.currencySymbol = <?php echo $this->getCurrencySymbol()?>;
             window.selectedShippingMethod = <?php echo $this->getSelectedShippingMethod()?>;
             window.storeCode = <?php echo $this->getStoreCode()?>;
+            window.isAllowedGuestCheckout = <?php echo $this->isAllowedGuestCheckout()?>;
+            window.isRegistrationAllowed = <?php echo $this->isRegistrationAllowed()?>;
+            window.isMethodRegister = <?php echo $this->isMethodRegister()?>;
+            window.isCustomerMustBeLogged = <?php echo $this->isCustomerMustBeLogged()?>;
+            window.getRegisterUrl = <?php echo $this->getRegisterUrl()?>;
         </script>
         <script>
             require(['mage/url', 'Magento_Checkout/js/model/step-loader'], function(url, loader) {
