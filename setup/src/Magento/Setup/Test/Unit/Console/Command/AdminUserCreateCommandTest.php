@@ -43,7 +43,7 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
             AdminAccount::KEY_EMAIL => 'test@test.com',
             AdminAccount::KEY_FIRST_NAME => 'John',
             AdminAccount::KEY_LAST_NAME => 'Doe',
-            InitParamListener::BOOTSTRAP_PARAM => '',
+            InitParamListener::BOOTSTRAP_PARAM => null,
         ];
         $commandTester = new CommandTester($this->command);
         $installerMock = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);

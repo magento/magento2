@@ -59,7 +59,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     /**
      * Get list of arguments for the command
      *
-     * @return InputArgument[]
+     * @return InputOption[]
      */
     public function getOptionsList()
     {
@@ -89,8 +89,8 @@ class AdminUserCreateCommand extends AbstractSetupCommand
             AdminAccount::KEY_LAST_NAME,
         ];
         foreach ($required as $key) {
-            if ($input->getOption($key)) {
-                $error[] = $key;
+            if (!$input->getOption($key)) {
+                $errors[] = $key;
             }
         }
         return $errors;
