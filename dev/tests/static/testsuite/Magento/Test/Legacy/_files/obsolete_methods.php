@@ -2159,4 +2159,6 @@ return [
     ['addOrdersCount', 'Magento\Reports\Model\Resource\Customer\Collection'],
     ['addSumAvgTotals', 'Magento\Reports\Model\Resource\Customer\Collection'],
     ['orderByTotalAmount', 'Magento\Reports\Model\Resource\Customer\Collection'],
+    ['addOrdersCount', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['addOrderedQty', 'Magento\Reports\Model\Resource\Product\Collection'],
 ];

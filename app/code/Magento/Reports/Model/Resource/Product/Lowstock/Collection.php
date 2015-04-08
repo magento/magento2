@@ -71,6 +71,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource
+     * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteResource
      * @param mixed $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -101,6 +102,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource,
+        \Magento\Quote\Model\Resource\Quote\Collection $quoteResource,
         $connection = null
     ) {
         parent::__construct(
@@ -126,6 +128,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
             $product,
             $eventTypeFactory,
             $productType,
+            $quoteResource,
             $connection
         );
         $this->stockRegistry = $stockRegistry;
