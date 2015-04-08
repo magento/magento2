@@ -11,9 +11,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use Magento\Setup\Model\Lists;
 
+/**
+ * Command prints list of available language locales
+ */
 class InfoLanguageListCommand extends Command
 {
     /**
+     * List model provides lists of available options for currency, language locales, timezones
+     *
      * @var Lists
      */
     private $lists;

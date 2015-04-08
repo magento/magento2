@@ -45,7 +45,7 @@ class InstallCommand extends AbstractSetupCommand
     protected $configModel;
 
     /**
-     * @var InstallUserConfigurationCommand
+     * @var InstallStoreConfigurationCommand
      */
     protected $userConfig;
 
@@ -59,13 +59,13 @@ class InstallCommand extends AbstractSetupCommand
      *
      * @param InstallerFactory $installerFactory
      * @param ConfigModel $configModel
-     * @param InstallUserConfigurationCommand $userConfig
+     * @param InstallStoreConfigurationCommand $userConfig
      * @param AdminUserCreateCommand $adminUser
      */
     public function __construct(
         InstallerFactory $installerFactory,
         ConfigModel $configModel,
-        InstallUserConfigurationCommand $userConfig,
+        InstallStoreConfigurationCommand $userConfig,
         AdminUserCreateCommand $adminUser
     ) {
         $this->installerFactory = $installerFactory;

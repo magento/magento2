@@ -13,10 +13,19 @@ class InfoTimezoneListCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
+        $timezones = [
+            'timezone' => 'timezone description'
+        ];
+
         /** @var \Magento\Setup\Model\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
         $list = $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
-        $list->expects($this->once())->method('getTimezoneList')->will($this->returnValue([]));
+        $list->expects($this->once())->method('getTimezoneList')->will($this->returnValue($timezones));
         $commandTester = new CommandTester(new InfoTimezoneListCommand($list));
         $commandTester->execute([]);
+        $this->assertStringMatchesFormat(
+            'timezone => timezone description',
+            $commandTester->getDisplay()
+        );
+
     }
 }

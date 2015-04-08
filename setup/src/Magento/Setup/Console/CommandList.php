@@ -47,7 +47,7 @@ class CommandList
             'Magento\Setup\Console\Command\InfoLanguageListCommand',
             'Magento\Setup\Console\Command\InfoTimezoneListCommand',
             'Magento\Setup\Console\Command\InstallCommand',
-            'Magento\Setup\Console\Command\InstallUserConfigurationCommand',
+            'Magento\Setup\Console\Command\InstallStoreConfigurationCommand',
             'Magento\Setup\Console\Command\ModuleEnableCommand',
             'Magento\Setup\Console\Command\ModuleDisableCommand',
             'Magento\Setup\Console\Command\ModuleStatusCommand',

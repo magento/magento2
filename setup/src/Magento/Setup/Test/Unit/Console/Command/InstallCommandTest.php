@@ -11,7 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
-use Magento\Setup\Console\Command\InstallUserConfigurationCommand;
+use Magento\Setup\Console\Command\InstallStoreConfigurationCommand;
 
 class InstallCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,10 +22,10 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_NAME => 'magento',
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_USER => 'root',
             '--' . BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'admin',
-            '--' . InstallUserConfigurationCommand::INPUT_BASE_URL => 'http://127.0.0.1/magento2ce/',
-            '--' . InstallUserConfigurationCommand::INPUT_LANGUAGE => 'en_US',
-            '--' . InstallUserConfigurationCommand::INPUT_TIMEZONE => 'America/Chicago',
-            '--' . InstallUserConfigurationCommand::INPUT_CURRENCY => 'USD',
+            '--' . InstallStoreConfigurationCommand::INPUT_BASE_URL => 'http://127.0.0.1/magento2ce/',
+            '--' . InstallStoreConfigurationCommand::INPUT_LANGUAGE => 'en_US',
+            '--' . InstallStoreConfigurationCommand::INPUT_TIMEZONE => 'America/Chicago',
+            '--' . InstallStoreConfigurationCommand::INPUT_CURRENCY => 'USD',
             '--' . AdminAccount::KEY_USER => 'user',
             '--' . AdminAccount::KEY_PASSWORD => '123123q',
             '--' . AdminAccount::KEY_EMAIL => 'test@test.com',
@@ -44,7 +44,7 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
 
         $userConfig = $this->getMock(
-            'Magento\Setup\Console\Command\InstallUserConfigurationCommand',
+            'Magento\Setup\Console\Command\InstallStoreConfigurationCommand',
             [],
             [],
             '',
@@ -121,22 +121,22 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
         $option1
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_BASE_URL));
+            ->will($this->returnValue(InstallStoreConfigurationCommand::INPUT_BASE_URL));
         $option2 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $option2
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_LANGUAGE));
+            ->will($this->returnValue(InstallStoreConfigurationCommand::INPUT_LANGUAGE));
         $option3 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $option3
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_TIMEZONE));
+            ->will($this->returnValue(InstallStoreConfigurationCommand::INPUT_TIMEZONE));
         $option4 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $option4
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_CURRENCY));
+            ->will($this->returnValue(InstallStoreConfigurationCommand::INPUT_CURRENCY));
         return [$option1, $option2, $option3, $option4];
     }
 

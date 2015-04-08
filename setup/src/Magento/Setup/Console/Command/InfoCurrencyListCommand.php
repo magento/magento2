@@ -11,9 +11,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use Magento\Setup\Model\Lists;
 
+/**
+ * Command prints list of available currencies
+ */
 class InfoCurrencyListCommand extends Command
 {
     /**
+     * List model provides lists of available options for currency, language locales, timezones
+     *
      * @var Lists
      */
     private $lists;
@@ -43,8 +48,8 @@ class InfoCurrencyListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach ($this->lists->getCurrencyList() as $key=>$locale) {
-            $output->writeln($key . ' => ' . $locale);
+        foreach ($this->lists->getCurrencyList() as $key => $currency) {
+            $output->writeln($key . ' => ' . $currency);
         }
     }
 }

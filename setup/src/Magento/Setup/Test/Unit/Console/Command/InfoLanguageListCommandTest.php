@@ -13,10 +13,17 @@ class InfoLanguageListCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
+        $languages = [
+            'LNG' => 'Language description'
+        ];
         /** @var \Magento\Setup\Model\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
         $list = $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
-        $list->expects($this->once())->method('getLocaleList')->will($this->returnValue([]));
+        $list->expects($this->once())->method('getLocaleList')->will($this->returnValue($languages));
         $commandTester = new CommandTester(new InfoLanguageListCommand($list));
         $commandTester->execute([]);
+        $this->assertStringMatchesFormat(
+            'LNG => Language description',
+            $commandTester->getDisplay()
+        );
     }
 }

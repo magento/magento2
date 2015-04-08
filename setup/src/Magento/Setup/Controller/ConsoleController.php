@@ -9,7 +9,6 @@ namespace Magento\Setup\Controller;
 use Magento\Setup\Model\ConsoleLogger;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
-use Magento\Setup\Model\Lists;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\EventManager\EventManagerInterface;
@@ -55,13 +54,6 @@ class ConsoleController extends AbstractActionController
      * @var ConsoleLogger
      */
     private $log;
-
-    /**
-     * Options Lists
-     *
-     * @var Lists
-     */
-    private $options;
 
     /**
      * Installer service
@@ -152,7 +144,6 @@ class ConsoleController extends AbstractActionController
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
-        Lists $options,
         InstallerFactory $installerFactory,
         ObjectManagerProvider $objectManagerProvider
     ) {
@@ -163,7 +154,6 @@ class ConsoleController extends AbstractActionController
             'Magento\Setup\Model\ConsoleLogger',
             ['output' => $output]
         );
-        $this->options = $options;
         $this->installer = $installerFactory->create($this->log);
 
         // By default we use our customized error handler, but for CLI we want to display all errors

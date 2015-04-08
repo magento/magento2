@@ -6,10 +6,10 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\InstallUserConfigurationCommand;
+use Magento\Setup\Console\Command\InstallStoreConfigurationCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class InstallUserConfigurationCommandTest extends \PHPUnit_Framework_TestCase
+class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -27,7 +27,7 @@ class InstallUserConfigurationCommandTest extends \PHPUnit_Framework_TestCase
     private $installer;
 
     /**
-     * @var InstallUserConfigurationCommand
+     * @var InstallStoreConfigurationCommand
      */
     private $command;
 
@@ -36,7 +36,7 @@ class InstallUserConfigurationCommandTest extends \PHPUnit_Framework_TestCase
         $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
-        $this->command = new InstallUserConfigurationCommand($this->installerFactory, $this->deploymentConfig);
+        $this->command = new InstallStoreConfigurationCommand($this->installerFactory, $this->deploymentConfig);
     }
 
     public function testExecute()
@@ -63,7 +63,7 @@ class InstallUserConfigurationCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertStringMatchesFormat(
-            'User settings can\'t be saved: the application is not installed.%w',
+            'Store settings can’t be saved because the Magento application is not installed.%w',
             $tester->getDisplay()
         );
     }

@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class InstallUserConfigurationCommand extends AbstractSetupCommand
+class InstallStoreConfigurationCommand extends AbstractSetupCommand
 {
     /**
      * Names of input arguments or options
@@ -60,8 +60,8 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $this->setName('setup:user-config:set')
-            ->setDescription('Installs admin user account')
+        $this->setName('setup:store-config:set')
+            ->setDescription('Installs store configuration')
             ->setDefinition($this->getOptionsList());
         parent::configure();
     }
@@ -72,7 +72,9 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln("<info>User settings can't be saved: the application is not installed.</info>");
+            $output->writeln(
+                "<info>Store settings can’t be saved because the Magento application is not installed.</info>"
+            );
             return;
         }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));

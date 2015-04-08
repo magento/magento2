@@ -11,9 +11,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
 use Magento\Setup\Model\Lists;
 
+/**
+ * Command prints list of available timezones
+ */
 class InfoTimezoneListCommand extends Command
 {
     /**
+     * List model provides lists of available options for currency, language locales, timezones
+     *
      * @var Lists
      */
     private $lists;
@@ -43,8 +48,8 @@ class InfoTimezoneListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach ($this->lists->getTimezoneList() as $key=>$locale) {
-            $output->writeln($key . ' => ' . $locale);
+        foreach ($this->lists->getTimezoneList() as $key => $timezone) {
+            $output->writeln($key . ' => ' . $timezone);
         }
     }
 }
