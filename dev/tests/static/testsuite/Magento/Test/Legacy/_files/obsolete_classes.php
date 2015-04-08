@@ -3143,4 +3143,5 @@ return [
     ['Magento\CatalogRule\CatalogRuleException'],
     ['Magento\Payment\Exception'],
     ['Magento\UrlRewrite\Model\Storage\DuplicateEntryException'],
+    ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
 ];
