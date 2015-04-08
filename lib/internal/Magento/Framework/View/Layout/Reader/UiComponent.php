@@ -6,9 +6,7 @@
 namespace Magento\Framework\View\Layout\Reader;
 
 use Magento\Framework\App;
-use Magento\Framework\Exception;
 use Magento\Framework\View\Layout;
-use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 
 /**
  * Class UiComponent
