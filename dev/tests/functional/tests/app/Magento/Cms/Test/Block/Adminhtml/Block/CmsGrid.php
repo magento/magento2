@@ -20,23 +20,25 @@ class CmsGrid extends Grid
      */
     protected $filters = [
         'title' => [
-            'selector' => '[name="params[filters][title]"]',
+            'selector' => '#title',
         ],
         'identifier' => [
-            'selector' => '[name="params[filters][identifier]"]',
+            'selector' => '#identifier',
         ],
         'is_active' => [
-            'selector' => '[name="params[filters][is_active]"]',
+            'selector' => '#is_active',
             'input' => 'select',
         ],
         'creation_time_from' => [
-            'selector' => '[name="params[filters][creation_time][from]"]',
+            'selector' => '(//span[.="Created"]/following::input[contains(@placeholder,"From")])[1]',
+            'strategy' => 'xpath',
         ],
         'update_time_from' => [
-            'selector' => '[name="params[filters][update_time][from]"]',
+            'selector' => '(//span[.="Created"]/following::input[contains(@placeholder,"From")])[2]',
+            'strategy' => 'xpath',
         ],
         'store_id' => [
-            'selector' => '[name="params[filters][store_id]"]',
+            'selector' => 'label[for="store_id"] + div > select',
             'input' => 'selectstore'
         ],
     ];
