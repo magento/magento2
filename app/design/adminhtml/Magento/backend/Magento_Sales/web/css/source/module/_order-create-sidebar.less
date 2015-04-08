@@ -1,0 +1,152 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@page-order-sidebar__font-size: 1.5rem;
+@page-order-sidebar__font-size-xs: 1.1rem;
+@page-order-sidebar__color: @color-very-dark-gray;
+@page-order-sidebar__margin: 2.4rem;
+@page-order-sidebar__padding: @indent__base;
+@page-order-sidebar__margin-small: .5rem;
+@page-order-sidebar__margin-m: 1rem;
+@page-order-sidebar__margin-reqular: 1.7rem;
+@page-order-sidebar__border-color: @border__color;
+
+@page-order-sidebar-scroll__height: 24rem;
+
+//
+
+//
+//  Order Sidebar
+//  ---------------------------------------------
+
+.order-sidebar {
+    &:extend(.admin__page-nav);
+    color: @page-order-sidebar__color;
+    padding: 3rem @page-order-sidebar__padding;
+
+    .order-currency {
+        float: none;
+        font-size: @font-size__base;
+        margin: 0 0 @page-order-sidebar__margin;
+        .admin__field-label {
+            display: block;
+            text-align: left;
+        }
+    }
+    .customer-activity-title {
+        border-bottom: 1px solid @page-order-sidebar__border-color;
+        font-size: 1.9rem;
+        font-weight: @font-weight__bold;
+        margin: 0 0 @page-order-sidebar__margin;
+        padding: 0 0 @page-order-sidebar__margin;
+    }
+    .admin__control-select {
+        margin: 0 0 @page-order-sidebar__margin-small;
+        width: 100%;
+    }
+    .order-sidebar-block {
+        border-bottom: 1px solid @page-order-sidebar__border-color;
+        margin: 0 0 @page-order-sidebar__margin;
+        padding: 0 0 @page-order-sidebar__margin;
+    }
+    .table-info {
+        color: @page-order-sidebar__color;
+        width: 100%;
+        th,
+        td {
+            &:first-child {
+                padding-left: @page-order-sidebar__padding;
+            }
+        }
+        .icon {
+            &:extend(.abs-icon all);
+            display: inline-block;
+            font-size: @page-order-sidebar__font-size + 0.1rem;
+            vertical-align: middle;
+            &:after {
+                color: @page-order-sidebar__color;
+            }
+            &.icon-remove {
+                margin-left: -3px;
+                &:after {
+                    content: @page-order-icon-remove__content;
+                }
+            }
+            &.icon-add {
+                &:after {
+                    content: @page-order-icon-add__content;
+                }
+            }
+            > span {
+                .extend__visually-hidden();
+            }
+        }
+        .col-add {
+            text-align: right;
+            .icon-add {
+                margin-right: @page-order-sidebar__margin-m;
+            }
+        }
+    }
+    .action-refresh {
+        &:extend(.abs-icon all);
+        display: table-cell;
+        font-size: @page-order-icon-refresh__font-size;
+        padding-right: @page-order-sidebar__margin-m;
+        vertical-align: middle;
+        &:after {
+            color: @page-order-icon-refresh__color;
+            content: @page-order-icon-refresh__content;
+        }
+        &:hover {
+            &:after {
+                color: @page-order-icon-refresh__hover__color;
+            }
+            text-decoration: none;
+        }
+        > span {
+            .extend__visually-hidden();
+        }
+    }
+    .create-order-sidebar-block {
+        .head {
+            margin: 0 0 @page-order-sidebar__margin;
+        }
+        .auto-scroll {
+            margin: 0 -@page-order-sidebar__padding @page-order-sidebar__margin-small;
+            max-height: @page-order-sidebar-scroll__height;
+            overflow: auto;
+            position: relative;
+            + .action-default {
+                margin-top: @page-order-sidebar__margin-reqular;
+            }
+            .no-items {
+                padding-left: @page-order-sidebar__padding;
+            }
+        }
+        .admin__field-option {
+            padding-top: 0;
+        }
+    }
+    .create-order-sidebar-label {
+        display: table-cell;
+        font-size: @page-order-sidebar__font-size;
+        font-weight: @font-weight__regular;
+        margin: 0;
+        vertical-align: middle;
+        + .admin__control-select {
+            margin-top: @page-order-sidebar__margin-reqular;
+        }
+    }
+    .actions {
+        .action-secondary {
+            width: 100%;
+        }
+    }
+}
