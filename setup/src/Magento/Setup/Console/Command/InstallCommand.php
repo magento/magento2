@@ -40,15 +40,33 @@ class InstallCommand extends AbstractSetupCommand
     protected $configModel;
 
     /**
+     * @var InstallUserConfigurationCommand
+     */
+    protected $userConfig;
+
+    /**
+     * @var AdminUserCreateCommand
+     */
+    protected $adminUser;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
      * @param ConfigModel $configModel
+     * @param InstallUserConfigurationCommand $userConfig
+     * @param AdminUserCreateCommand $adminUser
      */
-    public function __construct(InstallerFactory $installerFactory, ConfigModel $configModel)
-    {
+    public function __construct(
+        InstallerFactory $installerFactory,
+        ConfigModel $configModel,
+        InstallUserConfigurationCommand $userConfig,
+        AdminUserCreateCommand $adminUser
+    ) {
         $this->installerFactory = $installerFactory;
         $this->configModel = $configModel;
+        $this->userConfig = $userConfig;
+        $this->adminUser = $adminUser;
         parent::__construct();
     }
 
@@ -58,10 +76,8 @@ class InstallCommand extends AbstractSetupCommand
     protected function configure()
     {
         $inputOptionsArgs = $this->configModel->getAvailableOptions();
-        $userConfig = new InstallUserConfigurationCommand($this->installerFactory);
-        $inputOptionsArgs = array_merge($inputOptionsArgs, $userConfig->getOptionsList());
-        $adminUser = new AdminUserCreateCommand($this->installerFactory);
-        $inputOptionsArgs = array_merge($inputOptionsArgs, $adminUser->getArgumentsList());
+        $inputOptionsArgs = array_merge($inputOptionsArgs, $this->userConfig->getOptionsList());
+        $inputOptionsArgs = array_merge($inputOptionsArgs, $this->adminUser->getArgumentsList());
         $inputOptionsArgs = array_merge($inputOptionsArgs, [
             new InputOption(
                 self::INPUT_KEY_CLEANUP_DB,

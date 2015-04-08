@@ -80,7 +80,7 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
     /**
      * Get list of options for the command
      *
-     * @return array
+     * @return InputOption[]
      */
     public function getOptionsList()
     {

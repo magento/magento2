@@ -55,7 +55,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     /**
      * Get list of arguments for the command
      *
-     * @return array
+     * @return InputArgument[]
      */
     public function getArgumentsList()
     {
