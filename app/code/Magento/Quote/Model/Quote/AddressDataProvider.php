@@ -302,13 +302,14 @@ class AddressDataProvider implements DataProviderInterface
     public function getAdditionalAddressFields($providerName, $dataScopePrefix, array $fields = array())
     {
         foreach ($this->getFieldsMetaInfo('address') as $attributeCode => $attributeConfig) {
-            if (!$this->isFieldVisible($attributeCode, $attributeConfig)) {
+            $additionalConfig = isset($fields[$attributeCode]) ? $fields[$attributeCode] : [];
+            if (!$this->isFieldVisible($attributeCode, $attributeConfig, $additionalConfig)) {
                 continue;
             }
             $fields[$attributeCode] = $this->getFieldConfig(
                 $attributeCode,
                 $attributeConfig,
-                isset($fields[$attributeCode]) ? $fields[$attributeCode] : [],
+                $additionalConfig,
                 $providerName,
                 $dataScopePrefix
             );
@@ -388,12 +389,15 @@ class AddressDataProvider implements DataProviderInterface
      *
      * @param string $attributeCode
      * @param array $attributeConfig
+     * @param array $additionalConfig field configuration provided via layout XML
      * @return bool
      */
-    protected function isFieldVisible($attributeCode, array $attributeConfig)
+    protected function isFieldVisible($attributeCode, array $attributeConfig, array $additionalConfig = array())
     {
         // TODO move this logic to separate model so it can be customized
-        if ($attributeConfig['visible'] == false) {
+        if ($attributeConfig['visible'] == false
+            || (isset($additionalConfig['visible']) && $additionalConfig['visible'] == false)
+        ) {
             return false;
         }
         if ($attributeCode == 'vat_id' && !$this->addressHelper->isVatAttributeVisible()) {

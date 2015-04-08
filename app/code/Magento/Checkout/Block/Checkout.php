@@ -156,6 +156,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getJsLayout()
     {
+        // The following code is a workaround for custom address attributes
         if (isset($this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
             ['children']['billing-address-fieldset']['children']
         )) {
@@ -163,7 +164,16 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
                 ['children']['billing-address-fieldset']['children'];
             $this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
                 ['children']['billing-address-fieldset']['children'] = $this->addressDataProvider
-                    ->getAdditionalAddressFields('billingAddressProvider', 'billingAddress', $fields);
+                    ->getAdditionalAddressFields('checkoutProvider', 'billingAddress', $fields);
+        }
+        if (isset($this->jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
+            ['children']['shipping-address-fieldset']['children']
+        )) {
+            $fields = $this->jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
+            ['children']['shipping-address-fieldset']['children'];
+            $this->jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
+            ['children']['shipping-address-fieldset']['children'] = $this->addressDataProvider
+                ->getAdditionalAddressFields('checkoutProvider', 'shippingAddress', $fields);
         }
         return \Zend_Json::encode($this->jsLayout);
     }
