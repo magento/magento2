@@ -67,7 +67,7 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate(array $options, array $errors)
     {
-        $inputMock = $this->getMockForAbstractClass('Symfony\Component\Console\Input\InputInterface', [], '' ,false);
+        $inputMock = $this->getMockForAbstractClass('Symfony\Component\Console\Input\InputInterface', [], '' , false);
         $index = 0;
         foreach ($options as $option) {
             $inputMock->expects($this->at($index++))->method('getOption')->willReturn($option);
