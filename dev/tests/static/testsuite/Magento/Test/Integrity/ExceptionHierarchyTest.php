@@ -1,36 +1,37 @@
 <?php
 /**
- * Checks that all Exceptions inherit LocalizedException
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
- *
  */
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files as UtilityFiles;
 
+/**
+ * Checks that all Exceptions inherit LocalizedException
+ */
 class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param \ReflectionClass $reflectionException
-     * @dataProvider isInheritedLocalisedExceptionDataProvider
+     * @dataProvider isInheritedLocalizedExceptionDataProvider
      */
-    public function testIsInheritedLocalisedException(\ReflectionClass $reflectionException)
+    public function testIsInheritedLocalizedException(\ReflectionClass $reflectionException)
     {
         $this->assertTrue(
             $reflectionException->isSubclassOf('Magento\Framework\Exception\LocalizedException'),
-            "{$reflectionException->name} is not inherited LocalisedException"
+            "{$reflectionException->name} is not inherited LocalizedException"
         );
     }
 
     /**
      * @return array
      */
-    public function isInheritedLocalisedExceptionDataProvider()
+    public function isInheritedLocalizedExceptionDataProvider()
     {
         $files = UtilityFiles::init()->getClassFiles(true, false, false, true, false);
-        $blacklistExceptions = $this->isInheritedLocalisedExceptionBlacklist();
+        $blacklistExceptions = $this->getBlacklistExceptions();
 
         $data = [];
         foreach ($files as $file) {
@@ -61,7 +62,7 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    protected static function isInheritedLocalisedExceptionBlacklist()
+    protected function getBlacklistExceptions()
     {
         $blacklistFiles = str_replace('\\', '/', realpath(__DIR__)) . '/_files/blacklist/exception_hierarchy*.txt';
         $exceptions = [];
