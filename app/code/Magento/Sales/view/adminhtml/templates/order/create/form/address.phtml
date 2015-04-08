@@ -86,7 +86,7 @@ endif; ?>
         </div>
     </div>
     <?php $hideElement = 'address-' . ($block->getIsShipping() ? 'shipping' : 'billing') . '-overlay'; ?>
-    <div style="display: none;" id="<?php echo $hideElement ?>" class="overlay">
+    <div style="display: none;" id="<?php echo $hideElement ?>" class="order-methods-overlay">
         <span><?php echo __('You don\'t need to select a shipping address.') ?></span>
     </div>
 
