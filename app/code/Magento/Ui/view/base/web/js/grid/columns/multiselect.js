@@ -87,6 +87,8 @@ define([
 
             this.clearExcluded()
                 .selectPage();
+
+            return this;
         },
 
         /**
@@ -97,6 +99,9 @@ define([
 
             this.clearExcluded()
                 .deselectPage();
+            this.selected.removeAll();
+
+            return this;
         },
 
         /**
@@ -115,6 +120,8 @@ define([
             this.selected(
                 _.union(this.selected(), this.getIds())
             );
+
+            return this;
         },
 
         /**
@@ -125,6 +132,8 @@ define([
             this.selected.remove(function (value) {
                 return currentPageIds.indexOf(value) !== -1;
             });
+
+            return this;
         },
 
         /**
@@ -149,12 +158,13 @@ define([
                 ids = _.pluck(items, this.indexField);
 
             return exclude ?
-                _.difference(ids, this.excluded()) :
-                ids;
+                    _.difference(ids, this.excluded()) :
+                    ids;
         },
 
         /**
          * Recalculates list of the excluded records.
+         * Changes value of `excluded`.
          *
          * @param {Array} selected - List of the currently selected records.
          * @returns {Multiselect} Chainable.
@@ -173,6 +183,7 @@ define([
 
         /**
          * Calculates number of the selected records.
+         * Changes value of `totalSelected`.
          *
          * @returns {Multiselect} Chainable.
          */
