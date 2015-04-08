@@ -180,12 +180,6 @@ class ConsoleController extends AbstractActionController
                 'usage_short' => self::CMD_INSTALL . ' <options>',
                 'usage_desc' => 'Install Magento application',
             ],
-            self::CMD_INSTALL_USER_CONFIG => [
-                'route' => self::CMD_INSTALL_USER_CONFIG . ' ' . $userConfig,
-                'usage' => $userConfig,
-                'usage_short' => self::CMD_INSTALL_USER_CONFIG . ' <options>',
-                'usage_desc' => 'Install user configuration',
-            ],
             self::CMD_HELP => [
                 'route' => self::CMD_HELP . ' [' . implode('|', self::$helpOptions) . ']:type',
                 'usage' => '<' . implode('|', self::$helpOptions) . '>',
