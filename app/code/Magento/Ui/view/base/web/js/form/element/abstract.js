@@ -25,12 +25,13 @@ define([
             label: '',
             error: '',
             notice: '',
+            customScope: '',
 
             listens: {
                 value: 'onUpdate',
                 visible: 'setPreview',
                 '<%= provider %>:data.reset': 'reset',
-                '<%= provider %>:data.validate': 'validate'
+                '<%= provider %>:<% if (customScope !== "") { %><%= customScope %>.<% } %>data.validate': 'validate'
             },
 
             links: {

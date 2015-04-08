@@ -2,7 +2,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
 /*global define*/
 define(
     [
@@ -17,16 +16,16 @@ define(
     function(Component, ko, selectShippingAddress, customer, quote, navigator, addressList) {
         'use strict';
         var stepName = 'shippingAddress';
+        var newAddressSelected = ko.observable(false);
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-address'
             },
             stepNumber: navigator.getStepNumber(stepName),
             addresses: customer.getShippingAddressList(),
-            selectedAddressId: ko.observable(1),
+            selectedAddressId: addressList.getAddresses()[0].id,
             sameAsBilling: ko.observable(null),
             quoteHasBillingAddress: quote.getBillingAddress(),
-            newAddressSelected: ko.observable(false),
             isVisible: navigator.isStepVisible(stepName),
             isActive: function() {
                 if (quote.isVirtual()) {
@@ -35,8 +34,8 @@ define(
                 return !quote.isVirtual();
             },
             selectShippingAddress: function() {
-                if (!this.newAddressSelected()) {
-                    selectShippingAddress(addressList.getAddressById(this.selectedAddressId()), this.sameAsBilling());
+                if (!newAddressSelected()) {
+                    selectShippingAddress(addressList.getAddressById(this.selectedAddressId), this.sameAsBilling());
                 } else {
                     this.validate();
                     if (!this.source.get('params.invalid')) {
@@ -55,13 +54,13 @@ define(
             },
             onAddressChange: function() {
                 var billingAddress = quote.getBillingAddress();
-                if (this.selectedAddressId() != billingAddress().customerAddressId) {
+                if (this.selectedAddressId != billingAddress().customerAddressId) {
                     this.sameAsBilling(false);
                 }
-                if (this.selectedAddressId() == null) {
-                    this.newAddressSelected(true);
+                if (this.selectedAddressId == null) {
+                    newAddressSelected(true);
                 } else {
-                    this.newAddressSelected(false);
+                    newAddressSelected(false);
                 }
             },
             // Checkout step navigation
@@ -75,13 +74,17 @@ define(
             },
             isNewAddressSelected: function() {
                 if (!this.customerHasAddresses) {
+                    newAddressSelected(true);
                     return true;
                 }
-                return this.newAddressSelected();
+                return newAddressSelected();
+            },
+            validate: function() {
+                this.source.set('params.invalid', false);
+                this.source.trigger('shippingAddress.data.validate');
             },
             isCustomerLoggedIn: customer.isLoggedIn(),
-            customerHasAddresses: window.customerHasAddresses,
-
+            customerHasAddresses: window.customerHasAddresses
         });
     }
 );

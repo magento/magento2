@@ -349,6 +349,8 @@ class AddressDataProvider implements DataProviderInterface
         return [
             'component' => isset($additionalConfig['component']) ? $additionalConfig['component'] : $uiComponent,
             'config' => [
+                // customScope is used to group elements within a single form (e.g. they can be validated separately)
+                'customScope' => $dataScopePrefix,
                 'customEntry' => isset($additionalConfig['config']['customEntry'])
                     ? $additionalConfig['config']['customEntry']
                     : null,
@@ -423,6 +425,8 @@ class AddressDataProvider implements DataProviderInterface
             $streetLines[] = [
                 'component' => 'Magento_Ui/js/form/element/abstract',
                 'config' => [
+                    // customScope is used to group elements within a single form e.g. they can be validated separately
+                    'customScope' => $dataScopePrefix,
                     'template' => 'ui/form/field',
                     'elementTmpl' => 'ui/form/element/input',
                 ],

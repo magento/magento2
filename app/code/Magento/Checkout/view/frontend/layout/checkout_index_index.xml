@@ -69,15 +69,26 @@
                                                                     <item name="required-entry" xsi:type="string">true</item>
                                                                 </item>
                                                             </item>
+                                                            <item name="company" xsi:type="array">
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="fax" xsi:type="array">
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
+                                                                </item>
+                                                            </item>
                                                             <!-- The following items describe fields that are not directly related to address but must be shown in address form -->
                                                             <item name="email" xsi:type="array">
                                                                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
+                                                                    <item name="customScope" xsi:type="string">billingAddress</item>
                                                                 </item>
                                                                 <item name="label" xsi:type="string">Email</item>
-                                                                <item name="dataScope" xsi:type="string">customerDetails.email</item>
+                                                                <item name="dataScope" xsi:type="string">billingAddress.email</item>
                                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                                 <item name="sortOrder" xsi:type="string">45</item>
                                                                 <item name="validation" xsi:type="array">
@@ -90,6 +101,7 @@
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/password</item>
+                                                                    <item name="customScope" xsi:type="string">customerDetails</item>
                                                                 </item>
                                                                 <item name="label" xsi:type="string">Password</item>
                                                                 <item name="dataScope" xsi:type="string">customerDetails.password</item>
@@ -106,6 +118,7 @@
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/password</item>
+                                                                    <item name="customScope" xsi:type="string">customerDetails</item>
                                                                 </item>
                                                                 <item name="label" xsi:type="string">Confirm Password</item>
                                                                 <item name="dataScope" xsi:type="string">customerDetails.confirm_password</item>
@@ -124,7 +137,6 @@
                                             </item>
                                             <item name="shippingAddress" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address</item>
-                                                <item name="dataScope" xsi:type="string">shippingAddress</item>
                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="shipping-address-fieldset" xsi:type="array">
@@ -141,7 +153,7 @@
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
-                                                                    <item name="customEntry" xsi:type="string">billingAddress.region</item>
+                                                                    <item name="customEntry" xsi:type="string">shippingAddress.region</item>
                                                                 </item>
                                                                 <item name="validation" xsi:type="array">
                                                                     <item name="required-entry" xsi:type="boolean">true</item>
@@ -157,6 +169,16 @@
                                                                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/post-code</item>
                                                                 <item name="validation" xsi:type="array">
                                                                     <item name="required-entry" xsi:type="string">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="company" xsi:type="array">
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
+                                                                </item>
+                                                            </item>
+                                                            <item name="fax" xsi:type="array">
+                                                                <item name="validation" xsi:type="array">
+                                                                    <item name="min_text_length" xsi:type="number">0</item>
                                                                 </item>
                                                             </item>
                                                         </item>

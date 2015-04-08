@@ -25,7 +25,7 @@ define(
             },
             stepNumber: navigator.getStepNumber(stepName),
             billingAddresses: customer.getBillingAddressList(),
-            selectedBillingAddressId: "1",
+            selectedBillingAddressId: addressList.getAddresses()[0].id,
             isVisible: navigator.isStepVisible(stepName),
             useForShipping: "1",
             quoteIsVirtual: quote.isVirtual(),
@@ -47,7 +47,6 @@ define(
                     }
                 }
                 if (this.source.get('customerDetails')) {
-                    customer.setDetails('email', this.source.get('customerDetails.email'));
                     customer.setDetails('password', this.source.get('customerDetails.password'));
                     customer.setDetails('confirm_password', this.source.get('customerDetails.confirm_password'));
                 }
@@ -73,9 +72,15 @@ define(
                     newAddressSelected(false);
                 }
             },
+            validate: function() {
+                this.source.set('params.invalid', false);
+                this.source.trigger('billingAddress.data.validate');
+                if (quote.getCheckoutMethod() === 'register') {
+                    this.source.trigger('customerDetails.data.validate');
+                }
+            },
             isCustomerLoggedIn: customer.isLoggedIn(),
             customerHasAddresses: window.customerHasAddresses
-
         });
     }
 );
