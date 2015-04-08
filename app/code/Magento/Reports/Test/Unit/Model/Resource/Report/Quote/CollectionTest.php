@@ -83,6 +83,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $constructArgs['resource'] = $resourceMock;
         $productResourceMock = $this->getMock('\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false);
         $constructArgs['productResource'] = $productResourceMock;
+        $orderResourceMock = $this->getMock('\Magento\Sales\Model\Resource\Order\Collection', [], [], '', false);
+        $constructArgs['orderResource'] = $orderResourceMock;
 
         $collection = $this->getMock(
             'Magento\Reports\Model\Resource\Quote\Collection',
@@ -98,7 +100,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 '_initSelect',
                 'getTable',
                 'getItems',
-                'getOrdersSubSelect',
+                'getOrdersData',
             ],
             $constructArgs
         );
@@ -138,8 +140,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('useStraightJoin')->willReturnSelf();
         $this->selectMock->expects($this->exactly(2))->method('joinInner')->willReturnSelf();
-        $this->selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
-        $this->selectMock->expects($this->once())->method('columns')->willReturnSelf();
+        $collection->expects($this->once())->method('getOrdersData')->willReturn([]);
 
         $productAttributeMock->expects($this->once())->method('getBackend')->willReturnSelf();
         $priceAttributeMock->expects($this->once())->method('getBackend')->willReturnSelf();
