@@ -2161,4 +2161,6 @@ return [
     ['orderByTotalAmount', 'Magento\Reports\Model\Resource\Customer\Collection'],
     ['addOrdersCount', 'Magento\Reports\Model\Resource\Product\Collection'],
     ['addOrderedQty', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['prepareForProductsInCarts', 'Magento\Reports\Model\Resource\Quote\Collection'],
+    ['getOrdersSubSelect', 'Magento\Reports\Model\Resource\Quote\Collection'],
 ];

@@ -39,12 +39,17 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Collection
      */
-    protected $_productResource;
+    protected $productResource;
 
     /**
      * @var \Magento\Customer\Model\Resource\Customer
      */
-    protected $_customerResource;
+    protected $customerResource;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\Collection
+     */
+    protected $orderResource;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
@@ -53,6 +58,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Catalog\Model\Resource\Product\Collection $productResource
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
+     * @param \Magento\Sales\Model\Resource\Order\Collection $orderResource
      * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -63,12 +69,14 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\Resource\Product\Collection $productResource,
         \Magento\Customer\Model\Resource\Customer $customerResource,
+        \Magento\Sales\Model\Resource\Order\Collection $orderResource,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-        $this->_productResource = $productResource;
-        $this->_customerResource = $customerResource;
+        $this->productResource = $productResource;
+        $this->customerResource = $customerResource;
+        $this->orderResource = $orderResource;
     }
 
     /**
@@ -120,75 +128,47 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     /**
      * Prepare select query for products in carts report
      *
-     * @return $this
+     * @return \Magento\Framework\DB\Select
      */
-    public function prepareForProductsInCarts()
+    public function prepareActiveCartItems()
     {
-        $productAttrName = $this->_productResource->getAttribute('name');
-        $productAttrNameId = (int)$productAttrName->getAttributeId();
-        $productAttrNameTable = $productAttrName->getBackend()->getTable();
-        $productAttrPrice = $this->_productResource->getAttribute('price');
-        $productAttrPriceId = (int)$productAttrPrice->getAttributeId();
-        $productAttrPriceTable = $productAttrPrice->getBackend()->getTable();
+        $quoteItemsSelect = $this->getSelect();
+        $quoteItemsSelect->reset()
+            ->from(['main_table' => $this->getTable('quote')], '')
+            ->columns('quote_items.product_id')
+            ->columns(['carts' => new \Zend_Db_Expr('COUNT(quote_items.item_id)')])
+            ->columns('main_table.base_to_global_rate')
+            ->joinInner(
+                ['quote_items' => $this->getTable('quote_item')],
+                'quote_items.quote_id = main_table.entity_id',
+                null
+            )->where(
+                'main_table.is_active = ?',
+                1
+            )->group(
+                'quote_items.product_id'
+            );
 
-        $this->getSelect()->useStraightJoin(
-            true
-        )->reset(
-            \Zend_Db_Select::COLUMNS
-        )->joinInner(
-            ['quote_items' => $this->getTable('quote_item')],
-            'quote_items.quote_id = main_table.entity_id',
-            null
-        )->joinInner(
-            ['e' => $this->getTable('catalog_product_entity')],
-            'e.entity_id = quote_items.product_id',
-            null
-        )->joinInner(
-            ['product_name' => $productAttrNameTable],
-            'product_name.entity_id = e.entity_id'
-                . ' AND product_name.attribute_id = ' . $productAttrNameId
-                . ' AND product_name.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
-            ['name' => 'product_name.value']
-        )->joinInner(
-            ['product_price' => $productAttrPriceTable],
-            "product_price.entity_id = e.entity_id AND product_price.attribute_id = {$productAttrPriceId}",
-            ['price' => new \Zend_Db_Expr('product_price.value * main_table.base_to_global_rate')]
-        )->joinLeft(
-            ['order_items' => new \Zend_Db_Expr(sprintf('(%s)', $this->getOrdersSubSelect()))],
-            'order_items.product_id = e.entity_id',
-            []
-        )->columns(
-            'e.*'
-        )->columns(
-            ['carts' => new \Zend_Db_Expr('COUNT(quote_items.item_id)')]
-        )->columns(
-            'order_items.orders'
-        )->where(
-            'main_table.is_active = ?',
-            1
-        )->group(
-            'quote_items.product_id'
-        );
-
-        return $this;
+        return $quoteItemsSelect;
     }
 
     /**
-     * Orders quantity subselect
+     * Orders quantity data
      *
-     * @return \Magento\Framework\DB\Select
+     * @param array $productIds
+     * @return array
      */
-    protected function getOrdersSubSelect()
+    protected function getOrdersData(array $productIds)
     {
-        $ordersSubSelect = clone $this->getSelect();
+        $ordersSubSelect = clone $this->orderResource->getSelect();
         $ordersSubSelect->reset()->from(
             ['oi' => $this->getTable('sales_order_item')],
             ['orders' => new \Zend_Db_Expr('COUNT(1)'), 'product_id']
-        )->group(
+        )->where('oi.product_id IN (?)', $productIds)->group(
             'oi.product_id'
         );
 
-        return $ordersSubSelect;
+        return $this->orderResource->getConnection()->fetchAssoc($ordersSubSelect);
     }
 
     /**
@@ -211,7 +191,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      */
     public function addCustomerData($filter = null)
     {
-        $customersSelect = $this->_customerResource->getReadConnection()->select();
+        $customersSelect = $this->customerResource->getReadConnection()->select();
         $customersSelect->from(['customer' => 'customer_entity'], 'entity_id');
         if (isset($filter['customer_name'])) {
             $customersSelect = $this->getCustomerNames($customersSelect);
@@ -223,7 +203,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         if (isset($filter['email'])) {
             $customersSelect->where('customer.email LIKE ?', '%' . $filter['email'] . '%');
         }
-        $filteredCustomers = $this->_customerResource->getReadConnection()->fetchCol($customersSelect);
+        $filteredCustomers = $this->customerResource->getReadConnection()->fetchCol($customersSelect);
         $this->getSelect()->where('main_table.customer_id IN (?)', $filteredCustomers);
         return $this;
     }
@@ -270,24 +250,14 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     /**
      * Get select count sql
      *
-     * @return string
+     * @return \Magento\Framework\DB\Select
      */
     public function getSelectCountSql()
     {
-        $countSelect = clone $this->getSelect();
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-        $countSelect->resetJoinLeft();
-
-        if ($this->_selectCountSqlType == self::SELECT_COUNT_SQL_TYPE_CART) {
-            $countSelect->columns("COUNT(DISTINCT e.entity_id)");
-        } else {
-            $countSelect->columns("COUNT(DISTINCT main_table.entity_id)");
-        }
-
+        $countSelect = clone $this->prepareActiveCartItems();
+        $countSelect->reset(\Zend_Db_Select::COLUMNS)
+            ->reset(\Zend_Db_Select::GROUP)
+            ->columns('COUNT(DISTINCT quote_items.product_id)');
         return $countSelect;
     }
 
@@ -297,10 +267,10 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      */
     protected function getCustomerNames($select)
     {
-        $attrFirstname = $this->_customerResource->getAttribute('firstname');
+        $attrFirstname = $this->customerResource->getAttribute('firstname');
         $attrFirstnameId = (int)$attrFirstname->getAttributeId();
         $attrFirstnameTableName = $attrFirstname->getBackend()->getTable();
-        $attrLastname = $this->_customerResource->getAttribute('lastname');
+        $attrLastname = $this->customerResource->getAttribute('lastname');
         $attrLastnameId = (int)$attrLastname->getAttributeId();
         $attrLastnameTableName = $attrLastname->getBackend()->getTable();
         $select->joinInner(
@@ -326,7 +296,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      */
     public function resolveCustomerNames()
     {
-        $select = $this->_customerResource->getReadConnection()->select();
+        $select = $this->customerResource->getReadConnection()->select();
         $customerName = $select->getAdapter()->getConcatSql(['cust_fname.value', 'cust_lname.value'], ' ');
 
         $select->from(
@@ -342,5 +312,62 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
             $item->setData(array_merge($item->getData(), current($customersData)));
             next($customersData);
         }
+    }
+
+    /**
+     * Separate query for product and order data
+     *
+     * @return array
+     * @throws \Magento\Eav\Exception
+     */
+    protected function getProductData()
+    {
+        $productConnection = $this->productResource->getConnection('read');
+        $productAttrName = $this->productResource->getAttribute('name');
+        $productAttrNameId = (int)$productAttrName->getAttributeId();
+        $productAttrPrice = $this->productResource->getAttribute('price');
+        $productAttrPriceId = (int)$productAttrPrice->getAttributeId();
+
+        $select = clone $this->productResource->getSelect();
+        $select->reset();
+        $select->from(
+            ['main_table' => $this->getTable('catalog_product_entity')]
+        )->useStraightJoin(
+            true
+        )->joinInner(
+            ['product_name' => $productAttrName->getBackend()->getTable()],
+            'product_name.entity_id = main_table.entity_id'
+            . ' AND product_name.attribute_id = ' . $productAttrNameId
+            . ' AND product_name.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            ['name' => 'product_name.value']
+        )->joinInner(
+            ['product_price' => $productAttrPrice->getBackend()->getTable()],
+            "product_price.entity_id = main_table.entity_id AND product_price.attribute_id = {$productAttrPriceId}",
+            ['price' => new \Zend_Db_Expr('product_price.value')]
+        );
+        $productData = $productConnection->fetchAssoc($select);
+        return $productData;
+    }
+
+    /**
+     * Add data fetched from another database
+     *
+     * @return $this
+     */
+    protected function _afterLoad()
+    {
+        parent::_afterLoad();
+        $productData = $this->getProductData();
+        $productIds = array_keys($productData);
+        $orderData = $this->getOrdersData($productIds);
+        $items = $this->getItems();
+        foreach ($items as $item) {
+            $item->setId($item->getProductId());
+            $item->setPrice($productData[$item->getProductId()]['price'] * $item->getBaseToGlobalRate());
+            $item->setName($productData[$item->getProductId()]['name']);
+            $item->setOrders($orderData[$item->getProductId()]['orders']);
+        }
+
+        return $this;
     }
 }
