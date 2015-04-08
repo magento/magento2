@@ -54,8 +54,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -68,8 +66,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -81,8 +77,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $localeDate,
-            $dateTime,
             $resource,
             $resourceCollection,
             $data
