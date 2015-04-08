@@ -30,7 +30,7 @@ class InstallCommand extends AbstractSetupCommand
     /**
      * Parameter indicating command whether to install Sample Data
      */
-    const USE_SAMPLE_DATA = 'use_sample_data';
+    const INPUT_KEY_USE_SAMPLE_DATA = 'use_sample_data';
 
     /**
      * Installer service factory
@@ -97,7 +97,7 @@ class InstallCommand extends AbstractSetupCommand
                 'Provide order number prefix'
             ),
             new InputOption(
-                self::USE_SAMPLE_DATA,
+                self::INPUT_KEY_USE_SAMPLE_DATA,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Use sample data'

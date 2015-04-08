@@ -176,7 +176,7 @@ class Install extends AbstractActionController
             ? $source['store']['timezone'] : '';
         $result[UserConfig::KEY_CURRENCY] = isset($source['store']['currency'])
             ? $source['store']['currency'] : '';
-        $result[InstallCommand::USE_SAMPLE_DATA] = isset($source['store']['useSampleData'])
+        $result[InstallCommand::INPUT_KEY_USE_SAMPLE_DATA] = isset($source['store']['useSampleData'])
             ? $source['store']['useSampleData'] : '';
         return $result;
     }

@@ -271,7 +271,7 @@ class Installer
         }
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
-        if (!empty($request[InstallCommand::USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
+        if (!empty($request[InstallCommand::INPUT_KEY_USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
             $script[] = ['Installing sample data:', 'installSampleData', [$request]];
         }
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
@@ -415,12 +415,7 @@ class Installer
     {
         $this->checkInstallationFilePermissions();
         $userData = is_array($data) ? $data : $data->getArrayCopy();
-
-        // TODO: remove this when moving install command to symfony
-        $userData = $this->setDefaultValues($userData);
-
         $this->setupConfigModel->process($userData);
-
         if ($this->deploymentConfig->isAvailable()) {
             $deploymentConfigData = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
             if (isset($deploymentConfigData)) {
@@ -429,32 +424,6 @@ class Installer
         }
         // reset object manager now that there is a deployment config
         $this->objectManagerProvider->reset();
-    }
-    
-    /**
-     * Sets defaults if user input is missing
-     *
-     * @param array $userData
-     * @return array
-     */
-    private function setDefaultValues(array $userData)
-    {
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
-            $userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] = ConfigOptionsList::SESSION_SAVE_FILES;
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PASSWORD])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_PASSWORD] = '';
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_MODEL])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_MODEL] = 'mysql4';
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS] = 'SET NAMES utf8;';
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PREFIX])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_PREFIX] = '';
-        }
-        return $userData;
     }
 
     /**

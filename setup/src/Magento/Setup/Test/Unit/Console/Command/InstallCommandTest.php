@@ -33,6 +33,60 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             '--' . AdminAccount::KEY_LAST_NAME => 'Doe',
         ];
 
+        $configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
+        $configModel
+            ->expects($this->exactly(2))
+            ->method('getAvailableOptions')
+            ->will($this->returnValue($this->getOptionsListDeployConfig()));
+        $configModel
+            ->expects($this->once())
+            ->method('validate')
+            ->will($this->returnValue([]));
+
+        $userConfig = $this->getMock(
+            'Magento\Setup\Console\Command\InstallUserConfigurationCommand',
+            [],
+            [],
+            '',
+            false
+        );
+        $userConfig
+            ->expects($this->once())
+            ->method('getOptionsList')
+            ->will($this->returnValue($this->getOptionsListUserConfig()));
+
+        $adminUser = $this->getMock('Magento\Setup\Console\Command\AdminUserCreateCommand', [], [], '', false);
+        $adminUser
+            ->expects($this->once())
+            ->method('getOptionsList')
+            ->will($this->returnValue($this->getOptionsListAdminUser()));
+        $adminUser
+            ->expects($this->once())
+            ->method('validate')
+            ->will($this->returnValue([]));
+
+        $installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
+        $installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
+        $installerFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($installer));
+        $installer->expects($this->once())->method('install');
+        $commandTester = new CommandTester(new InstallCommand(
+            $installerFactory,
+            $configModel,
+            $userConfig,
+            $adminUser
+        ));
+        $commandTester->execute($input);
+    }
+
+    /**
+     * Get list of options for deployment configuration
+     *
+     * @return array
+     */
+    private function getOptionsListDeployConfig()
+    {
         $option1 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $option1
             ->expects($this->any())
@@ -53,95 +107,71 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue(BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME));
-        $configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
-        $configModel
-            ->expects($this->exactly(2))
-            ->method('getAvailableOptions')
-            ->will($this->returnValue([$option1, $option2, $option3, $option4]));
-        $configModel
-            ->expects($this->once())
-            ->method('validate')
-            ->will($this->returnValue([]));
+        return [$option1, $option2, $option3, $option4];
+    }
 
+    /**
+     * Get list of options for user configuration
+     *
+     * @return array
+     */
+    private function getOptionsListUserConfig()
+    {
+        $option1 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option1
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_BASE_URL));
+        $option2 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option2
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_LANGUAGE));
+        $option3 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option3
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_TIMEZONE));
+        $option4 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option4
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_CURRENCY));
+        return [$option1, $option2, $option3, $option4];
+    }
+
+    /**
+     * Get list of options for admin user
+     *
+     * @return array
+     */
+    private function getOptionsListAdminUser()
+    {
+        $option1 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option1
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(AdminAccount::KEY_USER));
+        $option2 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option2
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(AdminAccount::KEY_PASSWORD));
+        $option3 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option3
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(AdminAccount::KEY_EMAIL));
+        $option4 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option4
+            ->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue(AdminAccount::KEY_FIRST_NAME));
         $option5 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $option5
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_BASE_URL));
-        $option6 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $option6
-            ->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_LANGUAGE));
-        $option7 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $option7
-            ->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_TIMEZONE));
-        $option8 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $option8
-            ->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue(InstallUserConfigurationCommand::INPUT_CURRENCY));
-        $userConfig = $this->getMock(
-            'Magento\Setup\Console\Command\InstallUserConfigurationCommand',
-            [],
-            [],
-            '',
-            false
-        );
-        $userConfig
-            ->expects($this->once())
-            ->method('getOptionsList')
-            ->will($this->returnValue([$option5, $option6, $option7, $option8]));
-
-        $option9 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $option9
-            ->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue(AdminAccount::KEY_USER));
-        $option10 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $option10
-            ->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue(AdminAccount::KEY_PASSWORD));
-        $option11 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $option11
-            ->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue(AdminAccount::KEY_EMAIL));
-        $option12 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $option12
-            ->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue(AdminAccount::KEY_FIRST_NAME));
-        $option13 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
-        $option13
-            ->expects($this->any())
-            ->method('getName')
             ->will($this->returnValue(AdminAccount::KEY_LAST_NAME));
-        $adminUser = $this->getMock('Magento\Setup\Console\Command\AdminUserCreateCommand', [], [], '', false);
-        $adminUser
-            ->expects($this->once())
-            ->method('getOptionsList')
-            ->will($this->returnValue([$option9, $option10, $option11, $option12, $option13]));
-        $adminUser
-            ->expects($this->once())
-            ->method('validate')
-            ->will($this->returnValue([]));
-
-        $installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
-        $installerFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($installer));
-        $installer->expects($this->once())->method('install');
-        $commandTester = new CommandTester(new InstallCommand(
-            $installerFactory,
-            $configModel,
-            $userConfig,
-            $adminUser
-        ));
-        $commandTester->execute($input);
+        return [$option1, $option2, $option3, $option4, $option5];
     }
 }
