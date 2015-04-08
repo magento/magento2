@@ -26,11 +26,11 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             '--' . InstallUserConfigurationCommand::INPUT_LANGUAGE => 'en_US',
             '--' . InstallUserConfigurationCommand::INPUT_TIMEZONE => 'America/Chicago',
             '--' . InstallUserConfigurationCommand::INPUT_CURRENCY => 'USD',
-            AdminAccount::KEY_USER => 'user',
-            AdminAccount::KEY_PASSWORD => '123123q',
-            AdminAccount::KEY_EMAIL => 'test@test.com',
-            AdminAccount::KEY_FIRST_NAME => 'John',
-            AdminAccount::KEY_LAST_NAME => 'Doe',
+            '--' . AdminAccount::KEY_USER => 'user',
+            '--' . AdminAccount::KEY_PASSWORD => '123123q',
+            '--' . AdminAccount::KEY_EMAIL => 'test@test.com',
+            '--' . AdminAccount::KEY_FIRST_NAME => 'John',
+            '--' . AdminAccount::KEY_LAST_NAME => 'Doe',
         ];
 
         $option1 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
@@ -58,6 +58,10 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly(2))
             ->method('getAvailableOptions')
             ->will($this->returnValue([$option1, $option2, $option3, $option4]));
+        $configModel
+            ->expects($this->once())
+            ->method('validate')
+            ->will($this->returnValue([]));
 
         $option5 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $option5
@@ -91,36 +95,40 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getOptionsList')
             ->will($this->returnValue([$option5, $option6, $option7, $option8]));
 
-        $argument1 = $this->getMock('Symfony\Component\Console\Input\InputArgument', [], [], '', false);
-        $argument1
+        $option9 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option9
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue(AdminAccount::KEY_USER));
-        $argument2 = $this->getMock('Symfony\Component\Console\Input\InputArgument', [], [], '', false);
-        $argument2
+        $option10 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option10
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue(AdminAccount::KEY_PASSWORD));
-        $argument3 = $this->getMock('Symfony\Component\Console\Input\InputArgument', [], [], '', false);
-        $argument3
+        $option11 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option11
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue(AdminAccount::KEY_EMAIL));
-        $argument4 = $this->getMock('Symfony\Component\Console\Input\InputArgument', [], [], '', false);
-        $argument4
+        $option12 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option12
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue(AdminAccount::KEY_FIRST_NAME));
-        $argument5 = $this->getMock('Symfony\Component\Console\Input\InputArgument', [], [], '', false);
-        $argument5
+        $option13 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
+        $option13
             ->expects($this->any())
             ->method('getName')
             ->will($this->returnValue(AdminAccount::KEY_LAST_NAME));
         $adminUser = $this->getMock('Magento\Setup\Console\Command\AdminUserCreateCommand', [], [], '', false);
         $adminUser
             ->expects($this->once())
-            ->method('getArgumentsList')
-            ->will($this->returnValue([$argument1, $argument2, $argument3, $argument4, $argument5]));
+            ->method('getOptionsList')
+            ->will($this->returnValue([$option9, $option10, $option11, $option12, $option13]));
+        $adminUser
+            ->expects($this->once())
+            ->method('validate')
+            ->will($this->returnValue([]));
 
         $installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
         $installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);

@@ -75,10 +75,10 @@ class InstallCommand extends AbstractSetupCommand
      */
     protected function configure()
     {
-        $inputOptionsArgs = $this->configModel->getAvailableOptions();
-        $inputOptionsArgs = array_merge($inputOptionsArgs, $this->userConfig->getOptionsList());
-        $inputOptionsArgs = array_merge($inputOptionsArgs, $this->adminUser->getOptionsList());
-        $inputOptionsArgs = array_merge($inputOptionsArgs, [
+        $inputOptions = $this->configModel->getAvailableOptions();
+        $inputOptions = array_merge($inputOptions, $this->userConfig->getOptionsList());
+        $inputOptions = array_merge($inputOptions, $this->adminUser->getOptionsList());
+        $inputOptions = array_merge($inputOptions, [
             new InputOption(
                 self::INPUT_KEY_CLEANUP_DB,
                 null,
@@ -94,7 +94,7 @@ class InstallCommand extends AbstractSetupCommand
         ]);
         $this->setName('setup:install')
             ->setDescription('Installs Magento Application')
-            ->setDefinition($inputOptionsArgs);
+            ->setDefinition($inputOptions);
         parent::configure();
     }
 
@@ -105,9 +105,7 @@ class InstallCommand extends AbstractSetupCommand
     {
         $consoleLogger = new ConsoleLogger($output);
         $installer = $this->installerFactory->create($consoleLogger);
-        $inputOptionsArgs = $input->getArguments();
-        $inputOptionsArgs = array_merge($inputOptionsArgs, $input->getOptions());
-        $installer->install($inputOptionsArgs);
+        $installer->install($input->getOptions());
     }
 
     /**
@@ -116,13 +114,15 @@ class InstallCommand extends AbstractSetupCommand
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         $inputOptions = $input->getOptions();
-        $OptionsToValidate = [];
+
+        $configOptionsToValidate = [];
         foreach ($this->configModel->getAvailableOptions() as $option) {
             if (array_key_exists($option->getName(), $inputOptions)) {
-                $OptionsToValidate[$option->getName()] = $inputOptions[$option->getName()];
+                $configOptionsToValidate[$option->getName()] = $inputOptions[$option->getName()];
             }
         }
-        $errors = $this->configModel->validate($OptionsToValidate);
+        $errors = $this->configModel->validate($configOptionsToValidate);
+        $errors = array_merge($errors, $this->adminUser->validate($input));
         if (!empty($errors)) {
             foreach ($errors as $error) {
                 $output->writeln("<error>$error</error>");

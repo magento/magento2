@@ -78,7 +78,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[]
      */
-    private function validate(InputInterface $input)
+    public function validate(InputInterface $input)
     {
         $errors = [];
         $required = [
