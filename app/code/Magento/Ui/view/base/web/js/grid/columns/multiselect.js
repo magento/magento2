@@ -104,22 +104,27 @@ define([
          */
         toggleSelectAll: function () {
             return this.allSelected() ?
-                this.deselectAll() :
-                this.selectAll();
+                    this.deselectAll() :
+                    this.selectAll();
         },
 
         /**
          * Selects all records on the current page.
          */
         selectPage: function () {
-            this.selected(this.getIds());
+            this.selected(
+                _.union(this.selected(), this.getIds())
+            );
         },
 
         /**
          * Deselects all records on the current page.
          */
         deselectPage: function () {
-            this.selected.removeAll();
+            var currentPageIds = this.getIds();
+            this.selected.remove(function (value) {
+                return currentPageIds.indexOf(value) !== -1;
+            });
         },
 
         /**
@@ -212,15 +217,19 @@ define([
 
             switch (actionId) {
                 case 'selectPage':
+
                     return multiplePages && !this.isPageSelected(true);
 
                 case 'deselectPage':
+
                     return multiplePages && this.isPageSelected();
 
                 case 'selectAll':
+
                     return !this.allSelected();
 
                 case 'deselectAll':
+
                     return this.totalSelected() > 0;
             }
 
