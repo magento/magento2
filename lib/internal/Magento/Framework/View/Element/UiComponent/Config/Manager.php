@@ -140,10 +140,12 @@ class Manager implements ManagerInterface
     public function prepareData($name)
     {
         if ($name === null || $this->hasData($name)) {
-            throw new LocalizedException(__(
-                'Initialization error component, check the '
-                . 'spelling of the name or the correctness of the call.'
-            ));
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase(
+                    'Initialization error component, check the '
+                    . 'spelling of the name or the correctness of the call.'
+                )
+            );
         }
         $this->componentsPool = $this->arrayObjectFactory->create();
 

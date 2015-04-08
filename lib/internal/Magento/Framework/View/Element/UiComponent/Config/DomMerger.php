@@ -411,7 +411,9 @@ class DomMerger implements DomMergerInterface
     public function getDom()
     {
         if (!isset($this->domDocument)) {
-            throw new \LocalizedException(__('Object DOMDocument should be created.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Object DOMDocument should be created.')
+            );
         }
 
         return $this->domDocument;
