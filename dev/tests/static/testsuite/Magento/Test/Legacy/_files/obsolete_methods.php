@@ -2155,4 +2155,6 @@ return [
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
     ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
     ['prepareCatalogProductPriceIndexTable', 'Magento\CatalogRule\Model\Observer'],
+    ['prepareForProductsInCarts', 'Magento\Reports\Model\Resource\Quote\Collection'],
+    ['getOrdersSubSelect', 'Magento\Reports\Model\Resource\Quote\Collection'],
 ];
