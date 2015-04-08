@@ -72,7 +72,7 @@ class OrderSender extends Sender
     {
         $order->setSendEmail(true);
 
-        if (!$this->globalConfig->getValue('path/to/value/async_emails') || $forceSyncMode) {
+        if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             if ($this->checkAndSend($order)) {
                 $order->setEmailSent(true);
 

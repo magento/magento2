@@ -65,7 +65,7 @@ class SendEmails
      *
      * Also method is used in the next events:
      *
-     * - config_data_dev_grid_async_indexing_disabled
+     * - config_data_sales_email_general_async_sending_disabled
      *
      * Works only if asynchronous email sending is enabled
      * in global settings.
@@ -74,7 +74,7 @@ class SendEmails
      */
     public function execute()
     {
-        if ($this->globalConfig->getValue('path/to/value/async_emails')) {
+        if ($this->globalConfig->getValue('sales_email/general/async_sending')) {
             $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
             $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
 

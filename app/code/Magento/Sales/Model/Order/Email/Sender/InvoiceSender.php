@@ -73,7 +73,7 @@ class InvoiceSender extends Sender
     {
         $invoice->setSendEmail(true);
 
-        if (!$this->globalConfig->getValue('path/to/value/async_emails') || $forceSyncMode) {
+        if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $this->templateContainer->setTemplateVars(
                 [
                     'order' => $invoice->getOrder(),

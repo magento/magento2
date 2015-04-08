@@ -107,7 +107,7 @@ class SendEmailsTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($configValue, $collectionItems, $emailSendingResult)
     {
-        $path = 'path/to/value/async_emails';
+        $path = 'sales_email/general/async_sending';
 
         $this->globalConfig
             ->expects($this->once())
