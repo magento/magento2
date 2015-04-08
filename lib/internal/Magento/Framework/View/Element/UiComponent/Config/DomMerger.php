@@ -301,7 +301,7 @@ class DomMerger implements DomMergerInterface
      * 3. Append new node if original document doesn't have the same node
      *
      * @param \DOMElement $node
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function mergeNode(\DOMElement $node)
@@ -337,7 +337,7 @@ class DomMerger implements DomMergerInterface
      * @param \DOMDocument $domDocument
      * @param string|null $schemaFilePath
      * @return array of errors
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function validateDomDocument(\DOMDocument $domDocument, $schemaFilePath = null)
     {
@@ -356,7 +356,7 @@ class DomMerger implements DomMergerInterface
                     $errors[] = 'Unknown validation error';
                 }
             }
-        } catch (\Exception $exception) {
+        } catch (\LocalizedException $exception) {
             libxml_use_internal_errors(false);
             throw $exception;
         }
@@ -406,12 +406,12 @@ class DomMerger implements DomMergerInterface
      * Get DOM document
      *
      * @return \DOMDocument
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getDom()
     {
         if (!isset($this->domDocument)) {
-            throw new \Exception('Object DOMDocument should be created.');
+            throw new \LocalizedException(__('Object DOMDocument should be created.'));
         }
 
         return $this->domDocument;

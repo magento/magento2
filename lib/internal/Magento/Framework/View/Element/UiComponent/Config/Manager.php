@@ -6,7 +6,7 @@
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
 use ArrayObject;
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollectorFactory;
@@ -135,15 +135,15 @@ class Manager implements ManagerInterface
      *
      * @param string $name
      * @return ManagerInterface
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function prepareData($name)
     {
         if ($name === null || $this->hasData($name)) {
-            throw new Exception(
+            throw new LocalizedException(__(
                 'Initialization error component, check the '
                 . 'spelling of the name or the correctness of the call.'
-            );
+            ));
         }
         $this->componentsPool = $this->arrayObjectFactory->create();
 
