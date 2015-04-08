@@ -95,9 +95,10 @@ class Save extends \Magento\Backend\App\Action
                         isset($data['comment_customer_notify']),
                         isset($data['is_visible_on_front'])
                     );
+
+                    $creditmemo->setCustomerNote($data['comment_text']);
                 }
 
-                $creditmemo->setCustomerNote($data['comment_text']);
                 $creditmemo->setCustomerNoteNotify(isset($data['comment_customer_notify']));
 
                 if (isset($data['do_refund'])) {

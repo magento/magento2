@@ -106,9 +106,10 @@ class Save extends \Magento\Backend\App\Action
                     isset($data['comment_customer_notify']),
                     isset($data['is_visible_on_front'])
                 );
+
+                $shipment->setCustomerNote($data['comment_text']);
             }
 
-            $shipment->setCustomerNote($data['comment_text']);
             $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
 
             $shipment->register();
