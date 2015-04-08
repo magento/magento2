@@ -250,6 +250,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * @return bool
+     * @api
      */
     public function hasVerification()
     {
@@ -262,6 +263,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * @return array
+     * @api
      */
     public function getVerificationRegEx()
     {
@@ -298,6 +300,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @param string $type
      * @return bool
+     * @api
      */
     public function otherCcType($type)
     {
@@ -309,6 +312,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param   string $ccNumber
      * @return  bool
+     * @api
      */
     public function validateCcNum($ccNumber)
     {
@@ -348,6 +352,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param string $ccNumber
      * @return bool
+     * @api
      */
     public function validateCcNumOther($ccNumber)
     {

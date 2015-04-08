@@ -35,6 +35,7 @@ class MethodList
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @return \Magento\Payment\Model\MethodInterface[]
+     * @api
      */
     public function getAvailableMethods(\Magento\Quote\Model\Quote $quote = null)
     {
