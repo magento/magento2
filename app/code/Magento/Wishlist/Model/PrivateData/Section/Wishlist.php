@@ -14,6 +14,11 @@ use Magento\Customer\Model\PrivateData\Section\SectionSourceInterface;
 class Wishlist implements SectionSourceInterface
 {
     /**
+     * @var string
+     */
+    const SIDEBAR_ITEMS_NUMBER = 3;
+
+    /**
      * @var \Magento\Wishlist\Helper\Data
      */
     protected $wishlistHelper;
@@ -88,7 +93,8 @@ class Wishlist implements SectionSourceInterface
     protected function getItems()
     {
         $collection = $this->wishlistHelper->getWishlistItemCollection();
-        $collection->clear()->setCurPage(1)->setPageSize(3)->setInStockFilter(true)->setOrder('added_at');
+        $collection->clear()->setPageSize(self::SIDEBAR_ITEMS_NUMBER)
+            ->setInStockFilter(true)->setOrder('added_at');
         $items = [];
         foreach ($collection as $wishlistItem) {
             /** @var \Magento\Catalog\Model\Product $product */
