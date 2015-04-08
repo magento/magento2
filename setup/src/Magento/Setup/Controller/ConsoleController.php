@@ -35,7 +35,6 @@ class ConsoleController extends AbstractActionController
     const CMD_HELP = 'help';
     const CMD_INSTALL = 'install';
     const CMD_INSTALL_CONFIG = 'install-configuration';
-    const CMD_INSTALL_USER_CONFIG = 'install-user-configuration';
     /**#@- */
 
     /**
@@ -46,7 +45,6 @@ class ConsoleController extends AbstractActionController
     private static $actions = [
         self::CMD_HELP => 'help',
         self::CMD_INSTALL => 'install',
-        self::CMD_INSTALL_USER_CONFIG => 'installUserConfig',
     ];
 
     /**
@@ -56,10 +54,6 @@ class ConsoleController extends AbstractActionController
      */
     private static $helpOptions = [
         self::CMD_INSTALL,
-        self::CMD_INSTALL_USER_CONFIG,
-        UserConfig::KEY_LANGUAGE,
-        UserConfig::KEY_CURRENCY,
-        UserConfig::KEY_TIMEZONE,
     ];
 
     /**
@@ -274,18 +268,6 @@ class ConsoleController extends AbstractActionController
     }
 
     /**
-     * Installs user configuration
-     *
-     * @return void
-     */
-    public function installUserConfigAction()
-    {
-        /** @var \Zend\Console\Request $request */
-        $request = $this->getRequest();
-        $this->installer->installUserConfig($request->getParams());
-    }
-
-    /**
      * Shows necessary information for installing Magento
      *
      * @return string
@@ -301,12 +283,6 @@ class ConsoleController extends AbstractActionController
             return $usageInfo;
         }
         switch($type) {
-            case UserConfig::KEY_LANGUAGE:
-                return $this->arrayToString($this->options->getLocaleList());
-            case UserConfig::KEY_CURRENCY:
-                return $this->arrayToString($this->options->getCurrencyList());
-            case UserConfig::KEY_TIMEZONE:
-                return $this->arrayToString($this->options->getTimezoneList());
             default:
                 $usages = self::getCommandUsage();
                 if (isset($usages[$type])) {

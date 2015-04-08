@@ -141,59 +141,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->controller->installAction();
     }
 
-    public function testInstallUserConfigAction()
-    {
-        $this->installer->expects($this->once())->method('installUserConfig')->with($this->parameters);
-        $this->controller->installUserConfigAction();
-    }
-
-    /**
-     * @param string $type
-     * @param string $method
-     * @param array $expectedValue
-     *
-     * @dataProvider helpActionForLanguageCurrencyTimezoneDataProvider
-     */
-    public function testHelpActionForLanguageCurrencyTimezone($type, $method, $expectedValue)
-    {
-        $this->request->expects($this->once())->method('getParam')->willReturn($type);
-        $this->options->expects($this->once())->method($method)->willReturn($expectedValue);
-        $returnValue = $this->controller->helpAction();
-
-        //Need to convert from String to associative array.
-        $result = explode("\n", trim($returnValue));
-        $actual = [];
-        foreach ($result as $value) {
-            $tempArray  = explode(' => ', $value);
-            $actual[$tempArray[0]] = $tempArray[1];
-        }
-
-        $this->assertSame($expectedValue, $actual);
-    }
-
-    /**
-     * @return array
-     */
-    public function helpActionForLanguageCurrencyTimezoneDataProvider()
-    {
-        return [
-            [UserConfig::KEY_LANGUAGE, 'getLocaleList', [
-                    'someCode1' => 'some country',
-                    'someCode2' => 'some country2',
-                ]
-            ],
-            [UserConfig::KEY_CURRENCY, 'getCurrencyList', [
-                    'currencyCode1' => 'some currency1',
-                    'currencyCode2' => 'some currency2',
-                ]
-            ],
-            [UserConfig::KEY_TIMEZONE, 'getTimezoneList', [
-                    'timezone1' => 'some specific timezone1',
-                    'timezone2' => 'some specific timezone2',
-                ]
-            ],
-        ];
-    }
 
     public function testHelpActionNoType()
     {
@@ -233,7 +180,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['install',''],
-            ['install-user-configuration', ''],
             ['help', ''],
         ];
     }
