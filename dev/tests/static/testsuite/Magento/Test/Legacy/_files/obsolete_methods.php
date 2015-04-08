@@ -2155,4 +2155,6 @@ return [
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
     ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
     ['prepareCatalogProductPriceIndexTable', 'Magento\CatalogRule\Model\Observer'],
+    ['addOrdersCount', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['addOrderedQty', 'Magento\Reports\Model\Resource\Product\Collection'],
 ];
