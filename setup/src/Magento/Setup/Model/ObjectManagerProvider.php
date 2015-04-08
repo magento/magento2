@@ -29,6 +29,7 @@ class ObjectManagerProvider
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
+
     /**
      * @var DeploymentConfig
      */
@@ -45,6 +46,8 @@ class ObjectManagerProvider
     }
 
     /**
+     * Retrieve object manager.
+     *
      * @return \Magento\Framework\ObjectManagerInterface
      * @throws \Magento\Setup\Exception
      */
@@ -56,5 +59,15 @@ class ObjectManagerProvider
             $this->objectManager = $factory->create($initParams);
         }
         return $this->objectManager;
+    }
+
+    /**
+     * Causes object manager to be reinitialized the next time it is retrieved.
+     *
+     * @return void
+     */
+    public function reset()
+    {
+        $this->objectManager = null;
     }
 }

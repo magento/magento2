@@ -12,7 +12,11 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Resource\Order\Shipment as ShipmentResource;
+use Magento\Sales\Model\Order\Address\Renderer;
 
+/**
+ * Class ShipmentSender
+ */
 class ShipmentSender extends NotifySender
 {
     /**
@@ -26,22 +30,30 @@ class ShipmentSender extends NotifySender
     protected $shipmentResource;
 
     /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param Template $templateContainer
      * @param ShipmentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param PaymentHelper $paymentHelper
      * @param ShipmentResource $shipmentResource
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
         ShipmentIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         PaymentHelper $paymentHelper,
-        ShipmentResource $shipmentResource
+        ShipmentResource $shipmentResource,
+        Renderer $addressRenderer
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->paymentHelper = $paymentHelper;
         $this->shipmentResource = $shipmentResource;
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -55,6 +67,12 @@ class ShipmentSender extends NotifySender
     public function send(Shipment $shipment, $notify = true, $comment = '')
     {
         $order = $shipment->getOrder();
+        if ($order->getShippingAddress()) {
+            $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
+        } else {
+            $formattedShippingAddress = '';
+        }
+        $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
         $this->templateContainer->setTemplateVars(
             [
                 'order' => $order,
@@ -63,6 +81,8 @@ class ShipmentSender extends NotifySender
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
+                'formattedShippingAddress' => $formattedShippingAddress,
+                'formattedBillingAddress' => $formattedBillingAddress,
             ]
         );
         $result = $this->checkAndSend($order, $notify);

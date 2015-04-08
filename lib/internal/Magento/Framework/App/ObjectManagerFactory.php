@@ -22,6 +22,11 @@ use Magento\Framework\App\EnvironmentInterface;
 class ObjectManagerFactory
 {
     /**
+     * Path to definitions format in deployment configuration
+     */
+    const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
+
+    /**
      * Initialization parameter for a custom deployment configuration file
      */
     const INIT_PARAM_DEPLOYMENT_CONFIG_FILE = 'MAGE_CONFIG_FILE';
@@ -101,7 +106,7 @@ class ObjectManagerFactory
             $this->driverPool->getDriver(DriverPool::FILE),
             $this->directoryList->getPath(DirectoryList::DI),
             $this->directoryList->getPath(DirectoryList::GENERATION),
-            $deploymentConfig->get('definition/format', Serialized::MODE_NAME)
+            $deploymentConfig->get(self::CONFIG_PATH_DEFINITION_FORMAT, Serialized::MODE_NAME)
         );
 
         $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
