@@ -74,6 +74,9 @@ define(
                 }
             },
             isNewAddressSelected: function() {
+                if (!this.customerHasAddresses) {
+                    return true;
+                }
                 return this.newAddressSelected();
             },
             isCustomerLoggedIn: customer.isLoggedIn(),

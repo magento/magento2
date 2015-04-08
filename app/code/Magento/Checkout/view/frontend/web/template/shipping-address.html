@@ -14,7 +14,7 @@
          data-role="content"
          data-bind="fadeVisible: isVisible() && quoteHasBillingAddress()">
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
-            <!-- ko if: addresses.length > 0 -->
+            <!-- ko if: (customerHasAddresses)-->
             <div class="field addresses">
                 <label class="label" for="shipping:address-select"><span>Select a shipping address from your address book or enter a new address.</span></label>
                 <div class="control">

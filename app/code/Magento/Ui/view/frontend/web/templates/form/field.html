@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="field" data-bind="visible: visible, css: {'required': element.required, '_disabled': element.disabled, '_error': element.error}">
+<div class="field" data-bind="visible: visible, attr: {'name': element.dataScope}, css: {'required': element.required, '_disabled': element.disabled, '_error': element.error} ">
 
     <!-- ko if: element.label -->
     <label class="label" data-bind="attr: { for: element.uid }">

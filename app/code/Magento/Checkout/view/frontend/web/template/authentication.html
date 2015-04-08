@@ -5,7 +5,7 @@
  */
 -->
 <li id="opc-billing" class="section allow active" data-bind="visible: isActive()">
-    <div class="step-title" data-role="title">
+    <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <span class="number" data-bind="text: stepNumber()"></span>
         <h2 data-bind="text: $t('Checkout Method')"></h2>
     </div>

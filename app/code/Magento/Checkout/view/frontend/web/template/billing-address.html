@@ -11,6 +11,7 @@
     </div>
     <div id="checkout-step-billing" class="step-content" data-role="content" data-bind="fadeVisible: isVisible()">
         <form class="form billing" id="co-billing-form" data-hasrequired="* Required Fields">
+            <!-- ko if: (customerHasAddresses)-->
             <div class="field addresses">
                 <label class="label" for="billing:address-select"><span data-bind="text: $t('Select a billing address from your address book or enter a new address.')"></span></label>
                 <div class="control">
@@ -23,6 +24,7 @@
                     "></select>
                 </div>
             </div>
+            <!--/ko-->
             <fieldset id="billing-new-address-form" class="fieldset address"
                       data-bind="fadeVisible: isNewAddressSelected()">
 

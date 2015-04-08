@@ -6,6 +6,7 @@
 /*global define*/
 define(
     [
+        "jquery",
         'Magento_Ui/js/form/form',
         'ko',
         'Magento_Customer/js/model/customer',
@@ -14,7 +15,7 @@ define(
         '../model/quote',
         '../model/addresslist'
     ],
-    function (Component, ko,  customer, selectBillingAddress, navigator, quote, addressList) {
+    function ($, Component, ko,  customer, selectBillingAddress, navigator, quote, addressList) {
         "use strict";
         var stepName = 'billingAddress';
         var newAddressSelected = ko.observable(false);
@@ -28,6 +29,7 @@ define(
             isVisible: navigator.isStepVisible(stepName),
             useForShipping: "1",
             quoteIsVirtual: quote.isVirtual(),
+            hideEmail: quote.getCheckoutMethod() == null ? $('[name="customerDetails.email"]').hide(): '',
             billingAddressesOptionsText: function(item) {
                 return item.getFullAddress();
             },
@@ -56,11 +58,17 @@ define(
                 }
             },
             isNewAddressSelected: function() {
+                if (!this.customerHasAddresses) {
+                    return true;
+                }
                 return newAddressSelected();
             },
             onAddressChange: function (value) {
                 if (value === null) {
                     newAddressSelected(true);
+                    $('[name="customerDetails.email"]').hide();
+                    $('[name="customerDetails.password"]').hide();
+                    $('[name="customerDetails.confirm_password"]').hide();
                 } else {
                     newAddressSelected(false);
                 }

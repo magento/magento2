@@ -54,12 +54,20 @@ define(
                     return false;
                 }
                 if (guestChecked) {
-                    quote.setCheckoutMethod('guest')
+                    quote.setCheckoutMethod('guest');
+                    $('[name="customerDetails.password"]').hide();
+                    $('[name="customerDetails.confirm_password"]').hide();
+                    //$( '[name="billingAddress.email"]').show();
                 }
                 if (registerChecked) {
-                    quote.setCheckoutMethod('register')
+                    quote.setCheckoutMethod('register');
                 }
                 navigator.setCurrent('authentication').goNext();
+            },
+            navigateToCurrentStep: function() {
+                if (!navigator.isStepVisible(stepName)()) {
+                    navigator.goToStep(stepName);
+                }
             }
         });
     }
