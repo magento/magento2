@@ -7,9 +7,9 @@
 //  Variables
 //  ---------------------------------------------
 
-@page-order-table__border-color: @table-td__border-color;
-@page-order-sku__background: @admin__page-nav__background-color;
-@page-order-sku__padding: @indent__base;
+@order-create-table__border-color: @table-td__border-color;
+@order-create-sku__background: @admin__page-nav__background-color;
+@order-create-sku__padding: @indent__base;
 
 //
 
@@ -18,7 +18,7 @@
 //  ---------------------------------------------
 
 .order-tables {
-    margin: 0 0 @page-order-sidebar__margin-reqular;
+    margin: 0 0 @order-create-sidebar__margin-reqular;
     width: 100%;
     th {
         border-top: 0;
@@ -26,13 +26,13 @@
     }
     td {
         border-bottom: none;
-        padding-top: @page-order-sidebar__padding;
+        padding-top: @order-create-sidebar__padding;
     }
     tbody {
         tr {
             &:last-child {
                 td {
-                    border-bottom: 1px solid @page-order-table__border-color;
+                    border-bottom: 1px solid @order-create-table__border-color;
                 }
             }
             &.border {
@@ -54,17 +54,17 @@
     }
     .price {
         display: inline-block;
-        margin: 0 0 @page-order-sidebar__margin-small;
+        margin: 0 0 @order-create-sidebar__margin-small;
     }
     .custom-price-block {
-        font-size: @page-order-sidebar__font-size-xs;
-        margin: 0 0 @page-order-sidebar__margin-small;
+        font-size: @order-create-sidebar__font-size-xs;
+        margin: 0 0 @order-create-sidebar__margin-small;
         + .admin__control-text {
             &:extend(.abs-control-price);
         }
     }
     .discount-price-block {
-        font-size: @page-order-sidebar__font-size-xs;
+        font-size: @order-create-sidebar__font-size-xs;
     }
     .product-configure-block {
         margin: 1rem 0 0;
@@ -92,12 +92,12 @@
 //  ---------------------------------------------
 
 .add-by-sku {
-    background: @page-order-sku__background;
+    background: @order-create-sku__background;
     clear: both;
-    padding: @page-order-sku__padding;
+    padding: @order-create-sku__padding;
 
     .table-info {
-        color: @page-order-sidebar__color;
+        color: @order-create-sidebar__color;
     }
 
     .admin__field-note {
@@ -119,17 +119,17 @@
         &:extend(.abs-action-reset all);
         &:extend(.abs-icon all);
         display: inline-block;
-        font-size: @page-order-sidebar__font-size + 0.1rem;
+        font-size: @order-create-sidebar__font-size + 0.1rem;
         margin-left: 1.2rem;
-        padding-top: @page-order-sidebar__margin-small + 0.2rem;
+        padding-top: @order-create-sidebar__margin-small + 0.2rem;
         vertical-align: middle;
         &:after {
-            color: @page-order-sidebar__color;
-            content: @page-order-icon-remove__content;
+            color: @order-create-sidebar__color;
+            content: @order-create-icon-remove__content;
         }
         &:hover {
             &:after {
-                color: @page-order-icon-plus__hover__color;
+                color: @order-create-icon-plus__hover__color;
             }
         }
         > span {
