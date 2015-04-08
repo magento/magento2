@@ -44,6 +44,11 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
     protected $productBundleOptionsMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productInterfaceFactoryMock;
+
+    /**
      * @var \Closure
      */
     protected $closureMock;
@@ -62,7 +67,12 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return $this->productMock;
         };
-        $this->plugin = new BundleSaveOptions($this->productOptionRepositoryMock);
+        $this->productInterfaceFactoryMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterfaceFactory')
+            ->disableOriginalConstructor()->getMock();
+        $this->plugin = new BundleSaveOptions(
+            $this->productOptionRepositoryMock,
+            $this->productInterfaceFactoryMock
+        );
         $this->productExtensionMock = $this->getMock(
             'Magento\Catalog\Api\Data\ProductExtension',
             ['getBundleProductOptions'],
@@ -122,7 +132,7 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
 
         $this->productOptionRepositoryMock->expects($this->once())->method('save')->with($this->productMock, $option);
 
-        $this->productMock->expects($this->once())->method('getSku')
+        $this->productMock->expects($this->exactly(2))->method('getSku')
             ->will($this->returnValue($productSku));
 
         $this->productOptionRepositoryMock->expects($this->once())
@@ -130,8 +140,22 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
             ->with($productSku)
             ->will($this->returnValue([]));
 
+        $newProductMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
+            ->disableOriginalConstructor()->getMock();
+        $newProductMock->expects($this->once())
+            ->method('setSku')
+            ->with($productSku)
+            ->willReturnSelf();
+        $this->productInterfaceFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($newProductMock);
+        $this->productRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($newProductMock)
+            ->willReturn($newProductMock);
+
         $this->assertEquals(
-            $this->productMock,
+            $newProductMock,
             $this->plugin->aroundSave($this->productRepositoryMock, $this->closureMock, $this->productMock)
         );
     }
@@ -170,7 +194,7 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
         $this->productExtensionMock->expects($this->once())
             ->method('getBundleProductOptions')
             ->willReturn([$bundleOptionExisting, $bundleOptionNew]);
-        $this->productMock->expects($this->once())->method('getSku')
+        $this->productMock->expects($this->exactly(2))->method('getSku')
             ->will($this->returnValue($productSku));
 
         $this->productOptionRepositoryMock->expects($this->once())
@@ -193,8 +217,22 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($existingOption2);
 
+        $newProductMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
+            ->disableOriginalConstructor()->getMock();
+        $newProductMock->expects($this->once())
+            ->method('setSku')
+            ->with($productSku)
+            ->willReturnSelf();
+        $this->productInterfaceFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($newProductMock);
+        $this->productRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($newProductMock)
+            ->willReturn($newProductMock);
+
         $this->assertEquals(
-            $this->productMock,
+            $newProductMock,
             $this->plugin->aroundSave($this->productRepositoryMock, $this->closureMock, $this->productMock)
         );
     }
