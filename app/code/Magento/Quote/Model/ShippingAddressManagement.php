@@ -79,12 +79,12 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
                 __('Cart contains virtual product(s) only. Shipping address is not applicable.')
             );
         }
+        $customerAddressId = $address->getCustomerAddressId();
+        if ($customerAddressId) {
+            $addressData = $this->addressRepository->getById($customerAddressId);
 
-        if (!empty($address->getId())) {
-            $address = $quote->getShippingAddress();
-            $addressData = $this->addressRepository->getById($address->getId());
-
-            $address->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
+            $address =
+                $quote->getShippingAddress()->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
             $address->setSameAsBilling($address->getSameAsBilling());
         }
 
