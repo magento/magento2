@@ -264,43 +264,53 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Sales\Model\Order\Creditmemo\Item', $result);
     }
 
-    public function testCalcRowTotal()
+    /**
+     * @dataProvider calcRowTotalDataProvider
+     */
+    public function testCalcRowTotal($qty)
     {
         $creditmemoMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Creditmemo')
             ->disableOriginalConstructor()
             ->getMock();
         $creditmemoMock->expects($this->exactly(4))
             ->method('roundPrice')
-            ->willReturnMap(
-                [
-                    [0.375, 'regular', false, 0.4],
-                    [0.375, 'base', false, 0.4],
-                    [1, 'including', false, 1.0],
-                    [1, 'including_base', false, 1.0]
-                ]
-            );
+            ->will($this->returnCallback(
+                function($arg) {
+                    return round($arg,2);
+                }
+            ));
+
+        $qtyInvoiced = 10;
+        $qtyRefunded = 2;
+        $qtyAvailable = $qtyInvoiced - $qtyRefunded;
+
+        $rowInvoiced = 5;
+        $amountRefunded = 2;
+
+        $expectedRowTotal = ($rowInvoiced - $amountRefunded) / $qtyAvailable * $qty;
+        $expectedRowTotal = round($expectedRowTotal, 2);
 
         $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemMock->expects($this->once())
             ->method('getQtyInvoiced')
-            ->willReturn(10);
+            ->willReturn($qtyInvoiced);
         $orderItemMock->expects($this->once())
             ->method('getQtyRefunded')
-            ->willReturn(2);
+            ->willReturn($qtyRefunded);
         $orderItemMock->expects($this->once())
             ->method('getRowInvoiced')
-            ->willReturn(5);
+            ->willReturn($rowInvoiced);
         $orderItemMock->expects($this->once())
             ->method('getAmountRefunded')
-            ->willReturn(2);
+            ->willReturn($amountRefunded);
         $orderItemMock->expects($this->once())
             ->method('getBaseRowInvoiced')
-            ->willReturn(5);
+            ->willReturn($rowInvoiced);
         $orderItemMock->expects($this->once())
             ->method('getBaseAmountRefunded')
-            ->willReturn(2);
+            ->willReturn($amountRefunded);
         $orderItemMock->expects($this->once())
             ->method('getRowTotalInclTax')
             ->willReturn(1);
@@ -313,11 +323,28 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $orderItemMock->expects($this->once())
             ->method('getQtyOrdered')
             ->willReturn(1);
+        $orderItemMock->expects($this->any())
+            ->method('getQtyToRefund')
+            ->willReturn($qtyAvailable);
 
-        $this->item->setData('qty', 1);
+        $this->item->setData('qty', $qty);
         $this->item->setCreditmemo($creditmemoMock);
         $this->item->setOrderItem($orderItemMock);
         $result = $this->item->calcRowTotal();
+
         $this->assertInstanceOf('Magento\Sales\Model\Order\Creditmemo\Item', $result);
+        $this->assertEquals($expectedRowTotal, $this->item->getData('row_total'));
+        $this->assertEquals($expectedRowTotal, $this->item->getData('base_row_total'));
+    }
+
+    /**
+     * @return array
+     */
+    public function calcRowTotalDataProvider()
+    {
+        return [
+            'qty 1' => [1],
+            'qty 0' => [0],
+        ];
     }
 }
