@@ -10,8 +10,16 @@
 <?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Info */ ?>
 <?php $_order = $block->getOrder() ?>
 <?php
-$orderAdminDate = $block->formatDate($_order->getCreatedAtDate(), \IntlDateFormatter::MEDIUM, true);
-$orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDateFormatter::MEDIUM, true);
+$orderAdminDate = $block->formatDate(
+    $block->getOrderAdminDate($_order->getCreatedAt()),
+    \IntlDateFormatter::MEDIUM,
+    true
+);
+$orderStoreDate = $block->formatDate(
+    $block->getCreatedAtStoreDate($_order->getStore(), $_order->getCreatedAt()),
+    \IntlDateFormatter::MEDIUM,
+    true
+);
 ?>
 
 <?php /* the opening and closing divs of these two clearfixes are in app\code\core\Mage\Adminhtml\view\adminhtml\sales\order\invoice\create\form.phtml */?>
@@ -43,7 +51,13 @@ $orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDate
                 </tr>
                 <?php if ($orderAdminDate != $orderStoreDate):?>
                 <tr>
-                    <th><?php echo __('Order Date (%1)', $_order->getCreatedAtStoreDate()->getTimezone()->getName()) ?></th>
+                    <th><?php echo __(
+                            'Order Date (%1)',
+                            $block->getCreatedAtStoreDate(
+                                $_order->getStore(),
+                                $_order->getCreatedAt()
+                            )->getTimezone()->getName()
+                        ) ?></th>
                     <td><?php echo $orderStoreDate ?></td>
                 </tr>
                 <?php endif;?>
@@ -144,7 +158,7 @@ $orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDate
                 <div class="actions"><?php echo $block->getAddressEditLink($_order->getBillingAddress()); ?></div>
                 <span class="title"><?php echo __('Billing Address') ?></span>
             </div>
-            <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+            <address><?php echo $block->getFormattedAddress($_order->getBillingAddress()); ?></address>
         </div>
     </div>
 
@@ -156,7 +170,7 @@ $orderStoreDate = $block->formatDate($_order->getCreatedAtStoreDate(), \IntlDate
                 <div class="actions"><?php echo $block->getAddressEditLink($_order->getShippingAddress()); ?></div>
                 <span class="title"><?php echo __('Shipping Address') ?></span>
             </div>
-            <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
+            <address><?php echo $block->getFormattedAddress($_order->getShippingAddress()); ?></address>
         </div>
     </div>
 </div>
