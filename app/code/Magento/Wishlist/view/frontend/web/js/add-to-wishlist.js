@@ -32,53 +32,67 @@ define([
             this._on(events);
         },
         _updateWishlistData: function(event) {
-            var dataToAdd = {},
-                dataOrigin = {};
+            var dataToAdd = {};
+            if (event.handleObj.selector == this.options.qtyInfo) {
+                this._updateAddToWishlistButton({});
+                event.stopPropagation();
+                return;
+            }
             var self = this;
             $(event.handleObj.selector).each(function(index, element){
-                dataOrigin = $.extend({}, dataOrigin, self._getElementData(element, 1));
+                if ($(element).attr('type') == 'text') {
+                    dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    return;
+                }
                 if ($(element).is(':checked') || $(element).find(':checked').length) {
                     dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
-                } else {
-                    dataToAdd = dataOrigin;
                 }
             });
+
+            this._updateAddToWishlistButton(dataToAdd);
+            event.stopPropagation();
+        },
+        _updateAddToWishlistButton: function(dataToAdd) {
+            var self = this;
             $('[data-action="add-to-wishlist"]').each(function(index, element) {
                 var params = $(element).data('post');
                 if (!params)
                     params = {};
 
-                self._removeExcessiveData(params, dataOrigin, dataToAdd);
-                params.data = $.extend({}, params.data, dataToAdd, {'qty': $(self.options.qtyInfo).val()});
+                if (!$.isEmptyObject(dataToAdd)) {
+                    self._removeExcessiveData(params, dataToAdd);
+                }
 
+                params.data = $.extend({}, params.data, dataToAdd, {'qty': $(self.options.qtyInfo).val()});
                 $(element).data('post', params);
             });
-            event.stopPropagation();
         },
         _arrayDiffByKeys: function(array1, array2) {
             var result = {};
             $.each(array1, function(key, value) {
+                if (key.indexOf('option') === -1) {
+                    return;
+                }
                 if (!array2[key])
                     result[key] = value;
             });
             return result;
         },
-        _getElementData: function(element, origin) {
+        _getElementData: function(element) {
             var data = {},
                 elementName = $(element).attr('name'),
                 elementValue = $(element).val();
-            if ($(element).is('select[multiple]')) {
-                $.each(elementValue, function(key, option) {
-                    var value = origin ? option.value : option;
-                    data[elementName + '[' + value + ']'] = value;
+            if ($(element).is('select[multiple]') && elementValue !== null) {
+                $.each(elementValue, function (key, option) {
+                    data[elementName + '[' + option + ']'] = option;
                 });
             } else {
                 data[elementName] = elementValue;
             }
             return data;
         },
-        _removeExcessiveData: function(params, dataOrigin, dataToAdd) {
-            var dataToRemove = this._arrayDiffByKeys(dataOrigin, dataToAdd);
+        _removeExcessiveData: function(params, dataToAdd) {
+            var dataToRemove = this._arrayDiffByKeys(params.data, dataToAdd);
             $.each(dataToRemove, function(key, value) {
                 delete params.data[key];
             });
