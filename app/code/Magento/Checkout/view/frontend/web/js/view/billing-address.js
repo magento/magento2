@@ -64,7 +64,10 @@ define(
                 } else {
                     newAddressSelected(false);
                 }
-            }
+            },
+            isCustomerLoggedIn: customer.isLoggedIn(),
+            customerHasAddresses: window.customerHasAddresses
+
         });
     }
 );

@@ -28,6 +28,7 @@
             window.isMethodRegister = <?php echo $this->isMethodRegister()?>;
             window.isCustomerMustBeLogged = <?php echo $this->isCustomerMustBeLogged()?>;
             window.getRegisterUrl = <?php echo $this->getRegisterUrl()?>;
+            window.customerHasAddresses = <?php echo $this->customerHasAddresses()?>;
         </script>
         <script>
             require(['mage/url', 'Magento_Checkout/js/model/step-loader'], function(url, loader) {

@@ -8,6 +8,7 @@ namespace Magento\Checkout\Block;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Config as AddressConfig;
 use Magento\Framework\Webapi\Exception;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Onepage checkout block
@@ -234,10 +235,13 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $this->cartData = $this->cartRepository->get($this->getQuote()->getId());
             if (!$this->cartData->getCustomer()->getId()) {
                 $this->cartRepository->save($this->getQuote()->setCheckoutMethod('guest'));
+            } else {
+                $this->cartRepository->save($this->getQuote()->setCheckoutMethod(null));
             }
         }
         return $this->cartData;
     }
+
     /**
      * Retrieve current active quote.
      *
@@ -361,5 +365,17 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     public function getRegisterUrl()
     {
         return \Zend_Json::encode($this->customerUrl->getRegisterUrl());
+    }
+
+    /**
+     * @return int
+     */
+    public function customerHasAddresses()
+    {
+        try {
+            return \Zend_Json::encode(count($this->_getCustomer()->getAddresses()));
+        } catch (NoSuchEntityException $e) {
+            return \Zend_Json::encode(0);
+        }
     }
 }

@@ -75,7 +75,10 @@ define(
             },
             isNewAddressSelected: function() {
                 return this.newAddressSelected();
-            }
+            },
+            isCustomerLoggedIn: customer.isLoggedIn(),
+            customerHasAddresses: window.customerHasAddresses,
+
         });
     }
 );
