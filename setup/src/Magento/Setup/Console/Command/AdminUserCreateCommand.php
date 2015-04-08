@@ -49,7 +49,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     {
         $errors = $this->validate($input);
         if ($errors) {
-            throw new \InvalidArgumentException("Missing option(s):\n" . implode("\n", $errors));
+            throw new \InvalidArgumentException(implode("\n", $errors));
         }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->installAdminUser($input->getOptions());
@@ -90,7 +90,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
         ];
         foreach ($required as $key) {
             if (!$input->getOption($key)) {
-                $errors[] = $key;
+                $errors[] = 'Missing option ' . $key;
             }
         }
         return $errors;
