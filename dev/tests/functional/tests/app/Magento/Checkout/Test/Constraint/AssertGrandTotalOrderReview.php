@@ -10,10 +10,9 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderTotalOnReviewPage
- * Assert that Order Grand Total is correct on checkoutOnePage
+ * Assert that Order Grand Total is correct on checkoutOnePage.
  */
-class AssertOrderTotalOnReviewPage extends AbstractConstraint
+class AssertGrandTotalOrderReview extends AbstractConstraint
 {
     /**
      * Assert that Order Grand Total is correct on checkoutOnePage

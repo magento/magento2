@@ -17,7 +17,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class AbstractReview extends Block
+abstract class AbstractReview extends Block
 {
     /**
      * Continue checkout button.
@@ -302,6 +302,7 @@ class AbstractReview extends Block
      */
     public function getShippingExclTax()
     {
+        $this->waitForElementVisible($this->shippingExclTax);
         $subTotal = $this->_rootElement->find($this->shippingExclTax, Locator::SELECTOR_CSS);
         return $subTotal->isVisible() ? $this->escapeCurrency($subTotal->getText()) : null;
     }
