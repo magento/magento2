@@ -132,7 +132,7 @@ class UiComponentFactory extends Object
         if ($name === null) {
             $bundleComponents = $this->componentManager->prepareData($identifier)->getData($identifier);
             if (empty($bundleComponents)) {
-                throw new LocalizedException(__('You use an empty set.'));
+                throw new LocalizedException(new \Magento\Framework\Phrase('You use an empty set.'));
             }
             list($className, $componentArguments) = $this->argumentsResolver(
                 $identifier,
@@ -140,7 +140,7 @@ class UiComponentFactory extends Object
             );
             $componentArguments = array_merge($componentArguments, $arguments);
             if (!isset($componentArguments['context'])) {
-                throw new LocalizedException(__('Context, is required argument.'));
+                throw new LocalizedException(new \Magento\Framework\Phrase('Context, is required argument.'));
             }
             $componentContext = $componentArguments['context'];
             $components = [];
