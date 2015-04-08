@@ -87,7 +87,7 @@ class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductC
     /**
      * @var array
      */
-    protected $_values = [];
+    protected $_values = null;
 
     /**
      * Catalog product option value
@@ -557,7 +557,7 @@ class Option extends AbstractModel implements \Magento\Catalog\Api\Data\ProductC
     protected function _clearData()
     {
         $this->_data = [];
-        $this->_values = [];
+        $this->_values = null;
         return $this;
     }
 

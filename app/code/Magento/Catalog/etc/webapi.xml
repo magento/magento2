@@ -202,7 +202,7 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/products/media" method="POST">
+    <route url="/V1/products/:sku/media" method="POST">
         <service class="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" method="create"/>
         <resources>
             <resource ref="Magento_Catalog::catalog"/>
@@ -247,7 +247,7 @@
         </resources>
     </route>
 
-    <!-- Tear Price -->
+    <!-- Tier Price -->
     <route url="/V1/products/:sku/group-prices/:customerGroupId/tiers" method="GET">
         <service class="Magento\Catalog\Api\ProductTierPriceManagementInterface" method="getList"/>
         <resources>
