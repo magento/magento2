@@ -25,6 +25,8 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
     const INPUT_USE_REWRITES = 'use_rewrites';
     const INPUT_USE_SECURE = 'use_secure';
     const INPUT_BASE_URL_SECURE = 'base_url_secure';
+    const INPUT_USER_SECURE_ADMIN = 'use_secure_admin';
+    const INPUT_ADMIN_USE_SECURE_KEY = 'admin_use_security_key';
 
     /**
      * @var InstallerFactory
@@ -89,25 +91,25 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
                 self::INPUT_BASE_URL,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Base URL'
+                'URL the store is supposed to be available at'
             ),
             new InputOption(
                 self::INPUT_LANGUAGE,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Language locale'
+                'Default language code'
             ),
             new InputOption(
                 self::INPUT_TIMEZONE,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Time zone'
+                'Default time zone code'
             ),
             new InputOption(
                 self::INPUT_CURRENCY,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Currency'
+                'Default currency code'
             ),
             new InputOption(
                 self::INPUT_USE_REWRITES,
@@ -119,13 +121,25 @@ class InstallUserConfigurationCommand extends AbstractSetupCommand
                 self::INPUT_USE_SECURE,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Use secure'
+                'Use secure URLs. Enable this option only if SSL is available.'
             ),
             new InputOption(
                 self::INPUT_BASE_URL_SECURE,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Base URL secure'
+                'Base URL for SSL connection'
+            ),
+            new InputOption(
+                self::INPUT_USER_SECURE_ADMIN,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Run admin interface with SSL'
+            ),
+            new InputOption(
+                self::INPUT_ADMIN_USE_SECURE_KEY,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Whether to use a "security key" feature in Magento Admin URLs and forms'
             ),
         ];
     }
