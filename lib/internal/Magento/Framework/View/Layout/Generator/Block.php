@@ -171,7 +171,7 @@ class Block implements Layout\GeneratorInterface
     }
 
     /**
-     * Handle exceptions during rendering process.
+     * Handle exceptions during rendering process
      *
      * @param \Exception $cause
      * @throws \Exception

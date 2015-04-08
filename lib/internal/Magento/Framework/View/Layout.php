@@ -500,6 +500,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
+     * Handle exceptions during rendering process
+     *
      * @param \Exception $cause
      * @throws \Exception
      * @return void
