@@ -38,6 +38,11 @@ class Sidebar extends AbstractCart implements IdentityInterface
     protected $_checkoutHelper;
 
     /**
+     * @var array
+     */
+    protected $jsLayout;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -62,6 +67,15 @@ class Sidebar extends AbstractCart implements IdentityInterface
         $this->_checkoutCart = $checkoutCart;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
+        $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
+    }
+
+    /**
+     * @return string
+     */
+    public function getJsLayout()
+    {
+        return \Zend_Json::encode($this->jsLayout);
     }
 
     /**

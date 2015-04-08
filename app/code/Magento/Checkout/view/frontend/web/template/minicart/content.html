@@ -1,0 +1,67 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="block-title">
+    <strong>
+        <span class="text" data-bind="text: $t('My Cart')"></span>
+        <span
+            class="qty"
+            data-bind="css: { empty: cart().summary_count == 0 },
+                       text: cart().summary_count,
+                       attr: { title: $t('Items in Cart') }">
+        </span>
+    </strong>
+</div>
+
+<div class="block-content">
+    <button type="button"
+            id="btn-minicart-close"
+            class="action close"
+            data-bind="attr: { title: $t('Close') }">
+
+        <span data-bind="text: $t('My Cart')"></span>
+    </button>
+
+    <?php if ($_cartQty || $block->getAllowCartLink()): ?>
+
+
+    <!-- ko if: cart().summary_count -->
+    private
+    <strong class="subtitle" data-bind="text: $t('Recently added item(s)')"></strong>
+    <div data-action="scroll" class="minicart-items-wrapper">
+        <ol id="mini-cart" class="minicart-items">
+            <?php foreach ($_items as $_item): ?>
+            <?php echo $block->getItemHtml($_item) ?>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+    <!-- /ko -->
+
+    <!-- ko ifnot: cart().summary_count -->
+    agnostic
+    <strong class="subtitle empty" data-bind="text: $t('You have no items in your shopping cart.')"></strong>
+    <?php if ($block->getCartEmptyMessage()): ?>
+    <p class="minicart empty text"><?php echo $block->getCartEmptyMessage(); ?></p>
+    <?php endif; ?>
+    <!-- /ko -->
+
+    <?php if ($_cartQty || $block->getAllowCartLink()): ?>
+    <!-- ko if: cart().summary_count -->
+    private
+    <div class="actions">
+        <div class="secondary">
+            <a class="action viewcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
+                <span data-bind="text: $t('View and edit cart')"></span>
+            </a>
+        </div>
+    </div>
+    <!-- /ko -->
+
+    <div id="minicart-widgets" class="minicart-widgets">
+        <?php echo $block->getChildHtml('cart_promotion') ?>
+    </div>
+</div>

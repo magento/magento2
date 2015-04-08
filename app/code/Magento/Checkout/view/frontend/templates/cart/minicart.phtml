@@ -10,16 +10,17 @@
 ?>
 
 <div data-block="minicart" class="minicart-wrapper" >
-    <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>" data-bind="scope: 'minicart'">
+    <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>"
+       data-bind="scope: 'minicart_content'">
         <span class="text"><?php echo __('My Cart'); ?></span>
-        <span class="counter qty" data-bind="css: { empty: cart().summary_count <= 0 }">
-            <span class="counter-number" data-bind="text: cart().summary_count">0</span>
+        <span class="counter qty"
+              data-bind="css: { empty: cart().summary_count == 0 }">
+            <span class="counter-number" data-bind="text: cart().summary_count"></span>
             <span class="counter-label">
                 <?php echo $block->getSummaryText(0); ?>
             </span>
         </span>
     </a>
-    <?php // TODO: MAGETWO-34824: need to add conditions to js view model ?>
     <?php if ($block->getIsNeedToDisplaySideBar()): ?>
         <div class="block block-minicart empty"
              data-mage-init='{"dropdownDialog":{
@@ -31,14 +32,16 @@
                 "triggerClass":"active",
                 "parentClass":"active",
                 "buttons":[]}}'>
-            <div id="minicart-content-wrapper">
-                <?php echo $block->getChildHtml('minicart_content') ?>
+            <div id="minicart-content-wrapper"
+                 data-bind="scope: 'minicart_content'">
+                <!-- ko template: $data.getTemplate() --><!-- /ko -->
             </div>
         </div>
     <?php endif ?>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
+            "Magento_Ui/js/core/app": <?php echo $this->getJsLayout();?>,
             "sidebar": {
                 "targetElement": "div.block.block-minicart",
                 "url": {
@@ -70,21 +73,6 @@
             }
         }
     }
-    </script>
-    <script type="text/x-magento-init">
-        {
-            "*": {
-                "Magento_Ui/js/core/app": {
-                    "renderer": {
-                        "layout": {
-                            "minicart": {
-                                "component": "Magento_Checkout/js/view/minicart"
-                            }
-                        }
-                    }
-                }
-            }
-        }
     </script>
 </div>
 
