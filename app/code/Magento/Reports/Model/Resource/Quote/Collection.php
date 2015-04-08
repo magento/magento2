@@ -9,6 +9,7 @@
 /**
  * Reports quote collection
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Model\Resource\Quote;
