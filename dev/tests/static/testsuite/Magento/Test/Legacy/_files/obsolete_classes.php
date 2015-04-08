@@ -3147,4 +3147,6 @@ return [
     ['Magento\Payment\Exception'],
     ['Magento\UrlRewrite\Model\Storage\DuplicateEntryException'],
     ['Magento\Eav\Exception'],
+    ['Magento\Framework\Exception\State\InputMismatchException'],
+    ['Magento\Shipping\Exception'],
 ];
