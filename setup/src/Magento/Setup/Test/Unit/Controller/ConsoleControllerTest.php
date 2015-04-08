@@ -20,11 +20,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
     private $consoleLogger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Lists
-     */
-    private $options;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer
      */
     private $installer;
@@ -62,7 +57,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $installerFactory->expects($this->once())->method('create')->with($this->consoleLogger)->willReturn(
             $this->installer
         );
-        $this->options = $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
 
         $this->request = $this->getMock('Zend\Console\Request', [], [], '', false);
         $response = $this->getMock('Zend\Console\Response', [], [], '', false);
@@ -89,7 +83,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
 
         $this->controller = new ConsoleController(
-            $this->options,
             $installerFactory,
             $objectManagerProvider
         );
