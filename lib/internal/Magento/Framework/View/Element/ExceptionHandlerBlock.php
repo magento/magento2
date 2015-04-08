@@ -13,6 +13,9 @@ use Magento\Framework\Phrase;
  *
  * Block for default and maintenance mode. During layout loading process corrupted block (that throws exception)
  * will be replaced with a "dummy" block. As result, page will be loaded without broken block.
+ *
+ * When calls from parent to child block occurred and the error appeared in the child block,
+ * all blocks chain would be removed.
  */
 class ExceptionHandlerBlock implements BlockInterface
 {
@@ -30,6 +33,8 @@ class ExceptionHandlerBlock implements BlockInterface
     }
 
     /**
+     * Throws an exception when parent block calls corrupted child block method
+     *
      * @param string $method
      * @param array $args
      * @return void
@@ -37,23 +42,18 @@ class ExceptionHandlerBlock implements BlockInterface
      */
     public function __call($method, $args)
     {
-        $this->initializeException();
+        throw new LocalizedException(
+            new Phrase('Block %1 throws exception and cannot be rendered.', [$this->blockName])
+        );
     }
 
     /**
+     * Declared in BlockInterface and also throws an exception
+     *
      * @throws LocalizedException
      * @return void
      */
     public function toHtml()
-    {
-        $this->initializeException();
-    }
-
-    /**
-     * @throws LocalizedException
-     * @return void
-     */
-    protected function initializeException()
     {
         throw new LocalizedException(
             new Phrase('Block %1 throws exception and cannot be rendered.', [$this->blockName])

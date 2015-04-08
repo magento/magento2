@@ -106,7 +106,6 @@ class Block implements Layout\GeneratorInterface
      * @param Layout\Reader\Context $readerContext
      * @param Context $generatorContext
      * @return $this
-     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function process(Layout\Reader\Context $readerContext, Layout\Generator\Context $generatorContext)
@@ -141,9 +140,10 @@ class Block implements Layout\GeneratorInterface
                 $this->eventManager->dispatch('core_layout_block_create_after', ['block' => $block]);
             } catch (\Exception $e) {
                 $this->handleRenderException($e);
-                $layout->setBlock($elementName, $this->exceptionHandlerBlockFactory->create(
-                    ['blockName' => $elementName]
-                ));
+                $layout->setBlock(
+                    $elementName,
+                    $this->exceptionHandlerBlockFactory->create(['blockName' => $elementName])
+                );
                 unset($blockActions[$elementName]);
             }
             $scheduledStructure->unsetElement($elementName);
@@ -161,15 +161,18 @@ class Block implements Layout\GeneratorInterface
                 }
             } catch (\Exception $e) {
                 $this->handleRenderException($e);
-                $layout->setBlock($elementName, $this->exceptionHandlerBlockFactory->create(
-                    ['blockName' => $elementName]
-                ));
+                $layout->setBlock(
+                    $elementName,
+                    $this->exceptionHandlerBlockFactory->create(['blockName' => $elementName])
+                );
             }
         }
         return $this;
     }
 
     /**
+     * Handle exceptions during rendering process.
+     *
      * @param \Exception $cause
      * @throws \Exception
      * @return void
