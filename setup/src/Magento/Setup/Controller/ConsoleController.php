@@ -23,20 +23,13 @@ use Symfony\Component\Console\Output\StreamOutput;
  */
 class ConsoleController extends AbstractActionController
 {
-    /**#@+
-     * Supported command types
-     */
-    const CMD_HELP = 'help';
-    const CMD_INSTALL = 'install';
-    /**#@- */
-
     /**
      * Map of controller actions exposed in CLI
      *
      * @var string[]
      */
     private static $actions = [
-        self::CMD_HELP => 'help',
+
     ];
 
     /**
@@ -45,7 +38,7 @@ class ConsoleController extends AbstractActionController
      * @var string[]
      */
     private static $helpOptions = [
-        self::CMD_INSTALL,
+
     ];
 
     /**
@@ -127,12 +120,6 @@ class ConsoleController extends AbstractActionController
     private static function getCliConfig()
     {
         return [
-            self::CMD_HELP => [
-                'route' => self::CMD_HELP . ' [' . implode('|', self::$helpOptions) . ']:type',
-                'usage' => '<' . implode('|', self::$helpOptions) . '>',
-                'usage_short' => self::CMD_HELP . ' <topic>',
-                'usage_desc' => 'Help about particular command or topic:',
-            ],
         ];
     }
 

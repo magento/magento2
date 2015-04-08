@@ -47,12 +47,6 @@ class VerboseValidator
             $validationMessages .= $usages[$userAction] . PHP_EOL . PHP_EOL;
 
         } else {
-            if (!is_null($userAction)) {
-                $validationMessages .= PHP_EOL . "Unknown action name '{$userAction}'." . PHP_EOL . PHP_EOL;
-            } else {
-                $validationMessages .= PHP_EOL . "No action is given in the command." . PHP_EOL . PHP_EOL;
-            }
-            $validationMessages .= 'Available options: ' . PHP_EOL;
             foreach (array_keys($config) as $action) {
                 $validationMessages .= $action . PHP_EOL;
             }
