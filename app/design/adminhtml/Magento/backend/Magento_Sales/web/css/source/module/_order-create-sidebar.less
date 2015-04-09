@@ -68,6 +68,7 @@
             &:extend(.abs-icon all);
             display: inline-block;
             font-size: @order-create-sidebar__font-size + 0.1rem;
+            text-decoration: none;
             vertical-align: middle;
             &:after {
                 color: @order-create-sidebar__color;
@@ -83,12 +84,23 @@
                     content: @order-create-icon-add__content;
                 }
             }
+            &.icon-configure {
+                &:after {
+                    content: @order-create-icon-configure__content;
+                }
+                &:hover {
+                    &:after {
+                        color: @order-create-icon-plus__hover__color;
+                    }
+                }
+            }
             > span {
                 .extend__visually-hidden();
             }
         }
         .col-add {
             text-align: right;
+            .icon-configure,
             .icon-add {
                 margin-right: @order-create-sidebar__margin-m;
             }

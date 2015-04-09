@@ -10,7 +10,7 @@
 <?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
 <div class="create-order-sidebar-block" id="sidebar_data_<?php echo $block->getDataId() ?>">
     <div class="head">
-        <a href="#" class="action-refresh" title="<?php echo __('Refresh') ?>" onclick="order.loadArea('sidebar_<?php echo $block->getDataId() ?>', 'sidebar_data_<?php echo $block->getDataId() ?>');return false;">
+        <a href="#" class="action-refresh"  title="<?php echo $block->escapeHtml(__('Refresh')); ?>" onclick="order.loadArea('sidebar_<?php echo $block->getDataId() ?>', 'sidebar_data_<?php echo $block->getDataId() ?>');return false;">
             <span>Refresh</span>
         </a>
         <h5 class="create-order-sidebar-label">
@@ -36,14 +36,16 @@
 
                     <?php if ($block->canRemoveItems()): ?>
                         <th class="col-remove">
-                            <span class="icon icon-remove">
+                            <span title="<?php echo $block->escapeHtml(__('Remove')); ?>"
+                                  class="icon icon-remove">
                                 <span><?php echo __('Remove') ?></span>
                             </span>
                         </th>
                     <?php endif; ?>
 
                     <th class="col-add">
-                        <span class="icon icon-add">
+                        <span title="<?php echo $block->escapeHtml(__('Add To Order')); ?>"
+                              class="icon icon-add">
                             <span><?php echo __('Add To Order') ?></span>
                         </span>
                     </th>
@@ -72,7 +74,7 @@
                                            class="admin__control-checkbox"
                                            name="sidebar[remove][<?php echo $block->getItemId($_item) ?>]"
                                            value="<?php echo $block->getDataId() ?>"
-                                           title="<?php echo __('Remove') ?>" />
+                                           title="<?php echo $block->escapeHtml(__('Remove')); ?>" />
                                     <label class="admin__field-label"></label>
                                 </div>
                             </td>
@@ -81,15 +83,25 @@
                         <td class="col-add">
                             <div class="admin__field-option">
                                 <?php if ($block->isConfigurationRequired($_item->getTypeId()) && $block->getDataId() == 'wishlist'): ?>
-                                    <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo $block->getProductId($_item) ?>, <?php echo $block->getItemId($_item) ?>); return false;"><img src="<?php echo $block->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo __('Configure and Add to Order') ?>" title="<?php echo __('Configure and Add to Order') ?>" width="16" height="16"/></a>
+                                    <a href="#"
+                                       class="icon icon-configure"
+                                       title="<?php echo $block->escapeHtml(__('Configure and Add to Order')); ?>"
+                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo $block->getProductId($_item) ?>, <?php echo $block->getItemId($_item) ?>); return false;">
+                                        <span><?php echo __('Configure and Add to Order') ?></span>
+                                    </a>
                                 <?php elseif ($block->isConfigurationRequired($_item->getTypeId())): ?>
-                                    <a href="#" onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo $block->getProductId($_item) ?>); return false;"><img src="<?php echo $block->getViewFileUrl('images/grouped_to_order_icon.png') ?>" class="v-middle" alt="<?php echo __('Configure and Add to Order') ?>" title="<?php echo __('Configure and Add to Order') ?>" width="16" height="16"/></a>
+                                    <a href="#"
+                                       class="icon icon-configure"
+                                       title="<?php echo $block->escapeHtml(__('Configure and Add to Order')); ?>"
+                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo $block->getProductId($_item) ?>); return false;">
+                                        <span><?php echo __('Configure and Add to Order') ?></span>
+                                    </a>
                                 <?php else: ?>
                                     <input type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[<?php echo $block->getSidebarStorageAction() ?>][<?php echo $block->getIdentifierId($_item) ?>]"
                                            value="<?php echo $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
-                                           title="<?php echo __('Add To Order') ?>"/>
+                                           title="<?php echo $block->escapeHtml(__('Add to Order')); ?>""/>
                                     <label class="admin__field-label"></label>
                                 <?php endif; ?>
                             </div>
