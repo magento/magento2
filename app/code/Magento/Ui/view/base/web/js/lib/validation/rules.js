@@ -792,6 +792,12 @@ define([
                 return isMaxAllowedValid && isMinAllowedValid && isQtyIncrementsValid && qty > 0;
             },
             ''
+        ],
+        'equalTo': [
+            function (value, param) {
+                return value === $(param).val();
+            },
+            $.validator.messages.equalTo
         ]
     };
 })

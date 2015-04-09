@@ -127,8 +127,7 @@
                                                                 <item name="validation" xsi:type="array">
                                                                     <item name="required-entry" xsi:type="string">true</item>
                                                                     <item name="validate-password" xsi:type="string">true</item>
-                                                                    <!--todo add validation for equalTo-->
-                                                                    <!--<item name="equalTo" xsi:type="string">#customer_password/item>-->
+                                                                    <item name="equalTo" xsi:type="string"><![CDATA[[name='customerDetails[password]']]]></item>
                                                                 </item>
                                                             </item>
                                                         </item>
