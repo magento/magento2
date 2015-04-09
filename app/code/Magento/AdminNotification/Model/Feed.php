@@ -5,6 +5,8 @@
  */
 namespace Magento\AdminNotification\Model;
 
+use Magento\Framework\Config\ConfigOptionsList;
+
 /**
  * AdminNotification Feed model
  *
@@ -135,7 +137,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         $feedXml = $this->getFeedData();
 
-        $installDate = strtotime($this->_deploymentConfig->get('install/date'));
+        $installDate = strtotime($this->_deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE));
 
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
             foreach ($feedXml->channel->item as $item) {
