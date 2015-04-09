@@ -85,10 +85,10 @@
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
-                                                                    <item name="customScope" xsi:type="string">billingAddress</item>
+                                                                    <item name="customScope" xsi:type="string">customerDetails</item>
                                                                 </item>
                                                                 <item name="label" xsi:type="string">Email</item>
-                                                                <item name="dataScope" xsi:type="string">billingAddress.email</item>
+                                                                <item name="dataScope" xsi:type="string">customerDetails.email</item>
                                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                                 <item name="sortOrder" xsi:type="string">45</item>
                                                                 <item name="validation" xsi:type="array">

@@ -7,7 +7,7 @@
 <li id="opc-payment" class="section allow active" role="presentation">
     <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <span class="number" data-bind="text: stepNumber()"></span>
-        <h2>Payment Information</h2>
+        <h2 data-bind="text: $t('Payment Information')"></h2>
     </div>
     <div id="checkout-step-payment"
          class="step-content"
@@ -18,7 +18,7 @@
         <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
             <fieldset class="fieldset">
                 <legend class="legend payments-title">
-                    <span>Payment Information</span>
+                    <span><!-- ko text: $t('Payment Information')--><!-- /ko --></span>
                 </legend>
                 <br>
                 <!-- ko foreach: elems() -->
@@ -32,14 +32,14 @@
                             <input data-bind='attr: {id: "p_method_" + $data.code, value: $data.code}' type="radio" name="payment[method]" checked="checked" class="radio no-display" />
                             <!-- /ko -->
                             <!-- ko ifnot: $parent.getAvailablePaymentMethods().length == 1 -->
-                            <input data-bind='attr: {id: "p_method_" + $data.code, value: $data.code, title: $data.title}' type="radio" name="payment[method]" class="radio" />
+                            <input data-bind='attr: {id: "p_method_" + $data.code, value: $data.code, title: $t($data.title)}' type="radio" name="payment[method]" class="radio" />
                             <!-- /ko -->
-                            <label data-bind='attr: {for: "p_method_" + $data.code}, text: $data.title'></label>
+                            <label data-bind='attr: {for: "p_method_" + $data.code}, text: $t($data.title)'></label>
                         </dt>
                         <dd data-bind='attr: {class: "item-content $data.code"}'><!-- TODO Additional payment content is inserted here --></dd>
                         <!-- /ko -->
                         <!-- ko ifnot: getAvailablePaymentMethods().length > 0 -->
-                        <dt class="item-title">No Payment Methods</dt>
+                        <dt class="item-title"><!-- ko text: $t('No Payment Methods')--><!-- /ko --></dt>
                         <!-- /ko -->
                     </dl>
                     <!-- TODO Add checkout price calculated based on previous steps
@@ -53,7 +53,7 @@
                     <button data-role="opc-continue"
                             type="submit"
                             class="button action continue primary">
-                        <span>Continue</span>
+                        <span><!-- ko text: $t('Continue')--><!-- /ko --></span>
                     </button>
                 </div>
                 <div class="secondary">

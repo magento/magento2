@@ -40,24 +40,24 @@
                 </div>
                 <!-- /ko -->
                 <!-- ko ifnot: (isCustomerLoggedIn && customerHasAddresses)-->
-                <input type="hidden" name="billing[save_in_address_book]" value="1" checked="checked" />
+                <input  style="display: none" name="billing[save_in_address_book]" value="1" type="checkbox" checked="checked" />
                 <!-- /ko -->
             </fieldset>
             <!-- ko if: quoteIsVirtual == 0 -->
             <div class="field choice">
                 <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_yes" value="1" checked="checked" class="radio" data-bind="checked: useForShipping" />
-                <label class="label" for="billing:use_for_shipping_yes"><span>Ship to this address</span></label>
+                <label class="label" for="billing:use_for_shipping_yes"><span><!-- ko text: $t('Ship to this address')--><!-- /ko --> </span></label>
             </div>
             <div class="field choice">
                 <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0" class="radio" data-bind="checked: useForShipping" />
-                <label class="label" for="billing:use_for_shipping_no"><span>Ship to different address</span></label>
+                <label class="label" for="billing:use_for_shipping_no"><span><!-- ko text: $t('Ship to different address')--><!-- /ko --></span></label>
             </div>
             <!-- /ko -->
 
             <input type="hidden" name="billing[use_for_shipping]" value="1" />
             <div class="actions" id="billing-buttons-container">
                 <div class="primary">
-                    <button data-role="opc-continue" type="button" class="action continue primary" data-bind="click: submitBillingAddress"><span>Continue</span></button>
+                    <button data-role="opc-continue" type="button" class="action continue primary" data-bind="click: submitBillingAddress"><span><!-- ko text: $t('Continue')--><!-- /ko --></span></button>
                 </div>
             </div>
         </form>

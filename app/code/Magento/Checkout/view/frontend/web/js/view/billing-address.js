@@ -54,6 +54,10 @@ define(
                         if (!that.source.get('params.invalid')) {
                             var addressData = that.source.get('billingAddress');
                             addressData['save_in_address_book'] = $( "input[name = 'billing[save_in_address_book]']:checked" ).val();
+                            if (quote.getCheckoutMethod()() && !customer.isLoggedIn()())
+                            {
+                                addressData['email'] = this.source.get('customerDetails.email')
+                            }
                             selectBillingAddress(addressData, that.useForShipping);
                         }
                     }).fail( function() {
@@ -97,7 +101,7 @@ define(
             customerHasAddresses: window.customerHasAddresses,
             hideExtraFields: function() {
                 if (!quote.getCheckoutMethod()() && customer.isLoggedIn()()) {
-                    //$('[name="billingAddress.email"]').remove();
+                    $('[name="customerDetails.email"]').hide();
                     $('[name="customerDetails.password"]').hide();
                     $('[name="customerDetails.confirm_password"]').hide();
                 }

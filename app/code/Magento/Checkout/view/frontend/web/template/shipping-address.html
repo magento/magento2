@@ -7,7 +7,7 @@
 <li id="opc-shipping" class="section allow active" data-bind="fadeVisible: isActive()">
     <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <span class="number" data-bind="text: stepNumber()"></span>
-        <h2>Shipping Information</h2>
+        <h2 data-bind="text: $t('Shipping Information')"></h2>
     </div>
     <div id="checkout-step-shipping"
          class="step-content"
@@ -16,7 +16,7 @@
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
             <!-- ko if: (customerHasAddresses)-->
             <div class="field addresses">
-                <label class="label" for="shipping:address-select"><span>Select a shipping address from your address book or enter a new address.</span></label>
+                <label class="label" for="shipping:address-select"><span data-bind="text: $t('Select a shipping address from your address book or enter a new address.')"></span></label>
                 <div class="control">
                     <select name="shipping_address_id" id="shipping:address-select" data-bind="
                     options: addresses,
@@ -44,7 +44,7 @@
                 </div>
                 <!-- /ko -->
                 <!-- ko ifnot: (isCustomerLoggedIn && customerHasAddresses)-->
-                <input type="hidden" name="shipping[save_in_address_book]" value="1" checked="checked"/>
+                <input  style="display: none" name="shipping[save_in_address_book]" type="checkbox" value="1" checked="checked"/>
                 <!-- /ko -->
             </fieldset>
 
@@ -57,14 +57,14 @@
                        class="checkbox"
                        data-bind="checked: sameAsBilling, click: sameAsBillingClick"/>
                 <label class="label" for="shipping:same_as_billing">
-                    <span>Use Billing Address</span>
+                    <span data-bind="text: $t('Use Billing Address')"></span>
                 </label>
             </div>
             <div class="actions-toolbar" id="shipping-buttons-container">
                 <div class="primary">
-                    <button data-role="opc-continue" type="button" class="action continue primary" data-bind="click: selectShippingAddress"><span>Continue</span></button>
+                    <button data-role="opc-continue" type="button" class="action continue primary" data-bind="click: selectShippingAddress"><span data-bind="text: $t('Continue')"></span></button>
                 </div>
-                <div class="secondary"><a href="#" data-bind="click: backToBilling"><span>Back</span></a></div>
+                <div class="secondary"><a href="#" data-bind="click: backToBilling"><span data-bind="text: $t('Back')"></span></a></div>
             </div>
         </form>
     </div>
