@@ -7,11 +7,12 @@ define(
     [
         'jquery',
         'ko',
+        'underscore',
         'mage/storage',
         'Magento_Checkout/js/model/addresslist',
         './customer/address'
     ],
-    function($, ko, storage, addressList, address) {
+    function($, ko, _, storage, addressList, address) {
         "use strict";
         var isLoggedIn = ko.observable(window.isLoggedIn),
             customerData = {};
@@ -57,31 +58,52 @@ define(
                 }
             },
             addCustomerAddress: function (address) {
-                var fields = ['customer_id', 'region', 'country_id', 'street', 'company', 'telephone', 'fax', 'postcode', 'city', 'firstname', 'lastname', 'middlename', 'prefix', 'suffix', 'vat_id', 'default_billing', 'default_shipping'],
+                var fields = [
+                        'customer_id', 'country_id', 'street', 'company', 'telephone', 'fax', 'postcode', 'city',
+                        'firstname', 'lastname', 'middlename', 'prefix', 'suffix', 'vat_id', 'default_billing',
+                        'default_shipping'
+                    ],
                     customerAddress = {},
-                    hasSameAddress = 0,
-                    field,
+                    hasAddress = 0,
                     existingAddress;
 
                 if (!this.customerData.addresses) {
                     this.customerData.addresses = [];
                 }
 
-                for (field in address) {
-                    if (address.hasOwnProperty(field)) {
-                        if (fields.indexOf(field) > 0) {
-                            customerAddress[field] = address[field];
-                        }
-                    }
+                customerAddress = _.pick(address, fields);
+                if (address.hasOwnProperty('region_id')) {
+                    customerAddress.region = {
+                        region_id: address.region_id,
+                        region: address.region
+                    };
                 }
                 for (existingAddress in this.customerData.addresses) {
                     if (this.customerData.addresses.hasOwnProperty(existingAddress)) {
-                        hasSameAddress += this.customerData.addresses[existingAddress] === customerAddress ? 1 : 0;
+                        if (_.isEqual(this.customerData.addresses[existingAddress], customerAddress)) {
+                            hasAddress = existingAddress;
+                            break;
+                        }
                     }
                 }
-                if (hasSameAddress === 0) {
-                    this.customerData.addresses.push(customerAddress);
+                if (hasAddress === 0) {
+                    return this.customerData.addresses.push(customerAddress) - 1;
                 }
+                return hasAddress;
+            },
+            setAddressAsDefaultBilling: function (addressId) {
+                if (this.customerData.addresses[addressId]) {
+                    this.customerData.addresses[addressId].default_billing = 1;
+                    return true;
+                }
+                return false;
+            },
+            setAddressAsDefaultShipping: function (addressId) {
+                if (this.customerData.addresses[addressId]) {
+                    this.customerData.addresses[addressId].default_shipping = 1;
+                    return true;
+                }
+                return false;
             }
         };
     }

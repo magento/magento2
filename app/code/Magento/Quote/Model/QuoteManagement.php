@@ -283,10 +283,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $quote = $this->quoteRepository->getActive($cartId);
         $quote->setCustomer($customer);
 
-        $orderId = $this->placeOrder($cartId);
-
-        $this->accountManagement->authenticate($customer->getEmail(), $password);
-        return $orderId;
+        return $this->placeOrder($cartId);
     }
 
     /**

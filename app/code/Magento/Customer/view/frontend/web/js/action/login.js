@@ -2,7 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
+/*global define*/
 define(
     [
         'jquery',
@@ -10,13 +10,18 @@ define(
         'Magento_Ui/js/model/errorlist'
     ],
     function($, storage, errorlist) {
-        return function(login, password) {
+        "use strict";
+        return function(login, password, redirectUrl) {
             return storage.post(
                 'customer/ajax/login',
                 JSON.stringify({'username': login, 'password': password})
             ).done(function (response) {
                 if (response) {
-                    location.reload();
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    } else {
+                        location.reload();
+                    }
                 } else {
                     errorlist.add('Server returned no response');
                 }
@@ -27,6 +32,6 @@ define(
                     errorlist.add('Could not authenticate. Please try again later');
                 }
             });
-        }
+        };
     }
 );

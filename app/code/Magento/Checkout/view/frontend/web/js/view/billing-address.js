@@ -89,7 +89,7 @@ define(
                     this.source.trigger('customerDetails.data.validate');
                     checkEmailAvailability(this.isEmailCheckComplete);
                 } else {
-                    this.isEmailCheckComplete.resolve(true);
+                    this.isEmailCheckComplete.resolve();
                 }
             },
             isCustomerLoggedIn: customer.isLoggedIn(),

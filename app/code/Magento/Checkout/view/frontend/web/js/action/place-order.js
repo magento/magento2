@@ -10,23 +10,28 @@ define(
         'mage/storage',
         'mage/url',
         'Magento_Ui/js/model/errorlist',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Customer/js/action/login'
     ],
-    function(quote, urlBuilder, storage, url, errorList, customer) {
+    function(quote, urlBuilder, storage, url, errorList, customer, login) {
         "use strict";
         return function() {
             if (quote.getCheckoutMethod()() === 'register') {
-                customer.addCustomerAddress(quote.getBillingAddress()());
-                customer.addCustomerAddress(quote.getShippingAddress()());
+                customer.setAddressAsDefaultBilling(customer.addCustomerAddress(quote.getBillingAddress()()));
+                customer.setAddressAsDefaultShipping(customer.addCustomerAddress(quote.getShippingAddress()()));
                 storage.post(
-                    urlBuilder.createUrl('/carts/:quoteId/ordercreatingaccount', {quoteId: quote.getQuoteId()}),
+                    urlBuilder.createUrl('/carts/:quoteId/order-with-registration', {quoteId: quote.getQuoteId()}),
                     JSON.stringify({
                         customer: customer.customerData,
                         password: customer.getDetails('password')
                     })
                 ).done(
                     function() {
-                        window.location.replace(url.build('checkout/onepage/success/'));
+                        login(
+                            customer.customerData.email,
+                            customer.getDetails('password'),
+                            url.build('checkout/onepage/success/')
+                        );
                     }
                 ).error(
                     function(response) {
