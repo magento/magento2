@@ -48,7 +48,7 @@ class InfoLanguageListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach ($this->lists->getLocaleList() as $key=>$locale) {
+        foreach ($this->lists->getLocaleList() as $key => $locale) {
             $output->writeln($key . ' => ' . $locale);
         }
     }
