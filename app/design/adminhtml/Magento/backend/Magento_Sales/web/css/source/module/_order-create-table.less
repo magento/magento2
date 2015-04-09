@@ -10,6 +10,7 @@
 @order-create-table__border-color: @table-td__border-color;
 @order-create-sku__background: @admin__page-nav__background-color;
 @order-create-sku__padding: @indent__base;
+@order-create-sku-table__border-color: @color-white;
 
 //
 
@@ -91,15 +92,16 @@
 //  Add by SKU
 //  ---------------------------------------------
 
-.add-by-sku {
-    background: @order-create-sku__background;
-    clear: both;
-    padding: @order-create-sku__padding;
-
+.add-by-sku-wrapper {
+    .add-by-sku {
+        background: @order-create-sku__background;
+        clear: both;
+        margin: 0 0 @indent__base;
+        padding: @order-create-sku__padding;
+    }
     .table-info {
         color: @order-create-sidebar__color;
     }
-
     .admin__field-note {
         margin: 1.4rem 0;
     }
@@ -109,6 +111,7 @@
         }
         th,
         td {
+            border-bottom-color: @order-create-sku-table__border-color;
             &:first-child {
                 padding-left: 0;
             }
@@ -137,10 +140,16 @@
         }
     }
     .action-reset {
-        padding-top: 0;
         margin-top: -.4rem;
+        opacity: .5;
+        padding-top: 0;
+        &:after {
+            content: @order-create-icon-reset__content;
+        }
+        &:hover {
+            opacity: 1;
+        }
     }
-
     .col-qty {
         .admin__control-text {
             &:extend(.abs-control-qty all);
