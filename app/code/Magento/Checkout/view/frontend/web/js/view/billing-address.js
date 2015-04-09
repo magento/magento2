@@ -29,7 +29,6 @@ define(
             isVisible: navigator.isStepVisible(stepName),
             useForShipping: "1",
             quoteIsVirtual: quote.isVirtual(),
-            hideEmail: quote.getCheckoutMethod() == null ? $('[name="customerDetails.email"]').hide(): '',
             billingAddressesOptionsText: function(item) {
                 return item.getFullAddress();
             },
@@ -65,9 +64,6 @@ define(
             onAddressChange: function (value) {
                 if (value === null) {
                     newAddressSelected(true);
-                    $('[name="customerDetails.email"]').hide();
-                    $('[name="customerDetails.password"]').hide();
-                    $('[name="customerDetails.confirm_password"]').hide();
                 } else {
                     newAddressSelected(false);
                 }
@@ -80,7 +76,14 @@ define(
                 }
             },
             isCustomerLoggedIn: customer.isLoggedIn(),
-            customerHasAddresses: window.customerHasAddresses
+            customerHasAddresses: window.customerHasAddresses,
+            hideExtraFields: function() {
+                if (!quote.getCheckoutMethod()() && customer.isLoggedIn()()) {
+                    $('[name="billingAddress.email"]').hide();
+                    $('[name="customerDetails.password"]').hide();
+                    $('[name="customerDetails.confirm_password"]').hide();
+                }
+            }
         });
     }
 );

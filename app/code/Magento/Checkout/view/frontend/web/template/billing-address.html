@@ -26,7 +26,7 @@
             </div>
             <!--/ko-->
             <fieldset id="billing-new-address-form" class="fieldset address"
-                      data-bind="fadeVisible: isNewAddressSelected()">
+                      data-bind="fadeVisible: isNewAddressSelected(), event {change: hideExtraFields()}">
 
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
