@@ -118,7 +118,7 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
      * Prepare breadcrumbs
      *
      * @param \Magento\Cms\Model\Page $page
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     protected function _addBreadcrumbs(\Magento\Cms\Model\Page $page)

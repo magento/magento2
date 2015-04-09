@@ -37,13 +37,13 @@ class PhpUnit implements \PHPUnit_Framework_TestListener
      * Constructor
      *
      * @param \Magento\TestFramework\EventManager $eventManager
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(\Magento\TestFramework\EventManager $eventManager = null)
     {
         $this->_eventManager = $eventManager ?: self::$_defaultEventManager;
         if (!$this->_eventManager) {
-            throw new \Magento\Framework\Exception('Instance of the event manager is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Instance of the event manager is required.'));
         }
     }
 

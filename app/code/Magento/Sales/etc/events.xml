@@ -45,4 +45,7 @@
         <observer name="sales_send_order_shipment_emails" instance="Magento\Sales\Model\Observer\Order\Shipment\SendEmails" method="execute" />
         <observer name="sales_send_order_creditmemo_emails" instance="Magento\Sales\Model\Observer\Order\Creditmemo\SendEmails" method="execute" />
     </event>
+    <event name="store_add">
+        <observer name="magento_sequence" instance="Magento\SalesSequence\Model\Observer" method="execute" />
+    </event>
 </config>

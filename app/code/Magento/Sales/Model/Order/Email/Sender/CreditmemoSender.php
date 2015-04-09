@@ -12,7 +12,11 @@ use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Resource\Order\Creditmemo as CreditmemoResource;
+use Magento\Sales\Model\Order\Address\Renderer;
 
+/**
+ * Class CreditmemoSender
+ */
 class CreditmemoSender extends Sender
 {
     /**
@@ -33,12 +37,18 @@ class CreditmemoSender extends Sender
     protected $globalConfig;
 
     /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param Template $templateContainer
      * @param CreditmemoIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param PaymentHelper $paymentHelper
      * @param CreditmemoResource $creditmemoResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
@@ -46,12 +56,14 @@ class CreditmemoSender extends Sender
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         PaymentHelper $paymentHelper,
         CreditmemoResource $creditmemoResource,
-        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
+        Renderer $addressRenderer
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->paymentHelper = $paymentHelper;
         $this->creditmemoResource = $creditmemoResource;
         $this->globalConfig = $globalConfig;
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -74,18 +86,30 @@ class CreditmemoSender extends Sender
         $creditmemo->setSendEmail(true);
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
+            $order = $creditmemo->getOrder();
+
+            if ($order->getShippingAddress()) {
+                $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
+            } else {
+                $formattedShippingAddress = '';
+            }
+
+            $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
+
             $this->templateContainer->setTemplateVars(
                 [
-                    'order' => $creditmemo->getOrder(),
-                    'invoice' => $creditmemo,
+                    'order' => $order,
+                    'creditmemo' => $creditmemo,
                     'comment' => $creditmemo->getCustomerNoteNotify() ? $creditmemo->getCustomerNote() : '',
-                    'billing' => $creditmemo->getOrder()->getBillingAddress(),
-                    'payment_html' => $this->getPaymentHtml($creditmemo->getOrder()),
-                    'store' => $creditmemo->getOrder()->getStore()
+                    'billing' => $order->getBillingAddress(),
+                    'payment_html' => $this->getPaymentHtml($order),
+                    'store' => $order->getStore(),
+                    'formattedShippingAddress' => $formattedShippingAddress,
+                    'formattedBillingAddress' => $formattedBillingAddress,
                 ]
             );
 
-            if ($this->checkAndSend($creditmemo->getOrder())) {
+            if ($this->checkAndSend($order)) {
                 $creditmemo->setEmailSent(true);
 
                 $this->creditmemoResource->saveAttribute($creditmemo, ['send_email', 'email_sent']);

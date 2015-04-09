@@ -12,7 +12,11 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Resource\Order\Shipment as ShipmentResource;
+use Magento\Sales\Model\Order\Address\Renderer;
 
+/**
+ * Class ShipmentSender
+ */
 class ShipmentSender extends Sender
 {
     /**
@@ -33,12 +37,18 @@ class ShipmentSender extends Sender
     protected $globalConfig;
 
     /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param Template $templateContainer
      * @param ShipmentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param PaymentHelper $paymentHelper
      * @param ShipmentResource $shipmentResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
@@ -46,12 +56,14 @@ class ShipmentSender extends Sender
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         PaymentHelper $paymentHelper,
         ShipmentResource $shipmentResource,
-        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
+        Renderer $addressRenderer
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->paymentHelper = $paymentHelper;
         $this->shipmentResource = $shipmentResource;
         $this->globalConfig = $globalConfig;
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -74,18 +86,29 @@ class ShipmentSender extends Sender
         $shipment->setSendEmail(true);
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
+            $order = $shipment->getOrder();
+
+            if ($order->getShippingAddress()) {
+                $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
+            } else {
+                $formattedShippingAddress = '';
+            }
+            $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
+
             $this->templateContainer->setTemplateVars(
                 [
-                    'order' => $shipment->getOrder(),
+                    'order' => $order,
                     'shipment' => $shipment,
                     'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
-                    'billing' => $shipment->getOrder()->getBillingAddress(),
-                    'payment_html' => $this->getPaymentHtml($shipment->getOrder()),
-                    'store' => $shipment->getOrder()->getStore()
+                    'billing' => $order->getBillingAddress(),
+                    'payment_html' => $this->getPaymentHtml($order),
+                    'store' => $order->getStore(),
+                    'formattedShippingAddress' => $formattedShippingAddress,
+                    'formattedBillingAddress' => $formattedBillingAddress
                 ]
             );
 
-            if ($this->checkAndSend($shipment->getOrder())) {
+            if ($this->checkAndSend($order)) {
                 $shipment->setEmailSent(true);
 
                 $this->shipmentResource->saveAttribute($shipment, ['send_email', 'email_sent']);

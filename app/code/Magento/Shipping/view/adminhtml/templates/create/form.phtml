@@ -59,31 +59,6 @@ require([
     "mage/mage",
     "prototype"
 ], function(jQuery){
-
-    jQuery('body').one('packageInitialized', function(){
-        packaging.setConfirmPackagingCallback(function(){
-            packaging.setParamsCreateLabelRequest($('edit_form').serialize(true));
-            packaging.sendCreateLabelRequest();
-        });
-        packaging.setLabelCreatedCallback(function(response){
-            setLocation("<?php echo $block->getUrl(
-                'sales/order/view',
-                ['order_id' => $block->getShipment()->getOrderId()]
-            ); ?>");
-        });
-        packaging.setCancelCallback(function() {
-            packaging.cleanPackages();
-            $('create_shipping_label').checked = false;
-            toggleCreateLabelCheckbox();
-        });
-        packaging.setItemQtyCallback(function(itemId){
-            var item = $$('[name="shipment[items]['+itemId+']"]')[0];
-            if (item && !isNaN(item.value)) {
-                return item.value;
-            }
-        });
-    });
-
     jQuery('#edit_form').mage('form').mage('validation');
 
 });

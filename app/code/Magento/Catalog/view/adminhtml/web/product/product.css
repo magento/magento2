@@ -3,17 +3,17 @@
  * See COPYING.txt for license details.
  */
 
-.product-actions {
+.admin__scope-old .product-actions {
     padding: 5px 18px;
 }
-.product-actions .switcher {
+.admin__scope-old .product-actions .switcher {
     display: inline-block;
     vertical-align: top;
     margin: 3px 0 6px 6px;
 }
 
 /* Image Management */
-.images {
+.admin__scope-old .images {
     position: relative;
     border: 2px dotted #ccc;
     border-radius: 5px;
@@ -21,8 +21,8 @@
     padding: 5px;
 }
 
-.image,
-.gallery .ui-state-highlight {
+.admin__scope-old .image,
+.admin__scope-old .gallery .ui-state-highlight {
     position: relative;
     width: 17.874%;
     border: 1px solid #ccc;
@@ -37,11 +37,11 @@
     box-sizing: border-box;
 }
 
-.image .spacer {
+.admin__scope-old .image .spacer {
     width: 100%;
 }
 
-.image .product-image {
+.admin__scope-old .image .product-image {
     position: absolute;
     left: 0;
     top: 0;
@@ -52,7 +52,7 @@
     z-index: 1;
 }
 
-.image-label {
+.admin__scope-old .image-label {
     visibility: hidden;
     position: absolute;
     top: 0;
@@ -64,11 +64,11 @@
     z-index: 2;
 }
 
-.image.base-image .image-label {
+.admin__scope-old .image.base-image .image-label {
     visibility: visible;
 }
 
-.image-fade {
+.admin__scope-old .image-fade {
     visibility: hidden;
     position: absolute;
     left: 0;
@@ -85,24 +85,19 @@
     z-index: 3;
 }
 
-.eq-ie8 .image-fade {
-    background: #f7f2ec;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-}
-
-.image.hidden-for-front .image-fade {
+.admin__scope-old .image.hidden-for-front .image-fade {
     visibility: visible;
 }
 
-.gallery .image.hidden-for-front .image-fade {
+.admin__scope-old .gallery .image.hidden-for-front .image-fade {
     line-height: 160px;
 }
 
-.image.active {
+.admin__scope-old .image.active {
     box-shadow: 0 0 10px #2ea9ec;
 }
 
-.image .actions {
+.admin__scope-old .image .actions {
     position: absolute;
     top: 0;
     right: 0;
@@ -118,26 +113,26 @@
     z-index: 1;
 }
 
-.image .actions [class^="action-"],
-.image[data-image-hidden]:hover .actions [class^="action-"],
-.image.hidden-for-front:hover .actions [class^="action-"] {
+.admin__scope-old .image .actions [class^="action-"],
+.admin__scope-old .image[data-image-hidden]:hover .actions [class^="action-"],
+.admin__scope-old .image.hidden-for-front:hover .actions [class^="action-"] {
     visibility: hidden;
 }
 
-.image:hover .actions [class^="action-"],
-.image[data-image-hidden]:hover .actions .action-delete,
-.hidden-for-front:hover .actions .action-delete {
+.admin__scope-old .image:hover .actions [class^="action-"],
+.admin__scope-old .image[data-image-hidden]:hover .actions .action-delete,
+.admin__scope-old .hidden-for-front:hover .actions .action-delete {
     visibility: visible;
 }
 
-.image .action-delete {
+.admin__scope-old .image .action-delete {
     position: absolute;
     top: 2px;
     right: 2px;
     z-index: 2;
 }
 
-.image .action-make-base {
+.admin__scope-old .image .action-make-base {
     position: absolute;
     bottom: 20px;
     left: 10%;
@@ -146,11 +141,11 @@
     margin: auto;
 }
 
-.image.base-image .action-make-base {
+.admin__scope-old .image.base-image .action-make-base {
     display: none;
 }
 
-.image .draggable-handle {
+.admin__scope-old .image .draggable-handle {
     position: absolute;
     width: 14px;
     height: 8px;
@@ -164,31 +159,31 @@
     z-index: 2;
 }
 
-.image .draggable-handle:before {
+.admin__scope-old .image .draggable-handle:before {
     content: '';
 }
 
-.gallery .image .action-make-base {
+.admin__scope-old .gallery .image .action-make-base {
     width: 70%;
 }
 
-.gallery .image .action-delete {
+.admin__scope-old .gallery .image .action-delete {
     top: 5px;
     right: 5px;
 }
 
-.image.ui-sortable-placeholder {
+.admin__scope-old .image.ui-sortable-placeholder {
     background: #d7ebf5;
     border: 1px dotted #93dbff;
     visibility: visible !important;
 }
 
-.image-placeholder {
+.admin__scope-old .image-placeholder {
     position: relative;
     background: #fff url(Magento_Backend::images/image-placeholder.png) no-repeat 50% 0;
 }
 
-.image-placeholder .fileinput-button {
+.admin__scope-old .image-placeholder .fileinput-button {
     position: absolute;
     left: 0;
     top: 0;
@@ -196,11 +191,11 @@
     bottom: 0;
 }
 
-.image-placeholder .fileinput-button > span {
+.admin__scope-old .image-placeholder .fileinput-button > span {
     display: none;
 }
 
-.image-placeholder input[type="file"] {
+.admin__scope-old .image-placeholder input[type="file"] {
     position: absolute;
     top: 0;
     right: 0;
@@ -215,8 +210,8 @@
     cursor: pointer;
 }
 
-.image-placeholder .file-row,
-.image-placeholder.loading:after {
+.admin__scope-old .image-placeholder .file-row,
+.admin__scope-old .image-placeholder.loading:after {
     position: absolute;
     left: 0;
     right: 0;
@@ -231,7 +226,7 @@
     text-indent: -999em;
 }
 
-.image-placeholder-text {
+.admin__scope-old .image-placeholder-text {
     padding: 0 10px;
     position: absolute;
     left: 0;
@@ -244,22 +239,22 @@
     color: #cac8c4;
 }
 
-.gallery .image-placeholder {
+.admin__scope-old .gallery .image-placeholder {
     background-position: 50% 30%;
 }
 
-.gallery .image-placeholder-text {
+.admin__scope-old .gallery .image-placeholder-text {
     margin-bottom: 15%;
 }
 
 @media screen and (max-width: 1200px) {
-    .gallery .image-placeholder-text {
+    .admin__scope-old .gallery .image-placeholder-text {
         margin-bottom: 5px;
     }
 }
 
 /* Gallery image panel */
-.image-panel {
+.admin__scope-old .image-panel {
     display: none;
     position: relative;
     top: 5px;
@@ -271,12 +266,7 @@
     border-bottom: 1px solid #cfd0cb;
 }
 
-.eq-ie8 .image-panel {
-    border: solid #d6d3d0;
-    border-width: 2px 1px 1px;
-}
-
-.image-pointer {
+.admin__scope-old .image-pointer {
     position: absolute;
     left: 50%;
     top: -11px;
@@ -286,81 +276,77 @@
     background: url(Magento_Backend::images/gallery-image-panel-corner.png) no-repeat;
 }
 
-.eq-ie8 .image-pointer {
-    top: -13px;
-}
-
-.image-panel-controls,
-.image-panel-preview {
+.admin__scope-old .image-panel-controls,
+.admin__scope-old .image-panel-preview {
     float: left;
     width: 65.95744680199999%;
     margin-left: 2.127659574%;
 }
 
-.image-panel-preview {
+.admin__scope-old .image-panel-preview {
     margin-left: 0;
 }
 
-.image-panel-controls {
+.admin__scope-old .image-panel-controls {
     width: 29.914893614%;
     padding: 28px 1% 0 1%;
 }
 
-.image-panel-controls .image-name {
+.admin__scope-old .image-panel-controls .image-name {
     display: block;
     margin: 0 0 3px;
     color: #666;
 }
 
-.image-file-params {
+.admin__scope-old .image-file-params {
     margin: 0 0 10px 0;
     font-size: 11px;
     color: #666;
 }
 
-.image-panel-controls .action-remove,
-.image-panel-controls .action-remove:hover,
-.image-panel-controls .action-remove:active,
-.image-panel-controls .action-remove:focus,
-.image-panel-controls .action-remove[disabled] {
+.admin__scope-old .image-panel-controls .action-remove,
+.admin__scope-old .image-panel-controls .action-remove:hover,
+.admin__scope-old .image-panel-controls .action-remove:active,
+.admin__scope-old .image-panel-controls .action-remove:focus,
+.admin__scope-old .image-panel-controls .action-remove[disabled] {
     color: #a29c94;
     font: 12px/1.333 Arial, Verdana, sans-serif;
     text-decoration: underline;
     margin: 0 0 46px 0;
 }
 
-.image-panel-controls .fieldset-image-panel {
+.admin__scope-old .image-panel-controls .fieldset-image-panel {
     padding: 0 5px 0 0;
 }
 
-.image-panel-controls .fieldset-image-panel .field {
+.admin__scope-old .image-panel-controls .fieldset-image-panel .field {
     margin-bottom: 30px;
 }
 
-.image-panel-controls .fieldset-image-panel .label {
+.admin__scope-old .image-panel-controls .fieldset-image-panel .label {
     width: 100%;
     text-align: left;
     margin-bottom: 10px;
     padding-top: 0;
 }
 
-.image-panel-controls .fieldset-image-panel .field > .control,
-.image-panel-controls textarea {
+.admin__scope-old .image-panel-controls .fieldset-image-panel .field > .control,
+.admin__scope-old .image-panel-controls textarea {
     width: 100%;
     resize: vertical;
 }
 
-.image-panel-preview img {
+.admin__scope-old .image-panel-preview img {
     width: 100%;
 }
 
-.image-panel .action-close {
+.admin__scope-old .image-panel .action-close {
     position: absolute;
     top: 15px;
     right: 15px;
 }
 
-.image-panel .action-close:before {
+.admin__scope-old .image-panel .action-close:before {
     font-family: 'MUI-Icons';
     font-style: normal;
     speak: none;
@@ -371,105 +357,105 @@
     color: #bbb;
 }
 
-.image-panel .action-close span {
+.admin__scope-old .image-panel .action-close span {
     display: none;
 }
 
 /* action in fieldset wrapper */
-#group-fields-product-details-wrapper .attribute-selector {
+.admin__scope-old #group-fields-product-details-wrapper .attribute-selector {
     visibility: hidden;
 }
 
-#group-fields-product-details-wrapper.opened .attribute-selector {
+.admin__scope-old #group-fields-product-details-wrapper.opened .attribute-selector {
     visibility: visible;
 }
 
-.action-manage-images {
+.admin__scope-old .action-manage-images {
     font: 11px/1.666 Arial, Verdana, sans-serif;
     color: #a29c94;
     text-decoration: underline;
 }
 
 /* Quantity filed on product */
-.field-quantity_and_stock_status input[type="text"],
-.field-weight .control .field:first-child {
+.admin__scope-old .field-quantity_and_stock_status input[type="text"],
+.admin__scope-old .field-weight .control .field:first-child {
     width: 140px;
     margin-right: 15px;
 }
 
-.field-quantity_and_stock_status select {
+.admin__scope-old .field-quantity_and_stock_status select {
     vertical-align: middle;
 }
 
 /* Weight field */
-.field-weight .control {
+.admin__scope-old .field-weight .control {
     display: table;
     width: 100%;
 }
 
-.field-weight .control .field:first-child .control {
+.admin__scope-old .field-weight .control .field:first-child .control {
     width: 100%;
 }
 
-.field-weight .choice {
+.admin__scope-old .field-weight .choice {
     padding-top: 3px;
 }
 
-.field-weight .choice input {
+.admin__scope-old .field-weight .choice input {
     margin-right: 5px;
     vertical-align: bottom;
 }
 
-.field-price .addon > input {
+.admin__scope-old .field-price .addon > input {
     width: 99px;
     float: left;
 }
 
 /* Validation for Product Fields with addons  */
-.field-price .control,
-.field-special_price .control,
-.field-msrp .control,
-.field-weight .control,
-.field-quantity_and_stock_status .control {
+.admin__scope-old .field-price .control,
+.admin__scope-old .field-special_price .control,
+.admin__scope-old .field-msrp .control,
+.admin__scope-old .field-weight .control,
+.admin__scope-old .field-quantity_and_stock_status .control {
     position: relative;
 }
 
-.field-price label.mage-error,
-.field-special_price label.mage-error,
-.field-msrp label.mage-error,
-.field-weight label.mage-error,
-.field-quantity_and_stock_status label.mage-error {
+.admin__scope-old .field-price label.mage-error,
+.admin__scope-old .field-special_price label.mage-error,
+.admin__scope-old .field-msrp label.mage-error,
+.admin__scope-old .field-weight label.mage-error,
+.admin__scope-old .field-quantity_and_stock_status label.mage-error {
     position: static;
 }
 
 /* Change Attribute Set */
-#product_info_tabs li.removed,
-div.removed,
-.field.removed {
+.admin__scope-old #product_info_tabs li.removed,
+.admin__scope-old div.removed,
+.admin__scope-old .field.removed {
     display: none !important;
 }
 
 /*
     Custom Options
 -------------------------------------- */
-#product_options_container_top .field-option-title {
+.admin__scope-old #product_options_container_top .field-option-title {
     width: 500px;
 }
 
-#product_options_container_top .field-option-input-type {
+.admin__scope-old #product_options_container_top .field-option-input-type {
     width: 170px;
 }
 
-#product_options_container_top .col-draggable .draggable-handle {
+.admin__scope-old #product_options_container_top .col-draggable .draggable-handle {
     top: 7px;
 }
 
-#product_options_container_top .col-name,
-#product_options_container_top .col-sku {
+.admin__scope-old #product_options_container_top .col-name,
+.admin__scope-old #product_options_container_top .col-sku {
     width: 38%;
 }
 
-#product_options_container_top .add-select-row ~ label.mage-error {
+.admin__scope-old #product_options_container_top .add-select-row ~ label.mage-error {
     display: block;
     margin: 5px 0 0;
 }
@@ -477,17 +463,17 @@ div.removed,
 /*
     Tier Price Table
 -------------------------------------- */
-.tiers_table .col-qty {
+.admin__scope-old .tiers_table .col-qty {
     text-align: left;
     width: 150px;
 }
 
-.tiers_table .col-qty > input[type="text"] {
+.admin__scope-old .tiers_table .col-qty > input[type="text"] {
     width: 40%;
     margin-right: 5px;
 }
 
-.tiers_table .col-qty > .nobr {
+.admin__scope-old .tiers_table .col-qty > .nobr {
     width: 50%;
     float: right;
     margin-top: 6px;
@@ -495,38 +481,38 @@ div.removed,
     overflow: hidden;
 }
 
-.tiers_table .col-price {
+.admin__scope-old .tiers_table .col-price {
     width: 16%;
 }
 
-.new-variation-set {
+.admin__scope-old .new-variation-set {
     margin-left: 2.127659574%;
 }
 
-.not-applicable-attribute {
+.admin__scope-old .not-applicable-attribute {
     display: none;
 }
 
-.attribute-selector {
+.admin__scope-old .attribute-selector {
     margin: -3px -4px 0 0;
 }
 
-.attribute-selector .dropdown-menu {
+.admin__scope-old .attribute-selector .dropdown-menu {
     left: auto;
     right: 0;
 }
 
-.attribute-selector .action-choose {
+.admin__scope-old .attribute-selector .action-choose {
     margin: 0;
 }
 
-.attribute-selector .mage-suggest-dropdown > ul {
+.admin__scope-old .attribute-selector .mage-suggest-dropdown > ul {
     position: relative;
     max-height: 200px;
     overflow: auto;
     z-index: 1;
 }
 
-.attribute-selector .dropdown-menu .actions {
+.admin__scope-old .attribute-selector .dropdown-menu .actions {
     padding: 14px 12px;
 }

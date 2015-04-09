@@ -185,4 +185,14 @@
             <argument name="entityCollection" xsi:type="object" shared="false">Magento\Sales\Model\Resource\Order\Creditmemo\Collection</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\SalesSequence\Model\EntityPool">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="order" xsi:type="string">order</item>
+                <item name="invoice" xsi:type="string">invoice</item>
+                <item name="creditmemo" xsi:type="string">creditmemo</item>
+                <item name="shipment" xsi:type="string">shipment</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -86,7 +86,7 @@ class Settings
      *
      * @param string $settingName
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAsConfigFile($settingName)
     {
@@ -99,7 +99,9 @@ class Settings
                 return $result;
             }
         }
-        throw new \Magento\Framework\Exception("Setting '{$settingName}' specifies the non-existing file '{$result}'.");
+        throw new \Magento\Framework\Exception\LocalizedException(
+            __("Setting '%1' specifies the non-existing file '%2'.", $settingName, $result)
+        );
     }
 
     /**

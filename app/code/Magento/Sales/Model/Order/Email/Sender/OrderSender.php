@@ -11,7 +11,11 @@ use Magento\Sales\Model\Order\Email\Container\OrderIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Resource\Order as OrderResource;
+use Magento\Sales\Model\Order\Address\Renderer;
 
+/**
+ * Class OrderSender
+ */
 class OrderSender extends Sender
 {
     /**
@@ -32,12 +36,18 @@ class OrderSender extends Sender
     protected $globalConfig;
 
     /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param Template $templateContainer
      * @param OrderIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param PaymentHelper $paymentHelper
      * @param OrderResource $orderResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
@@ -45,12 +55,14 @@ class OrderSender extends Sender
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         PaymentHelper $paymentHelper,
         OrderResource $orderResource,
-        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
+        Renderer $addressRenderer
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->paymentHelper = $paymentHelper;
         $this->orderResource = $orderResource;
         $this->globalConfig = $globalConfig;
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -101,6 +113,8 @@ class OrderSender extends Sender
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
+                'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
+                'formattedBillingAddress' => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
             ]
         );
         parent::prepareTemplate($order);
