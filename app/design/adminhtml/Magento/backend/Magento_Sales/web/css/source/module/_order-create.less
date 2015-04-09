@@ -266,12 +266,11 @@
     position: relative;
 }
 
-.action-default {
-    .order-shipping-method-summary &,
-    .order-shipping-method & {
+.order-shipping-method-summary,
+.order-shipping-method {
+    .action-default {
         &:extend(.action-tertiary all);
         font-weight: @font-weight__regular;
-        margin-top: @indent__s;
         padding: 0;
     }
 }
