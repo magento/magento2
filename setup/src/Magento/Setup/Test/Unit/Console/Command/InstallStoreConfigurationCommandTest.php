@@ -63,7 +63,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertStringMatchesFormat(
-            'Store settings can’t be saved because the Magento application is not installed.%w',
+            "Store settings can't be saved because the Magento application is not installed.%w",
             $tester->getDisplay()
         );
     }

@@ -73,7 +73,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     {
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln(
-                "<info>Store settings can’t be saved because the Magento application is not installed.</info>"
+                "<info>Store settings can't be saved because the Magento application is not installed.</info>"
             );
             return;
         }
