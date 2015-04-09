@@ -23,9 +23,5 @@ try {
 HTML;
     exit(1);
 }
-try {
-    \Zend\Mvc\Application::init(require __DIR__ . '/config/application.config.php')->run();
-} catch (\Exception $e) {
-    echo $e->getMessage();
-}
+\Zend\Mvc\Application::init(require __DIR__ . '/config/application.config.php')->run();
 
