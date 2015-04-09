@@ -35,8 +35,6 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
@@ -51,8 +49,6 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
@@ -65,8 +61,6 @@ class Track extends \Magento\Sales\Model\Order\Shipment\Track
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $localeDate,
-            $dateTime,
             $storeManager,
             $shipmentFactory,
             $resource,

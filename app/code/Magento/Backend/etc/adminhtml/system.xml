@@ -154,13 +154,6 @@
             <label>Developer</label>
             <tab>advanced</tab>
             <resource>Magento_Backend::dev</resource>
-            <group id="restrict" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Developer Client Restrictions</label>
-                <field id="allow_ips" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Allowed IPs (comma separated)</label>
-                    <comment>Leave empty for access from any location.</comment>
-                </field>
-            </group>
             <group id="debug" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="1">
                 <label>Debug</label>
                 <field id="template_hints" translate="label" type="select" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="1">
