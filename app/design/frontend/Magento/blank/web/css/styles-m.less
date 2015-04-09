@@ -10,11 +10,12 @@
 //  These mobile styles are mandatory and will be used as basis according to the mobile first design
 
 //
-//  Global lib + theme styles
+//  Global lib + theme styles + theme extends
 //  ---------------------------------------------
 
 @import 'source/_reset.less';
 @import '_styles.less';
+@import (reference) 'source/_extends.less';
 
 //
 //  Magento Import instructions
@@ -31,3 +32,9 @@
 @import 'source/lib/_responsive.less';
 
 @media-target: 'mobile'; // Sets target device for this file
+
+//
+//  Global variables override
+//  ---------------------------------------------
+
+@import 'source/_theme.less';
