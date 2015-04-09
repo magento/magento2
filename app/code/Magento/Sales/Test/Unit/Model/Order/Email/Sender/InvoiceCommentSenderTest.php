@@ -19,11 +19,6 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
      */
     protected $invoiceMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $loggerMock;
-
     protected function setUp()
     {
         $this->stepMockSetup();
@@ -52,13 +47,6 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
             '',
             false
         );
-        $this->loggerMock = $this->getMock(
-            '\Psr\Log\LoggerInterface',
-            [],
-            [],
-            '',
-            false
-        );
         $this->invoiceMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
@@ -70,8 +58,8 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
-            $this->addressRendererMock,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->addressRendererMock
         );
     }
 

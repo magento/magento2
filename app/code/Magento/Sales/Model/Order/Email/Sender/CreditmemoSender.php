@@ -16,6 +16,8 @@ use Magento\Sales\Model\Order\Address\Renderer;
 
 /**
  * Class CreditmemoSender
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoSender extends NotifySender
 {

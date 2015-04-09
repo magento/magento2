@@ -19,11 +19,6 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
      */
     protected $shipmentMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $loggerMock;
-
     protected function setUp()
     {
         $this->stepMockSetup();
@@ -31,13 +26,6 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         $this->shipmentMock = $this->getMock(
             '\Magento\Sales\Model\Order\Shipment',
             ['getStore', '__wakeup', 'getOrder'],
-            [],
-            '',
-            false
-        );
-        $this->loggerMock = $this->getMock(
-            '\Psr\Log\LoggerInterface',
-            [],
             [],
             '',
             false
@@ -53,8 +41,8 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
-            $this->addressRendererMock,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->addressRendererMock
         );
     }
 

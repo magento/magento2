@@ -29,11 +29,6 @@ class InvoiceSenderTest extends AbstractSenderTest
     protected $invoiceResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $loggerMock;
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -79,13 +74,6 @@ class InvoiceSenderTest extends AbstractSenderTest
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
 
-        $this->loggerMock = $this->getMock(
-            '\Psr\Log\LoggerInterface',
-            [],
-            [],
-            '',
-            false
-        );
         $this->sender = new InvoiceSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
