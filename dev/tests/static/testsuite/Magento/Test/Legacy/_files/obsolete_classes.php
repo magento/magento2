@@ -3150,4 +3150,5 @@ return [
     ['Magento\Setup\Mvc\Console\RouteMatcher'],
     ['Magento\Setup\Mvc\Console\VerboseValidator'],
     ['Magento\Setup\Controller\ConsoleController'],
+    ['Magento\Setup\Model\UserConfigurationDataMapper', 'Magento\Setup\Model\StoreConfigurationDataMapper'],
 ];
