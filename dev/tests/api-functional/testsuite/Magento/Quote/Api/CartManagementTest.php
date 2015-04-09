@@ -13,6 +13,7 @@ class CartManagementTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'quoteCartManagementV1';
     const RESOURCE_PATH = '/V1/carts/';
+    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
 
     protected $createdQuotes = [];
 
@@ -302,22 +303,36 @@ class CartManagementTest extends WebapiAbstract
     }
 
     /**
+     * Test to get my cart based on customer authentication token or session
+     *
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
      */
     public function testGetCartForCustomer()
     {
+        // get customer ID token
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH_CUSTOMER_TOKEN,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+        ];
+        $requestData = ['username' => 'customer@example.com', 'password' => 'password'];
+        $token = $this->_webApiCall($serviceInfo, $requestData);
+
         $cart = $this->getCart('test01');
         $customerId = $cart->getCustomer()->getId();
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/customer/' . $customerId . '/cart',
+                'resourcePath' => '/V1/carts/mine',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $token
             ],
             'soap' => [
                 'service' => 'quoteCartManagementV1',
                 'serviceVersion' => 'V1',
                 'operation' => 'quoteCartManagementV1GetCartForCustomer',
+                'token' => $token
             ],
         ];
 
