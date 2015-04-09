@@ -89,9 +89,8 @@ class Save extends \Magento\Backend\App\Action
                     );
 
                     $creditmemo->setCustomerNote($data['comment_text']);
+                    $creditmemo->setCustomerNoteNotify(isset($data['comment_customer_notify']));
                 }
-
-                $creditmemo->setCustomerNoteNotify(isset($data['comment_customer_notify']));
 
                 if (isset($data['do_refund'])) {
                     $creditmemo->setRefundRequested(true);

@@ -108,9 +108,8 @@ class Save extends \Magento\Backend\App\Action
                 );
 
                 $shipment->setCustomerNote($data['comment_text']);
+                $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
             }
-
-            $shipment->setCustomerNoteNotify(isset($data['comment_customer_notify']));
 
             $shipment->register();
 
