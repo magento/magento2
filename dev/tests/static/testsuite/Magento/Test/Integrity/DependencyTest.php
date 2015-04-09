@@ -313,7 +313,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $declared = $type == self::TYPE_SOFT ? array_merge($soft, $hard) : $hard;
         if (!in_array($module, $declared) && !in_array($nsModule, $declared) && !$this->_isFake($nsModule)) {
             $undeclared[$type][] = $module;
-        } elseif ((false && in_array($module, $declared) || in_array($nsModule, $declared)) && $this->_isFake($nsModule)) {
+        } elseif ((in_array($module, $declared) || in_array($nsModule, $declared)) && $this->_isFake($nsModule)) {
             $this->_setDependencies($currentModule, $type, self::MAP_TYPE_REDUNDANT, $module);
         }
 
@@ -748,10 +748,5 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected function _isFake($module)
     {
         return isset(self::$_mapDependencies[$module]) ? false : true;
-    }
-
-    protected function isFrameworkDependency()
-    {
-
     }
 }
