@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 /*jshint browser:true*/
-/*global define*/
+/*global define,alert*/
 define(
     [
         "jquery",
@@ -13,9 +13,10 @@ define(
         '../action/select-billing-address',
         'Magento_Checkout/js/model/step-navigator',
         '../model/quote',
-        '../model/addresslist'
+        '../model/addresslist',
+        '../action/check-email-availability'
     ],
-    function ($, Component, ko,  customer, selectBillingAddress, navigator, quote, addressList) {
+    function ($, Component, ko, customer, selectBillingAddress, navigator, quote, addressList, checkEmailAvailability) {
         "use strict";
         var stepName = 'billingAddress';
         var newAddressSelected = ko.observable(false);
@@ -29,25 +30,38 @@ define(
             isVisible: navigator.isStepVisible(stepName),
             useForShipping: "1",
             quoteIsVirtual: quote.isVirtual(),
+            isEmailCheckComplete: null,
             billingAddressesOptionsText: function(item) {
                 return item.getFullAddress();
             },
             submitBillingAddress: function() {
+                this.isEmailCheckComplete = $.Deferred();
+                if (quote.getCheckoutMethod()() === 'register') {
+                    customer.customerData.email = this.source.get('billingAddress.email');
+                    customer.customerData.firstname = this.source.get('billingAddress.firstname');
+                    customer.customerData.lastname = this.source.get('billingAddress.lastname');
+                    customer.setDetails('password', this.source.get('customerDetails.password'));
+                }
                 if (this.selectedBillingAddressId) {
                     selectBillingAddress(
                         addressList.getAddressById(this.selectedBillingAddressId),
                         this.useForShipping
                     );
                 } else {
+                    var that = this;
                     this.validate();
-                    if (!this.source.get('params.invalid')) {
-                        var addressData = this.source.get('billingAddress');
-                        selectBillingAddress(addressData, this.useForShipping);
-                    }
-                }
-                if (this.source.get('customerDetails')) {
-                    customer.setDetails('password', this.source.get('customerDetails.password'));
-                    customer.setDetails('confirm_password', this.source.get('customerDetails.confirm_password'));
+                    $.when(this.isEmailCheckComplete).done( function() {
+                        if (!that.source.get('params.invalid')) {
+                            var addressData = that.source.get('billingAddress');
+                            selectBillingAddress(addressData, that.useForShipping);
+                        }
+                    }).fail( function() {
+                        alert(
+                            "There is already a registered customer using this email address. " +
+                            "Please log in using this email address or enter a different email address " +
+                            "to register your account."
+                        );
+                    });
                 }
             },
             navigateToCurrentStep: function() {
@@ -71,8 +85,11 @@ define(
             validate: function() {
                 this.source.set('params.invalid', false);
                 this.source.trigger('billingAddress.data.validate');
-                if (quote.getCheckoutMethod() === 'register') {
+                if (quote.getCheckoutMethod()() === 'register') {
                     this.source.trigger('customerDetails.data.validate');
+                    checkEmailAvailability(this.isEmailCheckComplete);
+                } else {
+                    this.isEmailCheckComplete.resolve(true);
                 }
             },
             isCustomerLoggedIn: customer.isLoggedIn(),

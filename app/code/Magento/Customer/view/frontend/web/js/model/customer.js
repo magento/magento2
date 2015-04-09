@@ -23,6 +23,8 @@ define(
                     addressList.add(new address(item));
                 });
             }
+        } else {
+            customerData = {};
         }
         return {
             customerData: customerData,
@@ -52,6 +54,33 @@ define(
                     return undefined;
                 } else {
                     return this.customerDetails;
+                }
+            },
+            addCustomerAddress: function (address) {
+                var fields = ['customer_id', 'region', 'country_id', 'street', 'company', 'telephone', 'fax', 'postcode', 'city', 'firstname', 'lastname', 'middlename', 'prefix', 'suffix', 'vat_id', 'default_billing', 'default_shipping'],
+                    customerAddress = {},
+                    hasSameAddress = 0,
+                    field,
+                    existingAddress;
+
+                if (!this.customerData.addresses) {
+                    this.customerData.addresses = [];
+                }
+
+                for (field in address) {
+                    if (address.hasOwnProperty(field)) {
+                        if (fields.indexOf(field) > 0) {
+                            customerAddress[field] = address[field];
+                        }
+                    }
+                }
+                for (existingAddress in this.customerData.addresses) {
+                    if (this.customerData.addresses.hasOwnProperty(existingAddress)) {
+                        hasSameAddress += this.customerData.addresses[existingAddress] === customerAddress ? 1 : 0;
+                    }
+                }
+                if (hasSameAddress === 0) {
+                    this.customerData.addresses.push(customerAddress);
                 }
             }
         };

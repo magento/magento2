@@ -101,6 +101,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $checkoutSession;
 
     /**
+     * @var \Magento\Customer\Api\AccountManagementInterface
+     */
+    protected $accountManagement;
+
+    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderFactory $orderFactory
@@ -116,6 +121,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -133,7 +139,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\CustomerFactory $customerModelFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Api\AccountManagementInterface $accountManagement
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -150,6 +157,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->customerModelFactory = $customerModelFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->checkoutSession = $checkoutSession;
+        $this->accountManagement = $accountManagement;
     }
 
     /**
@@ -264,6 +272,21 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->checkoutSession->setLastOrderId($order->getId());
         $this->checkoutSession->setLastRealOrderId($order->getIncrementId());
         return $order->getId();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function placeOrderCreatingAccount($cartId, $customer, $password)
+    {
+        $customer = $this->accountManagement->createAccount($customer, $password);
+        $quote = $this->quoteRepository->getActive($cartId);
+        $quote->setCustomer($customer);
+
+        $orderId = $this->placeOrder($cartId);
+
+        $this->accountManagement->authenticate($customer->getEmail(), $password);
+        return $orderId;
     }
 
     /**

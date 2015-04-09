@@ -42,4 +42,14 @@ interface CartManagementInterface
      * @return int Order ID.
      */
     public function placeOrder($cartId);
+
+    /**
+     * Registers a customer and places an order for the specified cart.
+     *
+     * @param int $cartId The cart ID.
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param string $password
+     * @return int Order ID.
+     */
+    public function placeOrderCreatingAccount($cartId, $customer, $password);
 }
