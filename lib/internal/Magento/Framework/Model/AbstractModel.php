@@ -132,7 +132,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      *
      * @var array
      */
-    private $storedData = [];
+    protected $storedData = [];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -705,7 +705,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
      *
      * @return $this
      */
-    protected function updateStoredData()
+    private function updateStoredData()
     {
         if (isset($this->_data)) {
             $this->storedData = $this->_data;
