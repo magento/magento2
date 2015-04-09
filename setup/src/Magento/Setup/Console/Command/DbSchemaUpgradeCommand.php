@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\ConsoleLogger;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,13 +25,22 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
     private $installFactory;
 
     /**
+     * Deployment configuration
+     *
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Inject dependencies
      *
      * @param InstallerFactory $installFactory
+     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(InstallerFactory $installFactory)
+    public function __construct(InstallerFactory $installFactory, DeploymentConfig $deploymentConfig)
     {
         $this->installFactory = $installFactory;
+        $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
 
@@ -50,6 +60,10 @@ class DbSchemaUpgradeCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->deploymentConfig->isAvailable()) {
+            $output->writeln("<info>No information is available: the application is not installed.</info>");
+            return;
+        }
         $installer = $this->installFactory->create(new ConsoleLogger($output));
         $installer->installSchema();
     }
