@@ -29,7 +29,7 @@ class SendEmailsTest extends \PHPUnit_Framework_TestCase
     /**
      * Entity resource model mock.
      *
-     * @var \Magento\Sales\Model\Resource\Entity|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Resource\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityResource;
 
@@ -60,7 +60,7 @@ class SendEmailsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->entityResource = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\Resource\Entity',
+            'Magento\Sales\Model\Resource\EntityAbstract',
             [],
             '',
             false,

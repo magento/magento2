@@ -23,7 +23,7 @@ class SendEmails
     /**
      * Entity resource model.
      *
-     * @var \Magento\Sales\Model\Resource\Entity
+     * @var \Magento\Sales\Model\Resource\EntityAbstract
      */
     protected $entityResource;
 
@@ -43,13 +43,13 @@ class SendEmails
 
     /**
      * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
-     * @param \Magento\Sales\Model\Resource\Entity $entityResource
+     * @param \Magento\Sales\Model\Resource\EntityAbstract $entityResource
      * @param \Magento\Sales\Model\Resource\Collection\AbstractCollection $entityCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender $emailSender,
-        \Magento\Sales\Model\Resource\Entity $entityResource,
+        \Magento\Sales\Model\Resource\EntityAbstract $entityResource,
         \Magento\Sales\Model\Resource\Collection\AbstractCollection $entityCollection,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
     ) {
