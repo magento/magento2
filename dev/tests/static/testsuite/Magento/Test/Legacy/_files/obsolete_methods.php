@@ -785,6 +785,7 @@ return [
     ['regenerateSessionId', 'Magento\Core\Model\Session\AbstractSession'],
     ['reinitialize', 'Magento\TestFramework\Bootstrap', 'Magento_TestFramework_Helper_Bootstrap::reinitialize'],
     ['removeAuthLink', 'Magento\Customer\Block\Account\Link'],
+    ['getCustomerName', 'Magento\Customer\Block\Account'],
     ['removeItem', 'Magento\Theme\Block\Html\Head'],
     ['removeCustomerFromSegments'],
     ['removeHandle', 'Magento\Core\Model\Layout\Update', 'Magento\Framework\View\Model\Layout\Merge'],
