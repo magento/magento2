@@ -64,7 +64,7 @@ class Load extends \Magento\Framework\App\Action\Action
             $sectionNames = $this->getRequest()->getParam('sections');
             $sectionNames = $sectionNames ? \explode(',', $sectionNames) : null;
 
-            $response = $this->sectionPool->getSectionsData($sectionNames);
+            $response = $this->sectionPool->getSectionsData(array_unique($sectionNames));
         } catch (LocalizedException $e) {
             // TODO: MAGETWO-34824 replace on const
             $resultJson->setStatusHeader(400, \Zend\Http\AbstractMessage::VERSION_11, 'Bad request');

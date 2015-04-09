@@ -62,6 +62,13 @@ define([
         });
     };
 
+    ko.extenders.disposablePrivateData = function(target, sectionName) {
+        target.subscribe(function(newValue) {
+            storage.remove(sectionName);
+        });
+        return target;
+    };
+
     var buffer = {
         data: {},
         bind: function (sectionName) {
@@ -84,8 +91,8 @@ define([
         },
         update: function (sections) {
             _.each(sections, function (sectionData, sectionName) {
-                buffer.notify(sectionName, sectionData);
                 storage.set(sectionName, sectionData);
+                buffer.notify(sectionName, sectionData);
             });
         },
         remove: function (sections) {
