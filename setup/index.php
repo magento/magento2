@@ -4,6 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+if (PHP_SAPI == 'cli') {
+    echo "You cannot run this from the command line." . PHP_EOL .
+        "Run \"php bin/magento\" instead." . PHP_EOL;
+    exit(1);
+}
 try {
     require __DIR__ . '/../app/bootstrap.php';
 } catch (\Exception $e) {
@@ -19,9 +24,6 @@ HTML;
     exit(1);
 }
 try {
-    if (PHP_SAPI == 'cli') {
-        throw new \Exception("You cannot run it as a script from commandline." . PHP_EOL);
-    }
     \Zend\Mvc\Application::init(require __DIR__ . '/config/application.config.php')->run();
 } catch (\Exception $e) {
     echo $e->getMessage();
