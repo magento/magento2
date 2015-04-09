@@ -26,11 +26,41 @@
         <span data-bind="text: $t('My Cart')"></span>
     </button>
 
-    <?php if ($_cartQty || $block->getAllowCartLink()): ?>
-
-
+    <!-- part 1 -->
     <!-- ko if: cart().summary_count -->
     private
+    <?php if ($_cartQty || $block->getAllowCartLink()): ?>
+    <div class="items-total">
+        <span class="count"><?php echo $_cartQty; ?></span>
+        <?php echo $block->getSummaryText($_cartQty); ?>
+    </div>
+    <?php $isPossibleOnepageCheckout = $_cartQty && $block->isPossibleOnepageCheckout() ?>
+    <?php if ($isPossibleOnepageCheckout): ?>
+    <?php echo $block->getChildHtml('subtotal'); ?>
+    <?php endif; ?>
+    <?php echo $block->getChildHtml('minicart_info') ?>
+    <div class="actions">
+        <div class="primary">
+            <?php if ($isPossibleOnepageCheckout): ?>
+            <button
+                    id="top-cart-btn-checkout"
+                    type="button"
+                    class="action primary checkout"
+                    title="<?php echo $block->escapeHtml(__('Go to Checkout')); ?>">
+                <span><?php echo __('Go to Checkout') ?></span>
+            </button>
+            <?php echo $block->getChildHtml('extra_actions') ?>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php endif ?>
+    <!-- /ko -->
+
+
+    <!-- part 2 -->
+    <!-- ko if: cart().summary_count -->
+    private
+    <?php if ($_cartQty || $block->getAllowCartLink()): ?>
     <strong class="subtitle" data-bind="text: $t('Recently added item(s)')"></strong>
     <div data-action="scroll" class="minicart-items-wrapper">
         <ol id="mini-cart" class="minicart-items">
@@ -41,6 +71,7 @@
     </div>
     <!-- /ko -->
 
+    <!-- part 3 -->
     <!-- ko ifnot: cart().summary_count -->
     agnostic
     <strong class="subtitle empty" data-bind="text: $t('You have no items in your shopping cart.')"></strong>
@@ -49,9 +80,11 @@
     <?php endif; ?>
     <!-- /ko -->
 
-    <?php if ($_cartQty || $block->getAllowCartLink()): ?>
+
+    <!-- part 4 -->
     <!-- ko if: cart().summary_count -->
     private
+    <?php if ($_cartQty || $block->getAllowCartLink()): ?>
     <div class="actions">
         <div class="secondary">
             <a class="action viewcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
@@ -61,6 +94,21 @@
     </div>
     <!-- /ko -->
 
+    <!-- part 5 -->
+    <!-- ko if: cart().summary_count -->
+    private
+    <?php if ($_cartQty || $block->getAllowCartLink()): ?>
+    <div class="actions">
+        <div class="secondary">
+            <a class="action viewcart" href="<?php echo $block->getUrl('checkout/cart'); ?>">
+                <span><?php echo __('View and edit cart') ?></span>
+            </a>
+        </div>
+    </div>
+    <?php endif ?>
+    <!-- /ko -->
+
+    <!-- part 6 -->
     <div id="minicart-widgets" class="minicart-widgets">
         <?php echo $block->getChildHtml('cart_promotion') ?>
     </div>
