@@ -266,6 +266,16 @@
     position: relative;
 }
 
+.action-default {
+    .order-shipping-method-summary &,
+    .order-shipping-method & {
+        &:extend(.action-tertiary all);
+        font-weight: @font-weight__regular;
+        margin-top: @indent__s;
+        padding: 0;
+    }
+}
+
 .order-methods-overlay {
     background: rgba(255, 255, 255, .5);
     bottom: 0;

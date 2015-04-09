@@ -72,7 +72,7 @@
             </dl>
             <a href="#"
                onclick="$('order-shipping-method-info').hide();$('order-shipping-method-choose').show();return false"
-               class="action-link">
+               class="action-default">
                 <span><?php echo __('Click to change shipping method') ?></span>
             </a>
         </div>
@@ -89,7 +89,7 @@ require(['prototype'], function(){
     </div>
 <?php else: ?>
     <div id="order-shipping-method-summary" class="order-shipping-method-summary">
-        <a href="#" onclick="order.loadShippingRates();return false" class="action-link">
+        <a href="#" onclick="order.loadShippingRates();return false" class="action-default">
             <span><?php echo __('Get shipping methods and rates') ?></span>
         </a>
         <input type="hidden" name="order[has_shipping]" value="" class="required-entry" />
