@@ -47,16 +47,16 @@ define([
         }
     });
 
-    var getFromStorage = function (sectionsName) {
+    var getFromStorage = function (sectionNames) {
         var result = {};
-        _.each(sectionsName, function (sectionName) {
+        _.each(sectionNames, function (sectionName) {
             result[sectionName] = storage.get(sectionName);
         });
         return result;
     };
 
-    var getFromServer = function (sectionsName) {
-        var parameters = _.isArray(sectionsName) ? {sections: sectionsName.join(',')} : [];
+    var getFromServer = function (sectionNames) {
+        var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
         return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
             throw new Error(jqXHR.responseJSON.message);
         });
@@ -133,7 +133,7 @@ define([
             });
         },
         invalidate: function (sectionNames) {
-            buffer.remove(sectionNames == '*' ? buffer.keys() : sectionNames);
+            buffer.remove(_.contains(sectionNames, '*') ? buffer.keys() : sectionNames);
         },
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
