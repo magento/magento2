@@ -20,7 +20,7 @@ define(
         return Component.extend({
             stepNumber: navigator.getStepNumber(stepName),
             isAllowedGuestCheckout: window.isAllowedGuestCheckout,
-            isRegistrationAllowed: window.isAllowedGuestCheckout,
+            isRegistrationAllowed: window.isRegistrationAllowed,
             isMethodRegister: window.isMethodRegister,
             isCustomerMustBeLogged: window.isCustomerMustBeLogged,
             registerUrl: window.getRegisterUrl,
@@ -57,7 +57,6 @@ define(
                     quote.setCheckoutMethod('guest');
                     $('[name="customerDetails.password"]').hide();
                     $('[name="customerDetails.confirm_password"]').hide();
-                    //$( '[name="billingAddress.email"]').show();
                 }
                 if (registerChecked) {
                     quote.setCheckoutMethod('register');
