@@ -231,9 +231,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'setCustomerGroupId',
                 'setIsActive',
                 'getId',
-                'assignCustomer',
+                'assignCustomerWithAddressChange',
                 'setIgnoreOldQty',
                 'setIsSuperMode',
+                'getAllAddresses',
                 '__wakeup'
             ],
             [],
@@ -290,7 +291,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->with($customerId)
             ->willReturn($dataCustomerMock);
         $quoteMock->expects($this->once())
-            ->method('assignCustomer')
+            ->method('assignCustomerWithAddressChange')
             ->with($dataCustomerMock);
         $quoteMock->expects($this->once())
             ->method('setIgnoreOldQty')
@@ -298,6 +299,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())
             ->method('setIsSuperMode')
             ->with(true);
+        $quoteMock->expects($this->any())
+            ->method('getAllAddresses')
+            ->will($this->returnValue([]));
 
         $this->assertEquals($quoteMock, $this->quote->getQuote());
     }
@@ -320,9 +324,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'setCustomerGroupId',
                 'setIsActive',
                 'getId',
-                'assignCustomer',
+                'assignCustomerWithAddressChange',
                 'setIgnoreOldQty',
                 'setIsSuperMode',
+                'getAllAddresses',
                 '__wakeup'
             ],
             [],
@@ -360,7 +365,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->with($customerId)
             ->willReturn($dataCustomerMock);
         $quoteMock->expects($this->once())
-            ->method('assignCustomer')
+            ->method('assignCustomerWithAddressChange')
             ->with($dataCustomerMock);
         $quoteMock->expects($this->once())
             ->method('setIgnoreOldQty')
@@ -368,6 +373,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())
             ->method('setIsSuperMode')
             ->with(true);
+        $quoteMock->expects($this->any())
+            ->method('getAllAddresses')
+            ->will($this->returnValue([]));
 
         $this->assertEquals($quoteMock, $this->quote->getQuote());
     }
