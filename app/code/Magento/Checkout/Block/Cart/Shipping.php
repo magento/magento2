@@ -34,7 +34,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_directoryBlock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface
+     * @var \Magento\Shipping\Model\CarrierFactoryInterface
      */
     protected $_carrierFactory;
 
@@ -48,7 +48,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Directory\Block\Data $directoryBlock
-     * @param \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
+     * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
@@ -57,7 +57,7 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Directory\Block\Data $directoryBlock,
-        \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
+        \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         PriceCurrencyInterface $priceCurrency,
         array $data = []
     ) {

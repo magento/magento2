@@ -506,7 +506,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Retrieve payment information model object
      *
-     * @return \Magento\Payment\Model\Info
+     * @return \Magento\Payment\Model\InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
      */
@@ -799,9 +799,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Check whether payment method can be used
      *
-     * TODO: payment method instance is not supposed to know about quote
-     *
-     * @param \Magento\Quote\Model\Quote|null $quote
+     * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)

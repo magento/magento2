@@ -362,7 +362,7 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Check whether there are CC types set in configuration
      *
-     * @param \Magento\Quote\Model\Quote|null $quote
+     * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
     public function isAvailable($quote = null)
