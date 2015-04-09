@@ -417,9 +417,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                      * Not auto increment primary key support
                      */
                     if ($this->_isPkAutoIncrement) {
-                        $data = $this->_prepareDataForSave($object);
-                        unset($data[$this->getIdFieldName()]);
-                        $data = $this->prepareDataForUpdate($data, $object->getStoredData());
+                        $data = $this->prepareDataForUpdate($object);
                         if (!empty($data)) {
                             $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
                         }
@@ -431,9 +429,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                             $condition
                         );
                         if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
-                            $data = $this->_prepareDataForSave($object);
-                            unset($data[$this->getIdFieldName()]);
-                            $data = $this->prepareDataForUpdate($data, $object->getStoredData());
+                            $data = $this->prepareDataForUpdate($object);
                             if (!empty($data)) {
                                 $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
                             }
@@ -778,17 +774,20 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
     /**
      * Get the array of data fields that was changed or added
      *
-     * @param array $data
-     * @param array $storedData
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return array
      */
-    protected function prepareDataForUpdate($data, $storedData)
+    protected function prepareDataForUpdate($object)
     {
-        foreach ($storedData as $key => $value) {
+        $data = $this->_prepareDataForSave($object);
+        unset($data[$this->getIdFieldName()]);
+
+        foreach ($object->getStoredData() as $key => $value) {
             if(array_key_exists($key, $data) && $data[$key] == $value) {
                 unset($data[$key]);
             }
         }
+
         return $data;
     }
 }
