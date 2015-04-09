@@ -50,9 +50,6 @@ class Module implements
                 $headers->addHeaderLine('Pragma', 'no-cache');
                 $headers->addHeaderLine('Expires', '1970-01-01');
             }
-        } elseif (($response instanceof \Zend\Console\Response) && isset($_SERVER['SCRIPT_NAME'])
-            && $this->endsWith($_SERVER['SCRIPT_NAME'], 'setup/index.php')) {
-            throw new \Exception("You cannot run it as a script from commandline." . PHP_EOL);
         }
     }
 
@@ -69,18 +66,5 @@ class Module implements
             include __DIR__ . '/../../../config/languages.config.php'
         );
         return $result;
-    }
-
-    /**
-     * Checks if a string ends with a substring
-     *
-     * @param string $haystack
-     * @param string $needle
-     * @return boolean
-     */
-    private function endsWith($haystack, $needle) {
-        // search forward starting from end minus needle length characters
-        return ($needle === ""
-            || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false));
     }
 }
