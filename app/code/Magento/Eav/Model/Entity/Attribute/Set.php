@@ -19,7 +19,7 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute;
 
-use Magento\Eav\Exception as EavException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\AttributeValueFactory;
 
@@ -255,17 +255,17 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Validate attribute set name
      *
      * @return bool
-     * @throws EavException
+     * @throws LocalizedException
      */
     public function validate()
     {
         $attributeSetName = $this->getAttributeSetName();
         if ($attributeSetName == '') {
-            throw new EavException(__('Attribute set name is empty.'));
+            throw new LocalizedException(__('Attribute set name is empty.'));
         }
 
         if (!$this->_getResource()->validate($this, $attributeSetName)) {
-            throw new EavException(__('An attribute set with the "%1" name already exists.', $attributeSetName));
+            throw new LocalizedException(__('An attribute set with the "%1" name already exists.', $attributeSetName));
         }
 
         return true;
