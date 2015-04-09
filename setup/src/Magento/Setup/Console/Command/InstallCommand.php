@@ -99,7 +99,7 @@ class InstallCommand extends AbstractSetupCommand
             new InputOption(
                 self::INPUT_KEY_USE_SAMPLE_DATA,
                 null,
-                InputOption::VALUE_REQUIRED,
+                InputOption::VALUE_NONE,
                 'Use sample data'
             )
         ]);
