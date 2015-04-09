@@ -3146,4 +3146,8 @@ return [
     ['Magento\Framework\App\DeploymentConfig\CacheConfig'],
     ['Magento\Setup\Model\DeploymentConfigMapper'],
     ['Magento\Framework\App\DeploymentConfig\EncryptConfig'],
+    ['Magento\Setup\Mvc\Console\RouteListener'],
+    ['Magento\Setup\Mvc\Console\RouteMatcher'],
+    ['Magento\Setup\Mvc\Console\VerboseValidator'],
+    ['Magento\Setup\Controller\ConsoleController'],
 ];
