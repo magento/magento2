@@ -12,22 +12,10 @@ use Magento\Setup\Model\InstallerFactory;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Setup\Model\StoreConfigurationDataMapper;
 
 class InstallStoreConfigurationCommand extends AbstractSetupCommand
 {
-    /**
-     * Names of input arguments or options
-     */
-    const INPUT_BASE_URL = 'base_url';
-    const INPUT_LANGUAGE = 'language';
-    const INPUT_TIMEZONE = 'timezone';
-    const INPUT_CURRENCY = 'currency';
-    const INPUT_USE_REWRITES = 'use_rewrites';
-    const INPUT_USE_SECURE = 'use_secure';
-    const INPUT_BASE_URL_SECURE = 'base_url_secure';
-    const INPUT_USER_SECURE_ADMIN = 'use_secure_admin';
-    const INPUT_ADMIN_USE_SECURE_KEY = 'admin_use_security_key';
-
     /**
      * @var InstallerFactory
      */
@@ -90,55 +78,55 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     {
         return [
             new InputOption(
-                self::INPUT_BASE_URL,
+                StoreConfigurationDataMapper::KEY_BASE_URL,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'URL the store is supposed to be available at'
             ),
             new InputOption(
-                self::INPUT_LANGUAGE,
+                StoreConfigurationDataMapper::KEY_LANGUAGE,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Default language code'
             ),
             new InputOption(
-                self::INPUT_TIMEZONE,
+                StoreConfigurationDataMapper::KEY_TIMEZONE,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Default time zone code'
             ),
             new InputOption(
-                self::INPUT_CURRENCY,
+                StoreConfigurationDataMapper::KEY_CURRENCY,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Default currency code'
             ),
             new InputOption(
-                self::INPUT_USE_REWRITES,
+                StoreConfigurationDataMapper::KEY_USE_SEF_URL,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Use rewrites'
             ),
             new InputOption(
-                self::INPUT_USE_SECURE,
+                StoreConfigurationDataMapper::KEY_IS_SECURE,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Use secure URLs. Enable this option only if SSL is available.'
             ),
             new InputOption(
-                self::INPUT_BASE_URL_SECURE,
+                StoreConfigurationDataMapper::KEY_BASE_URL_SECURE,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Base URL for SSL connection'
             ),
             new InputOption(
-                self::INPUT_USER_SECURE_ADMIN,
+                StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Run admin interface with SSL'
             ),
             new InputOption(
-                self::INPUT_ADMIN_USE_SECURE_KEY,
+                StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Whether to use a "security key" feature in Magento Admin URLs and forms'

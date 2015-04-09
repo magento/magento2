@@ -12,7 +12,7 @@ use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\Installer\ProgressFactory;
 use Magento\Setup\Model\InstallerFactory;
-use Magento\Setup\Model\UserConfigurationDataMapper as UserConfig;
+use Magento\Setup\Model\StoreConfigurationDataMapper as UserConfig;
 use Magento\Setup\Model\WebLogger;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;

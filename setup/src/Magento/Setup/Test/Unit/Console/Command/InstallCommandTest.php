@@ -12,6 +12,7 @@ use Magento\Setup\Model\AdminAccount;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use Magento\Setup\Console\Command\InstallStoreConfigurationCommand;
+use Magento\Setup\Model\StoreConfigurationDataMapper;
 
 class InstallCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,10 +23,10 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_NAME => 'magento',
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_USER => 'root',
             '--' . BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'admin',
-            '--' . InstallStoreConfigurationCommand::INPUT_BASE_URL => 'http://127.0.0.1/magento2ce/',
-            '--' . InstallStoreConfigurationCommand::INPUT_LANGUAGE => 'en_US',
-            '--' . InstallStoreConfigurationCommand::INPUT_TIMEZONE => 'America/Chicago',
-            '--' . InstallStoreConfigurationCommand::INPUT_CURRENCY => 'USD',
+            '--' . StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/magento2ce/',
+            '--' . StoreConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
+            '--' . StoreConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
+            '--' . StoreConfigurationDataMapper::KEY_CURRENCY => 'USD',
             '--' . AdminAccount::KEY_USER => 'user',
             '--' . AdminAccount::KEY_PASSWORD => '123123q',
             '--' . AdminAccount::KEY_EMAIL => 'test@test.com',
@@ -121,22 +122,22 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
         $option1
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(InstallStoreConfigurationCommand::INPUT_BASE_URL));
+            ->will($this->returnValue(StoreConfigurationDataMapper::KEY_BASE_URL));
         $option2 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $option2
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(InstallStoreConfigurationCommand::INPUT_LANGUAGE));
+            ->will($this->returnValue(StoreConfigurationDataMapper::KEY_LANGUAGE));
         $option3 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $option3
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(InstallStoreConfigurationCommand::INPUT_TIMEZONE));
+            ->will($this->returnValue(StoreConfigurationDataMapper::KEY_TIMEZONE));
         $option4 = $this->getMock('Magento\Framework\Setup\Option\TextConfigOption', [], [], '', false);
         $option4
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(InstallStoreConfigurationCommand::INPUT_CURRENCY));
+            ->will($this->returnValue(StoreConfigurationDataMapper::KEY_CURRENCY));
         return [$option1, $option2, $option3, $option4];
     }
 

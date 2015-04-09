@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\UserConfigurationDataMapper;
+use \Magento\Setup\Model\StoreConfigurationDataMapper;
 
 use Magento\Backend\Model\Url;
 use Magento\Directory\Helper\Data;
@@ -14,7 +14,7 @@ use Magento\Directory\Model\Currency;
 use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
 
-class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
+class StoreConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param array $data
@@ -23,7 +23,7 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfigData(array $data, array $expected)
     {
-        $userConfigurationDataMapper = new UserConfigurationDataMapper();
+        $userConfigurationDataMapper = new StoreConfigurationDataMapper();
         $this->assertEquals($expected, $userConfigurationDataMapper->getConfigData($data));
     }
 
@@ -38,15 +38,15 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'valid' =>
             [
                 [
-                    UserConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
-                    UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1/',
-                    UserConfigurationDataMapper::KEY_CURRENCY => 'USD',
-                    UserConfigurationDataMapper::KEY_IS_SECURE => '1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
-                    UserConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
-                    UserConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
-                    UserConfigurationDataMapper::KEY_USE_SEF_URL => '1',
+                    StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
+                    StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1/',
+                    StoreConfigurationDataMapper::KEY_CURRENCY => 'USD',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE => '1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
+                    StoreConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
+                    StoreConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
+                    StoreConfigurationDataMapper::KEY_USE_SEF_URL => '1',
                 ],
                 [
                     Store::XML_PATH_USE_REWRITES => '1',
@@ -64,15 +64,15 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             ],
             'valid alphabet url' => [
                 [
-                    UserConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://example.com/',
-                    UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://example.com/',
-                    UserConfigurationDataMapper::KEY_CURRENCY => 'USD',
-                    UserConfigurationDataMapper::KEY_IS_SECURE => '1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
-                    UserConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
-                    UserConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
-                    UserConfigurationDataMapper::KEY_USE_SEF_URL => '1',
+                    StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://example.com/',
+                    StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://example.com/',
+                    StoreConfigurationDataMapper::KEY_CURRENCY => 'USD',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE => '1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
+                    StoreConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
+                    StoreConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
+                    StoreConfigurationDataMapper::KEY_USE_SEF_URL => '1',
                 ],
                 [
                     Store::XML_PATH_USE_REWRITES => '1',
@@ -91,15 +91,15 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'no trailing slash' =>
             [
                 [
-                    UserConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1',
-                    UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
-                    UserConfigurationDataMapper::KEY_CURRENCY => 'USD',
-                    UserConfigurationDataMapper::KEY_IS_SECURE => '1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
-                    UserConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
-                    UserConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
-                    UserConfigurationDataMapper::KEY_USE_SEF_URL => '1',
+                    StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1',
+                    StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
+                    StoreConfigurationDataMapper::KEY_CURRENCY => 'USD',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE => '1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
+                    StoreConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
+                    StoreConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
+                    StoreConfigurationDataMapper::KEY_USE_SEF_URL => '1',
                 ],
                 [
                     Store::XML_PATH_USE_REWRITES => '1',
@@ -118,15 +118,15 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'no trailing slash, alphabet url' =>
                 [
                     [
-                        UserConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
-                        UserConfigurationDataMapper::KEY_BASE_URL => 'http://example.com',
-                        UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://example.com',
-                        UserConfigurationDataMapper::KEY_CURRENCY => 'USD',
-                        UserConfigurationDataMapper::KEY_IS_SECURE => '1',
-                        UserConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
-                        UserConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
-                        UserConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
-                        UserConfigurationDataMapper::KEY_USE_SEF_URL => '1',
+                        StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
+                        StoreConfigurationDataMapper::KEY_BASE_URL => 'http://example.com',
+                        StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://example.com',
+                        StoreConfigurationDataMapper::KEY_CURRENCY => 'USD',
+                        StoreConfigurationDataMapper::KEY_IS_SECURE => '1',
+                        StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
+                        StoreConfigurationDataMapper::KEY_LANGUAGE => 'en_US',
+                        StoreConfigurationDataMapper::KEY_TIMEZONE => 'America/Chicago',
+                        StoreConfigurationDataMapper::KEY_USE_SEF_URL => '1',
                     ],
                     [
                         Store::XML_PATH_USE_REWRITES => '1',
@@ -145,9 +145,9 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'is_secure, is_secure_admin set but no secure base url' =>
             [
                 [
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
-                    UserConfigurationDataMapper::KEY_IS_SECURE => '1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE => '1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
                 ],
                 [
                     Store::XML_PATH_UNSECURE_BASE_URL => 'http://127.0.0.1/',
@@ -156,10 +156,10 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'secure base url set but is_secure and is_secure_admin set to 0' =>
             [
                 [
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
-                    UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE => '0',
-                    UserConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '0',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
+                    StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE => '0',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '0',
                 ],
                 [
                     Store::XML_PATH_UNSECURE_BASE_URL => 'http://127.0.0.1/',
@@ -168,8 +168,8 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'secure base url set but is_secure and is_secure_admin not set' =>
             [
                 [
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
-                    UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
+                    StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
                 ],
                 [
                     Store::XML_PATH_UNSECURE_BASE_URL => 'http://127.0.0.1/',
@@ -178,10 +178,10 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'secure base url set, is_secure set to 0, is_secure_admin set to 1' =>
             [
                 [
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
-                    UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE => '0',
-                    UserConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
+                    StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE => '0',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
                 ],
                 [
                     Store::XML_PATH_UNSECURE_BASE_URL => 'http://127.0.0.1/',
@@ -193,10 +193,10 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'secure base url set, is_secure set to 1, is_secure_admin set to 0' =>
             [
                 [
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
-                    UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE => '1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '0',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
+                    StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE => '1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '0',
                 ],
                 [
                     Store::XML_PATH_UNSECURE_BASE_URL => 'http://127.0.0.1/',
@@ -208,9 +208,9 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'secure base url set, is_secure not set, is_secure_admin set to 1' =>
             [
                 [
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
-                    UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
+                    StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => '1',
                 ],
                 [
                     Store::XML_PATH_UNSECURE_BASE_URL => 'http://127.0.0.1/',
@@ -221,9 +221,9 @@ class UserConfigurationDataMapperTest extends \PHPUnit_Framework_TestCase
             'secure base url set, is_secure set to 1, is_secure_admin not set' =>
             [
                 [
-                    UserConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
-                    UserConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
-                    UserConfigurationDataMapper::KEY_IS_SECURE => '1',
+                    StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
+                    StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'https://127.0.0.1',
+                    StoreConfigurationDataMapper::KEY_IS_SECURE => '1',
                 ],
                 [
                     Store::XML_PATH_UNSECURE_BASE_URL => 'http://127.0.0.1/',

@@ -17,7 +17,7 @@ use Magento\Store\Model\Store;
  *
  * @package Magento\Setup\Model
  */
-class UserConfigurationDataMapper
+class StoreConfigurationDataMapper
 {
     /**#@+
      * Model data keys

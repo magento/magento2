@@ -786,7 +786,7 @@ class Installer
      */
     public function installUserConfig($data)
     {
-        $userConfig = new UserConfigurationDataMapper();
+        $userConfig = new StoreConfigurationDataMapper();
         $configData = $userConfig->getConfigData($data);
         if (count($configData) === 0) {
             return;
