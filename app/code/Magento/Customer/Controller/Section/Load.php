@@ -62,9 +62,9 @@ class Load extends \Magento\Framework\App\Action\Action
         $resultJson = $this->resultJsonFactory->create();
         try {
             $sectionNames = $this->getRequest()->getParam('sections');
-            $sectionNames = $sectionNames ? \explode(',', $sectionNames) : null;
+            $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
 
-            $response = $this->sectionPool->getSectionsData(array_unique($sectionNames));
+            $response = $this->sectionPool->getSectionsData($sectionNames);
         } catch (LocalizedException $e) {
             // TODO: MAGETWO-34824 replace on const
             $resultJson->setStatusHeader(400, \Zend\Http\AbstractMessage::VERSION_11, 'Bad request');
