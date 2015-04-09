@@ -182,10 +182,10 @@ class Install extends AbstractActionController
     }
 
     /**
- * Maps data from request to format of admin account model
- *
- * @return array
- */
+     * Maps data from request to format of admin account model
+     *
+     * @return array
+     */
     private function importAdminUserForm()
     {
         $source = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
