@@ -60,6 +60,8 @@ define(
                 }
                 if (registerChecked) {
                     quote.setCheckoutMethod('register');
+                    $('[name="customerDetails.password"]').show();
+                    $('[name="customerDetails.confirm_password"]').show();
                 }
                 navigator.setCurrent('authentication').goNext();
             },
