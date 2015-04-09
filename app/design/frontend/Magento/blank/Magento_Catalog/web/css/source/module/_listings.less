@@ -3,9 +3,21 @@
 //  * See COPYING.txt for license details.
 //  */
 
-@product-name-text-decoration: none;
-@product-name-text-decoration-hover: @link__hover__text-decoration;
+//
+//  Variables
+//  ---------------------------------------------
 
+@product-name-link__color: @text__color;
+@product-name-link__color__active: @text__color;
+@product-name-link__color__hover: @text__color;
+@product-name-link__color__visited: @text__color;
+
+@product-name-link__text-decoration: none;
+@product-name-link__text-decoration__active: @link__hover__text-decoration;
+@product-name-link__text-decoration__hover: @link__hover__text-decoration;
+@product-name-link__text-decoration__visited: @link__hover__text-decoration;
+
+//
 
 //
 //    Common
@@ -13,23 +25,7 @@
 
 & when (@media-common = true) {
 
-.product-name() {
-    font-weight: @font-weight__regular;
-    > a {
-        .link(
-             @_link-color: @text__color,
-             @_link-text-decoration: @product-name-text-decoration,
-             @_link-color-visited: @text__color,
-             @_link-text-decoration-visited: @product-name-text-decoration,
-             @_link-color-hover: @text__color,
-             @_link-text-decoration-hover: @product-name-text-decoration-hover,
-             @_link-color-active: @text__color,
-             @_link-text-decoration-active: @product-name-text-decoration-hover
-         );
-    }
-}
-
-// Product Lists
+//  Product Lists
 .products {
     margin: @indent__l 0;
 }
@@ -47,11 +43,11 @@
         &:extend(.abs-add-box-sizing all);
 
         &-name {
-            .product-name();
+            &:extend(.abs-product-link all);
             display: block;
             margin: @indent__xs 0;
             word-break: break-all;
-            // Non standard for webkit
+            //  Non standard for webkit
             word-break: break-word;
             -webkit-hyphens: auto;
             -moz-hyphens: auto;
@@ -248,8 +244,8 @@
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .products-list .product {
@@ -302,8 +298,8 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  ---------------------------------------------
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .page-products .products-grid .product-item { width: 100%/3 }
