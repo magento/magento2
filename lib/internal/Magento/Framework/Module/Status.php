@@ -7,8 +7,8 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\Module\ModuleList\DeploymentConfigFactory;
 use Magento\Framework\App\State\Cleanup;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * A service for controlling module status
@@ -60,13 +60,6 @@ class Status
     private $conflictChecker;
 
     /**
-     * Factory to create module deployment config object
-     *
-     * @var DeploymentConfigFactory
-     */
-    private $deploymentConfigFactory;
-
-    /**
      * Constructor
      *
      * @param ModuleList\Loader $loader
@@ -75,7 +68,6 @@ class Status
      * @param Cleanup $cleanup
      * @param ConflictChecker $conflictChecker
      * @param DependencyChecker $dependencyChecker
-     * @param DeploymentConfigFactory $deploymentConfigFactory
      */
     public function __construct(
         ModuleList\Loader $loader,
@@ -83,8 +75,7 @@ class Status
         Writer $writer,
         Cleanup $cleanup,
         ConflictChecker $conflictChecker,
-        DependencyChecker $dependencyChecker,
-        DeploymentConfigFactory $deploymentConfigFactory
+        DependencyChecker $dependencyChecker
     ) {
         $this->loader = $loader;
         $this->list = $list;
@@ -92,7 +83,6 @@ class Status
         $this->cleanup = $cleanup;
         $this->conflictChecker = $conflictChecker;
         $this->dependencyChecker = $dependencyChecker;
-        $this->deploymentConfigFactory = $deploymentConfigFactory;
     }
 
     /**
@@ -167,13 +157,12 @@ class Status
         foreach ($this->getAllModules($modules) as $name) {
             $currentStatus = $this->list->has($name);
             if (in_array($name, $modules)) {
-                $result[$name] = $isEnabled;
+                $result[$name] = (int)$isEnabled;
             } else {
-                $result[$name] = $currentStatus;
+                $result[$name] = (int)$currentStatus;
             }
         }
-        $segment = $this->deploymentConfigFactory->create($result);
-        $this->writer->update($segment);
+        $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
         $this->cleanup->clearCaches();
         $this->cleanup->clearCodeGeneratedFiles();
     }
