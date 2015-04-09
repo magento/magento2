@@ -14,6 +14,7 @@
 //  ---------------------------------------------
 
 @import '_styles.less';
+@import (reference) 'source/_extends.less';
 
 //
 //  Magento Import instructions
@@ -31,3 +32,9 @@
 
 @media-target: 'desktop'; // Sets target device for this file
 @media-common: false; // Sets not to output common styles
+
+//
+//  Global variables override
+//  ---------------------------------------------
+
+@import 'source/_theme.less';
