@@ -71,6 +71,9 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $addressRenderer;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->senderMock = $this->getMock(
@@ -205,6 +208,7 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
      * @param bool|null $emailSendingResult
      * @dataProvider sendDataProvider
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSend($configValue, $forceSyncMode, $customerNoteNotify, $emailSendingResult)
     {

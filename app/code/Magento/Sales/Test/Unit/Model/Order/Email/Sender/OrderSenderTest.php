@@ -66,6 +66,9 @@ class OrderSenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $addressRenderer;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->senderMock = $this->getMock(
