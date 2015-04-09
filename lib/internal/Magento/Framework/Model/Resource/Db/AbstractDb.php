@@ -779,14 +779,15 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      */
     protected function prepareDataForUpdate($object)
     {
-        $data = $this->_prepareDataForSave($object);
-        unset($data[$this->getIdFieldName()]);
-
+        $data = $object->getData();
         foreach ($object->getStoredData() as $key => $value) {
-            if (array_key_exists($key, $data) && $data[$key] == $value) {
+            if (array_key_exists($key, $data) && $data[$key] === $value) {
                 unset($data[$key]);
             }
         }
+        $dataObject = new \Magento\Framework\Object($data);
+        $data = $this->_prepareDataForTable($dataObject, $this->getMainTable());
+        unset($data[$this->getIdFieldName()]);
 
         return $data;
     }
