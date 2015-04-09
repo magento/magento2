@@ -22,4 +22,11 @@ HTML;
     }
     exit(1);
 }
-\Zend\Mvc\Application::init(require __DIR__ . '/config/application.config.php')->run();
+try {
+    \Zend\Mvc\Application::init(require __DIR__ . '/config/application.config.php')->run();
+} catch (\Exception $e) {
+    if (PHP_SAPI == 'cli') {
+        echo $e->getMessage();
+    }
+}
+
