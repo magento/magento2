@@ -61,6 +61,11 @@ class OrderSenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $globalConfig;
 
+    /**
+     * @var \Magento\Sales\Model\Order\Address\Renderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressRenderer;
+
     protected function setUp()
     {
         $this->senderMock = $this->getMock(
@@ -112,6 +117,14 @@ class OrderSenderTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->addressRenderer = $this->getMock(
+            'Magento\Sales\Model\Order\Address\Renderer',
+            ['format'],
+            [],
+            '',
+            false
+        );
+
         $this->storeMock = $this->getMock(
             '\Magento\Store\Model\Store',
             ['getStoreId', '__wakeup'],
@@ -136,7 +149,8 @@ class OrderSenderTest extends \PHPUnit_Framework_TestCase
             [
                 'getStore', 'getBillingAddress', 'getPayment',
                 '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
-                'getCustomerEmail', 'setSendEmail', 'setEmailSent'
+                'getCustomerEmail', 'setSendEmail', 'setEmailSent',
+                'getShippingAddress'
             ],
             [],
             '',
@@ -163,7 +177,8 @@ class OrderSenderTest extends \PHPUnit_Framework_TestCase
             $this->senderBuilderFactoryMock,
             $this->paymentHelper,
             $this->orderResource,
-            $this->globalConfig
+            $this->globalConfig,
+            $this->addressRenderer
         );
     }
 
@@ -176,7 +191,7 @@ class OrderSenderTest extends \PHPUnit_Framework_TestCase
      */
     public function testSend($configValue, $forceSyncMode, $emailSendingResult)
     {
-        $billingAddress = 'billing_address';
+        $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
 
         $this->orderMock->expects($this->once())
@@ -189,23 +204,42 @@ class OrderSenderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($configValue);
 
         if (!$configValue || $forceSyncMode) {
-            $this->orderMock->expects($this->any())
-                ->method('getBillingAddress')
-                ->willReturn($billingAddress);
-
             $this->identityContainerMock->expects($this->once())
                 ->method('isEnabled')
                 ->willReturn($emailSendingResult);
 
             if ($emailSendingResult) {
+                $addressMock = $this->getMock(
+                    'Magento\Sales\Model\Order\Address',
+                    [],
+                    [],
+                    '',
+                    false
+                );
+
+                $this->addressRenderer->expects($this->any())
+                    ->method('format')
+                    ->with($addressMock, 'html')
+                    ->willReturn($address);
+
+                $this->orderMock->expects($this->any())
+                    ->method('getBillingAddress')
+                    ->willReturn($addressMock);
+
+                $this->orderMock->expects($this->any())
+                    ->method('getShippingAddress')
+                    ->willReturn($addressMock);
+
                 $this->templateContainerMock->expects($this->once())
                     ->method('setTemplateVars')
                     ->with(
                         [
                             'order' => $this->orderMock,
-                            'billing' => $billingAddress,
+                            'billing' => $addressMock,
                             'payment_html' => 'payment',
                             'store' => $this->storeMock,
+                            'formattedShippingAddress' => $address,
+                            'formattedBillingAddress' => $address
                         ]
                     );
 

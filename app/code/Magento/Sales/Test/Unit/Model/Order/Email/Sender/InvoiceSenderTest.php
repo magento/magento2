@@ -65,6 +65,11 @@ class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $globalConfig;
 
+    /**
+     * @var \Magento\Sales\Model\Order\Address\Renderer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressRenderer;
+
     protected function setUp()
     {
         $this->senderMock = $this->getMock(
@@ -110,6 +115,14 @@ class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->addressRenderer = $this->getMock(
+            'Magento\Sales\Model\Order\Address\Renderer',
+            ['format'],
+            [],
+            '',
+            false
+        );
+
         $this->storeMock = $this->getMock(
             '\Magento\Store\Model\Store',
             ['getStoreId', '__wakeup'],
@@ -134,7 +147,7 @@ class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
             [
                 'getStore', 'getBillingAddress', 'getPayment',
                 '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
-                'getCustomerEmail'
+                'getCustomerEmail', 'getShippingAddress'
             ],
             [],
             '',
@@ -179,7 +192,8 @@ class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
             $this->senderBuilderFactoryMock,
             $this->paymentHelper,
             $this->invoiceResource,
-            $this->globalConfig
+            $this->globalConfig,
+            $this->addressRenderer
         );
     }
 
@@ -194,7 +208,7 @@ class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
     public function testSend($configValue, $forceSyncMode, $customerNoteNotify, $emailSendingResult)
     {
         $comment = 'comment_test';
-        $billingAddress = 'billing_address';
+        $address = 'address_test';
         $configPath = 'sales_email/general/async_sending';
 
         $this->invoiceMock->expects($this->once())
@@ -207,9 +221,26 @@ class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($configValue);
 
         if (!$configValue || $forceSyncMode) {
+            $addressMock = $this->getMock(
+                'Magento\Sales\Model\Order\Address',
+                [],
+                [],
+                '',
+                false
+            );
+
+            $this->addressRenderer->expects($this->any())
+                ->method('format')
+                ->with($addressMock, 'html')
+                ->willReturn($address);
+
             $this->orderMock->expects($this->any())
                 ->method('getBillingAddress')
-                ->willReturn($billingAddress);
+                ->willReturn($addressMock);
+
+            $this->orderMock->expects($this->any())
+                ->method('getShippingAddress')
+                ->willReturn($addressMock);
 
             $this->invoiceMock->expects($this->once())
                 ->method('getCustomerNoteNotify')
@@ -226,9 +257,11 @@ class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
                         'order' => $this->orderMock,
                         'invoice' => $this->invoiceMock,
                         'comment' => $customerNoteNotify ? $comment : '',
-                        'billing' => $billingAddress,
+                        'billing' => $addressMock,
                         'payment_html' => 'payment',
                         'store' => $this->storeMock,
+                        'formattedShippingAddress' => $address,
+                        'formattedBillingAddress' => $address
                     ]
                 );
 
