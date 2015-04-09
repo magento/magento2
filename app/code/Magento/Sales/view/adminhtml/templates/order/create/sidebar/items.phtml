@@ -10,8 +10,10 @@
 <?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
 <div class="create-order-sidebar-block" id="sidebar_data_<?php echo $block->getDataId() ?>">
     <div class="head">
-        <a href="#" class="action-refresh"  title="<?php echo $block->escapeHtml(__('Refresh')); ?>" onclick="order.loadArea('sidebar_<?php echo $block->getDataId() ?>', 'sidebar_data_<?php echo $block->getDataId() ?>');return false;">
-            <span>Refresh</span>
+        <a href="#" class="action-refresh"
+           title="<?php echo $block->escapeHtml(__('Refresh')); ?>"
+           onclick="order.loadArea('sidebar_<?php echo $block->getDataId() ?>', 'sidebar_data_<?php echo $block->getDataId() ?>');return false;">
+            <span><?php echo __('Refresh'); ?></span>
         </a>
         <h5 class="create-order-sidebar-label">
             <?php echo $block->getHeaderText() ?>
@@ -101,7 +103,7 @@
                                            class="admin__control-checkbox"
                                            name="sidebar[<?php echo $block->getSidebarStorageAction() ?>][<?php echo $block->getIdentifierId($_item) ?>]"
                                            value="<?php echo $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
-                                           title="<?php echo $block->escapeHtml(__('Add To Order')); ?>""/>
+                                           title="<?php echo $block->escapeHtml(__('Add To Order')); ?>"/>
                                     <label class="admin__field-label"></label>
                                 <?php endif; ?>
                             </div>
