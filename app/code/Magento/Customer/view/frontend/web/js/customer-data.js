@@ -14,13 +14,14 @@ define([
     var options;
     var ns = $.initNamespaceStorage('mage-cache-storage');
     var storage = ns.localStorage;
+    var storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
 
-    storage.invalidate_sections = 'invalidate_sections';
-    storage.getInvalidateSections = function() {
-        return this.get(this.invalidate_sections) || [];
+    storageInvalidation.invalid_sections = 'invalid_sections';
+    storageInvalidation.getInvalidSections = function() {
+        return this.get(this.invalid_sections) || [];
     };
-    storage.setInvalidateSections = function(sections) {
-        return this.set(this.invalidate_sections, sections);
+    storageInvalidation.setInvalidSections = function(sections) {
+        return this.set(this.invalid_sections, sections);
     };
 
     if (!ns.cookieStorage.isSet('mage-cache-sessid')) {
@@ -88,12 +89,12 @@ define([
             });
         },
         remove: function (sections) {
-            var invalidateSegments = storage.getInvalidateSections();
+            var invalidSections = storageInvalidation.getInvalidSections();
             _.each(sections, function (sectionName) {
                 buffer.notify(sectionName, '');
-                invalidateSegments.push(sectionName);
+                invalidSections.push(sectionName);
             });
-            storage.setInvalidateSections(invalidateSegments);
+            storageInvalidation.setInvalidSections(invalidSections);
         }
     };
 
@@ -107,10 +108,10 @@ define([
                 _.each(getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
-                var invalidateSegments = storage.getInvalidateSections();
-                if (invalidateSegments.length) {
-                    storage.setInvalidateSections([]);
-                    getFromServer(invalidateSegments).done(function (sections) {
+                var invalidSections = storageInvalidation.getInvalidSections();
+                if (invalidSections.length) {
+                    storageInvalidation.setInvalidSections([]);
+                    getFromServer(invalidSections).done(function (sections) {
                         buffer.update(sections);
                     });
                 }
