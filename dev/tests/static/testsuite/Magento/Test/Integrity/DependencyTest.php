@@ -322,7 +322,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Collect redundant dependencies
-     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @test
      * @depends testUndeclared
      */
