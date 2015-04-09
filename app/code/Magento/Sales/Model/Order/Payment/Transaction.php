@@ -9,8 +9,8 @@
 namespace Magento\Sales\Model\Order\Payment;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Sales\Api\Data\TransactionInterface;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  * Payment transaction model
@@ -25,7 +25,7 @@ use Magento\Sales\Api\Data\TransactionInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Transaction extends AbstractExtensibleModel implements TransactionInterface
+class Transaction extends AbstractModel implements TransactionInterface
 {
     /**#@+
      * Supported transaction types

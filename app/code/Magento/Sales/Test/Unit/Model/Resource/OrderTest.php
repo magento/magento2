@@ -36,9 +36,17 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $stateHandlerMock;
     /**
-     * @var \Magento\Sales\Model\Increment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Manager|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $salesIncrementMock;
+    protected $salesSequenceManagerMock;
+    /**
+     * @var \Magento\SalesSequence\Model\Sequence|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $salesSequenceMock;
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\Grid|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $gridAggregatorMock;
     /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -75,6 +83,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $adapterMock;
+    /**
+     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entitySnapshotMock;
 
     /**
      * Mock class dependencies
@@ -92,6 +104,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
         $this->stateHandlerMock = $this->getMock('Magento\Sales\Model\Resource\Order\Handler\State', [], [], '', false);
         $this->salesIncrementMock = $this->getMock('Magento\Sales\Model\Increment', [], [], '', false);
+        $this->gridAggregatorMock = $this->getMock('Magento\Sales\Model\Resource\Order\Grid', [], [], '', false);
         $this->orderMock = $this->getMock(
             'Magento\Sales\Model\Order',
             [],
@@ -140,14 +153,29 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->salesSequenceManagerMock = $this->getMock(
+            'Magento\SalesSequence\Model\Manager',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->salesSequenceMock = $this->getMock('Magento\SalesSequence\Sequence', [], [], '', false);
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Sales\Model\Resource\EntitySnapshot',
+            [],
+            [],
+            '',
+            false
+        );
         $contextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
         $this->resource = new Order(
             $contextMock,
             $this->attributeMock,
-            $this->salesIncrementMock,
+            $this->salesSequenceManagerMock,
+            $this->entitySnapshotMock,
             $this->addressHandlerMock,
             $this->stateHandlerMock
         );
@@ -170,7 +198,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue(1));
-        $this->orderMock->expects($this->once())->method('hasDataChanges')->will($this->returnValue(true));
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->orderMock)
+            ->will($this->returnValue(true));
         $this->resource->save($this->orderMock);
     }
 }

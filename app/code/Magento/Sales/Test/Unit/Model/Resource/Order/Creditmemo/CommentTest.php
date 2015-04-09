@@ -34,6 +34,10 @@ class CommentTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Creditmemo\Comment\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorMock;
+    /**
+     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entitySnapshotMock;
 
     /**
      * Set up
@@ -68,6 +72,14 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Sales\Model\Resource\EntitySnapshot',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($this->adapterMock));
@@ -98,7 +110,8 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Resource\Order\Creditmemo\Comment',
             [
                 'context' => $contextMock,
-                'validator' => $this->validatorMock
+                'validator' => $this->validatorMock,
+                'entitySnapshot' => $this->entitySnapshotMock
             ]
         );
     }
@@ -112,7 +125,10 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->equalTo($this->commentModelMock))
             ->will($this->returnValue([]));
-
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->commentModelMock)
+            ->willReturn(true);
         $this->commentModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->commentResource->save($this->commentModelMock);
         $this->assertTrue(true);
@@ -126,6 +142,10 @@ class CommentTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveValidationFailed()
     {
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->commentModelMock)
+            ->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->commentModelMock))
