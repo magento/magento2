@@ -786,8 +786,11 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             }
         }
         $dataObject = new \Magento\Framework\Object($data);
+        //$dataObject = clone $object;
+        //$dataObject->setData($data);
         $data = $this->_prepareDataForTable($dataObject, $this->getMainTable());
         unset($data[$this->getIdFieldName()]);
+        unset($dataObject);
 
         return $data;
     }
