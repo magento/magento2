@@ -783,7 +783,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
         unset($data[$this->getIdFieldName()]);
 
         foreach ($object->getStoredData() as $key => $value) {
-            if(array_key_exists($key, $data) && $data[$key] == $value) {
+            if (array_key_exists($key, $data) && $data[$key] == $value) {
                 unset($data[$key]);
             }
         }
