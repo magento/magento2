@@ -1005,7 +1005,6 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('eav_attribute_group'),
             'attribute_group_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-
         )->setComment(
             'Eav Entity Attributes'
         );
