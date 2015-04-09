@@ -313,7 +313,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $declared = $type == self::TYPE_SOFT ? array_merge($soft, $hard) : $hard;
         if (!in_array($module, $declared) && !in_array($nsModule, $declared) && !$this->_isFake($nsModule)) {
             $undeclared[$type][] = $module;
-        } elseif ((in_array($module, $declared) || in_array($nsModule, $declared)) && $this->_isFake($nsModule)) {
+        } elseif ((false && in_array($module, $declared) || in_array($nsModule, $declared)) && $this->_isFake($nsModule)) {
             $this->_setDependencies($currentModule, $type, self::MAP_TYPE_REDUNDANT, $module);
         }
 
@@ -331,6 +331,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         foreach (array_keys(self::$_mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
             $found = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND);
+            $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
         }
     }
@@ -747,5 +748,10 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected function _isFake($module)
     {
         return isset(self::$_mapDependencies[$module]) ? false : true;
+    }
+
+    protected function isFrameworkDependency()
+    {
+
     }
 }
