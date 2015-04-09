@@ -52,6 +52,8 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
 
     const CUSTOMER_ADDRESS_ID = 'customer_address_id';
 
+    const SAVE_IN_ADDRESS_BOOK = 'save_in_address_book';
+
     /**#@-*/
 
     /**
@@ -328,6 +330,7 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get billing/shipping email
      *
      * @return string
+     * @return strin
      */
     public function getEmail();
 
@@ -368,6 +371,21 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return $this
      */
     public function setCustomerAddressId($customerAddressId);
+
+    /**
+     * Get save in address book flag
+     *
+     * @return int|null
+     */
+    public function getSaveInAddressBook();
+
+    /**
+     * Set save in address book flag
+     *
+     * @param int|null $saveInAddressBook
+     * @return $this
+     */
+    public function setSaveInAddressBook($saveInAddressBook);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

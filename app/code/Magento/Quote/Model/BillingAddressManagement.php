@@ -72,6 +72,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
         if ($useForShipping) {
             $shippingAddress = $address;
         }
+        $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         if ($customerAddressId) {
             try {
                 $addressData = $this->addressRepository->getById($customerAddressId);
@@ -80,10 +81,11 @@ class BillingAddressManagement implements BillingAddressManagementInterface
             }
             $address = $quote->getBillingAddress()->importCustomerAddressData($addressData);
             if ($useForShipping) {
-                $shippingAddress = $quote->getShippingAddress()->importCustomerAddressData($addressData)->setSaveInAddressBook(0);
+                $shippingAddress = $quote->getShippingAddress()->importCustomerAddressData($addressData);
+                $shippingAddress->setSaveInAddressBook($saveInAddressBook);
             }
         }
-
+        $address->setSaveInAddressBook($saveInAddressBook);
         $quote->setBillingAddress($address);
         if ($useForShipping) {
             $shippingAddress->setSameAsBilling(1);

@@ -18,8 +18,6 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
  * @method Address setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method Address setUpdatedAt(string $value)
- * @method int getSaveInAddressBook()
- * @method Address setSaveInAddressBook(int $value)
  * @method \Magento\Customer\Api\Data\AddressInterface getCustomerAddress()
  * @method Address setCustomerAddressData(\Magento\Customer\Api\Data\AddressInterface $value)
  * @method string getAddressType()
@@ -1636,6 +1634,27 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function setCustomerAddressId($customerAddressId)
     {
         return $this->setData(self::CUSTOMER_ADDRESS_ID, $customerAddressId);
+    }
+
+    /**
+     * Get save in address book flag
+     *
+     * @return int|null
+     */
+    public function getSaveInAddressBook()
+    {
+        return $this->getData(self::SAVE_IN_ADDRESS_BOOK);
+    }
+
+    /**
+     * Set save in address book flag
+     *
+     * @param int|null $saveInAddressBook
+     * @return $this
+     */
+    public function setSaveInAddressBook($saveInAddressBook)
+    {
+        return $this->setData(self::SAVE_IN_ADDRESS_BOOK, $saveInAddressBook);
     }
     //@codeCoverageIgnoreEnd
 

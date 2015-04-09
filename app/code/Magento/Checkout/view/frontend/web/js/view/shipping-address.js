@@ -5,6 +5,7 @@
 /*global define*/
 define(
     [
+        "jquery",
         'Magento_Ui/js/form/form',
         'ko',
         'Magento_Checkout/js/action/select-shipping-address',
@@ -13,7 +14,7 @@ define(
         'Magento_Checkout/js/model/step-navigator',
         '../model/addresslist'
     ],
-    function(Component, ko, selectShippingAddress, customer, quote, navigator, addressList) {
+    function($, Component, ko, selectShippingAddress, customer, quote, navigator, addressList) {
         'use strict';
         var stepName = 'shippingAddress';
         var newAddressSelected = ko.observable(false);
@@ -40,6 +41,7 @@ define(
                     this.validate();
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get('shippingAddress');
+                        addressData['save_in_address_book'] = $( "input[name = 'shipping[save_in_address_book]']:checked" ).val();
                         selectShippingAddress(addressData, this.sameAsBilling());
                     }
                 }
