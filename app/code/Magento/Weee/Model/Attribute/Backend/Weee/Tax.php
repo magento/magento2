@@ -119,7 +119,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SurpressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function afterSave($object)
     {
