@@ -369,7 +369,10 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
             $item->setId($item->getProductId());
             $item->setPrice($productData[$item->getProductId()]['price'] * $item->getBaseToGlobalRate());
             $item->setName($productData[$item->getProductId()]['name']);
-            $item->setOrders($orderData[$item->getProductId()]['orders']);
+            $item->setOrders(0);
+            if (isset($orderData[$item->getProductId()])) {
+                $item->setOrders($orderData[$item->getProductId()]['orders']);
+            }
         }
 
         return $this;
