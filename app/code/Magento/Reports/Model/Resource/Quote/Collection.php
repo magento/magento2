@@ -167,7 +167,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         $ordersSubSelect = clone $this->orderResource->getSelect();
         $ordersSubSelect->reset()->from(
             ['oi' => $this->getTable('sales_order_item')],
-            ['orders' => new \Zend_Db_Expr('COUNT(1)'), 'product_id']
+            ['product_id', 'orders' => new \Zend_Db_Expr('COUNT(1)')]
         )->where('oi.product_id IN (?)', $productIds)->group(
             'oi.product_id'
         );
@@ -321,10 +321,11 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     /**
      * Separate query for product and order data
      *
+     * @param array $productIds
      * @return array
      * @throws \Magento\Eav\Exception
      */
-    protected function getProductData()
+    protected function getProductData(array $productIds)
     {
         $productConnection = $this->productResource->getConnection('read');
         $productAttrName = $this->productResource->getAttribute('name');
@@ -348,7 +349,8 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
             ['product_price' => $productAttrPrice->getBackend()->getTable()],
             "product_price.entity_id = main_table.entity_id AND product_price.attribute_id = {$productAttrPriceId}",
             ['price' => new \Zend_Db_Expr('product_price.value')]
-        );
+        )->where('main_table.entity_id IN (?)', $productIds);
+
         $productData = $productConnection->fetchAssoc($select);
         return $productData;
     }
@@ -361,10 +363,13 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     protected function _afterLoad()
     {
         parent::_afterLoad();
-        $productData = $this->getProductData();
-        $productIds = array_keys($productData);
-        $orderData = $this->getOrdersData($productIds);
         $items = $this->getItems();
+        $productIds = [];
+        foreach ($items as $item) {
+            $productIds[] = $item->getProductId();
+        }
+        $productData = $this->getProductData($productIds);
+        $orderData = $this->getOrdersData($productIds);
         foreach ($items as $item) {
             $item->setId($item->getProductId());
             $item->setPrice($productData[$item->getProductId()]['price'] * $item->getBaseToGlobalRate());
