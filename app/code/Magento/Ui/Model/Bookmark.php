@@ -265,9 +265,15 @@ class Bookmark extends AbstractModel
                 $sorting['columns'][$data['sorting']['field']] = ['sorting' => $data['sorting']['direction']];
             }
 
+            $paging = [];
+            if (isset($data['paging']['pageSize'])) {
+                $paging['pageSize'] = $data['paging']['pageSize'];
+            }
+
             $config = [
                 'columns' => isset($data['columns']) ? $data['columns'] : [],
                 'filters' => isset($data['filters']) ? $data['filters'] : [],
+                'paging'  => $paging,
             ];
             $config = array_replace_recursive($config, $sorting);
 

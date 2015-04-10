@@ -158,7 +158,7 @@ class UiComponentFactory extends Object
 
             return $component;
         } else {
-            $defaultData = $this->componentManager->createRawComponentData($name);
+            $defaultData = $this->componentManager->createRawComponentData($name, true);
             list($className, $componentArguments) = $this->argumentsResolver($identifier, $defaultData);
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create($className, array_merge($componentArguments, $arguments));

@@ -163,17 +163,17 @@ class Manager implements ManagerInterface
             );
         }
         $this->componentsPool = $this->arrayObjectFactory->create();
-//@fixme Cache has been broken
-//        $cacheID = static::CACHE_ID . '_' . $name;
-//        $cachedPool = $this->cache->load($cacheID);
-//        if ($cachedPool === false) {
+
+        $cacheID = static::CACHE_ID . '_' . $name;
+        $cachedPool = $this->cache->load($cacheID);
+        if ($cachedPool === false) {
             $this->prepare($name);
-//            $this->cache->save($this->componentsPool->serialize(), $cacheID);
-//        } else {
-//            $this->componentsPool->unserialize($cachedPool);
-//        }
+            $this->cache->save($this->componentsPool->serialize(), $cacheID);
+        } else {
+            $this->componentsPool->unserialize($cachedPool);
+        }
         $this->componentsData->offsetSet($name, $this->componentsPool);
-//        $this->componentsData->offsetSet($name, $this->evaluateComponentArguments($this->getData($name)));
+        $this->componentsData->offsetSet($name, $this->evaluateComponentArguments($this->getData($name)));
 
         return $this;
     }
@@ -204,9 +204,10 @@ class Manager implements ManagerInterface
      * To create the raw  data components
      *
      * @param string $component
+     * @param bool $evaluated
      * @return array
      */
-    public function createRawComponentData($component)
+    public function createRawComponentData($component, $evaluated = false)
     {
         $componentData = $this->componentConfigProvider->getComponentData($component);
         $componentData[Converter::DATA_ATTRIBUTES_KEY] = isset($componentData[Converter::DATA_ATTRIBUTES_KEY])
@@ -215,9 +216,11 @@ class Manager implements ManagerInterface
         $componentData[Converter::DATA_ARGUMENTS_KEY] = isset($componentData[Converter::DATA_ARGUMENTS_KEY])
             ? $componentData[Converter::DATA_ARGUMENTS_KEY]
             : [];
-        foreach ($componentData[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
-            $componentData[Converter::DATA_ARGUMENTS_KEY][$argumentName]
-                = $this->argumentInterpreter->evaluate($argument);
+        if ($evaluated) {
+            foreach ($componentData[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
+                $componentData[Converter::DATA_ARGUMENTS_KEY][$argumentName]
+                    = $this->argumentInterpreter->evaluate($argument);
+            }
         }
 
         return [
@@ -273,10 +276,9 @@ class Manager implements ManagerInterface
      *
      * @param $name
      * @param array $componentsPool
-     * @param string|null $parentName
      * @return array
      */
-    protected function createDataForComponent($name, array $componentsPool, $parentName = null)
+    protected function createDataForComponent($name, array $componentsPool)
     {
         $createdComponents = [];
         $rootComponent = $this->createRawComponentData($name);
@@ -284,10 +286,10 @@ class Manager implements ManagerInterface
             $resultConfiguration = [ManagerInterface::CHILDREN_KEY => []];
             $instanceName = $this->createName($component, $key, $name);
             // Evaluate arguments
-            foreach ($component[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
-                $component[Converter::DATA_ARGUMENTS_KEY][$argumentName]
-                    = $this->argumentInterpreter->evaluate($argument);
-            }
+//            foreach ($component[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
+//                $component[Converter::DATA_ARGUMENTS_KEY][$argumentName]
+//                    = $this->argumentInterpreter->evaluate($argument);
+//            }
             $resultConfiguration[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $this->mergeArguments(
                 $component,
                 $rootComponent
@@ -300,7 +302,7 @@ class Manager implements ManagerInterface
             unset($component[Converter::DATA_ATTRIBUTES_KEY]);
 
             // Add configuration from bookmark
-            $this->mergeBookmarkConfig($parentName, $resultConfiguration);
+//            $this->mergeBookmarkConfig($parentName, $resultConfiguration);
 
             // Create inner components
             foreach ($component as $subComponentName => $subComponent) {
