@@ -5,11 +5,10 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Customer\Api\AddressMetadataInterface;
-use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
-use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Customer\Model\Address\AddressModelInterface;
 
 /**
  * Sales order address model
@@ -21,12 +20,19 @@ use Magento\Sales\Api\Data\OrderAddressInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Address extends AbstractAddress implements OrderAddressInterface
+class Address extends AbstractModel implements OrderAddressInterface, AddressModelInterface
 {
+    /**
+     * Possible customer address types
+     */
+    const TYPE_BILLING = 'billing';
+
+    const TYPE_SHIPPING = 'shipping';
+
     /**
      * @var \Magento\Sales\Model\Order
      */
-    protected $_order;
+    protected $order;
 
     /**
      * @var string
@@ -41,66 +47,48 @@ class Address extends AbstractAddress implements OrderAddressInterface
     /**
      * @var \Magento\Sales\Model\OrderFactory
      */
-    protected $_orderFactory;
+    protected $orderFactory;
+
+    /**
+     * @var \Magento\Directory\Model\RegionFactory
+     */
+    protected $regionFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Directory\Helper\Data $directoryData
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Model\Address\Config $addressConfig
-     * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param AddressMetadataInterface $metadataService
-     * @param AddressInterfaceFactory $addressDataFactory
-     * @param RegionInterfaceFactory $regionDataFactory
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Directory\Helper\Data $directoryData,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Customer\Model\Address\Config $addressConfig,
-        \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Directory\Model\CountryFactory $countryFactory,
-        AddressMetadataInterface $metadataService,
-        AddressInterfaceFactory $addressDataFactory,
-        RegionInterfaceFactory $regionDataFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
+        $data = $this->implodeStreetField($data);
+        $this->regionFactory = $regionFactory;
+        $this->orderFactory = $orderFactory;
         parent::__construct(
             $context,
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $directoryData,
-            $eavConfig,
-            $addressConfig,
-            $regionFactory,
-            $countryFactory,
-            $metadataService,
-            $addressDataFactory,
-            $regionDataFactory,
-            $dataObjectHelper,
             $resource,
             $resourceCollection,
             $data
         );
-        $this->_orderFactory = $orderFactory;
+
     }
 
     /**
@@ -121,7 +109,110 @@ class Address extends AbstractAddress implements OrderAddressInterface
      */
     public function setOrder(\Magento\Sales\Model\Order $order)
     {
-        $this->_order = $order;
+        $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * Return 2 letter state code if available, otherwise full region name
+     *
+     * @return null|string
+     */
+    public function getRegionCode()
+    {
+        if (is_string($this->getRegion())) {
+            return $this->getRegion();
+        }
+        $model = $this->regionFactory->create()->load(
+            ((!$this->getRegionId() && is_numeric($this->getRegion())) ? $this->getRegion() : $this->getRegionId())
+        );
+        if ($model->getCountryId() == $this->getCountryId()) {
+            return $model->getCode();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Get full customer name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        $name = '';
+        if ($this->getPrefix()) {
+            $name .= $this->getPrefix() . ' ';
+        }
+        $name .= $this->getFirstname();
+        if ($this->getMiddlename()) {
+            $name .= ' ' . $this->getMiddlename();
+        }
+        $name .= ' ' . $this->getLastname();
+        if ($this->getSuffix()) {
+            $name .= ' ' . $this->getSuffix();
+        }
+        return $name;
+    }
+
+    /**
+     * Combine values of street lines into a single string
+     *
+     * @param string[]|string $value
+     * @return string
+     */
+    protected function implodeStreetValue($value)
+    {
+        if (is_array($value)) {
+            $value = trim(implode(PHP_EOL, $value));
+        }
+        return $value;
+    }
+
+    /**
+     * Enforce format of the street field
+     *
+     * @param array|string $key
+     * @param null $value
+     * @return \Magento\Framework\Object
+     */
+    public function setData($key, $value = null)
+    {
+        if (is_array($key)) {
+            $key = $this->implodeStreetField($key);
+        } elseif ($key == OrderAddressInterface::STREET) {
+            $value = $this->implodeStreetValue($value);
+        }
+        return parent::setData($key, $value);
+    }
+
+    /**
+     * Implode value of the street field, if it is present among other fields
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function implodeStreetField(array $data)
+    {
+        if (array_key_exists(OrderAddressInterface::STREET, $data)) {
+            $data[OrderAddressInterface::STREET] = $this->implodeStreetValue($data[OrderAddressInterface::STREET]);
+        }
+        return $data;
+    }
+
+    /**
+     * Create fields street1, street2, etc.
+     *
+     * To be used in controllers for views data
+     *
+     * @return $this
+     */
+    public function explodeStreetAddress()
+    {
+        $streetLines = $this->getStreet();
+        foreach ($streetLines as $lineNumber => $lineValue) {
+            $this->setData(OrderAddressInterface::STREET . ($lineNumber + 1), $lineValue);
+        }
         return $this;
     }
 
@@ -132,10 +223,10 @@ class Address extends AbstractAddress implements OrderAddressInterface
      */
     public function getOrder()
     {
-        if (!$this->_order) {
-            $this->_order = $this->_orderFactory->create()->load($this->getParentId());
+        if (!$this->order) {
+            $this->order = $this->orderFactory->create()->load($this->getParentId());
         }
-        return $this->_order;
+        return $this->order;
     }
 
     /**
@@ -330,13 +421,28 @@ class Address extends AbstractAddress implements OrderAddressInterface
     }
 
     /**
-     * Returns street
+     * Retrieve street field of an address
      *
      * @return string[]
      */
     public function getStreet()
     {
-        return parent::getStreet();
+        if (is_array($this->getData(OrderAddressInterface::STREET))) {
+            return $this->getData(OrderAddressInterface::STREET);
+        }
+        return explode(PHP_EOL, $this->getData(OrderAddressInterface::STREET));
+    }
+
+    /**
+     * Get street line by number
+     *
+     * @param int $number
+     * @return string
+     */
+    public function getStreetLine($number)
+    {
+        $lines = $this->getStreet();
+        return isset($lines[$number - 1]) ? $lines[$number - 1] : '';
     }
 
     /**
@@ -440,6 +546,14 @@ class Address extends AbstractAddress implements OrderAddressInterface
     public function setRegionId($id)
     {
         return $this->setData(OrderAddressInterface::REGION_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStreet($street)
+    {
+        return $this->setData(OrderAddressInterface::STREET, $street);
     }
 
     /**

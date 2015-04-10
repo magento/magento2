@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="msrp">
+            <field path="sales/msrp/enabled" scope="sales" scope_id="1" label="Yes" xsi:type="string">1</field>
+        </dataset>
+
+        <dataset name="msrp_rollback">
+            <field path="sales/msrp/enabled" scope="sales" scope_id="1" label="No" xsi:type="string">0</field>
+        </dataset>
+
+        <dataset name="msrp_before_order_confirmation">
+            <field path="sales/msrp/enabled" scope="sales" scope_id="1" label="Yes" xsi:type="string">1</field>
+            <field path="sales/msrp/display_price_type" scope="sales" scope_id="1" label="Before Order Confirmation" xsi:type="string">3</field>
+        </dataset>
+
+        <dataset name="msrp_before_order_confirmation_rollback">
+            <field path="sales/msrp/enabled" scope="sales" scope_id="1" label="No" xsi:type="string">0</field>
+            <field path="sales/msrp/display_price_type" scope="sales" scope_id="1" label="On Gesture" xsi:type="string">1</field>
+        </dataset>
+    </repository>
+</config>

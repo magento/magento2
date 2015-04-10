@@ -90,17 +90,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
 
-        $this->context = $this->objectManager->getObject(
-            'Magento\Framework\App\Action\Context',
-            [
-                'request' => $this->request,
-                'response' => $this->response,
-                'messageManager' => $this->messageManager
-            ]
-        );
-
-        $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->resultRedirectFactory = $this->getMock(
             'Magento\Framework\Controller\Result\RedirectFactory',
             ['create'],
@@ -108,6 +97,19 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->context = $this->objectManager->getObject(
+            'Magento\Framework\App\Action\Context',
+            [
+                'request' => $this->request,
+                'response' => $this->response,
+                'messageManager' => $this->messageManager,
+                'resultRedirectFactory' => $this->resultRedirectFactory
+            ]
+        );
+
+        $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
+        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->resultPageFactory = $this->getMock('Magento\Framework\View\Result\PageFactory', [], [], '', false);
         $this->customerAccountManagement = $this->getMockForAbstractClass(
             'Magento\Customer\Api\AccountManagementInterface',

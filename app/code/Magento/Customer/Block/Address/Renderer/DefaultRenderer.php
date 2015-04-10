@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Block\Address\Renderer;
 
-use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\Address\AddressModelInterface;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -111,7 +111,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function render(AbstractAddress $address, $format = null)
+    public function render(AddressModelInterface $address, $format = null)
     {
         $address = $address->getDataModel(0, 0);
         return $this->renderArray($this->addressMapper->toFlatArray($address), $format);

@@ -73,7 +73,7 @@ class Builder
                 $data['theme'],
                 $data['parent_theme']
             );
-        } catch (\Magento\Framework\Exception $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $isFilePresent = false;
         }
 

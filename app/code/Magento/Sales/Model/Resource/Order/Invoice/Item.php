@@ -10,7 +10,7 @@ namespace Magento\Sales\Model\Resource\Order\Invoice;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Sales\Model\Resource\Entity
+class Item extends \Magento\Sales\Model\Resource\EntityAbstract
 {
     /**
      * Event prefix

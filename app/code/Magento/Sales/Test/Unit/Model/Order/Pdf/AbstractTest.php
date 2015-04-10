@@ -22,6 +22,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         // Setup most constructor dependencies
         $paymentData = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
+        $addressRenderer = $this->getMock('Magento\Sales\Model\Order\Address\Renderer', [], [], '', false);
         $string = $this->getMock('Magento\Framework\Stdlib\String', [], [], '', false);
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $translate = $this->getMock('Magento\Framework\Translate\Inline\StateInterface', [], [], '', false);
@@ -87,7 +88,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 $pdfTotalFactory,
                 $pdfItemsFactory,
                 $localeMock,
-                $translate
+                $translate,
+                $addressRenderer
             ],
             '',
             true,

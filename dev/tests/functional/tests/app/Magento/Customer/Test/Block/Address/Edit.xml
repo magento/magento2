@@ -15,6 +15,10 @@
             <selector>#street_1</selector>
         </street>
         <city />
+        <country_id>
+            <selector>#country</selector>
+            <input>select</input>
+        </country_id>
         <region_id>
             <input>select</input>
         </region_id>
@@ -22,9 +26,5 @@
         <postcode>
             <selector>#zip</selector>
         </postcode>
-        <country_id>
-            <selector>#country</selector>
-            <input>select</input>
-        </country_id>
     </fields>
 </mapping>

@@ -7,37 +7,12 @@ namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use \Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 
-class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
+class ShipmentSenderTest extends AbstractSenderTest
 {
     /**
      * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
      */
     protected $sender;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $senderBuilderFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $templateContainerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $identityContainerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -55,20 +30,7 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->senderBuilderFactoryMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\SenderBuilderFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->templateContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\Template',
-            ['setTemplateVars'],
-            [],
-            '',
-            false
-        );
+        $this->stepMockSetup();
         $this->paymentHelper = $this->getMock('\Magento\Payment\Helper\Data', ['getInfoBlockHtml'], [], '', false);
         $this->paymentHelper->expects($this->any())
             ->method('getInfoBlockHtml')
@@ -82,40 +44,8 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->storeMock = $this->getMock(
-            '\Magento\Store\Model\Store',
-            ['getStoreId', '__wakeup'],
-            [],
-            '',
-            false
-        );
+        $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\ShipmentIdentity');
 
-        $this->identityContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\ShipmentIdentity',
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
-            [],
-            '',
-            false
-        );
-        $this->identityContainerMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
-
-        $this->orderMock = $this->getMock(
-            '\Magento\Sales\Model\Order',
-            [
-                'getStore', 'getBillingAddress', 'getPayment',
-                '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
-                'getCustomerEmail'
-            ],
-            [],
-            '',
-            false
-        );
-
-        $this->orderMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
         $paymentInfoMock = $this->getMock(
             '\Magento\Payment\Model\Info',
             [],
@@ -146,27 +76,27 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->paymentHelper,
-            $this->shipmentResource
+            $this->shipmentResource,
+            $this->addressRendererMock
         );
     }
 
     public function testSendFalse()
     {
+        $this->stepAddressFormat($this->addressMock);
         $result = $this->sender->send($this->shipmentMock);
         $this->assertFalse($result);
     }
 
     public function testSendTrueWithCustomerCopy()
     {
-        $billingAddress = 'billing_address';
+        $billingAddress = $this->addressMock;
         $comment = 'comment_test';
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
             ->will($this->returnValue(false));
-        $this->orderMock->expects($this->any())
-            ->method('getBillingAddress')
-            ->will($this->returnValue($billingAddress));
+        $this->stepAddressFormat($billingAddress);
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
@@ -182,6 +112,8 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
                         'billing' => $billingAddress,
                         'payment_html' => 'payment',
                         'store' => $this->storeMock,
+                        'formattedShippingAddress' => 1,
+                        'formattedBillingAddress' => 1
                     ]
                 )
             );
@@ -195,38 +127,20 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getPayment')
             ->will($this->returnValue($paymentInfoMock));
-
-        $senderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender',
-            ['send', 'sendCopyTo'],
-            [],
-            '',
-            false
-        );
-        $senderMock->expects($this->once())
-            ->method('send');
-        $senderMock->expects($this->never())
-            ->method('sendCopyTo');
-
-        $this->senderBuilderFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($senderMock));
-
+        $this->stepSendWithoutSendCopy();
         $result = $this->sender->send($this->shipmentMock, true, $comment);
         $this->assertTrue($result);
     }
 
     public function testSendTrueWithoutCustomerCopy()
     {
-        $billingAddress = 'billing_address';
+        $billingAddress = $this->addressMock;
         $comment = 'comment_test';
 
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
             ->will($this->returnValue(false));
-        $this->orderMock->expects($this->any())
-            ->method('getBillingAddress')
-            ->will($this->returnValue($billingAddress));
+        $this->stepAddressFormat($billingAddress);
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
@@ -242,25 +156,12 @@ class ShipmentSenderTest extends \PHPUnit_Framework_TestCase
                         'payment_html' => 'payment',
                         'comment' => $comment,
                         'store' => $this->storeMock,
+                        'formattedShippingAddress' => 1,
+                        'formattedBillingAddress' => 1
                     ]
                 )
             );
-        $senderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender',
-            ['send', 'sendCopyTo'],
-            [],
-            '',
-            false
-        );
-        $senderMock->expects($this->never())
-            ->method('send');
-        $senderMock->expects($this->once())
-            ->method('sendCopyTo');
-
-        $this->senderBuilderFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($senderMock));
-
+        $this->stepSendWithCallSendCopyTo();
         $result = $this->sender->send($this->shipmentMock, false, $comment);
         $this->assertTrue($result);
     }
