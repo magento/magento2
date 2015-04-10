@@ -12,16 +12,15 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class DbDataUpgradeCommandTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Setup\Model\InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $installerFactory;
+    protected $installerFactory;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $deploymentConfig;
+    protected $deploymentConfig;
 
     protected function setup()
     {

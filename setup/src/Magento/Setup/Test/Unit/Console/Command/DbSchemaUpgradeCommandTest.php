@@ -10,25 +10,8 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Console\Command\DbSchemaUpgradeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class DbSchemaUpgradeCommandTest extends \PHPUnit_Framework_TestCase
+class DbSchemaUpgradeCommandTest extends DbDataUpgradeCommandTest
 {
-
-    /**
-     * @var \Magento\Setup\Model\InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $installerFactory;
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfig;
-
-    protected function setup()
-    {
-        $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-    }
-
     public function testExecute()
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
