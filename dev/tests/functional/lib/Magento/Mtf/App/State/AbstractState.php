@@ -6,8 +6,10 @@
 
 namespace Magento\Mtf\App\State;
 
-use Magento\Framework\App\DeploymentConfig\DbConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Abstract class AbstractState
@@ -41,12 +43,11 @@ abstract class AbstractState implements StateInterface
     {
         $dirList = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
             ->get('Magento\Framework\Filesystem\DirectoryList');
-        $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(
-            new \Magento\Framework\App\DeploymentConfig\Reader($dirList),
-            []
-        );
-        $dbConfig = new DbConfig($deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
-        $dbInfo = $dbConfig->getConnection('default');
+
+        $reader = new Reader($dirList);
+        $deploymentConfig = new DeploymentConfig($reader);
+        $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
+        $dbInfo = $dbConfig['connection']['default'];
         $host = $dbInfo['host'];
         $user = $dbInfo['username'];
         $password = $dbInfo['password'];

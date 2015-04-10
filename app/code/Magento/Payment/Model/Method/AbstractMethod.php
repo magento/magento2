@@ -382,12 +382,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Fetch transaction info
      *
-     * @param \Magento\Payment\Model\Info $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $transactionId
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetchTransactionInfo(\Magento\Payment\Model\Info $payment, $transactionId)
+    public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
         return [];
     }
@@ -497,7 +497,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     public function getInfoInstance()
     {
         $instance = $this->getData('info_instance');
-        if (!$instance instanceof \Magento\Payment\Model\Info) {
+        if (!$instance instanceof \Magento\Payment\Model\InfoInterface) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot retrieve the payment information object instance.'));
         }
         return $instance;
@@ -673,11 +673,11 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Whether this method can accept or deny payment
      *
-     * @param \Magento\Payment\Model\Info $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function canReviewPayment(\Magento\Payment\Model\Info $payment)
+    public function canReviewPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
         return $this->_canReviewPayment;
     }
@@ -685,11 +685,11 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Attempt to accept a payment that us under review
      *
-     * @param \Magento\Payment\Model\Info $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function acceptPayment(\Magento\Payment\Model\Info $payment)
+    public function acceptPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
         if (!$this->canReviewPayment($payment)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The payment review action is unavailable.'));
@@ -700,11 +700,11 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Attempt to deny a payment that us under review
      *
-     * @param \Magento\Payment\Model\Info $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function denyPayment(\Magento\Payment\Model\Info $payment)
+    public function denyPayment(\Magento\Payment\Model\InfoInterface $payment)
     {
         if (!$this->canReviewPayment($payment)) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The payment review action is unavailable.'));
