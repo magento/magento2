@@ -9,10 +9,17 @@ define([
     'use strict';
 
     return Component.extend({
+        itemTemplates: [],
+
         initialize: function () {
             this._super();
 
             this.cart = customerData.get('cart');
+        },
+
+        // TODO: MAGETWO-34824
+        getItemTemplate: function (type) {
+
         }
     });
 });

@@ -55,10 +55,16 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
      */
     public function getSectionData()
     {
+        // TODO: MAGETWO-34824
         return [
-            'summary_count' => $this->getSummaryCount(),
-            'recent_items' => $this->getRecentItemsData(),
+            'summary_count' => 5,
+            'items' => [1, 2, 3,],
         ];
+
+//        return [
+//            'summary_count' => $this->getSummaryCount(),
+//            'items' => $this->getRecentItemsData(),
+//        ];
     }
 
     /**
