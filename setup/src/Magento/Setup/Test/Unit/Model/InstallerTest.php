@@ -6,13 +6,13 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use \Magento\Setup\Model\Installer;
-use \Magento\Setup\Model\DeploymentConfigMapper;
-
-use Magento\Framework\App\DeploymentConfig\DbConfig;
-use Magento\Framework\App\DeploymentConfig\EncryptConfig;
+use Magento\Framework\Config\ConfigOptionsList;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -54,16 +54,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $moduleLoader;
-
-    /**
-     * @var \Magento\Framework\Module\ModuleList\DeploymentConfigFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfigFactory;
-
-    /**
-     * @var \Magento\Framework\Module\ModuleList\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
@@ -111,24 +101,29 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
+     * @var \Magento\Setup\Model\ConfigModel|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configModel;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
      */
     private static $dbConfig = [
-        DbConfig::KEY_PREFIX => '',
+        SetupConfigOptionsList::KEY_PREFIX => '',
         'connection' => [
             'default' => [
-                DbConfig::KEY_HOST => '127.0.0.1',
-                DbConfig::KEY_NAME => 'magento',
-                DbConfig::KEY_USER => 'magento',
-                DbConfig::KEY_PASS => '',
+                SetupConfigOptionsList::KEY_HOST => '127.0.0.1',
+                SetupConfigOptionsList::KEY_NAME => 'magento',
+                SetupConfigOptionsList::KEY_USER => 'magento',
+                SetupConfigOptionsList::KEY_PASS => '',
             ],
         ],
     ];
 
     /**
-     * @var Magento\Framework\Model\Resource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     private $contextMock;
 
@@ -147,20 +142,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ['Foo_One', 'Bar_Two']
         );
         $this->moduleLoader = $this->getMock('Magento\Framework\Module\ModuleList\Loader', [], [], '', false);
-        $this->deploymentConfigFactory = $this->getMock(
-            'Magento\Framework\Module\ModuleList\DeploymentConfigFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->deploymentConfig = $this->getMock(
-            'Magento\Framework\Module\ModuleList\DeploymentConfig',
-            [],
-            [],
-            '',
-            false
-        );
         $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->adminFactory = $this->getMock('Magento\Setup\Model\AdminAccountFactory', [], [], '', false);
         $this->logger = $this->getMockForAbstractClass('Magento\Setup\Model\LoggerInterface');
@@ -171,6 +152,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->sampleData = $this->getMock('Magento\Setup\Model\SampleData', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
+        $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -197,42 +179,39 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->configWriter,
             $this->configReader,
             $this->config,
-            $this->deploymentConfigFactory,
             $this->moduleList,
             $this->moduleLoader,
-            $this->directoryList,
             $this->adminFactory,
             $this->logger,
-            $this->random,
             $connectionFactory,
             $this->maintenanceMode,
             $this->filesystem,
             $this->sampleData,
             $objectManagerProvider,
-            $this->contextMock
+            $this->contextMock,
+            $this->configModel
         );
     }
 
     public function testInstall()
     {
         $request = [
-            DeploymentConfigMapper::KEY_DB_HOST => '127.0.0.1',
-            DeploymentConfigMapper::KEY_DB_NAME => 'magento',
-            DeploymentConfigMapper::KEY_DB_USER => 'magento',
-            DeploymentConfigMapper::KEY_ENCRYPTION_KEY => 'encryption_key',
-            DeploymentConfigMapper::KEY_BACKEND_FRONTNAME => 'backend',
+            SetupConfigOptionsList::INPUT_KEY_DB_HOST => '127.0.0.1',
+            SetupConfigOptionsList::INPUT_KEY_DB_NAME => 'magento',
+            SetupConfigOptionsList::INPUT_KEY_DB_USER => 'magento',
+            SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
+            BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
         ];
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->any())->method('getSegment')->will($this->returnValueMap([
-            [DbConfig::CONFIG_KEY, self::$dbConfig],
-            [EncryptConfig::CONFIG_KEY, [EncryptConfig::KEY_ENCRYPTION_KEY => 'encryption_key']]
+            [SetupConfigOptionsList::KEY_DB, self::$dbConfig],
+            [
+                'crypt',
+                [SetupConfigOptionsList::KEY_ENCRYPTION_KEY => 'encryption_key']
+            ]
         ]));
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
-        $modules = ['Foo_One' => 1, 'Bar_Two' => 1 ];
-        $this->deploymentConfig->expects($this->any())->method('getData')->willReturn($modules);
-        $this->deploymentConfigFactory->expects($this->any())->method('create')->with($modules)
-            ->willReturn($this->deploymentConfig);
         $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
         $table = $this->getMock('Magento\Framework\DB\Ddl\Table', [], [], '', false);
         $connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
@@ -336,19 +315,21 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
 
         $expectedModules = [
-            'Bar_Two' => 0,
-            'Foo_One' => 1,
-            'New_Module' => 1
+            ConfigFilePool::APP_CONFIG => [
+                'modules' => [
+                    'Bar_Two' => 0,
+                    'Foo_One' => 1,
+                    'New_Module' => 1
+                ]
+            ]
         ];
 
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
-        $this->deploymentConfigFactory->expects($this->once())->method('create')->with($expectedModules)
-            ->willReturn($this->deploymentConfig);
 
         $newObject = $this->createObject(false, false);
         $this->configReader->expects($this->once())->method('load')
             ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
-        $this->configWriter->expects($this->once())->method('update')->with($this->deploymentConfig);
+        $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
         $this->logger->expects($this->at(0))->method('log')->with('File system cleanup:');
         $this->logger->expects($this->at(1))->method('log')
             ->with('The directory \'/var\' doesn\'t exist - skipping cleanup');
@@ -400,8 +381,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->config->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->once())
-            ->method('getSegment')
-            ->with(DbConfig::CONFIG_KEY)
+            ->method('getConfigData')
+            ->with(SetupConfigOptionsList::KEY_DB)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
