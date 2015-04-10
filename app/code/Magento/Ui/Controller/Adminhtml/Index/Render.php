@@ -33,6 +33,9 @@ class Render extends AbstractAction
      */
     public function execute()
     {
+        $bookmark = $this->_objectManager->get('Magento\Ui\Model\Bookmark');
+        /** @var $bookmark \Magento\Ui\Model\Bookmark */
+        $bookmark->saveState($this->_request->getParams());
         $component = $this->factory->create($this->_request->getParam('namespace'));
         $this->prepareComponent($component);
         $this->_response->appendBody((string) $component->render());

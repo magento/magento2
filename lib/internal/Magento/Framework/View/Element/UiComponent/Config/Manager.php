@@ -301,8 +301,8 @@ class Manager implements ManagerInterface
 
         if (isset($data[$parentName])) {
             foreach ($data[$parentName] as $name => $fields) {
-                if ($configuration['attributes']['name'] == $name) {
-                    $configuration['arguments']['data']['config'] = array_merge(
+                if ($configuration['attributes']['name'] == $name && is_array($fields)) {
+                    $configuration['arguments']['data']['config'] = array_replace_recursive(
                         $configuration['arguments']['data']['config'],
                         $fields
                     );

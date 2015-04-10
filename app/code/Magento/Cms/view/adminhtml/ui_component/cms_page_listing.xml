@@ -261,6 +261,7 @@
     <columns name="cms_page_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
+                <item name="dataScope" xsi:type="string">params.columns</item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="actionField" xsi:type="string">actions</item>
                     <item name="clickAction" xsi:type="string">edit</item>

@@ -247,4 +247,31 @@ class Bookmark extends AbstractModel
          */
         return $collection->filterCurrentForIdentifier($identifier)->load()->getLastItem();
     }
+
+    /**
+     * Save bookmark state
+     *
+     * @param [] $data
+     */
+    public function saveState($data)
+    {
+        if (isset($data['namespace'])) {
+            $bookmark = $this->getCurrentBookmarkByIdentifier($data['namespace']);
+
+            $sorting = [];
+            if (isset($data['sorting']['field'])
+                && isset($data['sorting']['direction'])) {
+                $sorting['columns'] = [];
+                $sorting['columns'][$data['sorting']['field']] = ['sorting' => $data['sorting']['direction']];
+            }
+
+            $config = [
+                'columns' => isset($data['columns']) ? $data['columns'] : [],
+                'filters' => isset($data['filters']) ? $data['filters'] : [],
+            ];
+            $config = array_replace_recursive($config, $sorting);
+
+            $bookmark->setConfig($config)->save();
+        }
+    }
 }
