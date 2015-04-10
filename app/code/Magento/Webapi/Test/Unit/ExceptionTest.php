@@ -17,7 +17,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         $code = 1111;
         $details = ['key1' => 'value1', 'key2' => 'value2'];
         $apiException = new \Magento\Framework\Webapi\Exception(
-            'Message',
+            __('Message'),
             $code,
             \Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED,
             $details
@@ -46,13 +46,13 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('InvalidArgumentException', "The specified HTTP code \"{$httpCode}\" is invalid.");
         /** Create \Magento\Framework\Webapi\Exception object with invalid code. */
         /** Valid codes range is from 400 to 599. */
-        new \Magento\Framework\Webapi\Exception('Message', 0, $httpCode);
+        new \Magento\Framework\Webapi\Exception(__('Message'), 0, $httpCode);
     }
 
     public function testGetOriginatorSender()
     {
         $apiException = new \Magento\Framework\Webapi\Exception(
-            'Message',
+            __('Message'),
             0,
             \Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED
         );
@@ -67,7 +67,7 @@ class ExceptionTest extends \PHPUnit_Framework_TestCase
     public function testGetOriginatorReceiver()
     {
         $apiException = new \Magento\Framework\Webapi\Exception(
-            'Message',
+            __('Message'),
             0,
             \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR
         );

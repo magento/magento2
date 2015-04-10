@@ -375,7 +375,7 @@ class Storage extends \Magento\Framework\Object
                 'id' => $this->_cmsWysiwygImages->convertPathToId($newPath),
             ];
             return $result;
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot create a new directory.'));
         }
     }
@@ -396,7 +396,7 @@ class Storage extends \Magento\Framework\Object
             $this->_deleteByPath($path);
             $path = $this->getThumbnailRoot() . $this->_getRelativePathToRoot($path);
             $this->_deleteByPath($path);
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot delete directory %1.', $path));
         }
     }

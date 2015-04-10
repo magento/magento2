@@ -21,7 +21,7 @@ class Sidebar extends Block
      *
      * @var string
      */
-    protected $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[@class="value qty"]';
+    protected $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
 
     /**
      * Mini cart link selector
@@ -38,11 +38,18 @@ class Sidebar extends Block
     protected $cartContent = 'div.minicart';
 
     /**
+     * Product list in mini shopping cart.
+     *
+     * @var string
+     */
+    protected $cartProductList = './/*[contains(@role, "dialog") and not(contains(@style,"display: none;"))]';
+
+    /**
      * Selector for cart item block
      *
      * @var string
      */
-    protected $cartItemByProductName = './/*[contains(@class,"products minilist")]//li[.//a[.="%s"]]';
+    protected $cartProductName = '//*[@id="mini-cart"]//li[.//a[normalize-space(text())="%s"]]';
 
     /**
      * Counter qty locator
@@ -91,7 +98,7 @@ class Sidebar extends Block
     {
         $this->openMiniCart();
         $productQty = sprintf($this->qty, $productName);
-        return $this->_rootElement->find($productQty, Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement->find($productQty, Locator::SELECTOR_XPATH)->getValue();
     }
 
     /**
@@ -110,7 +117,7 @@ class Sidebar extends Block
             $cartItem = $this->callRender($typeId, 'getCartItem', ['product' => $product]);
         } else {
             $cartItemBlock = $this->_rootElement->find(
-                sprintf($this->cartItemByProductName, $product->getName()),
+                sprintf($this->cartProductList . $this->cartProductName, $product->getName()),
                 Locator::SELECTOR_XPATH
             );
             $cartItem = $this->blockFactory->create(

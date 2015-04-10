@@ -14,8 +14,7 @@
     <block name="upsellBlock" class="Magento\Catalog\Test\Block\Product\ProductList\Upsell" locator=".block.upsell" strategy="css selector"/>
     <block name="crosssellBlock" class="Magento\Catalog\Test\Block\Product\ProductList\Crosssell" locator=".block.crosssell" strategy="css selector"/>
     <block name="downloadableLinksBlock" class="Magento\Downloadable\Test\Block\Catalog\Product\View\Links" locator="[data-container-for=downloadable-links]" strategy="css selector"/>
-    <block name="mapBlock" class="Magento\Catalog\Test\Block\Product\Price" locator="#map-popup-click-for-price" strategy="css selector"/>
-    <block name="messagesBlock" class="Magento\Core\Test\Block\Messages" locator=".page.messages .messages" strategy="css selector"/>
+    <block name="messagesBlock" class="Magento\Backend\Test\Block\Messages" locator=".page.messages .messages" strategy="css selector"/>
     <block name="reviewSummary" class="Magento\Review\Test\Block\Product\View\Summary" locator=".product-reviews-summary" strategy="css selector"/>
     <block name="customerReviewBlock" class="Magento\Review\Test\Block\Product\View" locator="#customer-reviews" strategy="css selector"/>
     <block name="reviewFormBlock" class="Magento\Review\Test\Block\Form" locator="#review-form" strategy="css selector"/>

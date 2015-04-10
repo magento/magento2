@@ -11,11 +11,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Pdfcreditmemos extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
@@ -23,15 +18,12 @@ class Pdfcreditmemos extends \Magento\Backend\App\Action
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
     ) {
         $this->_fileFactory = $fileFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

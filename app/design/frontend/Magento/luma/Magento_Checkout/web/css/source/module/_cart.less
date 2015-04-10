@@ -37,7 +37,7 @@
     //  Summary block
     &-summary {
         &:extend(.abs-add-box-sizing all);
-        .css(background, @sidebar-background);
+        .css(background, @sidebar__background-color);
         margin-bottom: 25px;
         padding: 1px 0 25px;
         > .title {
@@ -370,7 +370,7 @@
         .block {
             &:extend(.abs-cart-block all);
         }
-        .field .label {
+        .fieldset > .field > .label {
             display: none;
         }
         .actions-toolbar .primary {

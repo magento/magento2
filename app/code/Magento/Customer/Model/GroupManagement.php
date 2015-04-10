@@ -120,7 +120,7 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
-        } catch (\Magento\Framework\App\InitException $e) {
+        } catch (\Magento\Framework\Exception\State\InitException $e) {
             throw NoSuchEntityException::singleField('storeId', $storeId);
         }
         try {

@@ -37,7 +37,7 @@ class AssertCurrencySymbolOnCatalogPage extends AbstractConstraint
         $cmsIndex->open();
         $cmsIndex->getCurrencyBlock()->switchCurrency($currencySymbol);
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        $price = $catalogCategoryView->getListProductBlock()->getPrice($product->getId());
+        $price = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock()->getPrice('');
         preg_match('`(.*?)\d`', $price, $matches);
 
         $symbolOnPage = isset($matches[1]) ? $matches[1] : null;

@@ -70,19 +70,25 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context',
-            ['getRequest', 'getResponse'],
+            ['getRequest', 'getResponse', 'getResultRedirectFactory'],
             [],
             '',
             false
         );
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
+        $this->redirectFactoryMock = $this->getMock(
+            'Magento\Framework\Controller\Result\RedirectFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->response);
         $this->contextMock->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $this->contextMock->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->response);
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->redirectFactoryMock);
 
         $this->itemFactoryMock = $this->getMock('Magento\Catalog\Model\Product\Compare\ItemFactory', [], [], '', false);
         $this->collectionFactoryMock = $this->getMock(
@@ -100,13 +106,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->formKeyValidatorMock = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->redirectFactoryMock = $this->getMock(
-            'Magento\Framework\Controller\Result\RedirectFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
         $this->pageFactoryMock = $this->getMock('Magento\Framework\View\Result\PageFactory', [], [], '', false);
         $this->productRepositoryMock = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
         $this->decoderMock = $this->getMock('Magento\Framework\Url\DecoderInterface');
@@ -121,7 +120,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             $this->catalogSession,
             $this->storeManagerMock,
             $this->formKeyValidatorMock,
-            $this->redirectFactoryMock,
             $this->pageFactoryMock,
             $this->productRepositoryMock,
             $this->decoderMock

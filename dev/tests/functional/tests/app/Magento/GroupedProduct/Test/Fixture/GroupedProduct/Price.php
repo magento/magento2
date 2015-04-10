@@ -26,6 +26,11 @@ class Price extends ParentPrice implements FixtureInterface
     public function getPreset()
     {
         $presets = [
+            'starting-100' => [
+                'compare_price' => [
+                    'price_starting' => '100.00',
+                ],
+            ],
             'starting-560' => [
                 'compare_price' => [
                     'price_starting' => '560.00',

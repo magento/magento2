@@ -15,15 +15,13 @@ class Index extends \Magento\Catalog\Controller\Adminhtml\Category
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
-        parent::__construct($context, $resultRedirectFactory);
+        parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
     }
 

@@ -133,7 +133,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                 'request' => $this->requestMock,
                 'objectManager' => $this->objectManagerMock,
                 'actionFlag' => $this->actionFlagMock,
-                'messageManager' => $this->messageManagerMock
+                'messageManager' => $this->messageManagerMock,
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
         $this->viewAction = $objectManager->getObject(
@@ -191,33 +192,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->initOrderFail();
         $this->prepareRedirect();
         $this->setPath('sales/*/');
-
-        $this->assertInstanceOf(
-            'Magento\Backend\Model\View\Result\Redirect',
-            $this->viewAction->execute()
-        );
-    }
-
-    /**
-     * @covers \Magento\Sales\Controller\Adminhtml\Order\View::execute
-     */
-    public function testExecuteException()
-    {
-        $id = 111;
-        $message = 'epic fail';
-        $exception = new \Magento\Framework\App\Action\Exception($message);
-        $this->initOrder();
-        $this->initOrderSuccess($id);
-        $this->prepareRedirect();
-
-        $this->resultPageFactoryMock->expects($this->once())
-            ->method('create')
-            ->willThrowException($exception);
-        $this->messageManagerMock->expects($this->once())
-            ->method('addError')
-            ->with($message)
-            ->willReturnSelf();
-        $this->setPath('sales/order/index');
 
         $this->assertInstanceOf(
             'Magento\Backend\Model\View\Result\Redirect',

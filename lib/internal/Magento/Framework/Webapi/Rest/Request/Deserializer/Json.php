@@ -52,10 +52,10 @@ class Json implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfa
                 throw new \Magento\Framework\Webapi\Exception(new Phrase('Decoding error.'));
             } else {
                 throw new \Magento\Framework\Webapi\Exception(
-                    (string)(new Phrase(
+                    new Phrase(
                         'Decoding error: %1%2%3%4',
                         [PHP_EOL, $e->getMessage(), PHP_EOL, $e->getTraceAsString()]
-                    ))
+                    )
                 );
             }
         }

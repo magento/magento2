@@ -55,7 +55,7 @@ class Loader
     /**
      * Loads the full module list information
      *
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return array
      */
     public function load()
@@ -67,10 +67,12 @@ class Loader
 
             try {
                 $this->parser->loadXML($contents);
-            } catch (\Magento\Framework\Exception $e) {
-                throw new \Magento\Framework\Exception(
-                    'Invalid Document: ' . $file . PHP_EOL . ' Error: ' . $e->getMessage(),
-                    $e->getCode(),
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        'Invalid Document: %1%2 Error: %3',
+                        [$file, PHP_EOL, $e->getMessage()]
+                    ),
                     $e
                 );
             }

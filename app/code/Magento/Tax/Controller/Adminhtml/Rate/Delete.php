@@ -13,7 +13,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
     /**
      * Delete Rate and Data
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect|void
      */
     public function execute()
     {
@@ -29,17 +29,25 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
                     __('Something went wrong deleting this rate because of an incorrect rate ID.')
                 );
                 $this->getResponse()->setRedirect($this->getUrl('tax/*/'));
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
-                $this->messageManager->addError(__('Something went wrong deleting this rate.'));
+                return;
             }
-
-            if ($referer = $this->getRequest()->getServer('HTTP_REFERER')) {
-                $this->getResponse()->setRedirect($referer);
-            } else {
-                $this->getResponse()->setRedirect($this->getUrl("*/*/"));
-            }
+            return $this->getDefaultResult();
         }
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultResult()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        if ($this->getRequest()->getServer('HTTP_REFERER')) {
+            $resultRedirect->setRefererUrl();
+        } else {
+            $resultRedirect->setUrl($this->getUrl("*/*/"));
+        }
+        return $resultRedirect;
     }
 }

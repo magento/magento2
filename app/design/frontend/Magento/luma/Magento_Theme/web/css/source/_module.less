@@ -78,7 +78,7 @@
     //  ToDo UI: move it directly to .page-wrapper (now it doesn't appear in mediaquery cuz of size of css)
     .page-wrapper {
         .ie9 & {
-            .css(background-color, @color-background-page);
+            .css(background-color, @page__background-color);
             min-height: 0;
         }
     }
@@ -250,7 +250,7 @@
     }
 
     .copyright {
-        .css(background-color, @color-background-copyright);
+        .css(background-color, @copyright__background-color);
         .css(color, @color-white);
         display: block;
         padding: @indent__s;
@@ -397,7 +397,7 @@
 
     body {
         .ie9 & {
-            .css(background-color, @color-background-copyright);
+            .css(background-color, @copyright__background-color);
         }
     }
 

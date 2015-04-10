@@ -264,7 +264,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteModelException()
     {
-        $message = 'Cannot update item quantity.';
+        $message = 'The order no longer exists.';
         $response = ['error' => true, 'message' => $message];
 
         $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
@@ -307,7 +307,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteException()
     {
-        $message = 'Cannot update item quantity.';
+        $message = 'The order no longer exists.';
         $response = ['error' => true, 'message' => $message];
 
         $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')

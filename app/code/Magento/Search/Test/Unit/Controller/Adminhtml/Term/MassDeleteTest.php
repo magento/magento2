@@ -57,22 +57,6 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['addSuccess', 'addError'])
             ->getMockForAbstractClass();
-        $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
-            ->setMethods(['getRequest', 'getResponse', 'getObjectManager', 'getMessageManager'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->atLeastOnce())
-            ->method('getRequest')
-            ->will($this->returnValue($this->request));
-        $this->context->expects($this->atLeastOnce())
-            ->method('getResponse')
-            ->will($this->returnValue($this->response));
-        $this->context->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManager));
-        $this->context->expects($this->any())
-            ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManager));
         $this->pageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->setMethods([])
             ->disableOriginalConstructor()
@@ -88,13 +72,31 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
         $this->redirectFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->redirect));
+        $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->atLeastOnce())
+            ->method('getRequest')
+            ->willReturn($this->request);
+        $this->context->expects($this->atLeastOnce())
+            ->method('getResponse')
+            ->willReturn($this->response);
+        $this->context->expects($this->any())
+            ->method('getObjectManager')
+            ->willReturn($this->objectManager);
+        $this->context->expects($this->any())
+            ->method('getMessageManager')
+            ->willReturn($this->messageManager);
+        $this->context->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->redirectFactory);
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->controller = $this->objectManagerHelper->getObject(
             'Magento\Search\Controller\Adminhtml\Term\MassDelete',
             [
                 'context' => $this->context,
                 'resultPageFactory' => $this->pageFactory,
-                'resultRedirectFactory' => $this->redirectFactory
             ]
         );
     }
