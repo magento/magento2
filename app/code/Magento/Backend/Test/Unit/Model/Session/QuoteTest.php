@@ -87,6 +87,16 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $groupManagementMock;
 
     /**
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $billingAddressMock;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $shippingAddressMock;
+
+    /**
      * Set up
      *
      * @return void
@@ -215,9 +225,13 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * Run test getQuote method
      *
+     * @param \Magento\Quote\Model\Quote\Address[] $allAddresses
+     * @param \Magento\Quote\Model\Quote\Address|null $expectedBillingAddress
+     * @param \Magento\Quote\Model\Quote\Address|null $expectedShippingAddress
      * @return void
+     * @dataProvider allAddressesDataProvider
      */
-    public function testGetQuote()
+    public function testGetQuoteWithoutQuoteId($allAddresses, $expectedBillingAddress, $expectedShippingAddress)
     {
         $storeId = 10;
         $quoteId = 22;
@@ -292,7 +306,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dataCustomerMock);
         $quoteMock->expects($this->once())
             ->method('assignCustomerWithAddressChange')
-            ->with($dataCustomerMock);
+            ->with($dataCustomerMock, $expectedBillingAddress, $expectedShippingAddress);
         $quoteMock->expects($this->once())
             ->method('setIgnoreOldQty')
             ->with(true);
@@ -301,9 +315,60 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->with(true);
         $quoteMock->expects($this->any())
             ->method('getAllAddresses')
-            ->will($this->returnValue([]));
+            ->will($this->returnValue($allAddresses));
 
         $this->assertEquals($quoteMock, $this->quote->getQuote());
+    }
+
+    /**
+     * @return array
+     */
+    public function allAddressesDataProvider()
+    {
+        // since setup() is called after the dataProvider, ensure we have valid addresses
+        $this->buildAddressMocks();
+
+        return [
+            'empty addresses' => [
+                [],
+                null,
+                null
+            ],
+            'use typical addresses' => [
+                [$this->billingAddressMock, $this->shippingAddressMock],
+                $this->billingAddressMock,
+                $this->shippingAddressMock
+            ],
+        ];
+    }
+
+    protected function buildAddressMocks()
+    {
+        if ($this->billingAddressMock == null) {
+            $this->billingAddressMock = $this->getMock(
+                'Magento\Quote\Model\Quote\Address',
+                ['getAddressType'],
+                [],
+                '',
+                false
+            );
+            $this->billingAddressMock->expects($this->any())
+                ->method('getAddressType')
+                ->will($this->returnValue(\Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_BILLING));
+        }
+
+        if ($this->shippingAddressMock == null) {
+            $this->shippingAddressMock = $this->getMock(
+                'Magento\Quote\Model\Quote\Address',
+                ['getAddressType'],
+                [],
+                '',
+                false
+            );
+            $this->shippingAddressMock->expects($this->any())
+                ->method('getAddressType')
+                ->will($this->returnValue(\Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_SHIPPING));
+        }
     }
 
     /**
@@ -311,7 +376,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function testGetQuoteGet()
+    public function testGetQuoteWithQuoteId()
     {
         $storeId = 10;
         $quoteId = 22;
