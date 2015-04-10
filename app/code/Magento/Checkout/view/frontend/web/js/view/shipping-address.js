@@ -49,8 +49,8 @@ define(
             sameAsBillingClick: function() {
                 if (this.sameAsBilling()) {
                     var billingAddress = quote.getBillingAddress();
-                    this.selectedAddressId(billingAddress().customerAddressId);
-                    this.newAddressSelected(false);
+                    this.selectedAddressId = billingAddress().customerAddressId;
+                    newAddressSelected(false);
                 }
                 return true;
             },
