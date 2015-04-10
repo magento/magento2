@@ -24,7 +24,6 @@
    * Fixed an issue where not all .js files were added to a bundle
    * Fixed an issue where it was possible to save an incorrect IP value in the Developer Client Restriction field
    * Fixed an issue where a raw DB error was thrown when trying to enter a custom variable with duplicated variable code
-   * Fixed the integration test failure in L4 in Magento\Framework\View\Result\Page\Interceptor::getBody()
 
 0.74.0-beta3
 =============
