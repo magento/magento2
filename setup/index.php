@@ -24,4 +24,3 @@ HTML;
     exit(1);
 }
 \Zend\Mvc\Application::init(require __DIR__ . '/config/application.config.php')->run();
-
