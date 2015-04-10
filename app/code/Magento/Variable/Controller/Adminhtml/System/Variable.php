@@ -22,11 +22,6 @@ class Variable extends Action
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
@@ -49,7 +44,6 @@ class Variable extends Action
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -58,7 +52,6 @@ class Variable extends Action
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
@@ -66,7 +59,6 @@ class Variable extends Action
     ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultPageFactory = $resultPageFactory;

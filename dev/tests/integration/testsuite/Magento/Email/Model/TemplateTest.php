@@ -181,7 +181,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider setDesignConfigExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSetDesignConfigException($config)
     {
@@ -200,5 +200,105 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             [['area' => 'frontend']],
             [['store' => $storeId]],
         ];
+    }
+
+    public function testSetAndGetId()
+    {
+        $testId = 9999;
+        $this->_model->setId($testId);
+        $this->assertEquals($testId, $this->_model->getId());
+    }
+
+    public function testIsValidForSend()
+    {
+        $this->assertTrue($this->_model->isValidForSend());
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Email template 'foo' is not defined.
+     */
+    public function testGetTypeNonExistentType()
+    {
+        $this->_model->setId('foo');
+        $this->_model->getType();
+    }
+
+    public function testGetTypeHtml()
+    {
+        $this->_model->setId('customer_create_account_email_template');
+        $this->assertEquals(\Magento\Framework\App\TemplateTypesInterface::TYPE_HTML, $this->_model->getType());
+    }
+
+    public function testGetType()
+    {
+        $templateTypeId = 'test_template';
+        $this->_model->setTemplateType($templateTypeId);
+        $this->assertEquals($templateTypeId, $this->_model->getType());
+    }
+
+    public function testGetPreparedTemplateText()
+    {
+        $this->_model->loadDefault('customer_create_account_email_template');
+        $this->assertContains('<body style', $this->_model->getPreparedTemplateText());
+    }
+
+    public function testGetSendingException()
+    {
+        $this->assertNull($this->_model->getSendingException());
+    }
+
+    public function testGetVariablesOptionArray()
+    {
+        $testTemplateVariables = '{"var data.name":"Sender Name","var data.email":"Sender Email"}';
+        $this->_model->setOrigTemplateVariables($testTemplateVariables);
+        $variablesOptionArray = $this->_model->getVariablesOptionArray();
+        $this->assertEquals('{{var data.name}}', $variablesOptionArray[0]['value']);
+        $this->assertEquals('Sender Name', $variablesOptionArray[0]['label']->getArguments()[0]);
+        $this->assertEquals('{{var data.email}}', $variablesOptionArray[1]['value']);
+        $this->assertEquals('Sender Email', $variablesOptionArray[1]['label']->getArguments()[0]);
+    }
+
+    public function testGetVariablesOptionArrayInGroup()
+    {
+        $testTemplateVariables = '{"var data.name":"Sender Name","var data.email":"Sender Email"}';
+        $this->_model->setOrigTemplateVariables($testTemplateVariables);
+        $variablesOptionArray = $this->_model->getVariablesOptionArray(true);
+        $this->assertEquals('Template Variables', $variablesOptionArray['label']->getText());
+        $this->assertEquals($this->_model->getVariablesOptionArray(), $variablesOptionArray['value']);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\MailException
+     * @expectedExceptionMessage The template Name must not be empty.
+     */
+    public function testBeforeSaveEmptyTemplateCode()
+    {
+        $this->_model->beforeSave();
+    }
+
+    public function testBeforeSave()
+    {
+        $this->_model->setTemplateCode('test template code');
+        $this->_model->beforeSave();
+    }
+
+    public function testProcessTemplate()
+    {
+        $this->_model->setId('customer_create_account_email_template');
+        $this->assertContains('<body style', $this->_model->processTemplate());
+    }
+
+    public function testGetSubject()
+    {
+        $this->_model->setVars(['foo', 'bar', 'baz']);
+        $this->assertEquals('Subject', $this->_model->getSubject());
+    }
+
+    public function testSetOptions()
+    {
+        $options = ['area' => 'test area', 'store' => 1];
+        $this->_model->setOptions($options);
+        $this->assertEquals($options, $this->_model->getDesignConfig()->getData());
     }
 }

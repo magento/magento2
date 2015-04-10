@@ -137,7 +137,11 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         return __(
             'Credit Memo #%1 | %3 | %2 (%4)',
             $this->getCreditmemo()->getIncrementId(),
-            $this->formatDate($this->getCreditmemo()->getCreatedAtDate(), \IntlDateFormatter::MEDIUM, true),
+            $this->formatDate(
+                $this->_localeDate->date(new \DateTime($this->getCreditmemo()->getCreatedAt())),
+                \IntlDateFormatter::MEDIUM,
+                true
+            ),
             $this->getCreditmemo()->getStateName(),
             $emailSent
         );

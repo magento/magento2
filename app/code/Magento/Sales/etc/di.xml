@@ -137,4 +137,34 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Sales\Model\Observer\Order\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Invoice\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Shipment\Grid</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" type="Magento\Sales\Model\Observer\IndexGrid">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\Resource\Order\Creditmemo\Grid</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\SalesSequence\Model\EntityPool">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="order" xsi:type="string">order</item>
+                <item name="invoice" xsi:type="string">invoice</item>
+                <item name="creditmemo" xsi:type="string">creditmemo</item>
+                <item name="shipment" xsi:type="string">shipment</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

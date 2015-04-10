@@ -61,6 +61,7 @@ class Context extends \Magento\Framework\App\Action\Context
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Backend\Model\Auth $auth
@@ -81,6 +82,7 @@ class Context extends \Magento\Framework\App\Action\Context
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\App\ViewInterface $view,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\Model\Session $session,
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Backend\Model\Auth $auth,
@@ -99,7 +101,8 @@ class Context extends \Magento\Framework\App\Action\Context
             $redirect,
             $actionFlag,
             $view,
-            $messageManager
+            $messageManager,
+            $resultRedirectFactory
         );
 
         $this->_session = $session;

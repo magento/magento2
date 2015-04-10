@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Core\Test\Repository\ConfigData">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="cashondelivery">
             <field path="payment/cashondelivery/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
         </dataset>
@@ -19,7 +19,7 @@
             <field path="payment/cashondelivery/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="payment/cashondelivery/allowspecific" scope="payment" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
             <field path="payment/cashondelivery/specificcountry" scope="payment" scope_id="1" xsi:type="array">
-                <item label="United Kingdom" xsi:type="string">GB</item>
+                <item name="United Kingdom" xsi:type="string">GB</item>
             </field>
         </dataset>
 
@@ -40,7 +40,7 @@
             <field path="payment/checkmo/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="payment/checkmo/allowspecific" scope="payment" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
             <field path="payment/checkmo/specificcountry" scope="payment" scope_id="1" xsi:type="array">
-                <item label="United Kingdom" xsi:type="string">GB</item>
+                <item name="United Kingdom" xsi:type="string">GB</item>
             </field>
         </dataset>
 
@@ -61,7 +61,7 @@
             <field path="payment/banktransfer/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="payment/banktransfer/allowspecific" scope="payment" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
             <field path="payment/banktransfer/specificcountry" scope="payment" scope_id="1" xsi:type="array">
-                <item label="United Kingdom" xsi:type="string">GB</item>
+                <item name="United Kingdom" xsi:type="string">GB</item>
             </field>
         </dataset>
 
@@ -82,7 +82,7 @@
             <field path="payment/purchaseorder/active" scope="payment" scope_id="1" label="Yes" xsi:type="string">1</field>
             <field path="payment/purchaseorder/allowspecific" scope="payment" scope_id="1" label="Specific Countries" xsi:type="string">1</field>
             <field path="payment/purchaseorder/specificcountry" scope="payment" scope_id="1" xsi:type="array">
-                <item label="United Kingdom" xsi:type="string">GB</item>
+                <item name="United Kingdom" xsi:type="string">GB</item>
             </field>
         </dataset>
 

@@ -5,35 +5,35 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="storeGroup" module="Magento_Store" type="flat" entity_type="store_group" collection="Magento\Store\Model\Resource\Group\Collection" identifier="" repository_class="Magento\Store\Test\Repository\StoreGroup" handler_interface="Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface" class="Magento\Store\Test\Fixture\StoreGroup">
-    <dataset name="default">
-        <field name="website_id" xsi:type="array">
-            <item name="dataSet" xsi:type="string">main_website</item>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="storeGroup" module="Magento_Store" type="flat" entity_type="store_group" collection="Magento\Store\Model\Resource\Group\Collection" identifier="" repository_class="Magento\Store\Test\Repository\StoreGroup" handler_interface="Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface" class="Magento\Store\Test\Fixture\StoreGroup">
+        <dataset name="default">
+            <field name="website_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">main_website</item>
+            </field>
+            <field name="name" xsi:type="string">StoreGroup%isolation%</field>
+            <field name="root_category_id" xsi:type="array">
+                <item name="dataSet" xsi:type="string">default_category</item>
+            </field>
+        </dataset>
+        <field name="group_id" is_required="1">
+            <default_value xsi:type="null" />
         </field>
-        <field name="name" xsi:type="string">StoreGroup%isolation%</field>
-        <field name="root_category_id" xsi:type="array">
-            <item name="dataSet" xsi:type="string">default_category</item>
-        </field>
-    </dataset>
-    <field name="group_id" is_required="1">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="website_id" source="Magento\Store\Test\Fixture\StoreGroup\WebsiteId">
-      <default_value xsi:type="array">
+        <field name="website_id" source="Magento\Store\Test\Fixture\StoreGroup\WebsiteId">
+            <default_value xsi:type="array">
                 <item name="dataSet" xsi:type="string">main_website</item>
             </default_value>
-    </field>
-    <field name="name" is_required="">
-      <default_value xsi:type="string">StoreGroup%isolation%</default_value>
-    </field>
-    <field name="root_category_id" source="Magento\Store\Test\Fixture\StoreGroup\CategoryId">
-      <default_value xsi:type="array">
+        </field>
+        <field name="name" is_required="">
+            <default_value xsi:type="string">StoreGroup%isolation%</default_value>
+        </field>
+        <field name="root_category_id" source="Magento\Store\Test\Fixture\StoreGroup\CategoryId">
+            <default_value xsi:type="array">
                 <item name="dataSet" xsi:type="string">default_category</item>
             </default_value>
-    </field>
-    <field name="default_store_id" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-  </fixture>
+        </field>
+        <field name="default_store_id" is_required="">
+            <default_value xsi:type="number">0</default_value>
+        </field>
+    </fixture>
 </config>

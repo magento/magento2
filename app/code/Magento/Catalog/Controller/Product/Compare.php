@@ -7,7 +7,6 @@ namespace Magento\Catalog\Controller\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
-use Magento\Framework\Controller\Result;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
@@ -78,11 +77,6 @@ class Compare extends \Magento\Framework\App\Action\Action
     protected $_formKeyValidator;
 
     /**
-     * @var Result\Redirect
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
@@ -104,7 +98,6 @@ class Compare extends \Magento\Framework\App\Action\Action
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Validator $formKeyValidator
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param ProductRepositoryInterface $productRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -119,7 +112,6 @@ class Compare extends \Magento\Framework\App\Action\Action
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         Validator $formKeyValidator,
-        Result\RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         ProductRepositoryInterface $productRepository
     ) {
@@ -131,7 +123,6 @@ class Compare extends \Magento\Framework\App\Action\Action
         $this->_catalogProductCompareList = $catalogProductCompareList;
         $this->_catalogSession = $catalogSession;
         $this->_formKeyValidator = $formKeyValidator;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultPageFactory = $resultPageFactory;
         $this->productRepository = $productRepository;
         parent::__construct($context);

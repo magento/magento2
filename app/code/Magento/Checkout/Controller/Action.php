@@ -30,28 +30,20 @@ abstract class Action extends \Magento\Framework\App\Action\Action
     protected $accountManagement;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         CustomerRepositoryInterface $customerRepository,
-        AccountManagementInterface $accountManagement,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+        AccountManagementInterface $accountManagement
     ) {
         $this->_customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
         $this->accountManagement = $accountManagement;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

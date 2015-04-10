@@ -9,16 +9,13 @@
     <head>
         <css src="mui/mui_legacy.css"/>
         <css src="css/styles-old.css"/>
-        <css src="css/styles-migration.css"/> <!-- New styles scope -->
+        <css src="css/styles.css"/>
     </head>
 
     <body>
 
         <referenceContainer name="page.wrapper">
-            <container name="header.wrapper.scope" before="-" htmlTag="div" htmlClass="admin__scope"/>
-            <container name="menu.wrapper.scope" before="-" htmlTag="div" htmlClass="admin__scope">
-                <container name="menu.wrapper" before="-" htmlTag="div" htmlClass="menu-wrapper"/>
-            </container>
+            <container name="menu.wrapper" before="-" htmlTag="div" htmlClass="menu-wrapper"/>
         </referenceContainer>
 
         <referenceContainer name="header" htmlClass="page-header row">
@@ -29,8 +26,6 @@
         <move element="page.menu" destination="menu.wrapper" />
         <move element="logo" before="-" destination="menu.wrapper" />
 
-        <move element="header" destination="header.wrapper.scope" />
-        <move element="notices.wrapper" before="header" destination="header.wrapper.scope" />
         <move element="page.title" before="-" destination="header.inner.left" />
         <move element="user" before="-" destination="header.inner.right" />
         <move element="notification.messages" after="user" destination="header.inner.right" />

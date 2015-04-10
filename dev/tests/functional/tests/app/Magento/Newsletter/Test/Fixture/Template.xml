@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
   <fixture name="template" module="Magento_Newsletter" type="flat" entity_type="newsletter_template" collection="Magento\Newsletter\Model\Resource\Template\Collection" identifier="template_id" repository_class="Magento\Newsletter\Test\Repository\Template" handler_interface="Magento\Newsletter\Test\Handler\Template\TemplateInterface" class="Magento\Newsletter\Test\Fixture\Template">
     <dataset name="default">
         <field name="code" xsi:type="string">TemplateName%isolation%</field>

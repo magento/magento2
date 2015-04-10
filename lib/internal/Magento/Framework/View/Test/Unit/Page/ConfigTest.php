@@ -360,7 +360,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testElementAttributeException($elementType, $attribute, $value)
     {
-        $this->setExpectedException('\Magento\Framework\Exception', $elementType . " isn't allowed");
+        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException', $elementType . " isn't allowed");
         $this->model->setElementAttribute($elementType, $attribute, $value);
     }
 

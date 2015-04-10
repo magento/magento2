@@ -208,7 +208,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testMoveBroken()
     {
@@ -216,7 +216,7 @@ class LayoutDirectivesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testMoveAliasBroken()
     {

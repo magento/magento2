@@ -18,9 +18,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
 {
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
+        $installer = $setup;
+        $connection = $installer->getConnection();
         if (version_compare($context->getVersion(), '2.0.1') < 0) {
 
             $installer = $setup;
@@ -58,6 +62,97 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     $updatedAt['TYPE'] = Table::TYPE_TIMESTAMP;
                     $connection->modifyColumn($installer->getTable($table), 'updated_at', $updatedAt);
                 }
+            }
+        }
+
+        if (version_compare($context->getVersion(), '2.0.2') < 0) {
+
+            /**
+             * Adding 'updated_at' columns.
+             */
+
+            $tables = ['sales_shipment_grid', 'sales_invoice_grid', 'sales_creditmemo_grid'];
+
+            foreach ($tables as $table) {
+                $table = $setup->getTable($table);
+
+                $setup->getConnection()
+                    ->addColumn(
+                        $table,
+                        'updated_at',
+                        [
+                            'type' => Table::TYPE_TIMESTAMP,
+                            'after' => 'created_at',
+                            'comment' => 'Updated At'
+                        ]
+                    );
+
+                $setup->getConnection()
+                    ->addIndex($table, $setup->getIdxName($table, ['updated_at']), 'updated_at');
+            }
+
+            /**
+             * Modifying default value of 'updated_at' columns.
+             */
+
+            $tables = ['sales_order', 'sales_shipment', 'sales_invoice', 'sales_creditmemo'];
+
+            foreach ($tables as $table) {
+                $table = $setup->getTable($table);
+
+                $setup->getConnection()
+                    ->modifyColumn(
+                        $table,
+                        'updated_at',
+                        [
+                            'type' => Table::TYPE_TIMESTAMP,
+                            'default' => Table::TIMESTAMP_INIT_UPDATE
+                        ]
+                    );
+            }
+        }
+        if (version_compare($context->getVersion(), '2.0.3') < 0) {
+            $dropIncrementIndexTables = [
+                'sales_creditmemo',
+                'sales_invoice',
+                'sales_order',
+                'sales_shipment',
+                'sales_creditmemo_grid',
+                'sales_invoice_grid',
+                'sales_order_grid',
+                'sales_shipment_grid',
+            ];
+            foreach ($dropIncrementIndexTables as $table) {
+                $connection->dropIndex(
+                    $installer->getTable($table),
+                    $installer->getIdxName(
+                        $installer->getTable($table),
+                        ['increment_id'],
+                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                    )
+                );
+            }
+            $createIncrementIndexTables = [
+                'sales_creditmemo',
+                'sales_invoice',
+                'sales_order',
+                'sales_shipment',
+                'sales_creditmemo_grid',
+                'sales_invoice_grid',
+                'sales_order_grid',
+                'sales_shipment_grid',
+            ];
+            foreach ($createIncrementIndexTables as $table) {
+                $connection->addIndex(
+                    $installer->getTable($table),
+                    $installer->getIdxName(
+                        $installer->getTable($table),
+                        ['increment_id', 'store_id'],
+                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                    ),
+                    ['increment_id', 'store_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                );
             }
         }
     }

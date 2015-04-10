@@ -94,8 +94,8 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @throws \Magento\Framework\App\Action\NotFoundException
-     * @expectedException \Magento\Framework\App\Action\NotFoundException
+     * @throws \Magento\Framework\Exception\NotFoundException
+     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteNoParamsShouldThrowException()
     {
