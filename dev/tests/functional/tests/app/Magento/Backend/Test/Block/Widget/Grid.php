@@ -137,7 +137,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $filterButton = '.filters > button';
+    protected $filterButton = '[data-action="grid-filter-expand"]';
 
     /**
      * Active class
