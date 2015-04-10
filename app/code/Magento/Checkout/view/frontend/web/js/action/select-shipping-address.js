@@ -18,7 +18,7 @@ define(
         "use strict";
         return function(shippingAddress, sameAsBilling) {
             errorList.clear();
-            shippingAddress.sameAsBilling = sameAsBilling;
+            shippingAddress['same_as_billing'] = (sameAsBilling) ? 1 : 0;
             quote.setShippingAddress(shippingAddress);
             storage.post(
                 urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()}),
