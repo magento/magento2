@@ -1068,7 +1068,7 @@ class Installer
         try {
             $this->log->log($absolutePath);
             $configDir->delete($file);
-        } catch (FilesystemException $e) {
+        } catch (FileSystemException $e) {
             $this->log->log($e->getMessage());
         }
     }
