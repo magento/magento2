@@ -37,7 +37,7 @@ define(
             submitBillingAddress: function() {
                 this.isEmailCheckComplete = $.Deferred();
                 if (quote.getCheckoutMethod()() === 'register') {
-                    customer.customerData.email = this.source.get('billingAddress.email');
+                    customer.customerData.email = this.source.get('customerDetails.email');
                     customer.customerData.firstname = this.source.get('billingAddress.firstname');
                     customer.customerData.lastname = this.source.get('billingAddress.lastname');
                     customer.setDetails('password', this.source.get('customerDetails.password'));
@@ -54,9 +54,8 @@ define(
                         if (!that.source.get('params.invalid')) {
                             var addressData = that.source.get('billingAddress');
                             addressData['save_in_address_book'] = $( "input[name = 'billing[save_in_address_book]']:checked" ).val();
-                            if (quote.getCheckoutMethod()() && !customer.isLoggedIn()())
-                            {
-                                addressData['email'] = this.source.get('customerDetails.email')
+                            if (quote.getCheckoutMethod()() && !customer.isLoggedIn()()) {
+                                addressData['email'] = that.source.get('customerDetails.email')
                             }
                             selectBillingAddress(addressData, that.useForShipping);
                         }
