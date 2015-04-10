@@ -59,7 +59,7 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
         $this->productOptionRepositoryMock = $this->getMock('Magento\Bundle\Api\ProductOptionRepositoryInterface');
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['getExtensionAttributes', 'getTypeId', 'getSku'],
+            ['getExtensionAttributes', 'getTypeId', 'getSku', 'getStoreId'],
             [],
             '',
             false
@@ -67,11 +67,8 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return $this->productMock;
         };
-        $this->productInterfaceFactoryMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterfaceFactory')
-            ->disableOriginalConstructor()->getMock();
         $this->plugin = new BundleSaveOptions(
-            $this->productOptionRepositoryMock,
-            $this->productInterfaceFactoryMock
+            $this->productOptionRepositoryMock
         );
         $this->productExtensionMock = $this->getMock(
             'Magento\Catalog\Api\Data\ProductExtension',
@@ -142,16 +139,9 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
 
         $newProductMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
             ->disableOriginalConstructor()->getMock();
-        $newProductMock->expects($this->once())
-            ->method('setSku')
-            ->with($productSku)
-            ->willReturnSelf();
-        $this->productInterfaceFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($newProductMock);
         $this->productRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($newProductMock)
+            ->method('get')
+            ->with($productSku, false, null, true)
             ->willReturn($newProductMock);
 
         $this->assertEquals(
@@ -219,16 +209,9 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
 
         $newProductMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
             ->disableOriginalConstructor()->getMock();
-        $newProductMock->expects($this->once())
-            ->method('setSku')
-            ->with($productSku)
-            ->willReturnSelf();
-        $this->productInterfaceFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($newProductMock);
         $this->productRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($newProductMock)
+            ->method('get')
+            ->with($productSku, false, null, true)
             ->willReturn($newProductMock);
 
         $this->assertEquals(

@@ -15,20 +15,12 @@ class BundleSaveOptions
     protected $optionRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductInterfaceFactory
-     */
-    protected $productInterfaceFactory;
-
-    /**
      * @param \Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository
-     * @param \Magento\Catalog\Api\Data\ProductInterfaceFactory $productInterfaceFactory
      */
     public function __construct(
-        \Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository,
-        \Magento\Catalog\Api\Data\ProductInterfaceFactory $productInterfaceFactory
+        \Magento\Bundle\Api\ProductOptionRepositoryInterface $optionRepository
     ) {
         $this->optionRepository = $optionRepository;
-        $this->productInterfaceFactory = $productInterfaceFactory;
     }
 
     /**
@@ -81,7 +73,6 @@ class BundleSaveOptions
         foreach ($optionIdsToDelete as $optionId) {
             $this->optionRepository->delete($existingOptionsMap[$optionId]);
         }
-        $product = $this->productInterfaceFactory->create()->setSku($result->getSku());
-        return $subject->save($product);
+        return $subject->get($result->getSku(), false, $result->getStoreId(), true);
     }
 }

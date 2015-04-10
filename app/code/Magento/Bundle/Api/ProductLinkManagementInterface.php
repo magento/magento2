@@ -33,22 +33,22 @@ interface ProductLinkManagementInterface
     public function addChildByProductSku($sku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct);
 
     /**
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param Data\LinkInterface $linkedProduct
+     * @param string $sku
+     * @param \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException
-     * @return int
+     * @return bool
      */
     public function saveChild(
-        \Magento\Catalog\Api\Data\ProductInterface $product,
+        $sku,
         \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
     );
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param int $optionId
-     * @param Data\LinkInterface $linkedProduct
+     * @param \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\InputException

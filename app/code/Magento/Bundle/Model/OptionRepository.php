@@ -181,9 +181,9 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $optionCollection->setIdFilter($option->getOptionId());
 
             /** @var \Magento\Bundle\Model\Option $existingOption */
-            $existingOption = $optionCollection->getFirstItem();
+            $existingOption = $optionCollection->getItemById($option->getOptionId());
 
-            if (!$existingOption->getOptionId()) {
+            if (!isset($existingOption) || !$existingOption->getOptionId()) {
                 throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
             }
 
@@ -234,7 +234,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             $linksToDelete = array_udiff($existingLinks, $linksToUpdate, [$this, 'compareLinks']);
         }
         foreach ($linksToUpdate as $linkedProduct) {
-            $this->linkManagement->saveChild($product, $linkedProduct);
+            $this->linkManagement->saveChild($product->getSku(), $linkedProduct);
         }
         foreach ($linksToDelete as $linkedProduct) {
             $this->linkManagement->removeChild(

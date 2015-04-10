@@ -85,6 +85,55 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
     }
 
     /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     */
+    public function testSaveChild()
+    {
+        $productSku = 'bundle-product';
+        $children = $this->getChildren($productSku);
+
+        $linkedProduct = $children[0];
+
+        //Modify a few fields
+        $linkedProduct['is_default'] = true;
+        $linkedProduct['qty'] = 2;
+
+        $this->assertTrue($this->saveChild($productSku, $linkedProduct));
+        $children = $this->getChildren($productSku);
+        $this->assertEquals($linkedProduct, $children[0]);
+    }
+
+    /**
+     * @param string $productSku
+     * @param array $linkedProduct
+     * @return string
+     */
+    private function saveChild($productSku, $linkedProduct)
+    {
+        $resourcePath = self::RESOURCE_PATH . '/:sku/links';
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => str_replace(
+                    [':sku'],
+                    [$productSku],
+                    $resourcePath
+                ),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'SaveChild',
+            ],
+        ];
+        return $this->_webApiCall(
+            $serviceInfo,
+            ['sku' => $productSku, 'linkedProduct' => $linkedProduct]
+        );
+    }
+
+    /**
      * @param string $productSku
      * @param int $optionId
      * @param array $linkedProduct
