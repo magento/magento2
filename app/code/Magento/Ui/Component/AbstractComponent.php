@@ -219,7 +219,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
         $jsConfig = (array) $component->getData('js_config');
         if (isset($jsConfig['extends'])) {
             return $jsConfig;
-        } else if (null !== $extends) {
+        } elseif (null !== $extends) {
             $jsConfig['extends'] = $extends;
         } else {
             $jsConfig['extends'] = $component->getContext()->getNamespace();

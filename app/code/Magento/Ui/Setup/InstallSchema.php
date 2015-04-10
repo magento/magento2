@@ -40,7 +40,7 @@ class InstallSchema implements InstallSchemaInterface
                 'user_id',
                 Table::TYPE_INTEGER,
                 null,
-                ['identity' => true, 'unsigned' => true, 'nullable' => false],
+                ['unsigned' => true, 'nullable' => false],
                 'User Id'
             )
             ->addColumn(

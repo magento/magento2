@@ -6,11 +6,13 @@
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
 use ArrayObject;
+use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Exception;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollectorFactory;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition as ComponentDefinition;
+use Magento\Framework\View\Element\UiComponentInterface;
 
 /**
  * Class Manager
@@ -30,6 +32,13 @@ class Manager implements ManagerInterface
      * @var ComponentDefinition
      */
     protected $componentConfigProvider;
+
+    /**
+     * Argument interpreter
+     *
+     * @var InterpreterInterface
+     */
+    protected $argumentInterpreter;
 
     /**
      * DOM document merger
@@ -82,14 +91,13 @@ class Manager implements ManagerInterface
     protected $uiReader;
 
     /**
-     * Constructor
-     *
      * @param ComponentDefinition $componentConfigProvider
      * @param DomMergerInterface $domMerger
      * @param ReaderFactory $readerFactory
      * @param ArrayObjectFactory $arrayObjectFactory
      * @param AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
      * @param CacheInterface $cache
+     * @param InterpreterInterface $argumentInterpreter
      */
     public function __construct(
         ComponentDefinition $componentConfigProvider,
@@ -97,7 +105,8 @@ class Manager implements ManagerInterface
         ReaderFactory $readerFactory,
         ArrayObjectFactory $arrayObjectFactory,
         AggregatedFileCollectorFactory $aggregatedFileCollectorFactory,
-        CacheInterface $cache
+        CacheInterface $cache,
+        InterpreterInterface $argumentInterpreter
     ) {
         $this->componentConfigProvider = $componentConfigProvider;
         $this->domMerger = $domMerger;
@@ -106,6 +115,7 @@ class Manager implements ManagerInterface
         $this->componentsData = $this->arrayObjectFactory->create();
         $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
         $this->cache = $cache;
+        $this->argumentInterpreter = $argumentInterpreter;
     }
 
     /**
@@ -175,6 +185,10 @@ class Manager implements ManagerInterface
         $componentData[Converter::DATA_ARGUMENTS_KEY] = isset($componentData[Converter::DATA_ARGUMENTS_KEY])
             ? $componentData[Converter::DATA_ARGUMENTS_KEY]
             : [];
+        foreach ($componentData[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
+            $componentData[Converter::DATA_ARGUMENTS_KEY][$argumentName]
+                = $this->argumentInterpreter->evaluate($argument);
+        }
 
         return [
             ManagerInterface::COMPONENT_ATTRIBUTES_KEY => $componentData[Converter::DATA_ATTRIBUTES_KEY],
@@ -227,17 +241,23 @@ class Manager implements ManagerInterface
     /**
      * Create data for component instance
      *
-     * @param string $name
+     * @param $name
      * @param array $componentsPool
+     * @param string|null $parentName
      * @return array
      */
-    protected function createDataForComponent($name, array $componentsPool)
+    protected function createDataForComponent($name, array $componentsPool, $parentName = null)
     {
         $createdComponents = [];
         $rootComponent = $this->createRawComponentData($name);
         foreach ($componentsPool as $key => $component) {
             $resultConfiguration = [ManagerInterface::CHILDREN_KEY => []];
             $instanceName = $this->createName($component, $key, $name);
+            // Evaluate arguments
+            foreach ($component[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
+                $component[Converter::DATA_ARGUMENTS_KEY][$argumentName]
+                    = $this->argumentInterpreter->evaluate($argument);
+            }
             $resultConfiguration[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $this->mergeArguments(
                 $component,
                 $rootComponent
@@ -248,17 +268,45 @@ class Manager implements ManagerInterface
                 $rootComponent
             );
             unset($component[Converter::DATA_ATTRIBUTES_KEY]);
+
+            // Add configuration from bookmark
+            $this->mergeBookmarkConfig($parentName, $resultConfiguration);
+
             // Create inner components
             foreach ($component as $subComponentName => $subComponent) {
                 $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge(
                     $resultConfiguration[ManagerInterface::CHILDREN_KEY],
-                    $this->createDataForComponent($subComponentName, $subComponent)
+                    $this->createDataForComponent($subComponentName, $subComponent, $name)
                 );
             }
             $createdComponents[$instanceName] = $resultConfiguration;
         }
 
         return $createdComponents;
+    }
+
+    /**
+     * Merged bookmark config with main config
+     *
+     * @param $parentName
+     * @param $configuration
+     */
+    protected function mergeBookmarkConfig($parentName, &$configuration)
+    {
+        //@todo: get data form DB
+        $data = ['columns' => ['title' => ['visible' => true]]];
+
+        if (isset($data[$parentName])) {
+            foreach ($data[$parentName] as $name => $fields) {
+                if ($configuration['attributes']['name'] == $name) {
+                    $configuration['arguments']['data']['config'] = array_merge(
+                        $configuration['arguments']['data']['config'],
+                        $fields
+                    );
+                }
+            }
+        }
+
     }
 
     /**

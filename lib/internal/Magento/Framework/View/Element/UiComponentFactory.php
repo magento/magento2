@@ -106,10 +106,7 @@ class UiComponentFactory extends Object
         $attributes = $componentData[ManagerInterface::COMPONENT_ATTRIBUTES_KEY];
         $className = $attributes['class'];
         unset($attributes['class']);
-        $arguments = [];
-        foreach ($componentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY] as $name => $argument) {
-            $arguments[$name] = $this->argumentInterpreter->evaluate($argument);
-        }
+        $arguments = $componentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY];
 
         if (!isset($arguments['data'])) {
             $arguments['data'] = [];
