@@ -3,16 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Element\UiComponent\Config;
+namespace Magento\Ui\Model;
 
 use ArrayObject;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Exception;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
+use Magento\Framework\View\Element\UiComponent\Config\Converter;
+use Magento\Framework\View\Element\UiComponent\Config\DomMergerInterface;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollectorFactory;
+use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition as ComponentDefinition;
-use Magento\Ui\Model\Bookmark;
+use Magento\Framework\View\Element\UiComponent\Config\ReaderFactory;
+use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
 
 /**
  * Class Manager
@@ -159,18 +163,40 @@ class Manager implements ManagerInterface
             );
         }
         $this->componentsPool = $this->arrayObjectFactory->create();
-//@fixme Cache has been broken
-//        $cacheID = static::CACHE_ID . '_' . $name;
-//        $cachedPool = $this->cache->load($cacheID);
-//        if ($cachedPool === false) {
+        $cacheID = static::CACHE_ID . '_' . $name;
+        $cachedPool = $this->cache->load($cacheID);
+        if ($cachedPool === false) {
             $this->prepare($name);
-//            $this->cache->save($this->componentsPool->serialize(), $cacheID);
-//        } else {
-//            $this->componentsPool->unserialize($cachedPool);
-//        }
+            $this->cache->save($this->componentsPool->serialize(), $cacheID);
+        } else {
+            $this->componentsPool->unserialize($cachedPool);
+        }
         $this->componentsData->offsetSet($name, $this->componentsPool);
+        $this->componentsData->offsetSet($name, $this->evaluateComponentArguments($this->getData($name)));
 
         return $this;
+    }
+
+    /**
+     * Evaluated components data
+     *
+     * @param [] $components
+     * @return []
+     */
+    protected function evaluateComponentArguments($components)
+    {
+        foreach ($components as &$component) {
+            foreach ($component[ManagerInterface::COMPONENT_ARGUMENTS_KEY] as $argumentName => $argument) {
+                $component[ManagerInterface::COMPONENT_ARGUMENTS_KEY][$argumentName]
+                    = $this->argumentInterpreter->evaluate($argument);
+            }
+            $component['children'] = $this->evaluateComponentArguments($component['children']);
+            $this->mergeBookmarkConfig(
+                $component['attributes']['name'],
+                $component[ManagerInterface::COMPONENT_ARGUMENTS_KEY]['data']['config']
+            );
+        }
+        return $components;
     }
 
     /**
@@ -256,11 +282,6 @@ class Manager implements ManagerInterface
         foreach ($componentsPool as $key => $component) {
             $resultConfiguration = [ManagerInterface::CHILDREN_KEY => []];
             $instanceName = $this->createName($component, $key, $name);
-            // Evaluate arguments
-            foreach ($component[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
-                $component[Converter::DATA_ARGUMENTS_KEY][$argumentName]
-                    = $this->argumentInterpreter->evaluate($argument);
-            }
             $resultConfiguration[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $this->mergeArguments(
                 $component,
                 $rootComponent
@@ -273,7 +294,7 @@ class Manager implements ManagerInterface
             unset($component[Converter::DATA_ATTRIBUTES_KEY]);
 
             // Add configuration from bookmark
-            $this->mergeBookmarkConfig($parentName, $resultConfiguration);
+            //$this->mergeBookmarkConfig($parentName, $resultConfiguration);
 
             // Create inner components
             foreach ($component as $subComponentName => $subComponent) {
@@ -296,7 +317,6 @@ class Manager implements ManagerInterface
      */
     protected function mergeBookmarkConfig($parentName, &$configuration)
     {
-        //@todo: get data form DB
         $data = $this->bookmark->getCurrentBookmarkByIdentifier('cms_page_listing')->getConfig();
 
         if (isset($data[$parentName])) {
