@@ -94,7 +94,7 @@ class InstallCommand extends AbstractSetupCommand
                 self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Provide order number prefix'
+                'Sales order number prefix'
             ),
             new InputOption(
                 self::INPUT_KEY_USE_SAMPLE_DATA,
