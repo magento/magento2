@@ -5,13 +5,53 @@
  */
 namespace Magento\Ui\Model;
 
+use Magento\Framework\Data\Collection\Db;
+use Magento\Framework\Json\Decoder;
+use Magento\Framework\Json\Encoder;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Ui\Model\Resource\Bookmark\Collection;
+use Magento\Ui\Model\Resource\Bookmark as ResourceBookmark;
 
 /**
  * Domain class Bookmark
  */
 class Bookmark extends AbstractModel
 {
+    /**
+     * @var Encoder
+     */
+    protected $jsonEncoder;
+
+    /**
+     * @var Decoder
+     */
+    protected $jsonDecoder;
+
+    /**
+     * @param Encoder $jsonEncoder
+     * @param Decoder $jsonDecoder
+     * @param Context $context
+     * @param Registry $registry
+     * @param ResourceBookmark $resource
+     * @param Collection $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        Encoder $jsonEncoder,
+        Decoder $jsonDecoder,
+        Context $context,
+        Registry $registry,
+        ResourceBookmark $resource,
+        Collection $resourceCollection,
+        array $data = []
+    ) {
+        $this->jsonEncoder = $jsonEncoder;
+        $this->jsonDecoder = $jsonDecoder;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
+
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
@@ -22,6 +62,7 @@ class Bookmark extends AbstractModel
     const CONFIG           = 'config';
     const CREATED_AT       = 'created_at';
     const UPDATED_AT       = 'updated_at';
+    const CURRENT          = 'current';
     /**#@-*/
 
     /**
@@ -55,6 +96,16 @@ class Bookmark extends AbstractModel
     }
 
     /**
+     * Is current
+     *
+     * @return bool
+     */
+    public function isCurrent()
+    {
+        return (bool)$this->getData(self::CURRENT);
+    }
+
+    /**
      * Get title
      *
      * @return string
@@ -67,11 +118,11 @@ class Bookmark extends AbstractModel
     /**
      * Get config
      *
-     * @return string
+     * @return array
      */
     public function getConfig()
     {
-        return $this->getData(self::CONFIG);
+        return $this->jsonDecoder->decode($this->getData(self::CONFIG));
     }
 
     /**
@@ -128,6 +179,17 @@ class Bookmark extends AbstractModel
     }
 
     /**
+     * Set current
+     *
+     * @param bool $isCurrent
+     * @return $this
+     */
+    public function setCurrent($isCurrent)
+    {
+        return $this->setData(self::CURRENT, $isCurrent);
+    }
+
+    /**
      * Set title
      *
      * @param string $title
@@ -141,12 +203,12 @@ class Bookmark extends AbstractModel
     /**
      * Set config
      *
-     * @param string $config
+     * @param [] $config
      * @return $this
      */
     public function setConfig($config)
     {
-        return $this->setData(self::CONFIG, $config);
+        return $this->setData(self::CONFIG, $this->jsonEncoder->encode($config));
     }
 
     /**
@@ -169,5 +231,20 @@ class Bookmark extends AbstractModel
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(self::UPDATED_AT, $updatedAt);
+    }
+
+    /**
+     * Get current bookmark by identifier for current user
+     *
+     * @param string $identifier
+     * @return $this
+     */
+    public function getCurrentBookmarkByIdentifier($identifier)
+    {
+        $collection = $this->_resourceCollection;
+        /**
+         * @var $collection Collection
+         */
+        return $collection->filterCurrentForIdentifier($identifier)->load()->getLastItem();
     }
 }

@@ -12,7 +12,7 @@ use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollectorFactory;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition as ComponentDefinition;
-use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Model\Bookmark;
 
 /**
  * Class Manager
@@ -98,6 +98,7 @@ class Manager implements ManagerInterface
      * @param AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
      * @param CacheInterface $cache
      * @param InterpreterInterface $argumentInterpreter
+     * @param Bookmark $bookmark
      */
     public function __construct(
         ComponentDefinition $componentConfigProvider,
@@ -106,7 +107,8 @@ class Manager implements ManagerInterface
         ArrayObjectFactory $arrayObjectFactory,
         AggregatedFileCollectorFactory $aggregatedFileCollectorFactory,
         CacheInterface $cache,
-        InterpreterInterface $argumentInterpreter
+        InterpreterInterface $argumentInterpreter,
+        Bookmark $bookmark
     ) {
         $this->componentConfigProvider = $componentConfigProvider;
         $this->domMerger = $domMerger;
@@ -116,6 +118,7 @@ class Manager implements ManagerInterface
         $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
         $this->cache = $cache;
         $this->argumentInterpreter = $argumentInterpreter;
+        $this->bookmark = $bookmark;
     }
 
     /**
@@ -156,15 +159,15 @@ class Manager implements ManagerInterface
             );
         }
         $this->componentsPool = $this->arrayObjectFactory->create();
-
-        $cacheID = static::CACHE_ID . '_' . $name;
-        $cachedPool = $this->cache->load($cacheID);
-        if ($cachedPool === false) {
+//@fixme Cache has been broken
+//        $cacheID = static::CACHE_ID . '_' . $name;
+//        $cachedPool = $this->cache->load($cacheID);
+//        if ($cachedPool === false) {
             $this->prepare($name);
-            $this->cache->save($this->componentsPool->serialize(), $cacheID);
-        } else {
-            $this->componentsPool->unserialize($cachedPool);
-        }
+//            $this->cache->save($this->componentsPool->serialize(), $cacheID);
+//        } else {
+//            $this->componentsPool->unserialize($cachedPool);
+//        }
         $this->componentsData->offsetSet($name, $this->componentsPool);
 
         return $this;
@@ -294,7 +297,7 @@ class Manager implements ManagerInterface
     protected function mergeBookmarkConfig($parentName, &$configuration)
     {
         //@todo: get data form DB
-        $data = ['columns' => ['title' => ['visible' => true]]];
+        $data = $this->bookmark->getCurrentBookmarkByIdentifier('cms_page_listing')->getConfig();
 
         if (isset($data[$parentName])) {
             foreach ($data[$parentName] as $name => $fields) {

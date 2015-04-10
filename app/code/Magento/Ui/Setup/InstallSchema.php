@@ -50,11 +50,18 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false],
                 'Bookmark namespace'
             )
+            ->addColumn(
+                'current',
+                Table::TYPE_SMALLINT,
+                1,
+                ['nullable' => false],
+                'Mark current bookmark per user and identifier'
+            )
             ->addColumn('title', Table::TYPE_TEXT, 255, ['nullable' => true], 'Bookmark title')
             ->addColumn('config', Table::TYPE_TEXT, Table::MAX_TEXT_SIZE, ['nullable' => true], 'Bookmark config')
             ->addColumn('created_at', Table::TYPE_DATETIME, null, ['nullable' => false], 'Bookmark created at')
             ->addColumn('updated_at', Table::TYPE_DATETIME, null, ['nullable' => false], 'Bookmark updated at')
-            ->addIndex($setup->getIdxName('ui_bookmark', ['identifier']), ['identifier'])
+            ->addIndex($setup->getIdxName('ui_bookmark', ['identifier', 'user_id']), ['identifier', 'user_id'])
             ->addForeignKey(
                 $setup->getFkName('ui_bookmark', 'user_id', 'admin_user', 'user_id'),
                 'user_id',
