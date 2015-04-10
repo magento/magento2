@@ -54,6 +54,13 @@
         </data>
     </route>
 
+    <!-- Managing guest carts -->
+    <route url="/V1/guest-carts" method="POST">
+        <service class="Magento\Quote\Api\GuestCartManagementInterface" method="createEmptyCart"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 
     <!-- Managing Cart Shipment -->
     <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">

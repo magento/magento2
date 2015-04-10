@@ -72,7 +72,6 @@ interface CartItemRepositoryInterface
      * Removes the specified item from the specified cart.
      *
      * @param int $customerId Customer ID.
-     * @param int $cartId The cart ID.
      * @param int $itemId The item ID of the item to be removed.
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified item or cart does not exist.

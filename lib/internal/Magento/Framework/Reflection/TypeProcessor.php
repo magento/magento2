@@ -6,9 +6,9 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\ParameterReflection;
-use Magento\Framework\Phrase;
 
 /**
  * Type processor of config reader properties
@@ -108,6 +108,9 @@ class TypeProcessor
     public function register($type)
     {
         $typeName = $this->normalizeType($type);
+        if (is_null($typeName)) {
+            return null;
+        }
         if (!$this->isTypeSimple($typeName) && !$this->isTypeAny($typeName)) {
             $typeSimple = $this->getArrayItemType($type);
             if (!(class_exists($typeSimple) || interface_exists($typeSimple))) {
@@ -288,6 +291,9 @@ class TypeProcessor
      */
     public function normalizeType($type)
     {
+        if($type == 'null') {
+            return null;
+        }
         $normalizationMap = [
             self::STRING_TYPE => self::NORMALIZED_STRING_TYPE,
             self::INT_TYPE => self::NORMALIZED_INT_TYPE,
