@@ -1,3 +1,30 @@
+0.74.0-beta4
+=============
+* Various
+   * Implemented the getDefaultResult method, to be able to catch exceptions in FrontController and redirect user to the correct page
+   * The getDefaultResult method is invoked to return default result of action execution within controllers. It can be used to generate the ‘execute’ method result in action controllers
+   * Eliminated the unused exceptions. Exceptions that weren't linked to any logic were also eliminated and replaced with LocalizedException or its child classes
+   * Refactored all controllers where possible: the default exception handling logic moved to FrontController. Controllers that cannot be refactored do not conflict with the new logic
+* Framework:
+   * Created Magento Console to perform CLI actions
+   * Introduced a new SalesSequence module that is responsible for documents numeration management across the Order Management System
+   * Implemented the mechanism of asynchronous indexing of sales entities grids
+* Setup
+   * Added the ConfigOption and ConfigOptionsList classes to be used by modules to manage deployment configuration
+   * Moved all existing segments logic to new classes
+   * Added the config:set command, which enables deployment configuration management
+   * Removed the old 'install-configuration' tool
+* Functional tests:
+   * Fixed functional test for order placement from backend
+   * Replaced the end-to-end test for a product with MAP with an injectable test
+* Design
+   * Updated the Blank and Luma themes to enable theme (not only library) variables overriding in the _theme.less file of any inherited theme. Included LESS code standards to the UI Library documentation
+* Fixed bugs:
+   * Fixed an issue where composite products could not be added to the order from the Recently Viewed Products section
+   * Fixed an issue where not all .js files were added to a bundle
+   * Fixed an issue where it was possible to save an incorrect IP value in the Developer Client Restriction field
+   * Fixed an issue where a raw DB error was thrown when trying to enter a custom variable with duplicated variable code
+
 0.74.0-beta3
 =============
 * API
