@@ -15,10 +15,14 @@ use Magento\Framework\Message\MessageInterface;
  */
 class Messages implements SectionSourceInterface
 {
-    /** @var MessageManager */
-    private $messageManager;
+    /**
+     * Manager messages
+     * @var MessageManager
+     */
+    protected $messageManager;
 
     /**
+     * Constructor
      * @param MessageManager $messageManager
      */
     public function __construct(MessageManager $messageManager)
@@ -33,8 +37,9 @@ class Messages implements SectionSourceInterface
     {
         $messages = $this->messageManager->getMessages(true);
         return [
-            'messages' => array_reduce($messages->getItems(),
-                function(array $result, MessageInterface $message){
+            'messages' => array_reduce(
+                $messages->getItems(),
+                function(array $result, MessageInterface $message) {
                     $result[] = ['type' => $message->getType(), 'text' => $message->getText()];
                     return $result;
                 },
