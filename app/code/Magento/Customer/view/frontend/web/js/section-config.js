@@ -2,27 +2,30 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-define([], function () {
+define(['underscore'], function (_) {
     'use strict';
 
     var baseUrls, sections;
 
+    var canonize = function(url){
+        var route = url;
+        for (var key in baseUrls) {
+            route = url.replace(baseUrls[key], '');
+            if (route != url) {
+                break;
+            }
+        }
+        return route.replace(/^\/?index.php\/?/, '');
+    };
+
     return {
         getAffectedSections: function (url) {
-            var route = url;
-            for (var key in baseUrls) {
-                var route = url.replace(baseUrls[key], '');
-                if (route != url) {
-                    break;
-                }
-            }
+            var route = canonize(url);
+            var actions = _.find(sections, function(val, section){
+                return (route.indexOf(section) === 0);
+            });
 
-            route = route.replace(/^\/?index.php\/?/) + '/';
-            for (var key in sections) {
-                if (route.indexOf(key + '/') === 0) {
-                    return sections[key];
-                }
-            }
+            return _.union(_.toArray(actions), _.toArray(sections['*']));
         },
         'Magento_Customer/js/section-config': function(options) {
             baseUrls = options.baseUrls;
