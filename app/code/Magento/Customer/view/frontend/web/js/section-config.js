@@ -15,7 +15,7 @@ define(['underscore'], function (_) {
                 break;
             }
         }
-        return route.replace(/^\/?index.php\/?/, '');
+        return route.replace(/^\/?index.php\/?/, '').toLowerCase();
     };
 
     return {

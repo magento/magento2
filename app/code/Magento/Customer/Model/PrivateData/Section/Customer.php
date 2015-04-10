@@ -38,7 +38,7 @@ class Customer implements SectionSourceInterface
     {
         return [
             'username' => $this->currentCustomer->getCustomerId()
-                ? $this->customerViewHelper->getCustomerName($this->currentCustomer->getCustomer())
+                ? __('Welcome, %1', $this->customerViewHelper->getCustomerName($this->currentCustomer->getCustomer()))
                 : ''
         ];
     }
