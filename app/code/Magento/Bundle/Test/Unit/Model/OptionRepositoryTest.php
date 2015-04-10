@@ -336,7 +336,9 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $existingOptionMock = $this->getMock('\Magento\Bundle\Model\Option', ['getOptionId'], [], '', false);
         $optCollectionMock->expects($this->once())->method('setIdFilter')->with($optionId)->willReturnSelf();
-        $optCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($existingOptionMock);
+        $optCollectionMock->expects($this->once())->method('getItemById')
+            ->with($optionId)
+            ->willReturn($existingOptionMock);
         $existingOptionMock->expects($this->once())->method('getOptionId')->willReturn(null);
 
         $this->assertEquals($optionId, $this->model->save($productMock, $optionMock));
@@ -406,7 +408,9 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $optCollectionMock->expects($this->once())->method('setIdFilter')->with($optionId)->willReturnSelf();
-        $optCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($existingOptionMock);
+        $optCollectionMock->expects($this->once())->method('getItemById')
+            ->with($optionId)
+            ->willReturn($existingOptionMock);
         $existingOptionMock->expects($this->any())->method('getOptionId')->willReturn($existingOptionId);
 
         $productLinkUpdate = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
@@ -423,7 +427,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($productMock, $optionId, $productLinkNew);
         $this->linkManagementMock->expects($this->once())
             ->method('saveChild')
-            ->with($productMock, $productLinkUpdate);
+            ->with($productSku, $productLinkUpdate);
         $this->linkManagementMock->expects($this->once())
             ->method('removeChild')
             ->with($productSku, $optionId, $productSkuToDelete);
@@ -476,7 +480,9 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $optCollectionMock->expects($this->once())->method('setIdFilter')->with($optionId)->willReturnSelf();
-        $optCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($existingOptionMock);
+        $optCollectionMock->expects($this->once())->method('getItemById')
+            ->with($optionId)
+            ->willReturn($existingOptionMock);
         $existingOptionMock->expects($this->any())->method('getOptionId')->willReturn(null);
 
         $this->model->save($productMock, $optionMock);
