@@ -285,11 +285,6 @@ class Manager implements ManagerInterface
         foreach ($componentsPool as $key => $component) {
             $resultConfiguration = [ManagerInterface::CHILDREN_KEY => []];
             $instanceName = $this->createName($component, $key, $name);
-            // Evaluate arguments
-//            foreach ($component[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
-//                $component[Converter::DATA_ARGUMENTS_KEY][$argumentName]
-//                    = $this->argumentInterpreter->evaluate($argument);
-//            }
             $resultConfiguration[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $this->mergeArguments(
                 $component,
                 $rootComponent
@@ -300,9 +295,6 @@ class Manager implements ManagerInterface
                 $rootComponent
             );
             unset($component[Converter::DATA_ATTRIBUTES_KEY]);
-
-            // Add configuration from bookmark
-//            $this->mergeBookmarkConfig($parentName, $resultConfiguration);
 
             // Create inner components
             foreach ($component as $subComponentName => $subComponent) {
