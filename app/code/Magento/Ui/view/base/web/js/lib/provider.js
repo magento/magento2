@@ -3,43 +3,60 @@
  * See COPYING.txt for license details.
  */
 define([
-    'jquery',
-    './data_provider',
-    'Magento_Ui/js/lib/registry/registry'
-], function($, DataProvider, registry) {
+    'underscore',
+    'mageUtils',
+    'Magento_Ui/js/lib/class',
+    'Magento_Ui/js/lib/events'
+], function (_, utils, Class, EventsBus) {
     'use strict';
 
-    /**
-     * Merges passed settings with preset ajax properties
-     * @param  {Object} settings
-     * @returns {Object} - mutated settings
-     */
-    function getConfig(settings) {
-        var config = settings.config,
-            client = config.client = config.client || {};
+    var Provider = _.extend({
+        /**
+         * Initializes DataProvider instance.
+         * @param {Object} config - Settings to initialize object with.
+         */
+        initialize: function (config) {
+            _.extend(this.data = {}, config);
 
-        $.extend(true, client, {
-            ajax: {
-                data: {
-                    name: settings.name,
-                    form_key: FORM_KEY
-                }
-            }
-        });
+            return this;
+        },
 
-        return settings;
-    }
+        /**
+         * If path specified, returnes this.data[path], else returns this.data
+         * @param  {String} path
+         * @return {*} this.data[path] or simply this.data
+         */
+        get: function (path) {
+            return utils.nested(this.data, path);
+        },
 
-    /**
-     * Creates new data provider and register it by settings.name 
-     * @param {Object} settings
-     */
-    function init(settings) {
-        var name    = settings.name,
-            config  = getConfig(settings);
+        /**
+         * Sets value property to path and triggers update by path, passing result
+         * @param {String|*} path
+         * @param {String|*} value
+         * @return {Object} reference to instance
+         */
+        set: function (path, value) {
+            var data = utils.nested(this.data, path),
+                diffs = utils.compare(data, value, path);
 
-        registry.set(name, new DataProvider(config));
-    }
+            utils.nested(this.data, path, value);
 
-    return init;
+            diffs.changes.forEach(function (change) {
+                this.trigger(change.name, change.value, change);
+            }, this);
+
+            _.each(diffs.containers, function (changes, name) {
+                this.trigger(name, changes);
+            }, this);
+
+            return this;
+        },
+
+        remove: function (path) {
+            utils.nestedRemove(this.data, path);
+        }
+    }, EventsBus);
+
+    return Class.extend(Provider);
 });
