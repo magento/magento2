@@ -44,7 +44,6 @@ class ConfigureProductInCustomerWishlistOnBackendTest extends AbstractWishlistTe
      */
     public function __prepare(Customer $customer)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-31868');
         $customer->persist();
 
         return ['customer' => $customer];
