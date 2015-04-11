@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\HoldCreatedOrderTest">
+        <variation name="HoldCreatedOrderTestVariation1">
+            <data name="description" xsi:type="string">hold order and check status on the front in my account</data>
+            <data name="order/dataSet" xsi:type="string">default</data>
+            <data name="order/data/entity_id/products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
+            <data name="orderButtonsUnavailable" xsi:type="string">Invoice,Cancel,Reorder,Ship,Edit</data>
+            <data name="status" xsi:type="string">On Hold</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderOnHoldSuccessMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderButtonsUnavailable" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertUnholdButton" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
+        </variation>
+    </testCase>
+</config>

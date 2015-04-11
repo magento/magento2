@@ -45,7 +45,6 @@
         </dataset>
 
         <dataset name="checkmo_specificcountry_gb_rollback">
-            <field path="payment/checkmo/active" scope="payment" scope_id="1" label="No" xsi:type="string">0</field>
             <field path="payment/checkmo/allowspecific" scope="payment" scope_id="1" label="All Allowed Countries" xsi:type="string">0</field>
         </dataset>
 

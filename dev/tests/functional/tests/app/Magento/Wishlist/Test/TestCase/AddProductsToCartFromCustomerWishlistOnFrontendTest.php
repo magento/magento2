@@ -10,8 +10,6 @@ use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Customer\Test\Fixture\Customer;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create customer and login to frontend
  * 2. Create products
@@ -43,7 +41,6 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
      */
     public function test(Customer $customer, $products, $qty)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-34757');
         // Preconditions
         $customer->persist();
         $this->loginCustomer($customer);
