@@ -18,9 +18,5 @@
         <send_email>
             <input>checkbox</input>
         </send_email>
-        <refund_customerbalance_return_enable>
-            <input>checkbox</input>
-        </refund_customerbalance_return_enable>
-        <refund_customerbalance_return />
     </fields>
 </mapping>

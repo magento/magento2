@@ -18,10 +18,5 @@
         <send_email>
             <input>checkbox</input>
         </send_email>
-        <refund_customerbalance_return_enable>
-            <selector>#creditmemo_customerbalance_return_enable</selector>
-            <input>checkbox</input>
-        </refund_customerbalance_return_enable>
-        <refund_customerbalance_return />
     </fields>
 </mapping>

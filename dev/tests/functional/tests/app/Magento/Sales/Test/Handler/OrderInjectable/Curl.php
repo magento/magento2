@@ -101,7 +101,7 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
             'collect_shipping_rates' => 1,
         ];
         $result['shipping_data_method_set'] = [
-            'order' => ['shipping_method' => isset($data['shipping_method']) ? $data['shipping_method'] : ''],
+            'order' => ['shipping_method' => $result['order_data']['order']['shipping_method']],
             'payment' => $data['payment_auth_expiration'],
         ];
 
@@ -280,7 +280,7 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
                     'group_id' => $customerGroupId,
                     'email' => $this->customer->getEmail(),
                 ],
-                'shipping_method' => $data['shipping_method'],
+                'shipping_method' => isset($data['shipping_method']) ? $data['shipping_method'] : '',
             ],
             'item' => $this->prepareOrderProductsData($data['entity_id']),
             'billing_address' => $this->prepareBillingAddress($data['billing_address_id']),
