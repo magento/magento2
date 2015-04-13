@@ -5,21 +5,6 @@
  */
 namespace Magento\Quote\Api;
 
-interface GuestCartManagementInterface
+interface GuestCartManagementInterface extends CartManagementInterface
 {
-    /**
-     * Enables an guest user to create an empty cart and quote for an anonymous customer.
-     *
-     * @return int Cart ID.
-     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
-     */
-    public function createEmptyCart();
-
-    /**
-     * Places an order for a specified cart.
-     *
-     * @param int $cartId The cart ID.
-     * @return int Order ID.
-     */
-    public function placeOrder($cartId);
 }
