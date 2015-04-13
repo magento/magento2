@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\State;
 
 use Magento\Framework\Filesystem;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
