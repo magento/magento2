@@ -3151,4 +3151,5 @@ return [
     ['Magento\Setup\Mvc\Console\VerboseValidator'],
     ['Magento\Setup\Controller\ConsoleController'],
     ['Magento\Setup\Model\UserConfigurationDataMapper', 'Magento\Setup\Model\StoreConfigurationDataMapper'],
+    ['Magento\Framework\App\State\Cleanup', 'Magento\Framework\App\State\CleanupFiles'],
 ];
