@@ -335,7 +335,6 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($optCollectionMock);
 
         $existingOptionMock = $this->getMock('\Magento\Bundle\Model\Option', ['getOptionId'], [], '', false);
-        $optCollectionMock->expects($this->once())->method('setIdFilter')->with($optionId)->willReturnSelf();
         $optCollectionMock->expects($this->once())->method('getItemById')
             ->with($optionId)
             ->willReturn($existingOptionMock);
@@ -407,7 +406,6 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $optCollectionMock->expects($this->once())->method('setIdFilter')->with($optionId)->willReturnSelf();
         $optCollectionMock->expects($this->once())->method('getItemById')
             ->with($optionId)
             ->willReturn($existingOptionMock);
@@ -479,7 +477,6 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $optCollectionMock->expects($this->once())->method('setIdFilter')->with($optionId)->willReturnSelf();
         $optCollectionMock->expects($this->once())->method('getItemById')
             ->with($optionId)
             ->willReturn($existingOptionMock);

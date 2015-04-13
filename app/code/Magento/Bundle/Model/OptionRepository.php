@@ -178,7 +178,6 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
             }
         } else {
             $optionCollection = $this->type->getOptionsCollection($product);
-            $optionCollection->setIdFilter($option->getOptionId());
 
             /** @var \Magento\Bundle\Model\Option $existingOption */
             $existingOption = $optionCollection->getItemById($option->getOptionId());
