@@ -5,13 +5,30 @@
  */
 namespace Magento\Framework\App\Cache\Type;
 
-use Magento\Framework\App\DeploymentConfig\CacheConfig;
+use Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsList;
 
 /**
  * In-memory readonly pool of cache front-ends with enforced access control, specific to cache types
  */
 class FrontendPool
 {
+    /**
+     * Array key for cache type
+     */
+    const KEY_CACHE_TYPE = 'type';
+
+    /**
+     * Array key for cache frontend
+     */
+    const KEY_FRONTEND_CACHE = 'frontend';
+
+    /**
+     * Config key for cache
+     */
+    const KEY_CACHE = 'cache';
+
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -20,7 +37,7 @@ class FrontendPool
     /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
-    private $_deploymentConfig;
+    private $deploymentConfig;
 
     /**
      * @var \Magento\Framework\App\Cache\Frontend\Pool
@@ -50,7 +67,7 @@ class FrontendPool
         array $typeFrontendMap = []
     ) {
         $this->_objectManager = $objectManager;
-        $this->_deploymentConfig = $deploymentConfig;
+        $this->deploymentConfig = $deploymentConfig;
         $this->_frontendPool = $frontendPool;
         $this->_typeFrontendMap = $typeFrontendMap;
     }
@@ -85,10 +102,9 @@ class FrontendPool
     protected function _getCacheFrontendId($cacheType)
     {
         $result = null;
-        $cacheInfo = $this->_deploymentConfig->getSegment(CacheConfig::CONFIG_KEY);
+        $cacheInfo = $this->deploymentConfig->getConfigData(self::KEY_CACHE);
         if (null !== $cacheInfo) {
-            $cacheConfig = new CacheConfig($cacheInfo);
-            $result = $cacheConfig->getCacheTypeFrontendId($cacheType);
+            $result = $cacheInfo[self::KEY_CACHE_TYPE][$cacheType][self::KEY_FRONTEND_CACHE];
         }
         if (!$result) {
             if (isset($this->_typeFrontendMap[$cacheType])) {

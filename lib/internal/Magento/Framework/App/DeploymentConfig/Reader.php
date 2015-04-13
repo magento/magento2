@@ -65,11 +65,17 @@ class Reader
     /**
      * Loads the configuration file
      *
+     * @param string $configFile
      * @return array
      */
-    public function load()
+    public function load($configFile = null)
     {
-        $file = $this->dirList->getPath(DirectoryList::CONFIG) . '/' . $this->file;
+        if ($configFile) {
+            $file = $this->dirList->getPath(DirectoryList::CONFIG) . '/' . $configFile;
+        } else {
+            $file = $this->dirList->getPath(DirectoryList::CONFIG) . '/' . $this->file;
+        }
+
         $result = @include $file;
         return $result ?: [];
     }
