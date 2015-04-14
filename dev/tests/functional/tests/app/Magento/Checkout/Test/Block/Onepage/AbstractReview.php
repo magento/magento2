@@ -314,7 +314,7 @@ abstract class AbstractReview extends Block
      */
     public function placeOrder()
     {
-        $this->_rootElement->find($this->$continueCheckoutButton, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->continueCheckoutButton, Locator::SELECTOR_CSS)->click();
         $this->waitForElementNotVisible($this->waitElement);
     }
 
