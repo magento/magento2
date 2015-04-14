@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Quote\GuestCart;
+namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Model\Quote\Item\Repository;
 use Magento\Quote\Model\QuoteIdMask;
