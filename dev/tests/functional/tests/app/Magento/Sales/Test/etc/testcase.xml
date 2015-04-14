@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
     <scenario name="ReorderOrderEntityTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Core" next="createOrder" />
+        <step name="setupConfiguration" module="Magento_Config" next="createOrder" />
         <step name="createOrder" module="Magento_Sales" next="openOrder" />
         <step name="openOrder" module="Magento_Sales" next="reorder" />
         <step name="reorder" module="Magento_Sales" next="fillBillingAddress" />
@@ -17,7 +17,7 @@
         <step name="submitOrder" module="Magento_Sales" />
     </scenario>
     <scenario name="CreateOrderBackendTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Core" next="createProducts" />
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
         <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
         <step name="createTaxRule" module="Magento_Tax" next="createCustomer" />
         <step name="createCustomer" module="Magento_Customer" next="openSalesOrders" />

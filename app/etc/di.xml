@@ -222,7 +222,7 @@
     </type>
     <type name="Magento\Backend\App\Area\FrontNameResolver">
         <arguments>
-            <argument name="defaultFrontName" xsi:type="init_parameter">Magento\Backend\App\Area\FrontNameResolver::PARAM_BACKEND_FRONT_NAME</argument>
+            <argument name="defaultFrontName" xsi:type="init_parameter">Magento\Backend\Setup\ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Cache\State">
@@ -305,7 +305,6 @@
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\App\Resource\Config\Reader\Proxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config\Proxy</argument>
-            <argument name="initialResources" xsi:type="object">Magento\Framework\App\DeploymentConfig\ResourceConfig</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Resource\Config\Reader">
@@ -1072,6 +1071,12 @@
                 <item name="xml" xsi:type="string"><![CDATA[/<block.*?class=\"(?P<alias>[a-z]+[_a-z\d]*?\/[a-z]+[_a-z\d]*?)\".*?>/sui]]></item>
                 <item name="serialized" xsi:type="string"><![CDATA[#(?P<string>s:\d+:"(?P<alias>[a-z]+[_a-z\d]*?/[a-z]+[_a-z\d]*?)")#sui]]></item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\FrontController">
+        <arguments>
+            <argument name="appState" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+            <argument name="messageManager" xsi:type="object">Magento\Framework\Message\ManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Webapi\Rest\Request\DeserializerFactory">

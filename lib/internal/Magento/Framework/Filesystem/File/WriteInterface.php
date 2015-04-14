@@ -12,7 +12,7 @@ interface WriteInterface extends ReadInterface
      *
      * @param string $data
      * @return int
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function write($data);
 
@@ -23,7 +23,7 @@ interface WriteInterface extends ReadInterface
      * @param string $delimiter
      * @param string $enclosure
      * @return int
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function writeCsv(array $data, $delimiter = ',', $enclosure = '"');
 
@@ -31,7 +31,7 @@ interface WriteInterface extends ReadInterface
      * Flushes the output.
      *
      * @return bool
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function flush();
 

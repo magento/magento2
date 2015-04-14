@@ -143,12 +143,12 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @param array $config
      * @return $this
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setDesignConfig(array $config)
     {
         if (!isset($config['area']) || !isset($config['store'])) {
-            throw new \Magento\Framework\Exception('Design config must have area and store.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Design config must have area and store.'));
         }
         $this->getDesignConfig()->setData($config);
         return $this;

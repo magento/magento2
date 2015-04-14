@@ -41,7 +41,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
         $this->versionStorage->expects($this->never())->method($this->anything());
-        $this->assertEquals(time(), $this->object->getValue(), '', 5);
+        $this->assertInternalType('integer', $this->object->getValue());
         $this->object->getValue(); // Ensure computation occurs only once and result is cached in memory
     }
 
@@ -72,6 +72,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueDefaultModeSaving()
     {
+        $versionType = 'integer';
         $this->appState
             ->expects($this->once())
             ->method('getMode')
@@ -81,8 +82,8 @@ class VersionTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('load')
             ->will($this->throwException($storageException));
-        $this->versionStorage->expects($this->once())->method('save')->with($this->equalTo(time(), 5));
-        $this->assertEquals(time(), $this->object->getValue());
+        $this->versionStorage->expects($this->once())->method('save')->with($this->isType($versionType));
+        $this->assertInternalType($versionType, $this->object->getValue());
         $this->object->getValue(); // Ensure caching in memory
     }
 }

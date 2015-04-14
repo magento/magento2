@@ -118,8 +118,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Invoice\Config $invoiceConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
@@ -136,8 +134,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\Order\Invoice\Config $invoiceConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
@@ -159,8 +155,6 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $localeDate,
-            $dateTime,
             $resource,
             $resourceCollection,
             $data

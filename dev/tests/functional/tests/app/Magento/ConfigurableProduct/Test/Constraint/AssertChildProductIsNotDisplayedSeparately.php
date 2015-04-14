@@ -39,11 +39,19 @@ class AssertChildProductIsNotDisplayedSeparately extends AbstractConstraint
 
         $cmsIndex->open();
         foreach ($configurableAttributesData['matrix'] as $variation) {
-            $cmsIndex->getSearchBlock()->search($variation['sku']);
+            $product = $this->objectManager->create(
+                'Magento\Catalog\Test\Fixture\CatalogProductSimple',
+                [
+                    'data' => [
+                        'name' => $variation['name']
+                    ]
+                ]
+            );
 
-            $isVisibleProduct = $catalogSearchResult->getListProductBlock()->isProductVisible($variation['name']);
+            $cmsIndex->getSearchBlock()->search($variation['sku']);
+            $isVisibleProduct = $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible();
             while (!$isVisibleProduct && $catalogSearchResult->getBottomToolbar()->nextPage()) {
-                $isVisibleProduct = $catalogSearchResult->getListProductBlock()->isProductVisible($product->getName());
+                $isVisibleProduct = $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible();
             }
             if ($isVisibleProduct) {
                 $errors[] = sprintf(

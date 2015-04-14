@@ -10,10 +10,6 @@ use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
-use Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart;
-use Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart;
-use Magento\Checkout\Test\Constraint\AssertTaxInShoppingCart;
-use Magento\Checkout\Test\Constraint\AssertShippingInShoppingCart;
 
 /**
  * Assert that grand total is equal to expected.

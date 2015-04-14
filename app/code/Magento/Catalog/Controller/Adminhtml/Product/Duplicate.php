@@ -17,25 +17,17 @@ class Duplicate extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productCopier;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
-        \Magento\Catalog\Model\Product\Copier $productCopier,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Catalog\Model\Product\Copier $productCopier
     ) {
         $this->productCopier = $productCopier;
         parent::__construct($context, $productBuilder);
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**

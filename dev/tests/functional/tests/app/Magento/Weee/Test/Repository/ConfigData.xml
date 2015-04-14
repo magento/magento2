@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Core\Test\Repository\ConfigData">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="default_tax_configuration">
             <field path="tax/weee/enable" scope="tax" scope_id="1" label="No" xsi:type="string">0</field>
             <field path="tax/weee/display_list" scope="tax" scope_id="1" label="Including FPT and FPT description" xsi:type="string">1</field>

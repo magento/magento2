@@ -63,7 +63,7 @@ class DbIsolationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDbIsolation invalid
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testStartTestTransactionRequestInvalidAnnotation()
     {
@@ -73,7 +73,7 @@ class DbIsolationTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoDbIsolation disabled
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testStartTestTransactionRequestAmbiguousAnnotation()
     {

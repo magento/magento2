@@ -40,9 +40,9 @@ class CreateConfigurableProductEntityTest extends Injectable
 {
     /* tags */
     const TEST_TYPE = 'acceptance_test';
-    const STABLE = 'yes';
     const MVP = 'yes';
     const DOMAIN = 'MX';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

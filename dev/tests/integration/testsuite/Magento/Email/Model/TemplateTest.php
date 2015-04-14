@@ -181,7 +181,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider setDesignConfigExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSetDesignConfigException($config)
     {
@@ -269,7 +269,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Mail\Exception
+     * @expectedException \Magento\Framework\Exception\MailException
      * @expectedExceptionMessage The template Name must not be empty.
      */
     public function testBeforeSaveEmptyTemplateCode()

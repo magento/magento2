@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Core\Test\Repository\ConfigData">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="shipping_origin_US_CA">
             <field path="shipping/origin/country_id" scope="shipping" scope_id="1" label="United States" xsi:type="string">US</field>
             <field path="shipping/origin/region_id" scope="shipping" scope_id="1" label="California" xsi:type="string">12</field>
