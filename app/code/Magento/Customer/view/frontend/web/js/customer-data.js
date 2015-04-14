@@ -63,6 +63,7 @@ define([
     };
 
     ko.extenders.disposablePrivateData = function(target, sectionName) {
+        storage.remove(sectionName);
         target.subscribe(function(newValue) {
             storage.remove(sectionName);
         });
