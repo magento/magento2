@@ -79,6 +79,16 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
     protected $indexerRegistry;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataServiceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $attributeValueFactory;
+
     protected function setUp()
     {
         $this->context = $this->getMock(
@@ -148,6 +158,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->indexerRegistry = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+
+        $this->metadataServiceMock = $this->getMock('\Magento\Catalog\Api\CategoryAttributeRepositoryInterface');
+        $this->attributeValueFactory = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+            ->disableOriginalConstructor()->getMock();
 
         $this->category = $this->getCategoryModel();
     }
@@ -308,6 +322,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
                 'urlFinder' => $this->urlFinder,
                 'resource' => $this->resource,
                 'indexerRegistry' => $this->indexerRegistry,
+                'metadataService' => $this->metadataServiceMock,
+                'customAttributeFactory' => $this->attributeValueFactory,
             ]
         );
     }
@@ -396,5 +412,47 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->productIndexer));
 
         $this->category->reindex();
+    }
+
+    public function testGetCustomAttributes()
+    {
+        $nameAttributeCode = 'name';
+        $descriptionAttributeCode = 'description';
+        $interfaceAttribute = $this->getMock('\Magento\Framework\Api\MetadataObjectInterface');
+        $interfaceAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($nameAttributeCode);
+        $descriptionAttribute = $this->getMock('\Magento\Framework\Api\MetadataObjectInterface');
+        $descriptionAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($descriptionAttributeCode);
+        $customAttributesMetadata = [$interfaceAttribute, $descriptionAttribute];
+
+        $this->metadataServiceMock->expects($this->once())
+            ->method('getCustomAttributesMetadata')
+            ->willReturn($customAttributesMetadata);
+        $this->category->setData($nameAttributeCode, "sub");
+
+        //The color attribute is not set, expect empty custom attribute array
+        $this->assertEquals([], $this->category->getCustomAttributes());
+
+        //Set the color attribute;
+        $this->category->setData($descriptionAttributeCode, "description");
+        $attributeValue = new \Magento\Framework\Api\AttributeValue();
+        $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
+        $this->attributeValueFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
+        $this->assertEquals(1, count($this->category->getCustomAttributes()));
+        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
+        $this->assertEquals("description", $this->category->getCustomAttribute($descriptionAttributeCode)->getValue());
+
+        //Change the attribute value, should reflect in getCustomAttribute
+        $this->category->setData($descriptionAttributeCode, "new description");
+        $this->assertEquals(1, count($this->category->getCustomAttributes()));
+        $this->assertNotNull($this->category->getCustomAttribute($descriptionAttributeCode));
+        $this->assertEquals(
+            "new description",
+            $this->category->getCustomAttribute($descriptionAttributeCode)->getValue()
+        );
     }
 }
