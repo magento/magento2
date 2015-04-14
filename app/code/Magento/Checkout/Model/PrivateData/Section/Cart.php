@@ -34,20 +34,28 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $quote = null;
 
     /**
+     * @var \Magento\Checkout\Helper\Data
+     */
+    protected $checkoutHelper;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         \Magento\Checkout\Model\Cart $checkoutCart,
+        \Magento\Checkout\Helper\Data $checkoutHelper,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->catalogUrl = $catalogUrl;
         $this->checkoutCart = $checkoutCart;
+        $this->checkoutHelper = $checkoutHelper;
     }
 
     /**
@@ -56,9 +64,13 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     public function getSectionData()
     {
         // TODO: MAGETWO-34824
+        $totals = $this->checkoutCart->getQuote()->getTotals();
         return [
             'summary_count' => 5,
             'items' => [1, 2, 3,],
+            'subtotal' => isset($totals['subtotal'])
+                ? $this->checkoutHelper->formatPrice($totals['subtotal']->getValue())
+                : ''
         ];
 
 //        return [

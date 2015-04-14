@@ -66,7 +66,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
         $this->_catalogUrl = $catalogUrl;
         $this->_checkoutCart = $checkoutCart;
         parent::__construct($context, $customerSession, $checkoutSession, $data);
-        $this->_isScopePrivate = true;
+        $this->_isScopePrivate = false;
         $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
     }
 

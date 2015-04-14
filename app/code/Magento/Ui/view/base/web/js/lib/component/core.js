@@ -168,6 +168,16 @@ define([
         },
 
         /**
+         * Returns child element by it 'index'.
+         *
+         * @param {String} index
+         * @returns {*}
+         */
+        getChild: function(index) {
+            return _.findWhere(this.elems(), {'index': index});
+        },
+
+        /**
          * Updates property specified in uniqueNs
          * if components' unique property is set to 'true'.
          *
