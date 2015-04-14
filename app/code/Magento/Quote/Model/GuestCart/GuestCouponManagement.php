@@ -13,7 +13,7 @@ use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
- * Coupon management object.
+ * Coupon management object for guest carts.
  */
 class GuestCouponManagement extends CouponManagement implements GuestCouponManagementInterface
 {
@@ -39,7 +39,7 @@ class GuestCouponManagement extends CouponManagement implements GuestCouponManag
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::get($quotedIdMask->getId());
+        return parent::get($quoteIdMask->getId());
     }
 
     /**
@@ -49,7 +49,7 @@ class GuestCouponManagement extends CouponManagement implements GuestCouponManag
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::get($quotedIdMask->getId(), $couponCode);
+        return parent::set($quoteIdMask->getId(), $couponCode);
     }
 
     /**
