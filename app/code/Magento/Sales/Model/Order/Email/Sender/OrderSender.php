@@ -37,6 +37,7 @@ class OrderSender extends Sender
      * @param Template $templateContainer
      * @param OrderIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param PaymentHelper $paymentHelper
      * @param OrderResource $orderResource
      * @param Renderer $addressRenderer
@@ -45,11 +46,12 @@ class OrderSender extends Sender
         Template $templateContainer,
         OrderIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger,
         PaymentHelper $paymentHelper,
         OrderResource $orderResource,
         Renderer $addressRenderer
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
         $this->paymentHelper = $paymentHelper;
         $this->orderResource = $orderResource;
         $this->addressRenderer = $addressRenderer;

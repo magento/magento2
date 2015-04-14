@@ -28,6 +28,9 @@ class InvoiceSenderTest extends AbstractSenderTest
      */
     protected $invoiceResource;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->stepMockSetup();
@@ -75,6 +78,7 @@ class InvoiceSenderTest extends AbstractSenderTest
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
+            $this->loggerMock,
             $this->paymentHelper,
             $this->invoiceResource,
             $this->addressRendererMock
