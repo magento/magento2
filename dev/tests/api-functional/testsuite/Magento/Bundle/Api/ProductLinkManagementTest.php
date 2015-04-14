@@ -111,12 +111,12 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
      */
     private function saveChild($productSku, $linkedProduct)
     {
-        $resourcePath = self::RESOURCE_PATH . '/:productSku/links';
+        $resourcePath = self::RESOURCE_PATH . '/:productSku/links/:id';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => str_replace(
-                    [':productSku'],
-                    [$productSku],
+                    [':productSku', ':id'],
+                    [$productSku, $linkedProduct['id']],
                     $resourcePath
                 ),
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
