@@ -59,17 +59,6 @@ class GuestCartItemRepository extends Repository implements \Magento\Quote\Api\G
     /**
      * {@inheritdoc}
      */
-    public function delete(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
-    {
-        /** @var $quoteIdMask QuoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartItem->getQuoteId(), 'masked_id');
-        $cartItem->setQuoteId($quoteIdMask->getId());
-        parent::delete($cartItem);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function deleteById($cartId, $itemId)
     {
         /** @var $quoteIdMask QuoteIdMask */
