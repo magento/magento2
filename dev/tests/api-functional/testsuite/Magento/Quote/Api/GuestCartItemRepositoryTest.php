@@ -88,6 +88,15 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
         $cartId = $quote->getId();
+
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+            ->create();
+        $quoteIdMask->load($cartId);
+        //Use masked cart Id
+        $cartId = $quoteIdMask->getMaskedId();
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . 'items',
