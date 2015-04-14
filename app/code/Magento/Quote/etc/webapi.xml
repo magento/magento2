@@ -212,6 +212,26 @@
         </resources>
     </route>
 
+    <!-- Managing Guest Cart Payment -->
+    <route url="/V1/guest-carts/:cartId/selected-payment-methods" method="GET">
+        <service class="Magento\Quote\Api\GuestPaymentMethodManagementInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/selected-payment-methods" method="PUT">
+        <service class="Magento\Quote\Api\GuestPaymentMethodManagementInterface" method="set"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/payment-methods" method="GET">
+        <service class="Magento\Quote\Api\GuestPaymentMethodManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
     <!-- Managing Cart Billing address -->
     <route url="/V1/carts/:cartId/billing-address" method="GET">
         <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="get"/>
