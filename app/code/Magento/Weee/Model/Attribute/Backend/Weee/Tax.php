@@ -118,6 +118,8 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function afterSave($object)
     {
@@ -135,7 +137,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
         }
 
         foreach ($taxes as $tax) {
-            if (empty($tax['price']) || empty($tax['country']) || !empty($tax['delete'])) {
+            if ((empty($tax['price']) && empty($tax['value'])) || empty($tax['country']) || !empty($tax['delete'])) {
                 continue;
             }
 
@@ -145,7 +147,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             $data['website_id'] = $tax['website_id'];
             $data['country'] = $tax['country'];
             $data['state'] = $state;
-            $data['value'] = $tax['price'];
+            $data['value'] = !empty($tax['price']) ? $tax['price'] : $tax['value'];
             $data['attribute_id'] = $this->getAttribute()->getId();
 
             $this->_attributeTax->insertProductData($object, $data);

@@ -1,3 +1,61 @@
+0.74.0-beta4
+=============
+* Various
+   * Implemented the getDefaultResult method, to be able to catch exceptions in FrontController and redirect user to the correct page
+   * The getDefaultResult method is invoked to return default result of action execution within controllers. It can be used to generate the ‘execute’ method result in action controllers
+   * Eliminated the unused exceptions. Exceptions that weren't linked to any logic were also eliminated and replaced with LocalizedException or its child classes
+   * Refactored all controllers where possible: the default exception handling logic moved to FrontController. Controllers that cannot be refactored do not conflict with the new logic
+* Framework:
+   * Created Magento Console to perform CLI actions
+   * Introduced a new SalesSequence module that is responsible for documents numeration management across the Order Management System
+   * Implemented the mechanism of asynchronous indexing of sales entities grids
+* Setup
+   * Added the ConfigOption and ConfigOptionsList classes to be used by modules to manage deployment configuration
+   * Moved all existing segments logic to new classes
+   * Added the config:set command, which enables deployment configuration management
+   * Removed the old 'install-configuration' tool
+* Functional tests:
+   * Fixed functional test for order placement from backend
+   * Replaced the end-to-end test for a product with MAP with an injectable test
+* Design
+   * Updated the Blank and Luma themes to enable theme (not only library) variables overriding in the _theme.less file of any inherited theme. Included LESS code standards to the UI Library documentation
+* Fixed bugs:
+   * Fixed an issue where composite products could not be added to the order from the Recently Viewed Products section
+   * Fixed an issue where not all .js files were added to a bundle
+   * Fixed an issue where it was possible to save an incorrect IP value in the Developer Client Restriction field
+   * Fixed an issue where a raw DB error was thrown when trying to enter a custom variable with duplicated variable code
+
+0.74.0-beta3
+=============
+* API
+   * The orders were extended with the gift messages
+   * The page and block data and repository interfaces
+   * Updated the public API list
+* Framework improvements
+    * Improved the profile generator 
+    * Introduced the new environment for Jasmine tests
+* Design
+    * Inverted the new admin area styles scope, clean up the old styles
+    * New Side Panels on Admin Area
+* Various
+    * Asynchronous indexing for sales grids
+    * Advanced Mini Cart
+    * The HTML minification management on Admin Area
+    * Minor UI improvements
+    * The GitHub contribution process was updated in the README.md file
+* Fixed bugs
+    * Fixed the assets deployment tool with the minification
+    * Fixed the JMeter scenario for the performance toolkit
+    * Fixed the static files caching on Varnish
+    * Fixed Admin user creation with the duplicated email or name (incorrect URL)
+    * Fixed the link on Reset password email for secure URL case
+    * Fixed the configured product adding from the wish-list to shopping cart
+    * Fixed the long labels display on Admin Area
+    * Fixed the Navigation Menu items on Admin Area
+    * Various unit and integration tests bugs
+* GitHub issues and requests
+    [#675] (https://github.com/magento/magento2/issues/675) -- Fix for Textarea element cols and rows #675
+
 0.74.0-beta2
 =============
 * Fixed bugs
