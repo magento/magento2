@@ -300,6 +300,20 @@
         </resources>
     </route>
 
+    <!-- Managing Guest Cart Shipping address -->
+    <route url="/V1/guest-carts/:cartId/shipping-address" method="GET">
+        <service class="Magento\Quote\Api\GuestShippingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/shipping-address" method="POST">
+        <service class="Magento\Quote\Api\GuestShippingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
     <!-- Managing Cart Order -->
     <route url="/V1/carts/:cartId/order" method="PUT">
         <service class="Magento\Quote\Api\CartManagementInterface" method="placeOrder"/>
