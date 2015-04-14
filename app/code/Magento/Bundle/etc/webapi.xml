@@ -13,7 +13,7 @@
             <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
-    <route url="/V1/bundle-products/:productSku/links/:id" method="PUT">
+    <route url="/V1/bundle-products/:sku/links/:id" method="PUT">
         <service class="Magento\Bundle\Api\ProductLinkManagementInterface" method="saveChild"/>
         <resources>
             <resource ref="Magento_Catalog::products"/>

@@ -111,10 +111,10 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveChild(
-        $productSku,
+        $sku,
         \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
     ) {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($sku);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(
                 __('Product with specified sku: "%1" is not a bundle product', [$product->getSku()])
