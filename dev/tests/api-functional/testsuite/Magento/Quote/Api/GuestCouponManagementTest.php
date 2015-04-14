@@ -12,7 +12,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class GuestCouponManagementTest extends WebapiAbstract
 {
     const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'quoteCouponManagementV1';
+    const SERVICE_NAME = 'quoteGuestCouponManagementV1';
     const RESOURCE_PATH = '/V1/guest-carts/';
 
     /**
@@ -23,6 +23,20 @@ class GuestCouponManagementTest extends WebapiAbstract
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+    }
+
+    public function tearDown()
+    {
+        $createdQuotes = ['test_order_1', 'test01'];
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        foreach ($createdQuotes as $quoteId) {
+            $quote->load($quoteId, 'reserved_order_id');
+            $quote->delete();
+            /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+            $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMask');
+            $quoteIdMask->delete($quote->getId());
+        }
     }
 
     protected function getQuoteMaskedId($quoteId)
