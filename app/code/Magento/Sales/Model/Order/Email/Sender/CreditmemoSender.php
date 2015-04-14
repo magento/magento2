@@ -16,6 +16,8 @@ use Magento\Sales\Model\Order\Address\Renderer;
 
 /**
  * Class CreditmemoSender
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoSender extends NotifySender
 {
@@ -35,9 +37,15 @@ class CreditmemoSender extends NotifySender
     protected $addressRenderer;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
+    /**
      * @param Template $templateContainer
      * @param CreditmemoIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param PaymentHelper $paymentHelper
      * @param CreditmemoResource $creditmemoResource
      * @param Renderer $addressRenderer
@@ -46,11 +54,12 @@ class CreditmemoSender extends NotifySender
         Template $templateContainer,
         CreditmemoIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger,
         PaymentHelper $paymentHelper,
         CreditmemoResource $creditmemoResource,
         Renderer $addressRenderer
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
         $this->paymentHelper = $paymentHelper;
         $this->creditmemoResource = $creditmemoResource;
         $this->addressRenderer = $addressRenderer;
