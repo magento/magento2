@@ -41,7 +41,7 @@ define([
             multiSelect.exportSelections();
             //expect(multiSelect.source.set).toHaveBeenCalledWith([]);
             expect(multiSelect.source.set.calls.argsFor(1))
-                .toEqual({ selected: [], total: undefined} );
+                .toEqual([]);
         });
 
         it('Select specific several rows on several pages', function () {
@@ -75,7 +75,6 @@ define([
                 {id:1},
                 {id:2}
             ]);
-            //multiSelect.selectAll();
             multiSelect.rows([
                 {id:3},
                 {id:4}
@@ -97,7 +96,6 @@ define([
                 {id:1},
                 {id:2}
             ]);
-            //multiSelect.selectAll();
             multiSelect.rows([
                 {id:3},
                 {id:4}
@@ -121,9 +119,9 @@ define([
                 {id:4}
             ]);
 
-            expect(multiSelect.allSelected()).toBeTruthy();
+            expect(multiSelect.allSelected()).toBeFalsy();
             expect(multiSelect.excluded()).toEqual([]);
-            expect(multiSelect.selected()).toEqual([]);
+            expect(multiSelect.selected()).toEqual([1,2]);
         });
 
         it('Select all rows all over the Grid without all rows on current page but with specific rows on another page', function () {
@@ -144,8 +142,8 @@ define([
             multiSelect.selected.push(6);
 
             expect(multiSelect.allSelected()).toBeFalsy();
-            expect(multiSelect.excluded()).toEqual([3,4]);
-            expect(multiSelect.selected()).toEqual([]);
+            expect(multiSelect.excluded()).toEqual([]);
+            expect(multiSelect.selected()).toEqual([6]);
         });
 
     });
