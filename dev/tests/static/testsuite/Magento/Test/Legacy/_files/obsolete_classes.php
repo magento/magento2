@@ -758,7 +758,10 @@ return [
     ],
     ['Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\Exception'],
-    ['Magento\Framework\Exception\File\LargeSizeException'],
+    [
+        'Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException',
+        'Magento\Framework\Exception\File\LargeSizeException'
+    ],
     ['Magento\Catalog\Model\Product\Option\Type\File\NotImageException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\OptionRequiredException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\RunValidationException'],
@@ -3151,4 +3154,6 @@ return [
     ['Magento\Eav\Exception'],
     ['Magento\Framework\Exception\File\ValidatorException'],
     ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
+    ['Magento\Framework\Exception\State\InputMismatchException'],
+    ['Magento\Shipping\Exception'],
 ];
