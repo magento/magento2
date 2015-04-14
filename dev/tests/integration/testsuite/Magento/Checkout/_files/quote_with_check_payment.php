@@ -19,3 +19,12 @@ $quote->getPayment()->setMethod('checkmo');
 $quote->collectTotals();
 $quote->save();
 $quote->getPayment()->setMethod('checkmo');
+
+/** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+$quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+    ->create();
+$quoteIdMask->setId($quote->getId());
+$quoteIdMask->setDataChanges(true);
+$quoteIdMask->save();
+

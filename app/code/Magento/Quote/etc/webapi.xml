@@ -75,6 +75,12 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <route url="/V1/guest-carts/:cartId/order" method="PUT">
+        <service class="Magento\Quote\Api\GuestCartManagementInterface" method="placeOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 
     <!-- Managing Cart Shipment -->
     <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">

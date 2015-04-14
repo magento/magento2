@@ -7,4 +7,12 @@ namespace Magento\Quote\Api;
 
 interface GuestCartRepositoryInterface extends CartRepositoryInterface
 {
+    /**
+     * Enables an administrative user to return information for a specified cart.
+     *
+     * @param string $cartId
+     * @return \Magento\Quote\Api\Data\CartInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function get($cartId);
 }
