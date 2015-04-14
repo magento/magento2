@@ -16,14 +16,24 @@ use Magento\Framework\View\Element\UiComponentInterface;
 class Render extends AbstractAction
 {
     /**
+     * @var \Magento\Ui\Model\BookmarkFactory
+     */
+    protected $bookmarkFactory;
+
+    /**
      * Constructor
      *
      * @param Context $context
      * @param UiComponentFactory $factory
+     * @param \Magento\Ui\Model\BookmarkFactory $bookmarkFactory
      */
-    public function __construct(Context $context, UiComponentFactory $factory)
-    {
+    public function __construct(
+        Context $context,
+        UiComponentFactory $factory,
+        \Magento\Ui\Model\BookmarkFactory $bookmarkFactory
+    ) {
         parent::__construct($context, $factory);
+        $this->bookmarkFactory = $bookmarkFactory;
     }
 
     /**
@@ -33,7 +43,7 @@ class Render extends AbstractAction
      */
     public function execute()
     {
-        $bookmark = $this->_objectManager->get('Magento\Ui\Model\Bookmark');
+        $bookmark = $this->bookmarkFactory->create();
         /** @var $bookmark \Magento\Ui\Model\Bookmark */
         $bookmark->saveState($this->_request->getParams());
         $component = $this->factory->create($this->_request->getParam('namespace'));

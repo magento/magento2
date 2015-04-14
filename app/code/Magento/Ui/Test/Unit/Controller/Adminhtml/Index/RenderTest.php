@@ -53,7 +53,20 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->uiFactoryMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->render = new Render($contextMock, $this->uiFactoryMock);
+
+        $bookmarkFactory = $this->getMockBuilder('Magento\Ui\Model\BookmarkFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $bookmarkMock = $this->getMockBuilder('Magento\Ui\Model\Bookmark')
+            ->setMethods(['saveState'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $bookmarkMock->expects($this->any())
+            ->method('setState');
+        $bookmarkFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($bookmarkMock);
+        $this->render = new Render($contextMock, $this->uiFactoryMock, $bookmarkFactory);
     }
 
     public function testExecute()
@@ -61,10 +74,13 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $name = 'test-name';
         $renderedData = '<html>data</html>';
 
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock->expects($this->any())
             ->method('getParam')
             ->with('namespace')
             ->willReturn($name);
+        $this->requestMock->expects($this->any())
+            ->method('getParams')
+            ->willReturn([]);
         $this->responseMock->expects($this->once())
             ->method('appendBody')
             ->with($renderedData);
