@@ -146,13 +146,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
         $this->controller->installAction();
     }
 
-    public function testInstallDeploymentConfigAction()
-    {
-        $this->installer->expects($this->once())->method('checkInstallationFilePermissions');
-        $this->installer->expects($this->once())->method('installDeploymentConfig')->with($this->parameters);
-        $this->controller->installDeploymentConfigAction();
-    }
-
     public function testInstallSchemaAction()
     {
         $this->installer->expects($this->once())->method('installSchema');
@@ -659,7 +652,6 @@ class ConsoleControllerTest extends \PHPUnit_Framework_TestCase
             ['install',''],
             ['update', $noParameters],
             ['uninstall', $noParameters],
-            ['install-configuration', ''],
             ['install-schema', $noParameters],
             ['install-data', $noParameters],
             ['install-user-configuration', ''],

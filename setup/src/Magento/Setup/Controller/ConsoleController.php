@@ -7,10 +7,11 @@
 namespace Magento\Setup\Controller;
 
 use Composer\Package\Version\VersionParser;
+use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Setup\Model\AdminAccount;
+use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use Magento\Setup\Model\ConsoleLogger;
-use Magento\Setup\Model\DeploymentConfigMapper;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\Lists;
@@ -60,7 +61,6 @@ class ConsoleController extends AbstractActionController
     private static $actions = [
         self::CMD_HELP => 'help',
         self::CMD_INSTALL => 'install',
-        self::CMD_INSTALL_CONFIG => 'installDeploymentConfig',
         self::CMD_INSTALL_SCHEMA => 'installSchema',
         self::CMD_INSTALL_DATA => 'installData',
         self::CMD_INSTALL_USER_CONFIG => 'installUserConfig',
@@ -80,7 +80,6 @@ class ConsoleController extends AbstractActionController
      */
     private static $helpOptions = [
         self::CMD_INSTALL,
-        self::CMD_INSTALL_CONFIG,
         self::CMD_INSTALL_SCHEMA,
         self::CMD_INSTALL_DATA,
         self::CMD_INSTALL_USER_CONFIG,
@@ -182,16 +181,16 @@ class ConsoleController extends AbstractActionController
      */
     private static function getCliConfig()
     {
-        $deployConfig = '--' . DeploymentConfigMapper::KEY_DB_HOST . '='
-            . ' --' . DeploymentConfigMapper::KEY_DB_NAME . '='
-            . ' --' . DeploymentConfigMapper::KEY_DB_USER . '='
-            . ' --' . DeploymentConfigMapper::KEY_BACKEND_FRONTNAME . '='
-            . ' [--' . DeploymentConfigMapper::KEY_DB_PASS . '=]'
-            . ' [--' . DeploymentConfigMapper::KEY_DB_PREFIX . '=]'
-            . ' [--' . DeploymentConfigMapper::KEY_DB_MODEL . '=]'
-            . ' [--' . DeploymentConfigMapper::KEY_DB_INIT_STATEMENTS . '=]'
-            . ' [--' . DeploymentConfigMapper::KEY_SESSION_SAVE . '=]'
-            . ' [--' . DeploymentConfigMapper::KEY_ENCRYPTION_KEY . '=]'
+        $deployConfig = '--' . SetupConfigOptionsList::INPUT_KEY_DB_HOST . '='
+            . ' --' . SetupConfigOptionsList::INPUT_KEY_DB_NAME . '='
+            . ' --' . SetupConfigOptionsList::INPUT_KEY_DB_USER . '='
+            . ' --' . BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME . '='
+            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_PASS . '=]'
+            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_PREFIX . '=]'
+            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_MODEL . '=]'
+            . ' [--' . SetupConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS . '=]'
+            . ' [--' . SetupConfigOptionsList::INPUT_KEY_SESSION_SAVE . '=]'
+            . ' [--' . SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY . '=]'
             . ' [--' . Installer::ENABLE_MODULES . '=]'
             . ' [--' . Installer::DISABLE_MODULES . '=]';
         $userConfig = '[--' . UserConfig::KEY_BASE_URL . '=]'
@@ -238,12 +237,6 @@ class ConsoleController extends AbstractActionController
                 'usage' => '',
                 'usage_short' => self::CMD_UNINSTALL,
                 'usage_desc' => 'Uninstall Magento application',
-            ],
-            self::CMD_INSTALL_CONFIG => [
-                'route' => self::CMD_INSTALL_CONFIG . ' ' . $deployConfig,
-                'usage' => $deployConfig,
-                'usage_short' => self::CMD_INSTALL_CONFIG . ' <options>',
-                'usage_desc' => 'Install deployment configuration',
             ],
             self::CMD_INSTALL_SCHEMA => [
                 'route' => self::CMD_INSTALL_SCHEMA,
@@ -365,19 +358,6 @@ class ConsoleController extends AbstractActionController
         /** @var \Zend\Console\Request $request */
         $request = $this->getRequest();
         $this->installer->install($request->getParams());
-    }
-
-    /**
-     * Creates the config.php file
-     *
-     * @return void
-     */
-    public function installDeploymentConfigAction()
-    {
-        /** @var \Zend\Console\Request $request */
-        $request = $this->getRequest();
-        $this->installer->checkInstallationFilePermissions();
-        $this->installer->installDeploymentConfig($request->getParams());
     }
 
     /**
