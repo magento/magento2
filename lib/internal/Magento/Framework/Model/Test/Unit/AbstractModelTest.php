@@ -112,10 +112,10 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     public function testUpdateStoredData()
     {
         $this->model->setData(
-            array(
+            [
                 'id'   => 1000,
                 'name' => 'Test Name'
-            )
+            ]
         );
         $this->assertEmpty($this->model->getStoredData());
         $this->model->afterLoad();
