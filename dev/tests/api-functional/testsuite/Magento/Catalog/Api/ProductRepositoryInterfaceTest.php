@@ -15,6 +15,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products';
 
+    const KEY_GROUP_PRICES = 'group_prices';
+    const KEY_TIER_PRICES = 'tier_prices';
+
     private $productData = [
         [
             ProductInterface::SKU => 'simple',
@@ -36,9 +39,18 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testGet()
     {
         $productData = $this->productData[0];
+
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
+            $this->assertEquals($productData[$key], $response[$key]);
+        }
+    }
+
+    protected function getProduct($sku)
+    {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $productData[ProductInterface::SKU],
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -48,10 +60,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
 
-        $response = $this->_webApiCall($serviceInfo, ['sku' => $productData[ProductInterface::SKU]]);
-        foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
-            $this->assertEquals($productData[$key], $response[$key]);
-        }
+        $response = $this->_webApiCall($serviceInfo, ['sku' => $sku]);
+        return $response;
     }
 
     public function testGetNoSuchEntityException()
@@ -114,6 +124,291 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($product[ProductInterface::SKU]);
     }
 
+    public function testProductLinks()
+    {
+        $this->markTestSkipped('Skipped until MAGETWO-35458 is ready');
+        // Create simple product
+        $productData =  [
+            ProductInterface::SKU => "product_simple_500",
+            ProductInterface::NAME => "Product Simple 500",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 1,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+        ];
+
+        $this->saveProduct($productData);
+        $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "related",
+                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
+                            "position" => 0];
+        $productWithRelatedData =  [
+            ProductInterface::SKU => "product_simple_with_related_500",
+            ProductInterface::NAME => "Product Simple with Related 500",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 1,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+            "product_links" => [$productLinkData]
+        ];
+
+        $this->saveProduct($productWithRelatedData);
+        $response = $this->getProduct("product_simple_with_related_500");
+
+        $this->assertArrayHasKey('product_links', $response);
+        $links = $response['product_links'];
+        $this->assertEquals(1, count($links));
+        $this->assertEquals($productLinkData, $links[0]);
+
+        // update link information
+        $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "upsell",
+                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
+                            "position" => 0];
+        $productWithUpsellData =  [
+            ProductInterface::SKU => "product_simple_with_related_500",
+            ProductInterface::NAME => "Product Simple with Related 500",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 1,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+            "product_links" => [$productLinkData]
+        ];
+
+        $this->saveProduct($productWithUpsellData);
+        $response = $this->getProduct("product_simple_with_related_500");
+
+        $this->assertArrayHasKey('product_links', $response);
+        $links = $response['product_links'];
+        $this->assertEquals(1, count($links));
+        $this->assertEquals($productLinkData, $links[0]);
+
+        // Remove link
+        $productWithNoLinkData =  [
+            ProductInterface::SKU => "product_simple_with_related_500",
+            ProductInterface::NAME => "Product Simple with Related 500",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::PRICE => 100,
+            ProductInterface::STATUS => 1,
+            ProductInterface::TYPE_ID => 'simple',
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+            "product_links" => []
+        ];
+
+        $this->saveProduct($productWithNoLinkData);
+        $response = $this->getProduct("product_simple_with_related_500");
+
+        $this->assertArrayHasKey('product_links', $response);
+        $links = $response['product_links'];
+        $this->assertEquals(1, count($links));
+        $this->assertEquals([], $links[0]);
+
+        $this->deleteProduct("product_simple_500");
+        $this->deleteProduct("product_simple_with_related_500");
+    }
+
+    protected function getOptionsData()
+    {
+        return [
+            [
+                "product_sku" => "simple",
+                "title" => "DropdownOption",
+                "type" => "drop_down",
+                "sort_order" => 0,
+                "is_require" => true,
+                "values" => [
+                    [
+                        "title" => "DropdownOption2_1",
+                        "sort_order" => 0,
+                        "price" => 3,
+                        "price_type" => "fixed",
+                    ],
+                ],
+            ],
+            [
+                "product_sku" => "simple",
+                "title" => "CheckboxOption",
+                "type" => "checkbox",
+                "sort_order" => 1,
+                "is_require" => false,
+                "values" => [
+                    [
+                        "title" => "CheckBoxValue1",
+                        "price" => 5,
+                        "price_type" => "fixed",
+                        "sort_order" => 1,
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function testProductOptions()
+    {
+        //Create product with options
+        $productData = $this->getSimpleProductData();
+        $optionsDataInput = $this->getOptionsData();
+        $productData['options'] = $optionsDataInput;
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+
+        $this->assertArrayHasKey('options', $response);
+        $options = $response['options'];
+        $this->assertEquals(2, count($options));
+        $this->assertEquals(1, count($options[0]['values']));
+        $this->assertEquals(1, count($options[1]['values']));
+
+        //update the product options, adding a value to option 1, delete an option and create a new option
+        $options[0]['values'][] = [
+            "title" => "Value2",
+            "price" => 6,
+            "price_type" => "fixed",
+            'sort_order' => 3,
+        ];
+        $option1Id = $options[0]['option_id'];
+        $option2Id = $options[1]['option_id'];
+        $options[1] = [
+            "product_sku" => "simple",
+            "title" => "DropdownOption2",
+            "type" => "drop_down",
+            "sort_order" => 3,
+            "is_require" => false,
+            "values" => [
+                [
+                    "title" => "Value3",
+                    "price" => 7,
+                    "price_type" => "fixed",
+                    "sort_order" => 4,
+                ],
+            ],
+        ];
+        $response['options'] = $options;
+        $response = $this->updateProduct($response);
+        $this->assertArrayHasKey('options', $response);
+        $options = $response['options'];
+        $this->assertEquals(2, count($options));
+        $this->assertEquals(2, count($options[0]['values']));
+        $this->assertEquals(1, count($options[1]['values']));
+        $this->assertEquals($option1Id, $options[0]['option_id']);
+        $this->assertTrue($option2Id < $options[1]['option_id']);
+
+        //update product without setting options field, option should not be changed
+        unset($response['options']);
+        $this->updateProduct($response);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $this->assertArrayHasKey('options', $response);
+        $options = $response['options'];
+        $this->assertEquals(2, count($options));
+
+        //update product with empty options, options should be removed
+        $response['options'] = [];
+        $response = $this->updateProduct($response);
+        $this->assertEmpty($response['options']);
+
+        $this->deleteProduct($productData[ProductInterface::SKU]);
+    }
+
+    public function testProductWithMediaGallery()
+    {
+        $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        $encodedImage = base64_encode(file_get_contents($testImagePath));
+        //create a product with media gallery
+        $filename1 = 'tiny1' . time();
+        $filename2 = 'tiny2' . time();
+        $productData = $this->getSimpleProductData();
+        $productData['media_gallery_entries'] = [
+            [
+                'position' => 1,
+                'disabled' => true,
+                'label' => 'tiny1',
+                'types' => [],
+                'content' => [
+                    'mime_type' => 'image/jpeg',
+                    'name' => $filename1,
+                    'entry_data' => $encodedImage,
+                ]
+            ],
+            [
+                'position' => 2,
+                'disabled' => false,
+                'label' => 'tiny2',
+                'types' => ['image', 'small_image'],
+                'content' => [
+                    'mime_type' => 'image/jpeg',
+                    'name' => $filename2,
+                    'entry_data' => $encodedImage,
+                ]
+            ],
+        ];
+        $response = $this->saveProduct($productData);
+        $this->assertArrayHasKey('media_gallery_entries', $response);
+        $mediaGalleryEntries = $response['media_gallery_entries'];
+        $this->assertEquals(2, count($mediaGalleryEntries));
+        $id = $mediaGalleryEntries[0]['id'];
+        foreach ($mediaGalleryEntries as &$entry) {
+            unset($entry['id']);
+        }
+        $expectedValue = [
+            [
+                'label' => 'tiny1',
+                'position' => 1,
+                'disabled' => true,
+                'types' => [],
+                'file' => '/t/i/' . $filename1 . '.jpg',
+            ],
+            [
+                'label' => 'tiny2',
+                'position' => 2,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'file' => '/t/i/' . $filename2 . '.jpg',
+            ],
+        ];
+        $this->assertEquals($expectedValue, $mediaGalleryEntries);
+        //update the product media gallery
+        $response['media_gallery_entries'] = [
+            [
+                'id' => $id,
+                'label' => 'tiny1_new_label',
+                'position' => 1,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'file' => '/t/i/' . $filename1 . '.jpg',
+            ],
+        ];
+        $response = $this->updateProduct($response);
+        $mediaGalleryEntries = $response['media_gallery_entries'];
+        $this->assertEquals(1, count($mediaGalleryEntries));
+        unset($mediaGalleryEntries[0]['id']);
+        $expectedValue = [
+            [
+                'label' => 'tiny1_new_label',
+                'position' => 1,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'file' => '/t/i/' . $filename1 . '.jpg',
+            ]
+        ];
+        $this->assertEquals($expectedValue, $mediaGalleryEntries);
+        //don't set the media_gallery_entries field, existing entry should not be touched
+        unset($response['media_gallery_entries']);
+        $response = $this->updateProduct($response);
+        $mediaGalleryEntries = $response['media_gallery_entries'];
+        $this->assertEquals(1, count($mediaGalleryEntries));
+        unset($mediaGalleryEntries[0]['id']);
+        $this->assertEquals($expectedValue, $mediaGalleryEntries);
+        //pass empty array, delete all existing media gallery entries
+        $response['media_gallery_entries'] = [];
+        $response = $this->updateProduct($response);
+        $this->assertEquals(true, empty($response['media_gallery_entries']));
+        $this->deleteProduct($productData[ProductInterface::SKU]);
+    }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
@@ -124,13 +419,24 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::SKU => 'simple', //sku from fixture
         ];
         $product = $this->getSimpleProductData($productData);
+        $response =  $this->updateProduct($product);
+
+        $this->assertArrayHasKey(ProductInterface::SKU, $response);
+        $this->assertArrayHasKey(ProductInterface::NAME, $response);
+        $this->assertEquals($productData[ProductInterface::NAME], $response[ProductInterface::NAME]);
+        $this->assertEquals($productData[ProductInterface::SKU], $response[ProductInterface::SKU]);
+    }
+
+    protected function updateProduct($product)
+    {
+        $sku = $product[ProductInterface::SKU];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $product[ProductInterface::SKU] = null;
         }
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $productData[ProductInterface::SKU],
+                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -141,11 +447,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $requestData = ['product' => $product];
         $response =  $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->assertArrayHasKey(ProductInterface::SKU, $response);
-        $this->assertArrayHasKey(ProductInterface::NAME, $response);
-        $this->assertEquals($productData[ProductInterface::NAME], $response[ProductInterface::NAME]);
-        $this->assertEquals($productData[ProductInterface::SKU], $response[ProductInterface::SKU]);
+        return $response;
     }
 
     /**
@@ -204,6 +506,51 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertNotNull($response['items'][0]['sku']);
         $this->assertEquals('simple', $response['items'][0]['sku']);
+    }
+
+    protected function convertCustomAttributesToAssociativeArray($customAttributes)
+    {
+        $converted = [];
+        foreach ($customAttributes as $customAttribute) {
+            $converted[$customAttribute['attribute_code']] = $customAttribute['value'];
+        }
+        return $converted;
+    }
+
+    protected function convertAssociativeArrayToCustomAttributes($data)
+    {
+        $customAttributes = [];
+        foreach ($data as $attributeCode => $attributeValue) {
+            $customAttributes[] = ['attribute_code' => $attributeCode, 'value' => $attributeValue];
+        }
+        return $customAttributes;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testEavAttributes()
+    {
+        $response = $this->getProduct('simple');
+
+        $this->assertNotEmpty($response['custom_attributes']);
+        $customAttributesData = $this->convertCustomAttributesToAssociativeArray($response['custom_attributes']);
+        $this->assertNotTrue(isset($customAttributesData['name']));
+        $this->assertNotTrue(isset($customAttributesData['tier_price']));
+
+        //Set description
+        $descriptionValue = "new description";
+        $customAttributesData['description'] = $descriptionValue;
+        $response['custom_attributes'] = $this->convertAssociativeArrayToCustomAttributes($customAttributesData);
+
+        $response = $this->updateProduct($response);
+        $this->assertNotEmpty($response['custom_attributes']);
+
+        $customAttributesData = $this->convertCustomAttributesToAssociativeArray($response['custom_attributes']);
+        $this->assertTrue(isset($customAttributesData['description']));
+        $this->assertEquals($descriptionValue, $customAttributesData['description']);
+
+        $this->deleteProduct('simple');
     }
 
     /**
@@ -275,5 +622,161 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         return (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) ?
             $this->_webApiCall($serviceInfo, ['sku' => $sku]) : $this->_webApiCall($serviceInfo);
+    }
+
+    public function testGroupPrices()
+    {
+        // create a product with group prices
+        $custGroup1 = \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
+        $custGroup2 = \Magento\Customer\Model\Group::CUST_GROUP_ALL;
+        $productData = $this->getSimpleProductData();
+        $productData[self::KEY_GROUP_PRICES] = [
+            [
+                'customer_group_id' => $custGroup1,
+                'value' => 3.14
+            ],
+            [
+                'customer_group_id' => $custGroup2,
+                'value' => 3.45,
+            ]
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
+        $groupPrices = $response[self::KEY_GROUP_PRICES];
+        $this->assertNotNull($groupPrices, "CREATE: expected to have group prices");
+        $this->assertCount(2, $groupPrices, "CREATE: expected to have 2 'group_prices' objects");
+        $this->assertEquals(3.14, $groupPrices[0]['value']);
+        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
+        $this->assertEquals(3.45, $groupPrices[1]['value']);
+        $this->assertEquals($custGroup2, $groupPrices[1]['customer_group_id']);
+
+        // update the product's group prices: update 1st group price, (delete the 2nd group price), add a new one
+        $custGroup3 = 1;
+        $groupPrices[0]['value'] = 3.33;
+        $groupPrices[1] = [
+            'customer_group_id' => $custGroup3,
+            'value' => 2.10,
+        ];
+        $response[self::KEY_GROUP_PRICES] = $groupPrices;
+        $response = $this->updateProduct($response);
+
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
+        $groupPrices = $response[self::KEY_GROUP_PRICES];
+        $this->assertNotNull($groupPrices, "UPDATE 1: expected to have group prices");
+        $this->assertCount(2, $groupPrices, "UPDATE 1: expected to have 2 'group_prices' objects");
+        $this->assertEquals(3.33, $groupPrices[0]['value']);
+        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
+        $this->assertEquals(2.10, $groupPrices[1]['value']);
+        $this->assertEquals($custGroup3, $groupPrices[1]['customer_group_id']);
+
+        // update the product without any mention of group prices; no change expected for group pricing
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        unset($response[self::KEY_GROUP_PRICES]);
+        $response = $this->updateProduct($response);
+
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response);
+        $groupPrices = $response[self::KEY_GROUP_PRICES];
+        $this->assertNotNull($groupPrices, "UPDATE 2: expected to have group prices");
+        $this->assertCount(2, $groupPrices, "UPDATE 2: expected to have 2 'group_prices' objects");
+        $this->assertEquals(3.33, $groupPrices[0]['value']);
+        $this->assertEquals($custGroup1, $groupPrices[0]['customer_group_id']);
+        $this->assertEquals(2.10, $groupPrices[1]['value']);
+        $this->assertEquals($custGroup3, $groupPrices[1]['customer_group_id']);
+
+        // update the product with empty group prices; expect to have the existing group prices removed
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response[self::KEY_GROUP_PRICES] = [];
+        $response = $this->updateProduct($response);
+        $this->assertArrayHasKey(self::KEY_GROUP_PRICES, $response, "expected to have the 'group_prices' key");
+        $this->assertEmpty($response[self::KEY_GROUP_PRICES], "expected to have an empty array of 'group_prices'");
+
+        // delete the product with group prices; expect that all goes well
+        $response = $this->deleteProduct($productData[ProductInterface::SKU]);
+        $this->assertTrue($response);
+    }
+
+    public function testTierPrices()
+    {
+        // create a product with tier prices
+        $custGroup1 = \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID;
+        $custGroup2 = \Magento\Customer\Model\Group::CUST_GROUP_ALL;
+        $productData = $this->getSimpleProductData();
+        $productData[self::KEY_TIER_PRICES] = [
+            [
+                'customer_group_id' => $custGroup1,
+                'value' => 3.14,
+                'qty' => 5,
+            ],
+            [
+                'customer_group_id' => $custGroup2,
+                'value' => 3.45,
+                'qty' => 10,
+            ]
+        ];
+        $this->saveProduct($productData);
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+
+        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
+        $tierPrices = $response[self::KEY_TIER_PRICES];
+        $this->assertNotNull($tierPrices, "CREATE: expected to have tier prices");
+        $this->assertCount(2, $tierPrices, "CREATE: expected to have 2 'tier_prices' objects");
+        $this->assertEquals(3.14, $tierPrices[0]['value']);
+        $this->assertEquals(5, $tierPrices[0]['qty']);
+        $this->assertEquals($custGroup1, $tierPrices[0]['customer_group_id']);
+        $this->assertEquals(3.45, $tierPrices[1]['value']);
+        $this->assertEquals(10, $tierPrices[1]['qty']);
+        $this->assertEquals($custGroup2, $tierPrices[1]['customer_group_id']);
+
+        // update the product's tier prices: update 1st tier price, (delete the 2nd tier price), add a new one
+        $custGroup3 = 1;
+        $tierPrices[0]['value'] = 3.33;
+        $tierPrices[0]['qty'] = 6;
+        $tierPrices[1] = [
+            'customer_group_id' => $custGroup3,
+            'value' => 2.10,
+            'qty' => 12,
+        ];
+        $response[self::KEY_TIER_PRICES] = $tierPrices;
+        $response = $this->updateProduct($response);
+
+        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
+        $tierPrices = $response[self::KEY_TIER_PRICES];
+        $this->assertNotNull($tierPrices, "UPDATE 1: expected to have tier prices");
+        $this->assertCount(2, $tierPrices, "UPDATE 1: expected to have 2 'tier_prices' objects");
+        $this->assertEquals(3.33, $tierPrices[0]['value']);
+        $this->assertEquals(6, $tierPrices[0]['qty']);
+        $this->assertEquals($custGroup1, $tierPrices[0]['customer_group_id']);
+        $this->assertEquals(2.10, $tierPrices[1]['value']);
+        $this->assertEquals(12, $tierPrices[1]['qty']);
+        $this->assertEquals($custGroup3, $tierPrices[1]['customer_group_id']);
+
+        // update the product without any mention of tier prices; no change expected for tier pricing
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        unset($response[self::KEY_TIER_PRICES]);
+        $response = $this->updateProduct($response);
+
+        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response);
+        $tierPrices = $response[self::KEY_TIER_PRICES];
+        $this->assertNotNull($tierPrices, "UPDATE 2: expected to have tier prices");
+        $this->assertCount(2, $tierPrices, "UPDATE 2: expected to have 2 'tier_prices' objects");
+        $this->assertEquals(3.33, $tierPrices[0]['value']);
+        $this->assertEquals(6, $tierPrices[0]['qty']);
+        $this->assertEquals($custGroup1, $tierPrices[0]['customer_group_id']);
+        $this->assertEquals(2.10, $tierPrices[1]['value']);
+        $this->assertEquals(12, $tierPrices[1]['qty']);
+        $this->assertEquals($custGroup3, $tierPrices[1]['customer_group_id']);
+
+        // update the product with empty tier prices; expect to have the existing tier prices removed
+        $response = $this->getProduct($productData[ProductInterface::SKU]);
+        $response[self::KEY_TIER_PRICES] = [];
+        $response = $this->updateProduct($response);
+        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response, "expected to have the 'tier_prices' key");
+        $this->assertEmpty($response[self::KEY_TIER_PRICES], "expected to have an empty array of 'tier_prices'");
+
+        // delete the product with tier prices; expect that all goes well
+        $response = $this->deleteProduct($productData[ProductInterface::SKU]);
+        $this->assertTrue($response);
     }
 }

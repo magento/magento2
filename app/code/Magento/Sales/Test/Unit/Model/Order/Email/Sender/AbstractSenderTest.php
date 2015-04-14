@@ -45,6 +45,11 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $addressMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
     public function stepMockSetup()
     {
         $this->senderBuilderFactoryMock = $this->getMock(
@@ -86,6 +91,13 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         $this->addressRendererMock = $this->getMock('Magento\Sales\Model\Order\Address\Renderer', [], [], '', false);
         $this->addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false);
         $this->addressRendererMock->expects($this->any())->method('format')->willReturn(1);
+        $this->loggerMock = $this->getMock(
+            '\Psr\Log\LoggerInterface',
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     public function stepAddressFormat($billingAddress)
