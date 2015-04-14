@@ -147,19 +147,9 @@ class Quote extends \Magento\Framework\Session\SessionManager
                     $this->_quote->setStoreId($this->getStoreId());
                 }
 
-                if ($this->getCustomerId()) {
-                    // on a new quote, this will return an empty array
-                    $addresses = $this->_quote->getAllAddresses();
-                    $billingAddress = $this->findAddressByType(
-                        $addresses,
-                        \Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_BILLING
-                    );
-                    $shippingAddress = $this->findAddressByType(
-                        $addresses,
-                        \Magento\Quote\Model\Quote\Address::ADDRESS_TYPE_SHIPPING
-                    );
+                if ($this->getCustomerId() && $this->getCustomerId() != $this->_quote->getCustomerId()) {
                     $customer = $this->customerRepository->getById($this->getCustomerId());
-                    $this->_quote->assignCustomerWithAddressChange($customer, $billingAddress, $shippingAddress);
+                    $this->_quote->assignCustomer($customer);
                 }
             }
             $this->_quote->setIgnoreOldQty(true);
@@ -167,25 +157,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
         }
 
         return $this->_quote;
-    }
-
-    /**
-     * Returns the type of address requested, or null if no type of address is found
-     *
-     * @param \Magento\Quote\Model\Quote\Address[] $addresses
-     * @param string $type   ex: 'billing' or 'shipping'
-     * @return \Magento\Quote\Model\Quote\Address|null
-     */
-    protected function findAddressByType($addresses, $type)
-    {
-        $theAddress = null;
-        foreach ($addresses as $address) {
-            if ($address->getAddressType() == $type) {
-                $theAddress = $address;
-                break;
-            }
-        }
-        return $theAddress;
     }
 
     /**
