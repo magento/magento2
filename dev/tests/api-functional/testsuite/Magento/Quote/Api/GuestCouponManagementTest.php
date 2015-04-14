@@ -25,13 +25,11 @@ class GuestCouponManagementTest extends WebapiAbstract
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
-    protected function createGuestQuote($quoteId)
+    protected function getQuoteMaskedId($quoteId)
     {
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMaskFactory')->create();
-        $quoteIdMask->setId($quoteId);
-        $quoteIdMask->setDataChanges(true);
-        $quoteIdMask->save();
+        $quoteIdMask->load($quoteId);
         return $quoteIdMask->getMaskedId();
     }
 
@@ -44,7 +42,7 @@ class GuestCouponManagementTest extends WebapiAbstract
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
 
-        $cartId = $this->createGuestQuote($quote->getId());
+        $cartId = $this->getQuoteMaskedId($quote->getId());
 
         $couponCode = $quote->getCouponCode();
         $serviceInfo = [
@@ -71,7 +69,7 @@ class GuestCouponManagementTest extends WebapiAbstract
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $this->createGuestQuote($quote->getId());
+        $cartId = $this->getQuoteMaskedId($quote->getId());
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons',
@@ -99,7 +97,7 @@ class GuestCouponManagementTest extends WebapiAbstract
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $this->createGuestQuote($quote->getId());
+        $cartId = $this->getQuoteMaskedId($quote->getId());
 
         $couponCode = 'invalid_coupon_code';
 
@@ -132,7 +130,7 @@ class GuestCouponManagementTest extends WebapiAbstract
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
-        $cartId = $this->createGuestQuote($quote->getId());
+        $cartId = $this->getQuoteMaskedId($quote->getId());
         $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
         $salesRule->load('Test Coupon', 'name');
         $couponCode = $salesRule->getCouponCode();
