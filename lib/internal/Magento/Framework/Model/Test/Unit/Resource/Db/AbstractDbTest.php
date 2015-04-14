@@ -493,15 +493,15 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
 
         $abstractModelMock->setIdFieldName('id');
         $abstractModelMock->setData(
-            array(
+            [
                 'id'    => 12345,
                 'name'  => 'Test Name',
                 'value' => 'Test Value'
-            )
+            ]
         );
         $abstractModelMock->afterLoad();
         $this->assertEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
-        $newData = array ('value' => 'Test Value New');
+        $newData = ['value' => 'Test Value New'];
         $this->_model->expects($this->once())->method('_prepareDataForTable')->will($this->returnValue($newData));
         $abstractModelMock->addData($newData);
         $this->assertNotEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
