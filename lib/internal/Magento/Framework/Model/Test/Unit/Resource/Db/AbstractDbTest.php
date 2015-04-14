@@ -456,23 +456,11 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $adapterMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
-            [],
-            [],
-            '',
-            false
-        );
+        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
         $resourceMock->expects($this->any())
             ->method('_getWriteAdapter')
             ->will($this->returnValue($adapterMock));
-        $resourceCollectionMock = $this->getMock(
-            'Magento\Framework\Data\Collection\Db',
-            [],
-            [],
-            '',
-            false
-        );
+        $resourceCollectionMock = $this->getMock('Magento\Framework\Data\Collection\Db', [], [], '', false);
         $abstractModelMock = $this->getMockForAbstractClass(
             'Magento\Framework\Model\AbstractModel',
             [$contextMock, $registryMock, $resourceMock, $resourceCollectionMock]
