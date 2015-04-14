@@ -13,7 +13,7 @@ use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
- * Coupon management object for guest carts.
+ * Coupon management class for guest carts.
  */
 class GuestCouponManagement extends CouponManagement implements GuestCouponManagementInterface
 {

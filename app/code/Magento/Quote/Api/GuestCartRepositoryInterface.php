@@ -5,10 +5,13 @@
  */
 namespace Magento\Quote\Api;
 
+/**
+ * Cart Repository interface for guest carts.
+ */
 interface GuestCartRepositoryInterface extends CartRepositoryInterface
 {
     /**
-     * Enables an administrative user to return information for a specified cart.
+     * Enables a guest user to return information for a specified cart.
      *
      * @param string $cartId
      * @return \Magento\Quote\Api\Data\CartInterface

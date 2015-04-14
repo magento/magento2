@@ -6,7 +6,7 @@
 namespace Magento\Quote\Api;
 
 /**
- * Interface for payment method management in the cart by guest user.
+ * Payment method management interface for guest carts.
  */
 interface GuestPaymentMethodManagementInterface extends PaymentMethodManagementInterface
 {

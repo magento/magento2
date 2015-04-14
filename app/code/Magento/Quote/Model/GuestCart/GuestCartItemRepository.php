@@ -10,6 +10,9 @@ use Magento\Quote\Model\Quote\Item\Repository;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
+/**
+ * Cart Item repository class for guest carts.
+ */
 class GuestCartItemRepository extends Repository implements \Magento\Quote\Api\GuestCartItemRepositoryInterface
 {
     /**

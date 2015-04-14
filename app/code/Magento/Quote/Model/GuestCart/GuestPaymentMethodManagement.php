@@ -11,7 +11,7 @@ use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
- * Class for guest cart payment method management.
+ * Payment method management class for guest carts.
  */
 class GuestPaymentMethodManagement extends PaymentMethodManagement implements GuestPaymentMethodManagementInterface
 {

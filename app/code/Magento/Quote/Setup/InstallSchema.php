@@ -1551,7 +1551,7 @@ class InstallSchema implements InstallSchemaInterface
          * Create table to store cartId and obscured UUID based cartId mapping
          */
         /**
-         * Create table ''
+         * Create table 'quote_id_mask'
          */
         $table = $installer->getConnection()->newTable(
             $installer->getTable('quote_id_mask')

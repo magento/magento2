@@ -25,7 +25,7 @@ use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class GuestCartManagement
+ * Cart Management class for guest carts.
  */
 class GuestCartManagement extends QuoteManagement implements GuestCartManagementInterface
 {

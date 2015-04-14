@@ -15,7 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
- * Class GuestCartRepository
+ * Cart Repository class for guest carts.
  */
 class GuestCartRepository extends QuoteRepository implements GuestCartRepositoryInterface
 {
@@ -43,7 +43,7 @@ class GuestCartRepository extends QuoteRepository implements GuestCartRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function get($cartId, array $sharedStoreIds = [])
     {
@@ -53,7 +53,7 @@ class GuestCartRepository extends QuoteRepository implements GuestCartRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getActive($cartId, array $sharedStoreIds = [])
     {
@@ -63,7 +63,7 @@ class GuestCartRepository extends QuoteRepository implements GuestCartRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function save(Quote $quote)
     {
@@ -76,7 +76,7 @@ class GuestCartRepository extends QuoteRepository implements GuestCartRepository
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function delete(Quote $quote)
     {
