@@ -34,6 +34,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Shipment\Track\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorMock;
+    /**
+     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entitySnapshotMock;
 
     /**
      * Set up
@@ -63,6 +67,13 @@ class TrackTest extends \PHPUnit_Framework_TestCase
         );
         $this->validatorMock = $this->getMock(
             'Magento\Sales\Model\Order\Shipment\Track\Validator',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Sales\Model\Resource\EntitySnapshot',
             [],
             [],
             '',
@@ -98,7 +109,8 @@ class TrackTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Resource\Order\Shipment\Track',
             [
                 'context' => $contextMock,
-                'validator' => $this->validatorMock
+                'validator' => $this->validatorMock,
+                'entitySnapshot' => $this->entitySnapshotMock
             ]
         );
     }
@@ -108,6 +120,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->trackModelMock)
+            ->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->trackModelMock))
@@ -125,6 +141,10 @@ class TrackTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveValidationFailed()
     {
+        $this->entitySnapshotMock->expects($this->once())
+            ->method('isModified')
+            ->with($this->trackModelMock)
+            ->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($this->trackModelMock))
