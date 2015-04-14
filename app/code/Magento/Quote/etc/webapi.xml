@@ -246,6 +246,26 @@
         </resources>
     </route>
 
+    <!-- Managing Guest Cart Coupons -->
+    <route url="/V1/guest-carts/:cartId/coupons" method="GET">
+        <service class="Magento\Quote\Api\GuestCouponManagementInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/coupons/:couponCode" method="PUT">
+        <service class="Magento\Quote\Api\GuestCouponManagementInterface" method="set"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/coupons" method="DELETE">
+        <service class="Magento\Quote\Api\GuestCouponManagementInterface" method="remove"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
     <!-- Managing Cart Shipping address -->
     <route url="/V1/carts/:cartId/shipping-address" method="GET">
         <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="get"/>
