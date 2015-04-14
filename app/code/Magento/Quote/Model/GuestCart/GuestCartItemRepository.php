@@ -6,6 +6,7 @@
  */
 namespace Magento\Quote\Model\GuestCart;
 
+use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote\Item\Repository;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -45,7 +46,12 @@ class GuestCartItemRepository extends Repository implements \Magento\Quote\Api\G
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::getList($quoteIdMask->getId());
+        $cartItemList = parent::getList($quoteIdMask->getId());
+        /** @var $item CartItemInterface */
+        foreach ($cartItemList as $item) {
+            $item->setQuoteId($quoteIdMask->getMaskedId());
+        }
+        return $cartItemList;
     }
 
     /**
