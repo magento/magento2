@@ -5,9 +5,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Quote\Model;
+namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\GuestCouponManagementInterface;
+use Magento\Quote\Model\CouponManagement;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 

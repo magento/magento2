@@ -29,6 +29,6 @@
     <preference for="Magento\Quote\Api\GuestCartManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartManagement" />
     <preference for="Magento\Quote\Api\GuestCartRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartRepository" />
     <preference for="Magento\Quote\Api\GuestCartItemRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartItemRepository" />
-    <preference for="Magento\Quote\Api\GuestCouponManagementInterface" type="Magento\Quote\Model\GuestCouponManagement" />
+    <preference for="Magento\Quote\Api\GuestCouponManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCouponManagement" />
 
 </config>
