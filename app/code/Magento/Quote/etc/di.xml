@@ -31,4 +31,5 @@
     <preference for="Magento\Quote\Api\GuestCartItemRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartItemRepository" />
     <preference for="Magento\Quote\Api\GuestCouponManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCouponManagement" />
     <preference for="Magento\Quote\Api\GuestPaymentMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestPaymentMethodManagement" />
+    <preference for="Magento\Quote\Api\GuestCartTotalRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartTotalRepository" />
 </config>

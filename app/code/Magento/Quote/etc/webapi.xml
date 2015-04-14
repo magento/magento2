@@ -314,4 +314,10 @@
         </resources>
     </route>
 
+    <route url="/V1/guest-carts/:cartId/totals" method="GET">
+        <service class="Magento\Quote\Api\GuestCartTotalRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 </routes>
