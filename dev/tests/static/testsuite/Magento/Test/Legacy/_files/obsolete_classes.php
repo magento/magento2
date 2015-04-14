@@ -758,10 +758,7 @@ return [
     ],
     ['Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\Exception'],
-    [
-        'Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException',
-        'Magento\Framework\Exception\File\LargeSizeException'
-    ],
+    ['Magento\Framework\Exception\File\LargeSizeException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\NotImageException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\OptionRequiredException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\RunValidationException'],
@@ -3126,6 +3123,11 @@ return [
     ['Magento\Framework\App\DeploymentConfig\CacheConfig'],
     ['Magento\Setup\Model\DeploymentConfigMapper'],
     ['Magento\Framework\App\DeploymentConfig\EncryptConfig'],
+    ['Magento\Framework\Filesystem\Io\IoException'],
+    ['Magento\Framework\DB\DBException'],
+    ['Magento\Framework\DB\Tree\TreeException'],
+    ['Magento\Framework\DB\Tree\Node\NodeException'],
+    ['Magento\Framework\DB\Tree\NodeSet\NodeSetException'],
     ['Magento\Backup\Exception'],
     ['Magento\Catalog\Exception'],
     ['Magento\Reports\Exception'],
@@ -3146,4 +3148,7 @@ return [
     ['Magento\CatalogRule\CatalogRuleException'],
     ['Magento\Payment\Exception'],
     ['Magento\UrlRewrite\Model\Storage\DuplicateEntryException'],
+    ['Magento\Eav\Exception'],
+    ['Magento\Framework\Exception\File\ValidatorException'],
+    ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
 ];
