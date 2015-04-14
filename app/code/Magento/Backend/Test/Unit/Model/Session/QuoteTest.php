@@ -308,12 +308,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      * Run test getQuote method
      *
      * @return void
+     * @dataProvider getQuoteDataProvider
      */
-    public function testGetQuoteWithQuoteId()
+    public function testGetQuoteWithQuoteId($customerId, $quoteCustomerId, $expectedNumberOfInvokes)
     {
         $quoteId = 22;
         $storeId = 10;
-        $customerId = 66;
 
         $this->quote->expects($this->any())
             ->method('getQuoteId')
@@ -331,7 +331,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $dataCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerRepositoryMock->expects($this->once())
+        $this->customerRepositoryMock->expects($this->$expectedNumberOfInvokes())
             ->method('getById')
             ->with($customerId)
             ->willReturn($dataCustomerMock);
@@ -346,6 +346,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'assignCustomer',
                 'setIgnoreOldQty',
                 'setIsSuperMode',
+                'getCustomerId',
                 '__wakeup'
             ],
             [],
@@ -355,7 +356,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())
             ->method('setStoreId')
             ->with($storeId);
-        $quoteMock->expects($this->once())
+        $quoteMock->expects($this->$expectedNumberOfInvokes())
             ->method('assignCustomer')
             ->with($dataCustomerMock);
         $quoteMock->expects($this->once())
@@ -364,6 +365,9 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())
             ->method('setIsSuperMode')
             ->with(true);
+        $quoteMock->expects($this->once())
+            ->method('getCustomerId')
+            ->will($this->returnValue($quoteCustomerId));
 
         $this->quoteRepositoryMock->expects($this->once())
             ->method('create')
@@ -374,5 +378,16 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->willReturn($quoteMock);
 
         $this->assertEquals($quoteMock, $this->quote->getQuote());
+    }
+
+    /**
+     * @return array
+     */
+    public function getQuoteDataProvider()
+    {
+        return [
+            'customer ids different' => [66, null, 'once'],
+            'customer ids same' => [66, 66, 'never'],
+        ];
     }
 }
