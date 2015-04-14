@@ -130,27 +130,27 @@
 
     <!-- Managing Guest Cart Items -->
     <route url="/V1/guest-carts/:cartId/items" method="GET">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="getList"/>
+        <service class="Magento\Quote\Api\GuestCartItemRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="Magento_Cart::manage" />
+            <resource ref="anonymous" />
         </resources>
     </route>
     <route url="/V1/guest-carts/items" method="POST">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+        <service class="Magento\Quote\Api\GuestCartItemRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="anonymous" />
         </resources>
     </route>
     <route url="/V1/guest-carts/items/:itemId" method="PUT">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
+        <service class="Magento\Quote\Api\GuestCartItemRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Cart::manage" />
+            <resource ref="anonymous" />
         </resources>
     </route>
     <route url="/V1/guest-carts/:cartId/items/:itemId" method="DELETE">
-        <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="deleteById"/>
+        <service class="Magento\Quote\Api\GuestCartItemRepositoryInterface" method="deleteById"/>
         <resources>
-            <resource ref="Magento_Cart::manage" />
+            <resource ref="anonymous" />
         </resources>
     </route>
 

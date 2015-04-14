@@ -28,4 +28,6 @@
 
     <preference for="Magento\Quote\Api\GuestCartManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartManagement" />
     <preference for="Magento\Quote\Api\GuestCartRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartRepository" />
+    <preference for="Magento\Quote\Api\GuestCartItemRepositoryInterface" type="Magento\Quote\GuestCart\GuestCartItemRepository" />
+
 </config>
