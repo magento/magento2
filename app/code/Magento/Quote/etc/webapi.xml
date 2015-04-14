@@ -55,8 +55,22 @@
     </route>
 
     <!-- Managing guest carts -->
+
+    <route url="/V1/guest-carts/:cartId" method="GET">
+        <service class="Magento\Quote\Api\GuestCartRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+        <!-- No getList for anonymous guest cart users -->
     <route url="/V1/guest-carts" method="POST">
         <service class="Magento\Quote\Api\GuestCartManagementInterface" method="createEmptyCart"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId" method="PUT">
+        <service class="Magento\Quote\Api\GuestCartManagementInterface" method="assignCustomer"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

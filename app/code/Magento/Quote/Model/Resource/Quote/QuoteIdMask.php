@@ -20,5 +20,6 @@ class QuoteIdMask extends AbstractDb
     protected function _construct()
     {
         $this->_init('quote_id_mask', 'entity_id');
+        $this->_isPkAutoIncrement = false;
     }
 }

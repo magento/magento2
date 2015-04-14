@@ -1570,7 +1570,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'masked_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            16,
+            32,
             ['nullable' => 'false'],
             'Masked Id'
         )->setComment(

@@ -6,7 +6,9 @@
 
 namespace Magento\Quote\Model\GuestCart;
 
+use Magento\Quote\Api\GuestCartRepositoryInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Store\Model\StoreManagerInterface;
@@ -15,7 +17,7 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 /**
  * Class GuestCartRepository
  */
-class GuestCartRepository extends QuoteRepository
+class GuestCartRepository extends QuoteRepository implements GuestCartRepositoryInterface
 {
     /**
      * @var QuoteIdMaskFactory
@@ -46,7 +48,7 @@ class GuestCartRepository extends QuoteRepository
     public function get($cartId, array $sharedStoreIds = [])
     {
         /** @var $quoteIdMask QuoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->loadByMaskedId($cartId);
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return parent::get($quoteIdMask->getId(), $sharedStoreIds);
     }
 
@@ -56,7 +58,7 @@ class GuestCartRepository extends QuoteRepository
     public function getActive($cartId, array $sharedStoreIds = [])
     {
         /** @var $quoteIdMask QuoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->loadByMaskedId($cartId);
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return parent::getActive($quoteIdMask->getId(), $sharedStoreIds);
     }
 
@@ -67,7 +69,7 @@ class GuestCartRepository extends QuoteRepository
     {
         if($quote->getId()) {
             /** @var $quoteIdMask QuoteIdMask */
-            $quoteIdMask = $this->quoteIdMaskFactory->loadByMaskedId($quote->getId());
+            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'masked_id');
             $quote->setId($quoteIdMask->getId());
         }
         parent::save($quote);
@@ -80,7 +82,7 @@ class GuestCartRepository extends QuoteRepository
     {
         if($quote->getId()) {
             /** @var $quoteIdMask QuoteIdMask */
-            $quoteIdMask = $this->quoteIdMaskFactory->loadByMaskedId($quote->getId());
+            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'masked_id');
             $quote->setId($quoteIdMask->getId());
         }
         parent::delete($quote);

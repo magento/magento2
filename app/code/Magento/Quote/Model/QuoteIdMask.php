@@ -43,7 +43,7 @@ class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
      *
      * @return string
      */
-    public function guidv4()
+    protected function guidv4()
     {
         $data = openssl_random_pseudo_bytes(16);
 
