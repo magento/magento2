@@ -8,7 +8,7 @@ namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Model\Quote\Item\Repository;
 use Magento\Quote\Model\QuoteIdMask;
-use Magento\Quote\Model\Resource\Quote\QuoteIdMaskFactory;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
 class GuestCartItemRepository extends Repository implements \Magento\Quote\Api\GuestCartItemRepositoryInterface
 {
