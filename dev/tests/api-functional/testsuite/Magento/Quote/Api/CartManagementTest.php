@@ -310,14 +310,11 @@ class CartManagementTest extends WebapiAbstract
     public function testGetCartForCustomer()
     {
         // get customer ID token
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH_CUSTOMER_TOKEN,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-        ];
-        $requestData = ['username' => 'customer@example.com', 'password' => 'password'];
-        $token = $this->_webApiCall($serviceInfo, $requestData);
+        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         $cart = $this->getCart('test01');
         $customerId = $cart->getCustomer()->getId();
