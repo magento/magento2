@@ -3154,6 +3154,5 @@ return [
     ['Magento\Eav\Exception'],
     ['Magento\Framework\Exception\File\ValidatorException'],
     ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
-    ['Magento\Framework\Exception\State\InputMismatchException'],
     ['Magento\Shipping\Exception'],
 ];
