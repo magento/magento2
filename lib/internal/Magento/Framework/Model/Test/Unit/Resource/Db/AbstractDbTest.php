@@ -61,7 +61,12 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Framework\Model\Resource\Db\AbstractDb',
-            [$contextMock]
+            [$contextMock],
+            '',
+            true,
+            true,
+            true,
+            ['_prepareDataForTable']
         );
     }
 
@@ -421,5 +426,106 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
             [true, true],
             [null, false]
         ];
+    }
+
+    public function testPrepareDataForUpdate()
+    {
+        $adapterInterfaceMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $contextMock = new \Magento\Framework\Model\Context(
+            $this->getMock('Psr\Log\LoggerInterface'),
+            $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
+            $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false),
+            $this->getMock('Magento\Framework\App\State', [], [], '', false),
+            $this->getMock('\Magento\Framework\Model\ActionValidator\RemoveAction', [], [], '', false),
+            $this->getMock('\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor', [], [], '', false)
+        );
+        $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
+        $resourceMock = $this->getMock(
+            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            [
+                '_construct',
+                '_getReadAdapter',
+                '_getWriteAdapter',
+                '__wakeup',
+                'commit',
+                'delete',
+                'getIdFieldName',
+                'rollBack'
+            ],
+            [],
+            '',
+            false
+        );
+        $adapterMock = $this->getMock(
+            'Magento\Framework\DB\Adapter\AdapterInterface',
+            [],
+            [],
+            '',
+            false
+        );
+        $resourceMock->expects($this->any())
+            ->method('_getWriteAdapter')
+            ->will($this->returnValue($adapterMock));
+        $resourceCollectionMock = $this->getMock(
+            'Magento\Framework\Data\Collection\Db',
+            [],
+            [],
+            '',
+            false
+        );
+        $abstractModelMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Model\AbstractModel',
+            [$contextMock, $registryMock, $resourceMock, $resourceCollectionMock]
+        );
+        $data = 'tableName';
+        $this->_resourcesMock->expects($this->any())
+            ->method('getConnection')
+            ->will($this->returnValue($adapterInterfaceMock)
+        );
+        $this->_resourcesMock->expects($this->any())->method('getTableName')->with($data)->will(
+            $this->returnValue('tableName')
+        );
+        $this->_resourcesMock->expects($this->any())
+            ->method('_getWriteAdapter')
+            ->will($this->returnValue($adapterInterfaceMock));
+        $mainTableReflection = new \ReflectionProperty(
+            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            '_mainTable'
+        );
+        $mainTableReflection->setAccessible(true);
+        $mainTableReflection->setValue($this->_model, 'tableName');
+        $idFieldNameReflection = new \ReflectionProperty(
+            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            '_idFieldName'
+        );
+        $idFieldNameReflection->setAccessible(true);
+        $idFieldNameReflection->setValue($this->_model, 'idFieldName');
+        $adapterInterfaceMock->expects($this->any())->method('save')->with('tableName', 'idFieldName');
+        $adapterInterfaceMock->expects($this->any())->method('quoteInto')->will($this->returnValue('idFieldName'));
+
+        $abstractModelMock->setIdFieldName('id');
+        $abstractModelMock->setData(
+            array(
+                'id'    => 12345,
+                'name'  => 'Test Name',
+                'value' => 'Test Value'
+            )
+        );
+        $abstractModelMock->afterLoad();
+        $this->assertEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
+        $newData = array ('value' => 'Test Value New');
+        $this->_model->expects($this->once())->method('_prepareDataForTable')->will($this->returnValue($newData));
+        $abstractModelMock->addData($newData);
+        $this->assertNotEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
+        $abstractModelMock->isObjectNew(false);
+        $adapterInterfaceMock->expects($this->once())
+            ->method('update')
+            ->with(
+                'tableName',
+                $newData,
+                'idFieldName'
+            );
+
+        $this->_model->save($abstractModelMock);
     }
 }
