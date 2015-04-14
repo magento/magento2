@@ -15,14 +15,11 @@ class Grand extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      */
     public function collect(\Magento\Quote\Model\Quote\Address $address)
     {
-        $grandTotal = $address->getGrandTotal();
-        $baseGrandTotal = $address->getBaseGrandTotal();
-
         $totals = array_sum($address->getAllTotalAmounts());
         $baseTotals = array_sum($address->getAllBaseTotalAmounts());
 
-        $address->setGrandTotal($grandTotal + $totals);
-        $address->setBaseGrandTotal($baseGrandTotal + $baseTotals);
+        $address->setGrandTotal($totals);
+        $address->setBaseGrandTotal($baseTotals);
         return $this;
     }
 
