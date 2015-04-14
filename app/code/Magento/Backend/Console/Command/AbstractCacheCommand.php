@@ -75,7 +75,7 @@ abstract class AbstractCacheCommand extends Command
             if ($unsupportedTypes) {
                 throw new \InvalidArgumentException(
                     "The following requested cache types are not supported: '" . join("', '", $unsupportedTypes)
-                    . "'.\nSupported types: " . join(", ", $availableTypes) . ""
+                    . "'." . PHP_EOL . 'Supported types: ' . join(", ", $availableTypes)
                 );
             }
             return array_values(array_intersect($availableTypes, $requestedTypes));

@@ -51,7 +51,7 @@ abstract class AbstractCacheSetCommand extends AbstractCacheCommand
         if (!empty($changedTypes) && $isEnable) {
             $this->cacheManager->clean($changedTypes);
             $output->writeln('Cleaned cache types:');
-            $output->writeln(join("\n", $changedTypes));
+            $output->writeln(join(PHP_EOL, $changedTypes));
         }
     }
 }

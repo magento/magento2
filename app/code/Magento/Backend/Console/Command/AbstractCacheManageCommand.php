@@ -14,6 +14,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class AbstractCacheManageCommand extends AbstractCacheCommand
 {
     /**
+     * Input key all
+     */
+    const INPUT_KEY_ALL = 'all';
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -24,7 +29,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
             'list of cache types, space separated If omitted, all caches will be affected'
         );
         $this->addOption(
-            'all',
+            self::INPUT_KEY_ALL,
             null,
             InputOption::VALUE_NONE,
             'all cache types'
@@ -56,13 +61,13 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('all')) {
+        if ($input->getOption(self::INPUT_KEY_ALL)) {
             $types = $this->cacheManager->getAvailableTypes();
         } else {
             $types = $this->getRequestedTypes($input);
         }
         $this->performAction($types);
         $output->writeln($this->getDisplayMessage());
-        $output->writeln(join("\n", $types));
+        $output->writeln(join(PHP_EOL, $types));
     }
 }
