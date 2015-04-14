@@ -24,7 +24,7 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $continue = '#review-buttons-container button';
+    protected $continueCheckoutButton = '#review-buttons-container button';
 
     /**
      * Grand total search mask.
@@ -314,7 +314,7 @@ abstract class AbstractReview extends Block
      */
     public function placeOrder()
     {
-        $this->_rootElement->find($this->continue, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->$continueCheckoutButton, Locator::SELECTOR_CSS)->click();
         $this->waitForElementNotVisible($this->waitElement);
     }
 

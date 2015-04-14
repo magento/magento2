@@ -33,7 +33,7 @@ class Page extends AbstractFactory
      * @param string $class
      * @return string
      */
-    protected function _toCamelCase($class)
+    private function toCamelCase($class)
     {
         $classNameExcessSymbols = ['_', '\\', '/', 'https:', 'http:', 'com', 'www', '.', '-'];
         $class = str_replace($classNameExcessSymbols, ' ', $class);
@@ -50,7 +50,7 @@ class Page extends AbstractFactory
         $realClass = $this->_resolveClass($item);
         $reflectionClass = new \ReflectionClass($realClass);
         $mca = $reflectionClass->getConstant('MCA');
-        $methodNameSuffix = $this->_toCamelCase($mca);
+        $methodNameSuffix = $this->toCamelCase($mca);
 
         $fallbackComment = $this->_buildFallbackComment($item);
 
