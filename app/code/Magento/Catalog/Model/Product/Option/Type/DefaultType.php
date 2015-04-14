@@ -359,23 +359,26 @@ class DefaultType extends \Magento\Framework\Object
     public function getProductOptions()
     {
         if (!isset($this->_productOptions[$this->getProduct()->getId()])) {
-            foreach ($this->getProduct()->getOptions() as $_option) {
-                /* @var $option \Magento\Catalog\Model\Product\Option */
-                $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()] = [
-                    'option_id' => $_option->getId(),
-                ];
-                if ($_option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
-                    $optionValues = [];
-                    foreach ($_option->getValues() as $_value) {
-                        /* @var $value \Magento\Catalog\Model\Product\Option\Value */
-                        $optionValues[$_value->getTitle()] = $_value->getId();
+            $options = $this->getProduct()->getOptions();
+            if ($options != null) {
+                foreach ($options as $_option) {
+                    /* @var $option \Magento\Catalog\Model\Product\Option */
+                    $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()] = [
+                        'option_id' => $_option->getId(),
+                    ];
+                    if ($_option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
+                        $optionValues = [];
+                        foreach ($_option->getValues() as $_value) {
+                            /* @var $value \Magento\Catalog\Model\Product\Option\Value */
+                            $optionValues[$_value->getTitle()] = $_value->getId();
+                        }
+                        $this->_productOptions[$this
+                            ->getProduct()
+                            ->getId()][$_option
+                            ->getTitle()]['values'] = $optionValues;
+                    } else {
+                        $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()]['values'] = [];
                     }
-                    $this->_productOptions[$this
-                        ->getProduct()
-                        ->getId()][$_option
-                        ->getTitle()]['values'] = $optionValues;
-                } else {
-                    $this->_productOptions[$this->getProduct()->getId()][$_option->getTitle()]['values'] = [];
                 }
             }
         }
