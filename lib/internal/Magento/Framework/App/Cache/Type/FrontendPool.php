@@ -104,7 +104,8 @@ class FrontendPool
         $result = null;
         $cacheInfo = $this->deploymentConfig->getConfigData(self::KEY_CACHE);
         if (null !== $cacheInfo) {
-            $result = $cacheInfo[self::KEY_CACHE_TYPE][$cacheType][self::KEY_FRONTEND_CACHE];
+            $result = isset($cacheInfo[self::KEY_CACHE_TYPE][$cacheType][self::KEY_FRONTEND_CACHE]) ?
+                $cacheInfo[self::KEY_CACHE_TYPE][$cacheType][self::KEY_FRONTEND_CACHE] : null;
         }
         if (!$result) {
             if (isset($this->_typeFrontendMap[$cacheType])) {

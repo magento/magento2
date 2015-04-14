@@ -9,14 +9,28 @@ namespace Magento\Catalog\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
-/**
- * @todo remove this interface if framework support return array
- */
 interface ProductTierPriceInterface extends ExtensibleDataInterface
 {
     const QTY = 'qty';
 
     const VALUE = 'value';
+
+    const CUSTOMER_GROUP_ID = 'customer_group_id';
+
+    /**
+     * Retrieve customer group id
+     *
+     * @return int
+     */
+    public function getCustomerGroupId();
+
+    /**
+     * Set customer group id
+     *
+     * @param int $customerGroupId
+     * @return $this
+     */
+    public function setCustomerGroupId($customerGroupId);
 
     /**
      * Retrieve tier qty

@@ -38,6 +38,7 @@ class InvoiceSender extends NotifySender
      * @param Template $templateContainer
      * @param InvoiceIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param PaymentHelper $paymentHelper
      * @param InvoiceResource $invoiceResource
      * @param Renderer $addressRenderer
@@ -46,11 +47,12 @@ class InvoiceSender extends NotifySender
         Template $templateContainer,
         InvoiceIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger,
         PaymentHelper $paymentHelper,
         InvoiceResource $invoiceResource,
         Renderer $addressRenderer
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
         $this->paymentHelper = $paymentHelper;
         $this->invoiceResource = $invoiceResource;
         $this->addressRenderer = $addressRenderer;
