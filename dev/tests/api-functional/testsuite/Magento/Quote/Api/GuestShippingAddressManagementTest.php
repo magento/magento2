@@ -39,6 +39,14 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
         }
     }
 
+    protected function getQuoteMaskedId($quoteId)
+    {
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMaskFactory')->create();
+        $quoteIdMask->load($quoteId);
+        return $quoteIdMask->getMaskedId();
+    }
+
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      */
@@ -67,18 +75,11 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
             AddressInterface::KEY_EMAIL => $address->getEmail()
         ];
 
-        $cartId = $quote->getId();
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
-            ->create();
-        $quoteIdMask->load($cartId);
-        //Use masked cart Id
-        $cartId = $quoteIdMask->getMaskedId();
+        $cartId = $this->getQuoteMaskedId($quote->getId());
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $quote->getId() . '/shipping-address',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/shipping-address',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -101,18 +102,12 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
     public function testGetAddressOfQuoteWithVirtualProduct()
     {
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
-        $cartId = $quote->load('test_order_with_virtual_product', 'reserved_order_id')->getId();
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
-            ->create();
-        $quoteIdMask->load($cartId);
-        //Use masked cart Id
-        $cartId = $quoteIdMask->getMaskedId();
+        $quote->load('test_order_with_virtual_product', 'reserved_order_id');
+        $cartId = $this->getQuoteMaskedId($quote->getId());
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $quote->getId() . '/shipping-address',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/shipping-address',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -133,14 +128,7 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $quote->getId();
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
-            ->create();
-        $quoteIdMask->load($cartId);
-        //Use masked cart Id
-        $cartId = $quoteIdMask->getMaskedId();
+        $cartId = $this->getQuoteMaskedId($quote->getId());
 
         $serviceInfo = [
             'rest' => [
@@ -208,14 +196,7 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_with_virtual_product', 'reserved_order_id');
-        $cartId = $quote->getId();
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
-            ->create();
-        $quoteIdMask->load($cartId);
-        //Use masked cart Id
-        $cartId = $quoteIdMask->getMaskedId();
+        $cartId = $this->getQuoteMaskedId($quote->getId());
 
         $serviceInfo = [
             'rest' => [

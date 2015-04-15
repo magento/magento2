@@ -12,6 +12,8 @@ use Zend\Code\Reflection\ParameterReflection;
 
 /**
  * Type processor of config reader properties
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TypeProcessor
 {
@@ -108,7 +110,7 @@ class TypeProcessor
     public function register($type)
     {
         $typeName = $this->normalizeType($type);
-        if (is_null($typeName)) {
+        if (null === $typeName) {
             return null;
         }
         if (!$this->isTypeSimple($typeName) && !$this->isTypeAny($typeName)) {
@@ -291,7 +293,7 @@ class TypeProcessor
      */
     public function normalizeType($type)
     {
-        if($type == 'null') {
+        if ($type == 'null') {
             return null;
         }
         $normalizationMap = [

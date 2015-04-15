@@ -26,6 +26,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Cart Management class for guest carts.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GuestCartManagement extends QuoteManagement implements GuestCartManagementInterface
 {

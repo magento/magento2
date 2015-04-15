@@ -27,4 +27,3 @@ $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
 $quoteIdMask->setId($quote->getId());
 $quoteIdMask->setDataChanges(true);
 $quoteIdMask->save();
-
