@@ -29,6 +29,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
             InputOption::VALUE_NONE,
             'all cache types'
         );
+        parent::configure();
     }
 
     /**
