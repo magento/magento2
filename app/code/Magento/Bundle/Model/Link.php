@@ -21,11 +21,10 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_OPTION_ID = 'option_id';
     const KEY_QTY = 'qty';
     const KEY_POSITION = 'position';
-    const KEY_IS_DEFINED = 'is_defined';
     const KEY_IS_DEFAULT = 'is_default';
     const KEY_PRICE = 'price';
     const KEY_PRICE_TYPE = 'price_type';
-    const KEY_CAN_CHANGE_QUANTITY = 'can_change_quantity';
+    const KEY_CAN_CHANGE_QUANTITY = 'selection_can_change_quantity';
     /**#@-*/
 
     /**
@@ -75,14 +74,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function getPosition()
     {
         return $this->getData(self::KEY_POSITION);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIsDefined()
-    {
-        return $this->getData(self::KEY_IS_DEFINED);
     }
 
     /**
@@ -159,17 +150,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setPosition($position)
     {
         return $this->setData(self::KEY_POSITION, $position);
-    }
-
-    /**
-     * Set is defined
-     *
-     * @param bool $isDefined
-     * @return $this
-     */
-    public function setIsDefined($isDefined)
-    {
-        return $this->setData(self::KEY_IS_DEFINED, $isDefined);
     }
 
     /**

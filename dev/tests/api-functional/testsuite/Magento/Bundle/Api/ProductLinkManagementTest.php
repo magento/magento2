@@ -33,12 +33,12 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
         $this->assertArrayHasKey(0, $result);
         $this->assertArrayHasKey('option_id', $result[0]);
         $this->assertArrayHasKey('is_default', $result[0]);
-        $this->assertArrayHasKey('is_defined', $result[0]);
+        $this->assertArrayHasKey('can_change_quantity', $result[0]);
         $this->assertArrayHasKey('price', $result[0]);
         $this->assertArrayHasKey('price_type', $result[0]);
         $this->assertNotNull($result[0]['id']);
 
-        unset($result[0]['option_id'], $result[0]['is_default'], $result[0]['is_defined']);
+        unset($result[0]['option_id'], $result[0]['is_default'], $result[0]['can_change_quantity']);
         unset($result[0]['price'], $result[0]['price_type'], $result[0]['id']);
 
         ksort($result[0]);

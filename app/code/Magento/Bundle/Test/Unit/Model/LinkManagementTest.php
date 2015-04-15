@@ -193,7 +193,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->link->expects($this->once())->method('setIsDefault')->willReturnSelf();
         $this->link->expects($this->once())->method('setQty')->willReturnSelf();
-        $this->link->expects($this->once())->method('setIsDefined')->willReturnSelf();
+        $this->link->expects($this->once())->method('setCanChangeQuantity')->willReturnSelf();
         $this->link->expects($this->once())->method('setPrice')->willReturnSelf();
         $this->link->expects($this->once())->method('setPriceType')->willReturnSelf();
         $this->link->expects($this->once())->method('setId')->willReturnSelf();

@@ -324,7 +324,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $link->setIsDefault($selection->getIsDefault())
             ->setId($selection->getSelectionId())
             ->setQty($selection->getSelectionQty())
-            ->setIsDefined($selection->getSelectionCanChangeQty())
+            ->setCanChangeQuantity($selection->getSelectionCanChangeQty())
             ->setPrice($selectionPrice)
             ->setPriceType($selectionPriceType);
         return $link;

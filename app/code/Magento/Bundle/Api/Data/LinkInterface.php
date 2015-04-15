@@ -88,21 +88,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setPosition($position);
 
     /**
-     * Get is defined
-     *
-     * @return bool|null
-     */
-    public function getIsDefined();
-
-    /**
-     * Set is defined
-     *
-     * @param bool $isDefined
-     * @return $this
-     */
-    public function setIsDefined($isDefined);
-
-    /**
      * Get is default
      *
      * @return bool

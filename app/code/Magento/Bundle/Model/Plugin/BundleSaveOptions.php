@@ -46,7 +46,11 @@ class BundleSaveOptions
         }
 
         /* @var \Magento\Bundle\Api\Data\OptionInterface[] $options */
-        $bundleProductOptions = $product->getExtensionAttributes()->getBundleProductOptions();
+        $extendedAttributes = $product->getExtensionAttributes();
+        if ($extendedAttributes === null) {
+            return $result;
+        }
+        $bundleProductOptions = $extendedAttributes->getBundleProductOptions();
         if ($bundleProductOptions == null) {
             return $result;
         }
