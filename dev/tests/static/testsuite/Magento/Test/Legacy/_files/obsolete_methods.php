@@ -2155,4 +2155,5 @@ return [
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
     ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
     ['prepareCatalogProductPriceIndexTable', 'Magento\CatalogRule\Model\Observer'],
+    ['isOrderIncrementIdUsed', 'Magento\Quote\Model\Resource\Quote'],
 ];

@@ -11,6 +11,7 @@
         "magento/module-payment": "0.74.0-beta4",
         "magento/module-sales": "0.74.0-beta4",
         "magento/module-shipping": "0.74.0-beta4",
+        "magento/module-sales-sequence": "0.74.0-beta4",
         "magento/module-backend": "0.74.0-beta4",
         "magento/module-directory": "0.74.0-beta4",
         "magento/module-eav": "0.74.0-beta4",
