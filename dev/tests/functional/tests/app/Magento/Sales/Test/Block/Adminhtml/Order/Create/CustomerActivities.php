@@ -26,7 +26,7 @@ class CustomerActivities extends Block
      *
      * @var string
      */
-    protected $updateChanges = '.actions .action-.scalable';
+    protected $updateChanges = '.actions .action-default.scalable';
 
     /**
      * Order sidebar reorder css selector

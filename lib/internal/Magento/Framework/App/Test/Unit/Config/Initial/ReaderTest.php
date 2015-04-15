@@ -106,7 +106,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Framework\App\Config\Initial\Reader::read
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessageRegExp /Invalid XML in file \w+/
      */
     public function testReadInvalidConfig()

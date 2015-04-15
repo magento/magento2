@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Component\Layout;
 
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -87,7 +87,7 @@ class Tabs extends Generic implements LayoutInterface
      * @param UiComponentInterface $component
      * @param string $componentType
      * @return void
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function addChildren(array &$topNode, UiComponentInterface $component, $componentType)
     {
@@ -234,7 +234,7 @@ class Tabs extends Generic implements LayoutInterface
      * @param UiComponentInterface $childComponent
      * @param string $name
      * @return UiComponentInterface
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function createTabComponent(UiComponentInterface $childComponent, $name)
     {

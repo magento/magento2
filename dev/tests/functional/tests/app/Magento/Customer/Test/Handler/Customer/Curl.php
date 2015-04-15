@@ -79,7 +79,7 @@ class Curl extends AbstractCurl implements CustomerInterface
     public function persist(FixtureInterface $customer = null)
     {
         $address = [];
-        $result = [];
+
         /** @var Customer $customer */
         $url = $_ENV['app_frontend_url'] . 'customer/account/createpost/?nocookie=true';
         $data = $customer->getData();
@@ -106,7 +106,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         }
         $this->updateCustomer($data);
 
-        return $result;
+        return ['id' => $data['entity_id']];
     }
 
     /**

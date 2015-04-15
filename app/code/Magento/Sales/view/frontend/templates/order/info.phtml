@@ -18,7 +18,7 @@
         <div class="box box-order-shipping-address">
             <strong class="box-title"><span><?php echo __('Shipping Address') ?></span></strong>
             <div class="box-content">
-                <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
+                <address><?php echo $block->getFormattedAddress($_order->getShippingAddress()); ?></address>
             </div>
         </div>
 
@@ -41,7 +41,7 @@
                 <span><?php echo __('Billing Address') ?></span>
             </strong>
             <div class="box-content">
-                <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+                <address><?php echo $block->getFormattedAddress($_order->getBillingAddress()); ?></address>
             </div>
         </div>
         <div class="box box-order-billing-method">

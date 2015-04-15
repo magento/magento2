@@ -12,7 +12,11 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Resource\Order\Invoice as InvoiceResource;
+use Magento\Sales\Model\Order\Address\Renderer;
 
+/**
+ * Class InvoiceSender
+ */
 class InvoiceSender extends NotifySender
 {
     /**
@@ -26,22 +30,32 @@ class InvoiceSender extends NotifySender
     protected $invoiceResource;
 
     /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param Template $templateContainer
      * @param InvoiceIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param PaymentHelper $paymentHelper
      * @param InvoiceResource $invoiceResource
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
         InvoiceIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger,
         PaymentHelper $paymentHelper,
-        InvoiceResource $invoiceResource
+        InvoiceResource $invoiceResource,
+        Renderer $addressRenderer
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
         $this->paymentHelper = $paymentHelper;
         $this->invoiceResource = $invoiceResource;
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -55,6 +69,12 @@ class InvoiceSender extends NotifySender
     public function send(Invoice $invoice, $notify = true, $comment = '')
     {
         $order = $invoice->getOrder();
+        if ($order->getShippingAddress()) {
+            $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
+        } else {
+            $formattedShippingAddress = '';
+        }
+        $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
         $this->templateContainer->setTemplateVars(
             [
                 'order' => $order,
@@ -63,6 +83,8 @@ class InvoiceSender extends NotifySender
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
+                'formattedShippingAddress' => $formattedShippingAddress,
+                'formattedBillingAddress' => $formattedBillingAddress,
             ]
         );
         $result = $this->checkAndSend($order, $notify);

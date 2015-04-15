@@ -39,6 +39,11 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     protected $customAttributesCodes = null;
 
     /**
+     * @var bool
+     */
+    protected $customAttributesChanged = false;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -92,16 +97,43 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
+     * Initialize customAttributes based on existing data
+     *
+     * @return $this
+     */
+    protected function initializeCustomAttributes()
+    {
+        if (!isset($this->_data[self::CUSTOM_ATTRIBUTES]) || $this->customAttributesChanged) {
+            if (!empty($this->_data[self::CUSTOM_ATTRIBUTES])) {
+                $customAttributes = $this->_data[self::CUSTOM_ATTRIBUTES];
+            } else {
+                $customAttributes = [];
+            }
+            $customAttributeCodes = $this->getCustomAttributesCodes();
+
+            foreach ($customAttributeCodes as $customAttributeCode) {
+                if (isset($this->_data[$customAttributeCode])) {
+                    $customAttribute = $this->customAttributeFactory->create()
+                        ->setAttributeCode($customAttributeCode)
+                        ->setValue($this->_data[$customAttributeCode]);
+                    $customAttributes[$customAttributeCode] = $customAttribute;
+                }
+            }
+            $this->_data[self::CUSTOM_ATTRIBUTES] = $customAttributes;
+            $this->customAttributesChanged = false;
+        }
+    }
+
+    /**
      * Retrieve custom attributes values.
      *
      * @return \Magento\Framework\Api\AttributeInterface[]|null
      */
     public function getCustomAttributes()
     {
+        $this->initializeCustomAttributes();
         // Returning as a sequential array (instead of stored associative array) to be compatible with the interface
-        return isset($this->_data[self::CUSTOM_ATTRIBUTES])
-            ? array_values($this->_data[self::CUSTOM_ATTRIBUTES])
-            : [];
+        return array_values($this->_data[self::CUSTOM_ATTRIBUTES]);
     }
 
     /**
@@ -112,6 +144,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      */
     public function getCustomAttribute($attributeCode)
     {
+        $this->initializeCustomAttributes();
         return isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode])
             ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]
             : null;
@@ -154,8 +187,22 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             $filteredData = $this->filterCustomAttributes([self::CUSTOM_ATTRIBUTES => $value]);
             $value = $filteredData[self::CUSTOM_ATTRIBUTES];
         }
+        $this->customAttributesChanged = true;
         parent::setData($key, $value);
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * Unset customAttributesChanged flag
+     */
+    public function unsetData($key = null)
+    {
+        if (is_string($key) && isset($this->_data[self::CUSTOM_ATTRIBUTES][$key])) {
+            unset($this->_data[self::CUSTOM_ATTRIBUTES][$key]);
+        }
+        return parent::unsetData($key);
     }
 
     /**

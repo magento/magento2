@@ -15,62 +15,60 @@
 ?>
 <?php $_product = $block->getProduct()?>
 <?php $block->getConfigJson() ?>
-<div class="admin__scope">
-    <fieldset class="admin__fieldset downloadable-form">
+<fieldset class="admin__fieldset downloadable-form">
 
-        <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
-            <label class="admin__field-label" for="downloadable_links_title"><span><?php echo __('Title')?></span></label>
-            <div class="admin__field-control">
-                <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?php echo $block->getLinksTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
-                <?php if ($_product->getStoreId()): ?>
-                    <div class="admin__field admin__field-option">
-                        <input id="link_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="links_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
-                        <label class="admin__field-label" for="link_title_default"><span><?php echo __('Use Default Value'); ?></span></label>
-                    </div>
-                <?php endif; ?>
-            </div>
+    <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
+        <label class="admin__field-label" for="downloadable_links_title"><span><?php echo __('Title')?></span></label>
+        <div class="admin__field-control">
+            <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?php echo $block->getLinksTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <?php if ($_product->getStoreId()): ?>
+                <div class="admin__field admin__field-option">
+                    <input id="link_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="links_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
+                    <label class="admin__field-label" for="link_title_default"><span><?php echo __('Use Default Value'); ?></span></label>
+                </div>
+            <?php endif; ?>
         </div>
+    </div>
 
-        <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[GLOBAL]') . '"' : ''; ?>>
-            <label class="admin__field-label" for="downloadable_link_purchase_type"><span><?php echo __('Links can be purchased separately')?></span></label>
-            <div class="admin__field-control">
-                <?php echo $block->getPurchasedSeparatelySelect()?>
+    <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[GLOBAL]') . '"' : ''; ?>>
+        <label class="admin__field-label" for="downloadable_link_purchase_type"><span><?php echo __('Links can be purchased separately')?></span></label>
+        <div class="admin__field-control">
+            <?php echo $block->getPurchasedSeparatelySelect()?>
+        </div>
+    </div>
+    <div class="admin__field admin__field-wide">
+        <div class="admin__field-control">
+            <div class="admin__control-table-wrapper">
+                <table cellspacing="0" class="admin__control-table">
+                    <thead>
+                        <tr>
+                            <th class="col-title _required"><span><?php echo __('Title') ?></span></th>
+                            <?php if ($block->getCanReadPrice() !== false) : ?>
+                                <th class="col-price"><span><?php echo __('Price') ?></span></th>
+                            <?php endif; ?>
+                            <th class="col-limit"><span><?php echo __('Max. Downloads') ?></span></th>
+                            <th class="col-option"><span><?php echo __('Shareable') ?></span></th>
+                            <th class="col-sample"><span><?php echo __('Sample') ?></span></th>
+                            <th class="col-file"><span><?php echo __('File') ?></span></th>
+                            <th class="col-sort"><span><?php echo __('Sort Order') ?></span></th>
+                            <th class="col-actions">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td class="col-actions-add" colspan="8"><?php echo $block->getAddButtonHtml() ?></td>
+                        </tr>
+                    </tfoot>
+                    <tbody id="link_items_body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="admin__field-note">
+                <span><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
             </div>
         </div>
-        <div class="admin__field admin__field-wide">
-            <div class="admin__field-control">
-                <div class="admin__control-table-wrapper">
-                    <table cellspacing="0" class="admin__control-table">
-                        <thead>
-                            <tr>
-                                <th class="col-title _required"><span><?php echo __('Title') ?></span></th>
-                                <?php if ($block->getCanReadPrice() !== false) : ?>
-                                    <th class="col-price"><span><?php echo __('Price') ?></span></th>
-                                <?php endif; ?>
-                                <th class="col-limit"><span><?php echo __('Max. Downloads') ?></span></th>
-                                <th class="col-option"><span><?php echo __('Shareable') ?></span></th>
-                                <th class="col-sample"><span><?php echo __('Sample') ?></span></th>
-                                <th class="col-file"><span><?php echo __('File') ?></span></th>
-                                <th class="col-sort"><span><?php echo __('Sort Order') ?></span></th>
-                                <th class="col-actions">&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <td class="col-actions-add" colspan="8"><?php echo $block->getAddButtonHtml() ?></td>
-                            </tr>
-                        </tfoot>
-                        <tbody id="link_items_body">
-                        </tbody>
-                    </table>
-                </div>
-                <div class="admin__field-note">
-                    <span><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
-                </div>
-            </div>
-        </div>
-    </fieldset>
-</div>
+    </div>
+</fieldset>
 <script>
 require([
     'jquery',
@@ -103,9 +101,9 @@ require([
             <?php endif; ?>
             <?php endif; ?>
             '<td class="col-limit"><input type="text" id="downloadable_link_<%- data.id %>_downloads" name="downloadable[link][<%- data.id %>][number_of_downloads]" class="input-text admin__control-text downloads" value="<%- data.number_of_downloads %>" />'+
-            '<p><input type="checkbox" class="checkbox" id="downloadable_link_<%- data.id %>_is_unlimited" name="downloadable[link][<%- data.id %>][is_unlimited]" value="1" <%- data.is_unlimited %> /> <label for="downloadable_link_<%- data.id %>_is_unlimited">Unlimited</label></p></td>'+
+            '<p><input type="checkbox" class="checkbox admin__control-checkbox" id="downloadable_link_<%- data.id %>_is_unlimited" name="downloadable[link][<%- data.id %>][is_unlimited]" value="1" <%- data.is_unlimited %> /> <label for="downloadable_link_<%- data.id %>_is_unlimited">Unlimited</label></p></td>'+
             '<td class="col-share">'+
-                '<select id="downloadable_link _<%- data.id %>_shareable" name="downloadable[link][<%- data.id %>][is_shareable]">'+
+                '<select id="downloadable_link _<%- data.id %>_shareable" class="admin__control-select" name="downloadable[link][<%- data.id %>][is_shareable]">'+
                     '<option value="1">Yes</option>'+
                     '<option value="0">No</option>'+
                     '<option value="2" selected="selected">Use config</option>'+

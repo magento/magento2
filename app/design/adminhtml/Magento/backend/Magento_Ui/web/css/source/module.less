@@ -37,12 +37,6 @@
 }
 
 .customer-index-edit {
-    .page-wrapper {
-        background: #fff;
-    }
-    .col-2-left-layout {
-        background: #fff;
-    }
     .main-col {
         padding-left: 40px;
     }
@@ -121,15 +115,16 @@
                 color: #eb5202;
                 text-decoration: none;
             }
-            .ui-state-active & {
-                color: @admin__color4;
-                font-weight: 600;
-            }
             &.changed {
                 font-style: italic;
             }
         }
     }
+}
+
+.ui-state-active .tab-nav-item-link {
+    color: @admin__color4;
+    font-weight: 600;
 }
 
 .listing-tiles {
@@ -265,17 +260,6 @@
                 .visually-hidden();
             }
         }
-        .dropdown-menu {
-            > li {
-                padding: 4px 15px;
-                &:hover {
-                    background-color: #e8e8e8;
-                }
-                span {
-                    display: block;
-                }
-            }
-        }
     }
 
     .grid-actions {
@@ -360,14 +344,27 @@
     .filters-form {
         position: relative;
         z-index: 1;
-        margin: 14px 0;
+        margin: 30px 0 14px;
         background: #fff;
         border: 1px solid #bbb;
         box-shadow: 0 3px 3px rgba(0, 0, 0, .15);
+        width: 200%;
         .action-close {
             position: absolute;
             top: 3px;
             right: 7px;
+            background-color: transparent;
+            border: 0;
+            color: #676056;
+            box-shadow: none;
+            &:hover {
+                border: none;
+                box-shadow: none;
+            }
+        }
+        .action-apply {
+            vertical-align: top;
+            padding: 6px 13px 7px;
         }
     }
     .filters-actions {
@@ -441,7 +438,6 @@
 
 // Loading mask
 .admin__data-grid-loading-mask {
-    //  ToDo UI: Refactore this to spinner
     position: absolute;
     left: 0;
     top: 0;
@@ -471,15 +467,16 @@
 .field .control input[type='text'][disabled] ~ .addafter,
 .field .control select[disabled],
 .field .control select[disabled] ~ .addafter {
-    background-color: #f4f4f4;
-    border-color: #ddd;
-    box-shadow: none;
-    color: #999;
+    background-color: #e9e9e9;
+    border-color: #adadad;
+    color: #303030;
+    opacity: .5;
+    cursor: not-allowed;
 }
 
 .field .control input[type='text'][disabled] ~ .addafter strong,
 .field .control select[disabled] ~ .addafter strong {
-    background-color: #f4f4f4;
+    background-color: #e9e9e9;
 }
 
 .field-price.addon {

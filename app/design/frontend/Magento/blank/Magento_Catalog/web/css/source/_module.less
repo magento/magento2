@@ -46,12 +46,6 @@
 .old.price {
     text-decoration: line-through;
 }
-.msrp-price-wrapper {
-    text-decoration: none;
-    .price-wrapper {
-        text-decoration: line-through;
-    }
-}
 
 .price-tier_price {
     .price-including-tax + .price-excluding-tax {
@@ -217,6 +211,38 @@
             }
         }
     }
+    .fieldset-product-options-inner {
+        .legend {
+            border: none;
+            .css(font-weight, @font-weight__bold);
+            .css(margin, 0 0 @indent__xs);
+            display: inline-block;
+            .font-size(14px);
+            float: none;
+            padding: 0;
+        }
+        &.required {
+            .legend {
+                &:after {
+                    content: '*';
+                    .typography(
+                    @_font-size: @form-field-label-asterisk__font-size,
+                    @_color: @form-field-label-asterisk__color,
+                    @_font-family: @form-field-label-asterisk__font-family,
+                    @_font-weight: @form-field-label-asterisk__font-weight,
+                    @_line-height: @form-field-label-asterisk__line-height,
+                    @_font-style: @form-field-label-asterisk__font-style
+                    );
+                    .css(margin, @form-field-label-asterisk__margin);
+                }
+            }
+        }
+        .datetime-picker {
+            + .time-picker {
+                .css(margin-left, @indent__xs);
+            }
+        }
+    }
 }
 
 .product-info-main,
@@ -285,7 +311,7 @@
 
 .prices-tier {
     &:extend(.abs-reset-list all);
-    .css(background, @sidebar-background);
+    .css(background, @sidebar__background-color);
     padding: @indent__s (.75 * @indent__base);
     margin: @indent__s 0;
     .price-tier_price {

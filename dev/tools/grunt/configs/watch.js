@@ -14,7 +14,7 @@ var themeOptions = {};
 _.each(themes, function(theme, name) {
     themeOptions[name] = {
         "files": [
-            "<%= combo.autopath(\""+name+"\",\"pub\") %>/**/*.less"
+            "<%= combo.autopath(\""+name+"\", path.pub) %>/**/*.less"
         ],
         "tasks": "less:" + name
     };
@@ -30,15 +30,6 @@ var watchOptions = {
         "options": {
             livereload: true
         }
-    },
-    "backendMigration": {
-        "files": [
-            "<%= combo.autopath(\"backend\",\"pub\") %>/css/styles.css"
-        ],
-        "tasks": [
-            "replace:escapeCalc",
-            "less:override"
-        ]
     }
 };
 

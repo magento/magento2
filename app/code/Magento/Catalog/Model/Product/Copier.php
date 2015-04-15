@@ -7,8 +7,6 @@
  */
 namespace Magento\Catalog\Model\Product;
 
-use Magento\UrlRewrite\Model\Storage\DuplicateEntryException;
-
 class Copier
 {
     /**
@@ -65,7 +63,7 @@ class Copier
             try {
                 $duplicate->save();
                 $isDuplicateSaved = true;
-            } catch (DuplicateEntryException $e) {
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
             }
         } while (!$isDuplicateSaved);
 

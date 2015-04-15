@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface ManagerInterface
@@ -42,7 +42,7 @@ interface ManagerInterface
      *
      * @param string $name
      * @return ManagerInterface
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function prepareData($name);
 

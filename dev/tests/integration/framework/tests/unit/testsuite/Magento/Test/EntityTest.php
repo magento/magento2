@@ -34,14 +34,14 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     /**
      * Callback for save method in mocked model
      *
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function saveModelAndFailOnUpdate()
     {
         if (!$this->_model->getId()) {
             $this->saveModelSuccessfully();
         } else {
-            throw new \Magento\Framework\Exception('Synthetic model update failure.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Synthetic model update failure.'));
         }
     }
 
@@ -66,7 +66,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'successful CRUD' => ['saveModelSuccessfully'],
-            'cleanup on update error' => ['saveModelAndFailOnUpdate', 'Magento\Framework\Exception']
+            'cleanup on update error' => ['saveModelAndFailOnUpdate', 'Magento\Framework\Exception\LocalizedException']
         ];
     }
 

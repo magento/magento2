@@ -208,7 +208,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         )->with(
             'Magento_Config::config'
         )->will(
-            $this->throwException(new \Magento\Framework\Exception())
+            $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('Error')))
         );
         $this->assertFalse($this->_model->isAllowed());
     }

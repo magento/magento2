@@ -41,7 +41,7 @@ class AppArea
      *
      * @param array $annotations
      * @return string
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getTestAppArea($annotations)
     {
@@ -56,8 +56,11 @@ class AppArea
         ) : \Magento\TestFramework\Application::DEFAULT_APP_AREA);
 
         if (false == in_array($area, $this->_allowedAreas)) {
-            throw new \Magento\Framework\Exception(
-                'Invalid "@magentoAppArea" annotation, can be "' . implode('", "', $this->_allowedAreas) . '" only.'
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'Invalid "@magentoAppArea" annotation, can be "%1" only.',
+                    implode('", "', $this->_allowedAreas)
+                )
             );
         }
 

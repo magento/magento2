@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @var $block \Magento\CheckoutAgreements\Block\Agreements
+ */
+?>
+<?php if (!$block->getAgreements()) {
+    return;
+} ?>
+<ol id="checkout-agreements" class="agreements checkout items">
+    <?php foreach ($block->getAgreements() as $_a): ?>
+        <li class="item">
+            <div class="agreement content"<?php echo($_a->getContentHeight() ? ' style="height:' . $_a->getContentHeight() . '"' : '')?>>
+                <?php if ($_a->getIsHtml()):?>
+                    <?php echo $_a->getContent() ?>
+                <?php else:?>
+                    <?php echo nl2br($block->escapeHtml($_a->getContent())) ?>
+                <?php endif; ?>
+            </div>
+            <div id="checkout-agreements-form-<?php echo $_a->getId()?>" class="field choice agree required">
+                <input type="checkbox" id="agreement-<?php echo $_a->getId()?>" name="agreement[<?php echo $_a->getId()?>]" value="1" title="<?php echo $block->escapeHtml($_a->getCheckboxText()) ?>" class="checkbox""/>
+                <label class="label" for="agreement-<?php echo $_a->getId()?>"><span><?php echo $_a->getIsHtml() ? $_a->getCheckboxText() : $block->escapeHtml($_a->getCheckboxText()) ?></span></label>
+            </div>
+        </li>
+    <?php endforeach ?>
+</ol>

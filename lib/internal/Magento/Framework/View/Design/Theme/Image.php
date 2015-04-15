@@ -157,7 +157,7 @@ class Image
             $targetRelativePath =  $this->mediaDirectory->getRelativePath($previewDir . '/' . $destinationFileName);
             $isCopied = $this->rootDirectory->copyFile($sourceRelativePath, $targetRelativePath, $this->mediaDirectory);
             $this->theme->setPreviewImage($destinationFileName);
-        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+        } catch (\Magento\Framework\Exception\FileSystemException $e) {
             $this->theme->setPreviewImage(null);
             $this->logger->critical($e);
         }

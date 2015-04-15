@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\App\DeploymentConfig\EncryptConfig;
 use Magento\Setup\Model\AdminAccount;
-use Magento\Setup\Model\DeploymentConfigMapper;
+use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
+use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\Installer\ProgressFactory;
 use Magento\Setup\Model\InstallerFactory;
@@ -86,7 +86,7 @@ class Install extends AbstractActionController
             $this->installer->install($data);
             $json->setVariable(
                 'key',
-                $this->installer->getInstallInfo()[EncryptConfig::KEY_ENCRYPTION_KEY]
+                $this->installer->getInstallInfo()[SetupConfigOptionsList::KEY_ENCRYPTION_KEY]
             );
             $json->setVariable('success', true);
             $json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
@@ -128,17 +128,17 @@ class Install extends AbstractActionController
     {
         $source = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         $result = [];
-        $result[DeploymentConfigMapper::KEY_DB_HOST] = isset($source['db']['host']) ? $source['db']['host'] : '';
-        $result[DeploymentConfigMapper::KEY_DB_NAME] = isset($source['db']['name']) ? $source['db']['name'] : '';
-        $result[DeploymentConfigMapper::KEY_DB_USER] = isset($source['db']['user']) ? $source['db']['user'] :'';
-        $result[DeploymentConfigMapper::KEY_DB_PASS] =
+        $result[SetupConfigOptionsList::INPUT_KEY_DB_HOST] = isset($source['db']['host']) ? $source['db']['host'] : '';
+        $result[SetupConfigOptionsList::INPUT_KEY_DB_NAME] = isset($source['db']['name']) ? $source['db']['name'] : '';
+        $result[SetupConfigOptionsList::INPUT_KEY_DB_USER] = isset($source['db']['user']) ? $source['db']['user'] :'';
+        $result[SetupConfigOptionsList::INPUT_KEY_DB_PASS] =
             isset($source['db']['password']) ? $source['db']['password'] : '';
-        $result[DeploymentConfigMapper::KEY_DB_PREFIX] =
+        $result[SetupConfigOptionsList::INPUT_KEY_DB_PREFIX] =
             isset($source['db']['tablePrefix']) ? $source['db']['tablePrefix'] : '';
-        $result[DeploymentConfigMapper::KEY_BACKEND_FRONTNAME] = isset($source['config']['address']['admin'])
+        $result[BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME] = isset($source['config']['address']['admin'])
             ? $source['config']['address']['admin'] : '';
-        $result[DeploymentConfigMapper::KEY_ENCRYPTION_KEY] = isset($source['config']['encrypt']['key'])
-            ? $source['config']['encrypt']['key'] : '';
+        $result[SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY] = isset($source['config']['encrypt']['key'])
+            ? $source['config']['encrypt']['key'] : null;
         $result[Installer::ENABLE_MODULES] = isset($source['store']['selectedModules'])
             ? implode(',', $source['store']['selectedModules']) : '';
         $result[Installer::DISABLE_MODULES] = isset($source['store']['allModules'])

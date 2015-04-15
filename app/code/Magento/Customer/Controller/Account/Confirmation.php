@@ -8,7 +8,6 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -25,7 +24,6 @@ class Confirmation extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
@@ -33,14 +31,13 @@ class Confirmation extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
-        RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement
     ) {
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
-        parent::__construct($context, $customerSession, $resultRedirectFactory, $resultPageFactory);
+        parent::__construct($context, $customerSession, $resultPageFactory);
     }
 
     /**

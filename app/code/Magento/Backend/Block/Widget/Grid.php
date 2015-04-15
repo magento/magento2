@@ -449,6 +449,10 @@ class Grid extends \Magento\Backend\Block\Widget
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
                     'class' => 'task',
                 ]
+            )->setDataAttribute(
+                [
+                    'action' => 'grid-filter-apply'
+                ]
             )
         );
     }
