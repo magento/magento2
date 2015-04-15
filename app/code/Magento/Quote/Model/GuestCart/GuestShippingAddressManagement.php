@@ -14,7 +14,7 @@ use Magento\Quote\Model\ShippingAddressManagement;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
- * Shipping address management management class for guest carts.
+ * Shipping address management class for guest carts.
  */
 class GuestShippingAddressManagement extends ShippingAddressManagement implements
     GuestShippingAddressManagementInterface

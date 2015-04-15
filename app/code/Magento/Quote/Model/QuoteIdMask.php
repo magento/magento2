@@ -33,8 +33,8 @@ class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Math\Random $randomDataGenerator,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         $this->randomDataGenerator = $randomDataGenerator;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
