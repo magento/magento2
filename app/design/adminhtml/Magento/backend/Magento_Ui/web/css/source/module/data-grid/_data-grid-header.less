@@ -63,7 +63,8 @@
         position: relative;
         text-align: left;
         &._active,
-        &._active + .admin__action-dropdown-wrap,
+        &._active + .admin__action-dropdown-wrap, // ToDo UI: remove after bookmarks ready
+        &._hide + .admin__action-dropdown-wrap,
         &:first-child {
             &:after {
                 display: none;

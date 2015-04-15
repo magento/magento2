@@ -6,7 +6,7 @@
 -->
 
 <div
-    class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks _active"
+    class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks _hide"
     data-bind="css: {_active: opened, _disabled: !collapsible}, outerClick: close">
     <button
         class="admin__action-dropdown"
@@ -22,7 +22,7 @@
             data-bind="css: {_edit: false}">
             <div class="action-dropdown-menu-item-edit">
                 <input
-                    class="admin__control-input"
+                    class="admin__control-text"
                     data-bind="value: view.label"
                     type="text">
                 <button

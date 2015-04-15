@@ -29,6 +29,9 @@
 .admin__data-grid-action-bookmarks {
     .admin__action-dropdown-menu__align(right);
     opacity: @component-modal__opacity;
+    &._hide {
+        display: none;
+    }
     &._active {
         z-index: @data-grid-action__z-index;
     }
@@ -91,7 +94,7 @@
             }
         }
         //  Edit item
-        .admin__control-input {
+        .admin__control-text {
             font-size: @action-dropdown-menu__font-size;
             min-width: 15rem;
             width: ~'calc(100% - 4rem)';
