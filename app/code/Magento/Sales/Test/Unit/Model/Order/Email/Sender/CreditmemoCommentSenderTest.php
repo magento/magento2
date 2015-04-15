@@ -19,6 +19,9 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
      */
     protected $creditmemoMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->stepMockSetup();
@@ -40,6 +43,7 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
+            $this->loggerMock,
             $this->addressRendererMock
         );
     }

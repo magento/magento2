@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 
 /**
  * Product type price model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Price
 {
@@ -70,6 +71,21 @@ class Price
     protected $_groupManagement;
 
     /**
+     * @var \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory
+     */
+    protected $groupPriceFactory;
+
+    /**
+     * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory
+     */
+    protected $tierPriceFactory;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $config;
+
+    /**
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -77,6 +93,11 @@ class Price
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
@@ -85,7 +106,10 @@ class Price
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         PriceCurrencyInterface $priceCurrency,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory,
+        \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
@@ -94,6 +118,9 @@ class Price
         $this->_eventManager = $eventManager;
         $this->priceCurrency = $priceCurrency;
         $this->_groupManagement = $groupManagement;
+        $this->groupPriceFactory = $groupPriceFactory;
+        $this->tierPriceFactory = $tierPriceFactory;
+        $this->config = $config;
     }
 
     /**
@@ -181,7 +208,108 @@ class Price
     }
 
     /**
-     * Get product group price
+     * Gets list of product group prices
+     *
+     * @param Product $product
+     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]
+     */
+    public function getGroupPrices($product)
+    {
+        $prices = [];
+        $groupPrices = $this->getExistingPrices($product, 'group_price');
+        foreach ($groupPrices as $price) {
+            /** @var \Magento\Catalog\Api\Data\ProductGroupPriceInterface $groupPrice */
+            $groupPrice = $this->groupPriceFactory->create();
+            $groupPrice->setCustomerGroupId($price['cust_group']);
+            if (array_key_exists('website_price', $price)) {
+                $value = $price['website_price'];
+            } else {
+                $value = $price['price'];
+            }
+            $groupPrice->setValue($value);
+            $prices[] = $groupPrice;
+        }
+        return $prices;
+    }
+
+    /**
+     * Gets the 'group_price' array from the product
+     *
+     * @param Product $product
+     * @param string $key
+     * @param bool $returnRawData
+     * @return array
+     */
+    protected function getExistingPrices($product, $key, $returnRawData = false)
+    {
+        $prices = $product->getData($key);
+
+        if ($prices === null) {
+            $attribute = $product->getResource()->getAttribute($key);
+            if ($attribute) {
+                $attribute->getBackend()->afterLoad($product);
+                $prices = $product->getData($key);
+            }
+        }
+
+        if ($prices === null || !is_array($prices)) {
+            return ($returnRawData ? $prices : []);
+        }
+
+        return $prices;
+    }
+
+    /**
+     * Sets list of product group prices
+     *
+     * @param Product $product
+     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterface[] $groupPrices
+     * @return $this
+     */
+    public function setGroupPrices($product, array $groupPrices = null)
+    {
+        // null array means leave everything as is
+        if ($groupPrices === null) {
+            return $this;
+        }
+
+        $websiteId = $this->getWebsiteForPriceScope();
+        $allGroupsId = $this->getAllCustomerGroupsId();
+
+        // build the new array of group prices
+        $prices = [];
+        foreach ($groupPrices as $price) {
+            $prices[] = [
+                'website_id' => $websiteId,
+                'cust_group' => $price->getCustomerGroupId(),
+                'website_price' => $price->getValue(),
+                'price' => $price->getValue(),
+                'all_groups' => ($price->getCustomerGroupId() == $allGroupsId)
+            ];
+        }
+        $product->setData('group_price', $prices);
+
+        return $this;
+    }
+
+    /**
+     * Returns the website to use for group or tier prices, based on the price scope setting
+     *
+     * @return int|mixed
+     */
+    protected function getWebsiteForPriceScope()
+    {
+        $websiteId = 0;
+        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
+        if ($value != 0) {
+            // use the website associated with the current store
+            $websiteId = $this->_storeManager->getWebsite()->getId();
+        }
+        return $websiteId;
+    }
+
+    /**
+     * Get product group price for the customer
      *
      * @param Product $product
      * @return float
@@ -189,17 +317,9 @@ class Price
      */
     public function getGroupPrice($product)
     {
-        $groupPrices = $product->getData('group_price');
+        $groupPrices = $this->getGroupPrices($product);
 
-        if ($groupPrices === null) {
-            $attribute = $product->getResource()->getAttribute('group_price');
-            if ($attribute) {
-                $attribute->getBackend()->afterLoad($product);
-                $groupPrices = $product->getData('group_price');
-            }
-        }
-
-        if ($groupPrices === null || !is_array($groupPrices)) {
+        if (empty($groupPrices)) {
             return $product->getPrice();
         }
 
@@ -207,8 +327,9 @@ class Price
 
         $matchedPrice = $product->getPrice();
         foreach ($groupPrices as $groupPrice) {
-            if ($groupPrice['cust_group'] == $customerGroup && $groupPrice['website_price'] < $matchedPrice) {
-                $matchedPrice = $groupPrice['website_price'];
+            /** @var \Magento\Catalog\Api\Data\ProductGroupPriceInterface $groupPrice */
+            if ($groupPrice->getCustomerGroupId() == $customerGroup && $groupPrice->getValue() < $matchedPrice) {
+                $matchedPrice = $groupPrice->getValue();
                 break;
             }
         }
@@ -249,39 +370,32 @@ class Price
      */
     public function getTierPrice($qty, $product)
     {
-        $allGroups = $this->_groupManagement->getAllCustomersGroup()->getId();
-        $prices = $product->getData('tier_price');
+        $allGroupsId = $this->getAllCustomerGroupsId();
 
-        if ($prices === null) {
-            $attribute = $product->getResource()->getAttribute('tier_price');
-            if ($attribute) {
-                $attribute->getBackend()->afterLoad($product);
-                $prices = $product->getData('tier_price');
-            }
-        }
-
+        $prices = $this->getExistingPrices($product, 'tier_price', true);
         if ($prices === null || !is_array($prices)) {
             if ($qty !== null) {
                 return $product->getPrice();
+            } else {
+                return [
+                    [
+                        'price' => $product->getPrice(),
+                        'website_price' => $product->getPrice(),
+                        'price_qty' => 1,
+                        'cust_group' => $allGroupsId,
+                    ]
+                ];
             }
-            return [
-                [
-                    'price' => $product->getPrice(),
-                    'website_price' => $product->getPrice(),
-                    'price_qty' => 1,
-                    'cust_group' => $allGroups,
-                ]
-            ];
         }
 
         $custGroup = $this->_getCustomerGroupId($product);
         if ($qty) {
             $prevQty = 1;
             $prevPrice = $product->getPrice();
-            $prevGroup = $allGroups;
+            $prevGroup = $allGroupsId;
 
             foreach ($prices as $price) {
-                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allGroups) {
+                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allGroupsId) {
                     // tier not for current customer group nor is for all groups
                     continue;
                 }
@@ -293,8 +407,9 @@ class Price
                     // higher tier qty already found
                     continue;
                 }
-                if ($price['price_qty'] == $prevQty && $prevGroup != $allGroups && $price['cust_group'] == $allGroups
-                ) {
+                if ($price['price_qty'] == $prevQty &&
+                    $prevGroup != $allGroupsId &&
+                    $price['cust_group'] == $allGroupsId) {
                     // found tier qty is same as current tier qty but current tier group is ALL_GROUPS
                     continue;
                 }
@@ -308,7 +423,7 @@ class Price
         } else {
             $qtyCache = [];
             foreach ($prices as $priceKey => $price) {
-                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allGroups) {
+                if ($price['cust_group'] != $custGroup && $price['cust_group'] != $allGroupsId) {
                     unset($prices[$priceKey]);
                 } elseif (isset($qtyCache[$price['price_qty']])) {
                     $priceQty = $qtyCache[$price['price_qty']];
@@ -325,6 +440,77 @@ class Price
         }
 
         return $prices ? $prices : [];
+    }
+
+    /**
+     * Gets the CUST_GROUP_ALL id
+     *
+     * @return int
+     */
+    protected function getAllCustomerGroupsId()
+    {
+        // ex: 32000
+        return $this->_groupManagement->getAllCustomersGroup()->getId();
+    }
+
+    /**
+     * Gets list of product tier prices
+     *
+     * @param Product $product
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
+     */
+    public function getTierPrices($product)
+    {
+        $prices = [];
+        $tierPrices = $this->getExistingPrices($product, 'tier_price');
+        foreach ($tierPrices as $price) {
+            /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
+            $tierPrice = $this->tierPriceFactory->create();
+            $tierPrice->setCustomerGroupId($price['cust_group']);
+            if (array_key_exists('website_price', $price)) {
+                $value = $price['website_price'];
+            } else {
+                $value = $price['price'];
+            }
+            $tierPrice->setValue($value);
+            $tierPrice->setQty($price['price_qty']);
+            $prices[] = $tierPrice;
+        }
+        return $prices;
+    }
+
+    /**
+     * Sets list of product tier prices
+     *
+     * @param Product $product
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
+     * @return $this
+     */
+    public function setTierPrices($product, array $tierPrices = null)
+    {
+        // null array means leave everything as is
+        if ($tierPrices === null) {
+            return $this;
+        }
+
+        $websiteId = $this->getWebsiteForPriceScope();
+        $allGroupsId = $this->getAllCustomerGroupsId();
+
+        // build the new array of tier prices
+        $prices = [];
+        foreach ($tierPrices as $price) {
+            $prices[] = [
+                'website_id' => $websiteId,
+                'cust_group' => $price->getCustomerGroupId(),
+                'website_price' => $price->getValue(),
+                'price' => $price->getValue(),
+                'all_groups' => ($price->getCustomerGroupId() == $allGroupsId),
+                'price_qty' => $price->getQty()
+            ];
+        }
+        $product->setData('tier_price', $prices);
+
+        return $this;
     }
 
     /**

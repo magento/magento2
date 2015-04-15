@@ -249,8 +249,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote->setCustomerIsGuest(true);
             $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
         }
+        $quoteId = $this->submit($quote)->getId();
 
-        return $this->submit($quote)->getId();
+        return $quoteId;
     }
 
     /**

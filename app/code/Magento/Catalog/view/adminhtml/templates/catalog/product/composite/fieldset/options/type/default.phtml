@@ -6,6 +6,10 @@
 ?>
 <?php /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options */ ?>
 <?php $option = $block->getOption(); ?>
-<div class="field">
-    <label class="label"><?php echo $block->escapeHtml($option->getTitle()) ?></label>
+<div class="admin__field field">
+    <label class="admin__field-label label">
+        <span>
+            <?php echo $block->escapeHtml($option->getTitle()) ?>
+        </span>
+    </label>
 </div>

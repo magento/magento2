@@ -28,6 +28,9 @@ class ShipmentSenderTest extends AbstractSenderTest
      */
     protected $shipmentResource;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->stepMockSetup();
@@ -75,6 +78,7 @@ class ShipmentSenderTest extends AbstractSenderTest
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
+            $this->loggerMock,
             $this->paymentHelper,
             $this->shipmentResource,
             $this->addressRendererMock
