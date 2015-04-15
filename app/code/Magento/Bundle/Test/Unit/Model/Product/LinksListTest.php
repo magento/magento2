@@ -111,7 +111,7 @@ class LinksListTest extends \PHPUnit_Framework_TestCase
             ->with($linkMock, ['some data'], '\Magento\Bundle\Api\Data\LinkInterface')->willReturnSelf();
         $linkMock->expects($this->once())->method('setIsDefault')->with(true)->willReturnSelf();
         $linkMock->expects($this->once())->method('setQty')->with(66)->willReturnSelf();
-        $linkMock->expects($this->once())->method('setIsDefined')->with(22)->willReturnSelf();
+        $linkMock->expects($this->once())->method('setCanChangeQuantity')->with(22)->willReturnSelf();
         $linkMock->expects($this->once())->method('setPrice')->with(12)->willReturnSelf();
         $linkMock->expects($this->once())->method('setId')->with($selectionId)->willReturnSelf();
         $linkMock->expects($this->once())
