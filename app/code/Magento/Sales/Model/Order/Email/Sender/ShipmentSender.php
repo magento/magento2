@@ -45,6 +45,7 @@ class ShipmentSender extends Sender
      * @param Template $templateContainer
      * @param ShipmentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param PaymentHelper $paymentHelper
      * @param ShipmentResource $shipmentResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
@@ -54,12 +55,13 @@ class ShipmentSender extends Sender
         Template $templateContainer,
         ShipmentIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger,
         PaymentHelper $paymentHelper,
         ShipmentResource $shipmentResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
         Renderer $addressRenderer
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
         $this->paymentHelper = $paymentHelper;
         $this->shipmentResource = $shipmentResource;
         $this->globalConfig = $globalConfig;

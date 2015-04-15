@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
-use \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
-class CreditmemoSenderTest extends \PHPUnit_Framework_TestCase
+class CreditmemoSenderTest extends AbstractSenderTest
 {
     /**
      * @var \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender
@@ -15,161 +15,26 @@ class CreditmemoSenderTest extends \PHPUnit_Framework_TestCase
     protected $sender;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $senderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $senderBuilderFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $templateContainerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $identityContainerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderMock;
-
-    /**
      * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoMock;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $paymentHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Resource\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $creditmemoResource;
+    protected $creditmemoResourceMock;
 
-    /**
-     * Global configuration storage mock.
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $globalConfig;
-
-    /**
-     * @var \Magento\Sales\Model\Order\Address\Renderer|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $addressRenderer;
-
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
     protected function setUp()
     {
-        $this->senderMock = $this->getMock(
-            'Magento\Sales\Model\Order\Email\Sender',
-            ['send', 'sendCopyTo'],
-            [],
-            '',
-            false
-        );
+        $this->stepMockSetup();
 
-        $this->senderBuilderFactoryMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\SenderBuilderFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->templateContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\Template',
-            ['setTemplateVars'],
-            [],
-            '',
-            false
-        );
-        $this->paymentHelper = $this->getMock('\Magento\Payment\Helper\Data', ['getInfoBlockHtml'], [], '', false);
-        $this->paymentHelper->expects($this->any())
-            ->method('getInfoBlockHtml')
-            ->will($this->returnValue('payment'));
-
-        $this->creditmemoResource = $this->getMock(
+        $this->creditmemoResourceMock = $this->getMock(
             '\Magento\Sales\Model\Resource\Order\Creditmemo',
             ['saveAttribute'],
             [],
             '',
             false
         );
-
-        $this->globalConfig = $this->getMock(
-            'Magento\Framework\App\Config',
-            ['getValue'],
-            [],
-            '',
-            false
-        );
-
-        $this->addressRenderer = $this->getMock(
-            'Magento\Sales\Model\Order\Address\Renderer',
-            ['format'],
-            [],
-            '',
-            false
-        );
-
-        $this->storeMock = $this->getMock(
-            '\Magento\Store\Model\Store',
-            ['getStoreId', '__wakeup'],
-            [],
-            '',
-            false
-        );
-
-        $this->identityContainerMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity',
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
-            [],
-            '',
-            false
-        );
-        $this->identityContainerMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
-
-        $this->orderMock = $this->getMock(
-            '\Magento\Sales\Model\Order',
-            [
-                'getStore', 'getBillingAddress', 'getPayment',
-                '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
-                'getCustomerEmail', 'getShippingAddress'
-            ],
-            [],
-            '',
-            false
-        );
-
-        $this->orderMock->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
-        $paymentInfoMock = $this->getMock(
-            '\Magento\Payment\Model\Info',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderMock->expects($this->any())
-            ->method('getPayment')
-            ->will($this->returnValue($paymentInfoMock));
 
         $this->creditmemoMock = $this->getMock(
             '\Magento\Sales\Model\Order\Creditmemo',
@@ -189,12 +54,24 @@ class CreditmemoSenderTest extends \PHPUnit_Framework_TestCase
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
 
+        $this->identityContainerMock = $this->getMock(
+            '\Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity',
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
+            [],
+            '',
+            false
+        );
+        $this->identityContainerMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
+
         $this->sender = new CreditmemoSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
+            $this->loggerMock,
             $this->paymentHelper,
-            $this->creditmemoResource,
+            $this->creditmemoResourceMock,
             $this->globalConfig,
             $this->addressRenderer
         );
@@ -286,7 +163,7 @@ class CreditmemoSenderTest extends \PHPUnit_Framework_TestCase
                     ->method('setEmailSent')
                     ->with(true);
 
-                $this->creditmemoResource->expects($this->once())
+                $this->creditmemoResourceMock->expects($this->once())
                     ->method('saveAttribute')
                     ->with($this->creditmemoMock, ['send_email', 'email_sent']);
 
@@ -294,7 +171,7 @@ class CreditmemoSenderTest extends \PHPUnit_Framework_TestCase
                     $this->sender->send($this->creditmemoMock)
                 );
             } else {
-                $this->creditmemoResource->expects($this->once())
+                $this->creditmemoResourceMock->expects($this->once())
                     ->method('saveAttribute')
                     ->with($this->creditmemoMock, 'send_email');
 
@@ -303,7 +180,7 @@ class CreditmemoSenderTest extends \PHPUnit_Framework_TestCase
                 );
             }
         } else {
-            $this->creditmemoResource->expects($this->once())
+            $this->creditmemoResourceMock->expects($this->once())
                 ->method('saveAttribute')
                 ->with($this->creditmemoMock, 'send_email');
 

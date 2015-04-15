@@ -86,8 +86,8 @@
         <div class="fieldset-wrapper">
             <div class="fieldset-wrapper-title"><span class="title"><?php echo __('Refund Totals') ?></span></div>
             <?php echo $block->getChildHtml('creditmemo_totals') ?>
-            <div class="order-totals-bottom">
-                <div  class="field choice field-append-comments">
+            <div class="order-totals-actions">
+                <div class="field choice field-append-comments">
                     <input id="notify_customer" name="creditmemo[comment_customer_notify]" value="1" type="checkbox" />
                     <label for="notify_customer"><span><?php echo __('Append Comments') ?></span></label>
                 </div>
