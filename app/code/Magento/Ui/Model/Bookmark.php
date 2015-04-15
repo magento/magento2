@@ -251,7 +251,8 @@ class Bookmark extends AbstractModel
     /**
      * Save bookmark state
      *
-     * @param [] $data
+     * @param array $data
+     * @return void
      */
     public function saveState($data)
     {

@@ -3,9 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Element\UiComponent\Config;
+namespace Magento\Ui\Model;
 
 use ArrayObject;
+use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
@@ -182,8 +183,8 @@ class Manager implements ManagerInterface
     /**
      * Evaluated components data
      *
-     * @param [] $components
-     * @return []
+     * @param array $components
+     * @return array
      */
     protected function evaluateComponentArguments($components)
     {
@@ -313,10 +314,11 @@ class Manager implements ManagerInterface
     /**
      * Merged bookmark config with main config
      *
-     * @param $parentName
-     * @param $configuration
+     * @param string $parentName
+     * @param array $configuration
+     * @return void
      */
-    protected function mergeBookmarkConfig($parentName, &$configuration)
+    protected function mergeBookmarkConfig($parentName, array &$configuration)
     {
         $data = $this->bookmark->getCurrentBookmarkByIdentifier('cms_page_listing')->getConfig();
 
