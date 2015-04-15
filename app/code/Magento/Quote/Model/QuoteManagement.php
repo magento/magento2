@@ -101,6 +101,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $checkoutSession;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
+
+    /**
      * @var \Magento\Customer\Api\AccountManagementInterface
      */
     protected $accountManagement;
@@ -121,6 +126,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -140,6 +146,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Customer\Model\CustomerFactory $customerModelFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\AccountManagementInterface $accountManagement
     ) {
         $this->eventManager = $eventManager;
@@ -158,6 +165,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->dataObjectHelper = $dataObjectHelper;
         $this->checkoutSession = $checkoutSession;
         $this->accountManagement = $accountManagement;
+        $this->customerSession = $customerSession;
     }
 
     /**
@@ -280,10 +288,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     public function placeOrderCreatingAccount($cartId, $customer, $password)
     {
         $customer = $this->accountManagement->createAccount($customer, $password);
-        $quote = $this->quoteRepository->getActive($cartId);
-        $quote->setCustomer($customer);
-
-        return $this->placeOrder($cartId);
+        $quote = $this->quoteRepository->getActive($cartId)->assignCustomer($customer);
+        $quote->setCheckoutMethod('register');
+        $orderId = $this->placeOrder($cartId);
+        $this->customerSession->loginById($customer->getId());
+        return $orderId;
     }
 
     /**

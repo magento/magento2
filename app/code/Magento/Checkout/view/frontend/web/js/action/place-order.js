@@ -10,10 +10,9 @@ define(
         'mage/storage',
         'mage/url',
         'Magento_Ui/js/model/errorlist',
-        'Magento_Customer/js/model/customer',
-        'Magento_Customer/js/action/login'
+        'Magento_Customer/js/model/customer'
     ],
-    function(quote, urlBuilder, storage, url, errorList, customer, login) {
+    function(quote, urlBuilder, storage, url, errorList, customer) {
         "use strict";
         return function() {
             if (quote.getCheckoutMethod()() === 'register') {
@@ -27,13 +26,9 @@ define(
                     })
                 ).done(
                     function() {
-                        login(
-                            customer.customerData.email,
-                            customer.getDetails('password'),
-                            url.build('checkout/onepage/success/')
-                        );
+                        window.location.href = url.build('checkout/onepage/success/');
                     }
-                ).error(
+                ).fail(
                     function(response) {
                         var error = JSON.parse(response.responseText);
                         errorList.add(error);
@@ -46,7 +41,7 @@ define(
                     function() {
                         window.location.replace(url.build('checkout/onepage/success/'));
                     }
-                ).error(
+                ).fail(
                     function(response) {
                         var error = JSON.parse(response.responseText);
                         errorList.add(error);
