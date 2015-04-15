@@ -6,7 +6,7 @@
 
 namespace Magento\Quote\Api;
 
-interface GuestCartTotalRepositoryInterface extends CartTotalRepositoryInterface
+interface GuestCartTotalRepositoryInterface
 {
     /**
      * Returns quote totals data for a specified cart.
