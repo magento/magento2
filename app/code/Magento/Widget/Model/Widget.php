@@ -6,13 +6,13 @@
 
 // @codingStandardsIgnoreFile
 
+namespace Magento\Widget\Model;
+
 /**
  * Widget model for different purposes
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
-namespace Magento\Widget\Model;
-
 class Widget
 {
     /**
