@@ -90,9 +90,9 @@ class DeployCommand extends Command
 
             $omFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, []);
 
-            /** @var \Magento\Tools\View\Deployer $deployer */
+            /** @var \Magento\Setup\Model\Deployer $deployer */
             $deployer = $objectManager->create(
-                'Magento\Tools\View\Deployer',
+                'Magento\Setup\Model\Deployer',
                 ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
             );
             $deployer->deploy($omFactory, $languages);
