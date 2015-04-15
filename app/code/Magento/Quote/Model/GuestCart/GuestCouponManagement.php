@@ -18,9 +18,15 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 class GuestCouponManagement extends CouponManagement implements GuestCouponManagementInterface
 {
     /**
+     * @var QuoteIdMaskFactory
+     */
+    private $quoteIdMaskFactory;
+
+    /**
      * Constructs a coupon read service object.
      *
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
