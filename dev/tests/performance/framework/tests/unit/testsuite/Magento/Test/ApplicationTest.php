@@ -49,7 +49,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->_fixtureDir = __DIR__ . '/Performance/_files';
         $this->_fixtureConfigData = require $this->_fixtureDir . '/config_data.php';
 
-        $this->_script = realpath($this->_fixtureDir . '/app_base_dir/setup/index.php');
+        $this->_script = realpath($this->_fixtureDir . '/app_base_dir/bin/magento');
 
         $this->_config = new \Magento\TestFramework\Performance\Config(
             $this->_fixtureConfigData,

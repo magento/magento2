@@ -17,7 +17,7 @@ use Magento\Store\Model\Store;
  *
  * @package Magento\Setup\Model
  */
-class UserConfigurationDataMapper
+class StoreConfigurationDataMapper
 {
     /**#@+
      * Model data keys
@@ -43,6 +43,8 @@ class UserConfigurationDataMapper
         Store::XML_PATH_UNSECURE_BASE_URL => self::KEY_BASE_URL,
         Store::XML_PATH_SECURE_BASE_URL => self::KEY_BASE_URL_SECURE,
         Data::XML_PATH_DEFAULT_LOCALE => self::KEY_LANGUAGE,
+        Store::XML_PATH_SECURE_IN_FRONTEND  => self::KEY_IS_SECURE,
+        Store::XML_PATH_SECURE_IN_ADMINHTML => self::KEY_IS_SECURE_ADMIN,
         Data::XML_PATH_DEFAULT_TIMEZONE => self::KEY_TIMEZONE,
         Currency::XML_PATH_CURRENCY_BASE => self::KEY_CURRENCY,
         Currency::XML_PATH_CURRENCY_DEFAULT => self::KEY_CURRENCY,
@@ -59,37 +61,11 @@ class UserConfigurationDataMapper
     public function getConfigData($installParamData)
     {
         $configData = [];
-        if (!$this->isSecureUrlNeeded($installParamData) && isset($installParamData[self::KEY_BASE_URL_SECURE])) {
-            unset($installParamData[self::KEY_BASE_URL_SECURE]);
-        }
-
-        // Base URL is secure, add secure entries
-        if (isset($installParamData[self::KEY_BASE_URL_SECURE])) {
-            $this->pathDataMap = array_merge(
-                $this->pathDataMap,
-                [
-                    Store::XML_PATH_SECURE_IN_FRONTEND  => self::KEY_IS_SECURE,
-                    Store::XML_PATH_SECURE_IN_ADMINHTML => self::KEY_IS_SECURE_ADMIN
-                ]
-            );
-        }
 
         foreach ($this->pathDataMap as $path => $key) {
             $configData = $this->addParamToConfigData($configData, $installParamData, $key, $path);
         }
         return $configData;
-    }
-
-    /**
-     * Determine if secure URL is needed (use_secure or use_secure_admin flag is set.)
-     *
-     * @param array $installParamData
-     * @return bool
-     */
-    private function isSecureUrlNeeded($installParamData)
-    {
-        return ((isset($installParamData[self::KEY_IS_SECURE]) && $installParamData[self::KEY_IS_SECURE])
-            || (isset($installParamData[self::KEY_IS_SECURE_ADMIN]) && $installParamData[self::KEY_IS_SECURE_ADMIN]));
     }
 
     /**
