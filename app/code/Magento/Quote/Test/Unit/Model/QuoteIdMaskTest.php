@@ -6,12 +6,13 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Framework\Math\Random;
+
 /**
  * Unit test for \Magento\Quote\Model\QuoteIdMask
  */
 class QuoteIdMaskTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\Quote\Model\QuoteIdMask
      */
@@ -20,7 +21,10 @@ class QuoteIdMaskTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteIdMask = $helper->getObject('Magento\Quote\Model\QuoteIdMask');
+        $this->quoteIdMask = $helper->getObject(
+            'Magento\Quote\Model\QuoteIdMask',
+            ['randomDataGenerator' => new Random()]
+        );
     }
 
     public function testBeforeSave()

@@ -15,6 +15,31 @@ namespace Magento\Quote\Model;
 class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * @var \Magento\Framework\Math\Random
+     */
+    protected $randomDataGenerator;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Math\Random $randomDataGenerator
+     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Math\Random $randomDataGenerator,
+        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
+        array $data = [])
+    {
+        $this->randomDataGenerator = $randomDataGenerator;
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
+
+    /**
      * Initialize resource
      *
      * @return void
@@ -32,25 +57,7 @@ class QuoteIdMask extends \Magento\Framework\Model\AbstractModel
     public function beforeSave()
     {
         parent::beforeSave();
-        $this->setMaskedId($this->guidv4());
+        $this->setMaskedId($this->randomDataGenerator->getUniqueHash());
         return $this;
-    }
-
-    /**
-     * Generate guid
-     *
-     * Utility to generate random guid style identifiers
-     * Original Source: http://stackoverflow.com/questions/2040240/php-function-to-generate-v4-uuid
-     *
-     * @return string
-     */
-    protected function guidv4()
-    {
-        $data = openssl_random_pseudo_bytes(16);
-
-        $data[6] = chr(ord($data[6]) & 0x0f | 0x40); // set version to 0100
-        $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
-
-        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
     }
 }
