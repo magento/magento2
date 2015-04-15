@@ -309,7 +309,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Scope separator "::" cannot be used without scope identifier.
      */
     public function testExtractModuleException()

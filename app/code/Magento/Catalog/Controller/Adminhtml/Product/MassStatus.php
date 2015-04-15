@@ -17,25 +17,17 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $_productPriceIndexerProcessor;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
-     * @param \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
-        \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
-        \Magento\Backend\Model\View\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
     ) {
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         parent::__construct($context, $productBuilder);
-        $this->resultRedirectFactory = $resultRedirectFactory;
     }
 
     /**
@@ -61,6 +53,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      * Update product(s) status action
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
     public function execute()
     {
@@ -68,20 +61,26 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         $status = (int) $this->getRequest()->getParam('status');
 
-        try {
-            $this->_validateMassStatus($productIds, $status);
-            $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
-                ->updateAttributes($productIds, ['status' => $status], $storeId);
-            $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
-            $this->_productPriceIndexerProcessor->reindexList($productIds);
-        } catch (\Magento\Framework\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->_getSession()->addException($e, __('Something went wrong while updating the product(s) status.'));
-        }
+        $this->_validateMassStatus($productIds, $status);
+        $this->_objectManager->get('Magento\Catalog\Model\Product\Action')
+            ->updateAttributes($productIds, ['status' => $status], $storeId);
+        $this->messageManager->addSuccess(__('A total of %1 record(s) have been updated.', count($productIds)));
+        $this->_productPriceIndexerProcessor->reindexList($productIds);
 
-        return $this->resultRedirectFactory->create()->setPath('catalog/*/', ['store' => $storeId]);
+        return $this->getDefaultResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     */
+    public function getDefaultResult()
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        return $resultRedirect->setPath(
+            'catalog/*/',
+            ['store' => $this->getRequest()->getParam('store', 0)]
+        );
     }
 }

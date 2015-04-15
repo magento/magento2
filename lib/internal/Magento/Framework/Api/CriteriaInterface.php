@@ -73,7 +73,7 @@ interface CriteriaInterface
      * @param string|array $field
      * @param string|int|array $condition
      * @param string $type
-     * @throws \Magento\Framework\Exception if some error in the input could be detected.
+     * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      * @return void
      */
     public function addFilter($name, $field, $condition = null, $type = 'and');

@@ -668,6 +668,7 @@ AdminOrder.prototype = {
         if (confirm(confirmMessage)) {
             this.collectElementsValue = false;
             order.sidebarApplyChanges({'sidebar[empty_customer_cart]': 1});
+            this.collectElementsValue = true;
         }
     },
 
@@ -1289,7 +1290,7 @@ ControlButton.prototype = {
     initialize: function(label){
         this._label = label;
         this._node = new Element('button', {
-            'class': 'scalable action-add',
+            'class': 'action-secondary action-add',
             'type':  'button'
         });
     },

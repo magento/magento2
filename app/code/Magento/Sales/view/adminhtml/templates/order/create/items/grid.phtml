@@ -16,7 +16,7 @@
 <?php $_items = $block->getItems() ?>
 <?php if (empty($_items)): ?>
     <div class="grid" id="order-items_grid">
-        <table cellspacing="0" class="data-table order-tables">
+        <table class="data-table table-info order-tables">
             <thead>
                 <tr class="headings">
                     <th class="col-product"><span><?php echo __('Product') ?></span></th>
@@ -44,10 +44,10 @@
             <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?>
         </div>
     <?php endif; ?>
-        <table cellspacing="0" class="data-table order-tables">
+        <table class="data-table table-info order-tables">
             <thead>
                 <tr class="headings">
-                    <th class="col-product" colspan="2"><span><?php echo __('Product') ?></span></th>
+                    <th class="col-product"><span><?php echo __('Product') ?></span></th>
                     <th class="col-price"><span><?php echo __('Price') ?></span></th>
                     <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
                     <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
@@ -58,7 +58,7 @@
             </thead>
             <tfoot>
                 <tr>
-                    <td class="col-total" colspan="2"><?php echo __('Total %1 product(s)', count($_items)) ?></td>
+                    <td class="col-total"><?php echo __('Total %1 product(s)', count($_items)) ?></td>
                     <td colspan="2" class="col-subtotal"><?php echo __('Subtotal:') ?></td>
                     <td class="col-price"><strong><?php echo $block->formatPrice($block->getSubtotal()) ?></strong></td>
                     <td class="col-price"><strong><?php echo $block->formatPrice($block->getDiscountAmount()) ?></strong></td>
@@ -79,9 +79,9 @@
                                 <strong><?php echo __('SKU') ?>:</strong>
                                 <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
                             </div>
-                        </td>
-                        <td class="col-configure">
-                            <?php echo $block->getConfigureButtonHtml($_item) ?>
+                            <div class="product-configure-block">
+                                <?php echo $block->getConfigureButtonHtml($_item) ?>
+                            </div>
                         </td>
                         <td class="col-price">
 
@@ -95,27 +95,51 @@
                             </div>
                             <?php endif; ?>
                             <?php if ($block->canApplyCustomPrice($_item)): ?>
-                            <div class="nobr">
-                            <input type="checkbox" id="item_use_custom_price_<?php echo $_item->getId() ?>"<?php if ($_isCustomPrice): ?> checked="checked"<?php endif; ?> onclick="order.toggleCustomPrice(this, 'item_custom_price_<?php echo $_item->getId() ?>', 'item_tier_block_<?php echo $_item->getId() ?>');"/>
-                            <label class="normal" for="item_use_custom_price_<?php echo $_item->getId() ?>"><?php echo __('Custom Price') ?>*</label>
-                            </div>
+                                <div class="custom-price-block">
+                                    <input type="checkbox"
+                                           class="admin__control-checkbox"
+                                           id="item_use_custom_price_<?php echo $_item->getId() ?>"
+                                           <?php if ($_isCustomPrice): ?> checked="checked"<?php endif; ?>
+                                           onclick="order.toggleCustomPrice(this, 'item_custom_price_<?php echo $_item->getId() ?>', 'item_tier_block_<?php echo $_item->getId() ?>');"/>
+                                    <label class="normal" for="item_use_custom_price_<?php echo $_item->getId() ?>"><?php echo __('Custom Price') ?>*</label>
+                                </div>
                             <?php endif; ?>
-                            <input id="item_custom_price_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][custom_price]" value="<?php echo sprintf("%.2f", $block->getOriginalEditablePrice($_item))?>"<?php if (!$_isCustomPrice): ?> style="display:none" disabled="disabled"<?php endif; ?> class="input-text item-price"/>
+                            <input id="item_custom_price_<?php echo $_item->getId() ?>"
+                                   name="item[<?php echo $_item->getId() ?>][custom_price]"
+                                   value="<?php echo sprintf("%.2f", $block->getOriginalEditablePrice($_item))?>"
+                                   <?php if (!$_isCustomPrice): ?>
+                                   style="display:none"
+                                   disabled="disabled"
+                                   <?php endif; ?>
+                                   class="input-text item-price admin__control-text"/>
                         </td>
-                        <td class="col-qty"><input name="item[<?php echo $_item->getId() ?>][qty]" class="input-text item-qty" value="<?php echo $_item->getQty()*1 ?>" maxlength="12" /></td>
+                        <td class="col-qty">
+                            <input name="item[<?php echo $_item->getId() ?>][qty]"
+                                   class="input-text item-qty admin__control-text"
+                                   value="<?php echo $_item->getQty()*1 ?>"
+                                   maxlength="12" />
+                        </td>
                         <td class="col-subtotal col-price">
                             <?php echo $block->getItemRowTotalHtml($_item); ?>
                         </td>
                         <td class="col-discount col-price">
-                            <?php echo $block->formatPrice(-$_item->getTotalDiscountAmount()) ?><br />
-                            <input id="item_use_discount_<?php echo $_item->getId() ?>" name="item[<?php echo $_item->getId() ?>][use_discount]"<?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?> value="1" type="checkbox" />
-                            <label for="item_use_discount_<?php echo $_item->getId() ?>" class="normal"><?php echo __('Apply') ?></label>
+                            <?php echo $block->formatPrice(-$_item->getTotalDiscountAmount()) ?>
+                            <div class="discount-price-block">
+                                <input id="item_use_discount_<?php echo $_item->getId() ?>"
+                                       class="admin__control-checkbox"
+                                       name="item[<?php echo $_item->getId() ?>][use_discount]"
+                                       <?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?>
+                                       value="1"
+                                       type="checkbox" />
+                                <label for="item_use_discount_<?php echo $_item->getId() ?>" class="normal"><?php echo __('Apply') ?></label>
+                            </div>
+
                         </td>
                         <td class="col-price col-row-subtotal">
                             <?php echo $block->getItemRowTotalWithDiscountHtml($_item); ?>
                         </td>
                         <td class="col-actions last">
-                            <select name="item[<?php echo $_item->getId() ?>][action]" style="width:100px;">
+                            <select class="admin__control-select" name="item[<?php echo $_item->getId() ?>][action]">
                                 <option value=""></option>
                                 <option value="remove"><?php echo __('Remove') ?></option>
                                 <?php if ($block->getCustomerId() && $block->getMoveToCustomerStorage()): ?>
@@ -136,34 +160,50 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="100">
-                            <?php foreach ($_item->getMessage(false) as $message):
-                                if (empty($message)) {
-                                    continue;
-                                }
-                                ?>
-                                <div class="message <?php if ($_item->getHasError()): ?>error<?php else: ?>notice<?php endif; ?>">
-                                    <?php echo $block->escapeHtml($message); ?>
-                                </div>
-                            <?php endforeach; ?>
-                        </td>
-                    </tr>
+
+                    <?php $hasMessageError = false; ?>
+                    <?php foreach ($_item->getMessage(false) as $messageError):?>
+                        <?php if (!empty($messageError)) {
+                            $hasMessageError = true;
+                        }
+                        ?>
+                    <?php endforeach; ?>
+
+                    <?php if ($hasMessageError):?>
+                        <tr class="col-messages-error">
+                            <td colspan="100"> <!-- ToDo UI: remove the 100 -->
+                                <?php foreach ($_item->getMessage(false) as $message):
+                                    if (empty($message)) {
+                                        continue;
+                                    }
+                                    ?>
+                                    <div class="message <?php if ($_item->getHasError()): ?>message-error<?php else: ?>message-notice<?php endif; ?>">
+                                        <?php echo $block->escapeHtml($message); ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </td>
+                        </tr>
+                    <?php endif;?>
+
                     <?php echo $block->getItemExtraInfo($_item)->toHtml(); ?>
                 </tbody>
                 <?php endforeach; ?>
         </table>
         <p><small><?php echo $block->getInclExclTaxMessage(); ?></small></p>
-        <p><?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?></p>
     </div>
-    <div class="order-coupons" id="order-coupons"><?php echo $block->getChildHtml();?></div>
+
+    <div class="order-discounts">
+        <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()', 'action-secondary'); ?>
+        <div id="order-coupons" class="order-coupons"><?php echo $block->getChildHtml();?></div>
+    </div>
+
     <script>
-require([
-    'Magento_Sales/order/create/form'
-], function(){
-    order.itemsOnchangeBind()
-});
-</script>
+        require([
+            'Magento_Sales/order/create/form'
+        ], function(){
+            order.itemsOnchangeBind()
+        });
+    </script>
 </div>
 
 <?php if ($block->isGiftMessagesAvailable()) : ?>

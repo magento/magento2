@@ -6,6 +6,7 @@
 namespace Magento\Backend\Helper\Dashboard;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsList;
 
 /**
  * Data helper for dashboard
@@ -21,11 +22,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var string
      */
     protected $_installDate;
-
-    /**
-     * Configuration key to installation date
-     */
-    const INSTALL_DATE = 'install/date';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -45,7 +41,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         parent::__construct(
             $context
         );
-        $this->_installDate = $deploymentConfig->get(self::INSTALL_DATE);
+        $this->_installDate = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE);
         $this->_storeManager = $storeManager;
     }
 

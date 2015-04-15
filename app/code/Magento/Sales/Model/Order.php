@@ -258,12 +258,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    protected $timezone;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -292,8 +296,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -320,7 +323,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_orderConfig = $orderConfig;
         $this->productRepository = $productRepository;
         $this->productListFactory = $productListFactory;
-
+        $this->timezone = $timezone;
         $this->_orderItemCollectionFactory = $orderItemCollectionFactory;
         $this->_productVisibility = $productVisibility;
         $this->_serviceOrderFactory = $serviceOrderFactory;
@@ -340,8 +343,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $localeDate,
-            $dateTime,
             $resource,
             $resourceCollection,
             $data
@@ -1835,7 +1836,15 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getCreatedAtFormated($format)
     {
-        return $this->_localeDate->formatDate($this->getCreatedAtStoreDate(), $format, true);
+        return $this->timezone->formatDate(
+            $this->timezone->scopeDate(
+                $this->getStore(),
+                $this->getCreatedAt(),
+                true
+            ),
+            $format,
+            true
+        );
     }
 
     /**

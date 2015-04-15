@@ -5,7 +5,7 @@
  */
 namespace Magento\Sendfriend\Controller;
 
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -63,7 +63,7 @@ class Product extends \Magento\Framework\App\Action\Action
      *
      * @param RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
-     * @throws \Magento\Framework\App\Action\NotFoundException
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function dispatch(RequestInterface $request)
     {
@@ -73,7 +73,7 @@ class Product extends \Magento\Framework\App\Action\Action
         $session = $this->_objectManager->get('Magento\Customer\Model\Session');
 
         if (!$helper->isEnabled()) {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found.'));
         }
 
         if (!$helper->isAllowForGuest() && !$session->authenticate($this)) {

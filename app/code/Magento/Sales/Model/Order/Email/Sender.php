@@ -27,18 +27,26 @@ abstract class Sender
     protected $identityContainer;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param Template $templateContainer
      * @param IdentityInterface $identityContainer
-     * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         Template $templateContainer,
         IdentityInterface $identityContainer,
-        \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
+        \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;
         $this->senderBuilderFactory = $senderBuilderFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -56,8 +64,12 @@ abstract class Sender
         /** @var SenderBuilder $sender */
         $sender = $this->getSender();
 
-        $sender->send();
-        $sender->sendCopyTo();
+        try {
+            $sender->send();
+            $sender->sendCopyTo();
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+        }
 
         return true;
     }

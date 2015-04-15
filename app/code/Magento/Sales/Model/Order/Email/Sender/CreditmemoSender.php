@@ -12,7 +12,13 @@ use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Resource\Order\Creditmemo as CreditmemoResource;
+use Magento\Sales\Model\Order\Address\Renderer;
 
+/**
+ * Class CreditmemoSender
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CreditmemoSender extends NotifySender
 {
     /**
@@ -26,22 +32,37 @@ class CreditmemoSender extends NotifySender
     protected $creditmemoResource;
 
     /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
+    /**
      * @param Template $templateContainer
      * @param CreditmemoIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param PaymentHelper $paymentHelper
      * @param CreditmemoResource $creditmemoResource
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
         CreditmemoIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger,
         PaymentHelper $paymentHelper,
-        CreditmemoResource $creditmemoResource
+        CreditmemoResource $creditmemoResource,
+        Renderer $addressRenderer
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
         $this->paymentHelper = $paymentHelper;
         $this->creditmemoResource = $creditmemoResource;
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -55,14 +76,22 @@ class CreditmemoSender extends NotifySender
     public function send(Creditmemo $creditmemo, $notify = true, $comment = '')
     {
         $order = $creditmemo->getOrder();
+        if ($order->getShippingAddress()) {
+            $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
+        } else {
+            $formattedShippingAddress = '';
+        }
+        $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
         $this->templateContainer->setTemplateVars(
             [
                 'order' => $creditmemo->getOrder(),
-                'invoice' => $creditmemo,
+                'creditmemo' => $creditmemo,
                 'comment' => $comment,
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
+                'formattedShippingAddress' => $formattedShippingAddress,
+                'formattedBillingAddress' => $formattedBillingAddress,
             ]
         );
 
