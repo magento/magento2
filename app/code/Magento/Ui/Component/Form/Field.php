@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Component\Form;
 
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -64,16 +64,16 @@ class Field extends AbstractComponent
      * Prepare component configuration
      *
      * @return void
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function prepare()
     {
         parent::prepare();
         $formElement = $this->getData('config/formElement');
         if (null === $formElement) {
-            throw new Exception(
+            throw new LocalizedException(__(
                 'The configuration parameter "formElement" is a required for "' . $this->getName() . '" field.'
-            );
+            ));
         }
         // Create of wrapped component
         $this->wrappedComponent = $this->uiComponentFactory->create(

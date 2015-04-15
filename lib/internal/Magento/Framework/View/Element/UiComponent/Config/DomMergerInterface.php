@@ -27,7 +27,7 @@ interface DomMergerInterface
      * 3. Append new node if original document doesn't have the same node
      *
      * @param \DOMElement $node
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function mergeNode(\DOMElement $node);

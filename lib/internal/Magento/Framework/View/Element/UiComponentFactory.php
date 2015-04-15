@@ -6,8 +6,7 @@
 namespace Magento\Framework\View\Element;
 
 use Magento\Framework\Object;
-use Magento\Framework\Exception;
-use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -123,14 +122,14 @@ class UiComponentFactory extends Object
      * @param string $name
      * @param array $arguments
      * @return UiComponentInterface
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function create($identifier, $name = null, array $arguments = [])
     {
         if ($name === null) {
             $bundleComponents = $this->componentManager->prepareData($identifier)->getData($identifier);
             if (empty($bundleComponents)) {
-                throw new Exception('You use an empty set.');
+                throw new LocalizedException(new \Magento\Framework\Phrase('You use an empty set.'));
             }
             list($className, $componentArguments) = $this->argumentsResolver(
                 $identifier,
@@ -138,7 +137,7 @@ class UiComponentFactory extends Object
             );
             $componentArguments = array_merge($componentArguments, $arguments);
             if (!isset($componentArguments['context'])) {
-                throw new Exception('Context, is required argument.');
+                throw new LocalizedException(new \Magento\Framework\Phrase('Context, is required argument.'));
             }
             $componentContext = $componentArguments['context'];
             $components = [];

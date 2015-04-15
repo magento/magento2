@@ -52,7 +52,7 @@ class Reader implements UiReaderInterface
      *
      * @param array $fileList
      * @return array
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function readFiles(array $fileList)
     {

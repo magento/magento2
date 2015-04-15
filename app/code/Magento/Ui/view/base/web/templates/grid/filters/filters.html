@@ -10,7 +10,7 @@
 
 <div class="filters">
 
-    <button data-bind="click: toggleOpened, css: { active: opened }" >
+    <button data-bind="click: toggleOpened, css: { active: opened }" data-action="grid-filter-expand">
         <span data-bind="text: $t('Filter')"></span>
     </button>
 
@@ -24,18 +24,18 @@
             <!-- /ko -->
         </fieldset>
         <div class="actions filters-actions">
-            <button class="action secondary action-reset" type="button">
-                <span data-bind="click: reset, text: $t('Reset')"></span>
+            <button class="action secondary action-reset" type="button" data-bind="click: reset">
+                <span data-bind="text: $t('Reset')"></span>
             </button>
-            <button class="action primary action-apply" type="button">
-                <span data-bind="click: apply, text: $t('Apply')"></span>
+            <button class="action primary action-apply" type="button" data-bind="click: apply">
+                <span data-bind="text: $t('Apply')"></span>
             </button>
             <button
                 class="action secondary action-close"
                 type="button"
                 data-bind="click: close" >
                 <span data-bind="text: $t('Close')"></span>
-                    </button>
+            </button>
         </div>
         <div class="filters-current" data-bind="css: {active: active().length}">
             <ul class="filters-items items">

@@ -20,7 +20,7 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
     /**
      * Redirect url
      */
-    const REDIRECT_URL = '*/*/index';
+    const REDIRECT_URL = '*/*/';
 
     /**
      * Resource collection
@@ -44,17 +44,17 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $data = $this->getRequest()->getParam('massaction', '[]');
-        $data = json_decode($data, true);
+        $selected = $this->getRequest()->getParam('selected');
+        $excluded = $this->getRequest()->getParam('excluded');
 
-        if (isset($data['all_selected']) && $data['all_selected'] === true) {
-            if (!empty($data['excluded'])) {
-                $this->excludedDelete($data['excluded']);
+        if (isset($excluded)) {
+            if (!empty($excluded)) {
+                $this->excludedDelete($excluded);
             } else {
                 $this->deleteAll();
             }
-        } elseif (!empty($data['selected'])) {
-            $this->selectedDelete($data['selected']);
+        } elseif (!empty($selected)) {
+            $this->selectedDelete($selected);
         } else {
             $this->messageManager->addError(__('Please select item(s).'));
         }

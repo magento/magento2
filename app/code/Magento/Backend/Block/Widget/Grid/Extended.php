@@ -218,6 +218,10 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
                     'class' => 'task',
                 ]
+            )->setDataAttribute(
+                [
+                    'action' => 'grid-filter-apply'
+                ]
             )
         );
         return parent::_prepareLayout();
