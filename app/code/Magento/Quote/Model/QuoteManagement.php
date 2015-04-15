@@ -441,11 +441,10 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         return $order;
     }
 
-      /**
+    /**
      * Prepare quote for customer order submit
      *
      * @param $quote
-     *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -459,8 +458,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $hasDefaultBilling = (bool)$customer->getDefaultBilling();
         $hasDefaultShipping = (bool)$customer->getDefaultShipping();
 
-        if ($shipping && !$shipping->getSameAsBilling() &&
-            (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())
+        if ($shipping && !$shipping->getSameAsBilling()
+            && (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())
         ) {
             $shippingAddress = $shipping->exportCustomerAddress();
             if (!$hasDefaultShipping) {
