@@ -35,6 +35,23 @@ class GuestCartManagement extends QuoteManagement implements GuestCartManagement
     protected $quoteIdMaskFactory;
 
     /**
+     * Initialize dependencies.
+     *
+     * @param EventManager $eventManager
+     * @param QuoteValidator $quoteValidator
+     * @param OrderFactory $orderFactory
+     * @param OrderManagement $orderManagement
+     * @param CustomerManagement $customerManagement
+     * @param ToOrderConverter $quoteAddressToOrder
+     * @param ToOrderAddressConverter $quoteAddressToOrderAddress
+     * @param ToOrderItemConverter $quoteItemToOrderItem
+     * @param ToOrderPaymentConverter $quotePaymentToOrderPayment
+     * @param UserContextInterface $userContext
+     * @param QuoteRepository $quoteRepository
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param StoreManagerInterface $storeManager
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
@@ -76,7 +93,7 @@ class GuestCartManagement extends QuoteManagement implements GuestCartManagement
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createEmptyCart($customerId = null)
     {

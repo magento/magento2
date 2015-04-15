@@ -1550,20 +1550,17 @@ class InstallSchema implements InstallSchemaInterface
         /**
          * Create table to store cartId and obscured UUID based cartId mapping
          */
-        /**
-         * Create table 'quote_id_mask'
-         */
         $table = $installer->getConnection()->newTable(
             $installer->getTable('quote_id_mask')
         )->addColumn(
-            'entity_id',
+            'quote_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             ['identity' => true, 'unsigned' => true, 'nullable' => false],
-            'Entity Id'
+            'Quote ID'
         )->addForeignKey(
-            'entity_id',
-            'entity_id',
+            'quote_id',
+            'quote_id',
             $installer->getTable('quote'),
             'entity_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
@@ -1572,9 +1569,9 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             32,
             ['nullable' => 'false'],
-            'Masked Id'
+            'Masked ID'
         )->setComment(
-            'Quote id and masked id mapping'
+            'Quote ID and masked ID mapping'
         );
 
         $installer->getConnection()->createTable($table);

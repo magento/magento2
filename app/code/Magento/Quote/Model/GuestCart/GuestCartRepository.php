@@ -25,6 +25,8 @@ class GuestCartRepository extends QuoteRepository implements GuestCartRepository
     protected $quoteIdMaskFactory;
 
     /**
+     * Initialize dependencies.
+     *
      * @param QuoteFactory $quoteFactory
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection
@@ -67,7 +69,7 @@ class GuestCartRepository extends QuoteRepository implements GuestCartRepository
      */
     public function save(Quote $quote)
     {
-        if($quote->getId()) {
+        if ($quote->getId()) {
             /** @var $quoteIdMask QuoteIdMask */
             $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'masked_id');
             $quote->setId($quoteIdMask->getId());
@@ -80,7 +82,7 @@ class GuestCartRepository extends QuoteRepository implements GuestCartRepository
      */
     public function delete(Quote $quote)
     {
-        if($quote->getId()) {
+        if ($quote->getId()) {
             /** @var $quoteIdMask QuoteIdMask */
             $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'masked_id');
             $quote->setId($quoteIdMask->getId());

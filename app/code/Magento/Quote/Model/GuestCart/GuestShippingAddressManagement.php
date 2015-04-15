@@ -16,7 +16,8 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Shipping address management management class for guest carts.
  */
-class GuestShippingAddressManagement extends ShippingAddressManagement implements GuestShippingAddressManagementInterface
+class GuestShippingAddressManagement extends ShippingAddressManagement
+    implements GuestShippingAddressManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory

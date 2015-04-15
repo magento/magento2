@@ -9,11 +9,14 @@ namespace Magento\Quote\Model\GuestCart;
 use Magento\Quote\Api\GuestBillingAddressManagementInterface;
 use Magento\Quote\Model\BillingAddressManagement;
 use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteRepository;
 use Psr\Log\LoggerInterface as Logger;
 
-/** Quote billing address write service object. */
+/**
+ * Billing address management service for guest carts.
+ */
 class GuestBillingAddressManagement extends BillingAddressManagement implements GuestBillingAddressManagementInterface
 {
     /**

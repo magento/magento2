@@ -33,9 +33,7 @@ class GuestCouponManagement extends CouponManagement implements GuestCouponManag
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        parent::__construct(
-            $quoteRepository
-        );
+        parent::__construct($quoteRepository);
     }
 
     /**

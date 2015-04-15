@@ -15,7 +15,7 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 /**
  * Cart totals repository class for guest carts.
  */
-class GuestCartTotalRepository extends CartTotalRepository implements \Magento\Quote\Api\GuestCartTotalRepositoryInterface
+class GuestCartTotalRepository extends CartTotalRepository implements GuestCartTotalRepositoryInterface
 {
     /**
      * @var QuoteIdMaskFactory
@@ -37,11 +37,7 @@ class GuestCartTotalRepository extends CartTotalRepository implements \Magento\Q
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        parent::__construct(
-            $totalsFactory,
-            $quoteRepository,
-            $dataObjectHelper
-        );
+        parent::__construct($totalsFactory, $quoteRepository, $dataObjectHelper);
     }
 
     /**
