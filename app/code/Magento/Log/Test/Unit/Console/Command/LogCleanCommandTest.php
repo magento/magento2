@@ -13,7 +13,7 @@ class LogCleanCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $commandTester = new CommandTester(new LogCleanCommand());
-        $commandTester->execute([]);
+        $commandTester->execute(['--days' => '1']);
         $this->assertSame(
             'Log cleaned.' . PHP_EOL,
             $commandTester->getDisplay()

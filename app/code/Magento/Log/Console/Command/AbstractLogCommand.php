@@ -32,8 +32,9 @@ abstract class AbstractLogCommand extends Command
         $params = $_SERVER;
         $params[StoreManager::PARAM_RUN_CODE] = 'admin';
         $params[StoreManager::PARAM_RUN_TYPE] = 'store';
-        $bootstrap = Bootstrap::create(BP, $params);
-        $this->commandFactory = new Factory($bootstrap->getObjectManager());
+        $magentoObjectManagerFactory = Bootstrap::createObjectManagerFactory(BP, $params);
+        $objectManager = $magentoObjectManagerFactory->create($params);
+        $this->commandFactory = new Factory($objectManager);
         parent::__construct();
     }
 
