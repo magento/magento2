@@ -8,6 +8,7 @@ namespace Magento\Backend\Console\Command;
 
 use Magento\Framework\App\Cache\Manager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -17,6 +18,11 @@ abstract class AbstractCacheCommand extends Command
      * Input argument types
      */
     const INPUT_KEY_TYPES = 'types';
+
+    /**
+     * Input key all
+     */
+    const INPUT_KEY_ALL = 'all';
 
     /**
      * Input option bootsrap

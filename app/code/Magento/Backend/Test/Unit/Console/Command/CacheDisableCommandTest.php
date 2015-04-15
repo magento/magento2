@@ -47,6 +47,25 @@ class CacheDisableCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expect, $commandTester->getDisplay());
     }
 
+    public function testExecuteAll()
+    {
+        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
+        $this->cacheManager
+            ->expects($this->once())
+            ->method('setEnabled')
+            ->with(['A', 'B', 'C'], false)
+            ->willReturn(['A', 'B', 'C']);
+        $param = ['--all' => true];
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute($param);
+
+        $expect = 'Changed cache status:' . PHP_EOL;
+        foreach (['A', 'B', 'C'] as $cacheType) {
+            $expect .= sprintf('%30s: %d -> %d', $cacheType, true, false) . PHP_EOL;
+        }
+        $this->assertEquals($expect, $commandTester->getDisplay());
+    }
+
     public function testExecuteNoChanges()
     {
         $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);

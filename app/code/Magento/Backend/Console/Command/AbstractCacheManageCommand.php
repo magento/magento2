@@ -14,11 +14,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class AbstractCacheManageCommand extends AbstractCacheCommand
 {
     /**
-     * Input key all
-     */
-    const INPUT_KEY_ALL = 'all';
-
-    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -34,7 +29,6 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
             InputOption::VALUE_NONE,
             'all cache types'
         );
-        parent::configure();
     }
 
     /**

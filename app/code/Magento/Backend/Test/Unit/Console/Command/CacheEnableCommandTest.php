@@ -49,6 +49,28 @@ class CacheEnableCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expect, $commandTester->getDisplay());
     }
 
+    public function testExecuteAll()
+    {
+        $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
+        $this->cacheManager
+            ->expects($this->once())
+            ->method('setEnabled')
+            ->with(['A', 'B', 'C'], true)
+            ->willReturn(['A', 'B', 'C']);
+        $this->cacheManager->expects($this->once())->method('clean')->with(['A', 'B', 'C']);
+        $param = ['--all' => true];
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute($param);
+
+        $expect = 'Changed cache status:' . PHP_EOL;
+        foreach (['A', 'B', 'C'] as $cacheType) {
+            $expect .= sprintf('%30s: %d -> %d', $cacheType, false, true) . PHP_EOL;
+        }
+        $expect .= 'Cleaned cache types:' . PHP_EOL;
+        $expect .= 'A' . PHP_EOL . 'B' . PHP_EOL . 'C' . PHP_EOL;
+        $this->assertEquals($expect, $commandTester->getDisplay());
+    }
+
     public function testExecuteNoChanges()
     {
         $this->cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
