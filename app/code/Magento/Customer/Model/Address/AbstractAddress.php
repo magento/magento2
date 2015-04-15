@@ -29,7 +29,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @method bool getShouldIgnoreValidation()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractAddress extends AbstractExtensibleModel
+class AbstractAddress extends AbstractExtensibleModel implements AddressModelInterface
 {
     /**
      * Possible customer address types

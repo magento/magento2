@@ -7,9 +7,10 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\DeploymentConfig\DbConfig;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Resource\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
+use Magento\Framework\Config\ConfigOptionsList;
 
 class Resource
 {
@@ -18,8 +19,6 @@ class Resource
     const AUTO_UPDATE_NEVER = -1;
 
     const AUTO_UPDATE_ALWAYS = 1;
-
-    const PARAM_TABLE_PREFIX = 'db/table_prefix';
 
     const DEFAULT_READ_RESOURCE = 'core_read';
 
@@ -105,12 +104,11 @@ class Resource
             return $this->_connections[$connectionName];
         }
 
-        $dbInfo = $this->deploymentConfig->getSegment(DbConfig::CONFIG_KEY);
+        $dbInfo = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
         if (null === $dbInfo) {
             return false;
         }
-        $dbConfig = new DbConfig($dbInfo);
-        $connectionConfig = $dbConfig->getConnection($connectionName);
+        $connectionConfig = $dbInfo['connection'][$connectionName];
         if ($connectionConfig) {
             $connection = $this->_connectionFactory->create($connectionConfig);
         }
@@ -233,7 +231,9 @@ class Resource
     private function getTablePrefix()
     {
         if (null === $this->_tablePrefix) {
-            $this->_tablePrefix = (string)$this->deploymentConfig->get(self::PARAM_TABLE_PREFIX);
+            $this->_tablePrefix = (string)$this->deploymentConfig->get(
+                ConfigOptionsList::CONFIG_PATH_DB_PREFIX
+            );
         }
         return $this->_tablePrefix;
     }

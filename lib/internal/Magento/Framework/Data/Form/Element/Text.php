@@ -39,7 +39,7 @@ class Text extends AbstractElement
      */
     public function getHtml()
     {
-        $this->addClass('input-text');
+        $this->addClass('input-text admin__control-text');
         return parent::getHtml();
     }
 
