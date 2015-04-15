@@ -98,7 +98,7 @@ define([
         remove: function (sections) {
             var invalidSections = storageInvalidation.getInvalidSections();
             _.each(sections, function (sectionName) {
-                buffer.notify(sectionName, '');
+                storage.remove(sectionName);
                 invalidSections.push(sectionName);
             });
             storageInvalidation.setInvalidSections(invalidSections);

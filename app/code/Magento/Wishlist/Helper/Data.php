@@ -91,6 +91,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $wishlistProvider;
 
     /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Customer\Model\Session $customerSession
@@ -99,6 +104,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param WishlistProviderInterface $wishlistProvider
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -108,7 +114,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
-        WishlistProviderInterface $wishlistProvider
+        WishlistProviderInterface $wishlistProvider,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_customerSession = $customerSession;
@@ -117,6 +124,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_postDataHelper = $postDataHelper;
         $this->_customerViewHelper = $customerViewHelper;
         $this->wishlistProvider = $wishlistProvider;
+        $this->productRepository = $productRepository;
         parent::__construct($context);
     }
 
@@ -549,5 +557,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             self::XML_PATH_WISHLIST_LINK_USE_QTY,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * Retrieve URL to item Product
+     *
+     * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
+     * @param  array $additional
+     * @return string
+     */
+    public function getProductUrl($item, $additional = [])
+    {
+        if ($item instanceof \Magento\Catalog\Model\Product) {
+            $product = $item;
+        } else {
+            $product = $item->getProduct();
+        }
+        $buyRequest = $item->getBuyRequest();
+        if (is_object($buyRequest)) {
+            $config = $buyRequest->getSuperProductConfig();
+            if ($config && !empty($config['product_id'])) {
+                $product = $this->productRepository->getById(
+                    $config['product_id'],
+                    false,
+                    $this->_storeManager->getStore()->getStoreId()
+                );
+            }
+        }
+        return $product->getUrlModel()->getUrl($product, $additional);
     }
 }

@@ -22,7 +22,7 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
         <div class="block-content">
             <strong class="subtitle"><?php echo __('Last Added Items') ?></strong>
             <!-- ko if: wishlist().counter -->
-                <ol   class="product-items" id="wishlist-sidebar" data-bind="foreach: wishlist().items">
+                <ol class="product-items no-display" id="wishlist-sidebar" data-bind="foreach: wishlist().items, css: {'no-display': null}">
                     <li class="product-item">
                         <div class="product-item-info">
                             <a class="product-item-photo" data-bind="attr: { href: product_url, title: product_name }">
@@ -58,7 +58,7 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                         </div>
                     </li>
                 </ol>
-                <div class="actions-toolbar">
+                <div class="actions-toolbar no-display" data-bind="css: {'no-display': null}">
                     <div class="primary">
                         <a class="action details"
                            href="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getListUrl() ?>"

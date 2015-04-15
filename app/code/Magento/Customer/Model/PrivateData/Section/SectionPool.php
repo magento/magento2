@@ -60,7 +60,7 @@ class SectionPool implements SectionPoolInterface
         $data = [];
         foreach ($sectionNames as $sectionName) {
             if (!isset($this->sectionSourceMap[$sectionName])) {
-                throw new LocalizedException(__('"' . $sectionName . '" section source is not supported'));
+                throw new LocalizedException(__('"%1" section source is not supported', $sectionName));
             }
             $data[$sectionName] = $this->get($this->sectionSourceMap[$sectionName])->getData();
         }

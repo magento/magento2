@@ -56,17 +56,7 @@ class Wishlist implements SectionSourceInterface
      */
     protected function getCounter()
     {
-        return $this->createCounter($this->getItemCount());
-    }
-
-    /**
-     * Count items in wishlist
-     *
-     * @return int
-     */
-    protected function getItemCount()
-    {
-        return $this->wishlistHelper->getItemCount();
+        return $this->createCounter($this->wishlistHelper->getItemCount());
     }
 
     /**
@@ -107,7 +97,7 @@ class Wishlist implements SectionSourceInterface
                     'width' => $this->productImageView->getWidth(),
                     'height' => $this->productImageView->getHeight(),
                 ],
-                'product_url' => $this->block->getProductUrl($wishlistItem),
+                'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
                 'product_name' => $product->getName(),
                 'product_price' => $this->block->getProductPriceHtml(
                     $product,

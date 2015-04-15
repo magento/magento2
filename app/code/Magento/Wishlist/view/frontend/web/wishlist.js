@@ -36,7 +36,7 @@ define([
                         event.stopPropagation(event);
                         $(context).data('stop-processing', true);
                         var urlParams = _this._getItemsToCartParams(
-                            $(context).parents('.product-item').find(_this.options.addToCartSelector)
+                            $(context).parents('[data-row=product-item]').find(_this.options.addToCartSelector)
                         );
                         $.mage.dataPost().postData(urlParams);
                         return false;
