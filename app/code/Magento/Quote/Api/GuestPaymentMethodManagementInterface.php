@@ -8,12 +8,12 @@ namespace Magento\Quote\Api;
 /**
  * Payment method management interface for guest carts.
  */
-interface GuestPaymentMethodManagementInterface extends PaymentMethodManagementInterface
+interface GuestPaymentMethodManagementInterface
 {
     /**
      * Adds a specified payment method to a specified shopping cart.
      *
-     * @param int $cartId The cart ID.
+     * @param string $cartId The cart ID.
      * @param \Magento\Quote\Api\Data\PaymentInterface $method The payment method.
      * @return int Payment method ID.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
@@ -25,7 +25,7 @@ interface GuestPaymentMethodManagementInterface extends PaymentMethodManagementI
     /**
      * Returns the payment method for a specified shopping cart.
      *
-     * @param int $cartId The cart ID.
+     * @param string $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\PaymentInterface  Payment method object.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
@@ -34,7 +34,7 @@ interface GuestPaymentMethodManagementInterface extends PaymentMethodManagementI
     /**
      * Lists available payment methods for a specified shopping cart.
      *
-     * @param int $cartId The cart ID.
+     * @param string $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\PaymentMethodInterface[] Array of payment methods.
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */

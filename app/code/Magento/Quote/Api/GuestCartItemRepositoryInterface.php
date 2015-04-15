@@ -8,7 +8,7 @@ namespace Magento\Quote\Api;
 /**
  * Cart Item repository interface for guest carts.
  */
-interface GuestCartItemRepositoryInterface extends CartItemRepositoryInterface
+interface GuestCartItemRepositoryInterface
 {
     /**
      * Lists items that are assigned to a specified cart.
