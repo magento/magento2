@@ -15,15 +15,33 @@
         <div class="admin__field _required field-username">
             <label for="username" class="admin__field-label"><span><?php echo __('Username') ?></span></label>
             <div class="admin__field-control">
-                <input type="text" id="username" name="login[username]" autofocus value="" data-validate="{required:true}" class="admin__control-text" placeholder="<?php echo __('user name') ?>" />
+                <input
+                    id="username"
+                    class="admin__control-text"
+                    type="text"
+                    name="login[username]"
+                    autofocus
+                    value=""
+                    data-validate="{required:true}"
+                    placeholder="<?php echo __('user name') ?>"/>
             </div>
         </div>
         <div class="admin__field _required field-password">
             <label for="login" class="admin__field-label"><span><?php echo __('Password') ?></span></label>
             <div class="admin__field-control">
                 <!-- This is a dummy hidden field to trick firefox from auto filling the password -->
-                <input type="text" class="admin__control-dummy" name="dummy" id="dummy" />
-                <input type="password" id="login" name="login[password]" data-validate="{required:true}" class="admin__control-text" value="" placeholder="<?php echo __('password') ?>" />
+                <input
+                    id="dummy"
+                    class="admin__control-dummy"
+                    type="text"
+                    name="dummy"/>
+                <input
+                    id="login"
+                    class="admin__control-text"
+                    type="password"
+                    name="login[password]"
+                    data-validate="{required:true}"
+                    value="" placeholder="<?php echo __('password') ?>" />
             </div>
         </div>
         <?php echo $block->getChildHtml('form.additional.info'); ?>
