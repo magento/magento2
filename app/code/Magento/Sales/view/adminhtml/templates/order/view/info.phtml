@@ -44,7 +44,7 @@ $orderStoreDate = $block->formatDate(
                     <?php endif; ?>
                 </span>
             </div>
-            <table cellspacing="0" class="data-table">
+            <table class="data-table table-info">
                 <tr>
                     <th><?php echo __('Order Date') ?></th>
                     <td><?php echo $orderAdminDate ?></td>
@@ -111,12 +111,12 @@ $orderStoreDate = $block->formatDate(
 
     <div class="order-account-information">
         <?php /* Account Information */?>
-        <div class="fieldset-wrapper">
-            <div class="fieldset-wrapper-title">
+        <div class="admin__fieldset-wrapper">
+            <div class="admin__fieldset-wrapper-title">
                 <div class="actions"><?php echo $block->getAccountEditLink()?></div>
-                <span class="title"><?php echo __('Account Information') ?></span>
+                <strong class="title"><?php echo __('Account Information') ?></strong>
             </div>
-            <table cellspacing="0" class="data-table">
+            <table class="data-table table-info">
                 <tr>
                     <th><?php echo __('Customer Name') ?></th>
                     <td>

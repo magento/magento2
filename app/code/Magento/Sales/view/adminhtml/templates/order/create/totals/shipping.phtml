@@ -13,36 +13,36 @@
 ?>
 <?php if ($block->displayBoth()):?>
 <tr class="row-totals">
-    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <?php echo $block->getExcludeTaxLabel() ?>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <?php echo $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <tr class="row-totals">
-    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <?php echo $block->getIncludeTaxLabel() ?>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <?php echo $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
 <?php elseif ($block->displayIncludeTax()) : ?>
 <tr>
-    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <?php echo $block->getTotal()->getTitle() ?>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <?php echo $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
 <?php else:?>
 <tr class="row-totals">
-    <td style="<?php echo $block->getStyle() ?>" class="a-right" colspan="<?php echo $block->getColspan(); ?>">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-mark" colspan="<?php echo $block->getColspan(); ?>">
         <?php echo $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </td>
-    <td style="<?php echo $block->getStyle() ?>" class="a-right">
+    <td style="<?php echo $block->getStyle() ?>" class="admin__total-amount">
         <?php echo $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
