@@ -6,10 +6,11 @@
 namespace Magento\Log\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Magento\Framework\App\Bootstrap;
 use Magento\Store\Model\StoreManager;
 use Magento\Log\Model\Shell\Command\Factory;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Abstract class for commands related to manage Magento logs
@@ -19,22 +20,21 @@ abstract class AbstractLogCommand extends Command
     /**
      * Command factory
      *
-     * @var Factory
+     * @var ObjectManager
      */
-    protected $commandFactory;
+    protected $objectManager;
 
     /**
      * Constructor
      *
+     * @param ObjectManagerFactory $objectManagerFactory
      */
-    public function __construct()
+    public function __construct(ObjectManagerFactory $objectManagerFactory)
     {
         $params = $_SERVER;
         $params[StoreManager::PARAM_RUN_CODE] = 'admin';
         $params[StoreManager::PARAM_RUN_TYPE] = 'store';
-        $magentoObjectManagerFactory = Bootstrap::createObjectManagerFactory(BP, $params);
-        $objectManager = $magentoObjectManagerFactory->create($params);
-        $this->commandFactory = new Factory($objectManager);
+        $this->objectManager = $objectManagerFactory->create($params);
         parent::__construct();
     }
 

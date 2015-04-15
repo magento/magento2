@@ -12,13 +12,13 @@ class LogStatusCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
-        $commandTester = new CommandTester(new LogStatusCommand());
+        $objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
+        $objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
+        $command = $this->getMock('Magento\Log\Model\Shell\Command\Status', [], [], '', false);
+        $objectManager->expects($this->once())->method('create')->willReturn($command);
+        $command->expects($this->once())->method('execute');
+        $objectManagerFactory->expects($this->once())->method('create')->willReturn($objectManager);
+        $commandTester = new CommandTester(new LogStatusCommand($objectManagerFactory));
         $commandTester->execute([]);
-        $this->assertStringStartsWith(
-            '-----------------------------------+------------+------------+------------+' . PHP_EOL
-            . 'Table Name                         | Rows       | Data Size  | Index Size |'  . PHP_EOL
-            . '-----------------------------------+------------+------------+------------+' . PHP_EOL,
-            $commandTester->getDisplay()
-        );
     }
 }

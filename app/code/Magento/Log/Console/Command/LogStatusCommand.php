@@ -28,9 +28,9 @@ class LogStatusCommand extends AbstractLogCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $outputMsg = $this->commandFactory->createStatusCommand()->execute();
-        $output->writeln(
-            '<info>' . $outputMsg . '</info>'
-        );
+        /** @var \Magento\Log\Model\Shell\Command\Status $command */
+        $command = $this->objectManager->create('Magento\Log\Model\Shell\Command\Status');
+        $outputMsg = $command->execute();
+        $output->writeln('<info>' . $outputMsg . '</info>');
     }
 }

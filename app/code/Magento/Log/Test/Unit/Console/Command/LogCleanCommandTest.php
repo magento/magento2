@@ -12,11 +12,13 @@ class LogCleanCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
-        $commandTester = new CommandTester(new LogCleanCommand());
+        $objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
+        $objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
+        $command = $this->getMock('Magento\Log\Model\Shell\Command\Status', [], [], '', false);
+        $objectManager->expects($this->once())->method('create')->willReturn($command);
+        $command->expects($this->once())->method('execute');
+        $objectManagerFactory->expects($this->once())->method('create')->willReturn($objectManager);
+        $commandTester = new CommandTester(new LogCleanCommand($objectManagerFactory));
         $commandTester->execute(['--days' => '1']);
-        $this->assertSame(
-            'Log cleaned.' . PHP_EOL,
-            $commandTester->getDisplay()
-        );
     }
 }

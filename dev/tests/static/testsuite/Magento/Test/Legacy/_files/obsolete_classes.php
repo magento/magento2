@@ -3155,4 +3155,5 @@ return [
     ['Magento\Log\Model\Shell'],
     ['Magento\Log\App\Shell'],
     ['Magento\Framework\App\Cache\ManagerApp'],
+    ['Magento\Log\Model\Shell\Command\Factory'],
 ];
