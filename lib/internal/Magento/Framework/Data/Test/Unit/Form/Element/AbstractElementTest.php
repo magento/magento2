@@ -326,10 +326,10 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Data\Form\AbstractForm', [], [], '', false)
         );
         $expectedHtml = '<span class="field-row">' . "\n"
-            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry"/></span>' . "\n";
+            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"/></span>' . "\n";
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
-        $this->assertEquals(' required-entry', $this->_model->getClass());
+        $this->assertEquals(' required-entry _required', $this->_model->getClass());
     }
 
     /**
@@ -351,7 +351,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->_model->setRenderer($rendererMock);
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
-        $this->assertEquals(' required-entry', $this->_model->getClass());
+        $this->assertEquals(' required-entry _required', $this->_model->getClass());
     }
 
     /**
@@ -541,7 +541,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
                     'value' => 'some-value',
                 ],
                 '<span class="field-row">' . "\n"
-                    . '<label class="label" for="html-id" data-ui-id="form-element-some-namelabel">'
+                    . '<label class="label admin__field-label" for="html-id" data-ui-id="form-element-some-namelabel">'
                     . '<span>some label</span></label>' . "\n"
                     . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
                     . '</span>' . "\n"
@@ -554,7 +554,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
                     'value' => 'some-value',
                     'no_span' => true,
                 ],
-                '<label class="label" for="html-id" data-ui-id="form-element-some-namelabel">'
+                '<label class="label admin__field-label" for="html-id" data-ui-id="form-element-some-namelabel">'
                     . '<span>some label</span></label>' . "\n"
                     . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
             ],
@@ -582,7 +582,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
                     'label' => 'some-label',
                     'html_id' => 'some-html-id',
                 ],
-                '<label class="label" for="some-html-id" data-ui-id="form-element-label">'
+                '<label class="label admin__field-label" for="some-html-id" data-ui-id="form-element-label">'
                     . '<span>some-label</span></label>' . "\n"
             ],
             [
@@ -591,7 +591,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
                     'label' => 'some-label',
                     'html_id' => 'some-html-id',
                 ],
-                '<label class="label" for="some-html-idsuffix" data-ui-id="form-element-label">'
+                '<label class="label admin__field-label" for="some-html-idsuffix" data-ui-id="form-element-label">'
                     . '<span>some-label</span></label>' . "\n"
             ],
         ];
