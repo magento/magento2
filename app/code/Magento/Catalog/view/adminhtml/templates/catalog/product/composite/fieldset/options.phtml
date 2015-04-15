@@ -14,8 +14,10 @@
 
 <?php echo $block->getChildHtml('options_js') ?>
 
-<fieldset id="product_composite_configure_fields_options" class="fieldset <?php echo $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
-    <legend class="legend"><span><?php echo __('Custom Options') ?></span></legend>
+<fieldset id="product_composite_configure_fields_options" class="fieldset admin__fieldset <?php echo $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
+    <legend class="legend admin__legend">
+        <span><?php echo __('Custom Options') ?></span>
+    </legend><br>
     <?php foreach ($options as $option): ?>
         <?php echo $block->getOptionHtml($option); ?>
     <?php endforeach;?>

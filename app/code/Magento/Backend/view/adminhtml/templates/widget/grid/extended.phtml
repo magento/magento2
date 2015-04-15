@@ -42,7 +42,7 @@ $numColumns = sizeof($block->getColumns());
                     <label for="<?php echo $block->getId() ?>_export"
                            class="label"><?php echo __('Export to:') ?></label>
                     <select name="<?php echo $block->getId() ?>_export" id="<?php echo $block->getId() ?>_export"
-                            class="select">
+                            class="select admin__control-select">
                         <?php foreach ($block->getExportTypes() as $_type): ?>
                             <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
                         <?php endforeach; ?>
@@ -63,7 +63,8 @@ $numColumns = sizeof($block->getColumns());
                     <label class="view-pages">
                         <?php echo __('View') ?>
                         <select name="<?php echo $block->getVarNameLimit() ?>"
-                                onchange="<?php echo $block->getJsObjectName() ?>.loadByElement(this)" class="select">
+                                onchange="<?php echo $block->getJsObjectName() ?>.loadByElement(this)"
+                                class="select admin__control-select">
                             <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
                                 selected="selected"<?php endif; ?>>20
                             </option>
@@ -199,11 +200,11 @@ $numColumns = sizeof($block->getColumns());
                     <a href="#" title="<?php echo __('Previous page') ?>" class="action-previous"
                        onclick="<?php echo $block->getJsObjectName() ?>.setPage('<?php echo($_curPage - 1) ?>');return false;"><span><?php echo __('Previous page') ?></span></a>
                 <?php else: ?>
-                    <span class="action-previous disabled"><span><?php echo __('Previous page') ?></span></span>
+                    <span class="action-default action-previous disabled"><span><?php echo __('Previous page') ?></span></span>
                 <?php endif; ?>
 
                 <input type="text" name="<?php echo $block->getVarNamePage() ?>" value="<?php echo $_curPage ?>"
-                       class="input-text page"
+                       class="input-text admin__control-text page"
                        onkeypress="<?php echo $block->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
 
                 <span class="pages-total">
@@ -214,7 +215,7 @@ $numColumns = sizeof($block->getColumns());
                     <a href="#" title="<?php echo __('Next page') ?>" class="action-next"
                        onclick="<?php echo $block->getJsObjectName() ?>.setPage('<?php echo($_curPage + 1) ?>');return false;"><span><?php echo __('Next page') ?></span></a>
                 <?php else: ?>
-                    <span class="action-next disabled"><span><?php echo __('Next page') ?></span></span>
+                    <span class="action-default action-next disabled"><span><?php echo __('Next page') ?></span></span>
                 <?php endif; ?>
                 <?php if ($block->getChildBlock('grid.bottom.links')): ?>
                     <?php echo $block->getChildHtml('grid.bottom.links') ?>
