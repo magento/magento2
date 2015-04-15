@@ -72,7 +72,7 @@ class Qty extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Input
         $html = '<input type="text" ';
         $html .= 'name="' . $this->getColumn()->getId() . '" ';
         $html .= 'value="' . $qty . '" ' . $disabled;
-        $html .= 'class="input-text ' . $this->getColumn()->getInlineCss() . $addClass . '" />';
+        $html .= 'class="input-text admin__control-text ' . $this->getColumn()->getInlineCss() . $addClass . '" />';
         return $html;
     }
 }

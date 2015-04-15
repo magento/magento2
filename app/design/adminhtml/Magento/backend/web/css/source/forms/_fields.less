@@ -17,6 +17,8 @@
 @field-note__font-size: @font-size__s;
 @field-scope__color: @color-dark-gray;
 
+@field-option__padding-top: .8rem;
+
 @field-error-control__border-color: @color-tomato-brick;
 @field-error-message__background-color: @color-lazy-sun;
 @field-error-message__border-color: @color-apricot;
@@ -55,7 +57,8 @@
 }
 
 .admin__field-control {
-    .admin__control-input {
+    .admin__control-text,
+    .admin__control-textarea {
         width: 100%;
     }
 }
@@ -80,7 +83,7 @@
         line-height: 3.2rem;
         padding: 0;
         white-space: nowrap;
-        word-break: break-all;
+        word-wrap: break-word;
 
         &:before {
             .appearing__off();
@@ -143,10 +146,6 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
-        z-index: 1;
-        &:hover {
-            z-index: 2;
-        }
     }
 
     &[data-config-scope] {
@@ -178,6 +177,11 @@
         }
     }
 }
+.admin__field-control {
+    & + & {
+        margin-top: 1.5rem;
+    }
+}
 
 //
 //  Field messages
@@ -207,7 +211,7 @@
 
 //  Field containing checkbox or radio
 .admin__field-option {
-    padding-top: 8px;
+    padding-top: @field-option__padding-top;
 
     .admin__field-label {
         text-align: left;
@@ -233,6 +237,11 @@
             }
         }
     }
+}
+
+//  Field containing a value
+.admin__field-value {
+    padding-top: @field-option__padding-top;
 }
 
 //
@@ -286,5 +295,22 @@
                 .visually-hidden();
             }
         }
+    }
+}
+
+//
+//  Form legend
+//  _____________________________________________
+
+.admin__legend {
+    //  ToDo UI: add form legend styles. Check if they doon't conflict with create order page form legend styles
+    float: left;
+    position: static;
+    width: 100%;
+    & + br {
+        display: block;
+        height: 0;
+        overflow: hidden;
+        clear: left;
     }
 }

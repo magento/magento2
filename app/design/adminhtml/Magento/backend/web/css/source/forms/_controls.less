@@ -29,6 +29,8 @@
 
 @field-control-addon__color: @color-gray52;
 
+@field-control-option-label__padding-left: 26px;
+
 @field-label__indent: 1rem;
 @field-label__disabled__color: @color-gray60;
 @field-label__required__color: @color-phoenix;
@@ -69,16 +71,16 @@
     background-color: @field-control__disabled__background-color;
     border-color: @field-control__border-color;
     color: @field-control__color;
-    opacity: .5;
+    opacity: @disabled__opacity;
     cursor: not-allowed;
 }
 
-// Input text styles
-.admin__control-input {
+//  Input text styles
+.admin__control-text {
     .extend__form-control-styles();
 }
 
-// Select styles
+//  Select styles
 .admin__control-select {
     .extend__form-control-styles();
     .css(appearance, none, 1);
@@ -124,18 +126,23 @@
     }
 }
 
+// ToDo UI: add month and date styles
+//.admin__control-select-month {width:140px;}
+//.admin__control-select-year {width:103px;}
+//.admin__control-cvn {width:3em;}
+
 option:empty {
     display: none;
 }
 
-// Multiple select
+//  Multiple select
 .admin__control-multiselect {
     .extend__form-control-styles();
     height: auto;
     padding: .6rem 1rem;
 }
 
-// File uploader
+//  File uploader
 .admin__control-file-wrapper {
     display: inline-block;
     padding: .5rem 1rem;
@@ -172,13 +179,9 @@ option:empty {
 
 //
 //  Support text. Can be used on label or plain text to align controls & actions
-//  ---------------------------------------------
+//  ---------------------------------------------//  Textarea
 
-[class*='admin__control-'] {
-    + .admin__control-text {
-        margin-left: .7rem;
-    }
-}
+
 
 .admin__control-text {
     border: @field-control__border-width solid transparent;
@@ -193,15 +196,15 @@ option:empty {
 //  Textarea
 //  ---------------------------------------------
 
-.admin__control-inputarea {
+.admin__control-textarea {
     .extend__form-control-styles();
     height: 8.48rem;
     line-height: 1.18;
     padding-top: .8rem;
-    width: 100%;
+    resize: vertical;
 }
 
-// Control with additional prefix or suffix label
+//  Control with additional prefix or suffix label
 .admin__control-addon {
     .vendor-prefix-display(inline-flex);
     .vendor-prefix-flex-direction(row);
