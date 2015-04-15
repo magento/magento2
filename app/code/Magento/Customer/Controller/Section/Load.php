@@ -61,7 +61,7 @@ class Load extends \Magento\Framework\App\Action\Action
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         try {
-            //temporary solution for load layout dependent data (Price render)
+            // TODO: MAGETWO-34824 temporary solution for load layout dependent data (Price render)
             $this->_view->loadLayout();
             $sectionNames = $this->getRequest()->getParam('sections');
             $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
