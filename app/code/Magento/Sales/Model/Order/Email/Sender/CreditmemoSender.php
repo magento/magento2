@@ -44,11 +44,6 @@ class CreditmemoSender extends Sender
     protected $addressRenderer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $loggerMock;
-
-    /**
      * @param Template $templateContainer
      * @param CreditmemoIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
