@@ -68,7 +68,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      */
     public function getLinks()
     {
-        return $this->_downloadProdConfig->getLinks($this->getItem());
+        return $this->_downloadableProductConfiguration->getLinks($this->getItem());
     }
 
     /**
@@ -78,6 +78,6 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      */
     public function getLinksTitle()
     {
-        return $this->_downloadProdConfig->getLinksTitle($this->getProduct());
+        return $this->_downloadableProductConfiguration->getLinksTitle($this->getProduct());
     }
 }

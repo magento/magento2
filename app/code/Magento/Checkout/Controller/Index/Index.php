@@ -11,22 +11,22 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory
      */
-    protected $resultRedirectFactory;
+    protected $resultPageFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         parent::__construct($context);
-        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultPageFactory = $resultPageFactory;
     }
 
     /**
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Framework\Controller\Result\PageFactory
      */
     public function execute()
     {
