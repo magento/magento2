@@ -126,7 +126,6 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
             ->method('getPayment')
             ->will($this->returnValue($paymentInfoMock));
 
-
         $this->addressRenderer = $this->getMock('Magento\Sales\Model\Order\Address\Renderer', [], [], '', false);
         $this->addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false);
 
@@ -150,5 +149,60 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+    }
+
+    public function stepAddressFormat($billingAddress)
+    {
+        $this->orderMock->expects($this->any())
+            ->method('getBillingAddress')
+            ->will($this->returnValue($billingAddress));
+        $this->orderMock->expects($this->any())
+            ->method('getShippingAddress')
+            ->will($this->returnValue($billingAddress));
+    }
+
+    public function stepSendWithoutSendCopy()
+    {
+        $this->stepSend($this->once(), $this->never());
+    }
+
+    public function stepSendWithCallSendCopyTo()
+    {
+        $this->stepSend($this->never(), $this->once());
+    }
+
+    public function stepIdentityContainerInit($identityMockClassName)
+    {
+        $this->identityContainerMock = $this->getMock(
+            $identityMockClassName,
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
+            [],
+            '',
+            false
+        );
+        $this->identityContainerMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
+    }
+
+    protected function stepSend(
+        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendExpects,
+        \PHPUnit_Framework_MockObject_Matcher_InvokedCount $sendCopyToExpects
+    ) {
+        $senderMock = $this->getMock(
+            'Magento\Sales\Model\Order\Email\Sender',
+            ['send', 'sendCopyTo'],
+            [],
+            '',
+            false
+        );
+        $senderMock->expects($sendExpects)
+            ->method('send');
+        $senderMock->expects($sendCopyToExpects)
+            ->method('sendCopyTo');
+
+        $this->senderBuilderFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($senderMock));
     }
 }

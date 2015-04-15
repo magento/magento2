@@ -16,6 +16,8 @@ use Magento\Sales\Model\Order\Address\Renderer;
 
 /**
  * Class ShipmentSender
+ * 
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentSender extends Sender
 {
