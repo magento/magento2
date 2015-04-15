@@ -190,6 +190,9 @@
     }
     .data-grid-checkbox-cell {
         padding: 0;
+        &:hover {
+            cursor: default;
+        }
     }
     .data-grid-multiselect-cell {
         padding: @data-grid-th__padding-horizontal @data-grid-th__padding-vertical @data-grid-th__padding-horizontal - .1rem;
@@ -273,10 +276,12 @@
 
 //  Checkbox actions column
 .data-grid-checkbox-cell-inner {
-    cursor: pointer;
     display: block;
     padding: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
     text-align: right;
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 //  Nested rows

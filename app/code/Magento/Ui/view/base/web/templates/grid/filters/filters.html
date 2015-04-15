@@ -5,56 +5,98 @@
  */
 -->
 
-<div class="col-xs-6">
-    <div class="admin__scope-old">
+<div class="data-grid-search-control-wrap">
+    <input
+        class="admin__control-input data-grid-search-control"
+        placeholder="Search by keyword"
+        type="text"/>
+    <button
+        class="action-submit"
+        type="submit"><span data-bind="text: $t('Search')"></span></button>
+    <ul class="action-menu _active">
+        <li>
+            <a class="action-menu-item" href>Lorem</a>
+        </li>
+        <li>
+            <a class="action-menu-item" href>Lorem 1</a>
+        </li>
+        <li>
+            <a class="action-menu-item" href>Lorem 2</a>
+        </li>
+    </ul>
+</div>
 
-<div class="filters">
-
-    <button data-bind="click: toggleOpened, css: { active: opened }" data-action="grid-filter-expand">
-        <span data-bind="text: $t('Filter')"></span>
-    </button>
-
-    <div class="form filters-form" data-bind="visible: opened" data-part="filter-form">
-        <fieldset class="filters-fieldset fieldset">
-            <legend class="legend filters-legend">
-                <span data-bind="text: $t('Advanced filter')"></span>
-            </legend><br />
-            <!-- ko foreach: elems -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-        </fieldset>
-        <div class="actions filters-actions">
-            <button class="action secondary action-reset" type="button" data-bind="click: reset">
-                <span data-bind="text: $t('Reset')"></span>
-            </button>
-            <button class="action primary action-apply" type="button" data-bind="click: apply">
-                <span data-bind="text: $t('Apply')"></span>
-            </button>
-            <button
-                class="action secondary action-close"
-                type="button"
-                data-bind="click: close" >
-                <span data-bind="text: $t('Close')"></span>
-            </button>
-        </div>
-        <div class="filters-current" data-bind="css: {active: active().length}">
-            <ul class="filters-items items">
-                <!-- ko foreach: previews -->
-                <li class="filters-item item">
-                    <strong class="item-label" data-bind="text: label"></strong>
-                    <span class="item-value" data-bind="text: preview"></span>
-                    <button data-bind="click: $parent.reset.bind($parent, elem)" type="button" class="action action-remove">
-                        <span data-bind="text: $t('Remove')"></span>
-                    </button>
-                </li>
-                <!-- /ko -->
-            </ul>
-            <button data-bind="click: reset" class="action action-clear">
-                <span data-bind="text: $t('Clear all')"></span>
-            </button>
-        </div>
+<div class="data-grid-filters-actions-wrap">
+    <div class="data-grid-filters-action-wrap">
+        <button
+            class="action-default _active"
+            data-bind="click: toggleOpened, css: { _active: opened }">
+            <span data-bind="text: $t('Filters')"></span>
+        </button>
     </div>
 </div>
 
+<div
+    class="admin__data-grid-filters-current"
+    data-bind="css: {_show: active().length && !opened()}">
+    <div class="admin__current-filters-title-wrap">
+        <span
+            class="admin__current-filters-title"
+            data-bind="text: $t('Active filters:')"></span>
     </div>
+    <div class="admin__current-filters-list-wrap">
+        <ul class="admin__current-filters-list">
+            <!-- ko foreach: previews -->
+            <li>
+                <span data-bind="text: label + ':'"></span>
+                <span data-bind="text: preview"></span>
+                <button
+                    class="action-remove"
+                    data-bind="click: $parent.reset.bind($parent, elem)"
+                    type="button">
+                    <span data-bind="text: $t('Remove')"></span>
+                </button>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+</div>
+
+<div
+    class="admin__data-grid-filters-wrap"
+    data-bind="css: { _show: opened }"
+    data-part="filter-form">
+
+    <fieldset class="admin__fieldset admin__data-grid-filters">
+        <legend class="admin__filters-legend">
+            <span data-bind="text: $t('Advanced filter')"></span>
+        </legend>
+        <!-- ko foreach: elems -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+    </fieldset>
+
+    <div class="admin__data-grid-filters-footer">
+        <div class="admin__footer-secondary-actions">
+            <button
+                class="action-tertiary"
+                type="button">
+                <span data-bind="click: reset, text: $t('Reset')"></span>
+            </button>
+        </div>
+        <div class="admin__footer-main-actions">
+            <button
+                class="action-tertiary"
+                type="button"
+                data-bind="click: close">
+                <span data-bind="text: $t('Cancel')"></span>
+            </button>
+            <button
+                class="action-secondary"
+                type="button">
+                <span data-bind="click: apply, text: $t('Apply Filters')"></span>
+            </button>
+        </div>
+    </div>
+
 </div>

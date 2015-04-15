@@ -4,15 +4,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<fieldset class="field field-range field-date">
-    <legend class="label admin__control-support-text">
+
+<fieldset class="admin__form-field">
+    <legend class="admin__form-field-legend">
         <span data-bind="text: label"></span>
-    </legend><br />
-    <div class="control">
-        <div class="fields group group-2">
-            <!-- ko foreach: elems -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-        </div>
-    </div>
+    </legend>
+    <!-- ko foreach: elems -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
 </fieldset>
