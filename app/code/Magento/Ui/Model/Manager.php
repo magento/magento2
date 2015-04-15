@@ -276,7 +276,7 @@ class Manager implements ManagerInterface
     /**
      * Create data for component instance
      *
-     * @param $name
+     * @param string $name
      * @param array $componentsPool
      * @return array
      */
