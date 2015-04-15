@@ -3146,4 +3146,5 @@ return [
     ['Magento\CatalogRule\CatalogRuleException'],
     ['Magento\Payment\Exception'],
     ['Magento\UrlRewrite\Model\Storage\DuplicateEntryException'],
+    ['Magento\Framework\View\Element\UiComponent\Config\Manager'],
 ];

@@ -39,12 +39,12 @@ class Bookmark extends AbstractModel
      * @param array $data
      */
     public function __construct(
-        Encoder $jsonEncoder,
-        Decoder $jsonDecoder,
         Context $context,
         Registry $registry,
         ResourceBookmark $resource,
         Collection $resourceCollection,
+        Encoder $jsonEncoder,
+        Decoder $jsonDecoder,
         array $data = []
     ) {
         $this->jsonEncoder = $jsonEncoder;

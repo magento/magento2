@@ -28,12 +28,12 @@ class Collection extends AbstractCollection
      * @param \Magento\Ui\Model\Resource\Bookmark $resource
      */
     public function __construct(
-        \Magento\Authorization\Model\UserContextInterface $userContext,
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Ui\Model\Resource\Bookmark $resource
+        \Magento\Ui\Model\Resource\Bookmark $resource,
+        \Magento\Authorization\Model\UserContextInterface $userContext
     ) {
         $this->userContext = $userContext;
         parent::__construct(
