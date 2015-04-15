@@ -85,7 +85,7 @@ class Create extends Block
      *
      * @var string
      */
-    protected $updateItems = '#order-items_grid p button';
+    protected $updateItems = '#order-items_grid button[onclick="order.itemsUpdate()"]';
 
     /**
      * 'Add Selected Product(s) to Order' button.

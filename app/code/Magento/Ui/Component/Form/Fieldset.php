@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Component\Form;
 
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -91,7 +91,7 @@ class Fieldset extends AbstractComponent
      * @param string $name
      * @param UiComponentInterface|null $fieldComponent
      * @return void
-     * @throws Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function prepareField(array $fieldData, $name, UiComponentInterface $fieldComponent = null)
     {

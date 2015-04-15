@@ -44,10 +44,6 @@ class AbstractMassDelete extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $data = $this->getRequest()->getParam('massaction', '[]');
-        $data = json_decode($data, true);
-        $resultRedirect = $this->resultRedirectFactory->create();
-
         $selected = $this->getRequest()->getParam('selected');
         $excluded = $this->getRequest()->getParam('excluded');
 

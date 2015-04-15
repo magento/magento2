@@ -10,6 +10,7 @@ namespace Magento\Quote\Test\Unit\Model;
 
 use Magento\Quote\Model\Quote\Address;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -1039,5 +1040,95 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('dispatch');
 
         $this->quote->addItem($item);
+    }
+
+    /**
+     * @param array $productTypes
+     * @param int $expected
+     * @dataProvider dataProviderForTestBeforeSaveIsVirtualQuote
+     */
+    public function testBeforeSaveIsVirtualQuote(array $productTypes, $expected)
+    {
+        $storeId = 1;
+        $currencyMock = $this->getMockBuilder('Magento\Directory\Model\Currency')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currencyMock->expects($this->any())
+            ->method('getCode')
+            ->will($this->returnValue('test_code'));
+        $currencyMock->expects($this->any())
+            ->method('getRate')
+            ->will($this->returnValue('test_rate'));
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getBaseCurrency')
+            ->will($this->returnValue($currencyMock));
+        $storeMock->expects($this->once())
+            ->method('getCurrentCurrency')
+            ->will($this->returnValue($currencyMock));
+
+        $this->storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->with($storeId)
+            ->will($this->returnValue($storeMock));
+        $this->quote->setStoreId($storeId);
+
+        $collectionMock = $this->getMock(
+            'Magento\Quote\Model\Resource\Quote\Item\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+        $items = [];
+        foreach ($productTypes as $type) {
+            $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);;
+            $productMock->expects($this->any())->method('getIsVirtual')->willReturn($type);
+
+            $itemMock = $this->getMock(
+                'Magento\Quote\Model\Quote\Item',
+                ['isDeleted', 'getParentItemId', 'getProduct'],
+                [],
+                '',
+                false
+            );
+            $itemMock->expects($this->any())
+                ->method('isDeleted')
+                ->willReturn(false);
+            $itemMock->expects($this->any())
+                ->method('getParentItemId')
+                ->willReturn(false);
+            $itemMock->expects($this->any())
+                ->method('getProduct')
+                ->willReturn($productMock);
+            $items[] = $itemMock;
+        }
+        $iterator = new \ArrayIterator($items);
+        $collectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+        $this->quoteItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($collectionMock));
+
+        $this->quote->beforeSave();
+        $this->assertEquals($expected, $this->quote->getDataByKey(CartInterface::KEY_IS_VIRTUAL));
+    }
+
+
+    /**
+     * @return array
+     */
+    public function dataProviderForTestBeforeSaveIsVirtualQuote()
+    {
+        return [
+            [[true], 1],
+            [[true, true], 1],
+            [[false], 0],
+            [[true, false], 0],
+            [[false, false], 0]
+        ];
     }
 }

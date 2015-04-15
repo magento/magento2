@@ -105,12 +105,14 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     public function testGetJsonConfig()
     {
         $linkPrice = 3.;
+        $basePrice = 3.;
         $linkId = 42;
 
         $config = [
             'links' => [
                 $linkId => [
                     'finalPrice' => $linkPrice,
+                    'basePrice' => $basePrice
                 ],
             ],
         ];
@@ -118,6 +120,9 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $linkAmountMock = $this->getMock('Magento\Framework\Pricing\Amount\AmountInterface', [], [], '', false);
         $linkAmountMock->expects($this->once())
             ->method('getValue')
+            ->will($this->returnValue($linkPrice));
+        $linkAmountMock->expects($this->once())
+            ->method('getBaseAmount')
             ->will($this->returnValue($linkPrice));
 
         $typeInstanceMock = $this->getMock('Magento\Catalog\Model\Product\Type\Simple', ['getLinks'], [], '', false);
