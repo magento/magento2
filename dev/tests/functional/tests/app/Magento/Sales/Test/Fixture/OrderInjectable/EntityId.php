@@ -42,7 +42,7 @@ class EntityId extends DataSource
         if (is_string($data['products'])) {
             $products = explode(',', $data['products']);
             foreach ($products as $product) {
-                list($fixture, $dataSet) = explode('::', $product);
+                list($fixture, $dataSet) = explode('::', trim($product));
                 $product = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
                 $product->persist();
                 $this->data['products'][] = $product;

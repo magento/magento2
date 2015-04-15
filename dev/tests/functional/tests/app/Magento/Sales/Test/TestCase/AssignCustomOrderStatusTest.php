@@ -111,7 +111,7 @@ class AssignCustomOrderStatusTest extends Injectable
     }
 
     /**
-     * Run Assign Custom OrderStatus .
+     * Run Assign Custom OrderStatus.
      *
      * @param OrderStatus $orderStatus
      * @param OrderInjectable $order

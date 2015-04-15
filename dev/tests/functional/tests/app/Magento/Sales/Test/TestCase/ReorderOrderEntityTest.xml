@@ -15,7 +15,9 @@
             <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <data name="grandTotal" xsi:type="string">1,030.00</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">1,030.00</item>
+            </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="previousOrderStatus" xsi:type="string">Pending</data>
             <data name="status" xsi:type="string">Pending</data>

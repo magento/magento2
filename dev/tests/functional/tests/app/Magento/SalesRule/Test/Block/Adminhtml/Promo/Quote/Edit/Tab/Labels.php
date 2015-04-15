@@ -44,6 +44,8 @@ class Labels extends Tab
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getDataFormTab($fields = null, SimpleElement $element = null)
     {

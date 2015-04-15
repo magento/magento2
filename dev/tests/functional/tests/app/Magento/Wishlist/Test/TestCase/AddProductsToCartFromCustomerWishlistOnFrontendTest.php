@@ -68,11 +68,13 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
         $productBlock = $this->wishlistIndex->getWishlistBlock()->getProductItemsBlock();
         foreach ($products as $product) {
             $this->cmsIndex->getLinksBlock()->openLink("My Wish List");
+            $this->cmsIndex->getCmsPageBlock()->waitPageInit();
             if ($qty != '-') {
                 $productBlock->getItemProduct($product)->fillProduct(['qty' => $qty]);
                 $this->wishlistIndex->getWishlistBlock()->clickUpdateWishlist();
             }
             $productBlock->getItemProduct($product)->clickAddToCart();
+            $this->cmsIndex->getCmsPageBlock()->waitPageInit();
             if (!$this->wishlistIndex->getWishlistBlock()->isVisible()) {
                 $this->catalogProductView->getViewBlock()->addToCart($product);
                 $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();

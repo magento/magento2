@@ -6,7 +6,6 @@
 
 namespace Magento\Sales\Test\TestCase;
 
-use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Mtf\TestCase\Injectable;
 
@@ -35,13 +34,6 @@ class CreateInvoiceEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Customer account logout page.
-     *
-     * @var CustomerAccountLogout
-     */
-    protected $customerAccountLogout;
-
-    /**
      * Set up configuration.
      *
      * @return void
@@ -52,17 +44,6 @@ class CreateInvoiceEntityTest extends Injectable
             'Magento\Config\Test\TestStep\SetupConfigurationStep',
             ['configData' => 'checkmo, flatrate']
         )->run();
-    }
-
-    /**
-     * Injection data.
-     *
-     * @param CustomerAccountLogout $customerAccountLogout
-     * @return void
-     */
-    public function __inject(CustomerAccountLogout $customerAccountLogout)
-    {
-        $this->customerAccountLogout = $customerAccountLogout;
     }
 
     /**
@@ -78,11 +59,10 @@ class CreateInvoiceEntityTest extends Injectable
         $order->persist();
 
         // Steps
-        $createInvoice = $this->objectManager->create(
+        $result = $this->objectManager->create(
             'Magento\Sales\Test\TestStep\CreateInvoiceStep',
             ['order' => $order, 'data' => $data]
-        );
-        $result = $createInvoice->run();
+        )->run();
 
         return [
             'ids' => [
@@ -99,6 +79,6 @@ class CreateInvoiceEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->customerAccountLogout->open();
+        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
     }
 }

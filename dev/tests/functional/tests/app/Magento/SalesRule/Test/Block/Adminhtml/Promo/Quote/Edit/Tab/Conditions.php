@@ -24,6 +24,8 @@ class Conditions extends Tab
      * @param array $fields
      * @param SimpleElement|null $element
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
