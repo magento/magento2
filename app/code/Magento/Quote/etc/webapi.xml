@@ -246,6 +246,20 @@
         </resources>
     </route>
 
+    <!-- Guest Managing Cart Billing address -->
+    <route url="/V1/guest-carts/:cartId/billing-address" method="GET">
+        <service class="Magento\Quote\Api\GuestBillingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/billing-address" method="POST">
+        <service class="Magento\Quote\Api\GuestBillingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
     <!-- Managing Cart Coupons -->
     <route url="/V1/carts/:cartId/coupons" method="GET">
         <service class="Magento\Quote\Api\CouponManagementInterface" method="get"/>
