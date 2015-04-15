@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\GuestCart;
 
-use Magento\Quote\Api\ShippingAddressManagementInterface;
+use Magento\Quote\Api\GuestShippingAddressManagementInterface;
 use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface as Logger;
 /**
  * Shipping address management management class for guest carts.
  */
-class GuestShippingAddressManagement extends ShippingAddressManagement implements ShippingAddressManagementInterface
+class GuestShippingAddressManagement extends ShippingAddressManagement implements GuestShippingAddressManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory
@@ -60,6 +60,6 @@ class GuestShippingAddressManagement extends ShippingAddressManagement implement
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::get($cartId);
+        return parent::get($quoteIdMask->getId());
     }
 }
