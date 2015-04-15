@@ -55,6 +55,7 @@ class GuestCartManagement extends QuoteManagement implements GuestCartManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param StoreManagerInterface $storeManager
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         EventManager $eventManager,
