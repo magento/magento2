@@ -13,7 +13,7 @@
 <div class="admin__field _required">
     <label for="captcha" class="admin__field-label"><span><?php echo __('Please enter the letters from the image') ?></span></label>
     <div class="admin__field-control">
-        <input type="text" name="<?php echo \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $block->getFormId()?>]" id="captcha" data-validate="{required:true}" class="admin__control-input"/>
+        <input type="text" name="<?php echo \Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE ?>[<?php echo $block->getFormId()?>]" id="captcha" data-validate="{required:true}" class="admin__control-text"/>
         <?php if ($captcha->isCaseSensitive()) :?>
             <div class="admin__field-note">
                 <span><?php echo __('<strong>Attention</strong>: Captcha is case sensitive.') ?></span>

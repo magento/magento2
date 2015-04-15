@@ -179,17 +179,21 @@ option:empty {
 
 //
 //  Support text. Can be used on label or plain text to align controls & actions
-//  ---------------------------------------------//  Textarea
+//  ---------------------------------------------
 
-
-
-.admin__control-text {
+.admin__control-support-text { // ToDo UI: should be renamed to .admin__control-text
     border: @field-control__border-width solid transparent;
     display: inline-block;
     font-size: @field-control__font-size;
     line-height: @field-control__line-height;
     padding-top: @field-control__padding-top;
     padding-bottom: @field-control__padding-bottom;
+}
+
+[class*='admin__control-'] {
+    + .admin__control-support-text {
+        margin-left: .7rem;
+    }
 }
 
 //
