@@ -60,6 +60,6 @@ class Clean implements \Magento\Log\Model\Shell\CommandInterface
         /** @var $model \Magento\Log\Model\Log */
         $model = $this->_logFactory->create();
         $model->clean();
-        return "Log cleaned\n";
+        return "Log cleaned.";
     }
 }
