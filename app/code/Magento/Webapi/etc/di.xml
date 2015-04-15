@@ -30,4 +30,11 @@
     <type name="Magento\Integration\Model\ConfigBasedIntegrationManager">
         <plugin name="webapiSetup" type="Magento\Webapi\Model\Plugin\Manager" />
     </type>
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <arguments>
+            <argument name="paramsOverrider" xsi:type="array">
+                <item name="%customer_id%" xsi:type="object">Magento\Webapi\Controller\Rest\ParamOverriderCustomerId</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -6,7 +6,6 @@
 
 namespace Magento\Webapi\Controller\Rest;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Webapi\Model\Config\Converter;
 
 /**
@@ -15,18 +14,19 @@ use Magento\Webapi\Model\Config\Converter;
 class ParamsOverrider
 {
     /**
-     * @var \Magento\Authorization\Model\UserContextInterface
+     * @var ParamOverriderInterface[]
      */
-    protected $userContext;
+    private $paramsOverrider;
 
     /**
      * Initialize dependencies
      *
-     * @param UserContextInterface $userContext
+     * @param ParamOverriderInterface[] $paramOverriders
      */
-    public function __construct(UserContextInterface $userContext)
-    {
-        $this->userContext = $userContext;
+    public function __construct(
+        array $paramsOverrider = []
+    ) {
+        $this->paramsOverrider = $paramsOverrider;
     }
 
     /**
@@ -41,10 +41,9 @@ class ParamsOverrider
         foreach ($parameters as $name => $paramData) {
             $arrayKeys = explode('.', $name);
             if ($paramData[Converter::KEY_FORCE] || !$this->isNestedArrayValueSet($inputData, $arrayKeys)) {
-                if ($paramData[Converter::KEY_VALUE] == '%customer_id%'
-                    && $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-                ) {
-                    $value = $this->userContext->getUserId();
+                $paramValue = $paramData[Converter::KEY_VALUE];
+                if (isset($this->paramsOverrider[$paramValue])) {
+                    $value = $this->paramsOverrider[$paramValue]->getOverridenValue();
                 } else {
                     $value = $paramData[Converter::KEY_VALUE];
                 }
