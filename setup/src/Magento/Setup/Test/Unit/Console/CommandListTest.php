@@ -34,6 +34,8 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
             'Magento\Setup\Console\Command\DbDataUpgradeCommand',
             'Magento\Setup\Console\Command\DbSchemaUpgradeCommand',
             'Magento\Setup\Console\Command\DbStatusCommand',
+            'Magento\Setup\Console\Command\DeployCommand',
+            'Magento\Setup\Console\Command\DiCompileMultiTenantCommand',
             'Magento\Setup\Console\Command\InfoCurrencyListCommand',
             'Magento\Setup\Console\Command\InfoLanguageListCommand',
             'Magento\Setup\Console\Command\InfoTimezoneListCommand',
