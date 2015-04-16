@@ -1,4 +1,16 @@
-<td class="col item" data-th="Product Name"><strong class="product name product-item-name" data-bind="text: item.name"></strong>
-    <!-- options block skipped -->
+<td class="col item" data-th="Product Name"><strong class="product name product-item-name" data-bind="text: $t(item.name)"></strong>
     <!-- additional info block skipped -->
+    <!-- ko if: (item.options)-->
+    <dl class="item-options">
+        <!--ko foreach: item.options-->
+        <dt data-bind="text: $t(label)"></dt>
+            <!-- ko if: ($data.full_view)-->
+            <dd data-bind="html: full_view"></dd>
+            <!-- /ko -->
+            <!-- ko ifnot: ($data.full_view)-->
+            <dd data-bind="html: value"></dd>
+            <!-- /ko -->
+        <!-- /ko -->
+    </dl>
+    <!-- /ko -->
 </td>

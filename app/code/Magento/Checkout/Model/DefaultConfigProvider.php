@@ -18,6 +18,7 @@ use Magento\Framework\Locale\CurrencyInterface as CurrencyManager;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
+use Magento\Catalog\Helper\Product\ConfigurationPool;
 
 
 class DefaultConfigProvider implements ConfigProvider
@@ -78,6 +79,11 @@ class DefaultConfigProvider implements ConfigProvider
     private $shippingMethodManager;
 
     /**
+     * @var ConfigurationPool
+     */
+    private $configurationPool;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRegistration $customerRegistration
@@ -89,6 +95,7 @@ class DefaultConfigProvider implements ConfigProvider
      * @param QuoteRepository $quoteRepository
      * @param QuoteItemRepository $quoteItemRepository
      * @param ShippingMethodManager $shippingMethodManager
+     * @param ConfigurationPool $configurationPool
      */
     public function __construct(
         CheckoutHelper $checkoutHelper,
@@ -101,7 +108,8 @@ class DefaultConfigProvider implements ConfigProvider
         CurrencyManager $currencyManager,
         QuoteRepository $quoteRepository,
         QuoteItemRepository $quoteItemRepository,
-        ShippingMethodManager $shippingMethodManager
+        ShippingMethodManager $shippingMethodManager,
+        ConfigurationPool $configurationPool
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -114,6 +122,7 @@ class DefaultConfigProvider implements ConfigProvider
         $this->quoteRepository = $quoteRepository;
         $this->quoteItemRepository = $quoteItemRepository;
         $this->shippingMethodManager = $shippingMethodManager;
+        $this->configurationPool = $configurationPool;
     }
 
     /**
@@ -202,11 +211,36 @@ class DefaultConfigProvider implements ConfigProvider
         $quoteId = $this->getQuote()->getId();
         if ($quoteId) {
             $quoteItems = $this->quoteItemRepository->getList($quoteId);
-            foreach($quoteItems as $quoteItem) {
-                $quoteItemData[] = $quoteItem->toArray();
+            foreach($quoteItems as $key => $quoteItem) {
+                $quoteItemData[$key] = $quoteItem->toArray();
+                $quoteItemData[$key]['options'] = $this->getFormattedOptionValue($quoteItem);
             }
         }
         return $quoteItemData;
+    }
+
+    /**
+     * Retrieve formatted item options view
+     *
+     * @param \Magento\Quote\Api\Data\CartItemInterface $item
+     * @return array
+     */
+    protected function getFormattedOptionValue($item)
+    {
+        $optionsData = [];
+        $options = $this->configurationPool->getProductConfigurationHelper($item->getProductType())->getOptions($item);
+        foreach ($options as $key => $optionValue) {
+            /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
+            $helper = $this->configurationPool->getProductConfigurationHelper('default');
+            $params = [
+                'max_length' => 55,
+                'cut_replacer' => ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>'
+            ];
+            $option = $helper->getFormattedOptionValue($optionValue, $params);
+            $optionsData[$key] = $option;
+            $optionsData[$key]['label'] = $optionValue['label'];
+        }
+        return $optionsData;
     }
 
     /**
