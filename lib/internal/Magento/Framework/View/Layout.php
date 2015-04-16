@@ -5,14 +5,11 @@
  */
 namespace Magento\Framework\View;
 
-use Magento\Framework\App\State;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ScheduledStructure;
-use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Layout model
@@ -150,16 +147,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     protected $readerContext;
 
     /**
-     * @var State
-     */
-    protected $appState;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
      * @param Layout\ProcessorFactory $processorFactory
      * @param ManagerInterface $eventManager
      * @param Layout\Data\Structure $structure
@@ -170,8 +157,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param FrontendInterface $cache
      * @param Layout\Reader\ContextFactory $readerContextFactory
      * @param Layout\Generator\ContextFactory $generatorContextFactory
-     * @param State $appState
-     * @param Logger $logger
      * @param bool $cacheable
      */
     public function __construct(
@@ -185,8 +170,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         FrontendInterface $cache,
         Layout\Reader\ContextFactory $readerContextFactory,
         Layout\Generator\ContextFactory $generatorContextFactory,
-        State $appState,
-        Logger $logger,
         $cacheable = true
     ) {
         $this->_elementClass = 'Magento\Framework\View\Layout\Element';
@@ -202,8 +185,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $this->generatorPool = $generatorPool;
         $this->cacheable = $cacheable;
         $this->cache = $cache;
-        $this->appState = $appState;
-        $this->logger = $logger;
 
         $this->readerContextFactory = $readerContextFactory;
         $this->generatorContextFactory = $generatorContextFactory;
@@ -476,20 +457,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     public function renderElement($name, $useCache = true)
     {
         $this->build();
-        $result = '';
         if (!isset($this->_renderElementCache[$name]) || !$useCache) {
-            try {
-                if ($this->isUiComponent($name)) {
-                    $result = $this->_renderUiComponent($name);
-                } elseif ($this->isBlock($name)) {
-                    $result = $this->_renderBlock($name);
-                } else {
-                    $result = $this->_renderContainer($name);
-                }
-            } catch (\Exception $e) {
-                $this->handleRenderException($e);
-            }
-            $this->_renderElementCache[$name] = $result;
+            $this->_renderElementCache[$name] = $this->renderNonCachedElement($name);
         }
         $this->_renderingOutput->setData('output', $this->_renderElementCache[$name]);
         $this->_eventManager->dispatch(
@@ -500,19 +469,21 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
-     * Handle exceptions during rendering process
+     * Render non cached element
      *
-     * @param \Exception $cause
-     * @throws \Exception
-     * @return void
+     * @param string $name
+     * @return string
      */
-    protected function handleRenderException(\Exception $cause)
+    public function renderNonCachedElement($name)
     {
-        if ($this->appState->getMode() === State::MODE_DEVELOPER) {
-            throw $cause;
+        if ($this->isUiComponent($name)) {
+            $result = $this->_renderUiComponent($name);
+        } elseif ($this->isBlock($name)) {
+            $result = $this->_renderBlock($name);
+        } else {
+            $result = $this->_renderContainer($name);
         }
-        $message = ($cause instanceof LocalizedException) ? $cause->getLogMessage() : $cause->getMessage();
-        $this->logger->critical($message);
+        return $result;
     }
 
     /**
