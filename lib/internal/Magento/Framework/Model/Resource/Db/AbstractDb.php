@@ -365,6 +365,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
 
         $this->unserializeFields($object);
         $this->_afterLoad($object);
+        $object->afterLoad();
 
         return $this;
     }
