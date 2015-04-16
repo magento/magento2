@@ -266,7 +266,7 @@
         </resources>
     </route>
 
-    <!-- Guest Managing Cart Billing address -->
+    <!-- Managing Guest Cart Billing address -->
     <route url="/V1/guest-carts/:cartId/billing-address" method="GET">
         <service class="Magento\Quote\Api\GuestBillingAddressManagementInterface" method="get"/>
         <resources>
@@ -278,6 +278,26 @@
         <resources>
             <resource ref="anonymous" />
         </resources>
+    </route>
+
+    <!-- Managing My Cart Billing address -->
+    <route url="/V1/carts/mine/billing-address" method="GET">
+        <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/billing-address" method="POST">
+        <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
     </route>
 
     <!-- Managing Cart Coupons -->
