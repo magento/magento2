@@ -2163,4 +2163,5 @@ return [
     ['addOrderedQty', 'Magento\Reports\Model\Resource\Product\Collection'],
     ['prepareForProductsInCarts', 'Magento\Reports\Model\Resource\Quote\Collection'],
     ['getOrdersSubSelect', 'Magento\Reports\Model\Resource\Quote\Collection'],
+    ['isOrderIncrementIdUsed', 'Magento\Quote\Model\Resource\Quote'],
 ];
