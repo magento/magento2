@@ -56,7 +56,10 @@ class Curl extends AbstractCurl implements ConfigDataInterface
         $result = [];
         $fields = $fixture->getData();
         if (isset($fields['section'])) {
-            foreach ($fields['section'] as $itemSection) {
+            foreach ($fields['section'] as $key => $itemSection) {
+                if (is_array($itemSection)) {
+                    $itemSection['path'] = $key;
+                }
                 parse_str($this->prepareConfigPath($itemSection), $configPath);
                 $result = array_merge_recursive($result, $configPath);
             }

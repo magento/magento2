@@ -5,11 +5,10 @@
  */
 ?>
 
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
-        <span class="title"><?php echo $block->getHeaderText() ?></span>
-        <div class="actions"><?php echo $block->getButtonsHtml() ?></div>
-    </div>
-
+<div class="admin__fieldset-wrapper-title">
+    <span class="title"><?php echo $block->getHeaderText() ?></span>
+    <div class="actions"><?php echo $block->getButtonsHtml() ?></div>
+</div>
+<div class="admin__fieldset-wrapper-content">
     <?php echo $block->getChildHtml('', true) ?>
 </div>

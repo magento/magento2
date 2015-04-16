@@ -23,7 +23,7 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             $this->_getHtmlId() .
             '" value="' .
             $this->getEscapedValue() .
-            '" class="input-text no-changes"' .
+            '" class="input-text admin__control-text no-changes"' .
             $this->getUiId(
                 'filter',
                 $this->_getHtmlName()

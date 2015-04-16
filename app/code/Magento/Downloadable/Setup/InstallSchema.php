@@ -116,7 +116,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Downloadable Link Table');
@@ -164,7 +163,6 @@ class InstallSchema implements InstallSchemaInterface
                 'link_id',
                 $installer->getTable('downloadable_link'),
                 'link_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addIndex(
@@ -176,7 +174,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Downloadable Link Price Table');
@@ -274,16 +271,14 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_id',
                 $installer->getTable('customer_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
             )
             ->addForeignKey(
                 $installer->getFkName('downloadable_link_purchased', 'order_id', 'sales_order', 'entity_id'),
                 'order_id',
                 $installer->getTable('sales_order'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
             )
             ->setComment('Downloadable Link Purchased Table');
         $installer->getConnection()->createTable($table);
@@ -427,7 +422,6 @@ class InstallSchema implements InstallSchemaInterface
                 'purchased_id',
                 $installer->getTable('downloadable_link_purchased'),
                 'purchased_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -440,8 +434,7 @@ class InstallSchema implements InstallSchemaInterface
                 'order_item_id',
                 $installer->getTable('sales_order_item'),
                 'item_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
             )
             ->setComment('Downloadable Link Purchased Item Table');
         $installer->getConnection()->createTable($table);
@@ -493,7 +486,6 @@ class InstallSchema implements InstallSchemaInterface
                 'link_id',
                 $installer->getTable('downloadable_link'),
                 'link_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addIndex(
@@ -505,7 +497,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Link Title Table');
@@ -567,7 +558,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Downloadable Sample Table');
@@ -620,7 +610,6 @@ class InstallSchema implements InstallSchemaInterface
                 'sample_id',
                 $installer->getTable('downloadable_sample'),
                 'sample_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addIndex(
@@ -632,7 +621,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Downloadable Sample Title Table');
