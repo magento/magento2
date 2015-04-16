@@ -17,6 +17,8 @@
 @field-note__font-size: @font-size__s;
 @field-scope__color: @color-dark-gray;
 
+@field-option__padding-top: .8rem;
+
 @field-error-control__border-color: @color-tomato-brick;
 @field-error-message__background-color: @color-lazy-sun;
 @field-error-message__border-color: @color-apricot;
@@ -26,7 +28,7 @@
 //  Form Fields
 //  _____________________________________________
 
-// Fieldset
+//  Fieldset
 .admin__fieldset {
     border: 0;
     margin: 0;
@@ -52,7 +54,7 @@
     }
 }
 
-// Label
+//  Label
 .admin__field-label {
     color: @field-label__color;
     margin: 0;
@@ -69,7 +71,7 @@
         line-height: 3.2rem;
         padding: 0;
         white-space: nowrap;
-        word-break: break-all;
+        word-wrap: break-word;
 
         &:before {
             content: '.';
@@ -107,7 +109,7 @@
     }
 }
 
-// Field
+//  Field
 .admin__field {
     margin-bottom: 0;
 
@@ -130,10 +132,6 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
-        z-index: 1;
-        &:hover {
-            z-index: 2;
-        }
     }
 
     &[data-config-scope] {
@@ -166,7 +164,13 @@
     }
 }
 
-// Field error message
+.admin__field-control {
+    & + & {
+        margin-top: 1.5rem;
+    }
+}
+
+//  Field error message
 .admin__field-error {
     background: @field-error-message__background-color;
     border: 1px solid @field-error-message__border-color;
@@ -180,7 +184,7 @@
     padding: .8rem 1rem .9rem;
 }
 
-// Field notice message
+//  Field notice message
 .admin__field-note {
     color: @field-note__color;
     font-size: @field-note__font-size;
@@ -188,9 +192,9 @@
     padding: 0;
 }
 
-// Field containing checkbox or radio
+//  Field containing checkbox or radio
 .admin__field-option {
-    padding-top: 8px;
+    padding-top: @field-option__padding-top;
 
     .admin__field-label {
         text-align: left;
@@ -218,6 +222,11 @@
     }
 }
 
+//  Field containing a value
+.admin__field-value {
+    padding-top: @field-option__padding-top;
+}
+
 //
 //  Field containing multiple fields
 //  _____________________________________________
@@ -237,7 +246,7 @@
     }
 }
 
-// In rows
+//  In rows
 .admin__control-fields {
     .admin__field-label ~ .admin__field-control {
         width: 100%;
@@ -249,7 +258,7 @@
     }
 }
 
-// In line
+//  In line
 [class*='admin__control-grouped'] {
     box-sizing: border-box;
     display: table;
@@ -269,5 +278,22 @@
                 .visually-hidden();
             }
         }
+    }
+}
+
+//
+//  Form legend
+//  _____________________________________________
+
+.admin__legend {
+    //  ToDo UI: add form legend styles. Check if they doon't conflict with create order page form legend styles
+    float: left;
+    position: static;
+    width: 100%;
+    & + br {
+        display: block;
+        height: 0;
+        overflow: hidden;
+        clear: left;
     }
 }

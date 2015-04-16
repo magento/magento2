@@ -322,7 +322,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Collect redundant dependencies
-     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @test
      * @depends testUndeclared
      */
@@ -331,6 +331,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         foreach (array_keys(self::$_mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
             $found = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND);
+            $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
         }
     }

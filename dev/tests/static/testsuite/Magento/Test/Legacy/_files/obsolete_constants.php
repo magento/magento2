@@ -687,6 +687,11 @@ return [
         'Magento\Framework\App\SetupInfo::DEFAULT_PATH',
     ],
     [
+        'PARAM_BACKEND_FRONT_NAME',
+        'Magento\Backend\App\Area\FrontNameResolver',
+        'Magento\Backend\Setup\ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME'
+    ],
+    [
         'DEFAULT_ATTRIBUTE_SET_ID',
         'Magento\Catalog\Api\Data\CategoryAttributeInterface',
         'Use \Magento\Eav\Model\Entity\Type::getDefaultAttributeSetId() method instead',

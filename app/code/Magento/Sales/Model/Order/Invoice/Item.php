@@ -6,8 +6,8 @@
 namespace Magento\Sales\Model\Order\Invoice;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Item _getResource()
@@ -32,7 +32,7 @@ use Magento\Sales\Api\Data\InvoiceItemInterface;
  * @method \Magento\Sales\Model\Order\Invoice\Item setWeeeTaxApplied(string $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Item extends AbstractExtensibleModel implements InvoiceItemInterface
+class Item extends AbstractModel implements InvoiceItemInterface
 {
     /**
      * @var string
