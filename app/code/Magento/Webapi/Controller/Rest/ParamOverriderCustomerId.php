@@ -7,6 +7,7 @@
 namespace Magento\Webapi\Controller\Rest;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Webapi\Rest\Request\ParamOverriderInterface;
 
 /**
  * Replaces a "%customer_id%" value with the real customer id
