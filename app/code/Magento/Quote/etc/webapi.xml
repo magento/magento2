@@ -252,6 +252,35 @@
         </resources>
     </route>
 
+    <!-- Managing my Cart Payment -->
+    <route url="/V1/carts/mine/selected-payment-methods" method="GET">
+        <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/selected-payment-methods" method="PUT">
+        <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="set"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/payment-methods" method="GET">
+        <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
     <!-- Managing Cart Billing address -->
     <route url="/V1/carts/:cartId/billing-address" method="GET">
         <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="get"/>
