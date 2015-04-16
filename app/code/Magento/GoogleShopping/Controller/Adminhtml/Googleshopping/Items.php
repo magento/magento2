@@ -7,6 +7,7 @@ namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Notification\NotifierInterface;
+use Magento\Framework\Controller;
 
 /**
  * GoogleShopping Admin Items Controller
@@ -25,6 +26,14 @@ class Items extends \Magento\Backend\App\Action
      * @var \Magento\Framework\Url\EncoderInterface
      */
     protected $urlEncoder;
+
+    /**
+     * @return \Magento\Framework\Controller\Result\Raw
+     */
+    protected function emptyResult()
+    {
+        return $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
+    }
 
     /**
      * @param Action\Context $context
@@ -55,7 +64,7 @@ class Items extends \Magento\Backend\App\Action
      * Redirect user to Google Captcha challenge
      *
      * @param \Zend_Gdata_App_CaptchaRequiredException $e
-     * @return void
+     * @return Controller\ResultInterface
      */
     protected function _redirectToCaptcha($e)
     {
@@ -68,12 +77,14 @@ class Items extends \Magento\Backend\App\Action
             ]
         );
         if ($this->getRequest()->isAjax()) {
-            $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
-                    ->jsonEncode(['redirect' => $redirectUrl])
-            );
+            /** @var Controller\Result\Json $resultJson */
+            $resultJson = $this->resultFactory->create(Controller\ResultFactory::TYPE_JSON);
+            $resultJson->setData(['redirect' => $redirectUrl]);
+            return $resultJson;
         } else {
-            $this->_redirect($redirectUrl);
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT);
+            return $resultRedirect->setUrl($redirectUrl);
         }
     }
 

@@ -26,7 +26,7 @@ class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
     {
         $flag = $this->_getFlag();
         if ($flag->isLocked()) {
-            return;
+            return $this->emptyResult();
         }
 
         session_write_close();
@@ -38,19 +38,14 @@ class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
         try {
             $flag->lock();
             $operation = $this->operation;
-            $this->_objectManager->create(
-                'Magento\GoogleShopping\Model\MassOperations'
-            )->setFlag(
-                $flag
-            )->$operation(
-                $itemIds
-            );
+            $this->_objectManager->create('Magento\GoogleShopping\Model\MassOperations')
+                ->setFlag($flag)
+                ->$operation($itemIds);
         } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
             // Google requires CAPTCHA for login
             $this->messageManager->addError(__($e->getMessage()));
             $flag->unlock();
-            $this->_redirectToCaptcha($e);
-            return;
+            return $this->_redirectToCaptcha($e);
         } catch (\Exception $e) {
             $flag->unlock();
             $this->notifier->addMajor(
@@ -60,9 +55,10 @@ class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
                 )
             );
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            return;
+            return $this->emptyResult();
         }
 
         $flag->unlock();
+        return $this->emptyResult();
     }
 }

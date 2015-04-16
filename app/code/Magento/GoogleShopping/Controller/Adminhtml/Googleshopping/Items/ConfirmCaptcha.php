@@ -8,6 +8,7 @@ namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Notification\NotifierInterface;
+use Magento\Framework\Controller;
 
 class ConfirmCaptcha extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items
 {
@@ -35,39 +36,34 @@ class ConfirmCaptcha extends \Magento\GoogleShopping\Controller\Adminhtml\Google
     /**
      * Confirm CAPTCHA
      *
-     * @return void
+     * @return Controller\ResultInterface
      */
     public function execute()
     {
         $storeId = $this->_getStore()->getId();
         try {
-            $this->_objectManager->create(
-                'Magento\GoogleShopping\Model\Service'
-            )->getClient(
-                $storeId,
-                $this->urlDecoder->decode(
-                    $this->getRequest()->getParam('captcha_token')
-                ),
-                $this->getRequest()->getParam('user_confirm')
-            );
+            $this->_objectManager->create('Magento\GoogleShopping\Model\Service')
+                ->getClient(
+                    $storeId,
+                    $this->urlDecoder->decode($this->getRequest()->getParam('captcha_token')),
+                    $this->getRequest()->getParam('user_confirm')
+                );
             $this->messageManager->addSuccess(__('Captcha has been confirmed.'));
         } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
             $this->messageManager->addError(__('There was a Captcha confirmation error: %1', $e->getMessage()));
-            $this->_redirectToCaptcha($e);
-            return;
+            return $this->_redirectToCaptcha($e);
         } catch (\Zend_Gdata_App_Exception $e) {
             $this->messageManager->addError(
-                $this->_objectManager->get(
-                    'Magento\GoogleShopping\Helper\Data'
-                )->parseGdataExceptionMessage(
-                    $e->getMessage()
-                )
+                $this->_objectManager->get('Magento\GoogleShopping\Helper\Data')
+                    ->parseGdataExceptionMessage($e->getMessage())
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->messageManager->addError(__('Something went wrong during Captcha confirmation.'));
         }
 
-        $this->_redirect('adminhtml/*/index', ['store' => $storeId]);
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('adminhtml/*/index', ['store' => $storeId]);
     }
 }

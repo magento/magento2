@@ -11,13 +11,13 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
     /**
      * Add (export) several products to Google Content
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $flag = $this->_getFlag();
         if ($flag->isLocked()) {
-            return;
+            return $this->emptyResult();
         }
 
         session_write_close();
@@ -29,20 +29,14 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
 
         try {
             $flag->lock();
-            $this->_objectManager->create(
-                'Magento\GoogleShopping\Model\MassOperations'
-            )->setFlag(
-                $flag
-            )->addProducts(
-                $productIds,
-                $storeId
-            );
+            $this->_objectManager->create('Magento\GoogleShopping\Model\MassOperations')
+                ->setFlag($flag)
+                ->addProducts($productIds, $storeId);
         } catch (\Zend_Gdata_App_CaptchaRequiredException $e) {
             // Google requires CAPTCHA for login
             $this->messageManager->addError(__($e->getMessage()));
             $flag->unlock();
-            $this->_redirectToCaptcha($e);
-            return;
+            return $this->_redirectToCaptcha($e);
         } catch (\Exception $e) {
             $flag->unlock();
             $this->notifier->addMajor(
@@ -50,9 +44,10 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
                 $e->getMessage()
             );
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            return;
+            return $this->emptyResult();
         }
 
         $flag->unlock();
+        return $this->emptyResult();
     }
 }
