@@ -6,6 +6,7 @@
 namespace Magento\Persistent\Controller\Index;
 
 use Magento\Persistent\Controller\Index;
+use Magento\Framework\Controller\ResultFactory;
 
 class UnsetCookie extends Index
 {
@@ -35,7 +36,7 @@ class UnsetCookie extends Index
         if ($this->sessionHelper->isPersistent()) {
             $this->cleanup();
         }
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('customer/account/login');
         return $resultRedirect;
     }

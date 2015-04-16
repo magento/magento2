@@ -11,7 +11,6 @@ use Magento\Persistent\Model\QuoteManager;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Persistent\Helper\Session as SessionHelper;
-use Magento\Framework\Controller\Result\RedirectFactory;
 
 /**
  * Persistent front controller
@@ -45,11 +44,6 @@ class Index extends Action
     protected $sessionHelper;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * Whether clear checkout session when logout
      *
      * @var bool
@@ -62,21 +56,18 @@ class Index extends Action
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Persistent\Helper\Session $sessionHelper
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         Context $context,
         QuoteManager $quoteManager,
         CheckoutSession $checkoutSession,
         CustomerSession $customerSession,
-        SessionHelper $sessionHelper,
-        RedirectFactory $resultRedirectFactory
+        SessionHelper $sessionHelper
     ) {
         $this->quoteManager = $quoteManager;
         $this->checkoutSession = $checkoutSession;
         $this->customerSession = $customerSession;
         $this->sessionHelper = $sessionHelper;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         parent::__construct($context);
     }
 

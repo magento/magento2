@@ -6,6 +6,7 @@
 namespace Magento\Persistent\Controller\Index;
 
 use Magento\Persistent\Controller\Index;
+use Magento\Framework\Controller\ResultFactory;
 
 class SaveMethod extends Index
 {
@@ -24,7 +25,7 @@ class SaveMethod extends Index
             $this->quoteManager->setGuest();
         }
         $checkoutUrl = $this->_redirect->getRefererUrl();
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath($checkoutUrl . (strpos($checkoutUrl, '?') ? '&' : '?') . 'register');
         return $resultRedirect;
     }

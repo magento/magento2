@@ -6,6 +6,7 @@
 namespace Magento\Persistent\Controller\Index;
 
 use Magento\Persistent\Controller\Index;
+use Magento\Framework\Controller\ResultFactory;
 
 class ExpressCheckout extends Index
 {
@@ -17,7 +18,7 @@ class ExpressCheckout extends Index
     public function execute()
     {
         $this->messageManager->addNotice(__('Your shopping cart has been updated with new prices.'));
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('checkout/cart');
         return $resultRedirect;
     }
