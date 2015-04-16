@@ -204,7 +204,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'type' => 'checkbox',
                 'name' => 'in_products',
                 'values' => $this->_getSelectedProducts(),
-                'align' => 'center',
                 'index' => 'entity_id',
                 'sortable' => false
             ]
