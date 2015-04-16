@@ -71,11 +71,11 @@ class Multiline extends AbstractElement
 
         for ($i = 0; $i < $lineCount; $i++) {
             if ($i == 0 && $this->getRequired()) {
-                $this->setClass('input-text required-entry');
+                $this->setClass('input-text admin__control-text required-entry _required');
             } else {
-                $this->setClass('input-text');
+                $this->setClass('input-text admin__control-text');
             }
-            $html .= '<div class="multi-input"><input id="' .
+            $html .= '<div class="multi-input admin__field-control"><input id="' .
                 $this->getHtmlId() .
                 $i .
                 '" name="' .

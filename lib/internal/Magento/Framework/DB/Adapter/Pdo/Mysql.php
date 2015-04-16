@@ -1072,7 +1072,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * REF_TABLE_NAME   => string; reference table name
      * REF_COLUMN_NAME  => string; reference column name
      * ON_DELETE        => string; action type on delete row
-     * ON_UPDATE        => string; action type on update row
      *
      * @param string $tableName
      * @param string $schemaName
@@ -1102,8 +1101,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     'REF_SHEMA_NAME'    => isset($match[4]) ? $match[4] : $schemaName,
                     'REF_TABLE_NAME'    => $match[5],
                     'REF_COLUMN_NAME'   => $match[6],
-                    'ON_DELETE'         => isset($match[7]) ? $match[8] : '',
-                    'ON_UPDATE'         => isset($match[9]) ? $match[10] : '',
+                    'ON_DELETE'         => isset($match[7]) ? $match[8] : ''
                 ];
             }
 
@@ -1174,10 +1172,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     unset($columnDefinition['identity'], $columnDefinition['primary'], $columnDefinition['comment']);
 
                     $onDelete = $options['ON_DELETE'];
-                    $onUpdate = $options['ON_UPDATE'];
 
-                    if ($onDelete == AdapterInterface::FK_ACTION_SET_NULL
-                        || $onUpdate == AdapterInterface::FK_ACTION_SET_NULL) {
+                    if ($onDelete == AdapterInterface::FK_ACTION_SET_NULL) {
                         $columnDefinition['nullable'] = true;
                     }
                     $this->modifyColumn($options['TABLE_NAME'], $options['COLUMN_NAME'], $columnDefinition);
@@ -1187,8 +1183,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                         $options['COLUMN_NAME'],
                         $options['REF_TABLE_NAME'],
                         $options['REF_COLUMN_NAME'],
-                        ($onDelete) ? $onDelete : AdapterInterface::FK_ACTION_NO_ACTION,
-                        ($onUpdate) ? $onUpdate : AdapterInterface::FK_ACTION_NO_ACTION
+                        ($onDelete) ? $onDelete : AdapterInterface::FK_ACTION_NO_ACTION
                     );
                 }
             }
@@ -1634,15 +1629,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $keyData['REF_COLUMN_NAME']
             );
             $onDelete = $this->_getDdlAction($keyData['ON_DELETE']);
-            $onUpdate = $this->_getDdlAction($keyData['ON_UPDATE']);
 
             $table->addForeignKey(
                 $fkName,
                 $keyData['COLUMN_NAME'],
                 $keyData['REF_TABLE_NAME'],
                 $keyData['REF_COLUMN_NAME'],
-                $onDelete,
-                $onUpdate
+                $onDelete
             );
         }
 
@@ -2140,16 +2133,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if (!empty($relations)) {
             foreach ($relations as $fkData) {
                 $onDelete = $this->_getDdlAction($fkData['ON_DELETE']);
-                $onUpdate = $this->_getDdlAction($fkData['ON_UPDATE']);
-
                 $definition[] = sprintf(
-                    '  CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s) ON DELETE %s ON UPDATE %s',
+                    '  CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s) ON DELETE %s',
                     $this->quoteIdentifier($fkData['FK_NAME']),
                     $this->quoteIdentifier($fkData['COLUMN_NAME']),
                     $this->quoteIdentifier($fkData['REF_TABLE_NAME']),
                     $this->quoteIdentifier($fkData['REF_COLUMN_NAME']),
-                    $onDelete,
-                    $onUpdate
+                    $onDelete
                 );
             }
         }
@@ -2580,7 +2570,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param string $refTableName
      * @param string $refColumnName
      * @param string $onDelete
-     * @param string $onUpdate
      * @param bool $purge            trying remove invalid data
      * @param string $schemaName
      * @param string $refSchemaName
@@ -2594,7 +2583,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $refTableName,
         $refColumnName,
         $onDelete = AdapterInterface::FK_ACTION_CASCADE,
-        $onUpdate = AdapterInterface::FK_ACTION_CASCADE,
         $purge = false,
         $schemaName = null,
         $refSchemaName = null
@@ -2616,9 +2604,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         if ($onDelete !== null) {
             $query .= ' ON DELETE ' . strtoupper($onDelete);
-        }
-        if ($onUpdate  !== null) {
-            $query .= ' ON UPDATE ' . strtoupper($onUpdate);
         }
 
         $result = $this->rawQuery($query);

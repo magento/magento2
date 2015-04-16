@@ -66,7 +66,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
                 'From'
             ) . '" value="' . $this->getEscapedValue(
                 'from'
-            ) . '" class="input-text no-changes"  ' . $this->getUiId(
+            ) . '" class="input-text admin__control-text no-changes"  ' . $this->getUiId(
                 'filter',
                 $this->_getHtmlName(),
                 'from'
@@ -81,7 +81,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
                 'To'
             ) . '" value="' . $this->getEscapedValue(
                 'to'
-            ) . '" class="input-text no-changes" ' . $this->getUiId(
+            ) . '" class="input-text admin__control-text no-changes" ' . $this->getUiId(
                 'filter',
                 $this->_getHtmlName(),
                 'to'

@@ -66,7 +66,7 @@ class Select extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFi
         $html = '<select name="' . $this->_getHtmlName() . '" id="' . $this->_getHtmlId() . '"' . $this->getUiId(
             'filter',
             $this->_getHtmlName()
-        ) . 'class="no-changes">';
+        ) . 'class="admin__control-select no-changes">';
         $value = $this->getValue();
         foreach ($this->_getOptions() as $option) {
             if (is_array($option['value'])) {

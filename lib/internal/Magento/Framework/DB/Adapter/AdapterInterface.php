@@ -375,7 +375,6 @@ interface AdapterInterface
         $refTableName,
         $refColumnName,
         $onDelete = self::FK_ACTION_CASCADE,
-        $onUpdate = self::FK_ACTION_CASCADE,
         $purge = false,
         $schemaName = null,
         $refSchemaName = null
