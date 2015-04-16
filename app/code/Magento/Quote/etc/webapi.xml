@@ -424,6 +424,8 @@
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
+
+    <!-- Managing Cart Total -->
     <route url="/V1/carts/:cartId/totals" method="GET">
         <service class="Magento\Quote\Api\CartTotalRepositoryInterface" method="get"/>
         <resources>
@@ -431,10 +433,22 @@
         </resources>
     </route>
 
+    <!-- Managing Guest Cart Total -->
     <route url="/V1/guest-carts/:cartId/totals" method="GET">
         <service class="Magento\Quote\Api\GuestCartTotalRepositoryInterface" method="get"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
+    </route>
+
+    <!-- Managing My Cart Total -->
+    <route url="/V1/carts/mine/totals" method="GET">
+        <service class="Magento\Quote\Api\CartTotalRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
     </route>
 </routes>

@@ -171,4 +171,71 @@ class CartTotalRepositoryTest extends WebapiAbstract
             ItemTotals::KEY_BASE_ROW_TOTAL_INCL_TAX => $item->getBaseRowTotalInclTax(),
         ];
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
+     */
+    public function testGetMyTotals()
+    {
+        // get customer ID token
+        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_order_1', 'reserved_order_id');
+        $cartId = $quote->getId();
+
+        $serviceInfo = [
+            'soap' => [
+                'service' => 'quoteCartTotalRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'quoteCartTotalRepositoryV1get',
+                'token' => $token
+            ],
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine/totals',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $token
+            ],
+        ];
+
+        /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
+        $shippingAddress = $quote->getShippingAddress();
+
+        $data = [
+            Totals::KEY_BASE_GRAND_TOTAL => $quote->getBaseGrandTotal(),
+            Totals::KEY_GRAND_TOTAL => $quote->getGrandTotal(),
+            Totals::KEY_BASE_SUBTOTAL => $quote->getBaseSubtotal(),
+            Totals::KEY_SUBTOTAL => $quote->getSubtotal(),
+            Totals::KEY_BASE_SUBTOTAL_WITH_DISCOUNT => $quote->getBaseSubtotalWithDiscount(),
+            Totals::KEY_SUBTOTAL_WITH_DISCOUNT => $quote->getSubtotalWithDiscount(),
+            Totals::KEY_DISCOUNT_AMOUNT => $shippingAddress->getDiscountAmount(),
+            Totals::KEY_BASE_DISCOUNT_AMOUNT => $shippingAddress->getBaseDiscountAmount(),
+            Totals::KEY_SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
+            Totals::KEY_BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
+            Totals::KEY_SHIPPING_DISCOUNT_AMOUNT => $shippingAddress->getShippingDiscountAmount(),
+            Totals::KEY_BASE_SHIPPING_DISCOUNT_AMOUNT => $shippingAddress->getBaseShippingDiscountAmount(),
+            Totals::KEY_TAX_AMOUNT => $shippingAddress->getTaxAmount(),
+            Totals::KEY_BASE_TAX_AMOUNT => $shippingAddress->getBaseTaxAmount(),
+            Totals::KEY_SHIPPING_TAX_AMOUNT => $shippingAddress->getShippingTaxAmount(),
+            Totals::KEY_BASE_SHIPPING_TAX_AMOUNT => $shippingAddress->getBaseShippingTaxAmount(),
+            Totals::KEY_SUBTOTAL_INCL_TAX => $shippingAddress->getSubtotalInclTax(),
+            Totals::KEY_BASE_SUBTOTAL_INCL_TAX => $shippingAddress->getBaseSubtotalTotalInclTax(),
+            Totals::KEY_SHIPPING_INCL_TAX => $shippingAddress->getShippingInclTax(),
+            Totals::KEY_BASE_SHIPPING_INCL_TAX => $shippingAddress->getBaseShippingInclTax(),
+            Totals::KEY_BASE_CURRENCY_CODE => $quote->getBaseCurrencyCode(),
+            Totals::KEY_QUOTE_CURRENCY_CODE => $quote->getQuoteCurrencyCode(),
+            Totals::KEY_ITEMS => [$this->getQuoteItemTotalsData($quote)],
+        ];
+
+        $requestData = ['cartId' => $cartId];
+
+        $data = $this->formatTotalsData($data);
+
+        $this->assertEquals($data, $this->_webApiCall($serviceInfo, $requestData));
+    }
 }
