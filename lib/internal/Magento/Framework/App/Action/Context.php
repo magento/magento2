@@ -184,4 +184,12 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     {
         return $this->resultRedirectFactory;
     }
+
+    /**
+     * @return \Magento\Framework\Controller\ResultFactory
+     */
+    public function getResultFactory()
+    {
+        return $this->resultFactory;
+    }
 }
