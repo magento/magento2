@@ -17,7 +17,7 @@ use Magento\Framework\App\ObjectManager;
 abstract class AbstractLogCommand extends Command
 {
     /**
-     * Command factory
+     * Object Manager
      *
      * @var ObjectManager
      */

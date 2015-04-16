@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 class LogCleanCommand extends AbstractLogCommand
 {
     /**
-     * Names of input option
+     * Name of input option
      */
     const INPUT_KEY_DAYS = 'days';
 
