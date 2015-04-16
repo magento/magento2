@@ -340,7 +340,7 @@
             <label>PDF Print-outs</label>
             <tab>sales</tab>
             <resource>Magento_Sales::sales_pdf</resource>
-            <group id="invoice" translate="label" type="text" sortOrder="1" showInDefault="10" showInWebsite="1" showInStore="1">
+            <group id="invoice" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Invoice</label>
                 <field id="put_order_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Order ID in Header</label>
