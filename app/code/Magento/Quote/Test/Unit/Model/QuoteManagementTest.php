@@ -94,6 +94,11 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $customerSessionMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $dataObjectHelperMock;
 
     /**
@@ -166,12 +171,13 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             [
                 'getId',
                 'getCheckoutMethod',
-                'setCustomer',
+                'setCheckoutMethod',
                 'setCustomerId',
                 'setCustomerEmail',
                 'getBillingAddress',
                 'setCustomerIsGuest',
                 'setCustomerGroupId',
+                'assignCustomer'
             ],
             [],
             '',
@@ -186,6 +192,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->accountManagementMock = $this->getMock(
             '\Magento\Customer\Api\AccountManagementInterface',
             [],
@@ -211,6 +218,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerModelFactory' => $this->customerFactoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
                 'checkoutSession' => $this->checkoutSessionMock,
+                'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
             ]
         );
@@ -631,7 +639,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
 
-    public function testPlaceOrderIfCustomerIsQuest()
+    public function testPlaceOrderIfCustomerIsGuest()
     {
         $cartId = 100;
         $orderId = 332;
@@ -678,6 +686,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerModelFactory' => $this->customerFactoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
                 'checkoutSession' => $this->checkoutSessionMock,
+                'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
             ]
         );
@@ -727,6 +736,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerModelFactory' => $this->customerFactoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
                 'checkoutSession' => $this->checkoutSessionMock,
+                'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
             ]
         );
@@ -768,6 +778,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 9549;
         $orderId = 2321;
         $password = 'SoMeP@ssW0rd';
+        $customerId = 25;
         $customerMock = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
 
         $this->accountManagementMock->expects($this->once())
@@ -778,7 +789,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('setCustomer')->with($customerMock);
+        $this->quoteMock->expects($this->once())->method('assignCustomer')->with($customerMock)->willReturnSelf();
+        $this->quoteMock->expects($this->once())->method('setCheckoutMethod')->with('register');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
         $service = $this->getMock(
@@ -800,11 +812,14 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerModelFactory' => $this->customerFactoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
                 'checkoutSession' => $this->checkoutSessionMock,
+                'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
             ]
         );
 
         $service->expects($this->once())->method('placeOrder')->willReturn($orderId);
+        $customerMock->expects($this->once())->method('getId')->willReturn($customerId);
+        $this->customerSessionMock->expects($this->once())->method('loginById')->with($customerId);
         $this->assertEquals($orderId, $service->placeOrderCreatingAccount($cartId, $customerMock, $password));
     }
 
