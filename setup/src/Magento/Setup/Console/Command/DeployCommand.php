@@ -11,7 +11,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\Console\ObjectManagerProvider;
+
 
 class DeployCommand extends Command
 {
@@ -88,14 +89,14 @@ class DeployCommand extends Command
                 ['pathToSource' => BP]
             );
 
-            $omFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, []);
+            $objectManagerFactory = $this->objectManagerProvider->getObjectManagerFactory([]);
 
             /** @var \Magento\Setup\Model\Deployer $deployer */
             $deployer = $objectManager->create(
                 'Magento\Setup\Model\Deployer',
                 ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
             );
-            $deployer->deploy($omFactory, $languages);
+            $deployer->deploy($objectManagerFactory, $languages);
 
         } catch (\Exception $e) {
             $output->writeln($e->getMessage());

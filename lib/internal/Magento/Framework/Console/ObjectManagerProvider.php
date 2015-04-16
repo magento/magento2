@@ -45,7 +45,7 @@ class ObjectManagerProvider
     {
         if (null === $this->objectManager) {
             $initParams = $this->params->getCustomParameters();
-            $factory = Bootstrap::createObjectManagerFactory(BP, $initParams);
+            $factory = $this->getObjectManagerFactory($initParams);
             $this->objectManager = $factory->create($initParams);
         }
         return $this->objectManager;
@@ -59,5 +59,16 @@ class ObjectManagerProvider
     public function reset()
     {
         $this->objectManager = null;
+    }
+
+    /**
+     * Returns ObjectManagerFactory
+     *
+     * @param array $initParams
+     * @return \Magento\Framework\App\ObjectManagerFactory
+     */
+    public function getObjectManagerFactory($initParams)
+    {
+        return Bootstrap::createObjectManagerFactory(BP, $initParams);
     }
 }
