@@ -11,7 +11,7 @@ return [
         'installation' => [
             'options' => [
                 'backend_frontname' => 'backend',
-                'admin_username' => 'admin',
+                'admin_user' => 'admin',
                 'admin_password' => 'password1',
             ],
         ],

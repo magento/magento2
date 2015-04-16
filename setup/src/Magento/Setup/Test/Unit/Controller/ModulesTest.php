@@ -35,7 +35,6 @@ class ModulesTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->status = $this->getMock('Magento\Framework\Module\Status', [], [], '', false);
         /** @var
          * $objectManagerProvider \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
          */

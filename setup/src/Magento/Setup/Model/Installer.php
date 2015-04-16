@@ -29,6 +29,8 @@ use Magento\Store\Model\Store;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\App\State\CleanupFiles;
+use Magento\Setup\Console\Command\InstallCommand;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -39,27 +41,12 @@ use Magento\Framework\Config\File\ConfigFilePool;
  */
 class Installer
 {
-    /**
-     * Parameter indicating command whether to cleanup database in the install routine
-     */
-    const CLEANUP_DB = 'cleanup_database';
-
     /**#@+
      * Parameters for enabling/disabling modules
      */
     const ENABLE_MODULES = 'enable_modules';
     const DISABLE_MODULES = 'disable_modules';
     /**#@- */
-
-    /**
-     * Parameter indicating command whether to install Sample Data
-     */
-    const USE_SAMPLE_DATA = 'use_sample_data';
-
-    /**
-     * Parameter to specify an order_increment_prefix
-     */
-    const SALES_ORDER_INCREMENT_PREFIX = 'sales_order_increment_prefix';
 
     /**#@+
      * Formatting for progress log
@@ -194,6 +181,11 @@ class Installer
     private $setupConfigModel;
 
     /**
+     * @var CleanupFiles
+     */
+    private $cleanupFiles;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -211,7 +203,8 @@ class Installer
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Context $context
      * @param SetupConfigModel $setupConfigModel
-     * 
+     * @param CleanupFiles $cleanupFiles
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -229,7 +222,8 @@ class Installer
         SampleData $sampleData,
         ObjectManagerProvider $objectManagerProvider,
         Context $context,
-        SetupConfigModel $setupConfigModel
+        SetupConfigModel $setupConfigModel,
+        CleanupFiles $cleanupFiles
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -247,6 +241,7 @@ class Installer
         $this->objectManagerProvider = $objectManagerProvider;
         $this->context = $context;
         $this->setupConfigModel = $setupConfigModel;
+        $this->cleanupFiles = $cleanupFiles;
     }
 
     /**
@@ -261,22 +256,22 @@ class Installer
         $script[] = ['File permissions check...', 'checkInstallationFilePermissions', []];
         $script[] = ['Enabling Maintenance Mode...', 'setMaintenanceMode', [1]];
         $script[] = ['Installing deployment configuration...', 'installDeploymentConfig', [$request]];
-        if (!empty($request[self::CLEANUP_DB])) {
+        if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
         $script[] = ['Installing database schema:', 'installSchema', []];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Installing data...', 'installDataFixtures', []];
-        if (!empty($request[self::SALES_ORDER_INCREMENT_PREFIX])) {
+        if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
                 'Creating sales order increment prefix...',
                 'installOrderIncrementPrefix',
-                [$request[self::SALES_ORDER_INCREMENT_PREFIX]],
+                [$request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX]],
             ];
         }
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
-        if (!empty($request[Installer::USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
+        if (!empty($request[InstallCommand::INPUT_KEY_USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
             $script[] = ['Installing sample data:', 'installSampleData', [$request]];
         }
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
@@ -420,12 +415,7 @@ class Installer
     {
         $this->checkInstallationFilePermissions();
         $userData = is_array($data) ? $data : $data->getArrayCopy();
-
-        // TODO: remove this when moving install command to symfony
-        $userData = $this->setDefaultValues($userData);
-
         $this->setupConfigModel->process($userData);
-
         if ($this->deploymentConfig->isAvailable()) {
             $deploymentConfigData = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
             if (isset($deploymentConfigData)) {
@@ -434,32 +424,6 @@ class Installer
         }
         // reset object manager now that there is a deployment config
         $this->objectManagerProvider->reset();
-    }
-    
-    /**
-     * Sets defaults if user input is missing
-     *
-     * @param array $userData
-     * @return array
-     */
-    private function setDefaultValues(array $userData)
-    {
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
-            $userData[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] = ConfigOptionsList::SESSION_SAVE_FILES;
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PASS])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_PASS] = '';
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_MODEL])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_MODEL] = 'mysql4';
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_INIT_STATEMENTS] = 'SET NAMES utf8;';
-        }
-        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PREFIX])) {
-            $userData[ConfigOptionsList::INPUT_KEY_DB_PREFIX] = '';
-        }
-        return $userData;
     }
 
     /**
@@ -822,7 +786,7 @@ class Installer
      */
     public function installUserConfig($data)
     {
-        $userConfig = new UserConfigurationDataMapper();
+        $userConfig = new StoreConfigurationDataMapper();
         $configData = $userConfig->getConfigData($data);
         if (count($configData) === 0) {
             return;
@@ -909,9 +873,14 @@ class Installer
     public function updateModulesSequence()
     {
         $this->assertDeploymentConfigExists();
+
+        $this->clearCache();
+
         $this->log->log('File system cleanup:');
-        $this->deleteDirContents(DirectoryList::GENERATION);
-        $this->deleteDirContents(DirectoryList::CACHE);
+        $messages = $this->cleanupFiles->clearCodeGeneratedClasses();
+        foreach ($messages as $message) {
+            $this->log->log($message);
+        }
         $this->log->log('Updating modules:');
         $this->createModulesConfig([]);
     }
@@ -926,12 +895,29 @@ class Installer
         $this->log->log('Starting Magento uninstallation:');
 
         $this->cleanupDb();
+        $this->clearCache();
+
         $this->log->log('File system cleanup:');
-        $this->deleteDirContents(DirectoryList::VAR_DIR);
-        $this->deleteDirContents(DirectoryList::STATIC_VIEW);
+        $messages = $this->cleanupFiles->clearAllFiles();
+        foreach ($messages as $message) {
+            $this->log->log($message);
+        }
+
         $this->deleteDeploymentConfig();
 
         $this->log->logSuccess('Magento uninstallation complete.');
+    }
+
+    /**
+     * Clears cache
+     *
+     * @return void
+     */
+    private function clearCache()
+    {
+        $cache = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache');
+        $cache->clean();
+        $this->log->log('Cache cleared successfully');
     }
 
     /**
@@ -1066,33 +1052,6 @@ class Installer
     }
 
     /**
-     * Removes contents of a directory
-     *
-     * @param string $type
-     * @return void
-     */
-    private function deleteDirContents($type)
-    {
-        $dir = $this->filesystem->getDirectoryWrite($type);
-        $dirPath = $dir->getAbsolutePath();
-        if (!$dir->isExist()) {
-            $this->log->log("The directory '{$dirPath}' doesn't exist - skipping cleanup");
-            return;
-        }
-        foreach ($dir->read() as $path) {
-            if (preg_match('/^\./', $path)) {
-                continue;
-            }
-            $this->log->log("{$dirPath}{$path}");
-            try {
-                $dir->delete($path);
-            } catch (FileSystemException $e) {
-                $this->log->log($e->getMessage());
-            }
-        }
-    }
-
-    /**
      * Removes deployment configuration
      *
      * @return void
@@ -1140,7 +1099,7 @@ class Installer
             $connectionConfig[ConfigOptionsList::KEY_NAME],
             $connectionConfig[ConfigOptionsList::KEY_HOST],
             $connectionConfig[ConfigOptionsList::KEY_USER],
-            $connectionConfig[ConfigOptionsList::KEY_PASS]
+            $connectionConfig[ConfigOptionsList::KEY_PASSWORD]
         );
         if (isset($connectionConfig[ConfigOptionsList::KEY_PREFIX])) {
             $this->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsList::KEY_PREFIX]);
@@ -1157,7 +1116,7 @@ class Installer
      */
     private function installSampleData($request)
     {
-        $userName = isset($request[AdminAccount::KEY_USERNAME]) ? $request[AdminAccount::KEY_USERNAME] : '';
+        $userName = isset($request[AdminAccount::KEY_USER]) ? $request[AdminAccount::KEY_USER] : '';
         $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
     }
 
