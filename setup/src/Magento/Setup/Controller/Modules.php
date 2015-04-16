@@ -6,7 +6,7 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Setup\Model\ModuleStatus;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\Console\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;

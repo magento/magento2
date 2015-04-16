@@ -34,4 +34,16 @@
         <plugin name="page-cache-indexer-reindex-invalidate"
                 type="Magento\Indexer\Model\Processor\InvalidateCache" sortOrder="10"/>
     </type>
+    <preference for="Magento\Framework\Console\ParameterInterface" type="Magento\Indexer\Console\CustomParameters" />
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="info" xsi:type="object">Magento\Indexer\Console\IndexerInfoCommand</item>
+                <item name="reindex" xsi:type="object">Magento\Indexer\Console\IndexerReindexCommand</item>
+                <item name="set-mode" xsi:type="object">Magento\Indexer\Console\IndexerSetModeCommand</item>
+                <item name="show-mode" xsi:type="object">Magento\Indexer\Console\IndexerShowModeCommand</item>
+                <item name="status" xsi:type="object">Magento\Indexer\Console\IndexerStatusCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

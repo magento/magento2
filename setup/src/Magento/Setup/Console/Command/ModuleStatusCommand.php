@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\Console\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

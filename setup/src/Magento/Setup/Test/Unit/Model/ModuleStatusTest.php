@@ -31,7 +31,7 @@ class ModuleStatusTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Console\ObjectManagerProvider
      */
     private $objectManagerProvider;
 

@@ -7,6 +7,7 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\Console\ObjectManagerProvider;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Module\DependencyChecker;
