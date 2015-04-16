@@ -7,7 +7,6 @@ namespace Magento\Log\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Magento\Store\Model\StoreManager;
-use Magento\Log\Model\Shell\Command\Factory;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\ObjectManager;
