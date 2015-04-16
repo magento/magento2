@@ -6,13 +6,10 @@
 
 namespace Magento\Backend\Console\Command;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
 /**
  * Command for flushing cache
  */
-class CacheFlushCommand extends AbstractCacheManageCommand
+class CacheFlushCommand extends AbstractCacheTypeManageCommand
 {
     /**
      * {@inheritdoc}

@@ -6,32 +6,11 @@
 
 namespace Magento\Backend\Console\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class AbstractCacheSetCommand extends AbstractCacheCommand
+abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
-    {
-        $this->addArgument(
-            self::INPUT_KEY_TYPES,
-            InputArgument::IS_ARRAY,
-            'list of cache types, space separated If omitted, all caches will be affected'
-        );
-        $this->addOption(
-            self::INPUT_KEY_ALL,
-            null,
-            InputOption::VALUE_NONE,
-            'all cache types'
-        );
-        parent::configure();
-    }
-
     /**
      * Is enable cache or not
      *
