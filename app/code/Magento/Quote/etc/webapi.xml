@@ -24,7 +24,13 @@
     <route url="/V1/carts/" method="POST">
         <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCart"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Cart::manage" />
+        </resources>
+    </route>
+    <route url="/V1/customers/:customerId/carts" method="POST">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCartForCustomer"/>
+        <resources>
+            <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
     <route url="/V1/carts/:cartId" method="PUT">
@@ -36,7 +42,7 @@
 
     <!-- Managing my Cart -->
     <route url="/V1/carts/mine" method="POST">
-        <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCart"/>
+        <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCartForCustomer"/>
         <resources>
             <resource ref="self" />
         </resources>

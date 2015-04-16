@@ -198,7 +198,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($quoteId, $this->model->createEmptyCart());
     }
 
-    public function testCreateEmptyCartLoggedInUser()
+    public function testCreateEmptyCartForCustomer()
     {
         $storeId = 345;
         $quoteId = 2311;
@@ -222,13 +222,13 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturnSelf();
         $this->storeManagerMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
-        $this->assertEquals($quoteId, $this->model->createEmptyCart($userId));
+        $this->assertEquals($quoteId, $this->model->createEmptyCartForCustomer($userId));
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function testCreateEmptyCartLoggedInUserException()
+    public function testCreateEmptyCartForCustomerException()
     {
         $storeId = 345;
         $userId = 567;
@@ -246,7 +246,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturnSelf();
         $this->storeManagerMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
-        $this->model->createEmptyCart($userId);
+        $this->model->createEmptyCartForCustomer($userId);
     }
 
     /**
