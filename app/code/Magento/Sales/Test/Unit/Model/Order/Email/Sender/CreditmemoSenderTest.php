@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
-use \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
 class CreditmemoSenderTest extends AbstractSenderTest
 {
@@ -15,52 +15,34 @@ class CreditmemoSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoMock;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $paymentHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Resource\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $creditmemoResource;
+    protected $creditmemoResourceMock;
 
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
     protected function setUp()
     {
         $this->stepMockSetup();
-        $this->paymentHelper = $this->getMock('\Magento\Payment\Helper\Data', ['getInfoBlockHtml'], [], '', false);
-        $this->paymentHelper->expects($this->any())
-            ->method('getInfoBlockHtml')
-            ->will($this->returnValue('payment'));
 
-        $this->creditmemoResource = $this->getMock(
+        $this->creditmemoResourceMock = $this->getMock(
             '\Magento\Sales\Model\Resource\Order\Creditmemo',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity');
-        $paymentInfoMock = $this->getMock(
-            '\Magento\Payment\Model\Info',
-            [],
+            ['saveAttribute'],
             [],
             '',
             false
         );
-        $this->orderMock->expects($this->once())
-            ->method('getPayment')
-            ->will($this->returnValue($paymentInfoMock));
 
         $this->creditmemoMock = $this->getMock(
             '\Magento\Sales\Model\Order\Creditmemo',
-            ['getStore', '__wakeup', 'getOrder'],
+            [
+                'getStore', '__wakeup', 'getOrder',
+                'setSendEmail', 'setEmailSent', 'getCustomerNoteNotify',
+                'getCustomerNote'
+            ],
             [],
             '',
             false
@@ -71,95 +53,156 @@ class CreditmemoSenderTest extends AbstractSenderTest
         $this->creditmemoMock->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
+
+        $this->identityContainerMock = $this->getMock(
+            '\Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity',
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
+            [],
+            '',
+            false
+        );
+        $this->identityContainerMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
+
         $this->sender = new CreditmemoSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
             $this->paymentHelper,
-            $this->creditmemoResource,
-            $this->addressRendererMock
+            $this->creditmemoResourceMock,
+            $this->globalConfig,
+            $this->addressRenderer
         );
     }
 
-    public function testSendFalse()
+    /**
+     * @param int $configValue
+     * @param bool|null $forceSyncMode
+     * @param bool|null $customerNoteNotify
+     * @param bool|null $emailSendingResult
+     * @dataProvider sendDataProvider
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testSend($configValue, $forceSyncMode, $customerNoteNotify, $emailSendingResult)
     {
-        $this->stepAddressFormat($this->addressMock);
-        $result = $this->sender->send($this->creditmemoMock);
-        $this->assertFalse($result);
-    }
-
-    public function testSendTrueWithCustomerCopy()
-    {
-        $billingAddress = $this->addressMock;
-        $this->stepAddressFormat($this->addressMock);
         $comment = 'comment_test';
-        $this->orderMock->expects($this->once())
-            ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
-        $this->identityContainerMock->expects($this->once())
-            ->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->templateContainerMock->expects($this->once())
-            ->method('setTemplateVars')
-            ->with(
-                $this->equalTo(
+        $address = 'address_test';
+        $configPath = 'sales_email/general/async_sending';
+
+        $this->creditmemoMock->expects($this->once())
+            ->method('setSendEmail')
+            ->with(true);
+
+        $this->globalConfig->expects($this->once())
+            ->method('getValue')
+            ->with($configPath)
+            ->willReturn($configValue);
+
+        if (!$configValue || $forceSyncMode) {
+            $addressMock = $this->getMock(
+                'Magento\Sales\Model\Order\Address',
+                [],
+                [],
+                '',
+                false
+            );
+
+            $this->addressRenderer->expects($this->any())
+                ->method('format')
+                ->with($addressMock, 'html')
+                ->willReturn($address);
+
+            $this->orderMock->expects($this->any())
+                ->method('getBillingAddress')
+                ->willReturn($addressMock);
+
+            $this->orderMock->expects($this->any())
+                ->method('getShippingAddress')
+                ->willReturn($addressMock);
+
+            $this->creditmemoMock->expects($this->once())
+                ->method('getCustomerNoteNotify')
+                ->willReturn($customerNoteNotify);
+
+            $this->creditmemoMock->expects($this->any())
+                ->method('getCustomerNote')
+                ->willReturn($comment);
+
+            $this->templateContainerMock->expects($this->once())
+                ->method('setTemplateVars')
+                ->with(
                     [
                         'order' => $this->orderMock,
                         'creditmemo' => $this->creditmemoMock,
-                        'comment' => $comment,
-                        'billing' => $billingAddress,
+                        'comment' => $customerNoteNotify ? $comment : '',
+                        'billing' => $addressMock,
                         'payment_html' => 'payment',
                         'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1
+                        'formattedShippingAddress' => $address,
+                        'formattedBillingAddress' => $address
                     ]
-                )
+                );
+
+            $this->identityContainerMock->expects($this->once())
+                ->method('isEnabled')
+                ->willReturn($emailSendingResult);
+
+            if ($emailSendingResult) {
+                $this->senderBuilderFactoryMock->expects($this->once())
+                    ->method('create')
+                    ->willReturn($this->senderMock);
+
+                $this->senderMock->expects($this->once())->method('send');
+
+                $this->senderMock->expects($this->once())->method('sendCopyTo');
+
+                $this->creditmemoMock->expects($this->once())
+                    ->method('setEmailSent')
+                    ->with(true);
+
+                $this->creditmemoResourceMock->expects($this->once())
+                    ->method('saveAttribute')
+                    ->with($this->creditmemoMock, ['send_email', 'email_sent']);
+
+                $this->assertTrue(
+                    $this->sender->send($this->creditmemoMock)
+                );
+            } else {
+                $this->creditmemoResourceMock->expects($this->once())
+                    ->method('saveAttribute')
+                    ->with($this->creditmemoMock, 'send_email');
+
+                $this->assertFalse(
+                    $this->sender->send($this->creditmemoMock)
+                );
+            }
+        } else {
+            $this->creditmemoResourceMock->expects($this->once())
+                ->method('saveAttribute')
+                ->with($this->creditmemoMock, 'send_email');
+
+            $this->assertFalse(
+                $this->sender->send($this->creditmemoMock)
             );
-        $paymentInfoMock = $this->getMock(
-            '\Magento\Payment\Model\Info',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderMock->expects($this->once())
-            ->method('getPayment')
-            ->will($this->returnValue($paymentInfoMock));
-        $this->stepSendWithoutSendCopy();
-        $result = $this->sender->send($this->creditmemoMock, true, $comment);
-        $this->assertTrue($result);
+        }
     }
 
-    public function testSendTrueWithoutCustomerCopy()
+    /**
+     * @return array
+     */
+    public function sendDataProvider()
     {
-        $billingAddress = $this->addressMock;
-        $this->stepAddressFormat($billingAddress);
-        $comment = 'comment_test';
-        $this->orderMock->expects($this->once())
-            ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
-        $this->identityContainerMock->expects($this->once())
-            ->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->templateContainerMock->expects($this->once())
-            ->method('setTemplateVars')
-            ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'creditmemo' => $this->creditmemoMock,
-                        'billing' => $billingAddress,
-                        'payment_html' => 'payment',
-                        'comment' => $comment,
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1
-                    ]
-                )
-            );
-        $this->stepSendWithCallSendCopyTo();
-        $result = $this->sender->send($this->creditmemoMock, false, $comment);
-        $this->assertTrue($result);
+        return [
+            [0, 0, 1, true],
+            [0, 0, 0, true],
+            [0, 0, 1, false],
+            [0, 0, 0, false],
+            [0, 1, 1, true],
+            [0, 1, 0, true],
+            [1, null, null, null]
+        ];
     }
 }

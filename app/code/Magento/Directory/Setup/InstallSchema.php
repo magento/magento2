@@ -168,7 +168,6 @@ class InstallSchema implements InstallSchemaInterface
             'region_id',
             $installer->getTable('directory_country_region'),
             'region_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Directory Country Region Name'
