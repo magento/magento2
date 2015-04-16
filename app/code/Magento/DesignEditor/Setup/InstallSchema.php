@@ -51,7 +51,6 @@ class InstallSchema implements InstallSchemaInterface
             'theme_id',
             $setup->getTable('theme'),
             'theme_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Design Editor Theme Change'

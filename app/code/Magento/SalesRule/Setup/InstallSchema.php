@@ -264,7 +264,6 @@ class InstallSchema implements InstallSchemaInterface
             'rule_id',
             $installer->getTable('salesrule'),
             'rule_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Salesrule Coupon'
@@ -302,14 +301,12 @@ class InstallSchema implements InstallSchemaInterface
             'coupon_id',
             $installer->getTable('salesrule_coupon'),
             'coupon_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('salesrule_coupon_usage', 'customer_id', 'customer_entity', 'entity_id'),
             'customer_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Salesrule Coupon Usage'
@@ -356,14 +353,12 @@ class InstallSchema implements InstallSchemaInterface
             'customer_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('salesrule_customer', 'rule_id', 'salesrule', 'rule_id'),
             'rule_id',
             $installer->getTable('salesrule'),
             'rule_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Salesrule Customer'
@@ -415,14 +410,12 @@ class InstallSchema implements InstallSchemaInterface
             'rule_id',
             $installer->getTable('salesrule'),
             'rule_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('salesrule_label', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Salesrule Label'
@@ -472,8 +465,7 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-            \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
                 'salesrule_product_attribute',
@@ -484,22 +476,19 @@ class InstallSchema implements InstallSchemaInterface
             'customer_group_id',
             $installer->getTable('customer_group'),
             'customer_group_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-            \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('salesrule_product_attribute', 'rule_id', 'salesrule', 'rule_id'),
             'rule_id',
             $installer->getTable('salesrule'),
             'rule_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-            \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('salesrule_product_attribute', 'website_id', 'store_website', 'website_id'),
             'website_id',
             $installer->getTable('store_website'),
             'website_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-            \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Salesrule Product Attribute'
         );
@@ -607,7 +596,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Coupon Aggregated'
@@ -705,7 +693,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Coupon Aggregated Order'
@@ -743,14 +730,12 @@ class InstallSchema implements InstallSchemaInterface
             'rule_id',
             $installer->getTable('salesrule'),
             'rule_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('salesrule_website', 'website_id', 'core/website', 'website_id'),
             'website_id',
             $websitesTable,
             'website_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Rules To Websites Relations'
@@ -784,7 +769,6 @@ class InstallSchema implements InstallSchemaInterface
             'rule_id',
             $installer->getTable('salesrule'),
             'rule_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -796,7 +780,6 @@ class InstallSchema implements InstallSchemaInterface
             'customer_group_id',
             $customerGroupsTable,
             'customer_group_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Rules To Customer Groups Relations'
