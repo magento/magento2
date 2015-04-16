@@ -16,6 +16,11 @@ use Magento\Sales\Model\EntityInterface;
  * @method \Magento\Sales\Model\Resource\Order\Shipment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment getResource()
  * @method \Magento\Sales\Model\Order\Shipment setCreatedAt(string $value)
+ * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
+ * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
+ * @method string getCustomerNote()
+ * @method \Magento\Sales\Model\Order\Invoice setCustomerNoteNotify(bool $value)
+ * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
