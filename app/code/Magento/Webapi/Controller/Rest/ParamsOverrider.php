@@ -6,6 +6,7 @@
 
 namespace Magento\Webapi\Controller\Rest;
 
+use Magento\Framework\Webapi\Rest\Request\ParamOverriderInterface;
 use Magento\Webapi\Model\Config\Converter;
 
 /**

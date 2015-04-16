@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\QuoteWebapi\Model\Webapi;
+namespace Magento\Quote\Model\Webapi;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Webapi\Rest\Request\ParamOverriderInterface;
 use Magento\Quote\Api\CartManagementInterface;
 
 /**

@@ -35,4 +35,12 @@
     <preference for="Magento\Quote\Api\GuestShippingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingAddressManagement" />
     <preference for="Magento\Quote\Api\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
     <preference for="Magento\Quote\Api\GuestBillingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestBillingAddressManagement" />
+
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <arguments>
+            <argument name="paramsOverrider" xsi:type="array">
+                <item name="%cart_id%" xsi:type="object">Magento\QuoteWebapi\Model\Webapi\ParamOverriderCartId</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Webapi\Controller\Rest;
+namespace Magento\Framework\Webapi\Rest\Request;
 
 /**
  * Override parameter values
