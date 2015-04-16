@@ -25,8 +25,9 @@ class SaveMethod extends Index
             $this->quoteManager->setGuest();
         }
         $checkoutUrl = $this->_redirect->getRefererUrl();
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $resultRedirect->setPath($checkoutUrl . (strpos($checkoutUrl, '?') ? '&' : '?') . 'register');
+        $resultRedirect->setUrl($checkoutUrl . (strpos($checkoutUrl, '?') ? '&' : '?') . 'register');
         return $resultRedirect;
     }
 }

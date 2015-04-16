@@ -11,6 +11,22 @@ use Magento\Framework\Controller\ResultFactory;
 class UnsetCookie extends Index
 {
     /**
+     * Unset persistent cookie action
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function execute()
+    {
+        if ($this->sessionHelper->isPersistent()) {
+            $this->cleanup();
+        }
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setPath('customer/account/login');
+        return $resultRedirect;
+    }
+
+    /**
      * Revert all persistent data
      *
      * @return $this
@@ -24,20 +40,5 @@ class UnsetCookie extends Index
         }
         $this->sessionHelper->getSession()->removePersistentCookie();
         return $this;
-    }
-
-    /**
-     * Unset persistent cookie action
-     *
-     * @return \Magento\Framework\Controller\Result\Redirect
-     */
-    public function execute()
-    {
-        if ($this->sessionHelper->isPersistent()) {
-            $this->cleanup();
-        }
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $resultRedirect->setPath('customer/account/login');
-        return $resultRedirect;
     }
 }
