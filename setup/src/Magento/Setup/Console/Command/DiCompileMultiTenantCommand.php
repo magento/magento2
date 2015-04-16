@@ -8,7 +8,7 @@ namespace Magento\Setup\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Magento\Store\Model\StoreManager;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\Console\ObjectManagerProvider;
 use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
