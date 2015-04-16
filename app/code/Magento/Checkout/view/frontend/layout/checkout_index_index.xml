@@ -189,6 +189,24 @@
                                             </item>
                                             <item name="payment" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="checkmo" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/payment/method-info</item></item>
+                                                    <item name="cashondelivery" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/payment/method-info</item></item>
+                                                    <item name="banktransfer" xsi:type="array"><item name="component" xsi:type="string">Magento_Checkout/js/view/payment/method-info</item></item>
+                                                    <item name="purchaseorder" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/payment/method-info</item>
+                                                        <item name="config" xsi:type="array">
+                                                            <item name="formTemplate" xsi:type="string">Magento_Checkout/payment/purchaseorder-form</item>
+                                                        </item>
+                                                    </item>
+                                                    <item name="paypal_express" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/payment/method-info</item>
+                                                        <item name="config" xsi:type="array">
+                                                            <item name="titleTemplate" xsi:type="string">Magento_Checkout/payment/paypal_express-title</item>
+                                                            <item name="formTemplate" xsi:type="string">Magento_Checkout/payment/paypal_express-form</item>
+                                                        </item>
+                                                    </item>
+                                                </item>
                                             </item>
                                             <item name="review" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/review</item>

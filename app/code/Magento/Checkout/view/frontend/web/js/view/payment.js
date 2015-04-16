@@ -9,13 +9,11 @@ define(
         'jquery',
         'uiComponent',
         '../model/quote',
-        '../model/payment-service',
         '../action/select-payment-method',
         'Magento_Checkout/js/model/step-navigator'
     ],
-    function ($, Component, quote, paymentService, selectPaymentMethod, navigator) {
+    function ($, Component, quote, selectPaymentMethod, navigator) {
         var stepName = 'paymentMethod';
-        var paymentMethods = paymentService.getAvailablePaymentMethods();
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/payment'
@@ -31,8 +29,10 @@ define(
                 }
                 selectPaymentMethod(paymentMethodCode, []);
             },
-            getAvailablePaymentMethods: function() {
-                return paymentMethods();
+            getAvailableViews: function () {
+              return this.elems().filter(function(elem) {
+                  return elem.isAvailable();
+              });
             },
             isVisible: navigator.isStepVisible(stepName),
             backToShippingMethod: function() {

@@ -21,24 +21,23 @@
                     <span><!-- ko text: $t('Payment Information')--><!-- /ko --></span>
                 </legend>
                 <br>
-                <!-- ko foreach: elems() -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-                <!-- /ko -->
                 <div id="checkout-payment-method-load" class="opc-payment">
                     <dl class="items methods-payment">
-                        <!-- ko foreach: getAvailablePaymentMethods() -->
-                        <dt data-bind='attr: {class: "item-title " + $data.code}'>
-                            <!-- ko if: $parent.getAvailablePaymentMethods().length == 1 -->
-                            <input data-bind='attr: {id: "p_method_" + $data.code, value: $data.code}' type="radio" name="payment[method]" checked="checked" class="radio no-display" />
+                        <!-- ko foreach: getAvailableViews() -->
+                        <dt data-bind='attr: {class: "item-title " + $data.getCode()}'>
+                            <!-- ko if: $parent.getAvailableViews().length == 1 -->
+                            <input data-bind='attr: {id: "p_method_" + $data.getCode(), value: $data.getCode()}' type="radio" name="payment[method]" checked="checked" class="radio no-display" />
                             <!-- /ko -->
-                            <!-- ko ifnot: $parent.getAvailablePaymentMethods().length == 1 -->
-                            <input data-bind='attr: {id: "p_method_" + $data.code, value: $data.code, title: $t($data.title)}' type="radio" name="payment[method]" class="radio" />
+                            <!-- ko ifnot: $parent.getAvailableViews().length == 1 -->
+                            <input data-bind='attr: {id: "p_method_" + $data.getCode(), value: $data.getCode(), title: $data.getTitle()}' type="radio" name="payment[method]" class="radio" />
                             <!-- /ko -->
-                            <label data-bind='attr: {for: "p_method_" + $data.code}, text: $t($data.title)'></label>
+                            <label data-bind='attr: {for: "p_method_" + $data.getCode()}'><!-- ko template: titleTemplate --><!--/ko--></label>
                         </dt>
-                        <dd data-bind='attr: {class: "item-content $data.code"}'><!-- TODO Additional payment content is inserted here --></dd>
+                        <!-- ko if: $data.formTemplate -->
+                        <dd data-bind='attr: {class: "item-content $data.getCode()"}'><!-- ko template: formTemplate --><!--/ko--></dd>
                         <!-- /ko -->
-                        <!-- ko ifnot: getAvailablePaymentMethods().length > 0 -->
+                        <!-- /ko -->
+                        <!-- ko ifnot: getAvailableViews().length > 0 -->
                         <dt class="item-title"><!-- ko text: $t('No Payment Methods')--><!-- /ko --></dt>
                         <!-- /ko -->
                     </dl>
