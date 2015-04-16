@@ -42,6 +42,7 @@ class Plugin
      * @param string $name
      * @return string
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundRenderNonCachedElement(\Magento\Framework\View\Layout $subject, \Closure $proceed, $name)
     {

@@ -323,7 +323,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
      *
      * @param array $productIds
      * @return array
-     * @throws \Magento\Eav\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getProductData(array $productIds)
     {
