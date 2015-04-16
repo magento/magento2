@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
-use \Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 class OrderSenderTest extends AbstractSenderTest
 {
@@ -15,42 +15,32 @@ class OrderSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Resource\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $paymentHelper;
+    protected $orderResourceMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderResource;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $loggerMock;
-    
     protected function setUp()
     {
         $this->stepMockSetup();
-        $this->paymentHelper = $this->getMock(
-            '\Magento\Payment\Helper\Data',
-            ['getInfoBlockHtml'],
-            [],
-            '',
-            false
-        );
-        $this->paymentHelper->expects($this->any())
-            ->method('getInfoBlockHtml')
-            ->will($this->returnValue('payment'));
 
-        $this->orderResource = $this->getMock(
+        $this->orderResourceMock = $this->getMock(
             '\Magento\Sales\Model\Resource\Order',
-            [],
+            ['saveAttribute'],
             [],
             '',
             false
         );
-        $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\OrderIdentity');
+
+        $this->identityContainerMock = $this->getMock(
+            '\Magento\Sales\Model\Order\Email\Container\OrderIdentity',
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
+            [],
+            '',
+            false
+        );
+        $this->identityContainerMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
 
         $this->sender = new OrderSender(
             $this->templateContainerMock,
@@ -58,110 +48,125 @@ class OrderSenderTest extends AbstractSenderTest
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
             $this->paymentHelper,
-            $this->orderResource,
-            $this->addressRendererMock
+            $this->orderResourceMock,
+            $this->globalConfig,
+            $this->addressRenderer
         );
     }
 
-    public function testSendFalse()
+    /**
+     * @param int $configValue
+     * @param bool|null $forceSyncMode
+     * @param bool|null $emailSendingResult
+     * @dataProvider sendDataProvider
+     * @return void
+     */
+    public function testSend($configValue, $forceSyncMode, $emailSendingResult)
     {
-        $this->stepAddressFormat($this->addressMock);
-        $result = $this->sender->send($this->orderMock);
-        $this->assertFalse($result);
-    }
-
-    public function testSendTrueForCustomer()
-    {
-        $billingAddress = $this->addressMock;
+        $address = 'address_test';
+        $configPath = 'sales_email/general/async_sending';
 
         $this->orderMock->expects($this->once())
-            ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
-        $this->stepAddressFormat($billingAddress);
+            ->method('setSendEmail')
+            ->with(true);
 
-        $paymentInfoMock = $this->getMock(
-            '\Magento\Payment\Model\Info',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderMock->expects($this->once())
-            ->method('getPayment')
-            ->will($this->returnValue($paymentInfoMock));
+        $this->globalConfig->expects($this->once())
+            ->method('getValue')
+            ->with($configPath)
+            ->willReturn($configValue);
 
-        $this->identityContainerMock->expects($this->once())
-            ->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->templateContainerMock->expects($this->once())
-            ->method('setTemplateVars')
-            ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'billing' => $billingAddress,
-                        'payment_html' => 'payment',
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1
-                    ]
-                )
+        if (!$configValue || $forceSyncMode) {
+            $this->identityContainerMock->expects($this->once())
+                ->method('isEnabled')
+                ->willReturn($emailSendingResult);
+
+            if ($emailSendingResult) {
+                $addressMock = $this->getMock(
+                    'Magento\Sales\Model\Order\Address',
+                    [],
+                    [],
+                    '',
+                    false
+                );
+
+                $this->addressRenderer->expects($this->any())
+                    ->method('format')
+                    ->with($addressMock, 'html')
+                    ->willReturn($address);
+
+                $this->orderMock->expects($this->any())
+                    ->method('getBillingAddress')
+                    ->willReturn($addressMock);
+
+                $this->orderMock->expects($this->any())
+                    ->method('getShippingAddress')
+                    ->willReturn($addressMock);
+
+                $this->templateContainerMock->expects($this->once())
+                    ->method('setTemplateVars')
+                    ->with(
+                        [
+                            'order' => $this->orderMock,
+                            'billing' => $addressMock,
+                            'payment_html' => 'payment',
+                            'store' => $this->storeMock,
+                            'formattedShippingAddress' => $address,
+                            'formattedBillingAddress' => $address
+                        ]
+                    );
+
+                $this->senderBuilderFactoryMock->expects($this->once())
+                    ->method('create')
+                    ->willReturn($this->senderMock);
+
+                $this->senderMock->expects($this->once())->method('send');
+
+                $this->senderMock->expects($this->once())->method('sendCopyTo');
+
+                $this->orderMock->expects($this->once())
+                    ->method('setEmailSent')
+                    ->with(true);
+
+                $this->orderResourceMock->expects($this->once())
+                    ->method('saveAttribute')
+                    ->with($this->orderMock, ['send_email', 'email_sent']);
+
+                $this->assertTrue(
+                    $this->sender->send($this->orderMock)
+                );
+            } else {
+                $this->orderResourceMock->expects($this->once())
+                    ->method('saveAttribute')
+                    ->with($this->orderMock, 'send_email');
+
+                $this->assertFalse(
+                    $this->sender->send($this->orderMock)
+                );
+            }
+        } else {
+            $this->orderResourceMock->expects($this->once())
+                ->method('saveAttribute')
+                ->with($this->orderMock, 'send_email');
+
+            $this->assertFalse(
+                $this->sender->send($this->orderMock)
             );
-        $this->stepSend($this->once(), $this->once());
-        $result = $this->sender->send($this->orderMock);
-        $this->assertTrue($result);
+        }
     }
 
-    public function testSendTrueForGuest()
+    /**
+     * @return array
+     */
+    public function sendDataProvider()
     {
-        $billingAddress = $this->getMock(
-            '\Magento\Sales\Model\Order\Address',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->stepAddressFormat($billingAddress);
-        $billingAddress->expects($this->any())
-            ->method('getName')
-            ->will($this->returnValue('name'));
-        $this->orderMock->expects($this->once())
-            ->method('getCustomerIsGuest')
-            ->will($this->returnValue(true));
-        $this->orderMock->expects($this->any())
-            ->method('getBillingAddress')
-            ->will($this->returnValue($billingAddress));
-
-        $paymentInfoMock = $this->getMock(
-            '\Magento\Payment\Model\Info',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->orderMock->expects($this->once())
-            ->method('getPayment')
-            ->will($this->returnValue($paymentInfoMock));
-
-        $this->identityContainerMock->expects($this->once())
-            ->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->templateContainerMock->expects($this->once())
-            ->method('setTemplateVars')
-            ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'billing' => $billingAddress,
-                        'payment_html' => 'payment',
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1
-                    ]
-                )
-            );
-        $this->stepSend($this->once(), $this->once());
-        $result = $this->sender->send($this->orderMock);
-        $this->assertTrue($result);
+        return [
+            [0, 0, true],
+            [0, 0, true],
+            [0, 0, false],
+            [0, 0, false],
+            [0, 1, true],
+            [0, 1, true],
+            [1, null, null, null]
+        ];
     }
 }
