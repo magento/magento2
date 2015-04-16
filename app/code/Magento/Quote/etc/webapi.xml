@@ -348,6 +348,26 @@
         </resources>
     </route>
 
+    <!-- Managing My Cart Shipping address -->
+    <route url="/V1/carts/mine/shipping-address" method="GET">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/shipping-address" method="POST">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
     <!-- Managing Cart Order -->
     <route url="/V1/carts/:cartId/order" method="PUT">
         <service class="Magento\Quote\Api\CartManagementInterface" method="placeOrder"/>
