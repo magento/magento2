@@ -25,7 +25,7 @@ abstract class AbstractAction implements \Magento\Framework\App\ActionInterface
     protected $resultRedirectFactory;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory;
+     * @var \Magento\Framework\Controller\ResultFactory
      */
     protected $resultFactory;
 
