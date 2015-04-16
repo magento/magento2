@@ -418,7 +418,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_group_id',
                 $installer->getTable('customer_group'),
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -426,7 +425,6 @@ class InstallSchema implements InstallSchemaInterface
                 'rule_id',
                 $installer->getTable('catalogrule'),
                 'rule_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -434,7 +432,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('CatalogRule Group Website');
@@ -469,7 +466,6 @@ class InstallSchema implements InstallSchemaInterface
                 'rule_id',
                 $installer->getTable('catalogrule'),
                 'rule_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -477,7 +473,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Rules To Websites Relations');
@@ -512,7 +507,6 @@ class InstallSchema implements InstallSchemaInterface
                 'rule_id',
                 $installer->getTable('catalogrule'),
                 'rule_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -525,7 +519,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_group_id',
                 $installer->getTable('customer_group'),
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Rules To Customer Groups Relations');
