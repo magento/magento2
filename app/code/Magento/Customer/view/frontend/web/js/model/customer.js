@@ -14,7 +14,7 @@ define(
     ],
     function($, ko, _, storage, addressList, address) {
         "use strict";
-        var isLoggedIn = ko.observable(window.isLoggedIn),
+        var isLoggedIn = ko.observable(window.isCustomerLoggedIn),
             customerData = {};
 
         if (isLoggedIn()) {

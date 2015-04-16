@@ -16,19 +16,10 @@
             }
         </script>
         <script>
-            window.customerData = <?php echo $this->getCustomerData(); ?>;
-            window.cartData = <?php echo $this->getCart(); ?>;
-            window.cartItems = <?php echo $this->getCartItems(); ?>;
-            window.isLoggedIn = <?php echo $this->isCustomerLoggedIn() ? 'true' : 'false' ?>;
-            window.currencySymbol = <?php echo $this->getCurrencySymbol()?>;
-            window.selectedShippingMethod = <?php echo $this->getSelectedShippingMethod()?>;
-            window.storeCode = <?php echo $this->getStoreCode()?>;
-            window.isAllowedGuestCheckout = <?php echo $this->isAllowedGuestCheckout()?>;
-            window.isRegistrationAllowed = <?php echo $this->isRegistrationAllowed()?>;
-            window.isMethodRegister = <?php echo $this->isMethodRegister()?>;
-            window.isCustomerMustBeLogged = <?php echo $this->isCustomerMustBeLogged()?>;
-            window.getRegisterUrl = <?php echo $this->getRegisterUrl()?>;
-            window.customerHasAddresses = <?php echo $this->customerHasAddresses()?>;
+            window.checkoutConfig = <?php echo \Zend_Json::encode($this->getCheckoutConfig()); ?>;
+            // Create aliases for customer.js model from customer module
+            window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+            window.customerData = window.checkoutConfig.customerData;
         </script>
         <script>
             require(['mage/url', 'Magento_Checkout/js/model/step-loader'], function(url, loader) {

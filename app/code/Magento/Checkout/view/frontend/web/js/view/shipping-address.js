@@ -78,7 +78,7 @@ define(
                 }
             },
             isNewAddressSelected: function() {
-                if (!this.customerHasAddresses) {
+                if (!this.customerAddressCount) {
                     newAddressSelected(true);
                     return true;
                 }
@@ -89,7 +89,7 @@ define(
                 this.source.trigger('shippingAddress.data.validate');
             },
             isCustomerLoggedIn: customer.isLoggedIn(),
-            customerHasAddresses: window.customerHasAddresses
+            customerAddressCount: window.checkoutConfig.customerAddressCount
         });
     }
 );

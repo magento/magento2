@@ -7,7 +7,6 @@ namespace Magento\Checkout\Block;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Config as AddressConfig;
-use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -31,51 +30,14 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $jsLayout;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
-     */
-    protected $cartRepository;
-
-    /**
-     * @var \Magento\Quote\Api\CartItemRepositoryInterface
-     */
-    protected $cartItemRepository;
-
-    /**
-     * @var \Magento\Quote\Api\Data\CartInterface
-     */
-    protected $cartData;
-
-    /**
-     * @var \Magento\Framework\Locale\CurrencyInterface
-     */
-    protected $localeCurrency;
-
-    /**
-     * @var \Magento\Quote\Api\ShippingMethodManagementInterface
-     */
-    protected $shippingMethodManagement;
-
-    /**
      * @var \Magento\Quote\Model\Quote\AddressDataProvider
      */
     protected $addressDataProvider;
 
     /**
-     * Checkout data
-     *
-     * @var \Magento\Checkout\Helper\Data
+     * @var \Magento\Checkout\Model\CompositeConfigProvider
      */
-    protected $checkoutData;
-
-    /**
-     * @var \Magento\Customer\Model\Registration
-     */
-    protected $registration;
-
-    /**
-     * @var \Magento\Customer\Model\Url
-     */
-    protected $customerUrl;
+    protected $configProvider;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -90,14 +52,8 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Framework\Data\Form\FormKey $formKey
-     * @param \Magento\Quote\Model\QuoteRepository $cartRepositoryInterface
-     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
-     * @param \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement
-     * @param \Magento\Quote\Api\CartItemRepositoryInterface $cartItemRepository
      * @param \Magento\Quote\Model\Quote\AddressDataProvider $addressDataProvider
-     * @param \Magento\Checkout\Helper\Data $checkoutData
-     * @param \Magento\Customer\Model\Url $customerUrl
-     * @param \Magento\Customer\Model\Registration $registration
+     * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param array $data
      */
     public function __construct(
@@ -113,14 +69,8 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         \Magento\Framework\Data\Form\FormKey $formKey,
-        \Magento\Quote\Model\QuoteRepository $cartRepositoryInterface,
-        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
-        \Magento\Quote\Api\CartItemRepositoryInterface $cartItemRepository,
         \Magento\Quote\Model\Quote\AddressDataProvider $addressDataProvider,
-        \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Customer\Model\Registration $registration,
+        \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         array $data = []
     ) {
         parent::__construct(
@@ -140,16 +90,9 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         $this->formKey = $formKey;
         $this->_isScopePrivate = true;
         $this->jsLayout = is_array($data['jsLayout']) ? $data['jsLayout'] : [];
-        $this->cartRepository = $cartRepositoryInterface;
-        $this->localeCurrency = $localeCurrency;
-        $this->shippingMethodManagement = $shippingMethodManagement;
-        $this->cartItemRepository = $cartItemRepository;
         $this->addressDataProvider = $addressDataProvider;
-        $this->checkoutData = $checkoutData;
-        $this->registration = $registration;
-        $this->customerUrl = $customerUrl;
+        $this->configProvider = $configProvider;
     }
-
 
     /**
      * @return string
@@ -177,8 +120,6 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         }
         return \Zend_Json::encode($this->jsLayout);
     }
-
-
 
     /**
      * Get 'one step checkout' step data
@@ -222,170 +163,12 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     }
 
     /**
-     * Retrieve current customer data.
-     *
-     * @return string
-     */
-    public function getCustomerData()
-    {
-        if ($this->isCustomerLoggedIn()) {
-            return \Zend_Json::encode($this->_getCustomer()->__toArray());
-        }
-        return \Zend_Json::encode([]);
-    }
-
-    /**
-     * Retrieve current active quote object.
-     *
-     * @return \Magento\Quote\Api\Data\CartInterface
-     */
-    protected function getCartData()
-    {
-        if (!$this->cartData && $this->getQuote()->getId()) {
-            $this->cartData = $this->cartRepository->get($this->getQuote()->getId());
-            if (!$this->cartData->getCustomer()->getId()) {
-                $this->cartRepository->save($this->getQuote()->setCheckoutMethod('guest'));
-            } else {
-                $this->cartRepository->save($this->getQuote()->setCheckoutMethod(null));
-            }
-        }
-        return $this->cartData;
-    }
-
-    /**
-     * Retrieve current active quote.
-     *
-     * @return string
-     */
-    public function getCart()
-    {
-        return \Zend_Json::encode($this->getCartData());
-    }
-
-    /**
-     * Cart items as array
+     * Retrieve checkout configuration
      *
      * @return array
      */
-    public function getCartItems()
+    public function getCheckoutConfig()
     {
-        $itemData = [];
-        if ($this->getQuote()->getId()) {
-            $itemObjects = $this->cartItemRepository->getList($this->getQuote()->getId());
-            /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
-            foreach($itemObjects as $item) {
-                $itemData[] = $item->toArray();
-            }
-        }
-        return \Zend_Json::encode($itemData);
-    }
-
-    /**
-     * Retrieve active quote currency code.
-     *
-     * @return string
-     */
-    public function getCurrencySymbol()
-    {
-        $symbol = '';
-        if ($this->getCartData()) {
-            $currencyCode = $this->getCartData()->getQuoteCurrencyCode();
-            $currency = $this->localeCurrency->getCurrency($currencyCode);
-            $symbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
-        }
-        return \Zend_Json::encode(['data' => $symbol]);
-    }
-
-    /**
-     * Retrieve selected shipping method.
-     *
-     * @return string|bool
-     */
-    public function getSelectedShippingMethod()
-    {
-        $selectedShippingMethod = false;
-        $quoteId = $this->getQuote()->getId();
-        try {
-            $shippingMethod = $this->shippingMethodManagement->get($quoteId);
-            if ($shippingMethod) {
-                $selectedShippingMethod = $shippingMethod->getCarrierCode() . "_" . $shippingMethod->getMethodCode();
-            }
-        } catch( \Exception $e) {
-            //do nothing
-        }
-        return \Zend_Json::encode($selectedShippingMethod);
-    }
-
-    /**
-     *  Retrieve quote store code
-     *  @return string
-     */
-    public function getStoreCode()
-    {
-        return \Zend_Json::encode($this->getQuote()->getStore()->getCode());
-    }
-
-    /**
-     * Check if guests checkout is allowed
-     *
-     * @return string
-     */
-    public function isAllowedGuestCheckout()
-    {
-        return \Zend_Json::encode($this->checkoutData->isAllowedGuestCheckout($this->getQuote()));
-    }
-
-    /**
-     * Check if registration is allowed
-     *
-     * @return string
-     */
-    public function isRegistrationAllowed()
-    {
-        return \Zend_Json::encode($this->registration->isAllowed());
-    }
-
-    /**
-     * Return true if checkout method register
-     *
-     * @return string
-     */
-    public function isMethodRegister()
-    {
-        return \Zend_Json::encode(
-            $this->getQuote()->getCheckoutMethod() == \Magento\Checkout\Model\Type\Onepage::METHOD_REGISTER
-        );
-    }
-
-    /**
-     * Check if user must be logged during checkout process
-     *
-     * @return string
-     */
-    public function  isCustomerMustBeLogged()
-    {
-        return \Zend_Json::encode($this->checkoutData->isCustomerMustBeLogged());
-    }
-
-    /**
-     * Return registration URL
-     *
-     * @return string
-     */
-    public function getRegisterUrl()
-    {
-        return \Zend_Json::encode($this->customerUrl->getRegisterUrl());
-    }
-
-    /**
-     * @return int
-     */
-    public function customerHasAddresses()
-    {
-        try {
-            return \Zend_Json::encode(count($this->_getCustomer()->getAddresses()));
-        } catch (NoSuchEntityException $e) {
-            return \Zend_Json::encode(0);
-        }
+        return $this->configProvider->getConfig();
     }
 }

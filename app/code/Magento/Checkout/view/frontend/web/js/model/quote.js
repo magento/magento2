@@ -11,10 +11,10 @@ define(
         var shippingAddress = ko.observable(null);
         var shippingMethod = ko.observable(null);
         var paymentMethod = ko.observable(null);
-        var quoteData = window.cartData;
-        var currencySymbol = window.currencySymbol;
-        var selectedShippingMethod = ko.observable(window.selectedShippingMethod);
-        var storeCode = window.storeCode;
+        var quoteData = window.checkoutConfig.quoteData;
+        var currencySymbol = window.checkoutConfig.currencySymbol;
+        var selectedShippingMethod = ko.observable(window.checkoutConfig.selectedShippingMethod);
+        var storeCode = window.checkoutConfig.storeCode;
         var totals = ko.observable({});
         var checkoutMethod = ko.observable(null);
         return {
@@ -25,10 +25,10 @@ define(
                 return !!Number(quoteData.is_virtual);
             },
             getCurrencySymbol: function() {
-              return currencySymbol.data;
+              return currencySymbol;
             },
             getItems: function() {
-                return window.cartItems;
+                return window.checkoutConfig.quoteItemData;
             },
             getTotals: function() {
                 return totals

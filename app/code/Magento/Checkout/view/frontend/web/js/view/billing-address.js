@@ -77,7 +77,7 @@ define(
                 }
             },
             isNewAddressSelected: function() {
-                if (!this.customerHasAddresses) {
+                if (!this.customerAddressCount) {
                     return true;
                 }
                 return newAddressSelected();
@@ -102,7 +102,7 @@ define(
                 }
             },
             isCustomerLoggedIn: customer.isLoggedIn(),
-            customerHasAddresses: window.customerHasAddresses,
+            customerAddressCount: window.checkoutConfig.customerAddressCount,
             hideExtraFields: function() {
                 if (!quote.getCheckoutMethod()() && customer.isLoggedIn()()) {
                     $('[name="customerDetails.email"]').hide();

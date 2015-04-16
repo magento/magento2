@@ -9,7 +9,7 @@ define(
     function($) {
         return {
             method: "rest",
-            storeCode: window.storeCode,
+            storeCode: window.checkoutConfig.storeCode,
             version: 'V1',
             serviceUrl: ':method/:storeCode/:version',
 
