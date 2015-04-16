@@ -6,7 +6,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action;
-use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 
 class AddComment extends \Magento\Backend\App\Action
 {
@@ -16,9 +16,9 @@ class AddComment extends \Magento\Backend\App\Action
     protected $creditmemoLoader;
 
     /**
-     * @var CreditmemoSender
+     * @var CreditmemoCommentSender
      */
-    protected $creditmemoSender;
+    protected $creditmemoCommentSender;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -38,7 +38,7 @@ class AddComment extends \Magento\Backend\App\Action
     /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
-     * @param CreditmemoSender $creditmemoSender
+     * @param CreditmemoCommentSender $creditmemoCommentSender
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
@@ -46,13 +46,13 @@ class AddComment extends \Magento\Backend\App\Action
     public function __construct(
         Action\Context $context,
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
-        CreditmemoSender $creditmemoSender,
+        CreditmemoCommentSender $creditmemoCommentSender,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
-        $this->creditmemoSender = $creditmemoSender;
+        $this->creditmemoCommentSender = $creditmemoCommentSender;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRawFactory = $resultRawFactory;
@@ -94,7 +94,7 @@ class AddComment extends \Magento\Backend\App\Action
             );
             $comment->save();
 
-            $this->creditmemoSender->send($creditmemo, !empty($data['is_customer_notified']), $data['comment']);
+            $this->creditmemoCommentSender->send($creditmemo, !empty($data['is_customer_notified']), $data['comment']);
             $resultPage = $this->resultPageFactory->create();
             $response = $resultPage->getLayout()->getBlock('creditmemo_comments')->toHtml();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
