@@ -49,14 +49,12 @@ class InstallSchema implements InstallSchemaInterface
             'query_id',
             $installer->getTable('search_query'),
             'query_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('catalogsearch_recommendations', 'relation_id', 'search_query', 'query_id'),
             'relation_id',
             $installer->getTable('search_query'),
             'query_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment('Advanced Search Recommendations');
         $installer->getConnection()->createTable($table);
