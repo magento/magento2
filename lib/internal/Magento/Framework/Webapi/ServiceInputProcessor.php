@@ -199,10 +199,10 @@ class ServiceInputProcessor
             if (is_array($customAttributeValue)) {
                 //If type for AttributeValue's value as array is mixed, further processing is not possible
                 if ($type === TypeProcessor::ANY_TYPE) {
-                    continue;
+                    $attributeValue = $customAttributeValue;
+                } else {
+                    $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
                 }
-
-                $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
             } else {
                 $attributeValue = $this->_convertValue($customAttributeValue, $type);
             }

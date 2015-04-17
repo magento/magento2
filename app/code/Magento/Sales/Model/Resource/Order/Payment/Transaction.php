@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Resource\Order\Payment;
 
-use Magento\Sales\Model\Resource\Entity;
+use Magento\Sales\Model\Resource\EntityAbstract;
 use Magento\Sales\Model\Spi\TransactionResourceInterface;
 
 /**
@@ -13,7 +13,7 @@ use Magento\Sales\Model\Spi\TransactionResourceInterface;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Transaction extends Entity implements TransactionResourceInterface
+class Transaction extends EntityAbstract implements TransactionResourceInterface
 {
     /**
      * Serializeable field: additional_information

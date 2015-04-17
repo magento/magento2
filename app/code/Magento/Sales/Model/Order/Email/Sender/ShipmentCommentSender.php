@@ -10,20 +10,34 @@ use Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Address\Renderer;
 
+/**
+ * Class ShipmentCommentSender
+ */
 class ShipmentCommentSender extends NotifySender
 {
+    /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
     /**
      * @param Template $templateContainer
      * @param ShipmentCommentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
         ShipmentCommentIdentity $identityContainer,
-        \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
+        \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger,
+        Renderer $addressRenderer
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -37,6 +51,12 @@ class ShipmentCommentSender extends NotifySender
     public function send(Shipment $shipment, $notify = true, $comment = '')
     {
         $order = $shipment->getOrder();
+        if ($order->getShippingAddress()) {
+            $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
+        } else {
+            $formattedShippingAddress = '';
+        }
+        $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
         $this->templateContainer->setTemplateVars(
             [
                 'order' => $order,
@@ -44,6 +64,8 @@ class ShipmentCommentSender extends NotifySender
                 'comment' => $comment,
                 'billing' => $order->getBillingAddress(),
                 'store' => $order->getStore(),
+                'formattedShippingAddress' => $formattedShippingAddress,
+                'formattedBillingAddress' => $formattedBillingAddress,
             ]
         );
         return $this->checkAndSend($order, $notify);

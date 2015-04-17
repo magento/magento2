@@ -7,6 +7,7 @@
 namespace Magento\AdminNotification\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Config\ConfigOptionsList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -140,7 +141,8 @@ class FeedTest extends \PHPUnit_Framework_TestCase
         $this->backendConfig->expects($this->at(1))->method('getValue')
             ->will($this->returnValue('http://feed.magento.com'));
         $this->deploymentConfig->expects($this->once())->method('get')
-            ->with('install/date')->will($this->returnValue('Sat, 6 Sep 2014 16:46:11 UTC'));
+            ->with(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE)
+            ->will($this->returnValue('Sat, 6 Sep 2014 16:46:11 UTC'));
         if ($callInbox) {
             $this->inboxFactory->expects($this->once())->method('create')
                 ->will(($this->returnValue($this->inboxModel)));

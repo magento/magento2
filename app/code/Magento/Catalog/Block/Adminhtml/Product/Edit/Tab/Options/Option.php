@@ -278,6 +278,9 @@ class Option extends Widget
     public function getOptionValues()
     {
         $optionsArr = $this->getProduct()->getOptions();
+        if ($optionsArr == null) {
+            $optionsArr = [];
+        }
 
         if (!$this->_values || $this->getIgnoreCaching()) {
             $showPrice = $this->getCanReadPrice();

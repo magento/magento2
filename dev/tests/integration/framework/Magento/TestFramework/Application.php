@@ -10,7 +10,8 @@ use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\DeploymentConfig\DbConfig;
+use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\App\DeploymentConfig\Reader;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -161,12 +162,10 @@ class Application
     {
         if (null === $this->_db) {
             if ($this->isInstalled()) {
-                $deploymentConfig = new DeploymentConfig(
-                    new \Magento\Framework\App\DeploymentConfig\Reader($this->dirList),
-                    []
-                );
-                $dbConfig = new DbConfig($deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
-                $dbInfo = $dbConfig->getConnection('default');
+                $reader = new Reader($this->dirList);
+                $deploymentConfig = new DeploymentConfig($reader, []);
+                $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
+                $dbInfo = $dbConfig['connection']['default'];
                 $host = $dbInfo['host'];
                 $user = $dbInfo['username'];
                 $password = $dbInfo['password'];
@@ -175,7 +174,7 @@ class Application
                 $installConfig = $this->getInstallConfig();
                 $host = $installConfig['db_host'];
                 $user = $installConfig['db_user'];
-                $password = $installConfig['db_pass'];
+                $password = $installConfig['db_password'];
                 $dbName = $installConfig['db_name'];
             }
             $this->_db = new Db\Mysql(
@@ -298,6 +297,8 @@ class Application
         );
         $objectManager->removeSharedInstance('Magento\Framework\Logger\Monolog');
         $objectManager->addSharedInstance($logger, 'Magento\Framework\Logger\Monolog');
+        $sequenceBuilder = $objectManager->get('\Magento\TestFramework\Db\Sequence\Builder');
+        $objectManager->addSharedInstance($sequenceBuilder, 'Magento\SalesSequence\Model\Builder');
 
         Helper\Bootstrap::setObjectManager($objectManager);
 
@@ -332,6 +333,9 @@ class Application
             $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
         );
         \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\Renderer\Placeholder'));
+        /** @var \Magento\TestFramework\Db\Sequence $sequence */
+        $sequence = $objectManager->get('Magento\TestFramework\Db\Sequence');
+        $sequence->generateSequences();
     }
 
     /**
@@ -367,12 +371,16 @@ class Application
      */
     public function cleanup()
     {
+        $this->_ensureDirExists($this->installDir);
+        $this->_ensureDirExists($this->_configDir);
+
+        $this->copyAppConfigFiles();
         /**
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            'php -f %s uninstall --magento_init_params=%s',
-            [BP . '/setup/index.php', $this->getInitParamsQuery()]
+            'php -f %s setup:uninstall -n --magento_init_params=%s',
+            [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
 
@@ -403,8 +411,8 @@ class Application
 
         // run install script
         $this->_shell->execute(
-            'php -f %s install ' . implode(' ', array_keys($installParams)),
-            array_merge([BP . '/setup/index.php'], array_values($installParams))
+            'php -f %s setup:install ' . implode(' ', array_keys($installParams)),
+            array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
         // enable only specified list of caches

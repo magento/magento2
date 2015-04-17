@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\App;
 
-
 /**
  * Application deployment configuration
  */
@@ -92,19 +91,32 @@ class DeploymentConfig
     /**
      * Gets a value specified key from config data
      *
-     * The key is conventionally called "segment". There can be arbitrary data within each segment.
-     * This class is agnostic of contents of segments.
-     *
      * @param string $key
      * @return null|mixed
      */
-    public function getSegment($key)
+    public function getConfigData($key = null)
     {
         $this->load();
-        if (!isset($this->data[$key])) {
+
+        if ($key !== null && !isset($this->data[$key])) {
             return null;
         }
-        return $this->data[$key];
+
+        if (isset($this->data[$key])) {
+            return $this->data[$key];
+        }
+
+        return $this->data;
+    }
+
+    /**
+     * Resets config data
+     *
+     * @return void
+     */
+    public function resetData()
+    {
+        $this->data = null;
     }
 
     /**
@@ -127,30 +139,32 @@ class DeploymentConfig
 
     /**
      * Convert associative array of arbitrary depth to a flat associative array with concatenated key path as keys
+     * each level of array is accessible by path key
      *
      * @param array $params
+     * @param string $path
      * @return array
      * @throws \Exception
      */
-    private function flattenParams(array $params)
+    private function flattenParams(array $params, $path = null)
     {
-        $result = [];
-        foreach ($params as $key => $value) {
-            if (is_array($value)) {
-                $subParams = $this->flattenParams($value);
-                foreach ($subParams as $subKey => $subValue) {
-                    if (isset($result[$key . '/' . $subKey])) {
-                        throw new \Exception("Key collision {$subKey} is already defined.");
-                    }
-                    $result[$key . '/' . $subKey] = $subValue;
-                }
+        $cache = [];
+
+        foreach ($params as $key => $param) {
+            if ($path) {
+                $newPath = $path . '/' . $key;
             } else {
-                if (isset($result[$key])) {
-                    throw new \Exception("Key collision {$subKey} is already defined.");
-                }
-                $result[$key] = $value;
+                $newPath = $key;
+            }
+            if (isset($cache[$newPath])) {
+                throw new \Exception("Key collision {$newPath} is already defined.");
+            }
+            $cache[$newPath] = $param;
+            if (is_array($param)) {
+                $cache = array_merge($cache, $this->flattenParams($param, $newPath));
             }
         }
-        return $result;
+
+        return $cache;
     }
 }

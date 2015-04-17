@@ -20,7 +20,6 @@ return [
             'Magento\Setup\Controller\CreateAdminAccount',
             'Magento\Setup\Controller\Install',
             'Magento\Setup\Controller\Success',
-            'Magento\Setup\Controller\ConsoleController',
             'Magento\Setup\Controller\Modules',
         ],
         'instance' => [
