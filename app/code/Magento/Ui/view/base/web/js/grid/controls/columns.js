@@ -4,14 +4,18 @@
  */
 define([
     'mageUtils',
+    'mage/translate',
+    'underscore',
     'Magento_Ui/js/lib/collapsible'
-], function (utils, Collapsible) {
+], function (utils, $t, _, Collapsible) {
     'use strict';
 
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/controls/columns',
-            viewportSize: 18
+            viewportSize: 18,
+            viewportMaxSize: 30,
+            headerMessage: $t('<%- visible %> out of <%- total %> visible')
         },
 
         reset: function () {
@@ -21,6 +25,8 @@ define([
         apply: function () {
             var data = {},
                 current;
+
+            this.close();
 
             current = this.source.get('config.columns') || {};
 
@@ -33,26 +39,30 @@ define([
             utils.extend(current, data);
 
             this.source.store('config.columns', current);
-            this.close();
         },
 
         cancel: function () {
             var previous = this.source.get('config.columns'),
                 config;
 
+            this.close();
+
+            if (!previous) {
+                return;
+            }
+
             this.elems().forEach(function (elem) {
                 config = previous[elem.index] || {};
 
                 elem.visible(config.visible);
             });
-            this.close();
         },
 
         hasOverflow: function () {
             return this.elems().length > this.viewportSize;
         },
 
-        isLastVisible: function (elem) {
+        isDisabled: function (elem) {
             var visible = this.countVisible();
 
             return elem.visible() && visible === 1;
@@ -62,6 +72,13 @@ define([
             return this.elems().filter(function (elem) {
                 return elem.visible();
             }).length;
+        },
+
+        getHeaderMessage: function () {
+            return _.template(this.headerMessage, {
+                visible: this.countVisible(),
+                total: this.elems().length
+            });
         }
     });
 });
