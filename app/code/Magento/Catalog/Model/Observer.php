@@ -205,6 +205,10 @@ class Observer
         return in_array($category->getId(), $categoryPathIds);
     }
 
+    /**
+     * Get catalog layer
+     * @return \Magento\Catalog\Model\Layer
+     */
     private function getCatalogLayer()
     {
         if ($this->_catalogLayer === null) {
