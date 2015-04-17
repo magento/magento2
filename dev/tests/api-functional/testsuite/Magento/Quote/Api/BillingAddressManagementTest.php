@@ -170,8 +170,6 @@ class BillingAddressManagementTest extends WebapiAbstract
             AddressInterface::KEY_EMAIL => $address->getEmail()
         ];
 
-        $cartId = $quote->getId();
-
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . 'mine/billing-address',
