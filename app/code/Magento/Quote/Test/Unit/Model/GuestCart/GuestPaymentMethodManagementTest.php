@@ -8,7 +8,7 @@ namespace Magento\Quote\Test\Unit\Model\GuestCart;
 class GuestPaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Quote\Model\PaymentMethodManagement
+     * @var \Magento\Quote\Model\GuestCart\GuestPaymentMethodManagement
      */
     protected $model;
 
