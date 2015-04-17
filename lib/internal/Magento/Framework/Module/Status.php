@@ -7,7 +7,6 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\App\State\Cleanup;
 use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
@@ -39,13 +38,6 @@ class Status
     private $writer;
 
     /**
-     * Application state cleanup service
-     *
-     * @var Cleanup
-     */
-    private $cleanup;
-
-    /**
      * Dependency Checker
      *
      * @var DependencyChecker
@@ -65,7 +57,6 @@ class Status
      * @param ModuleList\Loader $loader
      * @param ModuleList $list
      * @param Writer $writer
-     * @param Cleanup $cleanup
      * @param ConflictChecker $conflictChecker
      * @param DependencyChecker $dependencyChecker
      */
@@ -73,14 +64,12 @@ class Status
         ModuleList\Loader $loader,
         ModuleList $list,
         Writer $writer,
-        Cleanup $cleanup,
         ConflictChecker $conflictChecker,
         DependencyChecker $dependencyChecker
     ) {
         $this->loader = $loader;
         $this->list = $list;
         $this->writer = $writer;
-        $this->cleanup = $cleanup;
         $this->conflictChecker = $conflictChecker;
         $this->dependencyChecker = $dependencyChecker;
     }
@@ -134,7 +123,7 @@ class Status
 
         foreach ($errorModulesConflict as $moduleName => $conflictingModules) {
             if (!empty($conflictingModules)) {
-                $errorMessages[] = "Cannot enable $moduleName, conflicting with other modules:";
+                $errorMessages[] = "Cannot enable $moduleName because it conflicts with other modules:";
                 $errorMessages[] = implode("\n", $conflictingModules);
             }
         }
@@ -163,8 +152,6 @@ class Status
             }
         }
         $this->writer->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
-        $this->cleanup->clearCaches();
-        $this->cleanup->clearCodeGeneratedFiles();
     }
 
     /**
@@ -239,9 +226,9 @@ class Status
     private function createVerboseErrorMessage($isEnabled, $moduleName, $missingDependencies)
     {
         if ($isEnabled) {
-            $errorMessages[] = "Cannot enable $moduleName, depending on disabled modules:";
+            $errorMessages[] = "Cannot enable $moduleName because it depends on disabled modules:";
         } else {
-            $errorMessages[] = "Cannot disable $moduleName, modules depending on it:";
+            $errorMessages[] = "Cannot disable $moduleName because modules depend on it:";
         }
         foreach ($missingDependencies as $errorModule => $path) {
                 $errorMessages[] = "$errorModule: " . implode('->', $path);
