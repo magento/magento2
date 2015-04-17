@@ -278,20 +278,15 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     {
         $contextMock = $this->getMock('\Magento\Framework\Model\Context', [], [], '', false);
         $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $resourceMock = $this->getMock('Magento\Framework\Model\Resource\Db\AbstractDb', ['_construct'], [], '', false);
         $abstractModelMock = $this->getMockForAbstractClass(
             '\Magento\Framework\Model\AbstractModel',
-            [$contextMock, $registryMock, $resourceMock],
+            [$contextMock, $registryMock],
             '',
             false,
             true,
             true,
-            ['__wakeup', 'getResource', '_afterLoad']
+            ['__wakeup']
         );
-        $abstractModelMock->expects($this->any())
-                    ->method('getResource')
-                    ->will($this->returnValue($resourceMock));
-        $abstractModelMock->expects($this->once())->method('_afterLoad');
 
         $value = 'some_value';
         $idFieldName = new \ReflectionProperty('Magento\Framework\Model\Resource\Db\AbstractDb', '_idFieldName');

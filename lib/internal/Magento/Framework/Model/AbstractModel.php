@@ -305,8 +305,10 @@ abstract class AbstractModel extends \Magento\Framework\Object
     {
         $this->_beforeLoad($modelId, $field);
         $this->_getResource()->load($this, $modelId, $field);
+        $this->_afterLoad();
         $this->setOrigData();
         $this->_hasDataChanges = false;
+        $this->updateStoredData();
         return $this;
     }
 
