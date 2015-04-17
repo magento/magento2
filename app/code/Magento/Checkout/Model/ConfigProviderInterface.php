@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Model;
 
-interface ConfigProvider
+interface ConfigProviderInterface
 {
 
     /**

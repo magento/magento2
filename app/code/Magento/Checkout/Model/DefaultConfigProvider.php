@@ -21,7 +21,7 @@ use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 
 
-class DefaultConfigProvider implements ConfigProvider
+class DefaultConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var CheckoutHelper

@@ -5,15 +5,15 @@
  */
 namespace Magento\Checkout\Model;
 
-class CompositeConfigProvider implements ConfigProvider
+class CompositeConfigProvider implements ConfigProviderInterface
 {
     /**
-     * @var ConfigProvider[]
+     * @var ConfigProviderInterface[]
      */
     private $configProviders;
 
     /**
-     * @param ConfigProvider[] $configProviders
+     * @param ConfigProviderInterface[] $configProviders
      */
     public function __construct(
         array $configProviders
