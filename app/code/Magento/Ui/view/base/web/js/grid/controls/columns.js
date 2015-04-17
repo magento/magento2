@@ -18,10 +18,16 @@ define([
             headerMessage: $t('<%- visible %> out of <%- total %> visible')
         },
 
+        /**
+         * Action Reset
+         */
         reset: function () {
             this.delegate('resetVisible');
         },
 
+        /**
+         * Action Apply
+         */
         apply: function () {
             var data = {},
                 current;
@@ -41,6 +47,9 @@ define([
             this.source.store('config.columns', current);
         },
 
+        /**
+         * Action Cancel
+         */
         cancel: function () {
             var previous = this.source.get('config.columns'),
                 config;
@@ -58,10 +67,21 @@ define([
             });
         },
 
+        /**
+         * Helper, wich helps to stop resizing and
+         * @returns {Boolean}
+         */
         hasOverflow: function () {
             return this.elems().length > this.viewportSize;
         },
 
+        /**
+         * Helper, checks
+         *  - if less than one item choosen
+         *  - if more then viewportMaxSize choosen
+         * @param {Object} elem
+         * @returns {Boolean}
+         */
         isDisabled: function (elem) {
             var count = this.countVisible(),
                 isLast = elem.visible() && count === 1,
@@ -70,12 +90,21 @@ define([
             return isLast || isTooMuch;
         },
 
+        /**
+         * Helper, returns number of visible checkboxes
+         * @returns {Number}
+         */
         countVisible: function () {
             return this.elems().filter(function (elem) {
                 return elem.visible();
             }).length;
         },
 
+        /**
+         * Compile header message from headerMessage setting.
+         * Expects Underscore template format
+         * @returns {String}
+         */
         getHeaderMessage: function () {
             return _.template(this.headerMessage, {
                 visible: this.countVisible(),
