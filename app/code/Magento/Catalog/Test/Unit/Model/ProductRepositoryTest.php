@@ -298,6 +298,55 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('load')->with($identifier);
         $this->productMock->expects($this->once())->method('getId')->willReturn($identifier);
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
+        //Second invocation should just return from cache
+        $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
+    }
+
+    /**
+     * Test the forceReload parameter
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetByIdForcedReload()
+    {
+        $identifier = "23";
+        $editMode = false;
+        $storeId = 0;
+
+        $this->productFactoryMock->expects($this->exactly(2))->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->productMock->expects($this->exactly(2))->method('load');
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn($identifier);
+        $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
+        //second invocation should just return from cache
+        $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
+        //force reload
+        $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId, true));
+    }
+
+    /**
+     * Test forceReload parameter
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetForcedReload()
+    {
+        $sku = "sku";
+        $id = "23";
+        $editMode = false;
+        $storeId = 0;
+
+        $this->productFactoryMock->expects($this->exactly(2))->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->productMock->expects($this->exactly(2))->method('load');
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn($sku);
+        $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')
+            ->with($sku)->willReturn($id);
+        $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId));
+        //second invocation should just return from cache
+        $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId));
+        //force reload
+        $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId, true));
     }
 
     public function testGetByIdWithSetStoreId()
