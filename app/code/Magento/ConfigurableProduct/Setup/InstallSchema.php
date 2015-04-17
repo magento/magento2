@@ -77,8 +77,7 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-                \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
+                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Super Attribute Table');
 
@@ -147,7 +146,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_super_attribute_id',
                 $installer->getTable('catalog_product_super_attribute'),
                 'product_super_attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -155,7 +153,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Super Attribute Label Table');
@@ -231,7 +228,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -244,7 +240,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_super_attribute_id',
                 $installer->getTable('catalog_product_super_attribute'),
                 'product_super_attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Super Attribute Pricing Table');
@@ -300,7 +295,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -308,7 +302,6 @@ class InstallSchema implements InstallSchemaInterface
                 'parent_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Super Link Table');

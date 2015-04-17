@@ -23,6 +23,9 @@
             </minimum_order>
         </sales>
         <sales_email>
+            <general>
+                <async_sending>0</async_sending>
+            </general>
             <order>
                 <enabled>1</enabled>
                 <template>sales_email_order_template</template>

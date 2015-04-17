@@ -885,7 +885,7 @@ class ConfigurableProductsFixture extends \Magento\ToolkitFramework\Fixture
         /** @var \Magento\ImportExport\Model\Import $import */
         $import = $this->application->getObjectManager()->create(
             'Magento\ImportExport\Model\Import',
-            ['data' => ['entity' => 'catalog_product', 'behavior' => 'append']]
+            ['data' => ['entity' => 'catalog_product', 'behavior' => 'replace']]
         );
 
         $source = new \Magento\ToolkitFramework\ImportExport\Fixture\Complex\Generator($pattern, $configurablesCount);

@@ -23,6 +23,9 @@ class ActionsToolbar extends Block
 
     /**
      * Click link on this page.
+     *
+     * @param string $linkName
+     * @throws \Exception
      */
     public function clickLink($linkName)
     {

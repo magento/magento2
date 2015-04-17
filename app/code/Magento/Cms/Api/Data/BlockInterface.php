@@ -7,6 +7,7 @@ namespace Magento\Cms\Api\Data;
 
 /**
  * CMS block interface.
+ * @api
  */
 interface BlockInterface
 {
