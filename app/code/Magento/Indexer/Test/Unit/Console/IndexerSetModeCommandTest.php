@@ -70,7 +70,11 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['mode' => 'realtime']);
         $actualValue = $commandTester->getDisplay();
-        $this->assertSame('Index mode for Indexer Title_indexer1 was changed from \'Update by Schedule\' to \'Update on Save\'' . PHP_EOL, $actualValue);
+        $this->assertSame(
+            'Index mode for Indexer Title_indexer1 was changed from '. '\'Update by Schedule\' to \'Update on Save\''
+            . PHP_EOL,
+            $actualValue
+        );
     }
 
     /**
@@ -164,7 +168,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
         $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexer1);
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['mode' => 'schedule', 'index' => ['id_indexer1']]);;
+        $commandTester->execute(['mode' => 'schedule', 'index' => ['id_indexer1']]);
         $actualValue = $commandTester->getDisplay();
         $this->assertStringStartsWith('Title_indexer1 indexer process unknown error:', $actualValue);
     }

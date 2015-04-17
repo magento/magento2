@@ -37,6 +37,6 @@ class IndexerInfoCommandTest extends IndexerCommandCommonTestSetup
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
         $actualValue = $commandTester->getDisplay();
-        $this->assertSame(sprintf('%-40s %s','id_indexer1' , 'Title_indexer1') . PHP_EOL, $actualValue);
+        $this->assertSame(sprintf('%-40s %s', 'id_indexer1', 'Title_indexer1') . PHP_EOL, $actualValue);
     }
 }

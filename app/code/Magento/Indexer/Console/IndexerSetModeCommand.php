@@ -10,7 +10,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-
 /**
  * Command for setting index mode for indexers.
  */
@@ -53,8 +52,10 @@ class IndexerSetModeCommand extends AbstractIndexerCommand
                 $indexer->setScheduled($input->getArgument(self::INPUT_KEY_MODE) === self::INPUT_KEY_SCHEDULE);
                 $currentStatus = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
                 if ($previousStatus !== $currentStatus) {
-                    $output->writeln('Index mode for Indexer ' . $indexer->getTitle() . ' was changed from \''
-                        . $previousStatus . '\' to \'' . $currentStatus . '\'');
+                    $output->writeln(
+                        'Index mode for Indexer ' . $indexer->getTitle() . ' was changed from \''
+                        . $previousStatus . '\' to \'' . $currentStatus . '\''
+                    );
                 } else {
                     $output->writeln('Index mode for Indexer ' . $indexer->getTitle() . ' has not been changed');
                 }

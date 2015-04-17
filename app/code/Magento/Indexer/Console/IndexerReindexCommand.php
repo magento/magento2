@@ -7,7 +7,6 @@ namespace Magento\Indexer\Console;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Command\Command;
 
 /**
  * Command for reindexing indexers.
