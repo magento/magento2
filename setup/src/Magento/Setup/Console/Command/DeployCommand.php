@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Console\ObjectManagerProvider;
+use Magento\Setup\Model\ObjectManagerProvider;
 
 
 class DeployCommand extends Command

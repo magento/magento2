@@ -6,7 +6,6 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Console\ObjectManagerProvider;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;

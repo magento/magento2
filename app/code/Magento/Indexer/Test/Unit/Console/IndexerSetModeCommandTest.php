@@ -11,92 +11,161 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * Command for updating installed application after the code base has changed
  */
-class IndexerSetModeCommandTest extends \PHPUnit_Framework_TestCase
+class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
 {
     /**
-     * Names of input arguments or options
-     */
-    const INPUT_KEY_MODE = 'mode';
-    const INPUT_KEY_REALTIME = 'realtime';
-    const INPUT_KEY_SCHEDULE = 'schedule';
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
-    {
-        $this->setName('indexer:set-mode')
-            ->setDescription(
-                'Sets index mode type'
-            )->setDefinition($this->getOptionsList());
-        parent::configure();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $errors = $this->validate($input);
-        if ($errors) {
-            throw new \InvalidArgumentException(implode("\n", $errors));
-        }
-
-        $indexers = $this->getIndexers($input);
-
-        foreach ($indexers as $indexer) {
-            try {
-                $previousStatus = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
-                $indexer->setScheduled($input->getArgument(self::INPUT_KEY_MODE) === self::INPUT_KEY_SCHEDULE);
-                $currentStatus = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
-                $output->writeln('Index mode for Indexer ' . $indexer->getTitle() . ' was changed from \''
-                    . $previousStatus . '\' to \'' . $currentStatus . '\'');
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $output->writeln($e->getMessage() . PHP_EOL);
-            } catch (\Exception $e) {
-                $output->writeln($indexer->getTitle() . " indexer process unknown error:" . PHP_EOL);
-                $output->writeln($e . PHP_EOL);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Get list of arguments for the command
+     * Command being tested
      *
-     * @return InputOption[]
+     * @var IndexerSetModeCommand
      */
-    public function getOptionsList()
+    private $command;
+
+    public function testGetOptions()
     {
-        $modeOptions[] = new InputArgument(
-            self::INPUT_KEY_MODE,
-            InputArgument::OPTIONAL,
-            'Indexer mode type ['. self::INPUT_KEY_REALTIME . '|' . self::INPUT_KEY_SCHEDULE .']'
-        );
-        $optionsList = parent::getOptionsList();
-        $optionsList = array_merge($modeOptions, $optionsList);
-        return $optionsList;
+        $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
+        $optionsList = $this->command->getOptionsList();
+        $this->assertSame(3, sizeof($optionsList));
+        $this->assertSame('mode', $optionsList[0]->getName());
+        $this->assertSame('all', $optionsList[1]->getName());
+        $this->assertSame('index', $optionsList[2]->getName());
     }
 
     /**
-     * Check if all admin options are provided
-     *
-     * @param InputInterface $input
-     * @return string[]
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Missing argument 'mode'. Accepted values for mode are 'realtime' or 'schedule'
      */
-    public function validate(InputInterface $input)
+    public function testExecuteInvalidArgument()
     {
-        $errors = [];
-        $acceptedValues = 'Accepted values for ' . self::INPUT_KEY_MODE . ' are \''
-            . self::INPUT_KEY_REALTIME . '\' or \'' . self::INPUT_KEY_SCHEDULE . '\'';
+        $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute([]);
+    }
 
-        $inputMode = $input->getArgument(self::INPUT_KEY_MODE);
-        if (!$inputMode) {
-            $errors[] = 'Missing argument \'' . self::INPUT_KEY_MODE .'\'' . PHP_EOL .  $acceptedValues;
-        } elseif (!in_array($inputMode, [self::INPUT_KEY_REALTIME, self::INPUT_KEY_SCHEDULE])) {
-            $errors[] = $acceptedValues;
-        }
-        return $errors;
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Accepted values for mode are 'realtime' or 'schedule'
+     */
+    public function testExecuteInvalidMode()
+    {
+        $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['mode' => 'wrong_mode']);
+    }
+
+    public function testExecuteAll()
+    {
+        $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
+        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+
+        $indexer1->expects($this->at(0))->method('isScheduled')->willReturn(true);
+        $indexer1->expects($this->at(2))->method('isScheduled')->willReturn(false);
+
+        $indexer1->expects($this->once())->method('setScheduled')->with(false);
+        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
+        $collection->expects($this->once())->method('getItems')->willReturn([$indexer1]);
+
+        $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
+        $this->indexerFactory->expects($this->never())->method('create');
+        $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['mode' => 'realtime']);
+        $actualValue = $commandTester->getDisplay();
+        $this->assertSame('Index mode for Indexer Title_indexer1 was changed from \'Update by Schedule\' to \'Update on Save\'' . PHP_EOL, $actualValue);
+    }
+
+    /**
+     * @param bool $isScheduled
+     * @param bool $previous
+     * @param bool $current
+     * @param string $mode
+     * @param $expectedValue
+     * @dataProvider executeWithIndexDataProvider
+     */
+    public function testExecuteWithIndex($isScheduled, $previous, $current, $mode, $expectedValue)
+    {
+        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
+        $indexer1->expects($this->once())->method('load')->with('id_indexer1')->willReturn($indexer1);
+        $indexer1->expects($this->once())->method('setScheduled')->with($isScheduled);
+        $indexer1->expects($this->at(1))->method('isScheduled')->willReturn($previous);
+        $indexer1->expects($this->at(3))->method('isScheduled')->willReturn($current);
+
+        $this->collectionFactory->expects($this->never())->method('create');
+        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexer1);
+
+        $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['mode' => $mode, 'index' => ['id_indexer1']]);
+        $actualValue = $commandTester->getDisplay();
+        $this->assertSame($expectedValue, $actualValue);
+    }
+
+    /**
+     * @return array
+     */
+    public function executeWithIndexDataProvider()
+    {
+        return [
+            [
+                false,
+                true,
+                false,
+                'realtime',
+                'Index mode for Indexer Title_indexer1 was changed from \'Update by Schedule\' to \'Update on Save\''
+                . PHP_EOL
+            ],
+            [
+                false,
+                false,
+                false,
+                'realtime',
+                'Index mode for Indexer Title_indexer1 has not been changed'
+                . PHP_EOL
+            ],
+            [
+                true,
+                true,
+                true,
+                'schedule',
+                'Index mode for Indexer Title_indexer1 has not been changed'
+                . PHP_EOL
+            ],
+            [
+                true,
+                false,
+                true,
+                'schedule',
+                'Index mode for Indexer Title_indexer1 was changed from \'Update on Save\' to \'Update by Schedule\''
+                . PHP_EOL
+            ],
+        ];
+    }
+    public function testExecuteWithLocalizedException()
+    {
+        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $localizedException = new \Magento\Framework\Exception\LocalizedException(__('Some Exception Message'));
+        $indexer1->expects($this->once())->method('setScheduled')->will($this->throwException($localizedException));
+        $this->collectionFactory->expects($this->never())->method('create');
+        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexer1);
+        $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['mode' => 'schedule', 'index' => ['id_indexer1']]);
+        $actualValue = $commandTester->getDisplay();
+        $this->assertStringStartsWith('Some Exception Message', $actualValue);
+    }
+
+    public function testExecuteWithException()
+    {
+        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $exception = new \Exception();
+        $indexer1->expects($this->once())->method('setScheduled')->will($this->throwException($exception));
+        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
+        $this->collectionFactory->expects($this->never())->method('create');
+        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexer1);
+        $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['mode' => 'schedule', 'index' => ['id_indexer1']]);;
+        $actualValue = $commandTester->getDisplay();
+        $this->assertStringStartsWith('Title_indexer1 indexer process unknown error:', $actualValue);
     }
 }

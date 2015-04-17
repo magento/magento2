@@ -12,7 +12,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Console\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManagerProvider;
 

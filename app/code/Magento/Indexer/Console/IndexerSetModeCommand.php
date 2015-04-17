@@ -52,13 +52,17 @@ class IndexerSetModeCommand extends AbstractIndexerCommand
                 $previousStatus = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
                 $indexer->setScheduled($input->getArgument(self::INPUT_KEY_MODE) === self::INPUT_KEY_SCHEDULE);
                 $currentStatus = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
-                $output->writeln('Index mode for Indexer ' . $indexer->getTitle() . ' was changed from \''
-                    . $previousStatus . '\' to \'' . $currentStatus . '\'');
+                if ($previousStatus !== $currentStatus) {
+                    $output->writeln('Index mode for Indexer ' . $indexer->getTitle() . ' was changed from \''
+                        . $previousStatus . '\' to \'' . $currentStatus . '\'');
+                } else {
+                    $output->writeln('Index mode for Indexer ' . $indexer->getTitle() . ' has not been changed');
+                }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $output->writeln($e->getMessage() . PHP_EOL);
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . " indexer process unknown error:" . PHP_EOL);
-                $output->writeln($e . PHP_EOL);
+                $output->writeln($e->getMessage() . PHP_EOL);
             }
         }
 
@@ -90,12 +94,12 @@ class IndexerSetModeCommand extends AbstractIndexerCommand
     public function validate(InputInterface $input)
     {
         $errors = [];
-        $acceptedValues = 'Accepted values for ' . self::INPUT_KEY_MODE . ' are \''
+        $acceptedValues = ' Accepted values for ' . self::INPUT_KEY_MODE . ' are \''
             . self::INPUT_KEY_REALTIME . '\' or \'' . self::INPUT_KEY_SCHEDULE . '\'';
 
         $inputMode = $input->getArgument(self::INPUT_KEY_MODE);
         if (!$inputMode) {
-            $errors[] = 'Missing argument \'' . self::INPUT_KEY_MODE .'\'' . PHP_EOL .  $acceptedValues;
+            $errors[] = 'Missing argument \'' . self::INPUT_KEY_MODE .'\'.' . $acceptedValues;
         } elseif (!in_array($inputMode, [self::INPUT_KEY_REALTIME, self::INPUT_KEY_SCHEDULE])) {
             $errors[] = $acceptedValues;
         }

@@ -8,32 +8,35 @@ namespace Magento\Indexer\Test\Unit\Console;
 use Magento\Indexer\Console\IndexerInfoCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class IndexerInfoCommandTest extends \PHPUnit_Framework_TestCase
+class IndexerInfoCommandTest extends IndexerCommandCommonTestSetup
 {
     /**
-     * {@inheritdoc}
+     * Command being tested
+     *
+     * @var IndexerInfoCommand
      */
-    protected function configure()
+    private $command;
+
+    public function testGetOptions()
     {
-        $this->setName('indexer:info')
-            ->setDescription(
-                'Shows allowed Indexers'
-            );
+        $this->command = new IndexerInfoCommand($this->objectManagerFactory);
+        $this->assertSame([], $this->command->getOptionsList());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function testExecute()
     {
-        $indexers = $this->parseIndexerString('all');
-        foreach ($indexers as $indexer) {
-            $output->writeln(sprintf('%-40s %s', $indexer->getId(), $indexer->getTitle()));
-        }
-    }
+        $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
+        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexer1->expects($this->once())->method('getId')->willReturn('id_indexer1');
+        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
+        $collection->expects($this->once())->method('getItems')->willReturn([$indexer1]);
 
-    public function getOptionsList()
-    {
-        return [];
+        $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
+        $this->indexerFactory->expects($this->never())->method('create');
+        $this->command = new IndexerInfoCommand($this->objectManagerFactory);
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute([]);
+        $actualValue = $commandTester->getDisplay();
+        $this->assertSame(sprintf('%-40s %s','id_indexer1' , 'Title_indexer1') . PHP_EOL, $actualValue);
     }
 }

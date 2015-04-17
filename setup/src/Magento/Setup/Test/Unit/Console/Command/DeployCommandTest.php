@@ -16,7 +16,7 @@ class DeployCommandTest extends \PHPUnit_Framework_TestCase
     private $deploymentConfig;
 
     /**
-     * @var Magento\Framework\Console\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManagerProvider;
 
@@ -37,7 +37,7 @@ class DeployCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerProvider = $this->getMock('Magento\Framework\Console\ObjectManagerProvider', [], [], '', false);
+        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->deployer = $this->getMock('Magento\Setup\Model\Deployer', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);

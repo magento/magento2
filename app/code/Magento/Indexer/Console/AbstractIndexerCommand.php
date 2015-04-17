@@ -13,7 +13,8 @@ use Magento\Indexer\Model\IndexerFactory;
 use Magento\Indexer\Model\Indexer\CollectionFactory;
 use Magento\Indexer\Model\IndexerInterface;
 use Magento\Indexer\Model\Indexer;
-use Magento\Framework\Console\ObjectManagerProvider;
+use Magento\Store\Model\StoreManager;
+use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * An Abstract class for all Indexer related commands.
@@ -42,11 +43,14 @@ class AbstractIndexerCommand extends Command
 
     /**
      * Constructor
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param ObjectManagerFactory $objectManagerFactory
      */
-    public function __construct(ObjectManagerProvider $objectManagerProvider)
+    public function __construct(ObjectManagerFactory $objectManagerFactory)
     {
-        $objectManager = $objectManagerProvider->get();
+        $params = $_SERVER;
+        $params[StoreManager::PARAM_RUN_CODE] = 'admin';
+        $params[StoreManager::PARAM_RUN_TYPE] = 'store';
+        $objectManager = $objectManagerFactory->create($params);
         $this->collectionFactory = $objectManager->create('Magento\Indexer\Model\Indexer\CollectionFactory');
         $this->indexerFactory = $objectManager->create('Magento\Indexer\Model\IndexerFactory');
         parent::__construct();

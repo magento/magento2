@@ -3157,4 +3157,6 @@ return [
     ['Magento\Framework\App\Cache\ManagerApp'],
     ['Magento\Log\Model\Shell\Command\Factory'],
     ['Magento\Tools\Di\App\Compiler'],
+    ['Magento\Indexer\App\Shell'],
+    ['Magento\Indexer\Model\Shell'],
 ];
