@@ -97,6 +97,16 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected $urlMock;
 
     /**
+     * @var \Magento\Checkout\Helper\Cart|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cartHelperMock;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $jsonHelperMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -139,7 +149,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['getParams', 'getParam'])
+            ->setMethods(['getParams', 'getParam', 'isAjax'])
             ->getMockForAbstractClass();
 
         $this->responseMock = $this->getMockBuilder('Magento\Framework\App\ResponseInterface')
@@ -187,6 +197,14 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('getUrl')
             ->will($this->returnValue($this->urlMock));
 
+        $this->cartHelperMock = $this->getMockBuilder('Magento\Checkout\Helper\Cart')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->jsonHelperMock = $this->getMockBuilder('Magento\Framework\Json\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new Cart(
             $this->contextMock,
             $this->wishlistProviderMock,
@@ -196,7 +214,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
             $this->optionFactoryMock,
             $this->productHelperMock,
             $this->escaperMock,
-            $this->helperMock
+            $this->helperMock,
+            $this->cartHelperMock,
+            $this->jsonHelperMock
         );
     }
 
@@ -397,6 +417,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn($params);
+        $this->requestMock->expects($this->once())
+            ->method('isAjax')
+            ->willReturn(false);
 
         $buyRequestMock = $this->getMockBuilder('Magento\Framework\Object')
             ->disableOriginalConstructor()
@@ -467,7 +490,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->with('You added '  . $productName . ' to your shopping cart.', null)
             ->willReturnSelf();
 
-        $this->checkoutCartMock->expects($this->once())
+        $this->cartHelperMock->expects($this->once())
             ->method('getShouldRedirectToCart')
             ->willReturn(false);
 
