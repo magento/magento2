@@ -118,6 +118,50 @@ class ShippingMethodManagementTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetMethodForMyCart()
+    {
+        $this->_markTestAsRestOnly();
+
+        $this->quote->load('test_order_1', 'reserved_order_id');
+
+        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine/selected-shipping-method',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $token
+            ]
+        ];
+
+        $requestData = [
+            'cartId' => 999,
+            'carrierCode' => 'flatrate',
+            'methodCode' => 'flatrate',
+        ]; // cartId 999 will be overridden
+
+        $result = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertEquals(true, $result);
+
+        /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $ShippingMethodManagementService */
+        $ShippingMethodManagementService = $this->objectManager->create(
+            'Magento\Quote\Api\ShippingMethodManagementInterface'
+        );
+        $shippingMethod = $ShippingMethodManagementService->get($this->quote->getId());
+
+        $this->assertNotNull($shippingMethod);
+        $this->assertEquals('flatrate', $shippingMethod->getCarrierCode());
+        $this->assertEquals('flatrate', $shippingMethod->getMethodCode());
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
      */
     public function testGetMethod()
@@ -170,6 +214,41 @@ class ShippingMethodManagementTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testGetMethodForMyCart()
+    {
+        $this->_markTestAsRestOnly();
+
+        $this->quote->load('test_order_1', 'reserved_order_id');
+
+        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagementService */
+        $shippingMethodManagementService = $this->objectManager->create(
+            'Magento\Quote\Api\ShippingMethodManagementInterface'
+        );
+        $shippingMethodManagementService->set($this->quote->getId(), 'flatrate', 'flatrate');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine/selected-shipping-method',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $token
+            ]
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, []);
+        $this->assertEquals('flatrate', $result[ShippingMethodInterface::KEY_CARRIER_CODE]);
+        $this->assertEquals('flatrate', $result[ShippingMethodInterface::KEY_METHOD_CODE]);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_and_address.php
      *
      */
@@ -202,6 +281,57 @@ class ShippingMethodManagementTest extends WebapiAbstract
 
         $returnedRates = $this->_webApiCall($this->getListServiceInfo($cartId), $requestData);
         $this->assertEquals($expectedData, $returnedRates);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testGetListForMyCart()
+    {
+        $this->_markTestAsRestOnly();
+
+        $this->quote->load('test_order_1', 'reserved_order_id');
+
+        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagementService */
+        $shippingMethodManagementService = $this->objectManager->create(
+            'Magento\Quote\Api\ShippingMethodManagementInterface'
+        );
+        $shippingMethodManagementService->set($this->quote->getId(), 'flatrate', 'flatrate');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine/shipping-methods',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $token
+            ]
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, []);
+        $this->assertNotEmpty($result);
+
+        /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $ShippingMethodManagementService */
+        $ShippingMethodManagementService = $this->objectManager->create(
+            'Magento\Quote\Api\ShippingMethodManagementInterface'
+        );
+        $shippingMethod = $ShippingMethodManagementService->get($this->quote->getId());
+        $expectedData = [
+            ShippingMethodInterface::KEY_CARRIER_CODE => $shippingMethod->getCarrierCode(),
+            ShippingMethodInterface::KEY_METHOD_CODE => $shippingMethod->getMethodCode(),
+            ShippingMethodInterface::KEY_CARRIER_TITLE => $shippingMethod->getCarrierTitle(),
+            ShippingMethodInterface::KEY_METHOD_TITLE => $shippingMethod->getMethodTitle(),
+            ShippingMethodInterface::KEY_SHIPPING_AMOUNT => $shippingMethod->getAmount(),
+            ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => $shippingMethod->getBaseAmount(),
+            ShippingMethodInterface::KEY_AVAILABLE => $shippingMethod->getAvailable(),
+        ];
+
+        $this->assertEquals($expectedData, $result[0]);
     }
 
     /**

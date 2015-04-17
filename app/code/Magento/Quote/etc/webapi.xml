@@ -108,6 +108,35 @@
         </resources>
     </route>
 
+    <!-- Managing My Cart Shipment Method -->
+    <route url="/V1/carts/mine/selected-shipping-method" method="PUT">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="set"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/selected-shipping-method" method="GET">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/shipping-methods" method="GET">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
     <!-- Managing Guest Cart Shipment Method -->
     <route url="/V1/guest-carts/:cartId/selected-shipping-method" method="PUT">
         <service class="Magento\Quote\Api\GuestShippingMethodManagementInterface" method="set"/>
