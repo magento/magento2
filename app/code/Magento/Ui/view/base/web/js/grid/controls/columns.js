@@ -63,9 +63,11 @@ define([
         },
 
         isDisabled: function (elem) {
-            var visible = this.countVisible();
+            var count = this.countVisible(),
+                isLast = elem.visible() && count === 1,
+                isTooMuch = count > this.viewportMaxSize;
 
-            return elem.visible() && visible === 1;
+            return isLast || isTooMuch;
         },
 
         countVisible: function () {
