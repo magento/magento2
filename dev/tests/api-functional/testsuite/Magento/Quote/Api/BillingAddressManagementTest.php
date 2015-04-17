@@ -138,6 +138,8 @@ class BillingAddressManagementTest extends WebapiAbstract
      */
     public function testGetMyAddress()
     {
+        $this->_markTestAsRestOnly();
+
         // get customer ID token
         /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
@@ -176,16 +178,9 @@ class BillingAddressManagementTest extends WebapiAbstract
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
                 'token' => $token
             ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Get',
-                'token' => $token
-            ],
         ];
 
-        $requestData = ["cartId" => $cartId];
-        $this->assertEquals($data, $this->_webApiCall($serviceInfo, $requestData));
+        $this->assertEquals($data, $this->_webApiCall($serviceInfo));
     }
 
     /**
@@ -193,6 +188,8 @@ class BillingAddressManagementTest extends WebapiAbstract
      */
     public function testSetMyAddress()
     {
+        $this->_markTestAsRestOnly();
+
         // get customer ID token
         /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
@@ -208,12 +205,6 @@ class BillingAddressManagementTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . 'mine/billing-address',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-                'token' => $token
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Assign',
                 'token' => $token
             ],
         ];
@@ -234,7 +225,6 @@ class BillingAddressManagementTest extends WebapiAbstract
             'fax' => '44332255',
         ];
         $requestData = [
-            "cartId" => $quote->getId(),
             'address' => $addressData,
         ];
 
