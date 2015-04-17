@@ -51,9 +51,9 @@ class OperationFactory
     ];
 
     /**
-     * @param \Magento\Framework\Console\ObjectManagerProvider $objectManagerProvider
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(\Magento\Framework\Console\ObjectManagerProvider $objectManagerProvider)
+    public function __construct(\Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider)
     {
         $this->objectManager = $objectManagerProvider->get();
     }

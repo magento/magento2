@@ -7,15 +7,16 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Console\ObjectManagerProvider;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use Magento\Setup\Module\Di\App\Task\OperationException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class DiCompileCommand extends AbstractSetupCommand
+class DiCompileCommand extends Command
 {
     /**
      * @var DeploymentConfig
@@ -82,8 +83,6 @@ class DiCompileCommand extends AbstractSetupCommand
                 'preferences' => [
                     'Magento\Setup\Module\Di\Compiler\Config\WriterInterface' =>
                         'Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem',
-                    'Symfony\Component\Console\Output\OutputInterface' =>
-                        get_class($output),
                 ],
                 'Magento\Setup\Module\Di\Compiler\Config\ModificationChain' => [
                     'arguments' => [
@@ -112,7 +111,12 @@ class DiCompileCommand extends AbstractSetupCommand
                     'arguments' => [
                         'excludePatterns' => $excludedPathsList
                     ]
-                ]
+                ],
+                'Magento\Setup\Module\Di\Compiler\Log\Writer\Console' => [
+                    'arguments' => [
+                        'output' => $output,
+                    ]
+                ],
             ]
         );
 
@@ -155,6 +159,7 @@ class DiCompileCommand extends AbstractSetupCommand
                 );
             }
             $this->taskManager->process();
+            $output->writeln('Successful');
         } catch (OperationException $e) {
             $output->writeln($e->getMessage());
         }
