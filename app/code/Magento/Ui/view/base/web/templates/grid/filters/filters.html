@@ -38,7 +38,7 @@
 
 <div
     class="admin__data-grid-filters-current"
-    data-bind="css: {_show: active().length && !opened()}">
+    data-bind="css: {_show: active().length}">
     <div class="admin__current-filters-title-wrap">
         <span
             class="admin__current-filters-title"
@@ -59,6 +59,12 @@
             </li>
             <!-- /ko -->
         </ul>
+    </div>
+    <div class="admin__current-filters-actions-wrap">
+        <button
+            class="action-tertiary action-clear"
+            type="button"
+            data-bind="text: $t('Clear all')"></button>
     </div>
 </div>
 
