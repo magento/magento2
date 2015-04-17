@@ -5,13 +5,14 @@
 /*global define*/
 define(
     [
+        'jquery',
         '../model/quote',
         '../model/url-builder',
         '../model/step-navigator',
         'Magento_Ui/js/model/errorlist',
         'mage/storage'
     ],
-    function(quote, urlBuilder, navigator, errorList, storage) {
+    function($, quote, urlBuilder, navigator, errorList, storage) {
         "use strict";
         return function (paymentMethodCode, additionalData) {
             // TODO add support of additional payment data for more complex payments
@@ -32,13 +33,18 @@ define(
                 urlBuilder.createUrl('/carts/:quoteId/selected-payment-methods', {quoteId: quote.getQuoteId()}),
                 JSON.stringify(paymentMethodData)
             ).done(
-                function() {
-                    quote.setPaymentMethod(paymentMethodCode);
-                    navigator.setCurrent('paymentMethod').goNext();
+                function(response) {
+                    response = JSON.parse(response);
+                    if (response.redirect) {
+                        $.mage.redirect(response.redirect);
+                    } else {
+                        quote.setPaymentMethod(paymentMethodCode);
+                        navigator.setCurrent('paymentMethod').goNext();
+                    }
                 }
             ).error(
                 function(response) {
-                    var error = JSON.parse(response.responseText);
+                    var error = JSON.parse(response.error);
                     errorList.add(error);
                     quote.setPaymentMethod(null);
                 }

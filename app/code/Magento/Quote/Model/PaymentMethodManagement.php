@@ -25,18 +25,26 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
     protected $methodList;
 
     /**
+     * @var \Magento\Framework\Json\Encoder
+     */
+    protected $jsonEncoder;
+
+    /**
      * @param QuoteRepository $quoteRepository
      * @param \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator
      * @param \Magento\Payment\Model\MethodList $methodList
+     * @param \Magento\Framework\Json\Encoder $jsonEncoder
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator,
-        \Magento\Payment\Model\MethodList $methodList
+        \Magento\Payment\Model\MethodList $methodList,
+        \Magento\Framework\Json\Encoder $jsonEncoder
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->zeroTotalValidator = $zeroTotalValidator;
         $this->methodList = $methodList;
+        $this->jsonEncoder = $jsonEncoder;
     }
 
     /**
@@ -44,6 +52,8 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
      */
     public function set($cartId, \Magento\Quote\Api\Data\PaymentInterface $method)
     {
+        $result = [];
+
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
 
@@ -53,32 +63,42 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
         ]);
-        $payment = $quote->getPayment();
-        $payment->importData($method->getData());
+
+        try {
+            $payment = $quote->getPayment();
+            $payment->importData($method->getData());
+        } catch (\Magento\Payment\Exception $e) {
+            $result['error'] = $e->getMessage();
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $result['error'] = $e->getMessage();
+        } catch (\Exception $e) {
+            $result['error'] = __('Unable to set Payment Method');
+        }
 
         if ($quote->isVirtual()) {
             // check if billing address is set
             if ($quote->getBillingAddress()->getCountryId() === null) {
-                throw new InvalidTransitionException(__('Billing address is not set'));
+                $result['error'] = __('Billing address is not set');
             }
             $quote->getBillingAddress()->setPaymentMethod($payment->getMethod());
-        } else {
+        } elseif ($quote->getShippingAddress()) {
+            $quote->getShippingAddress()->setCollectShippingRates(true);
             // check if shipping address is set
             if ($quote->getShippingAddress()->getCountryId() === null) {
-                throw new InvalidTransitionException(__('Shipping address is not set'));
+                $result['error'] = __('Shipping address is not set');
             }
             $quote->getShippingAddress()->setPaymentMethod($payment->getMethod());
         }
-        if (!$quote->isVirtual() && $quote->getShippingAddress()) {
-            $quote->getShippingAddress()->setCollectShippingRates(true);
+
+        $quote->setTotalsCollectedFlag(false)->collectTotals();
+        $this->quoteRepository->save($quote);
+
+        $redirectUrl = $quote->getPayment()->getCheckoutRedirectUrl();
+        if ($redirectUrl) {
+            $result['redirect'] = $redirectUrl;
         }
 
-        if (!$this->zeroTotalValidator->isApplicable($payment->getMethodInstance(), $quote)) {
-            throw new InvalidTransitionException(__('The requested Payment Method is not available.'));
-        }
-
-        $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
-        return $quote->getPayment()->getId();
+        return  $this->jsonEncoder->encode($result);
     }
 
     /**
