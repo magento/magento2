@@ -42,12 +42,6 @@ define(
                 selectShippingMethod(code);
             },
 
-            getFormatedPrice: function (price) {
-                //todo add format data
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
-            },
-
-
             isActive: function() {
                 if (quote.isVirtual()) {
                     navigator.setStepEnabled(stepName, false);

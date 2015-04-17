@@ -53,9 +53,11 @@
                                 </div>
                                  <!--/ko-->
                                 <label class="label" data-bind="attr: {'for': 's_method_' + item.carrier_code + '_' + item.method_code}">
-                                    <span  data-bind="text:$t(item.method_title)"></span>
-                                    <span class="price">
-                                        <span class="price" data-bind="text: $t($parents[1].getFormatedPrice(item.amount))"></span>
+                                    <span>
+                                        <!-- ko text: $t(item.method_title) --><!-- /ko -->
+                                        <!-- ko foreach: $parents[1].getRegion('price') -->
+                                            <!-- ko template: getTemplate() --><!-- /ko -->
+                                    <!-- /ko -->
                                     </span>
                                 </label>
                                 <!-- /ko -->
@@ -70,7 +72,7 @@
             </div>
 
             <div id="onepage-checkout-shipping-method-additional-load">
-                <!-- ko foreach: elems() -->
+                <!-- ko foreach: getRegion('giftMessage') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->
             </div>

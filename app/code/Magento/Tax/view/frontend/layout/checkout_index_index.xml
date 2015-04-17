@@ -15,6 +15,13 @@
                             <item name="children" xsi:type="array">
                                 <item name="steps" xsi:type="array">
                                     <item name="children" xsi:type="array">
+                                        <item name="shipping" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="price" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/shipping_method/price</item>
+                                                </item>
+                                            </item>
+                                        </item>
                                         <item name="review" xsi:type="array">
                                             <item name="children" xsi:type="array">
                                                 <item name="totals" xsi:type="array">
