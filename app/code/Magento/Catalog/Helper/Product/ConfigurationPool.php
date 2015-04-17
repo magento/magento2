@@ -20,16 +20,16 @@ class ConfigurationPool
     /**
      * @var array
      */
-    private $helpers = [];
+    private $instancesByType = [];
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param array $helpers
+     * @param array $instancesByType
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $helpers)
+    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, array $instancesByType)
     {
         $this->_objectManager = $objectManager;
-        $this->helpers = $helpers;
+        $this->instancesByType = $instancesByType;
     }
 
     /**
@@ -59,11 +59,11 @@ class ConfigurationPool
      * @param $productType
      * @return Configuration\ConfigurationInterface
      */
-    public function getProductConfigurationHelper($productType)
+    public function getByProductType($productType)
     {
-        if (!isset($this->helpers[$productType])) {
-            return $this->helpers['default'];
+        if (!isset($this->instancesByType[$productType])) {
+            return $this->instancesByType['default'];
         }
-        return $this->helpers[$productType];
+        return $this->instancesByType[$productType];
     }
 }

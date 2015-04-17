@@ -211,9 +211,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $quoteId = $this->getQuote()->getId();
         if ($quoteId) {
             $quoteItems = $this->quoteItemRepository->getList($quoteId);
-            foreach($quoteItems as $key => $quoteItem) {
-                $quoteItemData[$key] = $quoteItem->toArray();
-                $quoteItemData[$key]['options'] = $this->getFormattedOptionValue($quoteItem);
+            foreach($quoteItems as $index => $quoteItem) {
+                $quoteItemData[$index] = $quoteItem->toArray();
+                $quoteItemData[$index]['options'] = $this->getFormattedOptionValue($quoteItem);
             }
         }
         return $quoteItemData;
@@ -228,17 +228,17 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected function getFormattedOptionValue($item)
     {
         $optionsData = [];
-        $options = $this->configurationPool->getProductConfigurationHelper($item->getProductType())->getOptions($item);
-        foreach ($options as $key => $optionValue) {
+        $options = $this->configurationPool->getByProductType($item->getProductType())->getOptions($item);
+        foreach ($options as $index => $optionValue) {
             /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
-            $helper = $this->configurationPool->getProductConfigurationHelper('default');
+            $helper = $this->configurationPool->getByProductType('default');
             $params = [
                 'max_length' => 55,
                 'cut_replacer' => ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>'
             ];
             $option = $helper->getFormattedOptionValue($optionValue, $params);
-            $optionsData[$key] = $option;
-            $optionsData[$key]['label'] = $optionValue['label'];
+            $optionsData[$index] = $option;
+            $optionsData[$index]['label'] = $optionValue['label'];
         }
         return $optionsData;
     }

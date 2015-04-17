@@ -11,7 +11,7 @@
     </type>
     <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
         <arguments>
-            <argument name="helpers" xsi:type="array">
+            <argument name="instancesByType" xsi:type="array">
                 <item name="bundle" xsi:type="object">Magento\Bundle\Helper\Catalog\Product\Configuration</item>
             </argument>
         </arguments>
