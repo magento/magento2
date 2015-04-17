@@ -315,10 +315,10 @@ class Manager implements ManagerInterface
      * Merged bookmark config with main config
      *
      * @param string $parentName
-     * @param array $configuration
+     * @param array|null $configuration
      * @return void
      */
-    protected function mergeBookmarkConfig($parentName, array &$configuration)
+    protected function mergeBookmarkConfig($parentName, &$configuration)
     {
         $data = $this->bookmark->getCurrentBookmarkByIdentifier('cms_page_listing')->getConfig();
 

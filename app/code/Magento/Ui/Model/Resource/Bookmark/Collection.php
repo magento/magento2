@@ -5,7 +5,13 @@
  */
 namespace Magento\Ui\Model\Resource\Bookmark;
 
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Ui\Model\Resource\Bookmark;
+use Psr\Log\LoggerInterface;
 
 /**
  * Bookmark Collection
@@ -15,25 +21,25 @@ class Collection extends AbstractCollection
     /**
      * User context
      *
-     * @var \Magento\Authorization\Model\UserContextInterface
+     * @var UserContextInterface
      */
     protected $userContext;
 
     /**
-     * @param \Magento\Authorization\Model\UserContextInterface $userContext
-     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Ui\Model\Resource\Bookmark $resource
+     * @param UserContextInterface $userContext
+     * @param EntityFactoryInterface $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param Bookmark $resource
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Ui\Model\Resource\Bookmark $resource,
-        \Magento\Authorization\Model\UserContextInterface $userContext
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        Bookmark $resource,
+        UserContextInterface $userContext
     ) {
         $this->userContext = $userContext;
         parent::__construct(
@@ -64,7 +70,7 @@ class Collection extends AbstractCollection
      */
     public function filterCurrentForIdentifier($identifier)
     {
-        $this->addFieldToFilter('user_id', 1)//@fixme $this->userContext->getUserId())
+        $this->addFieldToFilter('user_id', $this->userContext->getUserId())
             ->addFieldToFilter('identifier', $identifier)
             ->addFieldToFilter('current', 1);
         return $this;
