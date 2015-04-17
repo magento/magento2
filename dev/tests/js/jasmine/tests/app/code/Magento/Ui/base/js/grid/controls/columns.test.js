@@ -5,12 +5,13 @@
 
 define([
     'underscore',
-    'Magento_Ui/js/grid/columns/multiselect'
+    'Magento_Ui/js/grid/controls/columns'
 ], function (_, Columns) {
     'use strict';
 
     describe('ui/js/grid/controls/columns', function () {
-        var columnsInstance;
+        var columnsInstance,
+            FakeElement;
 
         beforeEach(function () {
             columnsInstance = new Columns({
@@ -21,10 +22,12 @@ define([
                 dataScope: 'scope',
                 provider: 'provider'
             });
-            columnsInstance.source = {
-                set: function () {}
+            FakeElement = function(){
+                return this;
             };
-            spyOn(columnsInstance.source, 'set');
+            FakeElement.prototype.visible = function(){
+                return true;
+            };
         });
 
         it('hasOverflow method', function () {
@@ -40,20 +43,21 @@ define([
 
         it('isDisabled method', function () {
             columnsInstance.viewportMaxSize = 4;
-            columnsInstance.elems.push({id:1});
-            expect(columnsInstance.isDisabled()).toBeFalsy();
+            columnsInstance.elems.push(new FakeElement());
+            expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeTruthy();
 
-            columnsInstance.elems.push({id:2});
-            expect(columnsInstance.isDisabled()).toBeTruthy();
+            columnsInstance.elems.push(new FakeElement());
+            expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeFalsy();
 
-            columnsInstance.elems.push({id:3});
-            expect(columnsInstance.isDisabled()).toBeTruthy();
+            columnsInstance.elems.push(new FakeElement());
+            expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeFalsy();
 
-            columnsInstance.elems.push({id:4});
-            expect(columnsInstance.isDisabled()).toBeTruthy();
+            columnsInstance.elems.push(new FakeElement());
+            expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeFalsy();
 
-            columnsInstance.elems.push({id:5});
-            expect(columnsInstance.isDisabled()).toBeFalsy();
+            columnsInstance.elems.push(new FakeElement());
+            expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeTruthy();
+            expect(columnsInstance.isDisabled(columnsInstance.elems()[3])).toBeTruthy();
         });
 
     });
