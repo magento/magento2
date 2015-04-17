@@ -12,8 +12,8 @@ define([
             sortable: true,
             sorting: false,
             classes: {
-                'asc': 'sort-arrow-asc',
-                'desc': 'sort-arrow-desc'
+                'asc': '_ascend',
+                'desc': '_descend'
             },
             listens: {
                 '<%= provider %>:params.sorting.field': 'onSortChange',

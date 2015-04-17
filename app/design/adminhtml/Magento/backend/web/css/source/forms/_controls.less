@@ -43,7 +43,7 @@
 //  Common
 //  ---------------------------------------------
 
-.__form-control-styles() {
+.__form-control-pattern() {
     background-color: @field-control__background-color;
     border-radius: @field-control__border-radius;
     border: @field-control__border-width solid @field-control__border-color;
@@ -56,18 +56,19 @@
     padding: @field-control__padding-top @field-control__padding-horizontal @field-control__padding-bottom;
     transition: @smooth__border-color;
     vertical-align: baseline;
-    &:hover {
-        border-color: @field-control__hover__border-color;
-    }
 }
 
-.__form-control-styles__focus() {
+.__form-control-pattern__hover() {
+    border-color: @field-control__hover__border-color;
+}
+
+.__form-control-pattern__focus() {
     border-color: @field-control__focus__border-color;
     box-shadow: none;
     outline: 0;
 }
 
-.__form-control-styles__disabled() {
+.__form-control-pattern__disabled() {
     background-color: @field-control__disabled__background-color;
     border-color: @field-control__border-color;
     color: @field-control__color;
@@ -77,12 +78,12 @@
 
 //  Input text styles
 .admin__control-text {
-    .extend__form-control-styles();
+    &:extend(.abs-form-control-pattern all);
 }
 
 //  Select styles
 .admin__control-select {
-    .extend__form-control-styles();
+    &:extend(.abs-form-control-pattern all);
     .css(appearance, none, 1);
 
     background-repeat: no-repeat;
@@ -116,6 +117,7 @@
 
         background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color);
         background-position+: ~'calc(100% - 33px)' 0;
+        border-color: @field-control__focus__border-color;
     }
     &::-ms-expand {
         display: none;
@@ -137,7 +139,7 @@ option:empty {
 
 //  Multiple select
 .admin__control-multiselect {
-    .extend__form-control-styles();
+    &:extend(.abs-form-control-pattern all);
     height: auto;
     padding: .6rem 1rem;
 }
@@ -152,7 +154,7 @@ option:empty {
 
 .admin__control-file-label {
     :before {
-        &:extend(.__form-control-styles);
+        &:extend(.abs-form-control-pattern);
         content:'';
         left: 0;
         position: absolute;
@@ -161,10 +163,10 @@ option:empty {
         z-index: 0;
         .admin__control-file:active + &,
         .admin__control-file:focus + & {
-            &:extend(.__form-control-styles:focus);
+            &:extend(.abs-form-control-pattern:focus);
         }
         .admin__control-file[disabled] + & {
-            &:extend(.__form-control-styles[disabled]);
+            &:extend(.abs-form-control-pattern[disabled]);
         }
     }
 }
@@ -201,7 +203,7 @@ option:empty {
 //  ---------------------------------------------
 
 .admin__control-textarea {
-    .extend__form-control-styles();
+    &:extend(.abs-form-control-pattern all);
     height: 8.48rem;
     line-height: 1.18;
     padding-top: .8rem;
@@ -248,7 +250,7 @@ option:empty {
             }
         }
         & + [class*='admin__addon-']:before {
-            &:extend(.__form-control-styles);
+            &:extend(.abs-form-control-pattern);
             bottom: 0;
             box-sizing: border-box;
             content: '';
@@ -259,10 +261,10 @@ option:empty {
             z-index: 0;
         }
         &[disabled] + [class*='admin__addon-']:before {
-            &:extend(.__form-control-styles[disabled]);
+            &:extend(.abs-form-control-pattern[disabled]);
         }
         &:focus + [class*='admin__addon-']:before {
-            &:extend(.__form-control-styles:focus);
+            &:extend(.abs-form-control-pattern:focus);
         }
     }
 }
