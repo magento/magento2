@@ -24,7 +24,7 @@ define(
             },
             stepNumber: navigator.getStepNumber(stepName),
             addresses: customer.getShippingAddressList(),
-            selectedAddressId: addressList.getAddresses()[0].id,
+            selectedAddressId: ko.observable(addressList.getAddresses()[0].id),
             sameAsBilling: ko.observable(null),
             quoteHasBillingAddress: quote.getBillingAddress(),
             isVisible: navigator.isStepVisible(stepName),
@@ -36,7 +36,7 @@ define(
             },
             selectShippingAddress: function() {
                 if (!newAddressSelected()) {
-                    selectShippingAddress(addressList.getAddressById(this.selectedAddressId), this.sameAsBilling());
+                    selectShippingAddress(addressList.getAddressById(this.selectedAddressId()), this.sameAsBilling());
                 } else {
                     this.validate();
                     if (!this.source.get('params.invalid')) {
@@ -51,18 +51,30 @@ define(
             },
             sameAsBillingClick: function() {
                 if (this.sameAsBilling()) {
-                    var billingAddress = quote.getBillingAddress();
-                    this.selectedAddressId = billingAddress().customerAddressId;
-                    newAddressSelected(false);
+                    var billingAddress = quote.getBillingAddress()();
+                    if (billingAddress.customerAddressId) {
+                        this.selectedAddressId(billingAddress.customerAddressId);
+                        newAddressSelected(false);
+                    } else {
+                        // copy billing address data to shipping address form if customer uses new address for billing
+                        var shippingAddress = this.source.get('shippingAddress');
+                        for (var property in billingAddress) {
+                            if (billingAddress.hasOwnProperty(property) && shippingAddress.hasOwnProperty(property)) {
+                                this.source.set('shippingAddress.' + property, billingAddress[property]);
+                            }
+                        }
+                        this.selectedAddressId(null);
+                        newAddressSelected(true);
+                    }
                 }
                 return true;
             },
             onAddressChange: function() {
                 var billingAddress = quote.getBillingAddress();
-                if (this.selectedAddressId != billingAddress().customerAddressId) {
+                if (this.selectedAddressId() != billingAddress().customerAddressId) {
                     this.sameAsBilling(false);
                 }
-                if (this.selectedAddressId == null) {
+                if (this.selectedAddressId() == null) {
                     newAddressSelected(true);
                 } else {
                     newAddressSelected(false);
