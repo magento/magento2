@@ -36,8 +36,9 @@ class IndexerReindexCommand extends AbstractIndexerCommand
                 $startTime = microtime(true);
                 $indexer->reindexAll();
                 $resultTime = microtime(true) - $startTime;
-                $output->writeln( $indexer->getTitle() . ' index has been rebuilt successfully in '
-                    . gmdate('H:i:s', $resultTime) );
+                $output->writeln(
+                    $indexer->getTitle() . ' index has been rebuilt successfully in ' . gmdate('H:i:s', $resultTime)
+                );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $output->writeln($e->getMessage());
             } catch (\Exception $e) {
