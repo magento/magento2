@@ -33,6 +33,7 @@ class CreateCreditMemoEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
+    const STABLE = 'no'; // Backend customer form load
     /* end tags */
 
     /**
