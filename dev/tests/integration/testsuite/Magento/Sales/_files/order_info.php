@@ -48,7 +48,7 @@ $quote->setCustomerIsGuest(
         'Magento\Store\Model\StoreManagerInterface'
     )->getStore()->getId()
 )->setReservedOrderId(
-    'test01'
+    '100000001'
 )->setBillingAddress(
     $billingAddress
 )->setShippingAddress(

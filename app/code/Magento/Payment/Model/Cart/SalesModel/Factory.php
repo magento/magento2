@@ -26,7 +26,7 @@ class Factory
     /**
      * Wrap sales model with Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
      *
-     * @param \Magento\Sales\Model\Order|\Magento\Quote\Model\Quote $salesModel
+     * @param \Magento\Quote\Api\Data\CartInterface $salesModel
      * @return \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
      * @throws \InvalidArgumentException
      */

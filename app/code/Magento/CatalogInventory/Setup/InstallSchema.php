@@ -283,7 +283,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -291,7 +290,6 @@ class InstallSchema implements InstallSchemaInterface
                 'stock_id',
                 $installer->getTable('cataloginventory_stock'),
                 'stock_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Cataloginventory Stock Item');
