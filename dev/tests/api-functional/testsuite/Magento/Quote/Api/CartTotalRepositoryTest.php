@@ -177,6 +177,8 @@ class CartTotalRepositoryTest extends WebapiAbstract
      */
     public function testGetMyTotals()
     {
+        $this->_markTestAsRestOnly();
+
         // get customer ID token
         /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
@@ -190,12 +192,6 @@ class CartTotalRepositoryTest extends WebapiAbstract
         $cartId = $quote->getId();
 
         $serviceInfo = [
-            'soap' => [
-                'service' => 'quoteCartTotalRepositoryV1',
-                'serviceVersion' => 'V1',
-                'operation' => 'quoteCartTotalRepositoryV1get',
-                'token' => $token
-            ],
             'rest' => [
                 'resourcePath' => '/V1/carts/mine/totals',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
@@ -232,10 +228,8 @@ class CartTotalRepositoryTest extends WebapiAbstract
             Totals::KEY_ITEMS => [$this->getQuoteItemTotalsData($quote)],
         ];
 
-        $requestData = ['cartId' => $cartId];
-
         $data = $this->formatTotalsData($data);
 
-        $this->assertEquals($data, $this->_webApiCall($serviceInfo, $requestData));
+        $this->assertEquals($data, $this->_webApiCall($serviceInfo));
     }
 }
