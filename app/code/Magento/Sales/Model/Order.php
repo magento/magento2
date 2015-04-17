@@ -521,7 +521,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _canVoidOrder()
     {
-        return !($this->canUnhold() || $this->isPaymentReview());
+        return !($this->isCanceled() || $this->canUnhold() || $this->isPaymentReview());
     }
 
     /**
