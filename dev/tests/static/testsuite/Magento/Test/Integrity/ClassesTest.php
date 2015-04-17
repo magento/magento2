@@ -69,7 +69,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
                 $this->_assertClassesExist($classes, $file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhpFiles()
+            \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
         );
     }
 
@@ -530,29 +530,11 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
     {
         $files = \Magento\Framework\App\Utility\Files::init();
         $errors = [];
-        $fileList = $files->getFiles(
-            [
-                BP . '/dev/tests/integration',
-                BP . '/app/code/*/*/Test/Unit',
-                BP . '/lib/internal/*/*/*/Test/Unit',
-                BP . '/lib/internal/Magento/Framework/Test/Unit',
-                BP . '/dev/tools/Magento/Tools/*/Test/Unit',
-                BP . '/setup/src/Magento/Setup/Test/Unit',
-            ],
-            '*.php'
-        );
-        foreach ($fileList as $file) {
+        foreach ($files->getFiles([BP . '/dev/tests/{integration,unit}'], '*') as $file) {
             $code = file_get_contents($file);
-            if (preg_match_all(
-                '/@covers(DefaultClass)?\s+([\w\\\\]+)(::([\w\\\\]+))?/',
-                $code,
-                $matchesAll,
-                PREG_SET_ORDER
-            )) {
-                foreach ($matchesAll as $matches) {
-                    if ($this->isNonexistentEntityCovered($matches)) {
-                        $errors[] = $file . ': ' . $matches[0];
-                    }
+            if (preg_match('/@covers(DefaultClass)?\s+([\w\\\\]+)(::([\w\\\\]+))?/', $code, $matches)) {
+                if ($this->isNonexistentEntityCovered($matches)) {
+                    $errors[] = $file . ': ' . $matches[0];
                 }
             }
         }
