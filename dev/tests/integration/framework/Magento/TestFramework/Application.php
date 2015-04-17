@@ -174,7 +174,7 @@ class Application
                 $installConfig = $this->getInstallConfig();
                 $host = $installConfig['db_host'];
                 $user = $installConfig['db_user'];
-                $password = $installConfig['db_pass'];
+                $password = $installConfig['db_password'];
                 $dbName = $installConfig['db_name'];
             }
             $this->_db = new Db\Mysql(
@@ -371,12 +371,16 @@ class Application
      */
     public function cleanup()
     {
+        $this->_ensureDirExists($this->installDir);
+        $this->_ensureDirExists($this->_configDir);
+
+        $this->copyAppConfigFiles();
         /**
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            'php -f %s uninstall --magento_init_params=%s',
-            [BP . '/setup/index.php', $this->getInitParamsQuery()]
+            'php -f %s setup:uninstall -n --magento_init_params=%s',
+            [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
 
@@ -407,8 +411,8 @@ class Application
 
         // run install script
         $this->_shell->execute(
-            'php -f %s install ' . implode(' ', array_keys($installParams)),
-            array_merge([BP . '/setup/index.php'], array_values($installParams))
+            'php -f %s setup:install ' . implode(' ', array_keys($installParams)),
+            array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
         // enable only specified list of caches
