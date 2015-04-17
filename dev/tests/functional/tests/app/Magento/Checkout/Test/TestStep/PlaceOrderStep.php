@@ -12,41 +12,40 @@ use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Class PlaceOrderStep
- * Place order in one page checkout
+ * Place order in one page checkout.
  */
 class PlaceOrderStep implements TestStepInterface
 {
     /**
-     * Onepage checkout page
+     * Onepage checkout page.
      *
      * @var CheckoutOnepage
      */
     protected $checkoutOnepage;
 
     /**
-     * Assert that Order Grand Total is correct on checkout page review block
+     * Assert that Order Grand Total is correct on checkout page review block.
      *
      * @var AssertOrderTotalOnReviewPage
      */
     protected $assertOrderTotalOnReviewPage;
 
     /**
-     * One page checkout success page
+     * One page checkout success page.
      *
      * @var CheckoutOnepageSuccess
      */
     protected $checkoutOnepageSuccess;
 
     /**
-     * Grand total price
+     * Price array.
      *
      * @var string
      */
-    protected $grandTotal;
+    protected $prices;
 
     /**
-     * Checkout method
+     * Checkout method.
      *
      * @var string
      */
@@ -58,31 +57,31 @@ class PlaceOrderStep implements TestStepInterface
      * @param AssertOrderTotalOnReviewPage $assertOrderTotalOnReviewPage
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param string $checkoutMethod
-     * @param string|null $grandTotal
+     * @param array $prices
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertOrderTotalOnReviewPage $assertOrderTotalOnReviewPage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         $checkoutMethod,
-        $grandTotal = null
+        array $prices = []
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertOrderTotalOnReviewPage = $assertOrderTotalOnReviewPage;
-        $this->grandTotal = $grandTotal;
+        $this->prices = $prices;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->checkoutMethod = $checkoutMethod;
     }
 
     /**
-     * Place order after checking order totals on review step
+     * Place order after checking order totals on review step.
      *
      * @return array
      */
     public function run()
     {
-        if ($this->grandTotal !== null) {
-            $this->assertOrderTotalOnReviewPage->processAssert($this->checkoutOnepage, $this->grandTotal);
+        if (!empty($this->prices)) {
+            $this->assertOrderTotalOnReviewPage->processAssert($this->checkoutOnepage, $this->prices);
         }
         $this->checkoutOnepage->getReviewBlock()->placeOrder();
 

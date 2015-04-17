@@ -63,9 +63,9 @@ class Application
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Shell $shell
     ) {
-        $shellDir = $config->getApplicationBaseDir() . '/setup';
+        $shellDir = $config->getApplicationBaseDir() . '/bin';
         $this->_objectManager = $objectManager;
-        $this->_script = $this->_assertPath($shellDir . '/index.php');
+        $this->_script = $this->_assertPath($shellDir . '/magento');
         $this->_config = $config;
         $this->_shell = $shell;
     }
@@ -130,7 +130,7 @@ class Application
      */
     protected function _uninstall()
     {
-        $this->_shell->execute('php -f %s uninstall', [$this->_script]);
+        $this->_shell->execute('php -f %s setup:uninstall -n', [$this->_script]);
 
         $this->_isInstalled = false;
         $this->_fixtures = [];
@@ -157,7 +157,7 @@ class Application
         // Populate install options with global options
         $baseUrl = 'http://' . $this->_config->getApplicationUrlHost() . $this->_config->getApplicationUrlPath();
         $installOptions = array_merge($installOptions, ['base_url' => $baseUrl, 'base_url_secure' => $baseUrl]);
-        $installCmd = 'php -f %s install';
+        $installCmd = 'php -f %s setup:install';
         $installCmdArgs = [$this->_script];
         foreach ($installOptions as $optionName => $optionValue) {
             $installCmd .= " --{$optionName}=%s";

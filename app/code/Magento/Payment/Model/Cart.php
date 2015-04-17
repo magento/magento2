@@ -75,7 +75,7 @@ class Cart
     /**
      * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Order|\Magento\Quote\Model\Quote $salesModel
+     * @param \Magento\Quote\Api\Data\CartInterface $salesModel
      */
     public function __construct(
         \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory,
@@ -91,6 +91,7 @@ class Cart
      * Return payment cart sales model
      *
      * @return \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface
+     * @api
      */
     public function getSalesModel()
     {
@@ -102,6 +103,7 @@ class Cart
      *
      * @param float $taxAmount
      * @return void
+     * @api
      */
     public function addTax($taxAmount)
     {
@@ -113,6 +115,7 @@ class Cart
      *
      * @param float $taxAmount
      * @return void
+     * @api
      */
     public function setTax($taxAmount)
     {
@@ -123,6 +126,7 @@ class Cart
      * Get tax amount
      *
      * @return float
+     * @api
      */
     public function getTax()
     {
@@ -134,6 +138,7 @@ class Cart
      *
      * @param float $discountAmount
      * @return void
+     * @api
      */
     public function addDiscount($discountAmount)
     {
@@ -145,6 +150,7 @@ class Cart
      *
      * @param float $discountAmount
      * @return void
+     * @api
      */
     public function setDiscount($discountAmount)
     {
@@ -155,6 +161,7 @@ class Cart
      * Get discount amount
      *
      * @return float
+     * @api
      */
     public function getDiscount()
     {
@@ -166,6 +173,7 @@ class Cart
      *
      * @param float $shippingAmount
      * @return void
+     * @api
      */
     public function addShipping($shippingAmount)
     {
@@ -177,6 +185,7 @@ class Cart
      *
      * @param float $shippingAmount
      * @return void
+     * @api
      */
     public function setShipping($shippingAmount)
     {
@@ -187,6 +196,7 @@ class Cart
      * Get shipping amount
      *
      * @return float
+     * @api
      */
     public function getShipping()
     {
@@ -198,6 +208,7 @@ class Cart
      *
      * @param float $subtotalAmount
      * @return void
+     * @api
      */
     public function addSubtotal($subtotalAmount)
     {
@@ -208,6 +219,7 @@ class Cart
      * Get subtotal amount
      *
      * @return float
+     * @api
      */
     public function getSubtotal()
     {
@@ -222,6 +234,7 @@ class Cart
      * @param float $amount
      * @param string|null $identifier
      * @return void
+     * @api
      */
     public function addCustomItem($name, $qty, $amount, $identifier = null)
     {
@@ -232,6 +245,7 @@ class Cart
      * Get all cart items
      *
      * @return array
+     * @api
      */
     public function getAllItems()
     {
@@ -243,6 +257,7 @@ class Cart
      * Get shipping, tax, subtotal and discount amounts all together
      *
      * @return array
+     * @api
      */
     public function getAmounts()
     {
@@ -255,6 +270,7 @@ class Cart
      * Specify that shipping should be transferred as cart item
      *
      * @return void
+     * @api
      */
     public function setTransferShippingAsItem()
     {
@@ -265,6 +281,7 @@ class Cart
      * Specify that discount should be transferred as cart item
      *
      * @return void
+     * @api
      */
     public function setTransferDiscountAsItem()
     {
