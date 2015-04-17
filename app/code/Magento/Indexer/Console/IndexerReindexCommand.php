@@ -30,7 +30,7 @@ class IndexerReindexCommand extends AbstractIndexerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $indexers = $this->getIndexers($input);
+        $indexers = $this->getIndexers($input, $output);
         foreach ($indexers as $indexer) {
             try {
                 $startTime = microtime(true);

@@ -29,7 +29,7 @@ class IndexerShowModeCommand extends AbstractIndexerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $indexers = $this->getIndexers($input);
+        $indexers = $this->getIndexers($input, $output);
         foreach ($indexers as $indexer) {
             $status = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
             $output->writeln(sprintf('%-50s ', $indexer->getTitle() . ':') . $status);

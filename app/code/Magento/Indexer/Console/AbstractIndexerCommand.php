@@ -6,6 +6,7 @@
 namespace Magento\Indexer\Console;
 
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Command\Command;
@@ -58,11 +59,12 @@ class AbstractIndexerCommand extends Command
 
     /**
      * Gets list of indexers
-     * 
+     *
      * @param InputInterface $input
+     * @param OutputInterface $output
      * @return IndexerInterface[]
      */
-    public function getIndexers(InputInterface $input)
+    public function getIndexers(InputInterface $input, OutputInterface $output)
     {
         $inputArguments = $input->getArgument(AbstractIndexerCommand::INPUT_KEY_INDEXERS);
         if (isset($inputArguments) && sizeof($inputArguments)>0) {
@@ -70,7 +72,7 @@ class AbstractIndexerCommand extends Command
         } else {
             $indexes = AbstractIndexerCommand::INPUT_KEY_ALL;
         }
-        $indexers = $this->parseIndexerString($indexes);
+        $indexers = $this->parseIndexerString($indexes, $output);
         return $indexers;
     }
 
@@ -95,9 +97,10 @@ class AbstractIndexerCommand extends Command
      * Parses string with indexers and return array of indexer instances
      *
      * @param string $string
+     * @param OutputInterface $output
      * @return IndexerInterface[]
      */
-    public function parseIndexerString($string)
+    public function parseIndexerString($string, OutputInterface $output)
     {
         $indexers = [];
         if ($string === AbstractIndexerCommand::INPUT_KEY_ALL) {
@@ -111,7 +114,7 @@ class AbstractIndexerCommand extends Command
                     $indexer->load($code);
                     $indexers[] = $indexer;
                 } catch (\Exception $e) {
-                    echo 'Warning: Unknown indexer with code ' . trim($code) . PHP_EOL;
+                    $output->writeln('Warning: Unknown indexer with code ' . trim($code));
                 }
             }
         }
