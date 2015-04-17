@@ -14,8 +14,7 @@ define([
         defaults: {
             template: 'ui/grid/controls/columns',
             viewportSize: 18,
-            viewportMaxSize: 30,
-            headerMessage: $t('<%- visible %> out of <%- total %> visible')
+            viewportMaxSize: 30
         },
 
         /**
@@ -103,10 +102,11 @@ define([
         /**
          * Compile header message from headerMessage setting.
          * Expects Underscore template format
+         * @param {String} text - underscore-format template
          * @returns {String}
          */
-        getHeaderMessage: function () {
-            return _.template(this.headerMessage, {
+        getHeaderMessage: function (text) {
+            return _.template(text)({
                 visible: this.countVisible(),
                 total: this.elems().length
             });
