@@ -57,7 +57,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -65,7 +64,6 @@ class InstallSchema implements InstallSchemaInterface
                 'category_id',
                 $installer->getTable('catalog_category_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -73,7 +71,6 @@ class InstallSchema implements InstallSchemaInterface
                 'url_rewrite_id',
                 $installer->getTable('url_rewrite'),
                 'url_rewrite_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('url_rewrite_relation');

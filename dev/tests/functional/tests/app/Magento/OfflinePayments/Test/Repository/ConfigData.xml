@@ -103,12 +103,6 @@
         </dataset>
 
         <dataset name="checkmo_specificcountry_gb_rollback">
-            <field name="payment/checkmo/active" xsi:type="array">
-                <item name="scope" xsi:type="string">payment</item>
-                <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">No</item>
-                <item name="value" xsi:type="number">0</item>
-            </field>
             <field name="payment/checkmo/allowspecific" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>

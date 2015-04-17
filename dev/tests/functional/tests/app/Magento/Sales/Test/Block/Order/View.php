@@ -155,6 +155,7 @@ class View extends Block
     public function openLinkByName($name)
     {
         $this->_rootElement->find(sprintf($this->link, $name), Locator::SELECTOR_XPATH)->click();
+        sleep(3); // TODO: remove after resolving an issue with ajax on Frontend.
     }
 
     /**

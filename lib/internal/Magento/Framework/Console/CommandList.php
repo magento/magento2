@@ -6,12 +6,8 @@
 
 namespace Magento\Framework\Console;
 
-use Magento\Framework\ObjectManagerInterface;
-
 /**
  * Class CommandList has a list of commands, which can be extended via DI configuration.
- *
- * @package Magento\Framework\Console
  */
 class CommandList
 {

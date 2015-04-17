@@ -7,6 +7,8 @@
  */
 namespace Magento\Test\Integrity\Layout;
 
+use Magento\Framework\App\Utility\Files;
+
 class BlocksTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -24,7 +26,7 @@ class BlocksTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        foreach (\Magento\Framework\App\Utility\Files::init()->getLayoutFiles([], false) as $file) {
+        foreach (Files::init()->getLayoutFiles([], false) as $file) {
             $xml = simplexml_load_file($file);
             $elements = $xml->xpath('/layout//*[self::container or self::block]') ?: [];
             /** @var $node \SimpleXMLElement */
@@ -94,7 +96,7 @@ class BlocksTest extends \PHPUnit_Framework_TestCase
     public function getChildBlockDataProvider()
     {
         $result = [];
-        foreach (\Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, false, true, false) as $file) {
+        foreach (Files::init()->getPhpFiles(true, false, true, false, false) as $file) {
             $aliases = \Magento\Framework\App\Utility\Classes::getAllMatches(
                 file_get_contents($file),
                 '/\->getChildBlock\(\'([^\']+)\'\)/x'
