@@ -1961,7 +1961,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         );
         $tableOptions   = $this->_getOptionsDefinition($table);
         $sql = sprintf(
-            "CREATE TABLE %s (\n%s\n) %s",
+            "CREATE TABLE IF NOT EXISTS %s (\n%s\n) %s",
             $this->quoteIdentifier($table->getName()),
             implode(",\n", $sqlFragment),
             implode(" ", $tableOptions)

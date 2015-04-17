@@ -731,12 +731,13 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getTable('salesrule'),
             'rule_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-        )->addForeignKey(
-            $installer->getFkName('salesrule_website', 'website_id', 'core/website', 'website_id'),
-            'website_id',
-            $websitesTable,
-            'website_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+//        )->addForeignKey(
+//            $installer->getFkName('salesrule_website', 'website_id', 'core/website', 'website_id'),
+//            'website_id',
+//            $websitesTable,
+//            'website_id',
+//            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+//            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
         )->setComment(
             'Sales Rules To Websites Relations'
         );
