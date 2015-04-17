@@ -222,4 +222,9 @@
             </item>
         </argument>
     </nav>
+    <!-- bookmark -->
+    <bookmark class="Magento\Ui\Component\Bookmark">
+        <argument name="data" xsi:type="array">
+        </argument>
+    </bookmark>
 </components>
