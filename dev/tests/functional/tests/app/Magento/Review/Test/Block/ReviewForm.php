@@ -16,7 +16,7 @@ use Magento\Mtf\Block\Form as AbstractForm;
 /**
  * Review form on frontend.
  */
-class Form extends AbstractForm
+class ReviewForm extends AbstractForm
 {
     /**
      * Legend selector.
