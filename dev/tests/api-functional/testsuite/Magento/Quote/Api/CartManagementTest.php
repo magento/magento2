@@ -370,6 +370,41 @@ class CartManagementTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
+     */
+    public function testPlaceOrderForMyCart()
+    {
+        $this->_markTestAsRestOnly();
+
+        // get customer ID token
+        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test_order_1', 'reserved_order_id');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine/order',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $token
+            ],
+        ];
+
+        $orderId = $this->_webApiCall($serviceInfo, []);
+
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $this->objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        $items = $order->getAllItems();
+        $this->assertCount(1, $items);
+        $this->assertEquals('Simple Product', $items[0]->getName());
+        $quote->delete();
+    }
+
+    /**
      * Test to get my cart based on customer authentication token or session
      *
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
