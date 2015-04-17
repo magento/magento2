@@ -34,6 +34,19 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
     /* end tags */
 
     /**
+     * Prepare data for test
+     *
+     * @param Customer $customer
+     * @return array
+     */
+    public function __prepare(Customer $customer)
+    {
+        $customer->persist();
+
+        return ['customer' => $customer];
+    }
+
+    /**
      * Run suggest searching result test.
      *
      * @param Customer $customer
@@ -43,9 +56,6 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
      */
     public function test(Customer $customer, $products, $qty)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-34757');
-        // Preconditions
-        $customer->persist();
         $this->loginCustomer($customer);
         $products = $this->createProducts($products);
         $this->addToWishlist($products);
