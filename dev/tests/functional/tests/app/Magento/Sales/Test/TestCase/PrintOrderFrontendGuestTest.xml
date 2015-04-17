@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Sales\Test\TestCase\PrintOrderFrontendGuestTest">
+        <variation name="PrintOrderFrontendGuestTestVariation1">
+            <data name="customer" xsi:type="array">
+                <item name="dataSet" xsi:type="string">johndoe_with_addresses"</item>
+            </data>
+            <data name="billingAddress" xsi:type="array">
+                <item name="dataSet" xsi:type="string">customer_US"</item>
+            </data>
+            <data name="payment" xsi:type="array">
+                <item name="method" xsi:type="string">checkmo"</item>
+            </data>
+            <data name="products" xsi:type="string">bundleProduct::bundle_dynamic_product, configurableProduct::default, downloadableProduct::default</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">723.00</item>
+            </data>
+            <data name="paymentMethod" xsi:type="string">Check / Money order</data>
+            <data name="salesRule" xsi:type="string">active_sales_rule_with_fixed_price_discount_coupon</data>
+            <data name="salesRuleDiscount" xsi:type="string">300.00</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderBillingAddress" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderPaymentMethod" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertSalesPrintOrderProducts" />
+            <constraint name="Magento\SalesRule\Test\Constraint\AssertSalesRuleOnPrintOrder" />
+            <constraint name="Magento\Shipping\Test\Constraint\AssertShippingMethodOnPrintOrder" />
+        </variation>
+    </testCase>
+</config>
