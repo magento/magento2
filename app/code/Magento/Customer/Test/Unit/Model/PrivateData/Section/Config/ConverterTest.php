@@ -36,7 +36,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             [
                 'sections' => [
                     'customer/account/logout' => '*',
-                    'customer/account/editPost' => ['account'],
+                    'customer/account/editpost' => ['account'],
                 ]
             ],
             $this->converter->convert($this->source)

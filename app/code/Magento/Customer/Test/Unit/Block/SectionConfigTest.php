@@ -35,8 +35,7 @@ class blockTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Block\SectionConfig',
             [
                 'context' => $this->context,
-                'sectionConfig' => $this->sectionConfig,
-                'jsonEncoder' => $this->encoder
+                'sectionConfig' => $this->sectionConfig
             ]
         );
     }
@@ -44,9 +43,7 @@ class blockTest extends \PHPUnit_Framework_TestCase
     public function testGetSections()
     {
         $this->sectionConfig->expects($this->once())->method('get')->with('sections')->willReturn(['data']);
-        $this->encoder->expects($this->once())->method('encode')->with(['data'])
-            ->willReturn('encoded-data');
 
-        $this->assertEquals('encoded-data', $this->block->getSections());
+        $this->assertEquals(['data'], $this->block->getSections());
     }
 }
