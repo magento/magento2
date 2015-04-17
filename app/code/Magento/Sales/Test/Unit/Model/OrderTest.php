@@ -348,6 +348,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $order->setData('state', $orderState);
         $payment = $this->_prepareOrderPayment($order);
         $canVoidOrder = true;
+
+        if ($orderState == \Magento\Sales\Model\Order::STATE_CANCELED) {
+            $canVoidOrder = false;
+        }
+
         if ($orderState == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
             $canVoidOrder = false;
         }
