@@ -57,16 +57,6 @@ class GuestCartRepository extends QuoteRepository implements GuestCartRepository
     /**
      * {@inheritdoc}
      */
-    public function getActive($cartId, array $sharedStoreIds = [])
-    {
-        /** @var $quoteIdMask QuoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::getActive($quoteIdMask->getId(), $sharedStoreIds);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function save(Quote $quote)
     {
         if ($quote->getId()) {
