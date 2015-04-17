@@ -7,12 +7,10 @@
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-use \Magento\Quote\Model\QuoteRepository;
-
 class GuestCartRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Model\GuestCart\GuestCartRepository
      */
     protected $model;
 
