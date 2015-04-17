@@ -52,7 +52,7 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
     /**
      * Manage Items page with two item grids: Magento products and Google Content items
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {

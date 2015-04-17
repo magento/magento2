@@ -8,7 +8,6 @@ namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Notification\NotifierInterface;
-use Magento\Framework\Controller;
 
 class ConfirmCaptcha extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items
 {
@@ -36,7 +35,7 @@ class ConfirmCaptcha extends \Magento\GoogleShopping\Controller\Adminhtml\Google
     /**
      * Confirm CAPTCHA
      *
-     * @return Controller\ResultInterface
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -63,7 +62,7 @@ class ConfirmCaptcha extends \Magento\GoogleShopping\Controller\Adminhtml\Google
         }
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT);
+        $resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('adminhtml/*/index', ['store' => $storeId]);
     }
 }

@@ -11,7 +11,7 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
     /**
      * Add (export) several products to Google Content
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Framework\Controller\Result\Raw|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {

@@ -79,8 +79,7 @@ class Items extends \Magento\Backend\App\Action
         if ($this->getRequest()->isAjax()) {
             /** @var Controller\Result\Json $resultJson */
             $resultJson = $this->resultFactory->create(Controller\ResultFactory::TYPE_JSON);
-            $resultJson->setData(['redirect' => $redirectUrl]);
-            return $resultJson;
+            return $resultJson->setData(['redirect' => $redirectUrl]);
         } else {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT);

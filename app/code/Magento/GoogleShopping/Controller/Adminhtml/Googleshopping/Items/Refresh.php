@@ -20,7 +20,7 @@ class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
     protected $operation = 'synchronizeItems';
 
     /**
-     * {@inheritdoc}
+     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {

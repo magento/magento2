@@ -35,7 +35,7 @@ class Grid extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\I
     /**
      * Grid with Google Content items
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {

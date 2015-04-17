@@ -9,19 +9,34 @@ namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Selection;
 class Grid extends \Magento\Backend\App\Action
 {
     /**
+     * @var \Magento\Framework\View\LayoutInterface
+     */
+    protected $layout;
+
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\LayoutInterface $layout
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\LayoutInterface $layout
+    ) {
+        $this->layout = $layout;
+        parent::__construct($context);
+    }
+
+    /**
      * Grid with available products for Google Content
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Raw
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        $this->getResponse()->setBody(
-            $this->_view->getLayout()->createBlock(
-                'Magento\GoogleShopping\Block\Adminhtml\Items\Product'
-            )->setIndex(
-                $this->getRequest()->getParam('index')
-            )->toHtml()
+        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
+        $resultRaw = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
+        return $resultRaw->setContents(
+            $this->layout->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items\Product')
+                ->setIndex($this->getRequest()->getParam('index'))->toHtml()
         );
     }
 }
