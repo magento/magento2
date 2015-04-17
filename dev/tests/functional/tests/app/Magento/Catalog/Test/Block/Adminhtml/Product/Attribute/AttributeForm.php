@@ -15,7 +15,6 @@ use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Util\XmlConverter;
 
 /**
  * Edit attribute form on catalog product edit page.
@@ -49,7 +48,6 @@ class AttributeForm extends FormTabs
      * @param Mapper $mapper
      * @param BlockFactory $blockFactory
      * @param BrowserInterface $browser
-     * @param XmlConverter $xmlConverter
      * @param array $config
      */
     public function __construct(
@@ -57,10 +55,9 @@ class AttributeForm extends FormTabs
         Mapper $mapper,
         BlockFactory $blockFactory,
         BrowserInterface $browser,
-        XmlConverter $xmlConverter,
         array $config = []
     ) {
-        parent::__construct($element, $mapper, $blockFactory, $browser, $xmlConverter, $config);
+        parent::__construct($element, $mapper, $blockFactory, $browser, $config);
         $this->browser->switchToFrame(new Locator($this->iFrame));
     }
 

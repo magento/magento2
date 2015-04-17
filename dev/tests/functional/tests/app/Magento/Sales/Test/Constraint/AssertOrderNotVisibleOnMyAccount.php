@@ -11,24 +11,17 @@ use Magento\Customer\Test\Page\CustomerAccountIndex;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\OrderHistory;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\ObjectManager;
 
 /**
- * Class AssertOrderNotVisibleOnMyAccount
- * Assert order is not visible in customer account on frontend
+ * Assert order is not visible in customer account on frontend.
  */
 class AssertOrderNotVisibleOnMyAccount extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'low';
-    /* end tags */
-
     /**
      * Assert order is not visible in customer account on frontend
      *
      * @param OrderInjectable $order
      * @param Customer $customer
-     * @param ObjectManager $objectManager
      * @param CustomerAccountIndex $customerAccountIndex
      * @param OrderHistory $orderHistory
      * @param string $status
@@ -37,7 +30,6 @@ class AssertOrderNotVisibleOnMyAccount extends AbstractConstraint
     public function processAssert(
         OrderInjectable $order,
         Customer $customer,
-        ObjectManager $objectManager,
         CustomerAccountIndex $customerAccountIndex,
         OrderHistory $orderHistory,
         $status
@@ -46,14 +38,14 @@ class AssertOrderNotVisibleOnMyAccount extends AbstractConstraint
             'id' => $order->getId(),
             'status' => $status,
         ];
-        $customerLogin = $objectManager->create(
+        $this->objectManager->create(
             'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
             ['customer' => $customer]
-        );
-        $customerLogin->run();
+        )->run();
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Orders');
         \PHPUnit_Framework_Assert::assertFalse(
-            $orderHistory->getOrderHistoryBlock()->isOrderVisible($filter),
+            $orderHistory->getOrderHistoryBlock()->isVisible()
+            && $orderHistory->getOrderHistoryBlock()->isOrderVisible($filter),
             'Order with following data \'' . implode(', ', $filter) . '\' is present in Orders block on frontend.'
         );
     }
