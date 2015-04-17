@@ -28,7 +28,6 @@ return [
                 'Zend\ServiceManager\ServiceLocatorInterface' => 'ServiceManager',
                 'Magento\Framework\DB\LoggerInterface' => 'Magento\Framework\DB\Logger\Null',
                 'Magento\Framework\Locale\ConfigInterface' => 'Magento\Framework\Locale\Config',
-                'Magento\Framework\Console\ParameterInterface' => 'Magento\Setup\Console\CustomParameters',
             ],
         ],
     ],

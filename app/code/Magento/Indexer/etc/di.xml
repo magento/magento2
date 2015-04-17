@@ -34,7 +34,7 @@
         <plugin name="page-cache-indexer-reindex-invalidate"
                 type="Magento\Indexer\Model\Processor\InvalidateCache" sortOrder="10"/>
     </type>
-    <preference for="Magento\Framework\Console\ParameterInterface" type="Magento\Indexer\Console\CustomParameters" />
+
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
