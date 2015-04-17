@@ -6,14 +6,17 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
+use Magento\Framework\Controller\ResultFactory;
 
 class Save extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $postData = $this->getRequest()->getPostValue();
         if ($postData) {
             $postData['calculate_subtotal'] = $this->getRequest()->getParam('calculate_subtotal', 0);
@@ -24,12 +27,9 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
                 $this->messageManager->addSuccess(__('The tax rule has been saved.'));
 
                 if ($this->getRequest()->getParam('back')) {
-                    $this->_redirect('tax/*/edit', ['rule' => $taxRule->getId()]);
-                    return;
+                    return $resultRedirect->setPath('tax/*/edit', ['rule' => $taxRule->getId()]);
                 }
-
-                $this->_redirect('tax/*/');
-                return;
+                return $resultRedirect->setPath('tax/*/');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
@@ -37,9 +37,8 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
             }
 
             $this->_objectManager->get('Magento\Backend\Model\Session')->setRuleData($postData);
-            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
-            return;
+            return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
-        $this->getResponse()->setRedirect($this->getUrl('tax/rule'));
+        return $resultRedirect->setPath('tax/rule');
     }
 }
