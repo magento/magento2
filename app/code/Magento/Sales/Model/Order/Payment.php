@@ -910,7 +910,24 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function accept()
     {
-        $this->registerPaymentReviewAction(self::REVIEW_ACTION_ACCEPT, true);
+        $order = $this->getOrder();
+
+        $transactionId = $this->getLastTransId();
+        $invoice = $this->_getInvoiceForTransactionId($transactionId);
+
+        if ($this->getMethodInstance()->setStore($order->getStoreId())->acceptPayment($this)) {
+            $message = $this->_appendTransactionToMessage(
+                $transactionId,
+                $this->_prependMessage(__('Approved the payment online.'))
+            );
+            $this->paymentReviewTrue($invoice, $order, $message);
+        } else {
+            $message = $this->_appendTransactionToMessage(
+                $transactionId,
+                $this->_prependMessage(__('There is no need to approve this payment.'))
+            );
+            $this->paymentReviewNegative($order, $message, $transactionId);
+        }
         return $this;
     }
 
@@ -921,8 +938,55 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function deny()
     {
-        $this->registerPaymentReviewAction(self::REVIEW_ACTION_DENY, true);
+        $order = $this->getOrder();
+
+        $transactionId = $this->getLastTransId();
+        $invoice = $this->_getInvoiceForTransactionId($transactionId);
+
+        if ($this->getMethodInstance()->setStore($order->getStoreId())->denyPayment($this)) {
+            $message = $this->_appendTransactionToMessage(
+                $transactionId,
+                $this->_prependMessage(__('Denied the payment online'))
+            );
+            $this->paymentReviewFalse($invoice, $order, $message);
+        } else {
+            $message = $this->_appendTransactionToMessage(
+                $transactionId,
+                $this->_prependMessage(__('There is no need to deny this payment.'))
+            );
+            $this->paymentReviewNegative($order, $message, $transactionId);
+        }
         return $this;
+    }
+
+    public function update()
+    {
+        $order = $this->getOrder();
+
+        $transactionId = $this->getLastTransId();
+        $invoice = $this->_getInvoiceForTransactionId($transactionId);
+
+        $this->getMethodInstance()->setStore($order->getStoreId())->fetchTransactionInfo($this, $transactionId);
+
+        if ($this->getIsTransactionApproved()) {
+            $message = $this->_appendTransactionToMessage(
+                $transactionId,
+                $this->_prependMessage(__('Registered update about approved payment.'))
+            );
+            $this->paymentReviewTrue($invoice, $order, $message);
+        } elseif ($this->getIsTransactionDenied()) {
+            $message = $this->_appendTransactionToMessage(
+                $transactionId,
+                $this->_prependMessage(__('Registered update about denied payment.'))
+            );
+            $this->paymentReviewFalse($invoice, $order, $message);
+        } else {
+            $message = $this->_appendTransactionToMessage(
+                $transactionId,
+                $this->_prependMessage(__('There is no update for the payment.'))
+            );
+            $this->paymentReviewNegative($order, $message, $transactionId);
+        }
     }
 
     /**
@@ -931,84 +995,26 @@ class Payment extends Info implements OrderPaymentInterface
      * Sets order to processing state and optionally approves invoice or cancels the order
      *
      * @param string $action
-     * @param bool $isOnline
      * @return $this
      * @throws \Exception
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function registerPaymentReviewAction($action, $isOnline)
+    public function registerPaymentReviewAction($action)
     {
-        $order = $this->getOrder();
-
-        $transactionId = $isOnline ? $this->getLastTransId() : $this->getTransactionId();
-        $invoice = $this->_getInvoiceForTransactionId($transactionId);
-
         // invoke the payment method to determine what to do with the transaction
-        $result = null;
-        $message = null;
         switch ($action) {
             case self::REVIEW_ACTION_ACCEPT:
-                if ($isOnline) {
-                    if ($this->getMethodInstance()->setStore($order->getStoreId())->acceptPayment($this)) {
-                        $result = true;
-                        $message = __('Approved the payment online.');
-                    } else {
-                        $result = -1;
-                        $message = __('There is no need to approve this payment.');
-                    }
-                } else {
-                    $result = (bool)$this->getNotificationResult() ? true : -1;
-                    $message = __('Registered notification about approved payment.');
-                }
+                    $this->accept();
                 break;
             case self::REVIEW_ACTION_DENY:
-                if ($isOnline) {
-                    if ($this->getMethodInstance()->setStore($order->getStoreId())->denyPayment($this)) {
-                        $result = false;
-                        $message = __('Denied the payment online');
-                    } else {
-                        $result = -1;
-                        $message = __('There is no need to deny this payment.');
-                    }
-                } else {
-                    $result = (bool)$this->getNotificationResult() ? false : -1;
-                    $message = __('Registered notification about denied payment.');
-                }
+                    $this->deny();
                 break;
             case self::REVIEW_ACTION_UPDATE:
-                if ($isOnline) {
-                    $this->getMethodInstance()->setStore(
-                        $order->getStoreId()
-                    )->fetchTransactionInfo(
-                        $this,
-                        $transactionId
-                    );
-                }
-                if ($this->getIsTransactionApproved()) {
-                    $result = true;
-                    $message = __('Registered update about approved payment.');
-                } elseif ($this->getIsTransactionDenied()) {
-                    $result = false;
-                    $message = __('Registered update about denied payment.');
-                } else {
-                    $result = -1;
-                    $message = __('There is no update for the payment.');
-                }
+                    $this->update();
                 break;
             default:
                 throw new \Exception('Not implemented.');
         }
-        $message = $this->_appendTransactionToMessage($transactionId, $this->_prependMessage($message));
 
-        // process payment in case of positive or negative result, or add a comment
-        if (-1 === $result) { // switch won't work with such $result!
-            $this->paymentReviewNegative($order, $message, $transactionId);
-        } elseif (true === $result) {
-            $this->paymentReviewTrue($invoice, $order, $message);
-        } elseif (false === $result) {
-            $this->paymentReviewFalse($invoice, $order, $message);
-        }
         return $this;
     }
 
