@@ -999,37 +999,64 @@ class Payment extends Info implements OrderPaymentInterface
             default:
                 throw new \Exception('Not implemented.');
         }
-        $message = $this->_prependMessage($message);
-        if ($transactionId) {
-            $message = $this->_appendTransactionToMessage($transactionId, $message);
-        }
+        $message = $this->_appendTransactionToMessage($transactionId, $this->_prependMessage($message));
 
         // process payment in case of positive or negative result, or add a comment
         if (-1 === $result) { // switch won't work with such $result!
-            if ($order->getState() != \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
-                $status = $this->getIsFraudDetected() ? \Magento\Sales\Model\Order::STATUS_FRAUD : false;
-                $order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW, $status, $message);
-                if ($transactionId) {
-                    $this->setLastTransId($transactionId);
-                }
-            } else {
-                $order->addStatusHistoryComment($message);
-            }
+            $this->paymentReviewNegative($order, $message, $transactionId);
         } elseif (true === $result) {
-            if ($invoice) {
-                $invoice->pay();
-                $this->_updateTotals(['base_amount_paid_online' => $invoice->getBaseGrandTotal()]);
-                $order->addRelatedObject($invoice);
-            }
-            $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
+            $this->paymentReviewTrue($invoice, $order, $message);
         } elseif (false === $result) {
-            if ($invoice) {
-                $invoice->cancel();
-                $order->addRelatedObject($invoice);
-            }
-            $order->registerCancellation($message, false);
+            $this->paymentReviewFalse($invoice, $order, $message);
         }
         return $this;
+    }
+
+    /**
+     * @param $invoice
+     * @param \Magento\Sales\Model\Order $order
+     * @param string $message
+     */
+    protected function paymentReviewTrue($invoice, \Magento\Sales\Model\Order $order, $message)
+    {
+        if ($invoice) {
+            $invoice->pay();
+            $this->_updateTotals(['base_amount_paid_online' => $invoice->getBaseGrandTotal()]);
+            $order->addRelatedObject($invoice);
+        }
+        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
+    }
+
+    /**
+     * @param $invoice
+     * @param \Magento\Sales\Model\Order $order
+     * @param string $message
+     */
+    protected function paymentReviewFalse($invoice, \Magento\Sales\Model\Order $order, $message)
+    {
+        if ($invoice) {
+            $invoice->cancel();
+            $order->addRelatedObject($invoice);
+        }
+        $order->registerCancellation($message, false);
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order $order
+     * @param string $message
+     * @param int|null $transactionId
+     */
+    protected function paymentReviewNegative(\Magento\Sales\Model\Order $order, $message, $transactionId)
+    {
+        if ($order->getState() != \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
+            $status = $this->getIsFraudDetected() ? \Magento\Sales\Model\Order::STATUS_FRAUD : false;
+            $order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW, $status, $message);
+            if ($transactionId) {
+                $this->setLastTransId($transactionId);
+            }
+        } else {
+            $order->addStatusHistoryComment($message);
+        }
     }
 
     /**
