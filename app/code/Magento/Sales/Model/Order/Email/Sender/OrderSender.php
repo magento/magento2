@@ -91,7 +91,7 @@ class OrderSender extends Sender
     protected function prepareTemplate(Order $order)
     {
         $transport = new \Magento\Framework\Object(
-            ['templateVars' =>
+            ['template_vars' =>
                  [
                      'order'                    => $order,
                      'billing'                  => $order->getBillingAddress(),

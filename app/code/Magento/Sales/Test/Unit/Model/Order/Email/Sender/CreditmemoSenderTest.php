@@ -74,7 +74,8 @@ class CreditmemoSenderTest extends AbstractSenderTest
             $this->senderBuilderFactoryMock,
             $this->paymentHelper,
             $this->creditmemoResource,
-            $this->addressRendererMock
+            $this->addressRendererMock,
+            $this->eventManagerMock
         );
     }
 

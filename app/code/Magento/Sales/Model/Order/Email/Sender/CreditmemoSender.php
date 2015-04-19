@@ -86,15 +86,16 @@ class CreditmemoSender extends NotifySender
         $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
 
         $transport = new \Magento\Framework\Object(
-            ['templateVars' =>
+            ['template_vars' =>
                  [
-                     'order'                    => $order,
-                     'creditmemo'               => $creditmemo,
-                     'comment'                  => $comment,
-                     'billing'                  => $order->getBillingAddress(),
-                     'store'                    => $order->getStore(),
+                     'order' => $creditmemo->getOrder(),
+                     'creditmemo' => $creditmemo,
+                     'comment' => $comment,
+                     'billing' => $order->getBillingAddress(),
+                     'payment_html' => $this->getPaymentHtml($order),
+                     'store' => $order->getStore(),
                      'formattedShippingAddress' => $formattedShippingAddress,
-                     'formattedBillingAddress'  => $formattedBillingAddress,
+                     'formattedBillingAddress' => $formattedBillingAddress
                  ]
             ]
         );

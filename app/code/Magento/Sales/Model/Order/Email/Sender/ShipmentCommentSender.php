@@ -68,7 +68,7 @@ class ShipmentCommentSender extends NotifySender
         $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
 
         $transport = new \Magento\Framework\Object(
-            ['templateVars' =>
+            ['template_vars' =>
                  [
                      'order'                    => $order,
                      'shipment'                 => $shipment,
