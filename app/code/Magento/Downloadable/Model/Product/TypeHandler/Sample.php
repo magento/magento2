@@ -102,12 +102,14 @@ class Sample extends AbstractTypeHandler
     protected function setFiles(ComponentInterface $model, array $files)
     {
         if ($model->getSampleType() == \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE) {
-            $fileName = $this->downloadableFile->moveFileFromTmp(
-                $model->getBaseTmpPath(),
-                $model->getBasePath(),
-                $files
-            );
-            $model->setSampleFile($fileName);
+            if ($model->getSampleFile() === null) {
+                $fileName = $this->downloadableFile->moveFileFromTmp(
+                    $model->getBaseTmpPath(),
+                    $model->getBasePath(),
+                    $files
+                );
+                $model->setSampleFile($fileName);
+            }
         }
         return $this;
     }

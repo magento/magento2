@@ -5,23 +5,21 @@
  */
 namespace Magento\Downloadable\Api;
 
-use Magento\Downloadable\Api\Data\SampleContentInterface;
+use Magento\Downloadable\Api\Data\SampleInterface;
 
 interface SampleRepositoryInterface
 {
     /**
-     * Update downloadable sample of the given product (sample type and its resource cannot be changed)
+     * Update downloadable sample of the given product
      *
      * @param string $productSku
-     * @param \Magento\Downloadable\Api\Data\SampleContentInterface $sampleContent
-     * @param int $sampleId
+     * @param \Magento\Downloadable\Api\Data\SampleInterface $sample
      * @param bool $isGlobalScopeContent
      * @return int
      */
     public function save(
         $productSku,
-        SampleContentInterface $sampleContent,
-        $sampleId = null,
+        SampleInterface $sample,
         $isGlobalScopeContent = false
     );
 

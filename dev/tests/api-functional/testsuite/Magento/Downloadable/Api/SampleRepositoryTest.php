@@ -79,9 +79,11 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     protected function getTargetProduct($isScopeGlobal = false)
     {
-        $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
         if ($isScopeGlobal) {
-            $product->setStoreId(0);
+            $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductFactory')
+                ->create()->setStoreId(0)->load(1);
+        } else {
+            $product = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
         }
 
         return $product;
@@ -121,10 +123,10 @@ class SampleRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => true,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Title',
                 'sort_order' => 1,
-                'sample_file' => [
+                'sample_file_content' => [
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'image.jpg',
                 ],
@@ -136,10 +138,11 @@ class SampleRepositoryTest extends WebapiAbstract
         $globalScopeSample = $this->getTargetSample($this->getTargetProduct(true), $newSampleId);
         $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
         $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sampleContent']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sampleContent']['title'], $globalScopeSample->getTitle());
-        $this->assertEquals($requestData['sampleContent']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sampleContent']['sample_type'], $sample->getSampleType());
+        $this->assertNotNull($sample->getId());
+        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
+        $this->assertEquals($requestData['sample']['title'], $globalScopeSample->getTitle());
+        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
+        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
         $this->assertStringEndsWith('.jpg', $sample->getSampleFile());
         $this->assertNull($sample->getSampleUrl());
     }
@@ -152,7 +155,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Store View Title',
                 'sort_order' => 1,
                 'sample_url' => 'http://www.sample.example.com/',
@@ -164,10 +167,10 @@ class SampleRepositoryTest extends WebapiAbstract
         $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
         $globalScopeSample = $this->getTargetSample($this->getTargetProduct(true), $newSampleId);
         $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sampleContent']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sampleContent']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sampleContent']['sample_url'], $sample->getSampleUrl());
-        $this->assertEquals($requestData['sampleContent']['sample_type'], $sample->getSampleType());
+        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
+        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
+        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
+        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
         $this->assertEmpty($globalScopeSample->getTitle());
     }
 
@@ -179,7 +182,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Sample with URL resource',
                 'sort_order' => 1,
                 'sample_url' => 'http://www.sample.example.com/',
@@ -190,10 +193,10 @@ class SampleRepositoryTest extends WebapiAbstract
         $newSampleId = $this->_webApiCall($this->createServiceInfo, $requestData);
         $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
         $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sampleContent']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sampleContent']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sampleContent']['sample_type'], $sample->getSampleType());
-        $this->assertEquals($requestData['sampleContent']['sample_url'], $sample->getSampleUrl());
+        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
+        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
+        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
+        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
     }
 
     /**
@@ -201,14 +204,15 @@ class SampleRepositoryTest extends WebapiAbstract
      * @expectedException \Exception
      * @expectedExceptionMessage Invalid sample type.
      */
-    public function testCreateThrowsExceptionIfSampleTypeIsNotSpecified()
+    public function testCreateThrowsExceptionIfSampleTypeIsInvalid()
     {
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Sample with URL resource',
                 'sort_order' => 1,
+                'sample_type' => 'invalid',
             ],
         ];
 
@@ -225,11 +229,11 @@ class SampleRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Sample Title',
                 'sort_order' => 1,
                 'sample_type' => 'file',
-                'sample_file' => [
+                'sample_file_content' => [
                     'file_data' => 'not_a_base64_encoded_content',
                     'name' => 'image.jpg',
                 ],
@@ -249,11 +253,11 @@ class SampleRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Title',
                 'sort_order' => 15,
                 'sample_type' => 'file',
-                'sample_file' => [
+                'sample_file_content' => [
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                     'name' => 'name/with|forbidden{characters',
                 ],
@@ -273,7 +277,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Sample Title',
                 'sort_order' => 1,
                 'sample_type' => 'url',
@@ -295,7 +299,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Sample Title',
                 'sort_order' => $sortOrder,
                 'sample_type' => 'url',
@@ -326,7 +330,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'simple',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Sample Title',
                 'sort_order' => 50,
                 'sample_type' => 'url',
@@ -346,7 +350,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $requestData = [
             'isGlobalScopeContent' => false,
             'productSku' => 'wrong-sku',
-            'sampleContent' => [
+            'sample' => [
                 'title' => 'Title',
                 'sort_order' => 15,
                 'sample_type' => 'url',
@@ -366,19 +370,21 @@ class SampleRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => false,
-            'sampleId' => $sampleId,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
+                'id' => $sampleId,
                 'title' => 'Updated Title',
                 'sort_order' => 2,
+                'sample_type' => 'url',
             ],
         ];
 
         $this->assertEquals($sampleId, $this->_webApiCall($this->updateServiceInfo, $requestData));
         $sample = $this->getTargetSample($this->getTargetProduct(), $sampleId);
         $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sampleContent']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sampleContent']['sort_order'], $sample->getSortOrder());
+        $this->assertEquals($requestData['sample']['id'], $sample->getId());
+        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
+        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
     }
 
     /**
@@ -392,11 +398,12 @@ class SampleRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => true,
-            'sampleId' => $sampleId,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
+                'id' => $sampleId,
                 'title' => 'Updated Title',
                 'sort_order' => 2,
+                'sample_type' => 'url',
             ],
         ];
 
@@ -406,8 +413,8 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->assertNotNull($sample);
         // Title was set on store view level in fixture so it must be the same
         $this->assertEquals($originalSample->getTitle(), $sample->getTitle());
-        $this->assertEquals($requestData['sampleContent']['title'], $globalScopeSample->getTitle());
-        $this->assertEquals($requestData['sampleContent']['sort_order'], $sample->getSortOrder());
+        $this->assertEquals($requestData['sample']['title'], $globalScopeSample->getTitle());
+        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
     }
 
     /**
@@ -419,11 +426,12 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples/1';
         $requestData = [
             'isGlobalScopeContent' => true,
-            'sampleId' => 1,
             'productSku' => 'wrong-sku',
-            'sampleContent' => [
+            'sample' => [
+                'id' => 1,
                 'title' => 'Updated Title',
                 'sort_order' => 2,
+                'sample_type' => 'url',
             ],
         ];
         $this->_webApiCall($this->updateServiceInfo, $requestData);
@@ -441,11 +449,12 @@ class SampleRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => true,
-            'sampleId' => 9999,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
+                'id' => $sampleId,
                 'title' => 'Title',
                 'sort_order' => 2,
+                'sample_type' => 'url',
             ],
         ];
 
@@ -465,11 +474,12 @@ class SampleRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => false,
-            'sampleId' => $sampleId,
             'productSku' => 'downloadable-product',
-            'sampleContent' => [
+            'sample' => [
+                'id' => $sampleId,
                 'title' => 'Updated Sample Title',
                 'sort_order' => $sortOrder,
+                'sample_type' => 'url',
             ],
         ];
         $this->_webApiCall($this->updateServiceInfo, $requestData);

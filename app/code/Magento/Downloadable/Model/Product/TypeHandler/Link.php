@@ -168,12 +168,14 @@ class Link extends AbstractTypeHandler
             }
         }
         if ($model->getLinkType() == \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE) {
-            $linkFileName = $this->downloadableFile->moveFileFromTmp(
-                $this->createItem()->getBaseTmpPath(),
-                $this->createItem()->getBasePath(),
-                $files
-            );
-            $model->setLinkFile($linkFileName);
+            if ($model->getLinkFile() === null) {
+                $linkFileName = $this->downloadableFile->moveFileFromTmp(
+                    $this->createItem()->getBaseTmpPath(),
+                    $this->createItem()->getBasePath(),
+                    $files
+                );
+                $model->setLinkFile($linkFileName);
+            }
         }
         if ($model->getSampleType() == \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE) {
             $linkSampleFileName = $this->downloadableFile->moveFileFromTmp(
