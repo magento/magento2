@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Resource\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class CreditmemoSender
@@ -35,12 +36,20 @@ class CreditmemoSender extends NotifySender
     protected $addressRenderer;
 
     /**
+     * Application Event Dispatcher
+     *
+     * @var ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * @param Template $templateContainer
      * @param CreditmemoIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param PaymentHelper $paymentHelper
      * @param CreditmemoResource $creditmemoResource
      * @param Renderer $addressRenderer
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         Template $templateContainer,
@@ -48,12 +57,14 @@ class CreditmemoSender extends NotifySender
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         PaymentHelper $paymentHelper,
         CreditmemoResource $creditmemoResource,
-        Renderer $addressRenderer
+        Renderer $addressRenderer,
+        ManagerInterface $eventManager
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->paymentHelper = $paymentHelper;
         $this->creditmemoResource = $creditmemoResource;
         $this->addressRenderer = $addressRenderer;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -73,18 +84,26 @@ class CreditmemoSender extends NotifySender
             $formattedShippingAddress = '';
         }
         $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
-        $this->templateContainer->setTemplateVars(
-            [
-                'order' => $creditmemo->getOrder(),
-                'creditmemo' => $creditmemo,
-                'comment' => $comment,
-                'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
-                'store' => $order->getStore(),
-                'formattedShippingAddress' => $formattedShippingAddress,
-                'formattedBillingAddress' => $formattedBillingAddress,
+
+        $transport = new \Magento\Framework\Object(
+            ['templateVars' =>
+                 [
+                     'order'                    => $order,
+                     'creditmemo'               => $creditmemo,
+                     'comment'                  => $comment,
+                     'billing'                  => $order->getBillingAddress(),
+                     'store'                    => $order->getStore(),
+                     'formattedShippingAddress' => $formattedShippingAddress,
+                     'formattedBillingAddress'  => $formattedBillingAddress,
+                 ]
             ]
         );
+
+        $this->eventManager->dispatch(
+            'email_creditmemo_set_template_vars_before', array('sender' => $this, 'transport' => $transport)
+        );
+
+        $this->templateContainer->setTemplateVars($transport->getTemplateVars());
 
         $result = $this->checkAndSend($order, $notify);
         if ($result) {
