@@ -919,6 +919,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Order state setter.
      * If status is specified, will add order status history with specified comment
      * the setData() cannot be overridden because of compatibility issues with resource model
+     * By default allows to set any state. Can also update status to default or specified value
+     * Complete and closed states are encapsulated intentionally
      *
      * @param string $state
      * @param string|bool $status
@@ -926,6 +928,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param bool $isCustomerNotified
      * @param bool $shouldProtectState
      * @return \Magento\Sales\Model\Order
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setState(
         $state,
@@ -934,29 +937,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $isCustomerNotified = null,
         $shouldProtectState = true
     ) {
-        return $this->_setState($state, $status, $comment, $isCustomerNotified, $shouldProtectState);
-    }
 
-    /**
-     * Order state protected setter.
-     * By default allows to set any state. Can also update status to default or specified value
-     * Complete and closed states are encapsulated intentionally, see the _checkState()
-     *
-     * @param string $state
-     * @param string|bool $status
-     * @param string $comment
-     * @param bool $isCustomerNotified
-     * @param bool $shouldProtectState
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function _setState(
-        $state,
-        $status = false,
-        $comment = '',
-        $isCustomerNotified = null,
-        $shouldProtectState = false
-    ) {
         // attempt to set the specified state
         if ($shouldProtectState) {
             if ($this->isStateProtected($state)) {
@@ -965,17 +946,29 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
                 );
             }
         }
-        $this->setData('state', $state);
+
+        $transport = new \Magento\Framework\Object(
+            [
+                'state'     => $state,
+                'status'    => $status,
+                'comment'   => $comment,
+                'isCustomerNotified'    => $isCustomerNotified
+            ]
+        );
+
+        $this->_eventManager->dispatch('sales_order_state_change_before', array('order' => $this, 'transport' => $transport));
+        $status = $transport->getStatus();
+        $this->setData('state', $transport->getState());
 
         // add status history
         if ($status) {
             if ($status === true) {
-                $status = $this->getConfig()->getStateDefaultStatus($state);
+                $status = $this->getConfig()->getStateDefaultStatus($transport->getState());
             }
             $this->setStatus($status);
-            $history = $this->addStatusHistoryComment($comment, false);
+            $history = $this->addStatusHistoryComment($transport->getComment(), false);
             // no sense to set $status again
-            $history->setIsCustomerNotified($isCustomerNotified);
+            $history->setIsCustomerNotified($transport->getIsCustomerNotified());
         }
         return $this;
     }
@@ -1166,7 +1159,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $this->setTotalCanceled($this->getGrandTotal() - $this->getTotalPaid());
             $this->setBaseTotalCanceled($this->getBaseGrandTotal() - $this->getBaseTotalPaid());
 
-            $this->_setState($cancelState, true, $comment);
+            $this->setState($cancelState, true, $comment);
         } elseif (!$graceful) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot cancel this order.'));
         }
