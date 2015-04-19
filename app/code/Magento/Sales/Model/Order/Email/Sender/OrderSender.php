@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Resource\Order as OrderResource;
 use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class OrderSender
@@ -34,12 +35,20 @@ class OrderSender extends Sender
     protected $addressRenderer;
 
     /**
+     * Application Event Dispatcher
+     *
+     * @var ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * @param Template $templateContainer
      * @param OrderIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param PaymentHelper $paymentHelper
      * @param OrderResource $orderResource
      * @param Renderer $addressRenderer
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         Template $templateContainer,
@@ -47,12 +56,14 @@ class OrderSender extends Sender
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         PaymentHelper $paymentHelper,
         OrderResource $orderResource,
-        Renderer $addressRenderer
+        Renderer $addressRenderer,
+        ManagerInterface $eventManager
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->paymentHelper = $paymentHelper;
         $this->orderResource = $orderResource;
         $this->addressRenderer = $addressRenderer;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -79,16 +90,25 @@ class OrderSender extends Sender
      */
     protected function prepareTemplate(Order $order)
     {
-        $this->templateContainer->setTemplateVars(
-            [
-                'order' => $order,
-                'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
-                'store' => $order->getStore(),
-                'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
-                'formattedBillingAddress' => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
+        $transport = new \Magento\Framework\Object(
+            ['templateVars' =>
+                 [
+                     'order'                    => $order,
+                     'billing'                  => $order->getBillingAddress(),
+                     'payment_html'             => $this->getPaymentHtml($order),
+                     'store'                    => $order->getStore(),
+                     'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
+                     'formattedBillingAddress'  => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
+                 ]
             ]
         );
+
+        $this->eventManager->dispatch(
+            'email_order_set_template_vars_before', array('sender' => $this, 'transport' => $transport)
+        );
+
+        $this->templateContainer->setTemplateVars($transport->getTemplateVars());
+
         parent::prepareTemplate($order);
     }
 
