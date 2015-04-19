@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class ShipmentCommentSender
@@ -23,19 +24,29 @@ class ShipmentCommentSender extends NotifySender
     protected $addressRenderer;
 
     /**
+     * Application Event Dispatcher
+     *
+     * @var ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * @param Template $templateContainer
      * @param ShipmentCommentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param Renderer $addressRenderer
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         Template $templateContainer,
         ShipmentCommentIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
-        Renderer $addressRenderer
+        Renderer $addressRenderer,
+        ManagerInterface $eventManager
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->addressRenderer = $addressRenderer;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -55,17 +66,27 @@ class ShipmentCommentSender extends NotifySender
             $formattedShippingAddress = '';
         }
         $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
-        $this->templateContainer->setTemplateVars(
-            [
-                'order' => $order,
-                'shipment' => $shipment,
-                'comment' => $comment,
-                'billing' => $order->getBillingAddress(),
-                'store' => $order->getStore(),
-                'formattedShippingAddress' => $formattedShippingAddress,
-                'formattedBillingAddress' => $formattedBillingAddress,
+
+        $transport = new \Magento\Framework\Object(
+            ['templateVars' =>
+                 [
+                     'order'                    => $order,
+                     'shipment'                 => $shipment,
+                     'comment'                  => $comment,
+                     'billing'                  => $order->getBillingAddress(),
+                     'store'                    => $order->getStore(),
+                     'formattedShippingAddress' => $formattedShippingAddress,
+                     'formattedBillingAddress'  => $formattedBillingAddress,
+                 ]
             ]
         );
+
+        $this->eventManager->dispatch(
+            'email_shipment_comment_set_template_vars_before', array('sender' => $this, 'transport' => $transport)
+        );
+
+        $this->templateContainer->setTemplateVars($transport->getTemplateVars());
+
         return $this->checkAndSend($order, $notify);
     }
 }
