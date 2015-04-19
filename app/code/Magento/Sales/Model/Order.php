@@ -1159,7 +1159,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $this->setTotalCanceled($this->getGrandTotal() - $this->getTotalPaid());
             $this->setBaseTotalCanceled($this->getBaseGrandTotal() - $this->getBaseTotalPaid());
 
-            $this->setState($cancelState, true, $comment);
+            $this->setState($cancelState, true, $comment, null, false);
         } elseif (!$graceful) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot cancel this order.'));
         }
