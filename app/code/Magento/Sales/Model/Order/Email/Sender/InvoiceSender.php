@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Email\NotifySender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Resource\Order\Invoice as InvoiceResource;
 use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class InvoiceSender
@@ -35,12 +36,20 @@ class InvoiceSender extends NotifySender
     protected $addressRenderer;
 
     /**
+     * Application Event Dispatcher
+     *
+     * @var ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * @param Template $templateContainer
      * @param InvoiceIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param PaymentHelper $paymentHelper
      * @param InvoiceResource $invoiceResource
      * @param Renderer $addressRenderer
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         Template $templateContainer,
@@ -48,12 +57,14 @@ class InvoiceSender extends NotifySender
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         PaymentHelper $paymentHelper,
         InvoiceResource $invoiceResource,
-        Renderer $addressRenderer
+        Renderer $addressRenderer,
+        ManagerInterface $eventManager
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
         $this->paymentHelper = $paymentHelper;
         $this->invoiceResource = $invoiceResource;
         $this->addressRenderer = $addressRenderer;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -73,18 +84,28 @@ class InvoiceSender extends NotifySender
             $formattedShippingAddress = '';
         }
         $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
-        $this->templateContainer->setTemplateVars(
-            [
-                'order' => $order,
-                'invoice' => $invoice,
-                'comment' => $comment,
-                'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
-                'store' => $order->getStore(),
-                'formattedShippingAddress' => $formattedShippingAddress,
-                'formattedBillingAddress' => $formattedBillingAddress,
+
+        $transport = new \Magento\Framework\Object(
+            ['templateVars' =>
+                 [
+                     'order'                    => $order,
+                     'invoice'                  => $invoice,
+                     'comment'                  => $comment,
+                     'billing'                  => $order->getBillingAddress(),
+                     'payment_html'             => $this->getPaymentHtml($order),
+                     'store'                    => $order->getStore(),
+                     'formattedShippingAddress' => $formattedShippingAddress,
+                     'formattedBillingAddress'  => $formattedBillingAddress,
+                 ]
             ]
         );
+
+        $this->eventManager->dispatch(
+            'email_invoice_set_template_vars_before', array('sender' => $this, 'transport' => $transport)
+        );
+
+        $this->templateContainer->setTemplateVars($transport->getTemplateVars());
+
         $result = $this->checkAndSend($order, $notify);
         if ($result) {
             $invoice->setEmailSent(true);
