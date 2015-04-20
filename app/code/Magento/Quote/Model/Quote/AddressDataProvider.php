@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Model\Quote;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Eav\Model\Config as EavConfig;
@@ -97,7 +98,7 @@ class AddressDataProvider implements DataProviderInterface
      * @param AddressHelper $addressHelper
      * @param Session $customerSession
      * @param CustomerRepository $customerRepository
-     * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param DirectoryHelper $directoryHelper
      * @param array $meta
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -108,7 +109,7 @@ class AddressDataProvider implements DataProviderInterface
         AddressHelper $addressHelper,
         Session $customerSession,
         CustomerRepository $customerRepository,
-        \Magento\Directory\Helper\Data $directoryHelper,
+        DirectoryHelper $directoryHelper,
         array $meta = [],
         array $data = []
     ) {
