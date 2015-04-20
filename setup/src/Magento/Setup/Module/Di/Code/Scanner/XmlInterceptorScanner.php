@@ -41,7 +41,7 @@ class XmlInterceptorScanner implements ScannerInterface
         foreach ($xpath->query('//type[plugin]|//virtualType[plugin]') as $entityNode) {
             $attributes = $entityNode->attributes;
             $type = $attributes->getNamedItem('type');
-            if (!is_null($type)) {
+            if ($type !== null) {
                 array_push($output, $type->nodeValue);
             } else {
                 array_push($output, $attributes->getNamedItem('name')->nodeValue);

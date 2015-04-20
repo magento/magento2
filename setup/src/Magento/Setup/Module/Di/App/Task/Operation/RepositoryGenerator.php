@@ -65,7 +65,6 @@ class RepositoryGenerator implements OperationInterface
         $this->classesScanner->getList($this->data['path']);
 
         $files = $this->directoryScanner->scan($this->data['path'], $this->data['filePatterns']);
-        $this->repositoryScanner->setUseAutoload(false);
         $repositories = $this->repositoryScanner->collectEntities($files['di']);
         foreach ($repositories as $entityName) {
             class_exists($entityName);

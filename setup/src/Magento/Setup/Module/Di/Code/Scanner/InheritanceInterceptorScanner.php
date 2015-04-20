@@ -22,7 +22,8 @@ class InheritanceInterceptorScanner implements ScannerInterface
                 $interceptedEntity = substr($interceptorClass, 0, -12);
                 if (is_subclass_of($class, $interceptedEntity)) {
                     $reflectionClass = new \ReflectionClass($class);
-                    if (!$reflectionClass->isAbstract() && !$reflectionClass->isFinal()) {
+                    if (!$reflectionClass->isAbstract() && !$reflectionClass->isFinal()
+                        && !$this->endsWith($class, 'RepositoryInterface\Proxy')) {
                         $output[] = $class . '\\Interceptor';
                     }
                 }
@@ -31,5 +32,19 @@ class InheritanceInterceptorScanner implements ScannerInterface
         $output = array_merge($interceptedEntities, $output);
         $output = array_unique($output);
         return $output;
+    }
+
+    /**
+     * Check if a string ends with a substring
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    private function endsWith($haystack, $needle)
+    {
+        // search forward starting from end minus needle length characters
+        return $needle === ""
+        || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
     }
 }

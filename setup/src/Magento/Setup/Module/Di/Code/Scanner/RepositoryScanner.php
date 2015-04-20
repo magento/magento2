@@ -5,16 +5,13 @@
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
 
+use Magento\Framework\Autoload\AutoloaderRegistry;
+
 /**
  * Class RepositoryScanner
  */
 class RepositoryScanner implements ScannerInterface
 {
-    /**
-     * @var bool
-     */
-    private $useAutoload = true;
-
     /**
      * Get array of class names
      *
@@ -24,6 +21,8 @@ class RepositoryScanner implements ScannerInterface
     public function collectEntities(array $files)
     {
         $repositoryClassNames = [];
+        $phpErrorReport = error_reporting();
+        error_reporting(0);
         foreach ($files as $fileName) {
             $dom = new \DOMDocument();
             $dom->loadXML(file_get_contents($fileName));
@@ -37,7 +36,7 @@ class RepositoryScanner implements ScannerInterface
                     && $replacementType !== null
                     && (substr($forType->nodeValue, -19) == 'RepositoryInterface')
                 ) {
-                    if (!class_exists($replacementType->nodeValue, $this->useAutoload)) {
+                    if (!AutoloaderRegistry::getAutoloader()->loadClass($replacementType->nodeValue)) {
                         $persistor = str_replace('\\Repository', 'InterfacePersistor', $replacementType->nodeValue);
                         $factory = str_replace('\\Repository', 'InterfaceFactory', $replacementType->nodeValue);
                         $searchResultFactory
@@ -50,17 +49,7 @@ class RepositoryScanner implements ScannerInterface
                 }
             }
         }
+        error_reporting($phpErrorReport);
         return $repositoryClassNames;
-    }
-
-    /**
-     * Sets autoload flag
-     *
-     * @param boolean $useAutoload
-     * @return void
-     */
-    public function setUseAutoload($useAutoload)
-    {
-        $this->useAutoload = $useAutoload;
     }
 }

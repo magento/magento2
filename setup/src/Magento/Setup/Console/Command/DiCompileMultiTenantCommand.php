@@ -15,7 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
-use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
@@ -152,7 +151,7 @@ class DiCompileMultiTenantCommand extends Command
         $compilationDirs = [
             $rootDir . '/app/code',
             $rootDir . '/lib/internal/Magento',
-            $rootDir . '/dev/tools/Magento/Tools'
+            $rootDir . '/setup/src/Magento/Setup/Module'
         ];
 
         /** @var Writer\Console $logWriter Writer model for success messages */
@@ -161,8 +160,6 @@ class DiCompileMultiTenantCommand extends Command
 
         $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
 
-        AutoloaderRegistry::getAutoloader()->addPsr4('Magento\\', $generationDir . '/Magento/');
-
         // 1 Code generation
         // 1.1 Code scan
         $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
@@ -170,7 +167,6 @@ class DiCompileMultiTenantCommand extends Command
         $directoryScanner = new Scanner\DirectoryScanner();
         $files = $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns);
         $files['additional'] = [$input->getOption(self::INPUT_KEY_EXTRA_CLASSES_FILE)];
-        $entities = [];
         $repositoryScanner = new Scanner\RepositoryScanner();
         $repositories = $repositoryScanner->collectEntities($files['di']);
         $scanner = new Scanner\CompositeScanner();
@@ -205,8 +201,6 @@ class DiCompileMultiTenantCommand extends Command
         );
         /** Initialize object manager for code generation based on configs */
         $generator->setObjectManager($this->objectManager);
-        $generatorAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
-        spl_autoload_register([$generatorAutoloader, 'load']);
         foreach ($repositories as $entityName) {
             switch ($generator->generateClass($entityName)) {
                 case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
@@ -329,10 +323,12 @@ class DiCompileMultiTenantCommand extends Command
             exit(1);
         }
 
-        $output->writeln('<info>On *nix systems, verify the Magento application has permissions to modify files '
+        $output->writeln(
+            '<info>On *nix systems, verify the Magento application has permissions to modify files '
             . 'created by the compiler in the "var" directory. For instance, if you run the Magento application using '
             . 'Apache, the owner of the files in the "var" directory should be the Apache user (example command:'
             . ' "chown -R www-data:www-data <MAGENTO_ROOT>/var" where MAGENTO_ROOT is the Magento root directory).'
-            . '</info>');
+            . '</info>'
+        );
     }
 }
