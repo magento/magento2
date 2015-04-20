@@ -413,6 +413,35 @@
         </resources>
     </route>
 
+    <!-- Managing mine Cart Coupons -->
+    <route url="/V1/carts/mine/coupons" method="GET">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/coupons/:couponCode" method="PUT">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="set"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/coupons" method="DELETE">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="remove"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
     <!-- Managing Cart Shipping address -->
     <route url="/V1/carts/:cartId/shipping-address" method="GET">
         <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="get"/>
