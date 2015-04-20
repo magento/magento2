@@ -17,7 +17,7 @@ class ParamsOverrider
     /**
      * @var ParamOverriderInterface[]
      */
-    private $paramsOverrider;
+    private $paramOverriders;
 
     /**
      * Initialize dependencies
@@ -25,9 +25,9 @@ class ParamsOverrider
      * @param ParamOverriderInterface[] $paramOverriders
      */
     public function __construct(
-        array $paramsOverrider = []
+        array $paramOverriders = []
     ) {
-        $this->paramsOverrider = $paramsOverrider;
+        $this->paramOverriders = $paramOverriders;
     }
 
     /**
@@ -43,8 +43,8 @@ class ParamsOverrider
             $arrayKeys = explode('.', $name);
             if ($paramData[Converter::KEY_FORCE] || !$this->isNestedArrayValueSet($inputData, $arrayKeys)) {
                 $paramValue = $paramData[Converter::KEY_VALUE];
-                if (isset($this->paramsOverrider[$paramValue])) {
-                    $value = $this->paramsOverrider[$paramValue]->getOverridenValue();
+                if (isset($this->paramOverrider[$paramValue])) {
+                    $value = $this->paramOverrider[$paramValue]->getOverridenValue();
                 } else {
                     $value = $paramData[Converter::KEY_VALUE];
                 }

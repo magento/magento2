@@ -33,7 +33,8 @@ class ParamOverriderCartId implements ParamOverriderInterface
         $this->cartManagement = $cartManagement;
     }
 
-    public function getOverridenValue() {
+    public function getOverridenValue()
+    {
         if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
             $customerId = $this->userContext->getUserId();
 

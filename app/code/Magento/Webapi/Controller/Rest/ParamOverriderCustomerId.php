@@ -19,11 +19,13 @@ class ParamOverriderCustomerId implements ParamOverriderInterface
      */
     private $userContext;
 
-    public function __construct(UserContextInterface $userContext) {
+    public function __construct(UserContextInterface $userContext)
+    {
         $this->userContext = $userContext;
     }
 
-    public function getOverridenValue() {
+    public function getOverridenValue()
+    {
         if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
             return $this->userContext->getUserId();
         }

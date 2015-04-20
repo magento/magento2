@@ -32,7 +32,7 @@
     </type>
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
-            <argument name="paramsOverrider" xsi:type="array">
+            <argument name="paramOverriders" xsi:type="array">
                 <item name="%customer_id%" xsi:type="object">Magento\Webapi\Controller\Rest\ParamOverriderCustomerId</item>
             </argument>
         </arguments>

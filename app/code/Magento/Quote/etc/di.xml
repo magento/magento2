@@ -38,7 +38,7 @@
 
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
-            <argument name="paramsOverrider" xsi:type="array">
+            <argument name="paramOverriders" xsi:type="array">
                 <item name="%cart_id%" xsi:type="object">Magento\Quote\Model\Webapi\ParamOverriderCartId</item>
             </argument>
         </arguments>
