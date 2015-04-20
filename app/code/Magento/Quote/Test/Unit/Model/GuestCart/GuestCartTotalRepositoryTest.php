@@ -21,27 +21,7 @@ class GuestCartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $quoteRepositoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $quoteMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $totalsFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $addressMock;
-
-    /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $dataObjectHelperMock;
+    protected $cartTotalRepository;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -53,64 +33,58 @@ class GuestCartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $quoteIdMaskMock;
 
+    /**
+     * @var string
+     */
+    protected $maskedCartId = 'f216207248d65c789b17be8545e0aa73';
+
+    /**
+     * @var int
+     */
+    protected $cartId = 12;
+
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->totalsFactoryMock = $this->getMock(
-            'Magento\Quote\Api\Data\TotalsInterfaceFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
-        $this->addressMock = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
-        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+
+        $this->quoteIdMaskFactoryMock = $this->getMockBuilder('Magento\Quote\Model\QuoteIdMaskFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quoteIdMaskFactoryMock = $this->getMock('Magento\Quote\Model\QuoteIdMaskFactory', [], [], '', false);
-        $this->quoteIdMaskMock = $this->getMock('Magento\Quote\Model\QuoteIdMask', [], [], '', false);
+        $this->quoteIdMaskMock = $this->getMockBuilder('Magento\Quote\Model\QuoteIdMask')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cartTotalRepository = $this->getMockBuilder('Magento\Quote\Api\CartTotalRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
             'Magento\Quote\Model\GuestCart\GuestCartTotalRepository',
             [
-                'totalsFactory' => $this->totalsFactoryMock,
-                'quoteRepository' => $this->quoteRepositoryMock,
-                'dataObjectHelper' => $this->dataObjectHelperMock,
-                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock
+                'cartTotalRepository' => $this->cartTotalRepository,
+                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
             ]
         );
+
+        $this->quoteIdMaskFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->quoteIdMaskMock);
+        $this->quoteIdMaskMock->expects($this->once())
+            ->method('load')
+            ->with($this->maskedCartId, 'masked_id')
+            ->willReturn($this->quoteIdMaskMock);
+        $this->quoteIdMaskMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($this->cartId);
     }
 
     public function testGetTotals()
     {
-        $maskedCartId = 'f216207248d65c789b17be8545e0aa73';
-        $cartId = 12;
+        $retValue = 'retValue';
 
-        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
-        $this->quoteIdMaskMock->expects($this->once())
-            ->method('load')
-            ->with($maskedCartId, 'masked_id')
-            ->willReturn($this->quoteIdMaskMock);
-        $this->quoteIdMaskMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($cartId);
-
-        $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)
-            ->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($this->addressMock);
-        $this->addressMock->expects($this->once())->method('getData')->willReturn(['addressData']);
-        $this->quoteMock->expects($this->once())->method('getData')->willReturn(['quoteData']);
-
-        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $this->quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$item]));
-
-        $totals = $this->getMock('Magento\Quote\Model\Cart\Totals', ['setItems'], [], '', false);
-        $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totals);
-        $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray');
-        $totals->expects($this->once())->method('setItems');
-
-        $this->model->get($maskedCartId);
+        $this->cartTotalRepository->expects($this->once())
+            ->method('get')
+            ->with($this->cartId)
+            ->will($this->returnValue($retValue));
+        $this->assertSame($retValue, $this->model->get($this->maskedCartId));
     }
 }

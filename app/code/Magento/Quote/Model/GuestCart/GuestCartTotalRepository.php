@@ -6,16 +6,15 @@
 
 namespace Magento\Quote\Model\GuestCart;
 
+use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Quote\Api\GuestCartTotalRepositoryInterface;
-use Magento\Quote\Model\Cart\CartTotalRepository;
-use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Cart totals repository class for guest carts.
  */
-class GuestCartTotalRepository extends CartTotalRepository implements GuestCartTotalRepositoryInterface
+class GuestCartTotalRepository implements GuestCartTotalRepositoryInterface
 {
     /**
      * @var QuoteIdMaskFactory
@@ -23,21 +22,22 @@ class GuestCartTotalRepository extends CartTotalRepository implements GuestCartT
     private $quoteIdMaskFactory;
 
     /**
+     * @var CartTotalRepositoryInterface
+     */
+    private $cartTotalRepository;
+
+    /**
      * Constructs a cart totals data object.
      *
-     * @param \Magento\Quote\Api\Data\TotalsInterfaceFactory $totalsFactory Cart totals factory.
-     * @param QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param CartTotalRepositoryInterface $cartTotalRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        \Magento\Quote\Api\Data\TotalsInterfaceFactory $totalsFactory,
-        QuoteRepository $quoteRepository,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        CartTotalRepositoryInterface $cartTotalRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
+        $this->cartTotalRepository = $cartTotalRepository;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        parent::__construct($totalsFactory, $quoteRepository, $dataObjectHelper);
     }
 
     /**
@@ -47,6 +47,6 @@ class GuestCartTotalRepository extends CartTotalRepository implements GuestCartT
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::get($quoteIdMask->getId());
+        return $this->cartTotalRepository->get($quoteIdMask->getId());
     }
 }
