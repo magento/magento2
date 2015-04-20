@@ -23,7 +23,7 @@ class CacheDisableCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '' , false);
+        $this->cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
         $this->command = new CacheDisableCommand($this->cacheManager);
     }
 
