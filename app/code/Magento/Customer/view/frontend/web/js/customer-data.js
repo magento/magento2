@@ -29,7 +29,7 @@ define([
         storage.removeAll();
     }
 
-    $(document).on('ajaxComplete', function (event, xhr, settings) {
+    $(document).on('ajaxSuccess', function (event, xhr, settings) {
         if (settings.type.match(/post/i)) {
             var sections = sectionConfig.getAffectedSections(settings.url);
             if (sections) {
@@ -90,6 +90,7 @@ define([
             this.data[sectionName](sectionData);
         },
         update: function (sections) {
+            storageInvalidation.setInvalidSections([]);
             _.each(sections, function (sectionData, sectionName) {
                 storage.set(sectionName, sectionData);
                 buffer.notify(sectionName, sectionData);
@@ -117,7 +118,6 @@ define([
                 });
                 var invalidSections = storageInvalidation.getInvalidSections();
                 if (invalidSections.length) {
-                    storageInvalidation.setInvalidSections([]);
                     getFromServer(invalidSections).done(function (sections) {
                         buffer.update(sections);
                     });
