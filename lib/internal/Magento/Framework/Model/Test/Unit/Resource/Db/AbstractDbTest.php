@@ -431,13 +431,8 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
     public function testPrepareDataForUpdate()
     {
         $adapterInterfaceMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $contextMock = new \Magento\Framework\Model\Context(
-            $this->getMock('Psr\Log\LoggerInterface'),
-            $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false),
-            $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false),
-            $this->getMock('Magento\Framework\App\State', [], [], '', false),
-            $this->getMock('\Magento\Framework\Model\ActionValidator\RemoveAction', [], [], '', false),
-            $this->getMock('\Magento\Framework\Model\Resource\Db\ObjectRelationProcessor', [], [], '', false)
+        $context = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+                'Magento\Framework\Model\Context'
         );
         $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
         $resourceMock = $this->getMock(
@@ -460,7 +455,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $resourceCollectionMock = $this->getMock('Magento\Framework\Data\Collection\Db', [], [], '', false);
         $abstractModelMock = $this->getMockForAbstractClass(
             'Magento\Framework\Model\AbstractModel',
-            [$contextMock, $registryMock, $resourceMock, $resourceCollectionMock]
+            [$context, $registryMock, $resourceMock, $resourceCollectionMock]
         );
         $data = 'tableName';
         $this->_resourcesMock->expects($this->any())
