@@ -23,7 +23,7 @@ class IndexersApplyFixture extends \Magento\ToolkitFramework\Fixture
         $this->application->resetObjectManager();
 
                 foreach ($indexers["indexer"] as $indexer) {
-                    $this->application->indexerStates[$indexer['id']] = $indexer['set_scheduled'];
+                    $this->application->indexersStates[$indexer['id']] = $indexer['set_scheduled'];
                 }
 
         $this->application->getObjectManager()->get('Magento\Framework\App\CacheInterface')

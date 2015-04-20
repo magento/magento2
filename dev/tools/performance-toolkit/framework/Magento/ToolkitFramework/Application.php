@@ -70,11 +70,11 @@ class Application
     protected $_initArguments;
 
     /**
-     * Indexer states values
+     * Indexers states values
      *
      * @var array
      */
-    public $indexerStates;
+    public $indexersStates;
 
     /**
      * @param string $applicationBaseDir

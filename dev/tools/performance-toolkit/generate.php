@@ -49,7 +49,7 @@ try {
     $application->indexerStates = [];
     foreach ($indexerListIds as $key => $indexerId) {
         $indexer = $indexerRegistry->get($indexerId['indexer_id']);
-        $application->indexerStates[$indexerId['indexer_id']] = $indexer->isScheduled();
+        $application->indexersStates[$indexerId['indexer_id']] = $indexer->isScheduled();
         $indexer->setScheduled(true);
     }
 
@@ -65,7 +65,7 @@ try {
     foreach ($indexerListIds as $indexerId) {
         /** @var $indexer \Magento\Indexer\Model\Indexer */
         $indexer = $indexerRegistry->get($indexerId['indexer_id']);
-        $indexer->setScheduled($application->indexerStates[$indexerId['indexer_id']]);
+        $indexer->setScheduled($application->indexersStates[$indexerId['indexer_id']]);
     }
 
     $application->reindex();
