@@ -64,9 +64,6 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     protected function _construct()
     {
         $this->_init('Magento\Catalog\Model\Category', 'Magento\Catalog\Model\Resource\Category');
-
-        $this->_productWebsiteTable = $this->getTable('catalog_product_website');
-        $this->_productTable = $this->getTable('catalog_category_product');
     }
 
     /**
@@ -224,7 +221,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             if (!empty($regularIds)) {
                 $select = $this->_conn->select();
                 $select->from(
-                    ['main_table' => $this->_productTable],
+                    ['main_table' => $this->getProductTable()],
                     ['category_id', new \Zend_Db_Expr('COUNT(main_table.product_id)')]
                 )->where(
                     $this->_conn->quoteInto('main_table.category_id IN(?)', $regularIds)
@@ -233,7 +230,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
                 );
                 if ($websiteId) {
                     $select->join(
-                        ['w' => $this->_productWebsiteTable],
+                        ['w' => $this->getProductWebsiteTable()],
                         'main_table.product_id = w.product_id',
                         []
                     )->where(
@@ -259,7 +256,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
                     $bind = ['entity_id' => $item->getId(), 'c_path' => $item->getPath() . '/%'];
                     $select = $this->_conn->select();
                     $select->from(
-                        ['main_table' => $this->_productTable],
+                        ['main_table' => $this->getProductTable()],
                         new \Zend_Db_Expr('COUNT(DISTINCT main_table.product_id)')
                     )->joinInner(
                         ['e' => $this->getTable('catalog_category_entity')],
@@ -272,7 +269,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
                     );
                     if ($websiteId) {
                         $select->join(
-                            ['w' => $this->_productWebsiteTable],
+                            ['w' => $this->getProductWebsiteTable()],
                             'main_table.product_id = w.product_id',
                             []
                         )->where(
@@ -415,5 +412,31 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     {
         $this->setOrder($field, self::SORT_ORDER_ASC);
         return $this;
+    }
+
+    /**
+     * Getter for _productWebsiteTable
+     *
+     * @return string
+     */
+    public function getProductWebsiteTable()
+    {
+        if (empty($this->_productWebsiteTable)) {
+            $this->_productWebsiteTable = $this->getTable('catalog_product_website');
+        }
+        return $this->_productWebsiteTable;
+    }
+
+    /**
+     * Getter for _productTable
+     *
+     * @return string
+     */
+    public function getProductTable()
+    {
+        if (empty($this->_productTable)) {
+            $this->_productTable = $this->getTable('catalog_category_product');
+        }
+        return $this->_productTable;
     }
 }

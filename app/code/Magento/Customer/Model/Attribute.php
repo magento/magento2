@@ -38,6 +38,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Resource\Attribute');
+        $this->_setResourceModel('Magento\Customer\Model\Resource\Attribute');
     }
 }
