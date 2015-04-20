@@ -78,7 +78,8 @@ class DiCompileCommand extends Command
             'application' => '#^' . BP . '/app/code/[\\w]+/[\\w]+/Test#',
             'framework' => '#^' . BP . '/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#'
         ];
-        $this->objectManager->configure([
+        $this->objectManager->configure(
+            [
                 'preferences' => [
                     'Magento\Setup\Module\Di\Compiler\Config\WriterInterface' =>
                         'Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem',
@@ -128,15 +129,14 @@ class DiCompileCommand extends Command
                 $compiledPathsList['library'],
                 $compiledPathsList['generated_helpers'],
             ],
-            OperationFactory::INTERCEPTION =>
-                [
+            OperationFactory::INTERCEPTION => [
                     'intercepted_paths' => [
                         $compiledPathsList['application'],
                         $compiledPathsList['library'],
                         $compiledPathsList['generated_helpers'],
                     ],
                     'path_to_store' => $compiledPathsList['generated_helpers'],
-                ],
+            ],
             OperationFactory::AREA_CONFIG_GENERATOR => [
                 $compiledPathsList['application'],
                 $compiledPathsList['library'],
