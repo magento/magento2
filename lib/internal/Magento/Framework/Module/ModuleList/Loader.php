@@ -11,7 +11,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
 use Magento\Framework\Module\Dir\ResolverInterface;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Loader of module list information from the filesystem
@@ -47,20 +47,34 @@ class Loader
     private $dirResolver;
 
     /**
+     * Filesystem driver to allow reading of module.xml files which live outside of app/code
+     *
+     * @var DriverInterface
+     */
+    private $filesystemDriver;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param Dom $converter
      * @param Parser $parser
      * @param ResolverInterface $resolver
+     * @param DriverInterface $filesystemDriver
      */
-    public function __construct(Filesystem $filesystem, Dom $converter, Parser $parser, ResolverInterface $resolver)
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        Dom $converter,
+        Parser $parser,
+        ResolverInterface $resolver,
+        DriverInterface $filesystemDriver
+    ) {
         $this->filesystem = $filesystem;
         $this->converter = $converter;
         $this->parser = $parser;
         $this->parser->initErrorHandler();
         $this->dirResolver = $resolver;
+        $this->filesystemDriver = $filesystemDriver;
     }
 
     /**
@@ -72,10 +86,7 @@ class Loader
     public function load()
     {
         $result = [];
-        $dir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
-        foreach ($this->getModuleConfigPaths($dir) as $file) {
-            $contents = $dir->readFile($file);
-
+        foreach ($this->getModuleConfigs() as $contents) {
             try {
                 $this->parser->loadXML($contents);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -96,20 +107,23 @@ class Loader
     }
 
     /**
-     * Get an array containing the absolute file paths to all known module.xml files
+     * Returns a traversable yielding content of all module.xml files
      *
-     * @param ReadInterface $modulesDir
-     * @return array
+     * @return \Traversable
+     *
+     * @author Josh Di Fabio <joshdifabio@gmail.com>
      */
-    private function getModuleConfigPaths(ReadInterface $modulesDir)
+    private function getModuleConfigs()
     {
-        $moduleConfigPaths = $modulesDir->search('*/*/etc/module.xml');
-
-        foreach ($this->dirResolver->getModulePaths() as $modulePath) {
-            $moduleConfigPaths[] = $modulesDir->getAbsolutePath("$modulePath/etc/modules.xml");
+        $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
+        foreach ($modulesDir->search('*/*/etc/module.xml') as $filePath) {
+            yield $modulesDir->readFile($filePath);
         }
 
-        return array_unique($moduleConfigPaths);
+        foreach ($this->dirResolver->getModulePaths() as $modulePath) {
+            $filePath =  str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
+            yield $this->filesystemDriver->fileGetContents($filePath);
+        }
     }
 
     /**

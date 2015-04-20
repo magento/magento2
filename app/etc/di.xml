@@ -1076,6 +1076,11 @@
             <argument name="overriddenBaseFiles" xsi:type="object">lessFileOverriddenBase</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Module\ModuleList\Loader">
+        <arguments>
+            <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Module\Setup\MigrationData">
         <arguments>
             <argument name="data" xsi:type="array">
