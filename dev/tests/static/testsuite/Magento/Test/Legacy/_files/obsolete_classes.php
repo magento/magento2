@@ -3159,4 +3159,60 @@ return [
     ['Magento\Tools\Di\App\Compiler'],
     ['Magento\Indexer\App\Shell'],
     ['Magento\Indexer\Model\Shell'],
+    ['Magento\Tools\I18n\Context', 'Magento\Setup\Module\I18n\Context'],
+    ['Magento\Tools\I18n\Dictionary\Generator', 'Magento\Setup\Module\I18n\Dictionary\Generator'],
+    [
+        'Magento\Tools\I18n\Dictionary\Loader\File\AbstractFile',
+        'Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile'
+    ],
+    ['Magento\Tools\I18n\Dictionary\Loader\File\Csv', 'Magento\Setup\Module\I18n\Dictionary\Loader\File\Csv'],
+    ['Magento\Tools\I18n\Dictionary\Loader\FileInterface', 'Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface'],
+    ['Magento\Tools\I18n\Dictionary\Options\Resolver', 'Magento\Setup\Module\I18n\Dictionary\Options\Resolver'],
+    [
+        'Magento\Tools\I18n\Dictionary\Options\ResolverFactory',
+        'Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory'
+    ],
+    [
+        'Magento\Tools\I18n\Dictionary\Options\ResolverInterface',
+        'Magento\Setup\Module\I18n\Dictionary\Options\ResolverInterface'
+    ],
+    ['Magento\Tools\I18n\Dictionary\Phrase', 'Magento\Setup\Module\I18n\Dictionary\Phrase'],
+    ['Magento\Tools\I18n\Dictionary\Writer\Csv\Stdo', 'Magento\Setup\Module\I18n\Dictionary\Writer\Csv\Stdo'],
+    ['Magento\Tools\I18n\Dictionary\Writer\Csv', 'Magento\Setup\Module\I18n\Dictionary\Writer\Csv'],
+    ['Magento\Tools\I18n\Dictionary\WriterInterface', 'Magento\Setup\Module\I18n\Dictionary\WriterInterface'],
+    ['Magento\Tools\I18n\Dictionary', 'Magento\Setup\Module\I18n\Dictionary'],
+    ['Magento\Tools\I18n\Factory', 'Magento\Setup\Module\I18n\Factory'],
+    ['Magento\Tools\I18n\FilesCollector', 'Magento\Setup\Module\I18n\FilesCollector'],
+    ['Magento\Tools\I18n\Locale', 'Magento\Setup\Module\I18n\Locale'],
+    ['Magento\Tools\I18n\Pack\Generator', 'Magento\Setup\Module\I18n\Pack\Generator'],
+    ['Magento\Tools\I18n\Pack\Writer\File\AbstractFile', 'Magento\Setup\Module\I18n\Pack\Writer\File\AbstractFile'],
+    ['Magento\Tools\I18n\Pack\Writer\File\Csv', 'Magento\Setup\Module\I18n\Pack\Writer\File\Csv'],
+    ['Magento\Tools\I18n\Pack\WriterInterface', 'Magento\Setup\Module\I18n\Pack\WriterInterface'],
+    ['Magento\Tools\I18n\Parser\AbstractParser', 'Magento\Setup\Module\I18n\Parser\AbstractParser'],
+    ['Magento\Tools\I18n\Parser\Adapter\AbstractAdapter', 'Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter'],
+    ['Magento\Tools\I18n\Parser\Adapter\Js', 'Magento\Setup\Module\I18n\Parser\Adapter\Js'],
+    [
+        'Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector',
+        'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector'
+    ],
+    [
+        'Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Token',
+        'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token'
+    ],
+    [
+        'Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate',
+        'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate'
+    ],
+    [
+        'Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector',
+        'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector'
+    ],
+    ['Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer', 'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer'],
+    ['Magento\Tools\I18n\Parser\Adapter\Php', 'Magento\Setup\Module\I18n\Parser\Adapter\Php'],
+    ['Magento\Tools\I18n\Parser\Adapter\Xml', 'Magento\Setup\Module\I18n\Parser\Adapter\Xml'],
+    ['Magento\Tools\I18n\Parser\AdapterInterface', 'Magento\Setup\Module\I18n\Parser\AdapterInterface'],
+    ['Magento\Tools\I18n\Parser\Contextual', 'Magento\Setup\Module\I18n\Parser\Contextual'],
+    ['Magento\Tools\I18n\Parser\Parser', 'Magento\Setup\Module\I18n\Parser\Parser'],
+    ['Magento\Tools\I18n\ParserInterface', 'Magento\Setup\Module\I18n\ParserInterface'],
+    ['Magento\Tools\I18n\ServiceLocator', 'Magento\Setup\Module\I18n\ServiceLocator'],
 ];
