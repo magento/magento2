@@ -39,7 +39,7 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->objectManagerProvider = $this->getMock(
-            'Magento\Setup\Model\ObjectManagerProviderr',
+            'Magento\Setup\Model\ObjectManagerProvider',
             [],
             [],
             '',
