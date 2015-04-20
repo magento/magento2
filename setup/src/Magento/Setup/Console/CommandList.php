@@ -46,6 +46,7 @@ class CommandList
             'Magento\Setup\Console\Command\DeployStaticContentCommand',
             'Magento\Setup\Console\Command\DiCompileCommand',
             'Magento\Setup\Console\Command\DiCompileMultiTenantCommand',
+            'Magento\Setup\Console\Command\I18nPackCommand',
             'Magento\Setup\Console\Command\InfoCurrencyListCommand',
             'Magento\Setup\Console\Command\InfoLanguageListCommand',
             'Magento\Setup\Console\Command\InfoTimezoneListCommand',
