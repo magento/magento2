@@ -46,6 +46,7 @@ class CommandList
             'Magento\Setup\Console\Command\DeployStaticContentCommand',
             'Magento\Setup\Console\Command\DiCompileCommand',
             'Magento\Setup\Console\Command\DiCompileMultiTenantCommand',
+            'Magento\Setup\Console\Command\I18nCollectPhrasesCommand',
             'Magento\Setup\Console\Command\I18nPackCommand',
             'Magento\Setup\Console\Command\InfoCurrencyListCommand',
             'Magento\Setup\Console\Command\InfoLanguageListCommand',
@@ -59,7 +60,6 @@ class CommandList
             'Magento\Setup\Console\Command\MaintenanceDisableCommand',
             'Magento\Setup\Console\Command\MaintenanceEnableCommand',
             'Magento\Setup\Console\Command\MaintenanceStatusCommand',
-            'Magento\Setup\Console\Command\TranslationCollectPhrasesCommand',
             'Magento\Setup\Console\Command\UpgradeCommand',
             'Magento\Setup\Console\Command\UninstallCommand',
         ];

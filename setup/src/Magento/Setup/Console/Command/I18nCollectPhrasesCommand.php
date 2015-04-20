@@ -12,24 +12,27 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TranslationCollectPhrasesCommand extends Command
+/**
+ * Command for i18n dictionary generation
+ */
+class I18nCollectPhrasesCommand extends Command
 {
+    /**#@+
+     * Keys and shortcuts for input arguments and options
+     */
     const INPUT_KEY_DIRECTORY = 'directory';
-
     const INPUT_KEY_OUTPUT = 'output';
-
     const SHORTCUT_KEY_OUTPUT = 'o';
-
     const INPUT_KEY_MAGENTO = 'magento';
-
     const SHORTCUT_KEY_MAGENTO = 'm';
+    /**#@- */
 
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('translation:collect-phrases')
+        $this->setName('i18n:collect-phrases')
             ->setDescription('Discovers phrases in the codebase');
         $this->setDefinition([
             new InputArgument(self::INPUT_KEY_DIRECTORY, InputArgument::REQUIRED, 'Path to a directory to parse'),
@@ -48,6 +51,9 @@ class TranslationCollectPhrasesCommand extends Command
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
