@@ -166,7 +166,6 @@ class CouponManagementTest extends WebapiAbstract
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $quote->getId();
         $couponCode = $quote->getCouponCode();
         $serviceInfo = [
             'rest' => [
@@ -197,7 +196,6 @@ class CouponManagementTest extends WebapiAbstract
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $quote->getId();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . 'mine/coupons',
@@ -226,11 +224,6 @@ class CouponManagementTest extends WebapiAbstract
             'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
-
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
-        $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $quote->getId();
 
         $couponCode = 'invalid_coupon_code';
 
