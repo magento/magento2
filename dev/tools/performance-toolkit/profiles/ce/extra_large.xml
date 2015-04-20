@@ -33,5 +33,39 @@
                 <value>1</value>
             </config>
         </configs>
+        <indexers> <!-- Indexer mode value (true - Update by Schedule, false - Update on Save) -->
+            <indexer>
+                <id>catalog_category_product</id>
+                <set_scheduled>true</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalog_product_category</id>
+                <set_scheduled>true</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalog_product_price</id>
+                <set_scheduled>true</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalog_product_attribute</id>
+                <set_scheduled>true</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>cataloginventory_stock</id>
+                <set_scheduled>true</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalogrule_rule</id>
+                <set_scheduled>true</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalogrule_product</id>
+                <set_scheduled>true</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalogsearch_fulltext</id>
+                <set_scheduled>true</set_scheduled>
+            </indexer>
+        </indexers>
     </profile>
 </config>
