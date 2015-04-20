@@ -8,6 +8,7 @@ namespace Magento\Quote\Model\Webapi;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Webapi\Rest\Request\ParamOverriderInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartManagementInterface;
 
 /**
@@ -35,14 +36,18 @@ class ParamOverriderCartId implements ParamOverriderInterface
 
     public function getOverridenValue()
     {
-        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
-            $customerId = $this->userContext->getUserId();
+        try {
+            if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
+                $customerId = $this->userContext->getUserId();
 
-            /** @var \Magento\Quote\Api\Data\CartInterface */
-            $cart = $this->cartManagement->getCartForCustomer($customerId);
-            if ($cart) {
-                return $cart->getId();
+                /** @var \Magento\Quote\Api\Data\CartInterface */
+                $cart = $this->cartManagement->getCartForCustomer($customerId);
+                if ($cart) {
+                    return $cart->getId();
+                }
             }
+        } catch (NoSuchEntityException $e) {
+            /* do nothing and just return null */
         }
         return null;
     }
