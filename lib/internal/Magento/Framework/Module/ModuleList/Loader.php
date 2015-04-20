@@ -10,6 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
+use Magento\Framework\Module\Dir\ResolverInterface;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * Loader of module list information from the filesystem
@@ -38,18 +40,27 @@ class Loader
     private $parser;
 
     /**
+     * Module directory resolver
+     *
+     * @var ResolverInterface
+     */
+    private $dirResolver;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param Dom $converter
      * @param Parser $parser
+     * @param ResolverInterface $resolver
      */
-    public function __construct(Filesystem $filesystem, Dom $converter, Parser $parser)
+    public function __construct(Filesystem $filesystem, Dom $converter, Parser $parser, ResolverInterface $resolver)
     {
         $this->filesystem = $filesystem;
         $this->converter = $converter;
         $this->parser = $parser;
         $this->parser->initErrorHandler();
+        $this->dirResolver = $resolver;
     }
 
     /**
@@ -62,7 +73,7 @@ class Loader
     {
         $result = [];
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
-        foreach ($dir->search('*/*/etc/module.xml') as $file) {
+        foreach ($this->getModuleConfigPaths($dir) as $file) {
             $contents = $dir->readFile($file);
 
             try {
@@ -82,6 +93,23 @@ class Loader
             $result[$name] = $data[$name];
         }
         return $this->sortBySequence($result);
+    }
+
+    /**
+     * Get an array containing the absolute file paths to all known module.xml files
+     *
+     * @param ReadInterface $modulesDir
+     * @return array
+     */
+    private function getModuleConfigPaths(ReadInterface $modulesDir)
+    {
+        $moduleConfigPaths = $modulesDir->search('*/*/etc/module.xml');
+
+        foreach ($this->dirResolver->getModulePaths() as $modulePath) {
+            $moduleConfigPaths[] = $modulesDir->getAbsolutePath("$modulePath/etc/modules.xml");
+        }
+
+        return array_unique($moduleConfigPaths);
     }
 
     /**
