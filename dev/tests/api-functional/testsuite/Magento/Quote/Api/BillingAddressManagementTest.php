@@ -233,7 +233,7 @@ class BillingAddressManagementTest extends WebapiAbstract
         $quote->load('test_order_1', 'reserved_order_id');
         $address = $quote->getBillingAddress();
         $address->getRegionCode();
-        $savedData  = $address->getData();
+        $savedData = $address->getData();
         $this->assertEquals($addressId, $savedData['address_id']);
         //custom checks for street, region and address_type
         foreach ($addressData['street'] as $streetLine) {
