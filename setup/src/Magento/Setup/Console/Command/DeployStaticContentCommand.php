@@ -22,6 +22,9 @@ class DeployStaticContentCommand extends Command
      */
     const DRY_RUN_OPTION = 'dry-run';
 
+    /**
+     * Key for languages parameter
+     */
     const LANGUAGE_OPTION = 'languages';
 
     /**

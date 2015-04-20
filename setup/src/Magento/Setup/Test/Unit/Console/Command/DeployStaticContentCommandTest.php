@@ -31,6 +31,11 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
+     * @var \Magento\Framework\App\Utility\Files|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filesUtil;
+
+    /**
      * @var DeployStaticContentCommand
      */
     private $command;
@@ -41,20 +46,31 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->deployer = $this->getMock('Magento\Setup\Model\Deployer', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->filesUtil = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
         $this->command = new DeployStaticContentCommand($this->objectManagerProvider, $this->deploymentConfig);
     }
 
     public function testExecute()
     {
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->willReturn($this->deployer);
-
+        $omFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->objectManagerProvider->expects($this->any())
             ->method('get')
             ->will($this->returnValue($this->objectManager));
 
-        $this->objectManagerProvider->expects($this->once())->method('getObjectManagerFactory')->with([]);
+        $this->objectManagerProvider->expects($this->once())
+            ->method('getObjectManagerFactory')
+            ->with([])
+            ->willReturn($omFactory);
+
+        $this->deployer->expects($this->once())->method('deploy');
+
+        $this->objectManager->expects($this->at(0))
+            ->method('create')
+            ->willReturn($this->filesUtil);
+
+        $this->objectManager->expects($this->at(1))
+            ->method('create')
+            ->willReturn($this->deployer);
 
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
