@@ -61,7 +61,7 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertEquals('Application is not installed yet.' . PHP_EOL , $tester->getDisplay());
+        $this->assertEquals('Application is not installed yet.' . PHP_EOL, $tester->getDisplay());
     }
 
     public function testExecute()
