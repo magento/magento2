@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Setup\Console\Command;
+
+use Symfony\Component\Console\Tester\CommandTester;
+
+class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var I18nCollectPhrasesCommand
+     */
+    private $command;
+
+    /**
+     * @var CommandTester
+     */
+    private $tester;
+
+    public function setUp()
+    {
+        $this->command = new I18nPackCommand();
+        $this->tester = new CommandTester($this->command);
+    }
+
+    public function testExecute()
+    {
+        $this->tester->execute(
+            [
+                'source' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/i18n.csv',
+                'pack' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/pack',
+                'locale' => 'de_DE',
+                '--allow-duplicates' => true,
+            ]
+        );
+
+        $this->assertEquals('Successfully saved de_DE language package.' . PHP_EOL, $this->tester->getDisplay());
+        $basePath = BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/pack/app/code';
+        $this->assertFileExists($basePath . '/Magento/A/i18n/de_DE.csv');
+        $this->assertFileExists($basePath . '/Magento/B/i18n/de_DE.csv');
+        $this->assertFileExists($basePath . '/Magento/C/i18n/de_DE.csv');
+        $this->assertFileExists($basePath . '/Magento/D/i18n/de_DE.csv');
+    }
+
+    public function testExecuteNonExistingPath()
+    {
+        $nonExistPath = BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/non_exist.csv';
+        $this->tester->execute(
+            [
+                'source' => $nonExistPath,
+                'pack' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/pack',
+                'locale' => 'de_DE',
+                '--allow-duplicates' => true,
+            ]
+        );
+
+        $this->assertEquals("Cannot open dictionary file: \"$nonExistPath\"."  . PHP_EOL, $this->tester->getDisplay());
+    }
+}
