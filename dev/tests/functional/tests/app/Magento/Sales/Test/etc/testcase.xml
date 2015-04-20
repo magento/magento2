@@ -35,11 +35,7 @@
     </scenario>
     <scenario name="MoveRecentlyViewedProductsOnOrderPageTest" firstStep="createProducts">
         <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
-        <step name="createCustomer" module="Magento_Customer" next="loginCustomerOnFrontend">
-            <item name="customer">
-                <item name="dataSet" value="default" />
-            </item>
-        </step>
+        <step name="createCustomer" module="Magento_Customer" next="loginCustomerOnFrontend" />
         <step name="loginCustomerOnFrontend" module="Magento_Customer" next="openProductsOnFrontend" />
         <step name="openProductsOnFrontend" module="Magento_Catalog" next="openCustomerOnBackend" />
         <step name="openCustomerOnBackend" module="Magento_Customer" next="createOrderFromCustomerAccount" />
@@ -50,26 +46,14 @@
     </scenario>
     <scenario name="PrintOrderFrontendGuestTest" firstStep="createProducts">
         <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
-        <step name="createCustomer" module="Magento_Customer" next="openSalesOrders">
-            <item name="customer">
-                <item name="dataSet" value="johndoe_with_addresses" />
-            </item>
-        </step>
+        <step name="createCustomer" module="Magento_Customer" next="openSalesOrders" />
         <step name="openSalesOrders" module="Magento_Sales" next="createNewOrder" />
         <step name="createNewOrder" module="Magento_Sales" next="selectCustomerOrder" />
         <step name="selectCustomerOrder" module="Magento_Sales" next="selectStore" />
         <step name="selectStore" module="Magento_Sales" next="addProducts" />
         <step name="addProducts" module="Magento_Sales" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder">
-            <item name="billingAddress">
-                <item name="dataSet" value="customer_US" />
-            </item>
-        </step>
-        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder">
-            <item name="payment">
-                <item name="method" value="checkmo" />
-            </item>
-        </step>
+        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
         <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" next="openSalesOrderOnFrontendForGuest" />
         <step name="openSalesOrderOnFrontendForGuest" module="Magento_Sales" next="printOrderOnFrontend" />
