@@ -20,6 +20,9 @@ class IndexersStatesApplyFixture extends \Magento\ToolkitFramework\Fixture
     public function execute()
     {
         $indexers = \Magento\ToolkitFramework\Config::getInstance()->getValue('indexers', []);
+        if (!isset($indexers["indexer"]) || empty($indexers["indexer"])) {
+            return;
+        }
         $this->application->resetObjectManager();
         foreach ($indexers["indexer"] as $indexer) {
             $this->application->indexersStates[$indexer['id']] = ($indexer['set_scheduled'] == "true");

@@ -33,7 +33,7 @@
                 <value>1</value>
             </config>
         </configs>
-        <indexers> <!-- Indexer mode value (false - Update by Schedule, false - Update on Save) -->
+        <indexers> <!-- Indexer mode value (true - Update by Schedule, false - Update on Save) -->
             <indexer>
                 <id>catalog_category_product</id>
                 <set_scheduled>false</set_scheduled>
