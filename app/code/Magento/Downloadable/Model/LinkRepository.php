@@ -253,7 +253,15 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         } elseif ($link->getLinkType() === 'url') {
             $linkData['link_url'] = $link->getLinkUrl();
         } else {
-            $linkData['link_file'] = $link->getLinkFile();
+            //existing link file
+            $linkData['file'] = $this->jsonEncoder->encode(
+                [
+                    [
+                        'file' => $link->getLinkFile(),
+                        'status' => 'old',
+                    ]
+                ]
+            );
         }
 
         if ($link->getSampleType() == 'file' && $link->getSampleFile() === null) {

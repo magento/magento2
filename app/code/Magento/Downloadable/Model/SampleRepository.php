@@ -14,6 +14,11 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Json\EncoderInterface;
 
+/**
+ * Class SampleRepository
+ * @package Magento\Downloadable\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInterface
 {
     /**
@@ -133,7 +138,15 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         } elseif ($sample->getSampleType() === 'url') {
             $sampleData['sample_url'] = $sample->getSampleUrl();
         } else {
-            $sampleData['sample_file'] = $sample->getSampleFile();
+            //existing file
+            $sampleData['file'] = $this->jsonEncoder->encode(
+                [
+                    [
+                        'file' => $sample->getSampleFile(),
+                        'status' => 'old',
+                    ],
+                ]
+            );
         }
 
         $downloadableData = ['sample' => [$sampleData]];

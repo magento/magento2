@@ -184,6 +184,13 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
                 )
             );
         }
+        if (isset($linkData['link_file'])) {
+            $linkMock->expects($this->any())->method('getLinkFile')->will(
+                $this->returnValue(
+                    $linkData['link_file']
+                )
+            );
+        }
         return $linkMock;
     }
 
@@ -313,6 +320,84 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
                         'number_of_downloads' => $linkData['number_of_downloads'],
                         'is_shareable' => $linkData['is_shareable'],
                         'link_url' => $linkData['link_url'],
+                    ],
+                ],
+            ]
+        );
+        $this->productTypeMock->expects($this->once())->method('save')
+            ->with($this->productMock);
+
+        $this->assertEquals($linkId, $this->service->save($productSku, $linkMock));
+    }
+
+    public function testUpdateWithExistingFile()
+    {
+        $websiteId = 1;
+        $linkId = 1;
+        $productSku = 'simple';
+        $productId = 1;
+        $linkFile = '/l/i/link.jpg';
+        $encodedFiles = "something";
+        $linkData = [
+            'id' => $linkId,
+            'title' => 'Updated Title',
+            'sort_order' => 1,
+            'price' => 10.1,
+            'is_shareable' => true,
+            'number_of_downloads' => 100,
+            'link_type' => 'file',
+            'link_file' => $linkFile,
+        ];
+        $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
+            ->will($this->returnValue($this->productMock));
+        $this->productMock->expects($this->any())->method('getId')->will($this->returnValue($productId));
+        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock->expects($this->any())->method('getWebsiteId')->will($this->returnValue($websiteId));
+        $this->productMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+        $existingLinkMock = $this->getMock(
+            '\Magento\Downloadable\Model\Link',
+            [
+                '__wakeup',
+                'getId',
+                'load',
+                'getProductId'
+            ],
+            [],
+            '',
+            false
+        );
+        $this->linkFactoryMock->expects($this->once())->method('create')->will($this->returnValue($existingLinkMock));
+        $linkMock = $this->getLinkMock($linkData);
+        $this->contentValidatorMock->expects($this->any())->method('isValid')->with($linkMock)
+            ->will($this->returnValue(true));
+
+        $existingLinkMock->expects($this->any())->method('getId')->will($this->returnValue($linkId));
+        $existingLinkMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
+        $existingLinkMock->expects($this->once())->method('load')->with($linkId)->will($this->returnSelf());
+
+        $this->jsonEncoderMock->expects($this->once())
+            ->method('encode')
+            ->with(
+                [
+                    [
+                        'file' => $linkFile,
+                        'status' => 'old'
+                    ]
+                ]
+            )->willReturn($encodedFiles);
+        $this->productMock->expects($this->once())->method('setDownloadableData')->with(
+            [
+                'link' => [
+                    [
+                        'link_id' => $linkId,
+                        'is_delete' => 0,
+                        'type' => $linkData['link_type'],
+                        'sort_order' => $linkData['sort_order'],
+                        'title' => $linkData['title'],
+                        'price' => $linkData['price'],
+                        'number_of_downloads' => $linkData['number_of_downloads'],
+                        'is_shareable' => $linkData['is_shareable'],
+                        'file' => $encodedFiles,
                     ],
                 ],
             ]

@@ -68,7 +68,6 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function saveDataProvider()
     {
@@ -135,52 +134,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                     'number_of_downloads' => 15,
                     'price' => 15.00,
                 ]
-            ],
-            [
-                'product' => $this->createProductMock(100500, 1, 10, [10]),
-                'data' => [
-                    'link' => [
-                        [
-                            'link_id' => 0,
-                            'product_id' => 1,
-                            'sort_order' => '0',
-                            'title' => 'Downloadable Product Link',
-                            'sample' => [
-                                'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
-                                'url' => null,
-                                'sample_file' => '/n/d/jellyfish_1_3.jpg',
-                            ],
-                            'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
-                            'is_shareable' => \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG,
-                            'link_url' => null,
-                            'is_delete' => 0,
-                            'number_of_downloads' => 15,
-                            'price' => 15.00,
-                        ],
-                    ],
-                    'sample' => [
-                        [
-                            'is_delete' => 0,
-                            'sample_id' => 0,
-                            'title' => 'Downloadable Product Sample Title',
-                            'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
-                            'sample_file' => '/f/u/jellyfish_1_4.jpg',
-                            'sample_url' => null,
-                            'sort_order' => '0',
-                        ],
-                    ],
-                ],
-                'modelData' => [
-                    'product_id' => 1,
-                    'sort_order' => '0',
-                    'title' => 'Downloadable Product Link',
-                    'type' => \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE,
-                    'is_shareable' => \Magento\Downloadable\Model\Link::LINK_SHAREABLE_CONFIG,
-                    'link_url' => null,
-                    'number_of_downloads' => 15,
-                    'price' => 15.00,
-                ]
-            ],
+            ]
         ];
     }
 
