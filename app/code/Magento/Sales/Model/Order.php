@@ -952,7 +952,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
                 'state'     => $state,
                 'status'    => $status,
                 'comment'   => $comment,
-                'isCustomerNotified'    => $isCustomerNotified
+                'is_customer_notified'    => $isCustomerNotified
             ]
         );
 
