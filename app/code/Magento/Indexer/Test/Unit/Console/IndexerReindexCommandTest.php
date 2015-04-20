@@ -98,7 +98,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
         $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $exception = new \Exception();
         $indexer1->expects($this->once())->method('load')->will($this->throwException($exception));
-        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
+        $indexer1->expects($this->never())->method('getTitle');
         $this->collectionFactory->expects($this->never())->method('create');
         $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexer1);
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);

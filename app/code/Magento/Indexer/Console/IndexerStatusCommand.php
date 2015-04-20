@@ -29,7 +29,7 @@ class IndexerStatusCommand extends AbstractIndexerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $indexers = $this->getIndexers($input, output);
+        $indexers = $this->getIndexers($input, $output);
         foreach ($indexers as $indexer) {
             $status = 'unknown';
             switch ($indexer->getStatus()) {

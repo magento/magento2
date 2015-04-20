@@ -30,7 +30,7 @@ class IndexerInfoCommand extends AbstractIndexerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $indexers = $this->parseIndexerString(AbstractIndexerCommand::INPUT_KEY_ALL);
+        $indexers = $this->parseIndexerString(AbstractIndexerCommand::INPUT_KEY_ALL, $output);
         foreach ($indexers as $indexer) {
             $output->writeln(sprintf('%-40s %s', $indexer->getId(), $indexer->getTitle()));
         }
