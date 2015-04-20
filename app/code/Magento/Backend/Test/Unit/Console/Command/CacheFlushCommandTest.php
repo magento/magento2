@@ -59,5 +59,5 @@ class CacheFlushCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute($param);
         $expect = 'Flushed cache types:' . PHP_EOL . 'A' . PHP_EOL . 'B' . PHP_EOL . 'C' . PHP_EOL;
         $this->assertEquals($expect, $commandTester->getDisplay());
-    }    
+    }
 }
