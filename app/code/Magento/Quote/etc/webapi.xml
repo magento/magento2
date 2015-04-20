@@ -257,13 +257,13 @@
     </route>
 
     <!-- Managing Cart Payment -->
-    <route url="/V1/carts/:cartId/selected-payment-methods" method="GET">
+    <route url="/V1/carts/:cartId/selected-payment-method" method="GET">
         <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="get"/>
         <resources>
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
-    <route url="/V1/carts/:cartId/selected-payment-methods" method="PUT">
+    <route url="/V1/carts/:cartId/selected-payment-method" method="PUT">
         <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="set"/>
         <resources>
             <resource ref="Magento_Cart::manage" />
@@ -277,13 +277,13 @@
     </route>
 
     <!-- Managing Guest Cart Payment -->
-    <route url="/V1/guest-carts/:cartId/selected-payment-methods" method="GET">
+    <route url="/V1/guest-carts/:cartId/selected-payment-method" method="GET">
         <service class="Magento\Quote\Api\GuestPaymentMethodManagementInterface" method="get"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/guest-carts/:cartId/selected-payment-methods" method="PUT">
+    <route url="/V1/guest-carts/:cartId/selected-payment-method" method="PUT">
         <service class="Magento\Quote\Api\GuestPaymentMethodManagementInterface" method="set"/>
         <resources>
             <resource ref="anonymous" />
@@ -297,7 +297,7 @@
     </route>
 
     <!-- Managing my Cart Payment -->
-    <route url="/V1/carts/mine/selected-payment-methods" method="GET">
+    <route url="/V1/carts/mine/selected-payment-method" method="GET">
         <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="get"/>
         <resources>
             <resource ref="self" />
@@ -306,7 +306,7 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
-    <route url="/V1/carts/mine/selected-payment-methods" method="PUT">
+    <route url="/V1/carts/mine/selected-payment-method" method="PUT">
         <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="set"/>
         <resources>
             <resource ref="self" />

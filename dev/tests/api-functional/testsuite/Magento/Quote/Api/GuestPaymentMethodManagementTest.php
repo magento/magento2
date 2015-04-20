@@ -66,7 +66,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -103,7 +103,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -139,7 +139,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -178,7 +178,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -216,7 +216,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -286,7 +286,7 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -299,23 +299,20 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
         $requestData = ["cartId" => $cartId];
         $requestResponse = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertArrayHasKey('method', $requestResponse);
-        $this->assertArrayHasKey('po_number', $requestResponse);
-        $this->assertArrayHasKey('cc_owner', $requestResponse);
-        $this->assertArrayHasKey('cc_type', $requestResponse);
-        $this->assertArrayHasKey('cc_exp_year', $requestResponse);
-        $this->assertArrayHasKey('cc_exp_month', $requestResponse);
-        $this->assertArrayHasKey('additional_data', $requestResponse);
-
-        $this->assertNotNull($requestResponse['method']);
-        $this->assertNotNull($requestResponse['po_number']);
-        $this->assertNotNull($requestResponse['cc_owner']);
-        $this->assertNotNull($requestResponse['cc_type']);
-        $this->assertNotNull($requestResponse['cc_exp_year']);
-        $this->assertNotNull($requestResponse['cc_exp_month']);
-        $this->assertNotNull($requestResponse['additional_data']);
+        foreach ($this->getPaymentMethodFieldsForAssert() as $field) {
+            $this->assertArrayHasKey($field, $requestResponse);
+            $this->assertNotNull($requestResponse[$field]);
+        }
 
         $this->assertEquals('checkmo', $requestResponse['method']);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getPaymentMethodFieldsForAssert()
+    {
+        return ['method', 'po_number', 'cc_owner', 'cc_type', 'cc_exp_year', 'cc_exp_month', 'additional_data'];
     }
 
     /**
