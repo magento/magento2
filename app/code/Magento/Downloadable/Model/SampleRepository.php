@@ -105,6 +105,12 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         }
     }
 
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param SampleInterface $sample
+     * @param bool $isGlobalScopeContent
+     * @return int
+     */
     protected function saveSample(
         \Magento\Catalog\Api\Data\ProductInterface $product,
         SampleInterface $sample,
@@ -142,10 +148,12 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param SampleInterface $sample
-     * @param $isGlobalScopeContent
-     * @return mixed
+     * @param bool $isGlobalScopeContent
+     * @return int
      * @throws InputException
      * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function updateSample(
         \Magento\Catalog\Api\Data\ProductInterface $product,

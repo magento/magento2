@@ -266,9 +266,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveWithOnlySamples()
     {
         $productSku = "downloadable_product";
-        $existingLinkId = '2';
         $existingSampleId = '5';
-        $toBeDeletedLinkId = '3';
         $toBeDeletedSampleId = '4';
 
         $this->productMock->expects($this->once())->method('getTypeId')

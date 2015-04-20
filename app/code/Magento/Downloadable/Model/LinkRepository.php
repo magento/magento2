@@ -226,6 +226,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param LinkInterface $link
      * @param bool $isGlobalScopeContent
+     * @return int
      */
     protected function saveLink(
         \Magento\Catalog\Api\Data\ProductInterface $product,

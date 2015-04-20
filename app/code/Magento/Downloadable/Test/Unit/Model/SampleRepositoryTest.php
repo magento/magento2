@@ -201,7 +201,8 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->sampleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($existingSampleMock));
+        $this->sampleFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($existingSampleMock));
         $sampleMock = $this->getSampleMock($sampleData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
             ->will($this->returnValue(true));
@@ -254,7 +255,8 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $existingSampleMock->expects($this->any())->method('getId')->will($this->returnValue($sampleId));
         $existingSampleMock->expects($this->once())->method('load')->with($sampleId)->will($this->returnSelf());
         $existingSampleMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
-        $this->sampleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($existingSampleMock));
+        $this->sampleFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($existingSampleMock));
         $sampleMock = $this->getSampleMock($sampleData);
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
             ->will($this->returnValue(true));

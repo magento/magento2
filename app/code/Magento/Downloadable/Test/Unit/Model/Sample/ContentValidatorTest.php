@@ -51,7 +51,7 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->sampleFileMock = $this->getMock('\Magento\Downloadable\Api\Data\File\ContentInterface');
-        $this->validator = new \Magento\Downloadable\Model\Sample\ContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
+        $this->validator = new ContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
     }
 
     public function testIsValid()
