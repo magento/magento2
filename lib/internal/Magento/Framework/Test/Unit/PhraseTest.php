@@ -124,4 +124,22 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([], $phrase1->getArguments());
         $this->assertEquals($arguments, $phrase2->getArguments());
     }
+
+    /**
+     * Test default rendering
+     *
+     * @return void
+     */
+    public function testDefaultRendering()
+    {
+        $text = 'parameter1 is replaced by %1 parameter2 is replaced by %2';
+        $arguments = ['arg1', 'arg2'];
+        $result = 'parameter1 is replaced by arg1 parameter2 is replaced by arg2';
+        $phrase = new Phrase($text, $arguments);
+
+        $this->assertEquals($text, $phrase->getText());
+        $this->assertEquals($arguments, $phrase->getArguments());
+        $this->assertTrue($phrase->getRenderer() instanceof \Magento\Framework\Phrase\Renderer\Placeholder);
+        $this->assertEquals($result, $phrase->render());
+    }
 }
