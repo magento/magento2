@@ -18,13 +18,13 @@ class AssertSalesPrintOrderGrandTotal extends AbstractConstraint
      * Assert that Grand Total price was printed correctly on sales guest print page.
      *
      * @param SalesGuestPrint $salesGuestPrint
-     * @param string $grandTotal
+     * @param array $prices
      * @return void
      */
-    public function processAssert(SalesGuestPrint $salesGuestPrint, $grandTotal)
+    public function processAssert(SalesGuestPrint $salesGuestPrint, array $prices)
     {
         \PHPUnit_Framework_Assert::assertEquals(
-            $grandTotal,
+            $prices['grandTotal'],
             $salesGuestPrint->getViewBlock()->getItemBlock()->getGrandTotal(),
             "Grand total was printed incorrectly."
         );

@@ -92,8 +92,7 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
             )
             ->setComment('Newsletter Subscriber');
         $installer->getConnection()->createTable($table);
@@ -293,7 +292,6 @@ class InstallSchema implements InstallSchemaInterface
                 'template_id',
                 $installer->getTable('newsletter_template'),
                 'template_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Newsletter Queue');
@@ -345,7 +343,6 @@ class InstallSchema implements InstallSchemaInterface
                 'queue_id',
                 $installer->getTable('newsletter_queue'),
                 'queue_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -358,7 +355,6 @@ class InstallSchema implements InstallSchemaInterface
                 'subscriber_id',
                 $installer->getTable('newsletter_subscriber'),
                 'subscriber_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Newsletter Queue Link');
@@ -392,7 +388,6 @@ class InstallSchema implements InstallSchemaInterface
                 'queue_id',
                 $installer->getTable('newsletter_queue'),
                 'queue_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -400,7 +395,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Newsletter Queue Store Link');
@@ -459,7 +453,6 @@ class InstallSchema implements InstallSchemaInterface
                 'queue_id',
                 $installer->getTable('newsletter_queue'),
                 'queue_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -467,7 +460,6 @@ class InstallSchema implements InstallSchemaInterface
                 'subscriber_id',
                 $installer->getTable('newsletter_subscriber'),
                 'subscriber_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Newsletter Problems');
