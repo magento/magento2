@@ -10,6 +10,8 @@ namespace Magento\Framework\Module;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Stdlib\String as StringHelper;
+use Magento\Framework\Module\Dir\ResolverInterface;
 
 class Dir
 {
@@ -26,13 +28,22 @@ class Dir
     protected $_string;
 
     /**
-     * @param Filesystem $filesystem
-     * @param \Magento\Framework\Stdlib\String $string
+     * Module directory resolver
+     *
+     * @var ResolverInterface
      */
-    public function __construct(Filesystem $filesystem, \Magento\Framework\Stdlib\String $string)
+    private $dirResolver;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param StringHelper $string
+     * @param ResolverInterface $resolver
+     */
+    public function __construct(Filesystem $filesystem, StringHelper $string, ResolverInterface $resolver)
     {
         $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->_string = $string;
+        $this->dirResolver = $resolver;
     }
 
     /**
@@ -45,7 +56,10 @@ class Dir
      */
     public function getDir($moduleName, $type = '')
     {
-        $path = $this->_string->upperCaseWords($moduleName, '_', '/');
+        if (null === $path = $this->dirResolver->getModulePath($moduleName)) {
+            $path = $this->_string->upperCaseWords($moduleName, '_', '/');
+        }
+        
         if ($type) {
             if (!in_array($type, ['etc', 'i18n', 'view', 'Controller'])) {
                 throw new \InvalidArgumentException("Directory type '{$type}' is not recognized.");
