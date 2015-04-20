@@ -5,10 +5,10 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\DeployCommand;
+use Magento\Setup\Console\Command\DeployStaticContentCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class DeployCommandTest extends \PHPUnit_Framework_TestCase
+class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -31,7 +31,7 @@ class DeployCommandTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var DeployCommand
+     * @var DeployStaticContentCommand
      */
     private $command;
 
@@ -41,7 +41,7 @@ class DeployCommandTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->deployer = $this->getMock('Magento\Setup\Model\Deployer', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->command = new DeployCommand($this->objectManagerProvider, $this->deploymentConfig);
+        $this->command = new DeployStaticContentCommand($this->objectManagerProvider, $this->deploymentConfig);
     }
 
     public function testExecute()

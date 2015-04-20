@@ -77,8 +77,11 @@ class ObjectManagerProvider
      * @param array $initParams
      * @return \Magento\Framework\App\ObjectManagerFactory
      */
-    public function getObjectManagerFactory($initParams)
+    public function getObjectManagerFactory($initParams = [])
     {
-        return Bootstrap::createObjectManagerFactory(BP, $initParams);
+        return Bootstrap::createObjectManagerFactory(
+            BP,
+            $initParams
+        );
     }
 }

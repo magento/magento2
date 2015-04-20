@@ -150,7 +150,7 @@ class Deployer
             $this->htmlMinifier->minify($template);
             $this->output->isVerbose()?
                 $this->output->writeln($template . " minified\n")
-                :$this->output->write('.');
+                : $this->output->write('.');
             $this->count++;
         }
         $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
@@ -268,7 +268,7 @@ class Deployer
             $asset = $this->minifyService->getAssets([$asset], true)[0];
             $this->output->isVerbose()?
                 $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'")
-                :$this->output->write('.');
+                : $this->output->write('.');
             if ($this->isDryRun) {
                 $asset->getContent();
             } else {

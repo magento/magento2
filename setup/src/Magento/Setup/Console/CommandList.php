@@ -43,7 +43,7 @@ class CommandList
             'Magento\Setup\Console\Command\DbDataUpgradeCommand',
             'Magento\Setup\Console\Command\DbSchemaUpgradeCommand',
             'Magento\Setup\Console\Command\DbStatusCommand',
-            'Magento\Setup\Console\Command\DeployCommand',
+            'Magento\Setup\Console\Command\DeployStaticContentCommand',
             'Magento\Setup\Console\Command\DiCompileCommand',
             'Magento\Setup\Console\Command\DiCompileMultiTenantCommand',
             'Magento\Setup\Console\Command\InfoCurrencyListCommand',

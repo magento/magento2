@@ -11,13 +11,19 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Symfony\Component\Console\Input\InputArgument;
 use Magento\Setup\Model\ObjectManagerProvider;
 
 
-class DeployCommand extends Command
+class DeployStaticContentCommand extends Command
 {
+    /**
+     * Key for dry-run option
+     */
     const DRY_RUN_OPTION = 'dry-run';
+
     const LANGUAGE_OPTION = 'languages';
+
     /**
      * Object manager provider
      *
@@ -52,7 +58,20 @@ class DeployCommand extends Command
     {
         $this->setName('setup:static-content:deploy')
             ->setDescription('Deploys static view files')
-            ->setDefinition($this->getOptionsList());;
+            ->setDefinition([
+                new InputOption(
+                    self::DRY_RUN_OPTION,
+                    '-d',
+                    InputOption::VALUE_NONE,
+                    'If specified, then no files will be actually deployed.'
+                ),
+                new InputArgument(
+                    self::LANGUAGE_OPTION,
+                    InputArgument::IS_ARRAY,
+                    'List of languages you want the tool populate files for.',
+                    ['en_US']
+                ),
+            ]);
         parent::configure();
     }
 
@@ -68,15 +87,12 @@ class DeployCommand extends Command
 
         $options = $input->getOptions();
 
-        $languages = ['en_US'];
-        if (isset($options[self::LANGUAGE_OPTION])) {
-            $languages = explode(',', $options[self::LANGUAGE_OPTION]);
-            foreach ($languages as $lang) {
-                if (!preg_match('/^[a-z]{2}_[A-Z]{2}$/', $lang)) {
-                    throw new \InvalidArgumentException(
-                        ' --' . self::LANGUAGE_OPTION . ' option has invalid value format'
-                    );
-                }
+        $languages = $input->getArgument(self::LANGUAGE_OPTION);
+        foreach ($languages as $lang) {
+            if (!preg_match('/^[a-z]{2}_[A-Z]{2}$/', $lang)) {
+                throw new \InvalidArgumentException(
+                    $lang . ' argument has invalid value format'
+                );
             }
         }
 
@@ -89,7 +105,7 @@ class DeployCommand extends Command
                 ['pathToSource' => BP]
             );
 
-            $objectManagerFactory = $this->objectManagerProvider->getObjectManagerFactory([]);
+            $objectManagerFactory = $this->objectManagerProvider->getObjectManagerFactory();
 
             /** @var \Magento\Setup\Model\Deployer $deployer */
             $deployer = $objectManager->create(
@@ -99,33 +115,11 @@ class DeployCommand extends Command
             $deployer->deploy($objectManagerFactory, $languages);
 
         } catch (\Exception $e) {
-            $output->writeln($e->getMessage());
-            !$output->isVerbose()?:$output->writeln($e->getTraceAsString());
+            $output->writeln('<error>' . $e->getMessage() . '</error>>');
+            if ($output->isVerbose()) {
+                $output->writeln($e->getTraceAsString());
+            }
             return;
         }
-    }
-
-    /**
-     * Get list of options for the command
-     *
-     * @return InputOption[]
-     */
-    public function getOptionsList()
-    {
-        return [
-            new InputOption(
-                self::LANGUAGE_OPTION,
-                '-l',
-                InputOption::VALUE_REQUIRED,
-                'List of languages you want the tool populate files for.',
-                'en_US'
-            ),
-            new InputOption(
-                self::DRY_RUN_OPTION,
-                null,
-                InputOption::VALUE_NONE,
-                'If specified, then no files will be actually deployed.'
-            ),
-        ];
     }
 }
