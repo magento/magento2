@@ -3268,5 +3268,6 @@ return [
     ['Magento\Tools\Di\Definition\Serializer\SerializerInterface', 'Magento\Setup\Module\Di\Definition\Serializer\SerializerInterface'],
     ['Magento\Tools\Di\Definition\Serializer\Standard', 'Magento\Setup\Module\Di\Definition\Serializer\Standard'],
     ['Magento\Tools\Di\Compiler\Log\Writer\Quiet'],
-    ['Magento\Tools\Di\Compiler\Log\Writer\WriterInterface']
+    ['Magento\Tools\Di\Compiler\Log\Writer\WriterInterface'],
+    ['Magento\Tools\View\Deployer', 'Magento\Setup\Model\Deployer'],
 ];
