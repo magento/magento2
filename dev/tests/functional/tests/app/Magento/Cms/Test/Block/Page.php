@@ -15,11 +15,11 @@ use Magento\Mtf\Client\Locator;
 class Page extends Block
 {
     /**
-     * Selector for uninitialized page.
+     * Selector for initial script.
      *
      * @var string
      */
-    protected $uninitialized = '//body[(@data-mage-init) or (@aria-busy="true")]';
+    protected $initialScript = 'script[type="text/x-magento-init"]';
 
     /**
      * Cms page content class.
@@ -122,13 +122,7 @@ class Page extends Block
      */
     public function waitPageInit()
     {
-        $browser = $this->browser;
-        $uninitialized = $this->uninitialized;
-
-        $this->_rootElement->waitUntil(
-            function () use ($browser, $uninitialized) {
-                return $browser->find($uninitialized, Locator::SELECTOR_XPATH)->isVisible() == false ? true : null;
-            }
-        );
+        $this->waitForElementNotVisible($this->initialScript);
+        sleep(3); // TODO: remove after resolving an issue with ajax on Frontend.
     }
 }

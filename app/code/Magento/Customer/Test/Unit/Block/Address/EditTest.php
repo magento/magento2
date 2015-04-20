@@ -166,7 +166,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSetLayoutWithAlienAddress()

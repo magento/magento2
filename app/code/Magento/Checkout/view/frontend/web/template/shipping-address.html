@@ -14,7 +14,7 @@
          data-role="content"
          data-bind="fadeVisible: isVisible() && quoteHasBillingAddress()">
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
-            <!-- ko if: (customerHasAddresses)-->
+            <!-- ko if: (customerAddressCount)-->
             <div class="field addresses">
                 <label class="label" for="shipping:address-select"><span data-bind="text: $t('Select a shipping address from your address book or enter a new address.')"></span></label>
                 <div class="control">
@@ -35,7 +35,7 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
 
-                <!-- ko if: (isCustomerLoggedIn && customerHasAddresses)-->
+                <!-- ko if: (isCustomerLoggedIn && customerAddressCount)-->
                 <div class="field save choice">
                     <input id="shipping:save_in_address_book" class="checkbox" type="checkbox" title="Save in address book" value="1" name="shipping[save_in_address_book]">
                     <label class="label" for="shipping:save_in_address_book">
@@ -43,7 +43,7 @@
                     </label>
                 </div>
                 <!-- /ko -->
-                <!-- ko ifnot: (isCustomerLoggedIn && customerHasAddresses)-->
+                <!-- ko ifnot: (isCustomerLoggedIn && customerAddressCount)-->
                 <input  style="display: none" name="shipping[save_in_address_book]" type="checkbox" value="1" checked="checked"/>
                 <!-- /ko -->
             </fieldset>

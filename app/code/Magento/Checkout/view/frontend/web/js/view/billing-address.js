@@ -53,9 +53,12 @@ define(
                     $.when(this.isEmailCheckComplete).done( function() {
                         if (!that.source.get('params.invalid')) {
                             var addressData = that.source.get('billingAddress');
-                            addressData['save_in_address_book'] = $( "input[name = 'billing[save_in_address_book]']:checked" ).val();
+                            if (quote.getCheckoutMethod()() !== 'register') {
+                                var addressBookCheckbox = $("input[name='billing[save_in_address_book]']:checked");
+                                addressData.save_in_address_book = addressBookCheckbox.val();
+                            }
                             if (quote.getCheckoutMethod()() && !customer.isLoggedIn()()) {
-                                addressData['email'] = that.source.get('customerDetails.email')
+                                addressData.email = that.source.get('customerDetails.email');
                             }
                             selectBillingAddress(addressData, that.useForShipping);
                         }
@@ -74,7 +77,7 @@ define(
                 }
             },
             isNewAddressSelected: function() {
-                if (!this.customerHasAddresses) {
+                if (!this.customerAddressCount) {
                     return true;
                 }
                 return newAddressSelected();
@@ -91,13 +94,15 @@ define(
                 this.source.trigger('billingAddress.data.validate');
                 if (quote.getCheckoutMethod()() === 'register') {
                     this.source.trigger('customerDetails.data.validate');
-                    checkEmailAvailability(this.isEmailCheckComplete);
+                    if (!this.source.get('params.invalid')) {
+                        checkEmailAvailability(this.isEmailCheckComplete);
+                    }
                 } else {
                     this.isEmailCheckComplete.resolve();
                 }
             },
             isCustomerLoggedIn: customer.isLoggedIn(),
-            customerHasAddresses: window.customerHasAddresses,
+            customerAddressCount: window.checkoutConfig.customerAddressCount,
             hideExtraFields: function() {
                 if (!quote.getCheckoutMethod()() && customer.isLoggedIn()()) {
                     $('[name="customerDetails.email"]').hide();

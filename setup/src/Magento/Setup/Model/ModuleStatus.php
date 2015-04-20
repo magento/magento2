@@ -9,8 +9,8 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Module\ModuleList\DeploymentConfig as ModuleDeployment;
-use \Magento\Framework\Module\DependencyChecker;
+use Magento\Framework\Module\DependencyChecker;
+use Magento\Framework\Config\ConfigOptionsList;
 
 class ModuleStatus
 {
@@ -145,7 +145,7 @@ class ModuleStatus
      */
     private function deselectDisabledModules()
     {
-        $existingModules = $this->deploymentConfig->getSegment(ModuleDeployment::CONFIG_KEY);
+        $existingModules = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_MODULES);
         if (isset($existingModules)) {
             foreach ($existingModules as $module => $value) {
                 if (!$value) {

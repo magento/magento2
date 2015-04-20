@@ -87,6 +87,8 @@ define([
 
             this.clearExcluded()
                 .selectPage();
+
+            return this;
         },
 
         /**
@@ -97,6 +99,9 @@ define([
 
             this.clearExcluded()
                 .deselectPage();
+            this.selected.removeAll();
+
+            return this;
         },
 
         /**
@@ -104,22 +109,31 @@ define([
          */
         toggleSelectAll: function () {
             return this.allSelected() ?
-                this.deselectAll() :
-                this.selectAll();
+                    this.deselectAll() :
+                    this.selectAll();
         },
 
         /**
          * Selects all records on the current page.
          */
         selectPage: function () {
-            this.selected(this.getIds());
+            this.selected(
+                _.union(this.selected(), this.getIds())
+            );
+
+            return this;
         },
 
         /**
          * Deselects all records on the current page.
          */
         deselectPage: function () {
-            this.selected.removeAll();
+            var currentPageIds = this.getIds();
+            this.selected.remove(function (value) {
+                return currentPageIds.indexOf(value) !== -1;
+            });
+
+            return this;
         },
 
         /**
@@ -144,12 +158,13 @@ define([
                 ids = _.pluck(items, this.indexField);
 
             return exclude ?
-                _.difference(ids, this.excluded()) :
-                ids;
+                    _.difference(ids, this.excluded()) :
+                    ids;
         },
 
         /**
          * Recalculates list of the excluded records.
+         * Changes value of `excluded`.
          *
          * @param {Array} selected - List of the currently selected records.
          * @returns {Multiselect} Chainable.
@@ -168,6 +183,7 @@ define([
 
         /**
          * Calculates number of the selected records.
+         * Changes value of `totalSelected`.
          *
          * @returns {Multiselect} Chainable.
          */
@@ -212,15 +228,19 @@ define([
 
             switch (actionId) {
                 case 'selectPage':
+
                     return multiplePages && !this.isPageSelected(true);
 
                 case 'deselectPage':
+
                     return multiplePages && this.isPageSelected();
 
                 case 'selectAll':
+
                     return !this.allSelected();
 
                 case 'deselectAll':
+
                     return this.totalSelected() > 0;
             }
 

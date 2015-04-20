@@ -19,11 +19,11 @@ define(
         var stepName = 'authentication';
         return Component.extend({
             stepNumber: navigator.getStepNumber(stepName),
-            isAllowedGuestCheckout: window.isAllowedGuestCheckout,
-            isRegistrationAllowed: window.isRegistrationAllowed,
-            isMethodRegister: window.isMethodRegister,
-            isCustomerMustBeLogged: window.isCustomerMustBeLogged,
-            registerUrl: window.getRegisterUrl,
+            isGuestCheckoutAllowed: window.checkoutConfig.isGuestCheckoutAllowed,
+            isRegistrationAllowed: window.checkoutConfig.isRegistrationAllowed,
+            isMethodRegister: window.checkoutConfig.isMethodRegister,
+            isCustomerLoginRequired: window.checkoutConfig.isCustomerLoginRequired,
+            registerUrl: window.checkoutConfig.registerUrl,
             forgotPasswordUrl: '',
             username: '',
             password: '',
@@ -41,7 +41,7 @@ define(
                 return !customer.isLoggedIn()();
             },
             isChecked: function() {
-                if (isMethodRegister || !isAllowedGuestCheckout) {
+                if (isMethodRegister || !isGuestCheckoutAllowed) {
                     return 'register';
                 }
                 return false;

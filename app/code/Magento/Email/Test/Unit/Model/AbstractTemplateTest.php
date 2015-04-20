@@ -39,7 +39,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $config
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider invalidInputParametersDataProvider
      */
     public function testSetDesignConfigWithInvalidInputParametersThrowsException($config)

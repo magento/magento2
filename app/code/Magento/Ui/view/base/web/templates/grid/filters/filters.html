@@ -5,9 +5,12 @@
  */
 -->
 
-<div class="col-xs-6 filters">
+<div class="col-xs-6">
+    <div class="admin__scope-old">
 
-    <button data-bind="click: toggleOpened, css: { active: opened }">
+<div class="filters">
+
+    <button data-bind="click: toggleOpened, css: { active: opened }" data-action="grid-filter-expand">
         <span data-bind="text: $t('Filter')"></span>
     </button>
 
@@ -17,38 +20,41 @@
                 <span data-bind="text: $t('Advanced filter')"></span>
             </legend><br />
             <!-- ko foreach: elems -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
         </fieldset>
         <div class="actions filters-actions">
-            <button class="action-tertiary" type="button">
-                <span data-bind="click: reset, text: $t('Reset')"></span>
+            <button class="action secondary action-reset" type="button" data-bind="click: reset">
+                <span data-bind="text: $t('Reset')"></span>
             </button>
-            <button class="action-secondary" type="button">
-                <span data-bind="click: apply, text: $t('Apply')"></span>
+            <button class="action primary action-apply" type="button" data-bind="click: apply">
+                <span data-bind="text: $t('Apply')"></span>
             </button>
             <button
-                class="action-close"
+                class="action secondary action-close"
                 type="button"
                 data-bind="click: close" >
                 <span data-bind="text: $t('Close')"></span>
             </button>
         </div>
+        <div class="filters-current" data-bind="css: {active: active().length}">
+            <ul class="filters-items items">
+                <!-- ko foreach: previews -->
+                <li class="filters-item item">
+                    <strong class="item-label" data-bind="text: label"></strong>
+                    <span class="item-value" data-bind="text: preview"></span>
+                    <button data-bind="click: $parent.reset.bind($parent, elem)" type="button" class="action action-remove">
+                        <span data-bind="text: $t('Remove')"></span>
+                    </button>
+                </li>
+                <!-- /ko -->
+            </ul>
+            <button data-bind="click: reset" class="action action-clear">
+                <span data-bind="text: $t('Clear all')"></span>
+            </button>
+        </div>
     </div>
-    <div class="filters-current" data-bind="css: {active: active().length}">
-        <ul class="filters-items items">
-            <!-- ko foreach: previews -->
-            <li class="filters-item item">
-                <strong class="item-label" data-bind="text: label"></strong>
-                <span class="item-value" data-bind="text: preview"></span>
-                <button data-bind="click: $parent.reset.bind($parent, elem)" type="button" class="action action-remove">
-                    <span data-bind="text: $t('Remove')"></span>
-                </button>
-            </li>
-            <!-- /ko -->
-        </ul>
-        <button data-bind="click: reset" class="action action-clear">
-            <span data-bind="text: $t('Clear all')"></span>
-        </button>
+</div>
+
     </div>
 </div>

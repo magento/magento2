@@ -158,7 +158,7 @@ class Curl extends Conditions implements CatalogRuleInterface
         $response = $curl->read();
         $curl->close();
 
-        $pattern = '/col-rule_id\W*(\d+)<.td><[^<>]*?>' . $data['name'] . '/siu';
+        $pattern = '/col\-rule_id[\s\W]*(\d+).*?' . $data['name'] . '/siu';
         preg_match($pattern, $response, $matches);
         if (empty($matches)) {
             throw new \Exception('Cannot find Catalog Price Rule id! Response: ' . $response);

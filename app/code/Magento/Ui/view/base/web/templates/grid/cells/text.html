@@ -5,7 +5,7 @@
  */
 -->
 <!-- ko if: isClickable(row) -->
-<td data-bind="click: redirect.bind($data, getClickUrl(row)), html: getLabel(row[field.index])">
+<td data-bind="click: redirect.bind($data, getClickUrl(row)), html: getLabel(row[field.index])" data-action="grid-row-edit">
 </td>
 <!-- /ko -->
 <!-- ko ifnot: isClickable(row) -->

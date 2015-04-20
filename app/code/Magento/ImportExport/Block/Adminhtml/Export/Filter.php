@@ -80,7 +80,6 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             'date_format' => $this->_localeDate->getDateFormat(
                 \IntlDateFormatter::SHORT
             ),
-            'image' => $this->getViewFileUrl('images/grid-cal.png'),
         ];
         /** @var $selectBlock \Magento\Framework\View\Element\Html\Date */
         $dateBlock = $this->_layout->createBlock(

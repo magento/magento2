@@ -81,8 +81,10 @@ abstract class AbstractStorage implements StorageInterface
 
         try {
             $this->doReplace($urls);
-        } catch (DuplicateEntryException $e) {
-            throw new DuplicateEntryException(__('URL key for specified store already exists.'));
+        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+            throw new \Magento\Framework\Exception\AlreadyExistsException(
+                __('URL key for specified store already exists.')
+            );
         }
     }
 
@@ -91,7 +93,7 @@ abstract class AbstractStorage implements StorageInterface
      *
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return int
-     * @throws DuplicateEntryException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     abstract protected function doReplace($urls);
 

@@ -26,8 +26,8 @@ module.exports = {
         return command;
     },
 
-    autopath: function (themeName) {
-        return path.pub +
+    autopath: function (themeName, folder) {
+        return folder +
             theme[themeName].area + '/' +
             theme[themeName].name + '/' +
             theme[themeName].locale + '/';

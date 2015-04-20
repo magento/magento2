@@ -205,4 +205,47 @@ class ShippingMethod extends \Magento\Framework\Api\AbstractExtensibleObject imp
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return float
+     */
+    public function getPriceExclTax()
+    {
+        return $this->_get(self::KEY_PRICE_EXCL_TAX);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param float $priceExclTax
+     * @return $this
+     */
+    public function setPriceExclTax($priceExclTax)
+    {
+        return $this->setData(self::KEY_PRICE_EXCL_TAX, $priceExclTax);
+    }
+
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return float
+     */
+    public function getPriceInclTax()
+    {
+        return $this->_get(self::KEY_PRICE_INCL_TAX);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param float $priceInclTax
+     * @return $this
+     */
+    public function setPriceInclTax($priceInclTax)
+    {
+        return $this->setData(self::KEY_PRICE_INCL_TAX, $priceInclTax);
+    }
 }

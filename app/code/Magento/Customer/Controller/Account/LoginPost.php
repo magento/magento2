@@ -8,7 +8,6 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
@@ -35,7 +34,6 @@ class LoginPost extends \Magento\Customer\Controller\Account
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param RedirectFactory $resultRedirectFactory
      * @param PageFactory $resultPageFactory
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerUrl $customerHelperData
@@ -47,7 +45,6 @@ class LoginPost extends \Magento\Customer\Controller\Account
     public function __construct(
         Context $context,
         Session $customerSession,
-        RedirectFactory $resultRedirectFactory,
         PageFactory $resultPageFactory,
         AccountManagementInterface $customerAccountManagement,
         CustomerUrl $customerHelperData,
@@ -61,7 +58,6 @@ class LoginPost extends \Magento\Customer\Controller\Account
         parent::__construct(
             $context,
             $customerSession,
-            $resultRedirectFactory,
             $resultPageFactory
         );
     }

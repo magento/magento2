@@ -9,7 +9,6 @@ namespace Magento\Framework\Webapi;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\AttributeValue;
-use Magento\Framework\Api\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\Cache\Type\Webapi as WebapiCache;
 use Magento\Framework\Exception\InputException;
@@ -200,10 +199,10 @@ class ServiceInputProcessor
             if (is_array($customAttributeValue)) {
                 //If type for AttributeValue's value as array is mixed, further processing is not possible
                 if ($type === TypeProcessor::ANY_TYPE) {
-                    continue;
+                    $attributeValue = $customAttributeValue;
+                } else {
+                    $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
                 }
-
-                $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
             } else {
                 $attributeValue = $this->_convertValue($customAttributeValue, $type);
             }
@@ -256,7 +255,7 @@ class ServiceInputProcessor
             try {
                 $result = $this->typeProcessor->processSimpleAndAnyType($value, $type);
             } catch (SerializationException $e) {
-                throw new WebapiException($e->getMessage());
+                throw new WebapiException(new Phrase($e->getMessage()));
             }
         } else {
             /** Complex type or array of complex types */

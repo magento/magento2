@@ -13,7 +13,7 @@ use \Magento\Framework\App\Response\Http;
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Response\Http
+     * @var Http
      */
     protected $model;
 
@@ -32,6 +32,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     protected $contextMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Http\Context */
+    protected $dateTimeMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -41,12 +44,18 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')->disableOriginalConstructor()
             ->getMock();
+
+        $this->dateTimeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = $objectManager->getObject(
             'Magento\Framework\App\Response\Http',
             [
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
-                'context' => $this->contextMock
+                'context' => $this->contextMock,
+                'dateTime' => $this->dateTimeMock
             ]
         );
         $this->model->headersSentThrowsException = false;
@@ -118,14 +127,24 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testSetPublicHeaders()
     {
         $ttl = 120;
+        $timestamp = 1000000;
         $pragma = 'cache';
         $cacheControl = 'max-age=' . $ttl . ', public, s-maxage=' . $ttl;
-        $expiresResult = gmdate('D, d M Y H:i:s T', time() + $ttl);
+        $expiresResult ='Thu, 01 Jan 1970 00:00:00 GMT';
+
+        $this->dateTimeMock->expects($this->once())
+            ->method('strToTime')
+            ->with('+' . $ttl . ' seconds')
+            ->willReturn($timestamp);
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmDate')
+            ->with(Http::EXPIRATION_TIMESTAMP_FORMAT, $timestamp)
+            ->willReturn($expiresResult);
 
         $this->model->setPublicHeaders($ttl);
         $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
         $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
-        $this->assertLessThanOrEqual($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
+        $this->assertSame($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
     }
 
     /**
@@ -146,14 +165,24 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     public function testSetPrivateHeaders()
     {
         $ttl = 120;
+        $timestamp = 1000000;
         $pragma = 'cache';
         $cacheControl = 'max-age=' . $ttl . ', private';
-        $expires = gmdate('D, d M Y H:i:s T', strtotime('+' . $ttl . ' seconds'));
+        $expiresResult ='Thu, 01 Jan 1970 00:00:00 GMT';
+
+        $this->dateTimeMock->expects($this->once())
+            ->method('strToTime')
+            ->with('+' . $ttl . ' seconds')
+            ->willReturn($timestamp);
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmDate')
+            ->with(Http::EXPIRATION_TIMESTAMP_FORMAT, $timestamp)
+            ->willReturn($expiresResult);
 
         $this->model->setPrivateHeaders($ttl);
         $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
         $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
-        $this->assertEquals($expires, $this->model->getHeader('Expires')->getFieldValue());
+        $this->assertEquals($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
     }
 
     /**
@@ -173,14 +202,24 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetNoCacheHeaders()
     {
+        $timestamp = 1000000;
         $pragma = 'no-cache';
         $cacheControl = 'max-age=0, must-revalidate, no-cache, no-store';
-        $expires = gmdate('D, d M Y H:i:s T', strtotime('-1 year'));
+        $expiresResult ='Thu, 01 Jan 1970 00:00:00 GMT';
+
+        $this->dateTimeMock->expects($this->once())
+            ->method('strToTime')
+            ->with('-1 year')
+            ->willReturn($timestamp);
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmDate')
+            ->with(Http::EXPIRATION_TIMESTAMP_FORMAT, $timestamp)
+            ->willReturn($expiresResult);
 
         $this->model->setNoCacheHeaders();
         $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
         $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
-        $this->assertEquals($expires, $this->model->getHeader('Expires')->getFieldValue());
+        $this->assertEquals($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
     }
 
     /**
