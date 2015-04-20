@@ -27,6 +27,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="dev_tests_run" xsi:type="object">Magento\Developer\Console\DevTestsRunCommand</item>
+                <item name="dev_css_deploy" xsi:type="object">Magento\Developer\Console\CssDeployCommand</item>
             </argument>
         </arguments>
     </type>
