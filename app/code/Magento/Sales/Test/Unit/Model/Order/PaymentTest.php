@@ -36,6 +36,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Order\Invoice | \PHPUnit_Framework_MockObject_MockObject $orderMock */
     private $invoiceMock;
 
+    private $transactionId;
+
     protected function setUp()
     {
         $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\Manager')
@@ -118,6 +120,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->payment->setMethod('any');
         $this->payment->setOrder($this->orderMock);
+
+        $this->transactionId = 100;
     }
 
     protected function tearDown()
@@ -359,19 +363,17 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($paymentResult->getIsTransactionPending());
     }
 
-    public function testRegisterPaymentReviewActionOnlineApprovePaymentTrue()
+    public function testAcceptApprovePaymentTrue()
     {
-        $transactionId = 100;
         $baseGrandTotal = 300.00;
-        $message = sprintf('Approved the payment online. Transaction ID: "%s"', $transactionId);
+        $message = sprintf('Approved the payment online. Transaction ID: "%s"', $this->transactionId);
         $acceptPayment = true;
-        $action = Payment::REVIEW_ACTION_ACCEPT;
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
 
-        $this->mockInvoice($transactionId);
+        $this->mockInvoice($this->transactionId);
 
-        $this->mockResultTrueMethods($transactionId, $baseGrandTotal, $message);
+        $this->mockResultTrueMethods($this->transactionId, $baseGrandTotal, $message);
 
         $this->helperMock->expects($this->once())
             ->method('getMethodInstance')
@@ -386,22 +388,18 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->payment)
             ->willReturn($acceptPayment);
 
-        $this->payment->registerPaymentReviewAction($action, true);
+        $this->payment->accept();
         $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
-    public function registerPaymentReviewActionProviderAcceptPaymentFalse()
+    public function acceptPaymentFalseProvider()
     {
         return [
-            'Process online payment action - No payment approval fraud' => [
-                Payment::REVIEW_ACTION_ACCEPT,
-                100,
+            'Fraud = 1' => [
                 true,
                 Order::STATUS_FRAUD
             ],
-            'Process online payment action - No payment approval status true' => [
-                Payment::REVIEW_ACTION_ACCEPT,
-                100,
+            'Fraud = 0' => [
                 false,
                 false
             ],
@@ -409,26 +407,21 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test for registerPaymentOnlineAction() method
-     *
-     * @dataProvider registerPaymentReviewActionProviderAcceptPaymentFalse
-     * @param string $action
-     * @param int $transactionId
+     * @dataProvider acceptPaymentFalseProvider
      * @param bool $isFraudDetected
      * @param bool $status
      */
-    public function testRegisterPaymentReviewActionOnlineApprovePaymentFalse(
-        $action, $transactionId, $isFraudDetected, $status
-    ) {
-        $message = sprintf('There is no need to approve this payment. Transaction ID: "%s"', $transactionId);
+    public function testAcceptApprovePaymentFalse($isFraudDetected, $status)
+    {
+        $message = sprintf('There is no need to approve this payment. Transaction ID: "%s"', $this->transactionId);
         $acceptPayment = false;
         $orderState = 'random_state';
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_fraud_detected', $isFraudDetected);
 
 
-        $this->mockInvoice($transactionId);
+        $this->mockInvoice($this->transactionId);
 
         $this->orderMock->expects($this->once())
             ->method('getState')
@@ -451,30 +444,26 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->payment)
             ->willReturn($acceptPayment);
 
-        $this->payment->registerPaymentReviewAction($action, true);
-        $this->assertEquals($transactionId, $this->payment->getLastTransId());
+        $this->payment->accept();
+        $this->assertEquals($this->transactionId, $this->payment->getLastTransId());
     }
 
     /**
-     * Test for registerPaymentOnlineAction() method
      *
-     * @dataProvider registerPaymentReviewActionProviderAcceptPaymentFalse
-     * @param string $action
-     * @param int $transactionId
+     * @dataProvider acceptPaymentFalseProvider
      * @param bool $isFraudDetected
      */
-    public function testRegisterPaymentReviewActionOnlineApprovePaymentFalseOrderState(
-        $action, $transactionId, $isFraudDetected
-    ) {
-        $message = sprintf('There is no need to approve this payment. Transaction ID: "%s"', $transactionId);
+    public function testAcceptApprovePaymentFalseOrderState($isFraudDetected)
+    {
+        $message = sprintf('There is no need to approve this payment. Transaction ID: "%s"', $this->transactionId);
         $acceptPayment = false;
         $orderState = Order::STATE_PAYMENT_REVIEW;
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_fraud_detected', $isFraudDetected);
 
 
-        $this->mockInvoice($transactionId);
+        $this->mockInvoice($this->transactionId);
 
         $this->orderMock->expects($this->once())
             ->method('getState')
@@ -499,81 +488,18 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->payment)
             ->willReturn($acceptPayment);
 
-        $this->payment->registerPaymentReviewAction($action, true);
-        $this->assertEquals($transactionId, $this->payment->getLastTransId());
+        $this->payment->accept();
+        $this->assertEquals($this->transactionId, $this->payment->getLastTransId());
     }
 
-    /**
-     * Test for registerPaymentOnlineAction() method
-     *  - Action = accept
-     *  - isOffline = false
-     *
-     * @dataProvider registerPaymentReviewActionProviderAcceptPaymentFalse
-     * @param string $action
-     * @param int $transactionId
-     * @param bool $isFraudDetected
-     */
-    public function testRegisterPaymentReviewActionOnlineAcceptOffline(
-        $action, $transactionId, $isFraudDetected
-    ) {
-        $this->markTestSkipped('no support for offline');
-        $message = sprintf('Registered notification about approved payment. Transaction ID: "%s"', $transactionId);
-        $orderState = Order::STATE_PAYMENT_REVIEW;
-
-        $this->payment->setData('transaction_id', $transactionId);
-        $this->payment->setData('is_fraud_detected', $isFraudDetected);
-        $this->payment->setData('notification_result', false);
-
-        $this->mockInvoice($transactionId);
-
-        $this->orderMock->expects($this->once())
-            ->method('getState')
-            ->willReturn($orderState);
-
-        $this->orderMock->expects($this->never())
-            ->method('setState');
-        $this->orderMock->expects($this->once())
-            ->method('addStatusHistoryComment')
-            ->with($message);
-
-        $this->payment->registerPaymentReviewAction($action, false);
-    }
-
-    /**
-     * Test for registerPaymentOnlineAction() method
-     *  - Action = accept
-     *  - isOffline = false
-     *  - notification result = true
-     */
-    public function testRegisterPaymentReviewActionOnlineAcceptOfflineNotification()
-    {
-        $this->markTestSkipped('no support for offline');
-        $action = Payment::REVIEW_ACTION_ACCEPT;
-        $transactionId = 100;
-        $baseGrandTotal = 300.00;
-        $message = sprintf('Registered notification about approved payment. Transaction ID: "%s"', $transactionId);
-
-        $this->payment->setData('transaction_id', $transactionId);
-        $this->payment->setData('notification_result', true);
-
-        $this->mockInvoice($transactionId);
-
-        $this->mockResultTrueMethods($transactionId, $baseGrandTotal, $message);
-
-        $this->payment->registerPaymentReviewAction($action, false);
-        $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
-    }
-
-    public function testRegisterReviewActionOnlineDenyPaymentFalse()
+    public function testDenyPaymentFalse()
     {
         $denyPayment = true;
-        $transactionId = 100;
-        $message = sprintf('Denied the payment online Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_DENY;
+        $message = sprintf('Denied the payment online Transaction ID: "%s"', $this->transactionId);
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
 
-        $this->mockInvoice($transactionId);
+        $this->mockInvoice($this->transactionId);
         $this->mockResultFalseMethods($message);
 
         $this->helperMock->expects($this->once())
@@ -589,41 +515,25 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->payment)
             ->willReturn($denyPayment);
 
-        $this->payment->registerPaymentReviewAction($action, true);
-    }
-
-    public function registerReviewActionOnlineOnlineDenyPaymentNegativeProvider()
-    {
-        return [
-            'Is fraud detected = true' => [
-                true,
-                Order::STATUS_FRAUD
-            ],
-            'Is fraud detected = false' => [
-                false,
-                false
-            ]
-        ];
+        $this->payment->deny();
     }
 
     /**
-     * @dataProvider registerReviewActionOnlineOnlineDenyPaymentNegativeProvider
+     * @dataProvider acceptPaymentFalseProvider
      * @param bool $isFraudDetected
      * @param bool $status
      */
-    public function testRegisterReviewActionOnlineOnlineDenyPaymentNegative($isFraudDetected, $status)
+    public function testDenyPaymentNegative($isFraudDetected, $status)
     {
         $denyPayment = false;
-        $transactionId = 100;
-        $message = sprintf('There is no need to deny this payment. Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_DENY;
+        $message = sprintf('There is no need to deny this payment. Transaction ID: "%s"', $this->transactionId);
 
         $orderState = 'random_state';
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_fraud_detected', $isFraudDetected);
 
-        $this->mockInvoice($transactionId);
+        $this->mockInvoice($this->transactionId);
 
         $this->orderMock->expects($this->once())
             ->method('getState')
@@ -646,21 +556,19 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->payment)
             ->willReturn($denyPayment);
 
-        $this->payment->registerPaymentReviewAction($action, true);
+        $this->payment->deny();
     }
 
-    public function testRegisterReviewActionOnlineOnlineDenyPaymentNegativeStateReview()
+    public function testDenyPaymentNegativeStateReview()
     {
         $denyPayment = false;
-        $transactionId = 100;
-        $message = sprintf('There is no need to deny this payment. Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_DENY;
+        $message = sprintf('There is no need to deny this payment. Transaction ID: "%s"', $this->transactionId);
 
         $orderState = Order::STATE_PAYMENT_REVIEW;
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
 
-        $this->mockInvoice($transactionId);
+        $this->mockInvoice($this->transactionId);
 
         $this->orderMock->expects($this->once())
             ->method('getState')
@@ -685,87 +593,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->payment)
             ->willReturn($denyPayment);
 
-        $this->payment->registerPaymentReviewAction($action, true);
-    }
-
-    public function testRegisterReviewActionOnlineDenyNotificationTrue()
-    {
-        $this->markTestSkipped('no support for offline');
-        $transactionId = 100;
-        $message = sprintf('Registered notification about denied payment. Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_DENY;
-
-        $this->payment->setData('transaction_id', $transactionId);
-        $this->payment->setData('notification_result', true);
-
-        $this->mockInvoice($transactionId);
-
-        $this->helperMock->expects($this->never())
-            ->method('getMethodInstance');
-
-        $this->mockResultFalseMethods($message);
-
-        $this->payment->registerPaymentReviewAction($action, false);
-    }
-
-    /**
-     * @dataProvider registerReviewActionOnlineOnlineDenyPaymentNegativeProvider
-     * @param bool $isFraudDetected
-     * @param bool $status
-     */
-    public function testRegisterReviewActionOnlineDenyNotificationFalse($isFraudDetected, $status)
-    {
-        $this->markTestSkipped('no support for offline');
-        $transactionId = 100;
-        $message = sprintf('Registered notification about denied payment. Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_DENY;
-        $orderState = 'random_state';
-
-        $this->payment->setData('transaction_id', $transactionId);
-        $this->payment->setData('notification_result', false);
-        $this->payment->setData('is_fraud_detected', $isFraudDetected);
-
-        $this->mockInvoice($transactionId);
-
-        $this->orderMock->expects($this->once())
-            ->method('getState')
-            ->willReturn($orderState);
-
-        $this->orderMock->expects($this->once())
-            ->method('setState')
-            ->with(Order::STATE_PAYMENT_REVIEW, $status, $message);
-
-        $this->helperMock->expects($this->never())
-            ->method('getMethodInstance');
-
-        $this->payment->registerPaymentReviewAction($action, false);
-    }
-
-    public function testRegisterReviewActionOnlineDenyNotificationFalseStatusHistory()
-    {
-        $this->markTestSkipped('no support for offline');
-        $transactionId = 100;
-        $message = sprintf('Registered notification about denied payment. Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_DENY;
-        $orderState = Order::STATE_PAYMENT_REVIEW;
-
-        $this->payment->setData('transaction_id', $transactionId);
-        $this->payment->setData('notification_result', false);
-
-        $this->mockInvoice($transactionId);
-
-        $this->orderMock->expects($this->once())
-            ->method('getState')
-            ->willReturn($orderState);
-
-        $this->orderMock->expects($this->once())
-            ->method('addStatusHistoryComment')
-            ->with($message);
-
-        $this->helperMock->expects($this->never())
-            ->method('getMethodInstance');
-
-        $this->payment->registerPaymentReviewAction($action, false);
+        $this->payment->deny();
     }
 
     /**
@@ -787,20 +615,18 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$this->invoiceMock]);
     }
 
-    public function testRegisterReviewActionOnlineUpdateOnlineTransactionApproved()
+    public function testUpdateOnlineTransactionApproved()
     {
-        $transactionId = 100;
-        $message = sprintf('Registered update about approved payment. Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_UPDATE;
+        $message = sprintf('Registered update about approved payment. Transaction ID: "%s"', $this->transactionId);
 
         $storeId = 50;
         $baseGrandTotal = 299.99;
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_transaction_approved', true);
 
-        $this->mockInvoice($transactionId);
-        $this->mockResultTrueMethods($transactionId, $baseGrandTotal, $message);
+        $this->mockInvoice($this->transactionId);
+        $this->mockResultTrueMethods($this->transactionId, $baseGrandTotal, $message);
 
 
         $this->orderMock->expects($this->once())
@@ -815,24 +641,22 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->paymentMethodMock);
         $this->paymentMethodMock->expects($this->once())
             ->method('fetchTransactionInfo')
-            ->with($this->payment, $transactionId);
+            ->with($this->payment, $this->transactionId);
 
-        $this->payment->registerPaymentReviewAction($action, true);
+        $this->payment->update();
         $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
-    public function testRegisterReviewActionOnlineUpdateOnlineTransactionDenied()
+    public function testUpdateOnlineTransactionDenied()
     {
-        $transactionId = 100;
-        $message = sprintf('Registered update about denied payment. Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_UPDATE;
+        $message = sprintf('Registered update about denied payment. Transaction ID: "%s"', $this->transactionId);
 
         $storeId = 50;
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_transaction_denied', true);
 
-        $this->mockInvoice($transactionId);
+        $this->mockInvoice($this->transactionId);
         $this->mockResultFalseMethods($message);
 
         $this->orderMock->expects($this->once())
@@ -847,31 +671,29 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->paymentMethodMock);
         $this->paymentMethodMock->expects($this->once())
             ->method('fetchTransactionInfo')
-            ->with($this->payment, $transactionId);
+            ->with($this->payment, $this->transactionId);
 
-        $this->payment->registerPaymentReviewAction($action, true);
+        $this->payment->update();
     }
 
     /**
-     * @dataProvider registerReviewActionOnlineOnlineDenyPaymentNegativeProvider
+     * @dataProvider acceptPaymentFalseProvider
      * @param bool $isFraudDetected
      * @param bool $status
      */
-    public function testRegisterReviewActionOnlineUpdateOnlineTransactionDeniedFalse($isFraudDetected, $status)
+    public function testUpdateOnlineTransactionDeniedFalse($isFraudDetected, $status)
     {
-        $transactionId = 100;
-        $message = sprintf('There is no update for the payment. Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_UPDATE;
+        $message = sprintf('There is no update for the payment. Transaction ID: "%s"', $this->transactionId);
 
         $storeId = 50;
         $orderState = 'random_state';
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_transaction_denied', false);
         $this->payment->setData('is_transaction_approved', false);
         $this->payment->setData('is_fraud_detected', $isFraudDetected);
 
-        $this->mockInvoice($transactionId);
+        $this->mockInvoice($this->transactionId);
 
         $this->orderMock->expects($this->once())
             ->method('getState')
@@ -893,26 +715,24 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->paymentMethodMock);
         $this->paymentMethodMock->expects($this->once())
             ->method('fetchTransactionInfo')
-            ->with($this->payment, $transactionId);
+            ->with($this->payment, $this->transactionId);
 
-        $this->payment->registerPaymentReviewAction($action, true);
-        $this->assertEquals($transactionId, $this->payment->getLastTransId());
+        $this->payment->update();
+        $this->assertEquals($this->transactionId, $this->payment->getLastTransId());
     }
 
-    public function testRegisterReviewActionOnlineUpdateOnlineTransactionDeniedFalseHistoryComment()
+    public function testUpdateOnlineTransactionDeniedFalseHistoryComment()
     {
-        $transactionId = 100;
-        $message = sprintf('There is no update for the payment. Transaction ID: "%s"', $transactionId);
-        $action = Payment::REVIEW_ACTION_UPDATE;
+        $message = sprintf('There is no update for the payment. Transaction ID: "%s"', $this->transactionId);
 
         $storeId = 50;
         $orderState = Order::STATE_PAYMENT_REVIEW;
 
-        $this->payment->setLastTransId($transactionId);
+        $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_transaction_denied', false);
         $this->payment->setData('is_transaction_approved', false);
 
-        $this->mockInvoice($transactionId);
+        $this->mockInvoice($this->transactionId);
 
         $this->orderMock->expects($this->once())
             ->method('getState')
@@ -937,10 +757,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->paymentMethodMock);
         $this->paymentMethodMock->expects($this->once())
             ->method('fetchTransactionInfo')
-            ->with($this->payment, $transactionId);
+            ->with($this->payment, $this->transactionId);
 
-        $this->payment->registerPaymentReviewAction($action, true);
-        $this->assertEquals($transactionId, $this->payment->getLastTransId());
+        $this->payment->update();
+        $this->assertEquals($this->transactionId, $this->payment->getLastTransId());
     }
 
     /**
@@ -981,23 +801,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($message, false);
     }
 
-    public function testRegisterPaymentReviewActionOnlineException()
+    public function testAcceptWithoutInvoiceResultTrue()
     {
-        try {
-            $this->payment->registerPaymentReviewAction('random', true);
-        } catch (\Exception $e) {
-            $this->assertTrue((bool)$e->getMessage());
-        }
-    }
-
-    public function testRegisterPaymentReviewActionOnlineWithoutInvoiceResultTrue()
-    {
-        $transactionId = 100;
         $baseGrandTotal = null;
         $acceptPayment = true;
-        $action = Payment::REVIEW_ACTION_ACCEPT;
 
-        $this->payment->setData('transaction_id', $transactionId);
+        $this->payment->setData('transaction_id', $this->transactionId);
 
         $this->invoiceMock->expects($this->never())
             ->method('pay');
@@ -1019,18 +828,16 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->payment)
             ->willReturn($acceptPayment);
 
-        $this->payment->registerPaymentReviewAction($action, true);
+        $this->payment->accept();
         $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 
-    public function testRegisterPaymentReviewActionOnlineWithoutInvoiceResultFalse()
+    public function testDenyWithoutInvoiceResultFalse()
     {
-        $transactionId = 100;
         $baseGrandTotal = null;
         $denyPayment = true;
-        $action = Payment::REVIEW_ACTION_DENY;
 
-        $this->payment->setData('transaction_id', $transactionId);
+        $this->payment->setData('transaction_id', $this->transactionId);
 
         $this->invoiceMock->expects($this->never())
             ->method('cancel');
@@ -1052,7 +859,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->with($this->payment)
             ->willReturn($denyPayment);
 
-        $this->payment->registerPaymentReviewAction($action, true);
+        $this->payment->deny();
         $this->assertEquals($baseGrandTotal, $this->payment->getBaseAmountPaidOnline());
     }
 }
