@@ -9,6 +9,7 @@ use Magento\Framework\Model\Resource\Db\AbstractDb;
 
 /**
  * QuoteIdMask Resource model
+ * @codeCoverageIgnore
  */
 class QuoteIdMask extends AbstractDb
 {
