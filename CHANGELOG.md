@@ -29,10 +29,10 @@
     * Obsolete code tests did not cover Tests folders
     * Random fail of Magento\Log\Test\Unit\Model\VisitorTest
 * GitHub issues:
-   * [#1149] -- Checkout Grand Total amount miscalculation
-   * [#1165] -- Fix typos
-   * [#1182] -- Update system.xml for 'fix' sortOrder in adminhtml
-   * [#1186] -- SalesSequence: Fixed composer installer dependency
+   * [#1149] (https://github.com/magento/magento2/issues/1149) -- Checkout Grand Total amount miscalculation
+   * [#1165] (https://github.com/magento/magento2/issues/1165) -- Fix typos
+   * [#1182] (https://github.com/magento/magento2/issues/1182) -- Update system.xml for 'fix' sortOrder in adminhtml
+   * [#1186] (https://github.com/magento/magento2/issues/1186) -- SalesSequence: Fixed composer installer dependency
 
 0.74.0-beta4
 =============
