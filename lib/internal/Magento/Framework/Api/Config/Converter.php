@@ -21,7 +21,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
 
         /** @var \DOMNodeList $types */
-        $types = $source->getElementsByTagName('custom_attributes');
+        $types = $source->getElementsByTagName('extension_attributes');
         /** @var \DOMNode $type */
         foreach ($types as $type) {
             $typeConfig = [];

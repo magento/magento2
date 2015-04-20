@@ -9,7 +9,7 @@
   <xs:element name="config">
       <xs:complexType>
           <xs:sequence>
-              <xs:element name="custom_attributes" type="custom_attributesType" minOccurs="1" maxOccurs="unbounded">
+              <xs:element name="extension_attributes" type="extension_attributesType" minOccurs="1" maxOccurs="unbounded">
                   <xs:annotation>
                       <xs:documentation>Main schema element. Extended Attributes</xs:documentation>
                   </xs:annotation>
@@ -25,7 +25,7 @@
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
-  <xs:complexType name="custom_attributesType">
+  <xs:complexType name="extension_attributesType">
     <xs:sequence>
       <xs:element type="attributeType" name="attribute" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
