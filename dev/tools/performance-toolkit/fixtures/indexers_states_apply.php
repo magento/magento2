@@ -5,9 +5,9 @@
  */
 
 /**
- * Class IndexersApplyFixture
+ * Class IndexersStatesApplyFixture
  */
-class IndexersApplyFixture extends \Magento\ToolkitFramework\Fixture
+class IndexersStatesApplyFixture extends \Magento\ToolkitFramework\Fixture
 {
     /**
      * @var int
@@ -19,13 +19,11 @@ class IndexersApplyFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $indexers = \Magento\ToolkitFramework\Config::getInstance()->getValue('indexers', array());
+        $indexers = \Magento\ToolkitFramework\Config::getInstance()->getValue('indexers', []);
         $this->application->resetObjectManager();
-
-                foreach ($indexers["indexer"] as $indexer) {
-                    $this->application->indexersStates[$indexer['id']] = $indexer['set_scheduled'];
-                }
-
+        foreach ($indexers["indexer"] as $indexer) {
+            $this->application->indexersStates[$indexer['id']] = $indexer['set_scheduled'];
+        }
         $this->application->getObjectManager()->get('Magento\Framework\App\CacheInterface')
             ->clean([\Magento\Framework\App\Config::CACHE_TAG]);
     }
@@ -35,7 +33,7 @@ class IndexersApplyFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function getActionTitle()
     {
-        return 'Indexer Mode Changes';
+        return 'Indexers Mode Changes';
     }
 
     /**
@@ -47,4 +45,4 @@ class IndexersApplyFixture extends \Magento\ToolkitFramework\Fixture
     }
 }
 
-return new IndexersApplyFixture($this);
+return new IndexersStatesApplyFixture($this);
