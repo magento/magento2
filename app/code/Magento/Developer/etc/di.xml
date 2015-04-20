@@ -23,4 +23,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="dev_tests_run" xsi:type="object">Magento\Developer\Console\DevTestsRunCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
