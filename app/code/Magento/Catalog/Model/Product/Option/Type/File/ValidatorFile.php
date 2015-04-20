@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Product\Option\Type\File;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -89,10 +90,12 @@ class ValidatorFile extends Validator
      * @param \Magento\Framework\Object $processingParams
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Zend_File_Transfer_Exception
+     * @throws LocalizedException
+     * @throws ProductException
+     * @throws \Exception
+     * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validator\Exception
-     * @throws \Magento\Catalog\Model\Product\Exception
+     * @throws \Zend_File_Transfer_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -116,7 +119,7 @@ class ValidatorFile extends Validator
             // when file exceeds the upload_max_filesize, $_FILES is empty
             if ($this->validateContentLength()) {
                 $value = $this->fileSize->getMaxFileSizeInMb();
-                throw new \Magento\Framework\Exception\File\LargeSizeException(
+                throw new LocalizedException(
                     __('The file you uploaded is larger than %1 Megabytes allowed by server', $value)
                 );
             } else {
@@ -188,12 +191,10 @@ class ValidatorFile extends Validator
             $errors = $this->getValidatorErrors($upload->getErrors(), $fileInfo, $option);
 
             if (count($errors) > 0) {
-                throw new \Magento\Framework\Exception\File\ValidatorException(__(implode("\n", $errors)));
+                throw new LocalizedException(__(implode("\n", $errors)));
             }
         } else {
-            throw new \Magento\Framework\Exception\File\ValidatorException(
-                __('Please specify the product\'s required option(s).')
-            );
+            throw new LocalizedException(__('Please specify the product\'s required option(s).'));
         }
         return $userValue;
     }
