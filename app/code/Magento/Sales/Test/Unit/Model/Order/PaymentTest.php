@@ -420,9 +420,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_fraud_detected', $isFraudDetected);
 
-
-        $this->mockInvoice($this->transactionId);
-
         $this->orderMock->expects($this->once())
             ->method('getState')
             ->willReturn($orderState);
@@ -461,9 +458,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_fraud_detected', $isFraudDetected);
-
-
-        $this->mockInvoice($this->transactionId);
 
         $this->orderMock->expects($this->once())
             ->method('getState')
@@ -533,8 +527,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->payment->setLastTransId($this->transactionId);
         $this->payment->setData('is_fraud_detected', $isFraudDetected);
 
-        $this->mockInvoice($this->transactionId);
-
         $this->orderMock->expects($this->once())
             ->method('getState')
             ->willReturn($orderState);
@@ -567,8 +559,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $orderState = Order::STATE_PAYMENT_REVIEW;
 
         $this->payment->setLastTransId($this->transactionId);
-
-        $this->mockInvoice($this->transactionId);
 
         $this->orderMock->expects($this->once())
             ->method('getState')

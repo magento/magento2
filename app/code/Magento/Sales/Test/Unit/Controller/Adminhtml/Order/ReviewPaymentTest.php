@@ -151,8 +151,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->resultRedirectMock->expects($this->once())->method('setPath')->with('sales/*/')->willReturnSelf();
 
-        $this->paymentMock->expects($this->once())->method('registerPaymentReviewAction')
-            ->with(\Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE, true);
+        $this->paymentMock->expects($this->once())->method('update');
 
         $result = $this->reviewPayment->execute();
         $this->assertEquals($this->resultRedirectMock, $result);

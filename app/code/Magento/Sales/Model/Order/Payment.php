@@ -11,6 +11,7 @@ namespace Magento\Sales\Model\Order;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Order payment information
@@ -910,23 +911,24 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function accept()
     {
-        $order = $this->getOrder();
-
         $transactionId = $this->getLastTransId();
-        $invoice = $this->_getInvoiceForTransactionId($transactionId);
 
-        if ($this->getMethodInstance()->setStore($order->getStoreId())->acceptPayment($this)) {
+        /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+        $method = $this->getMethodInstance()->setStore($this->getOrder()->getStoreId());
+        if ($method->acceptPayment($this)) {
+            $invoice = $this->_getInvoiceForTransactionId($transactionId);
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
                 $this->_prependMessage(__('Approved the payment online.'))
             );
-            $this->paymentReviewTrue($invoice, $order, $message);
+            $this->updateBaseAmountPaidOnlineTotal($invoice);
+            $this->setOrderStateProcessing($message);
         } else {
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
                 $this->_prependMessage(__('There is no need to approve this payment.'))
             );
-            $this->paymentReviewNegative($order, $message, $transactionId);
+            $this->setOrderStatePaymentReview($message, $transactionId);
         }
         return $this;
     }
@@ -938,130 +940,120 @@ class Payment extends Info implements OrderPaymentInterface
      */
     public function deny()
     {
-        $order = $this->getOrder();
-
         $transactionId = $this->getLastTransId();
-        $invoice = $this->_getInvoiceForTransactionId($transactionId);
 
-        if ($this->getMethodInstance()->setStore($order->getStoreId())->denyPayment($this)) {
+        /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+        $method = $this->getMethodInstance()->setStore($this->getOrder()->getStoreId());
+        if ($method->denyPayment($this)) {
+            $invoice = $this->_getInvoiceForTransactionId($transactionId);
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
                 $this->_prependMessage(__('Denied the payment online'))
             );
-            $this->paymentReviewFalse($invoice, $order, $message);
+            $this->cancelInvoiceAndRegisterCancellation($invoice, $message);
         } else {
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
                 $this->_prependMessage(__('There is no need to deny this payment.'))
             );
-            $this->paymentReviewNegative($order, $message, $transactionId);
+            $this->setOrderStatePaymentReview($message, $transactionId);
         }
         return $this;
     }
 
+    /**
+     * Performs registered payment update.
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return $this
+     */
     public function update()
     {
-        $order = $this->getOrder();
-
         $transactionId = $this->getLastTransId();
         $invoice = $this->_getInvoiceForTransactionId($transactionId);
 
-        $this->getMethodInstance()->setStore($order->getStoreId())->fetchTransactionInfo($this, $transactionId);
+        $this->getMethodInstance()->setStore($this->getOrder()->getStoreId())
+            ->fetchTransactionInfo($this, $transactionId);
 
         if ($this->getIsTransactionApproved()) {
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
                 $this->_prependMessage(__('Registered update about approved payment.'))
             );
-            $this->paymentReviewTrue($invoice, $order, $message);
+            $this->updateBaseAmountPaidOnlineTotal($invoice);
+            $this->setOrderStateProcessing($message);
         } elseif ($this->getIsTransactionDenied()) {
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
                 $this->_prependMessage(__('Registered update about denied payment.'))
             );
-            $this->paymentReviewFalse($invoice, $order, $message);
+            $this->cancelInvoiceAndRegisterCancellation($invoice, $message);
         } else {
             $message = $this->_appendTransactionToMessage(
                 $transactionId,
                 $this->_prependMessage(__('There is no update for the payment.'))
             );
-            $this->paymentReviewNegative($order, $message, $transactionId);
-        }
-    }
-
-    /**
-     * Perform the payment review action: either initiated by merchant or by a notification
-     *
-     * Sets order to processing state and optionally approves invoice or cancels the order
-     *
-     * @param string $action
-     * @return $this
-     * @throws \Exception
-     */
-    public function registerPaymentReviewAction($action)
-    {
-        // invoke the payment method to determine what to do with the transaction
-        switch ($action) {
-            case self::REVIEW_ACTION_ACCEPT:
-                    $this->accept();
-                break;
-            case self::REVIEW_ACTION_DENY:
-                    $this->deny();
-                break;
-            case self::REVIEW_ACTION_UPDATE:
-                    $this->update();
-                break;
-            default:
-                throw new \Exception('Not implemented.');
+            $this->setOrderStatePaymentReview($message, $transactionId);
         }
 
         return $this;
     }
 
     /**
-     * @param $invoice
-     * @param \Magento\Sales\Model\Order $order
-     * @param string $message
+     * Triggers invoice pay and updates base_amount_paid_online total.
+     *
+     * @param \Magento\Sales\Model\Order\Invoice|false $invoice
      */
-    protected function paymentReviewTrue($invoice, \Magento\Sales\Model\Order $order, $message)
+    protected function updateBaseAmountPaidOnlineTotal($invoice)
     {
-        if ($invoice) {
+        if ($invoice instanceof Invoice) {
             $invoice->pay();
             $this->_updateTotals(['base_amount_paid_online' => $invoice->getBaseGrandTotal()]);
-            $order->addRelatedObject($invoice);
+            $this->getOrder()->addRelatedObject($invoice);
         }
-        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
     }
 
     /**
-     * @param $invoice
-     * @param \Magento\Sales\Model\Order $order
+     * Sets order state to 'processing' with appropriate message
+     *
+     * @param \Magento\Framework\Phrase|string $message
+     */
+    protected function setOrderStateProcessing($message)
+    {
+        $this->getOrder()->setState(Order::STATE_PROCESSING, true, $message);
+    }
+
+    /**
+     * Cancel invoice and register order cancellation
+     *
+     * @param Invoice|false $invoice
      * @param string $message
      */
-    protected function paymentReviewFalse($invoice, \Magento\Sales\Model\Order $order, $message)
+    protected function cancelInvoiceAndRegisterCancellation($invoice, $message)
     {
-        if ($invoice) {
+        if ($invoice instanceof Invoice) {
             $invoice->cancel();
-            $order->addRelatedObject($invoice);
+            $this->getOrder()->addRelatedObject($invoice);
         }
-        $order->registerCancellation($message, false);
+        $this->getOrder()->registerCancellation($message, false);
     }
 
     /**
-     * @param \Magento\Sales\Model\Order $order
+     * Sets order state status to 'payment_review' with appropriate message
+     *
      * @param string $message
      * @param int|null $transactionId
      */
-    protected function paymentReviewNegative(\Magento\Sales\Model\Order $order, $message, $transactionId)
+    protected function setOrderStatePaymentReview($message, $transactionId)
     {
-        if ($order->getState() != \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
-            $status = $this->getIsFraudDetected() ? \Magento\Sales\Model\Order::STATUS_FRAUD : false;
-            $order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW, $status, $message);
+        if ($this->getOrder()->getState() != Order::STATE_PAYMENT_REVIEW) {
+            $status = $this->getIsFraudDetected() ? Order::STATUS_FRAUD : false;
+            $this->getOrder()->setState(Order::STATE_PAYMENT_REVIEW, $status, $message);
             if ($transactionId) {
                 $this->setLastTransId($transactionId);
             }
         } else {
-            $order->addStatusHistoryComment($message);
+            $this->getOrder()->addStatusHistoryComment($message);
         }
     }
 
