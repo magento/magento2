@@ -54,7 +54,6 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
      */
     public function test(Customer $customer, $products, $qty)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-34757');
         // Preconditions
         $customer->persist();
         $this->loginCustomer($customer);
