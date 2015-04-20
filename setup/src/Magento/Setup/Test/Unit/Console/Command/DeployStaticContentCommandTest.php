@@ -92,5 +92,19 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
             $tester->getDisplay()
         );
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage ARG_IS_WRONG argument has invalid value format
+     */
+    public function testExecuteInvalidLanguageArgument()
+    {
+        $this->deploymentConfig->expects($this->once())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
+        $wrongParam = ['languages' => ['ARG_IS_WRONG']];
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute($wrongParam);
+    }
 }
 
