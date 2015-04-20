@@ -7,7 +7,7 @@
 define(
     [
         'uiComponent',
-        '../model/quote',
+        'Magento_Checkout/js/model/quote',
         'mage/url',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/action/place-order',
@@ -27,7 +27,9 @@ define(
             itemsBefore: itemsBefore,
             itemsAfter: itemsAfter,
             getItems: function() {
-                return quote.getItems();
+               if (review.getTotals()()) {
+                   return review.getTotals()().items;
+               }
             },
             getColHeaders: function() {
                 return ['name', 'price', 'qty', 'subtotal'];
