@@ -150,11 +150,11 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(true, $result);
 
-        /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $ShippingMethodManagementService */
-        $ShippingMethodManagementService = $this->objectManager->create(
+        /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagementService */
+        $shippingMethodManagementService = $this->objectManager->create(
             'Magento\Quote\Api\ShippingMethodManagementInterface'
         );
-        $shippingMethod = $ShippingMethodManagementService->get($this->quote->getId());
+        $shippingMethod = $shippingMethodManagementService->get($this->quote->getId());
 
         $this->assertNotNull($shippingMethod);
         $this->assertEquals('flatrate', $shippingMethod->getCarrierCode());
@@ -315,12 +315,9 @@ class ShippingMethodManagementTest extends WebapiAbstract
 
         $result = $this->_webApiCall($serviceInfo, []);
         $this->assertNotEmpty($result);
+        $this->assertCount(1, $result);
 
-        /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $ShippingMethodManagementService */
-        $ShippingMethodManagementService = $this->objectManager->create(
-            'Magento\Quote\Api\ShippingMethodManagementInterface'
-        );
-        $shippingMethod = $ShippingMethodManagementService->get($this->quote->getId());
+        $shippingMethod = $shippingMethodManagementService->get($this->quote->getId());
         $expectedData = [
             ShippingMethodInterface::KEY_CARRIER_CODE => $shippingMethod->getCarrierCode(),
             ShippingMethodInterface::KEY_METHOD_CODE => $shippingMethod->getMethodCode(),
