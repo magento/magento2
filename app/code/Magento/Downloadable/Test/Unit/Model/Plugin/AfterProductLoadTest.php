@@ -49,7 +49,8 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
         $this->productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productExtensionMock = $this->getMock('\Magento\Catalog\Api\Data\ProductExtensionInterface');
+        $this->productExtensionMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductExtension')
+            ->setMethods(['setDownloadableProductLinks', 'setDownloadableProductSamples'])->getMock();
     }
 
     public function testAfterLoad()

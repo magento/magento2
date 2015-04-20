@@ -71,8 +71,11 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->model = new AroundProductRepositorySave(
             $this->linkRepositoryMock,
             $this->sampleRepositoryMock        );
-        $this->productExtensionMock = $this->getMock('Magento\Catalog\Api\Data\ProductExtensionInterface');
-        $this->existingProductExtensionMock = $this->getMock('Magento\Catalog\Api\Data\ProductExtensionInterface');
+        $this->productExtensionMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductExtension')
+            ->setMethods(['getDownloadableProductLinks', 'getDownloadableProductSamples'])->getMock();
+        $this->existingProductExtensionMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductExtension')
+            ->setMethods(['getDownloadableProductLinks', 'getDownloadableProductSamples'])
+            ->getMock();
     }
 
     public function testAroundSaveWhenProductIsSimple()
