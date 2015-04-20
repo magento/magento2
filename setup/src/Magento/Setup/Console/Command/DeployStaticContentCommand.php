@@ -14,7 +14,9 @@ use Magento\Framework\App\DeploymentConfig;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Setup\Model\ObjectManagerProvider;
 
-
+/**
+ * Command for deploy static content
+ */
 class DeployStaticContentCommand extends Command
 {
     /**
