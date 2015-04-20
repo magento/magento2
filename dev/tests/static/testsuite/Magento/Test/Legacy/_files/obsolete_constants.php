@@ -697,4 +697,9 @@ return [
         'Use \Magento\Eav\Model\Entity\Type::getDefaultAttributeSetId() method instead',
     ],
     ['CONFIG_PATH_WSDL_CACHE_ENABLED', 'Magento\Webapi\Model\Soap\Server'],
+    [
+        'SIDEBAR_ORDER_LIMIT',
+        'Magento\Sales\Block\Reorder\Sidebar',
+        '\Magento\Sales\PrivateData\Section\LastOrderedItems::SIDEBAR_ORDER_LIMIT',
+    ],
 ];
