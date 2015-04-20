@@ -16,7 +16,13 @@ define(
         var stepName = 'paymentMethod';
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/payment'
+                template: 'Magento_Checkout/payment',
+                activeMethod: ''
+            },
+            initObservable: function () {
+                this._super()
+                    .observe('activeMethod');
+                return this;
             },
             stepNumber: navigator.getStepNumber(stepName),
             quoteHasShippingMethod: function() {

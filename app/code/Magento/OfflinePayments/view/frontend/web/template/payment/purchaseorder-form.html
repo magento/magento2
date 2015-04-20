@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<fieldset class="fieldset payment method" data-bind='attr: {id: "payment_form_" + getCode()}' style="display:none">
+<fieldset class="fieldset payment method" data-bind='attr: {id: "payment_form_" + getCode()}'>
     <div class="field field-number required">
         <label for="po_number" class="label"><span><!-- ko text: $t('Purchase Order Number')--><!-- /ko --></span></label>
         <div class="control">
-            <input type="text" id="po_number" name="payment[po_number]" data-bind='attr: {title: $t("Purchase Order Number")}' class="required-entry input-text" value="<!-- TODO Add form value -->"/>
+            <input type="text" id="po_number" name="payment[po_number]" data-bind='attr: {title: $t("Purchase Order Number")}, enable: $parent.activeMethod() === getCode()' class="required-entry input-text" value="<!-- TODO Add form value -->"/>
         </div>
     </div>
 </fieldset>
