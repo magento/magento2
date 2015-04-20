@@ -1,15 +1,14 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -95,22 +94,25 @@ class Cart extends Action\Action implements IndexInterface
      * If Product has required options - item removed from wishlist and redirect
      * to product view page with message about needed defined required options
      *
-     * @return ResponseInterface
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item');
-
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         /* @var $item \Magento\Wishlist\Model\Item */
         $item = $this->itemFactory->create()->load($itemId);
         if (!$item->getId()) {
-            return $this->_redirect('*/*');
+            $resultRedirect->setPath('*/*');
+            return $resultRedirect;
         }
         $wishlist = $this->wishlistProvider->getWishlist($item->getWishlistId());
         if (!$wishlist) {
-            return $this->_redirect('*/*');
+            $resultRedirect->setPath('*/*');
+            return $resultRedirect;
         }
 
         // Set qty
@@ -177,7 +179,7 @@ class Cart extends Action\Action implements IndexInterface
         }
 
         $this->helper->calculate();
-
-        return $this->getResponse()->setRedirect($redirectUrl);
+        $resultRedirect->setUrl($redirectUrl);
+        return $resultRedirect;
     }
 }
