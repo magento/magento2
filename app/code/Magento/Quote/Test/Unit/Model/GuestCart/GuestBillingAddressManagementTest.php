@@ -51,7 +51,7 @@ class GuestBillingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
         $this->billingAddressManagementMock = $this->getMock(
-            'Magento\Quote\Model\BillingAddressManagement',
+            'Magento\Quote\Api\BillingAddressManagementInterface',
             [],
             [],
             '',

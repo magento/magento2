@@ -3,11 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\GuestBillingAddressManagementInterface;
-use Magento\Quote\Model\BillingAddressManagement;
+use Magento\Quote\Api\BillingAddressManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
@@ -22,18 +21,18 @@ class GuestBillingAddressManagement implements GuestBillingAddressManagementInte
     private $quoteIdMaskFactory;
 
     /**
-     * @var BillingAddressManagement
+     * @var BillingAddressManagementInterface
      */
     private $billingAddressManagement;
 
     /**
      * Constructs a quote billing address service object.
      *
-     * @param BillingAddressManagement $billingAddressManagement
+     * @param BillingAddressManagementInterface $billingAddressManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        BillingAddressManagement $billingAddressManagement,
+        BillingAddressManagementInterface $billingAddressManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
