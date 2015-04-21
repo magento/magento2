@@ -84,7 +84,7 @@ class InstallSchema implements InstallSchemaInterface
                 'created_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Review create date'
             )
             ->addColumn(
