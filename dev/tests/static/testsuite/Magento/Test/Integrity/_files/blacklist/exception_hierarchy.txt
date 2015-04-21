@@ -1,0 +1,4 @@
+\Magento\Framework\Exception\LocalizedException
+\Magento\Framework\View\Asset\File\NotFoundException
+\Magento\Framework\Config\Dom\ValidationException
+\Magento\Framework\Gdata\Gshopping\HttpException
