@@ -10,21 +10,23 @@ define(
         'uiComponent',
         '../model/quote',
         '../action/select-payment-method',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Checkout/js/model/step-navigator',
+        'Magento_Checkout/js/model/payment-service',
     ],
-    function ($, Component, quote, selectPaymentMethod, navigator) {
+    function ($, Component, quote, selectPaymentMethod, navigator, paymentService) {
         var stepName = 'paymentMethod';
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/payment',
                 activeMethod: ''
             },
+            stepNumber: navigator.getStepNumber(stepName),
+            isVisible: navigator.isStepVisible(stepName),
             initObservable: function () {
                 this._super()
                     .observe('activeMethod');
                 return this;
             },
-            stepNumber: navigator.getStepNumber(stepName),
             quoteHasShippingMethod: function() {
                 return quote.isVirtual() || quote.getShippingMethod();
             },
@@ -36,11 +38,22 @@ define(
                 selectPaymentMethod(paymentMethodCode, []);
             },
             getAvailableViews: function () {
-              return this.elems().filter(function(elem) {
-                  return elem.isAvailable();
-              });
+                return this.sort(this.elems().filter(function(elem) {
+                    return elem.isAvailable();
+                }));
             },
-            isVisible: navigator.isStepVisible(stepName),
+            sort: function(elems){
+                var sortedElems = [];
+                _.each(paymentService.getAvailablePaymentMethods()(), function (originElem) {
+                    _.each(elems, function(elem) {
+                        if (elem.getCode() == originElem.code) {
+                            sortedElems.push(elem);
+                            return false;
+                        }
+                    });
+                });
+                return sortedElems;
+            },
             backToShippingMethod: function() {
                 navigator.setCurrent(stepName).goBack();
             },
