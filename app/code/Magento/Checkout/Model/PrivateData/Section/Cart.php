@@ -63,20 +63,29 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
      */
     public function getSectionData()
     {
-        // TODO: MAGETWO-34824
-        $totals = $this->checkoutCart->getQuote()->getTotals();
+        $totals = $this->getQuote()->getTotals();
         return [
-            'summary_count' => 5,
-            'items' => [1, 2, 3,],
+            'summary_count' => $this->getSummaryCount(),
             'subtotal' => isset($totals['subtotal'])
                 ? $this->checkoutHelper->formatPrice($totals['subtotal']->getValue())
-                : ''
+                : 0,
+            'cart_empty_message' => '',
+            'possible_onepage_checkout' => $this->isPossibleOnepageCheckout(),
+            'items' => [1, 2, 3,],
         ];
+    }
 
-//        return [
-//            'summary_count' => $this->getSummaryCount(),
-//            'items' => $this->getRecentItemsData(),
-//        ];
+    /**
+     * Get active quote
+     *
+     * @return \Magento\Quote\Model\Quote
+     */
+    protected function getQuote()
+    {
+        if (null === $this->quote) {
+            $this->quote = $this->checkoutSession->getQuote();
+        }
+        return $this->quote;
     }
 
     /**
@@ -93,6 +102,16 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     }
 
     /**
+     * Check if one page checkout is available
+     *
+     * @return bool
+     */
+    protected function isPossibleOnepageCheckout()
+    {
+        return $this->checkoutHelper->canOnepageCheckout() && !$this->getQuote()->getHasError();
+    }
+
+    /**
      * Get recent items data
      *
      * @return array
@@ -103,7 +122,9 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         $items = $this->getRecentItems();
         if ($items) {
             foreach ($items as $item) {
-                $itemsData = [];
+                $itemsData = [
+                    'product_type' => $item->getProductType(),
+                ];
                 // TODO: set data
                 // TODO: do not miss to check $_cartQty || $block->getAllowCartLink()
             }
@@ -114,7 +135,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     /**
      * Get array of last added items
      *
-     * @return array
+     * @return \Magento\Quote\Model\Quote\Item[]
      */
     protected function getRecentItems()
     {
@@ -143,7 +164,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     /**
      * Return customer quote items
      *
-     * @return array
+     * @return \Magento\Quote\Model\Quote\Item[]
      */
     protected function getItems()
     {
@@ -151,18 +172,5 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
             return $this->getCustomQuote()->getAllVisibleItems();
         }
         return $this->getQuote()->getAllVisibleItems();
-    }
-
-    /**
-     * Get active quote
-     *
-     * @return \Magento\Quote\Model\Quote
-     */
-    public function getQuote()
-    {
-        if (null === $this->quote) {
-            $this->quote = $this->checkoutSession->getQuote();
-        }
-        return $this->quote;
     }
 }

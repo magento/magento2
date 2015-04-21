@@ -14,4 +14,7 @@
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Model\PrivateData\Section\Cart">
+        <plugin name="cart_private_data_tax" type="Magento\Tax\Interceptor\Model\PrivateData\Section\CartInterceptor"/>
+    </type>
 </config>

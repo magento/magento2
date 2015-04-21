@@ -15,9 +15,12 @@
         <span class="text"><?php echo __('My Cart'); ?></span>
         <span class="counter qty"
               data-bind="css: { empty: cart().summary_count == 0 }">
-            <span class="counter-number" data-bind="text: cart().summary_count"></span>
+            <span class="counter-number"><!-- ko text: cart().summary_count --><!-- /ko --></span>
             <span class="counter-label">
-                <?php echo $block->getSummaryText(0); ?>
+            <!-- ko if: cart().summary_count -->
+                <!-- ko text: cart().summary_count --><!-- /ko -->
+                <!-- ko text: $t('items') --><!-- /ko -->
+            <!-- /ko -->
             </span>
         </span>
     </a>
@@ -33,10 +36,16 @@
                 "parentClass":"active",
                 "buttons":[]}}'>
             <div id="minicart-content-wrapper" data-bind="scope: 'minicart_content'">
-                <!-- ko template: $data.getTemplate() --><!-- /ko -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
             </div>
         </div>
     <?php endif ?>
+    <script>
+        // TODO: MAGETWO-34827: adapt for new configuration mechanism
+        window.checkout = {
+            checkoutUrl: '<?=$this->getShoppingCartUrl()?>'
+        };
+    </script>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
