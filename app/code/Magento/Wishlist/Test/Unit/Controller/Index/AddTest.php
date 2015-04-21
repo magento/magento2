@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
+
+use Magento\Framework\Controller\ResultFactory;
 
 class AddTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,20 +34,31 @@ class AddTest extends \PHPUnit_Framework_TestCase
      */
     protected $controller;
 
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
     public function setUp()
     {
         $this->context = $this->getMock(
             'Magento\Framework\App\Action\Context',
             [
-                'getRequest',
-                'getResponse',
-                'getObjectManager',
-                'getEventManager',
-                'getUrl',
-                'getActionFlag',
-                'getRedirect',
-                'getView',
-                'getMessageManager'
+//                'getRequest',
+//                'getResponse',
+//                'getObjectManager',
+//                'getEventManager',
+//                'getUrl',
+//                'getActionFlag',
+//                'getRedirect',
+//                'getView',
+//                'getMessageManager',
+//                'getResultFactory'
             ],
             [],
             '',
@@ -79,6 +91,17 @@ class AddTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT, [])
+            ->willReturn($this->resultRedirectMock);
     }
 
     /**
@@ -128,13 +151,6 @@ class AddTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $redirect = $this->getMock(
-            '\Magento\Store\App\Response\Redirect',
-            null,
-            [],
-            '',
-            false
-        );
         $view = $this->getMock(
             'Magento\Framework\App\View',
             null,
@@ -176,16 +192,15 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($actionFlag));
         $this->context
             ->expects($this->any())
-            ->method('getRedirect')
-            ->will($this->returnValue($redirect));
-        $this->context
-            ->expects($this->any())
             ->method('getView')
             ->will($this->returnValue($view));
         $this->context
             ->expects($this->any())
             ->method('getMessageManager')
             ->will($this->returnValue($messageManager));
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
     }
 
     public function configureCustomerSession()
@@ -261,12 +276,10 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', null, [], '', false);
         $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', ['redirect'], [], '', false);
-        $redirect
-            ->expects($this->once())
-            ->method('redirect')
-            ->with($response, '*/', [])
-            ->will($this->returnValue(null));
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/', [])
+            ->willReturnSelf();
         $view = $this->getMock('Magento\Framework\App\View', null, [], '', false);
         $messageManager = $this->getMock('Magento\Framework\Message\Manager', null, [], '', false);
 
@@ -296,10 +309,6 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($actionFlag));
         $this->context
             ->expects($this->any())
-            ->method('getRedirect')
-            ->will($this->returnValue($redirect));
-        $this->context
-            ->expects($this->any())
             ->method('getView')
             ->will($this->returnValue($view));
         $this->context
@@ -327,10 +336,13 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('setBeforeWishlistUrl')
             ->will($this->returnValue(null));
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
 
         $this->createController();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultRedirectMock, $this->controller->execute());
     }
 
     /**
@@ -344,7 +356,6 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->method('getWishlist')
             ->will($this->returnValue($wishlist));
 
-
         $request = $this->getMock('Magento\Framework\App\Request\Http', ['getParams'], [], '', false);
         $request
             ->expects($this->once())
@@ -356,12 +367,10 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', null, [], '', false);
         $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', ['redirect'], [], '', false);
-        $redirect
-            ->expects($this->once())
-            ->method('redirect')
-            ->with($response, '*/', [])
-            ->will($this->returnValue(null));
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/', [])
+            ->willReturnSelf();
         $view = $this->getMock('Magento\Framework\App\View', null, [], '', false);
         $messageManager = $this->getMock('Magento\Framework\Message\Manager', ['addError'], [], '', false);
         $messageManager
@@ -396,16 +405,15 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($actionFlag));
         $this->context
             ->expects($this->any())
-            ->method('getRedirect')
-            ->will($this->returnValue($redirect));
-        $this->context
-            ->expects($this->any())
             ->method('getView')
             ->will($this->returnValue($view));
         $this->context
             ->expects($this->any())
             ->method('getMessageManager')
             ->will($this->returnValue($messageManager));
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
 
         $this->customerSession
             ->expects($this->exactly(1))
@@ -430,7 +438,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
         $this->createController();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultRedirectMock, $this->controller->execute());
     }
 
     /**
@@ -466,12 +474,10 @@ class AddTest extends \PHPUnit_Framework_TestCase
         $eventManager = $this->getMock('Magento\Framework\Event\Manager', null, [], '', false);
         $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', ['redirect'], [], '', false);
-        $redirect
-            ->expects($this->once())
-            ->method('redirect')
-            ->with($response, '*', ['wishlist_id' => 2])
-            ->will($this->returnValue(null));
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*', ['wishlist_id' => 2])
+            ->willReturnSelf();
 
         $view = $this->getMock('Magento\Framework\App\View', null, [], '', false);
         $messageManager = $this->getMock('Magento\Framework\Message\Manager', ['addError'], [], '', false);
@@ -507,16 +513,15 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($actionFlag));
         $this->context
             ->expects($this->any())
-            ->method('getRedirect')
-            ->will($this->returnValue($redirect));
-        $this->context
-            ->expects($this->any())
             ->method('getView')
             ->will($this->returnValue($view));
         $this->context
             ->expects($this->any())
             ->method('getMessageManager')
             ->will($this->returnValue($messageManager));
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
 
         $this->customerSession
             ->expects($this->exactly(1))
@@ -559,7 +564,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
         $this->createController();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultRedirectMock, $this->controller->execute());
     }
 
     /**
@@ -683,12 +688,10 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
         $url = $this->getMock('Magento\Framework\Url', null, [], '', false);
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', null, [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', ['redirect'], [], '', false);
-        $redirect
-            ->expects($this->once())
-            ->method('redirect')
-            ->with($response, '*', ['wishlist_id' => 2])
-            ->will($this->returnValue(null));
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*', ['wishlist_id' => 2])
+            ->willReturnSelf();
 
         $view = $this->getMock('Magento\Framework\App\View', null, [], '', false);
 
@@ -735,16 +738,15 @@ class AddTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($actionFlag));
         $this->context
             ->expects($this->any())
-            ->method('getRedirect')
-            ->will($this->returnValue($redirect));
-        $this->context
-            ->expects($this->any())
             ->method('getView')
             ->will($this->returnValue($view));
         $this->context
             ->expects($this->any())
             ->method('getMessageManager')
             ->will($this->returnValue($messageManager));
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
 
         $this->customerSession
             ->expects($this->exactly(1))
@@ -766,6 +768,6 @@ class AddTest extends \PHPUnit_Framework_TestCase
 
         $this->createController();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultRedirectMock, $this->controller->execute());
     }
 }

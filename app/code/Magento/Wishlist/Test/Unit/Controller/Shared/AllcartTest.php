@@ -3,161 +3,146 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\Test\Unit\Controller\Shared;
+
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Controller\ResultFactory;
 
 class AllcartTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Wishlist\Controller\Shared\WishlistProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Controller\Shared\Allcart
      */
-    protected $wishlistProvider;
+    protected $allcartController;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $request;
+    protected $objectManagerHelper;
+
+    /**
+     * @var \Magento\Framework\App\Action\Context
+     */
+    protected $context;
+
+    /**
+     * @var \Magento\Wishlist\Controller\Shared\WishlistProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $wishlistProviderMock;
 
     /**
      * @var \Magento\Wishlist\Model\ItemCarrier|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $itemCarrier;
+    protected $itemCarrierMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\Wishlist|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $response;
+    protected $wishlistMock;
 
     /**
-     * @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $context;
+    protected $requestMock;
+
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForwardMock;
 
     protected function setUp()
     {
-        $this->wishlistProvider = $this->getMock(
-            '\Magento\Wishlist\Controller\Shared\WishlistProvider',
-            [],
-            [],
-            '',
-            false
+        $this->wishlistProviderMock = $this->getMockBuilder('Magento\Wishlist\Controller\Shared\WishlistProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->itemCarrierMock = $this->getMockBuilder('Magento\Wishlist\Model\ItemCarrier')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->wishlistMock = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultForwardMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Forward')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturnMap(
+                [
+                    [ResultFactory::TYPE_REDIRECT, [], $this->resultRedirectMock],
+                    [ResultFactory::TYPE_FORWARD, [], $this->resultForwardMock]
+                ]
+            );
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->context = $this->objectManagerHelper->getObject('Magento\Framework\App\Action\Context',
+            [
+                'request' => $this->requestMock,
+                'resultFactory' => $this->resultFactoryMock
+            ]
         );
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->itemCarrier = $this->getMock('Magento\Wishlist\Model\ItemCarrier', [], [], '', false);
-        $this->context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
-        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
-    }
-
-    protected function prepareContext()
-    {
-        $om = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $eventManager = $this->getMock('Magento\Framework\Event\Manager', null, [], '', false);
-        $url = $this->getMock('Magento\Framework\Url', [], [], '', false);
-        $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
-        $redirect = $this->getMock('\Magento\Store\App\Response\Redirect', [], [], '', false);
-        $view = $this->getMock('Magento\Framework\App\View', [], [], '', false);
-        $messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
-
-        $this->context
-            ->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($om));
-        $this->context
-            ->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($this->request));
-        $this->context
-            ->expects($this->any())
-            ->method('getResponse')
-            ->will($this->returnValue($this->response));
-        $this->context
-            ->expects($this->any())
-            ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
-        $this->context
-            ->expects($this->any())
-            ->method('getUrl')
-            ->will($this->returnValue($url));
-        $this->context
-            ->expects($this->any())
-            ->method('getActionFlag')
-            ->will($this->returnValue($actionFlag));
-        $this->context
-            ->expects($this->any())
-            ->method('getRedirect')
-            ->will($this->returnValue($redirect));
-        $this->context
-            ->expects($this->any())
-            ->method('getView')
-            ->will($this->returnValue($view));
-        $this->context
-            ->expects($this->any())
-            ->method('getMessageManager')
-            ->will($this->returnValue($messageManager));
-    }
-
-    public function getController()
-    {
-        $this->prepareContext();
-        return new \Magento\Wishlist\Controller\Shared\Allcart(
-            $this->context,
-            $this->wishlistProvider,
-            $this->itemCarrier
+        $this->allcartController = $this->objectManagerHelper->getObject('Magento\Wishlist\Controller\Shared\Allcart',
+            [
+                'context' => $this->context,
+                'wishlistProvider' => $this->wishlistProviderMock,
+                'itemCarrier' => $this->itemCarrierMock
+            ]
         );
-    }
-
-    public function testExecuteWithNoWishlist()
-    {
-        $this->wishlistProvider->expects($this->once())
-            ->method('getWishlist')
-            ->willReturn(false);
-
-        $this->request
-            ->expects($this->once())
-            ->method('initForward')
-            ->will($this->returnValue(true));
-        $this->request
-            ->expects($this->once())
-            ->method('setActionName')
-            ->with('noroute')
-            ->will($this->returnValue(true));
-        $this->request
-            ->expects($this->once())
-            ->method('setDispatched')
-            ->with(false)
-            ->will($this->returnValue(true));
-
-        $controller = $this->getController();
-        $controller->execute();
     }
 
     public function testExecuteWithWishlist()
     {
-        $wishlist = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->wishlistProvider->expects($this->once())
-            ->method('getWishlist')
-            ->willReturn($wishlist);
+        $url = 'http://redirect-url.com';
+        $quantity = 2;
 
-        $this->request
-            ->expects($this->once())
+        $this->wishlistProviderMock->expects($this->once())
+            ->method('getWishlist')
+            ->willReturn($this->wishlistMock);
+        $this->requestMock->expects($this->any())
             ->method('getParam')
             ->with('qty')
-            ->will($this->returnValue(2));
-
-        $this->itemCarrier
-            ->expects($this->once())
+            ->willReturn($quantity);
+        $this->itemCarrierMock->expects($this->once())
             ->method('moveAllToCart')
-            ->with($wishlist, 2)
-            ->will($this->returnValue('http://redirect-url.com'));
+            ->with($this->wishlistMock, 2)
+            ->willReturn($url);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setUrl')
+            ->with($url)
+            ->willReturnSelf();
 
-        $this->response
-            ->expects($this->once())
-            ->method('setRedirect')
-            ->will($this->returnValue('http://redirect-url.com'));
+        $this->assertSame($this->resultRedirectMock, $this->allcartController->execute());
+    }
 
-        $controller = $this->getController();
-        $controller->execute();
+    public function testExecuteWithNoWishlist()
+    {
+        $this->wishlistProviderMock->expects($this->once())
+            ->method('getWishlist')
+            ->willReturn(false);
+        $this->resultForwardMock->expects($this->once())
+            ->method('forward')
+            ->with('noroute')
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultForwardMock, $this->allcartController->execute());
     }
 }
