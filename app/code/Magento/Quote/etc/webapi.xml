@@ -163,4 +163,10 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <route url="/V1/carts/:cartId/collect-totals" method="PUT">
+        <service class="Magento\Quote\Api\CartTotalManagementInterface" method="collectTotals"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 </routes>

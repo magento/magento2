@@ -17,29 +17,11 @@ define(
             if (!code) {
                 alert('Please specify a shipping method');
             }
-            var shippingMethodCode = code.split("_");
-            var shippingMethodData ={
-                "cartId": quote.getQuoteId(),
-                "carrierCode" : shippingMethodCode[0],
-                "methodCode" : shippingMethodCode[1]
 
-            };
-            return storage.put(
-                urlBuilder.createUrl('/carts/:quoteId/selected-shipping-method', {quoteId: quote.getQuoteId()}),
-                JSON.stringify(shippingMethodData)
-            ).done(
-                function(response) {
-                    quote.setShippingMethod(shippingMethodCode);
-                    quote.setSelectedShippingMethod(code);
-                    navigator.setCurrent('shippingMethod').goNext();
-                }
-            ).error(
-                function(response) {
-                    var error = JSON.parse(response.responseText);
-                    errorList.add(error);
-                    quote.setShippingMethod(null);
-                }
-            );
+            var shippingMethodCode = code.split("_");
+            quote.setShippingMethod(shippingMethodCode);
+            quote.setSelectedShippingMethod(code);
+            navigator.setCurrent('shippingMethod').goNext();
         };
     }
 );

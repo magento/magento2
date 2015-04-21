@@ -11,10 +11,9 @@ define(
         'mage/url',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/action/place-order',
-        'Magento_Checkout/js/model/review',
         'underscore'
     ],
-    function (Component, quote, url, navigator, orderAction, review, _) {
+    function (Component, quote, url, navigator, orderAction, _) {
         "use strict";
         var stepName = 'review';
         var itemsBefore = [];
@@ -30,9 +29,7 @@ define(
             itemsAfter: itemsAfter,
             submitBefore: submitBefore,
             getItems: function() {
-               if (review.getTotals()()) {
-                   return review.getTotals()().items;
-               }
+                return quote.getTotals()().items;
             },
             getColHeaders: function() {
                 return ['name', 'price', 'qty', 'subtotal'];
@@ -56,7 +53,7 @@ define(
                }
             },
             // get recalculated totals when all data set
-            getTotals: review.getTotals()
+            getTotals: quote.getTotals()
         });
     }
 );
