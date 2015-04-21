@@ -1,0 +1,16 @@
+<td data-bind="attr: { 'data-th': getColName(), class: getClass() }">
+    <!-- ko if: displayPriceInclTax -->
+    <span class="price-including-tax" data-label="Incl. Tax">
+        <span class="cart-price">
+            <span class="price" data-bind="text: getPriceInclTax($parents[1])"></span>
+        </span>
+    </span>
+    <!-- /ko -->
+    <!-- ko if: displayPriceExclTax -->
+    <span class="price-excluding-tax" data-label="Excl. Tax">
+        <span class="cart-price">
+            <span class="price" data-bind="text: getPriceExclTax($parents[1])"></span>
+        </span>
+    </span>
+    <!-- /ko -->
+</td>

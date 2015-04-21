@@ -26,7 +26,7 @@
                         <tr>
                             <!-- ko foreach: getRegion('columns') -->
                                 <!-- ko foreach: elems() -->
-                                    <th class="col" scope="col" data-bind=" text: $t(getColName()) , attr: { class: getClass() }" ></th>
+                                    <th class="col" scope="col" data-bind=" text: $t(getColName()) , attr: { class: getHeaderClass() }" ></th>
                                 <!-- /ko -->
                             <!-- /ko -->
                         </tr>
