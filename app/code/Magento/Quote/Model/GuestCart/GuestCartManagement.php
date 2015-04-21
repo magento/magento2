@@ -10,8 +10,6 @@ use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Model\QuoteManagement;
-use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Cart Management class for guest carts.
