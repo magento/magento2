@@ -111,6 +111,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $accountManagement;
 
     /**
+     * @var \Magento\Checkout\Model\Agreements\AgreementsValidator  $agreementsValidator
+     */
+    protected $agreementsValidator;
+
+    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderFactory $orderFactory
@@ -128,6 +133,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
+     * @param \Magento\Checkout\Model\Agreements\AgreementsValidator $agreementsValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -147,7 +153,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Api\AccountManagementInterface $accountManagement
+        \Magento\Customer\Api\AccountManagementInterface $accountManagement,
+        \Magento\Checkout\Model\Agreements\AgreementsValidator $agreementsValidator
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -166,6 +173,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->checkoutSession = $checkoutSession;
         $this->accountManagement = $accountManagement;
         $this->customerSession = $customerSession;
+        $this->agreementsValidator = $agreementsValidator;
     }
 
     /**
@@ -263,8 +271,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function placeOrder($cartId)
+    public function placeOrder($cartId, $agreements = null)
     {
+        if (!$this->agreementsValidator->isValid($agreements)) {
+            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Please agree to all the terms and conditions before placing the order.'));
+        }
         $quote = $this->quoteRepository->getActive($cartId);
 
         if ($quote->getCheckoutMethod() === 'guest') {
@@ -285,12 +296,12 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * @inheritdoc
      */
-    public function placeOrderCreatingAccount($cartId, $customer, $password)
+    public function placeOrderCreatingAccount($cartId, $customer, $password, $agreements = null)
     {
         $customer = $this->accountManagement->createAccount($customer, $password);
         $quote = $this->quoteRepository->getActive($cartId)->assignCustomer($customer);
         $quote->setCheckoutMethod('register');
-        $orderId = $this->placeOrder($cartId);
+        $orderId = $this->placeOrder($cartId, $agreements);
         $this->customerSession->loginById($customer->getId());
         return $orderId;
     }

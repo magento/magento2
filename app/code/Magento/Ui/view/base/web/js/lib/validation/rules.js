@@ -743,6 +743,11 @@ define([
                 return !utils.isEmpty(value);
             }, $.mage.__('This is a required field.')
         ],
+        'checked': [
+            function(value) {
+                return value;
+            }, $.mage.__('This is a required field.')
+        ],
         'not-negative-amount': [
             function(value) {
                 if (value.length)

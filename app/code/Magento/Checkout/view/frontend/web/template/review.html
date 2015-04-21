@@ -51,6 +51,9 @@
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
             <div id="checkout-review-submit" data-mage-init='{"paymentAuthentication":{}}' class="checkout-submit-order">
+                <!-- ko foreach: getRegion('submitBefore') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
                 <div class="actions-toolbar" id="review-buttons-container">
                     <div class="primary">
                         <button data-role="review-save" type="submit" title="Place Order"

@@ -10,20 +10,26 @@ define(
         'mage/storage',
         'mage/url',
         'Magento_Ui/js/model/errorlist',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'underscore'
     ],
-    function(quote, urlBuilder, storage, url, errorList, customer) {
+    function(quote, urlBuilder, storage, url, errorList, customer, _) {
         "use strict";
-        return function() {
+        return function(customParams) {
+            var payload;
+            customParams = customParams || {};
             if (quote.getCheckoutMethod()() === 'register') {
+                if (customParams) {
+                    payload = _.extend({
+                        customer: customer.customerData,
+                        password: customer.getDetails('password')
+                    }, customParams);
+                }
                 customer.setAddressAsDefaultBilling(customer.addCustomerAddress(quote.getBillingAddress()()));
                 customer.setAddressAsDefaultShipping(customer.addCustomerAddress(quote.getShippingAddress()()));
                 storage.post(
                     urlBuilder.createUrl('/carts/:quoteId/order-with-registration', {quoteId: quote.getQuoteId()}),
-                    JSON.stringify({
-                        customer: customer.customerData,
-                        password: customer.getDetails('password')
-                    })
+                    JSON.stringify(payload)
                 ).done(
                     function() {
                         window.location.href = url.build('checkout/onepage/success/');
@@ -35,8 +41,15 @@ define(
                     }
                 );
             } else {
+                if (customParams) {
+                    payload = _.extend({
+                        customer: customer.customerData,
+                        password: customer.getDetails('password')
+                    }, customParams);
+                }
                 storage.put(
-                    urlBuilder.createUrl('/carts/:quoteId/order', {quoteId: quote.getQuoteId()})
+                    urlBuilder.createUrl('/carts/:quoteId/order', {quoteId: quote.getQuoteId()}),
+                    JSON.stringify(payload)
                 ).done(
                     function() {
                         window.location.replace(url.build('checkout/onepage/success/'));
