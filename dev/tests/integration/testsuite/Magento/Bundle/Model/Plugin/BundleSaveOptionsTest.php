@@ -24,25 +24,6 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
         $this->productRepository = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
     }
 
-    public static function tearDownAfterClass()
-    {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\CatalogInventory\Model\StockRegistry $stockRegistry */
-        $stockRegistry = $objectManager->get('Magento\CatalogInventory\Model\StockRegistry');
-        /** @var \Magento\CatalogInventory\Model\Stock\StockStatusRepository $stockStatusRepository */
-        $stockStatusRepository = $objectManager->get('Magento\CatalogInventory\Model\Stock\StockStatusRepository');
-        $isSecureArea = $objectManager->get('Magento\Framework\Registry')->registry('isSecureArea');
-        $objectManager->get('Magento\Framework\Registry')->unregister('isSecureArea');
-        $objectManager->get('Magento\Framework\Registry')->register('isSecureArea', true);
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('adminhtml');
-        foreach ([3, 2, 1] as $productId) {
-            $stockStatus = $stockRegistry->getStockStatus($productId, 1);
-            $stockStatusRepository->delete($stockStatus);
-        }
-        $objectManager->get('Magento\Framework\Registry')->unregister('isSecureArea');
-        $objectManager->get('Magento\Framework\Registry')->register('isSecureArea', $isSecureArea);
-    }
-
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
      * @magentoDbIsolation enabled
@@ -69,10 +50,11 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      */
     public function testSaveFailure()
     {
+        $this->markTestSkipped("When MAGETWO-36510 is fixed, need to change Dbisolation to disabled");
         $bundleProductSku = 'bundle-product';
         $product = $this->productRepository->get($bundleProductSku);
         $bundleExtensionAttributes = $product->getExtensionAttributes()->getBundleProductOptions();
