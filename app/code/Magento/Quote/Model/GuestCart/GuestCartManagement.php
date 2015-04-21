@@ -26,11 +26,6 @@ class GuestCartManagement implements GuestCartManagementInterface
     protected $quoteManagement;
 
     /**
-     * @var QuoteRepository
-     */
-    protected $quoteRepository;
-
-    /**
      * @var QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
@@ -39,17 +34,14 @@ class GuestCartManagement implements GuestCartManagementInterface
      * Initialize dependencies.
      *
      * @param CartManagementInterface $quoteManagement
-     * @param QuoteRepository $quoteRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CartManagementInterface $quoteManagement,
-        QuoteRepository $quoteRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteManagement = $quoteManagement;
-        $this->quoteRepository = $quoteRepository;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 

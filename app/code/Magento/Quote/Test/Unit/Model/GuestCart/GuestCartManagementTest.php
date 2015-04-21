@@ -47,7 +47,6 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->quoteIdMaskFactoryMock = $this->getMock(
             'Magento\Quote\Model\QuoteIdMaskFactory',
             ['create'],
@@ -67,7 +66,6 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\GuestCart\GuestCartManagement',
             [
                 'quoteManagement' => $this->quoteManagementMock,
-                'quoteRepository' => $this->quoteRepositoryMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock
             ]
         );
