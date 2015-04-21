@@ -20,6 +20,11 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     protected $rendererMock;
 
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
      * SetUp method
      *
      * @return void
@@ -29,6 +34,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $this->defaultRenderer = Phrase::getRenderer();
         $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\RendererInterface')
             ->getMock();
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     /**
@@ -51,7 +57,10 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
-        $phrase = new Phrase($text, $arguments);
+        $phrase = $this->objectManager->getObject('Magento\Framework\Phrase', [
+            'text' => $text,
+            'arguments' => $arguments,
+        ]);
         Phrase::setRenderer($this->rendererMock);
 
         $this->rendererMock->expects($this->once())
@@ -72,7 +81,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $this->rendererMock->expects($this->never())
             ->method('render');
 
-        new Phrase('some text');
+        $this->objectManager->getObject('Magento\Framework\Phrase', [
+            'text' => 'some text',
+        ]);
     }
 
     /**
@@ -85,7 +96,10 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
-        $phrase = new Phrase($text, $arguments);
+        $phrase = $this->objectManager->getObject('Magento\Framework\Phrase', [
+            'text' => $text,
+            'arguments' => $arguments,
+        ]);
         Phrase::setRenderer($this->rendererMock);
 
         $this->rendererMock->expects($this->once())
@@ -105,6 +119,9 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     {
         $text = 'some text';
         $phrase = new Phrase($text);
+        $phrase = $this->objectManager->getObject('Magento\Framework\Phrase', [
+            'text' => $text,
+        ]);
 
         $this->assertEquals($text, $phrase->getText());
     }
@@ -118,8 +135,13 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     {
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
-        $phrase1 = new Phrase($text);
-        $phrase2 = new Phrase($text, $arguments);
+        $phrase1 = $this->objectManager->getObject('Magento\Framework\Phrase', [
+            'text' => $text,
+        ]);
+        $phrase2 = $this->objectManager->getObject('Magento\Framework\Phrase', [
+            'text' => $text,
+            'arguments' => $arguments,
+        ]);
 
         $this->assertEquals([], $phrase1->getArguments());
         $this->assertEquals($arguments, $phrase2->getArguments());
@@ -135,7 +157,10 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $text = 'parameter1 is replaced by %1 parameter2 is replaced by %2';
         $arguments = ['arg1', 'arg2'];
         $result = 'parameter1 is replaced by arg1 parameter2 is replaced by arg2';
-        $phrase = new Phrase($text, $arguments);
+        $phrase = $this->objectManager->getObject('Magento\Framework\Phrase', [
+            'text' => $text,
+            'arguments' => $arguments,
+        ]);
 
         $this->assertEquals($text, $phrase->getText());
         $this->assertEquals($arguments, $phrase->getArguments());
