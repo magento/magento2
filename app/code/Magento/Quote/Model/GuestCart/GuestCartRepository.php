@@ -7,17 +7,14 @@
 namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\GuestCartRepositoryInterface;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteRepository;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Cart Repository class for guest carts.
  */
-class GuestCartRepository extends QuoteRepository implements GuestCartRepositoryInterface
+class GuestCartRepository implements GuestCartRepositoryInterface
 {
     /**
      * @var QuoteIdMaskFactory
@@ -25,58 +22,31 @@ class GuestCartRepository extends QuoteRepository implements GuestCartRepository
     protected $quoteIdMaskFactory;
 
     /**
+     * @var QuoteRepository
+     */
+    protected $quoteRepository;
+
+    /**
      * Initialize dependencies.
      *
-     * @param QuoteFactory $quoteFactory
-     * @param StoreManagerInterface $storeManager
-     * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection
-     * @param \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory
+     * @param QuoteRepository $quoteRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        QuoteFactory $quoteFactory,
-        StoreManagerInterface $storeManager,
-        \Magento\Quote\Model\Resource\Quote\Collection $quoteCollection,
-        \Magento\Quote\Api\Data\CartSearchResultsInterfaceFactory $searchResultsDataFactory,
+        QuoteRepository $quoteRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
-        parent::__construct($quoteFactory, $storeManager, $quoteCollection, $searchResultsDataFactory);
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get($cartId, array $sharedStoreIds = [])
+    public function get($cartId)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::get($quoteIdMask->getId(), $sharedStoreIds);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function save(Quote $quote)
-    {
-        if ($quote->getId()) {
-            /** @var $quoteIdMask QuoteIdMask */
-            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'masked_id');
-            $quote->setId($quoteIdMask->getId());
-        }
-        parent::save($quote);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete(Quote $quote)
-    {
-        if ($quote->getId()) {
-            /** @var $quoteIdMask QuoteIdMask */
-            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'masked_id');
-            $quote->setId($quoteIdMask->getId());
-        }
-        parent::delete($quote);
+        return $this->quoteRepository->get($quoteIdMask->getId());
     }
 }

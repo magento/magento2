@@ -30,28 +30,19 @@ class GuestCartTestHelper
     /**
      * Return mocks with expected invokes
      *
+     * First element is quoteIdMaskFactoryMock, second one is quoteIdMaskMock
+     *
      * @param $maskedCartId
      * @param $cartId
      * @return array
      */
-    public function mockQuoteIdMask(
-        $maskedCartId,
-        $cartId
-    ) {
+    public function mockQuoteIdMask( $maskedCartId, $cartId)
+    {
         $quoteIdMaskMock = $this->testCase->getMock('Magento\Quote\Model\QuoteIdMask', [], [], '', false);
         $quoteIdMaskFactoryMock = $this->testCase->getMock('Magento\Quote\Model\QuoteIdMaskFactory', [], [], '', false);
-
-        $quoteIdMaskFactoryMock->expects($this->testCase->once())->method('create')->willReturn(
-            $quoteIdMaskMock
-        );
-        $quoteIdMaskMock->expects($this->testCase->once())
-            ->method('load')
-            ->with($maskedCartId, 'masked_id')
-            ->willReturn($quoteIdMaskMock);
-        $quoteIdMaskMock->expects($this->testCase->once())
-            ->method('getId')
-            ->willReturn($cartId);
-
-        return [$quoteIdMaskFactoryMock,$quoteIdMaskMock];
+        $quoteIdMaskFactoryMock->expects($this->testCase->once())->method('create')->willReturn($quoteIdMaskMock);
+        $quoteIdMaskMock->expects($this->testCase->once())->method('load')->with($maskedCartId)->willReturnSelf();
+        $quoteIdMaskMock->expects($this->testCase->once())->method('getId')->willReturn($cartId);
+        return [$quoteIdMaskFactoryMock, $quoteIdMaskMock];
     }
 }
