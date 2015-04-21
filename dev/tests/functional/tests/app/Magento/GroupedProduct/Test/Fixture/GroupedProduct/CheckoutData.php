@@ -57,6 +57,39 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                     ],
                 ],
             ],
+            'three_simple_products_default_qty' => [
+                'options' => [
+                    [
+                        'name' => 'product_key_0',
+                        'qty' => 17,
+                    ],
+                    [
+                        'name' => 'product_key_1',
+                        'qty' => 36
+                    ],
+                    [
+                        'name' => 'product_key_2',
+                        'qty' => 20
+                    ],
+                ],
+                'cartItem' => [
+                    'price' => [
+                        'product_key_0' => 560,
+                        'product_key_1' => 40,
+                        'product_key_2' => 100,
+                    ],
+                    'qty' => [
+                        'product_key_0' => 17,
+                        'product_key_1' => 36,
+                        'product_key_2' => 20,
+                    ],
+                    'subtotal' => [
+                        'product_key_0' => 9520.00,
+                        'product_key_1' => 1440.00,
+                        'product_key_2' => 2000.00,
+                    ],
+                ],
+            ],
         ];
         return isset($presets[$name]) ? $presets[$name] : null;
     }
