@@ -63,7 +63,7 @@ class RepositoryGenerator implements OperationInterface
         }
 
         $this->classesScanner->getList($this->data['path']);
-
+        $this->repositoryScanner->setUseAutoload(false);
         $files = $this->directoryScanner->scan($this->data['path'], $this->data['filePatterns']);
         $repositories = $this->repositoryScanner->collectEntities($files['di']);
         foreach ($repositories as $entityName) {

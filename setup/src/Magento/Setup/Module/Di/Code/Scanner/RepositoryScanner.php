@@ -13,6 +13,11 @@ use Magento\Framework\Autoload\AutoloaderRegistry;
 class RepositoryScanner implements ScannerInterface
 {
     /**
+     * @var bool
+     */
+    private $useAutoload = true;
+
+    /**
      * Get array of class names
      *
      * @param array $files
@@ -21,8 +26,6 @@ class RepositoryScanner implements ScannerInterface
     public function collectEntities(array $files)
     {
         $repositoryClassNames = [];
-        $phpErrorReport = error_reporting();
-        error_reporting(0);
         foreach ($files as $fileName) {
             $dom = new \DOMDocument();
             $dom->loadXML(file_get_contents($fileName));
@@ -36,7 +39,12 @@ class RepositoryScanner implements ScannerInterface
                     && $replacementType !== null
                     && (substr($forType->nodeValue, -19) == 'RepositoryInterface')
                 ) {
-                    if (!AutoloaderRegistry::getAutoloader()->loadClass($replacementType->nodeValue)) {
+                    if (!$this->useAutoload) {
+                        $classExists = class_exists($replacementType->nodeValue, $this->useAutoload);
+                    } else {
+                        $classExists = AutoloaderRegistry::getAutoloader()->loadClass($replacementType->nodeValue);
+                    }
+                    if (!$classExists) {
                         $persistor = str_replace('\\Repository', 'InterfacePersistor', $replacementType->nodeValue);
                         $factory = str_replace('\\Repository', 'InterfaceFactory', $replacementType->nodeValue);
                         $searchResultFactory
@@ -49,7 +57,17 @@ class RepositoryScanner implements ScannerInterface
                 }
             }
         }
-        error_reporting($phpErrorReport);
         return $repositoryClassNames;
+    }
+
+    /**
+     * Sets autoload flag
+     *
+     * @param boolean $useAutoload
+     * @return void
+     */
+    public function setUseAutoload($useAutoload)
+    {
+        $this->useAutoload = $useAutoload;
     }
 }

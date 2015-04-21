@@ -20,10 +20,11 @@ class InheritanceInterceptorScanner implements ScannerInterface
         foreach ($classes as $class) {
             foreach ($interceptedEntities as $interceptorClass) {
                 $interceptedEntity = substr($interceptorClass, 0, -12);
-                if (is_subclass_of($class, $interceptedEntity)) {
+                if (is_subclass_of($class, $interceptedEntity)
+                    && !$this->endsWith($class, 'RepositoryInterface\\Proxy')
+                    && !$this->endsWith($class, '\\Interceptor')) {
                     $reflectionClass = new \ReflectionClass($class);
-                    if (!$reflectionClass->isAbstract() && !$reflectionClass->isFinal()
-                        && !$this->endsWith($class, 'RepositoryInterface\Proxy')) {
+                    if (!$reflectionClass->isAbstract() && !$reflectionClass->isFinal()) {
                         $output[] = $class . '\\Interceptor';
                     }
                 }

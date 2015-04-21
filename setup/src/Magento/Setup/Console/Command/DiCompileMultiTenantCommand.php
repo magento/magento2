@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
+use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
@@ -29,6 +30,7 @@ use Magento\Setup\Module\Di\Compiler\Log\Writer;
 use Magento\Setup\Module\Di\Definition\Compressor;
 use Magento\Setup\Module\Di\Definition\Serializer\Igbinary;
 use Magento\Setup\Module\Di\Definition\Serializer\Standard;
+
 
 /**
  * Command to generate all non-existing proxies and factories, and pre-compile class definitions,
@@ -151,6 +153,7 @@ class DiCompileMultiTenantCommand extends Command
         $compilationDirs = [
             $rootDir . '/app/code',
             $rootDir . '/lib/internal/Magento',
+            $rootDir . '/dev/tools/Magento/Tools',
             $rootDir . '/setup/src/Magento/Setup/Module'
         ];
 
@@ -159,6 +162,8 @@ class DiCompileMultiTenantCommand extends Command
         $log = new Log($logWriter, $logWriter);
 
         $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
+
+        AutoloaderRegistry::getAutoloader()->addPsr4('Magento\\', $generationDir . '/Magento/');
 
         // 1 Code generation
         // 1.1 Code scan
@@ -201,16 +206,17 @@ class DiCompileMultiTenantCommand extends Command
         );
         /** Initialize object manager for code generation based on configs */
         $generator->setObjectManager($this->objectManager);
+        $generatorAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
+        spl_autoload_register([$generatorAutoloader, 'load']);
+
         foreach ($repositories as $entityName) {
             switch ($generator->generateClass($entityName)) {
                 case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
                     $log->add(Log::GENERATION_SUCCESS, $entityName);
                     break;
-
                 case \Magento\Framework\Code\Generator::GENERATION_ERROR:
                     $log->add(Log::GENERATION_ERROR, $entityName);
                     break;
-
                 case \Magento\Framework\Code\Generator::GENERATION_SKIP:
                 default:
                     //no log
@@ -224,11 +230,9 @@ class DiCompileMultiTenantCommand extends Command
                     case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
                         $log->add(Log::GENERATION_SUCCESS, $entityName);
                         break;
-
                     case \Magento\Framework\Code\Generator::GENERATION_ERROR:
                         $log->add(Log::GENERATION_ERROR, $entityName);
                         break;
-
                     case \Magento\Framework\Code\Generator::GENERATION_SKIP:
                     default:
                         //no log
@@ -271,11 +275,9 @@ class DiCompileMultiTenantCommand extends Command
                     case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
                         $log->add(Log::GENERATION_SUCCESS, $entityName);
                         break;
-
                     case \Magento\Framework\Code\Generator::GENERATION_ERROR:
                         $log->add(Log::GENERATION_ERROR, $entityName);
                         break;
-
                     case \Magento\Framework\Code\Generator::GENERATION_SKIP:
                     default:
                         //no log

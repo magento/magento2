@@ -94,6 +94,9 @@ class RepositoryGeneratorTest extends \PHPUnit_Framework_TestCase
                 $data['filePatterns']
             )->willReturn($files);
         $this->repositoryScannerMock->expects($this->once())
+            ->method('setUseAutoload')
+            ->with(false);
+        $this->repositoryScannerMock->expects($this->once())
             ->method('collectEntities')
             ->with($files['di'])
             ->willReturn([]);
