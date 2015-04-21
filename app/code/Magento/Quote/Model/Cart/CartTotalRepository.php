@@ -8,6 +8,8 @@ namespace Magento\Quote\Model\Cart;
 use Magento\Quote\Api;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
+use Magento\Catalog\Helper\Product\ConfigurationPool;
+use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * Cart totals data object.
@@ -34,20 +36,26 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     private $dataObjectHelper;
 
     /**
-     * Constructs a cart totals data object.
-     *
-     * @param Api\Data\TotalsInterfaceFactory $totalsFactory Cart totals factory.
-     * @param QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @var ConfigurationPool
+     */
+    private $configurationPool;
+
+    /**
+     * @param Api\Data\TotalsInterfaceFactory $totalsFactory
+     * @param QuoteRepository $quoteRepository
+     * @param DataObjectHelper $dataObjectHelper
+     * @param ConfigurationPool $configurationPool
      */
     public function __construct(
         Api\Data\TotalsInterfaceFactory $totalsFactory,
         QuoteRepository $quoteRepository,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        ConfigurationPool $configurationPool
     ) {
         $this->totalsFactory = $totalsFactory;
         $this->quoteRepository = $quoteRepository;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->configurationPool = $configurationPool;
     }
 
     /**
@@ -68,8 +76,37 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
         $totals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray($totals, $totalsData, '\Magento\Quote\Api\Data\TotalsInterface');
-        $totals->setItems($quote->getAllItems());
+        $items = [];
+        foreach ($quote->getAllVisibleItems() as $index => $item) {
+            $items[$index] = $item->toArray();
+            $items[$index]['options'] = $this->getFormattedOptionValue($item);
+        }
+        $totals->setItems($items);
 
         return $totals;
+    }
+
+    /**
+     * Retrieve formatted item options view
+     *
+     * @param \Magento\Quote\Api\Data\CartItemInterface $item
+     * @return array
+     */
+    private function getFormattedOptionValue($item)
+    {
+        $optionsData = [];
+        $options = $this->configurationPool->getByProductType($item->getProductType())->getOptions($item);
+        foreach ($options as $index => $optionValue) {
+            /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
+            $helper = $this->configurationPool->getByProductType('default');
+            $params = [
+                'max_length' => 55,
+                'cut_replacer' => ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>'
+            ];
+            $option = $helper->getFormattedOptionValue($optionValue, $params);
+            $optionsData[$index] = $option;
+            $optionsData[$index]['label'] = $optionValue['label'];
+        }
+        return $optionsData;
     }
 }
