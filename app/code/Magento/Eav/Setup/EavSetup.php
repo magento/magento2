@@ -10,7 +10,7 @@ use Magento\Eav\Model\Entity\Setup\PropertyMapperInterface;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Eav\Exception as EavException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -247,7 +247,7 @@ class EavSetup
      *
      * @param int|string $entityTypeId
      * @return int
-     * @throws EavException
+     * @throws LocalizedException
      */
     public function getEntityTypeId($entityTypeId)
     {
@@ -255,7 +255,7 @@ class EavSetup
             $entityTypeId = $this->getEntityType($entityTypeId, 'entity_type_id');
         }
         if (!is_numeric($entityTypeId)) {
-            throw new EavException(__('Wrong entity ID'));
+            throw new LocalizedException(__('Wrong entity ID'));
         }
 
         return $entityTypeId;
@@ -381,7 +381,7 @@ class EavSetup
      * @param int|string $entityTypeId
      * @param int|string $setId
      * @return int
-     * @throws EavException
+     * @throws LocalizedException
      */
     public function getAttributeSetId($entityTypeId, $setId)
     {
@@ -389,7 +389,7 @@ class EavSetup
             $setId = $this->getAttributeSet($entityTypeId, $setId, 'attribute_set_id');
         }
         if (!is_numeric($setId)) {
-            throw new EavException(__('Wrong attribute set ID'));
+            throw new LocalizedException(__('Wrong attribute set ID'));
         }
 
         return $setId;
@@ -598,7 +598,7 @@ class EavSetup
      * @param int|string $setId
      * @param int|string $groupId
      * @return $this
-     * @throws EavException
+     * @throws LocalizedException
      */
     public function getAttributeGroupId($entityTypeId, $setId, $groupId)
     {
@@ -611,7 +611,7 @@ class EavSetup
         }
 
         if (!is_numeric($groupId)) {
-            throw new EavException(__('Wrong attribute group ID'));
+            throw new LocalizedException(__('Wrong attribute group ID'));
         }
         return $groupId;
     }
@@ -713,7 +713,7 @@ class EavSetup
      *
      * @param  array $data
      * @return true
-     * @throws EavException
+     * @throws LocalizedException
      */
     private function _validateAttributeData($data)
     {
@@ -727,7 +727,7 @@ class EavSetup
                 ['max' => $attributeCodeMaxLength]
             )
         ) {
-            throw new EavException(
+            throw new LocalizedException(
                 __('Maximum length of attribute code must be less than %1 symbols', $attributeCodeMaxLength)
             );
         }
