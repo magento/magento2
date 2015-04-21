@@ -6,18 +6,14 @@
 namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\GuestShippingAddressManagementInterface;
-use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Model\ShippingAddressManagement;
-use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Shipping address management class for guest carts.
  */
-class GuestShippingAddressManagement extends ShippingAddressManagement implements
-    GuestShippingAddressManagementInterface
+class GuestShippingAddressManagement implements GuestShippingAddressManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory
@@ -25,22 +21,21 @@ class GuestShippingAddressManagement extends ShippingAddressManagement implement
     protected $quoteIdMaskFactory;
 
     /**
+     * @var ShippingAddressManagement
+     */
+    protected $shippingAddressManagement;
+
+    /**
      * Constructs a quote shipping address write service object.
      *
-     * @param QuoteRepository $quoteRepository
-     * @param QuoteAddressValidator $addressValidator
-     * @param Logger $logger
+     * @param ShippingAddressManagement $shippingAddressManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        QuoteAddressValidator $addressValidator,
-        Logger $logger,
+        ShippingAddressManagement $shippingAddressManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
-        $this->quoteRepository = $quoteRepository;
-        $this->addressValidator = $addressValidator;
-        $this->logger = $logger;
+        $this->shippingAddressManagement = $shippingAddressManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
@@ -51,7 +46,7 @@ class GuestShippingAddressManagement extends ShippingAddressManagement implement
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::assign($quoteIdMask->getId(), $address);
+        return $this->shippingAddressManagement->assign($quoteIdMask->getId(), $address);
     }
 
     /**
@@ -61,6 +56,6 @@ class GuestShippingAddressManagement extends ShippingAddressManagement implement
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::get($quoteIdMask->getId());
+        return $this->shippingAddressManagement->get($quoteIdMask->getId());
     }
 }
