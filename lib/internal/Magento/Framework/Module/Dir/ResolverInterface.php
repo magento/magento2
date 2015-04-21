@@ -1,7 +1,5 @@
 <?php
 /**
- * List of active application modules.
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -22,8 +20,8 @@ interface ResolverInterface
     public function getModulePaths();
 
     /**
-     *
      * @param string $moduleName
+     * @return null|string
      */
     public function getModulePath($moduleName);
 }
