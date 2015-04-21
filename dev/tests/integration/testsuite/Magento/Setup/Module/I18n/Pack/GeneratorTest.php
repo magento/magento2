@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\Tools\I18n\Pack;
+namespace Magento\Setup\Module\I18n\Pack;
 
 use Magento\Setup\Module\I18n\ServiceLocator;
 

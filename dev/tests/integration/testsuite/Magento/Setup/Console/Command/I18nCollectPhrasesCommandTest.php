@@ -50,6 +50,7 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
         $output = fread($handle, filesize($outputPath));
         $expected = '"Hello world","Hello world"' . PHP_EOL . '"Foo bar","Foo bar"' . PHP_EOL;
         $this->assertEquals($expected, $output);
+        unlink($outputPath);
     }
 
     public function testExecuteNonExistingPath()

@@ -3,11 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate;
+namespace Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate;
 
 use Magento\Framework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector;
 
 /**
  * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector
@@ -28,7 +27,7 @@ class MethodCollectorTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->methodCollector = $this->objectManager->create(
-            'Magento\\Tools\\I18n\\Parser\\Adapter\\Php\\Tokenizer\\Translate\\MethodCollector'
+            'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector'
         );
     }
 

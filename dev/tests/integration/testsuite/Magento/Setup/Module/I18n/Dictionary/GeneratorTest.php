@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\Tools\I18n\Dictionary;
+namespace Magento\Setup\Module\I18n\Dictionary;
 
 use Magento\Setup\Module\I18n\ServiceLocator;
 
@@ -41,6 +41,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->source = $this->testDir . '/source';
         $this->outputFileName = $this->testDir . '/translate.csv';
         $this->generator = ServiceLocator::getDictionaryGenerator();
+
     }
 
     protected function tearDown()
