@@ -8,6 +8,7 @@ namespace Magento\Developer\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig;
@@ -27,17 +28,69 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class CssDeployCommand extends Command
 {
     /**
-     * Type argument
+     * Locale option key
+     */
+    const LOCALE_OPTION = 'locale';
+
+    /**
+     * Area option key
+     */
+    const AREA_OPTION = 'area';
+
+    /**
+     * Theme option key
+     */
+    const THEME_OPTION = 'theme';
+
+    /**
+     * Type argument key
      */
     const TYPE_ARGUMENT = 'type';
 
-    const LOCALE_ARGUMENT = 'locale';
-
-    const AREA_ARGUMENT = 'area';
-
-    const THEME_ARGUMENT = 'theme';
-
+    /**
+     * Files argument key
+     */
     const FILES_ARGUMENT = 'files';
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var Repository
+     */
+    private $assetRepo;
+
+    /**
+     * @var ConfigLoader
+     */
+    private $configLoader;
+
+    /**
+     * @var State
+     */
+    private $state;
+
+    /**
+     * @var \Magento\Framework\Less\FileGenerator
+     */
+    private $sourceFileGeneratorPool;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Source
+     */
+    private $assetSource;
+
+    /**
+     * @var ChainFactoryInterface
+     */
+    private $chainFactory;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * Inject dependencies
@@ -87,29 +140,33 @@ class CssDeployCommand extends Command
                     'Type of dynamic stylesheet language: [less|sass]'
                 ),
                 new InputArgument(
-                    self::LOCALE_ARGUMENT,
-                    InputArgument::OPTIONAL,
-                    'Locale',
-                    'en_US'
-                ),
-                new InputArgument(
-                    self::AREA_ARGUMENT,
-                    InputArgument::OPTIONAL,
-                    'Area, one of [frontend|adminhtml|doc]',
-                    'frontend'
-                ),
-                new InputArgument(
-                    self::THEME_ARGUMENT,
-                    InputArgument::OPTIONAL,
-                    'Theme in format Vendor/theme',
-                    'Magento/blank'
-                ),
-                new InputArgument(
                     self::FILES_ARGUMENT,
                     InputArgument::IS_ARRAY,
                     'Files to pre-process (accept more than one file type as comma-separate values)',
                     ['css/styles-m']
                 ),
+                new InputOption(
+                    self::LOCALE_OPTION,
+                    null,
+                    InputOption::VALUE_REQUIRED,
+                    'Locale',
+                    'en_US'
+                ),
+                new InputOption(
+                    self::AREA_OPTION,
+                    null,
+                    InputOption::VALUE_REQUIRED,
+                    'Area, one of [frontend|adminhtml|doc]',
+                    'frontend'
+                ),
+                new InputOption(
+                    self::THEME_OPTION,
+                    null,
+                    InputOption::VALUE_REQUIRED,
+                    'Theme in format Vendor/theme',
+                    'Magento/blank'
+                ),
+
             ]);
 
         parent::configure();
@@ -120,22 +177,35 @@ class CssDeployCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->state->setAreaCode($input->getArgument(self::AREA_ARGUMENT));
-        $this->objectManager->configure($this->configLoader->load($input->getArgument(self::AREA_ARGUMENT)));
+        $locale = $input->getOption(self::LOCALE_OPTION);
 
-        $sourceFileGenerator = $this->sourceFileGeneratorPool->create($input->getArgument(self::TYPE_ARGUMENT));
+        if (!preg_match('/^[a-z]{2}_[A-Z]{2}$/', $locale)) {
+            throw new \InvalidArgumentException(
+                $locale . ' argument has invalid value format'
+            );
+        }
+
+        $area = $input->getOption(self::AREA_OPTION);
+        $theme = $input->getOption(self::THEME_OPTION);
+
+        $type = $input->getArgument(self::TYPE_ARGUMENT);
+
+        $this->state->setAreaCode($area);
+        $this->objectManager->configure($this->configLoader->load($area));
+
+        $sourceFileGenerator = $this->sourceFileGeneratorPool->create($type);
 
         foreach ($input->getArgument(self::FILES_ARGUMENT) as $file) {
-            $file .= '.' . $input->getArgument(self::TYPE_ARGUMENT);
+            $file .= '.' . $type;
 
             $output->writeln("Gathering {$file} sources.");
 
             $asset = $this->assetRepo->createAsset(
                 $file,
                 [
-                    'area' => $input->getArgument(self::AREA_ARGUMENT),
-                    'theme' => $input->getArgument(self::THEME_ARGUMENT),
-                    'locale' => $input->getArgument(self::LOCALE_ARGUMENT),
+                    'area' => $area,
+                    'theme' => $theme,
+                    'locale' => $locale,
                 ]
             );
 

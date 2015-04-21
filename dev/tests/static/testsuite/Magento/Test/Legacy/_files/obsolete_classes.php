@@ -3270,4 +3270,7 @@ return [
     ['Magento\Tools\Di\Compiler\Log\Writer\Quiet'],
     ['Magento\Tools\Di\Compiler\Log\Writer\WriterInterface'],
     ['Magento\Tools\View\Deployer', 'Magento\Setup\Model\Deployer'],
+    ['Magento\Tools\Webdev\CliParams'],
+    ['Magento\Tools\Webdev\App\FileAssembler'],
+    ['Magento\Tools\View\Deployer\Log'],
 ];
