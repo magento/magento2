@@ -4,11 +4,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\GuestCouponManagementInterface;
-use Magento\Quote\Model\CouponManagement;
+use Magento\Quote\Api\CouponManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 
@@ -23,18 +22,18 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     private $quoteIdMaskFactory;
 
    /**
-     * @var CouponManagement
+     * @var CouponManagementInterface
      */
     private $couponManagement;
 
     /**
      * Constructs a coupon read service object.
      *
-     * @param CouponManagement $couponManagement
+     * @param CouponManagementInterface $couponManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        CouponManagement $couponManagement,
+        CouponManagementInterface $couponManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
