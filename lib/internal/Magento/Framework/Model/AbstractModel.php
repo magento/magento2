@@ -234,13 +234,16 @@ abstract class AbstractModel extends \Magento\Framework\Object
      */
     protected function _getResource()
     {
-        if (empty($this->_resourceName) && empty($this->_resource)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Resource is not set.')
-            );
+        if (empty($this->_resource)) {
+            if (empty($this->_resourceName)) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase('Resource is not set.')
+                );
+            }
+            $this->_resource = \Magento\Framework\App\ObjectManager::getInstance()->get($this->_resourceName);
         }
 
-        return $this->_resource ?: \Magento\Framework\App\ObjectManager::getInstance()->get($this->_resourceName);
+        return $this->_resource;
     }
 
     /**
