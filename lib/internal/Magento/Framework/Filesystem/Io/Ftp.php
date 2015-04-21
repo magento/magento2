@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Filesystem\Io;
 
+use Magento\Framework\Phrase;
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * FTP client
  */
@@ -66,7 +69,7 @@ class Ftp extends AbstractIo
      *
      * @param array $args
      * @return true
-     * @throws IoException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -74,7 +77,7 @@ class Ftp extends AbstractIo
     {
         if (empty($args['host'])) {
             $this->_error = self::ERROR_EMPTY_HOST;
-            throw new IoException(new \Magento\Framework\Phrase('Empty host specified'));
+            throw new LocalizedException(new Phrase('Empty host specified'));
         }
 
         if (empty($args['port'])) {
@@ -107,22 +110,20 @@ class Ftp extends AbstractIo
         }
         if (!$this->_conn) {
             $this->_error = self::ERROR_INVALID_CONNECTION;
-            throw new IoException(
-                new \Magento\Framework\Phrase('Could not establish FTP connection, invalid host or port')
-            );
+            throw new LocalizedException(new Phrase('Could not establish FTP connection, invalid host or port'));
         }
 
         if (!@ftp_login($this->_conn, $this->_config['user'], $this->_config['password'])) {
             $this->_error = self::ERROR_INVALID_LOGIN;
             $this->close();
-            throw new IoException(new \Magento\Framework\Phrase('Invalid user name or password'));
+            throw new LocalizedException(new Phrase('Invalid user name or password'));
         }
 
         if (!empty($this->_config['path'])) {
             if (!@ftp_chdir($this->_conn, $this->_config['path'])) {
                 $this->_error = self::ERROR_INVALID_PATH;
                 $this->close();
-                throw new IoException(new \Magento\Framework\Phrase('Invalid path'));
+                throw new LocalizedException(new Phrase('Invalid path'));
             }
         }
 
@@ -130,7 +131,7 @@ class Ftp extends AbstractIo
             if (!@ftp_pasv($this->_conn, true)) {
                 $this->_error = self::ERROR_INVALID_MODE;
                 $this->close();
-                throw new IoException(new \Magento\Framework\Phrase('Invalid file transfer mode'));
+                throw new LocalizedException(new Phrase('Invalid file transfer mode'));
             }
         }
 

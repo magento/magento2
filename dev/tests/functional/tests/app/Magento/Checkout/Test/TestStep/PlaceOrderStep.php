@@ -38,11 +38,11 @@ class PlaceOrderStep implements TestStepInterface
     protected $checkoutOnepageSuccess;
 
     /**
-     * Grand total price.
+     * Price array.
      *
-     * @var string
+     * @var array
      */
-    protected $grandTotal;
+    protected $prices;
 
     /**
      * Checkout method.
@@ -57,18 +57,18 @@ class PlaceOrderStep implements TestStepInterface
      * @param AssertGrandTotalOrderReview $assertGrandTotalOrderReview
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param string $checkoutMethod
-     * @param string|null $grandTotal
+     * @param array $prices
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertGrandTotalOrderReview $assertGrandTotalOrderReview,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         $checkoutMethod,
-        $grandTotal = null
+        array $prices = []
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertGrandTotalOrderReview = $assertGrandTotalOrderReview;
-        $this->grandTotal = $grandTotal;
+        $this->prices = $prices;
         $this->checkoutOnepageSuccess = $checkoutOnepageSuccess;
         $this->checkoutMethod = $checkoutMethod;
     }
@@ -80,8 +80,8 @@ class PlaceOrderStep implements TestStepInterface
      */
     public function run()
     {
-        if ($this->grandTotal !== null) {
-            $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->grandTotal);
+        if (!empty($this->prices)) {
+            $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices);
         }
         $this->checkoutOnepage->getReviewBlock()->placeOrder();
 

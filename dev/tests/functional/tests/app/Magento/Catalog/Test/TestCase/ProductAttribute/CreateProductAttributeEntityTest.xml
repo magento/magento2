@@ -182,7 +182,6 @@
             <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
             <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
             <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
-            <data name="issue" xsi:type="string">Bug: MAGETWO-33625</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUnique" />
         </variation>
     </testCase>
