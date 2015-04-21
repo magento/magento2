@@ -26,7 +26,7 @@ define(
                 return this.getMethod() != null;
             },
             getTitle: function() {
-                return this.getMethod()['title'];
+                return this.isAvailable() ? this.getMethod()['title'] : '';
             }
         });
     }
