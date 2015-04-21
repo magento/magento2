@@ -45,7 +45,7 @@ class InstallSchema implements InstallSchemaInterface
             'date_added',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Create date'
         )->addColumn(
             'title',
@@ -112,7 +112,7 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Create date'
         )->setComment(
             'Admin System Messages'
