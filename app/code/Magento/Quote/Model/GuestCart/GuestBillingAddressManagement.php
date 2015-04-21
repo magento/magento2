@@ -8,16 +8,13 @@ namespace Magento\Quote\Model\GuestCart;
 
 use Magento\Quote\Api\GuestBillingAddressManagementInterface;
 use Magento\Quote\Model\BillingAddressManagement;
-use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Model\QuoteRepository;
-use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Billing address management service for guest carts.
  */
-class GuestBillingAddressManagement extends BillingAddressManagement implements GuestBillingAddressManagementInterface
+class GuestBillingAddressManagement implements GuestBillingAddressManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory
@@ -25,25 +22,22 @@ class GuestBillingAddressManagement extends BillingAddressManagement implements 
     private $quoteIdMaskFactory;
 
     /**
+     * @var BillingAddressManagement
+     */
+    private $billingAddressManagement;
+
+    /**
      * Constructs a quote billing address service object.
      *
-     * @param QuoteRepository $quoteRepository Quote repository.
-     * @param QuoteAddressValidator $addressValidator Address validator.
-     * @param Logger $logger Logger.
+     * @param BillingAddressManagement $billingAddressManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        QuoteRepository $quoteRepository,
-        QuoteAddressValidator $addressValidator,
-        Logger $logger,
+        BillingAddressManagement $billingAddressManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        parent::__construct(
-            $quoteRepository,
-            $addressValidator,
-            $logger
-        );
+        $this->billingAddressManagement = $billingAddressManagement;
     }
 
     /**
@@ -53,8 +47,7 @@ class GuestBillingAddressManagement extends BillingAddressManagement implements 
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-
-        return parent::assign($quoteIdMask->getId(), $address);
+        return $this->billingAddressManagement->assign($quoteIdMask->getId(), $address);
     }
 
     /**
@@ -64,7 +57,6 @@ class GuestBillingAddressManagement extends BillingAddressManagement implements 
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-
-        return parent::get($quoteIdMask->getId());
+        return $this->billingAddressManagement->get($quoteIdMask->getId());
     }
 }

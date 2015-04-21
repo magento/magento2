@@ -6,8 +6,6 @@
  */
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-use Magento\Quote\Test\Unit\Model\GuestCart\GuestCartTestHelper;
-
 class GuestBillingAddressManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -18,22 +16,22 @@ class GuestBillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteRepositoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $validatorMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $quoteIdMaskFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteIdMaskMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $billingAddressManagementMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressMock;
 
     /**
      * @var string
@@ -51,14 +49,17 @@ class GuestBillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
-        $this->validatorMock = $this->getMock('\Magento\Quote\Model\QuoteAddressValidator', [], [], '', false);
-        $logger = $this->getMock('\Psr\Log\LoggerInterface');
-        $this->quoteIdMaskFactoryMock = $this->getMock('Magento\Quote\Model\QuoteIdMaskFactory', [], [], '', false);
-        $this->quoteIdMaskMock = $this->getMock('Magento\Quote\Model\QuoteIdMask', [], [], '', false);
+        $this->addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $this->billingAddressManagementMock = $this->getMock(
+            'Magento\Quote\Model\BillingAddressManagement',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
-        $this->cartId = 11;
+        $this->cartId = 123;
 
         $guestCartTestHelper = new GuestCartTestHelper($this);
         list($this->quoteIdMaskFactoryMock, $this->quoteIdMaskMock) = $guestCartTestHelper->mockQuoteIdMask(
@@ -69,10 +70,8 @@ class GuestBillingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $this->model = $objectManager->getObject(
             'Magento\Quote\Model\GuestCart\GuestBillingAddressManagement',
             [
-                'quoteRepository' => $this->quoteRepositoryMock,
-                'addressValidator' => $this->validatorMock,
-                'logger' => $logger,
-                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock
+                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+                'billingAddressManagement' => $this->billingAddressManagementMock
             ]
         );
     }
@@ -80,44 +79,19 @@ class GuestBillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testGetAddress()
+    public function testGet()
     {
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
-        $this->quoteRepositoryMock->expects($this->once())->method('getActive')
-            ->with($this->cartId )->will($this->returnValue($quoteMock));
-
-        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
-        $quoteMock->expects($this->any())->method('getBillingAddress')->will($this->returnValue($addressMock));
-
-        $this->assertEquals($addressMock, $this->model->get($this->maskedCartId ));
+        $this->billingAddressManagementMock->expects($this->once())->method('get')->willReturn($this->addressMock);
+        $this->assertEquals($this->addressMock, $this->model->get($this->maskedCartId));
     }
 
     /**
      * @return void
      */
-    public function testAssingAddress()
+    public function testAssing()
     {
-        $address = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false, false);
-
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
-            ->with($this->cartId )
-            ->will($this->returnValue($quoteMock));
-
-        $this->validatorMock->expects($this->once())->method('validate')
-            ->with($address)
-            ->will($this->returnValue(true));
-
-        $quoteMock->expects($this->once())->method('setBillingAddress')->with($address);
-        $quoteMock->expects($this->once())->method('setDataChanges')->with(true);
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
         $addressId = 1;
-        $billingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
-        $billingAddressMock->expects($this->once())->method('getId')->will($this->returnValue($addressId));
-        $quoteMock->expects($this->once())->method('getBillingAddress')
-            ->will($this->returnValue($billingAddressMock));
-
-        $this->assertEquals($addressId, $this->model->assign($this->maskedCartId , $address));
+        $this->billingAddressManagementMock->expects($this->once())->method('assign')->willReturn($addressId);
+        $this->assertEquals($addressId, $this->model->assign($this->maskedCartId, $this->addressMock));
     }
 }
