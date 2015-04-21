@@ -48,18 +48,7 @@ class AddTest extends \PHPUnit_Framework_TestCase
     {
         $this->context = $this->getMock(
             'Magento\Framework\App\Action\Context',
-            [
-//                'getRequest',
-//                'getResponse',
-//                'getObjectManager',
-//                'getEventManager',
-//                'getUrl',
-//                'getActionFlag',
-//                'getRedirect',
-//                'getView',
-//                'getMessageManager',
-//                'getResultFactory'
-            ],
+            [],
             [],
             '',
             false

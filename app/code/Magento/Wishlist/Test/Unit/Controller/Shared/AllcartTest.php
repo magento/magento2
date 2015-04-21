@@ -94,13 +94,15 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->context = $this->objectManagerHelper->getObject('Magento\Framework\App\Action\Context',
+        $this->context = $this->objectManagerHelper->getObject(
+            'Magento\Framework\App\Action\Context',
             [
                 'request' => $this->requestMock,
                 'resultFactory' => $this->resultFactoryMock
             ]
         );
-        $this->allcartController = $this->objectManagerHelper->getObject('Magento\Wishlist\Controller\Shared\Allcart',
+        $this->allcartController = $this->objectManagerHelper->getObject(
+            'Magento\Wishlist\Controller\Shared\Allcart',
             [
                 'context' => $this->context,
                 'wishlistProvider' => $this->wishlistProviderMock,
