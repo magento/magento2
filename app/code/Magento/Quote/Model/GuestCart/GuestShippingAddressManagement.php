@@ -8,8 +8,7 @@ namespace Magento\Quote\Model\GuestCart;
 use Magento\Quote\Api\GuestShippingAddressManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Model\ShippingAddressManagement;
-
+use Magento\Quote\Api\ShippingAddressManagementInterface;
 /**
  * Shipping address management class for guest carts.
  */
@@ -21,18 +20,18 @@ class GuestShippingAddressManagement implements GuestShippingAddressManagementIn
     protected $quoteIdMaskFactory;
 
     /**
-     * @var ShippingAddressManagement
+     * @var ShippingAddressManagementInterface
      */
     protected $shippingAddressManagement;
 
     /**
      * Constructs a quote shipping address write service object.
      *
-     * @param ShippingAddressManagement $shippingAddressManagement
+     * @param ShippingAddressManagementInterface $shippingAddressManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        ShippingAddressManagement $shippingAddressManagement,
+        ShippingAddressManagementInterface $shippingAddressManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->shippingAddressManagement = $shippingAddressManagement;
