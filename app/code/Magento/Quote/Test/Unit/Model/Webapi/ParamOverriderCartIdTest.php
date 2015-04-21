@@ -64,7 +64,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($retValue));
 
-        $this->assertSame($retValue, $this->model->getOverridenValue());
+        $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
 
     public function testGetOverridenValueIsCustomerAndCartDoesNotExist()
@@ -83,7 +83,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
             ->with($customerId)
             ->will($this->throwException(new NoSuchEntityException()));
 
-        $this->assertNull($this->model->getOverridenValue());
+        $this->assertNull($this->model->getOverriddenValue());
     }
 
     public function testGetOverridenValueIsCustomerAndCartIsNull()
@@ -102,7 +102,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
             ->with($customerId)
             ->will($this->returnValue(null));
 
-        $this->assertNull($this->model->getOverridenValue());
+        $this->assertNull($this->model->getOverriddenValue());
     }
 
     public function testGetOverridenValueIsNotCustomer()
@@ -111,6 +111,6 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
             ->method('getUserType')
             ->will($this->returnValue(UserContextInterface::USER_TYPE_ADMIN));
 
-        $this->assertNull($this->model->getOverridenValue());
+        $this->assertNull($this->model->getOverriddenValue());
     }
 }

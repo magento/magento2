@@ -29,9 +29,9 @@ namespace Magento\Framework\Webapi\Rest\Request;
 interface ParamOverriderInterface
 {
     /**
-     * Returns the overriden value to use.
+     * Returns the overridden value to use.
      *
      * @return string|int|null
      */
-    public function getOverridenValue();
+    public function getOverriddenValue();
 }

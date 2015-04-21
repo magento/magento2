@@ -44,7 +44,7 @@ class ParamsOverrider
             if ($paramData[Converter::KEY_FORCE] || !$this->isNestedArrayValueSet($inputData, $arrayKeys)) {
                 $paramValue = $paramData[Converter::KEY_VALUE];
                 if (isset($this->paramOverriders[$paramValue])) {
-                    $value = $this->paramOverriders[$paramValue]->getOverridenValue();
+                    $value = $this->paramOverriders[$paramValue]->getOverriddenValue();
                 } else {
                     $value = $paramData[Converter::KEY_VALUE];
                 }

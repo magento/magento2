@@ -45,7 +45,7 @@ class ParamOverriderCustomerIdTest extends \PHPUnit_Framework_TestCase
             ->method('getUserId')
             ->will($this->returnValue($retValue));
 
-        $this->assertSame($retValue, $this->model->getOverridenValue());
+        $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
 
     public function testGetOverridenValueIsNotCustomer()
@@ -54,6 +54,6 @@ class ParamOverriderCustomerIdTest extends \PHPUnit_Framework_TestCase
             ->method('getUserType')
             ->will($this->returnValue(UserContextInterface::USER_TYPE_ADMIN));
 
-        $this->assertNull($this->model->getOverridenValue());
+        $this->assertNull($this->model->getOverriddenValue());
     }
 }

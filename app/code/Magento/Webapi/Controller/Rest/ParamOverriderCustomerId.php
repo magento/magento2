@@ -32,7 +32,7 @@ class ParamOverriderCustomerId implements ParamOverriderInterface
     /**
      * {@inheritDoc}
      */
-    public function getOverridenValue()
+    public function getOverriddenValue()
     {
         if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
             return $this->userContext->getUserId();
