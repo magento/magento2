@@ -11,7 +11,7 @@
 */
 namespace Magento\Framework\Archive\Helper;
 
-use Magento\Framework\Exception\LocalizedException as MagentoException;
+use Magento\Framework\Exception\LocalizedException;
 
 class File
 {
@@ -87,7 +87,7 @@ class File
      * @param string $mode
      * @param int $chmod
      * @return void
-     * @throws MagentoException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function open($mode = 'w+', $chmod = 0666)
@@ -96,13 +96,13 @@ class File
 
         if ($this->_isInWriteMode) {
             if (!is_writable($this->_fileLocation)) {
-                throw new MagentoException(
+                throw new LocalizedException(
                     new \Magento\Framework\Phrase('Permission denied to write to %1', [$this->_fileLocation])
                 );
             }
 
             if (is_file($this->_filePath) && !is_writable($this->_filePath)) {
-                throw new MagentoException(
+                throw new LocalizedException(
                     new \Magento\Framework\Phrase(
                         "Can't open file %1 for writing. Permission denied.",
                         [$this->_fileName]
@@ -113,13 +113,13 @@ class File
 
         if ($this->_isReadableMode($mode) && (!is_file($this->_filePath) || !is_readable($this->_filePath))) {
             if (!is_file($this->_filePath)) {
-                throw new MagentoException(
+                throw new LocalizedException(
                     new \Magento\Framework\Phrase('File %1 does not exist', [$this->_filePath])
                 );
             }
 
             if (!is_readable($this->_filePath)) {
-                throw new MagentoException(
+                throw new LocalizedException(
                     new \Magento\Framework\Phrase('Permission denied to read file %1', [$this->_filePath])
                 );
             }
@@ -191,14 +191,14 @@ class File
      *
      * @param string $mode
      * @return void
-     * @throws MagentoException
+     * @throws LocalizedException
      */
     protected function _open($mode)
     {
         $this->_fileHandler = @fopen($this->_filePath, $mode);
 
         if (false === $this->_fileHandler) {
-            throw new MagentoException(new \Magento\Framework\Phrase('Failed to open file %1', [$this->_filePath]));
+            throw new LocalizedException(new \Magento\Framework\Phrase('Failed to open file %1', [$this->_filePath]));
         }
     }
 
@@ -207,14 +207,14 @@ class File
      *
      * @param string $data
      * @return void
-     * @throws MagentoException
+     * @throws LocalizedException
      */
     protected function _write($data)
     {
         $result = @fwrite($this->_fileHandler, $data);
 
         if (false === $result) {
-            throw new MagentoException(new \Magento\Framework\Phrase('Failed to write data to %1', [$this->_filePath]));
+            throw new LocalizedException(new \Magento\Framework\Phrase('Failed to write data to %1', [$this->_filePath]));
         }
     }
 
@@ -223,14 +223,14 @@ class File
      *
      * @param int $length
      * @return string
-     * @throws MagentoException
+     * @throws LocalizedException
      */
     protected function _read($length)
     {
         $result = fread($this->_fileHandler, $length);
 
         if (false === $result) {
-            throw new MagentoException(
+            throw new LocalizedException(
                 new \Magento\Framework\Phrase('Failed to read data from %1', [$this->_filePath])
             );
         }
@@ -284,12 +284,12 @@ class File
      * Check whether file is opened
      *
      * @return void
-     * @throws MagentoException
+     * @throws LocalizedException
      */
     protected function _checkFileOpened()
     {
         if (!$this->_fileHandler) {
-            throw new MagentoException(new \Magento\Framework\Phrase('File not opened'));
+            throw new LocalizedException(new \Magento\Framework\Phrase('File not opened'));
         }
     }
 }
