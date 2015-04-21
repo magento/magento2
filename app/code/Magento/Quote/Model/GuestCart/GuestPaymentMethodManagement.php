@@ -13,7 +13,7 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 /**
  * Payment method management class for guest carts.
  */
-class GuestPaymentMethodManagement extends PaymentMethodManagement implements GuestPaymentMethodManagementInterface
+class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory
@@ -21,21 +21,22 @@ class GuestPaymentMethodManagement extends PaymentMethodManagement implements Gu
     protected $quoteIdMaskFactory;
 
     /**
+     * @var PaymentMethodManagement
+     */
+    protected $paymentMethodManagement;
+
+    /**
      * Initialize dependencies.
      *
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator
-     * @param \Magento\Payment\Model\MethodList $methodList
+     * @param PaymentMethodManagement $paymentMethodManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator,
-        \Magento\Payment\Model\MethodList $methodList,
+        PaymentMethodManagement $paymentMethodManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
-        parent::__construct($quoteRepository, $zeroTotalValidator, $methodList);
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->paymentMethodManagement = $paymentMethodManagement;
     }
 
     /**
@@ -45,7 +46,7 @@ class GuestPaymentMethodManagement extends PaymentMethodManagement implements Gu
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::set($quoteIdMask->getId(), $method);
+        return $this->paymentMethodManagement->set($quoteIdMask->getId(), $method);
     }
 
     /**
@@ -55,7 +56,7 @@ class GuestPaymentMethodManagement extends PaymentMethodManagement implements Gu
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::get($quoteIdMask->getId());
+        return $this->paymentMethodManagement->get($quoteIdMask->getId());
     }
 
     /**
@@ -65,6 +66,6 @@ class GuestPaymentMethodManagement extends PaymentMethodManagement implements Gu
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::getList($quoteIdMask->getId());
+        return $this->paymentMethodManagement->getList($quoteIdMask->getId());
     }
 }

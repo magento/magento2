@@ -15,25 +15,30 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 /**
  * Coupon management class for guest carts.
  */
-class GuestCouponManagement extends CouponManagement implements GuestCouponManagementInterface
+class GuestCouponManagement implements GuestCouponManagementInterface
 {
     /**
      * @var QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
 
+   /**
+     * @var CouponManagement
+     */
+    private $couponManagement;
+
     /**
      * Constructs a coupon read service object.
      *
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param CouponManagement $couponManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        CouponManagement $couponManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        parent::__construct($quoteRepository);
+        $this->couponManagement = $couponManagement;
     }
 
     /**
@@ -43,7 +48,7 @@ class GuestCouponManagement extends CouponManagement implements GuestCouponManag
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::get($quoteIdMask->getId());
+        return $this->couponManagement->get($quoteIdMask->getId());
     }
 
     /**
@@ -53,7 +58,7 @@ class GuestCouponManagement extends CouponManagement implements GuestCouponManag
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::set($quoteIdMask->getId(), $couponCode);
+        return $this->couponManagement->set($quoteIdMask->getId(), $couponCode);
     }
 
     /**
@@ -63,6 +68,6 @@ class GuestCouponManagement extends CouponManagement implements GuestCouponManag
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::remove($quoteIdMask->getId());
+        return $this->couponManagement->remove($quoteIdMask->getId());
     }
 }
