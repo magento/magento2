@@ -24,8 +24,28 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
         $this->productRepository = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
     }
 
+    public static function tearDownAfterClass()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\CatalogInventory\Model\StockRegistry $stockRegistry */
+        $stockRegistry = $objectManager->get('Magento\CatalogInventory\Model\StockRegistry');
+        /** @var \Magento\CatalogInventory\Model\Stock\StockStatusRepository $stockStatusRepository */
+        $stockStatusRepository = $objectManager->get('Magento\CatalogInventory\Model\Stock\StockStatusRepository');
+        $isSecureArea = $objectManager->get('Magento\Framework\Registry')->registry('isSecureArea');
+        $objectManager->get('Magento\Framework\Registry')->unregister('isSecureArea');
+        $objectManager->get('Magento\Framework\Registry')->register('isSecureArea', true);
+        $objectManager->get('Magento\Framework\App\State')->setAreaCode('adminhtml');
+        foreach ([3, 2, 1] as $productId) {
+            $stockStatus = $stockRegistry->getStockStatus($productId, 1);
+            $stockStatusRepository->delete($stockStatus);
+        }
+        $objectManager->get('Magento\Framework\Registry')->unregister('isSecureArea');
+        $objectManager->get('Magento\Framework\Registry')->register('isSecureArea', $isSecureArea);
+    }
+
     /**
      * @magentoDataFixture Magento/Bundle/_files/product.php
+     * @magentoDbIsolation enabled
      */
     public function testSaveSuccess()
     {
@@ -74,6 +94,7 @@ class BundleSaveOptionsTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertTrue($caughtException);
+        /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Catalog\Model\Product')->load($product->getId());
         $this->assertEquals(null, $product->getDescription());
