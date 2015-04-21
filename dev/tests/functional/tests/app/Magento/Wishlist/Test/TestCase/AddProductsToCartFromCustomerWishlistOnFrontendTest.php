@@ -32,19 +32,6 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
     /* end tags */
 
     /**
-     * Prepare data for test
-     *
-     * @param Customer $customer
-     * @return array
-     */
-    public function __prepare(Customer $customer)
-    {
-        $customer->persist();
-
-        return ['customer' => $customer];
-    }
-
-    /**
      * Run suggest searching result test.
      *
      * @param Customer $customer
