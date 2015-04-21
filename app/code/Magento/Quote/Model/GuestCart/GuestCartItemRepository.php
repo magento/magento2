@@ -14,8 +14,13 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 /**
  * Cart Item repository class for guest carts.
  */
-class GuestCartItemRepository extends Repository implements \Magento\Quote\Api\GuestCartItemRepositoryInterface
+class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemRepositoryInterface
 {
+    /**
+     * @var Repository
+     */
+    protected $repository;
+
     /**
      * @var QuoteIdMaskFactory
      */
@@ -24,19 +29,15 @@ class GuestCartItemRepository extends Repository implements \Magento\Quote\Api\G
     /**
      * Constructs a read service object.
      *
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
+     * @param \Magento\Quote\Model\Quote\Item\Repository $repository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory,
+        \Magento\Quote\Model\Quote\Item\Repository $repository,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        parent::__construct($quoteRepository, $productRepository, $itemDataFactory);
+        $this->repository = $repository;
     }
 
     /**
@@ -46,7 +47,7 @@ class GuestCartItemRepository extends Repository implements \Magento\Quote\Api\G
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        $cartItemList = parent::getList($quoteIdMask->getId());
+        $cartItemList = $this->repository->getList($quoteIdMask->getId());
         /** @var $item CartItemInterface */
         foreach ($cartItemList as $item) {
             $item->setQuoteId($quoteIdMask->getMaskedId());
@@ -62,7 +63,7 @@ class GuestCartItemRepository extends Repository implements \Magento\Quote\Api\G
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartItem->getQuoteId(), 'masked_id');
         $cartItem->setQuoteId($quoteIdMask->getId());
-        return parent::save($cartItem);
+        return $this->repository->save($cartItem);
     }
 
     /**
@@ -72,17 +73,17 @@ class GuestCartItemRepository extends Repository implements \Magento\Quote\Api\G
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return parent::deleteById($quoteIdMask->getId(), $itemId);
+        return $this->repository->deleteById($quoteIdMask->getId(), $itemId);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function saveForCustomer($customerId, \Magento\Quote\Api\Data\CartItemInterface $cartItem)
+    public function delete(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartItem->getQuoteId(), 'masked_id');
         $cartItem->setQuoteId($quoteIdMask->getId());
-        return parent::saveForCustomer($customerId, $cartItem);
+        return $this->repository->delete($cartItem);
     }
 }
