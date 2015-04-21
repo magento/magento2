@@ -63,7 +63,7 @@ class I18nPackCommand extends Command
                 self::INPUT_KEY_ALLOW_DUPLICATES,
                 self::SHORTCUT_KEY_ALLOW_DUPLICATES,
                 InputOption::VALUE_NONE,
-                'Is allowed to save duplicates of translate, by default "no"'
+                'Flag indicates if allowed to save duplicates of translate, false by default'
             ),
         ]);
     }
