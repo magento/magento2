@@ -27,6 +27,9 @@ define(
             },
             getTitle: function() {
                 return this.isAvailable() ? this.getMethod()['title'] : '';
+            },
+            isActive: function(parent) {
+                return this.isAvailable() && parent.isMethodActive(this.getCode());
             }
         });
     }

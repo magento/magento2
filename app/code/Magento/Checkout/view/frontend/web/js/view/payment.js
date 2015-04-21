@@ -61,6 +61,9 @@ define(
                 if (!navigator.isStepVisible(stepName)()) {
                     navigator.goToStep(stepName);
                 }
+            },
+            isMethodActive: function(code) {
+                return this.activeMethod() === code;
             }
         });
     }
