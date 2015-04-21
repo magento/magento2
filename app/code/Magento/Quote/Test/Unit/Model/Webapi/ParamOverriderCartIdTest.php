@@ -69,7 +69,6 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOverridenValueIsCustomerAndCartDoesNotExist()
     {
-        $retValue = 'retValue';
         $customerId = 1;
 
         $this->userContext->expects($this->once())
@@ -79,8 +78,6 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
             ->method('getUserId')
             ->will($this->returnValue($customerId));
 
-        $cart = $this->getMockBuilder('Magento\Quote\Api\Data\CartInterface')
-            ->getMockForAbstractClass();
         $this->cartManagement->expects($this->once())
             ->method('getCartForCustomer')
             ->with($customerId)
@@ -91,7 +88,6 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOverridenValueIsCustomerAndCartIsNull()
     {
-        $retValue = 'retValue';
         $customerId = 1;
 
         $this->userContext->expects($this->once())
@@ -101,8 +97,6 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
             ->method('getUserId')
             ->will($this->returnValue($customerId));
 
-        $cart = $this->getMockBuilder('Magento\Quote\Api\Data\CartInterface')
-            ->getMockForAbstractClass();
         $this->cartManagement->expects($this->once())
             ->method('getCartForCustomer')
             ->with($customerId)

@@ -26,6 +26,12 @@ class ParamOverriderCartId implements ParamOverriderInterface
      */
     private $cartManagement;
 
+    /**
+     * Constructs an object to override the cart ID parameter on a request.
+     *
+     * @param UserContextInterface $userContext
+     * @param CartManagementInterface $cartManagement
+     */
     public function __construct(
         UserContextInterface $userContext,
         CartManagementInterface $cartManagement
@@ -34,6 +40,9 @@ class ParamOverriderCartId implements ParamOverriderInterface
         $this->cartManagement = $cartManagement;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getOverridenValue()
     {
         try {

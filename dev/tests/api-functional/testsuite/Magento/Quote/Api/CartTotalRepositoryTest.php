@@ -189,7 +189,6 @@ class CartTotalRepositoryTest extends WebapiAbstract
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
-        $cartId = $quote->getId();
 
         $serviceInfo = [
             'rest' => [
