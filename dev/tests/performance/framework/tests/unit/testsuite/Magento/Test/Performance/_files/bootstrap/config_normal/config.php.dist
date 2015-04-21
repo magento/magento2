@@ -11,7 +11,7 @@ return array(
         'installation' => array(
             'options' => array(
                 'backend_frontname' => 'backend',
-                'admin_username' => 'admin',
+                'admin_user' => 'admin',
                 'admin_password' => 'password1',
             ),
         ),
