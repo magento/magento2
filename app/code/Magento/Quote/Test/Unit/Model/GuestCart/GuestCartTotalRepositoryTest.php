@@ -57,6 +57,15 @@ class GuestCartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
+        $this->cartId = 123;
+
+        $guestCartTestHelper = new GuestCartTestHelper($this);
+        list($this->quoteIdMaskFactoryMock, $this->quoteIdMaskMock) = $guestCartTestHelper->mockQuoteIdMask(
+            $this->maskedCartId,
+            $this->cartId
+        );
+
         $this->model = $this->objectManager->getObject(
             'Magento\Quote\Model\GuestCart\GuestCartTotalRepository',
             [
@@ -64,17 +73,6 @@ class GuestCartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
             ]
         );
-
-        $this->quoteIdMaskFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->quoteIdMaskMock);
-        $this->quoteIdMaskMock->expects($this->once())
-            ->method('load')
-            ->with($this->maskedCartId, 'masked_id')
-            ->willReturn($this->quoteIdMaskMock);
-        $this->quoteIdMaskMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($this->cartId);
     }
 
     public function testGetTotals()

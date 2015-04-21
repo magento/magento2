@@ -46,12 +46,16 @@ class GuestShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingMethodManagementMock =
             $this->getMockBuilder('Magento\Quote\Api\ShippingMethodManagementInterface')
             ->getMockForAbstractClass();
-        $this->quoteIdMaskFactoryMock = $this->getMockBuilder('Magento\Quote\Model\QuoteIdMaskFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteIdMaskMock = $this->getMockBuilder('Magento\Quote\Model\QuoteIdMask')
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
+        $this->cartId = 867;
+
+        $guestCartTestHelper = new GuestCartTestHelper($this);
+        list($this->quoteIdMaskFactoryMock, $this->quoteIdMaskMock) = $guestCartTestHelper->mockQuoteIdMask(
+            $this->maskedCartId,
+            $this->cartId
+        );
+
         $this->model = $objectManager->getObject(
             'Magento\Quote\Model\GuestCart\GuestShippingMethodManagement',
             [
@@ -59,20 +63,6 @@ class GuestShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
             ]
         );
-
-        $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
-        $this->cartId = 867;
-
-        $this->quoteIdMaskFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->quoteIdMaskMock);
-        $this->quoteIdMaskMock->expects($this->once())
-            ->method('load')
-            ->with($this->maskedCartId, 'masked_id')
-            ->willReturn($this->quoteIdMaskMock);
-        $this->quoteIdMaskMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($this->cartId);
     }
 
     public function testSet()
