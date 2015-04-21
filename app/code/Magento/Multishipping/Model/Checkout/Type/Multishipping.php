@@ -703,7 +703,7 @@ class Multishipping extends \Magento\Framework\Object
                 $orders[] = $order;
                 $this->_eventManager->dispatch(
                     'checkout_type_multishipping_create_orders_single',
-                    ['order' => $order, 'address' => $address]
+                    ['order' => $order, 'address' => $address, 'quote' => $this->getQuote()]
                 );
             }
 
