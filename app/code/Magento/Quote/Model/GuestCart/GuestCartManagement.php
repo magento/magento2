@@ -84,16 +84,4 @@ class GuestCartManagement implements GuestCartManagementInterface
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->quoteManagement->placeOrder($quoteIdMask->getId());
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCartForCustomer($customerId)
-    {
-        $cart = $this->quoteRepository->getActiveForCustomer($customerId);
-        /** @var $quoteIdMask QuoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cart->getId(), 'masked_id');
-        $cart->setId($quoteIdMask->getId());
-        return $cart;
-    }
 }
