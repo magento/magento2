@@ -52,8 +52,6 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
      */
     public function set($cartId, \Magento\Quote\Api\Data\PaymentInterface $method)
     {
-        $result = [];
-
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
 
@@ -64,28 +62,20 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
         ]);
 
-        try {
-            $payment = $quote->getPayment();
-            $payment->importData($method->getData());
-        } catch (\Magento\Payment\Exception $e) {
-            $result['error'] = $e->getMessage();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $result['error'] = $e->getMessage();
-        } catch (\Exception $e) {
-            $result['error'] = __('Unable to set Payment Method');
-        }
+        $payment = $quote->getPayment();
+        $payment->importData($method->getData());
 
         if ($quote->isVirtual()) {
             // check if billing address is set
             if ($quote->getBillingAddress()->getCountryId() === null) {
-                $result['error'] = __('Billing address is not set');
+                throw new InvalidTransitionException(__('Billing address is not set'));
             }
             $quote->getBillingAddress()->setPaymentMethod($payment->getMethod());
         } elseif ($quote->getShippingAddress()) {
             $quote->getShippingAddress()->setCollectShippingRates(true);
             // check if shipping address is set
             if ($quote->getShippingAddress()->getCountryId() === null) {
-                $result['error'] = __('Shipping address is not set');
+                throw new InvalidTransitionException(__('Shipping address is not set'));
             }
             $quote->getShippingAddress()->setPaymentMethod($payment->getMethod());
         }
@@ -94,11 +84,9 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
         $this->quoteRepository->save($quote);
 
         $redirectUrl = $quote->getPayment()->getCheckoutRedirectUrl();
-        if ($redirectUrl) {
-            $result['redirect'] = $redirectUrl;
-        }
+        $result = $redirectUrl ? ['redirect' => $redirectUrl] : [];
 
-        return  $this->jsonEncoder->encode($result);
+        return $this->jsonEncoder->encode($result);
     }
 
     /**

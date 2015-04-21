@@ -43,9 +43,9 @@ define(
                     }
                 }
             ).error(
-                function(response) {
-                    var error = JSON.parse(response.error);
-                    errorList.add(error);
+                function(XMLHttpRequest) {
+                    var error = JSON.parse(XMLHttpRequest.responseText);
+                    errorList.add(error.message);
                     quote.setPaymentMethod(null);
                 }
             );
