@@ -8,7 +8,13 @@
     <div class="field field-number required">
         <label for="po_number" class="label"><span><!-- ko text: $t('Purchase Order Number')--><!-- /ko --></span></label>
         <div class="control">
-            <input type="text" id="po_number" name="payment[po_number]" data-bind='attr: {title: $t("Purchase Order Number")}, enable: $parent.activeMethod() === getCode()' class="required-entry input-text" value="<!-- TODO Add form value -->"/>
+            <input type="text"
+                   id="po_number"
+                   name="payment[po_number]"
+                   data-bind='
+                        attr: {title: $t("Purchase Order Number")},
+                        enable: isActive($parent)'
+                   class="required-entry input-text"/>
         </div>
     </div>
 </fieldset>
