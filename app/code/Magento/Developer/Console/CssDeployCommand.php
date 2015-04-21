@@ -11,7 +11,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Source;
 use Magento\Framework\App\State;
@@ -73,12 +72,12 @@ class CssDeployCommand extends Command
     private $state;
 
     /**
-     * @var \Magento\Framework\Less\FileGenerator
+     * @var SourceFileGeneratorPool
      */
     private $sourceFileGeneratorPool;
 
     /**
-     * @var \Magento\Framework\View\Asset\Source
+     * @var Source
      */
     private $assetSource;
 
@@ -100,7 +99,7 @@ class CssDeployCommand extends Command
      * @param ConfigLoader $configLoader
      * @param State $state
      * @param Source $assetSource
-     * @param \Magento\Framework\View\Asset\SourceFileGeneratorPool $sourceFileGeneratorPoll
+     * @param SourceFileGeneratorPool $sourceFileGeneratorPoll
      * @param ChainFactoryInterface $chainFactory
      * @param Filesystem $filesystem
      */
