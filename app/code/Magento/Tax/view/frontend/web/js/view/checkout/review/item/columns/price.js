@@ -24,7 +24,7 @@ define(
                 return 'both' == this.displayPriceMode || 'including' == this.displayPriceMode;
             },
             displayPriceExclTax: function() {
-                return 'both' == this.displayPriceMode || 'including' == this.displayPriceMode;
+                return 'both' == this.displayPriceMode || 'excluding' == this.displayPriceMode;
             },
             displayBothPrices: function() {
                 return 'both' == this.displayPriceMode;
