@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class DevTestsRunCommand
  *
- * @package Magento\Developer\Console
+ * Runs tests (unit, static, integration, etc.)
  */
 class DevTestsRunCommand extends Command
 {
@@ -88,7 +88,7 @@ class DevTestsRunCommand extends Command
             chdir($dirName);
             $command = 'php '. BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
             $message = $dirName . '> ' . $command;
-            $output->writeln(['',str_pad("---- {$message} ", 70, '-'), '']);
+            $output->writeln(['', str_pad("---- {$message} ", 70, '-'), '']);
             passthru($command, $returnVal);
             if ($returnVal) {
                 $failures[] = $message;
