@@ -42,6 +42,12 @@ class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($basePath . '/Magento/B/i18n/de_DE.csv');
         $this->assertFileExists($basePath . '/Magento/C/i18n/de_DE.csv');
         $this->assertFileExists($basePath . '/Magento/D/i18n/de_DE.csv');
+        unlink($basePath . '/Magento/A/i18n/de_DE.csv');
+        unlink($basePath . '/Magento/B/i18n/de_DE.csv');
+        unlink($basePath . '/Magento/C/i18n/de_DE.csv');
+        unlink($basePath . '/Magento/D/i18n/de_DE.csv');
+        $this->recursiveRmdir(BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/pack');
+
     }
 
     public function testExecuteNonExistingPath()
@@ -57,5 +63,18 @@ class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals("Cannot open dictionary file: \"$nonExistPath\"."  . PHP_EOL, $this->tester->getDisplay());
+    }
+
+    private function recursiveRmdir($dir)
+    {
+        if (is_dir($dir)) {
+            $subdirs = scandir($dir);
+            foreach ($subdirs as $subdir) {
+                if ($subdir !== '.' && $subdir !== '..' && filetype($dir . '/' . $subdir) === 'dir') {
+                    $this->recursiveRmdir($dir . '/' . $subdir);
+                }
+            }
+            rmdir($dir);
+        }
     }
 }
