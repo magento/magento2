@@ -47,7 +47,6 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
             true,
             []
         );
-        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->quoteIdMaskFactoryMock = $this->getMock(
             'Magento\Quote\Model\QuoteIdMaskFactory',
             ['create'],
@@ -67,7 +66,6 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
             'Magento\Quote\Model\GuestCart\GuestCartManagement',
             [
                 'quoteManagement' => $this->quoteManagementMock,
-                'quoteRepository' => $this->quoteRepositoryMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock
             ]
         );
@@ -103,20 +101,6 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testPlaceOrder()
-    {
-        $maskedCartId = 'masked1cart2id3';
-        $cartId = 1;
-        $orderId = 1;
-
-        $this->quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();
-        $this->quoteIdMaskMock->expects($this->once())->method('getId')->willReturn($maskedCartId);
-        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
-        $this->quoteManagementMock->expects($this->once())->method('placeOrder')->willReturn($orderId);
-
-        $this->assertEquals($orderId, $this->guestCartManagement->placeOrder($cartId));
-    }
-
-    public function testGetCartForCustomer()
     {
         $maskedCartId = 'masked1cart2id3';
         $cartId = 1;

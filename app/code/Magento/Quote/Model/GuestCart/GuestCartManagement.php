@@ -10,8 +10,6 @@ use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Model\QuoteManagement;
-use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Cart Management class for guest carts.
@@ -26,11 +24,6 @@ class GuestCartManagement implements GuestCartManagementInterface
     protected $quoteManagement;
 
     /**
-     * @var QuoteRepository
-     */
-    protected $quoteRepository;
-
-    /**
      * @var QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
@@ -39,17 +32,14 @@ class GuestCartManagement implements GuestCartManagementInterface
      * Initialize dependencies.
      *
      * @param CartManagementInterface $quoteManagement
-     * @param QuoteRepository $quoteRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CartManagementInterface $quoteManagement,
-        QuoteRepository $quoteRepository,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteManagement = $quoteManagement;
-        $this->quoteRepository = $quoteRepository;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
@@ -83,17 +73,5 @@ class GuestCartManagement implements GuestCartManagementInterface
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->quoteManagement->placeOrder($quoteIdMask->getId());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCartForCustomer($customerId)
-    {
-        $cart = $this->quoteRepository->getActiveForCustomer($customerId);
-        /** @var $quoteIdMask QuoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cart->getId(), 'masked_id');
-        $cart->setId($quoteIdMask->getId());
-        return $cart;
     }
 }
