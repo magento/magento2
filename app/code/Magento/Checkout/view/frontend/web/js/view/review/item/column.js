@@ -16,11 +16,18 @@ define(
         var columnTitle = '';
         return Component.extend({
             defaults: {
+                headerClass: null,
                 ownClass: ownClass,
                 columnTitle: columnTitle,
                 template: 'Magento_Checkout/review/item/column'
             },
             getClass: function() {
+                return 'col ' + this.ownClass;
+            },
+            getHeaderClass: function() {
+                if (this.headerClass) {
+                    return this.headerClass;
+                }
                 return 'col ' + this.ownClass;
             },
             getColName: function() {
