@@ -46,7 +46,7 @@ class I18nCollectPhrasesCommand extends Command
                 self::INPUT_KEY_MAGENTO,
                 self::SHORTCUT_KEY_MAGENTO,
                 InputOption::VALUE_NONE,
-                'Indicates whether the specified "directory" path is a Magento root directory, "no" by default'
+                'Flag indicates whether the specified "directory" path is a Magento root directory, false by default'
             ),
         ]);
     }
