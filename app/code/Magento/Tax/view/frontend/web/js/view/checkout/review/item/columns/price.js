@@ -15,21 +15,21 @@ define(
         return column.extend({
             defaults: {
                 headerClass: 'price',
-                displayBothPrices: true,
-                displayPriceInclTax: true,
-                displayPriceExclTax: true,
+                displayPriceMode: 'both',
                 ownClass: 'price-including-tax',
                 columnTitle: 'Price',
                 template: 'Magento_Tax/checkout/review/item/columns/price'
             },
             displayPriceInclTax: function() {
-                return this.displayBothPrices || this.displayPriceInclTax;
+                return 'both' == this.displayPriceMode || 'including' == this.displayPriceMode;
             },
             displayPriceExclTax: function() {
-                return this.displayBothPrices || this.displayPriceExclTax;
+                return 'both' == this.displayPriceMode || 'including' == this.displayPriceMode;
+            },
+            displayBothPrices: function() {
+                return 'both' == this.displayPriceMode;
             },
             getPriceExclTax: function(quoteItem) {
-                console.log(quoteItem);
                 return this.getFormattedPrice(quoteItem.price);
             },
             getPriceInclTax: function(quoteItem) {
