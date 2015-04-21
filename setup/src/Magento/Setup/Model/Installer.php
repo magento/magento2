@@ -459,6 +459,9 @@ class Installer
         if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_PREFIX])) {
             $userData[ConfigOptionsList::INPUT_KEY_DB_PREFIX] = '';
         }
+        if (!isset($userData[ConfigOptionsList::INPUT_KEY_DB_ENGINE])) {
+            $userData[ConfigOptionsList::INPUT_KEY_DB_ENGINE] = 'innodb';
+        }
         return $userData;
     }
 

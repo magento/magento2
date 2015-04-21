@@ -193,7 +193,8 @@ class ConsoleController extends AbstractActionController
             . ' [--' . SetupConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY . '=]'
             . ' [--' . Installer::ENABLE_MODULES . '=]'
             . ' [--' . Installer::DISABLE_MODULES . '=]';
-        $userConfig = '[--' . UserConfig::KEY_BASE_URL . '=]'
+        $userConfig = '[--' . SetupConfigOptionsList::INPUT_KEY_DB_ENGINE . '=]'
+            . ' [--' . UserConfig::KEY_BASE_URL . '=]'
             . ' [--' . UserConfig::KEY_LANGUAGE . '=]'
             . ' [--' . UserConfig::KEY_TIMEZONE . '=]'
             . ' [--' . UserConfig::KEY_CURRENCY . '=]'
