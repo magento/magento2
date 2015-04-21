@@ -120,7 +120,13 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             $result->setData('redirect', $redirectUrl);
         }
 
-        $this->_eventManager->dispatch('checkout_controller_onepage_saveOrder', ['result' => $result]);
+        $this->_eventManager->dispatch(
+            'checkout_controller_onepage_saveOrder',
+            [
+                'result' => $result,
+                'action' => $this
+            ]
+        );
 
         return $this->resultJsonFactory->create()->setData($result->getData());
     }
