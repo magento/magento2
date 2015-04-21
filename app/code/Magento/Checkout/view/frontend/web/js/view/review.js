@@ -37,7 +37,6 @@ define(
             getColHeaders: function() {
                 return ['name', 'price', 'qty', 'subtotal'];
             },
-            getAgreementsTemplate: function() {},
             isVisible: navigator.isStepVisible(stepName),
             cartUrl: url.build('checkout/cart/'),
             placeOrder: function() {
