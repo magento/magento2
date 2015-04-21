@@ -46,21 +46,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     $installer->getIdxName(
                         $installer->getTable($table),
                         ['entity_type_id'],
-                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
                     )
                 );
-//                $connection->dropColumn($installer->getTable($table), 'entity_type_id');
+                $connection->dropColumn($installer->getTable($table), 'entity_type_id');
             }
 
-//            $connection->dropColumn($installer->getTable('customer_address_entity'), 'entity_type_id');
-//            $connection->dropColumn($installer->getTable('customer_address_entity'), 'attribute_set_id');
-//
-//            $connection->dropIndex(
-//                $installer->getTable('customer_entity'),
-//                $installer->getIdxName('customer_entity', ['entity_type_id'])
-//            );
-//            $connection->dropColumn($installer->getTable('customer_entity'), 'entity_type_id');
-//            $connection->dropColumn($installer->getTable('customer_entity'), 'attribute_set_id');
+            $connection->dropColumn($installer->getTable('customer_address_entity'), 'entity_type_id');
+            $connection->dropColumn($installer->getTable('customer_address_entity'), 'attribute_set_id');
+
+            $connection->dropIndex(
+                $installer->getTable('customer_entity'),
+                $installer->getIdxName('customer_entity', ['entity_type_id'])
+            );
+            $connection->dropColumn($installer->getTable('customer_entity'), 'entity_type_id');
+            $connection->dropColumn($installer->getTable('customer_entity'), 'attribute_set_id');
         }
 
         if (version_compare($context->getVersion(), '2.0.0.2') < 0) {
