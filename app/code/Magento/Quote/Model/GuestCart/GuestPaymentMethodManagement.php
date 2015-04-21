@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\GuestCart;
 
-use Magento\Quote\Model\PaymentMethodManagement;
+use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Api\GuestPaymentMethodManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -21,18 +21,18 @@ class GuestPaymentMethodManagement implements GuestPaymentMethodManagementInterf
     protected $quoteIdMaskFactory;
 
     /**
-     * @var PaymentMethodManagement
+     * @var PaymentMethodManagementInterface
      */
     protected $paymentMethodManagement;
 
     /**
      * Initialize dependencies.
      *
-     * @param PaymentMethodManagement $paymentMethodManagement
+     * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        PaymentMethodManagement $paymentMethodManagement,
+        PaymentMethodManagementInterface $paymentMethodManagement,
         QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;

@@ -46,7 +46,7 @@ class GuestPaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->paymentMethodManagementMock = $this->getMock(
-            'Magento\Quote\Model\PaymentMethodManagement',
+            'Magento\Quote\Api\PaymentMethodManagementInterface',
             [],
             [],
             '',
