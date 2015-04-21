@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Tools\I18n\Dictionary;
 
-use Magento\Tools\I18n\ServiceLocator;
+use Magento\Setup\Module\I18n\ServiceLocator;
 
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +30,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected $outputFileName;
 
     /**
-     * @var \Magento\Tools\I18n\Dictionary\Generator
+     * @var \Magento\Setup\Module\I18n\Dictionary\Generator
      */
     protected $generator;
 

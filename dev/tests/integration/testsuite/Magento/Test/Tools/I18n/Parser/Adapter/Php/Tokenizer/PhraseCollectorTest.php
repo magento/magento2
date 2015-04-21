@@ -7,10 +7,10 @@ namespace Magento\Test\Tools\I18n\Parser\Adapter\Php\Tokenizer;
 
 use Magento\Framework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
+use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
 
 /**
- * @covers \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
+ * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
  */
 class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class PhraseCollectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector::parse
+     * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector::parse
      */
     public function testParse()
     {

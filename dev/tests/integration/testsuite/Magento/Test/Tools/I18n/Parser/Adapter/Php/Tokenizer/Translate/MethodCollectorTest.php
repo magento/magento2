@@ -7,10 +7,10 @@ namespace Magento\Test\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate;
 
 use Magento\Framework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector;
+use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector;
 
 /**
- * @covers \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector
+ * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector
  */
 class MethodCollectorTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class MethodCollectorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector::parse
+     * @covers \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector::parse
      */
     public function testParse()
     {

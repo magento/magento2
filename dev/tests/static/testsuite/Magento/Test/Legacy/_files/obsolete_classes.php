@@ -2875,7 +2875,7 @@ return [
     ['Magento\Tax\Service\V1\Data\TaxDetails\AppliedTaxRate', 'Magento\Tax\Api\Data\AppliedTaxRateInterface'],
     ['Magento\Tax\Service\V1\Data\TaxDetails\Item', 'Magento\Tax\Api\Data\TaxDetailsItemInterface'],
     ['Magento\Tax\Service\V1\OrderTaxServiceInterface', 'Magento\Tax\Api\OrderTaxManagementInterface'],
-    ['Magento\Tools\I18n\Code', 'Magento\Tools\I18n'],
+    ['Magento\Tools\I18n\Code', 'Magento\Setup\Module\I18n'],
     ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
     ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
     ['Magento\TestFramework\Utility\Files', 'Magento\Framework\App\Utility\Files'],
