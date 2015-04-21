@@ -20,13 +20,13 @@ define(
                 "cartId": quote.getQuoteId(),
                 "method": {
                     "method": paymentMethodCode,
-                    "po_number": null,
+                    "po_number": $('#po_number:visible').length ? $('#po_number:visible').val() : null,
                     "cc_owner": null,
                     "cc_number": null,
                     "cc_type": null,
                     "cc_exp_year": null,
                     "cc_exp_month": null,
-                    "additional_data": null
+                    "additional_data": additionalData
                 }
             };
             return storage.put(
