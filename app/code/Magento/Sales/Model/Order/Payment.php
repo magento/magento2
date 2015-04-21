@@ -726,8 +726,7 @@ class Payment extends Info implements OrderPaymentInterface
         }
         $message = $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
-
+        $this->setOrderStateProcessing($message);
         $this->_eventManager->dispatch(
             'sales_order_payment_refund',
             ['payment' => $this, 'creditmemo' => $creditmemo]
@@ -833,7 +832,7 @@ class Payment extends Info implements OrderPaymentInterface
             __('Registered notification about refunded amount of %1.', $this->_formatPrice($amount))
         );
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
+        $this->setOrderStateProcessing($message);
         return $this;
     }
 
@@ -1219,7 +1218,7 @@ class Payment extends Info implements OrderPaymentInterface
             $message .= ' ' . __('Amount: %1.', $this->_formatPrice($amount));
         }
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
+        $this->setOrderStateProcessing($message);
         $order->setDataChanges(true);
         return $this;
     }
