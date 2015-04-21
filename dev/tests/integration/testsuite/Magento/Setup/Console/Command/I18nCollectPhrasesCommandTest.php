@@ -25,6 +25,14 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
         $this->tester = new CommandTester($this->command);
     }
 
+    public function tearDown()
+    {
+        $property = new \ReflectionProperty('\Magento\Setup\Module\I18n\ServiceLocator', '_dictionaryGenerator');
+        $property->setAccessible(true);
+        $property->setValue(null);
+        $property->setAccessible(false);
+    }
+
     public function testExecuteConsoleOutput()
     {
         $this->tester->execute(

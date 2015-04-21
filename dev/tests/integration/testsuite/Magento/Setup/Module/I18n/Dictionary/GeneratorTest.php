@@ -49,6 +49,10 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         if (file_exists($this->outputFileName)) {
             unlink($this->outputFileName);
         }
+        $property = new \ReflectionProperty('Magento\Setup\Module\I18n\ServiceLocator', '_dictionaryGenerator');
+        $property->setAccessible(true);
+        $property->setValue(null);
+        $property->setAccessible(false);
     }
 
     public function testGenerationWithoutContext()
