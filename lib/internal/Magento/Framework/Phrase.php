@@ -93,7 +93,11 @@ class Phrase implements JsonSerializable
      */
     public function render()
     {
-        return self::$renderer ? self::$renderer->render([$this->text], $this->arguments) : $this->text;
+        try {
+            return self::$renderer ? self::$renderer->render([$this->text], $this->getArguments()) : $this->getText();
+        } catch (\Exception $e) {
+            return $this->getText();
+        }
     }
 
     /**
@@ -103,11 +107,7 @@ class Phrase implements JsonSerializable
      */
     public function __toString()
     {
-        try {
-            return $this->render();
-        } catch (\Exception $e) {
-            return $this->getText();
-        }
+        return $this->render();
     }
 
     /**
