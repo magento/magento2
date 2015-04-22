@@ -20,6 +20,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -111,6 +112,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     );
             }
         }
+
         if (version_compare($context->getVersion(), '2.0.3') < 0) {
             $dropIncrementIndexTables = [
                 'sales_creditmemo',
@@ -153,6 +155,80 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['increment_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 );
+            }
+        }
+
+        if (version_compare($context->getVersion(), '2.0.4') < 0) {
+
+            /**
+             * Adding 'send_email' columns.
+             */
+
+            $tables = ['sales_order', 'sales_invoice', 'sales_shipment', 'sales_creditmemo'];
+
+            foreach ($tables as $table) {
+                $table = $setup->getTable($table);
+
+                $setup->getConnection()
+                    ->addColumn(
+                        $table,
+                        'send_email',
+                        [
+                            'type' => Table::TYPE_SMALLINT,
+                            'after' => 'email_sent',
+                            'comment' => 'Send Email',
+                            'unsigned' => true
+                        ]
+                    );
+
+                $setup->getConnection()
+                    ->addIndex($table, $setup->getIdxName($table, ['email_sent']), 'email_sent');
+
+                $setup->getConnection()
+                    ->addIndex($table, $setup->getIdxName($table, ['send_email']), 'send_email');
+            }
+
+            /**
+             * Adding 'customer_note' columns.
+             */
+
+            $tables = ['sales_invoice', 'sales_shipment', 'sales_creditmemo'];
+
+            foreach ($tables as $table) {
+                $table = $setup->getTable($table);
+
+                $setup->getConnection()
+                    ->addColumn(
+                        $table,
+                        'customer_note',
+                        [
+                            'type' => Table::TYPE_TEXT,
+                            'after' => 'updated_at',
+                            'comment' => 'Customer Note'
+                        ]
+                    );
+            }
+
+            /**
+             * Adding 'customer_note_notify' columns.
+             */
+
+            $tables = ['sales_invoice', 'sales_shipment', 'sales_creditmemo'];
+
+            foreach ($tables as $table) {
+                $table = $setup->getTable($table);
+
+                $setup->getConnection()
+                    ->addColumn(
+                        $table,
+                        'customer_note_notify',
+                        [
+                            'type' => Table::TYPE_SMALLINT,
+                            'after' => 'customer_note',
+                            'comment' => 'Customer Note Notify',
+                            'unsigned' => true
+                        ]
+                    );
             }
         }
     }

@@ -228,14 +228,12 @@ class InstallSchema implements InstallSchemaInterface
             'product_tax_class_id',
             $setup->getTable('tax_class'),
             'class_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $setup->getFkName('tax_calculation', 'customer_tax_class_id', 'tax_class', 'class_id'),
             'customer_tax_class_id',
             $setup->getTable('tax_class'),
             'class_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $setup->getFkName(
@@ -247,7 +245,6 @@ class InstallSchema implements InstallSchemaInterface
             'tax_calculation_rate_id',
             $setup->getTable('tax_calculation_rate'),
             'tax_calculation_rate_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $setup->getFkName(
@@ -259,7 +256,6 @@ class InstallSchema implements InstallSchemaInterface
             'tax_calculation_rule_id',
             $setup->getTable('tax_calculation_rule'),
             'tax_calculation_rule_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Tax Calculation'
@@ -306,7 +302,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $setup->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $setup->getFkName(
@@ -318,7 +313,6 @@ class InstallSchema implements InstallSchemaInterface
             'tax_calculation_rate_id',
             $setup->getTable('tax_calculation_rate'),
             'tax_calculation_rate_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Tax Calculation Rate Title'
@@ -394,7 +388,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $setup->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Tax Order Aggregation'
@@ -492,21 +485,18 @@ class InstallSchema implements InstallSchemaInterface
             'associated_item_id',
             $setup->getTable('sales_order_item'),
             'item_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $setup->getFkName('sales_order_tax_item', 'tax_id', 'sales_order_tax', 'tax_id'),
             'tax_id',
             $setup->getTable('sales_order_tax'),
             'tax_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $setup->getFkName('sales_order_tax_item', 'item_id', 'sales_order_item', 'item_id'),
             'item_id',
             $setup->getTable('sales_order_item'),
             'item_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Order Tax Item'

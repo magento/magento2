@@ -211,21 +211,18 @@ class InstallSchema implements InstallSchemaInterface
             'admin_id',
             $adminTable,
             'user_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('oauth_token', 'consumer_id', 'oauth_consumer', 'entity_id'),
             'consumer_id',
             $installer->getTable('oauth_consumer'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('oauth_token', 'customer_id', 'customer_entity', 'entity_id'),
             'customer_id',
             $customerTable,
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'OAuth Tokens'
@@ -268,7 +265,6 @@ class InstallSchema implements InstallSchemaInterface
             'consumer_id',
             $installer->getTable('oauth_consumer'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'OAuth Nonce'
@@ -320,13 +316,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Creation Time'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_UPDATE],
             'Update Time'
         )->addColumn(
             'setup_type',
@@ -361,7 +357,6 @@ class InstallSchema implements InstallSchemaInterface
             'consumer_id',
             $installer->getTable('oauth_consumer'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         );
 

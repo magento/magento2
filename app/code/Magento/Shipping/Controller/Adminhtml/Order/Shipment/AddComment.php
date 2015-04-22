@@ -6,7 +6,7 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
-use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
+use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\LayoutFactory;
 
@@ -18,9 +18,9 @@ class AddComment extends \Magento\Backend\App\Action
     protected $shipmentLoader;
 
     /**
-     * @var ShipmentSender
+     * @var ShipmentCommentSender
      */
-    protected $shipmentSender;
+    protected $shipmentCommentSender;
 
     /**
      * @var LayoutFactory
@@ -30,17 +30,17 @@ class AddComment extends \Magento\Backend\App\Action
     /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
-     * @param ShipmentSender $shipmentSender
+     * @param ShipmentCommentSender $shipmentCommentSender
      * @param LayoutFactory $resultLayoutFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        ShipmentSender $shipmentSender,
+        ShipmentCommentSender $shipmentCommentSender,
         LayoutFactory $resultLayoutFactory
     ) {
         $this->shipmentLoader = $shipmentLoader;
-        $this->shipmentSender = $shipmentSender;
+        $this->shipmentCommentSender = $shipmentCommentSender;
         $this->resultLayoutFactory = $resultLayoutFactory;
         parent::__construct($context);
     }
@@ -79,7 +79,7 @@ class AddComment extends \Magento\Backend\App\Action
                 isset($data['is_visible_on_front'])
             );
 
-            $this->shipmentSender->send($shipment, !empty($data['is_customer_notified']), $data['comment']);
+            $this->shipmentCommentSender->send($shipment, !empty($data['is_customer_notified']), $data['comment']);
             $shipment->save();
             $resultLayout = $this->resultLayoutFactory->create();
             $resultLayout->addDefaultHandle();
