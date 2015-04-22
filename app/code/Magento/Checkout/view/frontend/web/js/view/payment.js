@@ -42,12 +42,13 @@ define(
                     self = this;
 
                 _.each(paymentService.getAvailablePaymentMethods()(), function (originElem) {
-                    sortedElems.push(self.getMethodByCode(originElem.code));
+                    var method = self.getMethodByCode(originElem.code);
+                    if (method && method.isAvailable()) {
+                        sortedElems.push(method);
+                    }
                 });
 
-                return sortedElems.filter(function(elem) {
-                    return elem.isAvailable();
-                });
+                return sortedElems;
             },
 
             getMethodByCode: function(code) {
