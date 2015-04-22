@@ -28,7 +28,7 @@ db:
     volumes_from:
         - dbdata
     ports:
-        - 3306:3306
+        - 3306
 setup:
     image: kojiromike/magento_tools
     volumes:
@@ -69,4 +69,4 @@ webapp:
     links:
         - db
     ports:
-        - "80:80"
+        - 80
