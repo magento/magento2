@@ -6,7 +6,7 @@
 -->
 
 <div
-    class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks _hide"
+    class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks"
     data-bind="css: {_active: opened, _disabled: !collapsible}, outerClick: close">
     <button
         class="admin__action-dropdown"
@@ -53,8 +53,11 @@
             </div>
         </li> 
         <!-- /ko -->
-        <li class="action-dropdown-menu-item-last">
+        <li class="action-dropdown-menu-action">
+            <a href="">Create New View</a>
+        </li>
+        <li class="action-dropdown-menu-action action-dropdown-menu-item-last">
             <a href="">Save Current View</a>
-        </li> 
+        </li>
     </ul>
 </div>
