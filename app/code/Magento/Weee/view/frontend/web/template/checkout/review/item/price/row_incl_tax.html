@@ -8,7 +8,7 @@
     <span class="cart-tax-total" data-bind="{mageInit: {taxToggle: {itemTaxId : '#subtotal-item-tax-details'+item.item_id}}"></span>
 <!-- /ko -->
 <!-- ko ifnot: (isDisplayPriceWithWeeeDetails(item)) -->
-    <span class="cart-price" data-bind="text: getFormattedPrice(getRowDisplayPriceInclTax(item))"></span>
+    <span class="cart-price"><span class="price" data-bind="text: getFormattedPrice(getRowDisplayPriceInclTax(item))"></span></span>
 <!-- /ko -->
 
 <!--ko if:  (item.weee_tax_applied.length > 0)-->
