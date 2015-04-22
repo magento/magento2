@@ -172,6 +172,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     public function collectDataProvider()
     {
         $result = [];
+
         // 3 item_1, $100 with $weee, 8.25 tax rate, full invoice
         $result['complete_invoice'] = [
             'order_data' => [
@@ -269,7 +270,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal' => 300,
                     'subtotal_incl_tax' => 344.85,
                     'base_subtotal_incl_tax' => 344.85,
-
                 ],
             ],
         ];
@@ -360,7 +360,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                         'tax_ratio' => serialize(['weee' => 1.65 / 2.47]),
                         'weee_tax_applied_row_amount' => 20,
                         'base_weee_tax_applied_row_amount' => 20,
-
                     ],
                 ],
                 'invoice_data' => [
@@ -372,7 +371,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal' => 200,
                     'subtotal_incl_tax' => 238.15,
                     'base_subtotal_incl_tax' => 238.15,
-
                 ],
             ],
         ];
@@ -464,7 +462,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                         'tax_ratio' => serialize(['weee' => 0.82 / 2.47]),
                         'weee_tax_applied_row_amount' => 10,
                         'base_weee_tax_applied_row_amount' => 10,
-
                     ],
                 ],
                 'invoice_data' => [
@@ -476,7 +473,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal' => 100,
                     'subtotal_incl_tax' => 119.07,
                     'base_subtotal_incl_tax' => 119.07,
-
                 ],
             ],
         ];
@@ -580,7 +576,98 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal' => 100,
                     'subtotal_incl_tax' => 114.95,
                     'base_subtotal_incl_tax' => 114.95,
+                ],
+            ],
+        ];
 
+        // 3 item_1, $100 with $weee, 8.25 tax rate. Invoicing qty 0.
+        $result['zero_invoice'] = [
+            'order_data' => [
+                'previous_invoices' => [
+                ],
+                'data_fields' => [
+                    'shipping_tax_amount' => 1.24,
+                    'base_shipping_tax_amount' => 1.24,
+                    'shipping_hidden_tax_amount' => 0,
+                    'base_shipping_hidden_tax_amount' => 0,
+                    'tax_amount' => 16.09,
+                    'tax_invoiced' => 0,
+                    'base_tax_amount' => 16.09,
+                    'base_tax_amount_invoiced' => 0,
+                    'subtotal' => '300',
+                    'base_subtotal' => '300',
+                ],
+            ],
+            'invoice_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'weee_tax_applied_row_amount' => 30,
+                            'base_weee_tax_applied_row_amnt' => 30,
+                            'row_weee_tax_incl_tax' => 32.47,
+                            'base_row_weee_tax_incl_tax' => 32.47,
+                            'weee_amount_invoiced' => 0,
+                            'base_weee_amount_invoiced' => 0,
+                            'weee_tax_amount_invoiced' => 0,
+                            'base_weee_tax_amount_invoiced' => 0,
+                            'applied_weee' => [
+                                [
+                                    'title' => 'recycling_fee',
+                                    'base_row_amount' => 30,
+                                    'row_amount' => 30,
+                                    'base_row_amount_incl_tax' => 32.47,
+                                    'row_amount_incl_tax' => 32.47,
+                                ],
+                            ],
+                            'applied_weee_updated' => [
+                                'base_row_amount_invoiced' => 30,
+                                'row_amount_invoiced' => 30,
+                                'base_tax_amount_invoiced' => 2.47,
+                                'tax_amount_invoiced' => 2.47,
+                            ],
+                            'qty_invoiced' => 0,
+                        ],
+                        'is_last' => true,
+                        'data_fields' => [
+                            'qty' => 0,
+                            'applied_weee' => [
+                                [
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'is_last' => true,
+                'include_in_subtotal' => false,
+                'data_fields' => [
+                    'grand_total' => 181.09,
+                    'base_grand_total' => 181.09,
+                    'subtotal' => 300,
+                    'base_subtotal' => 300,
+                    'subtotal_incl_tax' => 314.85,
+                    'base_subtotal_incl_tax' => 314.85,
+                    'tax_amount' => 16.09,
+                    'base_tax_amount' => 16.09,
+                ],
+            ],
+            'expected_results' => [
+                'invoice_items' => [
+                    'item_1' => [
+                        'applied_weee' => [
+                            [
+                                'title' => 'recycling_fee',
+                                'base_row_amount' => 0,
+                                'row_amount' => 0,
+                                'base_row_amount_incl_tax' => 0,
+                                'row_amount_incl_tax' => 0,
+                            ],
+                        ],
+                    ],
+                ],
+                'invoice_data' => [
+                    'subtotal' => 300,
+                    'base_subtotal' => 300,
                 ],
             ],
         ];
