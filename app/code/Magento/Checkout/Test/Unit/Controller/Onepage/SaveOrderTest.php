@@ -67,6 +67,7 @@ class SaveOrderTest extends \PHPUnit_Framework_TestCase
      * Set up
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
@@ -176,6 +177,7 @@ class SaveOrderTest extends \PHPUnit_Framework_TestCase
      * Test for execute method
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecute()
     {
@@ -262,6 +264,7 @@ class SaveOrderTest extends \PHPUnit_Framework_TestCase
                     ['Magento\Checkout\Model\Agreements\AgreementsValidator', $agreementsValidatorMock],
                 ]
             );
+
         // call _expireAjax method
         $onepageMock->expects($this->atLeastOnce())
             ->method('getQuote')
