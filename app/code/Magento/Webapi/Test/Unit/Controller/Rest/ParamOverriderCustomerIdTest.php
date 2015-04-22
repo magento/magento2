@@ -34,7 +34,7 @@ class ParamOverriderCustomerIdTest extends \PHPUnit_Framework_TestCase
         );
     }
     
-    public function testGetOverridenValueIsCustomer()
+    public function testGetOverriddenValueIsCustomer()
     {
         $retValue = 'retValue';
 
@@ -48,7 +48,7 @@ class ParamOverriderCustomerIdTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
 
-    public function testGetOverridenValueIsNotCustomer()
+    public function testGetOverriddenValueIsNotCustomer()
     {
         $this->userContext->expects($this->once())
             ->method('getUserType')

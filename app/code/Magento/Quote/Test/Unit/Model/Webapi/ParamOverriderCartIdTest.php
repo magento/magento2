@@ -42,7 +42,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetOverridenValueIsCustomerAndCartExists()
+    public function testGetOverriddenValueIsCustomerAndCartExists()
     {
         $retValue = 'retValue';
         $customerId = 1;
@@ -67,7 +67,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($retValue, $this->model->getOverriddenValue());
     }
 
-    public function testGetOverridenValueIsCustomerAndCartDoesNotExist()
+    public function testGetOverriddenValueIsCustomerAndCartDoesNotExist()
     {
         $customerId = 1;
 
@@ -86,7 +86,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getOverriddenValue());
     }
 
-    public function testGetOverridenValueIsCustomerAndCartIsNull()
+    public function testGetOverriddenValueIsCustomerAndCartIsNull()
     {
         $customerId = 1;
 
@@ -105,7 +105,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getOverriddenValue());
     }
 
-    public function testGetOverridenValueIsNotCustomer()
+    public function testGetOverriddenValueIsNotCustomer()
     {
         $this->userContext->expects($this->once())
             ->method('getUserType')
