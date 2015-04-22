@@ -39,9 +39,11 @@ interface CartManagementInterface
      * Places an order for a specified cart.
      *
      * @param int $cartId The cart ID.
+     * @param int[]|null $agreements
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
-    public function placeOrder($cartId);
+    public function placeOrder($cartId, $agreements = null);
 
     /**
      * Registers a customer and places an order for the specified cart.
@@ -49,7 +51,9 @@ interface CartManagementInterface
      * @param int $cartId The cart ID.
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $password
+     * @param int[]|null $agreements
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
-    public function placeOrderCreatingAccount($cartId, $customer, $password);
+    public function placeOrderCreatingAccount($cartId, $customer, $password, $agreements = null);
 }

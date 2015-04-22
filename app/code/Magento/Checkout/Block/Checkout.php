@@ -40,6 +40,11 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $configProvider;
 
     /**
+     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface[]
+     */
+    protected $customLayoutProviders;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
@@ -54,6 +59,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Quote\Model\Quote\AddressDataProvider $addressDataProvider
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
+     * @param \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface[] $customLayoutProviders
      * @param array $data
      */
     public function __construct(
@@ -71,6 +77,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Quote\Model\Quote\AddressDataProvider $addressDataProvider,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
+        array $customLayoutProviders = [],
         array $data = []
     ) {
         parent::__construct(
@@ -92,6 +99,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         $this->jsLayout = is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         $this->addressDataProvider = $addressDataProvider;
         $this->configProvider = $configProvider;
+        $this->customLayoutProviders = $customLayoutProviders;
     }
 
     /**
@@ -117,6 +125,10 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
             $this->jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
             ['children']['shipping-address-fieldset']['children'] = $this->addressDataProvider
                 ->getAdditionalAddressFields('checkoutProvider', 'shippingAddress', $fields);
+        }
+        foreach ($this->customLayoutProviders as $dataProvider) {
+            $customFormLayout = $dataProvider->getData();
+            $this->jsLayout = array_merge_recursive($this->jsLayout, $customFormLayout);
         }
         return \Zend_Json::encode($this->jsLayout);
     }

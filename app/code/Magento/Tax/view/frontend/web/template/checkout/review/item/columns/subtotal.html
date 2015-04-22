@@ -1,0 +1,17 @@
+<td data-bind="attr: { 'data-th': $t(getColName())}" class="col subtotal">
+    <!-- ko if: displayPriceInclTax -->
+    <span class="price-including-tax" data-bind ="attr:{'data-label': $t('Incl. Tax')}">
+            <!-- ko foreach: getRegion('row_incl_tax') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+    </span>
+
+    <!-- /ko -->
+    <!-- ko if: displayPriceExclTax -->
+    <span class="price-excluding-tax" data-bind ="attr:{'data-label': $t('Excl. Tax')}">
+            <!-- ko foreach: getRegion('row_excl_tax') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+    </span>
+    <!-- /ko -->
+</td>

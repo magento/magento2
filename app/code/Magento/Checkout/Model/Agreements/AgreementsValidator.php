@@ -27,7 +27,7 @@ class AgreementsValidator
      * @param int[] $agreementIds
      * @return bool
      */
-    public function isValid($agreementIds)
+    public function isValid($agreementIds = [])
     {
         $requiredAgreements = [];
         foreach ($this->agreementsProviders as $agreementsProvider) {

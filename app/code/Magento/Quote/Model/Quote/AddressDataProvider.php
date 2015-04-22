@@ -5,6 +5,9 @@
  */
 namespace Magento\Quote\Model\Quote;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\Customer\Helper\Address as AddressHelper;
@@ -44,6 +47,26 @@ class AddressDataProvider implements DataProviderInterface
     private $addressHelper;
 
     /**
+     * @var Session
+     */
+    private $customerSession;
+
+    /**
+     * @var CustomerRepository
+     */
+    private $customerRepository;
+
+    /**
+     * @var \Magento\Customer\Api\Data\CustomerInterface
+     */
+    private $customer;
+
+    /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    private $directoryHelper;
+
+    /**
      * Form element mapping
      *
      * @var array
@@ -73,13 +96,20 @@ class AddressDataProvider implements DataProviderInterface
      * @param EavValidationRul $eavValidationRule
      * @param EavConfig $eavConfig
      * @param AddressHelper $addressHelper
+     * @param Session $customerSession
+     * @param CustomerRepository $customerRepository
+     * @param DirectoryHelper $directoryHelper
      * @param array $meta
      * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         EavValidationRul $eavValidationRule,
         EavConfig $eavConfig,
         AddressHelper $addressHelper,
+        Session $customerSession,
+        CustomerRepository $customerRepository,
+        DirectoryHelper $directoryHelper,
         array $meta = [],
         array $data = []
     ) {
@@ -91,6 +121,9 @@ class AddressDataProvider implements DataProviderInterface
         );
         $this->data = $data;
         $this->addressHelper = $addressHelper;
+        $this->customerSession = $customerSession;
+        $this->customerRepository = $customerRepository;
+        $this->directoryHelper = $directoryHelper;
     }
 
     /**
@@ -346,7 +379,7 @@ class AddressDataProvider implements DataProviderInterface
             ? 'ui/form/element/select'
             : 'ui/form/element/input';
 
-        return [
+        $element = [
             'component' => isset($additionalConfig['component']) ? $additionalConfig['component'] : $uiComponent,
             'config' => [
                 // customScope is used to group elements within a single form (e.g. they can be validated separately)
@@ -369,6 +402,12 @@ class AddressDataProvider implements DataProviderInterface
             'customEntry' => isset($additionalConfig['customEntry']) ? $additionalConfig['customEntry'] : null,
             'visible' => isset($additionalConfig['visible']) ? $additionalConfig['visible'] : true,
         ];
+
+        $defaultValue = $this->getDefaultValue($attributeCode);
+        if (!is_null($defaultValue)) {
+            $element['default'] = $defaultValue;
+        }
+        return $element;
     }
 
     /**
@@ -448,5 +487,43 @@ class AddressDataProvider implements DataProviderInterface
             ],
             'children' => $streetLines,
         ];
+    }
+
+    /**
+     * @param string $attributeCode
+     * @return null|string
+     */
+    protected function getDefaultValue($attributeCode)
+    {
+        switch ($attributeCode) {
+            case 'firstname':
+                if ($this->getCustomer()) {
+                    return $this->getCustomer()->getFirstname();
+                }
+                break;
+            case 'lastname':
+                if ($this->getCustomer()) {
+                    return $this->getCustomer()->getLastname();
+                }
+                break;
+            case 'country_id':
+                return $this->directoryHelper->getDefaultCountry();
+        }
+        return null;
+    }
+
+    /**
+     * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     */
+    protected function getCustomer()
+    {
+        if (!$this->customer) {
+            if ($this->customerSession->isLoggedIn()) {
+                $this->customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
+            } else {
+                return null;
+            }
+        }
+        return $this->customer;
     }
 }

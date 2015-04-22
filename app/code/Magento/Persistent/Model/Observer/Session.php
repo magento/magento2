@@ -181,12 +181,18 @@ class Session
         /** @var $controllerAction \Magento\Framework\App\RequestInterface */
         $request = $observer->getEvent()->getRequest();
         if ($request) {
-            $rememberMeCheckbox = $request->getPost('persistent_remember_me');
-            $this->_persistentSession->setRememberMeChecked((bool)$rememberMeCheckbox);
+            $isRememberMeChecked = false;
+            if ($request->isXmlHttpRequest()) {
+                $requestData = \Zend_Json::decode($request->getContent());
+                $isRememberMeChecked = empty($requestData['persistent_remember_me']) ? false : true;
+            } else {
+                $isRememberMeChecked = $request->getPost('persistent_remember_me');
+            }
+            $this->_persistentSession->setRememberMeChecked((bool)$isRememberMeChecked);
             if ($request->getFullActionName() == 'checkout_onepage_saveBilling' ||
                 $request->getFullActionName() == 'customer_account_createpost'
             ) {
-                $this->_checkoutSession->setRememberMeChecked((bool)$rememberMeCheckbox);
+                $this->_checkoutSession->setRememberMeChecked((bool)$isRememberMeChecked);
             }
         }
     }
