@@ -27,11 +27,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     protected $processorFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $appStateMock;
-
-    /**
      * @var \Magento\Framework\View\Design\Theme\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $themeResolverMock;
