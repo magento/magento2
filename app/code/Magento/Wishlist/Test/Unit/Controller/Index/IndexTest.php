@@ -120,10 +120,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
 
         $layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $layout
-            ->expects($this->once())
-            ->method('initMessages')
-            ->willReturn(true);
 
         $this->wishlistProvider
             ->expects($this->once())
@@ -134,10 +130,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('loadLayout')
             ->willReturn(true);
-        $this->view
-            ->expects($this->once())
-            ->method('getLayout')
-            ->willReturn($layout);
+
         $this->view
             ->expects($this->once())
             ->method('renderLayout')

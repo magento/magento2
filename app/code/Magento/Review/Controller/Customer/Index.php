@@ -16,7 +16,6 @@ class Index extends \Magento\Review\Controller\Customer
     public function execute()
     {
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
 
         if ($navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation')) {
             $navigationBlock->setActive('review/customer');

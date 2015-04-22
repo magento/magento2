@@ -41,7 +41,6 @@ class Index extends Action\Action implements IndexInterface
             throw new NotFoundException();
         }
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 }

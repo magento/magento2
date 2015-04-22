@@ -86,7 +86,6 @@ class Confirmation extends \Magento\Customer\Controller\Account
         $resultPage->getLayout()->getBlock('accountConfirmation')->setEmail(
             $this->getRequest()->getParam('email', $email)
         );
-        $resultPage->getLayout()->initMessages();
         return $resultPage;
     }
 }

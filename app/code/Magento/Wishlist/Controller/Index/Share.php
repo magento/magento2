@@ -19,7 +19,6 @@ class Share extends Action\Action implements IndexInterface
     public function execute()
     {
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 }

@@ -16,7 +16,6 @@ class Builder extends \Magento\Framework\View\Layout\Builder
      */
     protected function afterGenerateBlock()
     {
-        $this->layout->initMessages();
         return $this;
     }
 }

@@ -134,8 +134,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $layout = $this->getMockBuilder('Magento\Framework\View\Layout')
             ->disableOriginalConstructor()
             ->getMock();
-        $layout->expects($this->once())
-            ->method('initMessages');
 
         $title = $this->getMockBuilder('Magento\Framework\View\Page\Title')
             ->disableOriginalConstructor()
@@ -154,9 +152,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $page = $this->getMockBuilder('Magento\Framework\View\Result\Page')
             ->disableOriginalConstructor()
             ->getMock();
-        $page->expects($this->once())
-            ->method('getLayout')
-            ->willReturn($layout);
+
         $page->expects($this->once())
             ->method('getConfig')
             ->willReturn($config);
