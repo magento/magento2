@@ -75,15 +75,4 @@ class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemReposit
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->repository->deleteById($quoteIdMask->getId(), $itemId);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
-    {
-        /** @var $quoteIdMask QuoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartItem->getQuoteId(), 'masked_id');
-        $cartItem->setQuoteId($quoteIdMask->getId());
-        return $this->repository->delete($cartItem);
-    }
 }

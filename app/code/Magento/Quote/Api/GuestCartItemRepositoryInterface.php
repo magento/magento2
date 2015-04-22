@@ -31,15 +31,6 @@ interface GuestCartItemRepositoryInterface
     public function save(\Magento\Quote\Api\Data\CartItemInterface $cartItem);
 
     /**
-     * Delete cart item
-     *
-     * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
-     * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     */
-    public function delete(\Magento\Quote\Api\Data\CartItemInterface $cartItem);
-
-    /**
      * Removes the specified item from the specified cart.
      *
      * @param string $cartId The cart ID.
