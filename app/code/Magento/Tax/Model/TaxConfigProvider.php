@@ -31,7 +31,9 @@ class TaxConfigProvider implements ConfigProviderInterface
     {
         return [
             'isDisplayShippingPriceExclTax' => $this->isDisplayShippingPriceExclTax(),
-            'isDisplayShippingBothPrices' => $this->isDisplayShippingBothPrices()
+            'isDisplayShippingBothPrices' => $this->isDisplayShippingBothPrices(),
+            'reviewItemPriceDisplayMode' => $this->getReviewItemPriceDisplayMode(),
+            'reviewTotalPriceDisplayMode' => $this->getReviewTotalPriceDisplayMode(),
         ];
     }
 
@@ -53,5 +55,37 @@ class TaxConfigProvider implements ConfigProviderInterface
     public function isDisplayShippingBothPrices()
     {
         return $this->taxHelper->displayShippingBothPrices();
+    }
+
+    /**
+     * Get review item price display mode
+     *
+     * @return string 'both', 'including', 'excluding'
+     */
+    public function getReviewItemPriceDisplayMode()
+    {
+        if ($this->taxHelper->displayCartBothPrices()) {
+            return 'both';
+        }
+        if ($this->taxHelper->displayCartPriceExclTax()) {
+            return 'excluding';
+        }
+        return 'including';
+    }
+
+    /**
+     * Get review item price display mode
+     *
+     * @return string 'both', 'including', 'excluding'
+     */
+    public function getReviewTotalPriceDisplayMode()
+    {
+        if ($this->taxHelper->displaySalesSubtotalBoth()) {
+            return 'both';
+        }
+        if ($this->taxHelper->displaySalesPriceExclTax()) {
+            return 'excluding';
+        }
+        return 'including';
     }
 }
