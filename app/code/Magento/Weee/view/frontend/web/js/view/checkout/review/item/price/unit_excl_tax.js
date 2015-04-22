@@ -6,11 +6,9 @@
 /*global define*/
 define(
     [
-        'Magento_Weee/js/view/checkout/review/item/price/weee',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Weee/js/view/checkout/review/item/price/weee'
     ],
-    function (weee,quote, priceUtils) {
+    function (weee) {
         "use strict";
         return weee.extend({
             defaults: {

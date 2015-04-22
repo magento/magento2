@@ -20,7 +20,6 @@
                                                 <item name="columns" xsi:type="array">
                                                     <item name="children" xsi:type="array">
                                                         <item name="price" xsi:type="array">
-                                                            <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/review/item/columns/price</item>
                                                             <item name="children" xsi:type="array">
                                                                 <item name="unit_incl_tax" xsi:type="array">
                                                                     <item name="component"  xsi:type="string">Magento_Weee/js/view/checkout/review/item/price/unit_incl_tax</item>
