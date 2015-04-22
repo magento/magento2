@@ -52,7 +52,10 @@ class BundleLoadOptions
             return $product;
         }
 
-        $productExtension = $this->productExtensionFactory->create();
+        $productExtension = $product->getExtensionAttributes();
+        if ($productExtension === null) {
+            $productExtension = $this->productExtensionFactory->create();
+        }
         $productExtension->setBundleProductOptions($this->productOptionList->getItems($product));
 
         $product->setExtensionAttributes($productExtension);
