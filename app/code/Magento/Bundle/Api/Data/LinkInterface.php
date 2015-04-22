@@ -9,6 +9,24 @@ namespace Magento\Bundle\Api\Data;
 
 interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    const PRICE_TYPE_FIXED = 0;
+    const PRICE_TYPE_PERCENT = 1;
+
+    /**
+     * Get the identifier
+     *
+     * @return string|null
+     */
+    public function getId();
+
+    /**
+     * Set id
+     *
+     * @param string $id
+     * @return $this
+     */
+    public function setId($id);
+
     /**
      * Get linked product sku
      *
@@ -68,21 +86,6 @@ interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setPosition($position);
-
-    /**
-     * Get is defined
-     *
-     * @return bool|null
-     */
-    public function getIsDefined();
-
-    /**
-     * Set is defined
-     *
-     * @param bool $isDefined
-     * @return $this
-     */
-    public function setIsDefined($isDefined);
 
     /**
      * Get is default
