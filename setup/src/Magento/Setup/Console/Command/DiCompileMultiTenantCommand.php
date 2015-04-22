@@ -183,6 +183,7 @@ class DiCompileMultiTenantCommand extends Command
      * @param array $fileExcludePatterns
      * @param InputInterface $input
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function generateCode($rootDir, $generationDir, $fileExcludePatterns, $input)
@@ -270,6 +271,7 @@ class DiCompileMultiTenantCommand extends Command
      * @param array $fileExcludePatterns
      * @param InputInterface $input
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function compileCode($rootDir, $generationDir, $fileExcludePatterns, $input)
