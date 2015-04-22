@@ -169,6 +169,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     public function collectDataProvider()
     {
         $result = [];
+
         // scenario 1: 3 item_1, $100 with $weee, 8.25 tax rate, 3 items invoiced, full creditmemo
         $result['complete_creditmemo'] = [
             'creditmemo_data' => [
@@ -236,7 +237,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                         'tax_ratio' => serialize(['weee' => 1.0]),
                         'weee_tax_applied_row_amount' => 30,
                         'base_weee_tax_applied_row_amount' => 30,
-
                     ],
                 ],
                 'creditmemo_data' => [
@@ -248,7 +248,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal' => 300,
                     'subtotal_incl_tax' => 357.22,
                     'base_subtotal_incl_tax' => 357.22,
-
                 ],
             ],
         ];
@@ -320,7 +319,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                         'tax_ratio' => serialize(['weee' => 1.65 / 2.47]),
                         'weee_tax_applied_row_amount' => 20,
                         'base_weee_tax_applied_row_amount' => 20,
-
                     ],
                 ],
                 'creditmemo_data' => [
@@ -332,7 +330,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal' => 200,
                     'subtotal_incl_tax' => 238.15,
                     'base_subtotal_incl_tax' => 238.15,
-
                 ],
             ],
         ];
@@ -404,7 +401,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                         'tax_ratio' => serialize(['weee' => 0.83 / 2.47]),
                         'weee_tax_applied_row_amount' => 10,
                         'base_weee_tax_applied_row_amount' => 10,
-
                     ],
                 ],
                 'creditmemo_data' => [
@@ -416,7 +412,79 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                     'base_subtotal' => 100,
                     'subtotal_incl_tax' => 119.07,
                     'base_subtotal_incl_tax' => 119.07,
+                ],
+            ],
+        ];
 
+        // scenario 4: 3 item_1, $100 with $weee, 8.25 tax rate.  Returning qty 0.
+        $result['zero_return'] = [
+            'creditmemo_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'weee_tax_applied_row_amount' => 30,
+                            'base_weee_tax_applied_row_amnt' => 30,
+                            'row_weee_tax_incl_tax' => 32.47,
+                            'base_row_weee_tax_incl_tax' => 32.47,
+                            'weee_amount_invoiced' => 30,
+                            'base_weee_amount_invoiced' => 30,
+                            'weee_amount_refunded' => 0,
+                            'base_weee_amount_refunded' => 0,
+                            'weee_tax_amount_invoiced' => 2.47,
+                            'base_weee_tax_amount_invoiced' => 2.47,
+                            'weee_tax_amount_refunded' => 0,
+                            'base_weee_tax_amount_refunded' => 0,
+                            'applied_weee' => [
+                                [
+                                    'title' => 'recycling_fee',
+                                    'base_row_amount' => 30,
+                                    'row_amount' => 30,
+                                    'base_row_amount_incl_tax' => 32.47,
+                                    'row_amount_incl_tax' => 32.47,
+                                ],
+                            ],
+                            'qty_invoiced' => 3,
+                        ],
+                        'is_last' => true,
+                        'data_fields' => [
+                            'qty' => 0,
+                            'applied_weee' => [
+                                [
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'include_in_subtotal' => false,
+                'data_fields' => [
+                    'grand_total' => 300,
+                    'base_grand_total' => 300,
+                    'subtotal' => 300,
+                    'base_subtotal' => 300,
+                    'subtotal_incl_tax' => 324.75,
+                    'base_subtotal_incl_tax' => 324.75,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                ],
+            ],
+            'expected_results' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'applied_weee' => [
+                            [
+                                'title' => 'recycling_fee',
+                                'base_row_amount' => 0,
+                                'row_amount' => 0,
+                                'base_row_amount_incl_tax' => 0,
+                                'row_amount_incl_tax' => 0,
+                            ],
+                        ],
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'subtotal' => 300,
+                    'base_subtotal' => 300,
                 ],
             ],
         ];
