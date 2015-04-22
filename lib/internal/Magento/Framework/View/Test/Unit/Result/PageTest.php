@@ -53,6 +53,11 @@ class PageTest extends \PHPUnit_Framework_TestCase
     protected $pageConfigRenderer;
 
     /**
+     * @var \Magento\Framework\View\Page\Config\RendererFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageConfigRendererFactory;
+
+    /**
      * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewFileSystem;
@@ -107,14 +112,10 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $pageConfigRendererFactory = $this->getMockBuilder('Magento\Framework\View\Page\Config\RendererFactory')
+        $this->pageConfigRendererFactory = $this->getMockBuilder('Magento\Framework\View\Page\Config\RendererFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $pageConfigRendererFactory->expects($this->once())
-            ->method('create')
-            ->with(['pageConfig' => $this->pageConfig])
-            ->willReturn($this->pageConfigRenderer);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->page = $objectManagerHelper->getObject(
@@ -124,7 +125,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 'layoutFactory' => $this->layoutFactory,
                 'context' => $this->context,
                 'translateInline' => $this->translateInline,
-                'pageConfigRendererFactory' => $pageConfigRendererFactory,
+                'pageConfigRendererFactory' => $this->pageConfigRendererFactory,
             ]
         );
     }
@@ -242,5 +243,20 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->page->addPageLayoutHandles($parameters, $defaultHandle);
+    }
+
+    public function testRenderResult()
+    {
+        /** @var $response \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
+        $response = $this->getMockBuilder('Magento\Framework\App\Response\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->pageConfigRendererFactory->expects($this->once())
+            ->method('create')
+            ->with(['pageConfig' => $this->pageConfig])
+            ->willReturn($this->pageConfigRenderer);
+
+        $this->assertEquals($this->page->renderResult($response), $this->page);
     }
 }

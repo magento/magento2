@@ -73,9 +73,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param bool $resolve
      * @return \Magento\Framework\Url\RouteParamsResolverFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getRouteParamsResolver()
+    protected function getRouteParamsResolver($resolve = true)
     {
         $routeParamsResolverFactoryMock = $this->getMock(
             'Magento\Framework\Url\RouteParamsResolverFactory',
@@ -84,8 +85,10 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $routeParamsResolverFactoryMock->expects($this->once())->method('create')
-            ->will($this->returnValue($this->routeParamsResolverMock));
+        if ($resolve) {
+            $routeParamsResolverFactoryMock->expects($this->once())->method('create')
+                    ->will($this->returnValue($this->routeParamsResolverMock));
+        }
         return $routeParamsResolverFactoryMock;
     }
 
@@ -363,7 +366,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             'request' => $requestMock,
             'sidResolver' => $this->sidResolverMock,
             'scopeResolver' => $this->scopeResolverMock,
-            'routeParamsResolver' => $this->getRouteParamsResolver(),
+            'routeParamsResolver' => $this->getRouteParamsResolver(false),
             'queryParamsResolver' => $this->queryParamsResolverMock,
         ]);
 
@@ -396,7 +399,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function testGetRedirectUrlWithSessionId()
     {
         $model = $this->getUrlModel(
-            ['routeParamsResolver' => $this->getRouteParamsResolver(), 'session' => $this->sessionMock,
+            ['routeParamsResolver' => $this->getRouteParamsResolver(false), 'session' => $this->sessionMock,
                 'sidResolver' => $this->sidResolverMock, 'queryParamsResolver' => $this->queryParamsResolverMock, ]
         );
 
@@ -422,7 +425,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRouteUrlWithValidUrl()
     {
-        $model = $this->getUrlModel(['routeParamsResolver' => $this->getRouteParamsResolver()]);
+        $model = $this->getUrlModel(['routeParamsResolver' => $this->getRouteParamsResolver(false)]);
 
         $this->routeParamsResolverMock->expects($this->never())->method('unsetData');
         $this->assertEquals('http://example.com', $model->getRouteUrl('http://example.com'));

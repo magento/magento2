@@ -134,7 +134,6 @@ class Page extends Layout
             $generatorPool,
             $isIsolated
         );
-        $this->initPageConfigReader();
     }
 
     /**
@@ -222,6 +221,9 @@ class Page extends Layout
      */
     protected function render(ResponseInterface $response)
     {
+        if (!$this->pageConfigRenderer) {
+            $this->initPageConfigReader();
+        }
         $this->pageConfig->publicBuild();
         if ($this->getPageLayout()) {
             $config = $this->getConfig();

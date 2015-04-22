@@ -136,6 +136,10 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
     protected $_routeParamsResolver;
 
     /**
+     * @var \Magento\Framework\Url\RouteParamsResolverFactory
+     */
+    protected $_routeParamsResolverFactory;
+    /**
      * @var \Magento\Framework\Url\ScopeResolverInterface
      */
     protected $_scopeResolver;
@@ -183,7 +187,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
         $this->_scopeResolver = $scopeResolver;
         $this->_session = $session;
         $this->_sidResolver = $sidResolver;
-        $this->_routeParamsResolver = $routeParamsResolver->create();
+        $this->_routeParamsResolverFactory = $routeParamsResolver;
         $this->_queryParamsResolver = $queryParamsResolver;
         $this->_scopeConfig = $scopeConfig;
         $this->_scopeType = $scopeType;
@@ -322,10 +326,10 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
      */
     protected function _getType()
     {
-        if (!$this->_routeParamsResolver->hasData('type')) {
-            $this->_routeParamsResolver->setData('type', self::DEFAULT_URL_TYPE);
+        if (!$this->getRouteParamsResolver()->hasData('type')) {
+            $this->getRouteParamsResolver()->setData('type', self::DEFAULT_URL_TYPE);
         }
-        return $this->_routeParamsResolver->getType();
+        return $this->getRouteParamsResolver()->getType();
     }
 
     /**
@@ -335,27 +339,27 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
      */
     protected function _isSecure()
     {
-        if ($this->_routeParamsResolver->hasData('secure_is_forced')) {
-            return (bool) $this->_routeParamsResolver->getData('secure');
+        if ($this->getRouteParamsResolver()->hasData('secure_is_forced')) {
+            return (bool) $this->getRouteParamsResolver()->getData('secure');
         }
 
         if (!$this->_getScope()->isUrlSecure()) {
             return false;
         }
 
-        if (!$this->_routeParamsResolver->hasData('secure')) {
+        if (!$this->getRouteParamsResolver()->hasData('secure')) {
             if ($this->_getType() == UrlInterface::URL_TYPE_LINK) {
                 $pathSecure = $this->_urlSecurityInfo->isSecure('/' . $this->_getActionPath());
-                $this->_routeParamsResolver->setData('secure', $pathSecure);
+                $this->getRouteParamsResolver()->setData('secure', $pathSecure);
             } elseif ($this->_getType() == UrlInterface::URL_TYPE_STATIC) {
                 $isRequestSecure = $this->_getRequest()->isSecure();
-                $this->_routeParamsResolver->setData('secure', $isRequestSecure);
+                $this->getRouteParamsResolver()->setData('secure', $isRequestSecure);
             } else {
-                $this->_routeParamsResolver->setData('secure', true);
+                $this->getRouteParamsResolver()->setData('secure', true);
             }
         }
 
-        return $this->_routeParamsResolver->getData('secure');
+        return $this->getRouteParamsResolver()->getData('secure');
     }
 
     /**
@@ -367,7 +371,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
     public function setScope($params)
     {
         $this->setData('scope', $this->_scopeResolver->getScope($params));
-        $this->_routeParamsResolver->setScope($this->_scopeResolver->getScope($params));
+        $this->getRouteParamsResolver()->setScope($this->_scopeResolver->getScope($params));
         return $this;
     }
 
@@ -401,11 +405,11 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
             $this->setScope($params['_scope']);
         }
         if (isset($params['_type'])) {
-            $this->_routeParamsResolver->setType($params['_type']);
+            $this->getRouteParamsResolver()->setType($params['_type']);
         }
 
         if (isset($params['_secure'])) {
-            $this->_routeParamsResolver->setSecure($params['_secure']);
+            $this->getRouteParamsResolver()->setSecure($params['_secure']);
         }
 
         /**
@@ -416,13 +420,13 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
                 $this->_getRouteFrontName()
             )
         ) {
-            $this->_routeParamsResolver->setType(UrlInterface::URL_TYPE_DIRECT_LINK);
+            $this->getRouteParamsResolver()->setType(UrlInterface::URL_TYPE_DIRECT_LINK);
         }
 
         $result = $this->_getScope()->getBaseUrl($this->_getType(), $this->_isSecure());
         // setting back the original scope
         $this->setScope($origScope);
-        $this->_routeParamsResolver->setType(self::DEFAULT_URL_TYPE);
+        $this->getRouteParamsResolver()->setType(self::DEFAULT_URL_TYPE);
         return $result;
     }
 
@@ -471,7 +475,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
                 $key = array_shift($routePieces);
                 if (!empty($routePieces)) {
                     $value = array_shift($routePieces);
-                    $this->_routeParamsResolver->setRouteParam($key, $value);
+                    $this->getRouteParamsResolver()->setRouteParam($key, $value);
                 }
             }
         }
@@ -650,7 +654,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
      */
     protected function _setRouteParams(array $data, $unsetOldParams = true)
     {
-        $this->_routeParamsResolver->setRouteParams($data, $unsetOldParams);
+        $this->getRouteParamsResolver()->setRouteParams($data, $unsetOldParams);
         return $this;
     }
 
@@ -661,7 +665,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
      */
     protected function _getRouteParams()
     {
-        return $this->_routeParamsResolver->getRouteParams();
+        return $this->getRouteParamsResolver()->getRouteParams();
     }
 
     /**
@@ -677,7 +681,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
             return $routePath;
         }
 
-        $this->_routeParamsResolver->unsetData('route_params');
+        $this->getRouteParamsResolver()->unsetData('route_params');
 
         if (isset($routeParams['_direct'])) {
             if (is_array($routeParams)) {
@@ -786,7 +790,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
          * this method has condition for adding default controller and action names
          * in case when we have params
          */
-        $this->_routeParamsResolver->unsetData('secure');
+        $this->getRouteParamsResolver()->unsetData('secure');
         $fragment = null;
         if (isset($routeParams['_fragment'])) {
             $fragment = $routeParams['_fragment'];
@@ -840,7 +844,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
         if (!is_null($fragment)) {
             $url .= '#' . $fragment;
         }
-        $this->_routeParamsResolver->unsetData('secure');
+        $this->getRouteParamsResolver()->unsetData('secure');
         return $this->escape($url);
     }
 
@@ -1037,5 +1041,18 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
         $requestUri = $this->_request->getServer('REQUEST_URI');
         $url = $this->_request->getScheme() . '://' . $this->_request->getHttpHost() . $port . $requestUri;
         return $url;
+    }
+
+    /**
+     * Get Route Params Resolver
+     *
+     * @return Url\RouteParamsResolverInterface
+     */
+    protected function getRouteParamsResolver()
+    {
+        if (!$this->_routeParamsResolver) {
+            $this->_routeParamsResolver = $this->_routeParamsResolverFactory->create();
+        }
+        return $this->_routeParamsResolver;
     }
 }
