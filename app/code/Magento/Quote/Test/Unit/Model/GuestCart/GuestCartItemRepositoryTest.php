@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Quote\Test\Unit\Model\Quote\Item;
+namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
 class GuestCartItemRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -58,10 +58,11 @@ class GuestCartItemRepositoryTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Quote\Test\Unit\Model\GuestCart\GuestCartTestHelper
          */
         $guestCartTestHelper = new \Magento\Quote\Test\Unit\Model\GuestCart\GuestCartTestHelper($this);
- 	 	list($this->quoteIdMaskFactoryMock, $this->quoteIdMaskMock) = $guestCartTestHelper->mockQuoteIdMask(
-            $this->maskedCartId,
-            $this->cartId
-        );
+        list($this->quoteIdMaskFactoryMock, $this->quoteIdMaskMock) =
+            $guestCartTestHelper->mockQuoteIdMask(
+                $this->maskedCartId,
+                $this->cartId
+            );
 
         $this->quoteIdMaskMock->expects($this->any())
             ->method('getMaskedId')
@@ -80,12 +81,13 @@ class GuestCartItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->cartItemRepositoryMock = $this->getMock('\Magento\Quote\Model\Quote\Item\Repository', [], [], '', false);
         $this->guestCartItemRepository =
-            $objectManager->getObject('Magento\Quote\Model\GuestCart\GuestCartItemRepository',
-            [
-                'repository' => $this->cartItemRepositoryMock,
-                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
-            ]
-        );
+            $objectManager->getObject(
+                'Magento\Quote\Model\GuestCart\GuestCartItemRepository',
+                [
+                    'repository' => $this->cartItemRepositoryMock,
+                    'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,
+                ]
+            );
     }
 
     /**

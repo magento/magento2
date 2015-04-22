@@ -21,7 +21,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
      */
     private $quoteIdMaskFactory;
 
-   /**
+    /**
      * @var CouponManagementInterface
      */
     private $couponManagement;

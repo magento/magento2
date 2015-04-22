@@ -46,7 +46,7 @@ class GuestCartRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock( 'Magento\Quote\Api\CartRepositoryInterface', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('Magento\Quote\Api\CartRepositoryInterface', [], [], '', false);
         $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
 
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';

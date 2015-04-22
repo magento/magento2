@@ -46,7 +46,7 @@ class GuestCouponManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->couponManagementMock = $this->getMock( 'Magento\Quote\Api\CouponManagementInterface', [], [], '', false);
+        $this->couponManagementMock = $this->getMock('Magento\Quote\Api\CouponManagementInterface', [], [], '', false);
 
         $this->couponCode = 'test_coupon_code';
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
