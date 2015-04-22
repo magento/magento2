@@ -37,6 +37,16 @@ class Cart extends Action\Action implements IndexInterface
     protected $cart;
 
     /**
+     * @var \Magento\Checkout\Helper\Cart
+     */
+    protected $cartHelper;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    protected $jsonHelper;
+
+    /**
      * @var \Magento\Wishlist\Model\Item\OptionFactory
      */
     private $optionFactory;
@@ -66,6 +76,10 @@ class Cart extends Action\Action implements IndexInterface
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Wishlist\Helper\Data $helper
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Action\Context $context,
@@ -76,7 +90,9 @@ class Cart extends Action\Action implements IndexInterface
         \Magento\Wishlist\Model\Item\OptionFactory $optionFactory,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Wishlist\Helper\Data $helper
+        \Magento\Wishlist\Helper\Data $helper,
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Framework\Json\Helper\Data $jsonHelper
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
@@ -86,6 +102,8 @@ class Cart extends Action\Action implements IndexInterface
         $this->productHelper = $productHelper;
         $this->escaper = $escaper;
         $this->helper = $helper;
+        $this->cartHelper = $cartHelper;
+        $this->jsonHelper = $jsonHelper;
         parent::__construct($context);
     }
 
@@ -159,8 +177,8 @@ class Cart extends Action\Action implements IndexInterface
                 $this->messageManager->addSuccess($message);
             }
 
-            if ($this->cart->getShouldRedirectToCart()) {
-                $redirectUrl = $this->cart->getCartUrl();
+            if ($this->cartHelper->getShouldRedirectToCart()) {
+                $redirectUrl = $this->cartHelper->getCartUrl();
             } else {
                 $refererUrl = $this->_redirect->getRefererUrl();
                 if ($refererUrl && $refererUrl != $configureUrl) {
@@ -177,6 +195,13 @@ class Cart extends Action\Action implements IndexInterface
         }
 
         $this->helper->calculate();
+
+        if ($this->getRequest()->isAjax()) {
+            $this->getResponse()->representJson(
+                $this->jsonHelper->jsonEncode(['backUrl' => $redirectUrl])
+            );
+            return;
+        }
 
         return $this->getResponse()->setRedirect($redirectUrl);
     }
