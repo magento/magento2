@@ -44,6 +44,7 @@ class Translate implements RendererInterface
      * @param [] $arguments
      * @return string
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function render(array $source, array $arguments)
     {
