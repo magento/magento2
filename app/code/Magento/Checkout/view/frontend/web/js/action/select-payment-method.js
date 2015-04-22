@@ -26,7 +26,7 @@ define(
                     "cc_type": null,
                     "cc_exp_year": null,
                     "cc_exp_month": null,
-                    "additional_data": additionalData
+                    "additional_data": additionalData.length ? additionalData : null
                 }
             };
             return storage.put(
