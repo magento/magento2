@@ -10,6 +10,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class SaveOrderTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveOrderTest extends \PHPUnit_Framework_TestCase
 {
