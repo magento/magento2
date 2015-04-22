@@ -1,0 +1,40 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<li
+    data-bind="css: {_edit: false}">
+    <div class="action-dropdown-menu-item-edit">
+        <input
+            class="admin__control-text"
+            data-bind="value: label"
+            type="text">
+        <button
+            class="action-submit"
+            type="button">
+            <span>Submit</span>
+        </button>
+        <div class="action-dropdown-menu-item-actions">
+            <button
+                class="action-delete"
+                type="button">
+                <span>Delete</span>
+            </button>
+        </div>
+    </div>
+    <div class="action-dropdown-menu-item">
+        <a
+            class="action-dropdown-menu-link"
+            href=""
+            data-bind="text: label, click: activate"></a>
+        <div class="action-dropdown-menu-item-actions">
+            <button
+                class="action-edit"
+                type="button">
+                <span>Edit</span>
+            </button>
+        </div>
+    </div>
+</li> 

@@ -10,15 +10,7 @@ define([
 
     return Group.extend({
         defaults: {
-            template: 'ui/grid/filters/elements/group',
-            visible: true
-        },
-
-        initObservable: function () {
-            this._super()
-                .observe('visible');
-
-            return this;
+            template: 'ui/grid/filters/elements/group'
         },
 
         reset: function () {

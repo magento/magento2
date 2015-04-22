@@ -28,7 +28,6 @@ define([
 
             listens: {
                 value: 'onUpdate',
-                visible: 'setPreview',
                 '<%= provider %>:data.reset': 'reset',
                 '<%= provider %>:data.validate': 'validate'
             },
@@ -119,7 +118,7 @@ define([
          * @returns {Abstract} Chainable.
          */
         setPreview: function (value) {
-            this.preview(!this.visible() ? '' : value);
+            this.preview(value);
 
             return this;
         },
