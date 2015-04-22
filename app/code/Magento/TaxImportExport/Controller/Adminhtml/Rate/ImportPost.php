@@ -12,7 +12,7 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
     /**
      * import action from import/export tax
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -31,7 +31,7 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         } else {
             $this->messageManager->addError(__('Invalid file upload attempt'));
         }
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('*/*/importexport');
         return $resultRedirect;
