@@ -59,7 +59,7 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="downloadableAfterProductLoad" type="\Magento\Downloadable\Model\Plugin\AfterProductLoad"/>
+        <plugin name="downloadableAfterLoad" type="\Magento\Downloadable\Model\Plugin\AfterProductLoad"/>
     </type>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="downloadableAroundSave" type="\Magento\Downloadable\Model\Plugin\AroundProductRepositorySave"/>

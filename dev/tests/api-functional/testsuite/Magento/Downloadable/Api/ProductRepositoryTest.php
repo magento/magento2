@@ -201,8 +201,6 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $expectedSampleData = $this->getExpectedSampleData();
         $this->assertEquals($expectedSampleData, $resultSamples);
-
-        return $response;
     }
 
     /**
@@ -210,7 +208,7 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     public function testUpdateDownloadableProductLinks()
     {
-        $response = $this->testCreateDownloadableProduct();
+        $response = $this->createDownloadableProduct();
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
         $link1Id = $resultLinks[0]['id'];
@@ -289,7 +287,7 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     public function testUpdateDownloadableProductLinksWithNewFile()
     {
-        $response = $this->testCreateDownloadableProduct();
+        $response = $this->createDownloadableProduct();
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
         $link1Id = $resultLinks[0]['id'];
@@ -396,7 +394,7 @@ class ProductRepositoryTest extends WebapiAbstract
 
     public function testUpdateDownloadableProductSamples()
     {
-        $response = $this->testCreateDownloadableProduct();
+        $response = $this->createDownloadableProduct();
 
         $resultSample
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
@@ -454,7 +452,7 @@ class ProductRepositoryTest extends WebapiAbstract
 
     public function testUpdateDownloadableProductSamplesWithNewFile()
     {
-        $response = $this->testCreateDownloadableProduct();
+        $response = $this->createDownloadableProduct();
 
         $resultSample
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
