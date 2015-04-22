@@ -8,13 +8,21 @@ namespace Magento\Quote\Api;
 interface CartManagementInterface
 {
     /**
-     * Enables an customer or guest user to create an empty cart and quote for an anonymous customer.
+     * Creates an empty cart and quote for a guest.
      *
-     * @param int|null $customerId The customer ID.
      * @return int Cart ID.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
      */
-    public function createEmptyCart($customerId = null);
+    public function createEmptyCart();
+
+    /**
+     * Creates an empty cart and quote for a specified customer.
+     *
+     * @param int $customerId The customer ID.
+     * @return int Cart ID.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
+     */
+    public function createEmptyCartForCustomer($customerId);
 
     /**
      * Returns information for the cart for a specified customer.

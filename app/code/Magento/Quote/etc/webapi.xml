@@ -24,7 +24,13 @@
     <route url="/V1/carts/" method="POST">
         <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCart"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Cart::manage" />
+        </resources>
+    </route>
+    <route url="/V1/customers/:customerId/carts" method="POST">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCartForCustomer"/>
+        <resources>
+            <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
     <route url="/V1/carts/:cartId" method="PUT">
@@ -36,7 +42,7 @@
 
     <!-- Managing my Cart -->
     <route url="/V1/carts/mine" method="POST">
-        <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCart"/>
+        <service class="Magento\Quote\Api\CartManagementInterface" method="createEmptyCartForCustomer"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -51,6 +57,15 @@
         </resources>
         <data>
             <parameter name="customerId" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/order" method="PUT">
+        <service class="Magento\Quote\Api\CartManagementInterface" method="placeOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
 
@@ -100,6 +115,35 @@
         <resources>
             <resource ref="Magento_Cart::manage" />
         </resources>
+    </route>
+
+    <!-- Managing My Cart Shipment Method -->
+    <route url="/V1/carts/mine/selected-shipping-method" method="PUT">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="set"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/selected-shipping-method" method="GET">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/shipping-methods" method="GET">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
     </route>
 
     <!-- Managing Guest Cart Shipment Method -->
@@ -213,13 +257,13 @@
     </route>
 
     <!-- Managing Cart Payment -->
-    <route url="/V1/carts/:cartId/selected-payment-methods" method="GET">
+    <route url="/V1/carts/:cartId/selected-payment-method" method="GET">
         <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="get"/>
         <resources>
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
-    <route url="/V1/carts/:cartId/selected-payment-methods" method="PUT">
+    <route url="/V1/carts/:cartId/selected-payment-method" method="PUT">
         <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="set"/>
         <resources>
             <resource ref="Magento_Cart::manage" />
@@ -233,13 +277,13 @@
     </route>
 
     <!-- Managing Guest Cart Payment -->
-    <route url="/V1/guest-carts/:cartId/selected-payment-methods" method="GET">
+    <route url="/V1/guest-carts/:cartId/selected-payment-method" method="GET">
         <service class="Magento\Quote\Api\GuestPaymentMethodManagementInterface" method="get"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/guest-carts/:cartId/selected-payment-methods" method="PUT">
+    <route url="/V1/guest-carts/:cartId/selected-payment-method" method="PUT">
         <service class="Magento\Quote\Api\GuestPaymentMethodManagementInterface" method="set"/>
         <resources>
             <resource ref="anonymous" />
@@ -250,6 +294,35 @@
         <resources>
             <resource ref="anonymous" />
         </resources>
+    </route>
+
+    <!-- Managing my Cart Payment -->
+    <route url="/V1/carts/mine/selected-payment-method" method="GET">
+        <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/selected-payment-method" method="PUT">
+        <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="set"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/payment-methods" method="GET">
+        <service class="Magento\Quote\Api\PaymentMethodManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
     </route>
 
     <!-- Managing Cart Billing address -->
@@ -266,7 +339,7 @@
         </resources>
     </route>
 
-    <!-- Guest Managing Cart Billing address -->
+    <!-- Managing Guest Cart Billing address -->
     <route url="/V1/guest-carts/:cartId/billing-address" method="GET">
         <service class="Magento\Quote\Api\GuestBillingAddressManagementInterface" method="get"/>
         <resources>
@@ -278,6 +351,26 @@
         <resources>
             <resource ref="anonymous" />
         </resources>
+    </route>
+
+    <!-- Managing My Cart Billing address -->
+    <route url="/V1/carts/mine/billing-address" method="GET">
+        <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/billing-address" method="POST">
+        <service class="Magento\Quote\Api\BillingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
     </route>
 
     <!-- Managing Cart Coupons -->
@@ -320,6 +413,35 @@
         </resources>
     </route>
 
+    <!-- Managing mine Cart Coupons -->
+    <route url="/V1/carts/mine/coupons" method="GET">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/coupons/:couponCode" method="PUT">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="set"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/coupons" method="DELETE">
+        <service class="Magento\Quote\Api\CouponManagementInterface" method="remove"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
     <!-- Managing Cart Shipping address -->
     <route url="/V1/carts/:cartId/shipping-address" method="GET">
         <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="get"/>
@@ -348,6 +470,26 @@
         </resources>
     </route>
 
+    <!-- Managing My Cart Shipping address -->
+    <route url="/V1/carts/mine/shipping-address" method="GET">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/shipping-address" method="POST">
+        <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="assign"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
     <!-- Managing Cart Order -->
     <route url="/V1/carts/:cartId/order" method="PUT">
         <service class="Magento\Quote\Api\CartManagementInterface" method="placeOrder"/>
@@ -355,6 +497,8 @@
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
+
+    <!-- Managing Cart Total -->
     <route url="/V1/carts/:cartId/totals" method="GET">
         <service class="Magento\Quote\Api\CartTotalRepositoryInterface" method="get"/>
         <resources>
@@ -362,10 +506,22 @@
         </resources>
     </route>
 
+    <!-- Managing Guest Cart Total -->
     <route url="/V1/guest-carts/:cartId/totals" method="GET">
         <service class="Magento\Quote\Api\GuestCartTotalRepositoryInterface" method="get"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
+    </route>
+
+    <!-- Managing My Cart Total -->
+    <route url="/V1/carts/mine/totals" method="GET">
+        <service class="Magento\Quote\Api\CartTotalRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
     </route>
 </routes>

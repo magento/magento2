@@ -46,11 +46,11 @@ class GuestCartManagement implements GuestCartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function createEmptyCart($customerId = null)
+    public function createEmptyCart()
     {
         /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create();
-        $cartId = $this->quoteManagement->createEmptyCart($customerId);
+        $cartId = $this->quoteManagement->createEmptyCart();
         $quoteIdMask->setId($cartId)->save();
         return $quoteIdMask->getMaskedId();
     }

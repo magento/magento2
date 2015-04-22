@@ -156,12 +156,26 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function createEmptyCart($customerId = null)
+    public function createEmptyCart()
     {
         $storeId = $this->storeManager->getStore()->getStoreId();
-        $quote = $customerId
-            ? $this->createCustomerCart($customerId, $storeId)
-            : $this->createAnonymousCart($storeId);
+        $quote = $this->createAnonymousCart($storeId);
+
+        try {
+            $this->quoteRepository->save($quote);
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Cannot create quote'));
+        }
+        return $quote->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createEmptyCartForCustomer($customerId)
+    {
+        $storeId = $this->storeManager->getStore()->getStoreId();
+        $quote = $this->createCustomerCart($customerId, $storeId);
 
         try {
             $this->quoteRepository->save($quote);
