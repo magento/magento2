@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Developer\Test\Unit\Console;
+namespace Magento\Developer\Test\Unit\Console\Command;
 
-use Magento\Developer\Console\DevTestsRunCommand;
+use Magento\Developer\Console\Command\DevTestsRunCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
