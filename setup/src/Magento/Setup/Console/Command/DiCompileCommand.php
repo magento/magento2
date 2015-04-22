@@ -61,8 +61,7 @@ class DiCompileCommand extends Command
     {
         $this->setName('setup:di:compile')
             ->setDescription(
-                'Generates all non-existing proxies and factories; and pre-compile class definitions,' .
-                'inheritance information and plugin definitions for single-tenant mode'
+                'Generates DI configuration and all non-existing interceptors, proxies and factories'
             );
         parent::configure();
     }
@@ -164,7 +163,7 @@ class DiCompileCommand extends Command
                 );
             }
             $this->taskManager->process();
-            $output->writeln('<info>Compiled code successfully.</info>');
+            $output->writeln('<info>Generated code and DI configuration successfully.</info>');
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         }
