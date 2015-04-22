@@ -11,7 +11,7 @@ define(
         '../model/quote',
         '../action/select-payment-method',
         'Magento_Checkout/js/model/step-navigator',
-        'Magento_Checkout/js/model/payment-service',
+        'Magento_Checkout/js/model/payment-service'
     ],
     function ($, Component, quote, selectPaymentMethod, navigator, paymentService) {
         var stepName = 'paymentMethod';
@@ -30,19 +30,19 @@ define(
             quoteHasShippingMethod: function() {
                 return quote.isVirtual() || quote.getShippingMethod();
             },
-            setPaymentMethod: function(form) {
-                var paymentMethodCode = $("input[name='payment[method]']:checked", form).val();
-                if (!paymentMethodCode) {
+            setPaymentMethod: function() {
+                if (!this.activeMethod()) {
                     alert('Please specify payment method.');
+                    return;
                 }
-                selectPaymentMethod(paymentMethodCode, []);
+                selectPaymentMethod(this.activeMethod(), this.getActiveMethodView().getData());
             },
             getAvailableViews: function () {
                 var sortedElems = [],
                     self = this;
 
                 _.each(paymentService.getAvailablePaymentMethods()(), function (originElem) {
-                    var method = self.getMethodByCode(originElem.code);
+                    var method = self.getMethodViewByCode(originElem.code);
                     if (method && method.isAvailable()) {
                         sortedElems.push(method);
                     }
@@ -50,11 +50,13 @@ define(
 
                 return sortedElems;
             },
-
-            getMethodByCode: function(code) {
+            getMethodViewByCode: function(code) {
                 return _.find(this.elems(), function(elem) {
                     return elem.getCode() == code;
                 });
+            },
+            getActiveMethodView: function() {
+                return this.getMethodViewByCode(this.activeMethod());
             },
             backToShippingMethod: function() {
                 navigator.setCurrent(stepName).goBack();

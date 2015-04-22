@@ -14,20 +14,21 @@ define(
     ],
     function($, quote, urlBuilder, navigator, errorList, storage) {
         "use strict";
-        return function (paymentMethodCode, additionalData) {
-            // TODO add support of additional payment data for more complex payments
+        return function (paymentMethodCode, methodData, additionalData) {
+            var defaultMethodData = {
+                "method": paymentMethodCode,
+                "po_number": null,
+                "cc_owner": null,
+                "cc_number": null,
+                "cc_type": null,
+                "cc_exp_year": null,
+                "cc_exp_month": null,
+                "additional_data": null
+            };
+            $.extend(defaultMethodData, methodData, {'additional_data': additionalData});
             var paymentMethodData = {
                 "cartId": quote.getQuoteId(),
-                "method": {
-                    "method": paymentMethodCode,
-                    "po_number": $('#po_number:visible').length ? $('#po_number:visible').val() : null,
-                    "cc_owner": null,
-                    "cc_number": null,
-                    "cc_type": null,
-                    "cc_exp_year": null,
-                    "cc_exp_month": null,
-                    "additional_data": additionalData.length ? additionalData : null
-                }
+                "method": defaultMethodData
             };
             return storage.put(
                 urlBuilder.createUrl('/carts/:quoteId/selected-payment-methods', {quoteId: quote.getQuoteId()}),

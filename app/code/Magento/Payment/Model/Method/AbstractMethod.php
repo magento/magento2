@@ -877,6 +877,6 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     public function getAdditionalInfo()
     {
-        return [];
+        return [[]];
     }
 }

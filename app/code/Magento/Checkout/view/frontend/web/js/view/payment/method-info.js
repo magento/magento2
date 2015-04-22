@@ -37,6 +37,9 @@ define(
                 }
                 var additionalInfo = this.getMethod()['additional_info'][0];
                 return additionalInfo && additionalInfo[key] ? additionalInfo[key] : '';
+            },
+            getData: function() {
+                return {};
             }
         });
     }
