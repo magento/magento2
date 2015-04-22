@@ -19,4 +19,11 @@
                 sortOrder="10"
         />
     </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="persistent_checkout_config_provider" xsi:type="object">Magento\Persistent\Model\CheckoutConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

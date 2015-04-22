@@ -11,10 +11,10 @@ define(
     ],
     function($, storage, errorlist) {
         "use strict";
-        return function(login, password, redirectUrl) {
+        return function(loginData, redirectUrl) {
             return storage.post(
                 'customer/ajax/login',
-                JSON.stringify({'username': login, 'password': password})
+                JSON.stringify(loginData)
             ).done(function (response) {
                 if (response) {
                     if (redirectUrl) {

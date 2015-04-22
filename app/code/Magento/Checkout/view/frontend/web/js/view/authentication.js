@@ -31,8 +31,13 @@ define(
             defaults: {
                 template: 'Magento_Checkout/authentication'
             },
-            login: function() {
-                login(this.username, this.password);
+            login: function(loginForm) {
+                var loginData = {};
+                var formDataArray = $(loginForm).serializeArray();
+                formDataArray.forEach(function (entry) {
+                    loginData[entry.name] = entry.value;
+                });
+                login(loginData);
             },
             isActive: function() {
                 if (customer.isLoggedIn()()) {
