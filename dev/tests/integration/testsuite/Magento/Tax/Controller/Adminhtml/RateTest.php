@@ -44,6 +44,11 @@ class RateTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals($expectedData['tax_postcode'], $rate->getTaxPostcode());
     }
 
+    /**
+     * Data provider for testAjaxSaveAction
+     *
+     * @return array
+     */
     public function ajaxSaveActionDataProvider()
     {
         $postData = ['rate' => '10', 'tax_country_id' => 'US', 'tax_region_id' => '1'];
@@ -193,4 +198,123 @@ class RateTest extends \Magento\Backend\Utility\Controller
             ]
         ];
     }
+
+    /**
+     * @dataProvider ajaxSaveActionDataProvider
+     * @magentoDbIsolation enabled
+     *
+     * @param array $rateClassData
+     */
+    public function testAjaxLoadAction($rateClassData)
+    {
+        /** @var \Magento\Tax\Api\TaxRateRepositoryInterface $rateClassService */
+        $rateClassService = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Tax\Api\TaxRateRepositoryInterface'
+        );
+
+        $rateClassFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Tax\Api\Data\TaxRateInterfaceFactory'
+        );
+
+        $rateClass = $rateClassFactory->create();
+        $rateClass->setRate($rateClassData['rate'])
+                  ->setTaxCountryId($rateClassData['tax_country_id'])
+                  ->setTaxRegionId($rateClassData['tax_region_id'])
+                  ->setCode($rateClassData['code'])
+                  ->setZipFrom($rateClassData['zip_from'])
+                  ->setZipIsRange($rateClassData['zip_is_range'])
+                  ->setZipFrom($rateClassData['zip_from'])
+                  ->setZipTo($rateClassData['zip_to'])
+                  ->setTaxPostcode($rateClassData['tax_postcode']);
+
+        $rateClass->save($rateClass);
+
+        $rateClassId=$rateClass->getTaxCalculationRateId();
+        /** @var $class \Magento\Tax\Model\Calculation\Rate */
+        $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Tax\Model\Calculation\Rate')
+            ->load($rateClassId, 'tax_calculation_rate_id');
+
+
+        $this->assertEquals($rateClassData['tax_country_id'], $class->getTaxCountryId());
+        $this->assertEquals($rateClassData['tax_region_id'], $class->getTaxRegionId());
+        $this->assertEquals($rateClassData['code'], $class->getCode());
+        $this->assertEquals($rateClassData['rate'], $class->getRate());
+        $this->assertEquals($rateClassData['zip_is_range']==1?1:0, $class->getZipIsRange()==1?1:0);
+        if ($rateClassData['zip_is_range']=='1') {
+        $this->assertEquals($rateClassData['zip_from'], $class->getZipFrom());
+        $this->assertEquals($rateClassData['zip_to'], $class->getZipTo());
+        }
+
+
+        $postData = [ 'id' => $rateClassId ];
+        $this->getRequest()->setPostValue($postData);
+        $this->dispatch('backend/tax/rate/ajaxLoad');
+        $jsonBody = $this->getResponse()->getBody();
+
+        $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Json\Helper\Data'
+        )->jsonDecode(
+            $jsonBody
+        );
+
+        $this->assertTrue(is_array($result));
+        if (is_array($result)) {
+            $this->assertArrayHasKey('success',$result);
+            if (array_key_exists('success',$result)) {
+                $this->assertTrue($result['success'] == true);
+                if ($result['success'] == true) {
+                    $this->assertArrayHasKey('result', $result);
+                    if (array_key_exists('result',$result)) {
+                        $this->assertTrue(is_array($result['result']));
+                        if (is_array($result['result'])) {
+                            $this->assertEquals($result['result']['tax_country_id'], $class->getTaxCountryId());
+                            $this->assertEquals($result['result']['tax_region_id'], $class->getTaxRegionId());
+                            $this->assertEquals($result['result']['tax_postcode'], $class->getTaxPostcode());
+                            $this->assertEquals($result['result']['code'], $class->getCode());
+                            $this->assertEquals($result['result']['rate'], $class->getRate());
+                            $this->assertEquals($result['result']['zip_is_range'] == 1 || $result['result']['zip_is_range']==true ? 1 : 0, $class->getZipIsRange() == 1 ? 1 : 0);
+                            if ($result['result']['zip_is_range'] == 1 || $result['result']['zip_is_range'] == true) {
+                                $this->assertEquals($result['result']['zip_from'], $class->getZipFrom());
+                                $this->assertEquals($result['result']['zip_to'], $class->getZipTo());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     *
+     */
+    public function testAjaxNonLoadAction()
+    {
+        $postData = [ 'id' => 99999999 ];
+        $this->getRequest()->setPostValue($postData);
+        $this->dispatch('backend/tax/rate/ajaxLoad');
+        $jsonBody = $this->getResponse()->getBody();
+
+        $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Json\Helper\Data'
+        )->jsonDecode(
+            $jsonBody
+        );
+
+        $this->assertTrue(is_array($result));
+        if (is_array($result)) {
+            $this->assertArrayHasKey('success',$result);
+            if (array_key_exists('success',$result)) {
+                $this->assertTrue($result['success'] == false);
+                if ($result['success'] == false) {
+                    $this->assertTrue(!array_key_exists('result',$result));
+                    $this->assertArrayHasKey('error_message',$result);
+                    if (array_key_exists('error_message',$result)) {
+                        $this->assertTrue(strlen($result['error_message'])>0);
+                    }
+                }
+            }
+        }
+    }
+
 }

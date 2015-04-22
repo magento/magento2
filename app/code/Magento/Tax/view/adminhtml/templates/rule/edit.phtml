@@ -73,16 +73,30 @@ require([
                 id = select.find('option').eq(index).attr('value'),
                 item;
 
-            for(var i = 0, c = taxRateCollection.length; i < c; i++) {
-                if (taxRateCollection[i].tax_calculation_rate_id == id) {
-                    item = taxRateCollection[i];
-                    break;
-                }
-            }
-            item.itemElement = that.prev();
-            $('#tax-rate-form')
-                    .dialogRates({itemRate: item})
-                    .dialogRates('open');
+            jQuery('body').trigger('processStart')
+            $.ajax({
+                type: "POST",
+
+                data: {id:id},
+                url: '<?php echo $block->getTaxRateLoadUrl()?>',
+                success: function(result, status) {
+                    jQuery('body').trigger('processStop');
+                    if (result.success) {
+                        item=result.result;
+                        item.itemElement = that.prev();
+                        $('#tax-rate-form')
+                            .dialogRates({itemRate: item})
+                            .dialogRates('open');
+
+                    } else {
+                        alert(result.error_message);
+                    }
+                },
+                error: function () {
+                    jQuery('body').trigger('processStop');
+                },
+                dataType: "json"
+            });
         };
 
         TaxRateEditableMultiselect.prototype.init = function () {
@@ -142,6 +156,7 @@ require([
                                 index = that.parent().index(),
                                 select = that.closest('.mselect-list').prev();
 
+                        jQuery('body').trigger('processStart')
                         var ajaxOptions = {
                             type: 'POST',
                             data: {
@@ -151,12 +166,16 @@ require([
                             dataType: 'json',
                             url: '<?php echo $block->getTaxRateDeleteUrl()?>',
                             success: function(result, status) {
+                                jQuery('body').trigger('processStop');
                                 if (result.success) {
                                     that.parent().remove();
                                     select.find('option').eq(index).remove();
                                 } else {
                                     alert(result.error_message);
                                 }
+                            },
+                            error: function () {
+                                jQuery('body').trigger('processStop');
                             }
                         };
                         $.ajax(ajaxOptions);
@@ -215,13 +234,15 @@ require([
                         if (!taxRateFormElement.validation().valid()) {
                             return;
                         }
-
+                        jQuery('.tax-rate-popup').trigger('processStart');
+                        jQuery('.loading-mask').css('z-index','1004');
                         var ajaxOptions = {
                             type: 'POST',
                             data: itemRateData,
                             dataType: 'json',
                             url: '<?php echo $block->getTaxRateSaveUrl()?>',
                             success: function(result, status) {
+                                jQuery('body').trigger('processStop');
                                 if (result.success) {
                                     itemRate.code = result.code;
                                     if (itemRate.tax_calculation_rate_id) {
@@ -238,10 +259,12 @@ require([
                                             .val(itemRate.tax_calculation_rate_id);
                                     }
                                     taxRateForm.dialogRates("close");
-                                    taxRateCollection.push(itemRate);
                                 } else {
                                     alert(result.error_message);
                                 }
+                            },
+                            error: function () {
+                                jQuery('body').trigger('processStop');
                             }
                         };
                         $.ajax(ajaxOptions);
@@ -256,6 +279,7 @@ require([
                     }
                 }]
             });
+            $('.grid-loading-mask').hide();
         }
     };
 
