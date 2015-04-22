@@ -38,6 +38,9 @@
                                                                 <!--</item>-->
                                                             <!--</item>-->
                                                         </item>
+                                                        <item name="subtotal" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/review/item/columns/subtotal</item>
+                                                        </item>
                                                     </item>
                                                 </item>
                                                 <item name="totals" xsi:type="array">
