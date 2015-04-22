@@ -38,22 +38,20 @@ define(
                 selectPaymentMethod(paymentMethodCode, []);
             },
             getAvailableViews: function () {
-                return this.sort(this.elems().filter(function(elem) {
-                    return elem.isAvailable();
-                }));
-            },
-            sort: function(elems){
                 var sortedElems = [],
                     self = this;
 
                 _.each(paymentService.getAvailablePaymentMethods()(), function (originElem) {
-                    sortedElems.push(self.getMethodByCode(elems, originElem.code));
+                    sortedElems.push(self.getMethodByCode(originElem.code));
                 });
-                return sortedElems;
+
+                return sortedElems.filter(function(elem) {
+                    return elem.isAvailable();
+                });
             },
-            getMethodByCode: function(elems, code) {
+            getMethodByCode: function(code) {
                 var method = null;
-                _.each(elems, function(elem) {
+                _.each(this.elems(), function(elem) {
                     if (elem.getCode() == code) {
                         method = elem;
                         return false;
