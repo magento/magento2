@@ -28,8 +28,10 @@ class OperationFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->setMethods([])
             ->getMock();
+        $objectManagerProviderMock = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $objectManagerProviderMock->expects($this->once())->method('get')->willReturn($this->objectManagerMock);
         $this->factory = new OperationFactory(
-            $this->objectManagerMock
+            $objectManagerProviderMock
         );
     }
 
