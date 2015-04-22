@@ -14,10 +14,10 @@ define(
         "use strict";
         return column.extend({
             defaults: {
-                headerClass: 'price',
+                headerClass: 'subtotal',
                 displayPriceMode: 'both',
                 ownClass: 'price-including-tax',
-                columnTitle: 'Price',
+                columnTitle: 'Subtotal',
                 template: 'Magento_Tax/checkout/review/item/columns/subtotal'
             },
             displayPriceInclTax: function() {

@@ -1,4 +1,4 @@
-<td data-bind="attr: { 'data-th': getColName(), class: getClass() }">
+<td data-bind="attr: { 'data-th': $t(getColName()), class: getClass() }">
     <!-- ko if: displayPriceInclTax -->
     <span class="price-including-tax" data-bind ="attr:{'data-label': $t('Incl. Tax')}">
             <!-- ko foreach: getRegion('unit_incl_tax') -->
@@ -8,7 +8,7 @@
 
     <!-- /ko -->
     <!-- ko if: displayPriceExclTax -->
-    <span class="price-excluding-tax"data-bind ="attr:{'data-label': $t('Excl. Tax')}">
+    <span class="price-excluding-tax" data-bind ="attr:{'data-label': $t('Excl. Tax')}">
             <!-- ko foreach: getRegion('unit_excl_tax') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->

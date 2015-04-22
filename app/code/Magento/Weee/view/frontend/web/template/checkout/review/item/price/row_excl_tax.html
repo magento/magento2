@@ -31,8 +31,8 @@
 
 
     <!-- ko if: isDisplayFinalPrice(item)-->
-        <span class="cart-tax-total" >
-            <span class="weee" data-bind="attr: {'data-label':$t('Total')}, mageInit: {taxToggle: {itemTaxId : '#esubtotal-item-tax-details'+item.item_id}}">
+        <span class="cart-tax-total" data-bind="mageInit: {taxToggle: {itemTaxId : '#esubtotal-item-tax-details'+item.item_id}}">
+            <span class="weee" data-bind="attr: {'data-label':$t('Total')}">
                 <span class="price" data-bind="text: getFormattedPrice(getFinalRowDisplayPriceExclTax(item))"></span>
             </span>
         </span>

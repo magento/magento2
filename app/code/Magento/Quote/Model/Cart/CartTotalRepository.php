@@ -78,6 +78,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $this->dataObjectHelper->populateWithArray($totals, $totalsData, '\Magento\Quote\Api\Data\TotalsInterface');
         $items = [];
         foreach ($quote->getAllVisibleItems() as $index => $item) {
+            $item->setWeeeTaxApplied(unserialize($item->getWeeeTaxApplied()));
             $items[$index] = $item->toArray();
             $items[$index]['options'] = $this->getFormattedOptionValue($item);
         }
