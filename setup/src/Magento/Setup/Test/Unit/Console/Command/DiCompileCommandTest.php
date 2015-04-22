@@ -56,7 +56,10 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertEquals('The Magento application is not installed yet.' . PHP_EOL, $tester->getDisplay());
+        $this->assertEquals(
+            'You cannot run this command because the Magento application is not installed.' . PHP_EOL,
+            $tester->getDisplay()
+        );
     }
 
     public function testExecute()
@@ -67,6 +70,6 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         $this->manager->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertEquals('Successful' . PHP_EOL, $tester->getDisplay());
+        $this->assertEquals('Compiled code successfully.' . PHP_EOL, $tester->getDisplay());
     }
 }

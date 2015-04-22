@@ -61,7 +61,7 @@ class DiCompileCommand extends Command
     {
         $this->setName('setup:di:compile')
             ->setDescription(
-                'Generates all non-existing proxies and factories, and pre-compile class definitions,' .
+                'Generates all non-existing proxies and factories; and pre-compile class definitions,' .
                 'inheritance information and plugin definitions for single-tenant mode'
             );
         parent::configure();
@@ -73,7 +73,7 @@ class DiCompileCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln('The Magento application is not installed yet.');
+            $output->writeln('You cannot run this command because the Magento application is not installed.');
             return;
         }
         $compiledPathsList = [
@@ -164,7 +164,7 @@ class DiCompileCommand extends Command
                 );
             }
             $this->taskManager->process();
-            $output->writeln('<info>Successful</info>');
+            $output->writeln('<info>Compiled code successfully.</info>');
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         }
