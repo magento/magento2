@@ -46,7 +46,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $resetButton = '.action-reset';
+    protected $resetButton = '[data-action="grid-filter-reset"]';
 
     /**
      * The first row in grid. For this moment we suggest that we should strictly define what we are going to search
@@ -144,7 +144,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $active = '.active';
+    protected $active = '._active';
 
     /**
      * Secondary part of row locator template for getRow() method
@@ -447,7 +447,7 @@ abstract class Grid extends Block
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
 
         $button = $this->_rootElement->find($this->filterButton);
-        if ($button->isVisible() && !$this->_rootElement->find($this->filterButton . $this->active)->isVisible()) {
+        if ($button->isVisible() && !$this->_rootElement->find($this->active . $this->filterButton)->isVisible()) {
             $button->click();
             $browser = $this->_rootElement;
             $selector = $this->searchButton;
