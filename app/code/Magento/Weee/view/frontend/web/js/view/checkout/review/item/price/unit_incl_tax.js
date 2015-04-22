@@ -6,9 +6,10 @@
 /*global define*/
 define(
     [
-        'Magento_Weee/js/view/checkout/review/item/price/weee'
+        'Magento_Weee/js/view/checkout/review/item/price/weee',
+        'jquery'
     ],
-    function (weee) {
+    function (weee,$) {
         "use strict";
         return weee.extend({
             defaults: {
@@ -22,7 +23,7 @@ define(
                     return unitInclTax;
                 }
                 if(window.checkoutConfig.getIncludeWeeeFlag) {
-                    return unitInclTax + parseFloat(item.weee_tax_incl_tax);
+                    return unitInclTax + this.getWeeeTaxInclTax(item);
                 }
                 return unitInclTax;
             },
@@ -31,10 +32,18 @@ define(
                 if (!window.checkoutConfig.isWeeeEnabled) {
                     return unitInclTax;
                 }
-                return unitInclTax + parseFloat(item.weee_tax_incl_tax);
+                return unitInclTax + this.getWeeeTaxInclTax(item);
             },
             getItemId: function(item) {
                 return item.item_id;
+            },
+            getWeeeTaxInclTax: function(item) {
+                var weeeTaxAppliedAmounts = item.weee_tax_applied;
+                var totalWeeeTaxIncTaxApplied = 0;
+                $.each(weeeTaxAppliedAmounts, function (key, weeeTaxAppliedAmount) {
+                    totalWeeeTaxIncTaxApplied+=parseFloat(Math.max(weeeTaxAppliedAmount.amount_incl_tax, 0));
+                });
+                return totalWeeeTaxIncTaxApplied;
             }
         });
     }

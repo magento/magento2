@@ -6,7 +6,9 @@
 -->
 
 <!-- ko if:  (isDisplayPriceWithWeeeDetails(item)) -->
-    <span class="cart-tax-total" data-bind="mageInit:{taxToggle: {itemTaxId : '#eunit-item-tax-details' + item.item_id}}"></span>
+    <span class="cart-tax-total" data-bind="mageInit:{taxToggle: {itemTaxId : '#eunit-item-tax-details' + item.item_id}}">
+        <span class="price" data-bind="text: getFormattedPrice(getUnitDisplayPriceExclTax(item))"></span>
+    </span>
 <!-- /ko -->
 <!-- ko ifnot:  (isDisplayPriceWithWeeeDetails(item)) -->
     <span class="cart-price"><span class="price" data-bind="text: getFormattedPrice(getUnitDisplayPriceExclTax(item))"></span></span>
