@@ -15,18 +15,9 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/weight" xsi:type="string">-</data>
-            <data name="product/data/category" xsi:type="string">-</data>
-            <data name="product/data/description" xsi:type="string">-</data>
-            <data name="product/data/short_description" xsi:type="string">-</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
-            <data name="product/data/stock_data/qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
             <data name="product/data/downloadable_sample/preset" xsi:type="string">with_three_samples</data>
             <data name="product/data/downloadable_links/preset" xsi:type="string">with_three_links</data>
             <data name="product/data/custom_options/preset" xsi:type="string">two_options</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
             <data name="isRequired" xsi:type="string">No</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -46,18 +37,8 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">50</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/weight" xsi:type="string">-</data>
             <data name="product/data/category" xsi:type="string">Default Category</data>
-            <data name="product/data/description" xsi:type="string">-</data>
-            <data name="product/data/short_description" xsi:type="string">-</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
-            <data name="product/data/stock_data/qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
-            <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
             <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
             <data name="isRequired" xsi:type="string">No</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -71,20 +52,11 @@
             <data name="product/data/price/value" xsi:type="string">9999</data>
             <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">123</data>
-            <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">-</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/weight" xsi:type="string">-</data>
             <data name="product/data/category" xsi:type="string">Default Category</data>
-            <data name="product/data/description" xsi:type="string">-</data>
-            <data name="product/data/short_description" xsi:type="string">-</data>
             <data name="product/data/stock_data/manage_stock" xsi:type="string">Yes</data>
-            <data name="product/data/stock_data/qty" xsi:type="string">-</data>
             <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">No</data>
             <data name="product/data/stock_data/min_qty" xsi:type="string">123</data>
-            <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
-            <data name="product/data/downloadable_links/preset" xsi:type="string">-</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
             <data name="isRequired" xsi:type="string">No</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -100,18 +72,9 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">5</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/weight" xsi:type="string">-</data>
             <data name="product/data/category" xsi:type="string">Default Category</data>
             <data name="product/data/description" xsi:type="string">This is description for downloadable product</data>
-            <data name="product/data/short_description" xsi:type="string">-</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
-            <data name="product/data/stock_data/qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
-            <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
             <data name="product/data/downloadable_links/preset" xsi:type="string">default</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
             <data name="isRequired" xsi:type="string">No</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -127,18 +90,11 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">10</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/weight" xsi:type="string">-</data>
             <data name="product/data/category" xsi:type="string">category %isolation%</data>
-            <data name="product/data/description" xsi:type="string">-</data>
             <data name="product/data/short_description" xsi:type="string">This is short description for downloadable product</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
-            <data name="product/data/stock_data/qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
             <data name="product/data/downloadable_sample/preset" xsi:type="string">default</data>
             <data name="product/data/downloadable_links/preset" xsi:type="string">with_three_links</data>
             <data name="product/data/custom_options/preset" xsi:type="string">default</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
             <data name="isRequired" xsi:type="string">Yes</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -159,16 +115,6 @@
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
             <data name="product/data/weight" xsi:type="string">10</data>
-            <data name="product/data/category" xsi:type="string">-</data>
-            <data name="product/data/description" xsi:type="string">-</data>
-            <data name="product/data/short_description" xsi:type="string">-</data>
-            <data name="product/data/stock_data/manage_stock" xsi:type="string">-</data>
-            <data name="product/data/stock_data/qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/use_config_min_qty" xsi:type="string">-</data>
-            <data name="product/data/stock_data/min_qty" xsi:type="string">-</data>
-            <data name="product/data/downloadable_sample/preset" xsi:type="string">-</data>
-            <data name="product/data/downloadable_links/preset" xsi:type="string">-</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/special_price" xsi:type="string">40</data>
             <data name="isRequired" xsi:type="string">No</data>
             <data name="product/data/url_key" xsi:type="string">downloadableproduct-%isolation%</data>

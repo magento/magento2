@@ -375,7 +375,6 @@ interface AdapterInterface
         $refTableName,
         $refColumnName,
         $onDelete = self::FK_ACTION_CASCADE,
-        $onUpdate = self::FK_ACTION_CASCADE,
         $purge = false,
         $schemaName = null,
         $refSchemaName = null
@@ -986,7 +985,7 @@ interface AdapterInterface
      * @param \Magento\Framework\DB\Select $select
      * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
-     * @throws \Magento\Framework\DB\DBException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100);
 

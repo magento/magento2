@@ -19,10 +19,14 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
      */
     protected $creditmemoMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity');
+        $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->creditmemoMock = $this->getMock(
             '\Magento\Sales\Model\Order\Creditmemo',
             ['getStore', '__wakeup', 'getOrder'],
@@ -40,7 +44,8 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
-            $this->addressRendererMock
+            $this->loggerMock,
+            $this->addressRenderer
         );
     }
 

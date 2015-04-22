@@ -24,7 +24,7 @@ class Scenario
 
     const ARG_BASEDIR = 'basedir';
 
-    const ARG_ADMIN_USERNAME = 'admin_username';
+    const ARG_ADMIN_USER = 'admin_user';
 
     const ARG_ADMIN_PASSWORD = 'admin_password';
 
