@@ -130,15 +130,4 @@ class GuestCartItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->assertTrue($this->guestCartItemRepository->deleteById($this->maskedCartId, $itemId));
     }
-
-    /**
-     * @return void
-     */
-    public function testDelete()
-    {
-        $this->cartItemRepositoryMock->expects($this->once())
-            ->method('delete')
-            ->with($this->quoteItemMock);
-        $this->guestCartItemRepository->delete($this->quoteItemMock);
-    }
 }

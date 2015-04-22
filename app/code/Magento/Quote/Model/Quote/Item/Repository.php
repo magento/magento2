@@ -107,10 +107,8 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
+    public function deleteById($cartId, $itemId)
     {
-        $cartId = $cartItem->getQuoteId();
-        $itemId = $cartItem->getItemId();
         /**
          * Quote.
          *
@@ -129,18 +127,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not remove item from quote'));
         }
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteById($cartId, $itemId)
-    {
-        $item = $this->itemDataFactory->create()
-            ->setQuoteId($cartId)
-            ->setItemId($itemId);
-
-        $this->delete($item);
         return true;
     }
 

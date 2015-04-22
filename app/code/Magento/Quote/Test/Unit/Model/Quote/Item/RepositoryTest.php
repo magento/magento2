@@ -7,7 +7,7 @@
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
-use \Magento\Quote\Model\Quote\Item\Repository;
+use Magento\Quote\Model\Quote\Item\Repository;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -292,15 +292,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 11;
         $itemId = 5;
-        $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
-        $this->dataMock->expects($this->once())->method('getItemId')->willReturn($itemId);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('getItemById')->with($itemId)->will($this->returnValue(false));
         $this->quoteMock->expects($this->never())->method('removeItem');
 
-        $this->repository->delete($this->dataMock);
+        $this->repository->deleteById($cartId, $itemId);
     }
 
     /**
@@ -312,8 +310,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 11;
         $itemId = 5;
-        $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
-        $this->dataMock->expects($this->once())->method('getItemId')->willReturn($itemId);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
@@ -328,27 +324,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->quoteMock)
             ->willThrowException($exception);
 
-        $this->repository->delete($this->dataMock);
-    }
-
-    /**
-     * @return void
-     */
-    public function testDelete()
-    {
-        $cartId = 11;
-        $itemId = 5;
-        $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
-        $this->dataMock->expects($this->once())->method('getItemId')->willReturn($itemId);
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
-        $this->quoteMock->expects($this->once())
-            ->method('getItemById')->with($itemId)->will($this->returnValue($this->quoteItemMock));
-        $this->quoteMock->expects($this->once())->method('removeItem');
-        $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
-
-        $this->repository->delete($this->dataMock);
+        $this->repository->deleteById($cartId, $itemId);
     }
 
     /**
@@ -363,13 +339,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($customerId)
             ->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getId')->willReturn($cartId);
-        $this->itemDataFactoryMock->expects($this->once())->method('create')->willReturn($this->dataMock);
-        $this->dataMock->expects($this->once())->method('setQuoteId')
-            ->with($cartId)->willReturn($this->dataMock);
-        $this->dataMock->expects($this->once())->method('setItemId')
-            ->with($itemId)->willReturn($this->dataMock);
-        $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
-        $this->dataMock->expects($this->once())->method('getItemId')->willReturn($itemId);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
@@ -424,13 +393,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 11;
         $itemId = 5;
-        $this->itemDataFactoryMock->expects($this->once())->method('create')->willReturn($this->dataMock);
-        $this->dataMock->expects($this->once())->method('setQuoteId')
-            ->with($cartId)->willReturn($this->dataMock);
-        $this->dataMock->expects($this->once())->method('setItemId')
-            ->with($itemId)->willReturn($this->dataMock);
-        $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
-        $this->dataMock->expects($this->once())->method('getItemId')->willReturn($itemId);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
