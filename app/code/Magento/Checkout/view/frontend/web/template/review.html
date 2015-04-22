@@ -53,9 +53,9 @@
             <div id="checkout-review-submit" data-mage-init='{"paymentAuthentication":{}}' class="checkout-submit-order">
                 <div class="actions-toolbar" id="review-buttons-container">
                     <div class="primary">
-                        <button data-role="review-save" type="submit" title="Place Order"
-                                data-bind="click: placeOrder"
-                                    class="button action primary checkout"><span data-bind="text: $t('Place Order')"></span></button>
+                        <!-- ko foreach: getRegion('submit') -->
+                        <!-- ko template: getTemplate() --><!-- /ko -->
+                        <!-- /ko -->
                     </div>
                     <div class="secondary">
                         <span id="checkout-review-edit-label" data-bind="text: $t('Forgot an Item?')"></span>

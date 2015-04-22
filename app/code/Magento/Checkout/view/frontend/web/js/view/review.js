@@ -10,10 +10,9 @@ define(
         '../model/quote',
         'mage/url',
         'Magento_Checkout/js/model/step-navigator',
-        'Magento_Checkout/js/action/place-order',
         'Magento_Checkout/js/model/review'
     ],
-    function (Component, quote, url, navigator, orderAction, review) {
+    function (Component, quote, url, navigator, review) {
         "use strict";
         var stepName = 'review';
         var itemsBefore = [];
@@ -35,9 +34,6 @@ define(
             getAgreementsTemplate: function() {},
             isVisible: navigator.isStepVisible(stepName),
             cartUrl: url.build('checkout/cart/'),
-            placeOrder: function() {
-                orderAction();
-            },
             // get recalculated totals when all data set
             getTotals: review.getTotals()
         });
