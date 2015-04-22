@@ -98,7 +98,7 @@ class Phrase implements JsonSerializable
      */
     public function render()
     {
-        return $this->getRenderer()->render([$this->text], $this->arguments);
+        return self::getRenderer() ? self::getRenderer()->render([$this->text], $this->arguments) : $this->text;
     }
 
     /**
