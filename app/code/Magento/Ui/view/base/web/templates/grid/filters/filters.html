@@ -30,7 +30,7 @@
     <div class="data-grid-filters-action-wrap">
         <button
             class="action-default _active"
-            data-bind="click: toggleOpened, css: { _active: opened }">
+            data-bind="click: toggleOpened, attr: { disabled: !hasVisible() }, css: { _active: isOpened() }">
             <span data-bind="text: $t('Filters')"></span>
         </button>
     </div>
@@ -49,10 +49,20 @@
             <!-- ko foreach: previews -->
             <li>
                 <span data-bind="text: label + ':'"></span>
+                
+                <!-- ko if: typeof preview === 'string' -->
                 <span data-bind="text: preview"></span>
+                <!-- /ko -->
+                
+                <!-- ko if: typeof preview === 'object' -->
+                <span>
+                    <!-- ko text: preview[0] || '...' --><!-- /ko --> - <!-- ko text: preview[1] || '...' --><!-- /ko -->
+                </span>
+                <!-- /ko -->
+
                 <button
                     class="action-remove"
-                    data-bind="click: $parent.reset.bind($parent, elem)"
+                    data-bind="click: $parent.clear.bind($parent, elem)"
                     type="button">
                     <span data-bind="text: $t('Remove')"></span>
                 </button>
@@ -64,13 +74,13 @@
         <button
             class="action-tertiary action-clear"
             type="button"
-            data-bind="text: $t('Clear all')"></button>
+            data-bind="text: $t('Clear all'), click: clear.bind($data, false)"></button>
     </div>
 </div>
 
 <div
     class="admin__data-grid-filters-wrap"
-    data-bind="css: { _show: opened }"
+    data-bind="css: { _show: isOpened() }"
     data-part="filter-form">
 
     <fieldset class="admin__fieldset admin__data-grid-filters">
@@ -78,19 +88,13 @@
             <span data-bind="text: $t('Advanced filter')"></span>
         </legend>
         <!-- ko foreach: elems -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko if: $parent.isFilterVisible($data) -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
         <!-- /ko -->
     </fieldset>
 
     <div class="admin__data-grid-filters-footer">
-        <div class="admin__footer-secondary-actions">
-            <button
-                class="action-tertiary"
-                type="button"
-                data-bind="click: reset">
-                <span data-bind="text: $t('Reset')"></span>
-            </button>
-        </div>
         <div class="admin__footer-main-actions">
             <button
                 class="action-tertiary"
@@ -101,7 +105,7 @@
             <button
                 class="action-secondary"
                 type="button"
-                data-bind="click: apply">
+                data-bind="click: onApply">
                 <span data-bind="text: $t('Apply Filters')"></span>
             </button>
         </div>

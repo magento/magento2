@@ -11,17 +11,9 @@ define([
     function extractPreview(elem) {
         return {
             label: elem.label,
-            preview: elem.delegate('getPreview'),
+            preview: elem.getPreview(),
             elem: elem
         };
-    }
-
-    function hasData(elem) {
-        return elem.delegate('hasData');
-    }
-
-    function resetValue(elem) {
-        return elem.delegate('reset');
     }
 
     return Collapsible.extend({
@@ -44,21 +36,39 @@ define([
 
         apply: function () {
             this.extractActive();
-            
+
             this.source.trigger('params.applyFilters');
             this.source.reload();
         },
 
-        reset: function (filter) {
+        clear: function (filter) {
             filter ?
-                resetValue(filter) :
-                this.active.each(resetValue);
+                filter.reset() :
+                this.active.each('reset');
 
             this.apply();
         },
 
+        isOpened: function () {
+            return this.opened() && this.hasVisible();
+        },
+
+        isFilterVisible: function (filter) {
+            return filter.visible() || this.isFilterActive(filter);
+        },
+
+        isFilterActive: function (filter) {
+            return this.active.contains(filter);
+        },
+
+        hasVisible: function () {
+            var visible = this.elems.filter(this.isFilterVisible, this);
+
+            return !!visible.length;
+        },
+
         extractActive: function () {
-            var active = this.elems.filter(hasData);
+            var active = this.elems.filter('hasData');
 
             this.active(active);
 
@@ -71,6 +81,11 @@ define([
             this.previews(_.compact(previews));
 
             return this;
+        },
+
+        onApply: function () {
+            this.close()
+                .apply();
         }
     });
 });

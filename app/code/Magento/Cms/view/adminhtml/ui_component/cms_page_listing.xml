@@ -76,6 +76,11 @@
                 <item name="config" xsi:type="array">
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="dataScope" xsi:type="string">params.filters</item>
+                    <item name="childDefaults" xsi:type="array">
+                         <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string"><![CDATA[cms_page_listing.cms_page_listing.cms_page_columns.<%= index %>:visible]]></item>
+                        </item>
+                    </item>
                 </item>
             </argument>
             <filterRange name="page_id">

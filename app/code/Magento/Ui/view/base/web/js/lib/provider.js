@@ -30,7 +30,7 @@ define([
          * @param {Object} config - Settings to initialize object with.
          */
         initialize: function (config) {
-            _.extend(this.data = {}, config);
+            _.extend(this, config);
 
             this.restore();
 
@@ -43,7 +43,7 @@ define([
          * @return {*} this.data[path] or simply this.data
          */
         get: function (path) {
-            return utils.nested(this.data, path);
+            return utils.nested(this, path);
         },
 
         /**
@@ -53,10 +53,10 @@ define([
          * @return {Object} reference to instance
          */
         set: function (path, value) {
-            var data = utils.nested(this.data, path),
+            var data = utils.nested(this, path),
                 diffs = utils.compare(data, value, path);
 
-            utils.nested(this.data, path, value);
+            utils.nested(this, path, value);
 
             diffs.changes.forEach(function (change) {
                 this.trigger(change.name, change.value, change);
@@ -70,9 +70,9 @@ define([
         },
 
         restore: function () {
-            var stored = getStored(this.data.dataScope);
+            var stored = getStored(this.dataScope);
 
-            utils.extend(this.data, stored);
+            utils.extend(this, stored);
         },
 
         store: function (property, data) {
@@ -82,11 +82,11 @@ define([
                 this.set(property, data);
             }
 
-            store(this.data.dataScope, property, data);
+            store(this.dataScope, property, data);
         },
 
         remove: function (path) {
-            utils.nestedRemove(this.data, path);
+            utils.nestedRemove(this, path);
         }
     }, EventsBus);
 

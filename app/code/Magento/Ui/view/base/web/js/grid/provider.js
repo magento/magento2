@@ -22,7 +22,7 @@ define([
             this.trigger('reload');
 
             $.ajax({
-                url: this.data.update_url,
+                url: this.update_url,
                 method: 'GET',
                 data: this.get('params'),
                 dataType: 'json'

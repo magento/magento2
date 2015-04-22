@@ -20,8 +20,8 @@ define([
         initClient: function () {
             this.client = new Client({
                 urls: {
-                    beforeSave: this.data.validate_url,
-                    save: this.data.submit_url
+                    beforeSave: this.validate_url,
+                    save: this.submit_url
                 }
             });
 

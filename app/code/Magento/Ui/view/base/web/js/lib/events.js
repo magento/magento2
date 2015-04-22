@@ -3,15 +3,20 @@
  * See COPYING.txt for license details.
  */
 define([
+    'ko',
     'underscore'
-], function (_) {
+], function (ko, _) {
     'use strict';
 
-    function addHandler(events, ns, callback, name) {
+    function addHandler(obj, events, ns, callback, name) {
         (events[name] = events[name] || []).push({
             callback: callback,
             ns: ns
         });
+
+        if (ko.isObservable(obj[name])) {
+            obj[name].subscribe(callback);
+        }
     }
 
     function getEvents(obj, name) {
@@ -58,7 +63,7 @@ define([
                 ns = callback;
             }
 
-            iterator = addHandler.bind(null, storage, ns);
+            iterator = addHandler.bind(null, this, storage, ns);
 
             _.isObject(events) ?
                 _.each(events, iterator) :

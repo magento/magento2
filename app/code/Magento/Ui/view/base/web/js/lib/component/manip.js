@@ -50,7 +50,7 @@ define([
 
     return {
         getRegion: function (name) {
-            var regions = this.regions;
+            var regions = this.regions = this.regions || {};
 
             if (!regions[name]) {
                 regions[name] = ko.observable([]);

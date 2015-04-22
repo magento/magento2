@@ -37,10 +37,6 @@ define([
                 value: '<%= provider %>:<%= dataScope %>'
             },
 
-            exports: {
-                visible: '<%= provider %>:config.<%= name %>.visible'
-            },
-
             imports: {
                 setPreview: '<%= name %>:value'
             }
@@ -137,8 +133,6 @@ define([
          */
         setVisible: function (isVisible) {
             this.visible(isVisible);
-
-            this.trigger('toggle', isVisible);
 
             return this;
         },

@@ -20,11 +20,17 @@ define([
     function observe(obj, key, value) {
         var method = Array.isArray(value) ? 'observableArray' : 'observable';
 
-        if (!ko.isObservable(obj[key])) {
-            obj[key] = ko[method](value);
-        } else {
+        if (_.isFunction(obj[key])) {
+            if (ko.isObservable(value)) {
+                value = value();
+            }
+
             obj[key](value);
+
+            return;
         }
+
+        obj[key] = ko[method](value);
     }
 
     return {
@@ -33,7 +39,8 @@ define([
             parentScope: '<%= $data.getPart(dataScope, -2) %>',
             template: 'ui/collection',
             containers: [],
-            _elems: []
+            _elems: [],
+            elems: []
         },
 
         initialize: function (options) {
@@ -66,7 +73,6 @@ define([
          * @returns {Component} Chainable.
          */
         initProperties: function () {
-            this.regions = [];
             this.source = registry.get(this.provider);
 
             return this;
@@ -78,20 +84,16 @@ define([
          * @returns {Component} Chainable.
          */
         initObservable: function () {
-            this.observe({
-                'elems': []
-            });
-
-            this.regions.forEach(function (region) {
-                this.observe(region, []);
-            }, this);
+            this.observe('elems');
 
             return this;
         },
 
         initLinks: function () {
+            this.setLinks(this.links, 'imports')
+                .setLinks(this.links, 'exports');
+
             _.each({
-                both: this.links,
                 exports: this.exports,
                 imports: this.imports
             }, this.setLinks, this);
@@ -207,6 +209,14 @@ define([
             }
 
             return this;
+        },
+
+        get: function (property) {
+            return utils.nested(this, property);
+        },
+
+        set: function (property, value) {
+            return utils.nested(this, property, value);
         },
 
         /**

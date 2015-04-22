@@ -10,108 +10,100 @@ define([
 ], function (ko, _, utils, registry) {
     'use strict';
 
-    function extractData(str) {
+    function extractData(owner, str) {
         var data = str.split(':');
 
+        if (!data[1]) {
+            data[1] = data[0];
+            data[0] = owner.name;
+        }
+
         return {
-            component: data[0],
-            prop: data[1]
+            target: data[0],
+            property: data[1]
         };
     }
 
-    function update(target, prop, value) {
-        if (_.isFunction(target[prop])) {
-            target[prop](value);
-        } else if (target.set) {
-            target.set(prop, value);
-        } else {
-            target[prop] = value;
-        }
+    function notEmpty(value) {
+        return typeof value !== 'undefined' && value != null;
     }
 
-    function imports(owner, target, ownerProp, targetProp, auto) {
-        var callback = update.bind(null, owner, ownerProp),
-            value;
+    function update(owner, value) {
+        var component = owner.component,
+            property = owner.property;
 
-        value = target.get ?
-            target.get(targetProp) :
-            utils.nested(target, targetProp);
-
-        if (ko.isObservable(value)) {
-            value.subscribe(callback);
-            value = value();
-        } else if (target.on) {
-            target.on(targetProp, callback);
-        }
-
-        if (auto && typeof value !== 'undefined') {
-            callback(value);
-        }
+        component.set(property, value);
     }
 
-    function exports(owner, target, ownerProp, targetProp, auto) {
-        var to = update.bind(null, target, targetProp);
+    function getValue(owner) {
+        var component = owner.component,
+            property = owner.property;
 
-        ownerProp = owner[ownerProp];
-
-        ownerProp.subscribe(to);
-
-        if (auto) {
-            to(ownerProp());
-        }
+        return utils.nested(component, property);
     }
 
-    function links(owner, target, ownerProp, direction) {
-        if (!ko.isObservable(owner[ownerProp]) && !_.isFunction(owner[ownerProp])) {
-            owner.observe(ownerProp);
-        }
+    function form(ownerComponent, targetComponent, ownerProp, targetProp, direction) {
+        var result,
+            tmp;
 
-        target = extractData(target);
-
-        registry.get(target.component, function (component) {
-            var args = [owner, component, ownerProp, target.prop, true];
-
-            switch (direction) {
-                case 'imports':
-                    imports.apply(null, args);
-                    break;
-
-                case 'exports':
-                    exports.apply(null, args);
-                    break;
-
-                case 'both':
-                    imports.apply(null, args);
-                    exports.apply(null, args);
-                    break;
+        result = {
+            owner: {
+                component: ownerComponent,
+                property: ownerProp
+            },
+            target: {
+                component: targetComponent,
+                property: targetProp
             }
-        });
-    }
+        };
 
-    function listen(owner, target, callback) {
-        target = extractData(target);
-
-        if (!target.prop) {
-            target.prop = target.component;
-            target.component = owner.name;
+        if (direction === 'exports') {
+            tmp = result.owner;
+            result.owner = result.target;
+            result.target = tmp;
         }
 
-        registry.get(target.component, function (component) {
-            imports(owner, component, callback, target.prop);
-        });
+        return result;
+    }
+
+    function setData(store, direction, property, data) {
+        var maps;
+
+        if (!store.maps) {
+            store.maps = {};
+        }
+
+        maps = store.maps;
+
+        maps[direction] = maps[direction] || {};
+
+        if (!Array.isArray(maps[direction][property])) {
+            maps[direction][property] = [];
+        }
+
+        maps[direction][property].push(data);
+    }
+
+    function getData(store, direction, property) {
+        var data,
+            maps = store.maps;
+
+        if (maps[direction] && maps[direction][property]) {
+            data = maps[direction][property][0];
+        } else {
+            direction = direction === 'imports' ? 'exports' : 'imports';
+
+            if (maps[direction] && maps[direction][property]) {
+                data = maps[direction][property][0];
+            }
+        }
+
+        return data;
     }
 
     return {
-        setLinks: function (data, direction) {
-            var owner = this;
-
-            _.each(data, function (target, prop) {
-                links(owner, target, prop, direction);
-            });
-        },
-
         setListners: function (listeners) {
-            var owner = this;
+            var data;
 
             _.each(listeners, function (callbacks, sources) {
                 sources = sources.split(' ');
@@ -119,10 +111,79 @@ define([
 
                 sources.forEach(function (target) {
                     callbacks.forEach(function (callback) {
-                        listen(owner, target, callback);
-                    });
-                });
-            });
+                        data = extractData(this, target);
+
+                        setData(this, 'imports', callback, data);
+
+                        this.link(callback, data, 'imports');
+                    }, this);
+                }, this);
+            }, this);
+        },
+
+        setLinks: function (links, direction) {
+            _.each(links, function (data, property) {
+                data = extractData(this, data);
+
+                this.observe(property);
+
+                setData(this, direction, property, data);
+
+                this.link(property, data, direction)
+                    .transfer(direction, property, data);
+            }, this);
+
+            return this;
+        },
+
+        link: function (property, data, direction) {
+            var owner,
+                formated;
+
+            registry.get(data.target, function (component) {
+                var callback;
+
+                formated = form(component, this, data.property, property, direction);
+                owner = formated.owner;
+
+                callback = update.bind(null, formated.target);
+
+                owner.component.on(owner.property, callback);
+            }.bind(this));
+
+            return this;
+        },
+
+        transfer: function (direction, property, data) {
+            var formated,
+                value;
+
+            data = data || getData(this, direction, property);
+
+            if (!data) {
+                return this;
+            }
+
+            registry.get(data.target, function (component) {
+                formated = form(component, this, data.property, property, direction);
+                value = getValue(formated.owner);
+
+                if (!notEmpty(value)) {
+                    return;
+                }
+
+                update(formated.target, value);
+            }.bind(this));
+
+            return this;
+        },
+
+        export: function (property, data) {
+            return this.transfer('exports', property, data);
+        },
+
+        import: function (property, data) {
+            return this.transfer('imports', property, data);
         }
     };
 });

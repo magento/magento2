@@ -21,49 +21,29 @@ define([
          * Action Reset
          */
         reset: function () {
-            this.delegate('resetVisible');
+            this.elems.each('resetVisible');
         },
 
         /**
          * Action Apply
          */
         apply: function () {
-            var data = {},
-                current;
+            this.close()
+                .elems.each('export', 'visible');
 
-            this.close();
+            this.source.store('config.columns');
 
-            current = this.source.get('config.columns') || {};
-
-            this.elems().forEach(function (elem) {
-                data[elem.index] = {
-                    visible: elem.visible()
-                };
-            });
-
-            utils.extend(current, data);
-
-            this.source.store('config.columns', current);
+            return this;
         },
 
         /**
          * Action Cancel
          */
         cancel: function () {
-            var previous = this.source.get('config.columns'),
-                config;
+            this.close()
+                .elems.each('import', 'visible');
 
-            this.close();
-
-            if (!previous) {
-                return;
-            }
-
-            this.elems().forEach(function (elem) {
-                config = previous[elem.index] || {};
-
-                elem.visible(config.visible);
-            });
+            return this;
         },
 
         /**
@@ -94,9 +74,7 @@ define([
          * @returns {Number}
          */
         countVisible: function () {
-            return this.elems().filter(function (elem) {
-                return elem.visible();
-            }).length;
+            return this.elems.filter('visible').length;
         },
 
         /**
