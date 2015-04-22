@@ -23,6 +23,9 @@
                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/minicart</item>
                                 <item name="config" xsi:type="array">
                                     <item name="template" xsi:type="string">Magento_Checkout/minicart/content</item>
+                                    <item name="itemRenderer" xsi:type="array">
+                                        <item name="default" xsi:type="string">Magento_Checkout/minicart/item/default</item>
+                                    </item>
                                 </item>
                                 <item name="children" xsi:type="array">
                                     <item name="subtotal.container" xsi:type="array">

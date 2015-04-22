@@ -67,12 +67,9 @@
     <!-- ko if: cart().summary_count -->
     <strong class="subtitle"><!-- ko text: $t('Recently added item(s)') --><!-- /ko --></strong>
     <div data-action="scroll" class="minicart-items-wrapper">
-
         <ol id="mini-cart" class="minicart-items" data-bind="foreach: cart().items">
-            <!-- ko template: $parent.getItemTemplate($data.product_type) --><!-- /ko -->
-            <!-- ko template:  --><!-- /ko -->
+            <!-- ko template: $parent.getItemTemplate($data) --><!-- /ko -->
         </ol>
-
     </div>
     <!-- /ko -->
 

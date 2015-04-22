@@ -4,12 +4,12 @@
  */
 define([
     'uiComponent',
+    'underscore',
     'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
+], function (Component, _, customerData) {
     'use strict';
 
     return Component.extend({
-        itemTemplates: [],
         isPossibleCheckout: true,
         checkoutUrl: window.checkout.checkoutUrl,
         initialize: function () {
@@ -17,7 +17,11 @@ define([
             this.cart = customerData.get('cart');
         },
         getItemTemplate: function (itemType) {
-            console.log(itemType);
+            if (_.has(this.itemRenderer, itemType.product_type)) {
+                return this.itemRenderer[itemType.product_type];
+            }
+            return this.itemRenderer['default'];
         }
     });
 });
+

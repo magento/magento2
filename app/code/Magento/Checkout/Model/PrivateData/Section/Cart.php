@@ -71,7 +71,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
                 : 0,
             'cart_empty_message' => '',
             'possible_onepage_checkout' => $this->isPossibleOnepageCheckout(),
-            'items' => [1, 2, 3,],
+            'items' => $this->getRecentItemsData(),
         ];
     }
 
@@ -122,7 +122,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         $items = $this->getRecentItems();
         if ($items) {
             foreach ($items as $item) {
-                $itemsData = [
+                $itemsData[] = [
                     'product_type' => $item->getProductType(),
                 ];
                 // TODO: set data
