@@ -7,7 +7,6 @@ namespace Magento\Setup\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Magento\Store\Model\StoreManager;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,6 +34,8 @@ use Magento\Setup\Module\Di\Definition\Serializer\Standard;
 /**
  * Command to generate all non-existing proxies and factories, and pre-compile class definitions,
  * inheritance information and plugin definitions
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DiCompileMultiTenantCommand extends Command
 {
@@ -56,22 +57,37 @@ class DiCompileMultiTenantCommand extends Command
     private $objectManager;
 
     /**
-     * Deployment configuration
      *
-     * @var DeploymentConfig
+     * @var array
      */
-    private $deploymentConfig;
+    private $entities;
+
+    /**
+     *
+     * @var array
+     */
+    private $files;
+
+    /**
+     *
+     * @var \Magento\Framework\Code\Generator
+     */
+    private $generator;
+
+    /**
+     *
+     * @var Log
+     */
+    private $log;
 
     /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(ObjectManagerProvider $objectManagerProvider, DeploymentConfig $deploymentConfig)
+    public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
         $this->objectManager = $objectManagerProvider->get();
-        $this->deploymentConfig = $deploymentConfig;
         parent::__construct();
     }
 
@@ -126,17 +142,9 @@ class DiCompileMultiTenantCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln("<info>You cannot run this command as Magento application is not installed.</info>");
-            return;
-        }
-
         $rootDir = realpath(__DIR__ . '/../../../../../../');
-
         $generationDir = $input->getOption(self::INPUT_KEY_GENERATION) ? $input->getOption(self::INPUT_KEY_GENERATION)
             : $rootDir . '/var/generation';
-        $diDir = $input->getOption(self::INPUT_KEY_DI) ? $input->getOption(self::INPUT_KEY_DI) : $rootDir . '/var/di';
-
         $testExcludePatterns = [
             "#^$rootDir/app/code/[\\w]+/[\\w]+/Test#",
             "#^$rootDir/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#",
@@ -146,48 +154,60 @@ class DiCompileMultiTenantCommand extends Command
         $fileExcludePatterns = $input->getOption('exclude-pattern') ?
             [$input->getOption(self::INPUT_KEY_EXCLUDE_PATTERN)] : ['#[\\\\/]M1[\\\\/]#i'];
         $fileExcludePatterns = array_merge($fileExcludePatterns, $testExcludePatterns);
-
-        $relationsFile = $diDir . '/relations.ser';
-        $pluginDefFile = $diDir . '/plugins.ser';
-
-        $compilationDirs = [
-            $rootDir . '/app/code',
-            $rootDir . '/lib/internal/Magento',
-            $rootDir . '/dev/tools/Magento/Tools',
-            $rootDir . '/setup/src/Magento/Setup/Module'
-        ];
-
-        /** @var Writer\Console $logWriter Writer model for success messages */
+        /** @var Writer\Console logWriter Writer model for success messages */
         $logWriter = new Writer\Console($output);
-        $log = new Log($logWriter, $logWriter);
-
-        $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
-
+        $this->log = new Log($logWriter, $logWriter);
         AutoloaderRegistry::getAutoloader()->addPsr4('Magento\\', $generationDir . '/Magento/');
-
         // 1 Code generation
+        $this->generateCode($rootDir, $generationDir, $fileExcludePatterns, $input);
+        // 2. Compilation
+        $this->compileCode($rootDir, $generationDir, $fileExcludePatterns, $input);
+        //Reporter
+        $this->log->report();
+        if (!$this->log->hasError()) {
+            $output->writeln(
+                '<info>On *nix systems, verify the Magento application has permissions to modify files '
+                . 'created by the compiler in the "var" directory. For instance, if you run the Magento application '
+                . 'using Apache, the owner of the files in the "var" directory should be the Apache user (example '
+                . 'command: "chown -R www-data:www-data <MAGENTO_ROOT>/var" where MAGENTO_ROOT is the Magento '
+                . 'root directory).</info>'
+            );
+        }
+    }
+
+    /**
+     * Generate Code
+     *
+     * @param string $rootDir
+     * @param string $generationDir
+     * @param array $fileExcludePatterns
+     * @param InputInterface $input
+     * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function generateCode($rootDir, $generationDir, $fileExcludePatterns, $input)
+    {
         // 1.1 Code scan
         $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
         $codeScanDir = realpath($rootDir . '/app');
         $directoryScanner = new Scanner\DirectoryScanner();
-        $files = $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns);
-        $files['additional'] = [$input->getOption(self::INPUT_KEY_EXTRA_CLASSES_FILE)];
+        $this->files = $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns);
+        $this->files['additional'] = [$input->getOption(self::INPUT_KEY_EXTRA_CLASSES_FILE)];
         $repositoryScanner = new Scanner\RepositoryScanner();
-        $repositories = $repositoryScanner->collectEntities($files['di']);
+        $repositories = $repositoryScanner->collectEntities($this->files['di']);
         $scanner = new Scanner\CompositeScanner();
-        $scanner->addChild(new Scanner\PhpScanner($log), 'php');
-        $scanner->addChild(new Scanner\XmlScanner($log), 'di');
+        $scanner->addChild(new Scanner\PhpScanner($this->log), 'php');
+        $scanner->addChild(new Scanner\XmlScanner($this->log), 'di');
         $scanner->addChild(new Scanner\ArrayScanner(), 'additional');
-        $entities = $scanner->collectEntities($files);
+        $this->entities = $scanner->collectEntities($this->files);
         $interceptorScanner = new Scanner\XmlInterceptorScanner();
-        $entities['interceptors'] = $interceptorScanner->collectEntities($files['di']);
-
+        $this->entities['interceptors'] = $interceptorScanner->collectEntities($this->files['di']);
         // 1.2 Generation of Factory and Additional Classes
         $generatorIo = new \Magento\Framework\Code\Generator\Io(
             new \Magento\Framework\Filesystem\Driver\File(),
             $generationDir
         );
-        $generator = new \Magento\Framework\Code\Generator(
+        $this->generator = new \Magento\Framework\Code\Generator(
             $generatorIo,
             [
                 Interceptor::ENTITY_TYPE => 'Magento\Framework\Interception\Code\Generator\Interceptor',
@@ -205,17 +225,17 @@ class DiCompileMultiTenantCommand extends Command
             ]
         );
         /** Initialize object manager for code generation based on configs */
-        $generator->setObjectManager($this->objectManager);
-        $generatorAutoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);
+        $this->generator->setObjectManager($this->objectManager);
+        $generatorAutoloader = new \Magento\Framework\Code\Generator\Autoloader($this->generator);
         spl_autoload_register([$generatorAutoloader, 'load']);
 
         foreach ($repositories as $entityName) {
-            switch ($generator->generateClass($entityName)) {
+            switch ($this->generator->generateClass($entityName)) {
                 case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
-                    $log->add(Log::GENERATION_SUCCESS, $entityName);
+                    $this->log->add(Log::GENERATION_SUCCESS, $entityName);
                     break;
                 case \Magento\Framework\Code\Generator::GENERATION_ERROR:
-                    $log->add(Log::GENERATION_ERROR, $entityName);
+                    $this->log->add(Log::GENERATION_ERROR, $entityName);
                     break;
                 case \Magento\Framework\Code\Generator::GENERATION_SKIP:
                 default:
@@ -224,14 +244,14 @@ class DiCompileMultiTenantCommand extends Command
             }
         }
         foreach (['php', 'additional'] as $type) {
-            sort($entities[$type]);
-            foreach ($entities[$type] as $entityName) {
-                switch ($generator->generateClass($entityName)) {
+            sort($this->entities[$type]);
+            foreach ($this->entities[$type] as $entityName) {
+                switch ($this->generator->generateClass($entityName)) {
                     case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
-                        $log->add(Log::GENERATION_SUCCESS, $entityName);
+                        $this->log->add(Log::GENERATION_SUCCESS, $entityName);
                         break;
                     case \Magento\Framework\Code\Generator::GENERATION_ERROR:
-                        $log->add(Log::GENERATION_ERROR, $entityName);
+                        $this->log->add(Log::GENERATION_ERROR, $entityName);
                         break;
                     case \Magento\Framework\Code\Generator::GENERATION_SKIP:
                     default:
@@ -240,43 +260,62 @@ class DiCompileMultiTenantCommand extends Command
                 }
             }
         }
+    }
 
-        // 2. Compilation
+    /**
+     * Compile Code
+     *
+     * @param string $rootDir
+     * @param string $generationDir
+     * @param array $fileExcludePatterns
+     * @param InputInterface $input
+     * @return void
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function compileCode($rootDir, $generationDir, $fileExcludePatterns, $input)
+    {
+        $diDir = $input->getOption(self::INPUT_KEY_DI) ? $input->getOption(self::INPUT_KEY_DI) : $rootDir . '/var/di';
+        $relationsFile = $diDir . '/relations.ser';
+        $pluginDefFile = $diDir . '/plugins.ser';
+        $compilationDirs = [
+            $rootDir . '/app/code',
+            $rootDir . '/lib/internal/Magento',
+            $rootDir . '/dev/tools/Magento/Tools',
+            $rootDir . '/setup/src/Magento/Setup/Module'
+        ];
+        $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
         // 2.1 Code scan
         $validator = new \Magento\Framework\Code\Validator();
         $validator->add(new \Magento\Framework\Code\Validator\ConstructorIntegrity());
         $validator->add(new \Magento\Framework\Code\Validator\ContextAggregation());
         $classesScanner = new \Magento\Setup\Module\Di\Code\Reader\ClassesScanner();
         $classesScanner->addExcludePatterns($fileExcludePatterns);
-
         $directoryInstancesNamesList = new \Magento\Setup\Module\Di\Code\Reader\Decorator\Directory(
-            $log,
+            $this->log,
             new \Magento\Framework\Code\Reader\ClassReader(),
             $classesScanner,
             $validator,
             $generationDir
         );
-
         foreach ($compilationDirs as $path) {
             if (is_readable($path)) {
                 $directoryInstancesNamesList->getList($path);
             }
         }
         $inheritanceScanner = new Scanner\InheritanceInterceptorScanner();
-        $entities['interceptors'] = $inheritanceScanner->collectEntities(
+        $this->entities['interceptors'] = $inheritanceScanner->collectEntities(
             get_declared_classes(),
-            $entities['interceptors']
+            $this->entities['interceptors']
         );
-
         // 2.1.1 Generation of Proxy and Interceptor Classes
         foreach (['interceptors', 'di'] as $type) {
-            foreach ($entities[$type] as $entityName) {
-                switch ($generator->generateClass($entityName)) {
+            foreach ($this->entities[$type] as $entityName) {
+                switch ($this->generator->generateClass($entityName)) {
                     case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
-                        $log->add(Log::GENERATION_SUCCESS, $entityName);
+                        $this->log->add(Log::GENERATION_SUCCESS, $entityName);
                         break;
                     case \Magento\Framework\Code\Generator::GENERATION_ERROR:
-                        $log->add(Log::GENERATION_ERROR, $entityName);
+                        $this->log->add(Log::GENERATION_ERROR, $entityName);
                         break;
                     case \Magento\Framework\Code\Generator::GENERATION_SKIP:
                     default:
@@ -285,52 +324,30 @@ class DiCompileMultiTenantCommand extends Command
                 }
             }
         }
-
         //2.1.2 Compile relations for Proxy/Interceptor classes
         $directoryInstancesNamesList->getList($generationDir);
-
         $relations = $directoryInstancesNamesList->getRelations();
-
         // 2.2 Compression
         if (!file_exists(dirname($relationsFile))) {
             mkdir(dirname($relationsFile), 0777, true);
         }
         $relations = array_filter($relations);
         file_put_contents($relationsFile, $serializer->serialize($relations));
-
         // 3. Plugin Definition Compilation
         $pluginScanner = new Scanner\CompositeScanner();
         $pluginScanner->addChild(new Scanner\PluginScanner(), 'di');
         $pluginDefinitions = [];
-        $pluginList = $pluginScanner->collectEntities($files);
+        $pluginList = $pluginScanner->collectEntities($this->files);
         $pluginDefinitionList = new \Magento\Framework\Interception\Definition\Runtime();
         foreach ($pluginList as $type => $entityList) {
             foreach ($entityList as $entity) {
                 $pluginDefinitions[ltrim($entity, '\\')] = $pluginDefinitionList->getMethodList($entity);
             }
         }
-
         $outputContent = $serializer->serialize($pluginDefinitions);
-
         if (!file_exists(dirname($pluginDefFile))) {
             mkdir(dirname($pluginDefFile), 0777, true);
         }
-
-        file_put_contents($pluginDefFile, $outputContent);
-
-        //Reporter
-        $log->report();
-
-        if ($log->hasError()) {
-            exit(1);
-        }
-
-        $output->writeln(
-            '<info>On *nix systems, verify the Magento application has permissions to modify files '
-            . 'created by the compiler in the "var" directory. For instance, if you run the Magento application using '
-            . 'Apache, the owner of the files in the "var" directory should be the Apache user (example command:'
-            . ' "chown -R www-data:www-data <MAGENTO_ROOT>/var" where MAGENTO_ROOT is the Magento root directory).'
-            . '</info>'
-        );
+        file_put_contents($pluginDefFile, $outputContent);            
     }
 }
