@@ -64,10 +64,6 @@ class AroundProductRepositorySave
         $stockItem->setProductId($result->getId());
         $stockItem->setWebsiteId($this->storeManager->getStore($result->getStoreId())->getWebsiteId());
 
-        // TODO: might need to handle a *new* -v- *update* for the stockItem
-        // ...   StockRegistry: $this->stockItemRepository->save
-        // TODO: ensure this is correct logic for PUT/update and POST/create
-
         $this->stockRegistry->updateStockItemBySku($result->getSku(), $stockItem);
 
         // since we just saved a portion of the product, force a reload of it before returning it
