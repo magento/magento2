@@ -98,6 +98,7 @@
     <type name="Magento\Catalog\Model\Product">
         <arguments>
             <argument name="catalogProductStatus" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Source\Status\Proxy</argument>
+            <argument name="productLink" xsi:type="object">Magento\Catalog\Model\Product\Link\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Resource\Product\Collection">
@@ -396,6 +397,11 @@
         <arguments>
             <argument name="validatorInfo" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo\Proxy</argument>
             <argument name="validatorFile" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Attribute\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Catalog\Model\Attribute\Config\Data\Proxy</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Catalog\Model\Layer\Search\Context" type="Magento\Catalog\Model\Layer\Context">

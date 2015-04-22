@@ -45,9 +45,9 @@ class Mapper
     private $objectManager;
 
     /**
-     * @var QueryInterface
+     * @var string
      */
-    private $rootQuery = null;
+    private $rootQueryName;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -70,24 +70,22 @@ class Mapper
         $this->queries = $queries;
         $this->aggregations = $aggregations;
         $this->filters = $filters;
-
-        $this->rootQuery = $this->get($rootQueryName);
+        $this->rootQueryName = $rootQueryName;
     }
 
     /**
      * Get Query Interface by name
      *
-     * @param string $queryName
      * @return QueryInterface
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws StateException
      */
-    private function get($queryName)
+    public function getRootQuery()
     {
         $this->mappedQueries = [];
         $this->mappedFilters = [];
-        $query = $this->mapQuery($queryName);
+        $query = $this->mapQuery($this->rootQueryName);
         $this->validate();
         return $query;
     }
@@ -302,14 +300,6 @@ class Mapper
     private function validateFilters()
     {
         $this->validateNotUsed($this->filters, $this->mappedFilters, 'Filter %1 is not used in request hierarchy');
-    }
-
-    /**
-     * @return QueryInterface
-     */
-    public function getRootQuery()
-    {
-        return $this->rootQuery;
     }
 
     /**
