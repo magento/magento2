@@ -43,16 +43,23 @@ define(
                 }));
             },
             sort: function(elems){
-                var sortedElems = [];
+                var sortedElems = [],
+                    self = this;
+
                 _.each(paymentService.getAvailablePaymentMethods()(), function (originElem) {
-                    _.each(elems, function(elem) {
-                        if (elem.getCode() == originElem.code) {
-                            sortedElems.push(elem);
-                            return false;
-                        }
-                    });
+                    sortedElems.push(self.getMethodByCode(elems, originElem.code));
                 });
                 return sortedElems;
+            },
+            getMethodByCode: function(elems, code) {
+                var method = null;
+                _.each(elems, function(elem) {
+                    if (elem.getCode() == code) {
+                        method = elem;
+                        return false;
+                    }
+                });
+                return method;
             },
             backToShippingMethod: function() {
                 navigator.setCurrent(stepName).goBack();
