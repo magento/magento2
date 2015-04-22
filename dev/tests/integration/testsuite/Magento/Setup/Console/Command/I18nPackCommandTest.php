@@ -50,6 +50,10 @@ class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Cannot open dictionary file:
+     */
     public function testExecuteNonExistingPath()
     {
         $nonExistPath = BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/non_exist.csv';
@@ -61,8 +65,6 @@ class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
                 '--allow-duplicates' => true,
             ]
         );
-
-        $this->assertEquals("Cannot open dictionary file: \"$nonExistPath\"."  . PHP_EOL, $this->tester->getDisplay());
     }
 
     private function recursiveRmdir($dir)

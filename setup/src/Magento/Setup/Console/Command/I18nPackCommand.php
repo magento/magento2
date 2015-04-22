@@ -73,19 +73,15 @@ class I18nPackCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        try {
-            $generator = ServiceLocator::getPackGenerator();
-            $locale = $input->getArgument(self::INPUT_KEY_LOCALE);
-            $generator->generate(
-                $input->getArgument(self::INPUT_KEY_SOURCE),
-                $input->getArgument(self::INPUT_KEY_PACK),
-                $locale,
-                $input->getOption(self::INPUT_KEY_MODE),
-                $input->getOption(self::INPUT_KEY_ALLOW_DUPLICATES)
-            );
-            $output->writeln("Successfully saved $locale language package.");
-        } catch (\Exception $e) {
-            $output->writeln($e->getMessage());
-        }
+        $generator = ServiceLocator::getPackGenerator();
+        $locale = $input->getArgument(self::INPUT_KEY_LOCALE);
+        $generator->generate(
+            $input->getArgument(self::INPUT_KEY_SOURCE),
+            $input->getArgument(self::INPUT_KEY_PACK),
+            $locale,
+            $input->getOption(self::INPUT_KEY_MODE),
+            $input->getOption(self::INPUT_KEY_ALLOW_DUPLICATES)
+        );
+        $output->writeln("<info>Successfully saved $locale language package.</info>");
     }
 }
