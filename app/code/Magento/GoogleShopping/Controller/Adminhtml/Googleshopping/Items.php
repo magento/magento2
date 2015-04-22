@@ -7,13 +7,10 @@ namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Notification\NotifierInterface;
-use Magento\Framework\Controller;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * GoogleShopping Admin Items Controller
- *
- * @name       \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Items extends \Magento\Backend\App\Action
 {
@@ -26,14 +23,6 @@ class Items extends \Magento\Backend\App\Action
      * @var \Magento\Framework\Url\EncoderInterface
      */
     protected $urlEncoder;
-
-    /**
-     * @return \Magento\Framework\Controller\Result\Raw
-     */
-    protected function emptyResult()
-    {
-        return $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
-    }
 
     /**
      * @param Action\Context $context
@@ -64,7 +53,7 @@ class Items extends \Magento\Backend\App\Action
      * Redirect user to Google Captcha challenge
      *
      * @param \Zend_Gdata_App_CaptchaRequiredException $e
-     * @return Controller\ResultInterface
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     protected function _redirectToCaptcha($e)
     {
@@ -77,12 +66,12 @@ class Items extends \Magento\Backend\App\Action
             ]
         );
         if ($this->getRequest()->isAjax()) {
-            /** @var Controller\Result\Json $resultJson */
-            $resultJson = $this->resultFactory->create(Controller\ResultFactory::TYPE_JSON);
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
             return $resultJson->setData(['redirect' => $redirectUrl]);
         } else {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-            $resultRedirect = $this->resultFactory->create(Controller\ResultFactory::TYPE_REDIRECT);
+            $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             return $resultRedirect->setUrl($redirectUrl);
         }
     }
@@ -114,5 +103,13 @@ class Items extends \Magento\Backend\App\Action
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Magento_GoogleShopping::items');
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\Result\Raw
+     */
+    protected function createRawObject()
+    {
+        return $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
     }
 }

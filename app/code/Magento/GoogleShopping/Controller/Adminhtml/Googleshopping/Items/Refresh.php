@@ -1,7 +1,5 @@
 <?php
 /**
- * Update items statistics and remove the items which are not available in Google Content
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +8,9 @@
 
 namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items;
 
+/**
+ * Update items statistics and remove the items which are not available in Google Content
+ */
 class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Items
 {
     /**
@@ -20,13 +21,13 @@ class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
     protected $operation = 'synchronizeItems';
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Redirect|\Magento\Framework\Controller\Result\Raw
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $flag = $this->_getFlag();
         if ($flag->isLocked()) {
-            return $this->emptyResult();
+            return $this->createRawObject();
         }
 
         session_write_close();
@@ -55,10 +56,10 @@ class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
                 )
             );
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            return $this->emptyResult();
+            return $this->createRawObject();
         }
 
         $flag->unlock();
-        return $this->emptyResult();
+        return $this->createRawObject();
     }
 }

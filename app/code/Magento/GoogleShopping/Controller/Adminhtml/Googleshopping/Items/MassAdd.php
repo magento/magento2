@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,13 +10,14 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
     /**
      * Add (export) several products to Google Content
      *
-     * @return \Magento\Framework\Controller\Result\Raw|\Magento\Backend\Model\View\Result\Redirect
+     * @return \Magento\Framework\Controller\ResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
         $flag = $this->_getFlag();
         if ($flag->isLocked()) {
-            return $this->emptyResult();
+            return $this->createRawObject();
         }
 
         session_write_close();
@@ -44,10 +44,10 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
                 $e->getMessage()
             );
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            return $this->emptyResult();
+            return $this->createRawObject();
         }
 
         $flag->unlock();
-        return $this->emptyResult();
+        return $this->createRawObject();
     }
 }
