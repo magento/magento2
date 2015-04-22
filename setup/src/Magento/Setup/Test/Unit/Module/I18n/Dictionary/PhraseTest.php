@@ -7,7 +7,6 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary;
 
 use \Magento\Setup\Module\I18n\Dictionary\Phrase;
 
-
 class PhraseTest extends \PHPUnit_Framework_TestCase
 {
     /**

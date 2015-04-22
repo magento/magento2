@@ -29,7 +29,7 @@ class Dictionary
     /**
      * Add phrase to pack container
      *
-     * @param \Magento\Setup\Module\I18n\Dictionary\Phrase $phrase
+     * @param Phrase $phrase
      * @return void
      */
     public function addPhrase(Phrase $phrase)
@@ -41,7 +41,7 @@ class Dictionary
     /**
      * Get phrases
      *
-     * @return \Magento\Setup\Module\I18n\Dictionary\Phrase[]
+     * @return Phrase[]
      */
     public function getPhrases()
     {

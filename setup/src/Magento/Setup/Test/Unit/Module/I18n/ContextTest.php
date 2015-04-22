@@ -7,7 +7,6 @@ namespace Magento\Setup\Test\Unit\Module\I18n;
 
 use \Magento\Setup\Module\I18n\Context;
 
-
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
     /**
