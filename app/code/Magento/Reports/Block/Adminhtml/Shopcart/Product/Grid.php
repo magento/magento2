@@ -57,14 +57,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     protected function _prepareCollection()
     {
         $collection = $this->_quotesFactory->create();
-        if ($this->queryResolver->isSingleQuery()) {
-            $collection->prepareForProductsInCarts();
-            $collection->setSelectCountSqlType(
-                \Magento\Reports\Model\Resource\Quote\Collection::SELECT_COUNT_SQL_TYPE_CART
-            );
-        } else {
-            $collection->prepareActiveCartItems();
-        }
+        $collection->prepareActiveCartItems();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -80,6 +73,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
                 'header' => __('ID'),
                 'align' => 'right',
                 'index' => 'entity_id',
+                'sortable' => false,
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id'
             ]
@@ -90,6 +84,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
             [
                 'header' => __('Product'),
                 'index' => 'name',
+                'sortable' => false,
                 'header_css_class' => 'col-product',
                 'column_css_class' => 'col-product'
             ]
@@ -104,6 +99,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
                 'type' => 'currency',
                 'currency_code' => $currencyCode,
                 'index' => 'price',
+                'sortable' => false,
                 'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency',
                 'rate' => $this->getRate($currencyCode),
                 'header_css_class' => 'col-price',
@@ -117,6 +113,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
                 'header' => __('Carts'),
                 'align' => 'right',
                 'index' => 'carts',
+                'sortable' => false,
                 'header_css_class' => 'col-carts',
                 'column_css_class' => 'col-carts'
             ]
@@ -128,6 +125,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
                 'header' => __('Orders'),
                 'align' => 'right',
                 'index' => 'orders',
+                'sortable' => false,
                 'header_css_class' => 'col-qty',
                 'column_css_class' => 'col-qty'
             ]
