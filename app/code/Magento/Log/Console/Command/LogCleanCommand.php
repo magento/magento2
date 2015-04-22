@@ -45,9 +45,20 @@ class LogCleanCommand extends AbstractLogCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $days = $input->getOption(self::INPUT_KEY_DAYS);
-        /** @var \Magento\Log\Model\Shell\Command\Clean $command */
-        $command = $this->objectManager->create('Magento\Log\Model\Shell\Command\Clean', ['days' => $days]);
-        $outputMsg = $command->execute();
-        $output->writeln('<info>' . $outputMsg . '</info>');
+        if ($days > 0) {
+            /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig */
+            $mutableConfig = $this->objectManager->create('Magento\Framework\App\Config\MutableScopeConfigInterface');
+            $mutableConfig->setValue(
+                \Magento\Log\Model\Log::XML_LOG_CLEAN_DAYS,
+                $days,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+        }
+        /** @var \Magento\Log\Model\LogFactory $logFactory */
+        $logFactory = $this->objectManager->create('Magento\Log\Model\LogFactory');
+        /** @var \Magento\Log\Model\Log $model */
+        $model = $logFactory->create();
+        $model->clean();
+        $output->writeln('<info>' . 'Log cleaned.' . '</info>');
     }
 }

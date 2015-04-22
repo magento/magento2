@@ -3273,4 +3273,7 @@ return [
     ['Magento\Tools\Webdev\CliParams'],
     ['Magento\Tools\Webdev\App\FileAssembler'],
     ['Magento\Tools\View\Deployer\Log'],
+    ['Magento\Log\Model\Shell\Command\Status'],
+    ['Magento\Log\Model\LogFactory\Clean'],
+    ['Magento\Log\Model\Shell\CommandInterface'],
 ];

@@ -14,9 +14,11 @@ class LogStatusCommandTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $command = $this->getMock('Magento\Log\Model\Shell\Command\Status', [], [], '', false);
-        $objectManager->expects($this->once())->method('create')->willReturn($command);
-        $command->expects($this->once())->method('execute');
+        $resourceFactory = $this->getMock('Magento\Log\Model\Resource\ShellFactory', [], [], '', false);
+        $objectManager->expects($this->once())->method('create')->willReturn($resourceFactory);
+        $resource = $this->getMock('Magento\Log\Model\Resource\Shell', [], [], '', false);
+        $resourceFactory->expects($this->once())->method('create')->willReturn($resource);
+        $resource->expects($this->once())->method('getTablesInfo')->willReturn([]);
         $objectManagerFactory->expects($this->once())->method('create')->willReturn($objectManager);
         $commandTester = new CommandTester(new LogStatusCommand($objectManagerFactory));
         $commandTester->execute([]);
