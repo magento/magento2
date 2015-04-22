@@ -32,7 +32,7 @@ class DownloadCustomOption extends Action\Action implements IndexInterface
     /**
      * Custom options download action
      *
-     * @return \Magento\Framework\Controller\Result\Forward|void
+     * @return \Magento\Framework\Controller\Result\Forward
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
