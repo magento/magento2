@@ -42,6 +42,7 @@ class Console
      *
      * @param array $data
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function write(array $data)
     {
