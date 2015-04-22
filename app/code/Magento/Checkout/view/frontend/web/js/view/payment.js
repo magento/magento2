@@ -49,15 +49,11 @@ define(
                     return elem.isAvailable();
                 });
             },
+
             getMethodByCode: function(code) {
-                var method = null;
-                _.each(this.elems(), function(elem) {
-                    if (elem.getCode() == code) {
-                        method = elem;
-                        return false;
-                    }
+                return _.find(this.elems(), function(elem) {
+                    return elem.getCode() == code;
                 });
-                return method;
             },
             backToShippingMethod: function() {
                 navigator.setCurrent(stepName).goBack();
