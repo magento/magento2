@@ -36,23 +36,17 @@ class GuestCartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $maskedCartId = 'f216207248d65c789b17be8545e0aa73';
+    protected $maskedCartId;
 
     /**
      * @var int
      */
-    protected $cartId = 12;
+    protected $cartId;
 
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->quoteIdMaskFactoryMock = $this->getMockBuilder('Magento\Quote\Model\QuoteIdMaskFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteIdMaskMock = $this->getMockBuilder('Magento\Quote\Model\QuoteIdMask')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->cartTotalRepository = $this->getMockBuilder('Magento\Quote\Api\CartTotalRepositoryInterface')
             ->disableOriginalConstructor()
             ->getMock();
