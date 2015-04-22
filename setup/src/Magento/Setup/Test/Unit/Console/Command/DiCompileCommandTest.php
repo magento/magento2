@@ -21,11 +21,6 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
     private $manager;
 
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $objectManagerProvider;
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
@@ -38,7 +33,7 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->objectManagerProvider = $this->getMock(
+        $objectManagerProvider = $this->getMock(
             'Magento\Setup\Model\ObjectManagerProvider',
             [],
             [],
@@ -51,9 +46,9 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
+        $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->manager = $this->getMock('Magento\Setup\Module\Di\App\Task\Manager', [], [], '', false);
-        $this->command = new DiCompileCommand($this->deploymentConfig, $this->manager, $this->objectManagerProvider);
+        $this->command = new DiCompileCommand($this->deploymentConfig, $this->manager, $objectManagerProvider);
     }
 
     public function testExecuteNotInstalled()
@@ -61,7 +56,7 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertEquals('Application is not installed yet.' . PHP_EOL, $tester->getDisplay());
+        $this->assertEquals('The Magento application is not installed yet.' . PHP_EOL, $tester->getDisplay());
     }
 
     public function testExecute()

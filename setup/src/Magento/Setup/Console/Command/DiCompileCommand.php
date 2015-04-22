@@ -16,6 +16,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Command to run compile in single-tenant mode
+ */
 class DiCompileCommand extends Command
 {
     /**
@@ -57,7 +60,11 @@ class DiCompileCommand extends Command
     protected function configure()
     {
         $this->setName('setup:di:compile')
-            ->setDescription('Compiles for single tenant');
+            ->setDescription(
+                'Generates all non-existing proxies and factories, and pre-compile class definitions,' .
+                'inheritance information and plugin definitions for single-tenant mode'
+            );
+        parent::configure();
     }
 
     /**
@@ -66,7 +73,7 @@ class DiCompileCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln('Application is not installed yet.');
+            $output->writeln('The Magento application is not installed yet.');
             return;
         }
         $compiledPathsList = [
@@ -157,9 +164,9 @@ class DiCompileCommand extends Command
                 );
             }
             $this->taskManager->process();
-            $output->writeln('Successful');
+            $output->writeln('<info>Successful</info>');
         } catch (OperationException $e) {
-            $output->writeln($e->getMessage());
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
         }
     }
 }
