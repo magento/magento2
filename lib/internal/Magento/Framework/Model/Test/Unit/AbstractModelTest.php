@@ -108,4 +108,22 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())->method('delete')->with($this->model);
         $this->model->delete();
     }
+
+    public function testUpdateStoredData()
+    {
+        $this->model->setData(
+            [
+                'id'   => 1000,
+                'name' => 'Test Name'
+            ]
+        );
+        $this->assertEmpty($this->model->getStoredData());
+        $this->model->afterLoad();
+        $this->assertEquals($this->model->getData(), $this->model->getStoredData());
+        $this->model->setData('value', 'Test Value');
+        $this->model->afterSave();
+        $this->assertEquals($this->model->getData(), $this->model->getStoredData());
+        $this->model->afterDelete();
+        $this->assertEmpty($this->model->getStoredData());
+    }
 }
