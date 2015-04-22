@@ -58,19 +58,4 @@ class DiCompileMultiTenantCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('You cannot run this command as Magento application is not installed.'
             . PHP_EOL, $tester->getDisplay());
     }
-
-    public function testExecute()
-    {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
-        $tester = new CommandTester($this->command);
-        $tester->execute([]);
-        $this->assertStringEndsWith(
-            'On *nix systems, verify the Magento application has permissions to modify files '
-            . 'created by the compiler in the "var" directory. For instance, if you run the Magento application using '
-            . 'Apache, the owner of the files in the "var" directory should be the Apache user (example command:'
-            . ' "chown -R www-data:www-data <MAGENTO_ROOT>/var" where MAGENTO_ROOT is the Magento root directory).'
-            . PHP_EOL,
-            $tester->getDisplay()
-        );
-    }
 }
