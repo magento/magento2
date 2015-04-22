@@ -16,9 +16,9 @@ define([
             this._super();
             this.cart = customerData.get('cart');
         },
-        getItemTemplate: function (itemType) {
-            if (_.has(this.itemRenderer, itemType.product_type)) {
-                return this.itemRenderer[itemType.product_type];
+        getItemTemplate: function (item) {
+            if (_.has(this.itemRenderer, item.product_type)) {
+                return this.itemRenderer[item.product_type];
             }
             return this.itemRenderer['default'];
         }
