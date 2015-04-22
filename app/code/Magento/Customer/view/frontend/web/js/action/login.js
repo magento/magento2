@@ -7,9 +7,10 @@ define(
     [
         'jquery',
         'mage/storage',
-        'Magento_Ui/js/model/errorlist'
+        'Magento_Ui/js/model/errorlist',
+        'Magento_Customer/js/model/customer'
     ],
-    function($, storage, errorlist) {
+    function($, storage, errorlist, customer) {
         "use strict";
         return function(loginData, redirectUrl) {
             return storage.post(
@@ -23,9 +24,11 @@ define(
                         location.reload();
                     }
                 } else {
+                    customer.increaseFailedLoginAttempt();
                     errorlist.add('Server returned no response');
                 }
             }).fail(function (response) {
+                customer.increaseFailedLoginAttempt();
                 if (response.status == 401) {
                     errorlist.add('Invalid login or password');
                 } else {
