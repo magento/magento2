@@ -88,7 +88,7 @@ class GuestBillingAddressManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testAssing()
+    public function testAssign()
     {
         $addressId = 1;
         $this->billingAddressManagementMock->expects($this->once())->method('assign')->willReturn($addressId);
