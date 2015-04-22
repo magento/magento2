@@ -8,7 +8,7 @@ define(
     [
         'Magento_Weee/js/view/checkout/review/item/price/weee'
     ],
-    function (weee,quote, priceUtils) {
+    function (weee) {
         "use strict";
         return weee.extend({
             defaults: {
