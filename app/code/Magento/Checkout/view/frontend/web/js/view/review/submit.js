@@ -19,8 +19,9 @@ define(
                 template: 'Magento_Checkout/review/submit',
                 displayArea: 'submit'
             },
+            paymentMethod: quote.getPaymentMethod(),
             getLabel: function() {
-                var view = this.getViewByCode(quote.getPaymentMethod()());
+                var view = this.getViewByCode(this.paymentMethod());
                 if (view && view.getLabel) {
                     return view.getLabel();
                 } else {
@@ -28,7 +29,7 @@ define(
                 }
             },
             getClick: function() {
-                var view = this.getViewByCode(quote.getPaymentMethod()());
+                var view = this.getViewByCode(this.paymentMethod());
                 if (view && view.getClick) {
                     return view.getClick();
                 } else {
