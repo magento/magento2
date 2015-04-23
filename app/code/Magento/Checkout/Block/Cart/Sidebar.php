@@ -27,6 +27,11 @@ class Sidebar extends AbstractCart
     protected $jsLayout;
 
     /**
+     * @var \Magento\Tax\Model\Config
+     */
+    protected $_taxConfig;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -37,10 +42,12 @@ class Sidebar extends AbstractCart
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Tax\Model\Config $taxConfig,
         array $data = []
     ) {
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = false;
+        $this->_taxConfig = $taxConfig;
         $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
     }
 
@@ -70,6 +77,28 @@ class Sidebar extends AbstractCart
     public function getShoppingCartUrl()
     {
         return $this->getUrl('checkout/cart');
+    }
+
+    /**
+     * Return whether subtotal should be displayed including tax
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getDisplaySubtotalInclTax()
+    {
+        return (int)$this->_taxConfig->displayCartSubtotalInclTax();
+    }
+
+    /**
+     * Return whether subtotal should be displayed excluding tax
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getDisplaySubtotalExclTax()
+    {
+        return (int)$this->_taxConfig->displayCartSubtotalExclTax();
     }
 
     /**

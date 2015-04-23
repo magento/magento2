@@ -34,22 +34,15 @@ class CartInterceptor
     protected $totals = null;
 
     /**
-     * @var \Magento\Tax\Model\Config
-     */
-    protected $taxConfig;
-
-    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Tax\Model\Config $taxConfig
+        \Magento\Checkout\Helper\Data $checkoutHelper
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->checkoutHelper = $checkoutHelper;
-        $this->taxConfig = $taxConfig;
     }
 
     /**
@@ -64,8 +57,6 @@ class CartInterceptor
     {
         $result['subtotal_incl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalInclTax());
         $result['subtotal_excl_tax'] = $this->checkoutHelper->formatPrice($this->getSubtotalExclTax());
-        $result['display_cart_subtotal_incl_tax'] = $this->taxConfig->displayCartSubtotalInclTax();
-        $result['display_cart_subtotal_excl_tax'] = $this->taxConfig->displayCartSubtotalExclTax();
         return $result;
     }
 
