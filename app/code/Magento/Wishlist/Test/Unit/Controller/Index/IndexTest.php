@@ -44,6 +44,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultPageMock;
 
+    /**
+     * @var \Magento\Framework\View\Layout
+     */
+    protected $layoutMock;
+
     protected function setUp()
     {
         $this->context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
@@ -57,11 +62,17 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->resultPageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->layoutMock = $this->getMockBuilder('Magento\Framework\View\Layout')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
             ->with(ResultFactory::TYPE_PAGE, [])
             ->willReturn($this->resultPageMock);
+        $this->resultPageMock->expects($this->any())
+            ->method('getLayout')
+            ->willReturn($this->layoutMock);
     }
 
     protected function prepareContext()

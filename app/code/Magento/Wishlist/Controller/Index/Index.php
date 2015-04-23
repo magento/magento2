@@ -42,6 +42,7 @@ class Index extends Action\Action implements IndexInterface
         }
         /** @var \Magento\Framework\View\Result\Page resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->getLayout()->initMessages();
         return $resultPage;
     }
 }

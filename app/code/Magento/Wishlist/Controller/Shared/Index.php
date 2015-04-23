@@ -68,6 +68,7 @@ class Index extends Action
         $this->registry->register('shared_wishlist', $wishlist);
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->getLayout()->initMessages();
         return $resultPage;
     }
 }
