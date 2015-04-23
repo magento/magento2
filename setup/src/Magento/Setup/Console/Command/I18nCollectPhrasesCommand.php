@@ -35,18 +35,19 @@ class I18nCollectPhrasesCommand extends Command
         $this->setName('i18n:collect-phrases')
             ->setDescription('Discovers phrases in the codebase');
         $this->setDefinition([
-            new InputArgument(self::INPUT_KEY_DIRECTORY, InputArgument::REQUIRED, 'Path to a directory to parse'),
+            new InputArgument(self::INPUT_KEY_DIRECTORY, InputArgument::REQUIRED, 'Directory path to parse'),
             new InputOption(
                 self::INPUT_KEY_OUTPUT,
                 self::SHORTCUT_KEY_OUTPUT,
                 InputOption::VALUE_REQUIRED,
-                'Path (with filename) to output file, by default output the results into standard output stream'
+                'Path (including filename) to an output file. With no file specified, defaults to stdout.'
             ),
             new InputOption(
                 self::INPUT_KEY_MAGENTO,
                 self::SHORTCUT_KEY_MAGENTO,
                 InputOption::VALUE_NONE,
-                'Flag indicates whether the specified "directory" path is a Magento root directory, false by default'
+                'Use the --magento parameter to specify the directory is the Magento root directory.' .
+                ' Omit the parameter if the directory is not the Magento root directory.'
             ),
         ]);
     }
@@ -56,16 +57,12 @@ class I18nCollectPhrasesCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        try {
-            $generator = ServiceLocator::getDictionaryGenerator();
-            $generator->generate(
-                $input->getArgument(self::INPUT_KEY_DIRECTORY),
-                $input->getOption(self::INPUT_KEY_OUTPUT),
-                $input->getOption(self::INPUT_KEY_MAGENTO)
-            );
-            $output->writeln('Dictionary successfully processed.');
-        } catch (\Exception $e) {
-            $output->writeln($e->getMessage());
-        }
+        $generator = ServiceLocator::getDictionaryGenerator();
+        $generator->generate(
+            $input->getArgument(self::INPUT_KEY_DIRECTORY),
+            $input->getOption(self::INPUT_KEY_OUTPUT),
+            $input->getOption(self::INPUT_KEY_MAGENTO)
+        );
+        $output->writeln('<info>Dictionary successfully processed.</info>');
     }
 }

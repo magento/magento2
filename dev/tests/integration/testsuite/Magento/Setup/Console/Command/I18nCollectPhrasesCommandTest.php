@@ -61,6 +61,10 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
         unlink($outputPath);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Specified path doesn't exist
+     */
     public function testExecuteNonExistingPath()
     {
         $this->tester->execute(
@@ -68,7 +72,5 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit_Framework_TestCase
                 'directory' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/non_exist',
             ]
         );
-
-        $this->assertEquals("Specified path doesn't exist" . PHP_EOL, $this->tester->getDisplay());
     }
 }
