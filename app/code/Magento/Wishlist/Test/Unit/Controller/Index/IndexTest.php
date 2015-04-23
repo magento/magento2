@@ -45,7 +45,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\View\Layout
+     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $layoutMock;
 
