@@ -71,7 +71,6 @@
                 </div>
                 <div class="block-content" aria-labelledby="block-customer-login-heading">
                     <form class="form login" data-role="login"
-                          id="login-form"
                           data-bind="submit:login"
                           method="post"
                           data-mage-init='{"validation":{}}'>
@@ -95,7 +94,7 @@
                             <div class="actions-toolbar">
                                 <input name="context" type="hidden" value="checkout" />
                                 <div class="primary">
-                                    <button type="submit" class="action login primary" data-action="checkout-method-login"><span data-bind="text: $t('Login')"></span></button>
+                                    <button type="submit" class="action login primary" data-bind="click: login" data-action="checkout-method-login"><span data-bind="text: $t('Login')"></span></button>
                                 </div>
                                 <div class="secondary">
                                     <a class="action remind" data-bind="attr: { href: forgotPasswordUrl }">

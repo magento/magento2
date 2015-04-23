@@ -14,12 +14,15 @@ define(
         'Magento_Checkout/js/model/step-navigator',
         '../model/quote',
         '../model/addresslist',
-        '../action/check-email-availability'
+        '../action/check-email-availability',
+        'mage/validation'
     ],
     function ($, Component, ko, customer, selectBillingAddress, navigator, quote, addressList, checkEmailAvailability) {
         "use strict";
         var stepName = 'billingAddress';
         var newAddressSelected = ko.observable(false);
+        var billingFormSelector = '#co-billing-form';
+
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/billing-address'
@@ -69,7 +72,9 @@ define(
                             if (quote.getCheckoutMethod()() && !customer.isLoggedIn()()) {
                                 addressData.email = that.source.get('customerDetails.email');
                             }
-                            selectBillingAddress(addressData, that.useForShipping, additionalData);
+                            if($(billingFormSelector).validation() && $(billingFormSelector).validation('isValid')) {
+                                selectBillingAddress(addressData, that.useForShipping, additionalData);
+                            }
                         }
                     }).fail( function() {
                         alert(
@@ -99,8 +104,12 @@ define(
                 }
             },
             validate: function() {
+                var billingFormSelector = '#co-billing-form';
+                $(billingFormSelector).validation();
+                $(billingFormSelector).validation('isValid');
                 this.source.set('params.invalid', false);
                 this.source.trigger('billingAddress.data.validate');
+
                 if (quote.getCheckoutMethod()() === 'register') {
                     this.source.trigger('customerDetails.data.validate');
                     if (!this.source.get('params.invalid')) {

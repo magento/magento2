@@ -8,11 +8,12 @@ define(
     [
         "jquery",
         'ko',
-        'uiComponent',
+        'Magento_Ui/js/form/form',
         'Magento_Customer/js/action/login',
         'Magento_Customer/js/model/customer',
         'Magento_Checkout/js/model/step-navigator',
-        '../model/quote'
+        '../model/quote',
+        'mage/validation'
     ],
     function($, ko, Component, login, customer, navigator, quote) {
         "use strict";
@@ -34,10 +35,13 @@ define(
             login: function(loginForm) {
                 var loginData = {};
                 var formDataArray = $(loginForm).serializeArray();
+                var loginFormSelector = 'form[data-role=login]';
                 formDataArray.forEach(function (entry) {
                     loginData[entry.name] = entry.value;
                 });
-                login(loginData);
+                if($(loginFormSelector).validation() && $(loginFormSelector).validation('isValid')) {
+                    login(loginData);
+                }
             },
             isActive: function() {
                 if (customer.isLoggedIn()()) {
@@ -74,7 +78,7 @@ define(
                 if (!navigator.isStepVisible(stepName)()) {
                     navigator.goToStep(stepName);
                 }
-            }
+            },
         });
     }
 );
