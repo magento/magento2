@@ -35,7 +35,7 @@ define(
                     alert('Please specify payment method.');
                     return;
                 }
-                selectPaymentMethod(this.activeMethod(), this.getActiveMethodView().getData());
+                selectPaymentMethod(this.getActiveMethodView());
             },
             getAvailableViews: function () {
                 var sortedElems = [],
