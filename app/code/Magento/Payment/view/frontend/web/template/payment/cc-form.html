@@ -1,0 +1,54 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<fieldset data-bind='attr: {class: "fieldset payment items ccard " + getCode(), id: "payment_form_" + getCode()}'>
+    <div class="field type required">
+        <label data-bind='attr: {for: getCode() + "_cc_type"}' class="label">
+            <span><!-- ko text: $t('Credit Card Type')--><!-- /ko --></span>
+        </label>
+        <div class="control">
+            <select name="payment[cc_type]" class="select" data-bind="
+                attr: {id: getCode() + '_cc_type', 'data-validate': {required:true, 'validate-cc-type-select':'#' + getCode() + '_cc_number'}},
+                mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'},
+                enable: isActive($parent), options: getCcAvailableTypes(), optionsCaption: $t('--Please Select--'), value: creditCardType}">
+            </select>
+        </div>
+    </div>
+    <div class="field number required">
+        <label data-bind="attr: {for: getCode() + '_cc_number'}" class="label">
+            <span><!-- ko text: $t('Credit Card Number')--><!-- /ko --></span>
+        </label>
+        <div class="control">
+            <input type="number" name="payment[cc_number]" class="input-text" value=""
+                data-bind="attr: {id: getCode() + '_cc_number', title: $t('Credit Card Number'), 'data-validate': {'required-number':true, 'validate-cc-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'}}"/>
+        </div>
+    </div>
+    <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'}">
+        <label data-bind="attr: {for: getCode() + '_expiration'}" class="label">
+            <span><!-- ko text: $t('Expiration Date')--><!-- /ko --></span>
+        </label>
+        <div class="control">
+            <div class="fields group group-2">
+                <div class="field no-label month">
+                    <div class="control">
+                        <select  name="payment[cc_exp_month]" class="select month"
+                            data-bind="attr: {id: getCode() + '_expiration', 'data-validate': {required:true, 'validate-cc-exp':'#' + getCode() + '_expiration_yr'}},
+                            enable: isActive($parent), options: getCcMonth(), optionsCaption: $t('Month'), value: creditCardExpMonth}">
+                        </select>
+                    </div>
+                </div>
+                <div class="field no-label year">
+                    <div class="control">
+                        <select name="payment[cc_exp_year]" class="select year"
+                            data-bind="attr: {id: getCode() + '_expiration_yr', 'data-validate': {required:true}},
+                            enable: isActive($parent), options: getCcYears(), optionsCaption: $t('Year'), value: creditCardExpYear}">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
