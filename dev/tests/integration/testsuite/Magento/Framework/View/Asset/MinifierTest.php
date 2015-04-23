@@ -208,7 +208,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->objectManager));
 
-        $logger = $this->objectManager->create(
+        $output = $this->objectManager->create(
             'Symfony\Component\Console\Output\Output'
         );
 
@@ -232,7 +232,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Setup\ModelDeployer $deployer */
         $deployer = $this->objectManager->create(
             'Magento\Setup\Model\Deployer',
-            ['filesUtil' => $filesUtil, 'logger' => $logger, 'isDryRun' => false]
+            ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => false]
         );
 
         $deployer->deploy($omFactory, ['en_US']);
