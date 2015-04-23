@@ -1,7 +1,3 @@
-dev/tools/Magento/Tools/Di/Test/Unit/_files/app/code/Magento/SomeModule/Model/Test.php
-dev/tools/Magento/Tools/Di/Test/Unit/_files/app/code/Magento/SomeModule/Helper/Test.php
-dev/tools/Magento/Tools/Di/Test/Unit/_files/app/code/Magento/SomeModule/Element.php
-dev/tools/Magento/Tools/Di/Test/Unit/_files/app/code/Magento/SomeModule/ElementFactory.php
 lib/internal/Magento/Framework/Code/Test/Unit/_files/app/code/Magento/SomeModule/Model/Proxy.php
 lib/internal/Magento/Framework/Code/Test/Unit/_files/app/code/Magento/SomeModule/Model/ElementFactory.php
 lib/internal/Magento/Framework/Code/Test/Unit/_files/app/code/Magento/SomeModule/Model/One/Test.php
@@ -96,3 +92,7 @@ dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magent
 dev/tests/integration/testsuite/Magento/Framework/Code/_expected/SourceClassWithNamespaceFactory.php
 dev/tests/integration/testsuite/Magento/Framework/Code/_expected/SourceClassWithNamespaceInterceptor.php
 dev/tests/integration/testsuite/Magento/Framework/Code/_expected/SourceClassWithNamespaceProxy.php
+setup/src/Magento/Setup/Test/Unit/Module/Di/Test/Unit/_files/app/code/Magento/SomeModule/Model/Test.php
+setup/src/Magento/Setup/Test/Unit/Module/Di/Test/Unit/_files/app/code/Magento/SomeModule/Helper/Test.php
+setup/src/Magento/Setup/Test/Unit/Module/Di/Test/Unit/_files/app/code/Magento/SomeModule/Element.php
+setup/src/Magento/Setup/Test/Unit/Module/Test/Unit/_files/app/code/Magento/SomeModule/ElementFactory.php
