@@ -30,7 +30,7 @@ class LogStatusCommandTest extends \PHPUnit_Framework_TestCase
             . 'log_customer                       | 0          | 16 b       | 16 b       |' . PHP_EOL
             . '-----------------------------------+------------+------------+------------+' . PHP_EOL
             . 'Total                              | 0          | 16 b       | 16 b       |' . PHP_EOL
-            . '-----------------------------------+------------+------------+------------+';
-        $this->assertEquals($expectedMsg . PHP_EOL, $commandTester->getDisplay());
+            . '-----------------------------------+------------+------------+------------+%w';
+        $this->assertStringMatchesFormat($expectedMsg, $commandTester->getDisplay());
     }
 }
