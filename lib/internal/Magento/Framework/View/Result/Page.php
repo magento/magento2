@@ -137,13 +137,16 @@ class Page extends Layout
     }
 
     /**
-     * Initialize page config reader
+     * Page config renderer getter
      *
-     * @return void
+     * @return View\Page\Config\Renderer|View\Page\Config\RendererInterface
      */
-    protected function initPageConfigReader()
+    protected function getPageConfigRenderer()
     {
-        $this->pageConfigRenderer = $this->pageConfigRendererFactory->create(['pageConfig' => $this->pageConfig]);
+        if (!$this->pageConfigRenderer) {
+            $this->pageConfigRenderer = $this->pageConfigRendererFactory->create(['pageConfig' => $this->pageConfig]);
+        }
+        return $this->pageConfigRenderer;
     }
 
     /**
@@ -221,9 +224,6 @@ class Page extends Layout
      */
     protected function render(ResponseInterface $response)
     {
-        if (!$this->pageConfigRenderer) {
-            $this->initPageConfigReader();
-        }
         $this->pageConfig->publicBuild();
         if ($this->getPageLayout()) {
             $config = $this->getConfig();
@@ -232,11 +232,11 @@ class Page extends Layout
             $requireJs = $this->getLayout()->getBlock('require.js');
             $this->assign([
                 'requireJs' => $requireJs ? $requireJs->toHtml() : null,
-                'headContent' => $this->pageConfigRenderer->renderHeadContent(),
+                'headContent' => $this->getPageConfigRenderer()->renderHeadContent(),
                 'headAdditional' => $addBlock ? $addBlock->toHtml() : null,
-                'htmlAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HTML),
-                'headAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HEAD),
-                'bodyAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_BODY),
+                'htmlAttributes' => $this->getPageConfigRenderer()->renderElementAttributes($config::ELEMENT_TYPE_HTML),
+                'headAttributes' => $this->getPageConfigRenderer()->renderElementAttributes($config::ELEMENT_TYPE_HEAD),
+                'bodyAttributes' => $this->getPageConfigRenderer()->renderElementAttributes($config::ELEMENT_TYPE_BODY),
                 'loaderIcon' => $this->getViewFileUrl('images/loader-2.gif'),
             ]);
 

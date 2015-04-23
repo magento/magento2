@@ -247,6 +247,42 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderResult()
     {
+        $layoutReaderPool = $this->getMockBuilder('Magento\Framework\View\Layout\ReaderPool')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $layoutBuilderFactory = $this->getMockBuilder('Magento\Framework\View\Layout\BuilderFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $generatorPool = $this->getMockBuilder('Magento\Framework\View\Layout\GeneratorPool')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $pageLayoutReader = $this->getMockBuilder('Magento\Framework\View\Page\Layout\Reader')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var $page \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject*/
+        $page = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+            ->setConstructorArgs(
+                [
+                    $this->context,
+                    $this->layoutFactory,
+                    $layoutReaderPool,
+                    $this->translateInline,
+                    $layoutBuilderFactory,
+                    $generatorPool,
+                    $this->pageConfigRendererFactory,
+                    $pageLayoutReader,
+                    'template',
+                    false
+                ]
+            )
+            ->setMethods(['renderPage'])
+            ->getMock();
+
+        $page->expects($this->any())
+            ->method('renderPage')
+            ->will($this->returnValue('output'));
+
         /** @var $response \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
         $response = $this->getMockBuilder('Magento\Framework\App\Response\Http')
             ->disableOriginalConstructor()
@@ -257,6 +293,10 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->with(['pageConfig' => $this->pageConfig])
             ->willReturn($this->pageConfigRenderer);
 
-        $this->assertEquals($this->page->renderResult($response), $this->page);
+        $this->pageConfig->expects($this->any())
+            ->method('getPageLayout')
+            ->will($this->returnValue('layout'));
+
+        $this->assertEquals($page->renderResult($response), $page);
     }
 }
