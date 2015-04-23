@@ -134,7 +134,7 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
                 'type' => 'less'
             ]
         );
-        $this->assertContains('Done', $commandTester->getDisplay());
+        $this->assertContains('Successfully processed LESS and/or SASS files', $commandTester->getDisplay());
     }
 
     /**
