@@ -37,7 +37,7 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * Retrieves list of classes for given path
      *
-     * @param array $path
+     * @param string $path
      * @return array
      * @throws FileSystemException
      */
@@ -45,7 +45,7 @@ class ClassesScanner implements ClassesScannerInterface
     {
         $realPath = realpath($path);
         if (!(bool)$realPath) {
-            throw new FileSystemException(new \Magento\Framework\Phrase('Invalid path: %1', $path));
+            throw new FileSystemException(new \Magento\Framework\Phrase('Invalid path: %1', [$path]));
         }
 
         $recursiveIterator = new \RecursiveIteratorIterator(
