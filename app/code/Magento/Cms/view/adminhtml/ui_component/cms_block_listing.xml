@@ -157,7 +157,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">update_time</item>
-                        <item name="label" xsi:type="string" translate="true">Created</item>
+                        <item name="label" xsi:type="string" translate="true">Modified</item>
                     </item>
                 </argument>
                 <filterDate name="from">
