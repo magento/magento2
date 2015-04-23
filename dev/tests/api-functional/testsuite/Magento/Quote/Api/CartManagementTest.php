@@ -382,9 +382,6 @@ class CartManagementTest extends WebapiAbstract
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
-        /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test_order_1', 'reserved_order_id');
-
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/carts/mine/order',
