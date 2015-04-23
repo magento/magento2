@@ -104,6 +104,7 @@ class Deployer
      * @param array $locales
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function deploy(ObjectManagerFactory $omFactory, array $locales)
     {
