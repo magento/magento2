@@ -22,5 +22,7 @@ class LogStatusCommandTest extends \PHPUnit_Framework_TestCase
         $objectManagerFactory->expects($this->once())->method('create')->willReturn($objectManager);
         $commandTester = new CommandTester(new LogStatusCommand($objectManagerFactory));
         $commandTester->execute([]);
+        $this->assertStringStartsWith('-----------------------------------+------------+------------+------------+'
+            . PHP_EOL, $commandTester->getDisplay());
     }
 }

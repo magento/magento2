@@ -36,5 +36,6 @@ class LogCleanCommandTest extends \PHPUnit_Framework_TestCase
         $objectManagerFactory->expects($this->once())->method('create')->willReturn($objectManager);
         $commandTester = new CommandTester(new LogCleanCommand($objectManagerFactory));
         $commandTester->execute(['--days' => '1']);
+        $this->assertEquals('Log cleaned.' . PHP_EOL, $commandTester->getDisplay());
     }
 }
