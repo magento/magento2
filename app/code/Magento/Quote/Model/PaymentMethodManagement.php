@@ -25,26 +25,18 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
     protected $methodList;
 
     /**
-     * @var \Magento\Framework\Json\Encoder
-     */
-    protected $jsonEncoder;
-
-    /**
      * @param QuoteRepository $quoteRepository
      * @param \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator
      * @param \Magento\Payment\Model\MethodList $methodList
-     * @param \Magento\Framework\Json\Encoder $jsonEncoder
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator,
-        \Magento\Payment\Model\MethodList $methodList,
-        \Magento\Framework\Json\Encoder $jsonEncoder
+        \Magento\Payment\Model\MethodList $methodList
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->zeroTotalValidator = $zeroTotalValidator;
         $this->methodList = $methodList;
-        $this->jsonEncoder = $jsonEncoder;
     }
 
     /**
@@ -61,7 +53,6 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
         ]);
-
         $payment = $quote->getPayment();
         $payment->importData($method->getData());
 
@@ -71,22 +62,23 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
                 throw new InvalidTransitionException(__('Billing address is not set'));
             }
             $quote->getBillingAddress()->setPaymentMethod($payment->getMethod());
-        } elseif ($quote->getShippingAddress()) {
-            $quote->getShippingAddress()->setCollectShippingRates(true);
+        } else {
             // check if shipping address is set
             if ($quote->getShippingAddress()->getCountryId() === null) {
                 throw new InvalidTransitionException(__('Shipping address is not set'));
             }
             $quote->getShippingAddress()->setPaymentMethod($payment->getMethod());
         }
+        if (!$quote->isVirtual() && $quote->getShippingAddress()) {
+            $quote->getShippingAddress()->setCollectShippingRates(true);
+        }
 
-        $quote->setTotalsCollectedFlag(false)->collectTotals();
-        $this->quoteRepository->save($quote);
+        if (!$this->zeroTotalValidator->isApplicable($payment->getMethodInstance(), $quote)) {
+            throw new InvalidTransitionException(__('The requested Payment Method is not available.'));
+        }
 
-        $redirectUrl = $quote->getPayment()->getCheckoutRedirectUrl();
-        $result = $redirectUrl ? ['redirect' => $redirectUrl] : [];
-
-        return $this->jsonEncoder->encode($result);
+        $quote->setTotalsCollectedFlag(false)->collectTotals()->save();
+        return $quote->getPayment()->getId();
     }
 
     /**

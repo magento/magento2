@@ -40,6 +40,9 @@ define(
             },
             getData: function() {
                 return {};
+            },
+            afterSave: function() {
+                return true;
             }
         });
     }
