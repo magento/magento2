@@ -445,14 +445,14 @@ abstract class Grid extends Block
     {
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
 
-        $button = $this->_rootElement->find($this->filterButton);
-        if ($button->isVisible() && !$this->_rootElement->find($this->active . $this->filterButton)->isVisible()) {
-            $button->click();
+        $toggleFilterButton = $this->_rootElement->find($this->filterButton);
+        $searchButton = $this->_rootElement->find($this->searchButton);
+        if ($toggleFilterButton->isVisible() && !$searchButton->isVisible()) {
+            $toggleFilterButton->click();
             $browser = $this->_rootElement;
-            $selector = $this->searchButton;
             $browser->waitUntil(
-                function () use ($browser, $selector) {
-                    return $browser->find($selector)->isVisible() ? true : null;
+                function () use ($searchButton) {
+                    return $searchButton->isVisible() ? true : null;
                 }
             );
         }
