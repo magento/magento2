@@ -141,20 +141,20 @@ class Rate extends \Magento\Backend\App\Action
      */
     protected function extractTaxRateData($taxRate)
     {
-        $formData = [
+        $taxRateData = [
             'tax_calculation_rate_id' => $taxRate->getId(),
             'tax_country_id' => $taxRate->getTaxCountryId(),
             'tax_region_id' => $taxRate->getTaxRegionId(),
             'tax_postcode' => $taxRate->getTaxPostcode(),
             'code' => $taxRate->getCode(),
             'rate' => $taxRate->getRate(),
-            'zip_is_range' => false,
+            'zip_is_range' => 0,
         ];
 
         if ($taxRate->getZipFrom() && $taxRate->getZipTo()) {
-            $formData['zip_is_range'] = true;
-            $formData['zip_from'] = $taxRate->getZipFrom();
-            $formData['zip_to'] = $taxRate->getZipTo();
+            $taxRateData['zip_is_range'] = 1;
+            $taxRateData['zip_from'] = $taxRate->getZipFrom();
+            $taxRateData['zip_to'] = $taxRate->getZipTo();
         }
 
         if ($taxRate->getTitles()) {
@@ -162,10 +162,10 @@ class Rate extends \Magento\Backend\App\Action
             foreach ($taxRate->getTitles() as $title) {
                 $titleData[] = [$title->getStoreId() => $title->getValue()];
             }
-            $formData['title'] = $titleData;
+            $taxRateData['title'] = $titleData;
         }
 
-        return $formData;
+        return $taxRateData;
     }
 
     /**

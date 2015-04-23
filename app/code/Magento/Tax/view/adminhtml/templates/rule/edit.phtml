@@ -73,14 +73,14 @@ require([
                 id = select.find('option').eq(index).attr('value'),
                 item;
 
-            jQuery('body').trigger('processStart')
+            $('body').trigger('processStart')
             $.ajax({
                 type: "POST",
 
                 data: {id:id},
                 url: '<?php echo $block->getTaxRateLoadUrl()?>',
                 success: function(result, status) {
-                    jQuery('body').trigger('processStop');
+                    $('body').trigger('processStop');
                     if (result.success) {
                         item=result.result;
                         item.itemElement = that.prev();
@@ -89,11 +89,15 @@ require([
                             .dialogRates('open');
 
                     } else {
-                        alert(result.error_message);
+                        if (result.error_message)
+                            alert(result.error_message);
+                        else
+                            alert('<?php echo __('An error occurred'); ?>');
                     }
                 },
                 error: function () {
-                    jQuery('body').trigger('processStop');
+                    $('body').trigger('processStop');
+                    alert('<?php echo __('An error occurred'); ?>');
                 },
                 dataType: "json"
             });
@@ -156,7 +160,7 @@ require([
                                 index = that.parent().index(),
                                 select = that.closest('.mselect-list').prev();
 
-                        jQuery('body').trigger('processStart')
+                        $('body').trigger('processStart')
                         var ajaxOptions = {
                             type: 'POST',
                             data: {
@@ -166,16 +170,20 @@ require([
                             dataType: 'json',
                             url: '<?php echo $block->getTaxRateDeleteUrl()?>',
                             success: function(result, status) {
-                                jQuery('body').trigger('processStop');
+                                $('body').trigger('processStop');
                                 if (result.success) {
                                     that.parent().remove();
                                     select.find('option').eq(index).remove();
                                 } else {
-                                    alert(result.error_message);
+                                    if (result.error_message)
+                                        alert(result.error_message);
+                                    else
+                                        alert('<?php echo __('An error occurred'); ?>');
                                 }
                             },
                             error: function () {
-                                jQuery('body').trigger('processStop');
+                                $('body').trigger('processStop');
+                                alert('<?php echo __('An error occurred'); ?>');
                             }
                         };
                         $.ajax(ajaxOptions);
@@ -234,15 +242,15 @@ require([
                         if (!taxRateFormElement.validation().valid()) {
                             return;
                         }
-                        jQuery('.tax-rate-popup').trigger('processStart');
-                        jQuery('.loading-mask').css('z-index','1004');
+                        $('.tax-rate-popup').trigger('processStart');
+                        $('.loading-mask').css('z-index','1004');
                         var ajaxOptions = {
                             type: 'POST',
                             data: itemRateData,
                             dataType: 'json',
                             url: '<?php echo $block->getTaxRateSaveUrl()?>',
                             success: function(result, status) {
-                                jQuery('body').trigger('processStop');
+                                $('body').trigger('processStop');
                                 if (result.success) {
                                     itemRate.code = result.code;
                                     if (itemRate.tax_calculation_rate_id) {
@@ -260,11 +268,15 @@ require([
                                     }
                                     taxRateForm.dialogRates("close");
                                 } else {
-                                    alert(result.error_message);
+                                    if (result.error_message)
+                                        alert(result.error_message);
+                                    else
+                                        alert('<?php echo __('An error occurred'); ?>');
                                 }
                             },
                             error: function () {
-                                jQuery('body').trigger('processStop');
+                                $('body').trigger('processStop');
+                                alert('<?php echo __('An error occurred'); ?>');
                             }
                         };
                         $.ajax(ajaxOptions);

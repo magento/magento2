@@ -288,32 +288,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Get Tax Rates Collection
-     *
-     * @return mixed
-     */
-    public function getRateCollection()
-    {
-        if ($this->getData('rate_collection') == null) {
-            $items = $this->_taxRateCollection->getItems();
-            $rates = [];
-            foreach ($items as $rate) {
-                $rateData = $rate->getData();
-                if (isset($rateData['titles'])) {
-                    foreach ($rateData['titles'] as $storeId => $value) {
-                        $rateData['title[' . $storeId . ']'] = $value;
-                    }
-                }
-                unset($rateData['titles']);
-                $rates[] = $rateData;
-            }
-
-            $this->setRateCollection($rates);
-        }
-        return $this->getData('rate_collection');
-    }
-
-    /**
      * Extract tax rate data in a format which is
      *
      * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate

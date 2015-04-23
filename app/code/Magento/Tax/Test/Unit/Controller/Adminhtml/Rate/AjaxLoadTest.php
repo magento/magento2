@@ -6,7 +6,6 @@
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Rate;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class AjaxLoadTest extends \PHPUnit_Framework_TestCase
@@ -30,8 +29,10 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
         return $taxRateMock;
     }
 
+    /**
+     * Executes the controller action and asserts non exception logic
+     */
     public function testExecute() {
-
         $id=1;
 
         $countryCode = 'US';
@@ -119,12 +120,11 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
      * Check if validation throws a catched exception in case of incorrect id
      */
     public function testExecuteException() {
-
         $id=999;
         $exceptionMessage='No such entity with taxRateId = '.$id;
-        $objectManager = new ObjectManager($this);
+        $noSuchEntityException= new NoSuchEntityException(__($exceptionMessage));
 
-        $exception= new NoSuchEntityException(__($exceptionMessage));
+        $objectManager = new ObjectManager($this);
 
         $request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
@@ -151,7 +151,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
         $taxRateRepository->expects($this->once())
             ->method('get')
             ->with($id)
-            ->willThrowException($exception);
+            ->willThrowException($noSuchEntityException);
 
         $encode = $this->getMockBuilder('Magento\Framework\Json\Helper\Data')
             ->disableOriginalConstructor()
@@ -181,9 +181,5 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
         );
 
         $notification->execute();
-
     }
-
-
-
 }

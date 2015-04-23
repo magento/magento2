@@ -19,7 +19,6 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
     public function execute()
     {
         $rateId = (int)$this->getRequest()->getParam('id');
-        $this->_coreRegistry->register(RegistryConstants::CURRENT_TAX_RATE_ID, $rateId);
         try {
             $taxRateDataObject = $this->_taxRateRepository->get($rateId);
             $result_array=$this->extractTaxRateData($taxRateDataObject);
