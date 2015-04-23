@@ -193,6 +193,7 @@
                                             <item name="shipping" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item>
                                                 <item name="sortOrder" xsi:type="string">4</item>
+                                                <item name="additional" xsi:type="array"></item>
                                             </item>
                                             <item name="payment" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
