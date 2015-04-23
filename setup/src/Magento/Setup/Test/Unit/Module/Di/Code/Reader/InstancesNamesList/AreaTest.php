@@ -36,7 +36,9 @@ class AreaTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getList'])
             ->getMock();
 
-        $this->classReaderDecoratorMock = $this->getMockBuilder('\Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator')
+        $this->classReaderDecoratorMock = $this->getMockBuilder(
+            '\Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator'
+        )
             ->disableOriginalConstructor()
             ->setMethods(['getConstructor'])
             ->getMock();

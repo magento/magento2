@@ -56,7 +56,13 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->argumentsResolver = $this->getMock('Magento\Setup\Module\Di\Compiler\ArgumentsResolver', [], [], '', false);
+        $this->argumentsResolver = $this->getMock(
+            'Magento\Setup\Module\Di\Compiler\ArgumentsResolver',
+            [],
+            [],
+            '',
+            false
+        );
         $this->argumentsResolverFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->argumentsResolver);
