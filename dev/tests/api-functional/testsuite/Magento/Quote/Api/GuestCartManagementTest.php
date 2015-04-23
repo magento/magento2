@@ -341,6 +341,5 @@ class GuestCartManagementTest extends WebapiAbstract
         $items = $order->getAllItems();
         $this->assertCount(1, $items);
         $this->assertEquals('Simple Product', $items[0]->getName());
-        $quote->delete();
     }
 }
