@@ -25,4 +25,9 @@
     <preference for="Magento\Quote\Api\Data\TotalsInterface" type="\Magento\Quote\Model\Cart\Totals" />
     <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="\Magento\Quote\Model\Quote\Cart\Totals\Item" />
     <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="\Magento\Quote\Model\Cart\Currency" />
+    <type name="Magento\Quote\Model\QuoteRepository">
+        <arguments>
+            <argument name="quoteCollection" xsi:type="object">Magento\Quote\Model\Resource\Quote\Collection\Proxy</argument>
+        </arguments>
+    </type>
 </config>
