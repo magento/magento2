@@ -246,6 +246,8 @@ class Deployer
      * @param string $locale
      * @param string $module
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function deployFile($filePath, $area, $themePath, $locale, $module)
     {

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Developer\Console;
+namespace Magento\Developer\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,6 +23,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class CssDeployCommand
+ * @SuppressWarnings("PMD.CouplingBetweenObjects")
  */
 class CssDeployCommand extends Command
 {
