@@ -134,19 +134,17 @@ class Page extends Layout
             $generatorPool,
             $isIsolated
         );
+        $this->initPageConfigReader();
     }
 
     /**
-     * Page config renderer getter
+     * Initialize page config reader
      *
-     * @return View\Page\Config\Renderer|View\Page\Config\RendererInterface
+     * @return void
      */
-    protected function getPageConfigRenderer()
+    protected function initPageConfigReader()
     {
-        if (!$this->pageConfigRenderer) {
-            $this->pageConfigRenderer = $this->pageConfigRendererFactory->create(['pageConfig' => $this->pageConfig]);
-        }
-        return $this->pageConfigRenderer;
+        $this->pageConfigRenderer = $this->pageConfigRendererFactory->create(['pageConfig' => $this->pageConfig]);
     }
 
     /**
@@ -232,11 +230,11 @@ class Page extends Layout
             $requireJs = $this->getLayout()->getBlock('require.js');
             $this->assign([
                 'requireJs' => $requireJs ? $requireJs->toHtml() : null,
-                'headContent' => $this->getPageConfigRenderer()->renderHeadContent(),
+                'headContent' => $this->pageConfigRenderer->renderHeadContent(),
                 'headAdditional' => $addBlock ? $addBlock->toHtml() : null,
-                'htmlAttributes' => $this->getPageConfigRenderer()->renderElementAttributes($config::ELEMENT_TYPE_HTML),
-                'headAttributes' => $this->getPageConfigRenderer()->renderElementAttributes($config::ELEMENT_TYPE_HEAD),
-                'bodyAttributes' => $this->getPageConfigRenderer()->renderElementAttributes($config::ELEMENT_TYPE_BODY),
+                'htmlAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HTML),
+                'headAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HEAD),
+                'bodyAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_BODY),
                 'loaderIcon' => $this->getViewFileUrl('images/loader-2.gif'),
             ]);
 
