@@ -209,8 +209,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->objectManager));
 
         $logger = $this->objectManager->create(
-            'Magento\Tools\View\Deployer\Log',
-            ['verbosity' => \Magento\Tools\View\Deployer\Log::SILENT]
+            'Symfony\Component\Console\Output\Output'
         );
 
         $filesUtil = $this->getMock('\Magento\Framework\App\Utility\Files', [], [], '', false);
@@ -230,9 +229,9 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        /** @var \Magento\Tools\View\Deployer $deployer */
+        /** @var \Magento\Setup\ModelDeployer $deployer */
         $deployer = $this->objectManager->create(
-            'Magento\Tools\View\Deployer',
+            'Magento\Setup\Model\Deployer',
             ['filesUtil' => $filesUtil, 'logger' => $logger, 'isDryRun' => false]
         );
 
