@@ -85,7 +85,7 @@ class FaviconTest extends \PHPUnit_Framework_TestCase
     public function testGetFaviconFile()
     {
         $scopeConfigValue = 'path';
-        $urlToMediaDir = 'http://magneto.url/pub/media/';
+        $urlToMediaDir = 'http://magento.url/pub/media/';
         $expectedFile = ImageFavicon::UPLOAD_DIR . '/' . $scopeConfigValue;
         $expectedUrl = $urlToMediaDir . $expectedFile;
 

@@ -45,6 +45,7 @@ use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryColle
  * @method bool hasForcedCanCreditmemo()
  * @method bool getIsInProcess()
  * @method \Magento\Customer\Model\Customer getCustomer()
+ * @method \Magento\Sales\Model\Order setSendEmail(bool $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -520,7 +521,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _canVoidOrder()
     {
-        return !($this->canUnhold() || $this->isPaymentReview());
+        return !($this->isCanceled() || $this->canUnhold() || $this->isPaymentReview());
     }
 
     /**

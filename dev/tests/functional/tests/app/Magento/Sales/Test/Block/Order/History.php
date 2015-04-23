@@ -27,7 +27,7 @@ class History extends Block
      *
      * @var string
      */
-    protected $itemOrder = '//tr[td[contains(@class, "id") and normalize-space(.)="%d"]]';
+    protected $itemOrder = '//tr[td[contains(@class, "id") and normalize-space(.)="%s"]]';
 
     /**
      * Order total css selector.

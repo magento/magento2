@@ -58,7 +58,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             AdminAccount::KEY_LAST_NAME => 'Doe',
             AdminAccount::KEY_EMAIL => 'john.doe@test.com',
             AdminAccount::KEY_PASSWORD => '123123q',
-            AdminAccount::KEY_USERNAME => 'admin',
+            AdminAccount::KEY_USER => 'admin',
         ];
 
         $this->adminAccount = new AdminAccount($this->setUpMock, $this->randomMock, $data);

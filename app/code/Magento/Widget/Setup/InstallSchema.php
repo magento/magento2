@@ -167,7 +167,6 @@ class InstallSchema implements InstallSchemaInterface
             'theme_id',
             $installer->getTable('theme'),
             'theme_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Instances of Widget for Package Theme'
@@ -235,7 +234,6 @@ class InstallSchema implements InstallSchemaInterface
             'instance_id',
             $installer->getTable('widget_instance'),
             'instance_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Instance of Widget on Page'
@@ -275,7 +273,6 @@ class InstallSchema implements InstallSchemaInterface
             'page_id',
             $installer->getTable('widget_instance_page'),
             'page_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -287,7 +284,6 @@ class InstallSchema implements InstallSchemaInterface
             'layout_update_id',
             $installer->getTable('layout_update'),
             'layout_update_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Layout updates'
@@ -380,7 +376,6 @@ class InstallSchema implements InstallSchemaInterface
             'layout_update_id',
             $installer->getTable('layout_update'),
             'layout_update_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addIndex(
             $installer->getIdxName(
@@ -394,14 +389,12 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('layout_link', 'theme_id', 'theme', 'theme_id'),
             'theme_id',
             $installer->getTable('theme'),
             'theme_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Layout Link'
