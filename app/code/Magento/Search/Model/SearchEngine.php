@@ -49,6 +49,9 @@ class SearchEngine implements SearchEngineInterface
      */
     protected function getAdapter()
     {
-        return ($this->adapter === null) ? $this->adapterFactory->create() : $this->adapter;
+        if ($this->adapter === null) {
+            $this->adapter = $this->adapterFactory->create();
+        }
+        return $this->adapter;
     }
 }
