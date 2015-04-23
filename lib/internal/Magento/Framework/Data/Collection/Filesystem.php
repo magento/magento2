@@ -696,7 +696,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      */
     public function filterCallbackLike($field, $filterValue, $row)
     {
-        $filterValueRegex = str_replace('%', '(.*?)', preg_quote($filterValue, '/'));
+        $filterValueRegex = str_replace('%', '(.*?)', str_replace('\'', '', preg_quote($filterValue, '/')));
         return (bool)preg_match("/^{$filterValueRegex}\$/i", $row[$field]);
     }
 
