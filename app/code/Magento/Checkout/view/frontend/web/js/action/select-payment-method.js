@@ -29,7 +29,7 @@ define(
             $.extend(defaultMethodData, methodData, {'additional_data': additionalData});
             var paymentMethodData = {
                 "cartId": quote.getQuoteId(),
-                "method": defaultMethodData
+                "paymentMethod": defaultMethodData
             };
             var shippingMethodCode = quote.getSelectedShippingMethod()().split("_"),
                 shippingMethodData = {
@@ -41,14 +41,9 @@ define(
                 JSON.stringify(_.extend(paymentMethodData, shippingMethodData))
             ).done(
                 function(response) {
-                    response = JSON.parse(response);
-                    if (response.redirect) {
-                        $.mage.redirect(response.redirect);
-                    } else {
-                        quote.setPaymentMethod(paymentMethodCode);
-                        quote.setTotals(response);
-                        navigator.setCurrent('paymentMethod').goNext();
-                    }
+                    quote.setPaymentMethod(paymentMethodCode);
+                    quote.setTotals(response);
+                    navigator.setCurrent('paymentMethod').goNext();
                 }
             ).error(
                 function(response) {
