@@ -18,7 +18,7 @@
                                         <item name="authentication" xsi:type="array">
                                             <item name="children" xsi:type="array">
                                                 <item name="captcha" xsi:type="array">
-                                                    <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/authentication/captcha</item>
+                                                    <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
                                                     <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
                                                     <item name="formId" xsi:type="string">user_login</item>
                                                 </item>
@@ -26,10 +26,15 @@
                                         </item>
                                         <item name="billingAddress" xsi:type="array">
                                             <item name="children" xsi:type="array">
-                                                <item name="captcha" xsi:type="array">
-                                                    <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/authentication/captcha</item>
+                                                <item name="captcha_guest_checkout" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/guestCaptcha</item>
                                                     <item name="displayArea" xsi:type="string">additional-fieldsets</item>
                                                     <item name="formId" xsi:type="string">guest_checkout</item>
+                                                </item>
+                                                <item name="captcha_register_during_checkout" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/registerCaptcha</item>
+                                                    <item name="displayArea" xsi:type="string">additional-fieldsets</item>
+                                                    <item name="formId" xsi:type="string">register_during_checkout</item>
                                                 </item>
                                             </item>
                                         </item>

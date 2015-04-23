@@ -16,12 +16,8 @@ define(
         "use strict";
         var captchaConfig = window.checkoutConfig.captcha;
         return Component.extend({
-            initialize: function() {
-                this._super();
-                this.updateCaptchaOnFailedLogin();
-            },
             defaults: {
-                template: 'Magento_Captcha/checkout/authentication/captcha'
+                template: 'Magento_Captcha/checkout/captcha'
             },
             imageSource: null,
             isRequired: function() {
@@ -41,14 +37,6 @@ define(
             },
             refresh: function() {
                 refreshAction(captchaConfig[this.formId].refreshUrl, this.formId, this.imageSource);
-            },
-            updateCaptchaOnFailedLogin: function () {
-                if (this.formId == 'user_login') {
-                    var self = this;
-                    customer.getFailedLoginAttempts().subscribe(function() {
-                        self.refresh();
-                    });
-                }
             }
         });
     }
