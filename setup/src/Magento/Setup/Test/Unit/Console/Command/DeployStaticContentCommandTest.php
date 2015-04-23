@@ -107,4 +107,3 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester->execute($wrongParam);
     }
 }
-
