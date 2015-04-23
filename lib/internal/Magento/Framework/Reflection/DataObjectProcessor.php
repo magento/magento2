@@ -50,18 +50,26 @@ class DataObjectProcessor
     protected $attributeTypeResolver;
 
     /**
+     * @var ExtensionAttributesProcessor
+     */
+    private $extensionAttributesProcessor;
+
+    /**
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param TypeProcessor $typeProcessor
      * @param \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
+     * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      */
     public function __construct(
         \Magento\Framework\Cache\FrontendInterface $cache,
         TypeProcessor $typeProcessor,
-        \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
+        \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver,
+        ExtensionAttributesProcessor $extensionAttributesProcessor
     ) {
         $this->cache = $cache;
         $this->typeProcessor = $typeProcessor;
         $this->attributeTypeResolver = $typeResolver;
+        $this->extensionAttributesProcessor = $extensionAttributesProcessor;
     }
 
     /**
@@ -110,6 +118,8 @@ class DataObjectProcessor
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
                 if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
                     $value = $this->convertCustomAttributes($value, $dataObjectType);
+                } elseif ($key === "extension_attributes") {
+                    $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
                 } elseif (is_object($value) && !($value instanceof Phrase)) {
                     $value = $this->buildOutputDataArray($value, $returnType);
                 } elseif (is_array($value)) {
@@ -138,7 +148,7 @@ class DataObjectProcessor
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function castValueToType($value, $type)
+    public function castValueToType($value, $type)
     {
         if ($value === null) {
             return null;
