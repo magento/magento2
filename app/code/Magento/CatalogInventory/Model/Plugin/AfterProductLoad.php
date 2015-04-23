@@ -37,7 +37,7 @@ class AfterProductLoad
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\Product
      */
-    public function afterLoad($product)
+    public function afterLoad(\Magento\Catalog\Model\Product $product)
     {
         $productExtension = $product->getExtensionAttributes();
         if ($productExtension === null) {

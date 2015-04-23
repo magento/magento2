@@ -185,9 +185,7 @@ class StockRegistry implements StockRegistryInterface
         $origStockItem = $this->getStockItem($productId, $websiteId);
         $data = $stockItem->getData();
         if ($origStockItem->getItemId()) {
-            if (isset($data['item_id'])) {
-                unset($data['item_id']);
-            }
+            unset($data['item_id']);
         }
         $origStockItem->addData($data);
         $origStockItem->setProductId($productId);
