@@ -37,7 +37,7 @@ class ClassesScanner implements ClassesScannerInterface
     /**
      * Retrieves list of classes for given path
      *
-     * @param string $path
+     * @param array $path
      * @return array
      * @throws FileSystemException
      */

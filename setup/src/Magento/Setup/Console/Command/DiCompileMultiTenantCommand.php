@@ -30,7 +30,6 @@ use Magento\Setup\Module\Di\Definition\Compressor;
 use Magento\Setup\Module\Di\Definition\Serializer\Igbinary;
 use Magento\Setup\Module\Di\Definition\Serializer\Standard;
 
-
 /**
  * Command to generate all non-existing proxies and factories, and pre-compile class definitions,
  * inheritance information and plugin definitions
