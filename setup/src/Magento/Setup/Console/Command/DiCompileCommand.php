@@ -163,7 +163,7 @@ class DiCompileCommand extends Command
                 );
             }
             $this->taskManager->process();
-            $output->writeln('<info>Generated code and DI configuration successfully.</info>');
+            $output->writeln('<info>Generated code and dependency injection configuration successfully.</info>');
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         }
