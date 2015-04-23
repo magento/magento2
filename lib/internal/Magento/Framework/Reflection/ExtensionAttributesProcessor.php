@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Reflection;
 
+use Magento\Framework\Api\Config\Reader as ExtensionAttributesConfigReader;
+use Magento\Framework\Api\Config\Converter;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttributesInterface;
@@ -26,16 +29,41 @@ class ExtensionAttributesProcessor
     private $dataObjectProcessor;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
+     * @var ExtensionAttributesConfigReader
+     */
+    private $configReader;
+
+    /**
      * @param DataObjectProcessor $dataObjectProcessor
+     * @param AuthorizationInterface $authorization
+     * @param ExtensionAttributesConfigReader $configReader
      */
     public function __construct(
-        DataObjectProcessor $dataObjectProcessor
+        DataObjectProcessor $dataObjectProcessor,
+        AuthorizationInterface $authorization,
+        ExtensionAttributesConfigReader $configReader
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->authorization = $authorization;
+        $this->configReader = $configReader;
     }
 
+    /**
+     * Writes out the extension attributes in an array.
+     *
+     * @param ExtensionAttributeInterface $dataObject
+     * @param string $dataObjectType
+     * @return array
+     */
     public function buildOutputDataArray(ExtensionAttributesInterface $dataObject, $dataObjectType)
     {
+        // TODO: cleanup all of this that's already duplicated in DataObjectProcessor; re-write the serializers
+
         $methods = $this->dataObjectProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
 
@@ -53,6 +81,12 @@ class ExtensionAttributesProcessor
                     continue;
                 }
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
+
+                if (!$this->isAttributePermissionValid($dataObjectType, $key)) {
+                    $outputData[$key] = null;
+                    continue;
+                }
+
                 if (is_object($value) && !($value instanceof Phrase)) {
                     $value = $this->dataObjectProcessor->buildOutputDataArray($value, $returnType);
                 } elseif (is_array($value)) {
@@ -74,5 +108,49 @@ class ExtensionAttributesProcessor
         }
 
         return $outputData;
+    }
+
+    /**
+     * @param string $dataObjectType
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function isAttributePermissionValid($dataObjectType, $attributeCode)
+    {
+        $typeName = $this->getRegularTypeForExtensionAttributesType($dataObjectType);
+        $permissions = $this->getPermissionsForTypeAndMethod($typeName, $attributeCode);
+        foreach ($permissions as $permission) {
+            if (!$this->authorization->isAllowed($permission)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function getRegularTypeForExtensionAttributesType($name)
+    {
+        return ltrim(str_replace('ExtensionInterface', 'Interface', $name), '\\');
+    }
+
+    /**
+     * @param string $typeName
+     * @param string $attributeCode
+     * @return string[] A list of permissions
+     */
+    private function getPermissionsForTypeAndMethod($typeName, $attributeCode)
+    {
+        // TODO: Move function to the Config and hope this is cached
+        $attributes = $this->configReader->read();
+        if (isset($attributes[$typeName]) && isset($attributes[$typeName][$attributeCode])) {
+            $attributeMetadata = $attributes[$typeName][$attributeCode];
+            $permissions = [];
+            foreach ($attributeMetadata[Converter::RESOURCE_PERMISSIONS] as $permission) {
+                $permissions[] = $permission;
+            }
+            return $permissions;
+        }
+
+        return [];
     }
 }
