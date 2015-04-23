@@ -70,6 +70,9 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         $this->manager->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertEquals('Generated code and DI configuration successfully.' . PHP_EOL, $tester->getDisplay());
+        $this->assertEquals(
+            'Generated code and dependency injection configuration successfully.' . PHP_EOL,
+            $tester->getDisplay()
+        );
     }
 }
