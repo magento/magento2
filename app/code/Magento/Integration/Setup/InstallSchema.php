@@ -268,9 +268,6 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'OAuth Nonce'
-        )->setOption(
-            'type',
-            'MyISAM'
         );
         $installer->getConnection()->createTable($table);
 
