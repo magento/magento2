@@ -14,7 +14,8 @@ define(
     ],
     function(quote, addressList, navigator, selectShippingAddress, registry) {
         "use strict";
-        return function(billingAddress, useForShipping) {
+        return function(billingAddress, useForShipping, additionalData) {
+            additionalData = additionalData || {};
             quote.setBillingAddress(billingAddress);
             if (useForShipping === '1' && !quote.isVirtual()) {
                 if (!billingAddress.id) {
@@ -29,7 +30,7 @@ define(
                         }
                     }
                 }
-                selectShippingAddress(billingAddress, useForShipping);
+                selectShippingAddress(billingAddress, useForShipping, additionalData);
             } else {
                 navigator.setCurrent('billingAddress').goNext();
             }

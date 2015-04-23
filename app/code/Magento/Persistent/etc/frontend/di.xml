@@ -26,4 +26,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\AddressAdditionalDataProcessor">
+        <plugin name="persistent_remember_me_checkbox_processor" type="Magento\Persistent\Model\Checkout\AddressDataProcessorPlugin" />
+    </type>
 </config>

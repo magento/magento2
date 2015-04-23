@@ -53,6 +53,15 @@ define(
                     $.when(this.isEmailCheckComplete).done( function() {
                         if (!that.source.get('params.invalid')) {
                             var addressData = that.source.get('billingAddress');
+                            var additionalData = {};
+                            /**
+                             * All the the input fields that are not a part of the address but need to be submitted
+                             * in the same request must have data-scope attribute set
+                             */
+                            var additionalFields = $('input[data-scope="additionalAddressData"]').serializeArray();
+                            additionalFields.forEach(function (field) {
+                                additionalData[field.name] = field.value;
+                            });
                             if (quote.getCheckoutMethod()() !== 'register') {
                                 var addressBookCheckbox = $("input[name='billing[save_in_address_book]']:checked");
                                 addressData.save_in_address_book = addressBookCheckbox.val();
@@ -60,7 +69,7 @@ define(
                             if (quote.getCheckoutMethod()() && !customer.isLoggedIn()()) {
                                 addressData.email = that.source.get('customerDetails.email');
                             }
-                            selectBillingAddress(addressData, that.useForShipping);
+                            selectBillingAddress(addressData, that.useForShipping, additionalData);
                         }
                     }).fail( function() {
                         alert(

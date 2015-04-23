@@ -181,19 +181,37 @@ class Session
         /** @var $controllerAction \Magento\Framework\App\RequestInterface */
         $request = $observer->getEvent()->getRequest();
         if ($request) {
-            $isRememberMeChecked = false;
-            if ($request->isXmlHttpRequest()) {
-                $requestData = \Zend_Json::decode($request->getContent());
-                $isRememberMeChecked = empty($requestData['persistent_remember_me']) ? false : true;
-            } else {
-                $isRememberMeChecked = $request->getPost('persistent_remember_me');
-            }
-            $this->_persistentSession->setRememberMeChecked((bool)$isRememberMeChecked);
+            $rememberMeCheckbox = $request->getPost('persistent_remember_me');
+            $this->_persistentSession->setRememberMeChecked((bool)$rememberMeCheckbox);
             if ($request->getFullActionName() == 'checkout_onepage_saveBilling' ||
                 $request->getFullActionName() == 'customer_account_createpost'
             ) {
-                $this->_checkoutSession->setRememberMeChecked((bool)$isRememberMeChecked);
+                $this->_checkoutSession->setRememberMeChecked((bool)$rememberMeCheckbox);
             }
+        }
+    }
+
+    /**
+     * Set Checked status of "Remember Me"
+     *
+     * @param Observer $observer
+     * @return void
+     */
+    public function setRememberMeStatusForAjaxLogin(Observer $observer)
+    {
+        if (!$this->_persistentData->canProcess($observer)
+            || !$this->_persistentData->isEnabled()
+            || !$this->_persistentData->isRememberMeEnabled()
+        ) {
+            return;
+        }
+
+        /** @var $request \Magento\Framework\App\RequestInterface */
+        $request = $observer->getEvent()->getRequest();
+        if ($request && $request->isXmlHttpRequest()) {
+            $requestData = \Zend_Json::decode($request->getContent());
+            $isRememberMeChecked = empty($requestData['persistent_remember_me']) ? false : true;
+            $this->_persistentSession->setRememberMeChecked((bool)$isRememberMeChecked);
         }
     }
 
