@@ -15,6 +15,11 @@ use Magento\Framework\Phrase;
 class Mapper
 {
     /**
+     * @var QueryInterface
+     */
+    private $rootQuery;
+
+    /**
      * @var array
      */
     private $queries;
@@ -83,11 +88,13 @@ class Mapper
      */
     public function getRootQuery()
     {
-        $this->mappedQueries = [];
-        $this->mappedFilters = [];
-        $query = $this->mapQuery($this->rootQueryName);
-        $this->validate();
-        return $query;
+        if (!$this->rootQuery) {
+            $this->mappedQueries = [];
+            $this->mappedFilters = [];
+            $this->rootQuery = $this->mapQuery($this->rootQueryName);
+            $this->validate();
+        }
+        return $this->rootQuery;
     }
 
     /**
