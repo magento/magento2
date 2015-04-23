@@ -34,6 +34,10 @@ class Curl extends AbstractCurl implements CustomerInterface
             'United States' => 'US',
             'United Kingdom' => 'GB'
         ],
+        'gender' => [
+            'Male' => 1,
+            'Female' => 2,
+        ],
         'region_id' => [
             'California' => 12,
             'New York' => 43,
@@ -77,12 +81,12 @@ class Curl extends AbstractCurl implements CustomerInterface
      */
     public function persist(FixtureInterface $customer = null)
     {
-        $address = [];
-        $result = [];
         /** @var Customer $customer */
-        $url = $_ENV['app_frontend_url'] . 'customer/account/createpost/?nocookie=true';
         $data = $customer->getData();
         $data['group_id'] = $this->getCustomerGroup($customer);
+        $address = [];
+        $result = [];
+        $url = $_ENV['app_frontend_url'] . 'customer/account/createpost/?nocookie=true';
 
         if ($customer->hasData('address')) {
             $address = $customer->getAddress();
