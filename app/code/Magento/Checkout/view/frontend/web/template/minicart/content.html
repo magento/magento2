@@ -35,7 +35,7 @@
             <!-- /ko -->
         </div>
 
-        <!-- ko if: isPossibleCheckout -->
+        <!-- ko if: cart().possible_onepage_checkout -->
             <!-- ko foreach: getRegion('subtotalContainer') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!-- /ko -->
@@ -45,7 +45,7 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
 
-        <!-- ko isPossibleCheckout -->
+        <!-- ko if: cart().possible_onepage_checkout -->
         <div class="actions">
             <div class="primary">
                 <button

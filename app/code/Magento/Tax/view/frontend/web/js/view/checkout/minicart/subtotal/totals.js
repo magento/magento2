@@ -9,8 +9,6 @@ define([
     'use strict';
 
     return Component.extend({
-        displaySubtotalExclTax: false,
-        displaySubtotalInclTax: false,
         initialize: function () {
             this._super();
             this.cart = customerData.get('cart');

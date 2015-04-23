@@ -88,7 +88,7 @@
     <td class="col qty" data-bind="attr: {'data-th': $t('Qty')}">
         <div class="field qty">
             <label class="label" for="cart-<?php echo $_item->getId() ?>-qty">
-                <span><!-- ko text: $t('Qty') --></span>
+                <span><!-- ko text: $t('Qty') --><!-- /ko --></span>
             </label>
             <div class="control qty">
                 <input id="cart-<?php echo $_item->getId() ?>-qty"
