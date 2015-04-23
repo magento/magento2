@@ -92,13 +92,36 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
-        $this->setType(
-            \Magento\Catalog\Model\Category::ENTITY
-        )->setConnection(
-            $this->_resource->getConnection('catalog_read'),
-            $this->_resource->getConnection('catalog_write')
-        );
-        $this->_categoryProductTable = $this->getTable('catalog_category_product');
+
+        $this->_read  = 'catalog_read';
+        $this->_write = 'catalog_write';
+    }
+
+    /**
+     * Entity type getter and lazy loader
+     *
+     * @return \Magento\Eav\Model\Entity\Type
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getEntityType()
+    {
+        if (empty($this->_type)) {
+            $this->setType(\Magento\Catalog\Model\Category::ENTITY);
+        }
+        return parent::getEntityType();
+    }
+
+    /**
+     * Category product table name getter
+     *
+     * @return string
+     */
+    public function getCategoryProductTable()
+    {
+        if (!$this->_categoryProductTable) {
+            $this->_categoryProductTable = $this->getTable('catalog_category_product');
+        }
+        return $this->_categoryProductTable;
     }
 
     /**
@@ -359,7 +382,7 @@ class Category extends AbstractResource
          */
         if (!empty($delete)) {
             $cond = ['product_id IN(?)' => array_keys($delete), 'category_id=?' => $id];
-            $adapter->delete($this->_categoryProductTable, $cond);
+            $adapter->delete($this->getCategoryProductTable(), $cond);
         }
 
         /**
@@ -374,7 +397,7 @@ class Category extends AbstractResource
                     'position' => (int)$position,
                 ];
             }
-            $adapter->insertMultiple($this->_categoryProductTable, $data);
+            $adapter->insertMultiple($this->getCategoryProductTable(), $data);
         }
 
         /**
@@ -384,7 +407,7 @@ class Category extends AbstractResource
             foreach ($update as $productId => $position) {
                 $where = ['category_id = ?' => (int)$id, 'product_id = ?' => (int)$productId];
                 $bind = ['position' => (int)$position];
-                $adapter->update($this->_categoryProductTable, $bind, $where);
+                $adapter->update($this->getCategoryProductTable(), $bind, $where);
             }
         }
 
@@ -417,7 +440,7 @@ class Category extends AbstractResource
     public function getProductsPosition($category)
     {
         $select = $this->_getWriteAdapter()->select()->from(
-            $this->_categoryProductTable,
+            $this->getCategoryProductTable(),
             ['product_id', 'position']
         )->where(
             'category_id = :category_id'

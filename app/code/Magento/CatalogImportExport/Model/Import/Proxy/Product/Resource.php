@@ -20,7 +20,7 @@ class Resource extends \Magento\Catalog\Model\Resource\Product
      */
     public function getProductCategoryTable()
     {
-        return $this->_productCategoryTable;
+        return parent::getProductCategoryTable();
     }
 
     /**
@@ -30,6 +30,6 @@ class Resource extends \Magento\Catalog\Model\Resource\Product
      */
     public function getProductWebsiteTable()
     {
-        return $this->_productWebsiteTable;
+        return parent::getProductWebsiteTable();
     }
 }
