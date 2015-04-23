@@ -144,7 +144,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $active = '._active';
+    protected $active = '[class=*_active]';
 
     /**
      * Secondary part of row locator template for getRow() method
@@ -417,7 +417,6 @@ abstract class Grid extends Block
      */
     public function isRowVisible(array $filter, $isSearchable = true, $isStrict = true)
     {
-        $this->openFilterBlock();
         return $this->getRow($filter, $isSearchable, $isStrict)->isVisible();
     }
 
