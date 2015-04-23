@@ -68,7 +68,7 @@ class Generator
      * Generate Class
      *
      * @param string $className
-     * @return string
+     * @return string | void
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \InvalidArgumentException
      */
@@ -108,8 +108,8 @@ class Generator
                 );
             }
             $this->includeFile($file);
+            return self::GENERATION_SUCCESS;
         }
-        return self::GENERATION_SUCCESS;
     }
 
     /**

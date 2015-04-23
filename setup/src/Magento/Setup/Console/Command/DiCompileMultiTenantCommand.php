@@ -349,6 +349,6 @@ class DiCompileMultiTenantCommand extends Command
         if (!file_exists(dirname($pluginDefFile))) {
             mkdir(dirname($pluginDefFile), 0777, true);
         }
-        file_put_contents($pluginDefFile, $outputContent);            
+        file_put_contents($pluginDefFile, $outputContent);
     }
 }
