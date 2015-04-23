@@ -67,6 +67,12 @@ class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Removes directories recursively
+     *
+     * @param string $dir
+     * @return void
+     */
     private function recursiveRmdir($dir)
     {
         if (is_dir($dir)) {
