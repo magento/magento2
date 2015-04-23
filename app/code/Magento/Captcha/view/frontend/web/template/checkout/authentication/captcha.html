@@ -1,4 +1,4 @@
-<!-- ko if: isRequired-->
+<!-- ko if: isRequired()-->
 <div class="field captcha required">
     <label for="captcha" class="label"><span data-bind="text: $t('Please type the letters below')"></span></label>
     <div class="control captcha">
@@ -8,8 +8,8 @@
                 <div class="control captcha-image">
                     <img data-bind="attr: {
                                         alt: $t('Please type the letters below'),
-                                        height: imageHeight,
-                                        src: imageSrc()
+                                        height: imageHeight(),
+                                        src: getImageSource(),
                                         }"
                          class="captcha-img"/>
                     <button type="button" class="action reload captcha-reload" data-bind="attr: {title: $t('Reload captcha')}, click: refresh">
@@ -17,7 +17,7 @@
                     </button>
                 </div>
             </div>
-            <!-- ko if: isCaseSensitive-->
+            <!-- ko if: isCaseSensitive()-->
             <div class="captcha-note note" data-bind="text: $t('Attention: Captcha is case sensitive.')"></div>
             <!-- /ko -->
         </div>

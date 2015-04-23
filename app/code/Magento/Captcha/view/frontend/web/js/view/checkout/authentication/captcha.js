@@ -10,39 +10,46 @@ define(
         'ko',
         'uiComponent',
         'Magento_Customer/js/model/customer',
-        'mage/storage'
+        'Magento_Captcha/js/action/refresh'
     ],
-    function ($, ko, Component, customer, storage) {
+    function ($, ko, Component, customer, refreshAction) {
         "use strict";
-        var config = window.checkoutConfig;
-        var imageSrc = ko.observable(config.captchaImageSrc);
-        var refreshCaptcha = function() {
-            storage.post(
-                config.captchaRefreshUrl,
-                JSON.stringify({'formId': config.captchaFormId})
-            ).done(
-                function (response) {
-                    if (response.imgSrc) {
-                        imageSrc(response.imgSrc);
-                    }
-                }
-            );
-        };
-
-        customer.getFailedLoginAttempts().subscribe(function() {
-            refreshCaptcha();
-        });
-
+        var captchaConfig = window.checkoutConfig.captcha;
         return Component.extend({
+            initialize: function() {
+                this._super();
+                this.updateCaptchaOnFailedLogin();
+            },
             defaults: {
                 template: 'Magento_Captcha/checkout/authentication/captcha'
             },
-            isRequired: config.captchaIsRequired,
-            formId: config.captchaFormId,
-            isCaseSensitive: config.captchaIsCaseSensitive,
-            imageHeight: config.captchaImageHeight,
-            imageSrc: imageSrc,
-            refresh: refreshCaptcha
+            imageSource: null,
+            isRequired: function() {
+                return captchaConfig[this.formId].isRequired;
+            },
+            isCaseSensitive: function() {
+                return captchaConfig[this.formId].isCaseSensitive;
+            },
+            imageHeight: function() {
+                return captchaConfig[this.formId].imageHeight;
+            },
+            getImageSource: function () {
+                if (this.imageSource == null) {
+                    this.imageSource = ko.observable(captchaConfig[this.formId].imageSrc);
+                }
+                return this.imageSource;
+            },
+            refresh: function() {
+                refreshAction(captchaConfig[this.formId].refreshUrl, this.formId, this.imageSource);
+            },
+            updateCaptchaOnFailedLogin: function () {
+                if (this.formId == 'user_login') {
+                    var self = this;
+                    customer.getFailedLoginAttempts().subscribe(function() {
+                        self.refresh();
+                    });
+                }
+            }
         });
     }
 );

@@ -51,12 +51,13 @@ class AjaxLogin
         \Closure $proceed
     ) {
         $httpUnauthorizedCode = 401;
+        $loginFormId = 'user_login';
 
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $subject->getRequest();
 
         /** @var \Magento\Captcha\Model\ModelInterface $captchaModel */
-        $captchaModel = $this->helper->getCaptcha(ConfigProvider::FORM_ID);
+        $captchaModel = $this->helper->getCaptcha($loginFormId);
 
         $loginParams = \Zend_Json::decode($request->getContent());
         $username = isset($loginParams['username']) ? $loginParams['username'] : null;

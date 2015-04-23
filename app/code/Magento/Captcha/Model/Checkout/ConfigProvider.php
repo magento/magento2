@@ -7,8 +7,6 @@ namespace Magento\Captcha\Model\Checkout;
 
 class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
 {
-    const FORM_ID = 'user_login';
-
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
@@ -20,15 +18,23 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     protected $captchaData;
 
     /**
+     * @var array
+     */
+    protected $formIds;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Captcha\Helper\Data $captchaData
+     * @param array $formIds
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Captcha\Helper\Data $captchaData
+        \Magento\Captcha\Helper\Data $captchaData,
+        array $formIds
     ) {
         $this->storeManager = $storeManager;
         $this->captchaData = $captchaData;
+        $this->formIds = $formIds;
     }
 
     /**
@@ -36,44 +42,50 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     public function getConfig()
     {
-        return [
-            'captchaIsCaseSensitive' => $this->isCaseSensitive(),
-            'captchaImageHeight' => $this->getImageHeight(),
-            'captchaImageSrc' => $this->getImageSrc(),
-            'captchaRefreshUrl' => $this->getRefreshUrl(),
-            'captchaIsRequired' => $this->getIsRequired(),
-            'captchaFormId' => self::FORM_ID
-        ];
+        $config = [];
+        foreach ($this->formIds as $formId) {
+            $config['captcha'][$formId] = [
+                'isCaseSensitive' => $this->isCaseSensitive($formId),
+                'imageHeight' => $this->getImageHeight($formId),
+                'imageSrc' => $this->getImageSrc($formId),
+                'refreshUrl' => $this->getRefreshUrl(),
+                'isRequired' => $this->getIsRequired($formId)
+            ];
+        }
+        return $config;
     }
 
     /**
      * Returns is captcha case sensitive
      *
+     * @param $formId
      * @return bool
      */
-    protected function isCaseSensitive()
+    protected function isCaseSensitive($formId)
     {
-        return (boolean)$this->getCaptchaModel()->isCaseSensitive();
+        return (boolean)$this->getCaptchaModel($formId)->isCaseSensitive();
     }
 
     /**
      * Returns captcha image height
      *
+     * @param $formId
      * @return int
      */
-    protected function getImageHeight()
+    protected function getImageHeight($formId)
     {
-        return $this->getCaptchaModel()->getHeight();
+        return $this->getCaptchaModel($formId)->getHeight();
     }
 
     /**
      * Returns captcha image source path
      *
+     * @param $formId
      * @return string
      */
-    protected function getImageSrc()
+    protected function getImageSrc($formId)
     {
-        $captcha = $this->getCaptchaModel();
+        $captcha = $this->getCaptchaModel($formId);
         $captcha->generate();
         return $captcha->getImgSrc();
     }
@@ -92,18 +104,22 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Whether captcha is required to be inserted to this form
      *
+     * @param $formId
      * @return bool
      */
-    protected function getIsRequired()
+    protected function getIsRequired($formId)
     {
-        return (boolean)$this->getCaptchaModel()->isRequired();
+        return (boolean)$this->getCaptchaModel($formId)->isRequired();
     }
 
     /**
+     * Return captcha model for specified form
+     *
+     * @param $formId
      * @return \Magento\Captcha\Model\ModelInterface
      */
-    protected function getCaptchaModel()
+    protected function getCaptchaModel($formId)
     {
-        return $this->captchaData->getCaptcha(self::FORM_ID);
+        return $this->captchaData->getCaptcha($formId);
     }
 }
