@@ -14,14 +14,13 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\View\Asset\SourceFileGeneratorPool;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Developer\Console\Command\CssDeployCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DevTestsRunCommand
+     * @var CssDeployCommand
      */
     private $command;
 

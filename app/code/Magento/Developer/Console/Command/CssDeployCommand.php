@@ -22,7 +22,7 @@ use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Class CssDeployCommand
+ * Class CssDeployCommand - collects, processes and publishes source files like LESS or SASS
  * @SuppressWarnings("PMD.CouplingBetweenObjects")
  */
 class CssDeployCommand extends Command
@@ -174,6 +174,7 @@ class CssDeployCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -198,7 +199,7 @@ class CssDeployCommand extends Command
         foreach ($input->getArgument(self::FILES_ARGUMENT) as $file) {
             $file .= '.' . $type;
 
-            $output->writeln("Gathering {$file} sources.");
+            $output->writeln("<info>Gathering {$file} sources.</info>");
 
             $asset = $this->assetRepo->createAsset(
                 $file,
@@ -228,7 +229,7 @@ class CssDeployCommand extends Command
             $destination = $asset->getPath();
             $rootDir->copyFile($source, $destination, $targetDir);
 
-            $output->writeln("Done");
+            $output->writeln("<info>Successfully processed LESS and/or SASS files</info>");
         }
     }
 }
