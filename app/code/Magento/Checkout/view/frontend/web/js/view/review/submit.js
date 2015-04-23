@@ -8,53 +8,37 @@
 /*global alert*/
 define(
     [
-        'ko',
         'uiComponent',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/action/place-order'
     ],
-    function (ko, Component, quote, orderAction) {
+    function (Component, quote, orderAction) {
         "use strict";
-
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/review/submit',
-                displayArea: 'submit',
-                submitLabel: ''
+                displayArea: 'submit'
             },
-
-            paymentMethod: quote.getPaymentMethod(),
-
-            initObservable: function () {
-                this._super()
-                    .observe('submitLabel');
-                return this;
-            },
-
-            getLabel:  function() {
-                var self = this;
-                var method = _.find(this._getPaymentComponent().elems(), function(elem) {
-                    return elem.index == self.paymentMethod();
-                });
-
-                if (method && method.hostedMethod && method.hostedMethod == true) {
-                    this.submitLabel('Continue');
+            getLabel: function() {
+                var view = this.getViewByCode(quote.getPaymentMethod()());
+                if (view && view.getLabel) {
+                    return view.getLabel();
                 } else {
-                    this.submitLabel('Place Order');
+                    return 'Place Order';
                 }
-
-                return this.submitLabel();
             },
-
-            _getPaymentComponent: function() {
-                var componentCheckout = this.containers[0].containers[0];
-                return _.find(componentCheckout.elems(), function(step) {
-                    return step.index == 'payment';
+            getClick: function() {
+                var view = this.getViewByCode(quote.getPaymentMethod()());
+                if (view && view.getClick) {
+                    return view.getClick();
+                } else {
+                    return orderAction;
+                }
+            },
+            getViewByCode: function(code) {
+                return _.find(this.elems(), function(elem) {
+                    return elem.index == code;
                 });
-            },
-
-            placeOrder: function() {
-                orderAction();
             }
         });
     }

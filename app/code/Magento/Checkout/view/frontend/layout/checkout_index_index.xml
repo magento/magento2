@@ -228,13 +228,18 @@
                                                     </item>
                                                     <item name="submitBefore" xsi:type="array">
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/submitBefore</item>
-                                                        <item name="children" xsi:type="array"></item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge your components here -->
+                                                        </item>
                                                     </item>
                                                     <item name="totals" xsi:type="array">
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/totals</item>
                                                     </item>
                                                     <item name="submit" xsi:type="array">
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/review/submit</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge your components here -->
+                                                        </item>
                                                     </item>
                                                 </item>
                                             </item>
