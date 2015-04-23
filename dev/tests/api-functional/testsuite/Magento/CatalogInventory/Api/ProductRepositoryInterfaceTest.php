@@ -185,9 +185,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 break;
             }
         }
-        if (!empty($qtyAndStockStatus)) {
+        if (!empty($qtyAndStockStatus) && is_array($qtyAndStockStatus)) {
+
+            if (array_key_exists('any_type', $qtyAndStockStatus)) {
+                // for SOAP, need to use the inner array
+                $qtyAndStockStatus = $qtyAndStockStatus['any_type'];
+            }
+
             // ex: [true, 1234]
-            if (is_bool($qtyAndStockStatus[0])) {
+            if (is_bool($qtyAndStockStatus[0]) || is_string($qtyAndStockStatus[0])) {
                 $qty = $qtyAndStockStatus[1];
             } else {
                 $qty = $qtyAndStockStatus[0];
