@@ -81,8 +81,8 @@ class Sidebar extends AbstractCart
 
     /**
      * Return whether subtotal should be displayed including tax
-     *
-     * @return bool
+     * TODO: dependence on taxConfig
+     * @return int
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDisplaySubtotalInclTax()
@@ -92,8 +92,8 @@ class Sidebar extends AbstractCart
 
     /**
      * Return whether subtotal should be displayed excluding tax
-     *
-     * @return bool
+     * TODO: dependence on taxConfig
+     * @return int
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getDisplaySubtotalExclTax()
