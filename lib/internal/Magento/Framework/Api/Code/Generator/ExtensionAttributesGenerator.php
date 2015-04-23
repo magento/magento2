@@ -8,6 +8,7 @@ namespace Magento\Framework\Api\Code\Generator;
 use Magento\Framework\Code\Generator\DefinedClasses;
 use Magento\Framework\Code\Generator\Io;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\Api\Config\Converter;
 
 /**
  * Code generator for data object extensions.
@@ -79,7 +80,8 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     protected function _getClassMethods()
     {
         $methods = [];
-        foreach ($this->getCustomAttributes() as $attributeName => $attributeType) {
+        foreach ($this->getCustomAttributes() as $attributeName => $attributeMetadata) {
+            $attributeType = $attributeMetadata[Converter::DATA_TYPE];
             $propertyName = SimpleDataObjectConverter::snakeCaseToCamelCase($attributeName);
             $getterName = 'get' . ucfirst($propertyName);
             $setterName = 'set' . ucfirst($propertyName);
@@ -150,11 +152,12 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
         }
         $dataInterface = ltrim($this->getSourceClassName(), '\\');
         if (isset($this->allCustomAttributes[$dataInterface])) {
-            foreach ($this->allCustomAttributes[$dataInterface] as $attributeName => $attributeType) {
+            foreach ($this->allCustomAttributes[$dataInterface] as $attributeName => $attributeMetadata) {
+                $attributeType = $attributeMetadata[Converter::DATA_TYPE];
                 if (strpos($attributeType, '\\') !== false) {
                     /** Add preceding slash to class names, while leaving primitive types as is */
                     $attributeType = $this->_getFullyQualifiedClassName($attributeType);
-                    $this->allCustomAttributes[$dataInterface][$attributeName] =
+                    $this->allCustomAttributes[$dataInterface][$attributeName][Converter::DATA_TYPE] =
                         $this->_getFullyQualifiedClassName($attributeType);
                 }
             }
