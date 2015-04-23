@@ -148,9 +148,9 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
 
     /**
      * @param Layout\ProcessorFactory $processorFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param ManagerInterface $eventManager
      * @param Layout\Data\Structure $structure
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param MessageManagerInterface $messageManager
      * @param Design\Theme\ResolverInterface $themeResolver
      * @param Layout\ReaderPool $readerPool
      * @param Layout\GeneratorPool $generatorPool
@@ -458,14 +458,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     {
         $this->build();
         if (!isset($this->_renderElementCache[$name]) || !$useCache) {
-            if ($this->isUiComponent($name)) {
-                $result = $this->_renderUiComponent($name);
-            } elseif ($this->isBlock($name)) {
-                $result = $this->_renderBlock($name);
-            } else {
-                $result = $this->_renderContainer($name);
-            }
-            $this->_renderElementCache[$name] = $result;
+            $this->_renderElementCache[$name] = $this->renderNonCachedElement($name);
         }
         $this->_renderingOutput->setData('output', $this->_renderElementCache[$name]);
         $this->_eventManager->dispatch(
@@ -473,6 +466,24 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             ['element_name' => $name, 'layout' => $this, 'transport' => $this->_renderingOutput]
         );
         return $this->_renderingOutput->getData('output');
+    }
+
+    /**
+     * Render non cached element
+     *
+     * @param string $name
+     * @return string
+     */
+    public function renderNonCachedElement($name)
+    {
+        if ($this->isUiComponent($name)) {
+            $result = $this->_renderUiComponent($name);
+        } elseif ($this->isBlock($name)) {
+            $result = $this->_renderBlock($name);
+        } else {
+            $result = $this->_renderContainer($name);
+        }
+        return $result;
     }
 
     /**

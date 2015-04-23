@@ -64,6 +64,8 @@ class Helper
     public function initialize(\Magento\Catalog\Model\Product $product)
     {
         $productData = $this->request->getPost('product');
+        unset($productData['custom_attributes']);
+        unset($productData['extension_attributes']);
 
         if ($productData) {
             $stockData = isset($productData['stock_data']) ? $productData['stock_data'] : [];
