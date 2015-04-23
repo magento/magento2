@@ -59,7 +59,9 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
             ->with($stockItemMock)
             ->willReturnSelf();
 
-        $this->productMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
+        $this->productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productMock->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($this->productExtensionMock)
