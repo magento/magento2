@@ -44,11 +44,17 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $configurationHelper;
 
     /**
+     * @var ItemPoolInterface
+     */
+    protected $itemPoolInterface;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Catalog\Helper\Product\Configuration $configurationHelper
+     * @param ItemPoolInterface $itemPoolInterface
      * @param array $data
      */
     public function __construct(
@@ -57,6 +63,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         \Magento\Catalog\Helper\Product\Configuration $configurationHelper,
+        ItemPoolInterface $itemPoolInterface,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
@@ -64,6 +71,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         $this->checkoutCart = $checkoutCart;
         $this->checkoutHelper = $checkoutHelper;
         $this->configurationHelper = $configurationHelper;
+        $this->itemPoolInterface = $itemPoolInterface;
     }
 
     /**
@@ -130,11 +138,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         $items = $this->getRecentItems();
         if ($items) {
             foreach ($items as $item) {
-                $itemsData[] = $item->toArray() + [
-                        'product_type' => $item->getProductType(),
-                        'options' => $this->configurationHelper->getCustomOptions($item)
-                    ];
-                // TODO: do not miss to check $_cartQty || $block->getAllowCartLink()
+                $itemsData[] = $this->itemPoolInterface->getItemData($item);
             }
         }
         return $itemsData;
