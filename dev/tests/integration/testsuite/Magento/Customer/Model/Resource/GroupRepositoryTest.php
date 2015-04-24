@@ -7,6 +7,7 @@
 namespace Magento\Customer\Model\Resource;
 
 use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Framework\Api\SearchCriteria;
 
 /**
  * Integration test for \Magento\Customer\Model\Resource\GroupRepository
@@ -28,12 +29,16 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\Api\SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
+    /** @var  \Magento\Framework\Api\SortOrderBuilder */
+    private $sortOrderBuilder;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->groupRepository = $this->objectManager->create('Magento\Customer\Api\GroupRepositoryInterface');
         $this->groupFactory = $this->objectManager->create('Magento\Customer\Api\Data\GroupInterfaceFactory');
         $this->searchCriteriaBuilder = $this->objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
+        $this->sortOrderBuilder = $this->objectManager->create('Magento\Framework\Api\SortOrderBuilder');
     }
 
     /**
@@ -248,6 +253,95 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
                     1 => [GroupInterface::CODE => 'General', GroupInterface::TAX_CLASS_ID => 3],
                     3 => [GroupInterface::CODE => 'Retailer', GroupInterface::TAX_CLASS_ID => 3]
                 ],
+            ],
+            'like_tax_name' => [
+                [
+                    $builder->setField(GroupInterface::TAX_CLASS_NAME)->setValue('Retail Customer')
+                        ->setConditionType('like')
+                        ->create(),
+                ],
+                [],
+                [
+                    0 => [GroupInterface::CODE => 'NOT LOGGED IN', GroupInterface::TAX_CLASS_ID => 3],
+                    1 => [GroupInterface::CODE => 'General', GroupInterface::TAX_CLASS_ID => 3],
+                    2 => [GroupInterface::CODE => 'Wholesale', GroupInterface::TAX_CLASS_ID => 3],
+                    3 => [GroupInterface::CODE => 'Retailer', GroupInterface::TAX_CLASS_ID => 3],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param string $field
+     * @param string, $direction
+     * @param string, $methodName
+     * @param array $expectedResult
+     *
+     * @dataProvider sortOrderDataProvider
+     */
+    public function testGetListSortOrder($field, $direction, $methodName, $expectedResult)
+    {
+        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+        /** @var string $direction */
+        $direction = ($direction == 'ASC') ? SearchCriteria::SORT_ASC : SearchCriteria::SORT_DESC;
+        $sortOrder = $this->sortOrderBuilder->setField($field)->setDirection($direction)->create();
+        $this->searchCriteriaBuilder->addSortOrder($sortOrder);
+
+        $searchResults = $this->groupRepository->getList($this->searchCriteriaBuilder->create());
+
+        /** @var \Magento\Customer\Api\Data\GroupInterface[] $resultItems */
+        $resultItems = $searchResults->getItems();
+        $this->assertTrue(count($resultItems) > 0);
+
+        $result = [];
+        foreach ($resultItems as $item) {
+            /** @var \Magento\Customer\Model\Data\Group $item */
+            $result[] = $item->$methodName();
+        }
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function sortOrderDataProvider()
+    {
+        return [
+            [
+                GroupInterface::ID,
+                'ASC',
+                'getId',
+                [0, 1, 2, 3],
+            ],
+            [
+                GroupInterface::ID,
+                'DESC',
+                'getId',
+                [3, 2, 1, 0],
+            ],
+            [
+                GroupInterface::CODE,
+                'ASC',
+                'getCode',
+                ['General', 'NOT LOGGED IN', 'Retailer', 'Wholesale'],
+            ],
+            [
+                GroupInterface::CODE,
+                'DESC',
+                'getCode',
+                ['Wholesale', 'Retailer', 'NOT LOGGED IN', 'General'],
+            ],
+            [
+                GroupInterface::TAX_CLASS_NAME,
+                'ASC',
+                'getTaxClassName',
+                ['Retail Customer', 'Retail Customer', 'Retail Customer', 'Retail Customer']
+            ],
+            [
+                GroupInterface::TAX_CLASS_NAME,
+                'DESC',
+                'getTaxClassName',
+                ['Retail Customer', 'Retail Customer', 'Retail Customer', 'Retail Customer']
             ],
         ];
     }

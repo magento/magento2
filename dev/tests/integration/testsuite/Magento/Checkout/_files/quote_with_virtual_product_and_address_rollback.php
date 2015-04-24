@@ -9,3 +9,7 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $quote = $objectManager->create('Magento\Quote\Model\Quote');
 $quote->load('test_order_with_virtual_product', 'reserved_order_id')->delete();
+
+/** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+$quoteIdMask = $objectManager->create('Magento\Quote\Model\QuoteIdMask');
+$quoteIdMask->delete($quote->getId());
