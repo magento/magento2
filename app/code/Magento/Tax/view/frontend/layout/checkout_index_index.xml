@@ -29,14 +29,6 @@
                                                     <item name="children" xsi:type="array">
                                                         <item name="price" xsi:type="array">
                                                             <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/review/item/columns/price</item>
-                                                            <!--<item name="children" xsi:type="array">-->
-                                                                <!--<item name="unit_incl_tax" xsi:type="array">-->
-                                                                    <!--<item name="component" xsi:type="string">Magento_Tax/js/view/checkout/review/item/columns/price</item>-->
-                                                                <!--</item>-->
-                                                                <!--<item name="unit_excl_tax" xsi:type="array">-->
-                                                                    <!--<item name="component" xsi:type="string">Magento_Tax/js/view/checkout/review/item/columns/price</item>-->
-                                                                <!--</item>-->
-                                                            <!--</item>-->
                                                         </item>
                                                         <item name="subtotal" xsi:type="array">
                                                             <item name="component" xsi:type="string">Magento_Tax/js/view/checkout/review/item/columns/subtotal</item>
@@ -50,6 +42,9 @@
                                                         </item>
                                                         <item name="shipping" xsi:type="array">
                                                             <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/shipping</item>
+                                                        </item>
+                                                        <item name="before_grandtotal" xsi:type="array">
+                                                            <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/before_grandtotal</item>
                                                         </item>
                                                         <item name="grandtotal" xsi:type="array">
                                                             <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/grandtotal</item>

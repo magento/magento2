@@ -18,7 +18,7 @@ define(
                 if(!parseFloat(item.weee_tax_applied_amount) || parseFloat(item.weee_tax_applied_amount <= 0)) {
                     return false;
                 }
-                return window.checkoutConfig.iDisplayPriceWithWeeeDetails;
+                return window.checkoutConfig.isDisplayPriceWithWeeeDetails;
             },
             isDisplayFinalPrice: function(item) {
                 if(!parseFloat(item.weee_tax_applied_amount)) {
