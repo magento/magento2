@@ -142,7 +142,7 @@ class CssDeployCommand extends Command
                 new InputArgument(
                     self::FILES_ARGUMENT,
                     InputArgument::IS_ARRAY,
-                    'Files to pre-process (accept more than one file type as comma-separate values)',
+                    'Files to pre-process (accept more than one file type as space-separate values)',
                     ['css/styles-m']
                 ),
                 new InputOption(
