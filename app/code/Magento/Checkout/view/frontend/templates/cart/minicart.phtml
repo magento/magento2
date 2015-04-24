@@ -43,6 +43,8 @@
     <script>
         // TODO: MAGETWO-34827: adapt for new configuration mechanism
         window.checkout = {
+            displaySubtotalInclTax: <?=$block->getDisplaySubtotalInclTax()?>,
+            displaySubtotalExclTax: <?=$block->getDisplaySubtotalExclTax()?>,
             checkoutUrl: '<?=$this->getShoppingCartUrl()?>'
         };
     </script>

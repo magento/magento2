@@ -54,10 +54,16 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $urlBuilder;
 
     /**
+     * @var \Magento\Catalog\Helper\Product\Configuration
+     */
+    protected $configurationHelper;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Catalog\Helper\Product\Configuration $configurationHelper
      * @param array $data
      */
     public function __construct(
@@ -68,12 +74,14 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         \Magento\Catalog\Model\Product\Image\View $productImageView,
         \Magento\Msrp\Helper\Data $msrpHelper,
         \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Catalog\Helper\Product\Configuration $configurationHelper,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->catalogUrl = $catalogUrl;
         $this->checkoutCart = $checkoutCart;
         $this->checkoutHelper = $checkoutHelper;
+        $this->configurationHelper = $configurationHelper;
         $this->productImageView = $productImageView;
         $this->msrpHelper = $msrpHelper;
         $this->urlBuilder = $urlBuilder;
@@ -161,6 +169,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
 
             $items[] = [
                 'product_type' => $item->getProductType(),
+                'options' => $this->configurationHelper->getCustomOptions($item),
                 'qty' => $this->getQty($item),
                 'item_id' => $item->getId(),
                 'configure_url' => $this->getConfigureUrl($item),

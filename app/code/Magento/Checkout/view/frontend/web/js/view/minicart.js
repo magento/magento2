@@ -9,7 +9,6 @@ define([
     'use strict';
 
     return Component.extend({
-        isPossibleCheckout: true,
         checkoutUrl: window.checkout.checkoutUrl,
         initialize: function () {
             this._super();

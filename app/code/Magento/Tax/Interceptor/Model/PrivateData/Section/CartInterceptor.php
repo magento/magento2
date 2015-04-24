@@ -29,7 +29,7 @@ class CartInterceptor
     protected $quote = null;
 
     /**
-     * @var null
+     * @var array|null
      */
     protected $totals = null;
 
