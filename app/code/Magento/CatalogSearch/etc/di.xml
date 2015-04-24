@@ -230,9 +230,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Resource\Fulltext\Collection">
-        <arguments>
-            <argument name="catalogSearchFulltext" xsi:type="object">Magento\CatalogSearch\Model\Fulltext\Proxy</argument>
-        </arguments>
-    </type>
 </config>
