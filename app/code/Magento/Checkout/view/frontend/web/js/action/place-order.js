@@ -15,7 +15,7 @@ define(
     ],
     function(quote, urlBuilder, storage, url, errorList, customer, _) {
         "use strict";
-        return function(customParams, afterSave) {
+        return function(customParams, callback) {
             var payload;
             customParams = customParams || {};
             if (quote.getCheckoutMethod()() === 'register') {
@@ -32,7 +32,9 @@ define(
                     JSON.stringify(payload)
                 ).done(
                     function() {
-                        if (!afterSave || afterSave()) {
+                        if (_.isFunction(callback)) {
+                            callback.call();
+                        } else {
                             window.location.href = url.build('checkout/onepage/success/');
                         }
                     }
@@ -54,7 +56,9 @@ define(
                     JSON.stringify(payload)
                 ).done(
                     function() {
-                        if (!afterSave || afterSave()) {
+                        if (_.isFunction(callback)) {
+                            callback.call();
+                        } else {
                             window.location.replace(url.build('checkout/onepage/success/'));
                         }
                     }

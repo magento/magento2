@@ -36,11 +36,11 @@ define(
             },
             isVisible: navigator.isStepVisible(stepName),
             cartUrl: url.build('checkout/cart/'),
-            placeOrder: function(afterSave) {
+            placeOrder: function(callback) {
                 var component,
                     isValid = false;
                if (_.isEmpty(this.submitBefore)) {
-                   orderAction(null, afterSave);
+                   orderAction(null, callback);
                } else {
                    for (component in this.submitBefore) {
                        if (this.submitBefore.hasOwnProperty(component) && !this.submitBefore[component].validate()) {
@@ -48,7 +48,7 @@ define(
                        }
                    }
                    if (isValid) {
-                       orderAction(this.submitBefore[component].getSubmitParams(), afterSave);
+                       orderAction(this.submitBefore[component].getSubmitParams(), callback);
                    }
                }
             },
