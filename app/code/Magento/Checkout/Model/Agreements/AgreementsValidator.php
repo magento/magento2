@@ -29,6 +29,7 @@ class AgreementsValidator
      */
     public function isValid($agreementIds = [])
     {
+        $agreementIds = $agreementIds === null ? [] : $agreementIds;
         $requiredAgreements = [];
         foreach ($this->agreementsProviders as $agreementsProvider) {
             $requiredAgreements = array_merge($requiredAgreements, $agreementsProvider->getRequiredAgreementIds());

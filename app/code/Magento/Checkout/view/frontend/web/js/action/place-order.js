@@ -42,10 +42,7 @@ define(
                 );
             } else {
                 if (customParams) {
-                    payload = _.extend({
-                        customer: customer.customerData,
-                        password: customer.getDetails('password')
-                    }, customParams);
+                    payload = customParams;
                 }
                 storage.put(
                     urlBuilder.createUrl('/carts/:quoteId/order', {quoteId: quote.getQuoteId()}),
