@@ -700,10 +700,16 @@ class Toolbar extends \Magento\Framework\View\Element\Template
         return $this->_orderField;
     }
 
+    /**
+     * Load Available Orders
+     *
+     * @return $this
+     */
     private function loadAvailableOrders()
     {
         if ($this->_availableOrder === null) {
             $this->_availableOrder = $this->_catalogConfig->getAttributeUsedForSortByArray();
         }
+        return $this;
     }
 }

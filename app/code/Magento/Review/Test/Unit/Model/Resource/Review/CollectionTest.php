@@ -70,12 +70,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 return $table;
             });
         $this->model = $this->objectManager->getObject(
-                '\Magento\Review\Model\Resource\Review\Collection',
-                [
-                    'storeManager' => $this->storeManagerMock,
-                    'resource' => $this->resourceMock,
-                ]
-            );
+            '\Magento\Review\Model\Resource\Review\Collection',
+            [
+                'storeManager' => $this->storeManagerMock,
+                'resource' => $this->resourceMock,
+            ]
+        );
 
     }
 
