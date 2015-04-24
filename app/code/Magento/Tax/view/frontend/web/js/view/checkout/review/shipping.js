@@ -21,7 +21,8 @@ define(
             },
             getColspan: 3,
             style: "",
-            quoteIsVirtual: quote.isVirtual(),            selectedShippingMethod: quote.getShippingMethod(),
+            quoteIsVirtual: quote.isVirtual(),
+            selectedShippingMethod: quote.getShippingMethod(),
             getTitle: function() {
                 return "Shipping & Handling" + shippingService.getTitleByCode(this.selectedShippingMethod());
             },

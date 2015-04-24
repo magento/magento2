@@ -35,22 +35,41 @@ define(
                     "shippingCarrierCode" : shippingMethodCode[0],
                     "shippingMethodCode" : shippingMethodCode[1]
                 };
-            return storage.put(
-                urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()}),
-                JSON.stringify(_.extend(paymentMethodData, shippingMethodData))
-            ).done(
-                function(response) {
-                    quote.setPaymentMethod(paymentMethodCode);
-                    quote.setTotals(response);
-                    navigator.setCurrent('paymentMethod').goNext();
-                }
-            ).error(
-                function(response) {
-                    var error = JSON.parse(response.responseText);
-                    errorList.add(error);
-                    quote.setPaymentMethod(null);
-                }
-            );
+            if (quote.isVirtual()) {
+                return storage.put(
+                    urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()}),
+                    JSON.stringify(_.extend(paymentMethodData))
+                ).done(
+                    function (response) {
+                        quote.setPaymentMethod(paymentMethodCode);
+                        quote.setTotals(response);
+                        navigator.setCurrent('paymentMethod').goNext();
+                    }
+                ).error(
+                    function (response) {
+                        var error = JSON.parse(response.responseText);
+                        errorList.add(error);
+                        quote.setPaymentMethod(null);
+                    }
+                );
+            } else {
+                return storage.put(
+                    urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()}),
+                    JSON.stringify(_.extend(paymentMethodData, shippingMethodData))
+                ).done(
+                    function (response) {
+                        quote.setPaymentMethod(paymentMethodCode);
+                        quote.setTotals(response);
+                        navigator.setCurrent('paymentMethod').goNext();
+                    }
+                ).error(
+                    function (response) {
+                        var error = JSON.parse(response.responseText);
+                        errorList.add(error);
+                        quote.setPaymentMethod(null);
+                    }
+                );
+            }
         };
     }
 );
