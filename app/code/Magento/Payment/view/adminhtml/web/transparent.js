@@ -13,7 +13,7 @@ define([
     $.widget('mage.transparent', {
         options: {
             hiddenFormTmpl:
-                '<form target="<%= data.target %>" action="<%= data.action %>" method="POST" enctype="application/x-www-form-urlencoded" class="no-display">' +
+                '<form target="<%= data.target %>" action="<%= data.action %>" method="POST" hidden enctype="application/x-www-form-urlencoded" class="no-display">' +
                     '<% _.each(data.inputs, function(val, key){ %>' +
                     '<input value="<%= val %>" name="<%= key %>" type="hidden">' +
                     '<% }); %>' +
@@ -68,9 +68,6 @@ define([
 
             data = this._preparePaymentData(response);
             var iframeSelector = '[data-container="' + this.options.gateway + '-transparent-iframe"]';
-
-            // there in iframe will appears errors
-            $(iframeSelector).show();
 
             tmpl = this.hiddenFormTmpl({
                 data: {

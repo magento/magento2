@@ -1099,6 +1099,7 @@ AdminOrder.prototype = {
 
     submit : function()
     {
+        jQuery('#edit_form').trigger('processStart');
         jQuery('#edit_form').trigger('submitOrder');
     },
 

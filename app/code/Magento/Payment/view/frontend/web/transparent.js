@@ -17,7 +17,7 @@ define([
             updateSelectorPrefix: '#checkout-',
             updateSelectorSuffix: '-load',
             hiddenFormTmpl:
-                '<form target="<%= data.target %>" action="<%= data.action %>" method="POST" enctype="application/x-www-form-urlencoded" class="no-display">' +
+                '<form target="<%= data.target %>" action="<%= data.action %>" method="POST" hidden enctype="application/x-www-form-urlencoded" class="no-display">' +
                     '<% _.each(data.inputs, function(val, key){ %>' +
                     '<input value="<%= val %>" name="<%= key %>" type="hidden">' +
                     '<% }); %>' +
@@ -67,7 +67,6 @@ define([
                 data: postData,
                 dataType: 'json',
                 beforeSend: function() {this.element.trigger('showAjaxLoader');},
-                complete: function() {this.element.trigger('hideAjaxLoader');},
                 success: function(response) {
                     var preparedData,
                         msg;
@@ -98,8 +97,6 @@ define([
         _postPaymentToGateway: function(data) {
             var tmpl;
             var iframeSelector = '[data-container="' + this.options.gateway + '-transparent-iframe"]';
-
-            $(iframeSelector).show();
 
             tmpl = this.hiddenFormTmpl({
                 data: {

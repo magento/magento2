@@ -3,22 +3,25 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/** @var \Magento\Payment\Block\Transparent\Iframe $this */
 $params = $this->getParams();
 ?>
 <html>
 <head>
 <script type="text/javascript">
+    var require = window.top.require;
+    require(['jquery'], function($) {
+        $('#opc-review').trigger('hideAjaxLoader');
+    });
     <?php if (isset($params['redirect'])): ?>
         window.location="<?php echo $this->escapeUrl($params['redirect']) ?>";
     <?php elseif (isset($params['redirect_parent'])): ?>
         window.top.location="<?php echo $this->escapeUrl($params['redirect_parent']) ?>";
     <?php elseif (isset($params['error_msg'])): ?>
-        alert(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
+        window.top.alert(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
     <?php elseif (isset($params['order_success'])): ?>
         window.top.location = "<?php echo $params['order_success'] ?>";
     <?php else: ?>
-        var require = window.top.require;
         require(['jquery'], function($) {
             $('#opc-review').trigger('saveOrder');
         });
@@ -26,13 +29,5 @@ $params = $this->getParams();
 </script>
 </head>
 <body>
-<?php if (isset($params['error'])): ?>
-    <table class="data-table" cellspacing="0">
-        <tr>
-            <th><?php echo $this->escapeHtml('Error')?>:</th>
-            <td><?php echo nl2br($params['error'])?></td>
-        </tr>
-    </table>
-<?php endif; ?>
 </body>
 </html>
