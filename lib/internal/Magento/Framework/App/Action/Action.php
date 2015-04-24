@@ -74,7 +74,6 @@ class Action extends AbstractAction
         $this->_redirect = $context->getRedirect();
         $this->_view = $context->getView();
         $this->messageManager = $context->getMessageManager();
-        $this->_objectManager->create('Magento\Framework\Object\Copy\Config\Data\Proxy');
     }
 
     /**
