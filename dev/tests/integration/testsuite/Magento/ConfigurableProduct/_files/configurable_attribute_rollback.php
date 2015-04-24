@@ -21,4 +21,3 @@ $eavConfig->clear();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-

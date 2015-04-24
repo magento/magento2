@@ -148,8 +148,8 @@ class ProductRepositoryTest extends WebapiAbstract
             "price" => 10,
             'attribute_set_id' => 4,
             "extension_attributes" => [
-                "downloadable_product_links" => $this->getLinkData(),
-                "downloadable_product_samples" => $this->getSampleData(),
+                "downloadable_product_links" => array_values($this->getLinkData()),
+                "downloadable_product_samples" => array_values($this->getSampleData()),
             ],
         ];
 
@@ -232,7 +232,7 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"] =
             [$updatedLink1Data, $linkData['link1'], $linkData['link2']];
-        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] = null;
+        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"]);
 
         $response = $this->saveProduct($response);
         $this->assertTrue(
@@ -334,7 +334,7 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"] =
             [$updatedLink1Data, $updatedLink2Data];
-        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] = null;
+        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"]);
 
         $response = $this->saveProduct($response);
         $this->assertTrue(
@@ -410,7 +410,7 @@ class ProductRepositoryTest extends WebapiAbstract
         ];
         $sampleData = $this->getSampleData();
 
-        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"] = null;
+        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"]);
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] =
             [$updatedSample1Data, $sampleData['sample1'], $sampleData['sample2']];
 
@@ -478,7 +478,7 @@ class ProductRepositoryTest extends WebapiAbstract
             'sample_type' => 'file',
         ];
 
-        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"] = null;
+        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"]);
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] =
             [$updatedSample1Data, $updatedSamp2e1Data];
 
