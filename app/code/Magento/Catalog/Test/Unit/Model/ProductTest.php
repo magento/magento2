@@ -147,6 +147,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $attributeValueFactory;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $linkTypeProviderMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entityCollectionProviderMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
@@ -283,6 +293,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->metadataServiceMock = $this->getMock('\Magento\Catalog\Api\ProductAttributeRepositoryInterface');
         $this->attributeValueFactory = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
             ->disableOriginalConstructor()->getMock();
+        $this->linkTypeProviderMock = $this->getMock('Magento\Catalog\Model\Product\LinkTypeProvider',
+            ['getLinkTypes'], [], '', false);
+        $this->entityCollectionProviderMock = $this->getMock('Magento\Catalog\Model\ProductLink\CollectionProvider',
+            ['getCollection'], [], '', false);
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -306,6 +321,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'mediaGalleryEntryFactory' => $this->mediaGalleryEntryFactoryMock,
                 'metadataService' => $this->metadataServiceMock,
                 'customAttributeFactory' => $this->attributeValueFactory,
+                'entityCollectionProvider' => $this->entityCollectionProviderMock,
+                'linkTypeProvider' => $this->linkTypeProviderMock,
                 'data' => ['id' => 1]
             ]
         );
@@ -737,37 +754,62 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductLinks()
     {
-        $inputLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $inputLink->setProductSku("Simple Product 1");
-        $inputLink->setLinkType("related");
-        $inputLink->setData("sku", "Simple Product 2");
-        $inputLink->setData("type_id", "simple");
-        $inputLink->setPosition(0);
+        $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
+        $this->linkTypeProviderMock->expects($this->once())
+            ->method('getLinkTypes')
+            ->willReturn($linkTypes);
 
-        $outputLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $outputLink->setProductSku("Simple Product 1");
-        $outputLink->setLinkType("related");
-        $outputLink->setLinkedProductSku("Simple Product 2");
-        $outputLink->setLinkedProductType("simple");
-        $outputLink->setPosition(0);
+        $inputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink->setProductSku("Simple Product 1");
+        $inputRelatedLink->setLinkType("related");
+        $inputRelatedLink->setData("sku", "Simple Product 2");
+        $inputRelatedLink->setData("type", "simple");
+        $inputRelatedLink->setPosition(0);
 
-        $productLinks = [];
-        $this->model->setData('related_products', [$inputLink]);
-        $productLinks[] = $outputLink;
-        $outputLink->setLinkType("upsell");
-        $inputLink->setLinkType("upsell");
-        $this->model->setData('up_sell_products', [$inputLink]);
-        $productLinks[] = $outputLink;
-        $outputLink->setLinkType("crosssell");
-        $inputLink->setLinkType("crosssell");
-        $this->model->setData('cross_sell_products', [$inputLink]);
-        $productLinks[] = $outputLink;
+        $customData = ["attribute_code" => "qty", "value" => 1];
+        $inputGroupLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputGroupLink->setProductSku("Simple Product 1");
+        $inputGroupLink->setLinkType("associated");
+        $inputGroupLink->setData("sku", "Simple Product 2");
+        $inputGroupLink->setData("type", "simple");
+        $inputGroupLink->setPosition(0);
+        $inputGroupLink["custom_attributes"] = [$customData];
 
-        $productLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $this->productLinkFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($productLink);
+        $outputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $outputRelatedLink->setProductSku("Simple Product 1");
+        $outputRelatedLink->setLinkType("related");
+        $outputRelatedLink->setLinkedProductSku("Simple Product 2");
+        $outputRelatedLink->setLinkedProductType("simple");
+        $outputRelatedLink->setPosition(0);
 
+        $groupExtension = $this->objectManagerHelper->getObject('Magento\Catalog\Api\Data\ProductLinkExtension');
+        $groupExtension->setQty(1);
+        $outputGroupLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $outputGroupLink->setProductSku("Simple Product 1");
+        $outputGroupLink->setLinkType("associated");
+        $outputGroupLink->setLinkedProductSku("Simple Product 2");
+        $outputGroupLink->setLinkedProductType("simple");
+        $outputGroupLink->setPosition(0);
+        $outputGroupLink->setExtensionAttributes($groupExtension);
+
+        $this->entityCollectionProviderMock->expects($this->at(0))
+            ->method('getCollection')
+            ->with($this->model, 'related')
+            ->willReturn([$inputRelatedLink]);
+        $this->entityCollectionProviderMock->expects($this->at(1))
+            ->method('getCollection')
+            ->with($this->model, 'upsell')
+            ->willReturn([]);
+        $this->entityCollectionProviderMock->expects($this->at(2))
+            ->method('getCollection')
+            ->with($this->model, 'crosssell')
+            ->willReturn([]);
+        $this->entityCollectionProviderMock->expects($this->at(3))
+            ->method('getCollection')
+            ->with($this->model, 'associated')
+            ->willReturn([$inputGroupLink]);
+
+        $expectedOutput = [$outputRelatedLink, $outputGroupLink];
         $typeInstanceMock = $this->getMock(
             'Magento\ConfigurableProduct\Model\Product\Type\Simple', ["getSku"], [], '', false);
         $typeInstanceMock
@@ -776,8 +818,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn("Simple Product 1");
         $this->model->setTypeInstance($typeInstanceMock);
 
+        $productLink1 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $productLink2 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $this->productLinkFactory->expects($this->at(0))
+            ->method('create')
+            ->willReturn($productLink1);
+        $this->productLinkFactory->expects($this->at(1))
+            ->method('create')
+            ->willReturn($productLink2);
+
+        $extension = $this->objectManagerHelper->getObject('Magento\Catalog\Api\Data\ProductLinkExtension');
+        $productLink2->setExtensionAttributes($extension);
+
         $links = $this->model->getProductLinks();
-        $this->assertEquals($links, $productLinks);
+        $this->assertEquals($links, $expectedOutput);
     }
 
     /**

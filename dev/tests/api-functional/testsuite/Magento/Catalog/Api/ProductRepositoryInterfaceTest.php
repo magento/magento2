@@ -126,7 +126,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     public function testProductLinks()
     {
-        $this->markTestSkipped('Skipped until MAGETWO-35458 is ready');
         // Create simple product
         $productData =  [
             ProductInterface::SKU => "product_simple_500",
@@ -140,9 +139,32 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
 
         $this->saveProduct($productData);
+
+        // Create a group product
+        $productLinkData = ["product_sku" => "group_product_500", "link_type" => "associated",
+                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
+                            "position" => 0, "extension_attributes" => ["qty" => 1]];
+        $productWithGroupData =  [
+            ProductInterface::SKU => "group_product_500",
+            ProductInterface::NAME => "Group Product 500",
+            ProductInterface::VISIBILITY => 4,
+            ProductInterface::TYPE_ID => 'grouped',
+            ProductInterface::PRICE => 300,
+            ProductInterface::STATUS => 1,
+            ProductInterface::ATTRIBUTE_SET_ID => 4,
+            "product_links" => [$productLinkData]
+        ];
+
+        $this->saveProduct($productWithGroupData);
+        $response = $this->getProduct("group_product_500");
+        $this->assertArrayHasKey('product_links', $response);
+        $links = $response['product_links'];
+        $this->assertEquals(1, count($links));
+        $this->assertEquals($productLinkData, $links[0]);
+
         $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "related",
                             "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
-                            "position" => 0];
+                            "position" => 0, "extension_attributes" => ["qty" => null]];
         $productWithRelatedData =  [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
@@ -166,7 +188,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // update link information
         $productLinkData = ["product_sku" => "product_simple_with_related_500", "link_type" => "upsell",
                             "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
-                            "position" => 0];
+                            "position" => 0, "extension_attributes" => ["qty" => null]];
         $productWithUpsellData =  [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
@@ -174,7 +196,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             "product_links" => [$productLinkData]
         ];
@@ -195,21 +216,19 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             "product_links" => []
         ];
 
         $this->saveProduct($productWithNoLinkData);
         $response = $this->getProduct("product_simple_with_related_500");
-
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals(1, count($links));
-        $this->assertEquals([], $links[0]);
+        $this->assertEquals([], $links);
 
         $this->deleteProduct("product_simple_500");
         $this->deleteProduct("product_simple_with_related_500");
+        $this->deleteProduct("group_product_500");
     }
 
     protected function getOptionsData()

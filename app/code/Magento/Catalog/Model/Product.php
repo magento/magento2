@@ -250,12 +250,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $metadataService;
 
     /*
-     * @param \Magento\Catalog\Model\ProductLink\ProductLinkManagementInterface
+     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider
      */
-    protected $linkManagement;
+    protected $entityCollectionProvider;
 
     /*
-     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider
+     */
+    protected $linkProvider;
+
+    /*
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
      */
     protected $productLinkFactory;
 
@@ -318,8 +323,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Product\Image\CacheFactory $imageCacheFactory
-     * @param \Magento\Catalog\Model\ProductLink\Management $linkManagement
-     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
+     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param array $data
@@ -354,7 +360,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         CategoryRepositoryInterface $categoryRepository,
         Product\Image\CacheFactory $imageCacheFactory,
-        \Magento\Catalog\Model\ProductLink\Management $linkManagement,
+        \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider,
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
@@ -380,7 +387,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         $this->categoryRepository = $categoryRepository;
         $this->imageCacheFactory = $imageCacheFactory;
-        $this->linkManagement = $linkManagement;
+        $this->entityCollectionProvider = $entityCollectionProvider;
+        $this->linkTypeProvider = $linkTypeProvider;
         $this->productLinkFactory = $productLinkFactory;
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -1352,23 +1360,23 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getProductLinks()
     {
         if (empty($this->_links)) {
-            $productLinks = [];
-
-            $productLinks['related'] = $this->getRelatedProducts();
-            $productLinks['upsell'] = $this->getUpSellProducts();
-            $productLinks['crosssell'] = $this->getCrossSellProducts();
-
             $output = [];
-            foreach ($productLinks as $type => $linkTypeArray) {
-                foreach ($linkTypeArray as $link) {
+            $linkTypes = $this->linkTypeProvider->getLinkTypes();
+            foreach($linkTypes as $linkTypeName => $linkTypeValue) {
+                $collection = $this->entityCollectionProvider->getCollection($this, $linkTypeName);
+                foreach ($collection as $item) {
                     /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
                     $productLink = $this->productLinkFactory->create();
                     $productLink->setProductSku($this->getSku())
-                        ->setLinkType($type)
-                        ->setLinkedProductSku($link['sku'])
-                        ->setLinkedProductType($link['type_id'])
-                        ->setPosition($link['position']);
-
+                        ->setLinkType($linkTypeName)
+                        ->setLinkedProductSku($item['sku'])
+                        ->setLinkedProductType($item['type'])
+                        ->setPosition($item['position']);
+                    if (isset($item['custom_attributes'])) {
+                        foreach ($item['custom_attributes'] as $option) {
+                            $productLink->getExtensionAttributes()->setQty($option['value']);
+                        }
+                    }
                     $output[] = $productLink;
                 }
             }

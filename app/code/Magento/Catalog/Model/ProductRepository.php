@@ -75,6 +75,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     protected $linkInitializer;
 
+    /*
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider
+     */
+    protected $linkTypeProvider;
+
+    /*
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     */
+    protected $storeManager;
+
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
      */
@@ -129,6 +139,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param Resource\Product $resourceModel
      * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer
+     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager,
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
@@ -149,6 +161,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\Resource\Product $resourceModel,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
@@ -166,6 +180,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceModel = $resourceModel;
         $this->linkInitializer = $linkInitializer;
+        $this->linkTypeProvider = $linkTypeProvider;
+        $this->storeManager = $storeManager;
         $this->attributeRepository = $attributeRepository;
         $this->filterBuilder = $filterBuilder;
         $this->metadataService = $metadataServiceInterface;
@@ -260,6 +276,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         if ($createNew) {
             $product = $this->productFactory->create();
+            if ($this->storeManager->hasSingleStore()) {
+                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
+            }
         } else {
             unset($this->instances[$productData['sku']]);
             $product = $this->get($productData['sku']);
@@ -353,11 +372,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
 
         // Clear all existing product links and then set the ones we want
-        $this->linkInitializer->initializeLinks($product, ['related' => []]);
-        $this->linkInitializer->initializeLinks($product, ['upsell' => []]);
-        $this->linkInitializer->initializeLinks($product, ['crosssell' => []]);
+        $linkTypes = $this->linkTypeProvider->getLinkTypes();
+        foreach($linkTypes as $typeName => $typeValue) {
+            $this->linkInitializer->initializeLinks($product, [$typeName => []]);
+        }
 
-        // Gather each linktype info
+        // Set each linktype info
         if (!empty($newLinks)) {
             $productLinks = [];
             foreach ($newLinks as $link) {
