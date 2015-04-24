@@ -13,7 +13,7 @@ class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
     /**
      * Command being tested
      *
-     * @var IndexerInfoCommand
+     * @var IndexerShowModeCommand
      */
     private $command;
 
@@ -30,13 +30,13 @@ class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
     {
 
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
-        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
-        $indexer1->expects($this->once())->method('isScheduled')->willReturn(true);
-        $indexer2 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer2->expects($this->once())->method('getTitle')->willReturn('Title_indexer2');
-        $indexer2->expects($this->once())->method('isScheduled')->willReturn(false);
-        $collection->expects($this->once())->method('getItems')->willReturn([$indexer1, $indexer2]);
+        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
+        $indexerOne->expects($this->once())->method('isScheduled')->willReturn(true);
+        $indexerTwo = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
+        $indexerTwo->expects($this->once())->method('isScheduled')->willReturn(false);
+        $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne, $indexerTwo]);
 
         $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
         $this->indexerFactory->expects($this->never())->method('create');
@@ -45,33 +45,33 @@ class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
         $actualValue = $commandTester->getDisplay();
-        $expectedValue = sprintf('%-50s ', 'Title_indexer1' . ':') . 'Update by Schedule' . PHP_EOL
-            . sprintf('%-50s ', 'Title_indexer2' . ':') . 'Update on Save';
+        $expectedValue = sprintf('%-50s ', 'Title_indexerOne' . ':') . 'Update by Schedule' . PHP_EOL
+            . sprintf('%-50s ', 'Title_indexerTwo' . ':') . 'Update on Save';
         $this->assertStringStartsWith($expectedValue, $actualValue);
     }
 
     public function testExecuteWithIndex()
     {
-        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
-        $indexer1->expects($this->once())->method('isScheduled')->willReturn(true);
-        $indexer2 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer2->expects($this->once())->method('getTitle')->willReturn('Title_indexer2');
-        $indexer2->expects($this->once())->method('isScheduled')->willReturn(false);
-        $indexer3 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer3->expects($this->never())->method('getTitle')->willReturn('Title_indexer3');
-        $indexer3->expects($this->never())->method('isScheduled')->willReturn(false);
+        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
+        $indexerOne->expects($this->once())->method('isScheduled')->willReturn(true);
+        $indexerTwo = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
+        $indexerTwo->expects($this->once())->method('isScheduled')->willReturn(false);
+        $indexerThree = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerThree->expects($this->never())->method('getTitle')->willReturn('Title_indexer3');
+        $indexerThree->expects($this->never())->method('isScheduled')->willReturn(false);
 
         $this->collectionFactory->expects($this->never())->method('create');
-        $this->indexerFactory->expects($this->at(0))->method('create')->willReturn($indexer1);
-        $this->indexerFactory->expects($this->at(1))->method('create')->willReturn($indexer2);
+        $this->indexerFactory->expects($this->at(0))->method('create')->willReturn($indexerOne);
+        $this->indexerFactory->expects($this->at(1))->method('create')->willReturn($indexerTwo);
 
         $this->command = new IndexerShowModeCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['index' => ['id_indexer1,id_indexer2']]);
+        $commandTester->execute(['index' => ['id_indexerOne', 'id_indexerTwo']]);
         $actualValue = $commandTester->getDisplay();
-        $expectedValue = sprintf('%-50s ', 'Title_indexer1' . ':') . 'Update by Schedule' . PHP_EOL
-            . sprintf('%-50s ', 'Title_indexer2' . ':') . 'Update on Save';
+        $expectedValue = sprintf('%-50s ', 'Title_indexerOne' . ':') . 'Update by Schedule' . PHP_EOL
+            . sprintf('%-50s ', 'Title_indexerTwo' . ':') . 'Update on Save';
         $this->assertStringStartsWith($expectedValue, $actualValue);
     }
 }

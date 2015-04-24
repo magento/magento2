@@ -17,19 +17,13 @@ class IndexerInfoCommandTest extends IndexerCommandCommonTestSetup
      */
     private $command;
 
-    public function testGetOptions()
-    {
-        $this->command = new IndexerInfoCommand($this->objectManagerFactory);
-        $this->assertSame([], $this->command->getInputList());
-    }
-
     public function testExecute()
     {
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
-        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer1->expects($this->once())->method('getId')->willReturn('id_indexer1');
-        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
-        $collection->expects($this->once())->method('getItems')->willReturn([$indexer1]);
+        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne->expects($this->once())->method('getId')->willReturn('id_indexerOne');
+        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
+        $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne]);
 
         $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
         $this->indexerFactory->expects($this->never())->method('create');
@@ -37,6 +31,6 @@ class IndexerInfoCommandTest extends IndexerCommandCommonTestSetup
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
         $actualValue = $commandTester->getDisplay();
-        $this->assertSame(sprintf('%-40s %s', 'id_indexer1', 'Title_indexer1') . PHP_EOL, $actualValue);
+        $this->assertSame(sprintf('%-40s %s', 'id_indexerOne', 'Title_indexerOne') . PHP_EOL, $actualValue);
     }
 }

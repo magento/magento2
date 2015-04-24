@@ -29,9 +29,9 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
     public function testExecuteAll()
     {
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
-        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
-        $collection->expects($this->once())->method('getItems')->willReturn([$indexer1]);
+        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
+        $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne]);
 
         $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
         $this->indexerFactory->expects($this->never())->method('create');
@@ -39,71 +39,71 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
         $actualValue = $commandTester->getDisplay();
-        $this->assertStringStartsWith('Title_indexer1 index has been rebuilt successfully in', $actualValue);
+        $this->assertStringStartsWith('Title_indexerOne index has been rebuilt successfully in', $actualValue);
     }
 
     public function testExecuteWithIndex()
     {
-        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer1->expects($this->once())->method('reindexAll');
-        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
-        $indexer1->expects($this->once())->method('load')->with('id_indexer1')->willReturn($indexer1);
+        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne->expects($this->once())->method('reindexAll');
+        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
+        $indexerOne->expects($this->once())->method('load')->with('id_indexerOne')->willReturn($indexerOne);
 
-        $indexer2 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer2->expects($this->once())->method('reindexAll');
-        $indexer2->expects($this->once())->method('getTitle')->willReturn('Title_indexer2');
-        $indexer2->expects($this->once())->method('load')->with('id_indexer2')->willReturn($indexer2);
+        $indexerTwo = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerTwo->expects($this->once())->method('reindexAll');
+        $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
+        $indexerTwo->expects($this->once())->method('load')->with('id_indexerTwo')->willReturn($indexerTwo);
 
         $this->collectionFactory->expects($this->never())->method('create');
-        $this->indexerFactory->expects($this->at(0))->method('create')->willReturn($indexer1);
-        $this->indexerFactory->expects($this->at(1))->method('create')->willReturn($indexer2);
+        $this->indexerFactory->expects($this->at(0))->method('create')->willReturn($indexerOne);
+        $this->indexerFactory->expects($this->at(1))->method('create')->willReturn($indexerTwo);
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['index' => ['id_indexer1,id_indexer2']]);
+        $commandTester->execute(['index' => ['id_indexerOne', 'id_indexerTwo']]);
         $actualValue = $commandTester->getDisplay();
-        $this->assertStringStartsWith('Title_indexer1 index has been rebuilt successfully in', $actualValue);
+        $this->assertStringStartsWith('Title_indexerOne index has been rebuilt successfully in', $actualValue);
     }
 
     public function testExecuteWithLocalizedException()
     {
-        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $localizedException = new \Magento\Framework\Exception\LocalizedException(__('Some Exception Message'));
-        $indexer1->expects($this->once())->method('reindexAll')->will($this->throwException($localizedException));
+        $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($localizedException));
         $this->collectionFactory->expects($this->never())->method('create');
-        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexer1);
+        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexerOne);
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['index' => ['id_indexer1']]);
+        $commandTester->execute(['index' => ['id_indexerOne']]);
         $actualValue = $commandTester->getDisplay();
         $this->assertStringStartsWith('Some Exception Message', $actualValue);
     }
 
     public function testExecuteWithException()
     {
-        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $exception = new \Exception();
-        $indexer1->expects($this->once())->method('reindexAll')->will($this->throwException($exception));
-        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
+        $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($exception));
+        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $this->collectionFactory->expects($this->never())->method('create');
-        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexer1);
+        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexerOne);
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['index' => ['id_indexer1']]);
+        $commandTester->execute(['index' => ['id_indexerOne']]);
         $actualValue = $commandTester->getDisplay();
-        $this->assertStringStartsWith('Title_indexer1 indexer process unknown error:', $actualValue);
+        $this->assertStringStartsWith('Title_indexerOne indexer process unknown error:', $actualValue);
     }
 
     public function testExecuteWithExceptionInLoad()
     {
-        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $exception = new \Exception();
-        $indexer1->expects($this->once())->method('load')->will($this->throwException($exception));
-        $indexer1->expects($this->never())->method('getTitle');
+        $indexerOne->expects($this->once())->method('load')->will($this->throwException($exception));
+        $indexerOne->expects($this->never())->method('getTitle');
         $this->collectionFactory->expects($this->never())->method('create');
-        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexer1);
+        $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexerOne);
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['index' => ['id_indexer1']]);
+        $commandTester->execute(['index' => ['id_indexerOne']]);
         $actualValue = $commandTester->getDisplay();
         $this->assertStringStartsWith('Warning: Unknown indexer with code', $actualValue);
     }

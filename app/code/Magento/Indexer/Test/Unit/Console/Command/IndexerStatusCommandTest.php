@@ -20,30 +20,30 @@ class IndexerStatusCommandTest extends IndexerCommandCommonTestSetup
     public function testExecuteAll()
     {
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
-        $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer1->expects($this->once())->method('getTitle')->willReturn('Title_indexer1');
-        $indexer1
+        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
+        $indexerOne
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(\Magento\Indexer\Model\Indexer\State::STATUS_VALID);
-        $indexer2 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer2->expects($this->once())->method('getTitle')->willReturn('Title_indexer2');
-        $indexer2
+        $indexerTwo = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
+        $indexerTwo
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(\Magento\Indexer\Model\Indexer\State::STATUS_INVALID);
-        $indexer3 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer3->expects($this->once())->method('getTitle')->willReturn('Title_indexer3');
-        $indexer3
+        $indexerThree = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerThree->expects($this->once())->method('getTitle')->willReturn('Title_indexerThree');
+        $indexerThree
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(\Magento\Indexer\Model\Indexer\State::STATUS_WORKING);
-        $indexer4 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $indexer4->expects($this->once())->method('getTitle')->willReturn('Title_indexer4');
+        $indexerFour = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerFour->expects($this->once())->method('getTitle')->willReturn('Title_indexerFour');
         $collection
             ->expects($this->once())
             ->method('getItems')
-            ->willReturn([$indexer1, $indexer2, $indexer3, $indexer4]);
+            ->willReturn([$indexerOne, $indexerTwo, $indexerThree, $indexerFour]);
 
         $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
         $this->indexerFactory->expects($this->never())->method('create');
@@ -51,11 +51,10 @@ class IndexerStatusCommandTest extends IndexerCommandCommonTestSetup
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
         $actualValue = $commandTester->getDisplay();
-        $expectedValue = sprintf('%-50s ', 'Title_indexer1' . ':') . 'Ready' . PHP_EOL
-            . sprintf('%-50s ', 'Title_indexer2' . ':') . 'Reindex required' . PHP_EOL
-            . sprintf('%-50s ', 'Title_indexer3' . ':') . 'Processing' . PHP_EOL
-            . sprintf('%-50s ', 'Title_indexer4' . ':') . 'unknown' . PHP_EOL;
-
+        $expectedValue = sprintf('%-50s ', 'Title_indexerOne' . ':') . 'Ready' . PHP_EOL
+            . sprintf('%-50s ', 'Title_indexerTwo' . ':') . 'Reindex required' . PHP_EOL
+            . sprintf('%-50s ', 'Title_indexerThree' . ':') . 'Processing' . PHP_EOL
+            . sprintf('%-50s ', 'Title_indexerFour' . ':') . 'unknown' . PHP_EOL;
 
         $this->assertStringStartsWith($expectedValue, $actualValue);
     }

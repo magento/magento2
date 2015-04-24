@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command for reindexing indexers.
  */
-class IndexerReindexCommand extends AbstractIndexerCommand
+class IndexerReindexCommand extends AbstractIndexerManageCommand
 {
     /**
      * {@inheritdoc}

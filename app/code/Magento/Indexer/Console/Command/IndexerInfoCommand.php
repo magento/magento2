@@ -7,7 +7,6 @@ namespace Magento\Indexer\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Command for displaying information related to indexers.
@@ -27,19 +26,9 @@ class IndexerInfoCommand extends AbstractIndexerCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $indexers = $this->parseIndexerString(AbstractIndexerCommand::INPUT_KEY_ALL, $output);
+        $indexers = $this->getAllIndexers();
         foreach ($indexers as $indexer) {
             $output->writeln(sprintf('%-40s %s', $indexer->getId(), $indexer->getTitle()));
         }
-    }
-
-    /**
-     * Get list of arguments for the command
-     *
-     * @return InputOption[]
-     */
-    public function getInputList()
-    {
-        return [];
     }
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Command for displaying current index mode for indexers.
  */
-class IndexerShowModeCommand extends AbstractIndexerCommand
+class IndexerShowModeCommand extends AbstractIndexerManageCommand
 {
     /**
      * {@inheritdoc}

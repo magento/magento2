@@ -13,14 +13,15 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * Command for setting index mode for indexers.
  */
-class IndexerSetModeCommand extends AbstractIndexerCommand
+class IndexerSetModeCommand extends AbstractIndexerManageCommand
 {
-    /**
+    /**#@+
      * Names of input arguments or options
      */
     const INPUT_KEY_MODE = 'mode';
     const INPUT_KEY_REALTIME = 'realtime';
     const INPUT_KEY_SCHEDULE = 'schedule';
+    /**#@- */
 
     /**
      * {@inheritdoc}
