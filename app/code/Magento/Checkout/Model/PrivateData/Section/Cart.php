@@ -122,10 +122,9 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         $items = $this->getRecentItems();
         if ($items) {
             foreach ($items as $item) {
-                $itemsData[] = [
-                    'product_type' => $item->getProductType(),
-                ];
-                // TODO: set data
+                $itemsData[] = $item->toArray() + [
+                        'product_type' => $item->getProductType()
+                    ];
                 // TODO: do not miss to check $_cartQty || $block->getAllowCartLink()
             }
         }
