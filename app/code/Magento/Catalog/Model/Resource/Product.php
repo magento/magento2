@@ -162,7 +162,7 @@ class Product extends AbstractResource
         }
 
         $select = $adapter->select()->from(
-            $this->_productWebsiteTable,
+            $this->getProductWebsiteTable(),
             'website_id'
         )->where(
             'product_id = ?',
@@ -181,7 +181,7 @@ class Product extends AbstractResource
     public function getWebsiteIdsByProductIds($productIds)
     {
         $select = $this->_getWriteAdapter()->select()->from(
-            $this->_productWebsiteTable,
+            $this->getProductWebsiteTable(),
             ['product_id', 'website_id']
         )->where(
             'product_id IN (?)',
@@ -313,14 +313,14 @@ class Product extends AbstractResource
             foreach ($insert as $websiteId) {
                 $data[] = ['product_id' => (int)$product->getId(), 'website_id' => (int)$websiteId];
             }
-            $adapter->insertMultiple($this->_productWebsiteTable, $data);
+            $adapter->insertMultiple($this->getProductWebsiteTable(), $data);
         }
 
         if (!empty($delete)) {
             foreach ($delete as $websiteId) {
                 $condition = ['product_id = ?' => (int)$product->getId(), 'website_id = ?' => (int)$websiteId];
 
-                $adapter->delete($this->_productWebsiteTable, $condition);
+                $adapter->delete($this->getProductWebsiteTable(), $condition);
             }
         }
 
