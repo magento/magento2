@@ -11,7 +11,8 @@ try {
 
     $shell = new Zend_Console_Getopt(
         [
-            'profile-s' => 'Profile configuration file',
+            'profile=s' => 'Profile configuration file',
+            'skip-reindex-i' => 'Skip reindex (Default - 0)',
         ]
     );
 
@@ -68,7 +69,9 @@ try {
         $indexer->setScheduled($application->indexersStates[$indexerId['indexer_id']]);
     }
 
-    $application->reindex();
+    if (!\Magento\ToolkitFramework\Helper\Cli::getOption('skip-reindex')) {
+        $application->reindex();
+    }
     $totalEndTime = microtime(true);
     $totalResultTime = $totalEndTime - $totalStartTime;
 
