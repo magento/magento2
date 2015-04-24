@@ -43,21 +43,29 @@ class DataObjectProcessor
     private $typeCaster;
 
     /**
+     * @var FieldNamer
+     */
+    private $fieldNamer;
+
+    /**
      * @param \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
      * @param MethodsMap $methodsMapProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      * @param TypeCaster $typeCaster
+     * @param FieldNamer $fieldNamer
      */
     public function __construct(
         \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver,
         MethodsMap $methodsMapProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor,
-        TypeCaster $typeCaster
+        TypeCaster $typeCaster,
+        FieldNamer $fieldNamer
     ) {
         $this->attributeTypeResolver = $typeResolver;
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->typeCaster = $typeCaster;
+        $this->fieldNamer = $fieldNamer;
     }
 
     /**
@@ -75,40 +83,28 @@ class DataObjectProcessor
 
         /** @var MethodReflection $method */
         foreach ($methods as $methodName => $methodReflectionData) {
-            // any method with parameter(s) gets ignored because we do not know the type and value of
-            // the parameter(s), so we are not able to process
-            if ($methodReflectionData['parameterCount'] > 0) {
+            if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
                 continue;
             }
-            $returnType = $methodReflectionData['type'];
-            if (substr($methodName, 0, 2) === self::IS_METHOD_PREFIX) {
-                $value = $dataObject->{$methodName}();
-                if ($value === null && !$methodReflectionData['isRequired']) {
-                    continue;
-                }
-                $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 2));
-                $outputData[$key] = $this->typeCaster->castValueToType($value, $returnType);
-            } elseif (substr($methodName, 0, 3) === self::HAS_METHOD_PREFIX) {
-                $value = $dataObject->{$methodName}();
-                if ($value === null && !$methodReflectionData['isRequired']) {
-                    continue;
-                }
-                $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
-                $outputData[$key] = $this->typeCaster->castValueToType($value, $returnType);
-            } elseif (substr($methodName, 0, 3) === self::GETTER_PREFIX) {
-                $value = $dataObject->{$methodName}();
-                if ($methodName === 'getCustomAttributes' && $value === []) {
-                    continue;
-                }
-                if ($value === null && !$methodReflectionData['isRequired']) {
-                    continue;
-                }
-                $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
-                if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
-                    $value = $this->convertCustomAttributes($value, $dataObjectType);
-                } elseif ($key === "extension_attributes") {
-                    $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
-                } elseif (is_object($value) && !($value instanceof Phrase)) {
+
+            $value = $dataObject->{$methodName}();
+            $isMethodRequired = $this->methodsMapProcessor->isMethodRequired($dataObjectType, $methodName);
+            if ($value === null && !$isMethodRequired) {
+                continue;
+            }
+
+            $returnType = $this->methodsMapProcessor->getMethodReturnType($dataObjectType, $methodName);
+            $key = $this->fieldNamer->getFieldNameForMethodName($methodName);
+            if ($key === 'custom_attributes' && $value === []) {
+                continue;
+            }
+
+            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
+                $value = $this->convertCustomAttributes($value, $dataObjectType);
+            } elseif ($key === "extension_attributes") {
+                $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
+            } else {
+                if (is_object($value) && !($value instanceof Phrase)) {
                     $value = $this->buildOutputDataArray($value, $returnType);
                 } elseif (is_array($value)) {
                     $valueResult = [];
@@ -123,9 +119,9 @@ class DataObjectProcessor
                 } else {
                     $value = $this->typeCaster->castValueToType($value, $returnType);
                 }
-
-                $outputData[$key] = $value;
             }
+
+            $outputData[$key] = $value;
         }
         return $outputData;
     }

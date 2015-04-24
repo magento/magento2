@@ -33,18 +33,26 @@ class MethodsMap
     private $serviceInterfaceMethodsMap = [];
 
     /**
+     * @var FieldNamer
+     */
+    private $fieldNamer;
+
+    /**
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param TypeProcessor $typeProcessor
      * @param \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
+     * @param FieldNamer $fieldNamer
      */
     public function __construct(
         \Magento\Framework\Cache\FrontendInterface $cache,
         TypeProcessor $typeProcessor,
-        \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
+        \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver,
+        FieldNamer $fieldNamer
     ) {
         $this->cache = $cache;
         $this->typeProcessor = $typeProcessor;
         $this->attributeTypeResolver = $typeResolver;
+        $this->fieldNamer = $fieldNamer;
     }
 
     /**
@@ -131,5 +139,38 @@ class MethodsMap
 
         $isExcludedMagicMethod = strpos($method->getName(), '__') === 0;
         return $isSuitableMethodType && !$isExcludedMagicMethod;
+    }
+
+    /**
+     * @param string $type
+     * @param string $methodName
+     * @return bool
+     */
+    public function isMethodValidForDataField($type, $methodName)
+    {
+        $methods = $this->getMethodsMap($type);
+        if (isset($methods[$methodName])) {
+            $methodMetadata = $methods[$methodName];
+            // any method with parameter(s) gets ignored because we do not know the type and value of
+            // the parameter(s), so we are not able to process
+            if ($methodMetadata['parameterCount'] > 0) {
+                return false;
+            }
+
+            return $this->fieldNamer->getFieldNameForMethodName($methodName) !== null;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $type
+     * @param string $methodName
+     * @return bool
+     */
+    public function isMethodRequired($type, $methodName)
+    {
+        $methods = $this->getMethodsMap($type);
+        return $methods[$methodName]['isRequired'];
     }
 }
