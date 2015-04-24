@@ -42,7 +42,6 @@ class Console
      *
      * @param array $data
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function write(array $data)
     {
@@ -51,22 +50,14 @@ class Console
             if (!count($classes)) {
                 continue;
             }
-            if ($type === Log::GENERATION_SUCCESS) {
-                $startTag = '<info>';
-                $endTag = '</info>';
-
-            } else {
-                $startTag = '<error>';
-                $endTag = '</error>';
-            }
-
-            $this->console->writeln($startTag . $this->_messages[$type] . $endTag);
+            $this->console->writeln($this->getStartTag($type) . $this->_messages[$type] . $this->getEndTag($type));
             foreach ($classes as $className => $messages) {
                 if (count($messages)) {
-                    $this->console->writeln($startTag . "\t" . $className . $endTag);
+                    $this->console->writeln($this->getStartTag($type) . "\t" . $className . $this->getEndTag($type));
                     foreach ($messages as $message) {
                         if ($message) {
-                            $this->console->writeln($startTag . "\t\t" . $message . $endTag);
+                            $this->console->writeln($this->getStartTag($type) . "\t\t"
+                                . $message . $this->getEndTag($type));
                             if ($type != Log::GENERATION_SUCCESS) {
                                 $errorsCount++;
                             }
@@ -78,6 +69,36 @@ class Console
 
         if ($errorsCount) {
             $this->console->writeln('<error>' . 'Total Errors Count: ' . $errorsCount . '</error>');
+        }
+    }
+
+    /**
+     * Retrieve starting output tag
+     *
+     * @param string $type
+     * @return string
+     */
+    private function getStartTag($type)
+    {
+        if ($type === Log::GENERATION_SUCCESS) {
+            return '<info>';
+        } else {
+            return '<error>';
+        }
+    }
+
+    /**
+     * Retrieve ending output tag
+     *
+     * @param string $type
+     * @return string
+     */
+    private function getEndTag($type)
+    {
+        if ($type === Log::GENERATION_SUCCESS) {
+            return '</info>';
+        } else {
+            return '</error>';
         }
     }
 }
