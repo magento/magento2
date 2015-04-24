@@ -41,16 +41,16 @@ class ItemPool implements ItemPoolInterface
      *
      * @param ObjectManagerInterface $objectManager
      * @param string $defaultItemId
-     * @param array $sectionSourceMap
+     * @param array $itemMap
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         $defaultItemId,
-        array $sectionSourceMap
+        array $itemMap = []
     ) {
         $this->objectManager = $objectManager;
         $this->defaultItemId = $defaultItemId;
-        $this->itemMap = $sectionSourceMap;
+        $this->itemMap = $itemMap;
     }
 
     /**
