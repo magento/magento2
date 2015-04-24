@@ -4,9 +4,8 @@
  */
 define([
     'uiComponent',
-    'underscore',
     'Magento_Customer/js/customer-data'
-], function (Component, _, customerData) {
+], function (Component, customerData) {
     'use strict';
 
     return Component.extend({
@@ -16,12 +15,8 @@ define([
             this._super();
             this.cart = customerData.get('cart');
         },
-        getItemTemplate: function (item) {
-            if (_.has(this.itemRenderer, item.product_type)) {
-                return this.itemRenderer[item.product_type];
-            }
-            return this.itemRenderer['default'];
+        getItemRenderer: function (productType) {
+            return this.itemRenderer[productType] || 'defaultRenderer';
         }
     });
 });
-

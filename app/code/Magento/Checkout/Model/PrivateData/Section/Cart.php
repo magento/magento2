@@ -39,6 +39,21 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $checkoutHelper;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Image\View
+     */
+    protected $productImageView;
+
+    /**
+     * @var \Magento\Msrp\Helper\Data
+     */
+    protected $msrpHelper;
+
+    /**
+     * @var \Magento\Framework\UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
@@ -50,12 +65,18 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Helper\Data $checkoutHelper,
+        \Magento\Catalog\Model\Product\Image\View $productImageView,
+        \Magento\Msrp\Helper\Data $msrpHelper,
+        \Magento\Framework\UrlInterface $urlBuilder,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->catalogUrl = $catalogUrl;
         $this->checkoutCart = $checkoutCart;
         $this->checkoutHelper = $checkoutHelper;
+        $this->productImageView = $productImageView;
+        $this->msrpHelper = $msrpHelper;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -71,7 +92,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
                 : 0,
             'cart_empty_message' => '',
             'possible_onepage_checkout' => $this->isPossibleOnepageCheckout(),
-            'items' => $this->getRecentItemsData(),
+            'items' => $this->getRecentItems(),
         ];
     }
 
@@ -112,27 +133,6 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     }
 
     /**
-     * Get recent items data
-     *
-     * @return array
-     */
-    protected function getRecentItemsData()
-    {
-        $itemsData = [];
-        $items = $this->getRecentItems();
-        if ($items) {
-            foreach ($items as $item) {
-                $itemsData[] = [
-                    'product_type' => $item->getProductType(),
-                ];
-                // TODO: set data
-                // TODO: do not miss to check $_cartQty || $block->getAllowCartLink()
-            }
-        }
-        return $itemsData;
-    }
-
-    /**
      * Get array of last added items
      *
      * @return \Magento\Quote\Model\Quote\Item[]
@@ -156,7 +156,28 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
                 $urlDataObject = new \Magento\Framework\Object($products[$productId]);
                 $item->getProduct()->setUrlDataObject($urlDataObject);
             }
-            $items[] = $item;
+            $this->productImageView->init($item->getProduct(), 'mini_cart_product_thumbnail', 'Magento_Catalog');
+            //TODO: Retrieve item info prom item pool
+
+            $items[] = [
+                'product_type' => $item->getProductType(),
+                'qty' => $this->getQty($item),
+                'item_id' => $item->getId(),
+                'configure_url' => $this->getConfigureUrl($item),
+                'is_visible_in_site_visibility' => $item->getProduct()->isVisibleInSiteVisibility(),
+                'name' => $this->getProductName($item),
+                'url' => $this->getProductUrl($item),
+                'has_url' => $this->hasProductUrl($item),
+                'price' => $this->checkoutHelper->formatPrice($item->getCalculationPrice()),
+                'image' => [
+                    'src' => $this->productImageView->getUrl(),
+                    'alt' => $this->productImageView->getLabel(),
+                    'width' => $this->productImageView->getWidth(),
+                    'height' => $this->productImageView->getHeight(),
+                ],
+                'canApplyMsrp' => $this->msrpHelper->isShowBeforeOrderConfirm($item->getProduct())
+                    && $this->msrpHelper->isMinimalPriceLessMsrp($item->getProduct())
+            ];
         }
         return $items;
     }
@@ -172,5 +193,94 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
             return $this->getCustomQuote()->getAllVisibleItems();
         }
         return $this->getQuote()->getAllVisibleItems();
+    }
+
+    /**
+     * Get item configure url
+     * @param \Magento\Quote\Model\Quote\Item  $item
+     *
+     * @return string
+     */
+    public function getConfigureUrl($item)
+    {
+        return $this->urlBuilder->getUrl(
+            'checkout/cart/configure',
+            ['id' => $item->getId(), 'product_id' => $item->getProduct()->getId()]
+        );
+    }
+
+    /**
+     * Get quote item qty
+     * @param \Magento\Quote\Model\Quote\Item  $item
+     *
+     * @return float|int
+     */
+    public function getQty($item)
+    {
+        return $item->getQty() * 1;
+    }
+
+    /**
+     * Check Product has URL
+     * @param \Magento\Quote\Model\Quote\Item  $item
+     *
+     * @return bool
+     */
+    public function hasProductUrl($item)
+    {
+        if ($item->getRedirectUrl()) {
+            return true;
+        }
+
+        $product = $item->getProduct();
+        $option = $item->getOptionByCode('product_type');
+        if ($option) {
+            $product = $option->getProduct();
+        }
+
+        if ($product->isVisibleInSiteVisibility()) {
+            return true;
+        } else {
+            if ($product->hasUrlDataObject()) {
+                $data = $product->getUrlDataObject();
+                if (in_array($data->getVisibility(), $product->getVisibleInSiteVisibilities())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Retrieve URL to item Product
+     * @param \Magento\Quote\Model\Quote\Item  $item
+     *
+     * @return string
+     */
+    public function getProductUrl($item)
+    {
+        if ($item->getRedirectUrl()) {
+            return $item->getRedirectUrl();
+        }
+
+        $product = $item->getProduct();
+        $option = $item->getOptionByCode('product_type');
+        if ($option) {
+            $product = $option->getProduct();
+        }
+
+        return $product->getUrlModel()->getUrl($product);
+    }
+
+    /**
+     * Get item product name
+     * @param \Magento\Quote\Model\Quote\Item  $item
+     *
+     * @return string
+     */
+    public function getProductName($item)
+    {
+        return $item->getProduct()->getName();
     }
 }
