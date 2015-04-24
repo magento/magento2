@@ -57,7 +57,8 @@ class Dir
     public function getDir($moduleName, $type = '')
     {
         if (null === $path = $this->dirResolver->getModulePath($moduleName)) {
-            $path = $this->_string->upperCaseWords($moduleName, '_', '/');
+            $relativePath = $this->_string->upperCaseWords($moduleName, '_', '/');
+            $path = $this->_modulesDirectory->getAbsolutePath($relativePath);
         }
         
         if ($type) {
@@ -67,8 +68,6 @@ class Dir
             $path .= '/' . $type;
         }
 
-        $result = $this->_modulesDirectory->getAbsolutePath($path);
-
-        return $result;
+        return $path;
     }
 }
