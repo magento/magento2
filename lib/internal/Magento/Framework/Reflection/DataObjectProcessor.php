@@ -120,8 +120,11 @@ class DataObjectProcessor
                         $valueResult[] = $this->typeCaster->castValueToType($singleValue, $arrayElementType);
                     }
                     $value = $valueResult;
+                } else {
+                    $value = $this->typeCaster->castValueToType($value, $returnType);
                 }
-                $outputData[$key] = $this->typeCaster->castValueToType($value, $returnType);
+
+                $outputData[$key] = $value;
             }
         }
         return $outputData;
