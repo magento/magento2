@@ -112,7 +112,7 @@ abstract class AbstractFile implements WriterInterface
                 throw new \RuntimeException(
                     sprintf('Missed context in row #%d.', $key + 1)
                     . "\n"
-                    . 'Each row has to consist of 3 columns: original phrase, translation, context'
+                    . 'Each row has to consist of 4 columns: original phrase, translation, context type, context value'
                 );
             }
             foreach ($phrase->getContextValue() as $context) {
