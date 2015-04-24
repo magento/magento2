@@ -1108,7 +1108,7 @@
     </type>
     <type name="Magento\Framework\App\Action\Context">
         <arguments>
-            <argument name="url" xsi:type="object">Magento\Framework\App\ViewInterface\Proxy</argument>
+            <argument name="view" xsi:type="object">Magento\Framework\App\ViewInterface\Proxy</argument>
         </arguments>
     </type>
 </config>

@@ -472,7 +472,7 @@
     </type>
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>
-            <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\Resource\Category\Collection\Proxy</argument>
+            <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\Resource\Category\Proxy</argument>
         </arguments>
     </type>
 </config>
