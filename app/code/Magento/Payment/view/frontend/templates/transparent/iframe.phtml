@@ -3,29 +3,32 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/** @var \Magento\Payment\Block\Transparent\Iframe $this */
-$params = $this->getParams();
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Payment\Block\Transparent\Iframe $block */
+$params = $block->getParams();
 ?>
 <html>
 <head>
-<script type="text/javascript">
+<script>
     var require = window.top.require;
     require(['jquery'], function($) {
         $('#opc-review').trigger('hideAjaxLoader');
     });
-    <?php if (isset($params['redirect'])): ?>
-        window.location="<?php echo $this->escapeUrl($params['redirect']) ?>";
-    <?php elseif (isset($params['redirect_parent'])): ?>
-        window.top.location="<?php echo $this->escapeUrl($params['redirect_parent']) ?>";
-    <?php elseif (isset($params['error_msg'])): ?>
-        window.top.alert(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
-    <?php elseif (isset($params['order_success'])): ?>
-        window.top.location = "<?php echo $params['order_success'] ?>";
-    <?php else: ?>
-        require(['jquery'], function($) {
-            $('#opc-review').trigger('saveOrder');
-        });
-    <?php endif; ?>
+<?php if (isset($params['redirect'])): ?>
+    window.location="<?php echo $this->escapeUrl($params['redirect']) ?>";
+<?php elseif (isset($params['redirect_parent'])): ?>
+    window.top.location="<?php echo $this->escapeUrl($params['redirect_parent']) ?>";
+<?php elseif (isset($params['error_msg'])): ?>
+    window.top.alert(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
+<?php elseif (isset($params['order_success'])): ?>
+    window.top.location = "<?php echo $params['order_success'] ?>";
+<?php else: ?>
+    require(['jquery'], function($) {
+        $('#opc-review').trigger('saveOrder');
+    });
+<?php endif; ?>
 </script>
 </head>
 <body>
