@@ -303,7 +303,7 @@ class Deployer
     /**
      * Verbose log
      *
-     * @param $message
+     * @param string $message
      * @return void
      */
     private function verboseLog($message)
