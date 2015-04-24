@@ -8,13 +8,14 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Controller\RegistryConstants;
+use Magento\Framework\Controller\ResultFactory;
 
 class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**
      * Show Edit Form
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -23,35 +24,27 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rate
         try {
             $taxRateDataObject = $this->_taxRateRepository->get($rateId);
         } catch (NoSuchEntityException $e) {
-            $this->getResponse()->setRedirect($this->getUrl("*/*/"));
-            return;
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+            return $resultRedirect->setPath("*/*/");
         }
 
-        $this->_initAction()->_addBreadcrumb(
-            __('Manage Tax Rates'),
-            __('Manage Tax Rates'),
-            $this->getUrl('tax/rate')
-        )->_addBreadcrumb(
-            __('Edit Tax Rate'),
-            __('Edit Tax Rate')
-        )->_addContent(
-            $this->_view->getLayout()->createBlock(
-                'Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save'
-            )->assign(
-                'header',
-                __('Edit Tax Rate')
-            )->assign(
+        $resultPage = $this->initResultPage();
+        $layout = $resultPage->getLayout();
+
+        $toolbarSaveBlock = $layout->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
+            ->assign('header', __('Edit Tax Rate'))
+            ->assign(
                 'form',
-                $this->_view->getLayout()->createBlock(
-                    'Magento\Tax\Block\Adminhtml\Rate\Form',
-                    'tax_rate_form'
-                )->setShowLegend(
-                    true
-                )
-            )
-        );
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(sprintf("%s", $taxRateDataObject->getCode()));
-        $this->_view->renderLayout();
+                $layout->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')->setShowLegend(true)
+            );
+
+        $resultPage->addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'), $this->getUrl('tax/rate'))
+            ->addBreadcrumb(__('Edit Tax Rate'), __('Edit Tax Rate'))
+            ->addContent($toolbarSaveBlock);
+
+        $resultPage->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
+        $resultPage->getConfig()->getTitle()->prepend(sprintf("%s", $taxRateDataObject->getCode()));
+        return $resultPage;
     }
 }
