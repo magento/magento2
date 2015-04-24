@@ -37,9 +37,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->loggerMock->expects($this->once())
             ->method('debug')
-            ->with("''");
+            ->with("'test_value'");
 
-        $this->logger->debug('', $this->configMock);
+        $this->logger->debug('test_value', $this->configMock);
     }
 
     public function testDebugOff()
