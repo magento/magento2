@@ -72,8 +72,8 @@ class I18nPackCommand extends Command
                 self::INPUT_KEY_ALLOW_DUPLICATES,
                 'd',
                 InputOption::VALUE_NONE,
-                'Use the --allow-duplicates parameter to allow to save duplicates of translate.' .
-                ' Omit the parameter otherwise.'
+                'Use the --allow-duplicates parameter to allow saving duplicates of translate.' .
+                ' Otherwise omit the parameter.'
             ),
         ]);
     }
