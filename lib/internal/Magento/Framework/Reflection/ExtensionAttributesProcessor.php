@@ -128,6 +128,10 @@ class ExtensionAttributesProcessor
         return true;
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     private function getRegularTypeForExtensionAttributesType($name)
     {
         return ltrim(str_replace('ExtensionInterface', 'Interface', $name), '\\');

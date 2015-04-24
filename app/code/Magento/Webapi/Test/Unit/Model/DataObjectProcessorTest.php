@@ -23,7 +23,11 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
     protected function setup()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->dataObjectProcessor = $objectManager->getObject('Magento\Framework\Reflection\DataObjectProcessor');
+        $this->dataObjectProcessor = $objectManager->getObject('Magento\Framework\Reflection\DataObjectProcessor',
+            [
+                'methodsMapProcessor' => $objectManager->getObject('Magento\Framework\Reflection\MethodsMap')
+            ]
+        );
         parent::setUp();
     }
 

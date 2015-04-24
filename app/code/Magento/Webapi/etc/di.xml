@@ -22,9 +22,13 @@
     <type name="Magento\Framework\Xml\Parser" shared="false" />
     <type name="Magento\Framework\Code\Scanner\DirectoryScanner" shared="false" />
     <type name="Magento\Server\Reflection" shared="false" />
-    <type name="Magento\Framework\Reflection\DataObjectProcessor">
+    <type name="Magento\Framework\Reflection\MethodsMap">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Webapi</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Reflection\DataObjectProcessor">
+        <arguments>
             <argument name="extensionAttributesProcessor" xsi:type="object">Magento\Framework\Reflection\ExtensionAttributesProcessor\Proxy</argument>
         </arguments>
     </type>

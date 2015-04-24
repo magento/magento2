@@ -21,28 +21,6 @@ class DataObjectProcessor
     const IS_METHOD_PREFIX = 'is';
     const HAS_METHOD_PREFIX = 'has';
     const GETTER_PREFIX = 'get';
-    const SERVICE_INTERFACE_METHODS_CACHE_PREFIX = 'serviceInterfaceMethodsMap';
-    const BASE_MODEL_CLASS = 'Magento\Framework\Model\AbstractExtensibleModel';
-
-    /**
-     * @var \Magento\Framework\Cache\FrontendInterface
-     */
-    protected $cache;
-
-    /**
-     * @var TypeProcessor
-     */
-    protected $typeProcessor;
-
-    /**
-     * @var array
-     */
-    protected $dataInterfaceMethodsMap = [];
-
-    /**
-     * @var array
-     */
-    protected $serviceInterfaceMethodsMap = [];
 
     /**
      * @var \Magento\Framework\Api\AttributeTypeResolverInterface
@@ -50,25 +28,27 @@ class DataObjectProcessor
     protected $attributeTypeResolver;
 
     /**
+     * @var MethodsMap
+     */
+    private $methodsMapProcessor;
+
+    /**
      * @var ExtensionAttributesProcessor
      */
     private $extensionAttributesProcessor;
 
     /**
-     * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param TypeProcessor $typeProcessor
      * @param \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
+     * @param MethodsMap $methodsMapProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      */
     public function __construct(
-        \Magento\Framework\Cache\FrontendInterface $cache,
-        TypeProcessor $typeProcessor,
         \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver,
+        MethodsMap $methodsMapProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor
     ) {
-        $this->cache = $cache;
-        $this->typeProcessor = $typeProcessor;
         $this->attributeTypeResolver = $typeResolver;
+        $this->methodsMapProcessor = $methodsMapProcessor;
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
     }
 
@@ -82,7 +62,7 @@ class DataObjectProcessor
      */
     public function buildOutputDataArray($dataObject, $dataObjectType)
     {
-        $methods = $this->getMethodsMap($dataObjectType);
+        $methods = $this->methodsMapProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
 
         /** @var MethodReflection $method */
@@ -178,18 +158,6 @@ class DataObjectProcessor
     }
 
     /**
-     * Get return type by interface name and method
-     *
-     * @param string $interfaceName
-     * @param string $methodName
-     * @return string
-     */
-    public function getMethodReturnType($interfaceName, $methodName)
-    {
-        return $this->getMethodsMap($interfaceName)[$methodName]['type'];
-    }
-
-    /**
      * Convert array of custom_attributes to use flat array structure
      *
      * @param \Magento\Framework\Api\AttributeInterface[] $customAttributes
@@ -242,79 +210,5 @@ class DataObjectProcessor
         }
         $data[AttributeValue::VALUE] = $value;
         return $data;
-    }
-
-    /**
-     * Return service interface or Data interface methods loaded from cache
-     *
-     * @param string $interfaceName
-     * @return array
-     * <pre>
-     * Service methods' reflection data stored in cache as 'methodName' => 'returnType'
-     * ex.
-     * [
-     *  'create' => '\Magento\Customer\Api\Data\Customer',
-     *  'validatePassword' => 'boolean'
-     * ]
-     * </pre>
-     */
-    public function getMethodsMap($interfaceName)
-    {
-        $key = self::SERVICE_INTERFACE_METHODS_CACHE_PREFIX . "-" . md5($interfaceName);
-        if (!isset($this->serviceInterfaceMethodsMap[$key])) {
-            $methodMap = $this->cache->load($key);
-            if ($methodMap) {
-                $this->serviceInterfaceMethodsMap[$key] = unserialize($methodMap);
-            } else {
-                $methodMap = $this->getMethodMapViaReflection($interfaceName);
-                $this->serviceInterfaceMethodsMap[$key] = $methodMap;
-                $this->cache->save(serialize($this->serviceInterfaceMethodsMap[$key]), $key);
-            }
-        }
-        return $this->serviceInterfaceMethodsMap[$key];
-    }
-
-    /**
-     * Use reflection to load the method information
-     *
-     * @param string $interfaceName
-     * @return array
-     */
-    protected function getMethodMapViaReflection($interfaceName)
-    {
-        $methodMap = [];
-        $class = new ClassReflection($interfaceName);
-        $baseClassMethods = false;
-        foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-            // Include all the methods of classes inheriting from AbstractExtensibleObject.
-            // Ignore all the methods of AbstractExtensibleModel's parent classes
-            if ($method->class === self::BASE_MODEL_CLASS) {
-                $baseClassMethods = true;
-            } elseif ($baseClassMethods) {
-                // ReflectionClass::getMethods() sorts the methods by class (lowest in inheritance tree first)
-                // then by the order they are defined in the class definition
-                break;
-            }
-
-            if ($this->isSuitableMethod($method)) {
-                $methodMap[$method->getName()] = $this->typeProcessor->getGetterReturnType($method);
-            }
-        }
-        return $methodMap;
-    }
-
-    /**
-     * Determines if the method is suitable to be used by the processor.
-     *
-     * @param \ReflectionMethod $method
-     * @return bool
-     */
-    protected function isSuitableMethod($method)
-    {
-        $isSuitableMethodType = !($method->isConstructor() || $method->isFinal()
-            || $method->isStatic() || $method->isDestructor());
-
-        $isExcludedMagicMethod = strpos($method->getName(), '__') === 0;
-        return $isSuitableMethodType && !$isExcludedMagicMethod;
     }
 }
