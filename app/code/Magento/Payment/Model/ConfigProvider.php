@@ -23,12 +23,16 @@ class ConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         return [
-            'ccAvailableTypes' => $this->config->getCcTypes(),
-            'ccMonths' => $this->config->getMonths(),
-            'ccYears' => $this->config->getYears(),
-            'ccHasVerification' => true,
-            'ccHasSsCardType' => false,
-            'ccSsStartYears' => $this->getSsStartYears(),
+            'payment' => [
+                'cc' => [
+                    'availableTypes' => $this->getCcAvailableTypes(),
+                    'months' => $this->getCcMonths(),
+                    'years' => $this->getCcYears(),
+                    'hasVerification' => $this->hasVerification(),
+                    'hasSsCardType' => $this->hasSsCardType(),
+                    'ssStartYears' => $this->getSsStartYears(),
+                ]
+            ]
         ];
     }
 
@@ -47,5 +51,55 @@ class ConfigProvider implements ConfigProviderInterface
             $years[$year] = $year;
         }
         return $years;
+    }
+
+    /**
+     * Retrieve availables credit card types
+     *
+     * @return array
+     */
+    protected function getCcAvailableTypes()
+    {
+        return $this->config->getCcTypes();
+    }
+
+    /**
+     * Retrieve credit card expire months
+     *
+     * @return array
+     */
+    protected function getCcMonths()
+    {
+        return $this->config->getMonths();
+    }
+
+    /**
+     * Retrieve credit card expire years
+     *
+     * @return array
+     */
+    protected function getCcYears()
+    {
+        return $this->config->getYears();
+    }
+
+    /**
+     * Retrieve has verification configuration
+     *
+     * @return bool
+     */
+    protected function hasVerification()
+    {
+        return true;
+    }
+
+    /**
+     * Whether switch/solo card type available
+     *
+     * @return bool
+     */
+    protected function hasSsCardType()
+    {
+        return false;
     }
 }

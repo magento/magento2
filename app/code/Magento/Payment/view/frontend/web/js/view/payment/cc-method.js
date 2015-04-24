@@ -42,7 +42,7 @@ define(
                 };
             },
             getCcAvailableTypes: function() {
-                return _.map(window.checkoutConfig.ccAvailableTypes, function(value, key) {
+                return _.map(window.checkoutConfig.payment.cc.availableTypes, function(value, key) {
                     return {
                         'value': key,
                         'type': value
@@ -50,7 +50,7 @@ define(
                 });
             },
             getCcMonths: function() {
-                return _.map(window.checkoutConfig.ccMonths, function(value, key) {
+                return _.map(window.checkoutConfig.payment.cc.months, function(value, key) {
                     return {
                         'value': key,
                         'month': value
@@ -58,7 +58,7 @@ define(
                 });
             },
             getCcYears: function() {
-                return _.map(window.checkoutConfig.ccYears, function(value, key) {
+                return _.map(window.checkoutConfig.payment.cc.years, function(value, key) {
                     return {
                         'value': key,
                         'year': value
@@ -66,13 +66,13 @@ define(
                 });
             },
             hasVerification: function() {
-                return window.checkoutConfig.ccHasVerification;
+                return window.checkoutConfig.payment.cc.hasVerification;
             },
             hasSsCardType: function() {
-                return window.checkoutConfig.ccHasSsCardType;
+                return window.checkoutConfig.payment.cc.hasSsCardType;
             },
             getSsStartYears: function() {
-                return _.map(window.checkoutConfig.ccSsStartYears, function(value, key) {
+                return _.map(window.checkoutConfig.payment.cc.ssStartYears, function(value, key) {
                     return {
                         'value': key,
                         'year': value
