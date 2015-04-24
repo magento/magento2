@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Console;
+namespace Magento\Indexer\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,10 +19,7 @@ class IndexerInfoCommand extends AbstractIndexerCommand
      */
     protected function configure()
     {
-        $this->setName('indexer:info')
-            ->setDescription(
-                'Shows allowed Indexers'
-            );
+        $this->setName('indexer:info')->setDescription('Shows allowed Indexers');
     }
 
     /**
@@ -41,7 +38,7 @@ class IndexerInfoCommand extends AbstractIndexerCommand
      *
      * @return InputOption[]
      */
-    public function getOptionsList()
+    public function getInputList()
     {
         return [];
     }

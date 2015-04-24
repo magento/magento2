@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Console;
+namespace Magento\Indexer\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,7 +21,7 @@ class IndexerReindexCommand extends AbstractIndexerCommand
         $this->setName('indexer:reindex')
             ->setDescription(
                 'Reindexes Data'
-            )->setDefinition($this->getOptionsList());
+            )->setDefinition($this->getInputList());
         parent::configure();
     }
 

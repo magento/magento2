@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Console;
+namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Indexer\Console\IndexerSetModeCommand;
+use Magento\Indexer\Console\Command\IndexerSetModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -23,7 +23,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
     public function testGetOptions()
     {
         $this->command = new IndexerSetModeCommand($this->objectManagerFactory);
-        $optionsList = $this->command->getOptionsList();
+        $optionsList = $this->command->getInputList();
         $this->assertSame(3, sizeof($optionsList));
         $this->assertSame('mode', $optionsList[0]->getName());
         $this->assertSame('all', $optionsList[1]->getName());
@@ -144,6 +144,7 @@ class IndexerSetModeCommandTest extends IndexerCommandCommonTestSetup
             ],
         ];
     }
+
     public function testExecuteWithLocalizedException()
     {
         $indexer1 = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);

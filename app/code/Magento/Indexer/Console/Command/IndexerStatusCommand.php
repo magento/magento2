@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Console;
+namespace Magento\Indexer\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,7 +20,7 @@ class IndexerStatusCommand extends AbstractIndexerCommand
     {
         $this->setName('indexer:status')
             ->setDescription('Shows status of Indexer')
-            ->setDefinition($this->getOptionsList());
+            ->setDefinition($this->getInputList());
         parent::configure();
     }
 

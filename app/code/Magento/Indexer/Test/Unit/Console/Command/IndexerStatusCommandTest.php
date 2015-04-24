@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Console;
+namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Indexer\Console\IndexerStatusCommand;
+use Magento\Indexer\Console\Command\IndexerStatusCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerStatusCommandTest extends IndexerCommandCommonTestSetup

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Console;
+namespace Magento\Indexer\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -64,27 +64,27 @@ class AbstractIndexerCommand extends Command
      * @param OutputInterface $output
      * @return IndexerInterface[]
      */
-    public function getIndexers(InputInterface $input, OutputInterface $output)
+    protected function getIndexers(InputInterface $input, OutputInterface $output)
     {
-        $inputArguments = $input->getArgument(AbstractIndexerCommand::INPUT_KEY_INDEXERS);
+        $inputArguments = $input->getArgument(self::INPUT_KEY_INDEXERS);
         if (isset($inputArguments) && sizeof($inputArguments)>0) {
             $indexes = implode(',', $inputArguments);
         } else {
-            $indexes = AbstractIndexerCommand::INPUT_KEY_ALL;
+            $indexes = self::INPUT_KEY_ALL;
         }
         $indexers = $this->parseIndexerString($indexes, $output);
         return $indexers;
     }
 
     /**
-     * Get list of arguments for the command
+     * Get list of options and arguments for the command
      *
-     * @return InputOption[]
+     * @return mixed
      */
-    public function getOptionsList()
+    public function getInputList()
     {
         return [
-            new InputOption(self::INPUT_KEY_ALL, 'a', InputOption::VALUE_NONE, 'Displays status of all Indexes'),
+            new InputOption(self::INPUT_KEY_ALL, 'a', InputOption::VALUE_NONE, 'All Indexes'),
             new InputArgument(
                 self::INPUT_KEY_INDEXERS,
                 InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
@@ -100,10 +100,10 @@ class AbstractIndexerCommand extends Command
      * @param OutputInterface $output
      * @return IndexerInterface[]
      */
-    public function parseIndexerString($string, OutputInterface $output)
+    protected function parseIndexerString($string, OutputInterface $output)
     {
         $indexers = [];
-        if ($string === AbstractIndexerCommand::INPUT_KEY_ALL) {
+        if ($string === self::INPUT_KEY_ALL) {
             /** @var Indexer[] $indexers */
             $indexers = $this->collectionFactory->create()->getItems();
         } elseif (!empty($string)) {

@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Console;
+namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Indexer\Console\IndexerReindexCommand;
+use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
@@ -20,7 +20,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
     public function testGetOptions()
     {
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
-        $optionsList = $this->command->getOptionsList();
+        $optionsList = $this->command->getInputList();
         $this->assertSame(2, sizeof($optionsList));
         $this->assertSame('all', $optionsList[0]->getName());
         $this->assertSame('index', $optionsList[1]->getName());

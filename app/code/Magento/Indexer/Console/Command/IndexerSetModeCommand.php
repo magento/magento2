@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Console;
+namespace Magento\Indexer\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,7 +30,7 @@ class IndexerSetModeCommand extends AbstractIndexerCommand
         $this->setName('indexer:set-mode')
             ->setDescription(
                 'Sets index mode type'
-            )->setDefinition($this->getOptionsList());
+            )->setDefinition($this->getInputList());
         parent::configure();
     }
 
@@ -75,14 +75,14 @@ class IndexerSetModeCommand extends AbstractIndexerCommand
      *
      * @return InputOption[]
      */
-    public function getOptionsList()
+    public function getInputList()
     {
         $modeOptions[] = new InputArgument(
             self::INPUT_KEY_MODE,
             InputArgument::OPTIONAL,
             'Indexer mode type ['. self::INPUT_KEY_REALTIME . '|' . self::INPUT_KEY_SCHEDULE .']'
         );
-        $optionsList = array_merge($modeOptions, parent::getOptionsList());
+        $optionsList = array_merge($modeOptions, parent::getInputList());
         return $optionsList;
     }
 

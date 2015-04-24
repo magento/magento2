@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Indexer\Test\Unit\Console;
+namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Indexer\Console\IndexerInfoCommand;
+use Magento\Indexer\Console\Command\IndexerInfoCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerInfoCommandTest extends IndexerCommandCommonTestSetup
@@ -20,7 +20,7 @@ class IndexerInfoCommandTest extends IndexerCommandCommonTestSetup
     public function testGetOptions()
     {
         $this->command = new IndexerInfoCommand($this->objectManagerFactory);
-        $this->assertSame([], $this->command->getOptionsList());
+        $this->assertSame([], $this->command->getInputList());
     }
 
     public function testExecute()
