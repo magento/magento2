@@ -467,4 +467,12 @@
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface" type="\Magento\Catalog\Model\Product\Option\Value" />
     <virtualType name="Magento\Catalog\Model\Resource\Attribute\Collection" type="Magento\Eav\Model\Resource\Entity\Attribute\Collection">
     </virtualType>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="transactionWrapper" type="\Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper" sortOrder="-1"/>
+    </type>
+    <type name="Magento\Catalog\Model\CategoryRepository">
+        <arguments>
+            <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\Resource\Category\Collection\Proxy</argument>
+        </arguments>
+    </type>
 </config>

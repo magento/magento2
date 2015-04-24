@@ -91,9 +91,48 @@ class Product extends AbstractResource
             $modelFactory,
             $data
         );
-        $this->setType(\Magento\Catalog\Model\Product::ENTITY)->setConnection('catalog_read', 'catalog_write');
-        $this->_productWebsiteTable = $this->getTable('catalog_product_website');
-        $this->_productCategoryTable = $this->getTable('catalog_category_product');
+        $this->_read  = 'catalog_read';
+        $this->_write = 'catalog_write';
+    }
+
+    /**
+     * Entity type getter and lazy loader
+     *
+     * @return \Magento\Eav\Model\Entity\Type
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getEntityType()
+    {
+        if (empty($this->_type)) {
+            $this->setType(\Magento\Catalog\Model\Product::ENTITY);
+        }
+        return parent::getEntityType();
+    }
+
+    /**
+     * Product Website table name getter
+     *
+     * @return string
+     */
+    public function getProductWebsiteTable()
+    {
+        if (!$this->_productWebsiteTable) {
+            $this->_productWebsiteTable = $this->getTable('catalog_product_website');
+        }
+        return $this->_productWebsiteTable;
+    }
+
+    /**
+     * Product Category table name getter
+     *
+     * @return string
+     */
+    public function getProductCategoryTable()
+    {
+        if (!$this->_productCategoryTable) {
+            $this->_productCategoryTable = $this->getTable('catalog_category_product');
+        }
+        return $this->_productCategoryTable;
     }
 
     /**
@@ -171,7 +210,7 @@ class Product extends AbstractResource
         $adapter = $this->_getReadAdapter();
 
         $select = $adapter->select()->from(
-            $this->_productCategoryTable,
+            $this->getProductCategoryTable(),
             'category_id'
         )->where(
             'product_id = ?',
@@ -329,7 +368,7 @@ class Product extends AbstractResource
                 ];
             }
             if ($data) {
-                $write->insertMultiple($this->_productCategoryTable, $data);
+                $write->insertMultiple($this->getProductCategoryTable(), $data);
             }
         }
 
@@ -337,7 +376,7 @@ class Product extends AbstractResource
             foreach ($delete as $categoryId) {
                 $where = ['product_id = ?' => (int)$object->getId(), 'category_id = ?' => (int)$categoryId];
 
-                $write->delete($this->_productCategoryTable, $where);
+                $write->delete($this->getProductCategoryTable(), $where);
             }
         }
 
