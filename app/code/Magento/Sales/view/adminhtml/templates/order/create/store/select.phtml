@@ -9,46 +9,55 @@
 ?>
 <?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Store\Select */ ?>
 <div class="store-scope form-inline">
-    <div class="tree-store-scope">
-    <?php $showHelpHint = 0; ?>
-    <?php foreach ($block->getWebsiteCollection() as $_website): ?>
-        <?php $showWebsite = false; ?>
-        <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
-            <?php $showGroup = false; ?>
-            <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
-                <?php if ($showWebsite == false): ?>
-                    <?php $showWebsite = true; ?>
-                    <div class="field field-website_label">
-                        <label class="label" for=""><span><?php echo $block->escapeHtml($_website->getName()) ?></span></label>
-                        <div class="control"></div>
-                        <?php if ($showHelpHint == 0):
-                            echo $block->getHintHtml();
-                            $showHelpHint = 1;
-                        endif; ?>
-                    </div>
-                <?php endif; ?>
-                <?php if ($showGroup == false): ?>
-                    <?php $showGroup = true; ?>
-                    <div class="field field-group_label">
-                        <label class="label" for=""><span><?php echo $block->escapeHtml($_group->getName()) ?></span></label>
-                        <div class="control"></div>
-                    </div>
-                <?php endif; ?>
-                <div class="field field-store_label">
-                     <label class="label" for=""><span><?php echo $block->escapeHtml($_group->getName()) ?></span></label>
-                    <div class="control">
-                        <div class="nested">
-                            <div class="field choice">
-                                <input type="radio" id="store_<?php echo $_store->getId() ?>" class="radio" onclick="order.setStoreId('<?php echo $_store->getId() ?>')"/>
-                                <label for="store_<?php echo $_store->getId() ?>"><?php echo $block->escapeHtml($_store->getName()) ?></label>
+    <div class="admin__fieldset tree-store-scope">
+        <?php $showHelpHint = 0; ?>
+        <?php foreach ($block->getWebsiteCollection() as $_website): ?>
+            <?php $showWebsite = false; ?>
+            <?php foreach ($block->getGroupCollection($_website) as $_group): ?>
+                <?php $showGroup = false; ?>
+                <?php foreach ($block->getStoreCollection($_group) as $_store): ?>
+                    <?php if ($showWebsite == false): ?>
+                        <?php $showWebsite = true; ?>
+                        <div class="admin__field field-website_label">
+                            <label class="admin__field-label" for="">
+                                <span><?php echo $block->escapeHtml($_website->getName()) ?></span>
+                            </label>
+                            <div class="admin__field-control">
+                                <div class="admin__field admin__field-option">
+                                    <?php if ($showHelpHint == 0):
+                                        echo $block->getHintHtml();
+                                        $showHelpHint = 1;
+                                    endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($showGroup == false): ?>
+                        <?php $showGroup = true; ?>
+                        <div class="admin__field field-group_label">
+                            <label class="admin__field-label" for=""><span><?php echo $block->escapeHtml($_group->getName()) ?></span></label>
+                            <div class="admin__field-control"></div>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="admin__field field-store_label">
+                        <label class="admin__field-label" for=""><span><?php echo $block->escapeHtml($_group->getName()) ?></span></label>
+                        <div class="admin__field-control">
+                            <div class="nested">
+                                <div class="admin__field admin__field-option">
+                                    <input type="radio" id="store_<?php echo $_store->getId() ?>" class="admin__control-radio" onclick="order.setStoreId('<?php echo $_store->getId() ?>')"/>
+                                    <label class="admin__field-label" for="store_<?php echo $_store->getId() ?>">
+                                        <?php echo $block->escapeHtml($_store->getName()) ?>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php endforeach; ?>
+                <?php if ($showGroup): ?>
+                <?php endif; ?>
             <?php endforeach; ?>
-            <?php if ($showGroup): ?>
-            <?php endif; ?>
         <?php endforeach; ?>
-    <?php endforeach; ?>
     </div>
 </div>

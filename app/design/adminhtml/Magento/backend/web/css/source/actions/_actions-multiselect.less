@@ -10,10 +10,11 @@
 //  Action multiselect is a combining of checkbox and dropdown elements
 
 .action-multiselect-wrap {
+    &:extend(.abs-clearfix all);
     display: inline-block;
+    padding-top: 1px;
     position: relative;
     height: @control-checkbox-radio__size;
-    white-space: nowrap;
     z-index: @action-multiselect__z-index;
     &:hover {
         .admin__control-checkbox + label:before,
@@ -40,16 +41,14 @@
         }
         .admin__control-checkbox + label:before,
         .action-multiselect-toggle {
-            opacity: 1;
             border-color: @field-control__border-color;
+            opacity: 1;
         }
     }
     .admin__control-checkbox,
     .admin__control-checkbox + label,
     .action-multiselect-toggle {
-        display: inline-block;
-        font-size: 0;
-        vertical-align: top;
+        float: left;
     }
     .action-multiselect-toggle {
         .action-toggle-triangle(
@@ -58,7 +57,7 @@
         );
         border-radius: 0 1px 1px 0;
         height: @control-checkbox-radio__size;
-        margin-left: -.5rem;
+        margin-left: -1px;
         padding: 0;
         position: relative;
         transition: @smooth__border-color;
@@ -74,7 +73,7 @@
         }
     }
     .action-menu {
-        left: -1.5rem; // ToDo UI: make sure that property equal grid first cell padding left
+        left: -(@data-grid-cell__padding-horizontal + @data-grid-cell__border-width + .1rem);
         right: auto;
         text-align: left;
         margin-top: 1px;

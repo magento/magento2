@@ -39,10 +39,20 @@
 //  _____________________________________________
 
 .admin__fieldset-wrapper-title {
+    .extend__clearfix();
+    border-bottom: 1px solid @color-gray80;
     margin-bottom: 30px;
     padding: 14px 0 16px;
-    strong {
+    strong,
+    .title {
         &:extend(h2);
+    }
+    .title {
+        float: left;
+        margin: .7rem 0 0;
+    }
+    .actions {
+        float: right;
     }
 }
 
@@ -185,7 +195,7 @@
 .admin__field-control > [class*='admin__control-'].mage-error {
     border-color: @field-error-control__border-color;
 }
-.admin__field-control label.mage-error {
+label.mage-error {
     &:extend(.admin__field-error);
 }
 

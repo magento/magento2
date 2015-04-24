@@ -25,7 +25,7 @@
 @notifications-close__color: @color-gray80;
 @notifications-counter__background-color: @color-tomato-brick;
 @notifications-entry__padding-top: .6rem;
-@notifications-entry__hover__background-color: @color-blue-clear-sky;
+@notifications-entry__hover__background-color: @action__hover__background-color;
 @notifications-list__width: 32rem;
 @notifications-title__color: @color-light-phoenix;
 @notifications-time__color: @color-very-dark-gray1;
@@ -101,7 +101,7 @@
     line-height: @line-height__base;
     padding: @notifications-entry__padding-top @notifications-action__padding-side .8rem;
     position: relative;
-    transition: background-color .2s linear;
+    transition: @smooth__background-color;
     &:hover {
         background-color: @notifications-entry__hover__background-color;
     }

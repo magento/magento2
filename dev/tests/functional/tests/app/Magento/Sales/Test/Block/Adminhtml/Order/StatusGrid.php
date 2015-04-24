@@ -7,13 +7,12 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
 /**
- * Class StatusGrid
- * Backend sales order's status management grid
+ * Backend sales order's status management grid.
  */
 class StatusGrid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     /**
-     * Filters array mapping
+     * Filters array mapping.
      */
     protected $filters = [
         'label' => [
@@ -28,7 +27,7 @@ class StatusGrid extends \Magento\Backend\Test\Block\Widget\Grid
     ];
 
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
@@ -42,7 +41,7 @@ class StatusGrid extends \Magento\Backend\Test\Block\Widget\Grid
     protected $unassignLink = '[data-column="unassign"] a';
 
     /**
-     * Search custom status and unassign it
+     * Search custom status and unassign it.
      *
      * @param array $filter
      * @throws \Exception

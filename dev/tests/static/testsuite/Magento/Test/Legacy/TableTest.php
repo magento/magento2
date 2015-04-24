@@ -32,7 +32,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
                 $message = $this->_composeFoundsMessage($legacyTables);
                 $this->assertEmpty($message, $message);
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhpFiles()
+            \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
         );
     }
 

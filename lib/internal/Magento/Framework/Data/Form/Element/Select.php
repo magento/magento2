@@ -39,7 +39,7 @@ class Select extends AbstractElement
      */
     public function getElementHtml()
     {
-        $this->addClass('select');
+        $this->addClass('select admin__control-select');
 
         $html = '';
         if ($this->getBeforeElementHtml()) {

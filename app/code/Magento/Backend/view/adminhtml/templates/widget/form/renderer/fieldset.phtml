@@ -22,7 +22,7 @@ if (!isset($advancedLabel)) {
     $advancedLabel = __('Additional Settings');
 }
 
-$cssClass = ($isField) ? 'field ' . $element->getClass() : 'fieldset ' . $element->getClass();
+$cssClass = ($isField) ? 'field ' . $element->getClass() : 'fieldset admin__fieldset ' . $element->getClass();
 
 if ($isField) {
     $count = $element->getCountBasicChildren();
@@ -41,13 +41,13 @@ if ($isField) {
     <div class="fieldset-wrapper <?php echo($isCollapsable) ? 'collapsable-wrapper ' : ''; ?>"
         id="<?php echo $containerId ? $containerId : $id . '-wrapper';?>"
         data-role="<?php echo $id ?>-wrapper">
-        <div class="fieldset-wrapper-title">
+        <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
             <strong class="title"<?php echo($isCollapsable) ? ' data-toggle="collapse" data-target="#' . $id . '-content"' : ''; ?>>
                 <span><?php echo $element->getLegend() ?></span>
             </strong>
             <?php echo $titleActions; ?>
         </div>
-        <div class="fieldset-wrapper-content<?php echo($isCollapsable) ? ' collapse' : ''; ?>"
+        <div class="fieldset-wrapper-content admin__fieldset-wrapper-content<?php echo($isCollapsable) ? ' collapse' : ''; ?>"
             id="<?php echo $id ?>-content"
             data-role="<?php echo $id ?>-content">
 <?php endif; ?>
@@ -69,7 +69,7 @@ if ($isField) {
     </div>
 
 
-    <?php echo($isField) ? '<div class="control">' : ''; ?>
+    <?php echo($isField) ? '<div class="control admin__field-control">' : ''; ?>
 
     <?php if ($element->hasHtmlContent() && !$isField): ?>
         <?php echo $element->getHtmlContent(); ?>
