@@ -33,7 +33,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      *
      * @var string
      */
-    protected $_productTable;
+    private $_productTable;
 
     /**
      * Store id, that we should count products on
@@ -47,7 +47,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      *
      * @var string
      */
-    protected $_productWebsiteTable;
+    private $_productWebsiteTable;
 
     /**
      * Load with product count flag
