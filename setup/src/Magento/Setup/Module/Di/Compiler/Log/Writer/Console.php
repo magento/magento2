@@ -56,8 +56,9 @@ class Console
                     $this->console->writeln($this->getStartTag($type) . "\t" . $className . $this->getEndTag($type));
                     foreach ($messages as $message) {
                         if ($message) {
-                            $this->console->writeln($this->getStartTag($type) . "\t\t"
-                                . $message . $this->getEndTag($type));
+                            $this->console->writeln(
+                                $this->getStartTag($type) . "\t\t" . $message . $this->getEndTag($type)
+                            );
                             if ($type != Log::GENERATION_SUCCESS) {
                                 $errorsCount++;
                             }
