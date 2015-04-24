@@ -68,6 +68,23 @@ class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Possible values for 'mode' option are 'replace' and 'merge'
+     */
+    public function testExecuteInvalidMode()
+    {
+        $this->tester->execute(
+            [
+                'source' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/i18n.csv',
+                'pack' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/pack',
+                'locale' => 'de_DE',
+                '--allow-duplicates' => true,
+                '--mode' => 'invalid'
+            ]
+        );
+    }
+
+    /**
      * Removes directories recursively
      *
      * @param string $dir

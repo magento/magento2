@@ -24,10 +24,18 @@ class I18nPackCommand extends Command
     const INPUT_KEY_PACK = 'pack';
     const INPUT_KEY_LOCALE = 'locale';
     const INPUT_KEY_MODE = 'mode';
-    const SHORTCUT_KEY_MODE = 'm';
     const INPUT_KEY_ALLOW_DUPLICATES = 'allow-duplicates';
-    const SHORTCUT_KEY_ALLOW_DUPLICATES = 'd';
     /**#@-*/
+
+    /**
+     * 'replace' mode value
+     */
+    const MODE_REPLACE = 'replace';
+
+    /**
+     * 'merge' mode value
+     */
+    const MODE_MERGE = 'merge';
 
     /**
      * {@inheritdoc}
@@ -54,16 +62,18 @@ class I18nPackCommand extends Command
             ),
             new InputOption(
                 self::INPUT_KEY_MODE,
-                self::SHORTCUT_KEY_MODE,
+                'm',
                 InputOption::VALUE_REQUIRED,
                 'Save mode for dictionary' . PHP_EOL . '- "replace" - replace language pack by new one' . PHP_EOL .
-                '- "merge" - merge language packages, by default "replace"'
+                '- "merge" - merge language packages, by default "replace"',
+                self::MODE_REPLACE
             ),
             new InputOption(
                 self::INPUT_KEY_ALLOW_DUPLICATES,
-                self::SHORTCUT_KEY_ALLOW_DUPLICATES,
+                'd',
                 InputOption::VALUE_NONE,
-                'Flag indicates if allowed to save duplicates of translate, false by default'
+                'Use the --allow-duplicates parameter to allow to save duplicates of translate.' .
+                ' Omit the parameter otherwise.'
             ),
         ]);
     }
@@ -74,6 +84,10 @@ class I18nPackCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $generator = ServiceLocator::getPackGenerator();
+        $mode = $input->getOption(self::INPUT_KEY_MODE);
+        if ($mode !== self::MODE_MERGE && $mode !== self::MODE_REPLACE) {
+            throw new \InvalidArgumentException("Possible values for 'mode' option are 'replace' and 'merge'");
+        }
         $locale = $input->getArgument(self::INPUT_KEY_LOCALE);
         $generator->generate(
             $input->getArgument(self::INPUT_KEY_SOURCE),
