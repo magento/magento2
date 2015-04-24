@@ -11,8 +11,7 @@ define(
         '../model/quote',
         '../model/payment-service',
         '../action/select-payment-method',
-        'Magento_Checkout/js/model/step-navigator',
-        'mage/validation'
+        'Magento_Checkout/js/model/step-navigator'
     ],
     function ($, Component, quote, paymentService, selectPaymentMethod, navigator) {
         var stepName = 'paymentMethod';
