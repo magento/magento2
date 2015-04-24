@@ -49,36 +49,30 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
 
         $totalWeeeAmount = 0;
         $baseTotalWeeeAmount = 0;
-
         $totalWeeeAmountInclTax = 0;
         $baseTotalWeeeAmountInclTax = 0;
-
-        $totalTaxAmount = $totalWeeeAmountInclTax - $totalWeeeAmount;
-        $baseTotalTaxAmount = $baseTotalWeeeAmountInclTax - $baseTotalWeeeAmount;
+        $totalTaxAmount = 0;
+        $baseTotalTaxAmount = 0;
 
         foreach ($creditmemo->getAllItems() as $item) {
             $orderItem = $item->getOrderItem();
-            if ($orderItem->isDummy() || $item->getQty() <= 0) {
+            $orderItemQty = $orderItem->getQtyOrdered();
+
+            if (!$orderItemQty || $orderItem->isDummy() || $item->getQty() < 0) {
                 continue;
             }
 
-            $ratio = $item->getQty() / $orderItem->getQtyOrdered();
+            $ratio = $item->getQty() / $orderItemQty;
 
             $orderItemWeeeAmountExclTax = $orderItem->getWeeeTaxAppliedRowAmount();
             $orderItemBaseWeeeAmountExclTax = $orderItem->getBaseWeeeTaxAppliedRowAmnt();
             $weeeAmountExclTax = $creditmemo->roundPrice($orderItemWeeeAmountExclTax * $ratio);
-            $baseWeeeAmountExclTax = $creditmemo->roundPrice(
-                $orderItemBaseWeeeAmountExclTax * $ratio,
-                'base'
-            );
+            $baseWeeeAmountExclTax = $creditmemo->roundPrice($orderItemBaseWeeeAmountExclTax * $ratio, 'base');
 
             $orderItemWeeeAmountInclTax = $this->_weeeData->getRowWeeeTaxInclTax($orderItem);
             $orderItemBaseWeeeAmountInclTax = $this->_weeeData->getBaseRowWeeeTaxInclTax($orderItem);
             $weeeAmountInclTax = $creditmemo->roundPrice($orderItemWeeeAmountInclTax * $ratio);
-            $baseWeeeAmountInclTax = $creditmemo->roundPrice(
-                $orderItemBaseWeeeAmountInclTax * $ratio,
-                'base'
-            );
+            $baseWeeeAmountInclTax = $creditmemo->roundPrice($orderItemBaseWeeeAmountInclTax * $ratio, 'base');
 
             $itemTaxAmount = $weeeAmountInclTax - $weeeAmountExclTax;
             $itemBaseTaxAmount = $baseWeeeAmountInclTax - $baseWeeeAmountExclTax;
