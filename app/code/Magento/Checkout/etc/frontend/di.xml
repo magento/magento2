@@ -29,8 +29,7 @@
                 type="Magento\Checkout\Model\PrivateData\Section\ItemPool"/>
     <type name="Magento\Checkout\Model\PrivateData\Section\ItemPoolInterface">
         <arguments>
-            <argument name="defaultItemId" xsi:type="string">Magento\Checkout\Model\PrivateData\Section\DefaultItem
-            </argument>
+            <argument name="defaultItemId" xsi:type="string">Magento\Checkout\Model\PrivateData\Section\DefaultItem</argument>
         </arguments>
     </type>
 </config>

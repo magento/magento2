@@ -6,28 +6,28 @@
 -->
 <li class="item product product-item">
     <div class="product">
-        <!-- ko if: has_url -->
-        <a data-bind="attr: {href: url, title: name}" tabindex="-1" class="product-item-photo">
-            <!-- ko template: {name: 'Magento_Catalog/product_image', data: image} --><!-- /ko -->
+        <!-- ko if: product_has_url -->
+        <a data-bind="attr: {href: product_url, title: product_name}" tabindex="-1" class="product-item-photo">
+            <!-- ko template: {name: 'Magento_Catalog/product_image', data: product_image} --><!-- /ko -->
         </a>
         <!-- /ko -->
-        <!-- ko ifnot: has_url -->
+        <!-- ko ifnot: product_has_url -->
         <span class="product-item-photo">
-            <!-- ko template: {name: 'Magento_Catalog/product_image', data: image} --><!-- /ko -->
+            <!-- ko template: {name: 'Magento_Catalog/product_image', data: product_image} --><!-- /ko -->
         </span>
         <!-- /ko -->
 
         <div class="product-item-details">
             <strong class="product-item-name">
-                <!-- ko if: has_url -->
-                <a data-bind="attr: {href: url, title: name}, text: name"></a>
+                <!-- ko if: product_has_url -->
+                <a data-bind="attr: {href: product_url, title: product_name}, text: product_name"></a>
                 <!-- /ko -->
-                <!-- ko ifnot: has_url -->
-                    <!-- ko text: name --><!-- /ko -->
+                <!-- ko ifnot: product_has_url -->
+                    <!-- ko text: product_name --><!-- /ko -->
                 <!-- /ko -->
             </strong>
 
-            <!-- ko if: options -->
+            <!-- ko if: options.length -->
             <div class="product options" data-mage-init='{"collapsible":{"openedState": "active", "saveState": false}}'>
                 <span data-role="title" class="more toggle"><!-- ko text: $t('View Details') --><!-- /ko --></span>
 
@@ -54,13 +54,13 @@
                 <!-- ko if: canApplyMsrp -->
 
                 <div class="details-map">
-                    <span class="label" data-bind="$t('Price')"></span>
-                    <span class="value" data-bind="$t('See price before order confirmation.')"></span>
+                    <span class="label" data-bind="text: $t('Price')"></span>
+                    <span class="value" data-bind="text: $t('See price before order confirmation.')"></span>
                 </div>
                 <!-- /ko -->
                 <!-- ko ifnot: canApplyMsrp -->
                 <!-- ko foreach: $parent.getRegion('priceSidebar') -->
-                    <!-- ko template: {name: getTemplate(), data: item} --><!-- /ko -->
+                    <!-- ko template: {name: getTemplate(), data: item.product_price, as: 'price'} --><!-- /ko -->
                 <!-- /ko -->
                 <!-- /ko -->
 
@@ -82,7 +82,7 @@
                            }"
                             class="update-cart-item"
                             style="display: none">
-                        <span data-bind="$t('Update')"></span>
+                        <span data-bind="text: $t('Update')"></span>
                     </button>
                 </div>
             </div>
@@ -91,14 +91,14 @@
                 <!-- ko if: is_visible_in_site_visibility -->
                 <div class="primary">
                     <a data-bind="attr: {href: configure_url, title: $t('Edit item')}" class="action edit">
-                        <span data-bind="$t('Edit')"></span>
+                        <span data-bind="text: $t('Edit')"></span>
                     </a>
                 </div>
                 <!-- /ko -->
                 <div class="secondary">
                     <a href="#" data-bind="attr: {'data-cart-item': item_id, title: $t('Remove item')}"
                        class="action delete">
-                        <span data-bind="$t('Remove')"></span>
+                        <span data-bind="text: $t('Remove')"></span>
                     </a>
                 </div>
             </div>

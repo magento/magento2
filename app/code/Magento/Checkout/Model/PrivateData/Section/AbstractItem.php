@@ -14,21 +14,26 @@ use Magento\Quote\Model\Quote\Item;
 abstract class AbstractItem implements ItemInterface
 {
     /**
+     * @var Item
+     */
+    protected $item;
+
+    /**
      * {@inheritdoc}
      */
     public function getItemData(Item $item)
     {
+        $this->item = $item;
         return \array_merge(
             ['product_type' => $item->getProductType()],
-            $this->doGetItemData($item)
+            $this->doGetItemData()
         );
     }
 
     /**
      * Get item data. Template method
      *
-     * @param Item $item
      * @return array
      */
-    abstract protected function doGetItemData($item);
+    abstract protected function doGetItemData();
 }

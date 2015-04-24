@@ -9,7 +9,7 @@ define([
     'use strict';
 
     return Component.extend({
-        checkoutUrl: window.checkout.checkoutUrl,
+        shoppingCartUrl: window.checkout.shoppingCartUrl,
         initialize: function () {
             this._super();
             this.cart = customerData.get('cart');
