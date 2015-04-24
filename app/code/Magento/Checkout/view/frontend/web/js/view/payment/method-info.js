@@ -31,13 +31,6 @@ define(
             isActive: function(parent) {
                 return this.isAvailable() && parent.isMethodActive(this.getCode());
             },
-            getAdditionalInfo: function (key) {
-                if (!this.isAvailable()) {
-                    return false;
-                }
-                var additionalInfo = this.getMethod()['additional_info'][0];
-                return additionalInfo && additionalInfo[key] ? additionalInfo[key] : '';
-            },
             getData: function() {
                 return {};
             },
