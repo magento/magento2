@@ -70,6 +70,17 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->with($id)
             ->will($this->returnValue($rateMock));
 
+
+        $taxRateConverter = $this->getMockBuilder('\Magento\Tax\Model\Calculation\Rate\Converter')
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+
+        $taxRateConverter->expects($this->any())
+            ->method('createSimpleArrayFromServiceObject')
+            ->with($rateMock);
+
+
         $encode = $this->getMockBuilder('Magento\Framework\Json\Helper\Data')
             ->disableOriginalConstructor()
             ->setMethods(['jsonEncode'])
@@ -92,10 +103,13 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['get', 'create', 'configure'])
             ->getMock();
 
-        $manager->expects($this->once())
+        $manager->expects($this->at(0))
+            ->method('get')
+            ->will($this->returnValue($taxRateConverter));
+
+        $manager->expects($this->at(1))
             ->method('get')
             ->will($this->returnValue($encode));
-
 
         $notification = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',

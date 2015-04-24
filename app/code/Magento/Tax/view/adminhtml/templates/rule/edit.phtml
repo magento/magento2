@@ -76,7 +76,6 @@ require([
             $('body').trigger('processStart')
             $.ajax({
                 type: "POST",
-
                 data: {id:id},
                 url: '<?php echo $block->getTaxRateLoadUrl()?>',
                 success: function(result, status) {

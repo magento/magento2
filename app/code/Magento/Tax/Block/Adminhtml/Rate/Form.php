@@ -66,6 +66,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_taxRateCollection;
 
     /**
+     * @var \Magento\Tax\Model\Calculation\Rate\Converter
+     */
+    protected $_taxRateConverter;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -75,6 +80,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
      * @param \Magento\Tax\Model\TaxRateCollection $taxRateCollection
+     * @param \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -88,6 +94,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository,
         \Magento\Tax\Model\TaxRateCollection $taxRateCollection,
+        \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter,
         array $data = []
     ) {
         $this->_regionFactory = $regionFactory;
@@ -96,6 +103,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_taxData = $taxData;
         $this->_taxRateRepository = $taxRateRepository;
         $this->_taxRateCollection = $taxRateCollection;
+        $this->_taxRateConverter = $taxRateConverter;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -127,7 +135,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
 
         $sessionFormValues = (array)$this->_coreRegistry->registry(RegistryConstants::CURRENT_TAX_RATE_FORM_DATA);
-        $formData = isset($taxRateDataObject) ? $this->extractTaxRateData($taxRateDataObject) : [];
+        $formData = isset($taxRateDataObject) ? $this->_taxRateConverter->createArrayFromServiceObject($taxRateDataObject) : [];
         $formData = array_merge($formData, $sessionFormValues);
 
         if (isset($formData['zip_is_range']) && $formData['zip_is_range'] && !isset($formData['tax_postcode'])) {

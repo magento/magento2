@@ -38,7 +38,7 @@ class Rate extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository
      * @param \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory
-     * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
+     * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -130,42 +130,6 @@ class Rate extends \Magento\Backend\App\Action
         }
 
         return $taxRate;
-    }
-
-
-    /**
-     * Extract tax rate data in a format which is array
-     *
-     * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
-     * @return array
-     */
-    protected function extractTaxRateData($taxRate)
-    {
-        $taxRateData = [
-            'tax_calculation_rate_id' => $taxRate->getId(),
-            'tax_country_id' => $taxRate->getTaxCountryId(),
-            'tax_region_id' => $taxRate->getTaxRegionId(),
-            'tax_postcode' => $taxRate->getTaxPostcode(),
-            'code' => $taxRate->getCode(),
-            'rate' => $taxRate->getRate(),
-            'zip_is_range' => 0,
-        ];
-
-        if ($taxRate->getZipFrom() && $taxRate->getZipTo()) {
-            $taxRateData['zip_is_range'] = 1;
-            $taxRateData['zip_from'] = $taxRate->getZipFrom();
-            $taxRateData['zip_to'] = $taxRate->getZipTo();
-        }
-
-        if ($taxRate->getTitles()) {
-            $titleData = [];
-            foreach ($taxRate->getTitles() as $title) {
-                $titleData[] = [$title->getStoreId() => $title->getValue()];
-            }
-            $taxRateData['title'] = $titleData;
-        }
-
-        return $taxRateData;
     }
 
     /**

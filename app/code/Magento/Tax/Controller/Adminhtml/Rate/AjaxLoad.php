@@ -20,8 +20,12 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
     {
         $rateId = (int)$this->getRequest()->getParam('id');
         try {
+            /* @var \Magento\Tax\Api\Data\TaxRateInterface */
             $taxRateDataObject = $this->_taxRateRepository->get($rateId);
-            $result_array=$this->extractTaxRateData($taxRateDataObject);
+            $result_array= $this->_objectManager->get(
+                '\Magento\Tax\Model\Calculation\Rate\Converter'
+            )->createSimpleArrayFromServiceObject($taxRateDataObject);
+
             $responseContent = $this->_objectManager->get(
                 'Magento\Framework\Json\Helper\Data'
             )->jsonEncode(
@@ -41,6 +45,7 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
                 ['success' => false, 'error_message' => __('An error occurred while loading this tax rate.')]
             );
         }
+
 
         $this->getResponse()->representJson($responseContent);
     }
