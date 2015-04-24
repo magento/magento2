@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Module\Di\Test\Unit\Compiler\Config;
+namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config;
 
 use \Magento\Setup\Module\Di\Compiler\Config\ModificationChain;
 

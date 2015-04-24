@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Setup\Test\Unit\Module\Di\Test\Unit\Definition;
+namespace Magento\Setup\Test\Unit\Module\Di\Definition;
 
 /**
  * Class CollectionTest

@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Setup\Test\Unit\Module\Di\Test\Unit\App\Task;
+namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use Magento\Setup\Module\Di\App\Task\OperationException;

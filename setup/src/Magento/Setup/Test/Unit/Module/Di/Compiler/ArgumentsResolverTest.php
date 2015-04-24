@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Module\Di\Test\Unit\Compiler;
+namespace Magento\Setup\Test\Unit\Module\Di\Compiler;
 
 use Magento\Setup\Module\Di\Compiler\ConstructorArgument;
 

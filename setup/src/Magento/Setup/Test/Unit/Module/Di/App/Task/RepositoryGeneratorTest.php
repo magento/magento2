@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Module\Di\Test\Unit\App\Task;
+namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
 use Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator;
 use Magento\Setup\Module\Di\Code\Scanner;

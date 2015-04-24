@@ -6,7 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Setup\Test\Unit\Module\Di\Test\Unit\Code\Scanner;
+namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
 class PluginScannerTest extends \PHPUnit_Framework_TestCase
 {
