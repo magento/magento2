@@ -311,7 +311,7 @@
 
 .prices-tier {
     &:extend(.abs-reset-list all);
-    .css(background, @sidebar-background);
+    .css(background, @sidebar__background-color);
     padding: @indent__s (.75 * @indent__base);
     margin: @indent__s 0;
     .price-tier_price {
@@ -618,7 +618,7 @@ body.catalog-product-compare-index {
             .attribute.label {
                 display: block;
                 width: 100%;
-                word-break: break-all;
+                word-wrap: break-word;
             }
         }
         &.attribute {

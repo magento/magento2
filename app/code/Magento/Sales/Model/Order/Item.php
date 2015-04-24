@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
@@ -23,7 +23,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Item extends AbstractExtensibleModel implements OrderItemInterface
+class Item extends AbstractModel implements OrderItemInterface
 {
     const STATUS_PENDING = 1;
 

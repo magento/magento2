@@ -21,19 +21,19 @@ class AssertOrdersInOrdersGrid extends AbstractConstraint
      *
      * @param OrderInjectable[] $orders
      * @param OrderIndex $orderIndex
-     * @param array $statuses
+     * @param array $orderStatuses
      * @param AssertOrderInOrdersGrid $assertOrderInOrdersGrid
      * @return void
      */
     public function processAssert(
         $orders,
         OrderIndex $orderIndex,
-        array $statuses,
+        array $orderStatuses,
         AssertOrderInOrdersGrid $assertOrderInOrdersGrid
     ) {
         $orderIndex->open();
         foreach ($orders as $key => $order) {
-            $assertOrderInOrdersGrid->assert($order, $orderIndex, $statuses[$key]);
+            $assertOrderInOrdersGrid->assert($order, $orderIndex, $orderStatuses[$key]);
         }
     }
 

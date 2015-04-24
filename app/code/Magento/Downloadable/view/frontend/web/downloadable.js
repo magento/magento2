@@ -43,12 +43,17 @@ define([
          */
         _reloadPrice: function() {
             var finalPrice = 0;
+            var basePrice = 0;
             this.element.find(this.options.linkElement + ':checked').each($.proxy(function(index, element) {
                 finalPrice += this.options.config.links[$(element).val()].finalPrice;
+                basePrice += this.options.config.links[$(element).val()].basePrice;
             }, this));
 
             $(this.options.priceHolderSelector).trigger('updatePrice', {
-                'prices': { 'finalPrice': { 'amount': finalPrice }}
+                'prices': {
+                    'finalPrice': { 'amount': finalPrice },
+                    'basePrice': { 'amount': basePrice }
+                }
             });
         }
     });

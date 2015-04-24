@@ -6,9 +6,7 @@
 
 namespace Magento\Review\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Review\Test\Fixture\Review;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
@@ -42,14 +40,8 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'MX';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
-
-    /**
-     * Catalog product index page
-     *
-     * @var CatalogProductIndex
-     */
-    protected $catalogProductIndex;
 
     /**
      * Catalog product edit page
@@ -114,7 +106,6 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
      *
      * @param RatingIndex $ratingIndex
      * @param RatingEdit $ratingEdit
-     * @param CatalogProductIndex $catalogProductIndex
      * @param CatalogProductEdit $catalogProductEdit
      * @param ReviewEdit $reviewEdit
      * @return void
@@ -122,13 +113,11 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     public function __inject(
         RatingIndex $ratingIndex,
         RatingEdit $ratingEdit,
-        CatalogProductIndex $catalogProductIndex,
         CatalogProductEdit $catalogProductEdit,
         ReviewEdit $reviewEdit
     ) {
         $this->ratingIndex = $ratingIndex;
         $this->ratingEdit = $ratingEdit;
-        $this->catalogProductIndex = $catalogProductIndex;
         $this->catalogProductEdit = $catalogProductEdit;
         $this->reviewEdit = $reviewEdit;
     }
@@ -144,10 +133,12 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
     {
         // Steps
         $review = $this->createReview($review, $rating);
-        $this->catalogProductIndex->open();
-        /** @var CatalogProductSimple $product */
         $product = $this->reviewInitial->getDataFieldConfig('entity_id')['source']->getEntity();
-        $this->catalogProductIndex->getProductGrid()->searchAndOpen(['sku' => $product->getSku()]);
+        $this->objectManager->create(
+            'Magento\Catalog\Test\TestStep\OpenProductOnBackendStep',
+            ['product' => $product]
+        )->run();
+
         $this->catalogProductEdit->getProductForm()->openTab('product_reviews');
         $filter = [
             'title' => $this->reviewInitial->getTitle(),

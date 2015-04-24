@@ -36,6 +36,11 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $validatorMock;
 
+    /**
+     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entitySnapshotMock;
+
     public function setUp()
     {
         $this->appResourceMock = $this->getMock(
@@ -54,6 +59,13 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->validatorMock = $this->getMock(
             'Magento\Sales\Model\Order\Status\History\Validator',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->entitySnapshotMock = $this->getMock(
+            'Magento\Sales\Model\Resource\EntitySnapshot',
             [],
             [],
             '',
@@ -87,7 +99,8 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Resource\Order\Status\History',
             [
                 'context' => $contextMock,
-                'validator' => $this->validatorMock
+                'validator' => $this->validatorMock,
+                'entitySnapshot' => $this->entitySnapshotMock
             ]
         );
     }
@@ -104,7 +117,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $historyMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
+        $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
         $historyMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
         $this->validatorMock->expects($this->once())
             ->method('validate')
@@ -128,7 +141,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $historyMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
+        $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
         $historyMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
         $this->validatorMock->expects($this->once())
             ->method('validate')

@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Model\Resource\Order;
 
-use Magento\Sales\Model\Resource\Entity as SalesResource;
+use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 
 /**
  * Flat sales order item resource

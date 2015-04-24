@@ -14,6 +14,7 @@ interface PaymentMethodChecksInterface
      * Retrieve payment method code
      *
      * @return string
+     * @api
      */
     public function getCode();
 
@@ -22,6 +23,7 @@ interface PaymentMethodChecksInterface
      * Can be used in admin
      *
      * @return bool
+     * @api
      */
     public function canUseInternal();
 
@@ -29,6 +31,7 @@ interface PaymentMethodChecksInterface
      * Can be used in regular checkout
      *
      * @return bool
+     * @api
      */
     public function canUseCheckout();
 
@@ -37,6 +40,7 @@ interface PaymentMethodChecksInterface
      *
      * @param string $country
      * @return bool
+     * @api
      */
     public function canUseForCountry($country);
 
@@ -45,6 +49,7 @@ interface PaymentMethodChecksInterface
      *
      * @param string $currencyCode
      * @return bool
+     * @api
      */
     public function canUseForCurrency($currencyCode);
 
@@ -55,6 +60,7 @@ interface PaymentMethodChecksInterface
      * @param int|string|null|\Magento\Store\Model\Store $storeId
      *
      * @return mixed
+     * @api
      */
     public function getConfigData($field, $storeId = null);
 }

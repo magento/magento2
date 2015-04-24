@@ -97,7 +97,7 @@ class GlobalsearchElement extends SimpleElement
      */
     protected function selectWindow()
     {
-        $this->driver->closeWindow();
+        $this->driver->selectWindow();
     }
 
     /**
