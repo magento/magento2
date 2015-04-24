@@ -53,7 +53,7 @@ class Phrase implements JsonSerializable
     public static function getRenderer()
     {
         if (!self::$renderer) {
-            self::$renderer = new RendererPlaceholder();  
+            self::$renderer = new RendererPlaceholder();
         }
         return self::$renderer;
     }
