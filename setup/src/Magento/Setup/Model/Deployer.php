@@ -149,9 +149,11 @@ class Deployer
         $this->count = 0;
         foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
             $this->htmlMinifier->minify($template);
-            $this->output->isVerbose()?
-                $this->output->writeln($template . " minified\n")
-                : $this->output->write('.');
+            if ($this->output->isVerbose()) {
+                $this->output->writeln($template . " minified\n");
+            } else {
+                $this->output->write('.');
+            }
             $this->count++;
         }
         $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
@@ -247,7 +249,6 @@ class Deployer
      * @param string $locale
      * @param string $module
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function deployFile($filePath, $area, $themePath, $locale, $module)
@@ -261,7 +262,7 @@ class Deployer
             $logMessage .= ", module '$module'";
         }
 
-        !$this->output->isVerbose()?:$this->output->writeln($logMessage);
+        $this->verboseLog($logMessage);
 
         try {
             $asset = $this->assetRepo->createAsset(
@@ -269,9 +270,11 @@ class Deployer
                 ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
             );
             $asset = $this->minifyService->getAssets([$asset], true)[0];
-            $this->output->isVerbose()?
-                $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'")
-                : $this->output->write('.');
+            if ($this->output->isVerbose()) {
+                $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'");
+            } else {
+                $this->output->write('.');
+            }
             if ($this->isDryRun) {
                 $asset->getContent();
             } else {
@@ -281,19 +284,32 @@ class Deployer
             $this->count++;
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {
             // File was not found by Fallback (possibly because it's wrong context for it) - there is nothing to publish
-            !$this->output->isVerbose()?:$this->output->writeln(
+            $this->verboseLog(
                 "\tNotice: Could not find file '$filePath'. This file may not be relevant for the theme or area."
             );
         } catch (\Less_Exception_Compiler $e) {
-            !$this->output->isVerbose()?:$this->output->writeln(
+            $this->verboseLog(
                 "\tNotice: Could not parse LESS file '$filePath'. "
                 . "This may indicate that the file is incomplete, but this is acceptable. "
                 . "The file '$filePath' will be combined with another LESS file."
             );
         } catch (\Exception $e) {
             $this->output->writeln($e->getMessage() . " ($logMessage)");
-            !$this->output->isVerbose()?:$this->output->writeln((string)$e);
+            $this->verboseLog((string)$e);
             $this->errorCount++;
+        }
+    }
+
+    /**
+     * Verbose log
+     *
+     * @param $message
+     * @return void
+     */
+    private function verboseLog($message)
+    {
+        if ($this->output->isVerbose()) {
+            $this->output->writeln($message);
         }
     }
 }

@@ -209,7 +209,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->objectManager));
 
         $output = $this->objectManager->create(
-            'Symfony\Component\Console\Output\Output'
+            'Symfony\Component\Console\Output\ConsoleOutput'
         );
 
         $filesUtil = $this->getMock('\Magento\Framework\App\Utility\Files', [], [], '', false);
