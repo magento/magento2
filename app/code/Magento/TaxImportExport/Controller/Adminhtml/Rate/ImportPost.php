@@ -1,17 +1,18 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
+
+use Magento\Framework\Controller\ResultFactory;
 
 class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**
      * import action from import/export tax
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -30,6 +31,9 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         } else {
             $this->messageManager->addError(__('Invalid file upload attempt'));
         }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setPath('*/*/importexport');
+        return $resultRedirect;
     }
 }
