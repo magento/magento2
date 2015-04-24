@@ -9,9 +9,7 @@ namespace Magento\CatalogRule\Test\TestCase;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 
 /**
- * Test Creation for Create CatalogPriceRuleEntity
- *
- * Test Flow:
+ * Steps:
  * 1. Log in as default admin user.
  * 2. Go to Marketing > Catalog Price Rules
  * 3. Press "+" button to start create new catalog price rule
@@ -42,8 +40,5 @@ class CreateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleIndex->getGridPageActions()->addNew();
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule);
         $this->catalogRuleNew->getFormPageActions()->save();
-
-        // Prepare data for tear down
-        $this->catalogRules[] = $catalogPriceRule;
     }
 }

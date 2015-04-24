@@ -12,9 +12,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
 
 /**
- * Test Coverage for Create Catalog Rule
- *
- * Test Flow:
+ * Steps:
  * 1. Log in as default admin user.
  * 2. Go to Marketing > Catalog Price Rules
  * 3. Press "+" button to start create new catalog price rule
@@ -37,7 +35,7 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
     /* end tags */
 
     /**
-     * Create Catalog Price Rule
+     * Create Catalog Price Rule.
      *
      * @param CatalogRule $catalogPriceRule
      * @param Customer $customer
@@ -69,9 +67,6 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         // Fill and Save the Form
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->save();
-
-        // Prepare data for tear down
-        $this->catalogRules[] = $catalogPriceRule;
 
         // Apply Catalog Price Rule
         $this->catalogRuleIndex->getGridPageActions()->applyRules();
