@@ -43,7 +43,5 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
         }
 
         $this->getResponse()->representJson($responseContent);
-
     }
-
 }

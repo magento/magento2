@@ -11,47 +11,36 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class AjaxLoadTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Retrieve tax rate mock
-     *
-     * @param array $taxRateData
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getTaxRateMock(array $taxRateData)
-    {
-        $taxRateMock = $this->getMock('Magento\Tax\Model\Calculation\Rate', [], [], '', false);
-        foreach ($taxRateData as $key => $value) {
-            // convert key from snake case to upper case
-            $taxRateMock->expects($this->once())
-                ->method('get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key))))
-                ->will($this->returnValue($value));
-        }
-
-        return $taxRateMock;
-    }
-
-    /**
      * Executes the controller action and asserts non exception logic
      */
     public function testExecute() {
         $id=1;
-
         $countryCode = 'US';
-
         $regionId = 2;
 
-        $rateTitles = [];
-
-        $rateMock = $this->getTaxRateMock([
-            'id' => $id,
-            'tax_country_id' => $countryCode,
-            'tax_region_id' => $regionId,
-            'tax_postcode' => null,
-            'rate' => 7.5,
-            'code' => 'Tax Rate Code',
-            'titles' => $rateTitles,
-        ]);
-
         $objectManager = new ObjectManager($this);
+
+        $rateTitles = [$objectManager->getObject(
+            '\Magento\Tax\Model\Calculation\Rate\Title',
+            ['data' => ['store_id' => 1, 'value' => 'texas']]
+         )
+        ];
+
+        $rateMock = $objectManager->getObject(
+            'Magento\Tax\Model\Calculation\Rate',
+        [
+            'data' =>
+                [
+                    'id' => $id,
+                    'tax_country_id' => $countryCode,
+                    'tax_region_id' => $regionId,
+                    'tax_postcode' => null,
+                    'rate' => 7.5,
+                    'code' => 'Tax Rate Code',
+                    'titles' => $rateTitles,
+                ],
+        ]
+        );
 
         $request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
@@ -88,7 +77,15 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
 
         $encode->expects($this->once())
             ->method('jsonEncode')
-            ->will($this->returnValue(['success' => true, 'error_message' => '','result'=>'{"success":true,"error_message":"","result":{"tax_calculation_rate_id":"1","tax_country_id":"US","tax_region_id":"12","tax_postcode":"*","code":"US-CA-*-Rate 1","rate":"8.2500","zip_is_range":false}}' ]));
+            ->will($this->returnValue(
+                [
+                    'success' => true,
+                    'error_message' => '',
+                    'result'=>
+                        '{"success":true,"error_message":"","result":{"tax_calculation_rate_id":"1","tax_country_id":"US","tax_region_id":"12","tax_postcode":"*","code":"Rate 1","rate":"8.2500","zip_is_range":0}}'
+                ]
+            )
+            );
 
         $manager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
             ->disableOriginalConstructor()
@@ -113,8 +110,6 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
         // No exception thrown
         $notification->execute();
     }
-
-
 
     /**
      * Check if validation throws a catched exception in case of incorrect id
