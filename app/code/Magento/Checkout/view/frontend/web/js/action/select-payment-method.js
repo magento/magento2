@@ -15,9 +15,9 @@ define(
     ],
     function($, quote, urlBuilder, navigator, errorList, storage, _) {
         "use strict";
-        return function (activeMethod, additionalData) {
+        return function (methodView) {
             var defaultMethodData = {
-                "method": activeMethod.getCode(),
+                "method": methodView.getCode(),
                 "po_number": null,
                 "cc_owner": null,
                 "cc_number": null,
@@ -26,7 +26,7 @@ define(
                 "cc_exp_month": null,
                 "additional_data": null
             };
-            $.extend(defaultMethodData, activeMethod.getData(), {'additional_data': additionalData});
+            $.extend(defaultMethodData, methodView.getData());
             var paymentMethodData = {
                 "cartId": quote.getQuoteId(),
                 "paymentMethod": defaultMethodData
@@ -41,8 +41,8 @@ define(
                 JSON.stringify(_.extend(paymentMethodData, shippingMethodData))
             ).done(
                 function(response) {
-                    if (activeMethod.afterSave()) {
-                        quote.setPaymentMethod(activeMethod.getCode());
+                    if (methodView.afterSave()) {
+                        quote.setPaymentMethod(methodView.getCode());
                         quote.setTotals(response);
                         navigator.setCurrent('paymentMethod').goNext();
                     }
