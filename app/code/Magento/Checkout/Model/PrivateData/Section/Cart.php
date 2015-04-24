@@ -59,11 +59,17 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $configurationHelper;
 
     /**
+     * @var ItemPoolInterface
+     */
+    protected $itemPoolInterface;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Catalog\Helper\Product\Configuration $configurationHelper
+     * @param ItemPoolInterface $itemPoolInterface
      * @param array $data
      */
     public function __construct(
@@ -75,6 +81,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         \Magento\Msrp\Helper\Data $msrpHelper,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Catalog\Helper\Product\Configuration $configurationHelper,
+        ItemPoolInterface $itemPoolInterface,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
@@ -82,6 +89,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         $this->checkoutCart = $checkoutCart;
         $this->checkoutHelper = $checkoutHelper;
         $this->configurationHelper = $configurationHelper;
+        $this->itemPoolInterface = $itemPoolInterface;
         $this->productImageView = $productImageView;
         $this->msrpHelper = $msrpHelper;
         $this->urlBuilder = $urlBuilder;
@@ -142,6 +150,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
 
     /**
      * Get array of last added items
+     * TODO: use new implementation: $this->itemPoolInterface->getItemData($item); 
      *
      * @return \Magento\Quote\Model\Quote\Item[]
      */

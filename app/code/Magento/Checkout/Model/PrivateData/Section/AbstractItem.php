@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Checkout\Model\PrivateData\Section;
+
+use Magento\Quote\Model\Quote\Item;
+
+/**
+ * Abstract item
+ */
+abstract class AbstractItem implements ItemInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getItemData(Item $item)
+    {
+        return \array_merge(
+            ['product_type' => $item->getProductType()],
+            $this->doGetItemData($item)
+        );
+    }
+
+    /**
+     * Get item data. Template method
+     *
+     * @param Item $item
+     * @return array
+     */
+    abstract protected function doGetItemData($item);
+}
