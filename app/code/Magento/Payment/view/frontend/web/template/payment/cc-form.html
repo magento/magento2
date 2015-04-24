@@ -10,10 +10,10 @@
             <span><!-- ko text: $t('Credit Card Type')--><!-- /ko --></span>
         </label>
         <div class="control">
-            <select name="payment[cc_type]" class="select" data-bind="
-                attr: {id: getCode() + '_cc_type', 'data-validate': {required:true, 'validate-cc-type-select':'#' + getCode() + '_cc_number'}},
-                mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'},
-                enable: isActive($parent), options: getCcAvailableTypes(), optionsCaption: $t('--Please Select--'), value: creditCardType}">
+            <select name="payment[cc_type]" class="select"
+                data-bind="attr: {id: getCode() + '_cc_type', 'data-validate': {required:true, 'validate-cc-type-select':'#' + getCode() + '_cc_number'}},
+                mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
+                enable: isActive($parent), options: getCcAvailableTypes(), optionsValue: 'value', optionsText: 'type', optionsCaption: $t('--Please Select--'), value: creditCardType">
             </select>
         </div>
     </div>
@@ -23,7 +23,8 @@
         </label>
         <div class="control">
             <input type="number" name="payment[cc_number]" class="input-text" value=""
-                data-bind="attr: {id: getCode() + '_cc_number', title: $t('Credit Card Number'), 'data-validate': {'required-number':true, 'validate-cc-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'}}"/>
+                data-bind="attr: {id: getCode() + '_cc_number', title: $t('Credit Card Number'), 'data-validate': {'required-number':true, 'validate-cc-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'}},
+                enable: isActive($parent), value: creditCardType"/>
         </div>
     </div>
     <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'}">
@@ -36,7 +37,7 @@
                     <div class="control">
                         <select  name="payment[cc_exp_month]" class="select month"
                             data-bind="attr: {id: getCode() + '_expiration', 'data-validate': {required:true, 'validate-cc-exp':'#' + getCode() + '_expiration_yr'}},
-                            enable: isActive($parent), options: getCcMonth(), optionsCaption: $t('Month'), value: creditCardExpMonth}">
+                            enable: isActive($parent), options: getCcMonths(), optionsValue: 'value', optionsText: 'month', optionsCaption: $t('Month'), value: creditCardExpMonth">
                         </select>
                     </div>
                 </div>
@@ -44,11 +45,66 @@
                     <div class="control">
                         <select name="payment[cc_exp_year]" class="select year"
                             data-bind="attr: {id: getCode() + '_expiration_yr', 'data-validate': {required:true}},
-                            enable: isActive($parent), options: getCcYears(), optionsCaption: $t('Year'), value: creditCardExpYear}">
+                            enable: isActive($parent), options: getCcYears(), optionsValue: 'value', optionsText: 'year', optionsCaption: $t('Year'), value: creditCardExpYear">
                         </select>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- ko if: (hasVerification())-->
+    <div class="field cvv required" data-bind="attr: {id: getCode() + '_cc_type_cvv_div'}">
+        <label data-bind="attr: {for: getCode() + '_cc_cid'}" class="label">
+            <span><!-- ko text: $t('Card Verification Number')--><!-- /ko --></span>
+        </label>
+        <div class="control">
+            <input type="number" class="input-text cvv" name="payment[cc_cid]" value=""
+                    data-bind="attr: {id: getCode() + '_cc_cid', title: $t('Card Verification Number'), 'data-validate': {'required-number':true, 'validate-cc-cvn':'#' + getCode() + '_cc_type'}}, enable: isActive($parent)"/>
+            <!-- $_content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' . __('Card Verification Number Visual Reference') . '\" title=\"' . __('Card Verification Number Visual Reference') . '\" />'; -->
+            <div class="note">
+                <a href="#" class="action cvv" data-bind="attr: {title: $t('What is this?')}, mageInit:{'tooltip': {'content': 'getViewFileUrl(Magento_Checkout::cvv.png)'}}"><span><!-- ko text: $t('What is this?')--><!-- /ko --></span></a>
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+    <!-- ko if: (hasSsCardType())-->
+    <div class="field switch solo required" data-bind="attr: {id: getCode() + '_cc_type_ss_div'}">
+        <div class="nested">
+            <div class="field switch solo required">
+                <label data-bind="attr: {for: getCode() + '_cc_issue'}" class="label"><span><!-- ko text: $t('Switch/Solo/Maestro Only')--><!-- /ko --></span></label>
+            </div>
+            <div class="field number required">
+                <label data-bind="attr: {for: getCode() + '_cc_issue'}" class="label"><span><!-- ko text: $t('Issue Number')--><!-- /ko --></span></label>
+                <div class="control">
+                    <input type="text" name="payment[cc_ss_issue]" value="" class="input-text cvv" data-bind="attr: {id: getCode() + '_cc_issue', title: $t('Issue Number'), 'data-validate': {'validate-cc-ukss':true}}, enable: isActive($parent)"/>
+                </div>
+            </div>
+
+            <div class="field date required">
+                <label data-bind="attr: {for: getCode() + '_start_month'}" class="label"><span><!-- ko text: $t('Start Date')--><!-- /ko --></span></label>
+                <div class="control">
+                    <div class="fields group group-2">
+                        <div class="field no-label">
+                            <div class="control">
+                                <select name="payment[cc_ss_start_month]" class="select month"
+                                        data-bind="attr: {id: getCode() + '_start_month', 'data-validate': {'validate-cc-ukss':true}},
+                                        enable: isActive($parent), options: getCcMonths(), optionsValue: 'value', optionsText: 'month', optionsCaption: $t('Month'), value: creditCardSsStartMonth">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field no-label">
+                            <div class="control">
+                                <select name="payment[cc_ss_start_year]" class="select year"
+                                        data-bind="attr: {id: getCode() + '_start_year', 'data-validate': {'validate-cc-ukss':true}},
+                                        enable: isActive($parent), options: getSsStartYears(), optionsValue: 'value', optionsText: 'year', optionsCaption: $t('Year'), value: creditCardSsStartYear">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="adv container" data-validation-msg="validate-cc-ukss">&nbsp;</div>
+        </div>
+    </div>
+    <!-- /ko -->
 </fieldset>

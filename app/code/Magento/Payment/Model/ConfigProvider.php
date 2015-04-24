@@ -23,12 +23,12 @@ class ConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         return [
-            'cc_available_types' => $this->config->getCcTypes(),
-            'cc_months' => $this->config->getMonths(),
-            'cc_years' => $this->config->getYears(),
-            'cc_has_verification' => true,
-            'cc_has_ss_card_type' => false,
-            'cc_ss_start_years' => $this->getSsStartYears(),
+            'ccAvailableTypes' => $this->config->getCcTypes(),
+            'ccMonths' => $this->config->getMonths(),
+            'ccYears' => $this->config->getYears(),
+            'ccHasVerification' => true,
+            'ccHasSsCardType' => false,
+            'ccSsStartYears' => $this->getSsStartYears(),
         ];
     }
 
@@ -46,7 +46,6 @@ class ConfigProvider implements ConfigProviderInterface
             $year = $first - $index;
             $years[$year] = $year;
         }
-        $years = [0 => __('Year')] + $years;
         return $years;
     }
 }
