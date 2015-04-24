@@ -22,4 +22,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Ui\DataProvider\Manager">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Ui\DataProvider\Config\Data\Proxy</argument>
+        </arguments>
+    </type>
 </config>

@@ -282,7 +282,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function setDefaultOrder($field)
     {
-        $this->getAvailableOrders();
+        $this->loadAvailableOrders();
         if (isset($this->_availableOrder[$field])) {
             $this->_orderField = $field;
         }
@@ -310,9 +310,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function getAvailableOrders()
     {
-        if ($this->_availableOrder === null) {
-            $this->_availableOrder = $this->_catalogConfig->getAttributeUsedForSortByArray();
-        }
+        $this->loadAvailableOrders();
         return $this->_availableOrder;
     }
 
@@ -337,7 +335,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function addOrderToAvailableOrders($order, $value)
     {
-        $this->getAvailableOrders();
+        $this->loadAvailableOrders();
         $this->_availableOrder[$order] = $value;
         return $this;
     }
@@ -350,7 +348,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
      */
     public function removeOrderFromAvailableOrders($order)
     {
-        $this->getAvailableOrders();
+        $this->loadAvailableOrders();
         if (isset($this->_availableOrder[$order])) {
             unset($this->_availableOrder[$order]);
         }
@@ -700,5 +698,18 @@ class Toolbar extends \Magento\Framework\View\Element\Template
             $this->_orderField = $this->_productListHelper->getDefaultSortField();
         }
         return $this->_orderField;
+    }
+
+    /**
+     * Load Available Orders
+     *
+     * @return $this
+     */
+    private function loadAvailableOrders()
+    {
+        if ($this->_availableOrder === null) {
+            $this->_availableOrder = $this->_catalogConfig->getAttributeUsedForSortByArray();
+        }
+        return $this;
     }
 }
