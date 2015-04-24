@@ -50,7 +50,7 @@ class CssDeployCommand extends Command
     /**
      * Files argument key
      */
-    const FILES_ARGUMENT = 'file';
+    const FILE_ARGUMENT = 'file';
 
     /**
      * @var ObjectManagerInterface
@@ -140,7 +140,7 @@ class CssDeployCommand extends Command
                     'Type of dynamic stylesheet language: [less|sass]'
                 ),
                 new InputArgument(
-                    self::FILES_ARGUMENT,
+                    self::FILE_ARGUMENT,
                     InputArgument::IS_ARRAY,
                     'Files to pre-process (file should be specified without extension)',
                     ['css/styles-m']
@@ -196,7 +196,7 @@ class CssDeployCommand extends Command
 
         $sourceFileGenerator = $this->sourceFileGeneratorPool->create($type);
 
-        foreach ($input->getArgument(self::FILES_ARGUMENT) as $file) {
+        foreach ($input->getArgument(self::FILE_ARGUMENT) as $file) {
             $file .= '.' . $type;
 
             $output->writeln("<info>Gathering {$file} sources.</info>");
