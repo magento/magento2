@@ -13,23 +13,4 @@ namespace Magento\CatalogImportExport\Model\Import\Proxy\Product;
 
 class Resource extends \Magento\Catalog\Model\Resource\Product
 {
-    /**
-     * Product to category table.
-     *
-     * @return string
-     */
-    public function getProductCategoryTable()
-    {
-        return parent::getProductCategoryTable();
-    }
-
-    /**
-     * Product to website table.
-     *
-     * @return string
-     */
-    public function getProductWebsiteTable()
-    {
-        return parent::getProductWebsiteTable();
-    }
 }
