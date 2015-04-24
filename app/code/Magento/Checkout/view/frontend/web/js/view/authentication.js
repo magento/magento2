@@ -25,7 +25,7 @@ define(
             isMethodRegister: window.checkoutConfig.isMethodRegister,
             isCustomerLoginRequired: window.checkoutConfig.isCustomerLoginRequired,
             registerUrl: window.checkoutConfig.registerUrl,
-            forgotPasswordUrl: '',
+            forgotPasswordUrl: window.checkoutConfig.getForgotPasswordUrl,
             username: '',
             password: '',
             isVisible: navigator.isStepVisible(stepName),
