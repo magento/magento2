@@ -16,12 +16,19 @@ class TaxConfigProvider implements ConfigProviderInterface
     protected $taxHelper;
 
     /**
+     * @var Config
+     */
+    protected $taxConfig;
+
+    /**
      * @param TaxHelper $taxHelper
      */
     public function __construct(
-        TaxHelper $taxHelper
+        TaxHelper $taxHelper,
+        Config $taxConfig
     ) {
         $this->taxHelper = $taxHelper;
+        $this->taxConfig = $taxConfig;
     }
 
     /**
@@ -33,7 +40,8 @@ class TaxConfigProvider implements ConfigProviderInterface
             'isDisplayShippingPriceExclTax' => $this->isDisplayShippingPriceExclTax(),
             'isDisplayShippingBothPrices' => $this->isDisplayShippingBothPrices(),
             'reviewItemPriceDisplayMode' => $this->getReviewItemPriceDisplayMode(),
-            'reviewTotalPriceDisplayMode' => $this->getReviewTotalPriceDisplayMode(),
+            'reviewTotalsDisplayMode' => $this->getReviewTotalsDisplayMode(),
+            'includeTaxInGrandTotal' => $this->getIncludeTaxInGrandTotal(),
         ];
     }
 
@@ -78,14 +86,24 @@ class TaxConfigProvider implements ConfigProviderInterface
      *
      * @return string 'both', 'including', 'excluding'
      */
-    public function getReviewTotalPriceDisplayMode()
+    public function getReviewTotalsDisplayMode()
     {
-        if ($this->taxHelper->displaySalesSubtotalBoth()) {
+        if ($this->taxConfig->displayCartSubtotalBoth()) {
             return 'both';
         }
-        if ($this->taxHelper->displaySalesPriceExclTax()) {
+        if ($this->taxConfig->displayCartSubtotalExclTax()) {
             return 'excluding';
         }
         return 'including';
+    }
+
+    /**
+     * Display tax in grand total section or not
+     *
+     * @return bool
+     */
+    public function getIncludeTaxInGrandTotal()
+    {
+        return $this->taxConfig->displayCartTaxWithGrandTotal();
     }
 }

@@ -13,8 +13,10 @@ define(
         'Magento_Catalog/js/price-utils'
     ],
     function (Component, quote, priceUtils) {
+        var displaySubtotalMode = window.checkoutConfig.reviewTotalsDisplayMode;
         return Component.extend({
             defaults: {
+                displaySubtotalMode: displaySubtotalMode,
                 template: 'Magento_Tax/checkout/review/subtotal'
             },
             getColspan: 3,
@@ -27,6 +29,16 @@ define(
                 var price = 0;
                 if (this.totals()) {
                     price = this.totals().subtotal;
+                }
+                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+            },
+            isBothPricesDisplayed: function() {
+                return 'both' == this.displaySubtotalMode;
+            },
+            getValueInclTax: function() {
+                var price = 0;
+                if (this.totals()) {
+                    price = this.totals().subtotal_incl_tax;
                 }
                 return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
             }
