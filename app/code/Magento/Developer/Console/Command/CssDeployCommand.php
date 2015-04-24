@@ -50,7 +50,7 @@ class CssDeployCommand extends Command
     /**
      * Files argument key
      */
-    const FILES_ARGUMENT = 'files';
+    const FILES_ARGUMENT = 'file';
 
     /**
      * @var ObjectManagerInterface
@@ -142,7 +142,7 @@ class CssDeployCommand extends Command
                 new InputArgument(
                     self::FILES_ARGUMENT,
                     InputArgument::IS_ARRAY,
-                    'Files to pre-process (accept more than one file type as space-separate values)',
+                    'Files to pre-process (file should be specified without extension)',
                     ['css/styles-m']
                 ),
                 new InputOption(
