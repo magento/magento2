@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Magento\Store\Model\StoreManager;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\App\ObjectManager;
@@ -29,6 +28,7 @@ use Magento\Setup\Module\Di\Compiler\Log\Writer;
 use Magento\Setup\Module\Di\Definition\Compressor;
 use Magento\Setup\Module\Di\Definition\Serializer\Igbinary;
 use Magento\Setup\Module\Di\Definition\Serializer\Standard;
+use \Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Command to generate all non-existing proxies and factories, and pre-compile class definitions,
@@ -36,7 +36,7 @@ use Magento\Setup\Module\Di\Definition\Serializer\Standard;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DiCompileMultiTenantCommand extends Command
+class DiCompileMultiTenantCommand extends AbstractSetupCommand
 {
     /**#@+
      * Names of input options
@@ -54,6 +54,13 @@ class DiCompileMultiTenantCommand extends Command
      * @var ObjectManager
      */
     private $objectManager;
+
+    /**
+     * Filesystem Directory List
+     *
+     * @var DirectoryList
+     */
+    private $directoryList;
 
     /**
      *
@@ -83,10 +90,12 @@ class DiCompileMultiTenantCommand extends Command
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param DirectoryList $directoryList
      */
-    public function __construct(ObjectManagerProvider $objectManagerProvider)
+    public function __construct(ObjectManagerProvider $objectManagerProvider, DirectoryList $directoryList)
     {
         $this->objectManager = $objectManagerProvider->get();
+        $this->directoryList = $directoryList;
         parent::__construct();
     }
 
@@ -141,14 +150,14 @@ class DiCompileMultiTenantCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $rootDir = realpath(__DIR__ . '/../../../../../../');
         $generationDir = $input->getOption(self::INPUT_KEY_GENERATION) ? $input->getOption(self::INPUT_KEY_GENERATION)
-            : $rootDir . '/var/generation';
+            : $this->directoryList->getPath(DirectoryList::GENERATION);
         $testExcludePatterns = [
-            "#^$rootDir/app/code/[\\w]+/[\\w]+/Test#",
-            "#^$rootDir/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#",
-            "#^$rootDir/setup/src/Magento/Setup/Test#",
-            "#^$rootDir/dev/tools/Magento/Tools/[\\w]+/Test#"
+            "#^" . $this->directoryList->getPath(DirectoryList::MODULES) . "/[\\w]+/[\\w]+/Test#",
+            "#^" . $this->directoryList->getPath(DirectoryList::LIB_INTERNAL)
+            . "/[\\w]+/[\\w]+/([\\w]+/)?Test#",
+            "#^" . $this->directoryList->getPath(DirectoryList::SETUP) . "/[\\w]+/[\\w]+/Test#",
+            "#^" . $this->directoryList->getRoot() . "/dev/tools/Magento/Tools/[\\w]+/Test#"
         ];
         $fileExcludePatterns = $input->getOption('exclude-pattern') ?
             [$input->getOption(self::INPUT_KEY_EXCLUDE_PATTERN)] : ['#[\\\\/]M1[\\\\/]#i'];
@@ -158,9 +167,9 @@ class DiCompileMultiTenantCommand extends Command
         $this->log = new Log($logWriter, $logWriter);
         AutoloaderRegistry::getAutoloader()->addPsr4('Magento\\', $generationDir . '/Magento/');
         // 1 Code generation
-        $this->generateCode($rootDir, $generationDir, $fileExcludePatterns, $input);
+        $this->generateCode($generationDir, $fileExcludePatterns, $input);
         // 2. Compilation
-        $this->compileCode($rootDir, $generationDir, $fileExcludePatterns, $input);
+        $this->compileCode($generationDir, $fileExcludePatterns, $input);
         //Reporter
         $this->log->report();
         if (!$this->log->hasError()) {
@@ -177,7 +186,6 @@ class DiCompileMultiTenantCommand extends Command
     /**
      * Generate Code
      *
-     * @param string $rootDir
      * @param string $generationDir
      * @param array $fileExcludePatterns
      * @param InputInterface $input
@@ -185,11 +193,11 @@ class DiCompileMultiTenantCommand extends Command
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function generateCode($rootDir, $generationDir, $fileExcludePatterns, $input)
+    public function generateCode($generationDir, $fileExcludePatterns, $input)
     {
         // 1.1 Code scan
         $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
-        $codeScanDir = realpath($rootDir . '/app');
+        $codeScanDir = $this->directoryList->getRoot() . '/app';
         $directoryScanner = new Scanner\DirectoryScanner();
         $this->files = $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns);
         $this->files['additional'] = [$input->getOption(self::INPUT_KEY_EXTRA_CLASSES_FILE)];
@@ -265,7 +273,6 @@ class DiCompileMultiTenantCommand extends Command
     /**
      * Compile Code
      *
-     * @param string $rootDir
      * @param string $generationDir
      * @param array $fileExcludePatterns
      * @param InputInterface $input
@@ -273,16 +280,17 @@ class DiCompileMultiTenantCommand extends Command
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function compileCode($rootDir, $generationDir, $fileExcludePatterns, $input)
+    private function compileCode($generationDir, $fileExcludePatterns, $input)
     {
-        $diDir = $input->getOption(self::INPUT_KEY_DI) ? $input->getOption(self::INPUT_KEY_DI) : $rootDir . '/var/di';
+        $diDir = $input->getOption(self::INPUT_KEY_DI) ? $input->getOption(self::INPUT_KEY_DI) :
+            $this->directoryList->getPath(DirectoryList::DI);
         $relationsFile = $diDir . '/relations.ser';
         $pluginDefFile = $diDir . '/plugins.ser';
         $compilationDirs = [
-            $rootDir . '/app/code',
-            $rootDir . '/lib/internal/Magento',
-            $rootDir . '/dev/tools/Magento/Tools',
-            $rootDir . '/setup/src/Magento/Setup/Module'
+            $this->directoryList->getPath(DirectoryList::MODULES),
+            $this->directoryList->getPath(DirectoryList::LIB_INTERNAL) . '/Magento',
+            $this->directoryList->getPath(DirectoryList::SETUP) . '/Magento/Setup/Module',
+            $this->directoryList->getRoot() . '/dev/tools/Magento/Tools',
         ];
         $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
         // 2.1 Code scan
