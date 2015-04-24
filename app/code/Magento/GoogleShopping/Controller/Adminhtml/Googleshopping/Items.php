@@ -104,12 +104,4 @@ class Items extends \Magento\Backend\App\Action
     {
         return $this->_authorization->isAllowed('Magento_GoogleShopping::items');
     }
-
-    /**
-     * @return \Magento\Framework\Controller\Result\Raw
-     */
-    protected function createRawObject()
-    {
-        return $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
-    }
 }

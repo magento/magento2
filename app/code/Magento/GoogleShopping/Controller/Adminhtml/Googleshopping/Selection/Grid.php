@@ -9,19 +9,19 @@ namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Selection;
 class Grid extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutFactory
      */
-    protected $layout;
+    protected $layoutFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\LayoutInterface $layout
+        \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
-        $this->layout = $layout;
+        $this->layoutFactory = $layoutFactory;
         parent::__construct($context);
     }
 
@@ -35,7 +35,7 @@ class Grid extends \Magento\Backend\App\Action
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
         return $resultRaw->setContents(
-            $this->layout->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items\Product')
+            $this->layoutFactory->create()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items\Product')
                 ->setIndex($this->getRequest()->getParam('index'))->toHtml()
         );
     }

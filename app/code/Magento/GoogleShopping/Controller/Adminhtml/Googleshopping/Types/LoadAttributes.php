@@ -9,21 +9,21 @@ namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types;
 class LoadAttributes extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types
 {
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutFactory
      */
-    protected $layout;
+    protected $layoutFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\LayoutInterface $layout
+        \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
-        $this->layout = $layout;
+        $this->layoutFactory = $layoutFactory;
         parent::__construct($context, $coreRegistry);
     }
 
@@ -38,7 +38,8 @@ class LoadAttributes extends \Magento\GoogleShopping\Controller\Adminhtml\Google
         $resultRaw = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
         try {
             $resultRaw->setContents(
-                $this->layout->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Attributes')
+                $this->layoutFactory->create()
+                    ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Attributes')
                     ->setAttributeSetId($this->getRequest()->getParam('attribute_set_id'))
                     ->setTargetCountry($this->getRequest()->getParam('target_country'))
                     ->setAttributeSetSelected(true)

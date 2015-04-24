@@ -17,7 +17,7 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
     {
         $flag = $this->_getFlag();
         if ($flag->isLocked()) {
-            return $this->createRawObject();
+            return $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
         }
 
         session_write_close();
@@ -44,10 +44,10 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
                 $e->getMessage()
             );
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            return $this->createRawObject();
+            return $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
         }
 
         $flag->unlock();
-        return $this->createRawObject();
+        return $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
     }
 }

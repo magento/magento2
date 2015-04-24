@@ -8,21 +8,21 @@ namespace Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types;
 class LoadAttributeSets extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\Types
 {
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var \Magento\Framework\View\LayoutFactory
      */
-    protected $layout;
+    protected $layoutFactory;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\LayoutInterface $layout
+        \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
-        $this->layout = $layout;
+        $this->layoutFactory = $layoutFactory;
         parent::__construct($context, $coreRegistry);
     }
 
@@ -37,7 +37,7 @@ class LoadAttributeSets extends \Magento\GoogleShopping\Controller\Adminhtml\Goo
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
         return $resultRaw->setContents(
-            $this->layout->getBlockSingleton('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Form')
+            $this->layoutFactory->create()->getBlockSingleton('Magento\GoogleShopping\Block\Adminhtml\Types\Edit\Form')
                 ->getAttributeSetsSelectElement($this->getRequest()->getParam('target_country'))
                 ->toHtml()
         );
