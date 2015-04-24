@@ -19,7 +19,6 @@ use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
-use Magento\Customer\Model\Url;
 
 
 class DefaultConfigProvider implements ConfigProviderInterface
@@ -85,24 +84,18 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $configurationPool;
 
     /**
-     * @var Url
-     */
-    private $customerUrl;
-
-    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRegistration $customerRegistration
      * @param CustomerRepository $customerRepository
      * @param CustomerSession $customerSession
-     * @param Url $customerUrlManager
+     * @param CustomerUrlManager $customerUrlManager
      * @param HttpContext $httpContext
      * @param CurrencyManager $currencyManager
      * @param QuoteRepository $quoteRepository
      * @param QuoteItemRepository $quoteItemRepository
      * @param ShippingMethodManager $shippingMethodManager
      * @param ConfigurationPool $configurationPool
-     * @param Url $customerUrl
      */
     public function __construct(
         CheckoutHelper $checkoutHelper,
@@ -116,8 +109,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         QuoteRepository $quoteRepository,
         QuoteItemRepository $quoteItemRepository,
         ShippingMethodManager $shippingMethodManager,
-        ConfigurationPool $configurationPool,
-        Url $customerUrl
+        ConfigurationPool $configurationPool
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -131,7 +123,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->quoteItemRepository = $quoteItemRepository;
         $this->shippingMethodManager = $shippingMethodManager;
         $this->configurationPool = $configurationPool;
-        $this->customerUrl = $customerUrl;
     }
 
     /**
@@ -154,7 +145,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'isCustomerLoginRequired' => $this->isCustomerLoginRequired(),
             'registerUrl' => $this->getRegisterUrl(),
             'customerAddressCount' => $this->getCustomerAddressCount(),
-            'getForgotPasswordUrl' => $this->getForgotPasswordUrl()
+            'forgotPasswordUrl' => $this->getForgotPasswordUrl()
         ];
     }
 
@@ -392,6 +383,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
      */
     private function getForgotPasswordUrl()
     {
-        return $this->customerUrl->getForgotPasswordUrl();
+        return $this->customerUrlManager->getForgotPasswordUrl();
     }
 }
