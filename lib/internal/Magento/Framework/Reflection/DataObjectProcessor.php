@@ -38,18 +38,26 @@ class DataObjectProcessor
     private $extensionAttributesProcessor;
 
     /**
+     * @var TypeCaster
+     */
+    private $typeCaster;
+
+    /**
      * @param \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
      * @param MethodsMap $methodsMapProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
+     * @param TypeCaster $typeCaster
      */
     public function __construct(
         \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver,
         MethodsMap $methodsMapProcessor,
-        ExtensionAttributesProcessor $extensionAttributesProcessor
+        ExtensionAttributesProcessor $extensionAttributesProcessor,
+        TypeCaster $typeCaster
     ) {
         $this->attributeTypeResolver = $typeResolver;
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
+        $this->typeCaster = $typeCaster;
     }
 
     /**
@@ -79,14 +87,14 @@ class DataObjectProcessor
                     continue;
                 }
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 2));
-                $outputData[$key] = $this->castValueToType($value, $returnType);
+                $outputData[$key] = $this->typeCaster->castValueToType($value, $returnType);
             } elseif (substr($methodName, 0, 3) === self::HAS_METHOD_PREFIX) {
                 $value = $dataObject->{$methodName}();
                 if ($value === null && !$methodReflectionData['isRequired']) {
                     continue;
                 }
                 $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
-                $outputData[$key] = $this->castValueToType($value, $returnType);
+                $outputData[$key] = $this->typeCaster->castValueToType($value, $returnType);
             } elseif (substr($methodName, 0, 3) === self::GETTER_PREFIX) {
                 $value = $dataObject->{$methodName}();
                 if ($methodName === 'getCustomAttributes' && $value === []) {
@@ -109,52 +117,14 @@ class DataObjectProcessor
                         if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
                             $singleValue = $this->buildOutputDataArray($singleValue, $arrayElementType);
                         }
-                        $valueResult[] = $this->castValueToType($singleValue, $arrayElementType);
+                        $valueResult[] = $this->typeCaster->castValueToType($singleValue, $arrayElementType);
                     }
                     $value = $valueResult;
                 }
-                $outputData[$key] = $this->castValueToType($value, $returnType);
+                $outputData[$key] = $this->typeCaster->castValueToType($value, $returnType);
             }
         }
         return $outputData;
-    }
-
-    /**
-     * Cast the output type to the documented type. This helps for output purposes.
-     *
-     * @param mixed $value
-     * @param string $type
-     * @return mixed
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    public function castValueToType($value, $type)
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        if ($type === "int" || $type === "integer") {
-            return (int)$value;
-        }
-
-        if ($type === "string") {
-            return (string)$value;
-        }
-
-        if ($type === "bool" || $type === "boolean" || $type === "true" || $type == "false") {
-            return (bool)$value;
-        }
-
-        if ($type === "float") {
-            return (float)$value;
-        }
-
-        if ($type === "double") {
-            return (double)$value;
-        }
-
-        return $value;
     }
 
     /**
