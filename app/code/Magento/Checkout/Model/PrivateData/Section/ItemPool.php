@@ -23,11 +23,11 @@ class ItemPool implements ItemPoolInterface
     protected $objectManager;
 
     /**
-     * Default item
+     * Default item id
      *
      * @var string
      */
-    protected $defaultItem;
+    protected $defaultItemId;
 
     /**
      * Item map. Key is item type, value is item object id in di
@@ -40,16 +40,16 @@ class ItemPool implements ItemPoolInterface
      * Construct
      *
      * @param ObjectManagerInterface $objectManager
-     * @param string $defaultItem
+     * @param string $defaultItemId
      * @param array $sectionSourceMap
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $defaultItem,
+        $defaultItemId,
         array $sectionSourceMap
     ) {
         $this->objectManager = $objectManager;
-        $this->defaultItem = $defaultItem;
+        $this->defaultItemId = $defaultItemId;
         $this->itemMap = $sectionSourceMap;
     }
 
@@ -70,7 +70,7 @@ class ItemPool implements ItemPoolInterface
      */
     protected function get($type)
     {
-        $itemId = isset($this->itemMap[$type]) ? $this->itemMap[$type] : $this->defaultItem;
+        $itemId = isset($this->itemMap[$type]) ? $this->itemMap[$type] : $this->defaultItemId;
         $item = $this->objectManager->get($itemId);
 
         if (!$item instanceof ItemInterface) {
