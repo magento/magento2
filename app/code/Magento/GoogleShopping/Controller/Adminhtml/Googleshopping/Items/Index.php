@@ -57,7 +57,10 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_PAGE);
-        $this->preparePage($resultPage);
+        $resultPage->setActiveMenu('Magento_GoogleShopping::catalog_googleshopping_items')
+            ->addBreadcrumb(__('Catalog'), __('Catalog'))
+            ->addBreadcrumb(__('Google Content'), __('Google Content'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Google Content Items'));
 
         $contentBlock = $resultPage->getLayout()
             ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items')
@@ -95,20 +98,5 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
         }
 
         return $resultPage->addBreadcrumb(__('Items'), __('Items'))->addContent($contentBlock);
-    }
-
-    /**
-     * Prepare page result
-     *
-     * @param \Magento\Backend\Model\View\Result\Page $resultPage
-     * @return \Magento\Backend\Model\View\Result\Page
-     */
-    protected function preparePage($resultPage)
-    {
-        $resultPage->setActiveMenu('Magento_GoogleShopping::catalog_googleshopping_items')
-            ->addBreadcrumb(__('Catalog'), __('Catalog'))
-            ->addBreadcrumb(__('Google Content'), __('Google Content'));
-        $resultPage->getConfig()->getTitle()->prepend(__('Google Content Items'));
-        return $resultPage;
     }
 }
