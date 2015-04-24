@@ -136,6 +136,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'quoteItemData' => $this->getQuoteItemData(),
             'isCustomerLoggedIn' => $this->isCustomerLoggedIn(),
             'currencySymbol' => $this->getCurrencySymbol(),
+            'baseCurrencySymbol' => $this->getBaseCurrencySymbol(),
             'selectedShippingMethod' => $this->getSelectedShippingMethod(),
             'storeCode' => $this->getStoreCode(),
             'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
@@ -256,6 +257,19 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $currency = $this->currencyManager->getCurrency($quote->getQuoteCurrencyCode());
             $currencySymbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
         }
+        return $currencySymbol;
+    }
+
+    /**
+     * Retrieve base currency symbol
+     *
+     * @return string
+     */
+    private function getBaseCurrencySymbol()
+    {
+        $defaultCurrency = $this->currencyManager->getCurrency($this->currencyManager->getDefaultCurrency());
+        $currencySymbol = $defaultCurrency->getSymbol()
+            ? $defaultCurrency->getSymbol() : $defaultCurrency->getShortName();
         return $currencySymbol;
     }
 

@@ -13,6 +13,7 @@ define(
         var paymentMethod = ko.observable(null);
         var quoteData = window.checkoutConfig.quoteData;
         var currencySymbol = window.checkoutConfig.currencySymbol;
+        var baseCurrencySymbol = window.checkoutConfig.baseCurrencySymbol;
         var selectedShippingMethod = ko.observable(window.checkoutConfig.selectedShippingMethod);
         var storeCode = window.checkoutConfig.storeCode;
         var totals = ko.observable({});
@@ -25,7 +26,10 @@ define(
                 return !!Number(quoteData.is_virtual);
             },
             getCurrencySymbol: function() {
-              return currencySymbol;
+                return currencySymbol;
+            },
+            getBaseCurrencySymbol: function() {
+                return baseCurrencySymbol;
             },
             getItems: function() {
                 return window.checkoutConfig.quoteItemData;

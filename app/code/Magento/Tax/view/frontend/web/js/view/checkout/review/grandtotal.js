@@ -38,7 +38,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().base_grand_total;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return quote.getBaseCurrencySymbol() + priceUtils.formatPrice(price);
             },
             getGrandTotalExclTax: function() {
                 var totals = this.totals();
