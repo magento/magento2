@@ -37,7 +37,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->loggerMock->expects($this->once())
             ->method('debug')
-            ->with('');
+            ->with("''");
 
         $this->logger->debug('', $this->configMock);
     }
