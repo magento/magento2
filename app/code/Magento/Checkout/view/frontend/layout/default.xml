@@ -24,7 +24,7 @@
                                 <item name="config" xsi:type="array">
                                     <item name="template" xsi:type="string">Magento_Checkout/minicart/content</item>
                                     <item name="itemRenderer" xsi:type="array">
-                                        <item name="default" xsi:type="string">Magento_Checkout/minicart/item/default</item>
+                                        <item name="default" xsi:type="string">Magento_Checkout/minicart/sidebar/default</item>
                                     </item>
                                 </item>
                                 <item name="children" xsi:type="array">

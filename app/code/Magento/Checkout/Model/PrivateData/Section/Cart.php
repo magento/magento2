@@ -39,10 +39,16 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $checkoutHelper;
 
     /**
+     * @var \Magento\Catalog\Helper\Product\Configuration
+     */
+    protected $configurationHelper;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Catalog\Helper\Product\Configuration $configurationHelper
      * @param array $data
      */
     public function __construct(
@@ -50,12 +56,14 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Helper\Data $checkoutHelper,
+        \Magento\Catalog\Helper\Product\Configuration $configurationHelper,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->catalogUrl = $catalogUrl;
         $this->checkoutCart = $checkoutCart;
         $this->checkoutHelper = $checkoutHelper;
+        $this->configurationHelper = $configurationHelper;
     }
 
     /**
@@ -123,7 +131,8 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         if ($items) {
             foreach ($items as $item) {
                 $itemsData[] = $item->toArray() + [
-                        'product_type' => $item->getProductType()
+                        'product_type' => $item->getProductType(),
+                        'options' => $this->configurationHelper->getCustomOptions($item)
                     ];
                 // TODO: do not miss to check $_cartQty || $block->getAllowCartLink()
             }
