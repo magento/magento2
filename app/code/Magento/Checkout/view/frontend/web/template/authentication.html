@@ -74,7 +74,7 @@
                           data-bind="submit:login"
                           method="post"
                           data-mage-init='{"validation":{}}'>
-                        <fieldset class="fieldset login">
+                        <fieldset class="fieldset login" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
                             <div class="field note" data-bind="text: $t('Already registered? Please log in below:')"></div>
                             <div class="field email required">
                                 <label class="label" for="login-email"><span data-bind="text: $t('Email')"></span></label>

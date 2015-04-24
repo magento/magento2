@@ -11,7 +11,8 @@ define(
         '../model/quote',
         '../model/payment-service',
         '../action/select-payment-method',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Checkout/js/model/step-navigator',
+        'mage/validation'
     ],
     function ($, Component, quote, paymentService, selectPaymentMethod, navigator) {
         var stepName = 'paymentMethod';
@@ -28,8 +29,9 @@ define(
                 var paymentMethodCode = $("input[name='payment[method]']:checked", form).val();
                 if (!paymentMethodCode) {
                     alert('Please specify payment method.');
+                } else {
+                    selectPaymentMethod(paymentMethodCode, []);
                 }
-                selectPaymentMethod(paymentMethodCode, []);
             },
             getAvailablePaymentMethods: function() {
                 return paymentMethods();

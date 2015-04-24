@@ -197,6 +197,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             }
 
             $quoteData = $quote->toArray();
+            $quoteData['is_virtual'] = $quote->getIsVirtual();
         }
         return $quoteData;
     }

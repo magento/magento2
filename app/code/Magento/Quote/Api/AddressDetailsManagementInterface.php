@@ -19,7 +19,7 @@ interface AddressDetailsManagementInterface
     public function saveAddresses(
         $cartId,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress,
-        \Magento\Quote\Api\Data\AddressInterface $shippingAddress,
+        \Magento\Quote\Api\Data\AddressInterface $shippingAddress = null,
         \Magento\Quote\Api\Data\AddressAdditionalDataInterface $additionalData = null
     );
 }

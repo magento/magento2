@@ -78,7 +78,7 @@ define(
                 if (!navigator.isStepVisible(stepName)()) {
                     navigator.goToStep(stepName);
                 }
-            },
+            }
         });
     }
 );

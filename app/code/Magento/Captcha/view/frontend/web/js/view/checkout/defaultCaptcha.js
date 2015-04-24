@@ -8,7 +8,7 @@ define(
     [
         'jquery',
         'ko',
-        'uiComponent',
+        'Magento_Ui/js/form/form',
         'Magento_Customer/js/model/customer',
         'Magento_Captcha/js/action/refresh'
     ],
@@ -37,6 +37,11 @@ define(
             },
             refresh: function() {
                 refreshAction(captchaConfig[this.formId].refreshUrl, this.formId, this.imageSource);
+            },
+            validate: function() {
+                this.source.set('params.invalid', false);
+               	this.source.trigger('captcha.data.validate');
+                return this.source.get('params.invalid');
             }
         });
     }

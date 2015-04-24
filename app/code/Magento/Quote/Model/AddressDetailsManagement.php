@@ -69,14 +69,16 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
     public function saveAddresses(
         $cartId,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress,
-        \Magento\Quote\Api\Data\AddressInterface $shippingAddress,
+        \Magento\Quote\Api\Data\AddressInterface $shippingAddress = null,
         \Magento\Quote\Api\Data\AddressAdditionalDataInterface $additionalData = null
     ) {
         $this->billingAddressManagement->assign($cartId, $billingAddress);
-        $this->shippingAddressManagement->assign($cartId, $shippingAddress);
-
         $addressDetails = $this->addressDetailsFactory->create();
-        $addressDetails->setShippingMethods($this->shippingMethodManagement->getList($cartId));
+        if ($shippingAddress) {
+            $this->shippingAddressManagement->assign($cartId, $shippingAddress);
+
+            $addressDetails->setShippingMethods($this->shippingMethodManagement->getList($cartId));
+        }
         $addressDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
         if (!is_null($additionalData)) {
             $this->dataProcessor->process($additionalData);
