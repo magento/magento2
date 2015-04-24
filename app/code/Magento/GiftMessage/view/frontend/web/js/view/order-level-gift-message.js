@@ -16,19 +16,29 @@ define([
                 template: 'Magento_GiftMessage/order-level-gift-message',
                 displayArea: 'orderLevelGiftMessage'
             },
+            message: {},
             initialize: function() {
+                var that = this;
+                quote.getShippingAddress().subscribe(function(shippingAddress) {
+                    var customerName = shippingAddress.firstname + ' ' + shippingAddress.lastname;
+                    that.message = {
+                        from: ko.observable(customerName),
+                        to: ko.observable(customerName),
+                        message: ko.observable(null)
+                    };
+                    this.dispose();
+                });
                 this._super();
                 giftOptions.addOrderLevelGiftOptions(this);
             },
             isOrderLevelGiftMessageVisible: ko.observable(true),
             setOrderLevelGiftMessageVisible: function() {
-                var defaultName = quote.getShippingAddress()().firstname + ' ' + quote.getShippingAddress()().lastname;
                 this.isOrderLevelGiftMessageVisible(!this.isOrderLevelGiftMessageVisible());
-                this.giftMessageSenderName(defaultName);
-                this.giftMessageRecipientName(defaultName);
             },
-            giftMessageSenderName: ko.observable(),
-            giftMessageRecipientName: ko.observable()
+            quoteId: quote.entity_id,
+            getData: function() {
+                return this.message;
+            }
         });
     }
 );

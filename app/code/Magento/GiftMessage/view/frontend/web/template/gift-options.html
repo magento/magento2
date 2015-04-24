@@ -27,9 +27,11 @@
                 <input type="checkbox" name="allow_gift_options_for_items" id="allow_gift_options_for_items" class="checkbox" data-bind="checked: isItemLevelGiftOptionsSelected">
                 <label for="allow_gift_options_for_items" class="label"><span data-bind="text: $t('Gift Options for Individual Items')"></span></label>
             </div>
-            <!-- ko foreach: getItemLevelGiftOptions() -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
+            <dd id="allow-gift-options-for-items-container" class="order-options individual" style="display: block;" data-bind="visible: isItemLevelGiftOptionsSelected">
+                <!-- ko foreach: getItemLevelGiftOptions() -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
+            </dd>
         </dt>
     </dl>
 </fieldset>
