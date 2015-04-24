@@ -46,4 +46,9 @@
             <argument name="quoteCollection" xsi:type="object">Magento\Quote\Model\Resource\Quote\Collection\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Quote\Model\Quote\Address">
+        <arguments>
+            <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
+        </arguments>
+    </type>
 </config>

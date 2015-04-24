@@ -964,6 +964,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Object\Copy\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Framework\Object\Copy\Config\Data\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Object\Copy\Config\Reader">
         <arguments>
             <argument name="fileName" xsi:type="string">fieldset.xml</argument>
