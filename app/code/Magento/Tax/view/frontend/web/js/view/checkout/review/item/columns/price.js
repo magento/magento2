@@ -12,21 +12,21 @@ define(
     ],
     function (column) {
         "use strict";
+        var displayPriceMode = window.checkoutConfig.reviewItemPriceDisplayMode || 'including';
         return column.extend({
             defaults: {
-                headerClass: 'price',
-                displayPriceMode: 'both',
-                ownClass: 'price-including-tax',
+                displayPriceMode: displayPriceMode,
+                ownClass: 'price',
                 columnTitle: 'Price',
                 template: 'Magento_Tax/checkout/review/item/columns/price'
             },
-            displayPriceInclTax: function() {
+            isPriceInclTaxDisplayed: function() {
                 return 'both' == this.displayPriceMode || 'including' == this.displayPriceMode;
             },
-            displayPriceExclTax: function() {
+            isPriceExclTaxDisplayed: function() {
                 return 'both' == this.displayPriceMode || 'excluding' == this.displayPriceMode;
             },
-            displayBothPrices: function() {
+            isBothPricesDisplayed: function() {
                 return 'both' == this.displayPriceMode;
             },
             getPriceExclTax: function(quoteItem) {
@@ -34,13 +34,6 @@ define(
             },
             getPriceInclTax: function(quoteItem) {
                 return this.getFormattedPrice(quoteItem.price_incl_tax);
-            },
-            getClass: function() {
-                if (this.displayBothPrices || this.displayPriceInclTax) {
-                    return 'price-including-tax';
-                } else {
-                    return 'price-excluding-tax';
-                }
             }
         });
     }

@@ -16,12 +16,19 @@ class TaxConfigProvider implements ConfigProviderInterface
     protected $taxHelper;
 
     /**
+     * @var Config
+     */
+    protected $taxConfig;
+
+    /**
      * @param TaxHelper $taxHelper
      */
     public function __construct(
-        TaxHelper $taxHelper
+        TaxHelper $taxHelper,
+        Config $taxConfig
     ) {
         $this->taxHelper = $taxHelper;
+        $this->taxConfig = $taxConfig;
     }
 
     /**
@@ -31,7 +38,10 @@ class TaxConfigProvider implements ConfigProviderInterface
     {
         return [
             'isDisplayShippingPriceExclTax' => $this->isDisplayShippingPriceExclTax(),
-            'isDisplayShippingBothPrices' => $this->isDisplayShippingBothPrices()
+            'isDisplayShippingBothPrices' => $this->isDisplayShippingBothPrices(),
+            'reviewItemPriceDisplayMode' => $this->getReviewItemPriceDisplayMode(),
+            'reviewTotalsDisplayMode' => $this->getReviewTotalsDisplayMode(),
+            'includeTaxInGrandTotal' => $this->getIncludeTaxInGrandTotal(),
         ];
     }
 
@@ -53,5 +63,47 @@ class TaxConfigProvider implements ConfigProviderInterface
     public function isDisplayShippingBothPrices()
     {
         return $this->taxHelper->displayShippingBothPrices();
+    }
+
+    /**
+     * Get review item price display mode
+     *
+     * @return string 'both', 'including', 'excluding'
+     */
+    public function getReviewItemPriceDisplayMode()
+    {
+        if ($this->taxHelper->displayCartBothPrices()) {
+            return 'both';
+        }
+        if ($this->taxHelper->displayCartPriceExclTax()) {
+            return 'excluding';
+        }
+        return 'including';
+    }
+
+    /**
+     * Get review item price display mode
+     *
+     * @return string 'both', 'including', 'excluding'
+     */
+    public function getReviewTotalsDisplayMode()
+    {
+        if ($this->taxConfig->displayCartSubtotalBoth()) {
+            return 'both';
+        }
+        if ($this->taxConfig->displayCartSubtotalExclTax()) {
+            return 'excluding';
+        }
+        return 'including';
+    }
+
+    /**
+     * Display tax in grand total section or not
+     *
+     * @return bool
+     */
+    public function getIncludeTaxInGrandTotal()
+    {
+        return $this->taxConfig->displayCartTaxWithGrandTotal();
     }
 }

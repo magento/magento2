@@ -16,6 +16,7 @@ define(
             defaults: {
                 template: "Magento_Persistent/remember-me"
             },
+            dataScope: "global",
             isRememberMeCheckboxVisible: ko.observable(persistenceConfig.isRememberMeCheckboxVisible),
             isRememberMeCheckboxChecked: ko.observable(persistenceConfig.isRememberMeCheckboxChecked)
         });

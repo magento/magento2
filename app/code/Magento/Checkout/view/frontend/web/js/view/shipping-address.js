@@ -35,8 +35,24 @@ define(
                 return !quote.isVirtual();
             },
             selectShippingAddress: function() {
+                var additionalData = {};
+                var billingAddress = quote.getBillingAddress()();
+                if (!billingAddress.customerAddressId) {
+                    /**
+                     * All the the input fields that are not a part of the address but need to be submitted
+                     * in the same request must have data-scope attribute set
+                     */
+                    var additionalFields = $('input[data-scope="additionalAddressData"]').serializeArray();
+                    additionalFields.forEach(function (field) {
+                        additionalData[field.name] = field.value;
+                    });
+                }
                 if (!newAddressSelected()) {
-                    selectShippingAddress(addressList.getAddressById(this.selectedAddressId()), this.sameAsBilling());
+                    selectShippingAddress(
+                        addressList.getAddressById(this.selectedAddressId()),
+                        this.sameAsBilling(),
+                        additionalData
+                    );
                 } else {
                     this.validate();
                     if (!this.source.get('params.invalid')) {
@@ -45,7 +61,7 @@ define(
                             var addressBookCheckBox =  $("input[name = 'shipping[save_in_address_book]']:checked");
                             addressData.save_in_address_book = addressBookCheckBox.val();
                         }
-                        selectShippingAddress(addressData, this.sameAsBilling());
+                        selectShippingAddress(addressData, this.sameAsBilling(), additionalData);
                     }
                 }
             },

@@ -30,7 +30,6 @@ define(
                 //todo add format data
                 return quote.getCurrencySymbol() + priceUtils.formatPrice(price)
             }
-
         });
     }
 );

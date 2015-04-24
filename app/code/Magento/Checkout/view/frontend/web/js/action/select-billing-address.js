@@ -10,11 +10,16 @@ define(
         '../model/addresslist',
         '../model/step-navigator',
         './select-shipping-address',
-        'uiRegistry'
+        'uiRegistry',
+        '../model/url-builder',
+        'mage/storage',
+        '../model/payment-service'
+
     ],
-    function(quote, addressList, navigator, selectShippingAddress, registry) {
+    function (quote, addressList, navigator, selectShippingAddress, registry, urlBuilder, storage, paymentService) {
         "use strict";
-        return function(billingAddress, useForShipping) {
+        return function (billingAddress, useForShipping, additionalData) {
+            additionalData = additionalData || {};
             quote.setBillingAddress(billingAddress);
             if (useForShipping === '1' && !quote.isVirtual()) {
                 if (!billingAddress.id) {
@@ -29,7 +34,26 @@ define(
                         }
                     }
                 }
-                selectShippingAddress(billingAddress, useForShipping);
+                selectShippingAddress(billingAddress, useForShipping, additionalData);
+            } else if (quote.isVirtual()) {
+                storage.post(
+                    urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()}),
+                    JSON.stringify({
+                        billingAddress: quote.getBillingAddress()(),
+                        additionalData: {extensionAttributes : additionalData}
+                    })
+                ).done(
+                    function(result) {
+                        paymentService.setPaymentMethods(result.payment_methods);
+                        navigator.setCurrent('billingAddress').goNext();
+                    }
+                ).fail(
+                    function(response) {
+                        var error = JSON.parse(response.responseText);
+                        errorList.add(error);
+                        quote.setBillingAddress(null);
+                    }
+                );
             } else {
                 navigator.setCurrent('billingAddress').goNext();
             }

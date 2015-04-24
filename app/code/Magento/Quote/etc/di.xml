@@ -28,4 +28,5 @@
     <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="\Magento\Quote\Model\Cart\Currency" />
     <preference for="Magento\Quote\Api\AddressDetailsManagementInterface" type="Magento\Quote\Model\AddressDetailsManagement" />
     <preference for="Magento\Quote\Api\Data\AddressDetailsInterface" type="Magento\Quote\Model\AddressDetails" />
+    <preference for="Magento\Quote\Api\Data\AddressAdditionalDataInterface" type="Magento\Quote\Model\AddressAdditionalData" />
 </config>

@@ -8,39 +8,17 @@
 /*global alert*/
 define(
     [
-        'Magento_Checkout/js/view/review/item/column'
+        'Magento_Tax/js/view/checkout/review/item/columns/price'
     ],
-    function (column) {
+    function (Price) {
         "use strict";
-        return column.extend({
+        var displayPriceMode = window.checkoutConfig.reviewItemPriceDisplayMode || 'including';
+        return Price.extend({
             defaults: {
-                headerClass: 'subtotal',
-                displayPriceMode: 'both',
-                ownClass: 'price-including-tax',
+                displayPriceMode: displayPriceMode,
+                ownClass: 'subtotal',
                 columnTitle: 'Subtotal',
                 template: 'Magento_Tax/checkout/review/item/columns/subtotal'
-            },
-            displayPriceInclTax: function() {
-                return 'both' == this.displayPriceMode || 'including' == this.displayPriceMode;
-            },
-            displayPriceExclTax: function() {
-                return 'both' == this.displayPriceMode || 'excluding' == this.displayPriceMode;
-            },
-            displayBothPrices: function() {
-                return 'both' == this.displayPriceMode;
-            },
-            getPriceExclTax: function(quoteItem) {
-                return this.getFormattedPrice(quoteItem.price);
-            },
-            getPriceInclTax: function(quoteItem) {
-                return this.getFormattedPrice(quoteItem.price_incl_tax);
-            },
-            getClass: function() {
-                if (this.displayBothPrices || this.displayPriceInclTax) {
-                    return 'price-including-tax';
-                } else {
-                    return 'price-excluding-tax';
-                }
             }
         });
     }

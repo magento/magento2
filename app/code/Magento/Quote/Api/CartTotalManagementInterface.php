@@ -23,8 +23,8 @@ interface CartTotalManagementInterface
      */
     public function collectTotals(
         $cartId,
-        $shippingCarrierCode,
-        $shippingMethodCode,
+        $shippingCarrierCode = null,
+        $shippingMethodCode = null,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
     );
 }

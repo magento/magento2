@@ -17,7 +17,7 @@ define(
             },
 
             getUnitDisplayPriceExclTax: function(item) {
-                var unitExclTax = parseFloat(item.price);
+                var unitExclTax = parseFloat(this.getItemDisplayPriceExclTax(item));
                 if (!window.checkoutConfig.isWeeeEnabled) {
                     return unitExclTax;
                 }
@@ -27,13 +27,24 @@ define(
                 return unitExclTax;
             },
             getFinalUnitDisplayPriceExclTax: function(item) {
-                var unitExclTax = parseFloat(item.price);
+                var unitExclTax = parseFloat(this.getItemDisplayPriceExclTax(item));
                 if (!window.checkoutConfig.isWeeeEnabled) {
                     return unitExclTax;
                 }
                 return unitExclTax + parseFloat(item.weee_tax_applied_amount);
-            }
+            },
+            getItemDisplayPriceExclTax: function (item) {
+                var price = item.calculation_price || null;
 
+                if (price === null) {
+                    if (item.custom_price !== null) {
+                        price = item.custom_price
+                    } else {
+                        return item.converted_price;
+                    }
+                }
+                return price;
+            }
         });
     }
 );

@@ -27,6 +27,7 @@
                                             <item name="children" xsi:type="array">
                                                 <item name="remember-me" xsi:type="array">
                                                     <item name="component" xsi:type="string">Magento_Persistent/js/view/remember-me</item>
+                                                    <item name="dataScope" xsi:type="string">additionalAddressData</item>
                                                     <item name="displayArea" xsi:type="string">additional-fieldsets</item>
                                                 </item>
                                             </item>

@@ -16,15 +16,17 @@ define(
     ],
     function(quote, addressList, urlBuilder, navigator, shippingService, paymentService, storage, errorList) {
         "use strict";
-        return function(shippingAddress, sameAsBilling) {
+        return function(shippingAddress, sameAsBilling, additionalData) {
             errorList.clear();
+            additionalData = additionalData || {};
             shippingAddress['same_as_billing'] = (sameAsBilling) ? 1 : 0;
             quote.setShippingAddress(shippingAddress);
             storage.post(
                 urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()}),
                 JSON.stringify({
                     shippingAddress: quote.getShippingAddress()(),
-                    billingAddress: quote.getBillingAddress()()
+                    billingAddress: quote.getBillingAddress()(),
+                    additionalData: {extensionAttributes : additionalData}
                 })
             ).done(
                 function(result) {

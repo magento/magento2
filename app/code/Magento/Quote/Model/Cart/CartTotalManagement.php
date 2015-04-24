@@ -47,11 +47,13 @@ class CartTotalManagement implements CartTotalManagementInterface
      */
     public function collectTotals(
         $cartId,
-        $shippingCarrierCode,
-        $shippingMethodCode,
+        $shippingCarrierCode = null,
+        $shippingMethodCode = null,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
     ) {
-        $this->shippingMehotManagement->set($cartId, $shippingCarrierCode, $shippingMethodCode);
+        if ($shippingCarrierCode && $shippingMethodCode) {
+            $this->shippingMehotManagement->set($cartId, $shippingCarrierCode, $shippingMethodCode);
+        }
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
         return $this->cartTotalsRepository->get($cartId);
     }
