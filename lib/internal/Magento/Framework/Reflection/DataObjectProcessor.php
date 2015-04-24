@@ -95,7 +95,7 @@ class DataObjectProcessor
 
             $returnType = $this->methodsMapProcessor->getMethodReturnType($dataObjectType, $methodName);
             $key = $this->fieldNamer->getFieldNameForMethodName($methodName);
-            if ($key === 'custom_attributes' && $value === []) {
+            if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES && $value === []) {
                 continue;
             }
 

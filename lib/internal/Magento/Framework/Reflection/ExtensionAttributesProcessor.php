@@ -69,42 +69,48 @@ class ExtensionAttributesProcessor
 
         /** @var MethodReflection $method */
         foreach ($methods as $methodName => $methodReflectionData) {
-            // any method with parameter(s) gets ignored because we do not know the type and value of
-            // the parameter(s), so we are not able to process
-            if ($methodReflectionData['parameterCount'] > 0) {
+            if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
                 continue;
             }
-            $returnType = $methodReflectionData['type'];
-            if (substr($methodName, 0, 3) === self::GETTER_PREFIX) {
-                $value = $dataObject->{$methodName}();
-                if ($value === null && !$methodReflectionData['isRequired']) {
-                    continue;
-                }
-                $key = SimpleDataObjectConverter::camelCaseToSnakeCase(substr($methodName, 3));
 
-                if (!$this->isAttributePermissionValid($dataObjectType, $key)) {
-                    $outputData[$key] = null;
-                    continue;
-                }
-
-                if (is_object($value) && !($value instanceof Phrase)) {
-                    $value = $this->dataObjectProcessor->buildOutputDataArray($value, $returnType);
-                } elseif (is_array($value)) {
-                    $valueResult = [];
-                    $arrayElementType = substr($returnType, 0, -2);
-                    foreach ($value as $singleValue) {
-                        if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
-                            $singleValue = $this->dataObjectProcessor->buildOutputDataArray(
-                                $singleValue,
-                                $arrayElementType
-                            );
-                        }
-                        $valueResult[] = $this->dataObjectProcessor->castValueToType($singleValue, $arrayElementType);
-                    }
-                    $value = $valueResult;
-                }
-                $outputData[$key] = $this->dataObjectProcessor->castValueToType($value, $returnType);
+            $key = $this->fieldNamer->getFieldNameForMethodName($methodName);
+            if (!$this->isAttributePermissionValid($dataObjectType, $key)) {
+                $outputData[$key] = null;
+                continue;
             }
+
+            $value = $dataObject->{$methodName}();
+            if ($value === null) {
+                // all extension attributes are optional
+                continue;
+            }
+
+            // should write field?
+            // isWriterValid
+            // what value should be written
+
+            $returnType = $this->methodsMapProcessor->getMethodReturnType($dataObjectType, $methodName);
+
+            if (is_object($value) && !($value instanceof Phrase)) {
+                $value = $this->dataObjectProcessor->buildOutputDataArray($value, $returnType);
+            } elseif (is_array($value)) {
+                $valueResult = [];
+                $arrayElementType = substr($returnType, 0, -2);
+                foreach ($value as $singleValue) {
+                    if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
+                        $singleValue = $this->dataObjectProcessor->buildOutputDataArray(
+                            $singleValue,
+                            $arrayElementType
+                        );
+                    }
+                    $valueResult[] = $this->dataObjectProcessor->castValueToType($singleValue, $arrayElementType);
+                }
+                $value = $valueResult;
+            } else {
+                $value = $this->typeCaster->castValueToType($value, $returnType);
+            }
+
+            $outputData[$key] = $value;
         }
 
         return $outputData;
