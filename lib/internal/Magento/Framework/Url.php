@@ -133,12 +133,12 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
     /**
      * @var \Magento\Framework\Url\RouteParamsResolverInterface
      */
-    protected $_routeParamsResolver;
+    private $_routeParamsResolver;
 
     /**
      * @var \Magento\Framework\Url\RouteParamsResolverFactory
      */
-    protected $_routeParamsResolverFactory;
+    private $_routeParamsResolverFactory;
     /**
      * @var \Magento\Framework\Url\ScopeResolverInterface
      */
