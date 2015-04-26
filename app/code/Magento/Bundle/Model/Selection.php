@@ -8,6 +8,8 @@ namespace Magento\Bundle\Model;
 /**
  * Bundle Selection Model
  *
+ * @method int getSelectionId()
+ * @method \Magento\Bundle\Model\Selection setSelectionId(int $value)
  * @method int getOptionId()
  * @method \Magento\Bundle\Model\Selection setOptionId(int $value)
  * @method int getParentProductId()
