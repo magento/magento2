@@ -87,26 +87,17 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     public function get($sku, $id)
     {
         $product = $this->getProduct($sku);
-        $collection = $this->getConfigurableAttributesCollection($product);
-        $collection->addFieldToFilter($collection->getResource()->getIdFieldName(), $id);
-        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
-        $configurableAttribute = $collection->getFirstItem();
-        if (!$configurableAttribute->getId()) {
-            throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $id));
-        }
-        $prices = $configurableAttribute->getPrices();
-        if (is_array($prices)) {
-            foreach ($prices as $price) {
-                /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
-                $value = $this->optionValueFactory->create();
-                $value->setValueIndex($price['value_index'])
-                    ->setPricingValue($price['pricing_value'])
-                    ->setIsPercent($price['is_percent']);
-                $values[] = $value;
+
+        $extensionAttribute = $product->getExtensionAttributes();
+        if ($extensionAttribute !== null) {
+            $options = $extensionAttribute->getConfigurableProductOptions();
+            foreach ($options as $option) {
+                if ($option->getId() == $id) {
+                    return $option;
+                }
             }
         }
-        $configurableAttribute->setValues($values);
-        return $configurableAttribute;
+        throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $id));
     }
 
     /**
@@ -116,21 +107,10 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     {
         $options = [];
         $product = $this->getProduct($sku);
-        foreach ($this->getConfigurableAttributesCollection($product) as $option) {
-            $values = [];
-            $prices = $option->getPrices();
-            if (is_array($prices)) {
-                foreach ($prices as $price) {
-                    /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
-                    $value = $this->optionValueFactory->create();
-                    $value->setValueIndex($price['value_index'])
-                        ->setPricingValue($price['pricing_value'])
-                        ->setIsPercent($price['is_percent']);
-                    $values[] = $value;
-                }
-            }
-            $option->setValues($values);
-            $options[] = $option;
+
+        $extensionAttribute = $product->getExtensionAttributes();
+        if ($extensionAttribute !== null) {
+            $options = $extensionAttribute->getConfigurableProductOptions();
         }
         return $options;
     }
