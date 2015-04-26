@@ -1,8 +1,13 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\View\Layout;
 
 /**
  * Proxy class for @see \Magento\Framework\View\Layout
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Proxy extends \Magento\Framework\View\Layout
 {
@@ -41,8 +46,11 @@ class Proxy extends \Magento\Framework\View\Layout
      * @param string $instanceName
      * @param bool $shared
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\Magento\\Framework\\View\\Layout', $shared = true)
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $instanceName = '\\Magento\\Framework\\View\\Layout',
+        $shared = true
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
         $this->_isShared = $shared;
@@ -53,11 +61,13 @@ class Proxy extends \Magento\Framework\View\Layout
      */
     public function __sleep()
     {
-        return array('_subject', '_isShared');
+        return ['_subject', '_isShared'];
     }
 
     /**
      * Retrieve ObjectManager from global scope
+     *
+     * @return void
      */
     public function __wakeup()
     {
@@ -66,6 +76,8 @@ class Proxy extends \Magento\Framework\View\Layout
 
     /**
      * Clone proxied instance
+     *
+     * @return void
      */
     public function __clone()
     {
@@ -290,7 +302,7 @@ class Proxy extends \Magento\Framework\View\Layout
     /**
      * {@inheritdoc}
      */
-    public function createBlock($type, $name = '', array $arguments = array())
+    public function createBlock($type, $name = '', array $arguments = [])
     {
         return $this->_getSubject()->createBlock($type, $name, $arguments);
     }
@@ -306,7 +318,7 @@ class Proxy extends \Magento\Framework\View\Layout
     /**
      * {@inheritdoc}
      */
-    public function addContainer($name, $label, array $options = array(), $parent = '', $alias = '')
+    public function addContainer($name, $label, array $options = [], $parent = '', $alias = '')
     {
         $this->_getSubject()->addContainer($name, $label, $options, $parent, $alias);
     }
@@ -402,9 +414,16 @@ class Proxy extends \Magento\Framework\View\Layout
     /**
      * {@inheritdoc}
      */
-    public function addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template, $data = array())
+    public function addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template, $data = [])
     {
-        return $this->_getSubject()->addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template, $data);
+        return $this->_getSubject()->addAdjustableRenderer(
+            $namespace,
+            $staticType,
+            $dynamicType,
+            $type,
+            $template,
+            $data
+        );
     }
 
     /**
@@ -418,7 +437,7 @@ class Proxy extends \Magento\Framework\View\Layout
     /**
      * {@inheritdoc}
      */
-    public function executeRenderer($namespace, $staticType, $dynamicType, $data = array())
+    public function executeRenderer($namespace, $staticType, $dynamicType, $data = [])
     {
         $this->_getSubject()->executeRenderer($namespace, $staticType, $dynamicType, $data);
     }
@@ -426,7 +445,7 @@ class Proxy extends \Magento\Framework\View\Layout
     /**
      * {@inheritdoc}
      */
-    public function initMessages($messageGroups = array())
+    public function initMessages($messageGroups = [])
     {
         $this->_getSubject()->initMessages($messageGroups);
     }

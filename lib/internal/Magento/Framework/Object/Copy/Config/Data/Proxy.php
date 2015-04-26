@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\Object\Copy\Config\Data;
 
 /**
@@ -41,8 +45,11 @@ class Proxy extends \Magento\Framework\Object\Copy\Config\Data
      * @param string $instanceName
      * @param bool $shared
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\Magento\\Framework\\Object\\Copy\\Config\\Data', $shared = true)
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $instanceName = '\\Magento\\Framework\\Object\\Copy\\Config\\Data',
+        $shared = true
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
         $this->_isShared = $shared;
@@ -53,11 +60,13 @@ class Proxy extends \Magento\Framework\Object\Copy\Config\Data
      */
     public function __sleep()
     {
-        return array('_subject', '_isShared');
+        return ['_subject', '_isShared'];
     }
 
     /**
      * Retrieve ObjectManager from global scope
+     *
+     * @return void
      */
     public function __wakeup()
     {
@@ -66,6 +75,8 @@ class Proxy extends \Magento\Framework\Object\Copy\Config\Data
 
     /**
      * Clone proxied instance
+     *
+     * @return void
      */
     public function __clone()
     {
