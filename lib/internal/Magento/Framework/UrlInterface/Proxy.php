@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\UrlInterface;
 
 /**
@@ -41,8 +45,11 @@ class Proxy implements \Magento\Framework\UrlInterface
      * @param string $instanceName
      * @param bool $shared
      */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $instanceName = '\\Magento\\Framework\\UrlInterface', $shared = true)
-    {
+    public function __construct(
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        $instanceName = '\\Magento\\Framework\\UrlInterface',
+        $shared = true
+    ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
         $this->_isShared = $shared;
@@ -53,11 +60,13 @@ class Proxy implements \Magento\Framework\UrlInterface
      */
     public function __sleep()
     {
-        return array('_subject', '_isShared');
+        return ['_subject', '_isShared'];
     }
 
     /**
      * Retrieve ObjectManager from global scope
+     *
+     * @return void
      */
     public function __wakeup()
     {
@@ -66,6 +75,8 @@ class Proxy implements \Magento\Framework\UrlInterface
 
     /**
      * Clone proxied instance
+     *
+     * @return void
      */
     public function __clone()
     {
@@ -98,7 +109,7 @@ class Proxy implements \Magento\Framework\UrlInterface
     /**
      * {@inheritdoc}
      */
-    public function getBaseUrl($params = array())
+    public function getBaseUrl($params = [])
     {
         return $this->_getSubject()->getBaseUrl($params);
     }
@@ -162,7 +173,7 @@ class Proxy implements \Magento\Framework\UrlInterface
     /**
      * {@inheritdoc}
      */
-    public function getDirectUrl($url, $params = array())
+    public function getDirectUrl($url, $params = [])
     {
         return $this->_getSubject()->getDirectUrl($url, $params);
     }
