@@ -1111,9 +1111,4 @@
             <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Action\Context">
-        <arguments>
-            <argument name="view" xsi:type="object">Magento\Framework\App\ViewInterface\Proxy</argument>
-        </arguments>
-    </type>
 </config>
