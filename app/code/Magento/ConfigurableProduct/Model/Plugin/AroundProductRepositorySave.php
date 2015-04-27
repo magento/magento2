@@ -117,10 +117,16 @@ class AroundProductRepositorySave
         return $this;
     }
 
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param $links
+     * @return $this
+     */
     protected function saveConfigurableProductLinks(
         \Magento\Catalog\Api\Data\ProductInterface $product,
         $links
     ) {
         $this->typeConfigurableFactory->create()->saveProducts($product, $links);
+        return $this;
     }
 }

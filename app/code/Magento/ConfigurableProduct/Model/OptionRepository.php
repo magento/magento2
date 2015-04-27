@@ -240,17 +240,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * Retrieve configurable attribute collection through product object
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection
-     */
-    private function getConfigurableAttributesCollection(\Magento\Catalog\Model\Product $product)
-    {
-        return $this->configurableType->getConfigurableAttributeCollection($product);
-    }
-
-    /**
      * Ensure that all necessary data is available for a new option creation.
      *
      * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
