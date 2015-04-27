@@ -13,13 +13,10 @@
         <strong data-bind="text: getGrandTotalExclTax()"></strong>
     </td>
 </tr>
-
-<!-- ko if: isTaxDisplayedInGrandTotal -->
     <!-- ko foreach: elems() -->
+ko
         <!-- ko template: getTemplate() --><!-- /ko -->
     <!-- /ko -->
-<!-- /ko -->
-
 <tr class="grand totals incl">
     <th data-bind="attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row">
         <strong>Grand Total Incl. Tax</strong>

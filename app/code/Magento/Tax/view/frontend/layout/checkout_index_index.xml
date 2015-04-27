@@ -48,6 +48,11 @@
                                                         </item>
                                                         <item name="grandtotal" xsi:type="array">
                                                             <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/grandtotal</item>
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="grandtotal_tax" xsi:type="array">
+                                                                    <item name="component"  xsi:type="string">Magento_Tax/js/view/checkout/review/tax_total</item>
+                                                                </item>
+                                                            </item>
                                                         </item>
                                                     </item>
                                                 </item>
