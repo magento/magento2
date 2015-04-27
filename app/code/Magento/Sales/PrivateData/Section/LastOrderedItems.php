@@ -150,7 +150,7 @@ class LastOrderedItems implements SectionSourceInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getSectionData()
     {
         return ['items' => $this->getItems()];
     }
