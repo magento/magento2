@@ -1,8 +1,8 @@
-<!-- ko if: isRequired()-->
+<!-- ko if: (isRequired() && getIsVisible())-->
 <div class="field captcha required">
-    <label for="captcha" class="label"><span data-bind="text: $t('Please type the letters below')"></span></label>
+    <label data-bind="attr: {for: 'captcha_' + formId}" class="label"><span data-bind="text: $t('Please type the letters below')"></span></label>
     <div class="control captcha">
-        <input name="captcha" type="text" class="input-text required-entry" data-validate="{required:true}" id="captcha" />
+        <input name="captcha" type="text" class="input-text required-entry" data-bind="value: captchaValue(), attr: {id: 'captcha_' + formId}" />
         <div class="nested">
             <div class="field captcha no-label">
                 <div class="control captcha-image">

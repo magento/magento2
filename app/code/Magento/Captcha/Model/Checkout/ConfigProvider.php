@@ -85,9 +85,12 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected function getImageSrc($formId)
     {
-        $captcha = $this->getCaptchaModel($formId);
-        $captcha->generate();
-        return $captcha->getImgSrc();
+        if ($this->getIsRequired($formId)) {
+            $captcha = $this->getCaptchaModel($formId);
+            $captcha->generate();
+            return $captcha->getImgSrc();
+        }
+        return '';
     }
 
     /**

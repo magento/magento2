@@ -25,6 +25,7 @@
                                             </item>
                                         </item>
                                         <item name="billingAddress" xsi:type="array">
+                                            <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/billing-address</item>
                                             <item name="children" xsi:type="array">
                                                 <item name="captcha_guest_checkout" xsi:type="array">
                                                     <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/guestCaptcha</item>

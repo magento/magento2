@@ -7,14 +7,20 @@
 define(
     [
         'Magento_Captcha/js/view/checkout/defaultCaptcha',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Captcha/js/model/captchaList'
     ],
-    function (defaultCaptcha, customer) {
+    function (defaultCaptcha, customer, captchaList) {
         "use strict";
         return defaultCaptcha.extend({
             initialize: function() {
                 this._super();
-                this.updateCaptchaOnFailedLogin();
+                var currentCaptcha = captchaList.getCaptchaByFormId(this.formId);
+                if (currentCaptcha != null) {
+                    currentCaptcha.setIsVisible(true);
+                    this.setCurrentCaptcha(currentCaptcha);
+                    this.updateCaptchaOnFailedLogin();
+                }
             },
             updateCaptchaOnFailedLogin: function () {
                 if (this.formId == 'user_login') {
