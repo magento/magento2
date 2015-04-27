@@ -160,7 +160,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             "#^" . $this->directoryList->getRoot() . "/dev/tools/Magento/Tools/[\\w]+/Test#"
         ];
         $fileExcludePatterns = $input->getOption('exclude-pattern') ?
-            [$input->getOption(self::INPUT_KEY_EXCLUDE_PATTERN)] : ['#[\\\\/]m1[\\\\/]#i'];
+            [$input->getOption(self::INPUT_KEY_EXCLUDE_PATTERN)] : ['#[\\\\/]M1[\\\\/]#i'];
         $fileExcludePatterns = array_merge($fileExcludePatterns, $testExcludePatterns);
         /** @var Writer\Console logWriter Writer model for success messages */
         $logWriter = new Writer\Console($output);
