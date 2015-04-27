@@ -19,12 +19,10 @@ define(
             var payload;
             customParams = customParams || {};
             if (quote.getCheckoutMethod()() === 'register') {
-                if (customParams) {
-                    payload = _.extend({
-                        customer: customer.customerData,
-                        password: customer.getDetails('password')
-                    }, customParams);
-                }
+                payload = _.extend({
+                    customer: customer.customerData,
+                    password: customer.getDetails('password')
+                }, customParams);
                 customer.setAddressAsDefaultBilling(customer.addCustomerAddress(quote.getBillingAddress()()));
                 customer.setAddressAsDefaultShipping(customer.addCustomerAddress(quote.getShippingAddress()()));
                 storage.post(
@@ -41,9 +39,7 @@ define(
                     }
                 );
             } else {
-                if (customParams) {
-                    payload = customParams;
-                }
+                payload = customParams;
                 storage.put(
                     urlBuilder.createUrl('/carts/:quoteId/order', {quoteId: quote.getQuoteId()}),
                     JSON.stringify(payload)

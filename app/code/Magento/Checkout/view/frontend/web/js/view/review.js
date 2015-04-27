@@ -18,7 +18,7 @@ define(
         var stepName = 'review';
         var itemsBefore = [];
         var itemsAfter = [];
-        var submitBefore = {};
+        var beforePlaceOrder = {};
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/review'
@@ -27,7 +27,7 @@ define(
             quoteHasPaymentMethod: quote.getPaymentMethod(),
             itemsBefore: itemsBefore,
             itemsAfter: itemsAfter,
-            submitBefore: submitBefore,
+            beforePlaceOrder: beforePlaceOrder,
             getItems: function() {
                 return quote.getTotals()().items;
             },
@@ -39,16 +39,16 @@ define(
             placeOrder: function() {
                 var component,
                     isValid = false;
-               if (_.isEmpty(this.submitBefore)) {
+               if (_.isEmpty(this.beforePlaceOrder)) {
                    orderAction();
                } else {
-                   for (component in this.submitBefore) {
-                       if (this.submitBefore.hasOwnProperty(component) && !this.submitBefore[component].validate()) {
+                   for (component in this.beforePlaceOrder) {
+                       if (this.beforePlaceOrder.hasOwnProperty(component) && !this.beforePlaceOrder[component].validate()) {
                            isValid = true;
                        }
                    }
                    if (isValid) {
-                       orderAction(this.submitBefore[component].getSubmitParams());
+                       orderAction(this.beforePlaceOrder[component].getSubmitParams());
                    }
                }
             },
