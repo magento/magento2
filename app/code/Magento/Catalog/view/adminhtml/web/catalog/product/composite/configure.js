@@ -195,7 +195,7 @@ ProductConfigure.prototype = {
             return false;
         }
 
-        this._initWindowElements();
+        this.initialize();
         this.current.listType = listType;
         this.current.itemId = itemId;
         this.confirmedCurrentId = this._getConfirmedBlockId(listType, itemId);

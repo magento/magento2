@@ -80,7 +80,7 @@ class DbIsolation
      *
      * @param \PHPUnit_Framework_TestCase $test
      * @return bool|null Returns NULL, if isolation is not defined for the current scope
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getIsolation(\PHPUnit_Framework_TestCase $test)
     {
@@ -88,8 +88,8 @@ class DbIsolation
         if (isset($annotations[self::MAGENTO_DB_ISOLATION])) {
             $isolation = $annotations[self::MAGENTO_DB_ISOLATION];
             if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
-                throw new \Magento\Framework\Exception(
-                    'Invalid "@magentoDbIsolation" annotation, can be "enabled" or "disabled" only.'
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Invalid "@magentoDbIsolation" annotation, can be "enabled" or "disabled" only.')
                 );
             }
             return $isolation === ['enabled'];

@@ -58,9 +58,9 @@ class AssertProductSearchableBySku extends AbstractConstraint
             ? $quantityAndStockStatus['is_in_stock']
             : null;
 
-        $isVisible = $catalogSearchResult->getListProductBlock()->isProductVisible($product->getName());
+        $isVisible = $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible();
         while (!$isVisible && $catalogSearchResult->getBottomToolbar()->nextPage()) {
-            $isVisible = $catalogSearchResult->getListProductBlock()->isProductVisible($product->getName());
+            $isVisible = $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible();
         }
 
         if ($product->getVisibility() === 'Catalog' || $stockStatus === 'Out of Stock') {

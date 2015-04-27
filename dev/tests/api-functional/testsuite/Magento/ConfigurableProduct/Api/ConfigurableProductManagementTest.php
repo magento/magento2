@@ -64,12 +64,16 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
                 'store_id' => 1,
                 'status' => 1,
                 'visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE,
+                'options' => [],
+                'product_links' => [],
                 'custom_attributes' => [
                     [
                         'attribute_code' => 'test_configurable',
                         'value' => $attributeOptionValue
                     ]
-                ]
+                ],
+                'group_prices' => [],
+                'tier_prices' => []
             ]
         ];
         ksort($expectedItems);

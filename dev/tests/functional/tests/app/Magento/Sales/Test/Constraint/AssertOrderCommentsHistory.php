@@ -26,14 +26,14 @@ class AssertOrderCommentsHistory extends AbstractConstraint
      * @param SalesOrderView $salesOrderView
      * @param OrderIndex $salesOrder
      * @param string $orderId
-     * @param string $grandTotal
+     * @param array $prices
      * @return void
      */
     public function processAssert(
         SalesOrderView $salesOrderView,
         OrderIndex $salesOrder,
         $orderId,
-        $grandTotal
+        array $prices
     ) {
         $salesOrder->open();
         $salesOrder->getSalesOrderGrid()->searchAndOpen(['id' => $orderId]);
@@ -41,7 +41,7 @@ class AssertOrderCommentsHistory extends AbstractConstraint
         $actualAuthorizedAmount = $salesOrderView->getOrderHistoryBlock()->getCommentsHistory();
 
         \PHPUnit_Framework_Assert::assertContains(
-            self::AUTHORIZED_AMOUNT . $grandTotal,
+            self::AUTHORIZED_AMOUNT . $prices['grandTotal'],
             $actualAuthorizedAmount,
             'Incorrect authorized amount value for the order #' . $orderId
         );

@@ -47,7 +47,7 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Invalid scope object
      */
     public function testGetScopeException()

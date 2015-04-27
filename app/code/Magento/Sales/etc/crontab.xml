@@ -25,5 +25,29 @@
         <job name="aggregate_sales_report_bestsellers_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportBestsellersData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
+        <job name="sales_grid_order_async_insert" instance="Magento\Sales\Model\Observer\Order\IndexGrid" method="asyncInsert">
+            <schedule>*/1 * * * *</schedule>
+        </job>
+        <job name="sales_grid_order_invoice_async_insert" instance="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" method="asyncInsert">
+            <schedule>*/1 * * * *</schedule>
+        </job>
+        <job name="sales_grid_order_shipment_async_insert" instance="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" method="asyncInsert">
+            <schedule>*/1 * * * *</schedule>
+        </job>
+        <job name="sales_grid_order_creditmemo_async_insert" instance="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" method="asyncInsert">
+            <schedule>*/1 * * * *</schedule>
+        </job>
+        <job name="sales_send_order_emails" instance="Magento\Sales\Model\Observer\Order\SendEmails" method="execute">
+            <schedule>*/1 * * * *</schedule>
+        </job>
+        <job name="sales_send_order_invoice_emails" instance="Magento\Sales\Model\Observer\Order\Invoice\SendEmails" method="execute">
+            <schedule>*/1 * * * *</schedule>
+        </job>
+        <job name="sales_send_order_shipment_emails" instance="Magento\Sales\Model\Observer\Order\Shipment\SendEmails" method="execute">
+            <schedule>*/1 * * * *</schedule>
+        </job>
+        <job name="sales_send_order_creditmemo_emails" instance="Magento\Sales\Model\Observer\Order\Creditmemo\SendEmails" method="execute">
+            <schedule>*/1 * * * *</schedule>
+        </job>
     </group>
 </config>

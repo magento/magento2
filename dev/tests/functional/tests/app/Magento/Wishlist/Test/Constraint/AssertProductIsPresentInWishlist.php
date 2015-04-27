@@ -13,13 +13,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
- * Class AssertProductIsPresentInWishlist
- * Assert that product is present in default wishlist
+ * Assert that product is present in default wishlist.
  */
 class AssertProductIsPresentInWishlist extends AbstractConstraint
 {
     /**
-     * Assert that product is present in default wishlist
+     * Assert that product is present in default wishlist.
      *
      * @param CmsIndex $cmsIndex
      * @param CustomerAccountIndex $customerAccountIndex
@@ -37,13 +36,13 @@ class AssertProductIsPresentInWishlist extends AbstractConstraint
         $customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Wish List');
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $wishlistIndex->getItemsBlock()->getItemProduct($product)->isVisible(),
+            $wishlistIndex->getWishlistBlock()->getProductItemsBlock()->getItemProduct($product)->isVisible(),
             $product->getName() . ' is not visible on wishlist page.'
         );
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

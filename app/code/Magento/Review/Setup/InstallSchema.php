@@ -84,7 +84,7 @@ class InstallSchema implements InstallSchemaInterface
                 'created_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false],
+                ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
                 'Review create date'
             )
             ->addColumn(
@@ -125,7 +125,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('review_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -133,7 +132,6 @@ class InstallSchema implements InstallSchemaInterface
                 'status_id',
                 $installer->getTable('review_status'),
                 'status_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION,
                 \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
             )
             ->setComment('Review base information');
@@ -210,15 +208,13 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_id',
                 $installer->getTable('customer_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
             )
             ->addForeignKey(
                 $installer->getFkName('review_detail', 'review_id', 'review', 'review_id'),
                 'review_id',
                 $installer->getTable('review'),
                 'review_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -226,8 +222,7 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
             )
             ->setComment('Review detail information');
         $installer->getConnection()->createTable($table);
@@ -288,7 +283,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Review aggregates');
@@ -322,7 +316,6 @@ class InstallSchema implements InstallSchemaInterface
                 'review_id',
                 $installer->getTable('review'),
                 'review_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -330,7 +323,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Review Store');
@@ -425,7 +417,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('rating_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Ratings');
@@ -480,7 +471,6 @@ class InstallSchema implements InstallSchemaInterface
                 'rating_id',
                 $installer->getTable('rating'),
                 'rating_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Rating options');
@@ -570,7 +560,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 $installer->getTable('rating_option'),
                 'option_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -578,7 +567,6 @@ class InstallSchema implements InstallSchemaInterface
                 'review_id',
                 $installer->getTable('review'),
                 'review_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Rating option values');
@@ -658,7 +646,6 @@ class InstallSchema implements InstallSchemaInterface
                 'rating_id',
                 $installer->getTable('rating'),
                 'rating_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -666,7 +653,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Rating vote aggregated');
@@ -700,7 +686,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -708,8 +693,7 @@ class InstallSchema implements InstallSchemaInterface
                 'rating_id',
                 $installer->getTable('rating'),
                 'rating_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-                \Magento\Framework\DB\Ddl\Table::ACTION_NO_ACTION
+                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Rating Store');
         $installer->getConnection()->createTable($table);
@@ -749,7 +733,6 @@ class InstallSchema implements InstallSchemaInterface
                 'rating_id',
                 $installer->getTable('rating'),
                 'rating_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -757,7 +740,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Rating Title');

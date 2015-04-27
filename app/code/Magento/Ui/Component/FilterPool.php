@@ -144,7 +144,7 @@ class FilterPool extends AbstractView
             }
             $condition = $this->filterPoolProvider->getFilter($metaData[$field]['filter_type'])->getCondition($value);
             if ($condition !== null) {
-                $collection->addFilter($field, $field, $condition);
+                $collection->addFieldToFilter($field, $condition);
             }
         }
     }

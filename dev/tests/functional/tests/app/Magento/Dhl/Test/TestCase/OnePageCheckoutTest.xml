@@ -12,28 +12,13 @@
             <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="customer/dataSet" xsi:type="string">customer_DE</data>
+            <data name="address/dataSet" xsi:type="string">customer_DE</data>
             <data name="billingAddress/dataSet" xsi:type="string">customer_DE</data>
             <data name="shipping/shipping_service" xsi:type="string">DHL</data>
             <data name="shipping/shipping_method" xsi:type="string">Express worldwide</data>
             <data name="cart/data/shipping_method" xsi:type="string">Express worldwide</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, dhl_eu, shipping_origin_CH, config_base_currency_ch</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>
-            <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
-        </variation>
-        <variation name="OnePageCheckoutTestVariation21">
-            <data name="description" xsi:type="string">MAGETWO-12851 – Use DHL International (US) Online Shipping Carrier on Checkout as a Registered Customer</data>
-            <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
-            <data name="checkoutMethod" xsi:type="string">login</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
-            <data name="shipping/shipping_service" xsi:type="string">DHL</data>
-            <data name="shipping/shipping_method" xsi:type="string">Domestic express</data>
-            <data name="cart/data/shipping_method" xsi:type="string">Domestic express</data>
-            <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="configData" xsi:type="string">checkmo, dhl_us, shipping_origin_US_CA</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid"/>

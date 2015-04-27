@@ -5,69 +5,82 @@
  */
 namespace Magento\Cms\Model;
 
+use Magento\Cms\Api\Data;
+use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class PageRepository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageRepository
+class PageRepository implements PageRepositoryInterface
 {
     /**
-     * @var \Magento\Cms\Model\Resource\Page
+     * @var Resource\Page
      */
     protected $resource;
 
     /**
-     * @var \Magento\Cms\Model\PageFactory
+     * @var PageFactory
      */
     protected $pageFactory;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Page\CollectionFactory
+     * @var Resource\Page\CollectionFactory
      */
     protected $pageCollectionFactory;
 
     /**
-     * @var \Magento\Framework\DB\QueryBuilderFactory
+     * @var Data\PageSearchResultsInterfaceFactory
      */
-    protected $queryBuilderFactory;
+    protected $searchResultsFactory;
 
     /**
-     * @var \Magento\Framework\DB\MapperFactory
+     * @var DataObjectHelper
      */
-    protected $mapperFactory;
+    protected $dataObjectHelper;
+
+    /**
+     * @var Data\PageInterfaceFactory
+     */
+    protected $dataPageFactory;
 
     /**
      * @param Resource\Page $resource
-     * @param \Magento\Cms\Model\PageFactory $pageFactory
-     * @param \Magento\Cms\Model\Resource\Page\CollectionFactory $pageCollectionFactory
-     * @param \Magento\Framework\DB\QueryBuilderFactory $queryBuilderFactory
-     * @param \Magento\Framework\DB\MapperFactory $mapperFactory
+     * @param PageFactory $pageFactory
+     * @param Data\PageInterfaceFactory $dataPageFactory
+     * @param Resource\Page\CollectionFactory $pageCollectionFactory
+     * @param Data\PageSearchResultsInterfaceFactory $searchResultsFactory
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        \Magento\Cms\Model\Resource\Page $resource,
-        \Magento\Cms\Model\PageFactory $pageFactory,
-        \Magento\Cms\Model\Resource\Page\CollectionFactory $pageCollectionFactory,
-        \Magento\Framework\DB\QueryBuilderFactory $queryBuilderFactory,
-        \Magento\Framework\DB\MapperFactory $mapperFactory
+        Resource\Page $resource,
+        PageFactory $pageFactory,
+        Data\PageInterfaceFactory $dataPageFactory,
+        Resource\Page\CollectionFactory $pageCollectionFactory,
+        Data\PageSearchResultsInterfaceFactory $searchResultsFactory,
+        DataObjectHelper $dataObjectHelper
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
         $this->pageCollectionFactory = $pageCollectionFactory;
-        $this->queryBuilderFactory = $queryBuilderFactory;
-        $this->mapperFactory = $mapperFactory;
+        $this->searchResultsFactory = $searchResultsFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->dataPageFactory = $dataPageFactory;
     }
 
     /**
      * Save Page data
      *
-     * @param \Magento\Cms\Model\Page $page
-     * @return \Magento\Cms\Model\Page
+     * @param Data\PageInterface $page
+     * @return Page
      * @throws CouldNotSaveException
      */
-    public function save(\Magento\Cms\Model\Page $page)
+    public function save(Data\PageInterface $page)
     {
         try {
             $this->resource->save($page);
@@ -81,10 +94,10 @@ class PageRepository
      * Load Page data by given Page Identity
      *
      * @param string $pageId
-     * @return \Magento\Cms\Model\Page
+     * @return Page
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($pageId)
+    public function getById($pageId)
     {
         $page = $this->pageFactory->create();
         $this->resource->load($page, $pageId);
@@ -97,27 +110,65 @@ class PageRepository
     /**
      * Load Page data collection by given search criteria
      *
-     * @param \Magento\Cms\Model\PageCriteriaInterface $criteria
-     * @return \Magento\Cms\Model\Resource\Page\Collection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @param SearchCriteriaInterface $criteria
+     * @return Resource\Page\Collection
      */
-    public function getList(\Magento\Cms\Model\PageCriteriaInterface $criteria)
+    public function getList(SearchCriteriaInterface $criteria)
     {
-        $queryBuilder = $this->queryBuilderFactory->create();
-        $queryBuilder->setCriteria($criteria);
-        $queryBuilder->setResource($this->resource);
-        $query = $queryBuilder->create();
-        $collection = $this->pageCollectionFactory->create(['query' => $query]);
-        return $collection;
+        $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($criteria);
+
+        $collection = $this->pageCollectionFactory->create();
+        foreach ($criteria->getFilterGroups() as $filterGroup) {
+            $fields = [];
+            $conditions = [];
+            foreach ($filterGroup->getFilters() as $filter) {
+                if ($filter->getField() === 'store_id') {
+                    $collection->addStoreFilter($filter->getValue(), false);
+                    continue;
+                }
+                $condition = $filter->getConditionType() ?: 'eq';
+                $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
+            }
+            if ($fields) {
+                $collection->addFieldToFilter($fields, $conditions);
+            }
+        }
+        $searchResults->setTotalCount($collection->getSize());
+        $sortOrders = $criteria->getSortOrders();
+        if ($sortOrders) {
+            foreach ($sortOrders as $sortOrder) {
+                $collection->addOrder(
+                    $sortOrder->getField(),
+                    ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                );
+            }
+        }
+        $collection->setCurPage($criteria->getCurrentPage());
+        $collection->setPageSize($criteria->getPageSize());
+        $pages = [];
+        /** @var Page $pageModel */
+        foreach ($collection as $pageModel) {
+            $pages[] = $this->dataObjectHelper->populateWithArray(
+                $this->dataPageFactory->create(),
+                $pageModel->getData(),
+                'Magento\Cms\Api\Data\PageInterface'
+            );
+        }
+        $searchResults->setItems($pages);
+        return $searchResults;
     }
 
     /**
      * Delete Page
      *
-     * @param \Magento\Cms\Model\Page $page
+     * @param Data\PageInterface $page
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws CouldNotDeleteException
      */
-    public function delete(\Magento\Cms\Model\Page $page)
+    public function delete(Data\PageInterface $page)
     {
         try {
             $this->resource->delete($page);
@@ -132,11 +183,11 @@ class PageRepository
      *
      * @param string $pageId
      * @return bool
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws CouldNotDeleteException
+     * @throws NoSuchEntityException
      */
     public function deleteById($pageId)
     {
-        return $this->delete($this->get($pageId));
+        return $this->delete($this->getById($pageId));
     }
 }

@@ -7,7 +7,6 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 
 /**
@@ -29,11 +28,6 @@ class Create extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
@@ -43,7 +37,6 @@ class Create extends \Magento\Backend\App\Action
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param PageFactory $resultPageFactory
-     * @param RedirectFactory $resultRedirectFactory
      * @param ForwardFactory $resultForwardFactory
      */
     public function __construct(
@@ -51,14 +44,12 @@ class Create extends \Magento\Backend\App\Action
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
         PageFactory $resultPageFactory,
-        RedirectFactory $resultRedirectFactory,
         ForwardFactory $resultForwardFactory
     ) {
         parent::__construct($context);
         $productHelper->setSkipSaleableCheck(true);
         $this->escaper = $escaper;
         $this->resultPageFactory = $resultPageFactory;
-        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->resultForwardFactory = $resultForwardFactory;
     }
 

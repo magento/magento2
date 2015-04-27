@@ -1882,11 +1882,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     {
         $customerId = $this->getSession()->getCustomerId();
         if (is_null($customerId)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please select a customer.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please select a customer'));
         }
 
         if (!$this->getSession()->getStore()->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please select a store.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please select a store'));
         }
         $items = $this->getQuote()->getAllItems();
 

@@ -3,8 +3,14 @@
 //  * See COPYING.txt for license details.
 //  */
 
-.action-add.mselect-button-add {
-    &:extend(button all);
+.block-footer .action-add {
+    &:extend(.admin__scope-old button all);
+}
+
+.mselect-items-wrapper {
+    button {
+        .button-reset();
+    }
 }
 
 .block.mselect-list {
