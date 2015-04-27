@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<!-- ko if: isPriceInclTaxDisplayed -->
+<!-- ko if: isTaxDisplayedInGrandTotal -->
 <tr class="grand totals excl">
     <th data-bind="attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row">
         <strong>Grand Total Excl. Tax</strong>
@@ -20,7 +20,6 @@
     <!-- /ko -->
 <!-- /ko -->
 
-<!-- $block->renderTotals('taxes', $block->getColspan() -->
 <tr class="grand totals incl">
     <th data-bind="attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row">
         <strong>Grand Total Incl. Tax</strong>
@@ -30,7 +29,7 @@
     </td>
 </tr>
 <!-- /ko -->
-<!-- ko if: !isPriceInclTaxDisplayed -->
+<!-- ko if: !isTaxDisplayedInGrandTotal -->
 <tr class="grand totals">
     <th data-bind="attr: {'style':style, 'colspan': getColspan }" class="mark" scope="row">
         <strong data-bind="text: getTitle()"></strong>

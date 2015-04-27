@@ -18,7 +18,6 @@ define(
         var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed || false;
         return Component.extend({
             defaults: {
-                isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
                 isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
                 template: 'Magento_Tax/checkout/review/grandtotal'
             },
@@ -42,6 +41,7 @@ define(
                 }
                 return quote.getBaseCurrencySymbol() + priceUtils.formatPrice(price);
             },
+            isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
             getGrandTotalExclTax: function() {
                 var totals = this.totals();
                 if (!totals) {
@@ -59,9 +59,6 @@ define(
                     return false;
                 }
                 return totals.base_currency_code != totals.quote_currency_code;
-            },
-            isPriceInclTaxDisplayed: function() {
-                return 'both' == this.displaySubtotalMode || 'including' == this.displaySubtotalMode;
             }
         });
     }
