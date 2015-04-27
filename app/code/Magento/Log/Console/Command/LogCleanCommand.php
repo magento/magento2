@@ -46,14 +46,17 @@ class LogCleanCommand extends AbstractLogCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $errorMsg = 'Invalid value for option "' . self::INPUT_KEY_DAYS . '"';
+        $errorMsg = 'Invalid value for option "' . self::INPUT_KEY_DAYS
+            . '". It should be a whole number greater than 0.';
         $days = $input->getOption(self::INPUT_KEY_DAYS);
-        if (!is_numeric($days) || (strpos($days,'.') !== false)) {
-            throw new \InvalidArgumentException($errorMsg);
+        if (!is_numeric($days) || (strpos($days, '.') !== false)) {
+            $output->writeln('<error>' . $errorMsg . '</error>');
+            return;
         }
         $days = (int) $days;
         if ($days <= 0) {
-            throw new \InvalidArgumentException($errorMsg);
+            $output->writeln('<error>' . $errorMsg . '</error>');
+            return;
         }
         /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig */
         $mutableConfig = $this->objectManager->create('Magento\Framework\App\Config\MutableScopeConfigInterface');

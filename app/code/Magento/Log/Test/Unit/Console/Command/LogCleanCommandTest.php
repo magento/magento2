@@ -57,29 +57,25 @@ class LogCleanCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid value for option "days"
+     *
+     * @param string $days
+     * @dataProvider daysDataProvider
      */
-    public function testExecuteInvalidNegativeDays()
+    public function testExecuteInvalidNegativeDays($days)
     {
-        $this->commandTester->execute(['--days' => '-1']);
+        $this->commandTester->execute(['--days' => $days]);
+        //Invalid value for option "days". It should be a whole number greater than 0.
+        $this->assertEquals(
+            'Invalid value for option "days". It should be a whole number greater than 0.' . PHP_EOL,
+            $this->commandTester->getDisplay()
+        );
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid value for option "days"
+     * @return array
      */
-    public function testExecuteInvalidFractionDays()
+    public function daysDataProvider()
     {
-        $this->commandTester->execute(['--days' => '5.5']);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid value for option "days"
-     */
-    public function testExecuteInvalidTexyDays()
-    {
-        $this->commandTester->execute(['--days' => 'test']);
+        return [['-1'], ['5.5'], ['test']];
     }
 }
