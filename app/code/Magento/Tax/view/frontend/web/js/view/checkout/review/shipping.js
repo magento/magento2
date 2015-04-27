@@ -29,10 +29,10 @@ define(
                 return "Shipping & Handling" + shippingService.getTitleByCode(this.selectedShippingMethod());
             },
             getExcludingLabel: function() {
-                return "Shipping(Excl. Tax)" + shippingService.getTitleByCode(this.selectedShippingMethod());
+                return "Shipping Excl. Tax" + shippingService.getTitleByCode(this.selectedShippingMethod());
             },
             getIncludingLabel: function() {
-                return "Shipping(Incl. Tax)" + shippingService.getTitleByCode(this.selectedShippingMethod());
+                return "Shipping Incl. Tax" + shippingService.getTitleByCode(this.selectedShippingMethod());
             },
             totals: quote.getTotals(),
             isBothPricesDisplayed: function() {
