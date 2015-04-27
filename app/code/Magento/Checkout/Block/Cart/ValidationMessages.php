@@ -43,7 +43,6 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
         );
         $this->cartHelper = $cartHelper;
         $this->currency = $currency;
-        $this->_isScopePrivate = true;
     }
 
     /**

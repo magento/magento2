@@ -31,7 +31,6 @@ class Send extends \Magento\Sendfriend\Controller\Product
         }
 
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
 
         $this->_eventManager->dispatch('sendfriend_product', ['product' => $product]);
         $data = $catalogSession->getSendfriendFormData();

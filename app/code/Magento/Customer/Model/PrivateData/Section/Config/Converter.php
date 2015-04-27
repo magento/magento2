@@ -22,9 +22,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $sections = [];
         foreach ($source->getElementsByTagName('action') as $action) {
-            $actionName = $action->getAttribute('name');
+            $actionName = mb_strtolower($action->getAttribute('name'));
             foreach ($action->getElementsByTagName('section') as $section) {
-                $sections[$actionName][] = $section->getAttribute('name');
+                $sections[$actionName][] = mb_strtolower($section->getAttribute('name'));
             }
             if (!isset($sections[$actionName])) {
                 $sections[$actionName] = self::INVALIDATE_ALL_SECTIONS_MARKER;

@@ -174,7 +174,7 @@ class Add extends \Magento\Checkout\Controller\Cart
             $this->_view->loadLayout(['default'], true, true, false);
             $layout = $this->_view->getLayout();
 
-            $result['messages'] = $layout->getBlock('global_messages')->toHtml();
+            $result['messages'] = $layout->getBlock('messages')->toHtml();
 
             if ($this->_checkoutSession->getCartWasUpdated()) {
                 $result['minicart'] = $layout->getBlock('minicart')->toHtml();

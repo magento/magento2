@@ -2,17 +2,26 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi'], function ($, _, ko, sectionConfig) {
+define([
+    'jquery',
+    'underscore',
+    'ko',
+    'Magento_Customer/js/section-config',
+    'jquery/jquery-storageapi'
+], function ($, _, ko, sectionConfig) {
     'use strict';
 
+    var options;
     var ns = $.initNamespaceStorage('mage-cache-storage');
     var storage = ns.localStorage;
-    storage.invalidate_sections = 'invalidate_sections';
-    storage.getInvalidateSections = function() {
-        return this.get(this.invalidate_sections) || [];
+    var storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+
+    storageInvalidation.invalid_sections = 'invalid_sections';
+    storageInvalidation.getInvalidSections = function() {
+        return this.get(this.invalid_sections) || [];
     };
-    storage.setInvalidateSections = function(sections) {
-        return this.set(this.invalidate_sections, sections);
+    storageInvalidation.setInvalidSections = function(sections) {
+        return this.set(this.invalid_sections, sections);
     };
 
     if (!ns.cookieStorage.isSet('mage-cache-sessid')) {
@@ -20,15 +29,9 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
         storage.removeAll();
     }
 
-    var canonize = function (url) {
-        var a = document.createElement('a');
-        a.href = url;
-        return a.pathname.replace(/^\/(?:index.php\/)?|\/$/ig,'');
-    };
-
-    $(document).on('ajaxComplete', function (event, xhr, settings) {
+    $(document).on('ajaxSuccess', function (event, xhr, settings) {
         if (settings.type.match(/post/i)) {
-            var sections = sectionConfig.get(canonize(settings.url));
+            var sections = sectionConfig.getAffectedSections(settings.url);
             if (sections) {
                 customerData.reload(sections);
             }
@@ -37,26 +40,34 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
 
     $(document).on('submit', function (event) {
         if (event.target.method.match(/post/i)) {
-            var sections = sectionConfig.get(canonize(event.target.action));
+            var sections = sectionConfig.getAffectedSections(event.target.action);
             if (sections) {
                 customerData.invalidate(sections);
             }
         }
     });
 
-    var getFromStorage = function (sectionsName) {
+    var getFromStorage = function (sectionNames) {
         var result = {};
-        _.each(sectionsName, function (sectionName) {
+        _.each(sectionNames, function (sectionName) {
             result[sectionName] = storage.get(sectionName);
         });
         return result;
     };
 
-    var getFromServer = function (sectionsName) {
-        var parameters = _.isArray(sectionsName) ? {sections: sectionsName.join(',')} : [];
-        return $.getJSON('/customer/section/load/', parameters).fail(function(jqXHR) {
+    var getFromServer = function (sectionNames) {
+        var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
+        return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
             throw new Error(jqXHR.responseJSON.message);
         });
+    };
+
+    ko.extenders.disposablePrivateData = function(target, sectionName) {
+        storage.remove(sectionName);
+        target.subscribe(function(newValue) {
+            storage.remove(sectionName);
+        });
+        return target;
     };
 
     var buffer = {
@@ -80,18 +91,19 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
             this.data[sectionName](sectionData);
         },
         update: function (sections) {
+            storageInvalidation.setInvalidSections([]);
             _.each(sections, function (sectionData, sectionName) {
-                buffer.notify(sectionName, sectionData);
                 storage.set(sectionName, sectionData);
+                buffer.notify(sectionName, sectionData);
             });
         },
         remove: function (sections) {
-            var invalidateSegments = storage.getInvalidateSections();
+            var invalidSections = storageInvalidation.getInvalidSections();
             _.each(sections, function (sectionName) {
-                buffer.notify(sectionName, '');
-                invalidateSegments.push(sectionName);
+                storage.remove(sectionName);
+                invalidSections.push(sectionName);
             });
-            storage.setInvalidateSections(invalidateSegments);
+            storageInvalidation.setInvalidSections(invalidSections);
         }
     };
 
@@ -105,10 +117,9 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
                 _.each(getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
-                var invalidateSegments = storage.getInvalidateSections();
-                if (invalidateSegments.length) {
-                    storage.setInvalidateSections([]);
-                    getFromServer(invalidateSegments).done(function (sections) {
+                var invalidSections = storageInvalidation.getInvalidSections();
+                if (invalidSections.length) {
+                    getFromServer(invalidSections).done(function (sections) {
                         buffer.update(sections);
                     });
                 }
@@ -118,16 +129,18 @@ define(['jquery', 'underscore', 'ko', 'sectionConfig', 'jquery/jquery-storageapi
             return buffer.get(sectionName);
         },
         reload: function (sectionNames) {
-            getFromServer(sectionNames == '*' ? buffer.keys() : sectionNames).done(function (sections) {
+            getFromServer(sectionNames).done(function (sections) {
                 buffer.update(sections);
             });
         },
         invalidate: function (sectionNames) {
-            buffer.remove(sectionNames == '*' ? buffer.keys() : sectionNames);
+            buffer.remove(_.contains(sectionNames, '*') ? buffer.keys() : sectionNames);
+        },
+        'Magento_Customer/js/customer-data': function (settings) {
+            options = settings;
+            customerData.init();
         }
     };
-
-    customerData.init();
 
     return customerData;
 });

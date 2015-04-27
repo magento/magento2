@@ -31,24 +31,16 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     protected $httpContext;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     */
-    protected $productRepository;
-
-    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
         $this->httpContext = $httpContext;
-        $this->productRepository = $productRepository;
         parent::__construct(
             $context,
             $data
@@ -276,23 +268,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getProductUrl($item, $additional = [])
     {
-        if ($item instanceof \Magento\Catalog\Model\Product) {
-            $product = $item;
-        } else {
-            $product = $item->getProduct();
-        }
-        $buyRequest = $item->getBuyRequest();
-        if (is_object($buyRequest)) {
-            $config = $buyRequest->getSuperProductConfig();
-            if ($config && !empty($config['product_id'])) {
-                $product = $this->productRepository->getById(
-                    $config['product_id'],
-                    false,
-                    $this->_storeManager->getStore()->getStoreId()
-                );
-            }
-        }
-        return parent::getProductUrl($product, $additional);
+        return $this->_getHelper()->getProductUrl($item, $additional);
     }
 
     /**
