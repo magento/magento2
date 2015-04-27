@@ -90,7 +90,7 @@ http://jmeter.apache.org/usermanual/component_reference.html
 Testing environment
 -----------
 
-jMeter: apache-jmeter-2.11
+jMeter: apache-jmeter-2.12
 OS (where jMeter is running): Windows 7 SP1
 Server (where Magento is hosted): Intel(R) Core(TM)2 Duo CPU T7700  @2.40GHz, memtotal 4gb.
 PHP:  5.4.19 (memory_limit 2Gb)
