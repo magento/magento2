@@ -78,9 +78,6 @@ $code = $block->getMethodCode();
                 <label for="<?php echo $code ?>_cc_cid" class="label"><span><?php echo __('Card Verification Number') ?></span></label>
                 <div class="control">
                     <input type="number" title="<?php echo __('Card Verification Number') ?>" data-container="<?php echo $code ?>-cc-cvv" class="input-text cvv" id="<?php echo $code ?>_cc_cid" name="payment[cc_cid]" value="" data-validate='{"required-number":true, "validate-cc-cvn":"#<?php echo $code ?>_cc_type"}' autocomplete="off"/>
-                    <div class="note">
-                        <a href="#" id="<?php echo $code ?>-cvv-what-is-this" class="action cvv" title="<?php echo $block->escapeHtml(__('What is this?'));?>" data-mage-init='{"tooltip": {"content": "<?php echo $_content ?>"}}'><span><?php echo __('What is this?') ?></span></a>
-                    </div>
                 </div>
             </div>
         <?php endif; ?>
