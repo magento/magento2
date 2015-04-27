@@ -140,7 +140,12 @@ class Form extends \Magento\Payment\Block\Form\Cc
      */
     public function getOrderUrl()
     {
-        return $this->_urlBuilder->getUrl($this->getMethodConfigData('place_order_url'));
+        return $this->_urlBuilder->getUrl(
+            $this->getMethodConfigData('place_order_url'),
+            [
+                '_secure' => $this->getRequest()->isSecure()
+            ]
+        );
     }
 
     /**

@@ -11,7 +11,7 @@ $code = $block->getMethodCode();
 ?>
 
 <!-- IFRAME for request to Payment Gateway -->
-<iframe id="<?php echo $code ?>-transparent-iframe" data-container="<?php echo $code ?>-transparent-iframe" allowtransparency="true" frameborder="0"  name="iframeTransparent" style="display:none;width:100%;background-color:transparent" src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
+<iframe width="0" height="0" id="<?php echo $code ?>-transparent-iframe" data-container="<?php echo $code ?>-transparent-iframe" allowtransparency="true" frameborder="0"  name="iframeTransparent" style="display:none;width:100%;background-color:transparent" src="<?php echo $block->getViewFileUrl('blank.html') ?>"></iframe>
 <form class="form" id="co-transparent-form" action="#" method="post" data-mage-init='{
     "transparent":{
         "controller":"<?php echo $block->getRequest()->getControllerName() ?>",
