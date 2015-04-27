@@ -71,6 +71,7 @@ class Cart extends Action\Action implements IndexInterface
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Wishlist\Helper\Data $helper
      * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Action\Context $context,

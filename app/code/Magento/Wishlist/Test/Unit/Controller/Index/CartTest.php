@@ -203,7 +203,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->messageManagerMock));
         $this->contextMock->expects($this->any())
             ->method('getUrl')
-            ->willReturn($this->urlMock); 
+            ->willReturn($this->urlMock);
         $this->contextMock->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
