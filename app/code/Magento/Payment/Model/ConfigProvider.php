@@ -7,6 +7,7 @@ namespace Magento\Payment\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository;
 use Psr\Log\LoggerInterface;
@@ -71,9 +72,9 @@ class ConfigProvider implements ConfigProviderInterface
                     'hasVerification' => $this->hasVerification(),
                     'hasSsCardType' => $this->hasSsCardType(),
                     'ssStartYears' => $this->getSsStartYears(),
-                    'cvvImage' => $this->getCvvImage()
-                ]
-            ]
+                    'cvvImage' => $this->getCvvImage(),
+                ],
+            ],
         ];
     }
 
@@ -168,10 +169,9 @@ class ConfigProvider implements ConfigProviderInterface
         try {
             $params = array_merge(['_secure' => $this->request->isSecure()], $params);
             return $this->assetRepo->getUrlWithParams($fileId, $params);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->logger->critical($e);
             return $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }
     }
-
 }
