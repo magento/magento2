@@ -21,6 +21,11 @@ use Magento\Sales\Model\EntityInterface;
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo getResource()
  * @method \Magento\Sales\Model\Order\Creditmemo setCreatedAt(string $value)
+ * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
+ * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
+ * @method string getCustomerNote()
+ * @method \Magento\Sales\Model\Order\Invoice setCustomerNoteNotify(bool $value)
+ * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -116,8 +121,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Creditmemo\Config $creditmemoConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
@@ -136,8 +139,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\Order\Creditmemo\Config $creditmemoConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
@@ -163,8 +164,6 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $localeDate,
-            $dateTime,
             $resource,
             $resourceCollection,
             $data

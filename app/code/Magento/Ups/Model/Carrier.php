@@ -184,10 +184,10 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     /**
      * Collect and get rates
      *
-     * @param RateRequest $request
+     * @param \Magento\Framework\Object $request
      * @return Result|bool|null
      */
-    public function collectRates(RateRequest $request)
+    public function collectRates(\Magento\Framework\Object $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;

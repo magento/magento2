@@ -40,11 +40,10 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                                        class="product-item-link"><?php echo $block->escapeHtml($product->getName()) ?></a>
                                 </strong>
                                 <?php
-                                    echo $block->getProductPriceHtml(
-                                        $product,
+                                    echo $block->getItemPriceHtml(
+                                        $item,
                                         \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
-                                        \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
-                                        ['item' => $item]
+                                        \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST
                                     );
                                 ?>
                                 <div class="product-item-actions">

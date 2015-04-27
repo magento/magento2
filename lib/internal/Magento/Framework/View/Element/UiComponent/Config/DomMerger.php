@@ -301,7 +301,7 @@ class DomMerger implements DomMergerInterface
      * 3. Append new node if original document doesn't have the same node
      *
      * @param \DOMElement $node
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
     public function mergeNode(\DOMElement $node)
@@ -315,7 +315,7 @@ class DomMerger implements DomMergerInterface
      *
      * @param string $xml
      * @return \DOMDocument
-     * @throws \Magento\Framework\Config\Dom\ValidationException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function createDomDocument($xml)
     {
@@ -324,7 +324,7 @@ class DomMerger implements DomMergerInterface
         if ($this->schemaFilePath) {
             $errors = $this->validateDomDocument($domDocument);
             if (count($errors)) {
-                throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
+                throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
             }
         }
 
@@ -370,7 +370,7 @@ class DomMerger implements DomMergerInterface
      *
      * @param \LibXMLError $errorInfo
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function renderErrorMessage(\LibXMLError $errorInfo)
     {
@@ -379,8 +379,10 @@ class DomMerger implements DomMergerInterface
             $result = str_replace('%' . $field . '%', trim((string)$value), $result);
         }
         if (strpos($result, '%') !== false) {
-            throw new \InvalidArgumentException(
-                'Error format "' . static::ERROR_FORMAT_DEFAULT . '" contains unsupported placeholders.'
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase(
+                    'Error format "' . static::ERROR_FORMAT_DEFAULT . '" contains unsupported placeholders.'
+                )
             );
         }
 
@@ -406,12 +408,14 @@ class DomMerger implements DomMergerInterface
      * Get DOM document
      *
      * @return \DOMDocument
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getDom()
     {
         if (!isset($this->domDocument)) {
-            throw new \Exception('Object DOMDocument should be created.');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                new \Magento\Framework\Phrase('Object DOMDocument should be created.')
+            );
         }
 
         return $this->domDocument;

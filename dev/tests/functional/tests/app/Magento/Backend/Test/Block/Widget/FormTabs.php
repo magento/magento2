@@ -13,11 +13,8 @@ use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Util\Iterator\File;
-use Magento\Mtf\Util\XmlConverter;
 
 /**
- * Class FormTabs
  * Is used to represent any form with tabs on the page
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -29,11 +26,6 @@ class FormTabs extends Form
      * @var array
      */
     protected $tabs = [];
-
-    /**
-     * @var XmlConverter
-     */
-    protected $xmlConverter;
 
     /**
      * Fields which aren't assigned to any tab
@@ -48,7 +40,6 @@ class FormTabs extends Form
      * @param Mapper $mapper
      * @param BlockFactory $blockFactory
      * @param BrowserInterface $browser
-     * @param XmlConverter $xmlConverter
      * @param array $config
      */
     public function __construct(
@@ -56,46 +47,17 @@ class FormTabs extends Form
         Mapper $mapper,
         BlockFactory $blockFactory,
         BrowserInterface $browser,
-        XmlConverter $xmlConverter,
         array $config = []
     ) {
-        $this->xmlConverter = $xmlConverter;
         parent::__construct($element, $blockFactory, $mapper, $browser, $config);
     }
 
     /**
      * Initialize block
      */
-    protected function _init()
+    protected function init()
     {
-        $this->tabs = $this->getTabs();
-    }
-
-    /**
-     * Get all tabs on the form
-     *
-     * @return array
-     */
-    protected function getTabs()
-    {
-        $result = [];
-
-        $paths = glob(
-            MTF_TESTS_PATH . preg_replace('/Magento\/\w+/', '*/*', str_replace('\\', '/', get_class($this))) . '.xml'
-        );
-        $files = new File($paths);
-
-        foreach ($files as $file) {
-            $presetXml = simplexml_load_string($file);
-            if ($presetXml instanceof \SimpleXMLElement) {
-                $array = $this->xmlConverter->convert($presetXml);
-                if (is_array($array)) {
-                    $result = array_replace_recursive($result, $array);
-                }
-            }
-        }
-
-        return $result;
+        $this->tabs = $this->getFormMapping();
     }
 
     /**
