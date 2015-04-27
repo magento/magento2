@@ -30,7 +30,8 @@ class LogCleanCommand extends AbstractLogCommand
                 self::INPUT_KEY_DAYS,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Save log for specified number of days (minimum 1 day)'
+                'Save log for specified number of days',
+                '1'
             ),
         ];
         $this->setName('log:clean')
@@ -41,19 +42,26 @@ class LogCleanCommand extends AbstractLogCommand
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $errorMsg = 'Invalid value for option "' . self::INPUT_KEY_DAYS . '"';
         $days = $input->getOption(self::INPUT_KEY_DAYS);
-        if ($days > 0) {
-            /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig */
-            $mutableConfig = $this->objectManager->create('Magento\Framework\App\Config\MutableScopeConfigInterface');
-            $mutableConfig->setValue(
-                \Magento\Log\Model\Log::XML_LOG_CLEAN_DAYS,
-                $days,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+        if (!is_numeric($days) || (strpos($days,'.') !== false)) {
+            throw new \InvalidArgumentException($errorMsg);
         }
+        $days = (int) $days;
+        if ($days <= 0) {
+            throw new \InvalidArgumentException($errorMsg);
+        }
+        /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableConfig */
+        $mutableConfig = $this->objectManager->create('Magento\Framework\App\Config\MutableScopeConfigInterface');
+        $mutableConfig->setValue(
+            \Magento\Log\Model\Log::XML_LOG_CLEAN_DAYS,
+            $days,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         /** @var \Magento\Log\Model\LogFactory $logFactory */
         $logFactory = $this->objectManager->create('Magento\Log\Model\LogFactory');
         /** @var \Magento\Log\Model\Log $model */
