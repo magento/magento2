@@ -200,10 +200,4 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct("product_simple_500");
         $this->deleteProduct("group_product_500");
     }
-
-
-
-
-
-
 }
