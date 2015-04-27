@@ -39,18 +39,26 @@ class ExtensionAttributesProcessor
     private $configReader;
 
     /**
+     * @var bool
+     */
+    private $isPermissionChecked;
+
+    /**
      * @param DataObjectProcessor $dataObjectProcessor
      * @param AuthorizationInterface $authorization
      * @param ExtensionAttributesConfigReader $configReader
+     * @param bool $isPermissionChecked
      */
     public function __construct(
         DataObjectProcessor $dataObjectProcessor,
         AuthorizationInterface $authorization,
-        ExtensionAttributesConfigReader $configReader
+        ExtensionAttributesConfigReader $configReader,
+        $isPermissionChecked = false
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->authorization = $authorization;
         $this->configReader = $configReader;
+        $this->isPermissionChecked = $isPermissionChecked;
     }
 
     /**
@@ -62,8 +70,6 @@ class ExtensionAttributesProcessor
      */
     public function buildOutputDataArray(ExtensionAttributesInterface $dataObject, $dataObjectType)
     {
-        // TODO: cleanup all of this that's already duplicated in DataObjectProcessor; re-write the serializers
-
         $methods = $this->dataObjectProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
 
@@ -74,14 +80,13 @@ class ExtensionAttributesProcessor
             }
 
             $key = $this->fieldNamer->getFieldNameForMethodName($methodName);
-            if (!$this->isAttributePermissionValid($dataObjectType, $key)) {
-                $outputData[$key] = null;
+            if ($this->isPermissionChecked && !$this->isAttributePermissionValid($dataObjectType, $key)) {
                 continue;
             }
 
             $value = $dataObject->{$methodName}();
             if ($value === null) {
-                // all extension attributes are optional
+                // all extension attributes are optional so don't need to check if isRequired
                 continue;
             }
 
