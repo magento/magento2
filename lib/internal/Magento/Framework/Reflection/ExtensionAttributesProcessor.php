@@ -12,6 +12,7 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\Framework\Reflection\MethodsMap;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
@@ -23,6 +24,11 @@ class ExtensionAttributesProcessor
      * @var DataObjectProcessor
      */
     private $dataObjectProcessor;
+
+    /**
+     * @var MethodsMap
+     */
+    private $methodsMapProcessor;
 
     /**
      * @var AuthorizationInterface
@@ -40,18 +46,37 @@ class ExtensionAttributesProcessor
     private $isPermissionChecked;
 
     /**
+     * @var FieldNamer
+     */
+    private $fieldNamer;
+
+    /**
+     * @var TypeCaster
+     */
+    private $typeCaster;
+
+    /**
      * @param DataObjectProcessor $dataObjectProcessor
+     * @param MethodsMap $methodsMapProcessor
+     * @param TypeCaster $typeCaster
+     * @param FieldNamer $fieldNamer
      * @param AuthorizationInterface $authorization
      * @param ExtensionAttributesConfigReader $configReader
      * @param bool $isPermissionChecked
      */
     public function __construct(
         DataObjectProcessor $dataObjectProcessor,
+        MethodsMap $methodsMapProcessor,
+        TypeCaster $typeCaster,
+        FieldNamer $fieldNamer,
         AuthorizationInterface $authorization,
         ExtensionAttributesConfigReader $configReader,
         $isPermissionChecked = false
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->methodsMapProcessor = $methodsMapProcessor;
+        $this->typeCaster = $typeCaster;
+        $this->fieldNamer = $fieldNamer;
         $this->authorization = $authorization;
         $this->configReader = $configReader;
         $this->isPermissionChecked = $isPermissionChecked;
@@ -66,7 +91,7 @@ class ExtensionAttributesProcessor
      */
     public function buildOutputDataArray(ExtensionAttributesInterface $dataObject, $dataObjectType)
     {
-        $methods = $this->dataObjectProcessor->getMethodsMap($dataObjectType);
+        $methods = $this->methodsMapProcessor->getMethodsMap($dataObjectType);
         $outputData = [];
 
         /** @var MethodReflection $method */
@@ -104,7 +129,7 @@ class ExtensionAttributesProcessor
                             $arrayElementType
                         );
                     }
-                    $valueResult[] = $this->dataObjectProcessor->castValueToType($singleValue, $arrayElementType);
+                    $valueResult[] = $this->typeCaster->castValueToType($singleValue, $arrayElementType);
                 }
                 $value = $valueResult;
             } else {
