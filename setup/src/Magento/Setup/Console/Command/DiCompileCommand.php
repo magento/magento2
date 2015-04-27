@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -37,18 +38,36 @@ class DiCompileCommand extends Command
     private $taskManager;
 
     /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
+     * @var array
+     */
+    private $compiledPathsList;
+
+    /**
+     * @var array
+     */
+    private $excludedPathsList;
+
+    /**
      * Constructor
      *
      * @param DeploymentConfig $deploymentConfig
+     * @param DirectoryList $directoryList
      * @param Manager $taskManager
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
+        DirectoryList $directoryList,
         Manager $taskManager,
         ObjectManagerProvider $objectManagerProvider
     ) {
         $this->deploymentConfig = $deploymentConfig;
+        $this->directoryList = $directoryList;
         $this->objectManager = $objectManagerProvider->get();
         $this->taskManager = $taskManager;
         parent::__construct();
@@ -61,7 +80,7 @@ class DiCompileCommand extends Command
     {
         $this->setName('setup:di:compile')
             ->setDescription(
-                'Generates DI configuration and all non-existing interceptors, proxies and factories'
+                'Generates DI configuration and all non-existing interceptors and factories'
             );
         parent::configure();
     }
@@ -71,19 +90,76 @@ class DiCompileCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $appCodePath = $this->directoryList->getPath(DirectoryList::MODULES);
+        $libraryPath = $this->directoryList->getPath(DirectoryList::LIB_INTERNAL);
+        $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln('You cannot run this command because the Magento application is not installed.');
             return;
         }
-        $compiledPathsList = [
-            'application' => BP . '/'  . 'app/code',
-            'library' => BP . '/'  . 'lib/internal/Magento/Framework',
-            'generated_helpers' => BP . '/'  . 'var/generation'
+        $this->compiledPathsList = [
+            'application' => $appCodePath,
+            'library' => $libraryPath . '/Magento/Framework',
+            'generated_helpers' => $generationPath
         ];
-        $excludedPathsList = [
-            'application' => '#^' . BP . '/app/code/[\\w]+/[\\w]+/Test#',
-            'framework' => '#^' . BP . '/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#'
+        $this->excludedPathsList = [
+            'application' => '#^' . $appCodePath . '/[\\w]+/[\\w]+/Test#',
+            'framework' => '#^' . $libraryPath . '/[\\w]+/[\\w]+/([\\w]+/)?Test#'
         ];
+        $this->configureObjectManager($output);
+
+        $operations = [
+            OperationFactory::REPOSITORY_GENERATOR => [
+                'path' => $this->compiledPathsList['application'],
+                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
+            ],
+            OperationFactory::APPLICATION_CODE_GENERATOR => [
+                $this->compiledPathsList['application'],
+                $this->compiledPathsList['library'],
+                $this->compiledPathsList['generated_helpers'],
+            ],
+            OperationFactory::INTERCEPTION => [
+                    'intercepted_paths' => [
+                        $this->compiledPathsList['application'],
+                        $this->compiledPathsList['library'],
+                        $this->compiledPathsList['generated_helpers'],
+                    ],
+                    'path_to_store' => $this->compiledPathsList['generated_helpers'],
+            ],
+            OperationFactory::AREA_CONFIG_GENERATOR => [
+                $this->compiledPathsList['application'],
+                $this->compiledPathsList['library'],
+                $this->compiledPathsList['generated_helpers'],
+            ],
+            OperationFactory::INTERCEPTION_CACHE => [
+                $this->compiledPathsList['application'],
+                $this->compiledPathsList['library'],
+                $this->compiledPathsList['generated_helpers'],
+            ]
+        ];
+
+        try {
+            foreach ($operations as $operationCode => $arguments) {
+                $this->taskManager->addOperation(
+                    $operationCode,
+                    $arguments
+                );
+            }
+            $this->taskManager->process();
+            $output->writeln('<info>Generated code and dependency injection configuration successfully.</info>');
+        } catch (OperationException $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+        }
+    }
+
+    /**
+     * Configure Object Manager
+     *
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function configureObjectManager(OutputInterface $output)
+    {
         $this->objectManager->configure(
             [
                 'preferences' => [
@@ -115,7 +191,7 @@ class DiCompileCommand extends Command
                 ],
                 'Magento\Setup\Module\Di\Code\Reader\ClassesScanner' => [
                     'arguments' => [
-                        'excludePatterns' => $excludedPathsList
+                        'excludePatterns' => $this->excludedPathsList
                     ]
                 ],
                 'Magento\Setup\Module\Di\Compiler\Log\Writer\Console' => [
@@ -125,47 +201,5 @@ class DiCompileCommand extends Command
                 ],
             ]
         );
-        $operations = [
-            OperationFactory::REPOSITORY_GENERATOR => [
-                'path' => $compiledPathsList['application'],
-                'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
-            ],
-            OperationFactory::APPLICATION_CODE_GENERATOR => [
-                $compiledPathsList['application'],
-                $compiledPathsList['library'],
-                $compiledPathsList['generated_helpers'],
-            ],
-            OperationFactory::INTERCEPTION => [
-                    'intercepted_paths' => [
-                        $compiledPathsList['application'],
-                        $compiledPathsList['library'],
-                        $compiledPathsList['generated_helpers'],
-                    ],
-                    'path_to_store' => $compiledPathsList['generated_helpers'],
-            ],
-            OperationFactory::AREA_CONFIG_GENERATOR => [
-                $compiledPathsList['application'],
-                $compiledPathsList['library'],
-                $compiledPathsList['generated_helpers'],
-            ],
-            OperationFactory::INTERCEPTION_CACHE => [
-                $compiledPathsList['application'],
-                $compiledPathsList['library'],
-                $compiledPathsList['generated_helpers'],
-            ]
-        ];
-
-        try {
-            foreach ($operations as $operationCode => $arguments) {
-                $this->taskManager->addOperation(
-                    $operationCode,
-                    $arguments
-                );
-            }
-            $this->taskManager->process();
-            $output->writeln('<info>Generated code and dependency injection configuration successfully.</info>');
-        } catch (OperationException $e) {
-            $output->writeln('<error>' . $e->getMessage() . '</error>');
-        }
     }
 }

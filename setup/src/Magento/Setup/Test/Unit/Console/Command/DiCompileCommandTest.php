@@ -48,7 +48,14 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         );
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->manager = $this->getMock('Magento\Setup\Module\Di\App\Task\Manager', [], [], '', false);
-        $this->command = new DiCompileCommand($this->deploymentConfig, $this->manager, $objectManagerProvider);
+        $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $directoryList->expects($this->exactly(3))->method('getPath');
+        $this->command = new DiCompileCommand(
+            $this->deploymentConfig,
+            $directoryList,
+            $this->manager,
+            $objectManagerProvider
+        );
     }
 
     public function testExecuteNotInstalled()
