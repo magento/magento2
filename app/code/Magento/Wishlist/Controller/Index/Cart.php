@@ -36,6 +36,11 @@ class Cart extends Action\Action implements IndexInterface
     protected $cart;
 
     /**
+     * @var \Magento\Checkout\Helper\Cart
+     */
+    protected $cartHelper;
+
+    /**
      * @var \Magento\Wishlist\Model\Item\OptionFactory
      */
     private $optionFactory;
@@ -65,6 +70,7 @@ class Cart extends Action\Action implements IndexInterface
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Wishlist\Helper\Data $helper
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
      */
     public function __construct(
         Action\Context $context,
@@ -75,7 +81,8 @@ class Cart extends Action\Action implements IndexInterface
         \Magento\Wishlist\Model\Item\OptionFactory $optionFactory,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Wishlist\Helper\Data $helper
+        \Magento\Wishlist\Helper\Data $helper,
+        \Magento\Checkout\Helper\Cart $cartHelper
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
@@ -85,6 +92,7 @@ class Cart extends Action\Action implements IndexInterface
         $this->productHelper = $productHelper;
         $this->escaper = $escaper;
         $this->helper = $helper;
+        $this->cartHelper = $cartHelper;
         parent::__construct($context);
     }
 
@@ -94,7 +102,7 @@ class Cart extends Action\Action implements IndexInterface
      * If Product has required options - item removed from wishlist and redirect
      * to product view page with message about needed defined required options
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -161,8 +169,8 @@ class Cart extends Action\Action implements IndexInterface
                 $this->messageManager->addSuccess($message);
             }
 
-            if ($this->cart->getShouldRedirectToCart()) {
-                $redirectUrl = $this->cart->getCartUrl();
+            if ($this->cartHelper->getShouldRedirectToCart()) {
+                $redirectUrl = $this->cartHelper->getCartUrl();
             } else {
                 $refererUrl = $this->_redirect->getRefererUrl();
                 if ($refererUrl && $refererUrl != $configureUrl) {
@@ -179,6 +187,14 @@ class Cart extends Action\Action implements IndexInterface
         }
 
         $this->helper->calculate();
+
+        if ($this->getRequest()->isAjax()) {
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+            $resultJson->setData(['backUrl' => $redirectUrl]);
+            return $resultJson;
+        }
+        
         $resultRedirect->setUrl($redirectUrl);
         return $resultRedirect;
     }

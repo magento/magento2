@@ -91,6 +91,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected $urlMock;
 
     /**
+     * @var \Magento\Checkout\Helper\Cart|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cartHelperMock;
+
+    /**
      * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultFactoryMock;
@@ -99,6 +104,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirectMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultJsontMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -143,7 +153,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['getParams', 'getParam'])
+            ->setMethods(['getParams', 'getParam', 'isAjax'])
             ->getMockForAbstractClass();
 
         $this->redirectMock = $this->getMockBuilder('Magento\Framework\App\Response\RedirectInterface')
@@ -163,10 +173,16 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getUrl'])
             ->getMockForAbstractClass();
+        $this->cartHelperMock = $this->getMockBuilder('Magento\Checkout\Helper\Cart')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -187,14 +203,19 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->messageManagerMock));
         $this->contextMock->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($this->urlMock));
+            ->willReturn($this->urlMock); 
         $this->contextMock->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactoryMock);
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
-            ->with(ResultFactory::TYPE_REDIRECT, [])
-            ->willReturn($this->resultRedirectMock);
+            ->willReturnMap(
+                [
+                    [ResultFactory::TYPE_REDIRECT, [], $this->resultRedirectMock],
+                    [ResultFactory::TYPE_JSON, [], $this->resultJsontMock]
+                ]
+            );
+
 
         $this->model = new Cart(
             $this->contextMock,
@@ -205,7 +226,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
             $this->optionFactoryMock,
             $this->productHelperMock,
             $this->escaperMock,
-            $this->helperMock
+            $this->helperMock,
+            $this->cartHelperMock
         );
     }
 
@@ -281,10 +303,36 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->resultRedirectMock, $this->model->execute());
     }
 
+    public function testExecuteWithQuantityArray()
+    {
+        $refererUrl = $this->prepareExecuteWithQuantityArray();
+        
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setUrl')
+            ->with($refererUrl)
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultRedirectMock, $this->model->execute());
+    }
+
+    public function testExecuteWithQuantityArrayAjax()
+    {
+        $refererUrl = $this->prepareExecuteWithQuantityArray(true);
+
+        $this->resultJsonMock->expects($this->once())
+            ->method('setData')
+            ->with(['backUrl' => $redirectUrl])
+            ->willReturnSelf();
+
+        $this->assertSame($this->resultJsonMock, $this->model->execute());
+    }
+
     /**
+     * @param bool $isAjax
+     * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testExecuteWithQuantityArray()
+    protected function prepareExecuteWithQuantityArray($isAjax = false)
     {
         $itemId = 2;
         $wishlistId = 1;
@@ -404,6 +452,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn($params);
+        $this->requestMock->expects($this->once())
+            ->method('isAjax')
+            ->willReturn(false);
 
         $buyRequestMock = $this->getMockBuilder('Magento\Framework\Object')
             ->disableOriginalConstructor()
@@ -474,7 +525,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->with('You added '  . $productName . ' to your shopping cart.', null)
             ->willReturnSelf();
 
-        $this->checkoutCartMock->expects($this->once())
+        $this->cartHelperMock->expects($this->once())
             ->method('getShouldRedirectToCart')
             ->willReturn(false);
 
@@ -485,12 +536,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->helperMock->expects($this->once())
             ->method('calculate')
             ->willReturnSelf();
-        $this->resultRedirectMock->expects($this->once())
-            ->method('setUrl')
-            ->with($refererUrl)
-            ->willReturnSelf();
-
-        $this->assertSame($this->resultRedirectMock, $this->model->execute());
+        
+        return $refererUrl;
     }
 
     /**
