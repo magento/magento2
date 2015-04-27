@@ -45,11 +45,6 @@ class DiCompileCommand extends Command
     /**
      * @var array
      */
-    private $compiledPathsList;
-
-    /**
-     * @var array
-     */
     private $excludedPathsList;
 
     /**
@@ -97,7 +92,7 @@ class DiCompileCommand extends Command
             $output->writeln('You cannot run this command because the Magento application is not installed.');
             return;
         }
-        $this->compiledPathsList = [
+        $compiledPathsList = [
             'application' => $appCodePath,
             'library' => $libraryPath . '/Magento/Framework',
             'generated_helpers' => $generationPath
@@ -110,31 +105,31 @@ class DiCompileCommand extends Command
 
         $operations = [
             OperationFactory::REPOSITORY_GENERATOR => [
-                'path' => $this->compiledPathsList['application'],
+                'path' => $compiledPathsList['application'],
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
             ],
             OperationFactory::APPLICATION_CODE_GENERATOR => [
-                $this->compiledPathsList['application'],
-                $this->compiledPathsList['library'],
-                $this->compiledPathsList['generated_helpers'],
+                $compiledPathsList['application'],
+                $compiledPathsList['library'],
+                $compiledPathsList['generated_helpers'],
             ],
             OperationFactory::INTERCEPTION => [
                     'intercepted_paths' => [
-                        $this->compiledPathsList['application'],
-                        $this->compiledPathsList['library'],
-                        $this->compiledPathsList['generated_helpers'],
+                        $compiledPathsList['application'],
+                        $compiledPathsList['library'],
+                        $compiledPathsList['generated_helpers'],
                     ],
-                    'path_to_store' => $this->compiledPathsList['generated_helpers'],
+                    'path_to_store' => $compiledPathsList['generated_helpers'],
             ],
             OperationFactory::AREA_CONFIG_GENERATOR => [
-                $this->compiledPathsList['application'],
-                $this->compiledPathsList['library'],
-                $this->compiledPathsList['generated_helpers'],
+                $compiledPathsList['application'],
+                $compiledPathsList['library'],
+                $compiledPathsList['generated_helpers'],
             ],
             OperationFactory::INTERCEPTION_CACHE => [
-                $this->compiledPathsList['application'],
-                $this->compiledPathsList['library'],
-                $this->compiledPathsList['generated_helpers'],
+                $compiledPathsList['application'],
+                $compiledPathsList['library'],
+                $compiledPathsList['generated_helpers'],
             ]
         ];
 
