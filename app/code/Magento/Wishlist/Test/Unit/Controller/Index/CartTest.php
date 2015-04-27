@@ -212,7 +212,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     [ResultFactory::TYPE_REDIRECT, [], $this->resultRedirectMock],
-                    [ResultFactory::TYPE_JSON, [], $this->resultJsontMock]
+                    [ResultFactory::TYPE_JSON, [], $this->resultJsonMock]
                 ]
             );
 
@@ -321,7 +321,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $this->resultJsonMock->expects($this->once())
             ->method('setData')
-            ->with(['backUrl' => $redirectUrl])
+            ->with(['backUrl' => $refererUrl])
             ->willReturnSelf();
 
         $this->assertSame($this->resultJsonMock, $this->model->execute());
@@ -454,7 +454,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->willReturn($params);
         $this->requestMock->expects($this->once())
             ->method('isAjax')
-            ->willReturn(false);
+            ->willReturn($isAjax);
 
         $buyRequestMock = $this->getMockBuilder('Magento\Framework\Object')
             ->disableOriginalConstructor()
