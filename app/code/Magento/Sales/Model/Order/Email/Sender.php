@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\Order\Email;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
 use Magento\Sales\Model\Order\Email\Container\Template;
+use Magento\Sales\Model\Order\Address\Renderer;
 
 abstract class Sender
 {
@@ -32,6 +33,11 @@ abstract class Sender
     protected $logger;
 
     /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param Template $templateContainer
      * @param IdentityInterface $identityContainer
      * @param SenderBuilderFactory $senderBuilderFactory
@@ -41,12 +47,14 @@ abstract class Sender
         Template $templateContainer,
         IdentityInterface $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        Renderer $addressRenderer
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;
         $this->senderBuilderFactory = $senderBuilderFactory;
         $this->logger = $logger;
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -117,5 +125,25 @@ abstract class Sender
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'store' => $this->identityContainer->getStore()->getStoreId()
         ];
+    }
+
+    /**
+     * @param Order $order
+     * @return string|null
+     */
+    protected function getFormattedShippingAddress($order)
+    {
+        return $order->getIsVirtual()
+            ? null
+            : $this->addressRenderer->format($order->getShippingAddress(), 'html');
+    }
+
+    /**
+     * @param Order $order
+     * @return string|null
+     */
+    protected function getFormattedBillingAddress($order)
+    {
+        return $this->addressRenderer->format($order->getBillingAddress(), 'html');
     }
 }
