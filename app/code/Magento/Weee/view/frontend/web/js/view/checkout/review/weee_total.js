@@ -12,6 +12,7 @@ define(
     ],
     function (Component,quote, priceUtils) {
         "use strict";
+        //var includeInSubtotal = window.checkoutConfig.isIncludedInSubtotal;
         return Component.extend({
             defaults: {
                 colspan: 3,
@@ -19,6 +20,7 @@ define(
                 title: 'FPT',
                 template: 'Magento_Weee/checkout/review/weee_total'
             },
+            isIncludedInSubtotal: window.checkoutConfig.isIncludedInSubtotal,
             totals: quote.getTotals(),
             getColspan: function() {
                 return this.colspan;
