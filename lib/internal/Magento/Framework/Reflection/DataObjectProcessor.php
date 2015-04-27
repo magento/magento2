@@ -14,7 +14,7 @@ use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
- * Data object processor for de-serialization using class reflection
+ * Data object processor for array serialization using class reflection
  */
 class DataObjectProcessor
 {
@@ -22,11 +22,6 @@ class DataObjectProcessor
      * @var MethodsMap
      */
     private $methodsMapProcessor;
-
-    /**
-     * @var ExtensionAttributesProcessor
-     */
-    private $extensionAttributesProcessor;
 
     /**
      * @var TypeCaster
@@ -39,21 +34,34 @@ class DataObjectProcessor
     private $fieldNamer;
 
     /**
+     * @var ExtensionAttributesProcessor
+     */
+    private $extensionAttributesProcessor;
+
+    /**
+     * @var CustomAttributesProcessor
+     */
+    private $customAttributesProcessor;
+
+    /**
      * @param MethodsMap $methodsMapProcessor
-     * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
+     * @param CustomAttributesProcessor $customAttributesProcessor
+     * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      */
     public function __construct(
         MethodsMap $methodsMapProcessor,
-        ExtensionAttributesProcessor $extensionAttributesProcessor,
         TypeCaster $typeCaster,
-        FieldNamer $fieldNamer
+        FieldNamer $fieldNamer,
+        CustomAttributesProcessor $customAttributesProcessor,
+        ExtensionAttributesProcessor $extensionAttributesProcessor
     ) {
         $this->methodsMapProcessor = $methodsMapProcessor;
-        $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->typeCaster = $typeCaster;
         $this->fieldNamer = $fieldNamer;
+        $this->extensionAttributesProcessor = $extensionAttributesProcessor;
+        $this->customAttributesProcessor = $customAttributesProcessor;
     }
 
     /**
