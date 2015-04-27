@@ -97,6 +97,29 @@
     padding-top: @button__padding-vertical__l;
 }
 
+.abs-action-delete {
+    &:extend(.abs-action-reset all);
+    &:extend(.abs-icon all);
+    display: inline-block;
+    font-size: 1.6rem;
+    margin-left: 1.2rem;
+    padding-top: .7rem;
+    text-decoration: none;
+    vertical-align: middle;
+    &:after {
+        color: @color-very-dark-gray;
+        content: @icon-delete__content;
+    }
+    &:hover {
+        &:after {
+            color: @color-very-dark-gray-black2;
+        }
+    }
+    > span {
+        &:extend(.abs-visually-hidden all);
+    }
+}
+
 .abs-action-default {
     .action-default();
 }
