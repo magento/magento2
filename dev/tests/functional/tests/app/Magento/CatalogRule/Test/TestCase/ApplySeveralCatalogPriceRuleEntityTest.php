@@ -10,14 +10,14 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Preconditions:
- *  1. Execute before each variation:
- *   - Delete all active catalog price rules
- *   - Create catalog price rule from dataSet using Curl
+ * 1. Execute before each variation:
+ *  - Delete all active catalog price rules
+ *  - Create catalog price rule from dataSet using Curl
  *
  * Steps:
- *  1. Apply all created rules
- *  2. Create simple product
- *  3. Perform all assertions
+ * 1. Apply all created rules.
+ * 2. Create simple product.
+ * 3. Perform all assertions.
  *
  * @group Catalog_Price_Rules_(MX)
  * @ZephyrId MAGETWO-24780

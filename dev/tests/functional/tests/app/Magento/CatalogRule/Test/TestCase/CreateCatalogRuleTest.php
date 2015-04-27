@@ -14,14 +14,14 @@ use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
 /**
  * Steps:
  * 1. Log in as default admin user.
- * 2. Go to Marketing > Catalog Price Rules
- * 3. Press "+" button to start create new catalog price rule
- * 4. Fill in all data according to data set
- * 5. Save rule
- * 6. Apply newly created catalog rule
- * 7. Create simple product
- * 8. Clear cache
- * 9. Perform all assertions
+ * 2. Go to Marketing > Catalog Price Rules.
+ * 3. Press "+" button to start create new catalog price rule.
+ * 4. Fill in all data according to data set.
+ * 5. Save rule.
+ * 6. Apply newly created catalog rule.
+ * 7. Create simple product.
+ * 8. Clear cache.
+ * 9. Perform all assertions.
  *
  * @ticketId MAGETWO-23036
  */
