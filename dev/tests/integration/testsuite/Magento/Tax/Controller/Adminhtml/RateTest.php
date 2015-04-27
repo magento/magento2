@@ -204,14 +204,11 @@ class RateTest extends \Magento\Backend\Utility\Controller
      * @magentoDbIsolation enabled
      *
      * @param array $rateClassData
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testAjaxLoadAction($rateClassData)
     {
-        /** @var \Magento\Tax\Api\TaxRateRepositoryInterface $rateClassService */
-        $rateClassService = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Tax\Api\TaxRateRepositoryInterface'
-        );
-
+        /** @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory $rateClassFactory */
         $rateClassFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Tax\Api\Data\TaxRateInterfaceFactory'
         );
@@ -231,7 +228,8 @@ class RateTest extends \Magento\Backend\Utility\Controller
 
         $rateClassId=$rateClass->getTaxCalculationRateId();
         /** @var $class \Magento\Tax\Model\Calculation\Rate */
-        $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Tax\Model\Calculation\Rate')
+        $class = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Tax\Model\Calculation\Rate')
             ->load($rateClassId, 'tax_calculation_rate_id');
 
         $this->assertEquals($rateClassData['tax_country_id'], $class->getTaxCountryId());
@@ -240,8 +238,8 @@ class RateTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals($rateClassData['rate'], $class->getRate());
         $this->assertEquals($rateClassData['zip_is_range']==1 ? 1 : 0, $class->getZipIsRange() ? 1 : 0);
         if ($rateClassData['zip_is_range']=='1') {
-        $this->assertEquals($rateClassData['zip_from'], $class->getZipFrom());
-        $this->assertEquals($rateClassData['zip_to'], $class->getZipTo());
+            $this->assertEquals($rateClassData['zip_from'], $class->getZipFrom());
+            $this->assertEquals($rateClassData['zip_to'], $class->getZipTo());
         }
 
         $postData = [ 'id' => $rateClassId ];
@@ -256,7 +254,7 @@ class RateTest extends \Magento\Backend\Utility\Controller
         );
 
         $this->assertTrue(is_array($result));
-        $this->assertArrayHasKey('success',$result);
+        $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success'] == true);
         $this->assertArrayHasKey('result', $result);
         $this->assertTrue(is_array($result['result']));
@@ -269,8 +267,8 @@ class RateTest extends \Magento\Backend\Utility\Controller
         $expectedZipIsRange=$result['result']['zip_is_range'] == 1  ? 1 : 0;
         $this->assertEquals($expectedZipIsRange, $class->getZipIsRange() ? 1 : 0);
         if ($expectedZipIsRange) {
-        $this->assertEquals($result['result']['zip_from'], $class->getZipFrom());
-        $this->assertEquals($result['result']['zip_to'], $class->getZipTo());
+            $this->assertEquals($result['result']['zip_from'], $class->getZipFrom());
+            $this->assertEquals($result['result']['zip_to'], $class->getZipTo());
         }
     }
 
@@ -292,10 +290,10 @@ class RateTest extends \Magento\Backend\Utility\Controller
         );
 
         $this->assertTrue(is_array($result));
-        $this->assertArrayHasKey('success',$result);
+        $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success'] == false);
-        $this->assertTrue(!array_key_exists('result',$result));
-        $this->assertArrayHasKey('error_message',$result);
+        $this->assertTrue(!array_key_exists('result', $result));
+        $this->assertArrayHasKey('error_message', $result);
         $this->assertTrue(strlen($result['error_message'])>0);
     }
 }

@@ -31,56 +31,51 @@ class Converter
     }
 
     /**
-     * Extract tax rate data in a format which is array
-     *
-     * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
-     * @return array
-     */
-    public function createSimpleArrayFromServiceObject(\Magento\Tax\Api\Data\TaxRateInterface $taxRate)
-    {
-        $taxRateData = $taxRate->getData();
-        if (isset($taxRateData['titles'])) {
-            foreach ($taxRateData['titles'] as $storeId => $value) {
-                $taxRateData['title[' . $storeId . ']'] = $value;
-            }
-        }
-        unset($taxRateData['titles']);
-
-        return $taxRateData;
-    }
-
-    /**
      * Extract tax rate data in a format which is
      *
      * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
      * @return array
      */
-    public function createArrayFromServiceObject($taxRate)
+    public function createArrayFromServiceObject($taxRate,$returnNumericLogic=false)
     {
-        $formData = [
+        $taxRateFormData = [
             'tax_calculation_rate_id' => $taxRate->getId(),
             'tax_country_id' => $taxRate->getTaxCountryId(),
             'tax_region_id' => $taxRate->getTaxRegionId(),
             'tax_postcode' => $taxRate->getTaxPostcode(),
             'code' => $taxRate->getCode(),
             'rate' => $taxRate->getRate(),
-            'zip_is_range' => false,
+            'zip_is_range' => $returnNumericLogic?0:false,
         ];
 
         if ($taxRate->getZipFrom() && $taxRate->getZipTo()) {
-            $formData['zip_is_range'] = true;
-            $formData['zip_from'] = $taxRate->getZipFrom();
-            $formData['zip_to'] = $taxRate->getZipTo();
+            $taxRateFormData['zip_is_range'] = $returnNumericLogic?1:true;
+            $taxRateFormData['zip_from'] = $taxRate->getZipFrom();
+            $taxRateFormData['zip_to'] = $taxRate->getZipTo();
         }
 
-        if ($taxRate->getTitles()) {
-            $titleData = [];
-            foreach ($taxRate->getTitles() as $title) {
-                $titleData[] = [$title->getStoreId() => $title->getValue()];
+        if ($returnNumericLogic) {
+            //format for the ajax on multiple sites titles
+            $title_array=($this->createTitleArrayFromServiceObject($taxRate));
+            if (is_array($title_array)) {
+                foreach($title_array as $storeId=>$title) {
+                    $taxRateFormData['title[' . $storeId . ']']=$title;
+                }
             }
-            $formData['title'] = $titleData;
+        }
+        else {
+            //format for the form array on multiple sites titles
+            $title_array=($this->createTitleArrayFromServiceObject($taxRate));
+            if (is_array($title_array)) {
+                $titleData = [];
+                foreach($title_array as $storeId=>$title) {
+                    $titleData[] = [$storeId => $title];
+                }
+                if (count($title_array)>0)
+                 $taxRateFormData['title'] = $titleData;
+            }
         }
 
-        return $formData;
+        return $taxRateFormData;
     }
 }
