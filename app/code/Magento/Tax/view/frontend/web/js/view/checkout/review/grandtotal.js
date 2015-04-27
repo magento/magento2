@@ -15,9 +15,11 @@ define(
     function (Component, quote, priceUtils) {
         "use strict";
         var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal || false;
+        var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed || false;
         return Component.extend({
             defaults: {
                 isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
+                isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
                 template: 'Magento_Tax/checkout/review/grandtotal'
             },
             getColspan: 3,

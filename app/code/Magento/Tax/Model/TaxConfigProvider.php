@@ -39,10 +39,23 @@ class TaxConfigProvider implements ConfigProviderInterface
         return [
             'isDisplayShippingPriceExclTax' => $this->isDisplayShippingPriceExclTax(),
             'isDisplayShippingBothPrices' => $this->isDisplayShippingBothPrices(),
+            'reviewShippingDisplayMode' => $this->getDisplayShippingMode(),
             'reviewItemPriceDisplayMode' => $this->getReviewItemPriceDisplayMode(),
             'reviewTotalsDisplayMode' => $this->getReviewTotalsDisplayMode(),
             'includeTaxInGrandTotal' => $this->getIncludeTaxInGrandTotal(),
+            'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
         ];
+    }
+
+    public function getDisplayShippingMode()
+    {
+        if ($this->taxConfig->displayCartShippingBoth()) {
+            return 'both';
+        }
+        if ($this->taxConfig->displayCartShippingExclTax()) {
+            return 'excluding';
+        }
+        return 'including';
     }
 
     /**
@@ -95,6 +108,16 @@ class TaxConfigProvider implements ConfigProviderInterface
             return 'excluding';
         }
         return 'including';
+    }
+
+    /**
+     * Show tax details in checkout totals section flag
+     *
+     * @return bool
+     */
+    public function isFullTaxSummaryDisplayed()
+    {
+        return $this->taxHelper->displayFullSummary();
     }
 
     /**

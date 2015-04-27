@@ -4,11 +4,28 @@
  * See COPYING.txt for license details.
  */
 -->
-<!--todo implement tax logic @see shipping.phtml-->
 <!-- ko if: quoteIsVirtual == 0 -->
-<tr class="totals shipping excl">
-    <th data-bind="text: getTitle(), attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row"></th>
-    <td  data-bind="text: getValue(), attr: {'style':style, 'data-th': getTitle()}" class="amount"></td>
-</tr>
+    <!-- ko if: isBothPricesDisplayed() -->
+    <tr class="totals shipping excl">
+        <th data-bind="text: getExcludingLabel(), attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row"></th>
+        <td class="amount" data-bind="text: getExcludingValue(), attr: {'style':style, 'data-th': getExcludingLabel()}"></td>
+    </tr>
+    <tr class="totals shipping incl">
+        <th data-bind="text: getIncludingLabel(), attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row"></th>
+        <td class="amount" data-bind="text: getIncludingValue(), attr: {'style':style, 'data-th': getIncludingLabel()}"></td>
+    </tr>
+    <!-- /ko -->
+    <!-- ko if: isIncludingDisplayed() -->
+    <tr class="totals shipping incl">
+        <th data-bind="text: getTitle(), attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row"></th>
+        <td class="amount" data-bind="text: getIncludingValue(), attr: {'style':style, 'data-th': getTitle()}"></td>
+    </tr>
+    <!-- /ko -->
+    <!-- ko if: isExcludingDisplayed() -->
+    <tr class="totals shipping excl">
+        <th data-bind="text: getTitle(), attr: {'style':style, 'colspan': getColspan}" class="mark" scope="row"></th>
+        <td  data-bind="text: getValue(), attr: {'style':style, 'data-th': getTitle()}" class="amount"></td>
+    </tr>
+    <!-- /ko -->
 <!-- /ko -->
 
