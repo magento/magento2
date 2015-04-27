@@ -33,7 +33,7 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        $resultRedirect->setPath('*/*/importexport');
+        $resultRedirect->setUrl($this->_redirect->getRedirectUrl());
         return $resultRedirect;
     }
 }
