@@ -5,6 +5,8 @@
  */
 namespace Magento\Bundle\Model\Source\Option\Selection\Price;
 
+use Magento\Bundle\Api\Data\LinkInterface;
+
 /**
  * Extended Attributes Source Model
  *
@@ -17,6 +19,9 @@ class Type implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return [['value' => '0', 'label' => __('Fixed')], ['value' => '1', 'label' => __('Percent')]];
+        return [
+            ['value' => LinkInterface::PRICE_TYPE_FIXED, 'label' => __('Fixed')],
+            ['value' => LinkInterface::PRICE_TYPE_PERCENT, 'label' => __('Percent')]
+        ];
     }
 }

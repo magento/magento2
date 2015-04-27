@@ -10,6 +10,20 @@ define([
 ], function (_, utils, Class, EventsBus) {
     'use strict';
 
+    function getStored(ns) {
+        var stored = localStorage.getItem(ns);
+
+        return !_.isNull(stored) ? JSON.parse(stored) : {};
+    }
+
+    function store(ns, property, data) {
+        var stored = getStored(ns);
+
+        utils.nested(stored, property, data);
+
+        localStorage.setItem(ns, JSON.stringify(stored));
+    }
+
     var Provider = _.extend({
         /**
          * Initializes DataProvider instance.
@@ -17,6 +31,8 @@ define([
          */
         initialize: function (config) {
             _.extend(this.data = {}, config);
+
+            this.restore();
 
             return this;
         },
@@ -51,6 +67,22 @@ define([
             }, this);
 
             return this;
+        },
+
+        restore: function () {
+            var stored = getStored(this.data.dataScope);
+
+            utils.extend(this.data, stored);
+        },
+
+        store: function (property, data) {
+            if (!data) {
+                data = this.get(property);
+            } else {
+                this.set(property, data);
+            }
+
+            store(this.data.dataScope, property, data);
         },
 
         remove: function (path) {
