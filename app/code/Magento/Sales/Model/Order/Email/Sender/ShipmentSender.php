@@ -73,7 +73,7 @@ class ShipmentSender extends Sender
         Renderer $addressRenderer,
         ManagerInterface $eventManager
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;
         $this->shipmentResource = $shipmentResource;
         $this->globalConfig = $globalConfig;
@@ -102,37 +102,24 @@ class ShipmentSender extends Sender
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $shipment->getOrder();
-
-            if ($order->getShippingAddress()) {
-                $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
-            } else {
-                $formattedShippingAddress = '';
-            }
-            $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
-
-            $transport = new \Magento\Framework\Object(
-                ['template_vars' =>
-                     [
-                         'order'                    => $order,
-                         'shipment'                 => $shipment,
-                         'comment'                  => $shipment->getCustomerNoteNotify()
-                             ? $shipment->getCustomerNote()
-                             : '',
-                         'billing'                  => $order->getBillingAddress(),
-                         'payment_html'             => $this->getPaymentHtml($order),
-                         'store'                    => $order->getStore(),
-                         'formattedShippingAddress' => $formattedShippingAddress,
-                         'formattedBillingAddress'  => $formattedBillingAddress
-                     ]
-                ]
-            );
+            
+            $transport = [
+                'order' => $order,
+                'shipment' => $shipment,
+                'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
+                'billing' => $order->getBillingAddress(),
+                'payment_html' => $this->getPaymentHtml($order),
+                'store' => $order->getStore(),
+                'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
+                'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
+            ];
 
             $this->eventManager->dispatch(
                 'email_shipment_set_template_vars_before',
                 ['sender' => $this, 'transport' => $transport]
             );
 
-            $this->templateContainer->setTemplateVars($transport->getTemplateVars());
+            $this->templateContainer->setTemplateVars($transport);
 
             if ($this->checkAndSend($order)) {
                 $shipment->setEmailSent(true);
