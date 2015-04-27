@@ -63,9 +63,5 @@
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
-
-        <dataset name="fedex_rollback">
-            <field path="carriers/fedex/active" scope="carriers" scope_id="1" label="No" xsi:type="string">0</field>
-        </dataset>
     </repository>
 </config>
