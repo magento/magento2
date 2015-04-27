@@ -33,7 +33,7 @@ class Messages implements SectionSourceInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getSectionData()
     {
         $messages = $this->messageManager->getMessages(true);
         return [
