@@ -17,7 +17,8 @@ define(
                 creditCardExpMonth: '',
                 creditCardNumber: '',
                 creditCardSsStartMonth: '',
-                creditCardSsStartYear: ''
+                creditCardSsStartYear: '',
+                creditCardVerificationNumber: ''
             },
             initObservable: function () {
                 this._super()
@@ -26,6 +27,7 @@ define(
                         'creditCardExpYear',
                         'creditCardExpMonth',
                         'creditCardNumber',
+                        'creditCardVerificationNumber',
                         'creditCardSsStartMonth',
                         'creditCardSsStartYear'
                     ]);
@@ -37,8 +39,11 @@ define(
                     'cc_exp_year': this.creditCardExpYear(),
                     'cc_exp_month': this.creditCardExpMonth(),
                     'cc_number': this.creditCardNumber(),
-                    'cc_ss_start_month': this.creditCardSsStartMonth(),
-                    'cc_ss_start_year': this.creditCardSsStartYear()
+                    additional_data: {
+                        'cc_cid': this.creditCardVerificationNumber(),
+                        'cc_ss_start_month': this.creditCardSsStartMonth(),
+                        'cc_ss_start_year': this.creditCardSsStartYear()
+                    }
                 };
             },
             getCcAvailableTypes: function() {
@@ -70,6 +75,9 @@ define(
             },
             hasSsCardType: function() {
                 return window.checkoutConfig.payment.cc.hasSsCardType;
+            },
+            getCvvImage: function() {
+                return window.checkoutConfig.payment.cc.cvvImage;
             },
             getSsStartYears: function() {
                 return _.map(window.checkoutConfig.payment.cc.ssStartYears, function(value, key) {
