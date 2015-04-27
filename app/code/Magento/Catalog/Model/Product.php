@@ -1374,7 +1374,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                         ->setPosition($item['position']);
                     if (isset($item['custom_attributes'])) {
                         foreach ($item['custom_attributes'] as $option) {
-                            $productLink->getExtensionAttributes()->setQty($option['value']);
+                            if ($option['attribute_code'] == 'qty') {
+                                $extendedAttributes = $productLink->getExtensionAttributes();
+                                if ($extendedAttributes !== null) {
+                                    $productLink->getExtensionAttributes()->setQty($option['value']);
+                                }
+                            }
                         }
                     }
                     $output[] = $productLink;

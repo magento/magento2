@@ -33,6 +33,11 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $linkTypeProviderMock;
 
+    /**
+     * @var \Magento\Framework\ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
         $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Model\ProductRepository', [], [], '', false);
@@ -105,7 +110,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn($linkTypes);
 
         $this->productMock->expects($this->never())->method('getProductLinks')->willReturn($links);
-        $this->assertEquals($links, $this->model->getLinkedItemsByType($productSku, $linkType));
+        $this->model->getLinkedItemsByType($productSku, $linkType);
     }
 
     public function testSetProductLinks()
@@ -118,8 +123,8 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
         $inputRelatedLink->setProductSku($productSku);
         $inputRelatedLink->setLinkType($linkType);
-        $inputRelatedLink->setData("sku", "bad sku");
-        $inputRelatedLink->setData("type_id", "bad type");
+        $inputRelatedLink->setData("sku", "Simple Product 1");
+        $inputRelatedLink->setData("type_id", "related");
         $inputRelatedLink->setPosition(0);
         $links = [$inputRelatedLink];
 
@@ -129,6 +134,7 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturn($linkTypes);
 
         $this->productMock->expects($this->once())->method('getProductLinks')->willReturn([]);
+        $this->productMock->expects($this->once())->method('setProductLinks')->with($links);
         $this->assertTrue($this->model->setProductLinks($productSku, $linkType, $links));
     }
 
