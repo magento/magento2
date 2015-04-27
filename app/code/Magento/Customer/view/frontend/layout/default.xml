@@ -24,7 +24,8 @@
         <referenceContainer name="content">
             <block name="customer.section.config" class="Magento\Customer\Block\SectionConfig"
                    template="Magento_Customer::js/section-config.phtml"/>
-            <block name="customer.customer.data" class="Magento\Framework\View\Element\Template"
+            <block name="customer.customer.data"
+                   class="Magento\Customer\Block\CustomerData"
                    template="Magento_Customer::js/customer-data.phtml"/>
         </referenceContainer>
     </body>

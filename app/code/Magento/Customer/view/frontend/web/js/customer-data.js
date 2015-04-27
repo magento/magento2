@@ -11,6 +11,9 @@ define([
 ], function ($, _, ko, sectionConfig) {
     'use strict';
 
+    //TODO: remove global change, in this case made for initNamespaceStorage
+    $.cookieStorage.setConf({path:'/'});
+
     var options;
     var ns = $.initNamespaceStorage('mage-cache-storage');
     var storage = ns.localStorage;
@@ -24,8 +27,8 @@ define([
         return this.set(this.invalid_sections, sections);
     };
 
-    if (!ns.cookieStorage.isSet('mage-cache-sessid')) {
-        ns.cookieStorage.set('mage-cache-sessid', true);
+    if (!$.cookieStorage.isSet('mage-cache-sessid')) {
+        $.cookieStorage.set('mage-cache-sessid', true);
         storage.removeAll();
     }
 
@@ -138,6 +141,13 @@ define([
         },
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
+
+            if (!$.cookieStorage.isSet('mage-cache-life')) {
+                var date = new Date(Date.now() + parseInt(options.cookieLifeTime) * 1000);
+                $.cookieStorage.setExpires(date).set('mage-cache-life', 'true');
+                storage.removeAll();
+            }
+
             customerData.init();
         }
     };

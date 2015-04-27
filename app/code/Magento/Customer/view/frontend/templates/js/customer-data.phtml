@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 /**
- * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Customer\Block\CustomerData $block
  */
 ?>
 <script type="text/x-magento-init">
@@ -12,6 +12,7 @@
     echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode([
         '*' => ['Magento_Customer/js/customer-data' => [
             'sectionLoadUrl' => $block->getUrl('customer/section/load'),
+            'cookieLifeTime' => $block->getCookieLifeTime(),
         ]],
     ]);
 ?>
