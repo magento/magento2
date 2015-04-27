@@ -32,9 +32,7 @@ define(
                     JSON.stringify(payload)
                 ).done(
                     function() {
-                        if (_.isFunction(callback)) {
-                            callback.call();
-                        } else {
+                        if (!_.isFunction(callback) || callback()) {
                             window.location.href = url.build('checkout/onepage/success/');
                         }
                     }
@@ -56,9 +54,7 @@ define(
                     JSON.stringify(payload)
                 ).done(
                     function() {
-                        if (_.isFunction(callback)) {
-                            callback.call();
-                        } else {
+                        if (!_.isFunction(callback) || callback()) {
                             window.location.replace(url.build('checkout/onepage/success/'));
                         }
                     }
