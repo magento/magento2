@@ -30,6 +30,7 @@ class WeeeConfigProvider implements ConfigProviderInterface
     /**
      * @param WeeeHelper $weeeHelper
      * @param StoreManagerInterface $storeManager
+     * @param Config $weeeConfig
      */
     public function __construct(
         WeeeHelper $weeeHelper,
@@ -50,7 +51,7 @@ class WeeeConfigProvider implements ConfigProviderInterface
             'isDisplayPriceWithWeeeDetails' => $this->iDisplayPriceWithWeeeDetails(),
             'isDisplayFinalPrice' => $this->isDisplayFinalPrice(),
             'isWeeeEnabled' => $this->isWeeeEnabled(),
-            'isIncludedInSubtotal' => $this->getIncludeInSubtotal(),
+            'isIncludedInSubtotal' => $this->isIncludedInSubtotal(),
             'getIncludeWeeeFlag' => $this->getIncludeWeeeFlag()
         ];
     }
@@ -136,7 +137,7 @@ class WeeeConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    public function getIncludeInSubtotal()
+    public function isIncludedInSubtotal()
     {
         return $this->weeeConfig->isEnabled() && $this->weeeConfig->includeInSubtotal();
     }

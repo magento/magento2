@@ -7,7 +7,7 @@
 <!-- ko if: isIncludedInSubtotal -->
 <tr class="totals">
     <th data-bind="text: getTitle(), attr: {'colspan': getColspan()}" class="mark" scope="row"></th>
-    <td class="amount" data-bind="attr: {'data-th': getTitle() }">
+    <td class="amount" data-bind="attr: {'data-th': $t(getTitle()) }">
         <span data-bind="text: getValue()"></span>
     </td>
 </tr>

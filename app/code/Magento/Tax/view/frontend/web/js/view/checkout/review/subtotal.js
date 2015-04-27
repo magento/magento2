@@ -21,6 +21,8 @@ define(
             },
             getColspan: 3,
             style: "",
+            excludingTaxMessage: 'Subtotal (Excl. Tax)',
+            includingTaxMessage: 'Subtotal (Incl. Tax)',
             getTitle: function() {
                 return "Subtotal"
             },

@@ -42,11 +42,16 @@ class TaxConfigProvider implements ConfigProviderInterface
             'reviewShippingDisplayMode' => $this->getDisplayShippingMode(),
             'reviewItemPriceDisplayMode' => $this->getReviewItemPriceDisplayMode(),
             'reviewTotalsDisplayMode' => $this->getReviewTotalsDisplayMode(),
-            'includeTaxInGrandTotal' => $this->getIncludeTaxInGrandTotal(),
+            'includeTaxInGrandTotal' => $this->isTaxDisplayedInGrandTotal(),
             'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
         ];
     }
 
+    /**
+     * Shipping mode: 'both', 'including', 'excluding'
+     *
+     * @return string
+     */
     public function getDisplayShippingMode()
     {
         if ($this->taxConfig->displayCartShippingBoth()) {
@@ -125,7 +130,7 @@ class TaxConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    public function getIncludeTaxInGrandTotal()
+    public function isTaxDisplayedInGrandTotal()
     {
         return $this->taxConfig->displayCartTaxWithGrandTotal();
     }

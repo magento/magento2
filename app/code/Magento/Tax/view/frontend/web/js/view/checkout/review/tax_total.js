@@ -24,7 +24,7 @@ define(
             totals: quote.getTotals(),
             style: "",
             getTitle: function() {
-                return "Tax"
+                return "Tax";
             },
             getValue: function() {
                 var amount = 0;

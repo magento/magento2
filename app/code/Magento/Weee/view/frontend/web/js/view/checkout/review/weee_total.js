@@ -12,7 +12,6 @@ define(
     ],
     function (Component,quote, priceUtils) {
         "use strict";
-        //var includeInSubtotal = window.checkoutConfig.isIncludedInSubtotal;
         return Component.extend({
             defaults: {
                 colspan: 3,
