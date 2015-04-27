@@ -47,7 +47,7 @@ class WeeeConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         return [
-            'iDisplayPriceWithWeeeDetails' => $this->iDisplayPriceWithWeeeDetails(),
+            'isDisplayPriceWithWeeeDetails' => $this->iDisplayPriceWithWeeeDetails(),
             'isDisplayFinalPrice' => $this->isDisplayFinalPrice(),
             'isWeeeEnabled' => $this->isWeeeEnabled(),
             'isIncludedInSubtotal' => $this->getIncludeInSubtotal(),
