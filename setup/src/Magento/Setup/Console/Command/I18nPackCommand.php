@@ -80,6 +80,7 @@ class I18nPackCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
