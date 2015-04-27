@@ -35,6 +35,9 @@ define(
             isBothPricesDisplayed: function() {
                 return 'both' == this.displaySubtotalMode;
             },
+            isIncludingTaxDisplayed: function() {
+                return 'including' == this.displaySubtotalMode;
+            },
             getValueInclTax: function() {
                 var price = 0;
                 if (this.totals()) {
