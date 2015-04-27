@@ -15,14 +15,10 @@ use Magento\Framework\Api\ExtensionAttributesInterface;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
- * Processes extension attributes and produces a PHP array for the data.
+ * Processes extension attributes and produces an array for the data.
  */
 class ExtensionAttributesProcessor
 {
-    const IS_METHOD_PREFIX = 'is';
-    const HAS_METHOD_PREFIX = 'has';
-    const GETTER_PREFIX = 'get';
-
     /**
      * @var DataObjectProcessor
      */

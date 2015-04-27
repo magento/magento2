@@ -18,15 +18,6 @@ use Zend\Code\Reflection\MethodReflection;
  */
 class DataObjectProcessor
 {
-    const IS_METHOD_PREFIX = 'is';
-    const HAS_METHOD_PREFIX = 'has';
-    const GETTER_PREFIX = 'get';
-
-    /**
-     * @var \Magento\Framework\Api\AttributeTypeResolverInterface
-     */
-    protected $attributeTypeResolver;
-
     /**
      * @var MethodsMap
      */
@@ -48,20 +39,17 @@ class DataObjectProcessor
     private $fieldNamer;
 
     /**
-     * @param \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver
      * @param MethodsMap $methodsMapProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      */
     public function __construct(
-        \Magento\Framework\Api\AttributeTypeResolverInterface $typeResolver,
         MethodsMap $methodsMapProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor,
         TypeCaster $typeCaster,
         FieldNamer $fieldNamer
     ) {
-        $this->attributeTypeResolver = $typeResolver;
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->typeCaster = $typeCaster;
@@ -100,7 +88,7 @@ class DataObjectProcessor
             }
 
             if ($key === CustomAttributesDataInterface::CUSTOM_ATTRIBUTES) {
-                $value = $this->convertCustomAttributes($value, $dataObjectType);
+                $value = $this->customAttributesProcessor->buildOutputDataArray($dataObject, $dataObjectType);
             } elseif ($key === "extension_attributes") {
                 $value = $this->extensionAttributesProcessor->buildOutputDataArray($value, $returnType);
             } else {
@@ -124,60 +112,5 @@ class DataObjectProcessor
             $outputData[$key] = $value;
         }
         return $outputData;
-    }
-
-    /**
-     * Convert array of custom_attributes to use flat array structure
-     *
-     * @param \Magento\Framework\Api\AttributeInterface[] $customAttributes
-     * @param string $dataObjectType
-     * @return array
-     */
-    protected function convertCustomAttributes($customAttributes, $dataObjectType)
-    {
-        $result = [];
-        foreach ((array)$customAttributes as $customAttribute) {
-            $result[] = $this->convertCustomAttribute($customAttribute, $dataObjectType);
-        }
-        return $result;
-    }
-
-    /**
-     * Convert custom_attribute object to use flat array structure
-     *
-     * @param \Magento\Framework\Api\AttributeInterface $customAttribute
-     * @param string $dataObjectType
-     * @return array
-     */
-    protected function convertCustomAttribute($customAttribute, $dataObjectType)
-    {
-        $data = [];
-        $data[AttributeValue::ATTRIBUTE_CODE] = $customAttribute->getAttributeCode();
-        $value = $customAttribute->getValue();
-        if (is_object($value)) {
-            $type = $this->attributeTypeResolver->resolveObjectType(
-                $customAttribute->getAttributeCode(),
-                $value,
-                $dataObjectType
-            );
-            $value = $this->buildOutputDataArray($value, $type);
-        } elseif (is_array($value)) {
-            $valueResult = [];
-            foreach ($value as $singleValue) {
-                if (is_object($singleValue)) {
-                    $type = $this->attributeTypeResolver->resolveObjectType(
-                        $customAttribute->getAttributeCode(),
-                        $singleValue,
-                        $dataObjectType
-                    );
-                    $singleValue = $this->buildOutputDataArray($singleValue, $type);
-                }
-                // Cannot cast to a type because the type is unknown
-                $valueResult[] = $singleValue;
-            }
-            $value = $valueResult;
-        }
-        $data[AttributeValue::VALUE] = $value;
-        return $data;
     }
 }
