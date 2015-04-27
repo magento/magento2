@@ -135,7 +135,7 @@ class LastOrderedItems implements SectionSourceInterface
     /**
      * Last order getter
      *
-     * @return \Magento\Sales\Model\Order|false
+     * @return \Magento\Sales\Model\Order|void
      */
     protected function getLastOrder()
     {
