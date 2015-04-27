@@ -7,11 +7,12 @@
 namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Phrase;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Zend\Code\Reflection\MethodReflection;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\AttributeTypeResolverInterface;
-
 /**
  * Processes custom attributes and produces an array for the data.
  */
@@ -59,11 +60,11 @@ class CustomAttributesProcessor
     /**
      * Convert custom_attribute object to use flat array structure
      *
-     * @param \Magento\Framework\Api\AttributeInterface $customAttribute
+     * @param AttributeInterface $customAttribute
      * @param string $dataObjectType
      * @return array
      */
-    private function convertCustomAttribute($customAttribute, $dataObjectType)
+    private function convertCustomAttribute(AttributeInterface $customAttribute, $dataObjectType)
     {
         $data = [];
         $data[AttributeValue::ATTRIBUTE_CODE] = $customAttribute->getAttributeCode();
