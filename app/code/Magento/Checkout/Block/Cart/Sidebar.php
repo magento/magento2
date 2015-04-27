@@ -8,7 +8,7 @@
 
 namespace Magento\Checkout\Block\Cart;
 
-use Magento\Framework\View\Block\IdentityInterface;
+use Magento\Framework\Object\IdentityInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
