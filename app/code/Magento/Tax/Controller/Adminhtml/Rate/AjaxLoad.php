@@ -24,7 +24,7 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
             $taxRateDataObject = $this->_taxRateRepository->get($rateId);
             $resultArray= $this->_objectManager->get(
                 '\Magento\Tax\Model\Calculation\Rate\Converter'
-            )->createArrayFromServiceObject($taxRateDataObject,true);
+            )->createArrayFromServiceObject($taxRateDataObject, true);
 
             $responseContent = $this->_objectManager->get(
                 'Magento\Framework\Json\Helper\Data'

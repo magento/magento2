@@ -34,9 +34,12 @@ class Converter
      * Extract tax rate data in a format which is
      *
      * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
+     * @param Boolean $returnNumericLogic
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function createArrayFromServiceObject($taxRate,$returnNumericLogic=false)
+    public function createArrayFromServiceObject($taxRate, $returnNumericLogic = false)
     {
         $taxRateFormData = [
             'tax_calculation_rate_id' => $taxRate->getId(),
@@ -56,23 +59,23 @@ class Converter
 
         if ($returnNumericLogic) {
             //format for the ajax on multiple sites titles
-            $title_array=($this->createTitleArrayFromServiceObject($taxRate));
-            if (is_array($title_array)) {
-                foreach($title_array as $storeId=>$title) {
+            $titleArray=($this->createTitleArrayFromServiceObject($taxRate));
+            if (is_array($titleArray)) {
+                foreach ($titleArray as $storeId => $title) {
                     $taxRateFormData['title[' . $storeId . ']']=$title;
                 }
             }
-        }
-        else {
+        } else {
             //format for the form array on multiple sites titles
-            $title_array=($this->createTitleArrayFromServiceObject($taxRate));
-            if (is_array($title_array)) {
+            $titleArray=($this->createTitleArrayFromServiceObject($taxRate));
+            if (is_array($titleArray)) {
                 $titleData = [];
-                foreach($title_array as $storeId=>$title) {
+                foreach ($titleArray as $storeId => $title) {
                     $titleData[] = [$storeId => $title];
                 }
-                if (count($title_array)>0)
-                 $taxRateFormData['title'] = $titleData;
+                if (count($titleArray)>0) {
+                    $taxRateFormData['title'] = $titleData;
+                }
             }
         }
 
