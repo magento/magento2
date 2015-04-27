@@ -12,10 +12,6 @@ $params = $block->getParams();
 <html>
 <head>
 <script>
-    var require = window.top.require;
-    require(['jquery'], function($) {
-        $('#edit_form').trigger('processStop');
-    });
 <?php if (isset($params['redirect'])): ?>
     window.location="<?php echo $block->escapeUrl($params['redirect']) ?>";
 <?php elseif (isset($params['redirect_parent'])): ?>
@@ -25,6 +21,10 @@ $params = $block->getParams();
 <?php elseif (isset($params['order_success'])): ?>
     window.top.location = "<?php echo $params['order_success'] ?>";
 <?php else: ?>
+    var require = window.top.require;
+    require(['jquery'], function($) {
+        $('#edit_form').trigger('processStop');
+    });
     require(['jquery'], function($) {
         $("input[name='payment[cc_number]']").prop('disabled', true);
         $("select[name='payment[cc_type]']").prop('disabled', true);
