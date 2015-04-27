@@ -142,11 +142,9 @@ define([
             if ($.type(response.data) === 'object') {
                 this._refreshShowcart(response.data.summary_qty, response.data.summary_text);
             }
-            $(this.options.minicart.content).html($.trim(response.content));
             if (response.cleanup === true) {
                 $(this.options.showcart.parent).addClass('empty');
             }
-            this._initContent();
         },
 
         /**

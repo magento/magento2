@@ -4,16 +4,64 @@
  */
 define([
     'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
+    'Magento_Customer/js/customer-data',
+    'jquery',
+    'ko'
+], function (Component, customerData, $, ko) {
     'use strict';
+
+    var sidebarInitialized = false;
+
+    function initSidebar() {
+        var minicart = $("[data-block='minicart']");
+        minicart.trigger('contentUpdated')
+        if (sidebarInitialized) {
+            return false;
+        }
+        sidebarInitialized = true;
+        minicart.mage('sidebar', {
+            "targetElement": "div.block.block-minicart",
+            "url": {
+                "checkout": window.checkout.checkoutUrl,
+                "update": window.checkout.updateItemQtyUrl,
+                "remove": window.checkout.removeItemUrl
+            },
+            "button": {
+                "checkout": "#top-cart-btn-checkout",
+                "remove": "#mini-cart a.action.delete",
+                "close": "#btn-minicart-close"
+            },
+            "showcart": {
+                "parent": "span.counter",
+                "qty": "span.counter-number",
+                "label": "span.counter-label"
+            },
+            "minicart": {
+                "list": "#mini-cart",
+                "content": "#minicart-content-wrapper",
+                "qty": "div.items-total",
+                "subtotal": "div.subtotal span.price"
+            },
+            "item": {
+                "qty": ":input.cart-item-qty",
+                "button": ":button.update-cart-item"
+            },
+            "confirmMessage": $.mage.__(
+                'Are you sure you would like to remove this item from the shopping cart?'
+            )
+        });
+    }
 
     return Component.extend({
         shoppingCartUrl: window.checkout.shoppingCartUrl,
         initialize: function () {
             this._super();
             this.cart = customerData.get('cart');
+            this.cart.subscribe(function () {
+                sidebarInitialized = false;
+            });
         },
+        initSidebar: ko.observable(initSidebar),
         getItemRenderer: function (productType) {
             return this.itemRenderer[productType] || 'defaultRenderer';
         }
