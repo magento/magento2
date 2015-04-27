@@ -29,7 +29,7 @@ define(
                     formId = 'guest_checkout';
                 }
                 var currentCaptcha = captchaList.getCaptchaByFormId(formId);
-                if (!currentCaptcha.getIsRequired()) {
+                if (currentCaptcha === null || !currentCaptcha.getIsRequired()) {
                     orig.apply(self, args);
                     return;
                 }
