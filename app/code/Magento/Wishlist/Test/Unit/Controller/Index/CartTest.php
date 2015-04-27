@@ -108,7 +108,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resultJsontMock;
+    protected $resultJsonMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
