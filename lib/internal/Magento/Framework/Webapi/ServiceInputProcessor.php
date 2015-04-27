@@ -137,8 +137,7 @@ class ServiceInputProcessor
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
         }
-        $factory = $this->objectManager->get($className . 'Factory');
-        $object = $factory->create();
+        $object = $this->objectManager->create($className);
 
         foreach ($data as $propertyName => $value) {
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
