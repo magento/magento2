@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/form/component',
+    'uiComponent',
     'Magento_Customer/js/customer-data'
 ], function (Component, customerData) {
     'use strict';
