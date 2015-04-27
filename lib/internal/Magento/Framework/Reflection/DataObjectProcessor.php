@@ -78,7 +78,7 @@ class DataObjectProcessor
         $outputData = [];
 
         /** @var MethodReflection $method */
-        foreach ($methods as $methodName => $methodReflectionData) {
+        foreach (array_keys($methods) as $methodName) {
             if (!$this->methodsMapProcessor->isMethodValidForDataField($dataObjectType, $methodName)) {
                 continue;
             }

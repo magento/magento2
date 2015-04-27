@@ -23,7 +23,7 @@ class FieldNamer
     const GETTER_PREFIX = 'get';
     
     /**
-     * @param string
+     * @param string $methodName
      * @return string|null
      */
     public function getFieldNameForMethodName($methodName)
