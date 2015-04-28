@@ -73,18 +73,18 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Update downloadable sample of the given product
      *
-     * @param string $productSku
+     * @param string $sku
      * @param \Magento\Downloadable\Api\Data\SampleInterface $sample
      * @param bool $isGlobalScopeContent
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save(
-        $productSku,
+        $sku,
         SampleInterface $sample,
         $isGlobalScopeContent = false
     ) {
-        $product = $this->productRepository->get($productSku, true);
+        $product = $this->productRepository->get($sku, true);
 
         $sampleId = $sample->getId();
         if ($sampleId) {

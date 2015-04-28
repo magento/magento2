@@ -12,13 +12,13 @@ interface SampleRepositoryInterface
     /**
      * Update downloadable sample of the given product
      *
-     * @param string $productSku
+     * @param string $sku
      * @param \Magento\Downloadable\Api\Data\SampleInterface $sample
      * @param bool $isGlobalScopeContent
      * @return int
      */
     public function save(
-        $productSku,
+        $sku,
         SampleInterface $sample,
         $isGlobalScopeContent = false
     );
