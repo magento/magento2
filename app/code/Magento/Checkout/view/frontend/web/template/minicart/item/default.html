@@ -8,12 +8,16 @@
     <div class="product">
         <!-- ko if: product_has_url -->
         <a data-bind="attr: {href: product_url, title: product_name}" tabindex="-1" class="product-item-photo">
-            <!-- ko template: {name: 'Magento_Catalog/product_image', data: product_image} --><!-- /ko -->
+            <!-- ko foreach: $parent.getRegion('itemImage') -->
+                <!-- ko template: {name: getTemplate(), data: item.product_image} --><!-- /ko -->
+            <!-- /ko -->
         </a>
         <!-- /ko -->
         <!-- ko ifnot: product_has_url -->
         <span class="product-item-photo">
-            <!-- ko template: {name: 'Magento_Catalog/product_image', data: product_image} --><!-- /ko -->
+            <!-- ko foreach: $parent.getRegion('itemImage') -->
+                <!-- ko template: {name: getTemplate(), data: item.product_image} --><!-- /ko -->
+            <!-- /ko -->
         </span>
         <!-- /ko -->
 

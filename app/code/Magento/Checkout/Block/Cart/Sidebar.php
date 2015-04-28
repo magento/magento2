@@ -32,6 +32,11 @@ class Sidebar extends AbstractCart
     protected $_taxConfig;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Image\View
+     */
+    protected $imageView;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -43,11 +48,13 @@ class Sidebar extends AbstractCart
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Tax\Model\Config $taxConfig,
+        \Magento\Catalog\Model\Product\Image\View $imageView,
         array $data = []
     ) {
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = false;
         $this->_taxConfig = $taxConfig;
+        $this->imageView = $imageView;
         $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
     }
 
@@ -57,6 +64,16 @@ class Sidebar extends AbstractCart
     public function getJsLayout()
     {
         return \Zend_Json::encode($this->jsLayout);
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageHtmlTemplate()
+    {
+        return $this->imageView->isWhiteBorders()
+            ? 'Magento_Catalog/product/image'
+            : 'Magento_Catalog/product/image_with_borders';
     }
 
     /**

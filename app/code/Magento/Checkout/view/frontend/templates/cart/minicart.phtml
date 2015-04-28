@@ -45,10 +45,11 @@
         window.checkout = {
             displaySubtotalInclTax: <?=$block->getDisplaySubtotalInclTax()?>,
             displaySubtotalExclTax: <?=$block->getDisplaySubtotalExclTax()?>,
-            shoppingCartUrl: '<?=$this->getShoppingCartUrl()?>',
-            checkoutUrl: '<?=$this->getCheckoutUrl()?>',
-            updateItemQtyUrl: '<?=$this->getUpdateItemQtyUrl()?>',
-            removeItemUrl: '<?=$this->getRemoveItemUrl()?>'
+            shoppingCartUrl: '<?=$block->getShoppingCartUrl()?>',
+            checkoutUrl: '<?=$block->getCheckoutUrl()?>',
+            updateItemQtyUrl: '<?=$block->getUpdateItemQtyUrl()?>',
+            removeItemUrl: '<?=$block->getRemoveItemUrl()?>',
+            imageTemplate: '<?= $block->getImageHtmlTemplate()?>'
         };
     </script>
     <script type="text/x-magento-init">

@@ -44,6 +44,11 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $itemPoolInterface;
 
     /**
+     * @var int|float
+     */
+    protected $summeryCount;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
@@ -99,14 +104,14 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     /**
      * Get shopping cart items qty based on configuration (summary qty or items qty)
      *
-     * @return int
+     * @return int|float
      */
     protected function getSummaryCount()
     {
-        if (!$this->getData('summary_qty')) {
-            $this->setData('summary_qty', (int)$this->checkoutCart->getSummaryQty());
+        if (!$this->summeryCount) {
+            $this->summeryCount = $this->checkoutCart->getSummaryQty() ?: 0;
         }
-        return $this->getData('summary_qty');
+        return $this->summeryCount;
     }
 
     /**
