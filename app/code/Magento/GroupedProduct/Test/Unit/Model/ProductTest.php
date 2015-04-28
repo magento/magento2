@@ -363,7 +363,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $outputRelatedLink->setPosition(0);
 
         $groupExtension = $this->objectManagerHelper->getObject('Magento\Catalog\Api\Data\ProductLinkExtension');
-        $groupExtension->setQty(1);
+        $reflectionOfUser = new \ReflectionClass('Magento\Catalog\Api\Data\ProductLinkExtension');
+        $method = $reflectionOfUser->getMethod('setData');
+        $method->setAccessible(true);
+        $method->invokeArgs($groupExtension, array('qty', 1));
+
         $outputGroupLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
         $outputGroupLink->setProductSku("Simple Product 1");
         $outputGroupLink->setLinkType("associated");
@@ -408,7 +412,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn($productLink2);
 
         $extension = $this->objectManagerHelper->getObject('Magento\Catalog\Api\Data\ProductLinkExtension');
-        $productLink2->setExtensionAttributes($extension);
         $productLink2->setExtensionAttributes($extension);
 
         $links = $this->model->getProductLinks();

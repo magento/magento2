@@ -766,15 +766,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $inputRelatedLink->setData("type", "simple");
         $inputRelatedLink->setPosition(0);
 
-        $customData = ["attribute_code" => "qty", "value" => 1];
-        $inputGroupLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $inputGroupLink->setProductSku("Simple Product 1");
-        $inputGroupLink->setLinkType("associated");
-        $inputGroupLink->setData("sku", "Simple Product 2");
-        $inputGroupLink->setData("type", "simple");
-        $inputGroupLink->setPosition(0);
-        $inputGroupLink["custom_attributes"] = [$customData];
-
         $outputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
         $outputRelatedLink->setProductSku("Simple Product 1");
         $outputRelatedLink->setLinkType("related");
