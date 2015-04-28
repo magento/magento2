@@ -12,7 +12,7 @@ namespace Magento\Framework\Reflection;
 class TypeCaster
 {
     /**
-     * Cast the output type to the documented type. This helps for output purposes.
+     * Cast the output type to the documented type. This helps for consistent output (e.g. JSON).
      *
      * @param mixed $value
      * @param string $type

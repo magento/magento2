@@ -10,7 +10,7 @@ use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
- * Determines method metadata information.
+ * Gathers method metadata information.
  */
 class MethodsMap
 {
@@ -56,15 +56,15 @@ class MethodsMap
     }
 
     /**
-     * Get return type by interface name and method
+     * Get return type by type name and method name.
      *
-     * @param string $interfaceName
+     * @param string $typeName
      * @param string $methodName
      * @return string
      */
-    public function getMethodReturnType($interfaceName, $methodName)
+    public function getMethodReturnType($typeName, $methodName)
     {
-        return $this->getMethodsMap($interfaceName)[$methodName]['type'];
+        return $this->getMethodsMap($typeName)[$methodName]['type'];
     }
 
     /**
@@ -142,6 +142,8 @@ class MethodsMap
     }
 
     /**
+     * Determines if the given method's on the given type is suitable for an output data array.
+     *
      * @param string $type
      * @param string $methodName
      * @return bool
@@ -164,11 +166,13 @@ class MethodsMap
     }
 
     /**
+     * If the method has only non-null return types
+     *
      * @param string $type
      * @param string $methodName
      * @return bool
      */
-    public function isMethodRequired($type, $methodName)
+    public function isMethodReturnValueRequired($type, $methodName)
     {
         $methods = $this->getMethodsMap($type);
         return $methods[$methodName]['isRequired'];

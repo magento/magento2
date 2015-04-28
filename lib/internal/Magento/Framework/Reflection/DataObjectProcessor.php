@@ -84,8 +84,11 @@ class DataObjectProcessor
             }
 
             $value = $dataObject->{$methodName}();
-            $isMethodRequired = $this->methodsMapProcessor->isMethodRequired($dataObjectType, $methodName);
-            if ($value === null && !$isMethodRequired) {
+            $isMethodReturnValueRequired = $this->methodsMapProcessor->isMethodReturnValueRequired(
+                $dataObjectType,
+                $methodName
+            );
+            if ($value === null && !$isMethodReturnValueRequired) {
                 continue;
             }
 

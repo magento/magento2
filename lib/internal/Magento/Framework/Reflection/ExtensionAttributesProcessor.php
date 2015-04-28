@@ -112,10 +112,6 @@ class ExtensionAttributesProcessor
                 continue;
             }
 
-            // should write field?
-            // isWriterValid
-            // what value should be written
-
             $returnType = $this->methodsMapProcessor->getMethodReturnType($dataObjectType, $methodName);
 
             if (is_object($value) && !($value instanceof Phrase)) {

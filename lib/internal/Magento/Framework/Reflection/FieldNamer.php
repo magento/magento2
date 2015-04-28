@@ -14,7 +14,7 @@ use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 
 /**
- * Determines the name to use for fields given metadata.
+ * Determines the name to use for fields in a data output array given method metadata.
  */
 class FieldNamer
 {
@@ -23,6 +23,8 @@ class FieldNamer
     const GETTER_PREFIX = 'get';
     
     /**
+     * Converts a method's name into a data field name.
+     *
      * @param string $methodName
      * @return string|null
      */
