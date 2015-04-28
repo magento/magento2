@@ -25,6 +25,9 @@ define(
                 "cc_exp_month": null,
                 "additional_data": null
             };
+            if (!methodView.isValid()) {
+                return false;
+            }
             _.extend(defaultMethodData, methodView.getData());
             var paymentMethodData = {
                 "cartId": quote.getQuoteId(),

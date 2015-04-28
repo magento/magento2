@@ -11,11 +11,12 @@
             <input type="text"
                    id="po_number"
                    name="payment[po_number]"
+                   data-validate="{required:true}"
                    data-bind='
                         attr: {title: $t("Purchase Order Number")},
                         value: purchaseOrderNumber
                         enable: isActive($parent)'
-                   class="required-entry input-text"/>
+                   class="input-text"/>
         </div>
     </div>
 </fieldset>
