@@ -143,10 +143,10 @@ define([
             options = settings;
 
             if (!$.cookieStorage.isSet('mage-cache-life')) {
-                var date = new Date(Date.now() + parseInt(options.cookieLifeTime) * 1000);
-                $.cookieStorage.setExpires(date).set('mage-cache-life', 'true');
                 storage.removeAll();
             }
+            var date = new Date(Date.now() + parseInt(options.cookieLifeTime) * 1000);
+            $.cookieStorage.setExpires(date).set('mage-cache-life', 'true');
 
             customerData.init();
         }
