@@ -957,7 +957,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             ]
         );
 
-        $this->_eventManager->dispatch('sales_order_state_change_before', array('order' => $this, 'transport' => $transport));
+        $this->_eventManager->dispatch(
+            'sales_order_state_change_before',
+            ['order' => $this, 'transport' => $transport]
+        );
         $status = $transport->getStatus();
         $this->setData('state', $transport->getState());
 

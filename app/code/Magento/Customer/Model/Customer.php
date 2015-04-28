@@ -1037,7 +1037,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $transport = new \Magento\Framework\Object(
             ['errors' => $errors]
         );
-        $this->_eventManager->dispatch('customer_validate' , ['customer' => $this, 'transport' => $transport]);
+        $this->_eventManager->dispatch('customer_validate', ['customer' => $this, 'transport' => $transport]);
         $errors = $transport->getErrors();
 
         if (empty($errors)) {
