@@ -182,6 +182,13 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $appStateMock = $this->getMock(
+            'Magento\Framework\App\State',
+            [],
+            [],
+            '',
+            false
+        );
         $this->storeManagerMock = $this->getMockForAbstractClass(
             'Magento\Store\Model\StoreManagerInterface',
             [],
@@ -201,11 +208,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'storage' => $this->storageMock,
                 'cookieManager' => $this->cookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
+                'appState' => $appStateMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'orderFactory' => $this->orderFactoryMock,
                 'storeManager' => $this->storeManagerMock,
-                'groupManagement' => $this->groupManagementMock
+                'groupManagement' => $this->groupManagementMock,
             ],
             '',
             true
