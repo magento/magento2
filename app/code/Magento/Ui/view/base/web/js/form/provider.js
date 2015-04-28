@@ -4,12 +4,12 @@
  */
 define([
     'underscore',
-    'Magento_Ui/js/lib/provider',
+    'uiComponent',
     './client'
-], function (_, Provider, Client) {
+], function (_, Component, Client) {
     'use strict';
 
-    return Provider.extend({
+    return Component.extend({
         initialize: function () {
             this._super()
                 .initClient();

@@ -18,6 +18,9 @@ define([
             listens: {
                 '<%= provider %>:params.sorting.field': 'onSortChange',
                 sorting: 'setSortClass push'
+            },
+            modules: {
+                source: '<%= provider %>'
             }
         },
 
@@ -47,12 +50,12 @@ define([
                 return;
             }
 
-            this.source.set('params.sorting', {
+            this.source('set', 'params.sorting', {
                 field: this.index,
                 direction: sorting
             });
 
-            this.source.reload();
+            this.source('reload');
         },
 
         toggleDirection: function () {

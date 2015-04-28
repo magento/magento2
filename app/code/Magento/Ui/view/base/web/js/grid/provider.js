@@ -6,11 +6,11 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/provider'
-], function ($, _, utils, Provider) {
+    'uiComponent'
+], function ($, _, utils, Component) {
     'use strict';
 
-    return Provider.extend({
+    return Component.extend({
         initialize: function () {
             utils.limit(this, 'reload', 50);
             _.bindAll(this, 'onReload');

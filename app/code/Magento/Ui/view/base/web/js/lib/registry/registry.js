@@ -11,16 +11,16 @@ define([
     'use strict';
 
     function async(name, registry, method) { 
-        var args;
+        var args = _.toArray(arguments).slice(3);
 
         if (_.isString(method)) {
-            args = _.toArray(arguments).slice(3);
-
             registry.get(name, function (component) {
                 component[method].apply(component, args); 
             });
-        } else {
-            registry.get(name, method);   
+        } else if (_.isFunction(method)) {
+            registry.get(name, method); 
+        } else if (!args.length) {
+            return registry.get(name);
         }
     }  
     

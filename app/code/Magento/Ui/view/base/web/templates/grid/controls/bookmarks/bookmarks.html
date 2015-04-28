@@ -14,14 +14,16 @@
         data-bind="click: toggleOpened"
         data-toggle="dropdown"
         aria-haspopup="true">
-        <span class="admin__action-dropdown-text">Default View</span>
+        <span class="admin__action-dropdown-text">
+            <!-- ko text: activeView() ? activeView().label() : 'Default View'--><!-- /ko -->
+        </span>
     </button>
     <ul class="admin__action-dropdown-menu">
         <!-- ko foreach: elems -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
-        <li class="action-dropdown-menu-item-last">
-            <a href="">Save Current View</a>
-        </li> 
+        <li class="action-dropdown-menu-action action-dropdown-menu-item-last">
+            <a href="" data-bind="click: createNewView, text: $t('Create New View')"></a>
+        </li>
     </ul>
 </div>

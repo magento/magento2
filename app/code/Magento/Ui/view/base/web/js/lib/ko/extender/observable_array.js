@@ -51,6 +51,10 @@ define([
 
         sortBy: wrapper('sortBy'),
 
+        findWhere: function (properties) {
+            return _.findWhere(this(), properties);
+        },
+
         contains: function (value) {
             return _.contains(this(), value);
         },

@@ -9,14 +9,16 @@ define([
     'use strict';
 
     function addHandler(obj, events, ns, callback, name) {
+        if (ko.isObservable(obj[name])) {
+            obj[name].subscribe(callback);
+
+            return;
+        }
+
         (events[name] = events[name] || []).push({
             callback: callback,
             ns: ns
         });
-
-        if (ko.isObservable(obj[name])) {
-            obj[name].subscribe(callback);
-        }
     }
 
     function getEvents(obj, name) {

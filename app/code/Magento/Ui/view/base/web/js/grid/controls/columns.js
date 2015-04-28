@@ -13,25 +13,16 @@ define([
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/controls/columns',
-            viewportSize: 18,
-            viewportMaxSize: 30
+            minVisible: 1,
+            maxVisible: 30,
+            viewportSize: 18
         },
 
         /**
          * Action Reset
          */
         reset: function () {
-            this.elems.each('resetVisible');
-        },
-
-        /**
-         * Action Apply
-         */
-        apply: function () {
-            this.close()
-                .elems.each('export', 'visible');
-
-            this.source.store('config.columns');
+            this.elems.each('applyState', 'visible', 'default');
 
             return this;
         },
@@ -41,7 +32,7 @@ define([
          */
         cancel: function () {
             this.close()
-                .elems.each('import', 'visible');
+                .elems.each('applyState', 'visible', 'last');
 
             return this;
         },
@@ -62,11 +53,11 @@ define([
          * @returns {Boolean}
          */
         isDisabled: function (elem) {
-            var count = this.countVisible(),
-                isLast = elem.visible() && count === 1,
-                isTooMuch = count > this.viewportMaxSize;
+            var visible = this.countVisible();
 
-            return isLast || isTooMuch;
+            return elem.visible() ?
+                visible === this.minVisible :
+                visible === this.maxVisible;
         },
 
         /**

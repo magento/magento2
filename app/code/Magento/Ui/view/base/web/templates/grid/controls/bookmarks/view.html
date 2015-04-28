@@ -5,36 +5,43 @@
  */
 -->
 <li
-    data-bind="css: {_edit: false}">
+    data-bind="css: {_edit: editing}, outerClick: closeEdit">
+    <!-- ko if: editable -->
     <div class="action-dropdown-menu-item-edit">
         <input
             class="admin__control-text"
-            data-bind="value: label"
+            data-bind="value: label, hasFocus: editing(), keyboard: {13: closeEdit, 27: closeEdit}"
             type="text">
         <button
             class="action-submit"
+            data-bind="click: function(){ $parent.close().saveView($data) }"
             type="button">
-            <span>Submit</span>
+            <span data-bind="text: $t('Submit')">Submit</span>
         </button>
         <div class="action-dropdown-menu-item-actions">
             <button
+                data-bind="click: function(){ $parent.close().removeView($data) }"
                 class="action-delete"
                 type="button">
-                <span>Delete</span>
+                <span data-bind="text: $t('Delete')">Delete</span>
             </button>
         </div>
     </div>
+    <!-- /ko -->
     <div class="action-dropdown-menu-item">
         <a
             class="action-dropdown-menu-link"
             href=""
-            data-bind="text: label, click: activate"></a>
+            data-bind="text: label, click: function(){ $data.active(true); $parent.close(); }"></a>
+        <!-- ko if: editable -->
         <div class="action-dropdown-menu-item-actions">
             <button
                 class="action-edit"
+                data-bind="click: openEdit, css: {_changed: changed}"
                 type="button">
-                <span>Edit</span>
+                <span data-bind="text: $t('Edit')"></span>
             </button>
         </div>
+        <!-- /ko -->
     </div>
 </li> 

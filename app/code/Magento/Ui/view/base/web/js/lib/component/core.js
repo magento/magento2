@@ -10,29 +10,6 @@ define([
 ], function (ko, utils, _, registry) {
     'use strict';
 
-    /**
-     * Wrapper for ko.observable and ko.observableArray.
-     * Assignes one or another ko property to obj[key]
-     * @param  {Object} obj   - object to store property to
-     * @param  {String} key   - key
-     * @param  {*} value      - initial value of observable
-     */
-    function observe(obj, key, value) {
-        var method = Array.isArray(value) ? 'observableArray' : 'observable';
-
-        if (_.isFunction(obj[key])) {
-            if (ko.isObservable(value)) {
-                value = value();
-            }
-
-            obj[key](value);
-
-            return;
-        }
-
-        obj[key] = ko[method](value);
-    }
-
     return {
         defaults: {
             parentName: '<%= $data.getPart(name, -2) %>',
@@ -49,6 +26,7 @@ define([
             this.initConfig(options)
                 .initProperties()
                 .initObservable()
+                .initModules()
                 .initUnique()
                 .initLinks()
                 .setListners(this.listens);
@@ -97,6 +75,16 @@ define([
                 exports: this.exports,
                 imports: this.imports
             }, this.setLinks, this);
+
+            return this;
+        },
+
+        initModules: function () {
+            var modules = this.modules || {};
+
+            _.each(modules, function (component, property) {
+                this[property] = registry.async(component);
+            }, this);
 
             return this;
         },
@@ -183,40 +171,6 @@ define([
             }
 
             return this;
-        },
-
-        /**
-         * If 2 params passed, path is considered as key.
-         * Else, path is considered as object.
-         * Assignes props to this based on incoming params
-         * @param  {Object|String} path
-         */
-        observe: function (path) {
-            var type = typeof path;
-
-            if (type === 'string') {
-                path = path.split(' ');
-            }
-
-            if (Array.isArray(path)) {
-                path.forEach(function (key) {
-                    observe(this, key, this[key]);
-                }, this);
-            } else if (type === 'object') {
-                _.each(path, function (value, key) {
-                    observe(this, key, value);
-                }, this);
-            }
-
-            return this;
-        },
-
-        get: function (property) {
-            return utils.nested(this, property);
-        },
-
-        set: function (property, value) {
-            return utils.nested(this, property, value);
         },
 
         /**
