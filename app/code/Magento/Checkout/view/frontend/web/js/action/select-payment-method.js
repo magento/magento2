@@ -42,7 +42,7 @@ define(
                 ).done(
                     function (response) {
                         if (methodView.afterSave()) {
-                            quote.setPaymentMethod(paymentMethodCode);
+                            quote.setPaymentMethod(methodView.getCode());
                             quote.setTotals(response);
                             navigator.setCurrent('paymentMethod').goNext();
                         }
@@ -61,7 +61,7 @@ define(
                 ).done(
                     function (response) {
                         if (methodView.afterSave()) {
-                            quote.setPaymentMethod(paymentMethodCode);
+                            quote.setPaymentMethod(methodView.getCode());
                             quote.setTotals(response);
                             navigator.setCurrent('paymentMethod').goNext();
                         }
