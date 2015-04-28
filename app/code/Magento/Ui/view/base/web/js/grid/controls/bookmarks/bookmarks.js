@@ -27,11 +27,11 @@ define([
                 activeIndex: 'onActiveChange',
                 current: 'onDataChange'
             },
-            newChild: {
+            newViewTmpl: {
                 label: 'New View',
                 active: true,
-                changed: true,
-                editing: true
+                editing: true,
+                restored: false
             },
             views: {
                 default: {
@@ -68,6 +68,11 @@ define([
             return this._super();
         },
 
+        /**
+         * Creates instances of a previously saved views.
+         *
+         * @returns {Bookmarks} Chainable.
+         */
         initViews: function () {
             var views = this.views,
                 active = _.findWhere(views, {index: this.activeIndex});
@@ -79,8 +84,16 @@ define([
             _.each(views, this.createView, this);
 
             this.activeIndex = '';
+
+            return this;
         },
 
+        /**
+         * Creates view with a provided data.
+         *
+         * @param {Object} item - Data object that will be passed to a view instance.
+         * @returns {Bookmarks} Chainable.
+         */
         createView: function (item) {
             var data = _.extend({}, this, item),
                 child = utils.template(itemTmpl, data);
@@ -92,17 +105,32 @@ define([
             }
 
             layout([child]);
+
+            return this;
         },
 
+        /**
+         * Creates new view instance.
+         *
+         * @returns {Bookmarks} Chainable.
+         */
         createNewView: function () {
-            var newChild = this.newChild;
+            var view = this.newViewTmpl;
 
-            newChild.index = Date.now();
-            newChild.data = this.current;
+            view.index = Date.now();
+            view.data = this.current;
 
-            this.createView(newChild);
+            this.createView(view);
+
+            return this;
         },
 
+        /**
+         * Deletes specfied view.
+         *
+         * @param {View} view - View to be deleted.
+         * @returns {Bookmarks} Chainable.
+         */
         removeView: function (view) {
             if (view.active()) {
                 this.defaultView.active(true);
@@ -111,24 +139,47 @@ define([
             this.removeStored('views.' + view.index);
 
             view.destroy();
-        },
-
-        saveView: function (view) {
-            var data = view.save();
-
-            this.store('views.' + view.index, {
-                index: view.index,
-                label: view.label(),
-                data: data
-            });
 
             return this;
         },
 
+        /**
+         * Saves data of a specified view;
+         * only if view has unsaved changes.
+         *
+         * @param {View} view - View to be saved.
+         * @returns {Bookmarks} Chainable.
+         */
+        saveView: function (view) {
+            var data;
+
+            if (view.changed()) {
+                data = view.save();
+
+                this.store('views.' + view.index, {
+                    index: view.index,
+                    label: view.label(),
+                    data: data
+                });
+            }
+
+            return this;
+        },
+
+        /**
+         * Retrives last saved data of current view.
+         *
+         * @returns {Object}
+         */
         getSaved: function () {
             return this.activeView().getSaved();
         },
 
+        /**
+         * Retrives default data.
+         *
+         * @returns {Object}
+         */
         getDefault: function () {
             return this.defaultView.getSaved();
         },
@@ -137,14 +188,19 @@ define([
             var active = this.activeView();
 
             if (active && active.index === this.defaultIndex) {
-                active.setData(this.current);
+                active.data.items = utils.copy(this.current);
+                active.changed(true);
                 this.saveView(active);
             }
         },
 
+        /**
+         * Listener of the activeIndex property.
+         *
+         * @param {String} index - Index of the active view.
+         */
         onActiveChange: function (index) {
-            var views = this.elems,
-                active = views.findWhere({index: index}),
+            var active = this.elems.findWhere({index: index}),
                 data = active.getData();
 
             this.store('activeIndex')
@@ -155,10 +211,13 @@ define([
             }
         },
 
+        /**
+         * Listens changes of current data object.
+         */
         onDataChange: function () {
             var active = this.activeView();
 
-            if (active && active.editable) {
+            if (active) {
                 active.setData(this.current);
             }
         }

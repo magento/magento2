@@ -5,12 +5,12 @@
  */
 -->
 <li
-    data-bind="css: {_edit: editing}, outerClick: closeEdit">
+    data-bind="css: {_edit: editing}, outerClick: endEdit">
     <!-- ko if: editable -->
     <div class="action-dropdown-menu-item-edit">
         <input
             class="admin__control-text"
-            data-bind="value: label, hasFocus: editing(), keyboard: {13: closeEdit, 27: closeEdit}"
+            data-bind="value: label, hasFocus: editing(), keyboard: {13: function(){ $parent.close().saveView($data) }}"
             type="text">
         <button
             class="action-submit"
@@ -37,7 +37,7 @@
         <div class="action-dropdown-menu-item-actions">
             <button
                 class="action-edit"
-                data-bind="click: openEdit, css: {_changed: changed}"
+                data-bind="click: startEdit, css: {_changed: changed}"
                 type="button">
                 <span data-bind="text: $t('Edit')"></span>
             </button>

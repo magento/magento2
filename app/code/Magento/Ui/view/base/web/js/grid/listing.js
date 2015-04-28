@@ -27,6 +27,13 @@ define([
             return this;
         },
 
+        initObservable: function () {
+            this._super()
+                .observe('rows');
+
+            return this;
+        },
+
         hideLoader: function () {
             loader.get(this.name).hide();
         },

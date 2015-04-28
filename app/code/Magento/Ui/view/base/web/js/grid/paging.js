@@ -50,7 +50,14 @@ define([
         },
 
         initObservable: function () {
-            this._super();
+            this._super()
+                .observe([
+                    'totalSelected',
+                    'totalRecords',
+                    'pageSize',
+                    'current',
+                    'pages'
+                ]);
 
             this._current = ko.pureComputed({
                 read: function () {

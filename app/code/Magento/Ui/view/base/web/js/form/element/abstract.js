@@ -69,7 +69,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible')
+            this.observe('error disabled focused preview visible value')
                 .observe({
                     'required': !!rules['required-entry']
                 });

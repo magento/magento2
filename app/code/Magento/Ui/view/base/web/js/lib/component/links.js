@@ -39,7 +39,7 @@ define([
         var component = owner.component,
             property = owner.property;
 
-        return utils.nested(component, property);
+        return component.get(property);
     }
 
     function form(ownerComponent, targetComponent, ownerProp, targetProp, direction) {
@@ -84,23 +84,6 @@ define([
         maps[direction][property].push(data);
     }
 
-    function getData(store, direction, property) {
-        var data,
-            maps = store.maps;
-
-        if (maps[direction] && maps[direction][property]) {
-            data = maps[direction][property][0];
-        } else {
-            direction = direction === 'imports' ? 'exports' : 'imports';
-
-            if (maps[direction] && maps[direction][property]) {
-                data = maps[direction][property][0];
-            }
-        }
-
-        return data;
-    }
-
     return {
         setListners: function (listeners) {
             var data;
@@ -124,8 +107,6 @@ define([
         setLinks: function (links, direction) {
             _.each(links, function (data, property) {
                 data = extractData(this, data);
-
-                this.observe(property);
 
                 setData(this, direction, property, data);
 
@@ -157,12 +138,6 @@ define([
         transfer: function (direction, property, data) {
             var formated,
                 value;
-
-            data = data || getData(this, direction, property);
-
-            if (!data) {
-                return this;
-            }
 
             registry.get(data.target, function (component) {
                 formated = form(component, this, data.property, property, direction);

@@ -60,7 +60,9 @@ define([
                     'excludeMode',
                     'totalSelected',
                     'allSelected',
-                    'indetermine'
+                    'indetermine',
+                    'totalRecords',
+                    'rows'
                 ]);
 
             return this;
