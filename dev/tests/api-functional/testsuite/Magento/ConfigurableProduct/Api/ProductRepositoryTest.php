@@ -75,7 +75,6 @@ class ProductRepositoryTest extends WebapiAbstract
                 "attribute_id" =>  $this->configurableAttribute->getId(),
                 "label" => $label,
                 "position" => 0,
-                'type' => 'select',
                 "values" => [
                     [
                         "pricing_value" => 10,

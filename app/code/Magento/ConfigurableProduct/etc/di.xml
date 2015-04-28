@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\ConfigurableProduct\Api\OptionTypesListInterface" type="Magento\ConfigurableProduct\Model\OptionTypesList" />
     <preference for="Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface" type="Magento\ConfigurableProduct\Model\ConfigurableProductManagement" />
     <preference for="Magento\ConfigurableProduct\Api\LinkManagementInterface" type="Magento\ConfigurableProduct\Model\LinkManagement" />
     <preference for="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" type="Magento\ConfigurableProduct\Model\OptionRepository" />
