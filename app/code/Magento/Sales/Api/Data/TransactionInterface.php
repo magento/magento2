@@ -78,7 +78,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the transaction ID for the transaction.
      *
-     * @param $id
+     * @param int $id
      * @return $this
      */
     public function setTransactionId($id);
