@@ -4,13 +4,16 @@
  * See COPYING.txt for license details.
  */
 -->
-<fieldset data-bind='attr: {class: "fieldset payment items ccard " + getCode(), id: "payment_form_" + getCode()}'>
+<fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
+    <!-- ko if: (isShowLegend())-->
+    <legend class="legend"><span><!-- ko text: $t('Credit Card Information')--><!-- /ko --></span></legend><br />
+    <!-- /ko -->
     <div class="field type required">
-        <label data-bind='attr: {for: getCode() + "_cc_type"}' class="label">
+        <label data-bind="attr: {for: getCode() + '_cc_type'}" class="label">
             <span><!-- ko text: $t('Credit Card Type')--><!-- /ko --></span>
         </label>
         <div class="control">
-            <select name="payment[cc_type]" class="select"
+            <select name="payment[cc_type]" class="select" data-container="cc-type"
                 data-bind="attr: {id: getCode() + '_cc_type', 'data-validate': JSON.stringify({required:true, 'validate-cc-type-select':'#' + getCode() + '_cc_number'})},
                 mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
                 enable: isActive($parent), options: getCcAvailableTypes(), optionsValue: 'value', optionsText: 'type', optionsCaption: $t('--Please Select--'), value: creditCardType">
@@ -22,7 +25,7 @@
             <span><!-- ko text: $t('Credit Card Number')--><!-- /ko --></span>
         </label>
         <div class="control">
-            <input type="number" name="payment[cc_number]" class="input-text" value=""
+            <input type="number" name="payment[cc_number]" class="input-text" value="" data-container="cc-number"
                 data-bind="attr: {id: getCode() + '_cc_number', title: $t('Credit Card Number'), 'data-validate': JSON.stringify({'required-number':true, 'validate-cc-number':'#' + getCode() + '_cc_type', 'validate-cc-type':'#' + getCode() + '_cc_type'})},
                 enable: isActive($parent), value: creditCardNumber"/>
         </div>
@@ -35,7 +38,7 @@
             <div class="fields group group-2">
                 <div class="field no-label month">
                     <div class="control">
-                        <select  name="payment[cc_exp_month]" class="select month"
+                        <select  name="payment[cc_exp_month]" class="select month" data-container="cc-month"
                             data-bind="attr: {id: getCode() + '_expiration', 'data-validate': JSON.stringify({required:true, 'validate-cc-exp':'#' + getCode() + '_expiration_yr'})},
                             enable: isActive($parent), options: getCcMonths(), optionsValue: 'value', optionsText: 'month', optionsCaption: $t('Month'), value: creditCardExpMonth">
                         </select>
@@ -43,7 +46,7 @@
                 </div>
                 <div class="field no-label year">
                     <div class="control">
-                        <select name="payment[cc_exp_year]" class="select year"
+                        <select name="payment[cc_exp_year]" class="select year" data-container="cc-year" data-container="cc-cvv"
                             data-bind="attr: {id: getCode() + '_expiration_yr', 'data-validate': JSON.stringify({required:true})},
                             enable: isActive($parent), options: getCcYears(), optionsValue: 'value', optionsText: 'year', optionsCaption: $t('Year'), value: creditCardExpYear">
                         </select>
