@@ -122,7 +122,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => true,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'title' => 'Title',
                 'sort_order' => 1,
@@ -154,7 +154,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'title' => 'Store View Title',
                 'sort_order' => 1,
@@ -181,7 +181,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'title' => 'Sample with URL resource',
                 'sort_order' => 1,
@@ -208,7 +208,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'title' => 'Sample with URL resource',
                 'sort_order' => 1,
@@ -228,7 +228,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'title' => 'Sample Title',
                 'sort_order' => 1,
@@ -252,7 +252,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'title' => 'Title',
                 'sort_order' => 15,
@@ -276,7 +276,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'title' => 'Sample Title',
                 'sort_order' => 1,
@@ -298,7 +298,7 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'title' => 'Sample Title',
                 'sort_order' => $sortOrder,
@@ -329,7 +329,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/simple/downloadable-links/samples';
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'simple',
+            'sku' => 'simple',
             'sample' => [
                 'title' => 'Sample Title',
                 'sort_order' => 50,
@@ -349,7 +349,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples';
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'wrong-sku',
+            'sku' => 'wrong-sku',
             'sample' => [
                 'title' => 'Title',
                 'sort_order' => 15,
@@ -370,7 +370,7 @@ class SampleRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'id' => $sampleId,
                 'title' => 'Updated Title',
@@ -398,7 +398,7 @@ class SampleRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => true,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'id' => $sampleId,
                 'title' => 'Updated Title',
@@ -426,7 +426,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->updateServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links/samples/1';
         $requestData = [
             'isGlobalScopeContent' => true,
-            'productSku' => 'wrong-sku',
+            'sku' => 'wrong-sku',
             'sample' => [
                 'id' => 1,
                 'title' => 'Updated Title',
@@ -449,7 +449,7 @@ class SampleRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => true,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'id' => $sampleId,
                 'title' => 'Title',
@@ -474,7 +474,7 @@ class SampleRepositoryTest extends WebapiAbstract
             = "/V1/products/downloadable-product/downloadable-links/samples/{$sampleId}";
         $requestData = [
             'isGlobalScopeContent' => false,
-            'productSku' => 'downloadable-product',
+            'sku' => 'downloadable-product',
             'sample' => [
                 'id' => $sampleId,
                 'title' => 'Updated Sample Title',
