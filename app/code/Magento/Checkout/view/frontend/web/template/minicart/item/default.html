@@ -38,10 +38,10 @@
                         <dt class="label"><!-- ko text: option.label --><!-- /ko --></dt>
                         <dd class="values">
                             <!-- ko if: Array.isArray(option) -->
-                                <!-- ko text: option.value.join('<br>') --><!-- /ko -->
+                                <span data-bind="html: option.value.join('<br>')"></span>
                             <!-- /ko -->
                             <!-- ko ifnot: Array.isArray(option) -->
-                                <!-- ko text: option.value --><!-- /ko -->
+                                <span data-bind="html: option.value"></span>
                             <!-- /ko -->
                         </dd>
                         <!-- /ko -->

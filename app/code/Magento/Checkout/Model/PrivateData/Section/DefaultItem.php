@@ -64,7 +64,7 @@ class DefaultItem extends AbstractItem
     {
         $this->productImageView->init($this->item->getProduct(), 'mini_cart_product_thumbnail', 'Magento_Catalog');
         return [
-            'options' => $this->configurationHelper->getCustomOptions($this->item),
+            'options' => $this->getOptionList(),
             'qty' => $this->item->getQty() * 1,
             'item_id' => $this->item->getId(),
             'configure_url' => $this->getConfigureUrl(),
@@ -82,6 +82,16 @@ class DefaultItem extends AbstractItem
             'canApplyMsrp' => $this->msrpHelper->isShowBeforeOrderConfirm($this->item->getProduct())
                 && $this->msrpHelper->isMinimalPriceLessMsrp($this->item->getProduct())
         ];
+    }
+
+    /**
+     * Get list of all options for product
+     *
+     * @return array
+     */
+    protected function getOptionList()
+    {
+        return $this->configurationHelper->getCustomOptions($this->item);
     }
 
     /**
