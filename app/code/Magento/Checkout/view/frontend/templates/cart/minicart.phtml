@@ -13,7 +13,7 @@
     <a class="action showcart" href="<?php echo $block->getShoppingCartUrl(); ?>"
        data-bind="scope: 'minicart_content'">
         <span class="text"><?php echo __('My Cart'); ?></span>
-        <span class="counter qty"
+        <span class="counter qty empty"
               data-bind="css: { empty: cart().summary_count == 0 }">
             <span class="counter-number"><!-- ko text: cart().summary_count --><!-- /ko --></span>
             <span class="counter-label">

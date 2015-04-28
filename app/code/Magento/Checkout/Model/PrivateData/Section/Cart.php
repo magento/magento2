@@ -99,14 +99,14 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     /**
      * Get shopping cart items qty based on configuration (summary qty or items qty)
      *
-     * @return int|float
+     * @return int
      */
     protected function getSummaryCount()
     {
-        if ($this->getData('summary_qty')) {
-            return $this->getData('summary_qty');
+        if (!$this->getData('summary_qty')) {
+            $this->setData('summary_qty', (int)$this->checkoutCart->getSummaryQty());
         }
-        return $this->checkoutCart->getSummaryQty();
+        return $this->getData('summary_qty');
     }
 
     /**
