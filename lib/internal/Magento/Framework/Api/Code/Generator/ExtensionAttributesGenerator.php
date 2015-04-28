@@ -88,7 +88,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
             $methods[] = [
                 'name' => $getterName,
                 'body' => "return \$this->_get('{$attributeName}');",
-                'docblock' => ['tags' => [['name' => 'return', 'description' => $attributeType]]],
+                'docblock' => ['tags' => [['name' => 'return', 'description' => $attributeType . '|null']]],
             ];
             $methods[] = [
                 'name' => $setterName,
