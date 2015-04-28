@@ -1935,7 +1935,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($schemaName !== null) {
             $table->setSchema($schemaName);
         }
-        if ($this->_config['engine'] !== null) {
+        if (isset($this->_config['engine'])) {
             $table->setOption('type', $this->_config['engine']);
         }
 
