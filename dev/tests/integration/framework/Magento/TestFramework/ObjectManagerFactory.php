@@ -95,7 +95,6 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
                     'Magento\Framework\Stdlib\CookieManagerInterface' => 'Magento\TestFramework\CookieManager',
                     'Magento\Framework\ObjectManager\DynamicConfigInterface' =>
                         '\Magento\TestFramework\ObjectManager\Configurator',
-                    'Magento\Framework\Stdlib\Cookie' => 'Magento\TestFramework\Cookie',
                     'Magento\Framework\App\RequestInterface' => 'Magento\TestFramework\Request',
                     'Magento\Framework\App\Request\Http' => 'Magento\TestFramework\Request',
                     'Magento\Framework\App\ResponseInterface' => 'Magento\TestFramework\Response',

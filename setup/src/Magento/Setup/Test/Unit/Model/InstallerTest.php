@@ -9,10 +9,10 @@ namespace Magento\Setup\Test\Unit\Model;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use \Magento\Setup\Model\Installer;
-use Magento\Framework\Config\ConfigOptionsList;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\App\State\CleanupFiles;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -106,6 +106,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $configModel;
 
     /**
+     * @var CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cleanupFiles;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
@@ -153,6 +158,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
+        $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -189,7 +195,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->sampleData,
             $objectManagerProvider,
             $this->contextMock,
-            $this->configModel
+            $this->configModel,
+            $this->cleanupFiles
         );
     }
 
@@ -300,18 +307,27 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateModulesSequence()
     {
-        $varDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $varDir->expects($this->exactly(2))->method('getAbsolutePath')->willReturn('/var');
-        $this->filesystem
-            ->expects($this->exactly(2))
-            ->method('getDirectoryWrite')
-            ->willReturn($varDir);
-
         $allModules = [
             'Foo_One' => [],
             'Bar_Two' => [],
             'New_Module' => [],
         ];
+        $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses')->will(
+            $this->returnValue(
+                [
+                    "The directory '/generation' doesn't exist - skipping cleanup",
+                ]
+            )
+        );
+
+        $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $cache->expects($this->once())->method('clean');
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\Cache', [], $cache],
+            ]));
+
         $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
 
         $expectedModules = [
@@ -330,9 +346,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->configReader->expects($this->once())->method('load')
             ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
         $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
-        $this->logger->expects($this->at(0))->method('log')->with('File system cleanup:');
-        $this->logger->expects($this->at(1))->method('log')
-            ->with('The directory \'/var\' doesn\'t exist - skipping cleanup');
+        $this->logger->expects($this->at(0))->method('log')->with('Cache cleared successfully');
+        $this->logger->expects($this->at(1))->method('log')->with('File system cleanup:');
+        $this->logger->expects($this->at(2))->method('log')
+            ->with('The directory \'/generation\' doesn\'t exist - skipping cleanup');
         $this->logger->expects($this->at(3))->method('log')->with('Updating modules:');
         $newObject->updateModulesSequence();
     }
@@ -340,18 +357,12 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function testUninstall()
     {
         $this->config->expects($this->once())->method('isAvailable')->willReturn(false);
-        $varDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $varDir->expects($this->once())->method('getAbsolutePath')->willReturn('/var');
-        $staticDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $staticDir->expects($this->once())->method('getAbsolutePath')->willReturn('/static');
         $configDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $configDir->expects($this->once())->method('getAbsolutePath')->willReturn('/config/config.php');
         $this->filesystem
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValueMap([
-                [DirectoryList::VAR_DIR, DriverPool::FILE, $varDir],
-                [DirectoryList::STATIC_VIEW, DriverPool::FILE, $staticDir],
                 [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
             ]));
         $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
@@ -359,20 +370,36 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('log')
             ->with('No database connection defined - skipping database cleanup');
-        $this->logger->expects($this->at(2))->method('log')->with('File system cleanup:');
-        $this->logger
-            ->expects($this->at(3))
-            ->method('log')
-            ->with("The directory '/var' doesn't exist - skipping cleanup");
+        $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $cache->expects($this->once())->method('clean');
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\Cache', [], $cache],
+            ]));
+        $this->logger->expects($this->at(2))->method('log')->with('Cache cleared successfully');
+        $this->logger->expects($this->at(3))->method('log')->with('File system cleanup:');
         $this->logger
             ->expects($this->at(4))
             ->method('log')
-            ->with("The directory '/static' doesn't exist - skipping cleanup");
+            ->with("The directory '/var' doesn't exist - skipping cleanup");
         $this->logger
             ->expects($this->at(5))
             ->method('log')
+            ->with("The directory '/static' doesn't exist - skipping cleanup");
+        $this->logger
+            ->expects($this->at(6))
+            ->method('log')
             ->with("The file '/config/config.php' doesn't exist - skipping cleanup");
         $this->logger->expects($this->once())->method('logSuccess')->with('Magento uninstallation complete.');
+        $this->cleanupFiles->expects($this->once())->method('clearAllFiles')->will(
+            $this->returnValue(
+                [
+                    "The directory '/var' doesn't exist - skipping cleanup",
+                    "The directory '/static' doesn't exist - skipping cleanup"
+                ]
+            )
+        );
 
         $this->object->uninstall();
     }

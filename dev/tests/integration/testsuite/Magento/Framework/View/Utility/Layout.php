@@ -104,6 +104,8 @@ class Layout
             'cache' => $objectManager->get('Magento\Framework\App\Cache\Type\Layout'),
             'readerContextFactory' => $objectManager->get('Magento\Framework\View\Layout\Reader\ContextFactory'),
             'generatorContextFactory' => $objectManager->get('Magento\Framework\View\Layout\Generator\ContextFactory'),
+            'appState' => $objectManager->get('Magento\Framework\App\State'),
+            'logger' => $objectManager->get('Psr\Log\LoggerInterface'),
         ];
     }
 }

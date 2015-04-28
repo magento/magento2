@@ -18,6 +18,7 @@ use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\Profiler;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Statement\Parameter;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String;
 
@@ -3325,13 +3326,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param \Magento\Framework\DB\Select $select
      * @param int $stepCount
      * @return \Magento\Framework\DB\Select[]
-     * @throws \Magento\Framework\DB\DBException
+     * @throws LocalizedException
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
     {
         $fromSelect = $select->getPart(\Magento\Framework\DB\Select::FROM);
         if (empty($fromSelect)) {
-            throw new \Magento\Framework\DB\DBException(
+            throw new LocalizedException(
                 new \Magento\Framework\Phrase('Select object must have correct "FROM" part')
             );
         }
@@ -3383,7 +3384,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param Select $select
      * @param string|array $table
      * @return string
-     * @throws \Magento\Framework\DB\DBException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -3441,7 +3442,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         if (!$columns) {
-            throw new \Magento\Framework\DB\DBException(
+            throw new LocalizedException(
                 new \Magento\Framework\Phrase('The columns for UPDATE statement are not defined')
             );
         }

@@ -37,7 +37,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const INPUT_KEY_DB_HOST = 'db_host';
     const INPUT_KEY_DB_NAME = 'db_name';
     const INPUT_KEY_DB_USER = 'db_user';
-    const INPUT_KEY_DB_PASS = 'db_pass';
+    const INPUT_KEY_DB_PASSWORD = 'db_password';
     const INPUT_KEY_DB_PREFIX = 'db_prefix';
     const INPUT_KEY_DB_MODEL = 'db_model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
@@ -164,7 +164,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'innodb'
             ),
             new TextConfigOption(
-                self::INPUT_KEY_DB_PASS,
+                self::INPUT_KEY_DB_PASSWORD,
                 TextConfigOption::FRONTEND_WIZARD_PASSWORD,
                 self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_PASS,
                 'Database server password',
