@@ -111,18 +111,13 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 false
             );
 
-            $this->addressRenderer->expects($this->any())
+            $this->addressRenderer->expects($this->exactly(2))
                 ->method('format')
                 ->with($addressMock, 'html')
                 ->willReturn($address);
 
-            $this->orderMock->expects($this->any())
-                ->method('getBillingAddress')
-                ->willReturn($addressMock);
 
-            $this->orderMock->expects($this->any())
-                ->method('getShippingAddress')
-                ->willReturn($addressMock);
+            $this->stepAddressFormat($addressMock);
 
             $this->creditmemoMock->expects($this->once())
                 ->method('getCustomerNoteNotify')
@@ -204,6 +199,77 @@ class CreditmemoSenderTest extends AbstractSenderTest
             [0, 1, 1, true],
             [0, 1, 0, true],
             [1, null, null, null]
+        ];
+    }
+
+    /**
+     * @param bool $isVirtualOrder
+     * @param int $formatCallCount
+     * @param string|null $expectedShippingAddress
+     * @dataProvider sendVirtualOrderDataProvider
+     */
+    public function testSendVirtualOrder($isVirtualOrder, $formatCallCount, $expectedShippingAddress)
+    {
+        $billingAddress = 'address_test';
+
+        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+
+        $this->creditmemoMock->expects($this->once())
+            ->method('setSendEmail')
+            ->with(true);
+
+        $this->globalConfig->expects($this->once())
+            ->method('getValue')
+            ->with('sales_email/general/async_sending')
+            ->willReturn(false);
+
+        $addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false );
+
+        $this->addressRenderer->expects($this->exactly($formatCallCount))
+            ->method('format')
+            ->with($addressMock, 'html')
+            ->willReturn($billingAddress);
+
+        $this->stepAddressFormat($addressMock, $isVirtualOrder);
+
+        $this->creditmemoMock->expects($this->once())
+            ->method('getCustomerNoteNotify')
+            ->willReturn(true);
+
+        $this->templateContainerMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(
+                [
+                    'order' => $this->orderMock,
+                    'creditmemo' => $this->creditmemoMock,
+                    'comment' => '',
+                    'billing' => $addressMock,
+                    'payment_html' => 'payment',
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => $expectedShippingAddress,
+                    'formattedBillingAddress' => $billingAddress
+                ]
+            );
+
+        $this->identityContainerMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn(false);
+
+        $this->creditmemoResourceMock->expects($this->once())
+            ->method('saveAttribute')
+            ->with($this->creditmemoMock, 'send_email');
+
+        $this->assertFalse($this->sender->send($this->creditmemoMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function sendVirtualOrderDataProvider()
+    {
+        return [
+            [true, 1, null],
+            [false, 2, 'address_test']
         ];
     }
 }
