@@ -36,11 +36,4 @@ abstract class AbstractItem implements ItemInterface
      * @return array
      */
     abstract protected function doGetItemData();
-
-    /**
-     * Get product for thumbnail. Template method
-     *
-     * @return \Magento\Catalog\Model\Product
-     */
-    abstract protected function doGetProductForThumbnail();
 }

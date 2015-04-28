@@ -48,7 +48,7 @@ class ConfigurableItem extends DefaultItem
     /**
      * {@inheritdoc}
      */
-    protected function doGetProductForThumbnail()
+    protected function getProductForThumbnail()
     {
         /**
          * Show parent product thumbnail if it must be always shown according to the related setting in system config

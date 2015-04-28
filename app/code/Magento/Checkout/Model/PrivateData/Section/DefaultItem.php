@@ -63,7 +63,7 @@ class DefaultItem extends AbstractItem
     protected function doGetItemData()
     {
         $this->productImageView->init(
-            $this->doGetProductForThumbnail(),
+            $this->getProductForThumbnail(),
             'mini_cart_product_thumbnail',
             'Magento_Catalog'
         );
@@ -101,7 +101,7 @@ class DefaultItem extends AbstractItem
     /**
      * {@inheritdoc}
      */
-    protected function doGetProductForThumbnail()
+    protected function getProductForThumbnail()
     {
         return $this->getProduct();
     }

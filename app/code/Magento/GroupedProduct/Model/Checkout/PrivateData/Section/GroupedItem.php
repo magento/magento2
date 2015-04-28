@@ -44,7 +44,7 @@ class GroupedItem extends DefaultItem
     /**
      * {@inheritdoc}
      */
-    protected function doGetProductForThumbnail()
+    protected function getProductForThumbnail()
     {
         /**
          * Show grouped product thumbnail if it must be always shown according to the related setting in system config
