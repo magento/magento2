@@ -10,6 +10,9 @@
     <type name="Magento\Framework\View\TemplateEngineFactory">
         <plugin name="debug_hints" type="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
     </type>
+    <type name="Magento\Framework\View\Layout">
+        <plugin name="exception_handler" type="Magento\Developer\Model\View\Layout\Plugin" sortOrder="10"/>
+    </type>
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="pageConfigRendererFactory" xsi:type="object">Magento\Developer\Model\View\Page\Config\RendererFactory</argument>

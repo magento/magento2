@@ -81,12 +81,11 @@ define([
                 var itemId = elem.data(this.options.dataAttribute),
                     url = this.options.addToCartUrl.replace('%item%', itemId),
                     inputName = $.validator.format(this.options.nameFormat, itemId),
-                    inputValue = elem.parent().find('[name="' + inputName + '"]').val(),
+                    inputValue = $('[name="' + inputName + '"]').val(),
                     separator = (url.indexOf('?') >= 0) ? '&' : '?';
                 url += separator + inputName + '=' + encodeURIComponent(inputValue);
                 this._validateAndRedirect(url);
             }
-
         },
 
         /**

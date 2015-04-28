@@ -9,14 +9,14 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Invoice;
 use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
 
 /**
- * Class Grid
- * Sales order grid
- *
+ * Sales order grid.
  */
 class Grid extends GridInterface
 {
     /**
-     * {@inheritdoc}
+     * Filters array mapping.
+     *
+     * @var array
      */
     protected $filters = [
         'id' => [
@@ -25,50 +25,42 @@ class Grid extends GridInterface
     ];
 
     /**
-     * Invoice amount
+     * Invoice amount.
      *
      * @var string
      */
     protected $invoiceAmount = 'td.col-qty.col-base_grand_total';
 
     /**
-     * An element locator which allows to select entities in grid
+     * An element locator which allows to select entities in grid.
      *
      * @var string
      */
     protected $selectItem = 'tbody tr .col-invoice-number';
 
     /**
-     * Get first invoice amount
+     * Get first invoice amount.
      *
-     * @return array|string
+     * @return string
      */
     public function getInvoiceAmount()
     {
-        $invoiceAmount = $this->getInvoiceAmountElement()->getText();
+        $invoiceAmount = $this->_rootElement->find($this->invoiceAmount)->getText();
         return $this->escapeCurrency($invoiceAmount);
     }
 
     /**
-     * Click the first invoice amount
+     * Click the first invoice amount.
      *
      * @return void
      */
     public function clickInvoiceAmount()
     {
-        $this->getInvoiceAmountElement()->click();
+        $this->_rootElement->find($this->invoiceAmount)->click();
     }
 
     /**
-     * @return mixed|\Magento\Mtf\Client\Element
-     */
-    private function getInvoiceAmountElement()
-    {
-        return $this->_rootElement->find($this->invoiceAmount);
-    }
-
-    /**
-     * Method that escapes currency symbols
+     * Method that escapes currency symbols.
      *
      * @param string $price
      * @return string|null
