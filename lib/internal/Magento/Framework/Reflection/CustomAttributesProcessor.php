@@ -13,6 +13,7 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 use Zend\Code\Reflection\MethodReflection;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\AttributeTypeResolverInterface;
+
 /**
  * Processes custom attributes and produces an array for the data.
  */
