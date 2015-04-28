@@ -782,16 +782,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $outputRelatedLink->setLinkedProductType("simple");
         $outputRelatedLink->setPosition(0);
 
-        $groupExtension = $this->objectManagerHelper->getObject('Magento\Catalog\Api\Data\ProductLinkExtension');
-        $groupExtension->setQty(1);
-        $outputGroupLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $outputGroupLink->setProductSku("Simple Product 1");
-        $outputGroupLink->setLinkType("associated");
-        $outputGroupLink->setLinkedProductSku("Simple Product 2");
-        $outputGroupLink->setLinkedProductType("simple");
-        $outputGroupLink->setPosition(0);
-        $outputGroupLink->setExtensionAttributes($groupExtension);
-
         $this->entityCollectionProviderMock->expects($this->at(0))
             ->method('getCollection')
             ->with($this->model, 'related')
@@ -807,9 +797,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->entityCollectionProviderMock->expects($this->at(3))
             ->method('getCollection')
             ->with($this->model, 'associated')
-            ->willReturn([$inputGroupLink]);
+            ->willReturn([]);
 
-        $expectedOutput = [$outputRelatedLink, $outputGroupLink];
+        $expectedOutput = [$outputRelatedLink];
         $typeInstanceMock = $this->getMock(
             'Magento\ConfigurableProduct\Model\Product\Type\Simple', ["getSku"], [], '', false);
         $typeInstanceMock
@@ -819,16 +809,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->setTypeInstance($typeInstanceMock);
 
         $productLink1 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
-        $productLink2 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
         $this->productLinkFactory->expects($this->at(0))
             ->method('create')
             ->willReturn($productLink1);
-        $this->productLinkFactory->expects($this->at(1))
-            ->method('create')
-            ->willReturn($productLink2);
-
-        $extension = $this->objectManagerHelper->getObject('Magento\Catalog\Api\Data\ProductLinkExtension');
-        $productLink2->setExtensionAttributes($extension);
 
         $links = $this->model->getProductLinks();
         $this->assertEquals($links, $expectedOutput);
