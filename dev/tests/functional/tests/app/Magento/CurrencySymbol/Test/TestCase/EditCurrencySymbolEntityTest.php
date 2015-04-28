@@ -52,7 +52,7 @@ class EditCurrencySymbolEntityTest extends Injectable
      * Create simple product and inject pages.
      *
      * @param SystemCurrencySymbolIndex $currencySymbolIndex
-     * @param SystemCurrencyIndex $currencyIndex,
+     * @param SystemCurrencyIndex $currencyIndex ,
      * @param FixtureFactory $fixtureFactory
      * @return array
      */
@@ -97,6 +97,7 @@ class EditCurrencySymbolEntityTest extends Injectable
      *
      * @param string $configData
      * @return void
+     * @throws \Exception
      */
     protected function importCurrencyRate($configData)
     {
@@ -108,7 +109,10 @@ class EditCurrencySymbolEntityTest extends Injectable
         // Import Exchange Rates for currencies
         $this->currencyIndex->open();
         $this->currencyIndex->getGridPageActions()->clickImportButton();
-        $this->currencyIndex->getMainPageActions()->saveCurrentRate();
+        if ($this->currencyIndex->getMessagesBlock()->isVisibleMessage('warning')) {
+            throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessages());
+        }
+        $this->currencyIndex->getFormPageActions()->save();
     }
 
     /**

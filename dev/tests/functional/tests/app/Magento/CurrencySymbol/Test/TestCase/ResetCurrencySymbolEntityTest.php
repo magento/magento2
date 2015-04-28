@@ -141,6 +141,7 @@ class ResetCurrencySymbolEntityTest extends Injectable
      *
      * @param string $configData
      * @return void
+     * @throws \Exception
      */
     protected function importCurrencyRate($configData)
     {
@@ -152,7 +153,10 @@ class ResetCurrencySymbolEntityTest extends Injectable
         // Import Exchange Rates for currencies
         $this->currencyIndex->open();
         $this->currencyIndex->getGridPageActions()->clickImportButton();
-        $this->currencyIndex->getMainPageActions()->saveCurrentRate();
+        if ($this->currencyIndex->getMessagesBlock()->isVisibleMessage('warning')) {
+            throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessages());
+        }
+        $this->currencyIndex->getFormPageActions()->save();
     }
 
     /**
