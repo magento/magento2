@@ -363,8 +363,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $outputRelatedLink->setPosition(0);
 
         $groupExtension = $this->objectManagerHelper->getObject('Magento\Catalog\Api\Data\ProductLinkExtension');
-        $reflectionOfUser = new \ReflectionClass('Magento\Catalog\Api\Data\ProductLinkExtension');
-        $method = $reflectionOfUser->getMethod('setData');
+        $reflectionOfExtension = new \ReflectionClass('Magento\Catalog\Api\Data\ProductLinkExtension');
+        $method = $reflectionOfExtension->getMethod('setData');
         $method->setAccessible(true);
         $method->invokeArgs($groupExtension, array('qty', 1));
 
