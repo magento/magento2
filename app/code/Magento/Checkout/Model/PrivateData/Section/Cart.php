@@ -48,7 +48,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
-     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param ItemPoolInterface $itemPoolInterface
      * @param array $data
      */
     public function __construct(

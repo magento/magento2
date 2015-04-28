@@ -65,11 +65,11 @@ class DefaultItem extends AbstractItem
         $this->productImageView->init($this->item->getProduct(), 'mini_cart_product_thumbnail', 'Magento_Catalog');
         return [
             'options' => $this->configurationHelper->getCustomOptions($this->item),
-            'qty' => $this->getQty(),
+            'qty' => $this->item->getQty() * 1,
             'item_id' => $this->item->getId(),
             'configure_url' => $this->getConfigureUrl(),
             'is_visible_in_site_visibility' => $this->item->getProduct()->isVisibleInSiteVisibility(),
-            'product_name' => $this->getProductName(),
+            'product_name' => $this->item->getProduct()->getName(),
             'product_url' => $this->getProductUrl(),
             'product_has_url' => $this->hasProductUrl(),
             'product_price' => $this->checkoutHelper->formatPrice($this->item->getCalculationPrice()),
@@ -86,11 +86,10 @@ class DefaultItem extends AbstractItem
 
     /**
      * Get item configure url
-     * @param \Magento\Quote\Model\Quote\Item  $this->item
      *
      * @return string
      */
-    public function getConfigureUrl()
+    protected function getConfigureUrl()
     {
         return $this->urlBuilder->getUrl(
             'checkout/cart/configure',
@@ -99,23 +98,11 @@ class DefaultItem extends AbstractItem
     }
 
     /**
-     * Get quote item qty
-     * @param \Magento\Quote\Model\Quote\Item  $this->item
-     *
-     * @return float|int
-     */
-    public function getQty()
-    {
-        return $this->item->getQty() * 1;
-    }
-
-    /**
      * Check Product has URL
-     * @param \Magento\Quote\Model\Quote\Item  $this->item
      *
      * @return bool
      */
-    public function hasProductUrl()
+    protected function hasProductUrl()
     {
         if ($this->item->getRedirectUrl()) {
             return true;
@@ -143,11 +130,10 @@ class DefaultItem extends AbstractItem
 
     /**
      * Retrieve URL to item Product
-     * @param \Magento\Quote\Model\Quote\Item  $this->item
      *
      * @return string
      */
-    public function getProductUrl()
+    protected function getProductUrl()
     {
         if ($this->item->getRedirectUrl()) {
             return $this->item->getRedirectUrl();
@@ -160,16 +146,5 @@ class DefaultItem extends AbstractItem
         }
 
         return $product->getUrlModel()->getUrl($product);
-    }
-
-    /**
-     * Get item product name
-     * @param \Magento\Quote\Model\Quote\Item  $this->item
-     *
-     * @return string
-     */
-    public function getProductName()
-    {
-        return $this->item->getProduct()->getName();
     }
 }
