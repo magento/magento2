@@ -64,4 +64,23 @@
     <action name="sales/order/reorder">
         <section name="cart"/>
     </action>
+
+    <action name="customer_order/cart/advancedAdd">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/advancedAdd">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/addFailedItems">
+        <section name="cart"/>
+    </action>
+    <action name="customer_order/cart/addFailedItems">
+        <section name="cart"/>
+    </action>
+    <action name="checkout/cart/uploadSkuCsv">
+        <section name="cart"/>
+    </action>
+    <action name="customer_order/cart/uploadSkuCsv">
+        <section name="cart"/>
+    </action>
 </config>
