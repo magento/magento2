@@ -8,6 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Api/etc/data_object.xsd">
     <custom_attributes for="Magento\Quote\Api\Data\AddressAdditionalDataInterface">
         <attribute code="captcha_string" type="string" />
-        <attribute code="captcha_formId" type="string" />
+        <attribute code="captcha_form_id" type="string" />
     </custom_attributes>
 </config>

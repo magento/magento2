@@ -33,6 +33,8 @@ class Validation
      * @param \Magento\Quote\Model\AddressAdditionalDataProcessor $subject
      * @param \Magento\Quote\Api\Data\AddressAdditionalDataInterface $additionalData
      * @throws \Exception
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeProcess(
         \Magento\Quote\Model\AddressAdditionalDataProcessor $subject,
@@ -41,7 +43,7 @@ class Validation
         $formId = $additionalData->getExtensionAttributes()->getCaptchaFormId();
         $captchaText = $additionalData->getExtensionAttributes()->getCaptchaString();
 
-        if ($formId !== null &&!in_array($formId, $this->formIds)) {
+        if ($formId !== null && !in_array($formId, $this->formIds)) {
             throw new \Exception(__('Provided form does not exist'));
         }
         $captchaModel = $this->captchaHelper->getCaptcha($formId);

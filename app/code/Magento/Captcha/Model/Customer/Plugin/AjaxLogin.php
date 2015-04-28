@@ -6,7 +6,8 @@
 namespace Magento\Captcha\Model\Customer\Plugin;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
-use Magento\Captcha\Model\Checkout\ConfigProvider;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Controller\Result\RawFactory;
 
 class AjaxLogin
 {
@@ -27,13 +28,13 @@ class AjaxLogin
 
     /**
      * @param CaptchaHelper $helper
-     * @param \Magento\Framework\Session\SessionManagerInterface $sessionManager
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param SessionManagerInterface $sessionManager
+     * @param RawFactory $resultRawFactory
      */
     public function __construct(
-        \Magento\Captcha\Helper\Data $helper,
-        \Magento\Framework\Session\SessionManagerInterface $sessionManager,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        CaptchaHelper $helper,
+        SessionManagerInterface $sessionManager,
+        RawFactory $resultRawFactory
     ){
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
