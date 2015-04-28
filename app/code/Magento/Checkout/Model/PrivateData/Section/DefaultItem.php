@@ -62,7 +62,11 @@ class DefaultItem extends AbstractItem
      */
     protected function doGetItemData()
     {
-        $this->productImageView->init($this->item->getProduct(), 'mini_cart_product_thumbnail', 'Magento_Catalog');
+        $this->productImageView->init(
+            $this->doGetProductForThumbnail(),
+            'mini_cart_product_thumbnail',
+            'Magento_Catalog'
+        );
         return [
             'options' => $this->getOptionList(),
             'qty' => $this->item->getQty() * 1,
@@ -80,7 +84,7 @@ class DefaultItem extends AbstractItem
                 'height' => $this->productImageView->getHeight(),
             ],
             'canApplyMsrp' => $this->msrpHelper->isShowBeforeOrderConfirm($this->item->getProduct())
-                && $this->msrpHelper->isMinimalPriceLessMsrp($this->item->getProduct())
+                && $this->msrpHelper->isMinimalPriceLessMsrp($this->item->getProduct()),
         ];
     }
 
@@ -92,6 +96,24 @@ class DefaultItem extends AbstractItem
     protected function getOptionList()
     {
         return $this->configurationHelper->getCustomOptions($this->item);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doGetProductForThumbnail()
+    {
+        return $this->getProduct();
+    }
+
+    /**
+     * Get item product
+     *
+     * @return \Magento\Catalog\Model\Product
+     */
+    protected function getProduct()
+    {
+        return $this->item->getProduct();
     }
 
     /**
