@@ -14,25 +14,66 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class AjaxLoadTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $_request;
+
+    /**
+     * @var \Magento\Framework\App\Response\Http
+     */
+    private $_response;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $_manager;
+
+    /**
+     * @var \Magento\Tax\Model\Calculation\RateRepository
+     */
+    private $_taxRateRepository;
+    /*
+     * test setup
+     */
+    public function setUp()
+    {
+        $this->_request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->setMethods(['getParam'])
+            ->getMock();
+
+        $this->_response = $this->getMockBuilder('\Magento\Framework\App\Response\Http')
+            ->disableOriginalConstructor()
+            ->setMethods(['representJson'])
+            ->getMock();
+
+        $this->_manager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['get', 'create', 'configure'])
+            ->getMock();
+
+        $this->_taxRateRepository = $this->getMockBuilder('\Magento\Tax\Model\Calculation\RateRepository')
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+    }
+    /**
      * Executes the controller action and asserts non exception logic
      */
     public function testExecute()
     {
         $taxRateId=1;
         $objectManager = new ObjectManager($this);
-
         $rateTitles = [$objectManager->getObject(
             '\Magento\Tax\Model\Calculation\Rate\Title',
             ['data' => ['store_id' => 1, 'value' => 'texas']]
         )
         ];
-
         $rateMock = $objectManager->getObject(
             'Magento\Tax\Model\Calculation\Rate',
             [
                 'data' =>
                     [
-                        'id' => $taxRateId,
                         'tax_country_id' => 'US',
                         'tax_region_id' => 2,
                         'tax_postcode' => null,
@@ -42,26 +83,16 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
                     ],
             ]
         );
-        $request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
-            ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
-            ->getMock();
-        $request->expects($this->once())
+
+        $this->_request->expects($this->any())
             ->method('getParam')
             ->will($this->returnValue($taxRateId));
 
-        $response = $this->getMockBuilder('\Magento\Framework\App\Response\Http')
-            ->disableOriginalConstructor()
-            ->setMethods(['representJson'])
-            ->getMock();
-        $response->expects($this->once())
+        $this->_response->expects($this->once())
             ->method('representJson');
 
-        $taxRateRepository = $this->getMockBuilder('\Magento\Tax\Model\Calculation\RateRepository')
-            ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMock();
-        $taxRateRepository->expects($this->once())
+
+        $this->_taxRateRepository->expects($this->any())
             ->method('get')
             ->with($taxRateId)
             ->will($this->returnValue($rateMock));
@@ -71,34 +102,43 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['get'])
             ->getMock();
         $taxRateConverter->expects($this->any())
-            ->method('createSimpleArrayFromServiceObject')
-            ->with($rateMock);
+            ->method('createArrayFromServiceObject')
+            ->with($rateMock, true);
 
         $encode = $this->getMockBuilder('Magento\Framework\Json\Helper\Data')
             ->disableOriginalConstructor()
             ->setMethods(['jsonEncode'])
             ->getMock();
-        $encode->expects($this->once())
-            ->method('jsonEncode');
 
-        $manager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'create', 'configure'])
-            ->getMock();
-        $manager->expects($this->at(0))
+        $encode->expects($this->any())
+            ->method('jsonEncode')
+            ->with(['success' => true, 'error_message' => '', 'result'=>
+                [
+                'tax_calculation_rate_id' => null,
+                'tax_country_id' => 'US',
+                'tax_region_id' => 2,
+                'tax_postcode' => null,
+                'code' => 'Tax Rate Code',
+                'rate' => 7.5,
+                'zip_is_range'=> 0,
+                'title[1]' => 'texas',
+                ],
+            ]);
+
+        $this->_manager->expects($this->at(0))
             ->method('get')
             ->will($this->returnValue($taxRateConverter));
-        $manager->expects($this->at(1))
+        $this->_manager->expects($this->at(1))
             ->method('get')
             ->will($this->returnValue($encode));
 
         $notification = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
             [
-                'objectManager' => $manager,
-                'taxRateRepository' => $taxRateRepository,
-                'request' => $request,
-                'response' => $response
+                'objectManager' => $this->_manager,
+                'taxRateRepository' => $this->_taxRateRepository,
+                'request' => $this->_request,
+                'response' => $this->_response
             ]
         );
 
@@ -117,29 +157,15 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
 
-        $request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
-            ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
-            ->getMock();
-
-        $request->expects($this->once())
+        $this->_request->expects($this->any())
             ->method('getParam')
             ->will($this->returnValue($taxRateId));
 
-        $response = $this->getMockBuilder('\Magento\Framework\App\Response\Http')
-            ->disableOriginalConstructor()
-            ->setMethods(['representJson'])
-            ->getMock();
-
-        $response->expects($this->once())
+        $this->_response->expects($this->once())
             ->method('representJson');
 
-        $taxRateRepository = $this->getMockBuilder('\Magento\Tax\Model\Calculation\RateRepository')
-            ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMock();
 
-        $taxRateRepository->expects($this->once())
+        $this->_taxRateRepository->expects($this->any())
             ->method('get')
             ->with($taxRateId)
             ->willThrowException($noSuchEntityEx);
@@ -150,27 +176,24 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $encode->expects($this->once())
-            ->method('jsonEncode');
+            ->method('jsonEncode')
+            ->with(['success' => false, 'error_message' => $exceptionMessage]);
 
-        $manager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'create', 'configure'])
-            ->getMock();
-
-        $manager->expects($this->once())
+        $this->_manager->expects($this->any())
             ->method('get')
             ->will($this->returnValue($encode));
 
         $notification = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
             [
-                'objectManager' => $manager,
-                'taxRateRepository' => $taxRateRepository,
-                'request' => $request,
-                'response' => $response
+                'objectManager' => $this->_manager,
+                'taxRateRepository' => $this->_taxRateRepository,
+                'request' => $this->_request,
+                'response' => $this->_response
             ]
         );
 
+        //exception thrown with catch
         $notification->execute();
     }
 }

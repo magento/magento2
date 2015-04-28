@@ -7,7 +7,6 @@
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Tax\Controller\RegistryConstants;
 
 class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
 {
@@ -32,7 +31,7 @@ class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
                 ['success' => true, 'error_message' => '', 'result'=>$resultArray]
             );
 
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (NoSuchEntityException $e) {
             $responseContent = $this->_objectManager->get(
                 'Magento\Framework\Json\Helper\Data'
             )->jsonEncode(
