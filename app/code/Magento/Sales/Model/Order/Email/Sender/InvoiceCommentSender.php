@@ -34,6 +34,7 @@ class InvoiceCommentSender extends NotifySender
      * @param Template $templateContainer
      * @param InvoiceCommentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
      * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
      */
@@ -41,10 +42,11 @@ class InvoiceCommentSender extends NotifySender
         Template $templateContainer,
         InvoiceCommentIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger,
         Renderer $addressRenderer,
         ManagerInterface $eventManager
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
         $this->addressRenderer = $addressRenderer;
         $this->eventManager = $eventManager;
     }

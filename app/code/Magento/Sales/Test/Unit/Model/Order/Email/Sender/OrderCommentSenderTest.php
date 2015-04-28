@@ -18,11 +18,13 @@ class OrderCommentSenderTest extends AbstractSenderTest
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity');
+        $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->sender = new OrderCommentSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
-            $this->addressRendererMock,
+            $this->loggerMock,
+            $this->addressRenderer,
             $this->eventManagerMock
         );
     }

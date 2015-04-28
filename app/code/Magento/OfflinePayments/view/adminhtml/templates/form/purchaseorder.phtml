@@ -7,11 +7,13 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<fieldset class="fieldset payment method" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none">
-    <div class="field field-number required">
-        <label for="po_number" class="label"><span><?php echo __('Purchase Order Number') ?></span></label>
-        <div class="control">
-            <input type="text" id="po_number" name="payment[po_number]" title="<?php echo __("Purchase Order Number") ?>" class="required-entry input-text" value="<?php echo $block->getInfoData('po_number') ?>"/>
+<fieldset class="admin__fieldset payment-method" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display: none">
+    <div class="admin__field _required">
+        <label for="po_number" class="admin__field-label"><span><?php echo __('Purchase Order Number') ?></span></label>
+        <div class="admin__field-control">
+            <input type="text" id="po_number" name="payment[po_number]"
+                   title="<?php echo __("Purchase Order Number") ?>" class="required-entry admin__control-text"
+                   value="<?php echo $block->getInfoData('po_number') ?>"/>
         </div>
     </div>
 </fieldset>

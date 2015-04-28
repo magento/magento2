@@ -42,6 +42,24 @@ class Head implements Layout\ReaderInterface
     }
 
     /**
+     * Add asset content type to node by name
+     *
+     * @param Layout\Element $node
+     * @return void
+     */
+    protected function addContentTypeByNodeName(Layout\Element $node)
+    {
+        switch ($node->getName()) {
+            case self::HEAD_CSS:
+                $node->addAttribute('content_type', 'css');
+                break;
+            case self::HEAD_SCRIPT:
+                $node->addAttribute('content_type', 'js');
+                break;
+        }
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @param Layout\Reader\Context $readerContext
@@ -59,6 +77,7 @@ class Head implements Layout\ReaderInterface
                 case self::HEAD_CSS:
                 case self::HEAD_SCRIPT:
                 case self::HEAD_LINK:
+                    $this->addContentTypeByNodeName($node);
                     $pageConfigStructure->addAssets($node->getAttribute('src'), $this->getAttributes($node));
                     break;
 
