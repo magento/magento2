@@ -36,8 +36,19 @@ define([
                 this.isOrderLevelGiftMessageVisible(!this.isOrderLevelGiftMessageVisible());
             },
             quoteId: quote.entity_id,
-            getData: function() {
-                return this.message;
+            submit: function() {
+                if (this.message.message() !== null) {
+                    return [{
+                        sender: this.message.from(),
+                        recipient: this.message.to(),
+                        message: this.message.message(),
+                        extension_attributes: {
+                            entity_id: this.quoteId,
+                            entity_type: 'quote'
+                        }
+                    }];
+                }
+                return [];
             }
         });
     }

@@ -18,6 +18,7 @@ define(
         var storeCode = window.checkoutConfig.storeCode;
         var totals = ko.observable({});
         var checkoutMethod = ko.observable(null);
+        var shippingCustomOptions = ko.observable(null);
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -78,6 +79,12 @@ define(
             },
             setCheckoutMethod: function(method) {
                 checkoutMethod(method);
+            },
+            setShippingCustomOptions: function(customOptions) {
+                shippingCustomOptions(customOptions);
+            },
+            getShippingCustomOptions: function() {
+                return shippingCustomOptions;
             }
         };
     }

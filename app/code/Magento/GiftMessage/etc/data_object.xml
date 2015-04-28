@@ -12,4 +12,11 @@
     <custom_attributes for="Magento\Sales\Api\Data\OrderItemInterface">
         <attribute code="gift_message" type="Magento\GiftMessage\Api\Data\MessageInterface" />
     </custom_attributes>
+    <custom_attributes for="Magento\GiftMessage\Api\Data\MessageInterface">
+        <attribute code="entity_id" type="string" />
+        <attribute code="entity_type" type="string" />
+    </custom_attributes>
+    <custom_attributes for="Magento\Quote\Api\Data\TotalsAdditionalDataInterface">
+        <attribute code="gift_messages" type="Magento\GiftMessage\Api\Data\MessageInterface[]" />
+    </custom_attributes>
 </config>

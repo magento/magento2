@@ -9,7 +9,7 @@ define(['uiComponent', 'ko', '../model/gift-options'],
         return Component.extend({
             defaults: {
                 template: 'Magento_GiftMessage/gift-options',
-                displayArea: 'giftOptions'
+                displayArea: 'shippingAdditional'
             },
             isGiftOptionsSelected: ko.observable(false),
             isOrderLevelGiftOptionsSelected: ko.observable(false),
@@ -28,6 +28,17 @@ define(['uiComponent', 'ko', '../model/gift-options'],
             },
             getItemLevelGiftOptions: function() {
                 return giftOptions.getItemLevelGiftOptions();
+            },
+            submit: function() {
+                var orderLevelOptions = this.getOrderLevelGiftOptions()[0].submit(),
+                    itemLevelOptions = this.getItemLevelGiftOptions()[0].submit(),
+                    giftOptions = orderLevelOptions.concat(itemLevelOptions);
+                if (giftOptions.length === 0) {
+                    return [];
+                }
+                return {
+                    gift_messages: giftOptions
+                };
             }
         });
     }
