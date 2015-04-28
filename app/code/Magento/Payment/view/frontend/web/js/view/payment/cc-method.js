@@ -86,6 +86,9 @@ define(
                         'year': value
                     }
                 });
+            },
+            isShowLegend: function() {
+                return return window.checkoutConfig.payment.cc.isShowLegend;
             }
         });
     }
