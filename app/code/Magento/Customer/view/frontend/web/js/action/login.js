@@ -25,14 +25,14 @@ define(
                     }
                 } else {
                     customer.increaseFailedLoginAttempt();
-                    errorlist.add('Server returned no response');
+                    errorlist.add({'message': 'Server returned no response'});
                 }
             }).fail(function (response) {
                 customer.increaseFailedLoginAttempt();
                 if (response.status == 401) {
-                    errorlist.add('Invalid login or password');
+                    errorlist.add({'message': 'Invalid login or password'});
                 } else {
-                    errorlist.add('Could not authenticate. Please try again later');
+                    errorlist.add({'message': 'Could not authenticate. Please try again later'});
                 }
             });
         };

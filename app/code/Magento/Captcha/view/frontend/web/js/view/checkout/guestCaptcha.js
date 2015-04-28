@@ -6,14 +6,23 @@
 /*global define*/
 define(
     [
-        'Magento_Captcha/js/view/checkout/defaultCaptcha'
+        'Magento_Captcha/js/view/checkout/defaultCaptcha',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Captcha/js/model/captchaList'
     ],
-    function (defaultCaptcha) {
+    function (defaultCaptcha, quote, captchaList) {
         "use strict";
         return defaultCaptcha.extend({
             initialize: function() {
                 this._super();
-                //some init things
+                var self = this;
+                var currentCaptcha = captchaList.getCaptchaByFormId(this.formId);
+                if (currentCaptcha != null) {
+                    this.setCurrentCaptcha(currentCaptcha);
+                    quote.getCheckoutMethod().subscribe(function(method) {
+                        self.setIsVisible((method == 'guest'));
+                    });
+                }
             }
         });
     }

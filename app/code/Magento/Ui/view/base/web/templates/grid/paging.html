@@ -5,7 +5,7 @@
  */
 -->
 <div class="col-xs-3">
-    <div class="admin__control-text">
+    <div class="admin__control-support-text">
         <span data-bind="text: totalRecords"></span> records found
         <!-- ko if: totalSelected -->
         (<span data-bind="text: totalSelected"></span> selected)
@@ -21,7 +21,7 @@
                    value: pageSize,
                    optionsValue: 'value',
                    optionsText: 'label'"></select>
-    <label class="admin__control-text" for="perPage">per page</label>
+    <label class="admin__control-support-text" for="perPage">per page</label>
 
     <div class="admin__data-grid-pager">
         <button
@@ -33,10 +33,10 @@
         </button>
         <input
             id="pageCurrent"
-            class="admin__control-input"
+            class="admin__control-text"
             data-bind="value: _current"
             type="number" />
-        <label class="admin__control-text" for="pageCurrent">
+        <label class="admin__control-support-text" for="pageCurrent">
             of <span data-bind="text: pages"></span>
         </label>
         <button

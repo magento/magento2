@@ -33,12 +33,11 @@ define(
             isVisible: navigator.isStepVisible(stepName),
             useForShipping: "1",
             quoteIsVirtual: quote.isVirtual(),
-            isEmailCheckComplete: null,
+            isEmailCheckComplete: $.Deferred(),
             billingAddressesOptionsText: function(item) {
                 return item.getFullAddress();
             },
             submitBillingAddress: function() {
-                this.isEmailCheckComplete = $.Deferred();
                 if (quote.getCheckoutMethod()() === 'register') {
                     customer.customerData.email = this.source.get('customerDetails.email');
                     customer.customerData.firstname = this.source.get('billingAddress.firstname');
@@ -104,9 +103,6 @@ define(
                 }
             },
             validate: function() {
-                var billingFormSelector = '#co-billing-form';
-                $(billingFormSelector).validation();
-                $(billingFormSelector).validation('isValid');
                 this.source.set('params.invalid', false);
                 this.source.trigger('billingAddress.data.validate');
 

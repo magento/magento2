@@ -21,6 +21,8 @@ define(
             },
             getColspan: 3,
             style: "",
+            excludingTaxMessage: 'Subtotal (Excl. Tax)',
+            includingTaxMessage: 'Subtotal (Incl. Tax)',
             getTitle: function() {
                 return "Subtotal"
             },
@@ -34,6 +36,9 @@ define(
             },
             isBothPricesDisplayed: function() {
                 return 'both' == this.displaySubtotalMode;
+            },
+            isIncludingTaxDisplayed: function() {
+                return 'including' == this.displaySubtotalMode;
             },
             getValueInclTax: function() {
                 var price = 0;

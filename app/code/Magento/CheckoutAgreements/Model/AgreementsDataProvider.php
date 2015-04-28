@@ -128,7 +128,7 @@ class AgreementsDataProvider implements DataProviderInterface
             ];
         }
         $result['components']['checkout']['children']['steps']['children']['review']['children']
-        ['submitBefore']['children']['checkoutAgreements']['children'] = $form;
+        ['beforePlaceOrder']['children']['checkoutAgreements']['children'] = $form;
         return $result;
     }
 

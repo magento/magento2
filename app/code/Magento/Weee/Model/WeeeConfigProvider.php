@@ -23,15 +23,23 @@ class WeeeConfigProvider implements ConfigProviderInterface
     protected $storeManager;
 
     /**
+     * @var Config
+     */
+    protected $weeeConfig;
+
+    /**
      * @param WeeeHelper $weeeHelper
      * @param StoreManagerInterface $storeManager
+     * @param Config $weeeConfig
      */
     public function __construct(
         WeeeHelper $weeeHelper,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        Config $weeeConfig
     ) {
         $this->weeeHelper = $weeeHelper;
         $this->storeManager = $storeManager;
+        $this->weeeConfig = $weeeConfig;
     }
 
     /**
@@ -40,9 +48,10 @@ class WeeeConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         return [
-            'iDisplayPriceWithWeeeDetails' => $this->iDisplayPriceWithWeeeDetails(),
+            'isDisplayPriceWithWeeeDetails' => $this->iDisplayPriceWithWeeeDetails(),
             'isDisplayFinalPrice' => $this->isDisplayFinalPrice(),
             'isWeeeEnabled' => $this->isWeeeEnabled(),
+            'isIncludedInSubtotal' => $this->isIncludedInSubtotal(),
             'getIncludeWeeeFlag' => $this->getIncludeWeeeFlag()
         ];
     }
@@ -121,5 +130,15 @@ class WeeeConfigProvider implements ConfigProviderInterface
             $this->getStoreId()
         );
         return $includeWeee;
+    }
+
+    /**
+     * Display FPT row in subtotal or not
+     *
+     * @return bool
+     */
+    public function isIncludedInSubtotal()
+    {
+        return $this->weeeConfig->isEnabled() && $this->weeeConfig->includeInSubtotal();
     }
 }

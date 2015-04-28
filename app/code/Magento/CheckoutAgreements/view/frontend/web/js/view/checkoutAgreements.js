@@ -13,7 +13,9 @@ define(
             },
             initialize: function() {
                 this._super();
-                review.prototype.submitBefore.checkoutAgreements = this;
+                if (window.checkoutConfig.checkoutAgreementsEnabled) {
+                    review.prototype.beforePlaceOrder.checkoutAgreements = this;
+                }
             },
             validate: function() {
                 this.source.set('params.invalid', false);

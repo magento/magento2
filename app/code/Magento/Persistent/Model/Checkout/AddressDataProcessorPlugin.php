@@ -48,6 +48,7 @@ class AddressDataProcessorPlugin
      *
      * @param AddressAdditionalDataProcessor $subject
      * @param AddressAdditionalData $additionalData
+     * @return void
      */
     public function beforeProcess(AddressAdditionalDataProcessor $subject, AddressAdditionalData $additionalData)
     {

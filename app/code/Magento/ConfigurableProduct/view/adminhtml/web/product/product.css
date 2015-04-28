@@ -241,25 +241,3 @@
 #allow_open_amount {
     margin-top: 8px;
 }
-
-.mage-new-category-dialog .ui-dialog-content .fieldset {
-    padding: 0;
-    margin: 0;
-}
-
-.mage-new-category-dialog .ui-dialog-content .label {
-    width: 25%;
-}
-
-.mage-new-category-dialog .ui-dialog-content .control {
-    width: 75%;
-}
-
-.mage-new-category-dialog .ui-dialog-buttonset {
-    text-align: left;
-}
-
-.mage-new-category-dialog .ui-dialog-buttonset .action-create {
-    margin: 0 0 0 25%;
-    vertical-align: middle;
-}

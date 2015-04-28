@@ -17,7 +17,7 @@
                                     <item name="children" xsi:type="array">
                                         <item name="review" xsi:type="array">
                                             <item name="children" xsi:type="array">
-                                                <item name="submitBefore" xsi:type="array">
+                                                <item name="beforePlaceOrder" xsi:type="array">
                                                     <item name="children" xsi:type="array">
                                                         <item name="checkoutAgreements" xsi:type="array">
                                                             <item name="component"  xsi:type="string">Magento_CheckoutAgreements/js/view/checkoutAgreements</item>

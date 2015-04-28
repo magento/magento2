@@ -14,6 +14,7 @@ class AddressAdditionalDataProcessor
      * Process address additional data
      *
      * @param AddressAdditionalDataInterface $additionalData
+     * @return void
      */
     public function process(AddressAdditionalDataInterface $additionalData)
     {

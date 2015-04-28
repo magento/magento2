@@ -43,12 +43,12 @@ define(
                         additionalData: {extensionAttributes : additionalData}
                     })
                 ).done(
-                    function(result) {
+                    function (result) {
                         paymentService.setPaymentMethods(result.payment_methods);
                         navigator.setCurrent('billingAddress').goNext();
                     }
                 ).fail(
-                    function(response) {
+                    function (response) {
                         var error = JSON.parse(response.responseText);
                         errorList.add(error);
                         quote.setBillingAddress(null);

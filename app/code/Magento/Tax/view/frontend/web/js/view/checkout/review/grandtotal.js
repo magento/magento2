@@ -15,15 +15,19 @@ define(
     function (Component, quote, priceUtils) {
         "use strict";
         var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal || false;
+        var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed || false;
         return Component.extend({
             defaults: {
-                isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
+                isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
                 template: 'Magento_Tax/checkout/review/grandtotal'
             },
             getColspan: 3,
             style: "",
+            exclTaxLabel: 'Grand Total Excl. Tax',
+            inclTaxLabel: 'Grand Total Incl. Tax',
+            basicCurrencyMessage: 'Your credit card will be charged for',
             getTitle: function() {
-                return "Grand Total"
+                return "Grand Total";
             },
             totals: quote.getTotals(),
             getValue: function() {
@@ -40,6 +44,7 @@ define(
                 }
                 return quote.getBaseCurrencySymbol() + priceUtils.formatPrice(price);
             },
+            isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
             getGrandTotalExclTax: function() {
                 var totals = this.totals();
                 if (!totals) {
@@ -57,9 +62,6 @@ define(
                     return false;
                 }
                 return totals.base_currency_code != totals.quote_currency_code;
-            },
-            isPriceInclTaxDisplayed: function() {
-                return 'both' == this.displaySubtotalMode || 'including' == this.displaySubtotalMode;
             }
         });
     }

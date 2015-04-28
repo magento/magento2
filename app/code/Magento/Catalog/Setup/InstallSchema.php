@@ -115,7 +115,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_set_id',
                 $installer->getTable('eav_attribute_set'),
                 'attribute_set_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -123,7 +122,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_type_id',
                 $installer->getTable('eav_entity_type'),
                 'entity_type_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Table');
@@ -203,7 +201,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -216,7 +213,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -224,7 +220,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Datetime Attribute Backend Table');
@@ -304,7 +299,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -317,7 +311,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -325,7 +318,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Decimal Attribute Backend Table');
@@ -400,7 +392,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -408,7 +399,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -416,7 +406,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Integer Attribute Backend Table');
@@ -496,7 +485,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -509,7 +497,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -517,7 +504,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Text Attribute Backend Table');
@@ -597,7 +583,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -610,7 +595,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -618,7 +602,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Varchar Attribute Backend Table');
@@ -709,7 +692,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -722,7 +704,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -730,7 +711,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Gallery Attribute Backend Table');
@@ -896,7 +876,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -909,7 +888,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_category_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -917,7 +895,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Category Datetime Attribute Backend Table');
@@ -1001,7 +978,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1014,7 +990,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_category_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1022,7 +997,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Category Decimal Attribute Backend Table');
@@ -1101,7 +1075,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1114,7 +1087,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_category_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1122,7 +1094,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Category Integer Attribute Backend Table');
@@ -1201,7 +1172,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1214,7 +1184,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_category_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1222,7 +1191,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Category Text Attribute Backend Table');
@@ -1306,7 +1274,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1319,7 +1286,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_category_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1327,7 +1293,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Category Varchar Attribute Backend Table');
@@ -1373,7 +1338,6 @@ class InstallSchema implements InstallSchemaInterface
                 'category_id',
                 $installer->getTable('catalog_category_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1381,7 +1345,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product To Category Linkage Table');
@@ -1514,7 +1477,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_id',
                 $installer->getTable('customer_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1522,7 +1484,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1530,8 +1491,7 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+                \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
             )
             ->setComment(
                 'Catalog Compare Table'
@@ -1569,7 +1529,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1577,7 +1536,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -1675,7 +1633,6 @@ class InstallSchema implements InstallSchemaInterface
                 'linked_product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1683,7 +1640,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1696,7 +1652,6 @@ class InstallSchema implements InstallSchemaInterface
                 'link_type_id',
                 $installer->getTable('catalog_product_link_type'),
                 'link_type_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -1754,7 +1709,6 @@ class InstallSchema implements InstallSchemaInterface
                 'link_type_id',
                 $installer->getTable('catalog_product_link_type'),
                 'link_type_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -1821,7 +1775,6 @@ class InstallSchema implements InstallSchemaInterface
                 'link_id',
                 $installer->getTable('catalog_product_link'),
                 'link_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1834,7 +1787,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_link_attribute_id',
                 $installer->getTable('catalog_product_link_attribute'),
                 'product_link_attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -1901,7 +1853,6 @@ class InstallSchema implements InstallSchemaInterface
                 'link_id',
                 $installer->getTable('catalog_product_link'),
                 'link_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1914,7 +1865,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_link_attribute_id',
                 $installer->getTable('catalog_product_link_attribute'),
                 'product_link_attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -1981,7 +1931,6 @@ class InstallSchema implements InstallSchemaInterface
                 'link_id',
                 $installer->getTable('catalog_product_link'),
                 'link_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -1994,7 +1943,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_link_attribute_id',
                 $installer->getTable('catalog_product_link_attribute'),
                 'product_link_attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2086,7 +2034,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_group_id',
                 $installer->getTable('customer_group'),
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2099,7 +2046,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2107,7 +2053,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2169,7 +2114,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2182,7 +2126,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2258,7 +2201,6 @@ class InstallSchema implements InstallSchemaInterface
                 'value_id',
                 $installer->getTable('catalog_product_entity_media_gallery'),
                 'value_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2266,7 +2208,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2279,7 +2220,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2374,7 +2314,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2448,7 +2387,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 $installer->getTable('catalog_product_option'),
                 'option_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2456,7 +2394,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2523,7 +2460,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 $installer->getTable('catalog_product_option'),
                 'option_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2531,7 +2467,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2663,7 +2598,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_type_id',
                 $installer->getTable('catalog_product_option_type_value'),
                 'option_type_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2671,7 +2605,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2738,7 +2671,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_type_id',
                 $installer->getTable('catalog_product_option_type_value'),
                 'option_type_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2746,7 +2678,6 @@ class InstallSchema implements InstallSchemaInterface
                 'store_id',
                 $installer->getTable('store'),
                 'store_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2908,7 +2839,6 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_id',
                 $installer->getTable('eav_attribute'),
                 'attribute_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -2947,7 +2877,6 @@ class InstallSchema implements InstallSchemaInterface
                 'child_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -2955,7 +2884,6 @@ class InstallSchema implements InstallSchemaInterface
                 'parent_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -3169,7 +3097,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_group_id',
                 $installer->getTable('customer_group'),
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -3182,7 +3109,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -3190,7 +3116,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -3252,7 +3177,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_group_id',
                 $installer->getTable('customer_group'),
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -3265,7 +3189,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -3273,7 +3196,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -3319,7 +3241,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -4605,7 +4526,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_group_id',
                 $installer->getTable('customer_group'),
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -4618,7 +4538,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -4631,7 +4550,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(
@@ -4694,7 +4612,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_group_id',
                 $installer->getTable('customer_group'),
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -4707,7 +4624,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -4715,7 +4631,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment(

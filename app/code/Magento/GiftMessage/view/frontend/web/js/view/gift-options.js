@@ -12,6 +12,8 @@ define(['uiComponent', 'ko', '../model/gift-options'],
                 displayArea: 'giftOptions'
             },
             isGiftOptionsSelected: ko.observable(false),
+            isOrderLevelGiftOptionsSelected: ko.observable(false),
+            isItemLevelGiftOptionsSelected: ko.observable(false),
             isGiftOptionsAvailable: function() {
                 return giftOptions.isGiftOptionsAvailable();
             },
@@ -26,9 +28,7 @@ define(['uiComponent', 'ko', '../model/gift-options'],
             },
             getItemLevelGiftOptions: function() {
                 return giftOptions.getItemLevelGiftOptions();
-            },
-            isOrderLevelGiftOptionsSelected: ko.observable(false),
-            isItemLevelGiftOptionsSelected: ko.observable(false)
+            }
         });
     }
 );

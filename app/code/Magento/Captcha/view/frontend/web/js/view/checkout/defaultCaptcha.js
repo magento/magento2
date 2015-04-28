@@ -10,33 +10,56 @@ define(
         'ko',
         'uiComponent',
         'Magento_Customer/js/model/customer',
-        'Magento_Captcha/js/action/refresh'
+        'Magento_Captcha/js/model/captcha',
+        'Magento_Captcha/js/model/captchaList'
     ],
-    function ($, ko, Component, customer, refreshAction) {
+    function ($, ko, Component, customer, Captcha, captchaList) {
         "use strict";
         var captchaConfig = window.checkoutConfig.captcha;
         return Component.extend({
             defaults: {
                 template: 'Magento_Captcha/checkout/captcha'
             },
-            imageSource: null,
+            currentCaptcha: null,
+            captchaValue: function() {
+                return this.currentCaptcha.getCaptchaValue();
+            },
+            initialize: function() {
+                $.each(captchaConfig, function(formId, captchaData) {
+                    captchaData.formId = formId;
+                    captchaList.add(Captcha(captchaData));
+                });
+                this._super();
+            },
+            getCurrentCaptcha: function() {
+                return this.currentCaptcha;
+            },
+            setCurrentCaptcha: function(captcha) {
+                this.currentCaptcha = captcha;
+            },
+            getFormId: function() {
+                return this.currentCaptcha.getFormId();
+            },
+            getIsVisible: function() {
+                return this.currentCaptcha.getIsVisible();
+            },
+            setIsVisible: function(flag) {
+                this.currentCaptcha.setIsVisible(flag);
+            },
             isRequired: function() {
-                return captchaConfig[this.formId].isRequired;
+                return this.currentCaptcha.getIsRequired();
             },
             isCaseSensitive: function() {
-                return captchaConfig[this.formId].isCaseSensitive;
+                return this.currentCaptcha.getIsCaseSensitive();
             },
             imageHeight: function() {
-                return captchaConfig[this.formId].imageHeight;
+                return this.currentCaptcha.getImageHeight();
             },
             getImageSource: function () {
-                if (this.imageSource == null) {
-                    this.imageSource = ko.observable(captchaConfig[this.formId].imageSrc);
-                }
-                return this.imageSource;
+                return this.currentCaptcha.getImageSource();
             },
             refresh: function() {
-                refreshAction(captchaConfig[this.formId].refreshUrl, this.formId, this.imageSource);
+                this.currentCaptcha.refresh();
             }
         });
     }

@@ -1,0 +1,416 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@order-create-icon-refresh__font-size: 2rem;
+@order-create-icon-refresh__color: @color-gray83;
+@order-create-icon-refresh__hover__color: darken(@color-gray83, 10%);
+
+@order-create-icon-add__content: @icon-arrow-right__content;
+@order-create-icon-configure__content: @icon-systems__content;
+@order-create-icon-remove__content: @icon-delete__content;
+@order-create-icon-reset__content: @icon-remove-small__content;
+@order-create-icon-refresh__content: @icon-refresh__content;
+@order-create-icon-plus__content: @icon-plus__content;
+@order-create-icon-plus__hover__color: @color-very-dark-gray-black2;
+
+//
+
+//
+//  Layout
+//  ---------------------------------------------
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .order-details {
+        float: right;
+        #mix-grid .width(9,12);
+        margin-left: 0;
+    }
+    .order-sidebar {
+        #mix-grid .column(3,12);
+        margin-left: 0;
+    }
+
+    .order-billing-address,
+    .order-billing-method,
+    .order-history {
+        float: left;
+        #mix-grid .width(6,12);
+    }
+
+    .order-shipping-address,
+    .order-shipping-method,
+    .order-totals {
+        float: right;
+        #mix-grid .width(6,12);
+    }
+}
+
+//
+//  Select Store Scope
+//  ---------------------------------------------
+
+.tree-store-scope {
+    max-width: 50rem;
+
+    .admin__field {
+        margin: 0 0 1rem;
+    }
+}
+
+//
+//  Order discounts
+//  ---------------------------------------------
+
+.order-discounts {
+    &:extend(.abs-clearfix all);
+    margin-top: @indent__base;
+    .action-secondary {
+        float: right;
+        margin-top: 2.1rem;
+    }
+    .order-coupons {
+        float: left;
+    }
+    .admin__field {
+        display: inline-block;
+        margin: 0 3.5rem 0 0;
+        vertical-align: top;
+
+        .admin__field-control {
+            padding-right: 32px;
+            position: relative;
+        }
+
+        .action-default {
+            &:extend(.abs-action-reset all);
+            top: 7px;
+            position: absolute;
+            right: 0;
+            > span {
+                .extend__visually-hidden();
+            }
+
+            &:before {
+                &:extend(.abs-icon all);
+                content: @order-create-icon-add__content;
+            }
+
+            &:hover {
+                color: @order-create-icon-plus__hover__color;
+            }
+        }
+        p {
+            margin: @indent__s 0 0;
+        }
+    }
+    .action-remove {
+        color: @color-brownie;
+        margin-left: @indent__xs;
+        &:hover {
+            color: @order-create-icon-plus__hover__color;
+            text-decoration: none;
+        }
+        > span {
+            .extend__visually-hidden();
+        }
+        &:before {
+            &:extend(.abs-icon all);
+            content: @order-create-icon-remove__content;
+        }
+    }
+}
+
+//
+//  Order Account Information
+//  ---------------------------------------------
+
+.order-account-information {
+    .admin__fieldset {
+        &:extend(.abs-clearfix all);
+    }
+    .admin__field {
+        margin-bottom: 0;
+    }
+    .field-group_id {
+        float: left;
+    }
+    .field-email {
+        margin-top: 0;
+        overflow: hidden;
+    }
+}
+
+//
+//  Order Address Information
+//  ---------------------------------------------
+
+.order-details {
+    .order-search-items {
+        .col-qty {
+            .admin__control-text {
+                &:extend(.abs-control-qty);
+            }
+        }
+    }
+
+    .admin__fieldset-wrapper:not(:last-child) {
+        margin-bottom: 5rem;
+    }
+
+    .admin__fieldset-wrapper-content {
+        &:extend(.abs-clearfix all);
+    }
+
+    .admin__fieldset-wrapper-title {
+        &:extend(.abs-clearfix all);
+        border-bottom: 1px solid @color-gray80;
+        margin-bottom: @order-create-sidebar__margin-reqular;
+        padding-bottom: @indent__xs;
+        .actions {
+            float: right;
+            margin-bottom: @order-create-sidebar__margin-reqular;
+            margin-top: -@indent__xs;
+        }
+        .action-secondary {
+            margin-left: @indent__base;
+        }
+        .title {
+            margin: 0;
+        }
+    }
+
+    .admin__legend {
+        &:extend(.abs-fieldset-legend all);
+    }
+
+    .admin__field {
+        &:extend(.abs-field-rows all);
+    }
+
+    .admin__field-option {
+        .admin__field-label {
+            display: block;
+            width: auto;
+        }
+    }
+}
+
+.field-vat-number {
+    .action-default {
+        &:extend(.action-tertiary all);
+        font-weight: @font-weight__regular;
+        margin-top: @indent__s;
+        padding: 0;
+    }
+}
+
+//
+//  Order Payment & Shipping Information
+//  ---------------------------------------------
+
+.order-methods {
+    .admin__field {
+        &:extend(.abs-field-rows all);
+    }
+    .admin__fieldset-wrapper-content {
+        .admin__fieldset-wrapper-title {
+            &:extend(.abs-fieldset-legend all);
+            border-bottom: 0;
+            margin-bottom: 1.5rem;
+            padding: 0;
+            strong {
+                font-weight: @font-weight__semibold;
+            }
+        }
+    }
+}
+
+.admin__payment-method-wapper {
+    margin: 0;
+    .admin__fieldset {
+        padding: 1.5rem 0 @indent__base @field-control-option-label__padding-left;
+    }
+    .admin__field {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.admin__order-shipment-methods-title {
+    font-weight: @font-weight__bold;
+    margin: 0 0 @indent__xs;
+}
+
+.admin__order-shipment-methods-options {
+    margin: 0 0 @indent__base;
+}
+
+.admin__order-shipment-methods-options-list {
+    list-style: none;
+    margin: 0;
+}
+
+.order-shipping-method-summary {
+    padding-top: @field-option__padding-top;
+}
+
+.order-shipping-method,
+.order-billing-method {
+    position: relative;
+}
+
+.order-shipping-method-summary,
+.order-shipping-method {
+    .action-default {
+        &:extend(.action-tertiary all);
+        font-weight: @font-weight__regular;
+        padding: 0;
+    }
+}
+
+.order-methods-overlay {
+    background: rgba(255, 255, 255, .5);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    span {
+        background: @color-white;
+        display: block;
+        font-weight: @font-weight__bold;
+        left: 0;
+        position: absolute;
+        top: 48px;
+    }
+    .order-shipping-address & {
+        span {
+            top: 27px;
+        }
+    }
+}
+
+//
+//  Order Errors
+//  ---------------------------------------------
+
+.order-errors {
+    .col-qty {
+        .admin__control-text {
+            &:extend(.abs-control-qty all);
+        }
+    }
+}
+
+//
+//  Gift options
+//  ---------------------------------------------
+
+.order-gift-options {
+    &:extend(.abs-clearfix all);
+    .card-price-box {
+        display: none;
+        &._active {
+            display: block;
+        }
+    }
+
+    .price-box {
+        .price {
+            font-weight: @font-weight__bold;
+        }
+    }
+
+    > .giftmessage-order-create {
+        float: left;
+        #mix-grid .width(6, 12);
+    }
+}
+
+.giftmessage-order-create {
+    .field-sender {
+        margin-top: 1.4rem;
+    }
+    .admin__field { // ToDo UI: remove when /app/code/Magento/Backend/view/adminhtml/templates/widget/form.phtml refactored (the wrapping div removed)
+        margin-bottom: 3rem;
+        position: relative;
+        + .admin__field {
+            margin-top: 1.5rem;
+        }
+    }
+}
+
+//
+//  Totals
+//  ---------------------------------------------
+
+.admin__table-secondary {
+    width: 100%;
+    td {
+        padding: .7rem @indent__s;
+    }
+    tr:nth-child(2n+1) td {
+        background-color: @color-white-fog2;
+    }
+    .admin__total-amount {
+        text-align: right;
+    }
+    tr:last-child td {
+        border-bottom: 1px solid @color-gray80;
+        padding-bottom: @indent__s;
+    }
+}
+
+.order-totals-actions {
+    margin-top: @indent__s;
+    .actions {
+        margin-top: @indent__l;
+        text-align: right;
+    }
+    .action-default {
+        &:extend(.abs-action-l all);
+    }
+}
+
+//  ToDo UI: review the collapsible block
+//.order-subtotal {
+//    .summary-collapse {
+//        cursor: pointer;
+//        display: inline-block;
+//        &:before {
+//            @iconsize: 16px;
+//
+//            background: #f2ebde;
+//            border: 1px solid #ada89e;
+//            border-radius: 2px;
+//            color: #816063;
+//            content: '+';
+//            display: inline-block;
+//            font-size: @iconsize;
+//            -webkit-font-smoothing: antialiased;
+//            font-style: normal;
+//            font-weight: normal;
+//            height: @iconsize;
+//            line-height: @iconsize;
+//            margin-right: 7px;
+//            overflow: hidden;
+//            speak: none;
+//            text-indent: 0;
+//            vertical-align: top;
+//            width: @iconsize;
+//        }
+//        &:hover:before {
+//            background: #cac3b4;
+//        }
+//    }
+//    &.show-details .summary-collapse:before {
+//        content: '\e03a';
+//    }
+//}

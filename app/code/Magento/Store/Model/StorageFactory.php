@@ -262,7 +262,7 @@ class StorageFactory
     protected function getActiveStoreByCode(\Magento\Store\Model\StoreManagerInterface $storage, $scopeCode)
     {
         $stores = $storage->getStores(true, true);
-        if ($scopeCode && isset($stores[$scopeCode])
+        if (is_string($scopeCode) && isset($stores[$scopeCode])
             && $stores[$scopeCode]->getId()
             && $stores[$scopeCode]->getIsActive()
         ) {

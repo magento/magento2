@@ -39,10 +39,28 @@ class TaxConfigProvider implements ConfigProviderInterface
         return [
             'isDisplayShippingPriceExclTax' => $this->isDisplayShippingPriceExclTax(),
             'isDisplayShippingBothPrices' => $this->isDisplayShippingBothPrices(),
+            'reviewShippingDisplayMode' => $this->getDisplayShippingMode(),
             'reviewItemPriceDisplayMode' => $this->getReviewItemPriceDisplayMode(),
             'reviewTotalsDisplayMode' => $this->getReviewTotalsDisplayMode(),
-            'includeTaxInGrandTotal' => $this->getIncludeTaxInGrandTotal(),
+            'includeTaxInGrandTotal' => $this->isTaxDisplayedInGrandTotal(),
+            'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
         ];
+    }
+
+    /**
+     * Shipping mode: 'both', 'including', 'excluding'
+     *
+     * @return string
+     */
+    public function getDisplayShippingMode()
+    {
+        if ($this->taxConfig->displayCartShippingBoth()) {
+            return 'both';
+        }
+        if ($this->taxConfig->displayCartShippingExclTax()) {
+            return 'excluding';
+        }
+        return 'including';
     }
 
     /**
@@ -98,11 +116,21 @@ class TaxConfigProvider implements ConfigProviderInterface
     }
 
     /**
+     * Show tax details in checkout totals section flag
+     *
+     * @return bool
+     */
+    public function isFullTaxSummaryDisplayed()
+    {
+        return $this->taxHelper->displayFullSummary();
+    }
+
+    /**
      * Display tax in grand total section or not
      *
      * @return bool
      */
-    public function getIncludeTaxInGrandTotal()
+    public function isTaxDisplayedInGrandTotal()
     {
         return $this->taxConfig->displayCartTaxWithGrandTotal();
     }

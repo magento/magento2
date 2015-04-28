@@ -145,6 +145,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'isCustomerLoginRequired' => $this->isCustomerLoginRequired(),
             'registerUrl' => $this->getRegisterUrl(),
             'customerAddressCount' => $this->getCustomerAddressCount(),
+            'forgotPasswordUrl' => $this->getForgotPasswordUrl()
         ];
     }
 
@@ -373,5 +374,15 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function getQuote()
     {
         return $this->checkoutSession->getQuote();
+    }
+
+    /**
+     * Return forgot password URL
+     *
+     * @return string
+     */
+    private function getForgotPasswordUrl()
+    {
+        return $this->customerUrlManager->getForgotPasswordUrl();
     }
 }
