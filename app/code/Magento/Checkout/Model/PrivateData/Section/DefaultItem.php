@@ -99,7 +99,7 @@ class DefaultItem extends AbstractItem
     }
 
     /**
-     * {@inheritdoc}
+     * @return \Magento\Catalog\Model\Product
      */
     protected function getProductForThumbnail()
     {
@@ -107,8 +107,6 @@ class DefaultItem extends AbstractItem
     }
 
     /**
-     * Get item product
-     *
      * @return \Magento\Catalog\Model\Product
      */
     protected function getProduct()
