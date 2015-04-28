@@ -17,7 +17,7 @@ define(
         "use strict";
         return function(customParams, callback) {
             var payload;
-            customParams = customParams || {};
+            customParams = customParams || {cartId: quote.getQuoteId(), paymentMethod: quote.getPaymentData()()};
             if (quote.getCheckoutMethod()() === 'register') {
                 payload = _.extend({
                     customer: customer.customerData,

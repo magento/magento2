@@ -17,6 +17,7 @@ use Magento\Quote\Model\Quote\Payment\ToOrderPayment as ToOrderPaymentConverter;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\StateException;
+use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
  * Class QuoteManagement
@@ -271,12 +272,29 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function placeOrder($cartId, $agreements = null)
+    public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null)
     {
         if (!$this->agreementsValidator->isValid($agreements)) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Please agree to all the terms and conditions before placing the order.'));
+            throw new \Magento\Framework\Exception\CouldNotSaveException(
+                __('Please agree to all the terms and conditions before placing the order.')
+            );
         }
         $quote = $this->quoteRepository->getActive($cartId);
+        if ($paymentMethod) {
+            $paymentMethod->setChecks([
+                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
+                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
+                \Magento\Payment\Model\Method\AbstractMethod::CHECK_ZERO_TOTAL,
+            ]);
+            $quote->getPayment()->setQuote($quote);
+
+            $data = $paymentMethod->getData();
+            $data = array_merge($data, (array)$data['additional_data']);
+            unset($data['additional_data']);
+            $quote->getPayment()->importData($data);
+        }
 
         if ($quote->getCheckoutMethod() === 'guest') {
             $quote->setCustomerId(null);
@@ -296,12 +314,17 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * @inheritdoc
      */
-    public function placeOrderCreatingAccount($cartId, $customer, $password, $agreements = null)
-    {
+    public function placeOrderCreatingAccount(
+        $cartId,
+        $customer,
+        $password,
+        $agreements = null,
+        PaymentInterface $paymentMethod = null
+    ) {
         $customer = $this->accountManagement->createAccount($customer, $password);
         $quote = $this->quoteRepository->getActive($cartId)->assignCustomer($customer);
         $quote->setCheckoutMethod('register');
-        $orderId = $this->placeOrder($cartId, $agreements);
+        $orderId = $this->placeOrder($cartId, $agreements, $paymentMethod);
         $this->customerSession->loginById($customer->getId());
         return $orderId;
     }
