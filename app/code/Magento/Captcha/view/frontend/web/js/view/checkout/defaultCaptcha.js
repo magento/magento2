@@ -20,6 +20,7 @@ define(
             defaults: {
                 template: 'Magento_Captcha/checkout/captcha'
             },
+            dataScope: 'global',
             currentCaptcha: null,
             captchaValue: function() {
                 return this.currentCaptcha.getCaptchaValue();

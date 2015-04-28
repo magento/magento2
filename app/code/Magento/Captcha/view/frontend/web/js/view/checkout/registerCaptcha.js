@@ -8,9 +8,12 @@ define(
     [
         'Magento_Captcha/js/view/checkout/defaultCaptcha',
         'Magento_Checkout/js/model/quote',
-        'Magento_Captcha/js/model/captchaList'
+        'Magento_Captcha/js/model/captchaList',
+        'Magento_Checkout/js/action/select-shipping-address',
+        'Magento_Checkout/js/action/select-billing-address',
+        'Magento_Checkout/js/model/step-navigator'
     ],
-    function (defaultCaptcha, quote, captchaList) {
+    function (defaultCaptcha, quote, captchaList, selectShippingAddress, selectBillingAddress, navigator) {
         "use strict";
         return defaultCaptcha.extend({
             initialize: function() {
@@ -20,7 +23,20 @@ define(
                 if (currentCaptcha != null) {
                     this.setCurrentCaptcha(currentCaptcha);
                     quote.getCheckoutMethod().subscribe(function(method) {
-                        self.setIsVisible((method == 'register'));
+                        if (method == 'register') {
+                            self.setIsVisible(true);
+                            var callback = function(isSuccessful) {
+                                if (!isSuccessful) {
+                                    currentCaptcha.setCaptchaValue(null);
+                                    currentCaptcha.refresh();
+                                    navigator.goToStep('billingAddress');
+                                }
+                            };
+                            selectShippingAddress.setActionCallback(callback);
+                            selectBillingAddress.setActionCallback(callback);
+                        } else {
+                            self.setIsVisible(false);
+                        }
                     });
                 }
             }

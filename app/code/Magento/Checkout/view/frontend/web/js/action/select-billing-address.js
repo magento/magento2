@@ -18,7 +18,8 @@ define(
     ],
     function (quote, addressList, navigator, selectShippingAddress, registry, urlBuilder, storage, paymentService) {
         "use strict";
-        return function (billingAddress, useForShipping, additionalData) {
+        var actionCallback;
+        var result = function (billingAddress, useForShipping, additionalData) {
             additionalData = additionalData || {};
             quote.setBillingAddress(billingAddress);
             if (useForShipping === '1' && !quote.isVirtual()) {
@@ -46,17 +47,23 @@ define(
                     function (result) {
                         paymentService.setPaymentMethods(result.payment_methods);
                         navigator.setCurrent('billingAddress').goNext();
+                        actionCallback(true);
                     }
                 ).fail(
                     function (response) {
                         var error = JSON.parse(response.responseText);
                         errorList.add(error);
                         quote.setBillingAddress(null);
+                        actionCallback(false);
                     }
                 );
             } else {
                 navigator.setCurrent('billingAddress').goNext();
             }
         };
+        result.setActionCallback = function (value) {
+            actionCallback = value;
+        };
+        return result;
     }
 );

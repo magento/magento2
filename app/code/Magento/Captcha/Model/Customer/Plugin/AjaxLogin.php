@@ -52,6 +52,7 @@ class AjaxLogin
     ) {
         $httpUnauthorizedCode = 401;
         $loginFormId = 'user_login';
+        $captchaInputName = 'captcha_string';
 
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $subject->getRequest();
@@ -61,8 +62,8 @@ class AjaxLogin
 
         $loginParams = \Zend_Json::decode($request->getContent());
         $username = isset($loginParams['username']) ? $loginParams['username'] : null;
-        $captchaString = isset($loginParams[CaptchaHelper::INPUT_NAME_FIELD_VALUE])
-            ? $loginParams[CaptchaHelper::INPUT_NAME_FIELD_VALUE]
+        $captchaString = isset($loginParams[$captchaInputName])
+            ? $loginParams[$captchaInputName]
             : null;
 
         if ($captchaModel->isRequired($username)) {
