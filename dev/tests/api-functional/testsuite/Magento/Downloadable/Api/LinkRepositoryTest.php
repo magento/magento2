@@ -794,7 +794,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $linkId = $this->getTargetLink($this->getTargetProduct())->getId();
         $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-links/{$linkId}";
         $requestData = [
-            'linkId' => $linkId,
+            'id' => $linkId,
         ];
 
         $this->assertTrue($this->_webApiCall($this->deleteServiceInfo, $requestData));
@@ -811,7 +811,7 @@ class LinkRepositoryTest extends WebapiAbstract
         $linkId = 9999;
         $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-links/{$linkId}";
         $requestData = [
-            'linkId' => $linkId,
+            'id' => $linkId,
         ];
 
         $this->_webApiCall($this->deleteServiceInfo, $requestData);

@@ -493,7 +493,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $sampleId = $this->getTargetSample($this->getTargetProduct())->getId();
         $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-links/samples/{$sampleId}";
         $requestData = [
-            'sampleId' => $sampleId,
+            'id' => $sampleId,
         ];
 
         $this->assertTrue($this->_webApiCall($this->deleteServiceInfo, $requestData));
@@ -510,7 +510,7 @@ class SampleRepositoryTest extends WebapiAbstract
         $sampleId = 9999;
         $this->deleteServiceInfo['rest']['resourcePath'] = "/V1/products/downloadable-links/samples/{$sampleId}";
         $requestData = [
-            'sampleId' => $sampleId,
+            'id' => $sampleId,
         ];
 
         $this->_webApiCall($this->deleteServiceInfo, $requestData);
