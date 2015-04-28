@@ -9,6 +9,7 @@ namespace Magento\Framework;
 
 use Zend\Stdlib\JsonSerializable;
 use Magento\Framework\Phrase\RendererInterface;
+use Magento\Framework\Phrase\Renderer\Placeholder;
 
 class Phrase implements JsonSerializable
 {
@@ -51,7 +52,11 @@ class Phrase implements JsonSerializable
      */
     public static function getRenderer()
     {
-        return self::$renderer;
+        if (self::$renderer) {
+            return self::$renderer;
+        } else {
+            self::$renderer = new \Magento\Framework\Phrase\Renderer\Placeholder();
+        }
     }
 
     /**
@@ -93,7 +98,7 @@ class Phrase implements JsonSerializable
      */
     public function render()
     {
-        return self::$renderer ? self::$renderer->render([$this->text], $this->arguments) : $this->text;
+        return self::getRenderer() ? self::getRenderer()->render([$this->text], $this->arguments) : $this->text;
     }
 
     /**
