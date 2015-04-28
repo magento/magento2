@@ -7,10 +7,14 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Api/etc/service_data_attributes.xsd">
     <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+    <!--
+        Once this is merged with the branch with the CatalogInventory integration, need to make sure the permission
+        below is actually used.
         <attribute code="stock_item" type="Magento\CatalogInventory\Api\Data\StockItemInterface">
             <resources>
                 <resource ref="Magento_CatalogInventory::cataloginventory"/>
             </resources>
         </attribute>
+    -->
     </extension_attributes>
 </config>
