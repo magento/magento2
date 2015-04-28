@@ -66,12 +66,12 @@
 <?php $orderTotalBar = $block->getChildHtml('order_totalbar'); ?>
 
 <?php if (!empty($orderTotalBar)): ?>
-<sections class="fieldset-wrapper">
+<section class="fieldset-wrapper">
     <?php echo $orderTotalBar; ?>
-</sections>
+</section>
 <?php endif; ?>
 
-<sections class="admin__page-section">
+<section class="admin__page-section">
     <input type="hidden" name="creditmemo[do_offline]" id="creditmemo_do_offline" value="0" />
     <div class="admin__page-section-title">
         <span class="title"><?php echo __('Order Total') ?></span>
@@ -132,7 +132,7 @@
             </div>
         </div>
     </div>
-</sections>
+</section>
 
 <script>
 require(['jquery', 'prototype'], function(jQuery){

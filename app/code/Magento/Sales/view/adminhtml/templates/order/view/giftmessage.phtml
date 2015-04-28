@@ -19,7 +19,7 @@
                    name="<?php echo $block->getFieldName('type'); ?>"
                    value="order"/>
 
-            <div class="admin__field field-from-name <?php echo $_required ? 'required' : ''; ?>">
+            <div class="admin__field field-from-name<?php echo $_required ? ' required' : ''; ?>">
                 <label class="admin__field-label"
                        for="<?php echo $block->getFieldId('sender'); ?>"><span><?php echo __('From Name'); ?></span></label>
 
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="admin__field field-to-name <?php echo $_required ? 'required' : ''; ?>">
+            <div class="admin__field field-to-name<?php echo $_required ? ' required' : ''; ?>">
                 <label class="admin__field-label"
                        for="<?php echo $block->getFieldId('recipient'); ?>"><span><?php echo __('To Name'); ?></span></label>
 
