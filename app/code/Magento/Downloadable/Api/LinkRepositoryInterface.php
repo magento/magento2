@@ -54,8 +54,8 @@ interface LinkRepositoryInterface
     /**
      * Delete downloadable link
      *
-     * @param int $linkId
+     * @param int $id
      * @return bool
      */
-    public function delete($linkId);
+    public function delete($id);
 }

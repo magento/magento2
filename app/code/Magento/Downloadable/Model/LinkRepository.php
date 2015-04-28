@@ -337,10 +337,10 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * {@inheritdoc}
      */
-    public function delete($linkId)
+    public function delete($id)
     {
         /** @var $link \Magento\Downloadable\Model\Link */
-        $link = $this->linkFactory->create()->load($linkId);
+        $link = $this->linkFactory->create()->load($id);
         if (!$link->getId()) {
             throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
         }

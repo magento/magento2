@@ -214,10 +214,10 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * {@inheritdoc}
      */
-    public function delete($sampleId)
+    public function delete($id)
     {
         /** @var $sample \Magento\Downloadable\Model\Sample */
-        $sample = $this->sampleFactory->create()->load($sampleId);
+        $sample = $this->sampleFactory->create()->load($id);
         if (!$sample->getId()) {
             throw new NoSuchEntityException(__('There is no downloadable sample with provided ID.'));
         }

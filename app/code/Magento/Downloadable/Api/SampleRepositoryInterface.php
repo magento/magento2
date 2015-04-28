@@ -26,8 +26,8 @@ interface SampleRepositoryInterface
     /**
      * Delete downloadable sample
      *
-     * @param int $sampleId
+     * @param int $id
      * @return bool
      */
-    public function delete($sampleId);
+    public function delete($id);
 }
