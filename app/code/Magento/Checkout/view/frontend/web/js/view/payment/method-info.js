@@ -14,7 +14,6 @@ define(
             defaults: {
                 titleTemplate: 'Magento_Checkout/payment/generic-title'
             },
-            paymentForm: '#co-payment-form',
             getCode: function() {
                 return this.index;
             },
@@ -37,10 +36,6 @@ define(
             },
             afterSave: function() {
                 return true;
-            },
-            isValid: function() {
-                jQuery(this.paymentForm).validation();
-                return jQuery(this.paymentForm).validation('isValid');
             }
         });
     }

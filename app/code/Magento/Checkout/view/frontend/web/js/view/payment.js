@@ -22,6 +22,7 @@ define(
             },
             stepNumber: navigator.getStepNumber(stepName),
             isVisible: navigator.isStepVisible(stepName),
+            paymentForm: '#co-payment-form',
             initObservable: function () {
                 this._super()
                     .observe('activeMethod');
@@ -35,7 +36,9 @@ define(
                     alert('Please specify payment method.');
                     return;
                 }
-                selectPaymentMethod(this.getActiveMethodView());
+                if (this.isFormValid()) {
+                    selectPaymentMethod(this.getActiveMethodView());
+                }
             },
             getAvailableViews: function () {
                 var sortedElems = [],
@@ -68,6 +71,10 @@ define(
             },
             isMethodActive: function(code) {
                 return this.activeMethod() === code;
+            },
+            isFormValid: function() {
+                $(this.paymentForm).validation();
+                return $(this.paymentForm).validation('isValid');
             }
         });
     }
