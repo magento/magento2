@@ -8,8 +8,9 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Layout as ResultLayout;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -84,7 +85,7 @@ class Send extends Action\Action implements IndexInterface
     /**
      * Share wishlist
      *
-     * @return ResponseInterface|void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -92,8 +93,11 @@ class Send extends Action\Action implements IndexInterface
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            return $this->_redirect('*/*/');
+            $resultRedirect->setPath('*/*/');
+            return $resultRedirect;
         }
 
         $wishlist = $this->wishlistProvider->getWishlist();
@@ -136,11 +140,12 @@ class Send extends Action\Action implements IndexInterface
             )->setSharingForm(
                 $this->getRequest()->getPostValue()
             );
-            $this->_redirect('*/*/share');
-            return;
+            $resultRedirect->setPath('*/*/share');
+            return $resultRedirect;
         }
-
-        $this->addLayoutHandles();
+        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+        $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
+        $this->addLayoutHandles($resultLayout);
         $this->inlineTranslation->suspend();
 
         $sent = 0;
@@ -149,7 +154,7 @@ class Send extends Action\Action implements IndexInterface
             $customer = $this->_customerSession->getCustomerDataObject();
             $customerName = $this->_customerHelperView->getCustomerName($customer);
 
-            $message .= $this->getRssLink($wishlist->getId());
+            $message .= $this->getRssLink($wishlist->getId(), $resultLayout);
             $emails = array_unique($emails);
             $sharingCode = $wishlist->getSharingCode();
 
@@ -172,7 +177,7 @@ class Send extends Action\Action implements IndexInterface
                             'customer' => $customer,
                             'customerName' => $customerName,
                             'salable' => $wishlist->isSalable() ? 'yes' : '',
-                            'items' => $this->getWishlistItems(),
+                            'items' => $this->getWishlistItems($resultLayout),
                             'addAllLink' => $this->_url->getUrl('*/shared/allcart', ['code' => $sharingCode]),
                             'viewOnSiteLink' => $this->_url->getUrl('*/shared/index', ['code' => $sharingCode]),
                             'message' => $message,
@@ -203,7 +208,8 @@ class Send extends Action\Action implements IndexInterface
 
             $this->_eventManager->dispatch('wishlist_share', ['wishlist' => $wishlist]);
             $this->messageManager->addSuccess(__('Your wish list has been shared.'));
-            $this->_redirect('*/*', ['wishlist_id' => $wishlist->getId()]);
+            $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);
+            return $resultRedirect;
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
             $this->messageManager->addError($e->getMessage());
@@ -212,7 +218,8 @@ class Send extends Action\Action implements IndexInterface
             )->setSharingForm(
                 $this->getRequest()->getPostValue()
             );
-            $this->_redirect('*/*/share');
+            $resultRedirect->setPath('*/*/share');
+            return $resultRedirect;
         }
     }
 
@@ -222,27 +229,28 @@ class Send extends Action\Action implements IndexInterface
      * Add 'wishlist_email_rss' layout handle.
      * Add 'wishlist_email_items' layout handle.
      *
+     * @param \Magento\Framework\View\Result\Layout $resultLayout
      * @return void
      */
-    protected function addLayoutHandles()
+    protected function addLayoutHandles(ResultLayout $resultLayout)
     {
         if ($this->getRequest()->getParam('rss_url')) {
-            $this->_view->getLayout()->getUpdate()->addHandle('wishlist_email_rss');
+            $resultLayout->addHandle('wishlist_email_rss');
         }
-        $this->_view->getLayout()->getUpdate()->addHandle('wishlist_email_items');
-        $this->_view->loadLayoutUpdates();
+        $resultLayout->addHandle('wishlist_email_items');
     }
 
     /**
      * Retrieve RSS link content (html)
      *
      * @param int $wishlistId
+     * @param \Magento\Framework\View\Result\Layout $resultLayout
      * @return mixed
      */
-    protected function getRssLink($wishlistId)
+    protected function getRssLink($wishlistId, ResultLayout $resultLayout)
     {
         if ($this->getRequest()->getParam('rss_url')) {
-            return $this->_view->getLayout()
+            return $resultLayout->getLayout()
                 ->getBlock('wishlist.email.rss')
                 ->setWishlistId($wishlistId)
                 ->toHtml();
@@ -252,11 +260,12 @@ class Send extends Action\Action implements IndexInterface
     /**
      * Retrieve wishlist items content (html)
      *
+     * @param \Magento\Framework\View\Result\Layout $resultLayout
      * @return string
      */
-    protected function getWishlistItems()
+    protected function getWishlistItems(ResultLayout $resultLayout)
     {
-        return $this->_view->getLayout()
+        return $resultLayout->getLayout()
             ->getBlock('wishlist.email.items')
             ->toHtml();
     }
