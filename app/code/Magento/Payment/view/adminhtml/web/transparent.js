@@ -27,10 +27,22 @@ define([
         },
 
         _create: function() {
+            var prepare = function (event, method) {
+                if (method === this.options.gateway) {
+                    $('#edit_form')
+                        .off('submitOrder')
+                        .on('submitOrder', this._orderSave.bind(this))
+                }
+            };
             this.hiddenFormTmpl = mageTemplate(this.options.hiddenFormTmpl);
-            $('#edit_form')
-                .off('submitOrder')
-                .on('submitOrder', this._orderSave.bind(this))
+            jQuery('#edit_form').on('changePaymentMethod', prepare.bind(this));
+
+            jQuery('#edit_form').trigger(
+                'changePaymentMethod',
+                [
+                    jQuery('#edit_form').find(':radio[name="payment[method]"]:checked').val()
+                ]
+            );
         },
 
         /**
