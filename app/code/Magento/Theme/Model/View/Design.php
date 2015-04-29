@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Theme\Model\View;
+
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
