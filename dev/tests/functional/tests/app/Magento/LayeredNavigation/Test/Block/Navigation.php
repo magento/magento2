@@ -3,13 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\LayeredNavigation\Test\Block;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Catalog layered navigation view block
+ * Catalog layered navigation view block.
  */
 class Navigation extends Block
 {
@@ -21,20 +22,6 @@ class Navigation extends Block
     protected $clearAll = '.action.clear';
 
     /**
-     * Price range.
-     *
-     * @var string
-     */
-    protected $priceRange = "[href$='?price=%s']";
-
-    /**
-     * Attribute option.
-     *
-     * @var string
-     */
-    protected $attributeOption = "//a[contains(text(), '%s')]";
-
-    /**
      * Attribute option title selector.
      *
      * @var string
@@ -42,11 +29,11 @@ class Navigation extends Block
     protected $optionTitle = '.filter-options-title';
 
     /**
-     * Attribute option content selector.
+     * Filter link locator.
      *
      * @var string
      */
-    protected $optionContent = '.filter-options-content';
+    protected $filterLink = './/dt[contains(text(),"%s")]/following-sibling::dd//a';
 
     /**
      * Click on 'Clear All' link.
@@ -56,28 +43,6 @@ class Navigation extends Block
     public function clearAll()
     {
         $this->_rootElement->find($this->clearAll, locator::SELECTOR_CSS)->click();
-    }
-
-    /**
-     * Select product price range.
-     *
-     * @param string $range
-     * @return void
-     */
-    public function selectPriceRange($range)
-    {
-        $this->_rootElement->find(sprintf($this->priceRange, $range))->click();
-    }
-
-    /**
-     * Select attribute option.
-     *
-     * @param string $optionName
-     * @return void
-     */
-    public function selectAttributeOption($optionName)
-    {
-        $this->_rootElement->find(sprintf($this->attributeOption, $optionName), Locator::SELECTOR_XPATH)->click();
     }
 
     /**
@@ -93,5 +58,26 @@ class Navigation extends Block
             $data[] = $option->getText();
         }
         return $data;
+    }
+
+    /**
+     * Open filter link.
+     *
+     * @param string $filter
+     * @param string $linkPattern
+     * @return void
+     * @throws \Exception
+     */
+    public function openFilterLink($filter, $linkPattern)
+    {
+        $links = $this->_rootElement->getElements(sprintf($this->filterLink, $filter), Locator::SELECTOR_XPATH);
+
+        foreach ($links as $link) {
+            if (preg_match($linkPattern, trim($link->getText()))) {
+                $link->click();
+                return;
+            }
+        }
+        throw new \Exception("Can't find {$filter} filter link by pattern: {$linkPattern}");
     }
 }
