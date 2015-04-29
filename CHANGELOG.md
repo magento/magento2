@@ -1,3 +1,25 @@
+0.74.0-beta6
+=============
+* Framework improvements
+    * Implemented a default exception handler for blocks
+    * Updated the root composer.json file
+    * Updated the setup tool to support different editions
+    * Added an ability to operate with Sales & Checkout APIs as guests and registered users
+    * Implemented the additional Sales & Checkout APIs for registered customers and guests
+    * Added unit tests to cover Sales & Checkout services code
+* Various
+    * Standardized the hierarchy of exceptions
+    * Added bundle product API integration to Catalog
+* Fixed bugs
+    * Fixed an issue where it was impossible to place an order using multiple address checkout
+    * Fixed an issue where DB timestamp columns with current_timestamp on update were not handled correctly
+    * Fixed an issue with FPT in partial invoices
+    * Fixed a performance issue in benchmark test
+    * Fixed the incorrect Exception class in the Magento_CurrencySymbol module
+    * Fixed an issue by letting MySQL determine a database table type instead of MyISAM
+    * Fixed an issue where test failures occurred when the database and the application were in different time zones
+    * Fixed an issue where \Magento\Framework\Phrase omitted placeholder values if no renderer was set
+
 0.74.0-beta5
 =============
 * Various
