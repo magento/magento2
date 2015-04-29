@@ -20,7 +20,7 @@ class Iframe extends \Magento\Framework\View\Element\Template
     protected $coreRegistry;
 
     /**
-     * Construct
+     * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
