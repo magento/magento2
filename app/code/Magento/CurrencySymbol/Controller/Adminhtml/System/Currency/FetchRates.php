@@ -22,7 +22,7 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
         $service = $this->getRequest()->getParam('rate_services');
         $this->_getSession()->setCurrencyRateService($service);
         if (!$service) {
-            throw new \Exception(__('Please specify a correct Import Service.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a correct Import Service.'));
         }
         try {
             /** @var \Magento\Directory\Model\Currency\Import\ImportInterface $importModel */
