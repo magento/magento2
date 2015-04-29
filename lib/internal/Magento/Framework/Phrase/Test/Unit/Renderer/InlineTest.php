@@ -8,28 +8,36 @@ namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 class InlineTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\TranslateInterface
+     * @var \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $translator;
 
     /**
      * @var \Magento\Framework\Phrase\Renderer\Translate
      */
-    protected $_renderer;
+    protected $renderer;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ProviderInterface
+     * @var \Magento\Framework\Translate\Inline\ProviderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $provider;
+
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
 
     protected function setUp()
     {
         $this->translator = $this->getMock('Magento\Framework\TranslateInterface', [], [], '', false);
         $this->provider = $this->getMock('Magento\Framework\Translate\Inline\ProviderInterface', [], [], '', false);
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+            ->getMock();
 
         $this->renderer = new \Magento\Framework\Phrase\Renderer\Inline(
             $this->translator,
-            $this->provider
+            $this->provider,
+            $this->loggerMock
         );
     }
 
@@ -69,5 +77,18 @@ class InlineTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($inlineTranslate));
 
         $this->assertEquals($text, $this->renderer->render([$text], []));
+    }
+
+    public function testRenderException()
+    {
+        $message = 'something went wrong';
+        $exception = new \Exception($message);
+
+        $this->provider->expects($this->once())
+            ->method('get')
+            ->willThrowException($exception);
+
+        $this->setExpectedException('Exception', $message);
+        $this->renderer->render(['text'], []);
     }
 }

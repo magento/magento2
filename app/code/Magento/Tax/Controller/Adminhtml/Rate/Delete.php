@@ -7,6 +7,7 @@
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Controller\ResultFactory;
 
 class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
 {
@@ -18,20 +19,19 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
     public function execute()
     {
         if ($rateId = $this->getRequest()->getParam('rate')) {
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             try {
                 $this->_taxRateRepository->deleteById($rateId);
 
                 $this->messageManager->addSuccess(__('The tax rate has been deleted.'));
-                $this->getResponse()->setRedirect($this->getUrl("*/*/"));
-                return;
+                return $resultRedirect->setPath("*/*/");
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addError(
                     __('Something went wrong deleting this rate because of an incorrect rate ID.')
                 );
-                $this->getResponse()->setRedirect($this->getUrl('tax/*/'));
-                return;
+                return $resultRedirect->setPath("tax/*/");
             }
-            return $this->getDefaultResult();
         }
     }
 
@@ -42,11 +42,11 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
      */
     public function getDefaultResult()
     {
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($this->getRequest()->getServer('HTTP_REFERER')) {
             $resultRedirect->setRefererUrl();
         } else {
-            $resultRedirect->setUrl($this->getUrl("*/*/"));
+            $resultRedirect->setPath("*/*/");
         }
         return $resultRedirect;
     }
