@@ -68,7 +68,9 @@ define([
     ko.extenders.disposablePrivateData = function(target, sectionName) {
         storage.remove(sectionName);
         target.subscribe(function(newValue) {
-            storage.remove(sectionName);
+            setTimeout(function(){
+                storage.remove(sectionName);
+            }, 3000);
         });
         return target;
     };
