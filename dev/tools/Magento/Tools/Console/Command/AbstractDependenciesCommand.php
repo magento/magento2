@@ -19,6 +19,11 @@ abstract class AbstractDependenciesCommand extends Command
     const INPUT_KEY_DIRECTORY = 'directory';
 
     /**
+     * Input key for output path of report file
+     */
+    const INPUT_KEY_OUTPUT = 'output';
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -30,6 +35,13 @@ abstract class AbstractDependenciesCommand extends Command
                     InputOption::VALUE_REQUIRED,
                     'Path to base directory for parsing',
                     BP
+                ),
+                new InputOption(
+                    self::INPUT_KEY_OUTPUT,
+                    'o',
+                    InputOption::VALUE_REQUIRED,
+                    'Path to report file',
+                    $this->getDefaultOutputPath()
                 )
             ]
         );
@@ -39,9 +51,17 @@ abstract class AbstractDependenciesCommand extends Command
     /**
      * Build dependencies report
      *
+     * @param string $outputPath
      * @return void
      */
-    abstract protected function buildReport();
+    abstract protected function buildReport($outputPath);
+
+    /**
+     * Get path to the default output report file
+     *
+     * @return string
+     */
+    abstract protected function getDefaultOutputPath();
 
     /**
      * {@inheritdoc}
@@ -49,8 +69,8 @@ abstract class AbstractDependenciesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            Files::setInstance(new \Magento\Framework\App\Utility\Files($input->getOption(self::INPUT_KEY_DIRECTORY)));
-            $this->buildReport();
+            Files::setInstance(new Files($input->getOption(self::INPUT_KEY_DIRECTORY)));
+            $this->buildReport($input->getOption(self::INPUT_KEY_OUTPUT));
             $output->writeln('<info>Report successfully processed.</info>');
         } catch (\Exception $e) {
             $output->writeln(

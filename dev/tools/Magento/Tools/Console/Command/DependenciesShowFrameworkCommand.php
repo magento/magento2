@@ -24,11 +24,22 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
     }
 
     /**
+     * Return default output file for framework dependencies report
+     *
+     * @return string
+     */
+    protected function getDefaultOutputPath()
+    {
+        return 'framework-dependencies.csv';
+    }
+
+    /**
      * Build Framework dependencies report
      *
+     * @param string $outputPath
      * @return void
      */
-    protected function buildReport()
+    protected function buildReport($outputPath)
     {
         $filesForParse = Files::init()->getFiles([Files::init()->getPathToSource() . '/app/code/Magento'], '*');
         $configFiles = Files::init()->getConfigFiles('module.xml', [], false);
@@ -40,7 +51,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
                     'config_files' => $configFiles,
                     'declared_namespaces' => Files::init()->getNamespaces(),
                 ],
-                'write' => ['report_filename' => 'framework-dependencies.csv'],
+                'write' => ['report_filename' => $outputPath],
             ]
         );
     }

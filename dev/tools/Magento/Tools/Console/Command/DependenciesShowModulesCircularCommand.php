@@ -24,18 +24,29 @@ class DependenciesShowModulesCircularCommand extends AbstractDependenciesCommand
     }
 
     /**
+     * Return default output file for modules circular dependencies report
+     *
+     * @return string
+     */
+    protected function getDefaultOutputPath()
+    {
+        return 'modules-circular-dependencies.csv';
+    }
+
+    /**
      * Build circular dependencies between modules report
      *
+     * @param string $outputPath
      * @return void
      */
-    protected function buildReport()
+    protected function buildReport($outputPath)
     {
         $filesForParse = Files::init()->getComposerFiles('code', false);
 
         ServiceLocator::getCircularDependenciesReportBuilder()->build(
             [
                 'parse' => ['files_for_parse' => $filesForParse],
-                'write' => ['report_filename' => 'modules-circular-dependencies.csv'],
+                'write' => ['report_filename' => $outputPath],
             ]
         );
     }

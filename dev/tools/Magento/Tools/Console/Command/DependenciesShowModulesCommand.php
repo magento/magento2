@@ -24,18 +24,29 @@ class DependenciesShowModulesCommand extends AbstractDependenciesCommand
     }
 
     /**
+     * Return default output file for modules dependencies report
+     *
+     * @return string
+     */
+    protected function getDefaultOutputPath()
+    {
+        return 'modules-dependencies.csv';
+    }
+
+    /**
      * Build circular dependencies between modules report
      *
+     * @param string $outputPath
      * @return void
      */
-    protected function buildReport()
+    protected function buildReport($outputPath)
     {
         $filesForParse = Files::init()->getComposerFiles('code', false);
 
         ServiceLocator::getDependenciesReportBuilder()->build(
             [
                 'parse' => ['files_for_parse' => $filesForParse],
-                'write' => ['report_filename' => 'modules-dependencies.csv'],
+                'write' => ['report_filename' => $outputPath],
             ]
         );
     }
