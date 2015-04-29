@@ -15,7 +15,7 @@ define([
             editable: true,
             editing: false,
             changed: false,
-            restored: true,
+            isNew: false,
             saved: {},
             exports: {
                 active: 'onActivate'
@@ -37,7 +37,7 @@ define([
                 items: this.data || {}
             };
 
-            this.restored ?
+            !this.isNew ?
                 this.save() :
                 this.changed(true);
         },
@@ -135,15 +135,12 @@ define([
          * @returns {Object} Current data.
          */
         save: function () {
-            var data = this.getData(),
-                saved = this.saved;
-
-            saved.items = data;
-            saved.label = this.label();
+            this.saved = utils.copy(this.data);
+            this.isNew = false;
 
             this.changed(false);
 
-            return data;
+            return this.saved.items;
         },
 
         /**

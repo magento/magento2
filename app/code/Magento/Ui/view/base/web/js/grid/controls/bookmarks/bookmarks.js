@@ -29,9 +29,8 @@ define([
             },
             newViewTmpl: {
                 label: 'New View',
-                active: true,
                 editing: true,
-                restored: false
+                isNew: true
             },
             views: {
                 default: {
@@ -64,6 +63,10 @@ define([
             if (elem.index === this.defaultIndex) {
                 this.defaultView = elem;
             }
+
+            elem.on({
+                editing: this.onEditingChange.bind(this, elem)
+            });
 
             return this._super();
         },
@@ -136,9 +139,9 @@ define([
                 this.defaultView.active(true);
             }
 
-            this.removeStored('views.' + view.index);
-
             view.destroy();
+
+            this.removeStored('views.' + view.index);
 
             return this;
         },
@@ -153,21 +156,27 @@ define([
         saveView: function (view) {
             var data;
 
-            if (view.changed()) {
-                data = view.save();
-
-                this.store('views.' + view.index, {
-                    index: view.index,
-                    label: view.label(),
-                    data: data
-                });
+            if (!view.changed()) {
+                return this;
             }
+
+            if (view.isNew) {
+                view.active(true);
+            }
+
+            data = view.save();
+
+            this.store('views.' + view.index, {
+                index: view.index,
+                label: view.label(),
+                data: data
+            });
 
             return this;
         },
 
         /**
-         * Retrives last saved data of current view.
+         * Retrives last saved data of a current view.
          *
          * @returns {Object}
          */
@@ -200,11 +209,11 @@ define([
          * @param {String} index - Index of the active view.
          */
         onActiveChange: function (index) {
-            var active = this.elems.findWhere({index: index}),
-                data = active.getData();
+            var view = this.elems.findWhere({index: index}),
+                data = view.getData();
 
             this.store('activeIndex')
-                .activeView(active);
+                .activeView(view);
 
             if (_.size(data)) {
                 this.set('current', data);
@@ -219,6 +228,15 @@ define([
 
             if (active) {
                 active.setData(this.current);
+            }
+        },
+
+        /**
+         * Lsitens changes of the views' 'editing' property.
+         */
+        onEditingChange: function (view, isEditing) {
+            if (!isEditing && view.isNew) {
+                this.removeView(view);
             }
         }
     });
