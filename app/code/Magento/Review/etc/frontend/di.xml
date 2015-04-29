@@ -16,14 +16,21 @@
             <argument name="storage" xsi:type="object">Magento\Review\Model\Session\Storage</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Review\Block\Form">
+    <type name="Magento\Review\Controller\Product">
         <arguments>
             <argument name="reviewSession" xsi:type="object">Magento\Review\Model\Session</argument>
         </arguments>
     </type>
-    <type name="Magento\Review\Controller\Product">
+    <type name="Magento\Review\Model\PrivateData\Section\Review">
         <arguments>
             <argument name="reviewSession" xsi:type="object">Magento\Review\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="review" xsi:type="string">Magento\Review\Model\PrivateData\Section\Review</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Url\SecurityInfo">

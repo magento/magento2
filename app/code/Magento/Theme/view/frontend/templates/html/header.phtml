@@ -14,7 +14,7 @@ $welcomeMessage = $block->getWelcome();
 <?php switch ($block->getShowPart()):
     case 'welcome': ?>
         <li class="greet welcome" data-bind="scope: 'welcome'">
-                <span data-bind="text: customer().username||'<?= $welcomeMessage ?>'"><?= $welcomeMessage?></span>
+                <span data-bind="text: welcome()||'<?= $welcomeMessage ?>'"><?= $welcomeMessage?></span>
         </li>
         <script type="text/x-magento-init">
         {

@@ -4,15 +4,14 @@
 */
 define([
     'uiComponent',
-    'Magento_Customer/js/customer-data'
-], function (Component, customerData) {
+    'Magento_Customer/js/customer-data',
+    'jquery'
+], function (Component, customerData, $) {
     'use strict';
 
     return Component.extend({
-        initialize: function () {
-            this._super();
-
-            this.customer = customerData.get('customer');
+        welcome: function() {
+            return $.mage.__('Welcome, ') + customerData.get('customer')().fullname + '!';
         }
     });
 });
