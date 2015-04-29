@@ -13,6 +13,27 @@ namespace Magento\Tax\Model\Calculation\Rate;
 class Converter
 {
     /**
+     * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory
+     */
+    protected $_taxRateDataObjectFactory;
+
+    /**
+     * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory
+     */
+    protected $_taxRateTitleDataObjectFactory;
+
+    /**
+     * @param \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory
+     * @param \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory,
+     */
+    public function __construct(
+        \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory,
+        \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
+    ) {
+        $this->_taxRateDataObjectFactory = $taxRateDataObjectFactory;
+        $this->_taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;
+    }
+    /**
      * Convert a tax rate data object to an array of associated titles
      *
      * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
@@ -39,7 +60,7 @@ class Converter
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function createArrayFromServiceObject($taxRate, $returnNumericLogic = false)
+    public function createArrayFromServiceObject(\Magento\Tax\Api\Data\TaxRateInterface $taxRate, $returnNumericLogic = false)
     {
         $taxRateFormData = [
             'tax_calculation_rate_id' => $taxRate->getId(),
@@ -80,5 +101,52 @@ class Converter
         }
 
         return $taxRateFormData;
+    }
+
+
+    /**
+     * Convert an array to a tax rate data object
+     *
+     * @param array $formData
+     * @return \Magento\Tax\Api\Data\TaxRateInterface
+     */
+    public function populateTaxRateData($formData)
+    {
+        $taxRate = $this->_taxRateDataObjectFactory->create();
+        $taxRate->setId($this->extractFormData($formData, 'tax_calculation_rate_id'))
+            ->setTaxCountryId($this->extractFormData($formData, 'tax_country_id'))
+            ->setTaxRegionId($this->extractFormData($formData, 'tax_region_id'))
+            ->setTaxPostcode($this->extractFormData($formData, 'tax_postcode'))
+            ->setCode($this->extractFormData($formData, 'code'))
+            ->setRate($this->extractFormData($formData, 'rate'));
+        if (isset($formData['zip_is_range']) && $formData['zip_is_range']) {
+            $taxRate->setZipFrom($this->extractFormData($formData, 'zip_from'))
+                ->setZipTo($this->extractFormData($formData, 'zip_to'))->setZipIsRange(1);
+        }
+
+        if (isset($formData['title'])) {
+            $titles = [];
+            foreach ($formData['title'] as $storeId => $value) {
+                $titles[] = $this->_taxRateTitleDataObjectFactory->create()->setStoreId($storeId)->setValue($value);
+            }
+            $taxRate->setTitles($titles);
+        }
+
+        return $taxRate;
+    }
+
+    /**
+     * Determines if an array value is set in the form data array and returns it.
+     *
+     * @param array $formData the form to get data from
+     * @param string $fieldName the key
+     * @return null|string
+     */
+    protected function extractFormData($formData, $fieldName)
+    {
+        if (isset($formData[$fieldName])) {
+            return $formData[$fieldName];
+        }
+        return null;
     }
 }
