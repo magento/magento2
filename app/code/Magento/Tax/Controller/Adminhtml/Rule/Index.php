@@ -10,12 +10,12 @@ namespace Magento\Tax\Controller\Adminhtml\Rule;
 class Index extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**
-     * @return $this
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->_initAction();
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Rules'));
-        $this->_view->renderLayout();
+        $resultPage = $this->initResultPage();
+        $resultPage->getConfig()->getTitle()->prepend(__('Tax Rules'));
+        return $resultPage;
     }
 }

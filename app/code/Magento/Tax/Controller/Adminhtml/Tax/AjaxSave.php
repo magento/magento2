@@ -6,12 +6,14 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Tax;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Tax
 {
     /**
      * Save Tax Class via AJAX
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
@@ -24,30 +26,30 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Tax
                 ->setClassName($this->_processClassName((string)$this->getRequest()->getPost('class_name')));
             $taxClassId = $this->taxClassRepository->save($taxClass);
 
-            $responseContent = $this->_objectManager->get(
-                'Magento\Framework\Json\Helper\Data'
-            )->jsonEncode(
-                [
-                    'success' => true,
-                    'error_message' => '',
-                    'class_id' => $taxClassId,
-                    'class_name' => $taxClass->getClassName(),
-                ]
-            );
+            $responseContent = [
+                'success' => true,
+                'error_message' => '',
+                'class_id' => $taxClassId,
+                'class_name' => $taxClass->getClassName(),
+            ];
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $responseContent = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode(
-                ['success' => false, 'error_message' => $e->getMessage(), 'class_id' => '', 'class_name' => '']
-            );
+            $responseContent = [
+                'success' => false,
+                'error_message' => $e->getMessage(),
+                'class_id' => '',
+                'class_name' => ''
+            ];
         } catch (\Exception $e) {
-            $responseContent = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode(
-                [
-                    'success' => false,
-                    'error_message' => __('Something went wrong saving this tax class.'),
-                    'class_id' => '',
-                    'class_name' => '',
-                ]
-            );
+            $responseContent = [
+                'success' => false,
+                'error_message' => __('Something went wrong saving this tax class.'),
+                'class_id' => '',
+                'class_name' => '',
+            ];
         }
-        $this->getResponse()->representJson($responseContent);
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $resultJson->setData($responseContent);
+        return $resultJson;
     }
 }
