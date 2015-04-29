@@ -48,7 +48,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ];
             foreach ($dropTablesColumn as $table) {
                 $connection->dropIndex(
-                    $table,
+                    $installer->getTable($table),
                     $installer->getIdxName(
                         $table,
                         'entity_type_id',
