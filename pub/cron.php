@@ -29,7 +29,7 @@ if ($_GET){
 if (empty($opt['group'])) {
     $opt['group'] = 'default';
 }
-// It is tracked for internal communication between processes, no user input is needed for this
+// This flag is for internal communication between processes only; no user input is needed for this
 if (empty($opt['standaloneProcessStarted'])) {
     $opt['standaloneProcessStarted'] = '0';
 }
