@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Test\Handler\SalesRuleInjectable;
+namespace Magento\SalesRule\Test\Handler\SalesRule;
 
 use Magento\Mtf\Handler\HandlerInterface;
 
 /**
  * Interface SalesRuleInterface.
  */
-interface SalesRuleInjectableInterface extends HandlerInterface
+interface SalesRuleInterface extends HandlerInterface
 {
     //
 }
