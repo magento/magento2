@@ -3,17 +3,18 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define(['uiComponent', 'ko', '../model/gift-options'],
-    function (Component, ko, giftOptions) {
+define(['uiComponent', 'ko', '../model/gift-options', '../model/gift-message'],
+    function (Component, ko, giftOptions, giftMessage) {
         "use strict";
+
         return Component.extend({
             defaults: {
                 template: 'Magento_GiftMessage/gift-options',
                 displayArea: 'shippingAdditional'
             },
-            isGiftOptionsSelected: ko.observable(false),
-            isOrderLevelGiftOptionsSelected: ko.observable(false),
-            isItemLevelGiftOptionsSelected: ko.observable(false),
+            isGiftOptionsSelected: ko.observable(giftMessage.isGiftOptionsSelected()),
+            isOrderLevelGiftOptionsSelected: ko.observable(giftMessage.isOrderLevelGiftOptionsSelected()),
+            isItemLevelGiftOptionsSelected: ko.observable(giftMessage.isItemLevelGiftOptionsSelected()),
             isGiftOptionsAvailable: function() {
                 return giftOptions.isGiftOptionsAvailable();
             },
@@ -30,9 +31,24 @@ define(['uiComponent', 'ko', '../model/gift-options'],
                 return giftOptions.getItemLevelGiftOptions();
             },
             submit: function() {
-                var orderLevelOptions = this.getOrderLevelGiftOptions()[0].submit(),
-                    itemLevelOptions = this.getItemLevelGiftOptions()[0].submit(),
-                    giftOptions = orderLevelOptions.concat(itemLevelOptions);
+                var orderLevelOptions = [],
+                    itemLevelOptions = [],
+                    giftOptions;
+                if (giftMessage.isOrderLevelGiftOptionsSelected() &&
+                    this.isOrderLevelGiftOptionsSelected() !== giftMessage.isOrderLevelGiftOptionsSelected()
+                ) {
+                    orderLevelOptions = this.getOrderLevelGiftOptions()[0].submit(true);
+                } else {
+                    orderLevelOptions = this.getOrderLevelGiftOptions()[0].submit();
+                }
+                if (giftMessage.isItemLevelGiftOptionsSelected() &&
+                    this.isItemLevelGiftOptionsSelected() !== giftMessage.isItemLevelGiftOptionsSelected()
+                ) {
+                    itemLevelOptions = this.getItemLevelGiftOptions()[0].submit(true);
+                } else {
+                    itemLevelOptions = this.getItemLevelGiftOptions()[0].submit();
+                }
+                giftOptions = orderLevelOptions.concat(itemLevelOptions);
                 if (giftOptions.length === 0) {
                     return [];
                 }

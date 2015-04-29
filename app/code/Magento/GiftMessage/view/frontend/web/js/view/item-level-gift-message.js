@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model/quote'],
-    function (Component, ko, giftOptions, quote) {
+define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model/quote', '../model/gift-message'],
+    function (Component, ko, giftOptions, quote, giftMessage) {
         "use strict";
         return Component.extend({
             defaults: {
@@ -20,15 +20,15 @@ define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model
                     that = this,
                     quoteItems = quote.getItems();
                 quote.getShippingAddress().subscribe(function(shippingAddress) {
-                    var customerName = shippingAddress.firstname + ' ' + shippingAddress.lastname;
+                    var name = shippingAddress.firstname + ' ' + shippingAddress.lastname;
                     for (item in quoteItems) {
                         if (quoteItems.hasOwnProperty(item)) {
-                            if (quoteItems[item].is_virtual == 0) {
+                            if (quoteItems[item].is_virtual === '0') {
                                 var itemId = quoteItems[item].item_id;
                                 that.messages[itemId] = {
-                                    from: ko.observable(customerName),
-                                    to: ko.observable(customerName),
-                                    message: ko.observable(null)
+                                    from: ko.observable(giftMessage.getDefaultMessageForItem(itemId).from || name),
+                                    to: ko.observable(giftMessage.getDefaultMessageForItem(itemId).to || name),
+                                    message: ko.observable(giftMessage.getDefaultMessageForItem(itemId).message)
                                 };
                                 that.isItemLevelGiftMessagesHidden[itemId] = ko.observable(true);
                                 that.quoteItems.push(quoteItems[item]);
@@ -42,10 +42,12 @@ define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model
                 giftOptions.addItemLevelGiftOptions(this);
             },
             itemImages: ko.observableArray(),
-            setItemLevelGiftMessageHidden: function(itemId) {
+            setItemLevelGiftMessageHidden: function(itemId, event) {
+                event.preventDefault();
                 this.isItemLevelGiftMessagesHidden[itemId](!this.isItemLevelGiftMessagesHidden[itemId]());
             },
-            submit: function() {
+            submit: function(remove) {
+                remove = remove || false;
                 var itemId,
                     giftMessages = [],
                     that = this;
@@ -53,9 +55,9 @@ define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model
                     if (that.messages.hasOwnProperty(itemId)) {
                         if (that.messages[itemId].message() !== null) {
                             giftMessages.push({
-                                sender: that.messages[itemId].from(),
-                                recipient: that.messages[itemId].to(),
-                                message: that.messages[itemId].message(),
+                                sender: remove ? null : that.messages[itemId].from(),
+                                recipient: remove ? null : that.messages[itemId].to(),
+                                message: remove ? null : that.messages[itemId].message(),
                                 extension_attributes: {
                                     entity_id: itemId,
                                     entity_type: 'item'
