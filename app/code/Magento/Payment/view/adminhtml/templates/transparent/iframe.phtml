@@ -24,8 +24,7 @@ $params = $block->getParams();
     var require = window.top.require;
     require(['jquery'], function($) {
         $('#edit_form').trigger('processStop');
-    });
-    require(['jquery'], function($) {
+
         $("input[name='payment[cc_number]']").prop('disabled', true);
         $("select[name='payment[cc_type]']").prop('disabled', true);
         $("select[name='payment[cc_exp_month]']").prop('disabled', true);
