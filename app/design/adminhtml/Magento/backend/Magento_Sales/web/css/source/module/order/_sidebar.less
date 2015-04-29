@@ -8,18 +8,16 @@
 //  ---------------------------------------------
 
 @order-create-sidebar__font-size: 1.5rem;
-@order-create-sidebar__font-size-xs: 1.1rem;
+@order-create-sidebar__font-size__xs: 1.1rem;
 @order-create-sidebar__color: @color-very-dark-gray;
 @order-create-sidebar__margin: 2.4rem;
 @order-create-sidebar__padding: @indent__base;
-@order-create-sidebar__margin-small: .5rem;
-@order-create-sidebar__margin-m: 1rem;
-@order-create-sidebar__margin-reqular: 1.7rem;
+@order-create-sidebar__margin__s: .5rem;
+@order-create-sidebar__margin__m: 1rem;
+@order-create-sidebar__margin__reqular: 1.7rem;
 @order-create-sidebar__border-color: @border__color;
 
 @order-create-sidebar-scroll__height: 24rem;
-
-//
 
 //
 //  Order Sidebar
@@ -47,7 +45,7 @@
         padding: 0 0 @order-create-sidebar__margin;
     }
     .admin__control-select {
-        margin: 0 0 @order-create-sidebar__margin-small;
+        margin: 0 0 @order-create-sidebar__margin__s;
         width: 100%;
     }
     .order-sidebar-block {
@@ -55,7 +53,7 @@
         margin: 0 0 @order-create-sidebar__margin;
         padding: 0 0 @order-create-sidebar__margin;
     }
-    .table-info {
+    .admin__table-primary {
         color: @order-create-sidebar__color;
         width: 100%;
         th,
@@ -102,7 +100,7 @@
             text-align: right;
             .icon-configure,
             .icon-add {
-                margin-right: @order-create-sidebar__margin-m;
+                margin-right: @order-create-sidebar__margin__m;
             }
         }
     }
@@ -110,7 +108,7 @@
         &:extend(.abs-icon all);
         display: table-cell;
         font-size: @order-create-icon-refresh__font-size;
-        padding-right: @order-create-sidebar__margin-m;
+        padding-right: @order-create-sidebar__margin__m;
         vertical-align: middle;
         &:after {
             color: @order-create-icon-refresh__color;
@@ -127,16 +125,16 @@
         }
     }
     .create-order-sidebar-block {
-        .head {
+        .sidebar-title-block {
             margin: 0 0 @order-create-sidebar__margin;
         }
         .auto-scroll {
-            margin: 0 -@order-create-sidebar__padding @order-create-sidebar__margin-small;
+            margin: 0 -@order-create-sidebar__padding @order-create-sidebar__margin__s;
             max-height: @order-create-sidebar-scroll__height;
             overflow: auto;
             position: relative;
             + .action-default {
-                margin-top: @order-create-sidebar__margin-reqular;
+                margin-top: @order-create-sidebar__margin__reqular;
             }
             .no-items {
                 padding-left: @order-create-sidebar__padding;
@@ -153,7 +151,7 @@
         margin: 0;
         vertical-align: middle;
         + .admin__control-select {
-            margin-top: @order-create-sidebar__margin-reqular;
+            margin-top: @order-create-sidebar__margin__reqular;
         }
     }
     .actions {
