@@ -23,14 +23,14 @@ class Product extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $coreRegistry = null;
 
     /**
      * Customer session model
      *
      * @var \Magento\Customer\Model\Session
      */
-    protected $_customerSession;
+    protected $customerSession;
 
     /**
      * Generic session
@@ -125,8 +125,8 @@ class Product extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;
-        $this->_coreRegistry = $coreRegistry;
-        $this->_customerSession = $customerSession;
+        $this->coreRegistry = $coreRegistry;
+        $this->customerSession = $customerSession;
         $this->_reviewSession = $reviewSession;
         $this->categoryRepository = $categoryRepository;
         $this->_logger = $logger;
@@ -153,9 +153,9 @@ class Product extends \Magento\Framework\App\Action\Action
         }
 
         if (!$allowGuest && $request->getActionName() == 'post' && $request->isPost()) {
-            if (!$this->_customerSession->isLoggedIn()) {
+            if (!$this->customerSession->isLoggedIn()) {
                 $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-                $this->_customerSession->setBeforeAuthUrl($this->_url->getUrl('*/*/*', ['_current' => true]));
+                $this->customerSession->setBeforeAuthUrl($this->_url->getUrl('*/*/*', ['_current' => true]));
                 $this->_reviewSession->setFormData(
                     $request->getPostValue()
                 )->setRedirectUrl(
@@ -175,20 +175,20 @@ class Product extends \Magento\Framework\App\Action\Action
      *
      * @return CatalogProduct
      */
-    protected function _initProduct()
+    protected function initProduct()
     {
         $this->_eventManager->dispatch('review_controller_product_init_before', ['controller_action' => $this]);
         $categoryId = (int)$this->getRequest()->getParam('category', false);
         $productId = (int)$this->getRequest()->getParam('id');
 
-        $product = $this->_loadProduct($productId);
+        $product = $this->loadProduct($productId);
         if (!$product) {
             return false;
         }
 
         if ($categoryId) {
             $category = $this->categoryRepository->get($categoryId);
-            $this->_coreRegistry->register('current_category', $category);
+            $this->coreRegistry->register('current_category', $category);
         }
 
         try {
@@ -212,7 +212,7 @@ class Product extends \Magento\Framework\App\Action\Action
      * @param int $productId
      * @return bool|CatalogProduct
      */
-    protected function _loadProduct($productId)
+    protected function loadProduct($productId)
     {
         if (!$productId) {
             return false;
@@ -227,8 +227,8 @@ class Product extends \Magento\Framework\App\Action\Action
             return false;
         }
 
-        $this->_coreRegistry->register('current_product', $product);
-        $this->_coreRegistry->register('product', $product);
+        $this->coreRegistry->register('current_product', $product);
+        $this->coreRegistry->register('product', $product);
 
         return $product;
     }

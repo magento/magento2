@@ -15,7 +15,7 @@ class ListAjax extends \Magento\Review\Controller\Product
      */
     public function execute()
     {
-        $this->_initProduct();
+        $this->initProduct();
         $this->_view->loadLayout();
         $this->_view->renderLayout();
     }

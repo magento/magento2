@@ -32,7 +32,7 @@ class View extends \Magento\Review\Controller\Product
             return false;
         }
 
-        $this->_coreRegistry->register('current_review', $review);
+        $this->coreRegistry->register('current_review', $review);
 
         return $review;
     }
@@ -50,7 +50,7 @@ class View extends \Magento\Review\Controller\Product
             return;
         }
 
-        $product = $this->_loadProduct($review->getEntityPkValue());
+        $product = $this->loadProduct($review->getEntityPkValue());
         if (!$product) {
             $this->_forward('noroute');
             return;

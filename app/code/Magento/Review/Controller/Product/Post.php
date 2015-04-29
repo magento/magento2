@@ -34,7 +34,7 @@ class Post extends \Magento\Review\Controller\Product
             $rating = $this->getRequest()->getParam('ratings', []);
         }
 
-        if (($product = $this->_initProduct()) && !empty($data)) {
+        if (($product = $this->initProduct()) && !empty($data)) {
             $review = $this->_reviewFactory->create()->setData($data);
             /* @var $review Review */
 
@@ -48,7 +48,7 @@ class Post extends \Magento\Review\Controller\Product
                     )->setStatusId(
                         Review::STATUS_PENDING
                     )->setCustomerId(
-                        $this->_customerSession->getCustomerId()
+                        $this->customerSession->getCustomerId()
                     )->setStoreId(
                         $this->_storeManager->getStore()->getId()
                     )->setStores(
@@ -61,7 +61,7 @@ class Post extends \Magento\Review\Controller\Product
                         )->setReviewId(
                             $review->getId()
                         )->setCustomerId(
-                            $this->_customerSession->getCustomerId()
+                            $this->customerSession->getCustomerId()
                         )->addOptionVote(
                             $optionId,
                             $product->getId()

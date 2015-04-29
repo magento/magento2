@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -45,9 +44,9 @@ class ListAction extends \Magento\Review\Controller\Product
      */
     public function execute()
     {
-        $product = $this->_initProduct();
+        $product = $this->initProduct();
         if ($product) {
-            $this->_coreRegistry->register('productId', $product->getId());
+            $this->coreRegistry->register('productId', $product->getId());
 
             $design = $this->_catalogDesign;
             $settings = $design->getDesignSettings($product);
