@@ -142,6 +142,7 @@ class Currencysymbol
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @api
      */
     public function getCurrencySymbolsData()
     {
@@ -222,6 +223,7 @@ class Currencysymbol
      *
      * @param  $symbols array
      * @return $this
+     * @api
      */
     public function setCurrencySymbolsData($symbols = [])
     {
@@ -274,6 +276,7 @@ class Currencysymbol
      *
      * @param string $code
      * @return string|false
+     * @api
      */
     public function getCurrencySymbol($code)
     {
