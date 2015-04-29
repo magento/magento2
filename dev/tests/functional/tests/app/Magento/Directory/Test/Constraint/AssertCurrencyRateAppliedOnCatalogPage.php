@@ -39,7 +39,8 @@ class AssertCurrencyRateAppliedOnCatalogPage extends AbstractConstraint
         $categoryName = $product->getCategoryIds()[0];
         $cmsIndex->open();
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        $actualPrice = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock()->getPrice('');
+        $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
+        $actualPrice = $priceBlock->getPrice('');
 
         \PHPUnit_Framework_Assert::assertEquals(
             $basePrice,
@@ -49,7 +50,7 @@ class AssertCurrencyRateAppliedOnCatalogPage extends AbstractConstraint
 
         $cmsIndex->getCurrencyBlock()->switchCurrency($currencySymbol);
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        $actualPrice = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock()->getPrice('');
+        $actualPrice = $priceBlock->getPrice('');
 
         \PHPUnit_Framework_Assert::assertEquals(
             $convertedPrice,

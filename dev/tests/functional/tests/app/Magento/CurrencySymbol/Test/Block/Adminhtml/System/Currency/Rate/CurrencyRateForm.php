@@ -16,13 +16,6 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class CurrencyRateForm extends Form
 {
     /**
-     * Selector for input.
-     *
-     * @var string
-     */
-    protected $inputRateSelector = 'input[name="rate[%s][%s]"]';
-
-    /**
      * Fill currency rate form.
      *
      * @param FixtureInterface $fixture
@@ -31,9 +24,12 @@ class CurrencyRateForm extends Form
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
-        $data = $fixture->getData();
-        $inputRateSelector = sprintf($this->inputRateSelector, $data['currency_from'], $data['currency_to']);
-        $this->_rootElement->find($inputRateSelector)->setValue($data['rate']);
+        $fixtureData = $fixture->getData();
+        $this->placeholders['currency_from'] = $fixtureData['currency_from'];
+        $this->placeholders['currency_to'] = $fixtureData['currency_to'];
+        $this->applyPlaceholders();
+        $mapping = $this->dataMapping(['rate' => $fixtureData['rate']]);
+        $this->_fill($mapping, $element);
 
         return $this;
     }

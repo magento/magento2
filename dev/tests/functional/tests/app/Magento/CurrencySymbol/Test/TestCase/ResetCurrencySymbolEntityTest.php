@@ -6,12 +6,8 @@
 
 namespace Magento\CurrencySymbol\Test\TestCase;
 
-use Magento\Mtf\TestCase\Injectable;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
-use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
-use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
 
 /**
  * Preconditions:
@@ -28,76 +24,12 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
  * @group Currency_(PS)
  * @ZephyrId MAGETWO-26638
  */
-class ResetCurrencySymbolEntityTest extends Injectable
+class ResetCurrencySymbolEntityTest extends CurrencySymbolEntityTest
 {
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'PS';
     /* end tags */
-
-    /**
-     * System currency symbol grid page.
-     *
-     * @var SystemCurrencySymbolIndex
-     */
-    protected $currencySymbolIndex;
-
-    /**
-     * System currency index page.
-     *
-     * @var SystemCurrencyIndex
-     */
-    protected $currencyIndex;
-
-    /**
-     * Currency symbol entity fixture.
-     *
-     * @var CurrencySymbolEntity
-     */
-    protected $currencySymbolDefault;
-
-    /**
-     * Fixture Factory.
-     *
-     * @var FixtureFactory
-     */
-    protected $fixtureFactory;
-
-    /**
-     * Prepare data. Create simple product.
-     *
-     * @param FixtureFactory $fixtureFactory
-     * @return array
-     */
-    public function __prepare(FixtureFactory $fixtureFactory)
-    {
-        $this->fixtureFactory = $fixtureFactory;
-        $product = $this->fixtureFactory->createByCode(
-            'catalogProductSimple',
-            ['dataSet' => 'product_with_category']
-        );
-        $product->persist();
-
-        return ['product' => $product];
-    }
-
-    /**
-     * Injection data.
-     *
-     * @param SystemCurrencySymbolIndex $currencySymbolIndex
-     * @param SystemCurrencyIndex $currencyIndex
-     * @param CurrencySymbolEntity $currencySymbolDefault
-     * @return array
-     */
-    public function __inject(
-        SystemCurrencySymbolIndex $currencySymbolIndex,
-        SystemCurrencyIndex $currencyIndex,
-        CurrencySymbolEntity $currencySymbolDefault
-    ) {
-        $this->currencySymbolIndex = $currencySymbolIndex;
-        $this->currencyIndex = $currencyIndex;
-        $this->currencySymbolDefault = $currencySymbolDefault;
-    }
 
     /**
      * Reset Currency Symbol Entity test.
@@ -134,41 +66,5 @@ class ResetCurrencySymbolEntityTest extends Injectable
                 ]
             )
         ];
-    }
-
-    /**
-     * Import currency rates.
-     *
-     * @param string $configData
-     * @return void
-     * @throws \Exception
-     */
-    protected function importCurrencyRate($configData)
-    {
-        $this->objectManager->getInstance()->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => $configData]
-        )->run();
-
-        // Import Exchange Rates for currencies
-        $this->currencyIndex->open();
-        $this->currencyIndex->getGridPageActions()->clickImportButton();
-        if ($this->currencyIndex->getMessagesBlock()->isVisibleMessage('warning')) {
-            throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessages());
-        }
-        $this->currencyIndex->getFormPageActions()->save();
-    }
-
-    /**
-     * Disabling currency which has been added.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        $this->objectManager->getInstance()->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => 'config_currency_symbols_usd']
-        )->run();
     }
 }
