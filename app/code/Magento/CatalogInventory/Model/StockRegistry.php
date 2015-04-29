@@ -15,6 +15,8 @@ use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 
 /**
  * Class StockRegistry
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockRegistry implements StockRegistryInterface
 {
