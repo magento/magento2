@@ -20,25 +20,17 @@ class Iframe extends \Magento\Framework\View\Element\Template
     protected $coreRegistry;
 
     /**
-     * @var \Magento\Authorizenet\Helper\DataFactory
-     */
-    protected $dataFactory;
-
-    /**
      * Construct
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Authorizenet\Helper\DataFactory $dataFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Authorizenet\Helper\DataFactory $dataFactory,
         array $data = []
     ) {
-        $this->dataFactory = $dataFactory;
         $this->coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -55,16 +47,5 @@ class Iframe extends \Magento\Framework\View\Element\Template
             $this->setParams($params);
         }
         return parent::_prepareLayout();
-    }
-
-    /**
-     * Get helper data
-     *
-     * @param string $area
-     * @return \Magento\Authorizenet\Helper\Backend\Data|\Magento\Authorizenet\Helper\Data
-     */
-    public function getHelper($area)
-    {
-        return $this->dataFactory->create($area);
     }
 }
