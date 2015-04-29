@@ -35,4 +35,10 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Developer\Console\Command\XmlConverterCommand">
+        <arguments>
+            <argument name="domXml" xsi:type="object" shared="false">DOMDocument</argument>
+            <argument name="domXsl" xsi:type="object" shared="false">DOMDocument</argument>
+        </arguments>
+    </type>
 </config>

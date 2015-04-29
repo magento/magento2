@@ -40,18 +40,37 @@ class XmlConverterCommand extends Command
     private $formatter;
 
     /**
+     * @var \DOMDocument
+     */
+    private $domXml;
+
+    /**
+     * @var \DOMDocument
+     */
+    private $domXsl;
+
+    /**
+     * @var \XSLTProcessor
+     */
+    private $xsltProcessor;
+
+    /**
      * Inject dependencies
      *
      * @param Formatter $formatter
+     * @param \DOMDocument $domXml
+     * @param \DOMDocument $domXsl
+     * @param \XSLTProcessor $xsltProcessor
      */
     public function __construct(
         Formatter $formatter,
-        \DOMDocument $dom,
+        \DOMDocument $domXml,
+        \DOMDocument $domXsl,
         \XSLTProcessor $xsltProcessor
     ) {
         $this->formatter = $formatter;
-        $this->domXml = clone $dom;
-        $this->domXsl = clone $dom;
+        $this->domXml = $domXml;
+        $this->domXsl = $domXsl;
         $this->xsltProcessor = $xsltProcessor;
 
         parent::__construct();
@@ -89,7 +108,6 @@ class XmlConverterCommand extends Command
 
     /**
      * {@inheritdoc}
-     * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -110,13 +128,9 @@ class XmlConverterCommand extends Command
                 file_put_contents($input->getArgument(self::XML_FILE_ARGUMENT), $result);
                 $output->writeln("<info>You saved converted XML into $xmlFile</info>");
             } else {
-                echo $result;
+                $output->write($result);
             }
 
-            return;
-        } catch (\Zend_Console_Getopt_Exception $e) {
-            $errorMessage =  $e->getUsageMessage();
-            $output->writeln("<error>$errorMessage</error>");
             return;
         } catch (\Exception $exception) {
             $errorMessage = $exception->getMessage();
