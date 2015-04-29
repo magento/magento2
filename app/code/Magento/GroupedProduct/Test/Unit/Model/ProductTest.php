@@ -415,6 +415,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productLink2->setExtensionAttributes($extension);
 
         $links = $this->model->getProductLinks();
-        $this->assertEquals($links, $expectedOutput);
+        // Match the links
+        $matches = 0;
+        foreach ($links as $link) {
+            foreach ($expectedOutput as $expected) {
+                if ($expected->getData() == $link->getData()) {
+                    $matches++;
+                }
+            }
+        }
+        $this->assertEquals($matches, 2);
     }
 }
