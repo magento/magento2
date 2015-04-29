@@ -206,6 +206,21 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
+     * Convert custom values if necessary
+     *
+     * @param array $customAttributes
+     * @return void
+     */
+    protected function convertCustomAttributeValues(array &$customAttributes)
+    {
+        foreach ($customAttributes as $attributeCode => $attributeValue) {
+            if ($attributeValue instanceof \Magento\Framework\Api\AttributeValue) {
+                $customAttributes[$attributeCode] = $attributeValue->getValue();
+            }
+        }
+    }
+
+    /**
      * Object data getter
      *
      * If $key is not defined will return all the data as an array.
@@ -231,6 +246,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             $customAttributes = isset($this->_data[self::CUSTOM_ATTRIBUTES])
                 ? $this->_data[self::CUSTOM_ATTRIBUTES]
                 : [];
+            $this->convertCustomAttributeValues($customAttributes);
             $data = array_merge($this->_data, $customAttributes);
             unset($data[self::CUSTOM_ATTRIBUTES]);
         } else {
@@ -238,6 +254,9 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
             if ($data === null) {
                 /** Try to find necessary data in custom attributes */
                 $data = parent::getData(self::CUSTOM_ATTRIBUTES . "/{$key}", $index);
+                if ($data instanceof \Magento\Framework\Api\AttributeValue) {
+                    $data = $data->getValue();
+                }
             }
         }
         return $data;

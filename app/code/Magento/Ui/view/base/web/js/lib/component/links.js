@@ -44,7 +44,7 @@ define([
             target.on(targetProp, callback);
         }
 
-        if (auto) {
+        if (auto && typeof value !== 'undefined') {
             callback(value);
         }
     }
