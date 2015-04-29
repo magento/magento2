@@ -77,4 +77,17 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($resultAfterSecond, $this->object->render([$text], $arguments));
     }
+
+    public function testRenderException()
+    {
+        $message = 'something went wrong';
+        $exception = new \Exception($message);
+
+        $this->rendererOne->expects($this->once())
+            ->method('render')
+            ->willThrowException($exception);
+
+        $this->setExpectedException('Exception', $message);
+        $this->object->render(['text'], []);
+    }
 }

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,6 +8,7 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Framework\App\Action;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class DownloadCustomOption extends Action\Action implements IndexInterface
 {
@@ -32,7 +32,7 @@ class DownloadCustomOption extends Action\Action implements IndexInterface
     /**
      * Custom options download action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Forward
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
@@ -43,9 +43,11 @@ class DownloadCustomOption extends Action\Action implements IndexInterface
         )->load(
             $this->getRequest()->getParam('id')
         );
-
+        /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+        $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
         if (!$option->getId()) {
-            return $this->_forward('noroute');
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
 
         $optionId = null;
@@ -56,7 +58,8 @@ class DownloadCustomOption extends Action\Action implements IndexInterface
                 $option->getCode()
             );
             if ((int)$optionId != $optionId) {
-                return $this->_forward('noroute');
+                $resultForward->forward('noroute');
+                return $resultForward;
             }
         }
         $productOption = $this->_objectManager->create('Magento\Catalog\Model\Product\Option')->load($optionId);
@@ -66,7 +69,8 @@ class DownloadCustomOption extends Action\Action implements IndexInterface
             $productOption->getProductId() != $option->getProductId() ||
             $productOption->getType() != 'file'
         ) {
-            return $this->_forward('noroute');
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
 
         try {
@@ -81,8 +85,8 @@ class DownloadCustomOption extends Action\Action implements IndexInterface
                 );
             }
         } catch (\Exception $e) {
-            $this->_forward('noroute');
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
-        exit(0);
     }
 }

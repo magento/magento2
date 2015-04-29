@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
+
+use Magento\Framework\Controller\ResultFactory;
 
 class RemoveTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,16 +23,6 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
-
-    /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $response;
-
-    /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $view;
 
     /**
      * @var \Magento\Store\App\Response\Redirect|\PHPUnit_Framework_MockObject_MockObject
@@ -53,17 +44,36 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
      */
     protected $url;
 
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
     protected function setUp()
     {
         $this->context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->wishlistProvider = $this->getMock('Magento\Wishlist\Controller\WishlistProvider', [], [], '', false);
-        $this->view = $this->getMock('Magento\Framework\App\View', [], [], '', false);
         $this->redirect = $this->getMock('\Magento\Store\App\Response\Redirect', [], [], '', false);
         $this->om = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $this->messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
         $this->url = $this->getMock('Magento\Framework\Url', [], [], '', false);
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT, [])
+            ->willReturn($this->resultRedirectMock);
     }
 
     public function tearDown()
@@ -71,9 +81,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         unset(
             $this->context,
             $this->request,
-            $this->response,
             $this->wishlistProvider,
-            $this->view,
             $this->redirect,
             $this->om,
             $this->messageManager,
@@ -96,10 +104,6 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->request);
         $this->context
             ->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->response);
-        $this->context
-            ->expects($this->any())
             ->method('getEventManager')
             ->willReturn($eventManager);
         $this->context
@@ -116,12 +120,11 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->redirect);
         $this->context
             ->expects($this->any())
-            ->method('getView')
-            ->willReturn($this->view);
-        $this->context
-            ->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
     }
 
     public function getController()
@@ -283,13 +286,12 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->response
-            ->expects($this->once())
-            ->method('setRedirect')
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setUrl')
             ->with($referer)
-            ->willReturn(true);
+            ->willReturnSelf();
 
-        $this->getController()->execute();
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
     public function testExecuteCanNotSaveWishlistAndWithRedirect()
@@ -373,19 +375,18 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getUrl')
             ->with('*/*')
-            ->willReturn('http:/test.com/frontname/module/controller/action');
+            ->willReturn('http://test.com/frontname/module/controller/action');
 
         $this->redirect
             ->expects($this->once())
             ->method('getRedirectUrl')
-            ->willReturn('http:/test.com/frontname/module/controller/action');
+            ->willReturn('http://test.com/frontname/module/controller/action');
 
-        $this->response
-            ->expects($this->once())
-            ->method('setRedirect')
-            ->with('http:/test.com/frontname/module/controller/action')
-            ->willReturn(true);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setUrl')
+            ->with('http://test.com/frontname/module/controller/action')
+            ->willReturnSelf();
 
-        $this->getController()->execute();
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 }
