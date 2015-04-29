@@ -28,6 +28,11 @@
     <action name="checkout/cart/estimateUpdatePost">
         <section name="cart"/>
     </action>
+
+    <action name="checkout/onepage/saveOrder">
+        <section name="cart"/>
+    </action>
+
     <action name="checkout/sidebar/removeItem">
         <section name="cart"/>
     </action>

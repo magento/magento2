@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../Magento/Customer/etc/sections.xsd">
-    <action name="checkout/onepage/success">
+    <action name="checkout/onepage/saveOrder">
         <section name="last-ordered-items"/>
     </action>
 </config>
