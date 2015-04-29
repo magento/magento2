@@ -7,7 +7,11 @@
  */
 namespace Magento\Framework\Phrase\Renderer;
 
-class Translate implements \Magento\Framework\Phrase\RendererInterface
+use Magento\Framework\Phrase\RendererInterface;
+use Magento\Framework\TranslateInterface;
+use Psr\Log\LoggerInterface;
+
+class Translate implements RendererInterface
 {
     /**
      * @var \Magento\Framework\TranslateInterface
@@ -15,13 +19,22 @@ class Translate implements \Magento\Framework\Phrase\RendererInterface
     protected $translator;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Renderer construct
      *
      * @param \Magento\Framework\TranslateInterface $translator
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(\Magento\Framework\TranslateInterface $translator)
-    {
+    public function __construct(
+        TranslateInterface $translator,
+        LoggerInterface $logger
+    ) {
         $this->translator = $translator;
+        $this->logger = $logger;
     }
 
     /**
@@ -30,12 +43,19 @@ class Translate implements \Magento\Framework\Phrase\RendererInterface
      * @param [] $source
      * @param [] $arguments
      * @return string
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function render(array $source, array $arguments)
     {
         $text = end($source);
 
-        $data = $this->translator->getData();
+        try {
+            $data = $this->translator->getData();
+        } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
+            throw $e;
+        }
 
         return array_key_exists($text, $data) ? $data[$text] : $text;
     }
