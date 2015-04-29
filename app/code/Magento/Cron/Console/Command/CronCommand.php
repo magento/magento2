@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\App\ObjectManagerFactory;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 
@@ -28,7 +28,7 @@ class CronCommand extends Command
     /**
      * Object Manager
      *
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -72,7 +72,7 @@ class CronCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $params['group'] = $input->getOption(self::INPUT_KEY_GROUP);
-        // This flag 'standaloneProcessStarted' is for internal communication between processes only
+        // This 'standaloneProcessStarted' flag is for internal communication between processes only
         $params['standaloneProcessStarted'] = '0';
         /** @var \Magento\Framework\App\Cron $cronObserver */
         $cronObserver = $this->objectManager->create('Magento\Framework\App\Cron', ['parameters' => $params]);
