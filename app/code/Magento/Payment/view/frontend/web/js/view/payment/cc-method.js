@@ -88,7 +88,7 @@ define(
                 });
             },
             isShowLegend: function() {
-                return window.checkoutConfig.payment.cc.isShowLegend;
+                return false;
             }
         });
     }

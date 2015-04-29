@@ -11,6 +11,7 @@ define(
         var shippingAddress = ko.observable(null);
         var shippingMethod = ko.observable(null);
         var paymentMethod = ko.observable(null);
+        var paymentData = ko.observable(null);
         var quoteData = window.checkoutConfig.quoteData;
         var currencySymbol = window.checkoutConfig.currencySymbol;
         var baseCurrencySymbol = window.checkoutConfig.baseCurrencySymbol;
@@ -57,6 +58,12 @@ define(
             },
             getPaymentMethod: function() {
                 return paymentMethod;
+            },
+            setPaymentData: function(data) {
+                paymentData(data);
+            },
+            getPaymentData: function() {
+                return paymentData;
             },
             setShippingMethod: function(shippingMethodCode) {
                 shippingMethod(shippingMethodCode);

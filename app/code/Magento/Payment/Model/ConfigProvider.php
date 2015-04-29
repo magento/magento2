@@ -73,7 +73,6 @@ class ConfigProvider implements ConfigProviderInterface
                     'hasSsCardType' => $this->hasSsCardType(),
                     'ssStartYears' => $this->getSsStartYears(),
                     'cvvImage' => $this->getCvvImage(),
-                    'isShowLegend' => $this->isShowLegend(),
                 ],
             ],
         ];
@@ -174,15 +173,5 @@ class ConfigProvider implements ConfigProviderInterface
             $this->logger->critical($e);
             return $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }
-    }
-
-    /**
-     * Check whether to show legend
-     *
-     * @return bool
-     */
-    protected function isShowLegend()
-    {
-        return false;
     }
 }
