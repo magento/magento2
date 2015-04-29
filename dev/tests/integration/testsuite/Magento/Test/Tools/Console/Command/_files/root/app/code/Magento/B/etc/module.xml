@@ -6,9 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_Authorization" setup_version="2.0.0">
-        <sequence>
-            <module name="Magento_Backend"/>
-        </sequence>
-    </module>
+    <module name="Magento_B" setup_version="2.0.0" />
 </config>
