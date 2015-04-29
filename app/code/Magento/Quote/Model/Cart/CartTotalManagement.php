@@ -15,7 +15,7 @@ class CartTotalManagement implements CartTotalManagementInterface
     /**
      * @var \Magento\Quote\Api\ShippingMethodManagementInterface
      */
-    protected $shippingMehodManagement;
+    protected $shippingMethodManagement;
 
     /**
      * @var \Magento\Quote\Api\PaymentMethodManagementInterface
@@ -44,7 +44,7 @@ class CartTotalManagement implements CartTotalManagementInterface
         \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
         \Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor $dataProcessor
     ) {
-        $this->shippingMehodManagement = $shippingMethodManagement;
+        $this->shippingMethodManagement = $shippingMethodManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartTotalsRepository = $cartTotalsRepository;
         $this->dataProcessor = $dataProcessor;
@@ -61,7 +61,7 @@ class CartTotalManagement implements CartTotalManagementInterface
         \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
     ) {
         if ($shippingCarrierCode && $shippingMethodCode) {
-            $this->shippingMehodManagement->set($cartId, $shippingCarrierCode, $shippingMethodCode);
+            $this->shippingMethodManagement->set($cartId, $shippingCarrierCode, $shippingMethodCode);
         }
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
         if ($additionalData !== null) {

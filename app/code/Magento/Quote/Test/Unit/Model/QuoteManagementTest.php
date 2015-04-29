@@ -116,6 +116,11 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $quoteMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $agreementsValidatorMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -214,6 +219,14 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->agreementsValidatorMock = $this->getMock(
+            '\Magento\Checkout\Model\Agreements\AgreementsValidator',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->model = $objectManager->getObject(
             'Magento\Quote\Model\QuoteManagement',
             [
@@ -230,7 +243,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'customerModelFactory' => $this->customerFactoryMock,
-                'dataObjectHelper' => $dataObjectHelper,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
                 'storeManager' => $this->storeManagerMock,
                 'checkoutSession' => $this->checkoutSessionMock,
                 'customerSession' => $this->customerSessionMock,
@@ -678,9 +691,11 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'customerModelFactory' => $this->customerFactoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
+                'storeManager' => $this->storeManagerMock,
                 'checkoutSession' => $this->checkoutSessionMock,
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
+                'agreementsValidator' => $this->agreementsValidatorMock,
             ]
         );
         $orderMock = $this->getMock(
@@ -700,6 +715,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastSuccessQuoteId')->with($cartId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderId')->with($orderId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
+        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
+
         $this->assertEquals($orderId, $service->placeOrder($cartId));
     }
 
@@ -728,9 +745,11 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'customerModelFactory' => $this->customerFactoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
+                'storeManager' => $this->storeManagerMock,
                 'checkoutSession' => $this->checkoutSessionMock,
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
+                'agreementsValidator' => $this->agreementsValidatorMock,
             ]
         );
         $orderMock = $this->getMock(
@@ -763,6 +782,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastSuccessQuoteId')->with($cartId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderId')->with($orderId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
+        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
         $this->assertEquals($orderId, $service->placeOrder($cartId));
     }
 
@@ -804,9 +824,11 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'customerModelFactory' => $this->customerFactoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
+                'storeManager' => $this->storeManagerMock,
                 'checkoutSession' => $this->checkoutSessionMock,
                 'customerSession' => $this->customerSessionMock,
                 'accountManagement' => $this->accountManagementMock,
+                'agreementsValidator' => $this->agreementsValidatorMock,
             ]
         );
 
