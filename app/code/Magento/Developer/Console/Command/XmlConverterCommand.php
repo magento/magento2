@@ -98,7 +98,7 @@ class XmlConverterCommand extends Command
                     self::OVERWRITE_OPTION,
                     '-o',
                     InputOption::VALUE_NONE,
-                    'Overwrite file XML file'
+                    'Overwrite XML file'
                 ),
 
             ]);
