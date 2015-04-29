@@ -73,6 +73,14 @@ define([
         return target;
     };
 
+    var invalidateCacheBySessionTimeOut = function(options) {
+        if (!$.cookieStorage.isSet('mage-cache-life')) {
+            storage.removeAll();
+        }
+        var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
+        $.cookieStorage.setExpires(date).set('mage-cache-life', 'true');
+    };
+
     var buffer = {
         data: {},
         bind: function (sectionName) {
@@ -141,13 +149,7 @@ define([
         },
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
-
-            if (!$.cookieStorage.isSet('mage-cache-life')) {
-                storage.removeAll();
-            }
-            var date = new Date(Date.now() + parseInt(options.cookieLifeTime) * 1000);
-            $.cookieStorage.setExpires(date).set('mage-cache-life', 'true');
-
+            invalidateCacheBySessionTimeOut(settings);
             customerData.init();
         }
     };
