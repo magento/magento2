@@ -7,38 +7,71 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div id="order_history_block">
+<div id="order_history_block" class="edit-order-comments">
     <?php if ($block->canAddComment()):?>
-    <div id="history_form">
-        <div><?php echo __('Add Order Comments') ?></div>
-        <div>
-            <label for="history_status"><?php echo __('Status') ?></label>
-            <select name="history[status]" id="history_status">
-            <?php foreach ($block->getStatuses() as $_code => $_label): ?>
-                <option value="<?php echo $_code ?>"<?php if ($_code == $block->getOrder()->getStatus()): ?> selected="selected"<?php endif; ?>><?php echo $_label ?></option>
-            <?php endforeach; ?>
-            </select>
-        </div>
-        <div>
-            <label for="history_comment"><?php echo __('Comment') ?></label>
-            <textarea name="history[comment]" rows="3" cols="5" id="history_comment"></textarea>
-        </div>
-        <div class="clearfix">
-            <div class="order-history-comments-options">
-                <?php if ($block->canSendCommentEmail()): ?>
-                <input name="history[is_customer_notified]" type="checkbox" id="history_notify" value="1" /><label for="history_notify"> <?php echo __('Notify Customer by Email') ?></label><br />
-                <?php endif; ?>
-                <input name="history[is_visible_on_front]" type="checkbox" id="history_visible" value="1" /><label for="history_visible"> <?php echo __('Visible on Frontend') ?></label>
+        <div class="order-history-block" id="history_form">
+
+            <div class="admin__field">
+                <label for="history_status" class="admin__field-label"><?php echo __('Status') ?></label>
+                <div class="admin__field-control">
+                    <select name="history[status]" id="history_status" class="admin__control-select">
+                        <?php foreach ($block->getStatuses() as $_code => $_label): ?>
+                            <option value="<?php echo $_code ?>"<?php if ($_code == $block->getOrder()->getStatus()): ?> selected="selected"<?php endif; ?>><?php echo $_label ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
             </div>
-            <div class="actions">
-                <?php echo $block->getChildHtml('submit_button') ?>
+
+            <div class="admin__field">
+                <label for="history_comment" class="admin__field-label">
+                    <?php echo __('Comment') ?>
+                </label>
+                <div class="admin__field-control">
+                    <textarea name="history[comment]"
+                              rows="3"
+                              cols="5"
+                              id="history_comment"
+                              class="admin__control-textarea"></textarea>
+                </div>
+            </div>
+
+            <div class="admin__field">
+                <div class="order-history-comments-options">
+                    <div class="admin__field admin__field-option">
+                        <?php if ($block->canSendCommentEmail()): ?>
+                            <input name="history[is_customer_notified]"
+                                   type="checkbox"
+                                   id="history_notify"
+                                   class="admin__control-checkbox"
+                                   value="1" />
+                            <label class="admin__field-label" for="history_notify">
+                                <?php echo __('Notify Customer by Email') ?>
+                            </label>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="admin__field admin__field-option">
+                        <input name="history[is_visible_on_front]"
+                               type="checkbox"
+                               id="history_visible"
+                               class="admin__control-checkbox"
+                               value="1" />
+                        <label class="admin__field-label" for="history_visible">
+                            <?php echo __('Visible on Frontend') ?>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="order-history-comments-actions">
+                    <?php echo $block->getChildHtml('submit_button') ?>
+                </div>
             </div>
         </div>
-    </div>
     <?php endif;?>
+
     <ul class="note-list">
     <?php foreach ($block->getOrder()->getStatusHistoryCollection(true) as $_item): ?>
-        <li>
+        <li class="note-list-item">
             <span class="note-list-date"><?php echo $block->formatDate($_item->getCreatedAtDate(), \IntlDateFormatter::MEDIUM) ?></span>
             <span class="note-list-time"><?php echo $block->formatTime($_item->getCreatedAtDate(), \IntlDateFormatter::MEDIUM) ?></span>
             <span class="note-list-status"><?php echo $_item->getStatusLabel() ?></span>

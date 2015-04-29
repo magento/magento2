@@ -6,6 +6,8 @@
 
 namespace Magento\Tax\Controller\Adminhtml;
 
+use Magento\Framework\Controller\ResultFactory;
+
 /**
  * Adminhtml tax rate controller
  *
@@ -76,21 +78,15 @@ class Rate extends \Magento\Backend\App\Action
     /**
      * Initialize action
      *
-     * @return \Magento\Backend\App\Action
+     * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function _initAction()
+    protected function initResultPage()
     {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_Tax::sales_tax_rates'
-        )->_addBreadcrumb(
-            __('Sales'),
-            __('Sales')
-        )->_addBreadcrumb(
-            __('Tax'),
-            __('Tax')
-        );
-        return $this;
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_Tax::sales_tax_rates')
+            ->addBreadcrumb(__('Sales'), __('Sales'))
+            ->addBreadcrumb(__('Tax'), __('Tax'));
+        return $resultPage;
     }
 
     /**
