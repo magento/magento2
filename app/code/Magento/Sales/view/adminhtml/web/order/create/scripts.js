@@ -339,6 +339,7 @@ AdminOrder.prototype = {
     },
 
     switchPaymentMethod : function(method){
+        jQuery('#edit_form').trigger('changePaymentMethod', [method]);
         this.setPaymentMethod(method);
         var data = {};
         data['order[payment_method]'] = method;
