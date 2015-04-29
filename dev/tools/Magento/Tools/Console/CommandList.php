@@ -20,7 +20,11 @@ class CommandList
      */
     protected function getCommandsClasses()
     {
-        return [];
+        return [
+            'Magento\Tools\Console\Command\DependenciesShowFrameworkCommand',
+            'Magento\Tools\Console\Command\DependenciesShowModulesCircularCommand',
+            'Magento\Tools\Console\Command\DependenciesShowModulesCommand',
+        ];
     }
 
     /**
