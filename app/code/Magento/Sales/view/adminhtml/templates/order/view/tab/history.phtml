@@ -7,10 +7,10 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<div class="fieldset-wrapper">
+<section class="admin__page-section edit-order-comments">
     <ul class="note-list">
     <?php foreach ($block->getFullHistory() as $_item): ?>
-        <li>
+        <li class="note-list-item">
             <span class="note-list-date"><?php echo $block->getItemCreatedAt($_item) ?></span>
             <span class="note-list-time"><?php echo $block->getItemCreatedAt($_item, 'time') ?></span>
             <span class="note-list-status"><?php echo $block->getItemTitle($_item) ?></span>
@@ -26,10 +26,26 @@
                     <?php endif; ?>
                 </span>
             <?php endif; ?>
-            <?php if ($_comment = $block->getItemComment($_item)): ?>
-                <div class="note-list-comment"><?php echo $_comment ?></div>
-            <?php endif; ?>
         </li>
     <?php endforeach; ?>
     </ul>
-</div>
+    <div class="edit-order-comments-block">
+        <div class="edit-order-comments-block-title">
+            <?php echo __('Notes for this Order') ?>
+        </div>
+        <?php foreach ($block->getFullHistory() as $_item): ?>
+            <?php if ($_comment = $block->getItemComment($_item)): ?>
+                <div class="comments-block-item">
+                    <div class="comments-block-item-comment">
+                        <?php echo $_comment ?>
+                    </div>
+                    <span class="comments-block-item-date-time">
+                        <?php echo __('Comment added') ?>
+                        <?php echo $block->getItemCreatedAt($_item) ?>
+                        <?php echo $block->getItemCreatedAt($_item, 'time') ?>
+                    </span>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</section>

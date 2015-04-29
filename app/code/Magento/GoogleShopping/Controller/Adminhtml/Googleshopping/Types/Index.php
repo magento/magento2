@@ -11,12 +11,12 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
     /**
      * List of all maps (items)
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->_initAction()->_addBreadcrumb(__('Attribute Maps'), __('Attribute Maps'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Google Content Attributes'));
-        $this->_view->renderLayout();
+        $resultPage = $this->initPage()->addBreadcrumb(__('Attribute Maps'), __('Attribute Maps'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Google Content Attributes'));
+        return $resultPage;
     }
 }
