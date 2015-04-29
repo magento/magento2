@@ -13,7 +13,6 @@ use Magento\Review\Model\Review;
 /**
  * Review controller
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Framework\App\Action\Action
@@ -37,7 +36,7 @@ class Product extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Framework\Session\Generic
      */
-    protected $_reviewSession;
+    protected $reviewSession;
 
     /**
      * Catalog catgory model
@@ -51,7 +50,7 @@ class Product extends \Magento\Framework\App\Action\Action
      *
      * @var \Psr\Log\LoggerInterface
      */
-    protected $_logger;
+    protected $logger;
 
     /**
      * Catalog product model
@@ -65,35 +64,35 @@ class Product extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Review\Model\ReviewFactory
      */
-    protected $_reviewFactory;
+    protected $reviewFactory;
 
     /**
      * Rating model
      *
      * @var \Magento\Review\Model\RatingFactory
      */
-    protected $_ratingFactory;
+    protected $ratingFactory;
 
     /**
      * Catalog design model
      *
      * @var \Magento\Catalog\Model\Design
      */
-    protected $_catalogDesign;
+    protected $catalogDesign;
 
     /**
      * Core model store manager interface
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * Core form key validator
      *
      * @var \Magento\Framework\Data\Form\FormKey\Validator
      */
-    protected $_formKeyValidator;
+    protected $formKeyValidator;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -124,17 +123,17 @@ class Product extends \Magento\Framework\App\Action\Action
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
     ) {
-        $this->_storeManager = $storeManager;
+        $this->storeManager = $storeManager;
         $this->coreRegistry = $coreRegistry;
         $this->customerSession = $customerSession;
-        $this->_reviewSession = $reviewSession;
+        $this->reviewSession = $reviewSession;
         $this->categoryRepository = $categoryRepository;
-        $this->_logger = $logger;
+        $this->logger = $logger;
         $this->productRepository = $productRepository;
-        $this->_reviewFactory = $reviewFactory;
-        $this->_ratingFactory = $ratingFactory;
-        $this->_catalogDesign = $catalogDesign;
-        $this->_formKeyValidator = $formKeyValidator;
+        $this->reviewFactory = $reviewFactory;
+        $this->ratingFactory = $ratingFactory;
+        $this->catalogDesign = $catalogDesign;
+        $this->formKeyValidator = $formKeyValidator;
 
         parent::__construct($context);
     }
@@ -198,7 +197,7 @@ class Product extends \Magento\Framework\App\Action\Action
                 ['product' => $product, 'controller_action' => $this]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->_logger->critical($e);
+            $this->logger->critical($e);
             return false;
         }
 
