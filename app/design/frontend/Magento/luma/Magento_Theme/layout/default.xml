@@ -18,11 +18,6 @@
             <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" after="footer_links" template="switch/stores.phtml"/>
         </referenceContainer>
         <remove name="report.bugs"/>
-        <referenceBlock name="logo">
-            <arguments>
-                <argument name="logo_file" xsi:type="string">images/logo.svg</argument>
-            </arguments>
-        </referenceBlock>
         <move element="copyright" destination="before.body.end"/>
     </body>
 </page>

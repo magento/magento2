@@ -59,7 +59,7 @@ class Table
     const MAX_VARBINARY_SIZE = 2147483648;
 
     /**
-     * Default values for timestampses - fill with current timestamp on inserting record, on changing and both cases
+     * Default values for timestamps - fill with current timestamp on inserting record, on changing and both cases
      */
     const TIMESTAMP_INIT_UPDATE = 'TIMESTAMP_INIT_UPDATE';
 
@@ -405,12 +405,11 @@ class Table
      * @param string $refTable      the reference table name
      * @param string $refColumn     the reference table column name
      * @param string $onDelete      the action on delete row
-     * @param string $onUpdate      the action on update
      * @return $this
      * @throws \Zend_Db_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function addForeignKey($fkName, $column, $refTable, $refColumn, $onDelete = null, $onUpdate = null)
+    public function addForeignKey($fkName, $column, $refTable, $refColumn, $onDelete = null)
     {
         $upperName = strtoupper($fkName);
 
@@ -429,23 +428,12 @@ class Table
                 $onDelete = self::ACTION_NO_ACTION;
         }
 
-        switch ($onUpdate) {
-            case self::ACTION_CASCADE:
-            case self::ACTION_RESTRICT:
-            case self::ACTION_SET_DEFAULT:
-            case self::ACTION_SET_NULL:
-                break;
-            default:
-                $onUpdate = self::ACTION_NO_ACTION;
-        }
-
         $this->_foreignKeys[$upperName] = [
             'FK_NAME' => $fkName,
             'COLUMN_NAME' => $column,
             'REF_TABLE_NAME' => $refTable,
             'REF_COLUMN_NAME' => $refColumn,
-            'ON_DELETE' => $onDelete,
-            'ON_UPDATE' => $onUpdate,
+            'ON_DELETE' => $onDelete
         ];
 
         return $this;

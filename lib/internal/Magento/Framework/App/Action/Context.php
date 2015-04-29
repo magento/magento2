@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App\Action;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
@@ -53,6 +55,16 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $messageManager;
 
     /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory
+     */
+    protected $resultFactory;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
@@ -62,6 +74,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Framework\Controller\ResultFactory $resultFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -74,7 +88,9 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Framework\App\Response\RedirectInterface $redirect,
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        ResultFactory $resultFactory
     ) {
         $this->_request = $request;
         $this->_response = $response;
@@ -85,6 +101,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_actionFlag = $actionFlag;
         $this->_view = $view;
         $this->messageManager = $messageManager;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultFactory = $resultFactory;
     }
 
     /**
@@ -157,5 +175,21 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     public function getMessageManager()
     {
         return $this->messageManager;
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    public function getResultRedirectFactory()
+    {
+        return $this->resultRedirectFactory;
+    }
+
+    /**
+     * @return \Magento\Framework\Controller\ResultFactory
+     */
+    public function getResultFactory()
+    {
+        return $this->resultFactory;
     }
 }

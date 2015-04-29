@@ -47,7 +47,7 @@ class FileFormat implements \Magento\TestFramework\Performance\Scenario\HandlerI
      *
      * @param \Magento\TestFramework\Performance\Scenario $scenario
      * @param string|null $reportFile Report file to write results to, NULL disables report creation
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function run(\Magento\TestFramework\Performance\Scenario $scenario, $reportFile = null)
     {
@@ -55,8 +55,8 @@ class FileFormat implements \Magento\TestFramework\Performance\Scenario\HandlerI
         /** @var $scenarioHandler \Magento\TestFramework\Performance\Scenario\HandlerInterface */
         $scenarioHandler = $this->getHandler($scenarioExtension);
         if (!$scenarioHandler) {
-            throw new \Magento\Framework\Exception(
-                "Unable to run scenario '{$scenario->getTitle()}', format is not supported."
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Unable to run scenario '%1', format is not supported.", $scenario->getTitle())
             );
         }
         $scenarioHandler->run($scenario, $reportFile);

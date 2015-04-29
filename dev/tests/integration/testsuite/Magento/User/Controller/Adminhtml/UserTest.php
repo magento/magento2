@@ -97,6 +97,32 @@ class UserTest extends \Magento\Backend\Utility\Controller
 
     /**
      * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/User/_files/user_with_role.php
+     */
+    public function testSaveActionDuplicateUser()
+    {
+        $this->getRequest()->setPostValue(
+            [
+                'username' => 'adminUser',
+                'email' => 'adminUser@example.com',
+                'firstname' => 'John',
+                'lastname' => 'Doe',
+                'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+                'password_confirmation' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+                \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD => Bootstrap::ADMIN_PASSWORD,
+            ]
+        );
+        $this->dispatch('backend/admin/user/save/active_tab/main_section');
+        $this->assertSessionMessages(
+            $this->equalTo(['A user with the same user name or email already exists.']),
+            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
+        );
+        $this->assertRedirect($this->stringContains('backend/admin/user/edit/'));
+        $this->assertRedirect($this->matchesRegularExpression('/^((?!active_tab).)*$/'));
+    }
+
+    /**
+     * @magentoDbIsolation enabled
      * @dataProvider resetPasswordDataProvider
      */
     public function testSaveActionPasswordChange($postData, $isPasswordCorrect)

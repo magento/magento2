@@ -7,7 +7,7 @@
 namespace Magento\CurrencySymbol\Test\Block\Adminhtml\System\Currency;
 
 use Magento\Backend\Test\Block\PageActions;
-use Magento\Core\Test\Block\Messages;
+use Magento\Backend\Test\Block\Messages;
 
 /**
  * Grid page actions on the SystemCurrencyIndex page.
@@ -60,7 +60,7 @@ class GridPageActions extends PageActions
     protected function getMessageBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Core\Test\Block\Messages',
+            'Magento\Backend\Test\Block\Messages',
             ['element' => $this->_rootElement->find($this->message)]
         );
     }

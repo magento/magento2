@@ -85,7 +85,7 @@
                 .css(line-height, @_nav-level0-item-line-height);
                 .css(padding, @_nav-level0-item-padding);
                 .css(text-transform, @_nav-level0-text-transform);
-                word-break: break-all;
+                word-wrap: break-word;
             }
             &.active {
                 .all-category {
@@ -126,7 +126,7 @@
         }
         .submenu {
             > li {
-                word-break: break-all;
+                word-wrap: break-word;
             }
             &:not(:first-child) {
                 .css(background, @_submenu-background-color);

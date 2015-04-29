@@ -876,15 +876,13 @@ class InstallSchema implements InstallSchemaInterface
             'customer_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->addForeignKey(
             $installer->getFkName('sales_order', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Order'
         );
@@ -1037,22 +1035,19 @@ class InstallSchema implements InstallSchemaInterface
             'customer_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->addForeignKey(
             $installer->getFkName('sales_order_grid', 'entity_id', 'sales_order', 'entity_id'),
             'entity_id',
             $installer->getTable('sales_order'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_order_grid', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Order Grid'
         );
@@ -1197,7 +1192,6 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_order'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Order Address'
@@ -1314,13 +1308,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'product_id',
@@ -1699,15 +1693,13 @@ class InstallSchema implements InstallSchemaInterface
             'order_id',
             $installer->getTable('sales_order'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_order_item', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Order Item'
         );
@@ -2050,7 +2042,6 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_order'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Order Payment'
@@ -2180,15 +2171,13 @@ class InstallSchema implements InstallSchemaInterface
             'order_id',
             $installer->getTable('sales_order'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_shipment', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Shipment'
         );
@@ -2296,15 +2285,13 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('sales_shipment'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_shipment_grid', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Shipment Grid'
         );
@@ -2395,7 +2382,6 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_shipment'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Shipment Item'
@@ -2487,7 +2473,6 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_shipment'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Shipment Track'
@@ -2546,7 +2531,6 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_shipment'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Shipment Comment'
@@ -2850,15 +2834,13 @@ class InstallSchema implements InstallSchemaInterface
             'order_id',
             $installer->getTable('sales_order'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_invoice', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Invoice'
         );
@@ -2996,15 +2978,13 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('sales_invoice'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_invoice_grid', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Invoice Grid'
         );
@@ -3173,7 +3153,6 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_invoice'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Invoice Item'
@@ -3232,7 +3211,6 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_invoice'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Invoice Comment'
@@ -3560,15 +3538,13 @@ class InstallSchema implements InstallSchemaInterface
             'order_id',
             $installer->getTable('sales_order'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_creditmemo', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Creditmemo'
         );
@@ -3748,15 +3724,13 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('sales_creditmemo'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_creditmemo_grid', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Creditmemo Grid'
         );
@@ -3925,7 +3899,6 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_creditmemo'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Creditmemo Item'
@@ -3984,7 +3957,6 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_creditmemo'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Creditmemo Comment'
@@ -4066,8 +4038,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Invoiced Aggregated'
         );
@@ -4148,8 +4119,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Invoiced Aggregated Order'
         );
@@ -4296,8 +4266,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Order Aggregated Created'
         );
@@ -4394,7 +4363,6 @@ class InstallSchema implements InstallSchemaInterface
             'order_id',
             $installer->getTable('sales_order'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -4406,14 +4374,12 @@ class InstallSchema implements InstallSchemaInterface
             'parent_id',
             $installer->getTable('sales_payment_transaction'),
             'transaction_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_payment_transaction', 'payment_id', 'sales_order_payment', 'entity_id'),
             'payment_id',
             $installer->getTable('sales_order_payment'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Payment Transaction'
@@ -4489,8 +4455,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Refunded Aggregated'
         );
@@ -4565,8 +4530,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Refunded Aggregated Order'
         );
@@ -4641,8 +4605,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Shipping Aggregated'
         );
@@ -4717,8 +4680,7 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Shipping Aggregated Order'
         );
@@ -4796,7 +4758,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -4808,7 +4769,6 @@ class InstallSchema implements InstallSchemaInterface
             'product_id',
             $installer->getTable('catalog_product_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Bestsellers Aggregated Daily'
@@ -4887,7 +4847,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -4899,7 +4858,6 @@ class InstallSchema implements InstallSchemaInterface
             'product_id',
             $installer->getTable('catalog_product_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Bestsellers Aggregated Monthly'
@@ -4978,7 +4936,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -4990,7 +4947,6 @@ class InstallSchema implements InstallSchemaInterface
             'product_id',
             $installer->getTable('catalog_product_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Bestsellers Aggregated Yearly'
@@ -5138,7 +5094,6 @@ class InstallSchema implements InstallSchemaInterface
             'status',
             $installer->getTable('sales_order_status'),
             'status',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Order Status Table'
@@ -5176,14 +5131,12 @@ class InstallSchema implements InstallSchemaInterface
             'status',
             $installer->getTable('sales_order_status'),
             'status',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('sales_order_status_label', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Order Status Label Table'

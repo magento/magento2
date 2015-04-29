@@ -31,7 +31,7 @@ use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Psr\Log\LoggerInterface as PsrLogger;
-use Magento\Framework\Mail\Exception as MailException;
+use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Reflection\DataObjectProcessor;
@@ -420,10 +420,12 @@ class AccountManagement implements AccountManagementInterface
                         )
                     );
             }
+            return true;
         } catch (MailException $e) {
             // If we are not able to send a reset password email, this should be ignored
             $this->logger->critical($e);
         }
+        return false;
     }
 
     /**

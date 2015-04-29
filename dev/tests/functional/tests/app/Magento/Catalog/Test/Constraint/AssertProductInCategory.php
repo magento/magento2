@@ -13,12 +13,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertProductInCategory
+ * Checking the product in the page of its price.
  */
 class AssertProductInCategory extends AbstractConstraint
 {
     /**
-     * Checking the product in the page of its price
+     * Checking the product in the page of its price.
      *
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
@@ -41,9 +41,9 @@ class AssertProductInCategory extends AbstractConstraint
         $cmsIndex->open();
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
 
-        $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
+        $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         while (!$isProductVisible && $catalogCategoryView->getBottomToolbar()->nextPage()) {
-            $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
+            $isProductVisible = $catalogCategoryView->getListProductBlock()->getProductItem($product)->isVisible();
         }
 
         \PHPUnit_Framework_Assert::assertTrue(
@@ -56,7 +56,7 @@ class AssertProductInCategory extends AbstractConstraint
     }
 
     /**
-     * Verify product price on category view page
+     * Verify product price on category view page.
      *
      * @param FixtureInterface $product
      * @param CatalogCategoryView $catalogCategoryView
@@ -64,18 +64,25 @@ class AssertProductInCategory extends AbstractConstraint
      */
     protected function assertPrice(FixtureInterface $product, CatalogCategoryView $catalogCategoryView)
     {
-        $price = $catalogCategoryView->getListProductBlock()->getProductPriceBlock($product->getName())
-            ->getRegularPrice();
+        $priceBlock = $catalogCategoryView->getListProductBlock()->getProductItem($product)->getPriceBlock();
 
         \PHPUnit_Framework_Assert::assertEquals(
-            number_format($product->getPrice(), 2),
-            $price,
+            number_format($product->getPrice(), 2, '.', ''),
+            $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice(),
             'Product regular price on category page is not correct.'
         );
+
+        if ($product->hasData('special_price')) {
+            \PHPUnit_Framework_Assert::assertEquals(
+                number_format($product->getSpecialPrice(), 2, '.', ''),
+                $priceBlock->getSpecialPrice(),
+                'Product special price on category page is not correct.'
+            );
+        }
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

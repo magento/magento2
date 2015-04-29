@@ -295,10 +295,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     /**
      * Collect and get rates
      *
-     * @param RateRequest $request
+     * @param \Magento\Framework\Object $request
      * @return bool|Result|null
      */
-    public function collectRates(RateRequest $request)
+    public function collectRates(\Magento\Framework\Object $request)
     {
         if (!$this->getConfigFlag($this->_activeFlag)) {
             return false;
@@ -1255,10 +1255,10 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     /**
      * Processing additional validation to check is carrier applicable.
      *
-     * @param RateRequest $request
-     * @return $this|Error|boolean
+     * @param \Magento\Framework\Object $request
+     * @return $this|\Magento\Framework\Object|boolean
      */
-    public function proccessAdditionalValidation(RateRequest $request)
+    public function proccessAdditionalValidation(\Magento\Framework\Object $request)
     {
         //Skip by item validation if there is no items in request
         if (!count($this->getAllItems($request))) {

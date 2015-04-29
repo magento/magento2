@@ -8,12 +8,12 @@
 
 ?>
 <?php $_items = $block->getCreditmemo()->getAllItems() ?>
-<div class="fieldset-wrapper">
-    <div class="fieldset-wrapper-title">
+<div class="admin__page-section">
+    <div class="admin__page-section-title">
         <span class="title"><?php echo __('Items Refunded') ?></span>
     </div>
-    <div class="grid">
-        <table cellspacing="0" class="data">
+    <div class="admin__page-section-content">
+        <table class="data-table admin__table-primary order-creditmemo-tables">
             <thead>
                 <tr class="headings">
                     <th class="col-product"><span><?php echo __('Product') ?></span></th>

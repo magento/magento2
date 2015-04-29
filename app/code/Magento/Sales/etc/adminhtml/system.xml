@@ -119,6 +119,14 @@
             <label>Sales Emails</label>
             <tab>sales</tab>
             <resource>Magento_Sales::sales_email</resource>
+            <group id="general" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Settings</label>
+                <field id="async_sending" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Asynchronous sending</label>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                    <backend_model>Magento\Sales\Model\Config\Backend\Email\AsyncSending</backend_model>
+                </field>
+            </group>
             <group id="order" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Order</label>
                 <field id="enabled" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -340,7 +348,7 @@
             <label>PDF Print-outs</label>
             <tab>sales</tab>
             <resource>Magento_Sales::sales_pdf</resource>
-            <group id="invoice" translate="label" type="text" sortOrder="1" showInDefault="10" showInWebsite="1" showInStore="1">
+            <group id="invoice" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Invoice</label>
                 <field id="put_order_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Display Order ID in Header</label>
@@ -368,6 +376,16 @@
                 <field id="status" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Customer Order Status Notification</label>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="dev">
+            <group id="grid" type="text" sortOrder="131" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Grid Settings</label>
+                <field id="async_indexing" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Asynchronous indexing</label>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                    <backend_model>Magento\Sales\Model\Config\Backend\Grid\AsyncIndexing</backend_model>
                 </field>
             </group>
         </section>

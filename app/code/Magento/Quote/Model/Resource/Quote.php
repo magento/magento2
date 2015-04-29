@@ -16,22 +16,22 @@ use Magento\Framework\Model\Resource\Db\AbstractDb;
 class Quote extends AbstractDb
 {
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var \Magento\SalesSequence\Model\Manager
      */
-    protected $_config;
+    protected $sequenceManager;
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Eav\Model\Config $config
-     * @param string|null $resourcePrefix
+     * @param \Magento\SalesSequence\Model\Manager $sequenceManager
+     * @param null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Eav\Model\Config $config,
+        \Magento\SalesSequence\Model\Manager $sequenceManager,
         $resourcePrefix = null
     ) {
         parent::__construct($context, $resourcePrefix);
-        $this->_config = $config;
+        $this->sequenceManager = $sequenceManager;
     }
 
     /**
@@ -156,28 +156,8 @@ class Quote extends AbstractDb
      */
     public function getReservedOrderId($quote)
     {
-        $storeId = (int)$quote->getStoreId();
-        return $this->_config->getEntityType(\Magento\Sales\Model\Order::ENTITY)->fetchNewIncrementId($storeId);
-    }
-
-    /**
-     * Check is order increment id use in sales/order table
-     *
-     * @param int $orderIncrementId
-     * @return bool
-     */
-    public function isOrderIncrementIdUsed($orderIncrementId)
-    {
-        $adapter = $this->_getReadAdapter();
-        $bind = [':increment_id' => $orderIncrementId];
-        $select = $adapter->select();
-        $select->from($this->getTable('sales_order'), 'entity_id')->where('increment_id = :increment_id');
-        $entity_id = $adapter->fetchOne($select, $bind);
-        if ($entity_id > 0) {
-            return true;
-        }
-
-        return false;
+        return $this->sequenceManager->getSequence(\Magento\Sales\Model\Order::ENTITY, (int)$quote->getStoreId())
+            ->getNextValue();
     }
 
     /**

@@ -27,8 +27,10 @@
             padding-left: 0;
         }
     }
-    th {
-        border-top: 0;
+    &.admin__table-primary {
+        th {
+            border-top: 0;
+        }
     }
 
     //  Primary column
@@ -88,6 +90,9 @@
     .empty-text {
         background: @dashboard-tabs__background-color;
         font-size: @dashboard__font-size__base;
+    }
+    .ui-tabs-panel {
+        border-top: 1px solid @color-gray68;
     }
 }
 
@@ -161,6 +166,7 @@
 .dashboard-store-stats {
     .ui-tabs {
         .extend__clearfix();
+        margin-bottom: 0;
         position: relative;
         &:before {
             .background-gradient(

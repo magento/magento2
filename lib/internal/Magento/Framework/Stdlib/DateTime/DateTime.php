@@ -63,6 +63,8 @@ class DateTime
      * @param  string $format
      * @param  int|string $input date in current timezone
      * @return string
+     *
+     * @deprecated (MAGETWO-35555)
      */
     public function gmtDate($format = null, $input = null)
     {
@@ -114,7 +116,7 @@ class DateTime
             return false;
         }
         $date = $this->_localeDate->date($result);
-        $timestamp = $date->getTimestamp() - $date->getTimezone()->getOffset($date);
+        $timestamp = $date->getTimestamp();
         unset($date);
         return $timestamp;
     }
@@ -136,7 +138,7 @@ class DateTime
             $result = strtotime($input);
         }
         $date = $this->_localeDate->date($result);
-        $timestamp = $date->getTimestamp() + $date->getTimezone()->getOffset($date);
+        $timestamp = $date->getTimestamp();
         unset($date);
         return $timestamp;
     }

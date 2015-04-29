@@ -11,24 +11,27 @@
     <?php echo $block->getBlockHtml('formkey')?>
     <?php  $_order = $block->getShipment()->getOrder() ?>
     <?php echo $block->getChildHtml('order_info') ?>
-    <div class="clearfix">
-        <div class="order-payment-method">
-            <!--Billing Address-->
-            <div class="fieldset-wrapper">
-                <div class="fieldset-wrapper-title">
+    <div class="admin__page-section">
+        <div class="admin__page-section-title">
+            <span class="title"><?php echo __('Payment &amp; Shipping Method') ?></span>
+        </div>
+        <div class="admin__page-section-content">
+            <div class="admin__page-section-item order-payment-method">
+                <?php /* Billing Address */ ?>
+                <div class="admin__page-section-item-title">
                     <span class="title"><?php echo __('Payment Information') ?></span>
                 </div>
-                <div><?php echo $block->getPaymentHtml() ?></div>
-                <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+                <div class="admin__page-section-item-content">
+                    <div><?php echo $block->getPaymentHtml() ?></div>
+                    <div class="order-payment-currency"><?php echo __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
+                </div>
             </div>
-        </div>
-        <div class="order-shipping-address">
-            <!--Shipping Address-->
-            <div class="fieldset-wrapper">
-                <div class="fieldset-wrapper-title">
+            <div class="admin__page-section-item order-shipping-address">
+                <?php /* Shipping Address */ ?>
+                <div class="admin__page-section-item-title">
                     <span class="title"><?php echo __('Shipping Information') ?></span>
                 </div>
-                <div class="shipping-description-wrapper">
+                <div class="admin__page-section-item-content shipping-description-wrapper">
                     <div class="shipping-description-title"><?php echo $block->escapeHtml($_order->getShippingDescription()) ?></div>
                     <div class="shipping-description-content">
                         <?php echo __('Total Shipping Charges'); ?>:
@@ -59,31 +62,6 @@ require([
     "mage/mage",
     "prototype"
 ], function(jQuery){
-
-    jQuery('body').one('packageInitialized', function(){
-        packaging.setConfirmPackagingCallback(function(){
-            packaging.setParamsCreateLabelRequest($('edit_form').serialize(true));
-            packaging.sendCreateLabelRequest();
-        });
-        packaging.setLabelCreatedCallback(function(response){
-            setLocation("<?php echo $block->getUrl(
-                'sales/order/view',
-                ['order_id' => $block->getShipment()->getOrderId()]
-            ); ?>");
-        });
-        packaging.setCancelCallback(function() {
-            packaging.cleanPackages();
-            $('create_shipping_label').checked = false;
-            toggleCreateLabelCheckbox();
-        });
-        packaging.setItemQtyCallback(function(itemId){
-            var item = $$('[name="shipment[items]['+itemId+']"]')[0];
-            if (item && !isNaN(item.value)) {
-                return item.value;
-            }
-        });
-    });
-
     jQuery('#edit_form').mage('form').mage('validation');
 
 });

@@ -95,6 +95,14 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->session = $this->getMock('Magento\Backend\Model\Session', ['setIsUrlNotice'], [], '', false);
         $this->actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
         $this->helper = $this->getMock('\Magento\Backend\Helper\Data', [], [], '', false);
+        $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
         $this->context->expects($this->once())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
@@ -116,14 +124,9 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('getHelper')
             ->willReturn($this->helper);
-
-        $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->context->expects($this->once())
+            ->method('getResultRedirectFactory')
+            ->willReturn($this->resultRedirectFactory);
 
         $this->resultForward = $this->getMockBuilder('Magento\Backend\Model\View\Result\Forward')
             ->disableOriginalConstructor()
@@ -137,7 +140,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\Email',
             [
                 'context' => $this->context,
-                'resultRedirectFactory' => $this->resultRedirectFactory,
                 'resultForwardFactory' => $this->resultForwardFactory,
             ]
         );

@@ -79,7 +79,6 @@ class InstallSchema implements InstallSchemaInterface
                 'parent_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Bundle Option');
@@ -138,7 +137,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 $installer->getTable('catalog_product_bundle_option'),
                 'option_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Bundle Option Value');
@@ -238,7 +236,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 $installer->getTable('catalog_product_bundle_option'),
                 'option_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -251,7 +248,6 @@ class InstallSchema implements InstallSchemaInterface
                 'product_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Bundle Selection');
@@ -305,7 +301,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -318,7 +313,6 @@ class InstallSchema implements InstallSchemaInterface
                 'selection_id',
                 $installer->getTable('catalog_product_bundle_selection'),
                 'selection_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Bundle Selection Price');
@@ -383,7 +377,6 @@ class InstallSchema implements InstallSchemaInterface
                 'customer_group_id',
                 $installer->getTable('customer_group'),
                 'customer_group_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -396,7 +389,6 @@ class InstallSchema implements InstallSchemaInterface
                 'entity_id',
                 $installer->getTable('catalog_product_entity'),
                 'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
@@ -409,7 +401,6 @@ class InstallSchema implements InstallSchemaInterface
                 'website_id',
                 $installer->getTable('store_website'),
                 'website_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Bundle Price Index');

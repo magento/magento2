@@ -249,12 +249,19 @@
 //    Product link
 //--------------------------------------
 .abs-product-link {
-    .link(
-        @_link-color: @color-gray19,
-        @_link-color-hover: @color-gray19,
-        @_link-color-active: @color-gray19,
-        @_link-color-visited: @color-gray19
-    );
+    font-weight: @font-weight__regular;
+    > a {
+        .link(
+        @_link-color: @product-name-link__color,
+        @_link-text-decoration: @product-name-link__text-decoration,
+        @_link-color-visited: @product-name-link__color__visited,
+        @_link-text-decoration-visited: @product-name-link__text-decoration__visited,
+        @_link-color-hover: @product-name-link__color__hover,
+        @_link-text-decoration-hover: @product-name-link__text-decoration__hover,
+        @_link-color-active: @product-name-link__color__active,
+        @_link-text-decoration-active: @product-name-link__text-decoration__active
+        );
+    }
 }
 
 //
@@ -893,7 +900,7 @@
 //--------------------------------------
 .abs-account-summary {
     td {
-        .css(background, @sidebar-background);
+        .css(background, @sidebar__background-color);
     }
 }
 
@@ -1325,31 +1332,9 @@
     .control {
         position: relative;
         &:extend(.abs-add-box-sizing all);
-        .icon-font(
-            @_icon-font-content: @icon-calendar,
-            @_icon-font-color: @primary__color__lighter,
-            @_icon-font-size: 23px,
-            @_icon-font-line-height: 23px,
-            @_icon-font-display: block
-        );
-        &:before {
-            position: absolute;
-            top: @indent__xs;
-            left: @indent__s;
-            margin-left: 85%;
-            z-index: 0;
-        }
-    }
-    img {
-        opacity: 0;
-        cursor: pointer;
-        position: relative;
-        z-index: 1;
-        width: 20px;
-        vertical-align: middle;
     }
     input {
-        width: 85%;
+        width: calc(~"100% - (@{icon-calendar__font-size} + @{indent__s})");
         margin-right: @indent__s;
     }
 }

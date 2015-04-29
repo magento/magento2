@@ -61,7 +61,7 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\App\InitException
+     * @expectedException \Magento\Framework\Exception\State\InitException
      * @expectedExceptionMessage Current store is not active.
      */
     public function testAroundDispatchWhenStoreNotActive()

@@ -43,12 +43,12 @@
     }
     &:not(.admin__field-option) {
         > .admin__field-label {
-            text-align: left;
-            width: auto;
             display: block;
             line-height: @field-label__font-size;
             margin-bottom: 1rem - round(( @field-label__line-height - 1 ) * @field-label__font-size / 2 , 2); // Try to Calculate margin offset considering line-height;
             margin-top: 0rem - round(( @field-label__line-height - 1 ) * @field-label__font-size / 2, 2);
+            text-align: left;
+            width: auto;
             &:before {
                 display: none;
             }
@@ -66,4 +66,20 @@
             }
         }
     }
+}
+
+.abs-control-qty {
+    min-width: 0;
+    width: 5.4rem;
+}
+
+.abs-control-price {
+    min-width: 0;
+    width: 10rem;
+}
+
+.abs-fieldset-legend {
+    font-size: 1.8rem;
+    font-weight: @font-weight__semibold;
+    margin-bottom: @indent__l;
 }

@@ -421,9 +421,10 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                      * Not auto increment primary key support
                      */
                     if ($this->_isPkAutoIncrement) {
-                        $data = $this->_prepareDataForSave($object);
-                        unset($data[$this->getIdFieldName()]);
-                        $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                        $data = $this->prepareDataForUpdate($object);
+                        if (!empty($data)) {
+                            $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                        }
                     } else {
                         $select = $this->_getWriteAdapter()->select()->from(
                             $this->getMainTable(),
@@ -432,8 +433,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
                             $condition
                         );
                         if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
-                            $data = $this->_prepareDataForSave($object);
-                            unset($data[$this->getIdFieldName()]);
+                            $data = $this->prepareDataForUpdate($object);
                             if (!empty($data)) {
                                 $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
                             }
@@ -773,5 +773,28 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
             return $checksum[$table];
         }
         return $checksum;
+    }
+
+    /**
+     * Get the array of data fields that was changed or added
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return array
+     */
+    protected function prepareDataForUpdate($object)
+    {
+        $data = $object->getData();
+        foreach ($object->getStoredData() as $key => $value) {
+            if (array_key_exists($key, $data) && $data[$key] === $value) {
+                unset($data[$key]);
+            }
+        }
+        $dataObject = clone $object;
+        $dataObject->setData($data);
+        $data = $this->_prepareDataForTable($dataObject, $this->getMainTable());
+        unset($data[$this->getIdFieldName()]);
+        unset($dataObject);
+
+        return $data;
     }
 }

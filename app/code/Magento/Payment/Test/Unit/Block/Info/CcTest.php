@@ -135,11 +135,11 @@ class CcTest extends \PHPUnit_Framework_TestCase
         $paymentInfo
             ->expects($this->any())
             ->method('getCcExpMonth')
-            ->will($this->returnValue($ccExpMonth));
+            ->willReturn($ccExpMonth);
         $paymentInfo
             ->expects($this->any())
             ->method('getCcExpYear')
-            ->will($this->returnValue($ccExpYear));
+            ->willReturn($ccExpYear);
         $this->model->setData('info', $paymentInfo);
 
         $this->localeDate
@@ -157,7 +157,7 @@ class CcTest extends \PHPUnit_Framework_TestCase
     public function getCcExpDateDataProvider()
     {
         return [
-            [2, 2015],
+            [3, 2015],
             [12, 2011],
             [01, 2036]
         ];

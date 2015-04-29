@@ -85,7 +85,7 @@ class Create extends Block
      *
      * @var string
      */
-    protected $updateItems = '#order-items_grid p button';
+    protected $updateItems = '#order-items_grid button[onclick="order.itemsUpdate()"]';
 
     /**
      * 'Add Selected Product(s) to Order' button.
@@ -289,6 +289,8 @@ class Create extends Block
      */
     public function selectPaymentMethod(array $paymentCode)
     {
+        $this->getTemplateBlock()->waitLoader();
+        $this->_rootElement->click();
         $this->getBillingMethodBlock()->selectPaymentMethod($paymentCode);
         $this->getTemplateBlock()->waitLoader();
     }

@@ -206,7 +206,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
                 if (!$this->_directory->isExist($currentDir)) {
                     $this->_directory->create($currentDir);
                 }
-            } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+            } catch (\Magento\Framework\Exception\FileSystemException $e) {
                 $message = __('The directory %1 is not writable by server.', $currentPath);
                 throw new \Magento\Framework\Exception\LocalizedException($message);
             }

@@ -1,15 +1,14 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\App\Action\NotFoundException;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class Update extends Action\Action implements IndexInterface
 {
@@ -49,19 +48,22 @@ class Update extends Action\Action implements IndexInterface
     /**
      * Update wishlist item comments
      *
-     * @return ResponseInterface|void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            return $this->_redirect('*/*/');
+            $resultRedirect->setPath('*/*/');
+            return $resultRedirect;
         }
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {
-            throw new NotFoundException();
+            throw new NotFoundException(__('Page not found.'));
         }
 
         $post = $this->getRequest()->getPostValue();
@@ -130,10 +132,11 @@ class Update extends Action\Action implements IndexInterface
             }
 
             if (isset($post['save_and_share'])) {
-                $this->_redirect('*/*/share', ['wishlist_id' => $wishlist->getId()]);
-                return;
+                $resultRedirect->setPath('*/*/share', ['wishlist_id' => $wishlist->getId()]);
+                return $resultRedirect;
             }
         }
-        $this->_redirect('*', ['wishlist_id' => $wishlist->getId()]);
+        $resultRedirect->setPath('*', ['wishlist_id' => $wishlist->getId()]);
+        return $resultRedirect;
     }
 }
