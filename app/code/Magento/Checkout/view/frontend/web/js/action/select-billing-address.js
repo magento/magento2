@@ -40,7 +40,8 @@ define(
                     urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()}),
                     JSON.stringify({
                         billingAddress: quote.getBillingAddress()(),
-                        additionalData: {extensionAttributes : additionalData}
+                        additionalData: {extensionAttributes : additionalData},
+                        checkoutMethod: quote.getCheckoutMethod()()
                     })
                 ).done(
                     function (result) {

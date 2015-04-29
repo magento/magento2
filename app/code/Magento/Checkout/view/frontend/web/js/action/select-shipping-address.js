@@ -26,7 +26,8 @@ define(
                 JSON.stringify({
                     shippingAddress: quote.getShippingAddress()(),
                     billingAddress: quote.getBillingAddress()(),
-                    additionalData: {extensionAttributes : additionalData}
+                    additionalData: {extensionAttributes : additionalData},
+                    checkoutMethod: quote.getCheckoutMethod()()
                 })
             ).done(
                 function(result) {

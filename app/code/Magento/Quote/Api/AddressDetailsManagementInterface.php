@@ -14,12 +14,14 @@ interface AddressDetailsManagementInterface
      * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
      * @param \Magento\Quote\Api\Data\AddressInterface $shippingAddress
      * @param \Magento\Quote\Api\Data\AddressAdditionalDataInterface|null $additionalData
+     * @param string|null $checkoutMethod
      * @return \Magento\Quote\Api\Data\AddressDetailsInterface
      */
     public function saveAddresses(
         $cartId,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress,
         \Magento\Quote\Api\Data\AddressInterface $shippingAddress = null,
-        \Magento\Quote\Api\Data\AddressAdditionalDataInterface $additionalData = null
+        \Magento\Quote\Api\Data\AddressAdditionalDataInterface $additionalData = null,
+        $checkoutMethod = null
     );
 }

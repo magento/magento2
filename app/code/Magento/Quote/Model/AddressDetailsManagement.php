@@ -38,6 +38,10 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
      * @var AddressAdditionalDataProcessor
      */
     protected $dataProcessor;
+    /**
+     * @var QuoteRepository
+     */
+    protected $quoteRepository;
 
     /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
@@ -46,6 +50,7 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
      * @param \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement
      * @param AddressDetailsFactory $addressDetailsFactory
      * @param AddressAdditionalDataProcessor $dataProcessor
+     * @param QuoteRepository $quoteRepository
      */
     public function __construct(
         \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement,
@@ -53,7 +58,8 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
         \Magento\Quote\Model\AddressDetailsFactory $addressDetailsFactory,
-        AddressAdditionalDataProcessor $dataProcessor
+        AddressAdditionalDataProcessor $dataProcessor,
+        QuoteRepository $quoteRepository
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->shippingAddressManagement = $shippingAddressManagement;
@@ -61,6 +67,7 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         $this->shippingMethodManagement = $shippingMethodManagement;
         $this->addressDetailsFactory = $addressDetailsFactory;
         $this->dataProcessor = $dataProcessor;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -70,7 +77,8 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         $cartId,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress,
         \Magento\Quote\Api\Data\AddressInterface $shippingAddress = null,
-        \Magento\Quote\Api\Data\AddressAdditionalDataInterface $additionalData = null
+        \Magento\Quote\Api\Data\AddressAdditionalDataInterface $additionalData = null,
+        $checkoutMethod = null
     ) {
         $this->billingAddressManagement->assign($cartId, $billingAddress);
         $addressDetails = $this->addressDetailsFactory->create();
@@ -82,6 +90,12 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         $addressDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
         if (!is_null($additionalData)) {
             $this->dataProcessor->process($additionalData);
+        }
+        if (!is_null($checkoutMethod)) {
+            $this->quoteRepository->save(
+                $this->quoteRepository->getActive($cartId)
+                    ->setCheckoutMethod($checkoutMethod)
+            );
         }
         return $addressDetails;
     }
