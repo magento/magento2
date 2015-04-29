@@ -78,32 +78,55 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->stockItemMock = $this->getMock('\Magento\CatalogInventory\Api\Data\StockItemInterface');
     }
 
-    public function testAroundSaveWhenProductHasNoExtensionAttributes()
+    public function testAroundSaveWhenProductHasNoStockItemNeedingToBeUpdated()
     {
+        // pretend we have no extension attributes at all
         $this->productMock->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn(null);
         $this->productExtensionMock->expects($this->never())->method('getStockItem');
 
+        // pretend that the product already has existing stock item information
+        $this->stockRegistry->expects($this->once())->method('getStockItem')->willReturn($this->stockItemMock);
+        $this->stockItemMock->expects($this->once())->method('getItemId')->willReturn(1);
+        $this->stockItemMock->expects($this->never())->method('setProductId');
+        $this->stockItemMock->expects($this->never())->method('setWebsiteId');
+
+        // expect that there are no changes to the existing stock item information
         $this->assertEquals(
             $this->savedProductMock,
             $this->plugin->aroundSave($this->productRepositoryMock, $this->closureMock, $this->productMock)
         );
     }
 
-    public function testAroundSaveWhenProductHasNoStockItemAttributes()
+    public function testAroundSaveWhenProductHasNoPersistentStockItemInfo()
     {
+        // pretend we do have extension attributes, but none for 'stock_item'
         $this->productMock->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->productExtensionMock);
         $this->productExtensionMock->expects($this->once())
             ->method('getStockItem')
             ->willReturn(null);
-        $this->stockItemMock->expects($this->never())->method('setProductId');
-        $this->stockItemMock->expects($this->never())->method('setWebsiteId');
+
+        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
+            ->disableOriginalConstructor()->getMock();
+        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn(1);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+
+        $this->stockRegistry->expects($this->once())->method('getStockItem')->willReturn($this->stockItemMock);
+        $this->stockRegistry->expects($this->once())->method('updateStockItemBySku');
+
+        $this->stockItemMock->expects($this->once())->method('getItemId')->willReturn(null);
+        $this->stockItemMock->expects($this->once())->method('setProductId');
+        $this->stockItemMock->expects($this->once())->method('setWebsiteId');
+
+        $newProductMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
+            ->disableOriginalConstructor()->getMock();
+        $this->productRepositoryMock->expects($this->once())->method('get')->willReturn($newProductMock);
 
         $this->assertEquals(
-            $this->savedProductMock,
+            $newProductMock,
             $this->plugin->aroundSave($this->productRepositoryMock, $this->closureMock, $this->productMock)
         );
     }

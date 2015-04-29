@@ -155,6 +155,31 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue($response);
     }
 
+    /**
+     * Tests that creating a simple product has a side-effect of creating catalog inventory
+     */
+    public function testSimpleProductCreationWithoutSpecifyingCatalogInventory()
+    {
+        // create a simple product with catalog inventory
+        $qty = null;
+        $productData = $this->getSimpleProductData($qty);
+        $this->assertArrayNotHasKey(self::KEY_CUSTOM_ATTRIBUTES, $productData);
+        $this->assertArrayNotHasKey(self::KEY_EXTENSION_ATTRIBUTES, $productData);
+
+        $response = $this->saveProduct($productData);
+
+        $this->assertArrayHasKey(self::KEY_EXTENSION_ATTRIBUTES, $response);
+        $this->assertTrue(isset($response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM]));
+        $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
+        $this->assertArrayHasKey(self::KEY_ITEM_ID, $stockItemData);
+        $this->assertArrayHasKey(self::KEY_PRODUCT_ID, $stockItemData);
+        $this->assertArrayHasKey(self::KEY_WEBSITE_ID, $stockItemData);
+
+        // delete the product; expect that all goes well
+        $response = $this->deleteProduct($productData[ProductInterface::SKU]);
+        $this->assertTrue($response);
+    }
+
     // --- my helpers -----------------------------------------------------------------------------
 
     /**
@@ -210,7 +235,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function getSimpleProductData($qty = 1000)
     {
-        return [
+        $productData = [
             ProductInterface::SKU => self::PRODUCT_SKU,
             ProductInterface::NAME => self::PRODUCT_SKU,
             ProductInterface::VISIBILITY => 4,
@@ -218,11 +243,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 10,
             ProductInterface::STATUS => 1,
             ProductInterface::ATTRIBUTE_SET_ID => 4,
-            self::KEY_CUSTOM_ATTRIBUTES => [
+        ];
+
+        if ($qty != null) {
+            $productData[self::KEY_CUSTOM_ATTRIBUTES] = [
                 [self::KEY_ATTRIBUTE_CODE => 'description', 'value' => 'My Product Description'],
                 [self::KEY_ATTRIBUTE_CODE => self::CODE_QUANTITY_AND_STOCK_STATUS, 'value' => [true, $qty]],
-            ],
-        ];
+            ];
+        }
+
+        return $productData;
     }
 
     /**
