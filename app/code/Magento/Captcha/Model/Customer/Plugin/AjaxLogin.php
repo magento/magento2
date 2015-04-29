@@ -7,7 +7,7 @@ namespace Magento\Captcha\Model\Customer\Plugin;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 class AjaxLogin
 {
@@ -22,23 +22,23 @@ class AjaxLogin
     protected $sessionManager;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var JsonFactory
      */
-    protected $resultRawFactory;
+    protected $resultJsonFactory;
 
     /**
      * @param CaptchaHelper $helper
      * @param SessionManagerInterface $sessionManager
-     * @param RawFactory $resultRawFactory
+     * @param JsonFactory $resultJsonFactorys
      */
     public function __construct(
         CaptchaHelper $helper,
         SessionManagerInterface $sessionManager,
-        RawFactory $resultRawFactory
+        JsonFactory $resultJsonFactory
     ){
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
-        $this->resultRawFactory = $resultRawFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
@@ -51,7 +51,6 @@ class AjaxLogin
         \Magento\Customer\Controller\Ajax\Login $subject,
         \Closure $proceed
     ) {
-        $httpUnauthorizedCode = 401;
         $loginFormId = 'user_login';
         $captchaInputName = 'captcha_string';
 
@@ -71,8 +70,9 @@ class AjaxLogin
             $captchaModel->logAttempt($username);
             if (!$captchaModel->isCorrect($captchaString)) {
                 $this->sessionManager->setUsername($username);
-                $resultRaw = $this->resultRawFactory->create();
-                return $resultRaw->setHttpResponseCode($httpUnauthorizedCode);
+                /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+                $resultJson = $this->resultJsonFactory->create();
+                return $resultJson->setData(['errors' => true, 'message' => __('Incorrect CAPTCHA')]);
             }
         }
         return $proceed();
