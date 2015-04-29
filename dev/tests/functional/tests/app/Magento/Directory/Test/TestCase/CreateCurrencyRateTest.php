@@ -6,6 +6,7 @@
 
 namespace Magento\Directory\Test\TestCase;
 
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Directory\Test\Fixture\CurrencyRate;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
@@ -24,7 +25,7 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
  * 5. Perform assertions.
  *
  * @group Localization_(PS)
- * @ZephyrId MAGETWO-12427
+ * @ZephyrId MAGETWO-12427, MAGETWO-36824
  */
 class CreateCurrencyRateTest extends Injectable
 {
@@ -59,14 +60,11 @@ class CreateCurrencyRateTest extends Injectable
      * @param $config
      * @return void
      */
-    public function test(CurrencyRate $currencyRate, CatalogProductSimple $product, $config)
+    public function test(CurrencyRate $currencyRate, CatalogProductSimple $product, ConfigData $config)
     {
         // Preconditions:
         $product->persist();
-        $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => $config]
-        )->run();
+        $config->persist();
 
         // Steps:
         $this->currencyIndexPage->open();

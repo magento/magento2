@@ -24,7 +24,7 @@ use Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity;
  * @group Currency_(PS)
  * @ZephyrId MAGETWO-26638
  */
-class ResetCurrencySymbolEntityTest extends CurrencySymbolEntityTest
+class ResetCurrencySymbolEntityTest extends AbstractCurrencySymbolEntityTest
 {
     /* tags */
     const MVP = 'no';

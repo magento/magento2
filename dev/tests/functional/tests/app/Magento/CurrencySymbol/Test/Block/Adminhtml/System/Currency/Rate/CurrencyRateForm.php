@@ -24,13 +24,11 @@ class CurrencyRateForm extends Form
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
-        $fixtureData = $fixture->getData();
-        $this->placeholders['currency_from'] = $fixtureData['currency_from'];
-        $this->placeholders['currency_to'] = $fixtureData['currency_to'];
+        /** @var \Magento\Directory\Test\Fixture\CurrencyRate $fixture */
+        $this->placeholders['currency_from'] = $fixture->getCurrencyFrom();
+        $this->placeholders['currency_to'] = $fixture->getCurrencyTo();
         $this->applyPlaceholders();
-        $mapping = $this->dataMapping(['rate' => $fixtureData['rate']]);
-        $this->_fill($mapping, $element);
 
-        return $this;
+        return parent::fill($fixture, $element);
     }
 }

@@ -15,7 +15,7 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
 /**
  * Abstract class for currency symbol tests.
  */
-abstract class CurrencySymbolEntityTest extends Injectable
+abstract class AbstractCurrencySymbolEntityTest extends Injectable
 {
     /**
      * System Currency Symbol grid page.
