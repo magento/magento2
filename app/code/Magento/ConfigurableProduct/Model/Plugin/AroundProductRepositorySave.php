@@ -119,12 +119,12 @@ class AroundProductRepositorySave
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param $links
+     * @param int[] $links
      * @return $this
      */
     protected function saveConfigurableProductLinks(
         \Magento\Catalog\Api\Data\ProductInterface $product,
-        $links
+        array $links
     ) {
         $this->typeConfigurableFactory->create()->saveProducts($product, $links);
         return $this;
