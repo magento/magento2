@@ -207,4 +207,124 @@ class ShippingAddressManagementTest extends WebapiAbstract
 
         $this->_webApiCall($serviceInfo, $requestData);
     }
+
+    /**
+     * Test getting shipping address based on the customer's authentication token.
+     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testGetMyAddress()
+    {
+        $this->_markTestAsRestOnly();
+
+        // get customer ID token
+        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_order_1', 'reserved_order_id');
+
+        /** @var \Magento\Quote\Model\Quote\Address $address */
+        $address = $quote->getShippingAddress();
+
+        $addressData = [
+            AddressInterface::KEY_COUNTRY_ID => $address->getCountryId(),
+            AddressInterface::KEY_ID => (int)$address->getId(),
+            AddressInterface::KEY_CUSTOMER_ID => $address->getCustomerId(),
+            AddressInterface::KEY_REGION => $address->getRegion(),
+            AddressInterface::KEY_REGION_ID => $address->getRegionId(),
+            AddressInterface::KEY_REGION_CODE => $address->getRegionCode(),
+            AddressInterface::KEY_STREET => $address->getStreet(),
+            AddressInterface::KEY_COMPANY => $address->getCompany(),
+            AddressInterface::KEY_TELEPHONE => $address->getTelephone(),
+            AddressInterface::KEY_POSTCODE => $address->getPostcode(),
+            AddressInterface::KEY_CITY => $address->getCity(),
+            AddressInterface::KEY_FIRSTNAME => $address->getFirstname(),
+            AddressInterface::KEY_LASTNAME => $address->getLastname(),
+            AddressInterface::KEY_EMAIL => $address->getEmail()
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . 'mine/shipping-address',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $token
+            ],
+        ];
+
+        $requestData = [];
+        $this->assertEquals($addressData, $this->_webApiCall($serviceInfo, $requestData));
+    }
+
+    /**
+     * Test setting shipping address based on the customer's authentication token.
+     *
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetMyAddress()
+    {
+        $this->_markTestAsRestOnly();
+
+        // get customer ID token
+        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_order_1', 'reserved_order_id');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . 'mine/shipping-address',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+                'token' => $token
+            ],
+        ];
+
+        $addressData = [
+            'firstname' => 'John',
+            'lastname' => 'Smith',
+            'email' => 'cat@dog.com',
+            'company' => 'eBay Inc',
+            'street' => ['Typical Street', 'Tiny House 18'],
+            'city' => 'Big City',
+            'region_id' => 12,
+            'region' => 'California',
+            'region_code' => 'CA',
+            'postcode' => '0985432',
+            'country_id' => 'US',
+            'telephone' => '88776655',
+            'fax' => '44332255',
+        ];
+        $requestData = [
+            'address' => $addressData,
+        ];
+
+        $addressId = $this->_webApiCall($serviceInfo, $requestData);
+
+        //reset $quote to reload data
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_order_1', 'reserved_order_id');
+        $address = $quote->getShippingAddress();
+        $address->getRegionCode();
+        $savedData  = $address->getData();
+        $this->assertEquals($addressId, $savedData['address_id'], 'Invalid address ID');
+        $this->assertEquals(0, $savedData['same_as_billing']);
+        //custom checks for street, region and address_type
+        $this->assertEquals($addressData['street'], $quote->getShippingAddress()->getStreet());
+        unset($addressData['street']);
+
+        $this->assertEquals('shipping', $savedData['address_type']);
+        //check the rest of fields
+        foreach ($addressData as $key => $value) {
+            $this->assertEquals($value, $savedData[$key], 'Invalid value for ' . $key);
+        }
+    }
 }
