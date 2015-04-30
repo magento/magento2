@@ -48,7 +48,9 @@
             </container>
         </referenceContainer>
         <referenceContainer name="page.top">
-            <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav" template="html/topmenu.phtml" ttl="3600"/>
+            <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav" template="html/topmenu.phtml" ttl="3600">
+                <block class="Magento\Theme\Block\Html\Topmenu\Renderer" name="catalog.topnav.renderer" template="html/topmenu/renderer.phtml"/>
+            </block>
             <container name="top.container" as="topContainer" label="After Page Header Top" htmlTag="div" htmlClass="top-container"/>
             <block class="Magento\Theme\Block\Html\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
         </referenceContainer>

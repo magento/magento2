@@ -1,0 +1,71 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Theme\Block\Html\Topmenu\Renderer $block
+ */
+
+$html = '';
+
+$children = $menuTree->getChildren();
+$parentLevel = $menuTree->getLevel();
+$childLevel = $parentLevel === null ? 0 : $parentLevel + 1;
+
+$counter = 1;
+$itemPosition = 1;
+$childrenCount = $children->count();
+
+$parentPositionClass = $menuTree->getPositionClass();
+$itemPositionClassPrefix = $parentPositionClass ? $parentPositionClass . '-' : 'nav-';
+
+foreach ($children as $child) {
+    $child->setLevel($childLevel);
+    $child->setIsFirst($counter == 1);
+    $child->setIsLast($counter == $childrenCount);
+    $child->setPositionClass($itemPositionClassPrefix . $counter);
+
+    $outermostClassCode = '';
+    $outermostClass = $menuTree->getOutermostClass();
+
+    if ($childLevel == 0 && $outermostClass) {
+        $outermostClassCode = ' class="' . $outermostClass . '" ';
+        $child->setClass($outermostClass);
+    }
+
+    if (count($colBrakes) && $colBrakes[$counter]['colbrake']) {
+        $html .= '</ul></li><li class="column"><ul>';
+    }
+
+    $html .= '<li ' . $block->getRenderedMenuItemAttributes($child) . '>';
+    $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>' . $block->escapeHtml(
+            $child->getName()
+        ) . '</span></a>';
+
+    if ($child->hasChildren()) {
+
+        $html .= '<ul class="level' . $childLevel . ' submenu">';
+        $html .= $block->addSubMenu(
+            $child,
+            $childLevel,
+            $childrenWrapClass,
+            $limit
+        );
+        $html .= '</ul>';
+
+    }
+
+    $html .= '</li>';
+    $itemPosition++;
+    $counter++;
+}
+
+if (count($colBrakes) && $limit) {
+    $html = '<li class="column"><ul>' . $html . '</ul></li>';
+}
+
+echo $html;
+
+?>
