@@ -19,9 +19,9 @@ angular.module('success', ['ngStorage'])
             $scope.url.front = $scope.config.address.actual_base_url;
         }
         if ($scope.config.https.admin) {
-            $scope.url.admin = $scope.config.https.text;
+            $scope.url.admin = $scope.config.https.text.concat($scope.config.address.admin);
         } else {
-            $scope.url.admin = $scope.config.address.actual_base_url;
+            $scope.url.admin = $scope.config.address.actual_base_url.concat($scope.config.address.admin);
         }
         $scope.messages = $localStorage.messages;
         $localStorage.$reset();
