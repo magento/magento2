@@ -9,31 +9,26 @@ namespace Magento\LayeredNavigation\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\Category;
-use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
+ * Preconditions:
+ * 1. Setup Layered Navigation configuration.
+ *
  * Steps:
  * 1. Create category.
  * 2. Create product with created category.
  * 3. Perform all assertions.
  *
- * @group LayeredNavigation_(MX)
+ * @group Layered_Navigation_(MX)
  * @ZephyrId MAGETWO-12419
  */
 class FilterProductListTest extends Injectable
 {
     /* tags */
+    const DOMAIN = 'MX';
     const TEST_TYPE = 'acceptance_test';
     /* end tags */
-
-    /**
-     * Fixture Factory.
-     *
-     * @var FixtureFactory
-     */
-    protected $fixtureFactory;
 
     /**
      * Configuration setting.
@@ -43,26 +38,15 @@ class FilterProductListTest extends Injectable
     protected $configData;
 
     /**
-     * Category fixture.
-     *
-     * @var Category
-     */
-    protected $category;
-
-    /**
      * Filtering product in the Frontend via layered navigation.
      *
-     * @param FixtureFactory $fixtureFactory
      * @param string $configData
      * @param Category $category
-     * @param string $products
      * @return array
      */
-    public function test(FixtureFactory $fixtureFactory, $configData, Category $category, $products)
+    public function test($configData, Category $category)
     {
-        $this->fixtureFactory = $fixtureFactory;
         $this->configData = $configData;
-        $this->category = $category;
 
         // Preconditions
         $this->objectManager->create(
@@ -71,43 +55,7 @@ class FilterProductListTest extends Injectable
         )->run();
 
         // Steps
-        $this->category->persist();
-        $products = $this->prepareProducts($products);
-
-        return ['products' => $products];
-    }
-
-    /**
-     * Create products and assign to category.
-     *
-     * @param string $products
-     * @return FixtureInterface[]
-     */
-    public function prepareProducts($products)
-    {
-        $products = array_map('trim', explode(',', $products));
-        $result = [];
-
-        foreach ($products as $productData) {
-            list($productCode, $dataSet) = explode('::', $productData);
-            $product = $this->fixtureFactory->createByCode(
-                $productCode,
-                [
-                    'dataSet' => $dataSet,
-                    'data' => [
-                        'category_ids' => [
-                            'presets' => null,
-                            'category' => $this->category
-                        ]
-                    ]
-                ]
-            );
-
-            $product->persist();
-            $result[] = $product;
-        }
-
-        return $result;
+        $category->persist();
     }
 
     /**

@@ -61,14 +61,14 @@ class Navigation extends Block
     }
 
     /**
-     * Open filter link.
+     * Click filter link.
      *
      * @param string $filter
      * @param string $linkPattern
      * @return void
      * @throws \Exception
      */
-    public function openFilterLink($filter, $linkPattern)
+    public function clickFilterLink($filter, $linkPattern)
     {
         $links = $this->_rootElement->getElements(sprintf($this->filterLink, $filter), Locator::SELECTOR_XPATH);
 

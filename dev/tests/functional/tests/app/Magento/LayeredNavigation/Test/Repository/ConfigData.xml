@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
-        <dataset name="layered_navigation_manual">
+        <dataset name="layered_navigation_manual_range_10">
             <field name="catalog/layered_navigation/display_product_count" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
                 <item name="scope_id" xsi:type="number">0</item>
@@ -29,7 +29,7 @@
                 <item name="value" xsi:type="string">10</item>
             </field>
         </dataset>
-        <dataset name="layered_navigation_manual_rollback">
+        <dataset name="layered_navigation_manual_range_10_rollback">
             <field name="catalog/layered_navigation/display_product_count" xsi:type="array">
                 <item name="scope" xsi:type="string">default</item>
                 <item name="scope_id" xsi:type="number">0</item>

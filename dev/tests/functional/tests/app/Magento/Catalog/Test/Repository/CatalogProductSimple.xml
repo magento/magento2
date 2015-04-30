@@ -79,7 +79,6 @@
             </field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">20</item>
-                <item name="preset" xsi:type="string">-</item>
             </field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataSet" xsi:type="string">taxable_goods</item>

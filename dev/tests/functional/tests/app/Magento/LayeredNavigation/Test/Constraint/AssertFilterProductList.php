@@ -12,7 +12,7 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check whether filtering product in the Frontend via layered navigation.
+ * Check whether products can be filtered in the Frontend via layered navigation.
  */
 class AssertFilterProductList extends AbstractConstraint
 {
@@ -27,35 +27,34 @@ class AssertFilterProductList extends AbstractConstraint
      * Assertion that filtered product list via layered navigation are displayed correctly.
      *
      * @param Category $category
-     * @param array $products
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
-     * @param array $asserts
+     * @param array $layeredNavigation
      * @return void
      */
     public function processAssert(
         Category $category,
-        array $products,
         CmsIndex $cmsIndex,
         CatalogCategoryView $catalogCategoryView,
-        array $asserts
+        array $layeredNavigation
     ) {
-        $this->products = $products;
+        $this->products = $category->getDataFieldConfig('category_products')['source']->getProducts();
         $cmsIndex->open();
         $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 
-        foreach ($asserts as $assert) {
-            $catalogCategoryView->getLayeredNavigationBlock()->openFilterLink(
-                $assert['filter'],
-                $assert['linkPattern']
-            );
+        foreach ($layeredNavigation as $filters) {
+            foreach ($filters as $filter) {
+                $catalogCategoryView->getLayeredNavigationBlock()->clickFilterLink(
+                    $filter['title'],
+                    $filter['linkPattern']
+                );
 
-            $productNames = $this->getProductNames($assert['products']);
-            sort($productNames);
-            $pageProductNames = $catalogCategoryView->getListProductBlock()->getProductNames();
-            sort($pageProductNames);
-            \PHPUnit_Framework_Assert::assertEquals($productNames, $pageProductNames);
-
+                $productNames = $this->getProductNames($filter['products']);
+                sort($productNames);
+                $pageProductNames = $catalogCategoryView->getListProductBlock()->getProductNames();
+                sort($pageProductNames);
+                \PHPUnit_Framework_Assert::assertEquals($productNames, $pageProductNames);
+            }
             $catalogCategoryView->getLayeredNavigationBlock()->clearAll();
         }
     }
