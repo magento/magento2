@@ -436,6 +436,7 @@ class Menu extends \Magento\Backend\Block\Template
      * @param array $colBrakes
      * @return string HTML
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function renderNavigation($menu, $level = 0, $limit = 0, $colBrakes = [])
     {

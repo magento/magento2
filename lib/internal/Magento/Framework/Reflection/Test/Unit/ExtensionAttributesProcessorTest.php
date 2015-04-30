@@ -9,16 +9,16 @@ namespace Magento\Framework\Reflection\Test\Unit;
 use Magento\Framework\Api\Config\Converter;
 use Magento\Framework\Api\Config\Reader;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\ExtensionAttributesProcessor;
 use Magento\Framework\Reflection\FieldNamer;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeCaster;
-use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * ExtensionAttributesProcessor test
  */
-class ExtensionsAttributesProcessorTest extends \PHPUnit_Framework_TestCase
+class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ExtensionAttributesProcessor
@@ -28,12 +28,12 @@ class ExtensionsAttributesProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var DataObjectProcessor
      */
-    private $dataObjectProcessor;
+    private $dataObjectProcessorMock;
 
     /**
      * @var MethodsMap
      */
-    private $methodsMapProcessor;
+    private $methodsMapProcessorMock;
 
     /**
      * @var FieldNamer
@@ -169,5 +169,4 @@ class ExtensionsAttributesProcessorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
-
 }
