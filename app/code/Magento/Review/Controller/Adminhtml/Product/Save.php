@@ -15,7 +15,7 @@ class Save extends \Magento\Review\Controller\Adminhtml\Product
     public function execute()
     {
         if (($data = $this->getRequest()->getPostValue()) && ($reviewId = $this->getRequest()->getParam('id'))) {
-            $review = $this->_reviewFactory->create()->load($reviewId);
+            $review = $this->reviewFactory->create()->load($reviewId);
             if (!$review->getId()) {
                 $this->messageManager->addError(__('The review was removed by another user or does not exist.'));
             } else {
@@ -30,7 +30,7 @@ class Save extends \Magento\Review\Controller\Adminhtml\Product
                     )->addOptionInfo()->load()->addRatingOptions();
                     foreach ($arrRatingId as $ratingId => $optionId) {
                         if ($vote = $votes->getItemByColumnValue('rating_id', $ratingId)) {
-                            $this->_ratingFactory->create(
+                            $this->ratingFactory->create(
                             )->setVoteId(
                                 $vote->getId()
                             )->setReviewId(
@@ -39,7 +39,7 @@ class Save extends \Magento\Review\Controller\Adminhtml\Product
                                 $optionId
                             );
                         } else {
-                            $this->_ratingFactory->create(
+                            $this->ratingFactory->create(
                             )->setRatingId(
                                 $ratingId
                             )->setReviewId(
