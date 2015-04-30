@@ -21,7 +21,7 @@ class Post extends ProductController
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($data = $this->getRequest()->getPostValue()) {
-            /** @var \Magento\Store\Model\StoreManagerInterface $storeManagerInterface */
+            /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
             $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
             if ($storeManager->hasSingleStore()) {
                 $data['stores'] = [
