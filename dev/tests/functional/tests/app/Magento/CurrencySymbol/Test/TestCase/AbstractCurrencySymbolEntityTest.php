@@ -39,13 +39,20 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
     protected $fixtureFactory;
 
     /**
-     * Prepare data. Create simple product.
+     * Create simple product and inject pages.
      *
+     * @param SystemCurrencySymbolIndex $currencySymbolIndex
+     * @param SystemCurrencyIndex $currencyIndex
      * @param FixtureFactory $fixtureFactory
      * @return array
      */
-    public function __prepare(FixtureFactory $fixtureFactory)
-    {
+    public function __inject(
+        SystemCurrencySymbolIndex $currencySymbolIndex,
+        SystemCurrencyIndex $currencyIndex,
+        FixtureFactory $fixtureFactory
+    ) {
+        $this->currencySymbolIndex = $currencySymbolIndex;
+        $this->currencyIndex = $currencyIndex;
         $this->fixtureFactory = $fixtureFactory;
         $product = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
@@ -54,21 +61,6 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
         $product->persist();
 
         return ['product' => $product];
-    }
-
-    /**
-     * Create simple product and inject pages.
-     *
-     * @param SystemCurrencySymbolIndex $currencySymbolIndex
-     * @param SystemCurrencyIndex $currencyIndex
-     * @return void
-     */
-    public function __inject(
-        SystemCurrencySymbolIndex $currencySymbolIndex,
-        SystemCurrencyIndex $currencyIndex
-    ) {
-        $this->currencySymbolIndex = $currencySymbolIndex;
-        $this->currencyIndex = $currencyIndex;
     }
 
     /**

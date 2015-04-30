@@ -296,6 +296,9 @@ class ConditionsElement extends SimpleElement
      * @param ElementInterface $element
      * @return void
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function fillCondition(array $rules, ElementInterface $element)
     {
