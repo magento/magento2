@@ -39,11 +39,13 @@
 //  _____________________________________________
 
 .admin__fieldset-wrapper-title {
-    .extend__clearfix();
-//    border-bottom: 1px solid @color-gray80;
+    &:extend(.abs-clearfix all);
+    border-bottom: 1px solid @color-gray80;
+    font-size: 1.7rem;
     margin-bottom: 30px;
     padding: 14px 0 16px;
     .title {
+        font-weight: 600;
         &.active {
             ~ .actions {
                 display: none;
@@ -229,6 +231,7 @@ label.mage-error {
 //
 //  Login page captcha field @todo ui - Create new captcha markup - Change reload button
 //  _____________________________________________
+
 .page-layout-admin-login {
     .field-captcha {
         padding-left: 30px;
@@ -245,3 +248,11 @@ label.mage-error {
 //  _____________________________________________
 
 .ui-datepicker .ui-datepicker-title select:extend(.admin__control-select all) {};
+
+//
+//  Popups
+//  _____________________________________________
+
+.attribute-popup {
+    background-color: @color-white;
+}

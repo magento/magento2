@@ -24,7 +24,7 @@ class AttributeForm extends FormTabs
      *
      * @var string
      */
-    protected $closedToggle = '//*[contains(@class,"collapsable-wrapper") and not(contains(@class,"opened"))]//strong';
+    protected $closedToggle = '//*[contains(@class,"admin__collapsible-block-wrapper") and not(contains(@class,"opened"))]//strong';
 
     /**
      * Properties tab selector.

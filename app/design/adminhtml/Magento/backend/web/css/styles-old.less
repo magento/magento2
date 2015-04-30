@@ -1151,14 +1151,11 @@ input.no-display,
         background: #fff;
         border: 0;
         margin: 0;
-        padding: 5px 18px 38px;
+        padding: 5px 0 38px;
         position: relative;
-        &.collapsable-wrapper {
-            border-bottom: 1px solid #ccc;
-        }
     }
 
-//    .fieldset-wrapper > .fieldset-wrapper-title,
+    .fieldset-wrapper > .fieldset-wrapper-title,
     .fieldset > .legend {
         position: static;
         float: left;
@@ -1173,9 +1170,11 @@ input.no-display,
         float: none;
     }
 
-//    .fieldset-wrapper > .fieldset-wrapper-title .title,
+    .fieldset-wrapper > .fieldset-wrapper-title .title,
     .fieldset > .legend span {
-        .style10();
+        color: #303030;
+        font-size: 1.7rem;
+        font-weight: 600;
         padding: 7px 0 10px;
         display: inline-block;
     }
@@ -1183,9 +1182,6 @@ input.no-display,
     //
     //  Collapsable fieldset-wrapper
     //  --------------------------------------
-    .collapsable-wrapper {
-        padding-bottom: 2px;
-    }
 
     // Fieldset styles in another fieldset
     .fieldset .fieldset-wrapper,
@@ -1197,7 +1193,7 @@ input.no-display,
 
     .fieldset .fieldset-wrapper .fieldset-wrapper-title,
     .fieldset-wrapper .fieldset-wrapper .fieldset-wrapper-title {
-        background:#f7f3eb;
+        background: #f7f3eb;
         padding: 0 18px;
         border: 0;
     }
@@ -1262,7 +1258,9 @@ input.no-display,
         padding-left: 30px;
     }
 
-    .ui-sortable .entry-edit .fieldset-wrapper-title > .title {
+    #super_config-wrapper,
+    #grouped-wrapper {
+        border-bottom: 0;
     }
 
     .fieldset-wrapper-title > .actions,
@@ -2474,7 +2472,7 @@ input.no-display,
         border-top: none;
     }
 
-    .attribute-popup .fieldset-wrapper:not(.collapsable-wrapper) .fieldset-wrapper-title {
+    .attribute-popup .fieldset-wrapper:not(.admin__collapsible-block) .fieldset-wrapper-title {
         border-bottom: none;
     }
 
@@ -2491,13 +2489,13 @@ input.no-display,
         width: 35%;
     }
 
-    .attribute-popup .collapsable-wrapper,
+    .attribute-popup .admin__collapsible-block-wrapper,
     #manage-titles-wrapper .fieldset-wrapper-title {
         margin-bottom: 0;
         padding-bottom: 0;
     }
 
-    .attribute-popup .collapsable-wrapper .fieldset-wrapper-title > .title:before {
+    .attribute-popup .admin__collapsible-block-wrapper .fieldset-wrapper-title > .title:before {
         color: #797269;
         font-size: 14px;
         top: 9px;
@@ -5423,65 +5421,6 @@ input.no-display,
     .main-col & {
         padding-left: 0;
         padding-right: 0;
-    }
-    .accordion {
-        margin: 0 0 8px;
-        padding: 0;
-        > dt {
-            background: #fff;
-            padding: 5px 18px 2px;
-            position: relative;
-            + dd {
-                display: none;
-                &.open {
-                    padding: 25px 18px 18px;
-                    display: block;
-                    margin-left: 0;
-                    border-top: 0;
-                    border-radius: 0 0 5px 5px;
-                }
-            }
-            &.open {
-                margin: 0;
-                border-bottom: 0;
-                border-radius: 5px 5px 0 0;
-                a {
-                    &:before {
-                        content: '\e02c'; // arrow down icon
-                    }
-                }
-            }
-            a {
-                .style10();
-                display: block;
-                padding: 7px 0 10px 22px;
-                text-decoration: none;
-                position: relative;
-                cursor: pointer;
-                border-bottom: 1px solid #cac3b4;
-                i {
-                    .style31();
-                }
-                &:before {
-                    position: absolute;
-                    left: 0;
-                    top: 11px;
-                    font-family: 'MUI-Icons';
-                    font-style: normal;
-                    speak: none;
-                    font-size: 16px;
-                    font-weight: normal;
-                    -webkit-font-smoothing: antialiased;
-                    content: '\e02a'; // arrow right icon
-                    color: #b2b0ad;
-                }
-                &:hover {
-                    &:before {
-                        color: #7e7e7e;
-                    }
-                }
-            }
-        }
     }
 }
 
