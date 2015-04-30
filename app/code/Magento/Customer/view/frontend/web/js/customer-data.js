@@ -15,17 +15,8 @@ define([
     $.cookieStorage.setConf({path:'/'});
 
     var options;
-    var ns = $.initNamespaceStorage('mage-cache-storage');
-    var storage = ns.localStorage;
+    var storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
     var storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
-
-    storageInvalidation.invalid_sections = 'invalid_sections';
-    storageInvalidation.getInvalidSections = function() {
-        return this.get(this.invalid_sections) || [];
-    };
-    storageInvalidation.setInvalidSections = function(sections) {
-        return this.set(this.invalid_sections, sections);
-    };
 
     if (!$.cookieStorage.isSet('mage-cache-sessid')) {
         $.cookieStorage.set('mage-cache-sessid', true);
@@ -107,17 +98,15 @@ define([
         update: function (sections) {
             _.each(sections, function (sectionData, sectionName) {
                 storage.set(sectionName, sectionData);
+                storageInvalidation.remove(sectionName);
                 buffer.notify(sectionName, sectionData);
             });
-            storageInvalidation.setInvalidSections([]);
         },
         remove: function (sections) {
-            var invalidSections = storageInvalidation.getInvalidSections();
             _.each(sections, function (sectionName) {
                 storage.remove(sectionName);
-                invalidSections.push(sectionName);
+                storageInvalidation.set(sectionName, true)
             });
-            storageInvalidation.setInvalidSections(invalidSections);
         }
     };
 
@@ -131,11 +120,8 @@ define([
                 _.each(getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
-                var invalidSections = storageInvalidation.getInvalidSections();
-                if (invalidSections.length) {
-                    getFromServer(invalidSections).done(function (sections) {
-                        buffer.update(sections);
-                    });
+                if (!_.isEmpty(storageInvalidation.keys())) {
+                    this.reload(storageInvalidation.keys());
                 }
             }
         },
