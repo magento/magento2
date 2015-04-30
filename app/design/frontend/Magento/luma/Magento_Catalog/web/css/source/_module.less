@@ -249,15 +249,9 @@
             margin-top: @form-field__vertical-indent;
         }
     }
-    .product-options-wrapper {
-        .field {
-            .note {
-                display: block;
-                .css(margin-top, @indent__xs);
-            }
-        }
+}
 
-    }
+.product-options-wrapper {
     .fieldset-product-options-inner {
         .legend {
             border: none;
@@ -288,6 +282,12 @@
             + .time-picker {
                 .css(margin-left, @indent__xs);
             }
+        }
+    }
+    .field {
+        .note {
+            display: block;
+            .css(margin-top, @indent__xs);
         }
     }
 }
