@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +10,7 @@ use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class Add extends Action\Action implements IndexInterface
 {
@@ -50,7 +50,7 @@ class Add extends Action\Action implements IndexInterface
     /**
      * Adding new item
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -73,10 +73,11 @@ class Add extends Action\Action implements IndexInterface
         }
 
         $productId = isset($requestParams['product']) ? (int)$requestParams['product'] : null;
-
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$productId) {
-            $this->_redirect('*/');
-            return;
+            $resultRedirect->setPath('*/');
+            return $resultRedirect;
         }
 
         try {
@@ -87,8 +88,8 @@ class Add extends Action\Action implements IndexInterface
 
         if (!$product || !$product->isVisibleInCatalog()) {
             $this->messageManager->addError(__('We can\'t specify a product.'));
-            $this->_redirect('*/');
-            return;
+            $resultRedirect->setPath('*/');
+            return $resultRedirect;
         }
 
         try {
@@ -112,9 +113,7 @@ class Add extends Action\Action implements IndexInterface
                 $referer = $this->_redirect->getRefererUrl();
             }
 
-
-            /** @var $helper \Magento\Wishlist\Helper\Data */
-            $helper = $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+            $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
             $message = __(
                 '%1 has been added to your wishlist. Click <a href="%2">here</a> to continue shopping.',
                 $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName()),
@@ -130,6 +129,7 @@ class Add extends Action\Action implements IndexInterface
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
 
-        $this->_redirect('*', ['wishlist_id' => $wishlist->getId()]);
+        $resultRedirect->setPath('*', ['wishlist_id' => $wishlist->getId()]);
+        return $resultRedirect;
     }
 }

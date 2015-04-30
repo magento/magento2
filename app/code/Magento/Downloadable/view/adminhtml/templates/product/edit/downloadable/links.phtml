@@ -39,7 +39,7 @@
     <div class="admin__field admin__field-wide">
         <div class="admin__field-control">
             <div class="admin__control-table-wrapper">
-                <table cellspacing="0" class="admin__control-table">
+                <table class="admin__control-table">
                     <thead>
                         <tr>
                             <th class="col-title _required"><span><?php echo __('Title') ?></span></th>
@@ -163,7 +163,7 @@ require([
             '</td>'+
             '<td class="col-sort"><input type="text" name="downloadable[link][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text admin__control-text sort" /></td>'+
             '<td class="col-action">'+
-                '<button id="downloadable_link_<%- data.id %>_delete_button" type="button" class="action-remove"><span><?php echo __('Delete'); ?></span></button>'+
+                '<button id="downloadable_link_<%- data.id %>_delete_button" type="button" class="action-delete"><span><?php echo __('Delete'); ?></span></button>'+
             '</td>'+
         '</tr>';
 
@@ -310,7 +310,7 @@ require([
                 }
             },
             bindRemoveButtons : function(){
-                var buttons = $$('tbody#link_items_body .action-remove');
+                var buttons = $$('tbody#link_items_body .action-delete');
                 for(var i=0;i<buttons.length;i++){
                     if(!$(buttons[i]).binded && !$(buttons[i]).hasClassName('disabled')){
                         $(buttons[i]).binded = true;

@@ -17,7 +17,7 @@ class Composite implements RendererInterface
     protected $_renderers;
 
     /**
-     * @param RendererInterface[] $renderers
+     * @param \Magento\Framework\Phrase\RendererInterface[] $renderers
      * @throws \InvalidArgumentException
      */
     public function __construct(array $renderers)
