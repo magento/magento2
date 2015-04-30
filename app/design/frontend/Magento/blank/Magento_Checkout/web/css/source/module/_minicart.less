@@ -197,9 +197,6 @@
         &:first-child {
             padding-top: 0;
         }
-        &:last-child {
-            padding-bottom: 0;
-        }
         > .product {
             &:extend(.abs-add-clearfix all);
         }
@@ -242,6 +239,9 @@
                 @_icon-font-margin: -3px 0 0 7px,
                 @_icon-font-position: after
             );
+            .details {
+                display: none;
+            }
         }
     }
     .details-qty,
