@@ -7,12 +7,19 @@
 
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
+use Magento\Framework\Exception\InputException;
+
 class AroundProductRepositorySave
 {
     /**
      * @var \Magento\ConfigurableProduct\Api\OptionRepositoryInterface
      */
     protected $optionRepository;
+
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
+    protected $productFactory;
 
     /**
      * Type configurable factory
@@ -28,15 +35,18 @@ class AroundProductRepositorySave
 
     /**
      * @param \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data $priceData
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory
      */
     public function __construct(
         \Magento\ConfigurableProduct\Api\OptionRepositoryInterface $optionRepository,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data $priceData,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory $typeConfigurableFactory
     ) {
         $this->optionRepository = $optionRepository;
+        $this->productFactory = $productFactory;
         $this->priceData = $priceData;
         $this->typeConfigurableFactory = $typeConfigurableFactory;
     }
@@ -119,14 +129,53 @@ class AroundProductRepositorySave
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param int[] $links
+     * @param int[] $linkIds
      * @return $this
      */
     protected function saveConfigurableProductLinks(
         \Magento\Catalog\Api\Data\ProductInterface $product,
-        array $links
+        array $linkIds
     ) {
-        $this->typeConfigurableFactory->create()->saveProducts($product, $links);
+        $configurableProductTypeResource = $this->typeConfigurableFactory->create();
+        if (!empty($linkIds)) {
+            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableProductType */
+            $configurableProductType = $product->getTypeInstance();
+            $configurableAttributes = $configurableProductType->getConfigurableAttributes($product);
+            $attributeCodes = [];
+            foreach ($configurableAttributes as $configurableAttribute) {
+                /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $productAttribute */
+                $productAttribute = $configurableAttribute->getProductAttribute();
+                $attributeCode = $productAttribute->getAttributeCode();
+                $attributeCodes[] = $attributeCode;
+            }
+            $this->validateProductLinks($attributeCodes, $linkIds);
+        }
+
+        $configurableProductTypeResource->saveProducts($product, $linkIds);
+        return $this;
+    }
+
+    /**
+     * @param array $attributeCodes
+     * @param array $linkIds
+     * @throws InputException
+     * @return $this
+     */
+    protected function validateProductLinks(array $attributeCodes, array $linkIds)
+    {
+        foreach ($linkIds as $productId) {
+            $variation = $this->productFactory->create()->load($productId);
+            if (!$variation->getId()) {
+                throw new InputException(__('Product with id "%1" does not exist.', $productId));
+            }
+            foreach ($attributeCodes as $attributeCode) {
+                if (!$variation->getData($attributeCode)) {
+                    throw new InputException(
+                        __('Product with id "%1" does not contain required attribute "%2".', $productId, $attributeCode)
+                    );
+                }
+            }
+        }
         return $this;
     }
 }

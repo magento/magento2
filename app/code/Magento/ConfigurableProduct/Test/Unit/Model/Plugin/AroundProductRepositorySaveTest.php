@@ -28,6 +28,11 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $productFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $productMock;
 
     /**
@@ -70,7 +75,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->productInterfaceMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['getExtensionAttributes', 'getTypeId', 'getSku', 'getStoreId', 'getId'],
+            ['getExtensionAttributes', 'getTypeId', 'getSku', 'getStoreId', 'getId', 'getTypeInstance'],
             [],
             '',
             false
@@ -78,11 +83,21 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return $this->productMock;
         };
-        $this->plugin = new AroundProductRepositorySave(
-            $this->productOptionRepositoryMock,
-            $this->priceDataMock,
-            $this->configurableTypeFactoryMock
+
+        $this->productFactoryMock = $this->getMockBuilder('\Magento\Catalog\Model\ProductFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->plugin = $objectManager->getObject(
+            'Magento\ConfigurableProduct\Model\Plugin\AroundProductRepositorySave',
+            [
+                'optionRepository' => $this->productOptionRepositoryMock,
+                'productFactory' => $this->productFactoryMock,
+                'priceData' => $this->priceDataMock,
+                'typeConfigurableFactory' => $this->configurableTypeFactoryMock
+            ]
         );
+
         $this->productExtensionMock = $this->getMock(
             'Magento\Catalog\Api\Data\ProductExtension',
             [
@@ -108,7 +123,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundSaveWhenProductIsConfigurableWithoutOptions()
+    public function testAroundSaveWithoutOptions()
     {
         $this->productInterfaceMock->expects($this->once())->method('getTypeId')
             ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
@@ -131,9 +146,89 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundSaveWhenProductIsConfigurableWithLinks()
+    protected function setupProducts($productIds, $attributeCode, $additionalProductId = null)
+    {
+        $count = 0;
+        $products = [];
+        foreach ($productIds as $productId) {
+            $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $productMock->expects($this->once())
+                ->method('load')
+                ->with($productId)
+                ->willReturnSelf();
+            $productMock->expects($this->once())
+                ->method('getId')
+                ->willReturn($productId);
+            $productMock->expects($this->once())
+                ->method('getData')
+                ->with($attributeCode)
+                ->willReturn('value');
+            $this->productFactoryMock->expects($this->at($count))
+                ->method('create')
+                ->willReturn($productMock);
+            $products[] = $productMock;
+            $count++;
+        }
+
+        if ($additionalProductId) {
+            $nonExistingProductMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $nonExistingProductMock->expects($this->once())
+                ->method('load')
+                ->with($additionalProductId)
+                ->willReturnSelf();
+            $this->productFactoryMock->expects($this->at($count))
+                ->method('create')
+                ->willReturn($nonExistingProductMock);
+            $products[] = $nonExistingProductMock;
+        }
+        return $products;
+    }
+
+    protected function setupConfigurableProductAttributes($attributeCodes)
+    {
+        $configurableProductTypeMock = $this->getMockBuilder(
+            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable'
+        )->disableOriginalConstructor()->getMock();
+
+        $this->productMock->expects($this->once())
+            ->method('getTypeInstance')
+            ->willReturn($configurableProductTypeMock);
+
+        $configurableAttributes = [];
+        foreach ($attributeCodes as $attributeCode) {
+            $configurableAttribute = $this->getMockBuilder(
+                '\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute'
+            )->setMethods(['getProductAttribute'])
+                ->disableOriginalConstructor()
+                ->getMock();
+            $productAttributeMock = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $productAttributeMock->expects($this->once())
+                ->method('getAttributeCode')
+                ->willReturn($attributeCode);
+            $configurableAttribute->expects($this->once())
+                ->method('getProductAttribute')
+                ->willReturn($productAttributeMock);
+            $configurableAttributes[] = $configurableAttribute;
+        }
+
+        $configurableProductTypeMock->expects($this->once())
+            ->method('getConfigurableAttributes')
+            ->with($this->productMock)
+            ->willReturn($configurableAttributes);
+
+        return $this;
+    }
+
+    public function testAroundSaveWithLinks()
     {
         $links = [4, 5];
+        $configurableAttributeCode = 'color';
         $this->productMock->expects($this->once())->method('getTypeId')
             ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
         $this->productMock->expects($this->once())
@@ -146,6 +241,9 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getConfigurableProductLinks')
             ->willReturn($links);
 
+        $this->setupConfigurableProductAttributes([$configurableAttributeCode]);
+        $this->setupProducts($links, $configurableAttributeCode);
+
         $configurableTypeMock = $this->getMockBuilder(
             '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'
         )->disableOriginalConstructor()->getMock();
@@ -157,7 +255,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->productMock, $links);
 
         $productId = 3;
-        $this->productMock->expects($this->once())
+        $this->productMock->expects($this->any())
             ->method('getId')
             ->willReturn($productId);
         $this->priceDataMock->expects($this->once())
@@ -176,7 +274,98 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundSaveWhenProductIsConfigurableWithOptions()
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Product with id "6" does not exist.
+     */
+    public function testAroundSaveWithNonExistingLinks()
+    {
+        $links = [4, 5];
+        $nonExistingId = 6;
+        $configurableAttributeCode = 'color';
+
+        $this->setupConfigurableProductAttributes([$configurableAttributeCode]);
+        $productMocks = $this->setupProducts($links, $configurableAttributeCode, $nonExistingId);
+        $nonExistingProductMock = $productMocks[2];
+        $nonExistingProductMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(null);
+        $links[] = $nonExistingId;
+
+        $this->productMock->expects($this->once())->method('getTypeId')
+            ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
+        $this->productMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productExtensionMock);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getConfigurableProductOptions')
+            ->willReturn(null);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getConfigurableProductLinks')
+            ->willReturn($links);
+
+        $configurableTypeMock = $this->getMockBuilder(
+            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'
+        )->disableOriginalConstructor()->getMock();
+        $this->configurableTypeFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($configurableTypeMock);
+        $configurableTypeMock->expects($this->never())
+            ->method('saveProducts')
+            ->with($this->productMock, $links);
+
+        $this->plugin->aroundSave($this->productRepositoryMock, $this->closureMock, $this->productMock);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Product with id "6" does not contain required attribute "color".
+     */
+    public function testAroundSaveWithLinksWithMissingAttribute()
+    {
+        $links = [4, 5];
+        $simpleProductId = 6;
+        $configurableAttributeCode = 'color';
+
+        $this->setupConfigurableProductAttributes([$configurableAttributeCode]);
+        $productMocks = $this->setupProducts($links, $configurableAttributeCode, $simpleProductId);
+        $simpleProductMock = $productMocks[2];
+        $simpleProductMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($simpleProductId);
+        $simpleProductMock->expects($this->once())
+            ->method('getData')
+            ->with($configurableAttributeCode)
+            ->willReturn(null);
+
+        $links[] = $simpleProductId;
+
+        $this->productMock->expects($this->once())->method('getTypeId')
+            ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
+        $this->productMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productExtensionMock);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getConfigurableProductOptions')
+            ->willReturn(null);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getConfigurableProductLinks')
+            ->willReturn($links);
+
+        $configurableTypeMock = $this->getMockBuilder(
+            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'
+        )->disableOriginalConstructor()->getMock();
+        $this->configurableTypeFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($configurableTypeMock);
+        $configurableTypeMock->expects($this->never())
+            ->method('saveProducts')
+            ->with($this->productMock, $links);
+
+        $this->plugin->aroundSave($this->productRepositoryMock, $this->closureMock, $this->productMock);
+    }
+
+    public function testAroundSaveWithOptions()
     {
         $productSku = "configurable_sku";
         $this->productInterfaceMock->expects($this->once())->method('getTypeId')

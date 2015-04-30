@@ -270,6 +270,25 @@ class ProductRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Product with id "%1" does not exist.
+     */
+    public function testUpdateConfigurableProductLinksWithNonExistingProduct()
+    {
+        $productId1 = 10;
+        $nonExistingId = 999;
+
+        $response = $this->createConfigurableProduct();
+        //leave existing option untouched
+        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']);
+        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
+            $productId1, $nonExistingId
+        ];
+        $this->saveProduct($response);
+    }
+
+    /**
      * Get product
      *
      * @param string $productSku
