@@ -40,6 +40,11 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
     protected $addressDetailsFactory;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataProcessor;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
@@ -52,6 +57,7 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
         $this->paymentMethodManagement = $this->getMock('\Magento\Quote\Api\PaymentMethodManagementInterface');
         $this->shippingMethodManagement = $this->getMock('\Magento\Quote\Api\ShippingMethodManagementInterface');
         $this->addressDetailsFactory = $this->getMock('\Magento\Quote\Model\AddressDetailsFactory', [], [], '', false);
+        $this->dataProcessor = $this->getMock('\Magento\Quote\Model\AddressAdditionalDataProcessor', [], [], '', false);
 
         $this->model = $this->objectManager->getObject(
             'Magento\Quote\Model\AddressDetailsManagement',
@@ -61,6 +67,7 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
                 'paymentMethodManagement' => $this->paymentMethodManagement,
                 'shippingMethodManagement' => $this->shippingMethodManagement,
                 'addressDetailsFactory' => $this->addressDetailsFactory,
+                'dataProcessor' => $this->dataProcessor
             ]
         );
     }
@@ -68,6 +75,7 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
     public function testSaveAddresses()
     {
         $cartId = 100;
+        $additionalData = $this->getMock('\Magento\Quote\Api\Data\AddressAdditionalDataInterface');
         $billingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
         $shippingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
 
@@ -102,6 +110,8 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
             ->method('setPaymentMethods')
             ->with([$paymentMethodMock])
             ->willReturnSelf();
-        $this->model->saveAddresses($cartId, $billingAddressMock, $shippingAddressMock);
+        $this->dataProcessor->expects($this->once())->method('process')->with($additionalData);
+
+        $this->model->saveAddresses($cartId, $billingAddressMock, $shippingAddressMock, $additionalData);
     }
 }
