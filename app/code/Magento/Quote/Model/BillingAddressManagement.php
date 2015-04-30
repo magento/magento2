@@ -67,8 +67,10 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $this->addressValidator->validate($address);
-        // TODO: Draft implementation. Should be improved when checkout ui rendering will be able to process addresses.
         $customerAddressId = $address->getCustomerAddressId();
+        $shippingAddress = null;
+        $addressData = [];
+
         if ($useForShipping) {
             $shippingAddress = $address;
         }

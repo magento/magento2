@@ -26,7 +26,7 @@ define(
                 customer.setAddressAsDefaultBilling(customer.addCustomerAddress(quote.getBillingAddress()()));
                 customer.setAddressAsDefaultShipping(customer.addCustomerAddress(quote.getShippingAddress()()));
                 storage.post(
-                    urlBuilder.createUrl('/carts/:quoteId/order-with-registration', {quoteId: quote.getQuoteId()}),
+                    urlBuilder.createUrl('/guest-carts/:quoteId/order-with-registration', {quoteId: quote.getQuoteId()}),
                     JSON.stringify(payload)
                 ).done(
                     function() {

@@ -34,10 +34,16 @@ define(
                 shippingMethodData = {
                     "shippingCarrierCode" : shippingMethodCode[0],
                     "shippingMethodCode" : shippingMethodCode[1]
-                };
+                },
+                serviceUrl;
+            if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()});
+            } else {
+                serviceUrl = urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()});
+            }
             if (quote.isVirtual()) {
                 return storage.put(
-                    urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()}),
+                    serviceUrl,
                     JSON.stringify(_.extend(paymentMethodData))
                 ).done(
                     function (response) {
@@ -67,7 +73,7 @@ define(
                     );
                 }
                 return storage.put(
-                    urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()}),
+                    serviceUrl,
                     JSON.stringify(_.extend(paymentMethodData, shippingMethodData))
                 ).done(
                     function (response) {

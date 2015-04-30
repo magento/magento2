@@ -36,6 +36,8 @@
     <preference for="Magento\Quote\Api\GuestShippingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingAddressManagement" />
     <preference for="Magento\Quote\Api\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
     <preference for="Magento\Quote\Api\GuestBillingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestBillingAddressManagement" />
+    <preference for="Magento\Quote\Api\GuestAddressDetailsManagementInterface" type="Magento\Quote\Model\GuestCart\GuestAddressDetailsManagement" />
+    <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
 
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
