@@ -19,6 +19,7 @@ use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
 
 class DefaultConfigProvider implements ConfigProviderInterface
@@ -84,6 +85,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $configurationPool;
 
     /**
+     * @param QuoteIdMaskFactory
+     */
+    protected $quoteIdMaskFactory;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRegistration $customerRegistration
@@ -96,6 +102,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param QuoteItemRepository $quoteItemRepository
      * @param ShippingMethodManager $shippingMethodManager
      * @param ConfigurationPool $configurationPool
+     * @param QuoteIdMaskFactory
      */
     public function __construct(
         CheckoutHelper $checkoutHelper,
@@ -109,7 +116,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         QuoteRepository $quoteRepository,
         QuoteItemRepository $quoteItemRepository,
         ShippingMethodManager $shippingMethodManager,
-        ConfigurationPool $configurationPool
+        ConfigurationPool $configurationPool,
+        QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -123,6 +131,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->quoteItemRepository = $quoteItemRepository;
         $this->shippingMethodManager = $shippingMethodManager;
         $this->configurationPool = $configurationPool;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
     /**
@@ -199,6 +208,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
 
             $quoteData = $quote->toArray();
             $quoteData['is_virtual'] = $quote->getIsVirtual();
+
+            /**
+             * Temporary workaround for guest customer API issue.
+             */
+            if (!$quote->getCustomer()->getId()) {
+                /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+                $quoteIdMask = $this->quoteIdMaskFactory->create();
+                $quoteData['entity_id'] = $quoteIdMask->load($this->getQuote()->getId())->getMaskedId();
+            }
+
         }
         return $quoteData;
     }

@@ -96,6 +96,12 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <route url="/V1/guest-carts/:cartId/order-with-registration" method="POST">
+        <service class="Magento\Quote\Api\GuestCartManagementInterface" method="placeOrderCreatingAccount"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 
     <!-- Managing Cart Shipment Method -->
     <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">
@@ -352,6 +358,12 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+    <route url="/V1/guest-carts/:cartId/addresses" method="POST">
+        <service class="Magento\Quote\Api\GuestAddressDetailsManagementInterface" method="saveAddresses"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 
     <!-- Managing My Cart Billing address -->
     <route url="/V1/carts/mine/billing-address" method="GET">
@@ -505,6 +517,12 @@
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
+    <route url="/V1/guest-carts/:cartId/collect-totals" method="PUT">
+        <service class="Magento\Quote\Api\GuestCartTotalManagementInterface" method="collectTotals"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 
     <!-- Managing Guest Cart Total -->
     <route url="/V1/guest-carts/:cartId/totals" method="GET">
@@ -526,12 +544,6 @@
     </route>
     <route url="/V1/carts/:cartId/addresses" method="POST">
         <service class="Magento\Quote\Api\AddressDetailsManagementInterface" method="saveAddresses"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/order-with-registration" method="POST">
-        <service class="Magento\Quote\Api\CartManagementInterface" method="placeOrderCreatingAccount"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

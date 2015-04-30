@@ -68,10 +68,25 @@ class GuestCartManagement implements GuestCartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function placeOrder($cartId)
+    public function placeOrder($cartId, $agreements = null)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->quoteManagement->placeOrder($quoteIdMask->getId());
+        return $this->quoteManagement->placeOrder($quoteIdMask->getId(), $agreements);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function placeOrderCreatingAccount($cartId, $customer, $password, $agreements = null)
+    {
+        /** @var $quoteIdMask QuoteIdMask */
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        return $this->quoteManagement->placeOrderCreatingAccount(
+            $quoteIdMask->getId(),
+            $customer,
+            $password,
+            $agreements
+        );
     }
 }

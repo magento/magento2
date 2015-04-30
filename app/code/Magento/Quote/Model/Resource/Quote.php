@@ -9,6 +9,7 @@
 namespace Magento\Quote\Model\Resource;
 
 use Magento\Framework\Model\Resource\Db\AbstractDb;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Quote resource model
@@ -21,6 +22,11 @@ class Quote extends AbstractDb
     protected $sequenceManager;
 
     /**
+     * @var QuoteIdMaskFactory
+     */
+    protected $quoteIdMaskFactory;
+
+    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
      * @param null $resourcePrefix
@@ -28,10 +34,12 @@ class Quote extends AbstractDb
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
+        QuoteIdMaskFactory $quoteIdMaskFactory,
         $resourcePrefix = null
     ) {
         parent::__construct($context, $resourcePrefix);
         $this->sequenceManager = $sequenceManager;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
     /**
@@ -273,7 +281,25 @@ class Quote extends AbstractDb
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->isPreventSaving()) {
-            return parent::save($object);
+            $result = parent::save($object);
+            $this->afterSave($object);
+            return $result;
+        }
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return void
+     */
+    protected function afterSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->getOrigData('entity_id') === null && !$object->getCustomerId()) {
+            $quoteId = $object->getId();
+            /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+            $quoteIdMask = $this->quoteIdMaskFactory->create();
+            if ($quoteIdMask->load($quoteId)) {
+                $quoteIdMask->setId($quoteId)->save();
+            }
         }
     }
 }

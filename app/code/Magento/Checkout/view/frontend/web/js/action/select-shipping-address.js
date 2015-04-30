@@ -18,12 +18,20 @@ define(
         "use strict";
         var actionCallback;
         var result = function(shippingAddress, sameAsBilling, additionalData) {
+            var serviceUrl;
+            if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
+            } else {
+                serviceUrl =  urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
+            }
+
             errorList.clear();
             additionalData = additionalData || {};
             shippingAddress['same_as_billing'] = (sameAsBilling) ? 1 : 0;
             quote.setShippingAddress(shippingAddress);
+
             storage.post(
-                urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()}),
+                serviceUrl,
                 JSON.stringify({
                     shippingAddress: quote.getShippingAddress()(),
                     billingAddress: quote.getBillingAddress()(),
