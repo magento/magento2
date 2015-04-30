@@ -18,30 +18,20 @@ define([
     var storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
     var storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
 
+    /** Expires date cache **/
     if (!$.cookieStorage.isSet('mage-cache-sessid')) {
         $.cookieStorage.set('mage-cache-sessid', true);
         storage.removeAll();
     }
-
-    $(document).on('ajaxSuccess', function (event, xhr, settings) {
-        if (settings.type.match(/post/i)) {
-            var sections = sectionConfig.getAffectedSections(settings.url);
-            if (sections) {
-                customerData.invalidate(sections);
-                customerData.reload(sections);
-            }
+    var invalidateCacheBySessionTimeOut = function(options) {
+        if (!$.cookieStorage.isSet('mage-cache-life')) {
+            storage.removeAll();
         }
-    });
+        var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
+        $.cookieStorage.setExpires(date).set('mage-cache-life', 'true');
+    };
 
-    $(document).on('submit', function (event) {
-        if (event.target.method.match(/post/i)) {
-            var sections = sectionConfig.getAffectedSections(event.target.action);
-            if (sections) {
-                customerData.invalidate(sections);
-            }
-        }
-    });
-
+    /** Data provider **/
     var getFromStorage = function (sectionNames) {
         var result = {};
         _.each(sectionNames, function (sectionName) {
@@ -49,7 +39,6 @@ define([
         });
         return result;
     };
-
     var getFromServer = function (sectionNames) {
         var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
         return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
@@ -65,14 +54,6 @@ define([
             }, 3000);
         });
         return target;
-    };
-
-    var invalidateCacheBySessionTimeOut = function(options) {
-        if (!$.cookieStorage.isSet('mage-cache-life')) {
-            storage.removeAll();
-        }
-        var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
-        $.cookieStorage.setExpires(date).set('mage-cache-life', 'true');
     };
 
     var buffer = {
@@ -105,7 +86,7 @@ define([
         remove: function (sections) {
             _.each(sections, function (sectionName) {
                 storage.remove(sectionName);
-                storageInvalidation.set(sectionName, true)
+                storageInvalidation.set(sectionName, true);
             });
         }
     };
@@ -113,9 +94,7 @@ define([
     var customerData = {
         init: function() {
             if (_.isEmpty(storage.keys())) {
-                getFromServer().done(function (sections) {
-                    buffer.update(sections);
-                });
+                this.reload();
             } else {
                 _.each(getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -142,6 +121,25 @@ define([
             customerData.init();
         }
     };
+
+    /** Events listener **/
+    $(document).on('ajaxComplete', function (event, xhr, settings) {
+        if (settings.type.match(/post/i)) {
+            var sections = sectionConfig.getAffectedSections(settings.url);
+            if (sections) {
+                customerData.invalidate(sections);
+                customerData.reload(sections);
+            }
+        }
+    });
+    $(document).on('submit', function (event) {
+        if (event.target.method.match(/post/i)) {
+            var sections = sectionConfig.getAffectedSections(event.target.action);
+            if (sections) {
+                customerData.invalidate(sections);
+            }
+        }
+    });
 
     return customerData;
 });
