@@ -9,7 +9,7 @@ namespace Magento\Tax\Test\TestCase;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
@@ -43,7 +43,7 @@ class TaxWithCrossBorderTest extends Injectable
     /**
      * Fixture SalesRule.
      *
-     * @var SalesRuleInjectable
+     * @var SalesRule
      */
     protected $salesRule;
 
@@ -108,14 +108,14 @@ class TaxWithCrossBorderTest extends Injectable
      *
      * @param CatalogProductSimple $product
      * @param string $configData
-     * @param SalesRuleInjectable $salesRule [optional]
+     * @param SalesRule $salesRule [optional]
      * @param CatalogRule $catalogRule [optional]
      * @return void
      */
     public function test(
         CatalogProductSimple $product,
         $configData,
-        SalesRuleInjectable $salesRule = null,
+        SalesRule $salesRule = null,
         CatalogRule $catalogRule = null
     ) {
         //Preconditions
