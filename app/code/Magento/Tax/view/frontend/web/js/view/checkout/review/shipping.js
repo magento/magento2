@@ -26,7 +26,7 @@ define(
             quoteIsVirtual: quote.isVirtual(),
             selectedShippingMethod: quote.getShippingMethod(),
             getTitle: function() {
-                return "Shipping & Handling" + shippingService.getTitleByCode(this.selectedShippingMethod());
+                return "Shipping & Handling" + "(" + shippingService.getTitleByCode(this.selectedShippingMethod())+ ")";
             },
             getExcludingLabel: function() {
                 return "Shipping Excl. Tax" + shippingService.getTitleByCode(this.selectedShippingMethod());

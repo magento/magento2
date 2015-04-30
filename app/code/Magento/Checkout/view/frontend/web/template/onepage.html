@@ -4,16 +4,19 @@
  * See COPYING.txt for license details.
  */
 -->
+
 <!-- ko foreach: getRegion('errors') -->
 <!-- ko template: getTemplate() --><!-- /ko -->
 <!--/ko-->
-<div class="opc-wrapper">
-    <!-- ko foreach: getRegion('steps') -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
-    <!--/ko-->
-</div>
-<div id="checkout-progress-wrapper" class="opc-block-progress-wrapper"><div class="opc-block-progress">
-    <!-- ko foreach: getRegion('progress') -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
-    <!--/ko-->
-</div>
+    <div class="columns">
+        <div class="opc-wrapper">
+            <!-- ko foreach: getRegion('steps') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div id="checkout-progress-wrapper" class="opc-block-progress-wrapper">
+            <!-- ko foreach: getRegion('progress') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+    </div>

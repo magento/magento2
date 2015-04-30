@@ -15,7 +15,6 @@ define(
         return Component.extend({
             defaults: {
                 template: 'Magento_Tax/checkout/shipping_method/price',
-                displayArea: 'price'
             },
 
             isDisplayShippingPriceExclTax: window.checkoutConfig.isDisplayShippingPriceExclTax,

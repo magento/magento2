@@ -35,11 +35,23 @@ define(
                     $.each(rates(), function (key, entity) {
                         if (entity['carrier_code'] == methodCodeParts[0]
                             && entity['method_code'] == methodCodeParts[1]) {
-                            shippingMethodTitle = "(" + entity['carrier_title'] + " - " + entity['method_title'] + ")";
+                            shippingMethodTitle = entity['carrier_title'] + " - " + entity['method_title'];
                         }
                     });
                 }
                 return shippingMethodTitle;
+            },
+            getRateByCode : function(methodCodeParts) {
+                var shippingRates = [];
+                if (methodCodeParts) {
+                    $.each(rates(), function (key, entity) {
+                        if (entity['carrier_code'] == methodCodeParts[0]
+                            && entity['method_code'] == methodCodeParts[1]) {
+                            shippingRates.push(entity);
+                        }
+                    });
+                }
+                return shippingRates;
             }
         }
     }

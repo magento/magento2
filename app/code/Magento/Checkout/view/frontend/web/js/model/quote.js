@@ -19,6 +19,8 @@ define(
         var totals = ko.observable({});
         var checkoutMethod = ko.observable(null);
         var shippingCustomOptions = ko.observable(null);
+        var formattedShippingAddress = ko.observable(null);
+        var formattedBillingAddress = ko.observable(null);
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -52,6 +54,18 @@ define(
             },
             getShippingAddress: function() {
                 return shippingAddress;
+            },
+            setFormattedBillingAddress: function (address) {
+                formattedBillingAddress(address);
+            },
+            getFormattedBillingAddress: function() {
+                return formattedBillingAddress;
+            },
+            setFormattedShippingAddress: function (address) {
+                formattedShippingAddress(address);
+            },
+            getFormattedShippingAddress: function() {
+                return formattedShippingAddress;
             },
             setPaymentMethod: function(paymentMethodCode) {
                 paymentMethod(paymentMethodCode);
