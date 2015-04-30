@@ -14,6 +14,9 @@ use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use Magento\Cron\Model\Observer;
+use Magento\Framework\Console\CLI;
+use Magento\Framework\Shell\ComplexParameter;
 
 /**
  * Command for executing cron jobs
@@ -59,6 +62,12 @@ class CronCommand extends Command
                 'Run jobs only from specified group',
                 'default'
             ),
+            new InputOption(
+                CLI::INPUT_KEY_BOOTSTRAP,
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Add or override parameters of the bootstrap'
+            ),
         ];
         $this->setName('cron:run')
             ->setDescription('Runs jobs by schedule')
@@ -71,9 +80,19 @@ class CronCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $params['group'] = $input->getOption(self::INPUT_KEY_GROUP);
-        // This 'standaloneProcessStarted' flag is for internal communication between processes only
-        $params['standaloneProcessStarted'] = '0';
+        $params[self::INPUT_KEY_GROUP] = $input->getOption(self::INPUT_KEY_GROUP);
+        $params[Observer::STANDALONE_PROCESS_STARTED] = '0';
+        $bootstrap = $input->getOption(CLI::INPUT_KEY_BOOTSTRAP);
+        if ($bootstrap) {
+            $bootstrapProcessor = new ComplexParameter(CLI::INPUT_KEY_BOOTSTRAP);
+            $bootstrapOptionValues = $bootstrapProcessor->getFromString(
+                '--' . CLI::INPUT_KEY_BOOTSTRAP . '=' . $bootstrap
+            );
+            $bootstrapOptionValue = $bootstrapOptionValues[Observer::STANDALONE_PROCESS_STARTED];
+            if ($bootstrapOptionValue) {
+                $params[Observer::STANDALONE_PROCESS_STARTED] = $bootstrapOptionValue;
+            }
+        }
         /** @var \Magento\Framework\App\Cron $cronObserver */
         $cronObserver = $this->objectManager->create('Magento\Framework\App\Cron', ['parameters' => $params]);
         $cronObserver->launch();
