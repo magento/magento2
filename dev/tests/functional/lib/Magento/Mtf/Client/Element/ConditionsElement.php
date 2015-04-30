@@ -106,6 +106,34 @@ class ConditionsElement extends SimpleElement
     protected $param = './span[span[*[substring(@id,(string-length(@id)-%d+1))="%s"]]]';
 
     /**
+     * Rule param wait locator.
+     *
+     * @var string
+     */
+    protected $ruleParamWait = './/*[@class="rule-param-wait"]';
+
+    /**
+     * Rule param input selector.
+     *
+     * @var string
+     */
+    protected $ruleParamInput = '[name^="rule"]';
+
+    /**
+     * Apply rule param link.
+     *
+     * @var string
+     */
+    protected $applyRuleParam = './/*[@class="rule-param-apply"]';
+
+    /**
+     * Chooser grid locator.
+     *
+     * @var string
+     */
+    protected $chooserGridLocator = 'div[id*=chooser]';
+
+    /**
      * Key of last find param.
      *
      * @var int
@@ -150,27 +178,6 @@ class ConditionsElement extends SimpleElement
         '&rbracket;' => ']',
         '&colon;' => ':',
     ];
-
-    /**
-     * Rule param wait locator.
-     *
-     * @var string
-     */
-    protected $ruleParamWait = './/*[@class="rule-param-wait"]';
-
-    /**
-     * Chooser grid locator.
-     *
-     * @var string
-     */
-    protected $chooserGridLocator = 'div[id*=chooser]';
-
-    /**
-     * Rule param input selector.
-     *
-     * @var string
-     */
-    protected $ruleParamInput = '[name^="rule"]';
 
     /**
      * Latest occurred exception.
@@ -281,7 +288,7 @@ class ConditionsElement extends SimpleElement
             throw $exception;
         }
     }
-    
+
     /**
      * Fill single condition.
      *
@@ -305,7 +312,7 @@ class ConditionsElement extends SimpleElement
                     if ($openParamLink->isVisible()) {
                         $openParamLink->click();
                     }
-                    $this->waitUntil(function() use ($param) {
+                    $this->waitUntil(function () use ($param) {
                         return $param->find($this->ruleParamInput)->isVisible() ? true : null;
                     });
 
@@ -353,7 +360,7 @@ class ConditionsElement extends SimpleElement
             );
             $grid->searchAndSelect([$chooserConfig[1] => $rule]);
 
-            $apply = $param->find('.//*[@class="rule-param-apply"]', Locator::SELECTOR_XPATH);
+            $apply = $param->find($this->applyRuleParam, Locator::SELECTOR_XPATH);
             if ($apply->isVisible()) {
                 $apply->click();
             }
@@ -485,7 +492,7 @@ class ConditionsElement extends SimpleElement
     /**
      * Param wait loader.
      *
-     * @return void
+     * @param ElementInterface $element
      */
     protected function waitForCondition(ElementInterface $element)
     {
