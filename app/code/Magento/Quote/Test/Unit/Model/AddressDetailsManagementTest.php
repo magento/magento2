@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Test\Unit\Model;
 
-use Magento\Quote\Model\AddressDetailsManagement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,20 +39,29 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $addressDetailsFactory;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
+        $this->objectManager = new ObjectManager($this);
         $this->billingAddressManagement = $this->getMock('\Magento\Quote\Api\BillingAddressManagementInterface');
         $this->shippingAddressManagement = $this->getMock('\Magento\Quote\Api\ShippingAddressManagementInterface');
         $this->paymentMethodManagement = $this->getMock('\Magento\Quote\Api\PaymentMethodManagementInterface');
         $this->shippingMethodManagement = $this->getMock('\Magento\Quote\Api\ShippingMethodManagementInterface');
         $this->addressDetailsFactory = $this->getMock('\Magento\Quote\Model\AddressDetailsFactory', [], [], '', false);
 
-        $this->model = new AddressDetailsManagement(
-            $this->billingAddressManagement,
-            $this->shippingAddressManagement,
-            $this->paymentMethodManagement,
-            $this->shippingMethodManagement,
-            $this->addressDetailsFactory
+        $this->model = $this->objectManager->getObject(
+            'Magento\Quote\Model\AddressDetailsManagement',
+            [
+                'billingAddressManagement' => $this->billingAddressManagement,
+                'shippingAddressManagement' => $this->shippingAddressManagement,
+                'paymentMethodManagement' => $this->paymentMethodManagement,
+                'shippingMethodManagement' => $this->shippingMethodManagement,
+                'addressDetailsFactory' => $this->addressDetailsFactory,
+            ]
         );
     }
 

@@ -8,9 +8,15 @@
 namespace Magento\Quote\Test\Unit\Model;
 
 use \Magento\Quote\Model\BillingAddressManagement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManager;
+
     /**
      * @var BillingAddressManagement
      */
@@ -31,10 +37,18 @@ class BillingAddressManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->objectManager = new ObjectManager($this);
         $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
         $this->validatorMock = $this->getMock('\Magento\Quote\Model\QuoteAddressValidator', [], [], '', false);
         $logger = $this->getMock('\Psr\Log\LoggerInterface');
-        $this->model = new BillingAddressManagement($this->quoteRepositoryMock, $this->validatorMock, $logger);
+        $this->model = $this->objectManager->getObject(
+            '\Magento\Quote\Model\BillingAddressManagement',
+            [
+                'quoteRepository' => $this->quoteRepositoryMock,
+                'addressValidator' => $this->validatorMock,
+                'logger' => $logger
+            ]
+        );
     }
 
     /**

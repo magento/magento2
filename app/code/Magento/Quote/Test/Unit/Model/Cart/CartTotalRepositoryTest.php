@@ -113,10 +113,9 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->once())->method('setWeeeTaxApplied')->with([1, 2, 3]);
         $itemMock->expects($this->once())->method('getWeeeTaxApplied')->willReturn(serialize([1, 2, 3]));
         $itemMock->expects($this->once())->method('toArray')->willReturn($itemToArray);
-//        $this->quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$item]));
 
-        $totals = $this->getMock('Magento\Quote\Model\Cart\Totals', ['setItems'], [], '', false);
-        $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totals);
+        $totalsMock = $this->getMock('Magento\Quote\Model\Cart\Totals', ['setItems'], [], '', false);
+        $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totalsMock);
         $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray');
         //expectations of method getFormattedOptionsValue()
         $itemMock->expects($this->any())->method('getProductType')->willReturn('simple');
@@ -126,8 +125,15 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $configMock1->expects($this->once())->method('getOptions')->willReturn([4 => ['label' => 'justLabel']]);
         $configMock2->expects($this->once())->method('getFormattedOptionValue');
         //back in get()
-        $totals->expects($this->once())->method('setItems');
+        $totalsMock->expects($this->once())->method('setItems')->with(
+            [
+            11 => [
+                    'name' => 'item',
+                    'options' => [ 4 => ['label' => 'justLabel']],
+                ],
+            ]
+        );
 
-        $this->model->get($cartId);
+        $this->assertEquals($totalsMock, $this->model->get($cartId));
     }
 }
