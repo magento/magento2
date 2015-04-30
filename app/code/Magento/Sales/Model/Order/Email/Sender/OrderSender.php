@@ -16,6 +16,7 @@ use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class OrderSender
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderSender extends Sender
 {
@@ -100,9 +101,7 @@ class OrderSender extends Sender
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             if ($this->checkAndSend($order)) {
                 $order->setEmailSent(true);
-
                 $this->orderResource->saveAttribute($order, ['send_email', 'email_sent']);
-
                 return true;
             }
         }
@@ -134,7 +133,8 @@ class OrderSender extends Sender
         );
 
         $this->eventManager->dispatch(
-            'email_order_set_template_vars_before', array('sender' => $this, 'transport' => $transport)
+            'email_order_set_template_vars_before',
+            ['sender' => $this, 'transport' => $transport]
         );
 
         $this->templateContainer->setTemplateVars($transport->getTemplateVars());

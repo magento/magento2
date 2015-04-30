@@ -17,7 +17,7 @@ use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class ShipmentSender
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentSender extends Sender
@@ -128,16 +128,15 @@ class ShipmentSender extends Sender
             );
 
             $this->eventManager->dispatch(
-                'email_shipment_set_template_vars_before', array('sender' => $this, 'transport' => $transport)
+                'email_shipment_set_template_vars_before',
+                ['sender' => $this, 'transport' => $transport]
             );
 
             $this->templateContainer->setTemplateVars($transport->getTemplateVars());
 
             if ($this->checkAndSend($order)) {
                 $shipment->setEmailSent(true);
-
                 $this->shipmentResource->saveAttribute($shipment, ['send_email', 'email_sent']);
-
                 return true;
             }
         }

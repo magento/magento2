@@ -84,7 +84,8 @@ class CreditmemoCommentSender extends NotifySender
         );
 
         $this->eventManager->dispatch(
-            'email_creditmemo_comment_set_template_vars_before', array('sender' => $this, 'transport' => $transport)
+            'email_creditmemo_comment_set_template_vars_before',
+            ['sender' => $this, 'transport' => $transport]
         );
 
         $this->templateContainer->setTemplateVars($transport->getTemplateVars());

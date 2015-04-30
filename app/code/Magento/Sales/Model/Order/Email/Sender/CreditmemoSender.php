@@ -128,16 +128,15 @@ class CreditmemoSender extends Sender
             );
 
             $this->eventManager->dispatch(
-                'email_creditmemo_set_template_vars_before', array('sender' => $this, 'transport' => $transport)
+                'email_creditmemo_set_template_vars_before',
+                ['sender' => $this, 'transport' => $transport]
             );
 
             $this->templateContainer->setTemplateVars($transport->getTemplateVars());
 
             if ($this->checkAndSend($order)) {
                 $creditmemo->setEmailSent(true);
-
                 $this->creditmemoResource->saveAttribute($creditmemo, ['send_email', 'email_sent']);
-
                 return true;
             }
         }
