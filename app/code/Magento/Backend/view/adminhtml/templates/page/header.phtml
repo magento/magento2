@@ -21,18 +21,18 @@
         </a>
     <?php break; ?>
     <?php case 'user': ?>
-        <div class="admin-user">
+        <div class="admin-user admin__action-dropdown-wrap">
             <a
                 href="<?php echo $block->getUrl('adminhtml/system_account/index') ?>"
-                class="admin-user-account"
+                class="admin__action-dropdown"
                 title="<?php echo $block->escapeHtml(__('My Account')) ?>"
                 data-mage-init='{"dropdown":{}}'
                 data-toggle="dropdown">
-                <span class="admin-user-account-text-wrapper">
+                <span class="admin__action-dropdown-text">
                     <span class="admin-user-account-text"><?php echo $block->escapeHtml($block->getUser()->getUsername()); ?></span>
                 </span>
             </a>
-            <ul class="admin-user-menu">
+            <ul class="admin__action-dropdown-menu">
                 <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::myaccount')): ?>
                 <li>
                     <a
