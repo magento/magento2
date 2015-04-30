@@ -36,6 +36,7 @@ define([
         if (settings.type.match(/post/i)) {
             var sections = sectionConfig.getAffectedSections(settings.url);
             if (sections) {
+                customerData.invalidate(sections);
                 customerData.reload(sections);
             }
         }
@@ -104,11 +105,11 @@ define([
             this.data[sectionName](sectionData);
         },
         update: function (sections) {
-            storageInvalidation.setInvalidSections([]);
             _.each(sections, function (sectionData, sectionName) {
                 storage.set(sectionName, sectionData);
                 buffer.notify(sectionName, sectionData);
             });
+            storageInvalidation.setInvalidSections([]);
         },
         remove: function (sections) {
             var invalidSections = storageInvalidation.getInvalidSections();
@@ -142,7 +143,7 @@ define([
             return buffer.get(sectionName);
         },
         reload: function (sectionNames) {
-            getFromServer(sectionNames).done(function (sections) {
+            return getFromServer(sectionNames).done(function (sections) {
                 buffer.update(sections);
             });
         },
