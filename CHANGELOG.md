@@ -1,3 +1,18 @@
+0.74.0-beta7
+=============
+* Framework improvements
+    * Exceptions are caught and logged before reaching the Phrase::__toString() method
+    * Refactored controller actions in the Checkout area
+    * Refactored controller actions in the Tax area
+    * Implemented new look & feel for the Edit Order page (View/Edit Order)
+* Fixed bugs
+    * Fixed an issue where a success message was absent when adding a product with options from Wishlist to Shopping Cart
+    * Fixed an issue where an exception was thrown when trying to sort Customer Groups by Tax Class
+    * Fixed an issue where the background color changed to the “on focus” state when clicking  the Admin Menu logo
+    * Fixed an issue with Mini Shopping Cart containing extra empty space
+* GitHub issues
+    * [#1173] (https://github.com/magento/magento2/pull/1173) -- Change to HttpClient4 from Java client; fix regex issues
+
 0.74.0-beta6
 =============
 * Framework improvements
