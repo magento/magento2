@@ -45,6 +45,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      *
      * @param int|null $severity
      * @return array|string|null
+     * @api
      */
     public function getSeverities($severity = null)
     {
@@ -69,6 +70,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * Retrieve Latest Notice
      *
      * @return $this
+     * @api
      */
     public function loadLatestNotice()
     {
@@ -81,6 +83,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * Retrieve notice statuses
      *
      * @return array
+     * @api
      */
     public function getNoticeStatus()
     {
@@ -109,6 +112,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param bool $isInternal
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
+     * @api
      */
     public function add($severity, $title, $description, $url = '', $isInternal = true)
     {
@@ -142,6 +146,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @api
      */
     public function addCritical($title, $description, $url = '', $isInternal = true)
     {
@@ -157,6 +162,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @api
      */
     public function addMajor($title, $description, $url = '', $isInternal = true)
     {
@@ -172,6 +178,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @api
      */
     public function addMinor($title, $description, $url = '', $isInternal = true)
     {
@@ -187,6 +194,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      * @param string $url
      * @param bool $isInternal
      * @return $this
+     * @api
      */
     public function addNotice($title, $description, $url = '', $isInternal = true)
     {

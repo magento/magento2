@@ -112,6 +112,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Retrieve feed url
      *
      * @return string
+     * @api
      */
     public function getFeedUrl()
     {
@@ -126,6 +127,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Check feed for modification
      *
      * @return $this
+     * @api
      */
     public function checkUpdate()
     {
@@ -166,6 +168,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $rssDate
      * @return string YYYY-MM-DD YY:HH:SS
+     * @api
      */
     public function getDate($rssDate)
     {
@@ -176,6 +179,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Retrieve Update Frequency
      *
      * @return int
+     * @api
      */
     public function getFrequency()
     {
@@ -186,6 +190,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Retrieve Last update time
      *
      * @return int
+     * @api
      */
     public function getLastUpdate()
     {
@@ -196,6 +201,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Set last update time (now)
      *
      * @return $this
+     * @api
      */
     public function setLastUpdate()
     {
@@ -207,6 +213,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      * Retrieve feed data as XML element
      *
      * @return \SimpleXMLElement
+     * @api
      */
     public function getFeedData()
     {
@@ -239,6 +246,8 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve feed as XML element
+     *
      * @return \SimpleXMLElement
      */
     public function getFeedXml()
