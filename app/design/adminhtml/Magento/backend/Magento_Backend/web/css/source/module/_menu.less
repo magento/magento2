@@ -73,16 +73,18 @@
         position: relative;
         text-align: center;
         z-index: @menu__z-index;
-        &:focus {
-            background-color: @menu-item__active__background-color;
-            box-shadow: none;
-            + .admin__menu {
-                .level-0 {
-                    &:first-child {
-                        > a {
-                            background-color: @menu__background-color;
-                            &:after {
-                                display: none;
+        ._keyfocus & {
+            &:focus {
+                background-color: @menu-item__active__background-color;
+                box-shadow: none;
+                + .admin__menu {
+                    .level-0 {
+                        &:first-child {
+                            > a {
+                                background-color: @menu__background-color;
+                                &:after {
+                                    display: none;
+                                }
                             }
                         }
                     }
