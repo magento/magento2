@@ -39,10 +39,18 @@ define(
                     }
                 );
             } else {
+                /**
+                 * Checkout for guest and registered customer.
+                 */
+                var serviceUrl;
+                if (quote.getCheckoutMethod()() === 'guest') {
+                    serviceUrl =  urlBuilder.createUrl('/guest-carts/:quoteId/order', {quoteId: quote.getQuoteId()});
+                } else {
+                    serviceUrl = urlBuilder.createUrl('/carts/mine/order', {});
+                }
                 payload = customParams;
                 storage.put(
-                    urlBuilder.createUrl('/carts/:quoteId/order', {quoteId: quote.getQuoteId()}),
-                    JSON.stringify(payload)
+                    serviceUrl, JSON.stringify(payload)
                 ).done(
                     function() {
                         window.location.replace(url.build('checkout/onepage/success/'));
