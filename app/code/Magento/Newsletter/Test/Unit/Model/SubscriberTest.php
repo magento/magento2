@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Newsletter\Model;
+namespace Magento\Newsletter\Test\Unit\Model;
 
 class SubscriberTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,7 +62,8 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
      */
     protected $subscriber;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->newsletterData = $this->getMock('Magento\Newsletter\Helper\Data', [], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->transportBuilder = $this->getMock(
@@ -107,7 +108,8 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
         );
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->subscriber = $this->objectManager->getObject('Magento\Newsletter\Model\Subscriber',
+        $this->subscriber = $this->objectManager->getObject(
+            'Magento\Newsletter\Model\Subscriber',
             [
                 'newsletterData' => $this->newsletterData,
                 'scopeConfig' => $this->scopeConfig,
