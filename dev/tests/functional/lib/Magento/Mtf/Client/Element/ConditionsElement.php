@@ -170,7 +170,14 @@ class ConditionsElement extends SimpleElement
      *
      * @var string
      */
-    protected $ruleParamInput = '.element [name^="rule"]';
+    protected $ruleParamInput = '[name^="rule"]';
+
+    /**
+     * Latest occurred exception.
+     *
+     * @var \Exception
+     */
+    protected $exception;
 
     /**
      * Set value to conditions.
@@ -180,6 +187,8 @@ class ConditionsElement extends SimpleElement
      */
     public function setValue($value)
     {
+        $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+
         $conditions = $this->decodeValue($value);
         $context = $this->find($this->mainCondition, Locator::SELECTOR_XPATH);
         $this->clear();
@@ -254,9 +263,6 @@ class ConditionsElement extends SimpleElement
         $count = 0;
 
         do {
-            if (!$this->driver->find('*:focus')->isVisible()) {
-                $this->driver->selectWindow();
-            }
             $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
 
             try {
@@ -264,12 +270,15 @@ class ConditionsElement extends SimpleElement
                 $isSetType = true;
             } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
                 $isSetType = false;
+                $this->exception = $e;
+                $this->eventManager->dispatchEvent(['exception'], [__METHOD__, $this->getAbsoluteSelector()]);
             }
             $count++;
         } while (!$isSetType && $count < self::TRY_COUNT);
 
         if (!$isSetType) {
-            throw new \Exception("Can not add condition: {$type}");
+            $exception = $this->exception ? $this->exception : (new \Exception("Can not add condition: {$type}"));
+            throw $exception;
         }
     }
     
@@ -287,44 +296,39 @@ class ConditionsElement extends SimpleElement
         foreach ($rules as $rule) {
             /** @var ElementInterface $param */
             $param = $this->findNextParam($element);
+            $isSet = false;
             $count = 0;
 
             do {
                 try {
-                    $this->openParam($param);
+                    $openParamLink = $param->find('a');
+                    if ($openParamLink->isVisible()) {
+                        $openParamLink->click();
+                    }
+                    $this->waitUntil(function() use ($param) {
+                        return $param->find($this->ruleParamInput)->isVisible() ? true : null;
+                    });
 
                     if ($this->fillGrid($rule, $param)) {
                         $isSet = true;
                     } elseif ($this->fillSelect($rule, $param)) {
                         $isSet = true;
-                    } else {
-                        $this->fillText($rule, $param);
+                    } elseif ($this->fillText($rule, $param)) {
                         $isSet = true;
                     }
                 } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
                     $isSet = false;
+                    $this->exception = $e;
+                    $this->eventManager->dispatchEvent(['exception'], [__METHOD__, $this->getAbsoluteSelector()]);
                 }
                 $count++;
             } while (!$isSet && $count < self::TRY_COUNT);
 
             if (!$isSet) {
-                throw new \Exception('Can not set value: ' . $rule);
+                $exception = $this->exception ? $this->exception : (new \Exception('Can not set value: ' . $rule));
+                throw $exception;
             }
         }
-    }
-
-    /**
-     * Open param of condition before filling.
-     *
-     * @param ElementInterface $param
-     * @return void
-     */
-    protected function openParam(ElementInterface $param)
-    {
-        if (!$this->driver->find('*:focus')->isVisible()) {
-            $this->driver->selectWindow();
-        }
-        $param->find('a')->click();
     }
 
     /**
