@@ -225,7 +225,8 @@ class Processor
      */
     public function getViewFileUrl()
     {
-        return $this->getBaseUrl() . self::ERROR_DIR . '/' . $this->_config->skin . '/';
+        //The url needs to be updated base on Document root path.
+        return $this->getBaseUrl() . str_replace($this->_indexDir, '', $this->_errorDir) . $this->_config->skin . '/';
     }
 
     /**
