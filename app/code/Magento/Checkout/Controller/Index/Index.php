@@ -6,30 +6,30 @@
  */
 namespace Magento\Checkout\Controller\Index;
 
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends \Magento\Checkout\Controller\Onepage
 {
-    /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     */
-    public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
-    ) {
-        parent::__construct($context);
-        $this->resultPageFactory = $resultPageFactory;
-    }
-
     /**
      * @return \Magento\Framework\Controller\Result\PageFactory
      */
     public function execute()
     {
-        return $this->resultPageFactory->create();
+        if (!$this->_objectManager->get('Magento\Checkout\Helper\Data')->canOnepageCheckout()) {
+            $this->messageManager->addError(__('The onepage checkout is disabled.'));
+            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
+        }
+        $quote = $this->getOnepage()->getQuote();
+        if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
+            return $this->resultRedirectFactory->create()->setPath('checkout/cart');
+        }
+
+        $this->_customerSession->regenerateId();
+        $this->_objectManager->get('Magento\Checkout\Model\Session')->setCartWasUpdated(false);
+        $currentUrl = $this->_url->getUrl('*/*/*', ['_secure' => true]);
+        $this->_objectManager->get('Magento\Customer\Model\Session')->setBeforeAuthUrl($currentUrl);
+        $this->getOnepage()->initCheckout();
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getLayout()->initMessages();
+        $resultPage->getConfig()->getTitle()->set(__('Checkout'));
+        return $resultPage;
     }
 }

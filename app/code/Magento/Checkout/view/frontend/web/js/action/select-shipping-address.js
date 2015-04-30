@@ -16,7 +16,8 @@ define(
     ],
     function(quote, addressList, urlBuilder, navigator, shippingService, paymentService, storage, errorList) {
         "use strict";
-        return function(shippingAddress, sameAsBilling, additionalData) {
+        var actionCallback;
+        var result = function(shippingAddress, sameAsBilling, additionalData) {
             errorList.clear();
             additionalData = additionalData || {};
             shippingAddress['same_as_billing'] = (sameAsBilling) ? 1 : 0;
@@ -34,6 +35,9 @@ define(
                     shippingService.setShippingRates(result.shipping_methods);
                     paymentService.setPaymentMethods(result.payment_methods);
                     navigator.setCurrent('shippingAddress').goNext();
+                    if (typeof actionCallback == 'function') {
+                        actionCallback(true);
+                    }
                 }
             ).fail(
                 function(response) {
@@ -41,8 +45,15 @@ define(
                     errorList.add(error);
                     quote.setShippingAddress(null);
                     quote.setBillingAddress(null);
+                    if (typeof actionCallback == 'function') {
+                        actionCallback(false);
+                    }
                 }
             );
         };
+        result.setActionCallback = function (value) {
+            actionCallback = value;
+        };
+        return result;
     }
 );

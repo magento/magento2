@@ -105,6 +105,7 @@ define(
             validate: function() {
                 this.source.set('params.invalid', false);
                 this.source.trigger('billingAddress.data.validate');
+                this.validateAdditionalAddressFields();
 
                 if (quote.getCheckoutMethod()() === 'register') {
                     this.source.trigger('customerDetails.data.validate');
@@ -114,6 +115,12 @@ define(
                 } else {
                     this.isEmailCheckComplete.resolve();
                 }
+            },
+            validateAdditionalAddressFields: function() {
+                $(billingFormSelector).validation();
+                $(billingFormSelector + ' input[data-scope="additionalAddressData"]').each(function(key, item) {
+                    $(item).valid();
+                });
             },
             isCustomerLoggedIn: customer.isLoggedIn(),
             customerAddressCount: window.checkoutConfig.customerAddressCount,

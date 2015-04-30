@@ -109,10 +109,8 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
+    public function deleteById($cartId, $itemId)
     {
-        $cartId = $cartItem->getQuoteId();
-        $itemId = $cartItem->getItemId();
         /**
          * Quote.
          *
@@ -131,18 +129,35 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException(__('Could not remove item from quote'));
         }
+
+        return true;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function deleteById($cartId, $itemId)
+    public function getListForCustomer($customerId)
     {
-        $item = $this->itemDataFactory->create()
-            ->setQuoteId($cartId)
-            ->setItemId($itemId);
+        $cart = $this->quoteRepository->getActiveForCustomer($customerId);
+        return $this->getList($cart->getId());
+    }
 
-        $this->delete($item);
-        return true;
+    /**
+     * {@inheritdoc}
+     */
+    public function saveForCustomer($customerId, \Magento\Quote\Api\Data\CartItemInterface $cartItem)
+    {
+        $cart = $this->quoteRepository->getActiveForCustomer($customerId);
+        $cartItem->setQuoteId($cart->getId());
+        return $this->save($cartItem);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteByIdForCustomer($customerId, $itemId)
+    {
+        $cart = $this->quoteRepository->getActiveForCustomer($customerId);
+        return $this->deleteById($cart->getId(), $itemId);
     }
 }

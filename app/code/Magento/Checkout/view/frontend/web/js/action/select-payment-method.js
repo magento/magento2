@@ -56,6 +56,16 @@ define(
                     }
                 );
             } else {
+                if (!_.isEmpty(quote.getShippingCustomOptions()())) {
+                    shippingMethodData = _.extend(
+                        shippingMethodData,
+                        {
+                            additionalData: {
+                                extension_attributes: quote.getShippingCustomOptions()()
+                            }
+                        }
+                    );
+                }
                 return storage.put(
                     urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()}),
                     JSON.stringify(_.extend(paymentMethodData, shippingMethodData))

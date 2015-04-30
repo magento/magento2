@@ -1,40 +1,44 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Controller\Index;
 
-class UnsetCookie extends \Magento\Persistent\Controller\Index
+use Magento\Persistent\Controller\Index;
+use Magento\Framework\Controller\ResultFactory;
+
+class UnsetCookie extends Index
 {
+    /**
+     * Unset persistent cookie action
+     *
+     * @return \Magento\Framework\Controller\Result\Redirect
+     */
+    public function execute()
+    {
+        if ($this->sessionHelper->isPersistent()) {
+            $this->cleanup();
+        }
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setPath('customer/account/login');
+        return $resultRedirect;
+    }
+
     /**
      * Revert all persistent data
      *
      * @return $this
      */
-    protected function _cleanup()
+    protected function cleanup()
     {
         $this->_eventManager->dispatch('persistent_session_expired');
-        $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
-        if ($this->_clearCheckoutSession) {
-            $this->_checkoutSession->clearStorage();
+        $this->customerSession->setCustomerId(null)->setCustomerGroupId(null);
+        if ($this->clearCheckoutSession) {
+            $this->checkoutSession->clearStorage();
         }
-        $this->_getHelper()->getSession()->removePersistentCookie();
+        $this->sessionHelper->getSession()->removePersistentCookie();
         return $this;
-    }
-
-    /**
-     * Unset persistent cookie action
-     *
-     * @return void
-     */
-    public function execute()
-    {
-        if ($this->_getHelper()->isPersistent()) {
-            $this->_cleanup();
-        }
-        $this->_redirect('customer/account/login');
-        return;
     }
 }

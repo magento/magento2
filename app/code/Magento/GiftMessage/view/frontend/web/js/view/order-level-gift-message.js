@@ -7,9 +7,10 @@ define([
         'uiComponent',
         'ko',
         '../model/gift-options',
-        'Magento_Checkout/js/model/quote'
+        'Magento_Checkout/js/model/quote',
+        '../model/gift-message'
     ],
-    function (Component, ko, giftOptions, quote) {
+    function (Component, ko, giftOptions, quote, giftMessage) {
         "use strict";
         return Component.extend({
             defaults: {
@@ -22,9 +23,9 @@ define([
                 quote.getShippingAddress().subscribe(function(shippingAddress) {
                     var customerName = shippingAddress.firstname + ' ' + shippingAddress.lastname;
                     that.message = {
-                        from: ko.observable(customerName),
-                        to: ko.observable(customerName),
-                        message: ko.observable(null)
+                        from: ko.observable(giftMessage.getDefaultMessageForQuote().from || customerName),
+                        to: ko.observable(giftMessage.getDefaultMessageForQuote().to || customerName),
+                        message: ko.observable(giftMessage.getDefaultMessageForQuote().message)
                     };
                     this.dispose();
                 });
@@ -33,11 +34,24 @@ define([
             },
             isOrderLevelGiftMessageVisible: ko.observable(true),
             setOrderLevelGiftMessageVisible: function() {
+                event.preventDefault();
                 this.isOrderLevelGiftMessageVisible(!this.isOrderLevelGiftMessageVisible());
             },
             quoteId: quote.entity_id,
-            getData: function() {
-                return this.message;
+            submit: function(remove) {
+                remove = remove || false;
+                if (this.message.message() !== null) {
+                    return [{
+                        sender: remove ? null : this.message.from(),
+                        recipient: remove ? null : this.message.to(),
+                        message: remove ? null : this.message.message(),
+                        extension_attributes: {
+                            entity_id: this.quoteId,
+                            entity_type: 'quote'
+                        }
+                    }];
+                }
+                return [];
             }
         });
     }

@@ -13,7 +13,7 @@ define(
     ],
     function (quote, urlBuilder, navigator, storage, errorList) {
         "use strict";
-        return function (code) {
+        return function (code, customOptions) {
             if (!code) {
                 alert('Please specify a shipping method');
             }
@@ -21,6 +21,7 @@ define(
             var shippingMethodCode = code.split("_");
             quote.setShippingMethod(shippingMethodCode);
             quote.setSelectedShippingMethod(code);
+            quote.setShippingCustomOptions(customOptions);
             navigator.setCurrent('shippingMethod').goNext();
         };
     }

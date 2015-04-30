@@ -89,7 +89,7 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
             $addressDetails->setShippingMethods($this->shippingMethodManagement->getList($cartId));
         }
         $addressDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
-        if (!is_null($additionalData)) {
+        if ($additionalData !== null) {
             $this->dataProcessor->process($additionalData);
         }
         if (!is_null($checkoutMethod)) {

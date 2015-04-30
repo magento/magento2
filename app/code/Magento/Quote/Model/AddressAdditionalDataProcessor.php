@@ -15,6 +15,7 @@ class AddressAdditionalDataProcessor
      *
      * @param AddressAdditionalDataInterface $additionalData
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function process(AddressAdditionalDataInterface $additionalData)
     {

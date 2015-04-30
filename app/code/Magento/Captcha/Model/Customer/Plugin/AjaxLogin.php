@@ -6,7 +6,8 @@
 namespace Magento\Captcha\Model\Customer\Plugin;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
-use Magento\Captcha\Model\Checkout\ConfigProvider;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 class AjaxLogin
 {
@@ -21,23 +22,23 @@ class AjaxLogin
     protected $sessionManager;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var JsonFactory
      */
-    protected $resultRawFactory;
+    protected $resultJsonFactory;
 
     /**
      * @param CaptchaHelper $helper
-     * @param \Magento\Framework\Session\SessionManagerInterface $sessionManager
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+     * @param SessionManagerInterface $sessionManager
+     * @param JsonFactory $resultJsonFactorys
      */
     public function __construct(
-        \Magento\Captcha\Helper\Data $helper,
-        \Magento\Framework\Session\SessionManagerInterface $sessionManager,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
+        CaptchaHelper $helper,
+        SessionManagerInterface $sessionManager,
+        JsonFactory $resultJsonFactory
     ){
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
-        $this->resultRawFactory = $resultRawFactory;
+        $this->resultJsonFactory = $resultJsonFactory;
     }
 
     /**
@@ -50,8 +51,8 @@ class AjaxLogin
         \Magento\Customer\Controller\Ajax\Login $subject,
         \Closure $proceed
     ) {
-        $httpUnauthorizedCode = 401;
         $loginFormId = 'user_login';
+        $captchaInputName = 'captcha_string';
 
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $subject->getRequest();
@@ -61,16 +62,17 @@ class AjaxLogin
 
         $loginParams = \Zend_Json::decode($request->getContent());
         $username = isset($loginParams['username']) ? $loginParams['username'] : null;
-        $captchaString = isset($loginParams[CaptchaHelper::INPUT_NAME_FIELD_VALUE])
-            ? $loginParams[CaptchaHelper::INPUT_NAME_FIELD_VALUE]
+        $captchaString = isset($loginParams[$captchaInputName])
+            ? $loginParams[$captchaInputName]
             : null;
 
         if ($captchaModel->isRequired($username)) {
             $captchaModel->logAttempt($username);
             if (!$captchaModel->isCorrect($captchaString)) {
                 $this->sessionManager->setUsername($username);
-                $resultRaw = $this->resultRawFactory->create();
-                return $resultRaw->setHttpResponseCode($httpUnauthorizedCode);
+                /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+                $resultJson = $this->resultJsonFactory->create();
+                return $resultJson->setData(['errors' => true, 'message' => __('Incorrect CAPTCHA')]);
             }
         }
         return $proceed();

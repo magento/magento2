@@ -11,6 +11,7 @@ define(['ko'], function(ko) {
             var expr = /([%])\w+/g,
                 errorMessage;
             if (!error.hasOwnProperty('parameters')) {
+                this.clear();
                 errors.push(error.message);
                 return true;
             }
@@ -21,6 +22,7 @@ define(['ko'], function(ko) {
                 }
                 return error.parameters.shift();
             });
+            this.clear();
             errors.push(errorMessage);
             return true;
         },

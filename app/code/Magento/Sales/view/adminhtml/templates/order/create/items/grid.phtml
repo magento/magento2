@@ -16,7 +16,7 @@
 <?php $_items = $block->getItems() ?>
 <?php if (empty($_items)): ?>
     <div class="grid" id="order-items_grid">
-        <table class="data-table table-info order-tables">
+        <table class="data-table admin__table-primary order-tables">
             <thead>
                 <tr class="headings">
                     <th class="col-product"><span><?php echo __('Product') ?></span></th>
@@ -40,11 +40,11 @@
 <div class="grid" id="order-items_grid">
     <div class="hor-scroll">
     <?php if (count($_items)>10): ?>
-        <div class="actions update">
-            <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()'); ?>
+        <div class="actions update actions-update">
+            <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()', 'action-secondary'); ?>
         </div>
     <?php endif; ?>
-        <table class="data-table table-info order-tables">
+        <table class="data-table admin__table-primary order-tables">
             <thead>
                 <tr class="headings">
                     <th class="col-product"><span><?php echo __('Product') ?></span></th>
@@ -75,8 +75,8 @@
                     <tr>
                         <td class="col-product">
                             <span id="order_item_<?php echo $_item->getId() ?>_title"><?php echo $block->escapeHtml($_item->getName()) ?></span>
-                            <div>
-                                <strong><?php echo __('SKU') ?>:</strong>
+                            <div class="product-sku-block">
+                                <span><?php echo __('SKU') ?>:</span>
                                 <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
                             </div>
                             <div class="product-configure-block">
@@ -140,7 +140,7 @@
                         </td>
                         <td class="col-actions last">
                             <select class="admin__control-select" name="item[<?php echo $_item->getId() ?>][action]">
-                                <option value=""></option>
+                                <option value=""><?php echo __('Please select') ?></option>
                                 <option value="remove"><?php echo __('Remove') ?></option>
                                 <?php if ($block->getCustomerId() && $block->getMoveToCustomerStorage()): ?>
                                     <option value="cart"><?php echo __('Move to Shopping Cart') ?></option>
@@ -170,7 +170,7 @@
                     <?php endforeach; ?>
 
                     <?php if ($hasMessageError):?>
-                        <tr class="col-messages-error">
+                        <tr class="row-messages-error">
                             <td colspan="100"> <!-- ToDo UI: remove the 100 -->
                                 <?php foreach ($_item->getMessage(false) as $message):
                                     if (empty($message)) {

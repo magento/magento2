@@ -27,10 +27,11 @@ interface ProductRepositoryInterface
      * @param string $sku
      * @param bool $editMode
      * @param null|int $storeId
+     * @param bool $forceReload
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($sku, $editMode = false, $storeId = null);
+    public function get($sku, $editMode = false, $storeId = null, $forceReload = false);
 
     /**
      * Get info about product by product id
@@ -38,10 +39,11 @@ interface ProductRepositoryInterface
      * @param int $productId
      * @param bool $editMode
      * @param null|int $storeId
+     * @param bool $forceReload
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getById($productId, $editMode = false, $storeId = null);
+    public function getById($productId, $editMode = false, $storeId = null, $forceReload = false);
 
     /**
      * Delete product
