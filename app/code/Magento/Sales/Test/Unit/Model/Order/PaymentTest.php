@@ -14,23 +14,45 @@ use \Magento\Sales\Model\Order\Payment;
  */
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Payment */
-    private $payment;
+    /**
+     * @var Payment
+     */
+    protected $payment;
 
-    /** @var \Magento\Payment\Helper\Data | \PHPUnit_Framework_MockObject_MockObject */
-    private $helperMock;
+    /**
+     * @var \Magento\Payment\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $helperMock;
 
-    /** @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject */
-    private $eventManagerMock;
+    /**
+     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
 
-    /** @var \Magento\Directory\Model\PriceCurrency | \PHPUnit_Framework_MockObject_MockObject */
-    private $priceCurrencyMock;
+    /**
+     * @var \Magento\Directory\Model\PriceCurrency | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrencyMock;
 
-    /** @var \Magento\Sales\Model\Order | \PHPUnit_Framework_MockObject_MockObject $orderMock */
-    private $orderMock;
+    /**
+     * @var \Magento\Sales\Model\Order | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderMock;
 
-    /** @var \Magento\Payment\Model\Method\AbstractMethod | \PHPUnit_Framework_MockObject_MockObject $orderMock */
-    private $paymentMethodMock;
+    /**
+     * @var \Magento\Payment\Model\Method\AbstractMethod | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $paymentMethodMock;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Payment\TransactionFactory | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionFactory;
+
+    /**
+     * @var \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionCollectionFactory;
 
     protected function setUp()
     {
@@ -72,11 +94,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'getConfigData',
                 'getConfigPaymentAction',
                 'validate',
+                'canCapture',
+                'canRefund'
             ])
             ->getMock();
 
-        $this->helperMock->expects($this->once())
-            ->method('getMethodInstance')
+        $this->helperMock->method('getMethodInstance')
             ->will($this->returnValue($this->paymentMethodMock));
 
         $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
@@ -93,12 +116,29 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
+        $this->transactionFactory = $this->getMock(
+            'Magento\Sales\Model\Order\Payment\TransactionFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->transactionCollectionFactory = $this->getMock(
+            'Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->payment = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Sales\Model\Order\Payment',
             [
                 'context'       => $context,
                 'paymentData'   => $this->helperMock,
                 'priceCurrency' => $this->priceCurrencyMock,
+                'transactionFactory' => $this->transactionFactory,
+                'transactionCollectionFactory' => $this->transactionCollectionFactory
             ]
         );
 
@@ -312,5 +352,103 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Sales\Model\Order\Payment', $paymentResult);
         $this->assertEquals($amount, $paymentResult->getBaseAmountAuthorized());
         $this->assertTrue($paymentResult->getIsTransactionPending());
+    }
+
+    public function testCanCaptureNoAuthorizationTransaction()
+    {
+        $this->paymentMethodMock->expects($this->once())
+            ->method('canCapture')
+            ->willReturn(true);
+        $this->assertTrue($this->payment->canCapture());
+    }
+
+    public function testCanCaptureCreateTransaction()
+    {
+        $this->paymentMethodMock->expects($this->once())
+            ->method('canCapture')
+            ->willReturn(true);
+
+        $parentTransactionId = 1;
+        $this->payment->setParentTransactionId($parentTransactionId);
+
+        $transaction = $this->getMock('Magento\Sales\Model\Order\Payment\Transaction', [], [], '', false);
+        $transaction->expects($this->once())
+            ->method('setOrderPaymentObject')
+            ->willReturnSelf();
+        $transaction->expects($this->once())
+            ->method('loadByTxnId')
+            ->willReturnSelf();
+        $transaction->expects($this->once())
+            ->method('getId')
+            ->willReturn($parentTransactionId);
+
+        $transaction->expects($this->once())
+            ->method('getIsClosed')
+            ->willReturn(false);
+
+        $this->transactionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($transaction);
+
+        $this->assertTrue($this->payment->canCapture());
+    }
+
+    public function testCanCaptureAuthorizationTransaction()
+    {
+        $paymentId = 1;
+        $this->payment->setId($paymentId);
+
+        $this->paymentMethodMock->expects($this->once())
+            ->method('canCapture')
+            ->willReturn(true);
+
+        $transaction = $this->getMock('Magento\Sales\Model\Order\Payment\Transaction', [], [], '', false);
+        $collection = $this->getMock(
+            'Magento\Sales\Model\Resource\Order\Payment\Transaction\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->transactionCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($collection);
+        $collection->expects($this->once())
+            ->method('setOrderFilter')
+            ->willReturnSelf();
+        $collection->expects($this->once())
+            ->method('addPaymentIdFilter')
+            ->willReturnSelf();
+        $collection->expects($this->once())
+            ->method('addTxnTypeFilter')
+            ->willReturnSelf();
+        $collection->method('setOrder')
+            ->willReturnMap(
+                [
+                    ['created_at', \Magento\Framework\Data\Collection::SORT_ORDER_DESC, $collection],
+                    ['transaction_id', \Magento\Framework\Data\Collection::SORT_ORDER_DESC, [$transaction]]
+                ]
+            );
+
+        $this->assertTrue($this->payment->canCapture());
+    }
+
+    /**
+     * @dataProvider boolProvider
+     */
+    public function testCanRefund($canRefund)
+    {
+        $this->paymentMethodMock->expects($this->once())
+            ->method('canRefund')
+            ->willReturn($canRefund);
+        $this->assertEquals($canRefund, $this->payment->canRefund());
+    }
+
+    public function boolProvider()
+    {
+        return [
+            [true],
+            [false]
+        ];
     }
 }
