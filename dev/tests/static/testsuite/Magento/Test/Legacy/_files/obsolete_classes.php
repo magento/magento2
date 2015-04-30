@@ -3335,5 +3335,5 @@ return [
     ['Magento\Log\Model\Shell\CommandInterface'],
     ['Magento\Framework\App\Filesystem\DirectoryList\AbstractShell'],
     ['Magento\Tools\Layout\Reference'],
-    ['Magento\Tools\Layout\Formatter', 'Magento\Developer\Model\Tools\Formatter']
+    ['Magento\Tools\Layout\Formatter', 'Magento\Developer\Model\Tools\Formatter'],
 ];

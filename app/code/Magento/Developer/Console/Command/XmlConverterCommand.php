@@ -92,7 +92,7 @@ class XmlConverterCommand extends Command
                 new InputArgument(
                     self::PROCESSOR_ARGUMENT,
                     InputArgument::REQUIRED,
-                    'Path to XSL styli sheet that going to be applied to XML file'
+                    'Path to XSL style sheet that going to be applied to XML file'
                 ),
                 new InputOption(
                     self::OVERWRITE_OPTION,
