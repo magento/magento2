@@ -31,20 +31,22 @@ define([
         $.cookieStorage.setExpires(date).set('mage-cache-life', 'true');
     };
 
-    /** Data provider **/
-    var getFromStorage = function (sectionNames) {
-        var result = {};
-        _.each(sectionNames, function (sectionName) {
-            result[sectionName] = storage.get(sectionName);
-        });
-        return result;
+    var dataProvider = {
+        getFromStorage: function (sectionNames) {
+            var result = {};
+            _.each(sectionNames, function (sectionName) {
+                result[sectionName] = storage.get(sectionName);
+            });
+            return result;
+        },
+        getFromServer: function (sectionNames) {
+            var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
+            return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
+                throw new Error(jqXHR.responseJSON.message);
+            });
+        }
     };
-    var getFromServer = function (sectionNames) {
-        var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
-        return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
-            throw new Error(jqXHR.responseJSON.message);
-        });
-    };
+
 
     ko.extenders.disposablePrivateData = function(target, sectionName) {
         storage.remove(sectionName);
@@ -96,7 +98,7 @@ define([
             if (_.isEmpty(storage.keys())) {
                 this.reload();
             } else {
-                _.each(getFromStorage(storage.keys()), function (sectionData, sectionName) {
+                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
                 if (!_.isEmpty(storageInvalidation.keys())) {
@@ -108,7 +110,7 @@ define([
             return buffer.get(sectionName);
         },
         reload: function (sectionNames) {
-            return getFromServer(sectionNames).done(function (sections) {
+            return dataProvider.getFromServer(sectionNames).done(function (sections) {
                 buffer.update(sections);
             });
         },
