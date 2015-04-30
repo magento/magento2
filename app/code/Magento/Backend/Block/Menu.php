@@ -454,21 +454,30 @@ class Menu extends \Magento\Backend\Block\Template
             }
 
             $id = $this->getJsId($menuItem->getId());
-            $output .= '<li ' . $this->getUiId(
-                $menuItem->getId()
-            ) . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass(
-                $menuItem,
-                $level
-            ) . ($level == 0 ? '" id="' . $id . '" aria-haspopup="true' : '')
-                . '" role="menu-item">' . $this->_renderAnchor(
-                $menuItem,
-                $level
-            ) . $this->_addSubMenu(
-                $menuItem,
-                $level,
-                $limit,
-                $id
-            ) . '</li>';
+            if (count($menu) > 1 || $level != 1) {
+                $output .= '<li ' . $this->getUiId(
+                        $menuItem->getId()
+                    ) . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass(
+                        $menuItem,
+                        $level
+                    ) . ($level == 0 ? '" id="' . $id . '" aria-haspopup="true' : '')
+                    . '" role="menu-item">' . $this->_renderAnchor(
+                        $menuItem,
+                        $level
+                    ) . $this->_addSubMenu(
+                        $menuItem,
+                        $level,
+                        $limit,
+                        $id
+                    ) . '</li>';
+            } else {
+                $output .= $this->_addSubMenu(
+                    $menuItem,
+                    $level,
+                    $limit,
+                    $id);
+            }
+
             $itemPosition++;
         }
 
