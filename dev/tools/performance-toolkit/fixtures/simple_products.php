@@ -19,7 +19,10 @@ class SimpleProductsFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $simpleProductsCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('simple_products', 180);
+        $simpleProductsCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('simple_products', 0);
+        if (!$simpleProductsCount) {
+            return;
+        }
         $this->application->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */
