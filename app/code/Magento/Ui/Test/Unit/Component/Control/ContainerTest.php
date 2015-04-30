@@ -17,7 +17,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $blockName = $nameInLayout . '-' . $id . '-button';
         $expectedHtml = 'test html';
 
-        $blockButtonMock = $this->getMock(Container::DEFAULT_BUTTON, [], [], '', false);
+        $blockButtonMock = $this->getMock(Container::DEFAULT_CONTROL, [], [], '', false);
         $blockButtonMock->expects($this->once())->method('toHtml')->willReturn($expectedHtml);
 
         $contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
@@ -32,7 +32,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with(Container::DEFAULT_BUTTON, $blockName)
+            ->with(Container::DEFAULT_CONTROL, $blockName)
             ->willReturn($blockButtonMock);
         $contextMock->expects($this->any())->method('getLayout')->willReturn($layoutMock);
 

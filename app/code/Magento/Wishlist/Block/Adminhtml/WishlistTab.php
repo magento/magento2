@@ -5,17 +5,16 @@
  */
 namespace Magento\Wishlist\Block\Adminhtml;
 
-use Magento\Backend\Block\Template\Context;
-use Magento\Customer\Controller\RegistryConstants;
 use Magento\Framework\Registry;
+use Magento\Backend\Block\Template\Context;
 use Magento\Ui\Component\Layout\Tabs\TabWrapper;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Customer\Controller\RegistryConstants;
 
 /**
  * Class WishlistTab
- *
- * @package Magento\Wishlist\Block\Adminhtml
  */
-class WishlistTab extends TabWrapper
+class WishlistTab extends TabWrapper implements TabInterface
 {
     /**
      * Core registry
