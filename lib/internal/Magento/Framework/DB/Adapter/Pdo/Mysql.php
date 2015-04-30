@@ -414,6 +414,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function query($sql, $bind = [])
     {
+        if (count($this->_splitMultiQuery($sql)) > 1) {
+            throw new LocalizedException(__('Cannot execute multiple queries.'));
+        }
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
             2013,  // SQLSTATE[HY000]: General error: 2013 Lost connection to MySQL server during query
