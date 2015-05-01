@@ -88,7 +88,7 @@ class AdminConfig extends Config
     {
         $parsedUrl = parse_url($this->_storeManager->getStore()->getBaseUrl());
         $baseUrl = $parsedUrl['path'];
-        $adminPath = $this->_frontNameResolver->getFrontName();
+        $adminPath = $this->_frontNameResolver->getFrontName() . ';/magento2ce/setup';
 
         return $baseUrl . $adminPath;
     }
