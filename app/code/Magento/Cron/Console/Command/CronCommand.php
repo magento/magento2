@@ -15,7 +15,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Cron\Model\Observer;
-use Magento\Framework\Console\CLI;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Shell\ComplexParameter;
 
 /**
@@ -63,7 +63,7 @@ class CronCommand extends Command
                 'default'
             ),
             new InputOption(
-                CLI::INPUT_KEY_BOOTSTRAP,
+                Cli::INPUT_KEY_BOOTSTRAP,
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Add or override parameters of the bootstrap'
@@ -82,11 +82,11 @@ class CronCommand extends Command
     {
         $params[self::INPUT_KEY_GROUP] = $input->getOption(self::INPUT_KEY_GROUP);
         $params[Observer::STANDALONE_PROCESS_STARTED] = '0';
-        $bootstrap = $input->getOption(CLI::INPUT_KEY_BOOTSTRAP);
+        $bootstrap = $input->getOption(Cli::INPUT_KEY_BOOTSTRAP);
         if ($bootstrap) {
-            $bootstrapProcessor = new ComplexParameter(CLI::INPUT_KEY_BOOTSTRAP);
+            $bootstrapProcessor = new ComplexParameter(Cli::INPUT_KEY_BOOTSTRAP);
             $bootstrapOptionValues = $bootstrapProcessor->getFromString(
-                '--' . CLI::INPUT_KEY_BOOTSTRAP . '=' . $bootstrap
+                '--' . Cli::INPUT_KEY_BOOTSTRAP . '=' . $bootstrap
             );
             $bootstrapOptionValue = $bootstrapOptionValues[Observer::STANDALONE_PROCESS_STARTED];
             if ($bootstrapOptionValue) {
