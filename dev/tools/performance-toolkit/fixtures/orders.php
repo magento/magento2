@@ -261,7 +261,7 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
             $queries[] = "INSERT INTO `{$salesOrderStatusHistoryTableName}` (`entity_id`, `parent_id`, `is_customer_notified`, `is_visible_on_front`, `comment`, `status`, `created_at`, `entity_name`) VALUES ({$salesOrderStatusHistoryId}, {$salesOrderId}, 1, 0, NULL, 'pending', '{$time}', 'order');";
 
             foreach($queries as $query) {
-                $writeAdapter->multiQuery($query);
+                $writeAdapter->query($query);
             }
 
             $entityId++;
