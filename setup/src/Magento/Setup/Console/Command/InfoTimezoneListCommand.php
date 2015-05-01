@@ -48,7 +48,7 @@ class InfoTimezoneListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach ($this->lists->getTimezoneList() as $key => $timezone) {
+        foreach ($this->lists->getTimezoneList(false) as $key => $timezone) {
             $output->writeln($key . ' => ' . $timezone);
         }
     }

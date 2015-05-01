@@ -32,9 +32,10 @@ class Lists
     /**
      * Retrieve list of timezones
      *
+     * @param bool $doSort
      * @return array
      */
-    public function getTimezoneList()
+    public function getTimezoneList($doSort = true)
     {
         $zones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
         $list = [];
@@ -45,7 +46,11 @@ class Lists
                 ResolverInterface::DEFAULT_LOCALE
             ) . ' (' . $code . ')';
         }
-        asort($list);
+
+        if ($doSort) {
+            asort($list);
+        }
+
         return $list;
     }
 
