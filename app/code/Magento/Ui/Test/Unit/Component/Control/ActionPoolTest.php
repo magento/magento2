@@ -127,18 +127,20 @@ class ActionPoolTest extends \PHPUnit_Framework_TestCase
             ->method('setChild')
             ->with($this->key, $toolbarContainerMock)
             ->willReturnSelf();
-        $this->assertNull($this->actionPool->add($this->key, $data, $this->uiComponentInterfaceMock));
+        $this->actionPool->add($this->key, $data, $this->uiComponentInterfaceMock);
     }
 
     public function testRemove()
     {
-        $this->assertNull($this->actionPool->remove($this->key));
+        $this->testAdd();
+        $this->actionPool->remove($this->key);
     }
 
     public function testUpdate()
     {
+        $this->testAdd();
         $data = ['id' => 'id'];
         $this->items[$this->key]->expects($this->any())->method('setData')->with($data)->willReturnSelf();
-        $this->assertNull($this->actionPool->update($this->key, $data));
+        $this->actionPool->update($this->key, $data);
     }
 }

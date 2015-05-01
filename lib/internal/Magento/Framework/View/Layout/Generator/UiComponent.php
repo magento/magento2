@@ -5,45 +5,63 @@
  */
 namespace Magento\Framework\View\Layout\Generator;
 
-use Magento\Framework\Data\Argument\InterpreterInterface;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Layout;
+use Magento\Framework\View\Element\BlockFactory;
+use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\GeneratorInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\View\Element\UiComponent\ContainerInterface;
+use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
+use Magento\Framework\View\Layout\Generator\Context as GeneratorContext;
+use Magento\Framework\View\Element\UiComponent\ContextFactory as UiComponentContextFactory;
+use Magento\Framework\View\LayoutInterface;
 
-class UiComponent implements Layout\GeneratorInterface
+/**
+ * Class UiComponent
+ */
+class UiComponent implements GeneratorInterface
 {
     /**
      * Generator type
      */
-    const TYPE = 'ui_component';
+    const TYPE = 'uiComponent';
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory
+     * Block container for components
+     */
+    const CONTAINER = 'Magento\Framework\View\Element\UiComponent\ContainerInterface';
+
+    /**
+     * @var UiComponentFactory
      */
     protected $uiComponentFactory;
 
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface
+     * @var UiComponentContextFactory
      */
-    protected $argumentInterpreter;
+    protected $contextFactory;
 
     /**
      * Constructor
      *
      * @param UiComponentFactory $uiComponentFactory
-     * @param \Magento\Framework\Data\Argument\InterpreterInterface $argumentInterpreter
+     * @param BlockFactory $blockFactory
+     * @param UiComponentContextFactory $contextFactory
      */
     public function __construct(
         UiComponentFactory $uiComponentFactory,
-        InterpreterInterface $argumentInterpreter
+        BlockFactory $blockFactory,
+        UiComponentContextFactory $contextFactory
     ) {
         $this->uiComponentFactory = $uiComponentFactory;
-        $this->argumentInterpreter = $argumentInterpreter;
+        $this->blockFactory = $blockFactory;
+        $this->contextFactory = $contextFactory;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function getType()
     {
@@ -53,11 +71,11 @@ class UiComponent implements Layout\GeneratorInterface
     /**
      * Creates UI Component object based on scheduled data and add it to the layout
      *
-     * @param Layout\Reader\Context $readerContext
-     * @param Context $generatorContext
+     * @param ReaderContext $readerContext
+     * @param GeneratorContext $generatorContext
      * @return $this
      */
-    public function process(Layout\Reader\Context $readerContext, Layout\Generator\Context $generatorContext)
+    public function process(ReaderContext $readerContext, GeneratorContext $generatorContext)
     {
         $scheduledStructure = $readerContext->getScheduledStructure();
         $scheduledElements = $scheduledStructure->getElements();
@@ -66,18 +84,16 @@ class UiComponent implements Layout\GeneratorInterface
         }
         $structure = $generatorContext->getStructure();
         $layout = $generatorContext->getLayout();
-        $this->uiComponentFactory->setLayout($layout);
+
+        // Instantiate blocks and collect all actions data
         /** @var $blocks \Magento\Framework\View\Element\AbstractBlock[] */
         $blocks = [];
-        // Instantiate blocks and collect all actions data
         foreach ($scheduledElements as $elementName => $element) {
-            list($type, $data) = $element;
-            if ($type === self::TYPE) {
-                $block = $this->generateComponent($structure, $elementName, $data);
-                $blocks[$elementName] = $block;
-                $layout->setBlock($elementName, $block);
-                $scheduledStructure->unsetElement($elementName);
-            }
+            list(, $data) = $element;
+            $block = $this->generateComponent($structure, $elementName, $data, $layout);
+            $blocks[$elementName] = $block;
+            $layout->setBlock($elementName, $block);
+            $scheduledStructure->unsetElement($elementName);
         }
 
         return $this;
@@ -86,35 +102,49 @@ class UiComponent implements Layout\GeneratorInterface
     /**
      * Create component object
      *
-     * @param \Magento\Framework\View\Layout\Data\Structure $structure
+     * @param Structure $structure
      * @param string $elementName
      * @param string $data
-     * @return \Magento\Framework\View\Element\UiComponentInterface
+     * @param LayoutInterface $layout
+     * @return ContainerInterface
      */
-    protected function generateComponent(Layout\Data\Structure $structure, $elementName, $data)
+    protected function generateComponent(Structure $structure, $elementName, $data, LayoutInterface $layout)
     {
         $attributes = $data['attributes'];
         if (!empty($attributes['group'])) {
             $structure->addToParentGroup($elementName, $attributes['group']);
         }
-        $arguments = empty($data['arguments']) ? [] : $this->evaluateArguments($data['arguments']);
-        $componentName = isset($attributes['component']) ? $attributes['component'] : '';
-        $uiComponent = $this->uiComponentFactory->createUiComponent($componentName, $elementName, $arguments);
-        return $uiComponent;
+
+        $context = $this->contextFactory->create([
+            'namespace' => $elementName,
+            'pageLayout' => $layout
+        ]);
+
+        $component = $this->uiComponentFactory->create($elementName, null, [
+            'context' => $context
+        ]);
+        $this->prepareComponent($component);
+
+        /** @var ContainerInterface $blockContainer */
+        $blockContainer = $this->blockFactory->createBlock(static::CONTAINER, ['component' => $component]);
+
+        return $blockContainer;
     }
 
     /**
-     * Compute and return argument values
+     * Call prepare method in the component UI
      *
-     * @param array $arguments
-     * @return array
+     * @param UiComponentInterface $component
+     * @return void
      */
-    protected function evaluateArguments(array $arguments)
+    protected function prepareComponent(UiComponentInterface $component)
     {
-        $result = [];
-        foreach ($arguments as $argumentName => $argumentData) {
-            $result[$argumentName] = $this->argumentInterpreter->evaluate($argumentData);
+        $childComponents = $component->getChildComponents();
+        if (!empty($childComponents)) {
+            foreach ($childComponents as $child) {
+                $this->prepareComponent($child);
+            }
         }
-        return $result;
+        $component->prepare();
     }
 }

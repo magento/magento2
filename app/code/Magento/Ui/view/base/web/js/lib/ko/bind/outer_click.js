@@ -9,6 +9,14 @@ define([
 ], function (ko, $) {
     'use strict';
 
+    function clickWrapper(elem, callback, e) {
+        var target = e.target;
+
+        if (target !== elem && !elem.contains(target)) {
+            callback();
+        }
+    }
+
     ko.bindingHandlers.outerClick = {
 
         /**
@@ -19,15 +27,17 @@ define([
          * @param  {Object} viewModel - reference to viewmodel
          */
         init: function (element, valueAccessor, allBindings, viewModel) {
-            var callback = valueAccessor();
+            var callback = valueAccessor(),
+                wrapper;
 
             callback = callback.bind(viewModel);
+            wrapper = clickWrapper.bind(null, element, callback);
 
-            $(document).on('click', callback);
+            $(document).on('click', wrapper);
 
             ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-                $(document).off('click', callback);
+                $(document).off('click', wrapper);
             });
         }
-    }
+    };
 });

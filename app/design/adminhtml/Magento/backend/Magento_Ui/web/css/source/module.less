@@ -3,13 +3,15 @@
 //  * See COPYING.txt for license details.
 //  */
 
-//colors
+//
+//  Variables
+//  ---------------------------------------------
+
 @admin__color1: #adadad;
 @admin__color2: #d3d3d3;
 @admin__color3: #e0e0e0;
 @admin__color4: #666;
 
-//Spacing
 @spacing__base: 10px;
 @spacing-xs: @spacing__base;
 @spacing-s: @spacing__base;
@@ -17,7 +19,6 @@
 @spacing-l: @spacing__base;
 @spacing-xl: @spacing__base;
 
-//Fonts
 @size__base: 1rem;
 @size-xs: @size__base;
 @size-s: @size__base;
@@ -26,6 +27,8 @@
 @size-xl: @size__base;
 
 @field-date-icon--color: #514943;
+
+//
 
 [class*="tab-nav-item"]:not(ul):active,
 [class*="tab-nav-item"]:not(ul):focus {
@@ -125,53 +128,51 @@
 }
 
 .listing-tiles {
-  overflow: hidden;
-  margin-top: -10px;
-  margin-left: -10px;
+    overflow: hidden;
+    margin-top: -10px;
+    margin-left: -10px;
 
-  .listing-tile {
-    background-color: #f2ebde;
-    display: block;
-    width: 238px;
-    height: 200px;
-    float: left;
-    border: 1px solid #676056;
-    margin-top: 10px;
-    margin-left: 10px;
-    border-radius: 4px;
-    text-align: center;
+    .listing-tile {
+        background-color: #f2ebde;
+        display: block;
+        width: 238px;
+        height: 200px;
+        float: left;
+        border: 1px solid #676056;
+        margin-top: 10px;
+        margin-left: 10px;
+        border-radius: 4px;
+        text-align: center;
 
-    &.disabled {
-      border-color: red;
+        &.disabled {
+            border-color: red;
+        }
+
+        &.enabled {
+            border-color: green;
+        }
     }
-
-    &.enabled {
-      border-color: green;
-    }
-  }
 }
 
 .listing {
-  .disabled {
-    color: red;
-  }
-  .enabled {
-    color: green;
-  }
+    .disabled {
+        color: red;
+    }
+    .enabled {
+        color: green;
+    }
 }
 
 .pager {
     text-align: left;
     padding-bottom: 10px;
     .clearfix();
-
     [data-part=left] {
         display: inline-block;
         width: 45%;
         float: left;
         text-align: left;
     }
-
     [data-part=right] {
         display: inline-block;
         width: 45%;
@@ -182,44 +183,30 @@
         -ms-user-select: none; // use in 11 IE
         user-select: none;
     }
-
-    .action-next{
+    .action-next {
         cursor: pointer;
     }
-
-    .action-previous{
+    .action-previous {
         cursor: pointer;
     }
 }
 
-.pager {
-  text-align: left;
-}
-.pager [data-part=left] {
-  display: inline-block;
-  width: 45%;
-  text-align: left;
-}
-.pager [data-part=right] {
-  display: inline-block;
-  width: 45%;
-  text-align: right;
-  float: right;
-}
-.grid .col-title {
-  min-width: 90px;
-  text-align: center;
-}
-.grid-actions [data-part=search] {
-  display: inline-block;
-  margin: 0 30px;
-}
-.grid-actions [data-part=search] input[type=text] {
-  vertical-align: bottom;
-  width: 460px;
+.grid-actions {
+    [data-part=search] {
+        display: inline-block;
+        margin: 0 30px;
+        input[type=text] {
+            vertical-align: bottom;
+            width: 460px;
+        }
+    }
 }
 
 .grid {
+    .col-title {
+        min-width: 90px;
+        text-align: center;
+    }
     .actions-split {
         .clearfix();
         display: inline-block;
@@ -292,274 +279,6 @@
     }
 }
 
-.filters {
-    &-toggle {
-        .button(
-            @_button-margin: 3px,
-            @_button-icon-use: true,
-            @_button-font-content: @icon-pointer-down,
-            @_button-icon-font-size: 30px,
-            @_button-icon-font-line-height: 15px,
-            @_button-icon-font-text-hide: false,
-            @_button-icon-font-position: after
-        );
-        .button-reset();
-        &:after {
-            margin-top: 2px;
-            margin-left: -3px;
-        }
-        &.active {
-            &:after {
-                content: @icon-pointer-up;
-            }
-        }
-    }
-    &-current {
-        padding: 10px 0;
-        display: none;
-        &.active{
-            display: block;
-        }
-    }
-    &-items {
-        .list-reset-styles();
-        display: inline;
-    }
-    &-item {
-        display: inline-block;
-        margin:0 5px 5px 0;
-        padding: 2px 2px 2px 4px;
-        border-radius: 3px;
-        background: #f7f3eb;
-        .item-label {
-            font-weight: 600;
-            &:after {
-                content: ": "
-            }
-        }
-        .action-remove {
-            .button(
-                @_button-margin: 3px,
-                @_button-icon-use: true,
-                @_button-font-content: @icon-remove,
-                @_button-icon-font-size: 16px,
-                @_button-icon-font-line-height: 16px,
-                @_button-icon-font-text-hide: true
-            );
-            padding: 0;
-            //.button-reset();
-        }
-    }
-    &-form {
-        position: relative;
-        z-index: 1;
-        margin: 14px 0;
-        background: #fff;
-        border: 1px solid #bbb;
-        box-shadow: 0 3px 3px rgba(0, 0, 0, .15);
-        .action-close {
-            position: absolute;
-            top: 3px;
-            right: 7px;
-            .button(
-                @_button-margin: 3px,
-                @_button-icon-use: true,
-                @_button-font-content: @icon-remove,
-                @_button-icon-font-size: 42px,
-                @_button-icon-font-line-height: 42px,
-                @_button-icon-font-text-hide: true
-            );
-            .button-reset();
-        }
-    }
-    &-actions {
-        margin: 18px;
-        text-align: right;
-    }
-    &-fieldset {
-        padding-bottom: 0;
-        .field {
-            border: 0;
-            .form-field(
-                    @_type: inline,
-                    @_column: true,
-                    @_column-number: 3,
-                    @_type-inline-label-width: 35%,
-                    @_type-inline-control-width: 65%
-                );
-            .label {
-                .style2();
-                margin: 0;
-            }
-        }
-    }
-    .field-date .group {
-        .hasDatepicker {
-          width: 100%;
-          padding-right: 30px;
-
-          & + .ui-datepicker-trigger {
-              img {
-                  display: none;
-              }
-              .button-reset();
-              .icon-font(
-                  @icon-calendar,
-                  @_icon-font-size: 35px,
-                  @_icon-font-line-height: 30px,
-                  @_icon-font-text-hide: true,
-                  @_icon-font-position: after,
-                  @_icon-font-color: @field-date-icon--color
-              );
-              margin-left: -33px;
-              display: inline-block;
-              width: 30px;
-          }
-        }
-    }
-    .field-range .group{
-        .field {
-            margin-bottom: 0;
-        }
-        .label {
-            &:extend(.visually-hidden all);
-        }
-        .control {
-            width: 100%;
-            box-sizing: border-box;
-            padding-right: 0;
-            position: relative;
-            z-index: 1;
-        }
-    }
-
-}
-
-/* [data-part=filter-form] {
-  width: 650px;
-  left: 150px;
-
-  background: #fff;
-  border: 1px solid #bbb;
-  position: absolute;
-  z-index: 100;
-  box-shadow: 0 3px 3px rgba(0, 0, 0, .15);
-  margin-top: 4px;
-
-  .title {
-    position: relative;
-    padding: 5px 18px;
-
-    .close {
-      position: absolute;
-      font-size: .8em;
-      right: 10px;
-      top: 12px;
-      cursor: pointer;
-
-      &:hover,
-      &:active {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  > .actions {
-    padding: 5px 18px 36px;
-  }
-} */
-
-.mass-select {
-    position: relative;
-    margin: -6px -10px;
-    padding: 6px 2px 6px 10px;
-    z-index: 1;
-    white-space: nowrap;
-    &.active {
-        background: rgba(0,0,0,.2);
-    }
-    &-toggle {
-        .button(
-            @_button-margin: 3px,
-            @_button-icon-use: true,
-            @_button-font-content: @icon-pointer-down,
-            @_button-icon-font-size: 30px,
-            @_button-icon-font-line-height: 15px,
-            @_button-icon-font-text-hide: true
-        );
-        .button-reset();
-        &:before {
-            margin-top: -2px;
-            text-indent: -5px;
-            color: #fff;
-        }
-        &:hover:before {
-            color: #fff;
-        }
-        &:active,
-        &.active {
-            &:before {
-                content: @icon-pointer-up;
-            }
-        }
-    }
-    &-field {
-        .label {
-            &:extend(.visually-hidden all);
-        }
-        display: inline;
-    }
-    &-menu {
-        display: none;
-        position: absolute; top: 100%; left: 0;
-        text-align: left;
-        .list-reset-styles();
-        background: #fff;
-        border: 1px solid #bbb;
-        min-width: 175px;
-        box-shadow: 0 3px 3px rgba(0, 0, 0, .15);
-        li {
-          margin: 0;
-          padding: 4px 15px;
-          border-bottom: 1px solid #e5e5e5;
-        }
-        li:hover {
-          background: #e8e8e8;
-          cursor: pointer;
-        }
-        span {
-            font-weight: normal;
-            font-size: 13px;
-            color: #645d53;
-        }
-        &.active {
-            display: block;
-        }
-    }
-}
-
-.grid-loading-mask{
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, .5);
-    z-index: 100;
-
-    .grid-loader{
-        position: absolute;
-        margin: auto;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: 218px;
-        height: 149px;
-        background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
-    }
-}
-
 //
 // Form Component
 //
@@ -581,20 +300,20 @@
 }
 
 .field-price.addon {
-  direction: rtl;
+    direction: rtl;
 }
 
 .field-price.addon > * {
-  direction: ltr;
+    direction: ltr;
 }
 
 .field-price.addon .addafter {
-  border-width: 1px 0 1px 1px;
-  border-radius: 2px 0 0 2px;
+    border-width: 1px 0 1px 1px;
+    border-radius: 2px 0 0 2px;
 }
 
 .field-price.addon input:first-child {
-  border-radius: 0 2px 2px 0;
+    border-radius: 0 2px 2px 0;
 }
 
 .field-price input[type="text"] {
@@ -602,21 +321,21 @@
 }
 
 .field-price input ~ label.addafter strong {
-  margin-left: 2px;
-  margin-right: -2px;
+    margin-left: 2px;
+    margin-right: -2px;
 }
 
 .field-price.addon > input {
-  width: 99px;
-  float: left;
+    width: 99px;
+    float: left;
 }
 
 .field-price .control {
-  position: relative;
+    position: relative;
 }
 
 .field-price label.mage-error {
-  position: absolute;
-  left: 0;
-  top: 30px;
+    position: absolute;
+    left: 0;
+    top: 30px;
 }
