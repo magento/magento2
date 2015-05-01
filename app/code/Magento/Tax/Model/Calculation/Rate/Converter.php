@@ -15,12 +15,12 @@ class Converter
     /**
      * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory
      */
-    protected $_taxRateDataObjectFactory;
+    protected $taxRateDataObjectFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory
      */
-    protected $_taxRateTitleDataObjectFactory;
+    protected $taxRateTitleDataObjectFactory;
 
     /**
      * @param \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory
@@ -30,8 +30,8 @@ class Converter
         \Magento\Tax\Api\Data\TaxRateInterfaceFactory $taxRateDataObjectFactory,
         \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory $taxRateTitleDataObjectFactory
     ) {
-        $this->_taxRateDataObjectFactory = $taxRateDataObjectFactory;
-        $this->_taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;
+        $this->taxRateDataObjectFactory = $taxRateDataObjectFactory;
+        $this->taxRateTitleDataObjectFactory = $taxRateTitleDataObjectFactory;
     }
     /**
      * Convert a tax rate data object to an array of associated titles
@@ -112,7 +112,7 @@ class Converter
      */
     public function populateTaxRateData($formData)
     {
-        $taxRate = $this->_taxRateDataObjectFactory->create();
+        $taxRate = $this->taxRateDataObjectFactory->create();
         $taxRate->setId($this->extractFormData($formData, 'tax_calculation_rate_id'))
             ->setTaxCountryId($this->extractFormData($formData, 'tax_country_id'))
             ->setTaxRegionId($this->extractFormData($formData, 'tax_region_id'))
@@ -127,7 +127,7 @@ class Converter
         if (isset($formData['title'])) {
             $titles = [];
             foreach ($formData['title'] as $storeId => $value) {
-                $titles[] = $this->_taxRateTitleDataObjectFactory->create()->setStoreId($storeId)->setValue($value);
+                $titles[] = $this->taxRateTitleDataObjectFactory->create()->setStoreId($storeId)->setValue($value);
             }
             $taxRate->setTitles($titles);
         }

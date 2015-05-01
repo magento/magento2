@@ -16,34 +16,34 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\Request\Http
      */
-    private $_request;
+    private $request;
 
     /**
      * @var \Magento\Framework\App\Response\Http
      */
-    private $_resultFactory;
+    private $resultFactory;
 
     /**
      * @var \Magento\Tax\Model\Calculation\RateRepository
      */
-    private $_taxRateRepository;
+    private $taxRateRepository;
 
     /*
      * test setup
      */
     public function setUp()
     {
-        $this->_request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMock();
 
-        $this->_resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->_taxRateRepository = $this->getMockBuilder('\Magento\Tax\Model\Calculation\RateRepository')
+        $this->taxRateRepository = $this->getMockBuilder('\Magento\Tax\Model\Calculation\RateRepository')
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -86,11 +86,11 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->_request->expects($this->any())
+        $this->request->expects($this->any())
             ->method('getParam')
             ->will($this->returnValue($taxRateId));
 
-        $this->_taxRateRepository->expects($this->any())
+        $this->taxRateRepository->expects($this->any())
             ->method('get')
             ->with($taxRateId)
             ->will($this->returnValue($rateMock));
@@ -115,7 +115,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
                 $returnArray,
             ]);
 
-        $this->_resultFactory->expects($this->any())
+        $this->resultFactory->expects($this->any())
             ->method('create')
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_JSON)
             ->willReturn($jsonObject);
@@ -123,10 +123,10 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
         $notification = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
             [
-                'taxRateRepository' => $this->_taxRateRepository,
+                'taxRateRepository' => $this->taxRateRepository,
                 'taxRateConverter' => $taxRateConverter,
-                'request' => $this->_request,
-                'resultFactory' => $this->_resultFactory,
+                'request' => $this->request,
+                'resultFactory' => $this->resultFactory,
             ]
         );
 
@@ -147,11 +147,11 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
 
-        $this->_request->expects($this->any())
+        $this->request->expects($this->any())
             ->method('getParam')
             ->will($this->returnValue($taxRateId));
 
-        $this->_taxRateRepository->expects($this->any())
+        $this->taxRateRepository->expects($this->any())
             ->method('get')
             ->with($taxRateId)
             ->willThrowException($noSuchEntityEx);
@@ -168,7 +168,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
                 'error_message' => $exceptionMessage,
             ]);
 
-        $this->_resultFactory->expects($this->any())
+        $this->resultFactory->expects($this->any())
             ->method('create')
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_JSON)
             ->willReturn($jsonObject);
@@ -176,9 +176,9 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
         $notification = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
             [
-                'taxRateRepository' => $this->_taxRateRepository,
-                'request' => $this->_request,
-                'resultFactory' => $this->_resultFactory,
+                'taxRateRepository' => $this->taxRateRepository,
+                'request' => $this->request,
+                'resultFactory' => $this->resultFactory,
             ]
         );
 
@@ -197,11 +197,11 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
 
-        $this->_request->expects($this->any())
+        $this->request->expects($this->any())
             ->method('getParam')
             ->will($this->returnValue($taxRateId));
 
-        $this->_taxRateRepository->expects($this->any())
+        $this->taxRateRepository->expects($this->any())
             ->method('get')
             ->with($taxRateId)
             ->willThrowException($noSuchEntityEx);
@@ -218,7 +218,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
                 'error_message' => $exceptionMessage,
             ]);
 
-        $this->_resultFactory->expects($this->any())
+        $this->resultFactory->expects($this->any())
             ->method('create')
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_JSON)
             ->willReturn($jsonObject);
@@ -226,9 +226,9 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
         $notification = $objectManager->getObject(
             'Magento\Tax\Controller\Adminhtml\Rate\AjaxLoad',
             [
-                'taxRateRepository' => $this->_taxRateRepository,
-                'request' => $this->_request,
-                'resultFactory' => $this->_resultFactory,
+                'taxRateRepository' => $this->taxRateRepository,
+                'request' => $this->request,
+                'resultFactory' => $this->resultFactory,
             ]
         );
 

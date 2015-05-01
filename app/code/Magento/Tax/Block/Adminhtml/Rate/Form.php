@@ -294,39 +294,4 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         return parent::_prepareForm();
     }
-
-    /**
-     * Extract tax rate data in a format which is
-     *
-     * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
-     * @return array
-     */
-    protected function extractTaxRateData($taxRate)
-    {
-        $formData = [
-            'tax_calculation_rate_id' => $taxRate->getId(),
-            'tax_country_id' => $taxRate->getTaxCountryId(),
-            'tax_region_id' => $taxRate->getTaxRegionId(),
-            'tax_postcode' => $taxRate->getTaxPostcode(),
-            'code' => $taxRate->getCode(),
-            'rate' => $taxRate->getRate(),
-            'zip_is_range' => false,
-        ];
-
-        if ($taxRate->getZipFrom() && $taxRate->getZipTo()) {
-            $formData['zip_is_range'] = true;
-            $formData['zip_from'] = $taxRate->getZipFrom();
-            $formData['zip_to'] = $taxRate->getZipTo();
-        }
-
-        if ($taxRate->getTitles()) {
-            $titleData = [];
-            foreach ($taxRate->getTitles() as $title) {
-                $titleData[] = [$title->getStoreId() => $title->getValue()];
-            }
-            $formData['title'] = $titleData;
-        }
-
-        return $formData;
-    }
 }

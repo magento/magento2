@@ -12,7 +12,7 @@ use Magento\Framework\Controller\ResultFactory;
 class AjaxLoad extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**
-     * Show Edit Form
+     * Json needed for the Ajax Edit Form
      *
      * @return void
      */
