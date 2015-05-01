@@ -178,6 +178,18 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Cannot execute multiple queries.
+     */
+    public function testMultipleQueryException()
+    {
+        $sql = "SELECT COUNT(*) AS _num FROM test; ";
+        $sql.= "INSERT INTO test(id) VALUES (1); ";
+        $sql.= "SELECT COUNT(*) AS _num FROM test; ";
+        $this->_mockAdapter->query($sql);
+    }
+
+    /**
      * Data Provider for testCheckDdlTransaction
      */
     public static function ddlSqlQueryProvider()

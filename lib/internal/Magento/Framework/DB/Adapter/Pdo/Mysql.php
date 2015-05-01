@@ -19,6 +19,7 @@ use Magento\Framework\DB\Profiler;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String;
 
@@ -415,7 +416,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function query($sql, $bind = [])
     {
         if (count($this->_splitMultiQuery($sql)) > 1) {
-            throw new LocalizedException(__('Cannot execute multiple queries.'));
+            throw new LocalizedException(new Phrase('Cannot execute multiple queries.'));
         }
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
@@ -618,48 +619,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $this->_queryHook = $hook;
         return $prev;
     }
-
-    /**
-     * Executes a SQL statement(s)
-     *
-     * @param string $sql
-     * @throws \Zend_Db_Exception
-     * @return array
-     */
-    public function multiQuery($sql)
-    {
-        return $this->multiMagentoQuery($sql);
-    }
-
-    /**
-     * Run Multi Query
-     *
-     * @param string $sql
-     * @return array
-     * @throws \Exception
-     */
-    public function multiMagentoQuery($sql)
-    {
-        ##$result = $this->rawQuery($sql);
-
-        #$this->beginTransaction();
-        try {
-            $stmts = $this->_splitMultiQuery($sql);
-            $result = [];
-            foreach ($stmts as $stmt) {
-                $result[] = $this->rawQuery($stmt);
-            }
-            #$this->commit();
-        } catch (\Exception $e) {
-            #$this->rollback();
-            throw $e;
-        }
-
-        $this->resetDdlCache();
-
-        return $result;
-    }
-
+    
     /**
      * Split multi statement query
      *
