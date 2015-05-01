@@ -184,7 +184,6 @@ interface TaxDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataI
 
     /**
      * Set taxable amount
-
      * @api
      * @param float $taxableAmount
      * @return $this
