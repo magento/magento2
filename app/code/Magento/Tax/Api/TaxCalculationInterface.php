@@ -19,6 +19,7 @@ interface TaxCalculationInterface
     /**
      * Calculate Tax
      *
+     * @api
      * @param \Magento\Tax\Api\Data\QuoteDetailsInterface $quoteDetails
      * @param null|int $storeId
      * @param bool $round
@@ -33,6 +34,7 @@ interface TaxCalculationInterface
     /**
      * Get default rate request
      *
+     * @api
      * @param int $productTaxClassID
      * @param int $customerId
      * @param string $storeId
@@ -43,6 +45,7 @@ interface TaxCalculationInterface
     /**
      * Get rate request
      *
+     * @api
      * @param int $productTaxClassID
      * @param int $customerId
      * @param string $storeId

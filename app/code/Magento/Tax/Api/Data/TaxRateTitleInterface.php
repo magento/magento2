@@ -21,6 +21,7 @@ interface TaxRateTitleInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Get store id
      *
+     * @api
      * @return string
      */
     public function getStoreId();
@@ -28,6 +29,7 @@ interface TaxRateTitleInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set store id
      *
+     * @api
      * @param string $storeId
      * @return $this
      */
@@ -36,6 +38,7 @@ interface TaxRateTitleInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Get title value
      *
+     * @api
      * @return string
      */
     public function getValue();
@@ -43,6 +46,7 @@ interface TaxRateTitleInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set title value
      *
+     * @api
      * @param string $value
      * @return string
      */
@@ -51,6 +55,7 @@ interface TaxRateTitleInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
+     * @api
      * @return \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -58,6 +63,7 @@ interface TaxRateTitleInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set an extension attributes object.
      *
+     * @api
      * @param \Magento\Tax\Api\Data\TaxRateTitleExtensionInterface $extensionAttributes
      * @return $this
      */

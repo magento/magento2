@@ -12,6 +12,7 @@ interface TaxRateRepositoryInterface
     /**
      * Create or update tax rate
      *
+     * @api
      * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
      * @return \Magento\Tax\Api\Data\TaxRateInterface
      * @throws \Magento\Framework\Exception\InputException If input is invalid or required input is missing.
@@ -22,6 +23,7 @@ interface TaxRateRepositoryInterface
     /**
      * Get tax rate
      *
+     * @api
      * @param int $rateId
      * @return \Magento\Tax\Api\Data\TaxRateInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -31,6 +33,7 @@ interface TaxRateRepositoryInterface
     /**
      * Delete tax rate
      *
+     * @api
      * @param int $rateId
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If no TaxRate with the given ID can be found.
@@ -41,6 +44,7 @@ interface TaxRateRepositoryInterface
     /**
      * Search TaxRates
      *
+     * @api
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Tax\Api\Data\TaxRateSearchResultsInterface containing Data\TaxRateInterface objects
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
@@ -50,6 +54,7 @@ interface TaxRateRepositoryInterface
     /**
      * Delete tax rate
      *
+     * @api
      * @param \Magento\Tax\Api\Data\TaxRateInterface $taxRate
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If no TaxRate with the given ID can be found.

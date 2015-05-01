@@ -28,6 +28,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Get customer billing address
      *
+     * @api
      * @return \Magento\Customer\Api\Data\AddressInterface|null
      */
     public function getBillingAddress();
@@ -35,6 +36,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set customer billing address
      *
+     * @api
      * @param \Magento\Customer\Api\Data\AddressInterface $billingAddress
      * @return $this
      */
@@ -43,6 +45,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Get customer shipping address
      *
+     * @api
      * @return \Magento\Customer\Api\Data\AddressInterface|null
      */
     public function getShippingAddress();
@@ -50,6 +53,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set customer shipping address
      *
+     * @api
      * @param \Magento\Customer\Api\Data\AddressInterface $shippingAddress
      * @return $this
      */
@@ -58,6 +62,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Get customer tax class key
      *
+     * @api
      * @return \Magento\Tax\Api\Data\TaxClassKeyInterface|null
      */
     public function getCustomerTaxClassKey();
@@ -65,6 +70,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set customer tax class key
      *
+     * @api
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $customerTaxClassKey
      * @return $this
      */
@@ -73,6 +79,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Get customer id
      *
+     * @api
      * @return int|null
      */
     public function getCustomerId();
@@ -80,6 +87,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set customer id
      *
+     * @api
      * @param int $customerId
      * @return $this
      */
@@ -88,6 +96,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Get customer data
      *
+     * @api
      * @return \Magento\Tax\Api\Data\QuoteDetailsItemInterface[]|null
      */
     public function getItems();
@@ -95,6 +104,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set customer data
      *
+     * @api
      * @param \Magento\Tax\Api\Data\QuoteDetailsItemInterface[] $items
      * @return $this
      */
@@ -103,6 +113,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Get customer tax class id
      *
+     * @api
      * @return int
      */
     public function getCustomerTaxClassId();
@@ -110,6 +121,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set customer tax class id
      *
+     * @api
      * @param int $customerTaxClassId
      * @return $this
      */
@@ -118,6 +130,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
+     * @api
      * @return \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -125,6 +138,7 @@ interface QuoteDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Set an extension attributes object.
      *
+     * @api
      * @param \Magento\Tax\Api\Data\QuoteDetailsExtensionInterface $extensionAttributes
      * @return $this
      */

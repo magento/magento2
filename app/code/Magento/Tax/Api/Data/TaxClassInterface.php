@@ -21,6 +21,7 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Get tax class ID.
      *
+     * @api
      * @return int|null
      */
     public function getClassId();
@@ -28,6 +29,7 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Set tax class ID.
      *
+     * @api
      * @param int $classId
      * @return $this
      */
@@ -36,6 +38,7 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Get tax class name.
      *
+     * @api
      * @return string
      */
     public function getClassName();
@@ -43,6 +46,7 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Set tax class name.
      *
+     * @api
      * @param string $className
      * @return $this
      */
@@ -51,6 +55,7 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Get tax class type.
      *
+     * @api
      * @return string
      */
     public function getClassType();
@@ -58,6 +63,7 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Set tax class type.
      *
+     * @api
      * @param string $classType
      * @return $this
      */
@@ -66,6 +72,7 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
+     * @api
      * @return \Magento\Tax\Api\Data\TaxClassExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -73,6 +80,7 @@ interface TaxClassInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Set an extension attributes object.
      *
+     * @api
      * @param \Magento\Tax\Api\Data\TaxClassExtensionInterface $extensionAttributes
      * @return $this
      */

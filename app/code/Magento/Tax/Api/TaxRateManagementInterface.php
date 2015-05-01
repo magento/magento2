@@ -13,6 +13,7 @@ interface TaxRateManagementInterface
     /**
      * Get rates by customerTaxClassId and productTaxClassId
      *
+     * @api
      * @param int $customerTaxClassId
      * @param int $productTaxClassId
      * @return TaxRateInterface[]

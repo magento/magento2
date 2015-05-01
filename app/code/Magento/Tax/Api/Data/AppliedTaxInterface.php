@@ -22,6 +22,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Get tax rate key
      *
+     * @api
      * @return string|null
      */
     public function getTaxRateKey();
@@ -29,6 +30,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Set tax rate key
      *
+     * @api
      * @param string $taxRateKey
      * @return $this
      */
@@ -37,6 +39,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Get percent
      *
+     * @api
      * @return float
      */
     public function getPercent();
@@ -44,6 +47,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Set percent
      *
+     * @api
      * @param float $percent
      * @return $this
      */
@@ -52,6 +56,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Get amount
      *
+     * @api
      * @return float
      */
     public function getAmount();
@@ -59,6 +64,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Get amount
      *
+     * @api
      * @param float $amount
      * @return $this
      */
@@ -67,6 +73,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Get rates
      *
+     * @api
      * @return \Magento\Tax\Api\Data\AppliedTaxRateInterface[]|null
      */
     public function getRates();
@@ -74,6 +81,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Set rates
      *
+     * @api
      * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
      * @return $this
      */
@@ -82,6 +90,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
+     * @api
      * @return \Magento\Tax\Api\Data\AppliedTaxExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -89,6 +98,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
     /**
      * Set an extension attributes object.
      *
+     * @api
      * @param \Magento\Tax\Api\Data\AppliedTaxExtensionInterface $extensionAttributes
      * @return $this
      */
