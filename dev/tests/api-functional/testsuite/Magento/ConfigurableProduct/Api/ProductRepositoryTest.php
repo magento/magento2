@@ -54,6 +54,16 @@ class ProductRepositoryTest extends WebapiAbstract
         parent::tearDown();
     }
 
+    protected function getConfigurableAttributeOptions()
+    {
+        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $optionCollection */
+        $optionCollection = $this->objectManager->create(
+            'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+        );
+        $options = $optionCollection->setAttributeFilter($this->configurableAttribute->getId())->getData();
+        return $options;
+    }
+
     protected function createConfigurableProduct()
     {
         $productId1 = 10;
@@ -63,11 +73,8 @@ class ProductRepositoryTest extends WebapiAbstract
 
         $this->configurableAttribute = $this->eavConfig->getAttribute('catalog_product', 'test_configurable');
         $this->assertNotNull($this->configurableAttribute);
-        /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $optionCollection */
-        $optionCollection = $this->objectManager->create(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
-        );
-        $options = $optionCollection->setAttributeFilter($this->configurableAttribute->getId())->getData();
+
+        $options = $this->getConfigurableAttributeOptions();
         $this->assertEquals(2, count($options));
 
         $configurableProductOptions = [
@@ -284,6 +291,37 @@ class ProductRepositoryTest extends WebapiAbstract
         unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']);
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
             $productId1, $nonExistingId
+        ];
+        $this->saveProduct($response);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Products "%1" and %2 have the same set of attribute values.
+     */
+    public function testUpdateConfigurableProductLinksWithDuplicateAttributes()
+    {
+        $productId1 = 10;
+        $productId2 = 20;
+
+        $response = $this->createConfigurableProduct();
+        $options = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'];
+        //make product2 and product1 have the same value for the configurable attribute
+        $optionValue1 = $options[0]['values'][0]['value_index'];
+        $product2 = $this->getProduct('simple_' . $productId2);
+        $product2['custom_attributes'] = [
+            [
+                'attribute_code' => 'test_configurable',
+                'value' => $optionValue1,
+            ]
+        ];
+        $this->saveProduct($product2);
+
+        //leave existing option untouched
+        unset($response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options']);
+        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
+            $productId1, $productId2
         ];
         $this->saveProduct($response);
     }

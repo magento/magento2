@@ -408,6 +408,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testResetConfigurableAttributes()
+    {
+        $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['unsetData', '__wakeup', '__sleep'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->any())->method('unsetData')
+            ->with('_cache_instance_configurable_attributes')
+            ->will($this->returnSelf());
+
+        $this->assertEquals($this->_model, $this->_model->resetConfigurableAttributes($product));
+    }
+
     public function testHasOptions()
     {
         $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')

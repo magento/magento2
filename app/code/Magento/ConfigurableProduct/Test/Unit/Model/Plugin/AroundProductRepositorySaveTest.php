@@ -161,10 +161,10 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             $productMock->expects($this->once())
                 ->method('getId')
                 ->willReturn($productId);
-            $productMock->expects($this->once())
+            $productMock->expects($this->any())
                 ->method('getData')
                 ->with($attributeCode)
-                ->willReturn('value');
+                ->willReturn($productId);
             $this->productFactoryMock->expects($this->at($count))
                 ->method('create')
                 ->willReturn($productMock);
@@ -333,10 +333,58 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $simpleProductMock->expects($this->once())
             ->method('getId')
             ->willReturn($simpleProductId);
-        $simpleProductMock->expects($this->once())
+        $simpleProductMock->expects($this->any())
             ->method('getData')
             ->with($configurableAttributeCode)
             ->willReturn(null);
+
+        $links[] = $simpleProductId;
+
+        $this->productMock->expects($this->once())->method('getTypeId')
+            ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
+        $this->productMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productExtensionMock);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getConfigurableProductOptions')
+            ->willReturn(null);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getConfigurableProductLinks')
+            ->willReturn($links);
+
+        $configurableTypeMock = $this->getMockBuilder(
+            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'
+        )->disableOriginalConstructor()->getMock();
+        $this->configurableTypeFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($configurableTypeMock);
+        $configurableTypeMock->expects($this->never())
+            ->method('saveProducts')
+            ->with($this->productMock, $links);
+
+        $this->plugin->aroundSave($this->productRepositoryMock, $this->closureMock, $this->productMock);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Products "6" and 4 have the same set of attribute values.
+     */
+    public function testAroundSaveWithLinksWithDuplicateAttributes()
+    {
+        $links = [4, 5];
+        $simpleProductId = 6;
+        $configurableAttributeCode = 'color';
+
+        $this->setupConfigurableProductAttributes([$configurableAttributeCode]);
+        $productMocks = $this->setupProducts($links, $configurableAttributeCode, $simpleProductId);
+        $simpleProductMock = $productMocks[2];
+        $simpleProductMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($simpleProductId);
+        $simpleProductMock->expects($this->any())
+            ->method('getData')
+            ->with($configurableAttributeCode)
+            ->willReturn(4);
 
         $links[] = $simpleProductId;
 

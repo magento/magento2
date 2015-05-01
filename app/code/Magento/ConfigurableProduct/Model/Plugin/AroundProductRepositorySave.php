@@ -84,6 +84,7 @@ class AroundProductRepositorySave
         }
         if ($configurableProductOptions !== null) {
             $this->saveConfigurableProductOptions($result, $configurableProductOptions);
+            $result->getTypeInstance()->resetConfigurableAttributes($result);
         }
         if ($configurableProductLinks !== null) {
             $this->saveConfigurableProductLinks($result, $configurableProductLinks);
@@ -163,18 +164,27 @@ class AroundProductRepositorySave
      */
     protected function validateProductLinks(array $attributeCodes, array $linkIds)
     {
+        $valueMap = [];
         foreach ($linkIds as $productId) {
             $variation = $this->productFactory->create()->load($productId);
             if (!$variation->getId()) {
                 throw new InputException(__('Product with id "%1" does not exist.', $productId));
             }
+            $valueKey = '';
             foreach ($attributeCodes as $attributeCode) {
                 if (!$variation->getData($attributeCode)) {
                     throw new InputException(
                         __('Product with id "%1" does not contain required attribute "%2".', $productId, $attributeCode)
                     );
                 }
+                $valueKey = $valueKey . $attributeCode . ':' . $variation->getData($attributeCode) . ';';
             }
+            if (isset($valueMap[$valueKey])) {
+                throw new InputException(
+                    __('Products "%1" and %2 have the same set of attribute values.', $productId, $valueMap[$valueKey])
+                );
+            }
+            $valueMap[$valueKey] = $productId;
         }
         return $this;
     }
