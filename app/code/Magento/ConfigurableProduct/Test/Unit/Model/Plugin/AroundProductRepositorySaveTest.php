@@ -436,6 +436,17 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('deleteById')
             ->with($productSku, 4);
 
+        $configurableProductTypeMock = $this->getMockBuilder(
+            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable'
+        )->disableOriginalConstructor()->getMock();
+        $configurableProductTypeMock->expects($this->once())
+            ->method('resetConfigurableAttributes')
+            ->with($this->productMock)
+            ->willReturnSelf();
+        $this->productMock->expects($this->any())
+            ->method('getTypeInstance')
+            ->willReturn($configurableProductTypeMock);
+
         $productId = 3;
         $this->productMock->expects($this->once())
             ->method('getId')
