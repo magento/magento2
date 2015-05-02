@@ -278,8 +278,6 @@ class ProductRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Product with id "%1" does not exist.
      */
     public function testUpdateConfigurableProductLinksWithNonExistingProduct()
     {
@@ -292,13 +290,26 @@ class ProductRepositoryTest extends WebapiAbstract
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
             $productId1, $nonExistingId
         ];
-        $this->saveProduct($response);
+
+        $expectedMessage = 'Product with id "%1" does not exist.';
+        try {
+            $this->saveProduct($response);
+            $this->fail("Expected exception");
+        } catch (\SoapFault $e) {
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage(),
+                "SoapFault does not contain expected message."
+            );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(['0' => '999'], $errorObj['parameters']);
+        }
     }
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Products "%1" and %2 have the same set of attribute values.
      */
     public function testUpdateConfigurableProductLinksWithDuplicateAttributes()
     {
@@ -323,7 +334,22 @@ class ProductRepositoryTest extends WebapiAbstract
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
             $productId1, $productId2
         ];
-        $this->saveProduct($response);
+
+        $expectedMessage = 'Products "%1" and %2 have the same set of attribute values.';
+        try {
+            $this->saveProduct($response);
+            $this->fail("Expected exception");
+        } catch (\SoapFault $e) {
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage(),
+                "SoapFault does not contain expected message."
+            );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(['0' => 20, '1' => 10], $errorObj['parameters']);
+        }
     }
 
     /**
