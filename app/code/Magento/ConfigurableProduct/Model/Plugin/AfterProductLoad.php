@@ -63,9 +63,9 @@ class AfterProductLoad
         $options = [];
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $typeInstance */
         $typeInstance = $product->getTypeInstance();
-        $optionCollection = $typeInstance->getConfigurableAttributeCollection($product);
+        $attributeCollection = $typeInstance->getConfigurableAttributes($product);
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $option */
-        foreach ($optionCollection as $option) {
+        foreach ($attributeCollection as $option) {
             $values = [];
             $prices = $option->getPrices();
             if (is_array($prices)) {

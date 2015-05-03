@@ -141,7 +141,7 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
         $options = [$optionMock1, $optionMock2];
 
         $this->configurableProductTypeInstanceMock->expects($this->once())
-            ->method('getConfigurableAttributeCollection')
+            ->method('getConfigurableAttributes')
             ->with($this->productMock)
             ->willReturn($options);
         return $options;
