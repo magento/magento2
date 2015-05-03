@@ -31,10 +31,15 @@ class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
         $userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
         $userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
 
+        $paramOverriderCustomerId = $objectManager->getObject(
+            'Magento\Webapi\Controller\Rest\ParamOverriderCustomerId',
+            ['userContext' => $userContextMock]
+        );
+
         /** @var \Magento\Webapi\Controller\Rest\ParamsOverrider $paramsOverrider */
         $paramsOverrider = $objectManager->getObject(
             'Magento\Webapi\Controller\Rest\ParamsOverrider',
-            ['userContext' => $userContextMock]
+            ['paramOverriders' => ['%customer_id%' => $paramOverriderCustomerId ]]
         );
 
         $this->assertEquals($expectedOverriddenParams, $paramsOverrider->override($requestData, $parameters));
@@ -84,7 +89,7 @@ class ParamsOverriderTest extends \PHPUnit_Framework_TestCase
             'force true, value present, override value is %customer_id%, not a customer' => [
                 ['Name1' => 'valueIn'],
                 ['Name1' => ['force' => true, 'value' => '%customer_id%']],
-                ['Name1' => '%customer_id%'],
+                ['Name1' => null],
                 1234,
                 UserContextInterface::USER_TYPE_INTEGRATION,
             ],

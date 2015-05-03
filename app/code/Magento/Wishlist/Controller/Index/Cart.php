@@ -1,15 +1,14 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -35,6 +34,11 @@ class Cart extends Action\Action implements IndexInterface
      * @var \Magento\Checkout\Model\Cart
      */
     protected $cart;
+
+    /**
+     * @var \Magento\Checkout\Helper\Cart
+     */
+    protected $cartHelper;
 
     /**
      * @var \Magento\Wishlist\Model\Item\OptionFactory
@@ -66,6 +70,8 @@ class Cart extends Action\Action implements IndexInterface
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Wishlist\Helper\Data $helper
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Action\Context $context,
@@ -76,7 +82,8 @@ class Cart extends Action\Action implements IndexInterface
         \Magento\Wishlist\Model\Item\OptionFactory $optionFactory,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Wishlist\Helper\Data $helper
+        \Magento\Wishlist\Helper\Data $helper,
+        \Magento\Checkout\Helper\Cart $cartHelper
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->quantityProcessor = $quantityProcessor;
@@ -86,6 +93,7 @@ class Cart extends Action\Action implements IndexInterface
         $this->productHelper = $productHelper;
         $this->escaper = $escaper;
         $this->helper = $helper;
+        $this->cartHelper = $cartHelper;
         parent::__construct($context);
     }
 
@@ -95,22 +103,25 @@ class Cart extends Action\Action implements IndexInterface
      * If Product has required options - item removed from wishlist and redirect
      * to product view page with message about needed defined required options
      *
-     * @return ResponseInterface
+     * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item');
-
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         /* @var $item \Magento\Wishlist\Model\Item */
         $item = $this->itemFactory->create()->load($itemId);
         if (!$item->getId()) {
-            return $this->_redirect('*/*');
+            $resultRedirect->setPath('*/*');
+            return $resultRedirect;
         }
         $wishlist = $this->wishlistProvider->getWishlist($item->getWishlistId());
         if (!$wishlist) {
-            return $this->_redirect('*/*');
+            $resultRedirect->setPath('*/*');
+            return $resultRedirect;
         }
 
         // Set qty
@@ -159,8 +170,8 @@ class Cart extends Action\Action implements IndexInterface
                 $this->messageManager->addSuccess($message);
             }
 
-            if ($this->cart->getShouldRedirectToCart()) {
-                $redirectUrl = $this->cart->getCartUrl();
+            if ($this->cartHelper->getShouldRedirectToCart()) {
+                $redirectUrl = $this->cartHelper->getCartUrl();
             } else {
                 $refererUrl = $this->_redirect->getRefererUrl();
                 if ($refererUrl && $refererUrl != $configureUrl) {
@@ -178,6 +189,14 @@ class Cart extends Action\Action implements IndexInterface
 
         $this->helper->calculate();
 
-        return $this->getResponse()->setRedirect($redirectUrl);
+        if ($this->getRequest()->isAjax()) {
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+            $resultJson->setData(['backUrl' => $redirectUrl]);
+            return $resultJson;
+        }
+        
+        $resultRedirect->setUrl($redirectUrl);
+        return $resultRedirect;
     }
 }

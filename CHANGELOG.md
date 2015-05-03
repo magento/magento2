@@ -1,3 +1,45 @@
+0.74.0-beta7
+=============
+* Framework improvements
+    * Exceptions are caught and logged before reaching the Phrase::__toString() method
+    * Refactored controller actions in the Checkout area
+    * Refactored controller actions in the Tax area
+    * Implemented new look & feel for the Edit Order page (View/Edit Order)
+    * Replaced the end-to-end test for Onepage Checkout with online shipment methods with the scenario test
+* Fixed bugs
+    * Fixed an issue where a success message was absent when adding a product with options from Wishlist to Shopping Cart
+    * Fixed an issue where an exception was thrown when trying to sort Customer Groups by Tax Class
+    * Fixed an issue where the background color changed to the “on focus” state when clicking  the Admin Menu logo
+    * Fixed an issue with Mini Shopping Cart containing extra empty space
+* GitHub issues
+    * [#1173] (https://github.com/magento/magento2/pull/1173) -- Change to HttpClient4 from Java client; fix regex issues
+    * [#1185] (https://github.com/magento/magento2/pull/1185) -- Error message for duplicated phrases not allowed in Generator.php
+    * [#1199] (https://github.com/magento/magento2/pull/1199) -- Add Event for sales_order_state_change_before during Order->saveState()
+    * [#1201] (https://github.com/magento/magento2/pull/1101) -- Add customer_validate event
+    * [#1202] (https://github.com/magento/magento2/pull/1102) -- Email sending events
+
+0.74.0-beta6
+=============
+* Framework improvements
+    * Implemented a default exception handler for blocks
+    * Updated the root composer.json file
+    * Updated the setup tool to support different editions
+    * Added an ability to operate with Sales & Checkout APIs as guests and registered users
+    * Implemented the additional Sales & Checkout APIs for registered customers and guests
+    * Added unit tests to cover Sales & Checkout services code
+* Various
+    * Standardized the hierarchy of exceptions
+    * Added bundle product API integration to Catalog
+* Fixed bugs
+    * Fixed an issue where it was impossible to place an order using multiple address checkout
+    * Fixed an issue where DB timestamp columns with current_timestamp on update were not handled correctly
+    * Fixed an issue with FPT in partial invoices
+    * Fixed a performance issue in benchmark test
+    * Fixed the incorrect Exception class in the Magento_CurrencySymbol module
+    * Fixed an issue by letting MySQL determine a database table type instead of MyISAM
+    * Fixed an issue where test failures occurred when the database and the application were in different time zones
+    * Fixed an issue where \Magento\Framework\Phrase omitted placeholder values if no renderer was set
+
 0.74.0-beta5
 =============
 * Various

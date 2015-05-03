@@ -163,8 +163,8 @@ class CartRepositoryTest extends WebapiAbstract
             ->setValue($cart->getSubtotal())
             ->create();
 
-        $yesterdayDate = (new \DateTime())->sub(new \DateInterval('P1D'))->format('Y-m-d');
-        $tomorrowDate = (new \DateTime())->add(new \DateInterval('P1D'))->format('Y-m-d');
+        $yesterdayDate = (new \DateTime($cart->getCreatedAt()))->sub(new \DateInterval('P1D'))->format('Y-m-d');
+        $tomorrowDate = (new \DateTime($cart->getCreatedAt()))->add(new \DateInterval('P1D'))->format('Y-m-d');
         $minCreatedAtFilter = $this->filterBuilder->setField('created_at')
             ->setConditionType('gteq')
             ->setValue($yesterdayDate)

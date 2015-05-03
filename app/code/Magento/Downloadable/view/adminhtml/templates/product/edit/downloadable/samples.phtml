@@ -31,7 +31,7 @@ $block->getConfigJson();
     <div class="admin__field admin__field-wide">
         <div class="admin__field-control">
             <div class="admin__control-table-wrapper">
-                <table cellspacing="0" class="admin__control-table">
+                <table class="admin__control-table">
                     <thead>
                         <tr>
                             <th class="_required col-title"><span><?php echo __('Title') ?></span></th>
@@ -102,7 +102,7 @@ require([
                             '</td>'+
                             '<td class="col-sort"><input type="text" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text sort admin__control-text" /></td>'+
                             '<td class="col-actions">'+
-                                '<button type="button" class="action-remove"><span>Delete</span></button>'+
+                                '<button type="button" class="action-delete"><span>Delete</span></button>'+
                             '</td>'+
                         '</tr>';
         sampleItems = {
@@ -183,7 +183,7 @@ require([
                 }
             },
             bindRemoveButtons: function() {
-                var buttons = $$('tbody#sample_items_body .action-remove');
+                var buttons = $$('tbody#sample_items_body .action-delete');
                 for(var i=0;i<buttons.length;i++){
                     if(!$(buttons[i]).binded){
                         $(buttons[i]).binded = true;

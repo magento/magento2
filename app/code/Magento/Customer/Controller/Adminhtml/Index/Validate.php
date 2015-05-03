@@ -37,7 +37,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
             );
             $customerForm->setInvisibleIgnored(true);
 
-            $data = $customerForm->extractData($this->getRequest(), 'account');
+            $data = $customerForm->extractData($this->getRequest(), 'customer');
 
             if ($customer->getWebsiteId()) {
                 unset($data['website_id']);
@@ -74,8 +74,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
      */
     protected function _validateCustomerAddress($response)
     {
-        $customerData =  $this->getRequest()->getParam('account');
-        $addresses = isset($customerData['customer_address']) ? $customerData['customer_address'] : [];
+        $addresses = $this->getRequest()->getPost('address');
         if (!is_array($addresses)) {
             return;
         }
@@ -86,7 +85,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
 
             $addressForm = $this->_formFactory->create('customer_address', 'adminhtml_customer_address');
 
-            $requestScope = sprintf('account/customer_address/%s', $index);
+            $requestScope = sprintf('address/%s', $index);
             $formData = $addressForm->extractData($this->getRequest(), $requestScope);
 
             $errors = $addressForm->validateData($formData);

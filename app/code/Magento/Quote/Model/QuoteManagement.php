@@ -6,17 +6,18 @@
 
 namespace Magento\Quote\Model;
 
-use Magento\Quote\Model\Quote as QuoteEntity;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Event\ManagerInterface as EventManager;
-use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
-use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\StateException;
+use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
 use Magento\Quote\Model\Quote\Address\ToOrderAddress as ToOrderAddressConverter;
 use Magento\Quote\Model\Quote\Item\ToOrderItem as ToOrderItemConverter;
 use Magento\Quote\Model\Quote\Payment\ToOrderPayment as ToOrderPaymentConverter;
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\StateException;
+use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
+use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class QuoteManagement
@@ -96,6 +97,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $dataObjectHelper;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderFactory $orderFactory
@@ -110,6 +116,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerModelFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -126,7 +133,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         QuoteRepository $quoteRepository,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\CustomerFactory $customerModelFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        StoreManagerInterface $storeManager
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -142,16 +150,32 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->customerRepository = $customerRepository;
         $this->customerModelFactory = $customerModelFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->storeManager = $storeManager;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function createEmptyCart($storeId)
+    public function createEmptyCart()
     {
-        $quote = $this->userContext->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER
-            ? $this->createCustomerCart($storeId)
-            : $this->createAnonymousCart($storeId);
+        $storeId = $this->storeManager->getStore()->getStoreId();
+        $quote = $this->createAnonymousCart($storeId);
+
+        try {
+            $this->quoteRepository->save($quote);
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Cannot create quote'));
+        }
+        return $quote->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createEmptyCartForCustomer($customerId)
+    {
+        $storeId = $this->storeManager->getStore()->getStoreId();
+        $quote = $this->createCustomerCart($customerId, $storeId);
 
         try {
             $this->quoteRepository->save($quote);
@@ -213,16 +237,17 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * Creates a cart for the currently logged-in customer.
      *
+     * @param int $customerId
      * @param int $storeId
      * @return \Magento\Quote\Model\Quote Cart object.
      * @throws CouldNotSaveException The cart could not be created.
      */
-    protected function createCustomerCart($storeId)
+    protected function createCustomerCart($customerId, $storeId)
     {
-        $customer = $this->customerRepository->getById($this->userContext->getUserId());
+        $customer = $this->customerRepository->getById($customerId);
 
         try {
-            $this->quoteRepository->getActiveForCustomer($this->userContext->getUserId());
+            $this->quoteRepository->getActiveForCustomer($customerId);
             throw new CouldNotSaveException(__('Cannot create quote'));
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
 
