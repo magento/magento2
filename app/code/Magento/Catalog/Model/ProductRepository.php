@@ -373,7 +373,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         // Clear all existing product links and then set the ones we want
         $linkTypes = $this->linkTypeProvider->getLinkTypes();
-        foreach($linkTypes as $typeName => $typeValue) {
+        foreach (array_keys($linkTypes) as $typeName) {
             $this->linkInitializer->initializeLinks($product, [$typeName => []]);
         }
 

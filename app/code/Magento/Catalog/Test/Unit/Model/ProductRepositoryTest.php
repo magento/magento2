@@ -121,6 +121,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
