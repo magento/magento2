@@ -597,10 +597,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getId', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMock();
-        $productResource = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product')
-            ->setMethods(['__wakeup', 'loadAllAttributes', 'getSortedAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $productCollection = $this->getMockBuilder(
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection'
         )
