@@ -112,6 +112,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $contentValidatorMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $linkTypeProviderMock;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
@@ -194,6 +199,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $optionConverter = $this->objectManager->getObject('Magento\Catalog\Model\Product\Option\Converter');
+        $this->linkTypeProviderMock = $this->getMock('Magento\Catalog\Model\Product\LinkTypeProvider',
+            ['getLinkTypes'], [], '', false);
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
             [
@@ -212,6 +219,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'fileSystem' => $this->fileSystemMock,
                 'contentFactory' => $this->contentFactoryMock,
                 'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
+                'linkTypeProvider' => $this->linkTypeProviderMock
             ]
         );
     }
@@ -847,6 +855,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->initializedProductMock->setData("product_links", $existingLinks);
 
         if (!empty($newLinks)) {
+            $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
+            $this->linkTypeProviderMock->expects($this->once())
+                ->method('getLinkTypes')
+                ->willReturn($linkTypes);
+
             $this->initializedProductMock->setData("ignore_links_flag", false);
             $this->resourceModelMock
                 ->expects($this->any())->method('getProductsIdsBySkus')
@@ -858,6 +871,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             $inputLink->setLinkedProductSku($newLinks['linked_product_sku']);
             $inputLink->setLinkedProductType($newLinks['linked_product_type']);
             $inputLink->setPosition($newLinks['position']);
+
+            if (isset($newLinks['qty'])) {
+                $inputLink->setQty($newLinks['qty']);
+            }
 
             $this->productData['product_links'] = [$inputLink];
 
@@ -898,6 +915,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 $outputLink->setLinkedProductSku($link['linked_product_sku']);
                 $outputLink->setLinkedProductType($link['linked_product_type']);
                 $outputLink->setPosition($link['position']);
+                if (isset($link['qty'])) {
+                    $outputLink->setQty($link['qty']);
+                }
 
                 $outputLinks[] = $outputLink;
             }
@@ -913,11 +933,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         // Scenario 1
         // No existing, new links
         $data['scenario_1'] = [
-            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
+            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "associated", "linked_product_sku" =>
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0, "qty" => 1],
             'existingLinks' => [],
-            'expectedData' => [["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0]]
+            'expectedData' => [["product_sku" => "Simple Product 1", "link_type" => "associated", "linked_product_sku" =>
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0, "qty" => 1]]
             ];
 
         // Scenario 2
