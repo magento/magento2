@@ -60,8 +60,10 @@ class Converter
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function createArrayFromServiceObject(\Magento\Tax\Api\Data\TaxRateInterface $taxRate, $returnNumericLogic = false)
-    {
+    public function createArrayFromServiceObject(
+        \Magento\Tax\Api\Data\TaxRateInterface $taxRate,
+        $returnNumericLogic = false
+    ) {
         $taxRateFormData = [
             'tax_calculation_rate_id' => $taxRate->getId(),
             'tax_country_id' => $taxRate->getTaxCountryId(),

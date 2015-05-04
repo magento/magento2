@@ -17,12 +17,12 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Tax\Api\Data\TaxRateInterfaceFactory
      */
-    protected $_taxRateDataObjectFactory;
+    protected $taxRateDataObjectFactory;
 
     /**
      * @var \Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory
      */
-    protected $_taxRateTitleDataObjectFactory;
+    protected $taxRateTitleDataObjectFactory;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper
@@ -31,12 +31,16 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_taxRateDataObjectFactory = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxRateInterfaceFactory')
+        $this->taxRateDataObjectFactory = $this->getMockBuilder(
+            '\Magento\Tax\Api\Data\TaxRateInterfaceFactory'
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->_taxRateTitleDataObjectFactory = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory')
+        $this->taxRateTitleDataObjectFactory = $this->getMockBuilder(
+            '\Magento\Tax\Api\Data\TaxRateTitleInterfaceFactory'
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -45,8 +49,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter =  $this->objectManager->getObject(
             'Magento\Tax\Model\Calculation\Rate\Converter',
             [
-                'taxRateDataObjectFactory' =>  $this->_taxRateDataObjectFactory,
-                'taxRateTitleDataObjectFactory' => $this->_taxRateTitleDataObjectFactory,
+                'taxRateDataObjectFactory' =>  $this->taxRateDataObjectFactory,
+                'taxRateTitleDataObjectFactory' => $this->taxRateTitleDataObjectFactory,
             ]
         );
     }
@@ -110,7 +114,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->_taxRateDataObjectFactory->expects($this->once())->method('create')->willReturn($taxRate);
+        $this->taxRateDataObjectFactory->expects($this->once())->method('create')->willReturn($taxRate);
 
         $this->assertSame($taxRate, $this->converter->populateTaxRateData($dataArray));
         $this->assertEquals($taxRate->getTitles(), $rateTitles);
