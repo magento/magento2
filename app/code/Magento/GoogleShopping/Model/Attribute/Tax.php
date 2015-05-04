@@ -170,9 +170,9 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                 foreach ($regions as $region) {
                     $adjustments = $product->getPriceInfo()->getAdjustments();
                     if (array_key_exists('tax', $adjustments)) {
-                        $taxIncluded = true;
+                        $isTaxIncluded = true;
                     } else {
-                        $taxIncluded = false;
+                        $isTaxIncluded = false;
                     }
 
                     $quoteDetailsItemDataArray = [
@@ -184,7 +184,7 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                         ],
                         'unit_price' => $product->getPrice(),
                         'quantity' => 1,
-                        'tax_included' => $taxIncluded,
+                        'is_tax_included' => $isTaxIncluded,
                         'short_description' => $product->getName(),
                     ];
 

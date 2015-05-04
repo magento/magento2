@@ -20,7 +20,7 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
 
     const KEY_QUANTITY = 'quantity';
 
-    const KEY_TAX_INCLUDED = 'tax_included';
+    const KEY_IS_TAX_INCLUDED = 'is_tax_included';
 
     const KEY_SHORT_DESCRIPTION = 'short_description';
 

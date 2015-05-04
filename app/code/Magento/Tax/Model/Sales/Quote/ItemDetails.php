@@ -58,7 +58,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getIsTaxIncluded()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_TAX_INCLUDED);
+        return $this->getData(QuoteDetailsItemInterface::KEY_IS_TAX_INCLUDED);
     }
 
     /**
@@ -164,7 +164,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setIsTaxIncluded($isTaxIncluded)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_TAX_INCLUDED, $isTaxIncluded);
+        return $this->setData(QuoteDetailsItemInterface::KEY_IS_TAX_INCLUDED, $isTaxIncluded);
     }
 
     /**
