@@ -28,7 +28,8 @@ abstract class AbstractDependenciesCommand extends Command
      */
     protected function configure()
     {
-        $this->setDefinition([
+        $this->setDefinition(
+            [
                 new InputOption(
                     self::INPUT_KEY_DIRECTORY,
                     'd',
