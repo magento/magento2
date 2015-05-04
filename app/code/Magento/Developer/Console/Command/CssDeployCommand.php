@@ -146,7 +146,7 @@ class CssDeployCommand extends Command
                 new InputArgument(
                     self::TYPE_ARGUMENT,
                     InputArgument::REQUIRED,
-                    'Type of dynamic stylesheet language: [less|sass]'
+                    'Type of dynamic stylesheet language: [less]'
                 ),
                 new InputArgument(
                     self::FILE_ARGUMENT,
