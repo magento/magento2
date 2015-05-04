@@ -147,7 +147,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
                     $this->_quote->setStoreId($this->getStoreId());
                 }
 
-                if ($this->getCustomerId()) {
+                if ($this->getCustomerId() && $this->getCustomerId() != $this->_quote->getCustomerId()) {
                     $customer = $this->customerRepository->getById($this->getCustomerId());
                     $this->_quote->assignCustomer($customer);
                 }
