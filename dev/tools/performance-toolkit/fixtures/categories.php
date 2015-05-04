@@ -19,7 +19,10 @@ class CategoriesFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $categoriesNumber = \Magento\ToolkitFramework\Config::getInstance()->getValue('categories', 18);
+        $categoriesNumber = \Magento\ToolkitFramework\Config::getInstance()->getValue('categories', 0);
+        if (!$categoriesNumber) {
+            return;
+        }
         $maxNestingLevel = \Magento\ToolkitFramework\Config::getInstance()->getValue('categories_nesting_level', 3);
         $this->application->resetObjectManager();
 
