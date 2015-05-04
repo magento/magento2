@@ -20,6 +20,7 @@ use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\View\Asset\SourceFileGeneratorPool;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Locale\Validator;
 
 /**
  * Class CssDeployCommand - collects, processes and publishes source files like LESS or SASS
@@ -93,6 +94,11 @@ class CssDeployCommand extends Command
     private $filesystem;
 
     /**
+     * @var Validator
+     */
+    private $validator;
+
+    /**
      * Inject dependencies
      *
      * @param ObjectManagerInterface $objectManager
@@ -103,6 +109,7 @@ class CssDeployCommand extends Command
      * @param SourceFileGeneratorPool $sourceFileGeneratorPoll
      * @param ChainFactoryInterface $chainFactory
      * @param Filesystem $filesystem
+     * @param Validator $validator
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -112,7 +119,8 @@ class CssDeployCommand extends Command
         Source $assetSource,
         SourceFileGeneratorPool $sourceFileGeneratorPoll,
         ChainFactoryInterface $chainFactory,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        Validator $validator
     ) {
         $this->state = $state;
         $this->objectManager = $objectManager;
@@ -122,6 +130,7 @@ class CssDeployCommand extends Command
         $this->assetSource = $assetSource;
         $this->chainFactory = $chainFactory;
         $this->filesystem = $filesystem;
+        $this->validator = $validator;
 
         parent::__construct();
     }
@@ -180,9 +189,9 @@ class CssDeployCommand extends Command
     {
         $locale = $input->getOption(self::LOCALE_OPTION);
 
-        if (!preg_match('/^[a-z]{2}_[A-Z]{2}$/', $locale)) {
+        if (!$this->validator->isValid($locale)) {
             throw new \InvalidArgumentException(
-                $locale . ' argument has invalid value format'
+                $locale . ' argument has invalid value please run info:language:list for list of available locales'
             );
         }
 
