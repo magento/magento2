@@ -40,8 +40,8 @@ abstract class AbstractDependenciesCommand extends Command
                     self::INPUT_KEY_OUTPUT,
                     'o',
                     InputOption::VALUE_REQUIRED,
-                    'Path to report file',
-                    $this->getDefaultOutputPath()
+                    'Report filename',
+                    $this->getDefaultOutputFilename()
                 )
             ]
         );
@@ -57,11 +57,11 @@ abstract class AbstractDependenciesCommand extends Command
     abstract protected function buildReport($outputPath);
 
     /**
-     * Get path to the default output report file
+     * Get the default output report filename
      *
      * @return string
      */
-    abstract protected function getDefaultOutputPath();
+    abstract protected function getDefaultOutputFilename();
 
     /**
      * {@inheritdoc}
@@ -74,7 +74,7 @@ abstract class AbstractDependenciesCommand extends Command
             $output->writeln('<info>Report successfully processed.</info>');
         } catch (\Exception $e) {
             $output->writeln(
-                '<error>Please, check passed path. Dependencies report generator failed: ' .
+                '<error>Please check the path you provided. Dependencies report generator failed with error: ' .
                 $e->getMessage() . '</error>'
             );
         }

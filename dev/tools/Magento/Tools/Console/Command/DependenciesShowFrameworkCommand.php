@@ -24,11 +24,11 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
     }
 
     /**
-     * Return default output file for framework dependencies report
+     * Return default output filename for framework dependencies report
      *
      * @return string
      */
-    protected function getDefaultOutputPath()
+    protected function getDefaultOutputFilename()
     {
         return 'framework-dependencies.csv';
     }

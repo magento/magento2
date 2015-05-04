@@ -24,11 +24,11 @@ class DependenciesShowModulesCircularCommand extends AbstractDependenciesCommand
     }
 
     /**
-     * Return default output file for modules circular dependencies report
+     * Return default output filename for modules circular dependencies report
      *
      * @return string
      */
-    protected function getDefaultOutputPath()
+    protected function getDefaultOutputFilename()
     {
         return 'modules-circular-dependencies.csv';
     }

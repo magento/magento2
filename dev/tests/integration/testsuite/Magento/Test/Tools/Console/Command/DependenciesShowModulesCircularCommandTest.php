@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Test\Tool\Console\Command;
+namespace Magento\Test\Tools\Console\Command;
 
 use Magento\Tools\Console\Command\DependenciesShowModulesCircularCommand;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -38,7 +38,7 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit_Framework_Test
         $this->commandTester->execute(
             ['--directory' => __DIR__ . '/_files/root', '--output' => __DIR__ . '/_files/output/circular.csv']
         );
-        $this->assertEquals('Report successfully processed.' . PHP_EOL , $this->commandTester->getDisplay());
+        $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
         $this->assertFileEquals(
             __DIR__ . '/_files/expected/circular.csv',
             __DIR__ . '/_files/output/circular.csv'
@@ -49,7 +49,7 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit_Framework_Test
     {
         $this->commandTester->execute(['--directory' => '/invalid/path']);
         $this->assertContains(
-            'Please, check passed path. Dependencies report generator failed:',
+            'Please check the path you provided. Dependencies report generator failed with error:',
             $this->commandTester->getDisplay()
         );
     }
