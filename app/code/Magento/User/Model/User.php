@@ -52,11 +52,6 @@ class User extends AbstractModel implements StorageInterface
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
 
     /**
-     * Minimum length of admin password
-     */
-    const MIN_PASSWORD_LENGTH = 7;
-
-    /**
      * Model event prefix
      *
      * @var string
@@ -271,33 +266,16 @@ class User extends AbstractModel implements StorageInterface
      */
     protected function _getValidationRulesBeforeSave()
     {
-        $userNameNotEmpty = new \Zend_Validate_NotEmpty();
-        $userNameNotEmpty->setMessage(__('User Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $firstNameNotEmpty = new \Zend_Validate_NotEmpty();
-        $firstNameNotEmpty->setMessage(__('First Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $lastNameNotEmpty = new \Zend_Validate_NotEmpty();
-        $lastNameNotEmpty->setMessage(__('Last Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $emailValidity = new \Zend_Validate_EmailAddress();
-        $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
-
         /** @var $validator \Magento\Framework\Validator\Object */
         $validator = $this->_validatorObject->create();
-        $validator->addRule(
-            $userNameNotEmpty,
-            'username'
-        )->addRule(
-            $firstNameNotEmpty,
-            'firstname'
-        )->addRule(
-            $lastNameNotEmpty,
-            'lastname'
-        )->addRule(
-            $emailValidity,
-            'email'
-        );
+        UserValidationRules::addUserInfoRules($validator);
 
+        // Add validation rules for the password management fields
         if ($this->_willSavePassword()) {
-            $this->_addPasswordValidation($validator);
+            UserValidationRules::addPasswordRules($validator);
+            if ($this->hasPasswordConfirmation()) {
+                UserValidationRules::addPasswordConfirmationRule($validator, $this->getPasswordConfirmation());
+            }
         }
         return $validator;
     }
@@ -332,47 +310,6 @@ class User extends AbstractModel implements StorageInterface
             return true;
         }
         return $errors;
-    }
-
-    /**
-     * Add validation rules for the password management fields
-     *
-     * @param \Magento\Framework\Validator\Object $validator
-     * @return void
-     */
-    protected function _addPasswordValidation(\Magento\Framework\Validator\Object $validator)
-    {
-        $passwordNotEmpty = new \Zend_Validate_NotEmpty();
-        $passwordNotEmpty->setMessage(__('Password is required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $minPassLength = self::MIN_PASSWORD_LENGTH;
-        $passwordLength = new \Zend_Validate_StringLength(['min' => $minPassLength, 'encoding' => 'UTF-8']);
-        $passwordLength->setMessage(
-            __('Your password must be at least %1 characters.', $minPassLength),
-            \Zend_Validate_StringLength::TOO_SHORT
-        );
-        $passwordChars = new \Zend_Validate_Regex('/[a-z].*\d|\d.*[a-z]/iu');
-        $passwordChars->setMessage(
-            __('Your password must include both numeric and alphabetic characters.'),
-            \Zend_Validate_Regex::NOT_MATCH
-        );
-        $validator->addRule(
-            $passwordNotEmpty,
-            'password'
-        )->addRule(
-            $passwordLength,
-            'password'
-        )->addRule(
-            $passwordChars,
-            'password'
-        );
-        if ($this->hasPasswordConfirmation()) {
-            $passwordConfirmation = new \Zend_Validate_Identical($this->getPasswordConfirmation());
-            $passwordConfirmation->setMessage(
-                __('Your password confirmation must match your password.'),
-                \Zend_Validate_Identical::NOT_SAME
-            );
-            $validator->addRule($passwordConfirmation, 'password');
-        }
     }
 
     /**

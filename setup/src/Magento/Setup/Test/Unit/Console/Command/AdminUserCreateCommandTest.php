@@ -81,12 +81,12 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
     public function validateDataProvider()
     {
         return [
-            [[false, true, true, true, true], ['Missing option ' . AdminAccount::KEY_USER]],
+            [[null, 'Doe', 'admin', 'test@test.com', '123123q'], ['First Name is a required field.']],
             [
-                [true, false, false, true, true],
-                ['Missing option ' . AdminAccount::KEY_PASSWORD, 'Missing option ' . AdminAccount::KEY_EMAIL],
+                ['John', null, null, 'test@test.com', '123123q'],
+                ['User Name is a required field.', 'Last Name is a required field.'],
             ],
-            [[true, true, true, true, true], []],
+            [['John', 'Doe', 'admin', 'test@test.com', '123123q'], []],
         ];
     }
 }
