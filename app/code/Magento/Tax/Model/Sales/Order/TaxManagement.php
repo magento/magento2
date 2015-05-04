@@ -10,7 +10,8 @@ namespace Magento\Tax\Model\Sales\Order;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterfaceFactory as TaxDetailsDataObjectFactory;
 use Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface as AppliedTax;
-use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface as Item;
+use Magento\Tax\Model\Sales\Order\Tax;
+use Magento\Tax\Model\Sales\Order\Tax\Item;
 
 class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
 {
@@ -83,7 +84,7 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
      * Aggregate item applied taxes to get order applied taxes
      *
      * @param TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory
-     * @param Item[] $items
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $items
      * @return AppliedTax[]
      */
     protected function aggregateAppliedTaxes(TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory, $items)
@@ -96,25 +97,25 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
                 $code = $itemAppliedTax->getCode();
                 if (!isset($orderAppliedTaxesData[$code])) {
                     $orderAppliedTaxesData[$code] = [
-                        AppliedTax::KEY_CODE => $code,
-                        AppliedTax::KEY_TITLE => $itemAppliedTax->getTitle(),
-                        AppliedTax::KEY_PERCENT => $itemAppliedTax->getPercent(),
-                        AppliedTax::KEY_AMOUNT => $itemAppliedTax->getAmount(),
-                        AppliedTax::KEY_BASE_AMOUNT => $itemAppliedTax->getBaseAmount(),
+                        Tax::KEY_CODE => $code,
+                        Tax::KEY_TITLE => $itemAppliedTax->getTitle(),
+                        Tax::KEY_PERCENT => $itemAppliedTax->getPercent(),
+                        Tax::KEY_AMOUNT => $itemAppliedTax->getAmount(),
+                        Tax::KEY_BASE_AMOUNT => $itemAppliedTax->getBaseAmount(),
                     ];
                 } else {
-                    $orderAppliedTaxesData[$code][AppliedTax::KEY_AMOUNT] += $itemAppliedTax->getAmount();
-                    $orderAppliedTaxesData[$code][AppliedTax::KEY_BASE_AMOUNT] += $itemAppliedTax->getBaseAmount();
+                    $orderAppliedTaxesData[$code][Tax::KEY_AMOUNT] += $itemAppliedTax->getAmount();
+                    $orderAppliedTaxesData[$code][Tax::KEY_BASE_AMOUNT] += $itemAppliedTax->getBaseAmount();
                 }
             }
         }
         foreach ($orderAppliedTaxesData as $orderAppliedTaxData) {
             $orderAppliedTaxes[] = $appliedTaxDataObjectFactory->create()
-                ->setCode($orderAppliedTaxData[AppliedTax::KEY_CODE])
-                ->setTitle($orderAppliedTaxData[AppliedTax::KEY_TITLE])
-                ->setPercent($orderAppliedTaxData[AppliedTax::KEY_PERCENT])
-                ->setAmount($orderAppliedTaxData[AppliedTax::KEY_AMOUNT])
-                ->setBaseAmount($orderAppliedTaxData[AppliedTax::KEY_BASE_AMOUNT]);
+                ->setCode($orderAppliedTaxData[Tax::KEY_CODE])
+                ->setTitle($orderAppliedTaxData[Tax::KEY_TITLE])
+                ->setPercent($orderAppliedTaxData[Tax::KEY_PERCENT])
+                ->setAmount($orderAppliedTaxData[Tax::KEY_AMOUNT])
+                ->setBaseAmount($orderAppliedTaxData[Tax::KEY_BASE_AMOUNT]);
         }
         return $orderAppliedTaxes;
     }
