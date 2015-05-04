@@ -40,11 +40,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $testArrayWithWee=$testArray;
-        $testArrayWithWee[0][0]['prices']['weeePrice']= [
+        $testArrayWithWeee=$testArray;
+        $testArrayWithWeee[0][0]['prices']['weeePrice']= [
             'amount' => $testArray[0][0]['prices']['finalPrice']['amount'],
         ];
-        $testArrayWithWee[0][1]['prices']['weeePrice']= [
+        $testArrayWithWeee[0][1]['prices']['weeePrice']= [
             'amount' => $testArray[0][1]['prices']['finalPrice']['amount'],
         ];
 
@@ -62,7 +62,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $observerObject->expects($this->once())
             ->method('setData')
-            ->with('config', $testArrayWithWee);
+            ->with('config', $testArrayWithWeee);
 
          $objectManager = new ObjectManager($this);
          $weeeObserverObject = $objectManager->getObject(

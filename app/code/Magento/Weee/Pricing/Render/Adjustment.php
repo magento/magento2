@@ -66,7 +66,7 @@ class Adjustment extends AbstractAdjustment
      */
     public function getRawFinalAmount()
     {
-        return   $this->amountRender->getAmount()->getValue();
+        return $this->finalAmount;
     }
 
     /**
