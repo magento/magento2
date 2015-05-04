@@ -162,10 +162,10 @@ class Application
     {
         if (null === $this->_db) {
             if ($this->isInstalled()) {
-                $reader = new Reader($this->dirList);
+                $configPool = new \Magento\Framework\Config\File\ConfigFilePool();
+                $reader = new Reader($this->dirList, $configPool);
                 $deploymentConfig = new DeploymentConfig($reader, []);
-                $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
-                $dbInfo = $dbConfig['connection']['default'];
+                $dbInfo = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT);
                 $host = $dbInfo['host'];
                 $user = $dbInfo['username'];
                 $password = $dbInfo['password'];

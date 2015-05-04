@@ -63,7 +63,7 @@ class ConfigGenerator
      */
     public function createInstallConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         if ($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE) === null) {
             $configData->set(ConfigOptionsList::CONFIG_PATH_INSTALL_DATE, date('r'));
@@ -80,7 +80,7 @@ class ConfigGenerator
     {
         $currentKey = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
 
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
         if (isset($data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY])) {
             if ($currentKey !== null) {
                 $key = $currentKey . "\n" . $data[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY];
@@ -106,7 +106,7 @@ class ConfigGenerator
      */
     public function createSessionConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         if (isset($data[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
             $configData->set(
@@ -126,7 +126,7 @@ class ConfigGenerator
      */
     public function createDefinitionsConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         if (!empty($data[ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT])) {
             $configData->set(
@@ -146,7 +146,7 @@ class ConfigGenerator
      */
     public function createDbConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         $optional = [
             ConfigOptionsList::INPUT_KEY_DB_HOST,
@@ -188,7 +188,7 @@ class ConfigGenerator
      */
     public function createResourceConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         if ($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_RESOURCE_DEFAULT_SETUP) === null) {
             $configData->set(ConfigOptionsList::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');

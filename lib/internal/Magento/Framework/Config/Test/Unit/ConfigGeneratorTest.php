@@ -29,21 +29,21 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $returnValue = $this->configGeneratorObject->createInstallConfig([]);
         $this->assertInstanceOf('Magento\Framework\Config\Data\ConfigData', $returnValue);
-        $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
     }
 
     public function testCreateCryptConfigWithInput()
     {
         $testData = [ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY => 'some-test_key'];
         $returnValue = $this->configGeneratorObject->createCryptConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         $this->assertEquals(['crypt' => ['key' => 'some-test_key']], $returnValue->getData());
     }
 
     public function testCreateCryptConfigWithoutInput()
     {
         $returnValue = $this->configGeneratorObject->createCryptConfig([]);
-        $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
     }
 
@@ -51,19 +51,19 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $testData = [ConfigOptionsList::INPUT_KEY_SESSION_SAVE => 'files'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         $this->assertEquals(['session' => ['save' => ConfigOptionsList::SESSION_SAVE_FILES]], $returnValue->getData());
 
         $testData = [ConfigOptionsList::INPUT_KEY_SESSION_SAVE => 'db'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         $this->assertEquals(['session' => ['save' => ConfigOptionsList::SESSION_SAVE_DB]], $returnValue->getData());
     }
 
     public function testCreateSessionConfigWithoutInput()
     {
         $returnValue = $this->configGeneratorObject->createSessionConfig([]);
-        $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         $this->assertEquals([], $returnValue->getData());
     }
 
@@ -71,7 +71,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $testData = [\Magento\Framework\Config\ConfigOptionsList::INPUT_KEY_DEFINITION_FORMAT => 'test-format'];
         $returnValue = $this->configGeneratorObject->createDefinitionsConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         $this->assertEquals(['definition' => ['format' => 'test-format']], $returnValue->getData());
     }
 
@@ -84,7 +84,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
             ConfigOptionsList::INPUT_KEY_DB_PREFIX => 'testSomePrefix',
         ];
         $returnValue = $this->configGeneratorObject->createDbConfig($testData);
-        $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         $dbData = $returnValue->getData();
         $dbData = $dbData['db'];
         $this->assertArrayHasKey('table_prefix', $dbData);
@@ -104,7 +104,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testCreateResourceConfig()
     {
         $returnValue = $this->configGeneratorObject->createResourceConfig();
-        $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         $this->assertEquals(['resource' => ['default_setup' => ['connection' => 'default']]], $returnValue->getData());
     }
 }

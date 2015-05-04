@@ -25,6 +25,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
     const CONFIG_PATH_RESOURCE_DEFAULT_SETUP = 'resource/default_setup/connection';
     const CONFIG_PATH_DB_CONNECTION_DEFAULT = 'db/connection/default/';
+    const CONFIG_PATH_DB_CONNECTIONS= 'db/connection/';
     const CONFIG_PATH_DB_PREFIX = 'db/table_prefix';
     /**#@-*/
 

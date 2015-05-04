@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\DeploymentConfig;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Deployment configuration reader
@@ -14,69 +15,80 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Reader
 {
     /**
-     * Default configuration file name
-     */
-    const DEFAULT_FILE = 'config.php';
-
-    /**
-     * Directory list object
-     *
      * @var DirectoryList
      */
     private $dirList;
 
     /**
-     * Custom file name
-     *
-     * @var string
+     * @var ConfigFilePool
      */
-    private $file;
+    private $configFilePool;
+
+    /**
+     * Configuration file names
+     *
+     * @var array
+     */
+    private $files;
 
     /**
      * Constructor
      *
      * @param DirectoryList $dirList
+     * @param ConfigFilePool $configFilePool
      * @param null|string $file
      * @throws \InvalidArgumentException
      */
-    public function __construct(DirectoryList $dirList, $file = null)
+    public function __construct(DirectoryList $dirList, ConfigFilePool $configFilePool, $file = null)
     {
         $this->dirList = $dirList;
+        $this->configFilePool = $configFilePool;
         if (null !== $file) {
             if (!preg_match('/^[a-z\d\.\-]+\.php$/i', $file)) {
                 throw new \InvalidArgumentException("Invalid file name: {$file}");
             }
-            $this->file = $file;
+            $this->files = [$file];
         } else {
-            $this->file = self::DEFAULT_FILE;
+            $this->files = $this->configFilePool->getPaths();
         }
     }
 
     /**
      * Gets the file name
      *
-     * @return string
+     * @return array
      */
-    public function getFile()
+    public function getFiles()
     {
-        return $this->file;
+        return $this->files;
     }
 
     /**
      * Loads the configuration file
      *
      * @param string $configFile
+     * @throws \Exception
      * @return array
      */
     public function load($configFile = null)
     {
+        $path = $this->dirList->getPath(DirectoryList::CONFIG);
         if ($configFile) {
-            $file = $this->dirList->getPath(DirectoryList::CONFIG) . '/' . $configFile;
+            $result = @include $path . '/' . $this->configFilePool->getPath($configFile);
         } else {
-            $file = $this->dirList->getPath(DirectoryList::CONFIG) . '/' . $this->file;
-        }
+            $configFiles = $this->configFilePool->getPaths();
+            $result = [];
+            foreach ($configFiles as $fileKey => $config) {
+                $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
+                $fileData = @include $configFile;
 
-        $result = @include $file;
+                if (empty(array_intersect_key($result, $fileData))) {
+                    $result = array_replace_recursive($result, $fileData ?: []);
+                } else {
+                    throw new \Exception('Duplicate keys are present');
+                }
+            }
+        }
         return $result ?: [];
     }
 }

@@ -1028,9 +1028,7 @@ class Installer
     {
         // stops cleanup if app/etc/config.php does not exist
         if ($this->deploymentConfig->isAvailable()) {
-            $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
-            $config = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
-
+            $config = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT);
             if ($config) {
                 try {
                     $connection = $this->connectionFactory->create($config);
@@ -1093,8 +1091,7 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
-        $connectionConfig = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
+        $connectionConfig = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT);
         $this->checkDatabaseConnection(
             $connectionConfig[ConfigOptionsList::KEY_NAME],
             $connectionConfig[ConfigOptionsList::KEY_HOST],

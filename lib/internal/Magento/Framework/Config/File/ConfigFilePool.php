@@ -6,14 +6,13 @@
 
 namespace Magento\Framework\Config\File;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * Stores file key to file name config
  */
 class ConfigFilePool
 {
     const APP_CONFIG = 'app_config';
+    const APP_ENV = 'app_env';
 
     /**
      * Default application config
@@ -21,7 +20,8 @@ class ConfigFilePool
      * @var array
      */
     private $applicationConfigFiles = [
-        self::APP_CONFIG => 'config.php'
+        self::APP_CONFIG => 'config.php',
+        self::APP_ENV => 'env.php',
     ];
 
     /**
