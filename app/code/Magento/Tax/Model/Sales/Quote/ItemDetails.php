@@ -56,7 +56,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
     /**
      * {@inheritdoc}
      */
-    public function getTaxIncluded()
+    public function getIsTaxIncluded()
     {
         return $this->getData(QuoteDetailsItemInterface::KEY_TAX_INCLUDED);
     }

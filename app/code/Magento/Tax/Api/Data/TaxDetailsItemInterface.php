@@ -221,7 +221,7 @@ interface TaxDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Return associated item code if this item is associated with another item, null otherwise
      *
-     * @return mixed|null
+     * @return int|null
      */
     public function getAssociatedItemCode();
 

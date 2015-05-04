@@ -114,7 +114,7 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getTaxIncluded();
+    public function getIsTaxIncluded();
 
     /**
      * Set whether the tax is included in the unit price and row total
@@ -172,7 +172,7 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get associated item code if this item is associated with another item, null otherwise
      *
-     * @return mixed|null
+     * @return int|null
      */
     public function getAssociatedItemCode();
 

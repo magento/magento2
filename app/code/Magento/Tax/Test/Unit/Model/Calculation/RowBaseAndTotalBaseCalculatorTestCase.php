@@ -168,7 +168,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
                 ],
                 [
                     self::ONCE => true,
-                    self::MOCK_METHOD_NAME => 'getTaxIncluded',
+                    self::MOCK_METHOD_NAME => 'getIsTaxIncluded',
                     self::MOCK_VALUE => $taxIncluded
                 ]
             ]
