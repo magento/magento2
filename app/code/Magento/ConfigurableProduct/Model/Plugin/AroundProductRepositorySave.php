@@ -165,6 +165,12 @@ class AroundProductRepositorySave
     protected function validateProductLinks(array $attributeCodes, array $linkIds)
     {
         $valueMap = [];
+        if (empty($attributeCodes) && !empty($linkIds)) {
+            throw new InputException(
+                __('The configurable product does not have any variation attribute.')
+            );
+        }
+
         foreach ($linkIds as $productId) {
             $variation = $this->productFactory->create()->load($productId);
             if (!$variation->getId()) {

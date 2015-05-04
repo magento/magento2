@@ -413,6 +413,31 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->plugin->aroundSave($this->productRepositoryMock, $this->closureMock, $this->productMock);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage The configurable product does not have any variation attribute.
+     */
+    public function testAroundSaveWithLinksWithoutVariationAttributes()
+    {
+        $links = [4, 5];
+
+        $this->setupConfigurableProductAttributes([]);
+
+        $this->productMock->expects($this->once())->method('getTypeId')
+            ->willReturn(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE);
+        $this->productMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productExtensionMock);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getConfigurableProductOptions')
+            ->willReturn(null);
+        $this->productExtensionMock->expects($this->once())
+            ->method('getConfigurableProductLinks')
+            ->willReturn($links);
+
+        $this->plugin->aroundSave($this->productRepositoryMock, $this->closureMock, $this->productMock);
+    }
+
     public function testAroundSaveWithOptions()
     {
         $productSku = "configurable_sku";

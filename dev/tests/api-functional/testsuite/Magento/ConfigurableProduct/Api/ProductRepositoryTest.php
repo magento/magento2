@@ -353,6 +353,38 @@ class ProductRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     */
+    public function testUpdateConfigurableProductLinksWithWithoutVariationAttributes()
+    {
+        $productId1 = 10;
+        $productId2 = 20;
+
+        $response = $this->createConfigurableProduct();
+
+        /** delete all variation attribute */
+        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'] = [];
+        $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_links'] = [
+            $productId1, $productId2
+        ];
+
+        $expectedMessage = 'The configurable product does not have any variation attribute.';
+        try {
+            $this->saveProduct($response);
+            $this->fail("Expected exception");
+        } catch (\SoapFault $e) {
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage(),
+                "SoapFault does not contain expected message."
+            );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
+    }
+
+    /**
      * Get product
      *
      * @param string $productSku
