@@ -4,7 +4,7 @@
  */
 define([
     'underscore'
-], function(_) {
+], function (_) {
     'use strict';
 
     function addHandler(events, ns, callback, name) {
@@ -20,19 +20,19 @@ define([
         return name ? events[name] : events;
     }
 
-    function keepHandler(ns, handler){
-        if(!ns){
+    function keepHandler(ns, handler) {
+        if (!ns) {
             return false;
         }
 
         return handler.ns !== ns;
     }
 
-    function trigger(handlers, args){
-        var bubble  = true,
+    function trigger(handlers, args) {
+        var bubble = true,
             callback;
 
-        handlers.forEach(function(handler){
+        handlers.forEach(function (handler) {
             callback = handler.callback;
 
             if (callback.apply(null, args) === false) {
@@ -46,10 +46,9 @@ define([
     return {
         /**
          * Calls callback when name event is triggered.
-         * @param  {String}     events
-         * @param  {Function}   callback
-         * @param  {Function}   ns
-         * @return {Object}     reference to this
+         * @param  {String}   events
+         * @param  {Function} callback
+         * @return {Object} reference to this
          */
         on: function (events, callback, ns) {
             var storage = getEvents(this),
@@ -69,20 +68,20 @@ define([
         },
 
         /**
-         * Removed callback from listening to target events
+         * Removed callback from listening to target event
          * @param  {String} ns
          * @return {Object} reference to this
          */
         off: function (ns) {
             var storage = getEvents(this),
-                filter  = keepHandler.bind(null, ns);
+                filter = keepHandler.bind(null, ns);
 
             _.each(storage, function (handlers, name) {
                 handlers = handlers.filter(filter);
 
                 handlers.length ?
-                    (storage[name] = handlers) :
-                    (delete storage[name]);
+                    storage[name] = handlers :
+                    delete storage[name];
             });
 
             return this;
@@ -95,9 +94,13 @@ define([
          */
         trigger: function (name) {
             var handlers = getEvents(this, name),
-                args     = _.toArray(arguments).slice(1);
+                args = _.toArray(arguments).slice(1);
 
-            return _.isUndefined(handlers) || trigger(handlers, args);
+            if (_.isUndefined(handlers)) {
+                return true;
+            }
+
+            return trigger(handlers, args);
         }
     };
 });

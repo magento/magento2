@@ -24,9 +24,8 @@ interface ElementInterface extends UiComponentInterface
 
     /**
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsReadonly();
+    public function isReadonly();
 
     /**
      * @return string
