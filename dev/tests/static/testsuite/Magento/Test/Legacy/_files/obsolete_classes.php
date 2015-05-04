@@ -3336,4 +3336,70 @@ return [
     ['Magento\Framework\App\Filesystem\DirectoryList\AbstractShell'],
     ['Magento\Tools\Layout\Reference'],
     ['Magento\Tools\Layout\Formatter', 'Magento\Developer\Model\Tools\Formatter'],
+    ['Magento\Tools\Dependency\Circular', 'Magento\Setup\Module\Dependency\Circular'],
+    ['Magento\Tools\Dependency\Parser\Code', 'Magento\Setup\Module\Dependency\Parser\Code'],
+    ['Magento\Tools\Dependency\Parser\Composer\Json', 'Magento\Setup\Module\Dependency\Composer\Json'],
+    ['Magento\Tools\Dependency\Parser\Config\Xml', 'Magento\Setup\Module\Dependency\Config\Xml'],
+    ['Magento\Tools\Dependency\ParserInterface', 'Magento\Setup\Module\Dependency\ParserInterface'],
+    [
+        'Magento\Tools\Dependency\Report\Builder\AbstractBuilder',
+        'Magento\Setup\Module\Dependency\Report\Builder\AbstractBuilder'
+    ],
+    ['Magento\Tools\Dependency\Report\BuilderInterface', 'Magento\Setup\Module\Dependency\Report\BuilderInterface'],
+    ['Magento\Tools\Dependency\Report\Circular\Builder', 'Magento\Setup\Module\Dependency\Report\Circular\Builder'],
+    [
+        'Magento\Tools\Dependency\Report\Circular\Data\Chain',
+        'Magento\Setup\Module\Dependency\Report\Circular\Data\Chain'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Circular\Data\Config',
+        'Magento\Setup\Module\Dependency\Report\Circular\Data\Config'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Circular\Data\Module',
+        'Magento\Setup\Module\Dependency\Report\Circular\Data\Module'
+    ],
+    ['Magento\Tools\Dependency\Report\Circular\Writer', 'Magento\Setup\Module\Dependency\Report\Circular\Writer'],
+    [
+        'Magento\Tools\Dependency\Report\Data\Config\AbstractConfig',
+        'Magento\Setup\Module\Dependency\Report\Data\Config\AbstractConfig'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Data\ConfigInterface',
+        'Magento\Setup\Module\Dependency\Report\Data\ConfigInterface'
+    ],
+    ['Magento\Tools\Dependency\Report\Dependency\Builder', 'Magento\Setup\Module\Dependency\Report\Dependency\Builder'],
+    [
+        'Magento\Tools\Dependency\Report\Dependency\Data\Config',
+        'Magento\Setup\Module\Dependency\Report\Dependency\Data\Config'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Dependency\Data\Dependency',
+        'Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Dependency\Data\Module',
+        'Magento\Setup\Module\Dependency\Report\Dependency\Data\Module'
+    ],
+    ['Magento\Tools\Dependency\Report\Dependency\Writer', 'Magento\Setup\Module\Dependency\Report\Dependency\Writer'],
+    ['Magento\Tools\Dependency\Report\Framework\Builder', 'Magento\Setup\Module\Dependency\Report\Framework\Builder'],
+    [
+        'Magento\Tools\Dependency\Report\Framework\Data\Config',
+        'Magento\Setup\Module\Dependency\Report\Framework\Data\Config'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Framework\Data\Dependency',
+        'Magento\Setup\Module\Dependency\Report\Framework\Data\Dependency'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Framework\Data\Module',
+        'Magento\Setup\Module\Dependency\Report\Framework\Data\Module'
+    ],
+    ['Magento\Tools\Dependency\Report\Framework\Writer', 'Magento\Setup\Module\Dependency\Report\Framework\Writer'],
+    [
+        'Magento\Tools\Dependency\Report\Writer\Csv\AbstractWriter',
+        'Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter'
+    ],
+    ['Magento\Tools\Dependency\Report\WriterInterface', 'Magento\Setup\Module\Dependency\Report\WriterInterface'],
+    ['Magento\Tools\Dependency\ServiceLocator', 'Magento\Setup\Module\Dependency\ServiceLocator'],
 ];
