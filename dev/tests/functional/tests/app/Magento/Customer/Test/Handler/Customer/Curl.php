@@ -86,7 +86,6 @@ class Curl extends AbstractCurl implements CustomerInterface
         $data = $customer->getData();
         $data['group_id'] = $this->getCustomerGroup($customer);
         $address = [];
-        $result = [];
         $url = $_ENV['app_frontend_url'] . 'customer/account/createpost/?nocookie=true';
 
         if ($customer->hasData('address')) {
