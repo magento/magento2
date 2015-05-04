@@ -334,6 +334,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductLinks()
     {
+        $this->markTestIncomplete('Skipped due to https://jira.corp.x.com/browse/MAGETWO-36926');
         $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
         $this->linkTypeProviderMock->expects($this->once())
             ->method('getLinkTypes')
