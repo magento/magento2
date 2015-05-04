@@ -86,6 +86,30 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
                 ['John', null, null, 'test@test.com', '123123q'],
                 ['User Name is a required field.', 'Last Name is a required field.'],
             ],
+            [['John', 'Doe', 'admin', null, '123123q'], ['Please enter a valid email.']],
+            [
+                ['John', 'Doe', 'admin', 'test', '123123q'],
+                ["'test' is not a valid email address in the basic format local-part@hostname"]
+            ],
+            [
+                ['John', 'Doe', 'admin', 'test@test.com', ''],
+                [
+                    'Password is required field.',
+                    'Your password must be at least 7 characters.',
+                    'Your password must include both numeric and alphabetic characters.'
+                ]
+            ],
+            [
+                ['John', 'Doe', 'admin', 'test@test.com', '123123'],
+                [
+                    'Your password must be at least 7 characters.',
+                    'Your password must include both numeric and alphabetic characters.'
+                ]
+            ],
+            [
+                ['John', 'Doe', 'admin', 'test@test.com', '1231231'],
+                ['Your password must include both numeric and alphabetic characters.']
+            ],
             [['John', 'Doe', 'admin', 'test@test.com', '123123q'], []],
         ];
     }

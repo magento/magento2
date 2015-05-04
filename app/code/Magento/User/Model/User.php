@@ -289,27 +289,16 @@ class User extends AbstractModel implements StorageInterface
      */
     public function validate()
     {
-        $errors = [];
-        if (!\Zend_Validate::is(trim($this->getUsername()), 'NotEmpty')) {
-            $errors[] = __('The user name cannot be empty.');
+        /** @var $validator \Magento\Framework\Validator\Object */
+        $validator = $this->_validatorObject->create();
+        UserValidationRules::addUserInfoRules($validator);
+
+        if (!$validator->isValid($this)) {
+            return $validator->getMessages();
         }
 
-        if (!\Zend_Validate::is(trim($this->getFirstname()), 'NotEmpty')) {
-            $errors[] = __('The first name cannot be empty.');
-        }
+        return true;
 
-        if (!\Zend_Validate::is(trim($this->getLastname()), 'NotEmpty')) {
-            $errors[] = __('The last name cannot be empty.');
-        }
-
-        if (!\Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
-            $errors[] = __('Please correct this email address: "%1".', $this->getEmail());
-        }
-
-        if (empty($errors)) {
-            return true;
-        }
-        return $errors;
     }
 
     /**

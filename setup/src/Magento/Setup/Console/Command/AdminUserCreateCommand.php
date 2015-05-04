@@ -67,7 +67,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     {
         return [
             new InputOption(AdminAccount::KEY_USER, null, InputOption::VALUE_REQUIRED, 'Admin user'),
-            new InputOption(AdminAccount::KEY_PASSWORD, null, InputOption::VALUE_REQUIRED, 'Admin password'),
+            new InputOption(AdminAccount::KEY_PASSWORD, null, InputOption::VALUE_REQUIRED, 'Admin password', ''),
             new InputOption(AdminAccount::KEY_EMAIL, null, InputOption::VALUE_REQUIRED, 'Admin email'),
             new InputOption(AdminAccount::KEY_FIRST_NAME, null, InputOption::VALUE_REQUIRED, 'Admin first name'),
             new InputOption(AdminAccount::KEY_LAST_NAME, null, InputOption::VALUE_REQUIRED, 'Admin last name'),
