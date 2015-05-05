@@ -13,13 +13,15 @@ define(
         var paymentMethod = ko.observable(null);
         var paymentData = ko.observable(null);
         var quoteData = window.checkoutConfig.quoteData;
-        var currencySymbol = window.checkoutConfig.currencySymbol;
         var baseCurrencySymbol = window.checkoutConfig.baseCurrencySymbol;
+        var priceFormat = window.checkoutConfig.priceFormat;
         var selectedShippingMethod = ko.observable(window.checkoutConfig.selectedShippingMethod);
         var storeCode = window.checkoutConfig.storeCode;
         var totals = ko.observable({});
         var checkoutMethod = ko.observable(null);
         var shippingCustomOptions = ko.observable(null);
+        var formattedShippingAddress = ko.observable(null);
+        var formattedBillingAddress = ko.observable(null);
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -27,8 +29,8 @@ define(
             isVirtual: function() {
                 return !!Number(quoteData.is_virtual);
             },
-            getCurrencySymbol: function() {
-                return currencySymbol;
+            getPriceFormat: function() {
+                return priceFormat;
             },
             getBaseCurrencySymbol: function() {
                 return baseCurrencySymbol;
@@ -53,6 +55,18 @@ define(
             },
             getShippingAddress: function() {
                 return shippingAddress;
+            },
+            setFormattedBillingAddress: function (address) {
+                formattedBillingAddress(address);
+            },
+            getFormattedBillingAddress: function() {
+                return formattedBillingAddress;
+            },
+            setFormattedShippingAddress: function (address) {
+                formattedShippingAddress(address);
+            },
+            getFormattedShippingAddress: function() {
+                return formattedShippingAddress;
             },
             setPaymentMethod: function(paymentMethodCode) {
                 paymentMethod(paymentMethodCode);

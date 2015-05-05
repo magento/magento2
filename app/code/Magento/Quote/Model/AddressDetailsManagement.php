@@ -82,10 +82,14 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         $checkoutMethod = null
     ) {
         $this->billingAddressManagement->assign($cartId, $billingAddress);
+
+        /** @var \Magento\Quote\Api\Data\AddressDetailsInterface  $addressDetails */
         $addressDetails = $this->addressDetailsFactory->create();
         if ($shippingAddress) {
             $this->shippingAddressManagement->assign($cartId, $shippingAddress);
-
+            $addressDetails->setFormattedShippingAddress(
+                $this->shippingAddressManagement->get($cartId)->format('html')
+            );
             $addressDetails->setShippingMethods($this->shippingMethodManagement->getList($cartId));
         }
         $addressDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
@@ -98,6 +102,10 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
                     ->setCheckoutMethod($checkoutMethod)
             );
         }
+
+        $addressDetails->setFormattedBillingAddress(
+            $this->billingAddressManagement->get($cartId)->format('html')
+        );
         return $addressDetails;
     }
 }

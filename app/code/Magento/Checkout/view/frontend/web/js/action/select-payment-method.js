@@ -39,7 +39,7 @@ define(
             if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()});
             } else {
-                serviceUrl = urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()});
+                serviceUrl = urlBuilder.createUrl('/carts/mine/collect-totals', {});
             }
             if (quote.isVirtual()) {
                 return storage.put(

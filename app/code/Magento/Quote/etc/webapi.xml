@@ -501,6 +501,15 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
+    <route url="/V1/carts/mine/addresses" method="POST">
+        <service class="Magento\Quote\Api\AddressDetailsManagementInterface" method="saveAddresses"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
 
     <!-- Managing Cart Order -->
     <route url="/V1/carts/:cartId/order" method="PUT">
@@ -542,16 +551,13 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
-    <route url="/V1/carts/:cartId/addresses" method="POST">
-        <service class="Magento\Quote\Api\AddressDetailsManagementInterface" method="saveAddresses"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
-    <route url="/V1/carts/:cartId/collect-totals" method="PUT">
+    <route url="/V1/carts/mine/collect-totals" method="PUT">
         <service class="Magento\Quote\Api\CartTotalManagementInterface" method="collectTotals"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="self" />
         </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
     </route>
 </routes>

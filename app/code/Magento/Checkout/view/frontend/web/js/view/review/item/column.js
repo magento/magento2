@@ -38,7 +38,7 @@ define(
             },
             getFormattedPrice: function (price) {
                 //todo add format data further
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             }
         });
     }

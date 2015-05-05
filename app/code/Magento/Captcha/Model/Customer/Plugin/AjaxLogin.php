@@ -29,7 +29,7 @@ class AjaxLogin
     /**
      * @param CaptchaHelper $helper
      * @param SessionManagerInterface $sessionManager
-     * @param JsonFactory $resultJsonFactorys
+     * @param JsonFactory $resultJsonFactory
      */
     public function __construct(
         CaptchaHelper $helper,

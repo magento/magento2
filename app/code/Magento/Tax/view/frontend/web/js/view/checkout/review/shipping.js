@@ -26,7 +26,7 @@ define(
             quoteIsVirtual: quote.isVirtual(),
             selectedShippingMethod: quote.getShippingMethod(),
             getTitle: function() {
-                return "Shipping & Handling" + shippingService.getTitleByCode(this.selectedShippingMethod());
+                return "Shipping & Handling" + "(" + shippingService.getTitleByCode(this.selectedShippingMethod())+ ")";
             },
             getExcludingLabel: function() {
                 return "Shipping Excl. Tax" + shippingService.getTitleByCode(this.selectedShippingMethod());
@@ -49,21 +49,21 @@ define(
                 if (this.totals()) {
                     price =  this.totals().shipping_amount;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             getIncludingValue: function() {
                 var price = 0;
                 if (this.totals()) {
                     price =  this.totals().shipping_incl_tax;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             getExcludingValue: function() {
                 var price = 0;
                 if (this.totals()) {
                     price =  this.totals().shipping_amount;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             }
         });
     }
