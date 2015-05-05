@@ -17,6 +17,7 @@ class Builder extends View\Page\Builder
      */
     protected function afterGenerateBlock()
     {
+        $this->layout->initMessages();
         return $this;
     }
 }
