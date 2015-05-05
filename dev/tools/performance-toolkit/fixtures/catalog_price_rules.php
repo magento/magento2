@@ -19,7 +19,10 @@ class CatalogPriceRulesFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $catalogPriceRulesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('catalog_price_rules', 3);
+        $catalogPriceRulesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('catalog_price_rules', 0);
+        if (!$catalogPriceRulesCount) {
+            return;
+        }
         $this->application->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */
