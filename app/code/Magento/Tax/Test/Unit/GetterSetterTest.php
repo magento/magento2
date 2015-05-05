@@ -20,8 +20,10 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
         foreach ($variables as $variableName => $variableValue) {
             $setterName = 'set' . $variableName;
 
-            $this->assertTrue(method_exists($classObject, $setterName),
-                "Method " . $setterName . " does not exist in " . $className);
+            $this->assertTrue(
+                method_exists($classObject, $setterName),
+                "Method " . $setterName . " does not exist in " . $className
+            );
 
             if (is_array($variableValue)) {
                 if (strpos($variableValue[0], 'Magento') !== false) {
@@ -34,25 +36,34 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
                 $variableValue = $obj;
                 $variables[$variableName] = $variableValue;
             }
-            $this->assertNotFalse(call_user_func([$classObject, $setterName], $variableValue),
-                "Calling method " . $setterName . " failed in " . $className);
+            $this->assertNotFalse(call_user_func(
+                [$classObject, $setterName], $variableValue),
+                "Calling method " . $setterName . " failed in " . $className
+            );
         }
 
         foreach ($variables as $variableName => $variableValue) {
             $getterName = 'get' . $variableName;
 
-            $this->assertTrue(method_exists($classObject, $getterName),
-                "Method " . $getterName . " does not exist in " . $className);
+            $this->assertTrue(
+                method_exists($classObject, $getterName),
+                "Method " . $getterName . " does not exist in " . $className
+            );
             $result = call_user_func([$classObject, $getterName]);
-            $this->assertNotFalse($result,
-                "Calling method " . $getterName . " failed in " . $className);
-            $this->assertSame($result, $variableValue,
-                "Value from " . $getterName . "did not match in " . $className);
+            $this->assertNotFalse(
+                $result,
+                "Calling method " . $getterName . " failed in " . $className
+            );
+            $this->assertSame(
+                $result, $variableValue,
+                "Value from " . $getterName . "did not match in " . $className
+            );
         }
     }
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function dataProviderGettersSetters()
     {
