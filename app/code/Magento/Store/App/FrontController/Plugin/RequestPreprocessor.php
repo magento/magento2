@@ -79,6 +79,7 @@ class RequestPreprocessor
 
                     $response = $this->_responseFactory->create();
                     $response->setRedirect($redirectUrl, $redirectCode);
+                    $response->setNoCacheHeaders();
                     return $response;
                 }
             }

@@ -5,6 +5,11 @@
 
 var config = {
     "waitSeconds": 0,
+    "map": {
+        "*": {
+            "mageUtils": "mage/utils/main"
+        }
+    },
     "shim": {
         "jquery/jquery-migrate": ["jquery"],
         "jquery/jquery.hashchange": ["jquery", "jquery/jquery-migrate"],

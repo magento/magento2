@@ -5,8 +5,8 @@
  */
 namespace Magento\Ui\Component\Form\Fieldset;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Ui\Component\Form\Fieldset;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Factory

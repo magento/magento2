@@ -17,7 +17,7 @@
             <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="remove" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="move" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="ui_component" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="uiComponent" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
