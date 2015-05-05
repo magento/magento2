@@ -204,7 +204,8 @@ class Observer extends \Magento\Framework\Model\AbstractModel
     public function getPriceConfiguration(\Magento\Framework\Event\Observer $observer)
     {
         if ($this->_weeeData->isEnabled()) {
-            $priceConfig=$observer->getData('config');
+            $priceConfigObj=$observer->getData('configObj');
+            $priceConfig=$priceConfigObj->getConfig();
             if (is_array($priceConfig)) {
                 foreach ($priceConfig as $keyConfigs => $configs) {
                     if (is_array($configs)) {
@@ -217,8 +218,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                     }
                 }
             }
-
-            $observer->setData('config', $priceConfig);
+            $priceConfigObj->setConfig($priceConfig);
         }
         return $this;
     }

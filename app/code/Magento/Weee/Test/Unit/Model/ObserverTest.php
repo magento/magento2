@@ -40,6 +40,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        $configObj = new \Magento\Framework\Object(
+            [
+                'config' => $testArray,
+            ]
+        );
+
         $testArrayWithWeee=$testArray;
         $testArrayWithWeee[0][0]['prices']['weeePrice']= [
             'amount' => $testArray[0][0]['prices']['finalPrice']['amount'],
@@ -57,12 +63,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $observerObject->expects($this->any())
             ->method('getData')
-            ->with('config')
-            ->will($this->returnValue($testArray));
-
-        $observerObject->expects($this->once())
-            ->method('setData')
-            ->with('config', $testArrayWithWeee);
+            ->with('configObj')
+            ->will($this->returnValue($configObj));
 
          $objectManager = new ObjectManager($this);
          $weeeObserverObject = $objectManager->getObject(
@@ -71,6 +73,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                  'weeeData' => $weeHelper,
              ]
          );
-        $weeeObserverObject->getPriceConfiguration($observerObject);
+         $weeeObserverObject->getPriceConfiguration($observerObject);
+
+         $this->assertEquals($testArrayWithWeee, $configObj->getData('config'));
     }
 }
