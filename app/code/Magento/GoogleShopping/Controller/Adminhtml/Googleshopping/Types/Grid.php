@@ -11,11 +11,10 @@ class Grid extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
     /**
      * Grid for AJAX request
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
-        $this->_view->loadLayout('false');
-        $this->_view->renderLayout();
+        return $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_LAYOUT);
     }
 }

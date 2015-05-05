@@ -18,14 +18,14 @@
 @notifications-action__padding-bottom: (@page-header-action__height - @notifications-action-icon__size) / 2 - .05rem;
 @notifications-action__padding-side: 2rem;
 @notifications-action__padding-top: (@page-header-action__height - @notifications-action-icon__size) / 2 + .05rem;
-@notifications-action__hover__color: darken(@page-header-action__color, 20%);
+@notifications-action__hover__color: darken(@action-dropdown__color, 20%);
 @notifications-action-icon__size: 1.9rem;
 @notifications-action-menu__z-index: @header__z-index;
 
 @notifications-close__color: @color-gray80;
 @notifications-counter__background-color: @color-tomato-brick;
 @notifications-entry__padding-top: .6rem;
-@notifications-entry__hover__background-color: @color-blue-clear-sky;
+@notifications-entry__hover__background-color: @action__hover__background-color;
 @notifications-list__width: 32rem;
 @notifications-title__color: @color-light-phoenix;
 @notifications-time__color: @color-very-dark-gray1;
@@ -39,33 +39,41 @@
     &.active {
         z-index: @notifications-action-menu__z-index; // Should be over global search when active
         .notifications-action {
-            border-color: @page-header-action__active__border-color;
+            border-color: @action-dropdown__active__border-color;
             box-shadow: @component__box-shadow__base;
             &:after {
-                background-color: @page-header-action__background-color;
+                border: none;
+                background-color: @action-dropdown__background-color;
                 content: '';
+                display: block;
                 height: @component__shadow-size__base + 1;
                 left: -(@component__shadow-size__base + 1);
+                margin-top: 0;
                 position: absolute;
                 right: 0;
                 top: 100%;
+                width: auto;
             }
         }
-        .notifications-list {
-            opacity: 1;
-            visibility: visible;
-        }
+    }
+    //  Notifications dropdown
+    .admin__action-dropdown-menu {
+        padding: 1rem 0 0;
+        width: @notifications-list__width;
     }
 }
 
 .notifications-action {
-    &:extend(.abs-page-header-action all);
+    height: @page-header-action__height;
     padding: @notifications-action__padding-top @notifications-action__padding-side @notifications-action__padding-bottom;
-    z-index: 2;
+    &:after {
+        display: none;
+    }
     &:before {
         &:extend(.abs-icon all);
         content: @icon-notification-02__content;
         font-size: @notifications-action-icon__size;
+        margin-right: 0;
     }
     &:active {
         &:before {
@@ -89,21 +97,11 @@
     }
 }
 
-.notifications-list {
-    &:extend(.abs-page-header-action-menu all);
-    padding-top: 1rem;
-    width: @notifications-list__width;
-    z-index: 1;
-    &:before {
-        z-index: 2;
-    }
-}
-
 .notifications-entry {
     line-height: @line-height__base;
     padding: @notifications-entry__padding-top @notifications-action__padding-side .8rem;
     position: relative;
-    transition: background-color .2s linear;
+    transition: @smooth__background-color;
     &:hover {
         background-color: @notifications-entry__hover__background-color;
     }
