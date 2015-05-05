@@ -20,13 +20,19 @@ class AdminUserCreateCommand extends AbstractSetupCommand
      * @var InstallerFactory
      */
     private $installerFactory;
+
+    /**
+     * @var UserValidationRules
+     */
+    private $validationRules;
     
     /**
      * @param InstallerFactory $installerFactory
      */
-    public function __construct(InstallerFactory $installerFactory)
+    public function __construct(InstallerFactory $installerFactory, UserValidationRules $validationRules)
     {
         $this->installerFactory = $installerFactory;
+        $this->validationRules = $validationRules;
         parent::__construct();
     }
 
@@ -91,8 +97,8 @@ class AdminUserCreateCommand extends AbstractSetupCommand
             ->setPassword($input->getOption(AdminAccount::KEY_PASSWORD));
 
         $validator = new \Magento\Framework\Validator\Object;
-        UserValidationRules::addUserInfoRules($validator);
-        UserValidationRules::addPasswordRules($validator);
+        $this->validationRules->addUserInfoRules($validator);
+        $this->validationRules->addPasswordRules($validator);
 
         if (!$validator->isValid($user)) {
             $errors = array_merge($errors, $validator->getMessages());

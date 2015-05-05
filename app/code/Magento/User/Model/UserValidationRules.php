@@ -5,6 +5,11 @@
  */
 namespace Magento\User\Model;
 
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\NotEmpty;
+use Magento\Framework\Validator\Regex;
+use Magento\Framework\Validator\StringLength;
+
 /**
  * Class for adding validation rules to an Admin user
  */
@@ -21,15 +26,15 @@ class UserValidationRules
      * @param \Magento\Framework\Validator\Object $validator
      * @return \Magento\Framework\Validator\Object
      */
-    public static function addUserInfoRules(\Magento\Framework\Validator\Object $validator)
+    public function addUserInfoRules(\Magento\Framework\Validator\Object $validator)
     {
-        $userNameNotEmpty = new \Zend_Validate_NotEmpty();
+        $userNameNotEmpty = new NotEmpty();
         $userNameNotEmpty->setMessage(__('User Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $firstNameNotEmpty = new \Zend_Validate_NotEmpty();
+        $firstNameNotEmpty = new NotEmpty();
         $firstNameNotEmpty->setMessage(__('First Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $lastNameNotEmpty = new \Zend_Validate_NotEmpty();
+        $lastNameNotEmpty = new NotEmpty();
         $lastNameNotEmpty->setMessage(__('Last Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
-        $emailValidity = new \Zend_Validate_EmailAddress();
+        $emailValidity = new EmailAddress();
         $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
 
         /** @var $validator \Magento\Framework\Validator\Object */
@@ -56,17 +61,17 @@ class UserValidationRules
      * @param \Magento\Framework\Validator\Object $validator
      * @return \Magento\Framework\Validator\Object
      */
-    public static function addPasswordRules(\Magento\Framework\Validator\Object $validator)
+    public function addPasswordRules(\Magento\Framework\Validator\Object $validator)
     {
-        $passwordNotEmpty = new \Zend_Validate_NotEmpty();
-        $passwordNotEmpty->setMessage(__('Password is required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
+        $passwordNotEmpty = new NotEmpty();
+        $passwordNotEmpty->setMessage(__('Password is required field.'), NotEmpty::IS_EMPTY);
         $minPassLength = self::MIN_PASSWORD_LENGTH;
-        $passwordLength = new \Zend_Validate_StringLength(['min' => $minPassLength, 'encoding' => 'UTF-8']);
+        $passwordLength = new StringLength(['min' => $minPassLength, 'encoding' => 'UTF-8']);
         $passwordLength->setMessage(
             __('Your password must be at least %1 characters.', $minPassLength),
             \Zend_Validate_StringLength::TOO_SHORT
         );
-        $passwordChars = new \Zend_Validate_Regex('/[a-z].*\d|\d.*[a-z]/iu');
+        $passwordChars = new Regex('/[a-z].*\d|\d.*[a-z]/iu');
         $passwordChars->setMessage(
             __('Your password must include both numeric and alphabetic characters.'),
             \Zend_Validate_Regex::NOT_MATCH
@@ -92,7 +97,7 @@ class UserValidationRules
      * @param $passwordConfirmation
      * @return \Magento\Framework\Validator\Object
      */
-    public static function addPasswordConfirmationRule(
+    public function addPasswordConfirmationRule(
         \Magento\Framework\Validator\Object $validator,
         $passwordConfirmation
     ) {

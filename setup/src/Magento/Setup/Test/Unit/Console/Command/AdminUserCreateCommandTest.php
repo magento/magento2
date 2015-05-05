@@ -8,6 +8,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Console\Command\AdminUserCreateCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use Magento\User\Model\UserValidationRules;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +26,7 @@ class AdminUserCreateCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->installerFactoryMock = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $this->command = new AdminUserCreateCommand($this->installerFactoryMock);
+        $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());
     }
 
     public function testExecute()

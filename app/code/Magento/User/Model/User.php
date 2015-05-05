@@ -121,6 +121,11 @@ class User extends AbstractModel implements StorageInterface
     protected $_storeManager;
 
     /**
+     * @var UserValidationRules
+     */
+    protected $validationRules;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\User\Helper\Data $userData
@@ -131,6 +136,7 @@ class User extends AbstractModel implements StorageInterface
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param UserValidationRules $validationRules
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
@@ -148,6 +154,7 @@ class User extends AbstractModel implements StorageInterface
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        UserValidationRules $validationRules,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -161,6 +168,7 @@ class User extends AbstractModel implements StorageInterface
         $this->_roleFactory = $roleFactory;
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
+        $this->validationRules = $validationRules;
     }
 
     /**
@@ -268,13 +276,13 @@ class User extends AbstractModel implements StorageInterface
     {
         /** @var $validator \Magento\Framework\Validator\Object */
         $validator = $this->_validatorObject->create();
-        UserValidationRules::addUserInfoRules($validator);
+        $this->validationRules->addUserInfoRules($validator);
 
         // Add validation rules for the password management fields
         if ($this->_willSavePassword()) {
-            UserValidationRules::addPasswordRules($validator);
+            $this->validationRules->addPasswordRules($validator);
             if ($this->hasPasswordConfirmation()) {
-                UserValidationRules::addPasswordConfirmationRule($validator, $this->getPasswordConfirmation());
+                $this->validationRules->addPasswordConfirmationRule($validator, $this->getPasswordConfirmation());
             }
         }
         return $validator;
@@ -291,7 +299,7 @@ class User extends AbstractModel implements StorageInterface
     {
         /** @var $validator \Magento\Framework\Validator\Object */
         $validator = $this->_validatorObject->create();
-        UserValidationRules::addUserInfoRules($validator);
+        $this->validationRules->addUserInfoRules($validator);
 
         if (!$validator->isValid($this)) {
             return $validator->getMessages();

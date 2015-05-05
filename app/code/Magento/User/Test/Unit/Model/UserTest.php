@@ -5,6 +5,7 @@
  */
 
 namespace Magento\User\Test\Unit\Model;
+use Magento\User\Model\UserValidationRules;
 
 /**
  * Test class for \Magento\User\Model\User testing
@@ -34,7 +35,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_storeManagerMock;
 
     /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
@@ -136,6 +137,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
                 'roleFactory' => $roleFactoryMock,
                 'transportBuilder' => $this->_transportBuilderMock,
                 'storeManager' => $this->_storeManagerMock,
+                'validationRules' => new UserValidationRules(),
                 'config' => $this->_configMock,
                 'encryptor' => $this->_encryptorMock
             ]
