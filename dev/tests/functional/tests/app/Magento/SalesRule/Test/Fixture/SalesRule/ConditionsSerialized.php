@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+namespace Magento\SalesRule\Test\Fixture\SalesRule;
 
 use Magento\Mtf\Fixture\DataSource;
 

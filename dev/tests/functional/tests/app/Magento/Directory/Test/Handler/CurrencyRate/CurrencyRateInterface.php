@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Test\Handler\SalesRuleInjectable;
+namespace Magento\Directory\Test\Handler\CurrencyRate;
 
 use Magento\Mtf\Handler\HandlerInterface;
 
 /**
- * Interface SalesRuleInterface.
+ * Interface CurrencyRateInterface
  */
-interface SalesRuleInjectableInterface extends HandlerInterface
+interface CurrencyRateInterface extends HandlerInterface
 {
     //
 }
