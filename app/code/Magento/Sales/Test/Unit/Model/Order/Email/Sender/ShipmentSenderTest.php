@@ -73,7 +73,8 @@ class ShipmentSenderTest extends AbstractSenderTest
             $this->paymentHelper,
             $this->shipmentResourceMock,
             $this->globalConfig,
-            $this->addressRenderer
+            $this->addressRenderer,
+            $this->eventManagerMock
         );
     }
 
