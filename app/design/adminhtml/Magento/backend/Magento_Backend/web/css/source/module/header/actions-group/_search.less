@@ -43,8 +43,8 @@
     min-width: @search-global-field__width;
     &._active {
         .search-global-input {
-            background-color: @page-header-action__background-color;
-            border-color: @page-header-action__active__border-color;
+            background-color: @action-dropdown__background-color;
+            border-color: @action-dropdown__active__border-color;
             box-shadow: @component__box-shadow__base;
             padding-right: @search-global-input__active__padding-right;
             width: @search-global-input__active__width;
@@ -70,7 +70,7 @@
         width: @search-global-input__active__width;
     }
     .search-global-menu {
-        border: 1px solid @page-header-action__active__border-color;
+        border: 1px solid @action-dropdown__active__border-color;
         border-top-color: transparent;
         box-shadow: @component__box-shadow__base;
         left: 0;
@@ -81,7 +81,7 @@
         top: 100%;
         z-index: 2;
         &:after {
-            background-color: @page-header-action__background-color;
+            background-color: @action-dropdown__background-color;
             content: '';
             height: @component__shadow-size__base;
             left: 0;
@@ -90,8 +90,8 @@
             top: -@component__shadow-size__base;
         }
         > li {
-            background-color: @page-header-action__background-color;
-            border-top: 1px solid @page-header-action__border-color;
+            background-color: @action-dropdown__background-color;
+            border-top: 1px solid @action-dropdown__border-color;
             display: block;
             font-size: @font-size__s;
             padding: @search-global-input__padding-top @search-global-input__padding-side @search-global-input__padding-bottom;
@@ -120,7 +120,7 @@
     }
     &:hover {
         &:before {
-            color: @page-header-action__hover__color;
+            color: @action-dropdown__hover__color;
         }
     }
     &:before {

@@ -5,26 +5,20 @@
  */
 namespace Magento\Ui\Component\Form\Element\DataType;
 
-use Magento\Ui\Component\AbstractView;
+use Magento\Ui\Component\AbstractComponent;
 
 /**
  * Class AbstractDataType
  */
-abstract class AbstractDataType extends AbstractView implements DataTypeInterface
+abstract class AbstractDataType extends AbstractComponent implements DataTypeInterface
 {
     /**
+     * Validate value
+     *
      * @return bool
      */
     public function validate()
     {
         return true;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDataObjectValue()
-    {
-        return $this->getData('data_object')[$this->getData('name')];
     }
 }

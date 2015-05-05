@@ -24,7 +24,8 @@ class OrderCommentSenderTest extends AbstractSenderTest
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
-            $this->addressRenderer
+            $this->addressRenderer,
+            $this->eventManagerMock
         );
     }
 

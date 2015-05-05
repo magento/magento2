@@ -5,8 +5,8 @@
  */
 -->
 <div class="admin__page-nav">
-    <div class="admin__page-nav-title" data-bind="css: { '_collapsible': collapsible, '_opened': opened() && collapsible }, click: toggle, click: onClick, keyboard: { 13: onClick }">
-        <strong tabindex="1" data-bind="text: label, keyboard: { 13: toggle }"></strong>
+    <div class="admin__page-nav-title" data-bind="css: { '_collapsible': collapsible, '_opened': opened && collapsible }, click: toggleOpened, keyboard: { 13: toggleOpened }">
+        <strong tabindex="1" data-bind="text: label, keyboard: { 13: toggleOpened }"></strong>
     </div>
     <ul class="admin__page-nav-items items" data-bind="visible: opened">
         <!-- ko foreach: elems -->

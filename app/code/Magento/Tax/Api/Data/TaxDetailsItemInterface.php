@@ -11,36 +11,6 @@ namespace Magento\Tax\Api\Data;
  */
 interface TaxDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    /**#@+
-     * Constants defined for keys of array, makes typos less likely
-     */
-    const KEY_CODE = 'code';
-
-    const KEY_TYPE = 'type';
-
-    const KEY_TAX_PERCENT = 'tax_percent';
-
-    const KEY_PRICE = 'price';
-
-    const KEY_PRICE_INCL_TAX = 'price_incl_tax';
-
-    const KEY_ROW_TOTAL = 'row_total';
-
-    const KEY_ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
-
-    const KEY_ROW_TAX = 'row_tax';
-
-    const KEY_TAXABLE_AMOUNT = 'taxable_amount';
-
-    const KEY_DISCOUNT_AMOUNT = 'discount_amount';
-
-    const KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
-
-    const KEY_APPLIED_TAXES = 'applied_taxes';
-
-    const KEY_ASSOCIATED_ITEM_CODE = 'associated_item_code';
-    /**#@-*/
-
     /**
      * Get code (sku or shipping code)
      *
@@ -224,7 +194,7 @@ interface TaxDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Return associated item code if this item is associated with another item, null otherwise
      *
-     * @return mixed|null
+     * @return int|null
      */
     public function getAssociatedItemCode();
 

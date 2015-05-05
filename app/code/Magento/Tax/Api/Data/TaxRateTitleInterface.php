@@ -12,15 +12,6 @@ namespace Magento\Tax\Api\Data;
  */
 interface TaxRateTitleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    /**#@+
-     *
-     * Tax rate field key.
-     */
-    const KEY_STORE_ID = 'store_id';
-
-    const KEY_VALUE_ID = 'value';
-    /**#@-*/
-
     /**
      * Get store id
      *

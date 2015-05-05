@@ -8,6 +8,7 @@ namespace Magento\GoogleShopping\Model\Attribute;
 use Magento\Framework\Parse\Zip;
 use Magento\Store\Model\Store;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
+use Magento\Tax\Model\TaxClass\Key;
 
 /**
  * Tax attribute model
@@ -179,8 +180,8 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                         'code' => $product->getSku(),
                         'type' => 'product',
                         'tax_class_key' => [
-                            TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
-                            TaxClassKeyInterface::KEY_VALUE => $product->getTaxClassId(),
+                            Key::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
+                            Key::KEY_VALUE => $product->getTaxClassId(),
                         ],
                         'unit_price' => $product->getPrice(),
                         'quantity' => 1,
@@ -204,8 +205,8 @@ class Tax extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
                         'billing_address' => $billingAddressDataArray,
                         'shipping_address' => $shippingAddressDataArray,
                         'customer_tax_class_key' => [
-                            TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
-                            TaxClassKeyInterface::KEY_VALUE => $defaultCustomerTaxClassId,
+                            Key::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
+                            Key::KEY_VALUE => $defaultCustomerTaxClassId,
                         ],
                         'items' => [
                             $quoteDetailsItemDataArray,
