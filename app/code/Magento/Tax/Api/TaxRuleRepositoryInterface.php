@@ -6,12 +6,14 @@
 
 namespace Magento\Tax\Api;
 
+/**
+ * @api
+ */
 interface TaxRuleRepositoryInterface
 {
     /**
      * Get TaxRule
      *
-     * @api
      * @param int $ruleId
      * @return \Magento\Tax\Api\Data\TaxRuleInterface
      */
@@ -20,7 +22,6 @@ interface TaxRuleRepositoryInterface
     /**
      * Save TaxRule
      *
-     * @api
      * @param \Magento\Tax\Api\Data\TaxRuleInterface $rule
      * @return \Magento\Tax\Api\Data\TaxRuleInterface $rule
      * @throws \Magento\Framework\Exception\InputException If input is invalid or required input is missing.
@@ -31,7 +32,6 @@ interface TaxRuleRepositoryInterface
     /**
      * Delete TaxRule
      *
-     * @api
      * @param \Magento\Tax\Api\Data\TaxRuleInterface $rule
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If no TaxRate with the given ID can be found.
@@ -42,7 +42,6 @@ interface TaxRuleRepositoryInterface
     /**
      * Delete TaxRule
      *
-     * @api
      * @param int $ruleId
      * @return bool
      * @throws \Magento\Framework\Exception\NoSuchEntityException If no TaxRate with the given ID can be found.
@@ -53,7 +52,6 @@ interface TaxRuleRepositoryInterface
     /**
      * Search TaxRules
      *
-     * @api
      * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Tax\Api\Data\TaxRuleSearchResultsInterface containing TaxRuleInterface objects
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input

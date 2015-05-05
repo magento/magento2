@@ -5,6 +5,9 @@
  */
 namespace Magento\Tax\Api\Data;
 
+/**
+ * @api
+ */
 interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
@@ -36,7 +39,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get code (sku or shipping code)
      *
-     * @api
      * @return string|null
      */
     public function getCode();
@@ -44,7 +46,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set code (sku or shipping code)
      *
-     * @api
      * @param string $code
      * @return $this
      */
@@ -53,7 +54,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get type (e.g., shipping, product, wee, gift wrapping, etc.)
      *
-     * @api
      * @return string|null
      */
     public function getType();
@@ -61,7 +61,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set type (e.g., shipping, product, wee, gift wrapping, etc.)
      *
-     * @api
      * @param string $type
      * @return $this
      */
@@ -70,7 +69,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get tax class key
      *
-     * @api
      * @return \Magento\Tax\Api\Data\TaxClassKeyInterface
      */
     public function getTaxClassKey();
@@ -78,7 +76,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set tax class key
      *
-     * @api
      * @param \Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey
      * @return $this
      */
@@ -87,7 +84,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get unit price
      *
-     * @api
      * @return float
      */
     public function getUnitPrice();
@@ -95,7 +91,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set unit price
      *
-     * @api
      * @param float $unitPrice
      * @return $this
      */
@@ -104,7 +99,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get quantity
      *
-     * @api
      * @return float
      */
     public function getQuantity();
@@ -112,7 +106,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set quantity
      *
-     * @api
      * @param float $quantity
      * @return $this
      */
@@ -121,7 +114,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get indicate that if the tax is included in the unit price and row total
      *
-     * @api
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
@@ -130,7 +122,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set whether the tax is included in the unit price and row total
      *
-     * @api
      * @param bool $isTaxIncluded
      * @return $this
      */
@@ -139,7 +130,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get short description
      *
-     * @api
      * @return string|null
      */
     public function getShortDescription();
@@ -147,7 +137,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set short description
      *
-     * @api
      * @param string $shortDescription
      * @return $this
      */
@@ -156,7 +145,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get discount amount
      *
-     * @api
      * @return float
      */
     public function getDiscountAmount();
@@ -164,7 +152,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set discount amount
      *
-     * @api
      * @param float $discountAmount
      * @return $this
      */
@@ -173,7 +160,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get parent code if this item is a child, null if this is a top level item.
      *
-     * @api
      * @return string|null
      */
     public function getParentCode();
@@ -181,7 +167,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set parent code
      *
-     * @api
      * @param string $parentCode
      * @return $this
      */
@@ -190,7 +175,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get associated item code if this item is associated with another item, null otherwise
      *
-     * @api
      * @return mixed|null
      */
     public function getAssociatedItemCode();
@@ -198,7 +182,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set associated item code
      *
-     * @api
      * @param int $associatedItemCode
      * @return $this
      */
@@ -207,7 +190,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get associated item tax class id
      *
-     * @api
      * @return int
      */
     public function getTaxClassId();
@@ -215,7 +197,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set associated item tax class id
      *
-     * @api
      * @param int $taxClassId
      * @return $this
      */
@@ -224,7 +205,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @api
      * @return \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -232,7 +212,6 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Set an extension attributes object.
      *
-     * @api
      * @param \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface $extensionAttributes
      * @return $this
      */

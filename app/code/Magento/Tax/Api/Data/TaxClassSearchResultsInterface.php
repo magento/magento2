@@ -6,12 +6,14 @@
 
 namespace Magento\Tax\Api\Data;
 
+/**
+ * @api
+ */
 interface TaxClassSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
      * Get items
      *
-     * @api
      * @return \Magento\Tax\Api\Data\TaxClassInterface[]
      */
     public function getItems();
@@ -19,7 +21,6 @@ interface TaxClassSearchResultsInterface extends \Magento\Framework\Api\SearchRe
     /**
      * Set items.
      *
-     * @api
      * @param \Magento\Tax\Api\Data\TaxClassInterface[] $items
      * @return $this
      */

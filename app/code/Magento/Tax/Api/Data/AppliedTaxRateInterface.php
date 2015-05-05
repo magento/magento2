@@ -6,6 +6,9 @@
 
 namespace Magento\Tax\Api\Data;
 
+/**
+ * @api
+ */
 interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
@@ -21,7 +24,6 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Get code
      *
-     * @api
      * @return string|null
      */
     public function getCode();
@@ -29,7 +31,6 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Set code
      *
-     * @api
      * @param string $code
      * @return $this
      */
@@ -38,7 +39,6 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Get Title
      *
-     * @api
      * @return string|null
      */
     public function getTitle();
@@ -46,7 +46,6 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Set Title
      *
-     * @api
      * @param string $title
      * @return $this
      */
@@ -55,7 +54,6 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Get Tax Percent
      *
-     * @api
      * @return float|null
      */
     public function getPercent();
@@ -63,7 +61,6 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Set Tax Percent
      *
-     * @api
      * @param float $percent
      * @return $this
      */
@@ -72,7 +69,6 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @api
      * @return \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -80,7 +76,6 @@ interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Set an extension attributes object.
      *
-     * @api
      * @param \Magento\Tax\Api\Data\AppliedTaxRateExtensionInterface $extensionAttributes
      * @return $this
      */

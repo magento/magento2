@@ -8,12 +8,14 @@ namespace Magento\Tax\Api;
 
 use Magento\Tax\Api\Data\TaxRateInterface;
 
+/**
+ * @api
+ */
 interface TaxRateManagementInterface
 {
     /**
      * Get rates by customerTaxClassId and productTaxClassId
      *
-     * @api
      * @param int $customerTaxClassId
      * @param int $productTaxClassId
      * @return TaxRateInterface[]

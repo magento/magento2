@@ -8,6 +8,9 @@ namespace Magento\Tax\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * @api
+ */
 interface TaxClassKeyInterface extends ExtensibleDataInterface
 {
     /**#@+
@@ -29,7 +32,6 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
     /**
      * Get type of tax class key
      *
-     * @api
      * @return string
      */
     public function getType();
@@ -37,7 +39,6 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
     /**
      * Set type of tax class key
      *
-     * @api
      * @param string $type
      * @return $this
      */
@@ -46,7 +47,6 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
     /**
      * Get value of tax class key
      *
-     * @api
      * @return string
      */
     public function getValue();
@@ -54,7 +54,6 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
     /**
      * Set value of tax class key
      *
-     * @api
      * @param string $value
      * @return $this
      */
@@ -63,7 +62,6 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @api
      * @return \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -71,7 +69,6 @@ interface TaxClassKeyInterface extends ExtensibleDataInterface
     /**
      * Set an extension attributes object.
      *
-     * @api
      * @param \Magento\Tax\Api\Data\TaxClassKeyExtensionInterface $extensionAttributes
      * @return $this
      */

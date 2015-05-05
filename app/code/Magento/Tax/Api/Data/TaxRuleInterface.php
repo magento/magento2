@@ -8,12 +8,14 @@ namespace Magento\Tax\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
+/**
+ * @api
+ */
 interface TaxRuleInterface extends ExtensibleDataInterface
 {
     /**
      * Get id
      *
-     * @api
      * @return int|null
      */
     public function getId();
@@ -21,7 +23,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Set id
      *
-     * @api
      * @param int $id
      * @return $this
      */
@@ -30,7 +31,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Get tax rule code
      *
-     * @api
      * @return string
      */
     public function getCode();
@@ -38,7 +38,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Set tax rule code
      *
-     * @api
      * @param string $code
      * @return $this
      */
@@ -47,7 +46,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Get priority
      *
-     * @api
      * @return int
      */
     public function getPriority();
@@ -55,7 +53,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Set priority
      *
-     * @api
      * @param int $priority
      * @return $this
      */
@@ -64,7 +61,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Get sort order.
      *
-     * @api
      * @return int
      */
     public function getPosition();
@@ -72,7 +68,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Set sort order.
      *
-     * @api
      * @param int $position
      * @return $this
      */
@@ -81,7 +76,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Get customer tax class id
      *
-     * @api
      * @return int[]
      */
     public function getCustomerTaxClassIds();
@@ -89,7 +83,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Set customer tax class id
      *
-     * @api
      * @param int[] $customerTaxClassIds
      * @return $this
      */
@@ -98,7 +91,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Get product tax class id
      *
-     * @api
      * @return int[]
      */
     public function getProductTaxClassIds();
@@ -106,7 +98,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Set product tax class id
      *
-     * @api
      * @param int[] $productTaxClassIds
      * @return $this
      */
@@ -115,7 +106,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Get tax rate ids
      *
-     * @api
      * @return int[]
      */
     public function getTaxRateIds();
@@ -123,7 +113,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Set tax rate ids
      *
-     * @api
      * @param int[] $taxRateIds
      * @return $this
      */
@@ -132,7 +121,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Get calculate subtotal.
      *
-     * @api
      * @return bool|null
      */
     public function getCalculateSubtotal();
@@ -140,7 +128,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Set calculate subtotal.
      *
-     * @api
      * @param bool $calculateSubtotal
      * @return $this
      */
@@ -149,7 +136,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @api
      * @return \Magento\Tax\Api\Data\TaxRuleExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -157,7 +143,6 @@ interface TaxRuleInterface extends ExtensibleDataInterface
     /**
      * Set an extension attributes object.
      *
-     * @api
      * @param \Magento\Tax\Api\Data\TaxRuleExtensionInterface $extensionAttributes
      * @return $this
      */
