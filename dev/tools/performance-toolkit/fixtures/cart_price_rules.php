@@ -20,7 +20,10 @@ class CartPriceRulesFixture extends \Magento\ToolkitFramework\Fixture
     public function execute()
     {
         $this->application->resetObjectManager();
-        $cartPriceRulesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('cart_price_rules', 9);
+        $cartPriceRulesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('cart_price_rules', 0);
+        if (!$cartPriceRulesCount) {
+            return;
+        }
         $cartPriceRulesProductsFloor = \Magento\ToolkitFramework\Config::getInstance()->getValue(
             'cart_price_rules_floor',
             3

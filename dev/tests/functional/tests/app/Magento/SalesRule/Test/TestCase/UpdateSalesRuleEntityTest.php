@@ -6,7 +6,7 @@
 
 namespace Magento\SalesRule\Test\TestCase;
 
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -92,13 +92,13 @@ class UpdateSalesRuleEntityTest extends Injectable
     /**
      * Update Sales Rule Entity.
      *
-     * @param SalesRuleInjectable $salesRule
-     * @param SalesRuleInjectable $salesRuleOrigin
+     * @param SalesRule $salesRule
+     * @param SalesRule $salesRuleOrigin
      * @return void
      */
     public function testUpdateSalesRule(
-        SalesRuleInjectable $salesRule,
-        SalesRuleInjectable $salesRuleOrigin
+        SalesRule $salesRule,
+        SalesRule $salesRuleOrigin
     ) {
         // Preconditions
         $salesRuleOrigin->persist();
