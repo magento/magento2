@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
+
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**

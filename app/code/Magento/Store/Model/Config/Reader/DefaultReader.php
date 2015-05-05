@@ -8,6 +8,7 @@
 namespace Magento\Store\Model\Config\Reader;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class DefaultReader implements \Magento\Framework\App\Config\Scope\ReaderInterface
 {
@@ -45,14 +46,14 @@ class DefaultReader implements \Magento\Framework\App\Config\Scope\ReaderInterfa
      * Read configuration data
      *
      * @param null|string $scope
-     * @throws \Magento\Framework\Exception Exception is thrown when scope other than default is given
+     * @throws LocalizedException Exception is thrown when scope other than default is given
      * @return array
      */
     public function read($scope = null)
     {
         $scope = $scope === null ? ScopeConfigInterface::SCOPE_TYPE_DEFAULT : $scope;
         if ($scope !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            throw new \Magento\Framework\Exception("Only default scope allowed");
+            throw new \Magento\Framework\Exception\LocalizedException(__("Only default scope allowed"));
         }
 
         $config = $this->_initialConfig->getData($scope);

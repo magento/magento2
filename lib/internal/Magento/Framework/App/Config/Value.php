@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Config data model
