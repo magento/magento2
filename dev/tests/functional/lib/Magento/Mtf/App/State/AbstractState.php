@@ -49,11 +49,18 @@ abstract class AbstractState implements StateInterface
 
         $reader = new Reader($dirList, $configFilePool);
         $deploymentConfig = new DeploymentConfig($reader);
-        $dbInfo = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT);
-        $host = $dbInfo['host'];
-        $user = $dbInfo['username'];
-        $password = $dbInfo['password'];
-        $database = $dbInfo['dbname'];
+        $host = $deploymentConfig->get(
+            ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_HOST
+        );
+        $user = $deploymentConfig->get(
+            ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_USER
+        );
+        $password = $deploymentConfig->get(
+            ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PASSWORD
+        );
+        $database = $deploymentConfig->get(
+            ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_NAME
+        );
 
         $fileName = MTF_BP . '/' . $database . '.sql';
         if (!file_exists($fileName)) {

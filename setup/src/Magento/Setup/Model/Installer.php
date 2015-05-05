@@ -1057,17 +1057,19 @@ class Installer
     private function deleteDeploymentConfig()
     {
         $configDir = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-        $file = 'config.php';
-        $absolutePath = $configDir->getAbsolutePath($file);
-        if (!$configDir->isFile($file)) {
-            $this->log->log("The file '{$absolutePath}' doesn't exist - skipping cleanup");
-            return;
-        }
-        try {
-            $this->log->log($absolutePath);
-            $configDir->delete($file);
-        } catch (FileSystemException $e) {
-            $this->log->log($e->getMessage());
+        $configFiles = $this->deploymentConfigReader->getFiles();
+        foreach ($configFiles as $configFile) {
+            $absolutePath = $configDir->getAbsolutePath($configFile);
+            if (!$configDir->isFile($configFile)) {
+                $this->log->log("The file '{$absolutePath}' doesn't exist - skipping cleanup");
+                continue;
+            }
+            try {
+                $this->log->log($absolutePath);
+                $configDir->delete($configFile);
+            } catch (FileSystemException $e) {
+                $this->log->log($e->getMessage());
+            }
         }
     }
 
@@ -1091,15 +1093,25 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $connectionConfig = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT);
         $this->checkDatabaseConnection(
-            $connectionConfig[ConfigOptionsList::KEY_NAME],
-            $connectionConfig[ConfigOptionsList::KEY_HOST],
-            $connectionConfig[ConfigOptionsList::KEY_USER],
-            $connectionConfig[ConfigOptionsList::KEY_PASSWORD]
+            $this->deploymentConfig->get(
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_NAME
+            ),
+            $this->deploymentConfig->get(
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_HOST
+            ),
+            $this->deploymentConfig->get(
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_USER
+            ),
+            $this->deploymentConfig->get(
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PASSWORD
+            )
         );
-        if (isset($connectionConfig[ConfigOptionsList::KEY_PREFIX])) {
-            $this->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsList::KEY_PREFIX]);
+        if (null !== $this->deploymentConfig->get(
+            ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PREFIX
+        )) {
+            $this->checkDatabaseTablePrefix($this->deploymentConfig->get
+                (ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PREFIX));
         }
     }
 

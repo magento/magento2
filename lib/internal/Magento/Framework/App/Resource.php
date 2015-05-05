@@ -104,8 +104,10 @@ class Resource
             return $this->_connections[$connectionName];
         }
 
-        $connections = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DB_CONNECTIONS);
-        $connectionConfig = $connections[$connectionName];
+        $connectionConfig = $this->deploymentConfig->get(
+            ConfigOptionsList::CONFIG_PATH_DB_CONNECTIONS . '/' . $connectionName
+        );
+
         if ($connectionConfig) {
             $connection = $this->_connectionFactory->create($connectionConfig);
         }

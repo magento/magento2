@@ -148,7 +148,8 @@ class Application
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         ];
         $driverPool = new \Magento\Framework\Filesystem\DriverPool;
-        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool);
+        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool;
+        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool, $configFilePool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
     }
@@ -165,11 +166,18 @@ class Application
                 $configPool = new \Magento\Framework\Config\File\ConfigFilePool();
                 $reader = new Reader($this->dirList, $configPool);
                 $deploymentConfig = new DeploymentConfig($reader, []);
-                $dbInfo = $deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT);
-                $host = $dbInfo['host'];
-                $user = $dbInfo['username'];
-                $password = $dbInfo['password'];
-                $dbName = $dbInfo['dbname'];
+                $host = $deploymentConfig->get(
+                    ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_HOST
+                );
+                $user = $deploymentConfig->get(
+                    ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_USER
+                );
+                $password = $deploymentConfig->get(
+                    ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PASSWORD
+                );
+                $dbName = $deploymentConfig->get(
+                    ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_NAME
+                );
             } else {
                 $installConfig = $this->getInstallConfig();
                 $host = $installConfig['db_host'];

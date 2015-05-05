@@ -81,9 +81,10 @@ class Reader
             foreach ($configFiles as $fileKey => $config) {
                 $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
                 $fileData = @include $configFile;
-
-                if (empty(array_intersect_key($result, $fileData))) {
-                    $result = array_replace_recursive($result, $fileData ?: []);
+                if (empty($fileData)) {
+                    $result = array_merge($result, []);
+                } elseif (empty(array_intersect_key($result, $fileData))) {
+                    $result = array_replace_recursive($result, $fileData);
                 } else {
                     throw new \Exception('Duplicate keys are present');
                 }
