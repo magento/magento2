@@ -9,7 +9,9 @@ use Magento\Framework\ObjectManager\DefinitionFactory;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Setup\Validator\DbValidator;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -42,6 +44,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const INPUT_KEY_DB_MODEL = 'db_model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
     const INPUT_KEY_RESOURCE = 'resource';
+    const INPUT_KEY_SKIP_DB_VALIDATION = 'skip_db_validation';
     /**#@-*/
 
     /**#@+
@@ -97,13 +100,20 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $configGenerator;
 
     /**
+     * @var DbValidator
+     */
+    private $dbValidator;
+
+    /**
      * Constructor
      *
      * @param ConfigGenerator $configGenerator
+     * @param DbValidator $dbValidator
      */
-    public function __construct(ConfigGenerator $configGenerator)
+    public function __construct(ConfigGenerator $configGenerator, DbValidator $dbValidator)
     {
         $this->configGenerator = $configGenerator;
+        $this->dbValidator = $dbValidator;
     }
 
     /**
@@ -182,6 +192,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'Database  initial set of commands',
                 'SET NAMES utf8;'
             ),
+            new FlagConfigOption(
+                self::INPUT_KEY_SKIP_DB_VALIDATION,
+                '',
+                'If specified, then db connection validation will be skipped',
+                '-s'
+            ),
         ];
     }
 
@@ -206,9 +222,40 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * {@inheritdoc}
      */
-    public function validate(array $options)
+    public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
         $errors = [];
+
+        if (isset($options[ConfigOptionsList::INPUT_KEY_DB_PREFIX])) {
+            try {
+                $this->dbValidator->checkDatabaseTablePrefix($options[ConfigOptionsList::INPUT_KEY_DB_PREFIX]);
+            } catch (\InvalidArgumentException $exception) {
+                $errors[] = $exception->getMessage();
+            }
+        }
+
+        if (!$options[ConfigOptionsList::INPUT_KEY_SKIP_DB_VALIDATION] &&
+            (
+                $options[ConfigOptionsList::INPUT_KEY_DB_NAME] !== null
+                || $options[ConfigOptionsList::INPUT_KEY_DB_HOST] !== null
+                || $options[ConfigOptionsList::INPUT_KEY_DB_USER] !== null
+                || $options[ConfigOptionsList::INPUT_KEY_DB_PASSWORD] !== null
+            )
+        ) {
+            try {
+
+                $options = $this->getDbSettings($options, $deploymentConfig);
+
+                $this->dbValidator->checkDatabaseConnection(
+                    $options[ConfigOptionsList::INPUT_KEY_DB_NAME],
+                    $options[ConfigOptionsList::INPUT_KEY_DB_HOST],
+                    $options[ConfigOptionsList::INPUT_KEY_DB_USER],
+                    $options[ConfigOptionsList::INPUT_KEY_DB_PASSWORD]
+                );
+            } catch (\Exception $exception) {
+                $errors[] = $exception->getMessage();
+            }
+        }
 
         if (isset($options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY])
             && !$options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY]) {
@@ -224,5 +271,36 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         }
 
         return $errors;
+    }
+
+    /**
+     * @param array $options
+     * @param DeploymentConfig $deploymentConfig
+     *
+     * @return array
+     */
+    private function getDbSettings(array $options, DeploymentConfig $deploymentConfig)
+    {
+        if ($options[ConfigOptionsList::INPUT_KEY_DB_NAME] === null) {
+            $options[ConfigOptionsList::INPUT_KEY_DB_NAME] =
+                $deploymentConfig->get(self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_NAME);
+        }
+
+        if ($options[ConfigOptionsList::INPUT_KEY_DB_HOST] === null) {
+            $options[ConfigOptionsList::INPUT_KEY_DB_HOST] =
+                $deploymentConfig->get(self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_HOST);
+        }
+
+        if ($options[ConfigOptionsList::INPUT_KEY_DB_USER] === null) {
+            $options[ConfigOptionsList::INPUT_KEY_DB_USER] =
+                $deploymentConfig->get(self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_USER);
+        }
+
+        if ($options[ConfigOptionsList::INPUT_KEY_DB_PASSWORD] === null) {
+            $options[ConfigOptionsList::INPUT_KEY_DB_PASSWORD] =
+                $deploymentConfig->get(self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_PASSWORD);
+        }
+
+        return $options;
     }
 }

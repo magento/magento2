@@ -31,6 +31,7 @@ use Magento\Setup\Module\Setup;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Setup\Validator\DbValidator;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -186,6 +187,11 @@ class Installer
     private $cleanupFiles;
 
     /**
+     * @var DbValidator
+     */
+    private $dbValidator;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -204,6 +210,7 @@ class Installer
      * @param Context $context
      * @param SetupConfigModel $setupConfigModel
      * @param CleanupFiles $cleanupFiles
+     * @param DbValidator $dbValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -223,7 +230,8 @@ class Installer
         ObjectManagerProvider $objectManagerProvider,
         Context $context,
         SetupConfigModel $setupConfigModel,
-        CleanupFiles $cleanupFiles
+        CleanupFiles $cleanupFiles,
+        DbValidator $dbValidator
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -242,6 +250,7 @@ class Installer
         $this->context = $context;
         $this->setupConfigModel = $setupConfigModel;
         $this->cleanupFiles = $cleanupFiles;
+        $this->dbValidator = $dbValidator;
     }
 
     /**
@@ -953,63 +962,6 @@ class Installer
     }
 
     /**
-     * Checks Database Connection
-     *
-     * @param string $dbName
-     * @param string $dbHost
-     * @param string $dbUser
-     * @param string $dbPass
-     * @return boolean
-     * @throws \Magento\Setup\Exception
-     */
-    public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
-    {
-        $connection = $this->connectionFactory->create([
-            'dbname' => $dbName,
-            'host' => $dbHost,
-            'username' => $dbUser,
-            'password' => $dbPass,
-            'active' => true,
-        ]);
-
-        if (!$connection) {
-            throw new \Magento\Setup\Exception('Database connection failure.');
-        }
-
-        $mysqlVersion = $connection->fetchOne('SELECT version()');
-        if ($mysqlVersion) {
-            if (preg_match('/^([0-9\.]+)/', $mysqlVersion, $matches)) {
-                if (isset($matches[1]) && !empty($matches[1])) {
-                    if (version_compare($matches[1], self::MYSQL_VERSION_REQUIRED) < 0) {
-                        throw new \Magento\Setup\Exception(
-                            'Sorry, but we support MySQL version '. self::MYSQL_VERSION_REQUIRED . ' or later.'
-                        );
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Check if database table prefix is valid
-     *
-     * @param string $prefix
-     * @return boolean
-     * @throws \InvalidArgumentException
-     */
-    public function checkDatabaseTablePrefix($prefix)
-    {
-        //The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_);
-        // the first character should be a letter.
-        if ($prefix !== '' && !preg_match('/^([a-zA-Z])([[:alnum:]_]+)$/', $prefix)) {
-            throw new \InvalidArgumentException('Please correct the table prefix format.');
-        }
-
-        return true;
-    }
-
-    /**
      * Return messages
      *
      * @return array
@@ -1095,14 +1047,14 @@ class Installer
     {
         $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
         $connectionConfig = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
-        $this->checkDatabaseConnection(
+        $this->dbValidator->checkDatabaseConnection(
             $connectionConfig[ConfigOptionsList::KEY_NAME],
             $connectionConfig[ConfigOptionsList::KEY_HOST],
             $connectionConfig[ConfigOptionsList::KEY_USER],
             $connectionConfig[ConfigOptionsList::KEY_PASSWORD]
         );
         if (isset($connectionConfig[ConfigOptionsList::KEY_PREFIX])) {
-            $this->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsList::KEY_PREFIX]);
+            $this->dbValidator->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsList::KEY_PREFIX]);
         }
     }
 

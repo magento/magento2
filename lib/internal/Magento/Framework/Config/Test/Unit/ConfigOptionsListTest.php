@@ -7,6 +7,7 @@ namespace Magento\Framework\Config\Test\Unit;
 
 use Magento\Framework\Config\ConfigGenerator;
 use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Setup\Validator\DbValidator;
 
 class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,11 +26,17 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
      */
     private $deploymentConfig;
 
+    /**
+     * @var DbValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dbValidator;
+
     protected function setUp()
     {
         $this->generator = $this->getMock('Magento\Framework\Config\ConfigGenerator', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->object = new ConfigOptionsList($this->generator);
+        $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
+        $this->object = new ConfigOptionsList($this->generator, $this->dbValidator);
     }
 
     public function testGetOptions()
@@ -55,7 +62,9 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Database type', $options[8]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[9]);
         $this->assertSame('Database  initial set of commands', $options[9]->getDescription());
-        $this->assertEquals(10, count($options));
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\FlagConfigOption', $options[10]);
+        $this->assertSame('If specified, then db connection validation will be skipped', $options[10]->getDescription());
+        $this->assertEquals(11, count($options));
     }
 
     public function testCreateOptions()

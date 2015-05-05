@@ -7,6 +7,7 @@
 namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\DatabaseCheck;
+use Magento\Setup\Validator\DbValidator;
 
 class DatabaseCheckTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,6 +15,11 @@ class DatabaseCheckTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer
      */
     private $installer;
+
+    /**
+     * @var DbValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dbValidator;
 
     /**
      * Controller
@@ -30,12 +36,13 @@ class DatabaseCheckTest extends \PHPUnit_Framework_TestCase
         $installerFactory->expects($this->once())->method('create')->with($webLogger)->willReturn(
             $this->installer
         );
-        $this->controller = new DatabaseCheck($installerFactory, $webLogger);
+        $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
+        $this->controller = new DatabaseCheck($installerFactory, $webLogger, $this->dbValidator);
     }
 
     public function testIndexAction()
     {
-        $this->installer->expects($this->once())->method('checkDatabaseConnection');
+        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection');
         $jsonModel = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -45,7 +52,7 @@ class DatabaseCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexActionWithError()
     {
-        $this->installer->expects($this->once())->method('checkDatabaseConnection')->will(
+        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->will(
             $this->throwException(new \Exception)
         );
         $jsonModel = $this->controller->indexAction();
@@ -58,7 +65,7 @@ class DatabaseCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexActionCheckPrefix()
     {
-        $this->installer->expects($this->once())->method('checkDatabaseTablePrefix');
+        $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix');
         $this->controller->indexAction();
     }
 }
