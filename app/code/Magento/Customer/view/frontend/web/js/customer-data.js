@@ -7,7 +7,8 @@ define([
     'underscore',
     'ko',
     'Magento_Customer/js/section-config',
-    'jquery/jquery-storageapi'
+    'jquery/jquery-storageapi',
+    'jquery/jquery-cookie'
 ], function ($, _, ko, sectionConfig) {
     'use strict';
 
@@ -24,11 +25,12 @@ define([
         storage.removeAll();
     }
     var invalidateCacheBySessionTimeOut = function(options) {
-        if (!$.cookieStorage.isSet('mage-cache-life')) {
+        if (new Date($.localStorage.get('mage-cache-timeout')) < new Date()) {
             storage.removeAll();
         }
+
         var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
-        $.cookieStorage.setExpires(date).set('mage-cache-life', 'true');
+        $.localStorage.set('mage-cache-timeout', date);
     };
 
     var dataProvider = {
