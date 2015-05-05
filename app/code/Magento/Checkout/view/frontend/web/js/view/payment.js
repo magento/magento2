@@ -54,7 +54,7 @@ define(
                 return sortedElems;
             },
             getMethodViewByCode: function(code) {
-                return _.find(this.elems(), function(elem) {
+                return _.find(this.getRegion('paymentMethods')(), function(elem) {
                     return elem.getCode() == code;
                 });
             },
