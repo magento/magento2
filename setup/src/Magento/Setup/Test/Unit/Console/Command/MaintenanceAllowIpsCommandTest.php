@@ -65,6 +65,34 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
                 'Set exempt IP-addresses: none' . PHP_EOL
             ],
             [
+                ['ip' => ['none']],
+                "'none' is not allowed" . PHP_EOL
+            ],
+            [
+                ['ip' => ['none'], '--none' => true],
+                'Set exempt IP-addresses: none' . PHP_EOL
+            ],
+            [
+                ['ip' => ['127.0.0.1', 'none']],
+                "'none' is not allowed" . PHP_EOL
+            ],
+            [
+                ['ip' => ['none', '127.0.0.1']],
+                "'none' is not allowed" . PHP_EOL
+            ],
+            [
+                ['ip' => ['none', 'none']],
+                "'none' is not allowed" . PHP_EOL
+            ],
+            [
+                ['ip' => ['127.0.0.1', 'none'], '--none' => true],
+                'Set exempt IP-addresses: none' . PHP_EOL
+            ],
+            [
+                ['ip' => ['127.0']],
+                'Invalid IP 127.0' . PHP_EOL
+            ],
+            [
                 [],
                 ''
             ]

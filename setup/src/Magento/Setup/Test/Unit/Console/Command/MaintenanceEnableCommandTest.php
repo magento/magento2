@@ -65,6 +65,22 @@ class MaintenanceEnableCommandTest extends \PHPUnit_Framework_TestCase
                 [],
                 'Enabled maintenance mode' . PHP_EOL
             ],
+            [
+                ['--ip' => ['none', 'none']],
+                "'none' can be only used once" . PHP_EOL
+            ],
+            [
+                ['--ip' => ['none', '127.0.0.1']],
+                "Multiple values are not allowed when 'none' is used" . PHP_EOL
+            ],
+            [
+                ['--ip' => ['none', '127.0']],
+                "Multiple values are not allowed when 'none' is used" . PHP_EOL
+            ],
+            [
+                ['--ip' => ['127.0']],
+                'Invalid IP 127.0' . PHP_EOL
+            ],
         ];
     }
 }

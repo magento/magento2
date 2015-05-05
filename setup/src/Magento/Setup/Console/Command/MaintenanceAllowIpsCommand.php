@@ -8,6 +8,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Module\ModuleList;
+use Magento\Setup\Model\IpValidator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -75,6 +76,12 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     {
         if (!$input->getOption(self::INPUT_KEY_NONE)) {
             $addresses = $input->getArgument(self::INPUT_KEY_IP);
+            $messages = IpValidator::validateIps($addresses, false);
+            if (!empty($messages)) {
+                $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $messages));
+                return;
+            }
+
             if (!empty($addresses)) {
                 $this->maintenanceMode->setAddresses(implode(',', $addresses));
                 $output->writeln(
