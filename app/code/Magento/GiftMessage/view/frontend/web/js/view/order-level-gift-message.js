@@ -32,8 +32,8 @@ define([
                 this._super();
                 giftOptions.addOrderLevelGiftOptions(this);
             },
-            isOrderLevelGiftMessageVisible: ko.observable(true),
-            setOrderLevelGiftMessageVisible: function() {
+            isOrderLevelGiftMessageVisible: ko.observable(false),
+            setOrderLevelGiftMessageVisible: function(data, event) {
                 event.preventDefault();
                 this.isOrderLevelGiftMessageVisible(!this.isOrderLevelGiftMessageVisible());
             },

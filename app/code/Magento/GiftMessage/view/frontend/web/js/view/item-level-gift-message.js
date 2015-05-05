@@ -14,7 +14,6 @@ define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model
             messages: {},
             quoteItems: [],
             quoteItemsCount: 0,
-            isItemLevelGiftMessagesHidden: {},
             initialize: function() {
                 var item,
                     that = this,
@@ -30,7 +29,7 @@ define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model
                                     to: ko.observable(giftMessage.getDefaultMessageForItem(itemId).to || name),
                                     message: ko.observable(giftMessage.getDefaultMessageForItem(itemId).message)
                                 };
-                                that.isItemLevelGiftMessagesHidden[itemId] = ko.observable(true);
+                                quoteItems[item].isItemLevelGiftMessageVisible = ko.observable(false);
                                 that.quoteItems.push(quoteItems[item]);
                             }
                         }
@@ -42,9 +41,11 @@ define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model
                 giftOptions.addItemLevelGiftOptions(this);
             },
             itemImages: ko.observableArray(),
-            setItemLevelGiftMessageHidden: function(itemId, event) {
+            setItemLevelGiftMessageHidden: function(data, event) {
                 event.preventDefault();
-                this.isItemLevelGiftMessagesHidden[itemId](!this.isItemLevelGiftMessagesHidden[itemId]());
+                if (data.hasOwnProperty('item_id')) {
+                    this.isItemLevelGiftMessageVisible(!this.isItemLevelGiftMessageVisible());
+                }
             },
             submit: function(remove) {
                 remove = remove || false;

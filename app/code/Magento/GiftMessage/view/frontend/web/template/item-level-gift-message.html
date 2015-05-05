@@ -31,8 +31,8 @@
         </div>
         <div class="options">
             <!-- <div class="options-items-container"></div> -->
-            <a href="#" class="action activate message" data-bind="click: $parent.setItemLevelGiftMessageHidden(item_id, event), text: $t('Gift Message')"></a>
-            <div id="gift-messages-for-item-container" class="block message" data-bind="visible: $parent.isItemLevelGiftMessagesHidden[item_id]">
+            <a href="#" class="action activate message" data-bind="click: $parent.setItemLevelGiftMessageHidden, text: $t('Gift Message')"></a>
+            <div id="gift-messages-for-item-container" class="block message" data-bind="visible: isItemLevelGiftMessageVisible">
                 <fieldset class="fieldset">
                     <p data-bind="text: $t('You can leave a box blank if you don\'t wish to add a gift message for the item.')"></p>
                     <div class="field from">
