@@ -1,12 +1,13 @@
 <?php
 /**
- * High-level interface for email templates data that hides format from the client code
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
 
+/**
+ * High-level interface for email templates data that hides format from the client code
+ */
 class Config
 {
     /**
@@ -35,6 +36,7 @@ class Config
      * Retrieve unique identifiers of all available email templates
      *
      * @return string[]
+     * @api
      */
     public function getAvailableTemplates()
     {
@@ -46,6 +48,7 @@ class Config
      *
      * @param string $templateId
      * @return \Magento\Framework\Phrase
+     * @api
      */
     public function getTemplateLabel($templateId)
     {
@@ -57,6 +60,7 @@ class Config
      *
      * @param string $templateId
      * @return string
+     * @api
      */
     public function getTemplateType($templateId)
     {
@@ -68,6 +72,7 @@ class Config
      *
      * @param string $templateId
      * @return string
+     * @api
      */
     public function getTemplateModule($templateId)
     {
@@ -79,6 +84,7 @@ class Config
      *
      * @param string $templateId
      * @return string
+     * @api
      */
     public function getTemplateFilename($templateId)
     {
