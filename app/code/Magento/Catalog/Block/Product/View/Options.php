@@ -219,8 +219,16 @@ class Options extends \Magento\Framework\View\Element\Template
             $config[$option->getId()] = $priceValue;
         }
 
-        //alter the return array from the other modules eg: weee
-        $this->_eventManager->dispatch('catalog_product_option_price_configuration_after', ['config' => &$config]);
+        $configObj = new \Magento\Framework\Object(
+            [
+                'config' => $config,
+            ]
+        );
+
+        //pass the return array encapsulated in an object for the other modules to be able to alter it eg: weee
+        $this->_eventManager->dispatch('catalog_product_option_price_configuration_after', ['configObj' => $configObj]);
+
+        $config=$configObj->getConfig();
 
         return $this->_jsonEncoder->encode($config);
     }
