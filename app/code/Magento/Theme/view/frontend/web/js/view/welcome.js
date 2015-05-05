@@ -11,7 +11,12 @@ define([
 
     return Component.extend({
         welcome: function() {
-            return $.mage.__('Welcome, ') + customerData.get('customer')().fullname + '!';
+            var customer = customerData.get('customer')();
+            if ('fullname' in customer) {
+                return $.mage.__('Welcome, ') + customer.fullname + '!';
+            } else {
+                return null;
+            }
         }
     });
 });

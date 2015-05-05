@@ -36,11 +36,12 @@ class Customer implements SectionSourceInterface
      */
     public function getSectionData()
     {
+        if (!$this->currentCustomer->getCustomerId()) {
+            return [];
+        }
         $customer = $this->currentCustomer->getCustomer();
         return [
-            'fullname' => $this->currentCustomer->getCustomerId()
-                ? $this->customerViewHelper->getCustomerName($customer)
-                : '',
+            'fullname' => $this->customerViewHelper->getCustomerName($customer),
             'firstname' => $customer->getFirstname(),
         ];
     }
