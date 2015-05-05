@@ -7,6 +7,7 @@
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\MaintenanceDisableCommand;
+use Magento\Setup\Model\IpValidator;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class MaintenanceDisableCommandTest extends \PHPUnit_Framework_TestCase
@@ -24,7 +25,7 @@ class MaintenanceDisableCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
-        $this->command = new MaintenanceDisableCommand($this->maintenanceMode);
+        $this->command = new MaintenanceDisableCommand($this->maintenanceMode, new IpValidator());
     }
 
     /**

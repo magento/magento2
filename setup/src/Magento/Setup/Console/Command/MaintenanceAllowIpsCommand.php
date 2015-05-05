@@ -26,18 +26,24 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     const INPUT_KEY_NONE = 'none';
 
     /**
-     * @var MaintenanceMode $maintenanceMode
+     * @var MaintenanceMode
      */
     private $maintenanceMode;
+
+    /**
+     * @var IpValidator
+     */
+    private $ipValidator;
 
     /**
      * Constructor
      *
      * @param MaintenanceMode $maintenanceMode
      */
-    public function __construct(MaintenanceMode $maintenanceMode)
+    public function __construct(MaintenanceMode $maintenanceMode, IpValidator $ipValidator)
     {
         $this->maintenanceMode = $maintenanceMode;
+        $this->ipValidator = $ipValidator;
         parent::__construct();
     }
 
@@ -76,7 +82,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     {
         if (!$input->getOption(self::INPUT_KEY_NONE)) {
             $addresses = $input->getArgument(self::INPUT_KEY_IP);
-            $messages = IpValidator::validateIps($addresses, false);
+            $messages = $this->ipValidator->validateIps($addresses, false);
             if (!empty($messages)) {
                 $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $messages));
                 return;

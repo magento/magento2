@@ -5,6 +5,9 @@
  */
 namespace Magento\Setup\Model;
 
+/**
+ * Class to validate list of IPs for maintenance commands
+ */
 class IpValidator
 {
     /**
@@ -14,7 +17,7 @@ class IpValidator
      * @param bool $noneAllowed
      * @return string[]
      */
-    public static function validateIps(array $ips, $noneAllowed)
+    public function validateIps(array $ips, $noneAllowed)
     {
         $none = [];
         $validIps = [];

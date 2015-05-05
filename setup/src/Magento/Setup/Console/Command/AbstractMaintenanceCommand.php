@@ -19,18 +19,24 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
     const INPUT_KEY_IP = 'ip';
 
     /**
-     * @var MaintenanceMode $maintenanceMode
+     * @var MaintenanceMode
      */
     protected $maintenanceMode;
+
+    /**
+     * @var IpValidator
+     */
+    protected $ipValidator;
 
     /**
      * Constructor
      *
      * @param MaintenanceMode $maintenanceMode
      */
-    public function __construct(MaintenanceMode $maintenanceMode)
+    public function __construct(MaintenanceMode $maintenanceMode, IpValidator $ipValidator)
     {
         $this->maintenanceMode = $maintenanceMode;
+        $this->ipValidator = $ipValidator;
         parent::__construct();
     }
 
@@ -73,7 +79,7 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $addresses = $input->getOption(self::INPUT_KEY_IP);
-        $messages = IpValidator::validateIps($addresses, true);
+        $messages = $this->ipValidator->validateIps($addresses, true);
         if (!empty($messages)) {
             $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $messages));
             return;

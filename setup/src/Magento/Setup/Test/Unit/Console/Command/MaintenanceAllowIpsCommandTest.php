@@ -7,6 +7,7 @@
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\MaintenanceAllowIpsCommand;
+use Magento\Setup\Model\IpValidator;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
@@ -24,7 +25,7 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
-        $this->command = new MaintenanceAllowIpsCommand($this->maintenanceMode);
+        $this->command = new MaintenanceAllowIpsCommand($this->maintenanceMode, new IpValidator());
     }
 
     /**
