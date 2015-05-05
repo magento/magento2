@@ -6,12 +6,10 @@
 define([
     'ko',
     './template/engine',
-    './bind/date',
     './bind/scope',
     './bind/datepicker',
     './bind/stop_propagation',
     './bind/outer_click',
-    './bind/class',
     './bind/keyboard',
     './bind/optgroup',
     './extender/observable_array'

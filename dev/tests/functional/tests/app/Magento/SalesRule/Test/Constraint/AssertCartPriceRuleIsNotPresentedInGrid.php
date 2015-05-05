@@ -6,7 +6,7 @@
 
 namespace Magento\SalesRule\Test\Constraint;
 
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -19,10 +19,10 @@ class AssertCartPriceRuleIsNotPresentedInGrid extends AbstractConstraint
      * Assert that sales rule is not present in cart price rules grid.
      *
      * @param PromoQuoteIndex $promoQuoteIndex
-     * @param SalesRuleInjectable $salesRule
+     * @param SalesRule $salesRule
      * @return void
      */
-    public function processAssert(PromoQuoteIndex $promoQuoteIndex, SalesRuleInjectable $salesRule)
+    public function processAssert(PromoQuoteIndex $promoQuoteIndex, SalesRule $salesRule)
     {
         \PHPUnit_Framework_Assert::assertFalse(
             $promoQuoteIndex->getPromoQuoteGrid()->isRowVisible(['name' => $salesRule->getName()]),

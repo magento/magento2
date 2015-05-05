@@ -11,7 +11,7 @@ use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlInterface;
@@ -111,10 +111,10 @@ class Curl extends AbstractCurl implements OrderInjectableInterface
     /**
      * Prepare coupon data.
      *
-     * @param SalesRuleInjectable $data
+     * @param SalesRule $data
      * @return array
      */
-    protected function prepareCouponCode(SalesRuleInjectable $data)
+    protected function prepareCouponCode(SalesRule $data)
     {
         return ['order' => ['coupon' => ['code' => $data->getCouponCode()]]];
     }
