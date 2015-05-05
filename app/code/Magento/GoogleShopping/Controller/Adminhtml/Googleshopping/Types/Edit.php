@@ -11,7 +11,7 @@ class Edit extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
     /**
      * Edit attribute set mapping
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -21,11 +21,9 @@ class Edit extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
         try {
             $result = [];
             if ($typeId) {
-                $collection = $this->_objectManager->create(
-                    'Magento\GoogleShopping\Model\Resource\Attribute\Collection'
-                )->addTypeFilter(
-                    $typeId
-                )->load();
+                $collection = $this->_objectManager
+                    ->create('Magento\GoogleShopping\Model\Resource\Attribute\Collection')
+                    ->addTypeFilter($typeId)->load();
                 foreach ($collection as $attribute) {
                     $result[] = $attribute->getData();
                 }
@@ -34,19 +32,22 @@ class Edit extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\T
             $this->_coreRegistry->register('attributes', $result);
 
             $breadcrumbLabel = $typeId ? __('Edit attribute set mapping') : __('New attribute set mapping');
-            $this->_initAction()->_addBreadcrumb(
-                $breadcrumbLabel,
-                $breadcrumbLabel
-            )->_addContent(
-                $this->_view->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit')
-            );
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Google Content Attribute Mapping'));
-            $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Google Content Attributes'));
-            $this->_view->renderLayout();
+
+            $resultPage = $this->initPage();
+            $resultPage->addBreadcrumb($breadcrumbLabel, $breadcrumbLabel)
+                ->addContent(
+                    $resultPage->getLayout()->createBlock('Magento\GoogleShopping\Block\Adminhtml\Types\Edit')
+                );
+
+            $resultPage->getConfig()->getTitle()->prepend(__('Google Content Attribute Mapping'));
+            $resultPage->getConfig()->getTitle()->prepend(__('Google Content Attributes'));
+            return $resultPage;
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->messageManager->addError(__("We can't edit Attribute Set Mapping."));
-            $this->_redirect('adminhtml/*/index');
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+            return $resultRedirect->setPath('adminhtml/*/index');
         }
     }
 }

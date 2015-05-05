@@ -164,6 +164,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
 
         /** @var \Magento\Customer\Model\Resource\Group\Collection $collection */
         $collection = $this->groupFactory->create()->getCollection();
+        $collection->addTaxClass();
 
         //Add filters from root filter group to the collection
         /** @var FilterGroup $group */
@@ -234,6 +235,8 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
                 return 'customer_group_code';
             case GroupInterface::ID:
                 return 'customer_group_id';
+            case GroupInterface::TAX_CLASS_NAME:
+                return 'class_name';
             default:
                 return $field;
         }

@@ -12,6 +12,7 @@
 namespace Magento\Tax\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Controller\ResultFactory;
 
 class Rule extends \Magento\Backend\App\Action
 {
@@ -49,21 +50,15 @@ class Rule extends \Magento\Backend\App\Action
     /**
      * Initialize action
      *
-     * @return $this
+     * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function _initAction()
+    protected function initResultPage()
     {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_Tax::sales_tax_rules'
-        )->_addBreadcrumb(
-            __('Tax'),
-            __('Tax')
-        )->_addBreadcrumb(
-            __('Tax Rules'),
-            __('Tax Rules')
-        );
-        return $this;
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_Tax::sales_tax_rules')
+            ->addBreadcrumb(__('Tax'), __('Tax'))
+            ->addBreadcrumb(__('Tax Rules'), __('Tax Rules'));
+        return $resultPage;
     }
 
     /**
