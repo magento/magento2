@@ -29,7 +29,7 @@ class AssertTaxTotalOrderReview extends AbstractConstraint
             $reviewTaxTotal,
             number_format($taxTotal, 2),
             'Tax price: \'' . $reviewTaxTotal
-            . '\' not equals with price from data set: \'' . $reviewTaxTotal . '\''
+            . '\' not equals with price from data set: \'' . $taxTotal . '\''
         );
     }
 
