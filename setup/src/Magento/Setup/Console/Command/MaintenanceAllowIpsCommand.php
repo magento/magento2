@@ -39,6 +39,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
      * Constructor
      *
      * @param MaintenanceMode $maintenanceMode
+     * @param IpValidator $ipValidator
      */
     public function __construct(MaintenanceMode $maintenanceMode, IpValidator $ipValidator)
     {
