@@ -89,15 +89,21 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
             $modules = $input->getArgument(self::INPUT_KEY_MODULES);
         }
         if (empty($modules)) {
-            throw new \InvalidArgumentException(
-                'No modules specified. Specify a space-separated list of modules or use the --all option'
+            $output->writeln(
+                '<error>No modules specified. Specify a space-separated list of modules or use the --all option</error>'
             );
+            return;
         }
         /**
          * @var \Magento\Framework\Module\Status $status
          */
         $status = $this->objectManagerProvider->get()->get('Magento\Framework\Module\Status');
-        $modulesToChange = $status->getModulesToChange($isEnable, $modules);
+        try {
+            $modulesToChange = $status->getModulesToChange($isEnable, $modules);
+        } catch (\LogicException $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return;
+        }
         if (!empty($modulesToChange)) {
             $force = $input->getOption(self::INPUT_KEY_FORCE);
             if (!$force) {
@@ -156,19 +162,19 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
         /** @var \Magento\Framework\App\Cache $cache */
         $cache = $objectManager->get('Magento\Framework\App\Cache');
         $cache->clean();
-        $output->writeln('Cache cleared successfully.');
+        $output->writeln('<info>Cache cleared successfully.</info>');
         /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
         $cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
         $cleanupFiles->clearCodeGeneratedClasses();
-        $output->writeln('Generated classes cleared successfully.');
+        $output->writeln('<info>Generated classes cleared successfully.</info>');
         if ($input->getOption(self::INPUT_KEY_CLEAR_STATIC_CONTENT)) {
             $cleanupFiles->clearMaterializedViewFiles();
-            $output->writeln('Generated static view files cleared successfully.');
+            $output->writeln('<info>Generated static view files cleared successfully.</info>');
         } else {
             $output->writeln(
                 '<error>Alert: Generated static view files were not cleared.'
                 . ' You can clear them using the --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
-                . ' Failure to clear static view files might cause display issues in the Admin and storefront.'
+                . ' Failure to clear static view files might cause display issues in the Admin and storefront.</error>'
             );
         }
     }
