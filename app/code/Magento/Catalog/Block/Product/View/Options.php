@@ -206,18 +206,21 @@ class Options extends \Magento\Framework\View\Element\Template
             /* @var $option \Magento\Catalog\Model\Product\Option */
             $priceValue = 0;
             if ($option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
-                $_tmpPriceValues = [];
+                $tmpPriceValues = [];
                 foreach ($option->getValues() as $value) {
                     /* @var $value \Magento\Catalog\Model\Product\Option\Value */
                     $id = $value->getId();
-                    $_tmpPriceValues[$id] = $this->_getPriceConfiguration($value);
+                    $tmpPriceValues[$id] = $this->_getPriceConfiguration($value);
                 }
-                $priceValue = $_tmpPriceValues;
+                $priceValue = $tmpPriceValues;
             } else {
                 $priceValue = $this->_getPriceConfiguration($option);
             }
             $config[$option->getId()] = $priceValue;
         }
+
+        //alter the return array from the other modules eg: weee
+        $this->_eventManager->dispatch('catalog_product_option_price_configuration_after', ['config' => &$config]);
 
         return $this->_jsonEncoder->encode($config);
     }

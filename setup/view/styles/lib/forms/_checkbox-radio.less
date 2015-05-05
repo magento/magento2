@@ -9,7 +9,6 @@
 
 @checkbox__border-color: @color-gray68;
 @radio-bullet__color: @color-brownie;
-@color-required: @color-prime;
 
 //
 //  Common
@@ -23,7 +22,8 @@
 
     &[disabled],
     &.disabled {
-        + .form-label, + .form-label:before {
+        + .form-label,
+        + .form-label:before {
             cursor: default;
             opacity: @disabled__opacity;
             pointer-events: none;
@@ -31,7 +31,6 @@
     }
 
     //  Hover state
-
     &:not([disabled]),
     &:not(.disabled) {
         + .form-label {

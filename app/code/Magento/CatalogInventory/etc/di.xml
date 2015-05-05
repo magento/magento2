@@ -52,4 +52,10 @@
     <type name="Magento\Catalog\Block\Product\View">
         <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
     </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="catalogInventoryAfterLoad" type="\Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
+    </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="catalogInventoryAroundSave" type="\Magento\CatalogInventory\Model\Plugin\AroundProductRepositorySave"/>
+    </type>
 </config>

@@ -194,4 +194,32 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         $response->setTypes($types);
         return $this;
     }
+
+    /**
+     * Modify the options config for the front end to resemble the weee final price
+     *
+     * @param   \Magento\Framework\Event\Observer $observer
+     * @return  $this
+     */
+    public function getPriceConfiguration(\Magento\Framework\Event\Observer $observer)
+    {
+        if ($this->_weeeData->isEnabled()) {
+            $priceConfig=$observer->getData('config');
+            if (is_array($priceConfig)) {
+                foreach ($priceConfig as $keyConfigs => $configs) {
+                    if (is_array($configs)) {
+                        foreach ($configs as $keyConfig => $config) {
+                            $priceConfig[$keyConfigs][$keyConfig]['prices']['weeePrice']= [
+                                'amount' => $config['prices']['finalPrice']['amount'],
+                            ];
+                        }
+
+                    }
+                }
+            }
+
+            $observer->setData('config', $priceConfig);
+        }
+        return $this;
+    }
 }

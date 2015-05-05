@@ -5,8 +5,8 @@
  */
 namespace Magento\Tax\Model;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
+use Magento\Tax\Model\TaxClass\Key;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -121,8 +121,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'quantity' => 2,
             'unit_price' => 10,
             'tax_class_key' => [
-                TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
-                TaxClassKeyInterface::KEY_VALUE => 'DefaultProductClass',
+                Key::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
+                Key::KEY_VALUE => 'DefaultProductClass',
             ],
         ];
         $oneProductResults = [
@@ -649,8 +649,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'customer_tax_class_key' => [
-                    TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
-                    TaxClassKeyInterface::KEY_VALUE => 'DefaultCustomerClass',
+                    Key::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
+                    Key::KEY_VALUE => 'DefaultCustomerClass',
                 ],
             ],
             'expected_tax_details' => [
@@ -1064,8 +1064,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
             'quantity' => 9,
             'unit_price' => 0.33, // this is including the store tax of 10%. Pre tax is 0.3
             'tax_class_key' => [
-                TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
-                TaxClassKeyInterface::KEY_VALUE => 'HigherProductClass',
+                Key::KEY_TYPE => TaxClassKeyInterface::TYPE_NAME,
+                Key::KEY_VALUE => 'HigherProductClass',
             ],
             'is_tax_included' => true,
         ];
@@ -1817,8 +1817,8 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
                     && is_string($value)
                 ) {
                     $value = [
-                        TaxClassKeyInterface::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
-                        TaxClassKeyInterface::KEY_VALUE => $this->taxClassIds[$value],
+                        Key::KEY_TYPE => TaxClassKeyInterface::TYPE_ID,
+                        Key::KEY_VALUE => $this->taxClassIds[$value],
                     ];
                 }
             }

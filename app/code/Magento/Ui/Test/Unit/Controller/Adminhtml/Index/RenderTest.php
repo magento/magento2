@@ -63,24 +63,31 @@ class RenderTest extends \PHPUnit_Framework_TestCase
 
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
-            ->with('component')
-            ->willReturn($name);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('name')
+            ->with('namespace')
             ->willReturn($name);
         $this->responseMock->expects($this->once())
             ->method('appendBody')
             ->with($renderedData);
 
-        $viewMock = $this->getMock('Magento\Ui\Form\Field', ['render'], [], '', false);
+        /**
+         * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $viewMock
+         */
+        $viewMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponentInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['render']
+        );
         $viewMock->expects($this->once())
             ->method('render')
             ->willReturn($renderedData);
         $this->uiFactoryMock->expects($this->once())
-            ->method('createUiComponent')
+            ->method('create')
             ->willReturn($viewMock);
 
-        $this->assertNull($this->render->execute());
+        $this->render->execute();
     }
 }

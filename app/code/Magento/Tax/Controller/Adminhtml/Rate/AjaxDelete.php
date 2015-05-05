@@ -6,36 +6,33 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rate;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class AjaxDelete extends \Magento\Tax\Controller\Adminhtml\Rate
 {
     /**
      * Delete Tax Rate via AJAX
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
         $rateId = (int)$this->getRequest()->getParam('tax_calculation_rate_id');
         try {
             $this->_taxRateRepository->deleteById($rateId);
-            $responseContent = $this->_objectManager->get(
-                'Magento\Framework\Json\Helper\Data'
-            )->jsonEncode(
-                ['success' => true, 'error_message' => '']
-            );
+            $responseContent = ['success' => true, 'error_message' => ''];
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $responseContent = $this->_objectManager->get(
-                'Magento\Framework\Json\Helper\Data'
-            )->jsonEncode(
-                ['success' => false, 'error_message' => $e->getMessage()]
-            );
+            $responseContent = ['success' => false, 'error_message' => $e->getMessage()];
         } catch (\Exception $e) {
-            $responseContent = $this->_objectManager->get(
-                'Magento\Framework\Json\Helper\Data'
-            )->jsonEncode(
-                ['success' => false, 'error_message' => __('An error occurred while deleting this tax rate.')]
-            );
+            $responseContent = [
+                'success' => false,
+                'error_message' => __('An error occurred while deleting this tax rate.')
+            ];
         }
-        $this->getResponse()->representJson($responseContent);
+
+        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $resultJson->setData($responseContent);
+        return $resultJson;
     }
 }
