@@ -33,31 +33,23 @@
             }
         }
     }
-    &.complex {
-        .section-config {
-            &.with-button {
-                // PayPal connected
-                &.enabled {
-                    > .entry-edit-head {
-                        &:before {
-                            &:extend(.abs-icon all);
-                            background-color: @color-success;
-                            border-radius: 100%;
-                            color: @color-white;
-                            content: @icon-check-mage__content; // ex "\e01e"
-                            display: block;
-                            float: left;
-                            font-size: 1.6rem;
-                            font-weight: normal;
-                            height: 1em;
-                            margin-left: -25px;
-                            margin-top: .2rem;
-                            overflow: hidden;
-                            width: 1em;
-                        }
-                    }
-                }
-            }
+    &.complex .section-config.with-button.enabled > .entry-edit-head, // PayPal connected
+    .config td.label label.enabled {
+        &:before {
+            &:extend(.abs-icon all);
+            background-color: @success__color;
+            border-radius: 100%;
+            color: @color-white;
+            content: @icon-check-mage__content; // ex "\e01e"
+            display: block;
+            float: left;
+            font-size: 1.6rem;
+            font-weight: @font-weight__regular;
+            height: 1em;
+            margin-left: -25px;
+            margin-top: .2rem;
+            overflow: hidden;
+            width: 1em;
         }
     }
     &.config-advanced {
@@ -104,12 +96,8 @@
                     overflow: auto;
                     visibility: visible;
                 }
-                .state-closed {
-                    height: 0;
-                    overflow: hidden;
-                    visibility: hidden;
-                }
             }
+            &.open .state-closed,
             .state-opened {
                 height: 0;
                 overflow: hidden;
@@ -131,30 +119,6 @@
             margin-bottom: 0;
             padding-left: (@collapsible-title-icon__size + 1rem);
             padding-top: @collapsible-content__indent;
-        }
-        td {
-            &.label {
-                label {
-                    &.enabled {
-                        &:before {
-                            &:extend(.abs-icon all);
-                            background-color: @color-success;
-                            border-radius: 100%;
-                            color: @color-white;
-                            content: @icon-check-mage__content; // ex "\e01e"
-                            display: block;
-                            float: left;
-                            font-size: 1.6rem;
-                            font-weight: normal;
-                            height: 1em;
-                            margin-left: -25px;
-                            margin-top: .2rem;
-                            overflow: hidden;
-                            width: 1em;
-                        }
-                    }
-                }
-            }
         }
     }
     > .config {
