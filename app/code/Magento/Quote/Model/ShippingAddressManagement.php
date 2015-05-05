@@ -81,12 +81,12 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
         }
         $customerAddressId = $address->getCustomerAddressId();
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
+        $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         if ($customerAddressId) {
             $addressData = $this->addressRepository->getById($customerAddressId);
-
             $address =  $quote->getShippingAddress()->importCustomerAddressData($addressData);
-            $address->setSameAsBilling($address->getSameAsBilling());
         }
+        $address->setSameAsBilling($sameAsBilling);
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
         $quote->setShippingAddress($address);

@@ -180,9 +180,12 @@ class ShippingMethodManagementTest extends WebapiAbstract
             ShippingMethodInterface::KEY_METHOD_CODE => $methodCode,
             ShippingMethodInterface::KEY_CARRIER_TITLE => $carrierTitle,
             ShippingMethodInterface::KEY_METHOD_TITLE => $methodTitle,
-            ShippingMethodInterface::KEY_SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
             ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
+            ShippingMethodInterface::KEY_SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
             ShippingMethodInterface::KEY_AVAILABLE => true,
+            ShippingMethodInterface::KEY_ERROR_MESSAGE => null,
+            ShippingMethodInterface::KEY_PRICE_EXCL_TAX => null,
+            ShippingMethodInterface::KEY_PRICE_INCL_TAX => null,
         ];
 
         $requestData = ["cartId" => $cartId];

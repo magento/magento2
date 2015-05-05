@@ -72,7 +72,10 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
             AddressInterface::KEY_CITY => $address->getCity(),
             AddressInterface::KEY_FIRSTNAME => $address->getFirstname(),
             AddressInterface::KEY_LASTNAME => $address->getLastname(),
-            AddressInterface::KEY_EMAIL => $address->getEmail()
+            AddressInterface::KEY_EMAIL => $address->getEmail(),
+            AddressInterface::SAME_AS_BILLING => $address->getSameAsBilling(),
+            AddressInterface::CUSTOMER_ADDRESS_ID => $address->getCustomerAddressId(),
+            AddressInterface::SAVE_IN_ADDRESS_BOOK => $address->getSaveInAddressBook()
         ];
 
         $cartId = $this->getQuoteMaskedId($quote->getId());
@@ -90,7 +93,11 @@ class GuestShippingAddressManagementTest extends WebapiAbstract
         ];
 
         $requestData = ["cartId" => $cartId];
-        $this->assertEquals($data, $this->_webApiCall($serviceInfo, $requestData));
+        $response = $this->_webApiCall($serviceInfo, $requestData);
+
+        asort($data);
+        asort($response);
+        $this->assertEquals($data, $response);
     }
 
     /**
