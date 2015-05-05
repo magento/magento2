@@ -31,7 +31,7 @@ define(
                 if (quote.getTotals()) {
                     amount = this.totals().tax_amount;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(amount);
+                return priceUtils.formatPrice(amount, quote.getPriceFormat());
             }
         });
     }

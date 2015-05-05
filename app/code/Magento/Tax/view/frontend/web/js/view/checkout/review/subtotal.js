@@ -32,7 +32,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().subtotal;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             isBothPricesDisplayed: function() {
                 return 'both' == this.displaySubtotalMode;
@@ -45,7 +45,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().subtotal_incl_tax;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             }
         });
     }

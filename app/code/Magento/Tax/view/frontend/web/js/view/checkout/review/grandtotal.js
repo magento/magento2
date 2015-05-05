@@ -35,7 +35,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().grand_total;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             getBaseValue: function() {
                 var price = 0;
@@ -54,7 +54,7 @@ define(
                 if (amount < 0) {
                     return 0;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(amount);
+                return priceUtils.formatPrice(amount, quote.getPriceFormat());
             },
             isBaseGrandTotalDisplayNeeded: function() {
                 var totals = this.totals();
