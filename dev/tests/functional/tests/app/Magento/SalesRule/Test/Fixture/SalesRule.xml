@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="salesRuleInjectable" module="Magento_SalesRule" type="flat" entity_type="salesrule" collection="Magento\SalesRule\Model\Resource\Rule\Collection" repository_class="Magento\SalesRule\Test\Repository\SalesRuleInjectable" handler_interface="Magento\SalesRule\Test\Handler\SalesRuleInjectable\SalesRuleInjectableInterface" class="Magento\SalesRule\Test\Fixture\SalesRuleInjectable">
+    <fixture name="salesRule" module="Magento_SalesRule" type="flat" entity_type="salesrule" collection="Magento\SalesRule\Model\Resource\Rule\Collection" repository_class="Magento\SalesRule\Test\Repository\SalesRule" handler_interface="Magento\SalesRule\Test\Handler\SalesRule\SalesRuleInterface" class="Magento\SalesRule\Test\Fixture\SalesRule">
         <dataset name="default">
             <field name="name" xsi:type="string">Default price rule %isolation%</field>
             <field name="is_active" xsi:type="string">Active</field>
@@ -36,7 +36,7 @@
         <field name="is_active" group="rule_information">
             <default_value xsi:type="string">Active</default_value>
         </field>
-        <field name="conditions_serialized" group="conditions" source="Magento\SalesRule\Test\Fixture\SalesRuleInjectable\ConditionsSerialized" />
+        <field name="conditions_serialized" group="conditions" source="Magento\SalesRule\Test\Fixture\SalesRule\ConditionsSerialized" />
         <field name="actions_serialized" group="actions" />
         <field name="stop_rules_processing" group="actions">
             <default_value xsi:type="string">1</default_value>
