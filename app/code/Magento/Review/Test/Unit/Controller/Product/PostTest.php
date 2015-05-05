@@ -8,6 +8,9 @@ namespace Magento\Review\Test\Unit\Controller\Product;
 use Magento\Review\Model\Review;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class PostTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -95,6 +98,9 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRedirectMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setUp()
     {
         $this->redirect = $this->getMock('\Magento\Framework\App\Response\RedirectInterface');

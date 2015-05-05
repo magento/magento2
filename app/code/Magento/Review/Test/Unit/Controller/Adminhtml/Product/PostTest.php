@@ -9,6 +9,7 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PostTest extends \PHPUnit_Framework_TestCase
 {
@@ -132,7 +133,8 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ['__wakeup', 'setRatingId', 'setReviewId', 'addOptionVote'],
             [],
             '',
-            false);
+            false
+        );
         $this->ratingFactoryMock = $this->getMock(
             'Magento\Review\Model\RatingFactory',
             ['create'],
