@@ -4,9 +4,7 @@
  * See COPYING.txt for license details.
  */
 ?>
-
-<div class="opc-wrapper">
-    <ol class="opc" id="checkout" data-bind="scope:'checkout'">
+    <div id="checkout" data-bind="scope:'checkout'">
         <!-- ko template: getTemplate() --><!-- /ko -->
         <script type="text/x-magento-init">
             {
@@ -27,5 +25,4 @@
                 return url.setBaseUrl('<?php echo $block->getBaseUrl();?>');
             })
         </script>
-    </ol>
-</div>
+    </div>
