@@ -46,24 +46,40 @@ class Authentication
     protected $messageManager;
 
     /**
+     * @var \Magento\Backend\App\Action\Context
+     */
+    protected $context;
+
+    /**
+     * @var \Magento\Backend\App\BackendAppList
+     */
+    protected $backendAppList;
+
+    /**
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\App\BackendAppList $backendAppList
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\Model\UrlInterface $url,
         \Magento\Framework\App\ResponseInterface $response,
         \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\App\BackendAppList $backendAppList
     ) {
         $this->_auth = $auth;
         $this->_url = $url;
         $this->_response = $response;
         $this->_actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
+        $this->context = $context;
+        $this->backendAppList = $backendAppList;
     }
 
     /**
@@ -90,6 +106,21 @@ class Authentication
                 $this->_processNotLoggedInUser($request);
             } else {
                 $this->_auth->getAuthStorage()->prolong();
+
+                $backendApp = null;
+                if ($request->getParam('app')) {
+                    $backendApp = $this->backendAppList->getBackendApp($request->getParam('app'));
+                }
+
+                if ($backendApp) {
+                    //if (!$this->context->getAuthorization()->isAllowed($backendApp->getAclResource())) {
+                    //    $this->_auth->logout();
+                    //    $this->_processNotLoggedInUser($request);
+                    //}
+                    $resultRedirect = $this->context->getResultRedirectFactory()->create();
+                    $url = $this->context->getBackendUrl()->getBaseUrl() . $backendApp->getStartupPage();
+                    return $resultRedirect->setUrl($url);
+                }
             }
         }
         $this->_auth->getAuthStorage()->refreshAcl();

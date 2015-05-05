@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Setup\BackendApp" type="Magento\Backend\App\BackendApp">
+        <arguments>
+            <argument name="cookiePath" xsi:type="string">setup</argument>
+            <argument name="startupPage" xsi:type="string">setup</argument>
+            <argument name="aclResourceName" xsi:type="string">Magento_Setup::manage_setup</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Backend\App\BackendAppList">
+        <arguments>
+            <argument name="backendApps" xsi:type="array">
+                <item name="setup" xsi:type="object">Magento\Setup\BackendApp</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -33,10 +33,10 @@ class Index extends AbstractActionController
             $this->objectManager->create('Magento\Backend\Model\Auth\Session', [
                 'sessionConfig' => $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig')
             ]);
-
             if (!$this->objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
+                /** @var \Magento\Backend\Helper\Data $urlHelper */
                 $urlHelper = $this->objectManager->get('Magento\Backend\Helper\Data');
-                $url = $urlHelper->getUrl('backend/auth/login');
+                $url = $urlHelper->getUrl('setup/index/index', []);
                 $response = $this->getPluginManager()
                     ->get('Redirect')
                     ->toUrl($url);
