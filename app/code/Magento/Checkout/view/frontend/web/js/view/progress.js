@@ -10,10 +10,11 @@ define(
         'uiComponent',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/shipping-service'
+        'Magento_Checkout/js/model/shipping-service',
+        'Magento_Checkout/js/model/payment-service'
 
     ],
-    function (ko, Component, navigator, quote, shippingService) {
+    function (ko, Component, navigator, quote, shippingService, paymentService) {
         var className = ko.observable();
         return Component.extend({
             defaults: {
@@ -28,11 +29,26 @@ define(
                 if (quote.getPaymentMethod()) {
                     className('opc-block-progress order-review-step')
                 }
-                return this.className
+                return className()
             },
 
             isShowStep: function (stepName) {
-                return navigator.findStepByName(stepName).isEnabled
+                switch(stepName){
+                    case 'shippingAddress':
+                        if (quote.isVirtual()) {
+                            return false
+                        }
+                        return navigator.findStepByName(stepName).isEnabled;
+                        break;
+                    case 'shippingMethod':
+                        if (quote.isVirtual()) {
+                            return false
+                        }
+                        return navigator.findStepByName(stepName).isEnabled;
+                        break;
+                    default:
+                        return navigator.findStepByName(stepName).isEnabled;
+                }
             },
             isStepComplete: function(stepName) {
                 switch(stepName){
@@ -61,8 +77,9 @@ define(
             getShippingMethod: function() {
                 return quote.getShippingMethod()
             },
-                    getPaymentMethod: function() {
-                return quote.getPaymentMethod();
+            getPaymentMethod: function() {
+                var code = quote.getPaymentMethod();
+                return paymentService.getPaymentMethodTitle(code);
             },
             goToStep: function(stepName) {
                 navigator.goToStep(stepName);

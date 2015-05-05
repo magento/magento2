@@ -14,6 +14,18 @@ define(
             },
             getAvailablePaymentMethods: function () {
                 return this.availablePaymentMethods;
+            },
+            getPaymentMethodTitle: function(code) {
+                var paymentMethodTitle = '';
+                if (code) {
+                    var paymentMethodsArray = this.availablePaymentMethods();
+                    paymentMethodsArray.forEach(function (entry) {
+                        if (entry.code = code) {
+                            paymentMethodTitle = entry.title
+                        }
+                    });
+                    return paymentMethodTitle;
+                }
             }
         }
     }
