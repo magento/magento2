@@ -28,6 +28,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     
     /**
      * @param InstallerFactory $installerFactory
+     * @param UserValidationRules $validationRules
      */
     public function __construct(InstallerFactory $installerFactory, UserValidationRules $validationRules)
     {
