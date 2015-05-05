@@ -3,10 +3,10 @@
  * See COPYING.txt for license details.
  */
 define([
-    'mage/utils',
+    'mageUtils',
     './storage',
     './events'
-], function (utils, Storage, Events) {
+], function(utils, Storage, Events) {
     'use strict';
 
     function Registry() {
@@ -20,21 +20,22 @@ define([
         /**
          * Retrieves data from registry.
          *
-         * @param {(String|Array)} elems - An array of elements' names or
-         *      a string of names divided by spaces.
-         * @param {Function} [callback] - Callback function that will be triggered
+         * @params {(String|Array)} elems -
+         *      An array of elements' names or a string of names divided by spaces.
+         * @params {Function} [callback] -
+         *      Callback function that will be triggered
          *      when all of the elements are registered.
          * @returns {Array|*|Undefined}
          *      Returns either an array of elements
          *      or an element itself if only is requested.
          *      If callback function is specified then returns 'undefined'.
          */
-        get: function (elems, callback) {
+        get: function(elems, callback) {
             var records;
 
             elems = utils.stringToArray(elems) || [];
 
-            if (typeof callback == 'function') {
+            if (typeof callback !== 'undefined') {
                 this.events.wait(elems, callback);
             } else {
                 records = this.storage.get(elems);
@@ -45,11 +46,12 @@ define([
             }
         },
 
-        /**
+
+       /**
          * Sets data to registry.
          *
-         * @param {String} elem - Elements' name.
-         * @param {*} value - Value that will be assigned to the element.
+         * @params {String} elems - Elements' name.
+         * @params {*} value - Value that will be assigned to the element.
          * @returns {registry} Chainable.
          */
         set: function (elem, value) {
@@ -61,8 +63,8 @@ define([
 
         /**
          * Removes specified elements from a storage.
-         * @param {(String|Array)} elems - An array of elements' names or
-         *      a string of names divided by spaces.
+         * @params {(String|Array)} elems -
+         *      An array of elements' names or a string of names divided by spaces.
          * @returns {registry} Chainable.
          */
         remove: function (elems) {
@@ -76,8 +78,8 @@ define([
        /**
          * Checks whether specified elements has been registered.
          *
-         * @param {(String|Array)} elems - An array of elements' names or
-         *      a string of names divided by spaces.
+         * @params {(String|Array)} elems -
+         *      An array of elements' names or a string of names divided by spaces.
          * @returns {Boolean}
          */
         has: function (elems) {
