@@ -76,17 +76,30 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $additionalData = $this->getMock('\Magento\Quote\Api\Data\AddressAdditionalDataInterface');
-        $billingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
-        $shippingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $billingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $shippingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
 
         $this->billingAddressManagement->expects($this->once())
             ->method('assign')
             ->with($cartId, $billingAddressMock)
             ->willReturn(1);
+
+        $billingAddressMock->expects($this->once())->method('format')->with('html');
+        $this->billingAddressManagement->expects($this->once())
+            ->method('get')
+            ->with($cartId)
+            ->willReturn($billingAddressMock);
+
         $this->shippingAddressManagement->expects($this->once())
             ->method('assign')
             ->with($cartId, $shippingAddressMock)
             ->willReturn(1);
+
+        $shippingAddressMock->expects($this->once())->method('format')->with('html');
+        $this->shippingAddressManagement->expects($this->once())
+            ->method('get')
+            ->with($cartId)
+            ->willReturn($shippingAddressMock);
 
         $shippingMethodMock = $this->getMock('\Magento\Quote\Api\Data\ShippingMethodInterface');
         $this->shippingMethodManagement->expects($this->once())

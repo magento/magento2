@@ -284,7 +284,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId', '__wakeup'])
             ->getMock();
-        $store->expects($this->exactly(2))
+        $store->expects($this->any())
             ->method('getWebsiteId')
             ->will($this->returnValue($websiteId));
 
@@ -307,16 +307,25 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $storage->expects($this->once())
             ->method('setData')
             ->with('quote_id_' . $websiteId, $replaceQuoteId);
-        $storage->expects($this->once())
+        $storage->expects($this->any())
             ->method('getData')
             ->with('quote_id_' . $websiteId)
-            ->will($this->returnValue($replaceQuoteId));;
+            ->will($this->returnValue($replaceQuoteId));
+
+        $quoteIdMasked = $this->getMock('\Magento\Quote\Model\QuoteIdMask', [], [], '', false);
+        $quoteIdMasked->expects($this->once())->method('load')->with($replaceQuoteId)->willReturnSelf();
+        $quoteIdMasked->expects($this->once())->method('setId')->with($replaceQuoteId)->willReturnSelf();
+        $quoteIdMasked->expects($this->once())->method('save')->willReturnSelf();
+
+        $quoteIdMaskedFactory = $this->getMock('\Magento\Quote\Model\QuoteIdMaskFactory', [], [], '', false);
+        $quoteIdMaskedFactory->expects($this->once())->method('create')->willReturn($quoteIdMasked);
 
         $session = $this->_helper->getObject(
             'Magento\Checkout\Model\Session',
             [
                 'storeManager' => $storeManager,
-                'storage' => $storage
+                'storage' => $storage,
+                'quoteIdMaskFactory' => $quoteIdMaskedFactory
             ]
         );
 
