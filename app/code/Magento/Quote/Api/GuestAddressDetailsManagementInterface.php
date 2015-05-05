@@ -8,7 +8,7 @@ namespace Magento\Quote\Api;
 interface GuestAddressDetailsManagementInterface
 {
     /**
-     * Save billing and shipping addresses for guest
+     * Save billing and shipping addresses for guest.
      *
      * @param string $cartId
      * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress

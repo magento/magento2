@@ -22,7 +22,7 @@ define(
             if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
             } else {
-                serviceUrl =  urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
+                serviceUrl =  urlBuilder.createUrl('/carts/mine/addresses', {});
             }
 
             errorList.clear();
