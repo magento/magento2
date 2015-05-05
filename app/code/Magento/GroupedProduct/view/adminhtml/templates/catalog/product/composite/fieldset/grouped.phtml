@@ -20,7 +20,7 @@
         <?php if ((!$_product->isAvailable() && !$_skipSaleableCheck) || !$_hasAssociatedProducts): ?>
             <p class="availability out-of-stock"><?php echo __('Availability:') ?> <span><?php echo __('Out of stock') ?></span></p>
         <?php endif; ?>
-        <table class="data-table table-info grouped-items-table" id="super-product-table">
+        <table class="data-table admin__table-primary grouped-items-table" id="super-product-table">
             <thead>
                 <tr class="headings">
                     <th class="col-id"><?php echo __('ID') ?></th>

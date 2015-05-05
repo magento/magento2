@@ -6,9 +6,10 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <ui_component name="cms_page_listing" component="listing"/>
+            <uiComponent name="cms_page_listing"/>
         </referenceContainer>
     </body>
 </page>

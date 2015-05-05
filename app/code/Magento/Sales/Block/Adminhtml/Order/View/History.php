@@ -54,7 +54,7 @@ class History extends \Magento\Backend\Block\Template
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->setData(
-            ['label' => __('Submit Comment'), 'class' => 'save', 'onclick' => $onclick]
+            ['label' => __('Submit Comment'), 'class' => 'action-save action-secondary', 'onclick' => $onclick]
         );
         $this->setChild('submit_button', $button);
         return parent::_prepareLayout();

@@ -110,8 +110,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerateWithNotAllowedDuplicatesAndDuplicatesExist()
     {
         $error = "Duplicated translation is found, but it is not allowed.\n"
-            . "The phrase \"phrase1\" is translated differently in 1 places.\n"
-            . "The phrase \"phrase2\" is translated differently in 1 places.\n";
+            . "The phrase \"phrase1\" is translated in 1 places.\n"
+            . "The phrase \"phrase2\" is translated in 1 places.\n";
         $this->setExpectedException('\RuntimeException', $error);
 
         $allowDuplicates = false;

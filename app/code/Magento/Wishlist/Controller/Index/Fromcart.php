@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,6 +8,7 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class Fromcart extends Action\Action implements IndexInterface
 {
@@ -82,7 +82,8 @@ class Fromcart extends Action\Action implements IndexInterface
      */
     public function getDefaultResult()
     {
-        $resultRedirect = $this->resultRedirectFactory->create();
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setUrl($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl());
     }
 }
