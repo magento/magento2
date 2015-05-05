@@ -19,18 +19,20 @@ define([
     var storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
     var storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
 
-    /** Expires date cache **/
-    if (!$.cookieStorage.isSet('mage-cache-sessid')) {
-        $.cookieStorage.set('mage-cache-sessid', true);
-        storage.removeAll();
-    }
     var invalidateCacheBySessionTimeOut = function(options) {
         if (new Date($.localStorage.get('mage-cache-timeout')) < new Date()) {
             storage.removeAll();
         }
-
+        //TODO: probably easier to track changes in the session of the backend area
         var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
         $.localStorage.set('mage-cache-timeout', date);
+    };
+
+    var invalidateCacheByCloseCookieSession = function() {
+        if (!$.cookieStorage.isSet('mage-cache-sessid')) {
+            $.cookieStorage.set('mage-cache-sessid', true);
+            storage.removeAll();
+        }
     };
 
     var dataProvider = {
@@ -122,6 +124,7 @@ define([
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
             invalidateCacheBySessionTimeOut(settings);
+            invalidateCacheByCloseCookieSession();
             customerData.init();
         }
     };
