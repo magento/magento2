@@ -61,6 +61,7 @@ class XmlConverterCommand extends Command
      * @param \DOMDocument $domXml
      * @param \DOMDocument $domXsl
      * @param \XSLTProcessor $xsltProcessor
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         Formatter $formatter,
