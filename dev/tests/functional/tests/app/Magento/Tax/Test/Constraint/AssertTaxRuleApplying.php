@@ -11,15 +11,12 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Customer\Test\Page\CustomerAccountLogin;
-use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Tax\Test\Fixture\TaxRule;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
- * Class AssertTaxRuleApplying
  * Abstract class for implementing assert applying
  */
 abstract class AssertTaxRuleApplying extends AbstractConstraint
@@ -82,8 +79,6 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
      *
      * @param FixtureFactory $fixtureFactory
      * @param TaxRule $taxRule
-     * @param CustomerAccountLogin $customerAccountLogin
-     * @param CustomerAccountLogout $customerAccountLogout
      * @param Customer $customer
      * @param CatalogProductView $catalogProductView
      * @param CheckoutCart $checkoutCart
@@ -92,14 +87,10 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
      * @param BrowserInterface $browser
      * @param TaxRule $initialTaxRule
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function processAssert(
         FixtureFactory $fixtureFactory,
         TaxRule $taxRule,
-        CustomerAccountLogin $customerAccountLogin,
-        CustomerAccountLogout $customerAccountLogout,
         Customer $customer,
         CatalogProductView $catalogProductView,
         CheckoutCart $checkoutCart,
@@ -134,9 +125,10 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         );
         $this->productSimple->persist();
         // Customer login
-        $customerAccountLogout->open();
-        $customerAccountLogin->open();
-        $customerAccountLogin->getLoginBlock()->login($customer);
+        $this->objectManager->create(
+            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            ['customer' => $customer]
+        )->run();
         // Clearing shopping cart and adding product to shopping cart
         $checkoutCart->open()->getCartBlock()->clearShoppingCart();
         $browser->open($_ENV['app_frontend_url'] . $this->productSimple->getUrlKey() . '.html');

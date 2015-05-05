@@ -60,5 +60,5 @@ class CmsGrid extends Grid
      *
      * @var string
      */
-    protected $editLink = 'td[data-part="body.row.cell"]';
+    protected $editLink = '.action-menu-item';
 }
