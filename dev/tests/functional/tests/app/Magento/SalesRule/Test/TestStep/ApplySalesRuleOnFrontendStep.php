@@ -7,7 +7,7 @@
 namespace Magento\SalesRule\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
@@ -25,16 +25,16 @@ class ApplySalesRuleOnFrontendStep implements TestStepInterface
     /**
      * SalesRule fixture.
      *
-     * @var SalesRuleInjectable
+     * @var SalesRule
      */
     protected $salesRule;
 
     /**
      * @constructor
      * @param CheckoutCart $checkoutCart
-     * @param SalesRuleInjectable $salesRule
+     * @param SalesRule $salesRule
      */
-    public function __construct(CheckoutCart $checkoutCart, SalesRuleInjectable $salesRule = null)
+    public function __construct(CheckoutCart $checkoutCart, SalesRule $salesRule = null)
     {
         $this->checkoutCart = $checkoutCart;
         $this->salesRule = $salesRule;

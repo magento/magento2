@@ -6,7 +6,7 @@
 
 namespace Magento\Sales\Test\Fixture\OrderInjectable;
 
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\DataSource;
 
@@ -24,12 +24,12 @@ class CouponCode extends DataSource
     public function __construct(FixtureFactory $fixtureFactory, array $data, array $params = [])
     {
         $this->params = $params;
-        if (isset($data['value']) && $data['value'] instanceof SalesRuleInjectable) {
+        if (isset($data['value']) && $data['value'] instanceof SalesRule) {
             $this->data = $data['value'];
             return;
         }
         if (isset($data['dataSet'])) {
-            $salesRule = $fixtureFactory->createByCode('salesRuleInjectable', ['dataSet' => $data['dataSet']]);
+            $salesRule = $fixtureFactory->createByCode('salesRule', ['dataSet' => $data['dataSet']]);
             $salesRule->persist();
             $this->data = $salesRule;
         }

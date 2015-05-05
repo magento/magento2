@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\SalesRule\Test\Repository\SalesRuleInjectable">
+    <repository class="Magento\SalesRule\Test\Repository\SalesRule">
         <dataset name="active_sales_rule_with_percent_price_discount_coupon">
             <field name="name" xsi:type="string">Shopping Cart Price Rule with Specific Coupon %isolation%</field>
             <field name="description" xsi:type="string">Description for Cart Price Rule</field>
