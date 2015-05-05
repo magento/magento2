@@ -11,12 +11,12 @@
         <script type="text/x-magento-init">
             {
                 "#checkout": {
-                    "Magento_Ui/js/core/app": <?php echo $this->getJsLayout();?>
+                    "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
                 }
             }
         </script>
         <script>
-            window.checkoutConfig = <?php echo \Zend_Json::encode($this->getCheckoutConfig()); ?>;
+            window.checkoutConfig = <?php echo \Zend_Json::encode($block->getCheckoutConfig()); ?>;
             // Create aliases for customer.js model from customer module
             window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
             window.customerData = window.checkoutConfig.customerData;
@@ -24,7 +24,7 @@
         <script>
             require(['mage/url', 'Magento_Checkout/js/model/step-loader'], function(url, loader) {
                 loader.registerLoader();
-                return url.setBaseUrl('<?php echo $this->getBaseUrl();?>');
+                return url.setBaseUrl('<?php echo $block->getBaseUrl();?>');
             })
         </script>
     </ol>
