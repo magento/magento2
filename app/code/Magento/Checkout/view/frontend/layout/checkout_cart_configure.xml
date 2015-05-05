@@ -14,5 +14,15 @@
         <referenceBlock name="product.info">
             <block class="Magento\Checkout\Block\Cart\Item\Configure" name="checkout.cart.item.configure.block"/>
         </referenceBlock>
+        <referenceBlock name="product.info.addtocart">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Magento_Checkout::cart/item/configure/updatecart.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="product.info.addtocart.additional">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Magento_Checkout::cart/item/configure/updatecart.phtml</argument>
+            </action>
+        </referenceBlock>
     </body>
 </page>
