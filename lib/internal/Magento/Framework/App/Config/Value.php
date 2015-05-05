@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Config data model
@@ -91,7 +92,7 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     {
         return (string)$this->_config->getValue(
             $this->getPath(),
-            $this->getScope() ?: \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+            $this->getScope() ?: ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             $this->getScopeCode()
         );
     }

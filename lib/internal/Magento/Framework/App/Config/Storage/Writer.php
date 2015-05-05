@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\App\Config\Storage;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class Writer implements \Magento\Framework\App\Config\Storage\WriterInterface
 {
     /**
@@ -32,7 +34,7 @@ class Writer implements \Magento\Framework\App\Config\Storage\WriterInterface
      * @param   int $scopeId
      * @return  void
      */
-    public function delete($path, $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, $scopeId = 0)
+    public function delete($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0)
     {
         $this->_resource->deleteConfig(rtrim($path, '/'), $scope, $scopeId);
     }
@@ -46,7 +48,7 @@ class Writer implements \Magento\Framework\App\Config\Storage\WriterInterface
      * @param int $scopeId
      * @return void
      */
-    public function save($path, $value, $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, $scopeId = 0)
+    public function save($path, $value, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeId = 0)
     {
         $this->_resource->saveConfig(rtrim($path, '/'), $value, $scope, $scopeId);
     }

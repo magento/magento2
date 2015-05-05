@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Theme\Model\View;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Keeps design settings for current request
@@ -167,7 +168,7 @@ class Design implements \Magento\Framework\View\DesignInterface
             if ($this->_storeManager->isSingleStoreMode()) {
                 $theme = $this->_scopeConfig->getValue(
                     self::XML_PATH_THEME_ID,
-                    \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 );
             } else {
                 $theme = (string) $this->_scopeConfig->getValue(

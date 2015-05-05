@@ -8,6 +8,7 @@
 
 namespace Magento\Store\Test\Unit\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Store\Model\Store;
@@ -399,7 +400,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 ['catalog/price/scope', ScopeInterface::SCOPE_STORE, 'scope_code', $priceScope],
                 [
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     null,
                     'USD'
                 ],

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @magentoAppArea adminhtml
@@ -68,7 +69,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $config->saveConfig(
             'payment/checkmo/order_status',
             $statusCode,
-            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             0
         );
 
