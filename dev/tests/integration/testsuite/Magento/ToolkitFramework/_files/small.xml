@@ -61,7 +61,7 @@
                 <value>0</value>
             </config>
             <config>
-                <path>system/full_page_cache/varnish/access_lis</path>
+                <path>system/full_page_cache/varnish/access_list</path>
                 <scope>default</scope>
                 <scopeId>0</scopeId>
                 <value>localhost</value>

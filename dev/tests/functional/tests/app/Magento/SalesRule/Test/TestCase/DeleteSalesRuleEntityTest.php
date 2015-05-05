@@ -6,7 +6,7 @@
 
 namespace Magento\SalesRule\Test\TestCase;
 
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\Mtf\TestCase\Injectable;
@@ -63,10 +63,10 @@ class DeleteSalesRuleEntityTest extends Injectable
     /**
      * Delete Sales Rule Entity.
      *
-     * @param SalesRuleInjectable $salesRule
+     * @param SalesRule $salesRule
      * @return void
      */
-    public function testDeleteSalesRule(SalesRuleInjectable $salesRule)
+    public function testDeleteSalesRule(SalesRule $salesRule)
     {
         // Preconditions
         $salesRule->persist();

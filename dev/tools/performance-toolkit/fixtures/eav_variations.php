@@ -21,6 +21,10 @@ class EavVariationsFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
+        $configurablesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('configurable_products', 0);
+        if (!$configurablesCount) {
+            return;
+        }
         $this->application->resetObjectManager();
 
         /* @var $model \Magento\Catalog\Model\Resource\Eav\Attribute */

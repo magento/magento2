@@ -65,9 +65,8 @@
 .row-gutter {
     margin-left: -(@content__indent / 2);
     margin-right: -(@content__indent / 2);
-    .col-gutter {
+    > [class*='col-'] {
         padding-left: @content__indent / 2;
         padding-right: @content__indent / 2;
     }
 }
-
