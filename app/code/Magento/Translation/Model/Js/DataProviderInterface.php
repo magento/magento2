@@ -6,6 +6,11 @@
 
 namespace Magento\Translation\Model\Js;
 
+/**
+ * Provides translation data from a theme.
+ *
+ * @api
+ */
 interface DataProviderInterface
 {
     /**
@@ -14,7 +19,6 @@ interface DataProviderInterface
      * @param string $themePath The path to the theme
      * @return array A string array where the key is the phrase and the value is the translated phrase.
      * @throws \Exception
-     * @api
      */
     public function getData($themePath);
 }
