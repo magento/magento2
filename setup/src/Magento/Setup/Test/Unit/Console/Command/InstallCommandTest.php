@@ -16,9 +16,28 @@ use Magento\Setup\Model\StoreConfigurationDataMapper;
 
 class InstallCommandTest extends \PHPUnit_Framework_TestCase
 {
-    public function testExecute()
-    {
-        $input = [
+    /**
+     * @var array
+     */
+    private $input;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|InstallCommand
+     */
+    private $command;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\InstallerFactory
+     */
+    private $installerFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer
+     */
+    private $installer;
+
+    public function setUp() {
+        $this->input = [
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_HOST => 'localhost',
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_NAME => 'magento',
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_USER => 'root',
@@ -66,19 +85,25 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->will($this->returnValue([]));
 
-        $installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
-        $installerFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($installer));
-        $installer->expects($this->once())->method('install');
-        $commandTester = new CommandTester(new InstallCommand(
-            $installerFactory,
+        $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
+        $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
+        $this->command=new InstallCommand(
+            $this->installerFactory,
             $configModel,
             $userConfig,
             $adminUser
-        ));
-        $commandTester->execute($input);
+        );
+    }
+
+    public function testExecute()
+    {
+        $this->installerFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->installer));
+        $this->installer->expects($this->once())->method('install');
+
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute($this->input);
     }
 
     /**
@@ -174,5 +199,63 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->will($this->returnValue(AdminAccount::KEY_LAST_NAME));
         return [$option1, $option2, $option3, $option4, $option5];
+    }
+
+    /**
+     * @dataProvider validateDataProvider
+     * @param $prefixValue
+     */
+    public function testValidate($prefixValue)
+    {
+        $this->installerFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->installer));
+        $this->installer->expects($this->once())->method('install');
+        $this->input['--'.InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
+
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute($this->input);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @dataProvider validateWithExceptionDataProvider
+     * @param $prefixValue
+     */
+    public function testValidateWithException($prefixValue)
+    {
+        $this->installerFactory->expects($this->never())
+            ->method('create')
+            ->will($this->returnValue($this->installer));
+        $this->installer->expects($this->never())->method('install');
+        $this->input['--'.InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
+
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute($this->input);
+    }
+
+    /**
+     * @return array
+     */
+    public function validateDataProvider()
+    {
+        return [
+            'without option' => ['', ''],
+            'normal case' => ['abcde', ''],
+            '20 chars' => ['12345678901234567890', '']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function validateWithExceptionDataProvider()
+    {
+        return [
+            ['123456789012345678901'
+                , 'InvalidArgumentException'],
+            ['abcdefghijk12345678fdgsdfgsdfgsdfsgsdfg90abcdefgdfddgsdfg'
+                , 'InvalidArgumentException']
+        ];
     }
 }
