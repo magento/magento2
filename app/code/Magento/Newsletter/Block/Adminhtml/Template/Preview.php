@@ -6,8 +6,6 @@
 
 /**
  * Newsletter template preview block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
@@ -58,18 +56,6 @@ class Preview extends \Magento\Backend\Block\Widget
             $template->setTemplateStyles($this->getRequest()->getParam('styles'));
         }
 
-        $storeId = (int)$this->getRequest()->getParam('store_id');
-        if (!$storeId) {
-            $defaultStore = $this->_storeManager->getDefaultStoreView();
-            if (!$defaultStore) {
-                $allStores = $this->_storeManager->getStores();
-                if (isset($allStores[0])) {
-                    $defaultStore = $allStores[0];
-                }
-            }
-            $storeId = $defaultStore ? $defaultStore->getId() : null;
-        }
-
         \Magento\Framework\Profiler::start("newsletter_template_proccessing");
         $vars = [];
 
@@ -78,7 +64,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $vars['subscriber']->load($this->getRequest()->getParam('subscriber'));
         }
 
-        $template->emulateDesign($storeId);
+        $template->emulateDesign($this->getStoreId());
         $templateProcessed = $this->_appState->emulateAreaCode(
             \Magento\Newsletter\Model\Template::DEFAULT_DESIGN_AREA,
             [$template, 'getProcessedTemplate'],
@@ -93,5 +79,28 @@ class Preview extends \Magento\Backend\Block\Widget
         \Magento\Framework\Profiler::stop("newsletter_template_proccessing");
 
         return $templateProcessed;
+    }
+
+    /**
+     * Get Store Id from request or default
+     *
+     * @return int|null
+     */
+    protected function getStoreId()
+    {
+        $storeId = (int)$this->getRequest()->getParam('store_id');
+        if ($storeId) {
+            return $storeId;
+        }
+
+        $defaultStore = $this->_storeManager->getDefaultStoreView();
+        if (!$defaultStore) {
+            $allStores = $this->_storeManager->getStores();
+            if (isset($allStores[0])) {
+                $defaultStore = $allStores[0];
+            }
+        }
+
+        return $defaultStore ? $defaultStore->getId() : null;
     }
 }
