@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Test\TestStep;
 
+use Magento\Mtf\ObjectManager;
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
 use Magento\Mtf\TestStep\TestStepInterface;
 
@@ -22,12 +24,21 @@ class SaveAttributeStep implements TestStepInterface
     protected $attributeNew;
 
     /**
+     * CatalogProductAttribute fixture.
+     *
+     * @var CatalogProductAttribute
+     */
+    protected $attribute;
+
+    /**
      * @constructor
      * @param CatalogProductAttributeNew $attributeNew
+     * @param CatalogProductAttribute $attribute
      */
-    public function __construct(CatalogProductAttributeNew $attributeNew)
+    public function __construct(CatalogProductAttributeNew $attributeNew, CatalogProductAttribute $attribute)
     {
         $this->attributeNew = $attributeNew;
+        $this->attribute = $attribute;
     }
 
     /**
@@ -38,5 +49,18 @@ class SaveAttributeStep implements TestStepInterface
     public function run()
     {
         $this->attributeNew->getPageActions()->save();
+    }
+
+    /**
+     * Delete attribute after test.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        ObjectManager::getInstance()->create(
+            'Magento\Catalog\Test\TestStep\DeleteAttributeStep',
+            ['attribute' => $this->attribute]
+        )->run();
     }
 }

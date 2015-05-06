@@ -75,4 +75,13 @@ class SetupConfigurationStep implements TestStepInterface
 
         return ['config' => $result];
     }
+
+    /**
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->rollback = true;
+        $this->run();
+    }
 }
