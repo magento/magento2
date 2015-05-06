@@ -46,7 +46,7 @@
             data-bind="text: $t('Active filters:')"></span>
     </div>
     <div class="admin__current-filters-list-wrap">
-        <ul class="admin__current-filters-list">
+        <ul class="admin__current-filters-list" data-role="filter-list">
             <!-- ko foreach: previews -->
             <li>
                 <span data-bind="text: label + ':'"></span>
@@ -63,6 +63,7 @@
 
                 <button
                     class="action-remove"
+                    data-action="grid-filter-remove-chip"
                     data-bind="click: $parent.clear.bind($parent, elem)"
                     type="button">
                     <span data-bind="text: $t('Remove')"></span>
