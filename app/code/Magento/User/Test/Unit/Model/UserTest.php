@@ -5,6 +5,7 @@
  */
 
 namespace Magento\User\Test\Unit\Model;
+
 use Magento\User\Model\UserValidationRules;
 
 /**
