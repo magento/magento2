@@ -95,8 +95,22 @@
                    aria-describedby="payment-method-label" data-bind="text:$t('Change'), click: goToStep('paymentMethod')">
                 </a>
             </dt>
-            <dd class="item-content complete" data-bind="text: getPaymentMethod()">
-                <!--<?php echo $block->getPaymentHtml() ?>-->
+            <dd class="item-content complete">
+                <dl class="payment-method">
+                    <dt class="title"><!-- ko text: getPaymentMethodTitle() --><!--/ko--></dt>
+                    <dd class="content">
+                        <!-- ko if: getPaymentMethodInfo().length > 0 -->
+                        <table class="data table">
+                            <tbody data-bind="foreach: {data: getPaymentMethodInfo(), as: 'item'}">
+                            <tr>
+                                <th scope="row"><!-- ko text: $t(item.name) --><!--/ko--></th>
+                                <td><!-- ko text: $t(item.value) --><!--/ko--></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!--/ko-->
+                    </dd>
+                </dl>
             </dd>
             <!--/ko-->
             <!-- ko ifnot: isStepComplete('paymentMethod') -->

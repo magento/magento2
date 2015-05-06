@@ -10,10 +10,10 @@ define(
         'uiComponent',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/shipping-service'
-
+        'Magento_Checkout/js/model/shipping-service',
+        'Magento_Checkout/js/model/payment-service'
     ],
-    function (ko, Component, navigator, quote, shippingService) {
+    function (ko, Component, navigator, quote, shippingService, paymentService) {
         var className = ko.observable();
         return Component.extend({
             defaults: {
@@ -61,8 +61,15 @@ define(
             getShippingMethod: function() {
                 return quote.getShippingMethod()
             },
-                    getPaymentMethod: function() {
+            getPaymentMethod: function() {
                 return quote.getPaymentMethod();
+            },
+            getPaymentMethodTitle: function() {
+                var code = this.getPaymentMethod()();
+                return paymentService.getTitleByCode(code)
+            },
+            getPaymentMethodInfo: function() {
+                return paymentService.getSelectedPaymentInfo()
             },
             goToStep: function(stepName) {
                 navigator.goToStep(stepName);

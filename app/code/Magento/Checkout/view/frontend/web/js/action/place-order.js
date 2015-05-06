@@ -7,17 +7,21 @@ define(
     [
         '../model/quote',
         '../model/url-builder',
+        '../model/payment-service',
         'mage/storage',
         'mage/url',
         'Magento_Ui/js/model/errorlist',
         'Magento_Customer/js/model/customer',
         'underscore'
     ],
-    function(quote, urlBuilder, storage, url, errorList, customer, _) {
+    function(quote, urlBuilder, paymentService, storage, url, errorList, customer, _) {
         "use strict";
         return function(customParams, callback) {
             var payload;
-            customParams = customParams || {cartId: quote.getQuoteId(), paymentMethod: quote.getPaymentData()()};
+            customParams = customParams || {
+                cartId: quote.getQuoteId(),
+                paymentMethod: paymentService.getSelectedPaymentData()
+            };
             if (quote.getCheckoutMethod()() === 'register') {
                 payload = _.extend({
                     customer: customer.customerData,

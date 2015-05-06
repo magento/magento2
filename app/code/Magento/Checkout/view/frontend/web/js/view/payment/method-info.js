@@ -35,6 +35,9 @@ define(
             getData: function() {
                 return {};
             },
+            getInfo: function() {
+                return [];
+            },
             afterSave: function() {
                 return true;
             }

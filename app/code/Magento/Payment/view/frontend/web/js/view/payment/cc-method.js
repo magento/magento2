@@ -7,9 +7,10 @@
 define(
     [
         'underscore',
-        'Magento_Checkout/js/view/payment/method-info'
+        'Magento_Checkout/js/view/payment/method-info',
+        'jquery'
     ],
-    function (_, methodInfo) {
+    function (_, methodInfo, $) {
         return methodInfo.extend({
             defaults: {
                 creditCardType: '',
@@ -89,6 +90,24 @@ define(
             },
             isShowLegend: function() {
                 return false;
+            },
+            getCcTypeTitleByCode: function(code) {
+                var title = '';
+                $.each(this.getCcAvailableTypes(), function (key, value) {
+                    if (value['value'] == code) {
+                        title = value['type'];
+                    }
+                });
+                return title;
+            },
+            formatDisplayCcNumber: function(number) {
+                return 'xxxx-' + number.substr(-4);
+            },
+            getInfo: function() {
+                return [
+                    {'name': 'Credit Card Type', value: this.getCcTypeTitleByCode(this.creditCardType())},
+                    {'name': 'Credit Card Number', value: this.formatDisplayCcNumber(this.creditCardNumber())}
+                ];
             }
         });
     }

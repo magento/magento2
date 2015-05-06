@@ -8,11 +8,12 @@ define(
         '../model/quote',
         '../model/url-builder',
         '../model/step-navigator',
+        '../model/payment-service',
         'Magento_Ui/js/model/errorlist',
         'mage/storage',
         'underscore'
     ],
-    function(quote, urlBuilder, navigator, errorList, storage, _) {
+    function(quote, urlBuilder, navigator, service, errorList, storage, _) {
         "use strict";
         return function (methodView) {
             var defaultMethodData = {
@@ -49,7 +50,8 @@ define(
                     function (response) {
                         if (methodView.afterSave()) {
                             quote.setPaymentMethod(methodView.getCode());
-                            quote.setPaymentData(defaultMethodData);
+                            service.setSelectedPaymentData(defaultMethodData);
+                            service.setSelectedPaymentInfo(methodView.getInfo());
                             quote.setTotals(response);
                             navigator.setCurrent('paymentMethod').goNext();
                         }
@@ -79,7 +81,8 @@ define(
                     function (response) {
                         if (methodView.afterSave()) {
                             quote.setPaymentMethod(methodView.getCode());
-                            quote.setPaymentData(defaultMethodData);
+                            service.setSelectedPaymentData(defaultMethodData);
+                            service.setSelectedPaymentInfo(methodView.getInfo());
                             quote.setTotals(response);
                             navigator.setCurrent('paymentMethod').goNext();
                         }
