@@ -21,7 +21,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-exec": "^0.4.6",
     "grunt-styledocco": "^0.1.4",
-    "grunt-template-jasmine-requirejs": "^0.2.0",
+    "grunt-template-jasmine-requirejs": "^0.2.3",
     "grunt-text-replace": "^0.4.0",
     "imagemin-svgo": "^4.0.1",
     "load-grunt-config": "^0.16.0",
