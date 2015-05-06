@@ -81,7 +81,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $xmlFile = __DIR__ . '/_files/service_data_attributes.xml';
+        $xmlFile = __DIR__ . '/_files/extension_attributes.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
         $result = $this->_converter->convert($dom);
