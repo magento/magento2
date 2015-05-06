@@ -284,6 +284,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param bool $printQuery
      * @param bool $logQuery
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Exception
      */
     public function loadData($printQuery = false, $logQuery = false)

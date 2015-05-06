@@ -252,9 +252,4 @@
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideThemeFiltered</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Ui\DataProvider\Manager">
-        <arguments>
-            <argument name="config" xsi:type="object">Magento\Ui\DataProvider\Config\Data\Proxy</argument>
-        </arguments>
-    </type>
 </config>

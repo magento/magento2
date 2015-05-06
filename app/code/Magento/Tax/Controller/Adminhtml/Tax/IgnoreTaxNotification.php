@@ -9,7 +9,6 @@ namespace Magento\Tax\Controller\Adminhtml\Tax;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-
 class IgnoreTaxNotification extends \Magento\Tax\Controller\Adminhtml\Tax
 {
     /**
