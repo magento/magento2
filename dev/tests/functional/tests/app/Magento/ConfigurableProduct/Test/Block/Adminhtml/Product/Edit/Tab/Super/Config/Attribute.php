@@ -104,7 +104,7 @@ class Attribute extends Form
      *
      * @var string
      */
-    protected $attributeTitle = '.title > span';
+    protected $attributeTitle = '[data-toggle="collapse"] > span';
 
     /**
      * Selector for attribute content
