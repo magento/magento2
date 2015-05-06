@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Api/etc/data_object.xsd">
-    <custom_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Api/etc/service_data_attributes.xsd">
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
         <attribute code="configurable_product_options" type="Magento\ConfigurableProduct\Api\Data\OptionInterface[]" />
         <attribute code="configurable_product_links" type="int[]" />
-    </custom_attributes>
+    </extension_attributes>
 </config>
