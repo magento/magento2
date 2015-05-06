@@ -22,7 +22,7 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
     {
         /** @var \Magento\Framework\App\DeploymentConfig $config */
         $config = Bootstrap::getObjectManager()->get('Magento\Framework\App\DeploymentConfig');
-        self::$typesConfig = $config->getConfigData(State::CACHE_KEY);
+        self::$typesConfig = $config->get(State::CACHE_KEY);
     }
 
     protected function tearDown()
@@ -87,7 +87,7 @@ class MassActionTest extends \Magento\Backend\Utility\Controller
      */
     protected function getCacheStates()
     {
-        $configPath = Bootstrap::getInstance()->getAppTempDir() . '/etc/config.php';
+        $configPath = Bootstrap::getInstance()->getAppTempDir() . '/etc/env.php';
         $configData = eval(str_replace('<?php', '', file_get_contents($configPath)));
         return $configData['cache_types'];
     }
