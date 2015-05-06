@@ -5,6 +5,7 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
+use Magento\Framework\Object;
 use Magento\Framework\Exception\PaymentException;
 
 class SaveOrder extends \Magento\Checkout\Controller\Onepage
@@ -26,16 +27,17 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             return $this->_ajaxRedirectResponse();
         }
 
-        $result = [];
+        $result = new Object();
         try {
             $agreementsValidator = $this->_objectManager->get('Magento\Checkout\Model\Agreements\AgreementsValidator');
             if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
-                $result['success'] = false;
-                $result['error'] = true;
-                $result['error_messages'] = __(
-                    'Please agree to all the terms and conditions before placing the order.'
+                $result->setData('success', false);
+                $result->setData('error', true);
+                $result->setData(
+                    'error_messages',
+                    __('Please agree to all the terms and conditions before placing the order.')
                 );
-                return $this->resultJsonFactory->create()->setData($result);
+                return $this->resultJsonFactory->create()->setData($result->getData());
             }
 
             $data = $this->getRequest()->getPost('payment', []);
@@ -54,25 +56,34 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             $this->getOnepage()->saveOrder();
 
             $redirectUrl = $this->getOnepage()->getCheckout()->getRedirectUrl();
-            $result['success'] = true;
-            $result['error'] = false;
+            $result->setData('success', true);
+            $result->setData('error', false);
         } catch (PaymentException $e) {
             $message = $e->getMessage();
             if (!empty($message)) {
-                $result['error_messages'] = $message;
+                $result->setData('error_messages', $message);
             }
-            $result['goto_section'] = 'payment';
-            $result['update_section'] = ['name' => 'payment-method', 'html' => $this->_getPaymentMethodsHtml()];
+            $result->setData('goto_section', 'payment');
+            $result->setData(
+                'update_section',
+                [
+                    'name' => 'payment-method',
+                    'html' => $this->_getPaymentMethodsHtml()
+                ]
+            );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_objectManager->get('Magento\Checkout\Helper\Data')
                 ->sendPaymentFailedEmail($this->getOnepage()->getQuote(), $e->getMessage());
-            $result['success'] = false;
-            $result['error'] = true;
-            $result['error_messages'] = $e->getMessage();
+            $result->setData(
+                'success',
+                false
+            );
+            $result->setData('error', true);
+            $result->setData('error_messages', $e->getMessage());
             $gotoSection = $this->getOnepage()->getCheckout()->getGotoSection();
             if ($gotoSection) {
-                $result['goto_section'] = $gotoSection;
+                $result->setData('goto_section', $gotoSection);
                 $this->getOnepage()->getCheckout()->setGotoSection(null);
             }
 
@@ -80,10 +91,13 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             if ($updateSection) {
                 if (isset($this->_sectionUpdateFunctions[$updateSection])) {
                     $updateSectionFunction = $this->_sectionUpdateFunctions[$updateSection];
-                    $result['update_section'] = [
-                        'name' => $updateSection,
-                        'html' => $this->{$updateSectionFunction}(),
-                    ];
+                    $result->setData(
+                        'update_section',
+                        [
+                            'name' => $updateSection,
+                            'html' => $this->{$updateSectionFunction}(),
+                        ]
+                    );
                 }
                 $this->getOnepage()->getCheckout()->setUpdateSection(null);
             }
@@ -91,18 +105,29 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->_objectManager->get('Magento\Checkout\Helper\Data')
                 ->sendPaymentFailedEmail($this->getOnepage()->getQuote(), $e->getMessage());
-            $result['success'] = false;
-            $result['error'] = true;
-            $result['error_messages'] = __('Something went wrong processing your order. Please try again later.');
+            $result->setData('success', false);
+            $result->setData('error', true);
+            $result->setData(
+                'error_messages',
+                __('Something went wrong processing your order. Please try again later.')
+            );
         }
         /**
          * when there is redirect to third party, we don't want to save order yet.
          * we will save the order in return action.
          */
         if (isset($redirectUrl)) {
-            $result['redirect'] = $redirectUrl;
+            $result->setData('redirect', $redirectUrl);
         }
 
-        return $this->resultJsonFactory->create()->setData($result);
+        $this->_eventManager->dispatch(
+            'checkout_controller_onepage_saveOrder',
+            [
+                'result' => $result,
+                'action' => $this
+            ]
+        );
+
+        return $this->resultJsonFactory->create()->setData($result->getData());
     }
 }

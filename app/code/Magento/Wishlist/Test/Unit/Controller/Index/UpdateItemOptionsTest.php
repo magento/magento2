@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
+
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -32,21 +33,6 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $response;
-
-    /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $view;
-
-    /**
-     * @var \Magento\Store\App\Response\Redirect|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $redirect;
-
-    /**
      * @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $om;
@@ -72,6 +58,16 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
     protected $eventManager;
 
     /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
+    /**
      * SetUp method
      *
      * @return void
@@ -81,15 +77,23 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
         $this->productRepository = $this->getMock('Magento\Catalog\Model\ProductRepository', [], [], '', false);
         $this->context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->wishlistProvider = $this->getMock('Magento\Wishlist\Controller\WishlistProvider', [], [], '', false);
-        $this->view = $this->getMock('Magento\Framework\App\View', [], [], '', false);
-        $this->redirect = $this->getMock('\Magento\Store\App\Response\Redirect', [], [], '', false);
         $this->om = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $this->messageManager = $this->getMock('Magento\Framework\Message\Manager', [], [], '', false);
         $this->url = $this->getMock('Magento\Framework\Url', [], [], '', false);
         $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->eventManager = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT, [])
+            ->willReturn($this->resultRedirectMock);
     }
 
     /**
@@ -103,10 +107,7 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             $this->productRepository,
             $this->context,
             $this->request,
-            $this->response,
             $this->wishlistProvider,
-            $this->view,
-            $this->redirect,
             $this->om,
             $this->messageManager,
             $this->url,
@@ -133,10 +134,6 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->request);
         $this->context
             ->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($this->response);
-        $this->context
-            ->expects($this->any())
             ->method('getEventManager')
             ->willReturn($this->eventManager);
         $this->context
@@ -149,16 +146,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($actionFlag);
         $this->context
             ->expects($this->any())
-            ->method('getRedirect')
-            ->willReturn($this->redirect);
-        $this->context
-            ->expects($this->any())
-            ->method('getView')
-            ->willReturn($this->view);
-        $this->context
-            ->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManager);
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
     }
 
     /**
@@ -189,14 +181,12 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('product')
             ->willReturn(null);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/', [])
+            ->willReturnSelf();
 
-        $this->redirect
-            ->expects($this->once())
-            ->method('redirect')
-            ->with($this->response, '*/', [])
-            ->willReturn(true);
-
-        $this->getController()->execute();
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
     /**
@@ -223,14 +213,12 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with('We can\'t specify a product.')
             ->willReturn(true);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/', [])
+            ->willReturnSelf();
 
-        $this->redirect
-            ->expects($this->once())
-            ->method('redirect')
-            ->with($this->response, '*/', [])
-            ->willReturn(true);
-
-        $this->getController()->execute();
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
     /**
@@ -293,14 +281,12 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Wishlist\Model\Item')
             ->willReturn($item);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/', [])
+            ->willReturnSelf();
 
-        $this->redirect
-            ->expects($this->once())
-            ->method('redirect')
-            ->with($this->response, '*/', [])
-            ->willReturn(true);
-
-        $this->getController()->execute();
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 
     /**
@@ -416,14 +402,12 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with('error-message', null)
             ->willReturn(true);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/*', ['wishlist_id' => 56])
+            ->willReturnSelf();
 
-        $this->redirect
-            ->expects($this->once())
-            ->method('redirect')
-            ->with($this->response, '*/*', ['wishlist_id' => 56])
-            ->willReturn(true);
-
-        $this->getController()->execute();
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
     /**
      * Test execute add success critical exception
@@ -556,13 +540,11 @@ class UpdateItemOptionsTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with('An error occurred while updating wish list.', null)
             ->willReturn(true);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/*', ['wishlist_id' => 56])
+            ->willReturnSelf();
 
-        $this->redirect
-            ->expects($this->once())
-            ->method('redirect')
-            ->with($this->response, '*/*', ['wishlist_id' => 56])
-            ->willReturn(true);
-
-        $this->getController()->execute();
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 }

@@ -17,6 +17,7 @@
         <directory suffix="Test.php">../../../lib/internal/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../lib/internal/*/*/*/Test/Unit</directory>
         <directory suffix="Test.php">../../../setup/src/*/*/Test/Unit</directory>
+        <directory suffix="Test.php">../../../update/dev/tests/unit/testsuite</directory>
     </testsuite>
     <php>
         <ini name="date.timezone" value="America/Los_Angeles"/>
@@ -26,6 +27,7 @@
             <directory suffix=".php">../../../app/code/*</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
             <directory suffix=".php">../../../setup/src/*</directory>
+            <directory suffix=".php">../../../update/app/code/*</directory>
             <exclude>
                 <directory>../../../app/code/*/*/Test</directory>
                 <directory>../../../lib/internal/*/*/Test</directory>
