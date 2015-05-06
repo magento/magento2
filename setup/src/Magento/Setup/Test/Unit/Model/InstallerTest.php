@@ -362,12 +362,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->filesystem
             ->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValueMap(
-                    [
-                        [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
-                    ]
-                )
-            );
+            ->will($this->returnValueMap([
+                [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
+            ]));
         $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
         $this->logger
             ->expects($this->at(1))

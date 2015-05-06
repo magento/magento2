@@ -1108,11 +1108,11 @@ class Installer
             )
         );
         if (null !== $this->deploymentConfig->get(
+            ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PREFIX
+        )) {
+            $this->checkDatabaseTablePrefix($this->deploymentConfig->get(
                 ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PREFIX
-            )
-        ) {
-            $this->checkDatabaseTablePrefix($this->deploymentConfig->get
-                (ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PREFIX));
+            ));
         }
     }
 
