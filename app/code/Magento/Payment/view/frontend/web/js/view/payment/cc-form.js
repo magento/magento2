@@ -7,12 +7,12 @@
 define(
     [
         'underscore',
-        'Magento_Checkout/js/view/payment/method-info',
-        'jquery'
+        'uiComponent'
     ],
-    function (_, methodInfo, $) {
-        return methodInfo.extend({
+    function (_, component) {
+        return component.extend({
             defaults: {
+                template: 'Magento_Payment/payment/cc-form',
                 creditCardType: '',
                 creditCardExpYear: '',
                 creditCardExpMonth: '',
@@ -33,6 +33,9 @@ define(
                         'creditCardSsStartYear'
                     ]);
                 return this;
+            },
+            getCode: function() {
+                return 'cc';
             },
             getData: function() {
                 return {
@@ -93,7 +96,7 @@ define(
             },
             getCcTypeTitleByCode: function(code) {
                 var title = '';
-                $.each(this.getCcAvailableTypes(), function (key, value) {
+                _.each(this.getCcAvailableTypes(), function (value) {
                     if (value['value'] == code) {
                         title = value['type'];
                     }
