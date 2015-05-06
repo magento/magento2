@@ -436,6 +436,7 @@ class Menu extends \Magento\Backend\Block\Template
      * @param array $colBrakes
      * @return string HTML
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function renderNavigation($menu, $level = 0, $limit = 0, $colBrakes = [])
     {
@@ -454,21 +455,30 @@ class Menu extends \Magento\Backend\Block\Template
             }
 
             $id = $this->getJsId($menuItem->getId());
-            $output .= '<li ' . $this->getUiId(
-                $menuItem->getId()
-            ) . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass(
-                $menuItem,
-                $level
-            ) . ($level == 0 ? '" id="' . $id . '" aria-haspopup="true' : '')
-                . '" role="menu-item">' . $this->_renderAnchor(
-                $menuItem,
-                $level
-            ) . $this->_addSubMenu(
-                $menuItem,
-                $level,
-                $limit,
-                $id
-            ) . '</li>';
+            if (count($menu) > 1 || $level != 1) {
+                $output .= '<li ' . $this->getUiId(
+                        $menuItem->getId()
+                    ) . ' class="item-' . $itemClass . ' ' . $this->_renderItemCssClass(
+                        $menuItem,
+                        $level
+                    ) . ($level == 0 ? '" id="' . $id . '" aria-haspopup="true' : '')
+                    . '" role="menu-item">' . $this->_renderAnchor(
+                        $menuItem,
+                        $level
+                    ) . $this->_addSubMenu(
+                        $menuItem,
+                        $level,
+                        $limit,
+                        $id
+                    ) . '</li>';
+            } else {
+                $output .= $this->_addSubMenu(
+                    $menuItem,
+                    $level,
+                    $limit,
+                    $id);
+            }
+
             $itemPosition++;
         }
 

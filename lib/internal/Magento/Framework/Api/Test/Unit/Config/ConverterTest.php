@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Api\Test\Unit\Config;
 
+use Magento\Framework\Api\Config\Converter;
+
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -47,15 +49,39 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'Magento\Tax\Api\Data\TaxRateInterface' => [
             ],
             'Magento\Catalog\Api\Data\ProductInterface' => [
-                'stock_item' => 'Magento\CatalogInventory\Api\Data\StockItemInterface'
+                'stock_item' => [
+                    Converter::DATA_TYPE => 'Magento\CatalogInventory\Api\Data\StockItemInterface',
+                    Converter::RESOURCE_PERMISSIONS => [],
+                ],
             ],
             'Magento\Customer\Api\Data\CustomerInterface' => [
-                'custom_1' => 'Magento\Customer\Api\Data\CustomerCustom',
-                'custom_2' => 'Magento\CustomerExtra\Api\Data\CustomerCustom2'
+                'custom_1' => [
+                    Converter::DATA_TYPE => 'Magento\Customer\Api\Data\CustomerCustom',
+                    Converter::RESOURCE_PERMISSIONS => [],
+                ],
+                'custom_2' => [
+                    Converter::DATA_TYPE => 'Magento\CustomerExtra\Api\Data\CustomerCustom2',
+                    Converter::RESOURCE_PERMISSIONS => [],
+                ],
+            ],
+            'Magento\Customer\Api\Data\CustomerInterface2' => [
+                'custom_with_permission' => [
+                    Converter::DATA_TYPE => 'Magento\Customer\Api\Data\CustomerCustom',
+                    Converter::RESOURCE_PERMISSIONS => [
+                        'Magento_Customer::manage',
+                    ],
+                ],
+                'custom_with_multiple_permissions' => [
+                    Converter::DATA_TYPE => 'Magento\CustomerExtra\Api\Data\CustomerCustom2',
+                    Converter::RESOURCE_PERMISSIONS => [
+                        'Magento_Customer::manage',
+                        'Magento_Customer::manage2',
+                    ],
+                ],
             ],
         ];
 
-        $xmlFile = __DIR__ . '/_files/data_object_valid.xml';
+        $xmlFile = __DIR__ . '/_files/service_data_attributes.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
         $result = $this->_converter->convert($dom);
