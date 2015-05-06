@@ -42,6 +42,7 @@ abstract class Sender
      * @param IdentityInterface $identityContainer
      * @param SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
