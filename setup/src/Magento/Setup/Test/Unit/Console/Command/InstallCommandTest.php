@@ -87,7 +87,7 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
 
         $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
         $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
-        $this->command=new InstallCommand(
+        $this->command = new InstallCommand(
             $this->installerFactory,
             $configModel,
             $userConfig,
@@ -202,6 +202,8 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test install command with valid sales_order_increment_prefix value
+     *
      * @dataProvider validateDataProvider
      * @param $prefixValue
      */
@@ -211,13 +213,15 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->installer));
         $this->installer->expects($this->once())->method('install');
-        $this->input['--'.InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
+        $this->input['--' . InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($this->input);
     }
 
     /**
+     * Test install command with invalid sales_order_increment_prefix value
+     *
      * @expectedException InvalidArgumentException
      * @dataProvider validateWithExceptionDataProvider
      * @param $prefixValue
@@ -228,7 +232,7 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->installer));
         $this->installer->expects($this->never())->method('install');
-        $this->input['--'.InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
+        $this->input['--' . InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
 
         $commandTester = new CommandTester($this->command);
         $commandTester->execute($this->input);
@@ -241,8 +245,8 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'without option' => ['', ''],
-            'normal case' => ['abcde', ''],
-            '20 chars' => ['12345678901234567890', '']
+            'normal case'    => ['abcde', ''],
+            '20 chars'       => ['12345678901234567890', '']
         ];
     }
 
@@ -252,10 +256,8 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
     public function validateWithExceptionDataProvider()
     {
         return [
-            ['123456789012345678901'
-                , 'InvalidArgumentException'],
-            ['abcdefghijk12345678fdgsdfgsdfgsdfsgsdfg90abcdefgdfddgsdfg'
-                , 'InvalidArgumentException']
+            ['123456789012345678901', 'InvalidArgumentException'],
+            ['abcdefghijk12345678fdgsdfgsdfgsdfsgsdfg90abcdefgdfddgsdfg', 'InvalidArgumentException']
         ];
     }
 }

@@ -35,7 +35,7 @@ class InstallCommand extends AbstractSetupCommand
     /**
      * Regex for sales_order_increment_prefix validation.
      */
-    const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
+    const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{1,20}$/';
 
     /**
      * Installer service factory
@@ -150,14 +150,16 @@ class InstallCommand extends AbstractSetupCommand
     }
 
     /**
+     * Validate sales_order_increment_prefix value
+     *
      * @param InputInterface $input
-     * @return Array of error messages
+     * @return string[] Array of error messages
      */
     public function validate(InputInterface $input) {
         $errors = [];
-        $value=$input->getOption(self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX);
-        if(preg_match(self::SALES_ORDER_INCREMENT_PREFIX_RULE, $value) != 1) {
-            $errors[]=self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX." validation failed.";
+        $value = $input->getOption(self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX);
+        if (preg_match(self::SALES_ORDER_INCREMENT_PREFIX_RULE, $value) != 1) {
+            $errors[] = self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX." validation failed.";
         }
         return $errors;
     }
