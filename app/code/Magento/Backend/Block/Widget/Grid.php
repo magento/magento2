@@ -436,10 +436,10 @@ class Grid extends \Magento\Backend\Block\Widget
             $this->getLayout()->createBlock(
                 'Magento\Backend\Block\Widget\Button'
             )->setData(
-                ['label' => __('Reset Filter'), 'onclick' => $this->getJsObjectName() . '.resetFilter()', 'class' => 'action-reset']
-            )->setDataAttribute(
                 [
-                    'action' => 'grid-filter-reset'
+                    'label' => __('Reset Filter'),
+                    'onclick' => $this->getJsObjectName() . '.resetFilter()',
+                    'class' => 'action-reset action-tertiary'
                 ]
             )
         );
@@ -451,7 +451,7 @@ class Grid extends \Magento\Backend\Block\Widget
                 [
                     'label' => __('Search'),
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
-                    'class' => 'task',
+                    'class' => 'action-secondary',
                 ]
             )->setDataAttribute(
                 [
@@ -820,8 +820,8 @@ class Grid extends \Magento\Backend\Block\Widget
     {
         $html = '';
         if ($this->getColumnSet()->isFilterVisible()) {
-            $html .= $this->getResetFilterButtonHtml();
             $html .= $this->getSearchButtonHtml();
+            $html .= $this->getResetFilterButtonHtml();
         }
         return $html;
     }

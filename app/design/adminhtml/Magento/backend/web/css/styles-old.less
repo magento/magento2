@@ -751,7 +751,6 @@ input.no-display,
 
 
     fieldset {
-        border: 1px solid #ccc;
         padding: 20px;
     }
 
@@ -2521,9 +2520,16 @@ input.no-display,
     }
 
     .attribute-popup .collapsable-wrapper,
-    #manage-titles-wrapper .fieldset-wrapper-title {
-        margin-bottom: 0;
-        padding-bottom: 0;
+    #manage-titles-wrapper {
+        .fieldset-wrapper-title {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .col-store-view {
+            .input-text {
+                width: 100%;
+            }
+        }
     }
 
     .attribute-popup .collapsable-wrapper .fieldset-wrapper-title > .title:before {
@@ -2569,8 +2575,13 @@ input.no-display,
         display: none;
     }
 
-    #manage-options-panel > .data-table {
-        clear: both;
+    #manage-options-panel {
+        .admin__control-table {
+            clear: both;
+        }
+        .input-text {
+            width: 100%;
+        }
     }
 
     // Custom grids view
@@ -2693,12 +2704,12 @@ input.no-display,
         clear: both;
     }
 
-    .customer-information .data-table,
+    .customer-information .admin__table-secondary,
     .customer-information address {
         width: 48.5%;
     }
 
-    .customer-information .data-table {
+    .customer-information .admin__table-secondary {
         float: left;
         width: 48.5%;
     }
@@ -4341,19 +4352,32 @@ input.no-display,
         padding-left: 0;
     }
 
-    .accordion .config .label label {
-        padding-top: 7px;
-    }
-
-    .accordion .config td {
-        background: none;
-        border: 0;
-        padding: 22px 15px 0 0;
-        vertical-align: top;
-    }
-
-    .accordion .paypal-selection-simplified {
-        padding-left: 30px;
+    .accordion {
+        .config {
+            .label {
+                label {
+                    padding-top: 7px;
+                }
+            }
+            > table {
+                > tbody {
+                    > tr {
+                        > td {
+                            background-color: transparent;
+                            border: 0;
+                            padding: 22px 15px 0 0;
+                            vertical-align: top;
+                        }
+                    }
+                }
+            }
+            .admin__control-table {
+                margin-bottom: .5rem;
+            }
+        }
+        .paypal-selection-simplified {
+            padding-left: 30px;
+        }
     }
 
     .accordion .paypal-selection input[type="checkbox"] {
@@ -5362,15 +5386,6 @@ input.no-display,
     }
 }
 
-.adminhtml-rma-edit {
-    .admin__scope-old {
-        .col-product,
-        .col-sku {
-            &:extend(.col-70-max all);
-        }
-    }
-}
-
 
 //
 //  Products
@@ -5799,7 +5814,7 @@ input.no-display,
 .adminhtml-export-index {
     .admin__scope-old {
         .grid-actions,
-        .grid {
+        .data-grid {
             &:extend(.side-paddings-0);
         }
         .col-label,
@@ -5809,7 +5824,7 @@ input.no-display,
         .col-code {
             &:extend(.ellipsis all);
         }
-        .grid {
+        .data-grid {
             td {
                 vertical-align: middle;
             }
@@ -5817,15 +5832,18 @@ input.no-display,
                 margin: 0 10px 0 5px;
                 width: 37%;
             }
-            .input-text-range-date {
+            .hasDatepicker{
                 margin: 0 5px;
                 width: 32%;
             }
+            .admin__control-support-text {
+                margin-right: .5rem;
+            }
         }
-        .ui-datepicker-trigger {
-            display: inline-block;
-            margin: -3px 10px 0 0;
-            vertical-align: middle;
+        .data-grid-checkbox-cell {
+            padding-right: 1rem;
+            padding-left: 1rem;
+            text-align: center;
         }
     }
 }

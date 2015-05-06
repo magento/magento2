@@ -11,7 +11,7 @@ namespace Magento\Catalog\Model\Product\Option\Type;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Catalog product option default type
+ * Catalog product option selected type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -339,7 +339,7 @@ class DefaultType extends \Magento\Framework\Object
     }
 
     /**
-     * Return SKU for selected option
+     * Return SKU for default option
      *
      * @param string $optionValue Prepared for cart option value
      * @param string $skuDelimiter Delimiter for Sku parts
