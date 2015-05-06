@@ -15,9 +15,18 @@ define([
                 'asc': '_ascend',
                 'desc': '_descend'
             },
+            states: {
+                namespace: 'columns.<%= index %>'
+            },
+            links: {
+                sorting: '<%= states.provider %>:current.<%= states.namespace %>.sorting'
+            },
+            imports: {
+                setSortClass: 'sorting'
+            },
             listens: {
                 '<%= provider %>:params.sorting.field': 'onSortChange',
-                sorting: 'setSortClass push'
+                sorting: 'push'
             },
             modules: {
                 source: '<%= provider %>'
@@ -27,8 +36,6 @@ define([
         initObservable: function () {
             this._super()
                 .observe('sorting sortClass');
-
-            this.setSortClass(this.sorting());
 
             return this;
         },

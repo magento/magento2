@@ -22,8 +22,8 @@
         <!-- ko foreach: elems -->
             <!-- ko template: getTemplate() --><!-- /ko -->
         <!-- /ko -->
-        <li class="action-dropdown-menu-action action-dropdown-menu-item-last">
-            <a href="" data-bind="click: createNewView, text: $t('Save View As')"></a>
+        <li data-bind="visible: hasChanges" class="action-dropdown-menu-action action-dropdown-menu-item-last">
+            <a href="" data-bind="click: createNewView, text: $t('Save Current View')"></a>
         </li>
     </ul>
 </div>
