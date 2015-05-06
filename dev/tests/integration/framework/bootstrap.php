@@ -29,7 +29,11 @@ try {
 
     $installConfigFile = $settings->getAsConfigFile('TESTS_INSTALL_CONFIG_FILE');
     if (!file_exists($installConfigFile)) {
-        $installConfigFile = $installConfigFile . '.dist';
+        $installConfigFile .= '.dist';
+    }
+    $globalConfigFile = $settings->getAsConfigFile('TESTS_GLOBAL_CONFIG_FILE');
+    if (!file_exists($globalConfigFile)) {
+        $globalConfigFile .= '.dist';
     }
     $sandboxUniqueId = md5(sha1_file($installConfigFile));
     $installDir = "{$testsTmpDir}/sandbox-{$settings->get('TESTS_PARALLEL_THREAD', 0)}-{$sandboxUniqueId}";
@@ -37,6 +41,7 @@ try {
         $shell,
         $installDir,
         $installConfigFile,
+        $globalConfigFile,
         $settings->get('TESTS_GLOBAL_CONFIG_DIR'),
         $settings->get('TESTS_MAGENTO_MODE'),
         AutoloaderRegistry::getAutoloader()
