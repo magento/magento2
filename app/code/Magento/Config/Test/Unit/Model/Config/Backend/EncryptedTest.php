@@ -88,17 +88,23 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
      * @dataProvider beforeSaveDataProvider
      *
      * @param $value
-     * @param $valueToSave
+     * @param $expectedValue
+     * @param $encryptMethodCall
      */
-    public function testBeforeSave($value, $encryptMethodCall)
+    public function testBeforeSave($value, $expectedValue, $encryptMethodCall)
     {
         $this->_resourceMock->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
         $this->_resourceMock->expects($this->any())->method('commit')->will($this->returnSelf());
+        $this->_encryptorMock->expects($this->exactly($encryptMethodCall))
+            ->method('encrypt')
+            ->with($value)
+            ->will($this->returnValue('encrypted'));
 
         $this->_model->setValue($value);
         $this->_model->setPath('some/path');
         $this->_model->beforeSave();
-        $this->_encryptorMock->expects($this->exactly($encryptMethodCall))->method('encrypt')->with($this->any());
+
+        $this->assertEquals($expectedValue, $this->_model->getValue());
     }
 
     /**
@@ -106,6 +112,6 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
      */
     public function beforeSaveDataProvider()
     {
-        return [['someValue', 1], ['****', 0]];
+        return [['someValue', 'encrypted', 1], ['****', '****', 0]];
     }
 }
