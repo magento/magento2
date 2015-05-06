@@ -669,6 +669,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param string $value
      * @param string $type
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addFilter($field, $value, $type = 'and')
     {
