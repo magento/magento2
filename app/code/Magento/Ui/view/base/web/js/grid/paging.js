@@ -24,6 +24,10 @@ define([
             pageSize: 20,
             current: 1,
 
+            states: {
+                namespace: 'current.paging'
+            },
+
             imports: {
                 totalSelected: '<%= provider %>:config.multiselect.total',
                 totalRecords: '<%= provider %>:data.totalRecords'
@@ -33,6 +37,10 @@ define([
                 pageSize: '<%= provider %>:params.paging.pageSize',
                 current: '<%= provider %>:params.paging.current',
                 pages: '<%= provider %>:data.pages'
+            },
+
+            links: {
+                pageSize: '<%= states.provider %>:<%= states.namespace %>.pageSize'
             },
 
             listens: {
@@ -49,6 +57,11 @@ define([
             return this;
         },
 
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Paging} Chainable.
+         */
         initObservable: function () {
             this._super()
                 .observe([

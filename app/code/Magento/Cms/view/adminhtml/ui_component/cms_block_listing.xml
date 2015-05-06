@@ -206,6 +206,9 @@
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="states" xsi:type="array">
+                        <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks</item>
+                    </item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">

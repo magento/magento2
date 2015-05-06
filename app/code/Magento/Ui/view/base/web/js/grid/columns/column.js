@@ -15,14 +15,10 @@ define([
             sortable: false,
             visible: true,
             states: {
-                provider: '',
-                namespace: 'columns.<%= index %>',
-                data: {
-                    visible: '<%= states.namespace %>.visible'
-                }
+                namespace: 'columns.<%= index %>'
             },
             links: {
-                visible: '<%= states.provider %>:current.<%= states.data.visible %>'
+                visible: '<%= states.provider %>:current.<%= states.namespace %>.visible'
             },
             modules: {
                 statesProvider: '<%= states.provider %>'
@@ -38,7 +34,7 @@ define([
 
         applyState: function (property, state) {
             var provider = this.statesProvider(),
-                namespace = this.states.data[property],
+                namespace = this.states.namespace + '.' + property,
                 data,
                 value;
 
