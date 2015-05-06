@@ -88,10 +88,9 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
         } else {
             $modules = $input->getArgument(self::INPUT_KEY_MODULES);
         }
-        if (empty($modules)) {
-            $output->writeln(
-                '<error>No modules specified. Specify a space-separated list of modules or use the --all option</error>'
-            );
+        $messages = $this->validate($modules);
+        if (!empty($messages)) {
+            $output->writeln(implode(PHP_EOL, $messages));
             return;
         }
         /**
@@ -140,6 +139,22 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
         } else {
             $output->writeln('<info>No modules were changed.</info>');
         }
+    }
+
+    /**
+     * Validate list of modules and return error messages
+     *
+     * @param string[] $modules
+     * @return string[]
+     */
+    protected function validate(array $modules)
+    {
+        $messages = [];
+        if (empty($modules)) {
+            $messages[] = '<error>No modules specified. Specify a space-separated list of modules' .
+                ' or use the --all option</error>';
+        }
+        return $messages;
     }
 
     /**
