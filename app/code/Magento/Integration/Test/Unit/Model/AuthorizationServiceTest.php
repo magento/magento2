@@ -3,10 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Test\Unit\Service\V1;
+namespace Magento\Integration\Test\Unit\Model;
 
-use \Magento\Integration\Service\V1\AuthorizationService;
-
+use Magento\Integration\Model\AuthorizationService;
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\UserContextInterface;
 

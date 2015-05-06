@@ -26,15 +26,15 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $aclRetrieverMock;
 
     /**
-     * @var \Magento\Integration\Service\V1\AuthorizationServiceInterface
+     * @var \Magento\Integration\Api\AuthorizationServiceInterface
      */
     protected $integrationAuthServiceMock;
 
     public function setUp()
     {
-        $this->subjectMock = $this->getMock('Magento\Integration\Service\V1\Integration', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Integration\Model\IntegrationService', [], [], '', false);
         $this->integrationAuthServiceMock = $this->getMockBuilder(
-            'Magento\Integration\Service\V1\AuthorizationServiceInterface'
+            'Magento\Integration\Api\AuthorizationServiceInterface'
         )->disableOriginalConstructor()->getMock();
         $this->aclRetrieverMock = $this->getMockBuilder('Magento\Authorization\Model\Acl\AclRetriever')
             ->disableOriginalConstructor()

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Api;
 
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
@@ -12,6 +12,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface providing token generation for Admins
+ *
+ * @api
  */
 interface AdminTokenServiceInterface
 {

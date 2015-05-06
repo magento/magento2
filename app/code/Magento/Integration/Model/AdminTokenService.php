@@ -4,30 +4,35 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Model;
 
-use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\CredentialsValidator;
 use Magento\Integration\Model\Oauth\Token as Token;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory as TokenCollectionFactory;
+use Magento\User\Model\User as UserModel;
 
-class CustomerTokenService implements CustomerTokenServiceInterface
+/**
+ * Class to handle token generation for Admins
+ *
+ */
+class AdminTokenService implements \Magento\Integration\Api\AdminTokenServiceInterface
 {
     /**
      * Token Model
-     *
+     *a
      * @var TokenModelFactory
      */
     private $tokenModelFactory;
 
     /**
-     * Customer Account Service
+     * User Model
      *
-     * @var AccountManagementInterface
+     * @var UserModel
      */
-    private $accountManagement;
+    private $userModel;
 
     /**
      * @var \Magento\Integration\Model\CredentialsValidator
@@ -45,18 +50,18 @@ class CustomerTokenService implements CustomerTokenServiceInterface
      * Initialize service
      *
      * @param TokenModelFactory $tokenModelFactory
-     * @param AccountManagementInterface $accountManagement
+     * @param UserModel $userModel
      * @param TokenCollectionFactory $tokenModelCollectionFactory
      * @param \Magento\Integration\Model\CredentialsValidator $validatorHelper
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
-        AccountManagementInterface $accountManagement,
+        UserModel $userModel,
         TokenCollectionFactory $tokenModelCollectionFactory,
         CredentialsValidator $validatorHelper
     ) {
         $this->tokenModelFactory = $tokenModelFactory;
-        $this->accountManagement = $accountManagement;
+        $this->userModel = $userModel;
         $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
         $this->validatorHelper = $validatorHelper;
     }
@@ -64,21 +69,29 @@ class CustomerTokenService implements CustomerTokenServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function createCustomerAccessToken($username, $password)
+    public function createAdminAccessToken($username, $password)
     {
         $this->validatorHelper->validate($username, $password);
-        $customerDataObject = $this->accountManagement->authenticate($username, $password);
-        return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
+        $this->userModel->login($username, $password);
+        if (!$this->userModel->getId()) {
+            /*
+             * This message is same as one thrown in \Magento\Backend\Model\Auth to keep the behavior consistent.
+             * Constant cannot be created in Auth Model since it uses legacy translation that doesn't support it.
+             * Need to make sure that this is refactored once exception handling is updated in Auth Model.
+             */
+            throw new AuthenticationException(__('Please correct the user name or password.'));
+        }
+        return $this->tokenModelFactory->create()->createAdminToken($this->userModel->getId())->getToken();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function revokeCustomerAccessToken($customerId)
+    public function revokeAdminAccessToken($adminId)
     {
-        $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByCustomerId($customerId);
+        $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByAdminId($adminId);
         if ($tokenCollection->getSize() == 0) {
-            throw new LocalizedException(__('This customer has no tokens.'));
+            throw new LocalizedException(__('This user has no tokens.'));
         }
         try {
             foreach ($tokenCollection as $token) {

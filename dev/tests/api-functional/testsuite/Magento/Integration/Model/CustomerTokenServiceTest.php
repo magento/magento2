@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\InputException;
@@ -15,7 +15,7 @@ use Magento\User\Model\User as UserModel;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
- * api-functional test for \Magento\Integration\Service\V1\CustomerTokenService.
+ * api-functional test for \Magento\Integration\Model\CustomerTokenService.
  */
 class CustomerTokenServiceTest extends WebapiAbstract
 {
@@ -50,7 +50,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
     public function setUp()
     {
         $this->_markTestAsRestOnly();
-        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\CustomerTokenService');
+        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Model\CustomerTokenService');
         $this->customerAccountManagement = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Api\AccountManagementInterface'
         );

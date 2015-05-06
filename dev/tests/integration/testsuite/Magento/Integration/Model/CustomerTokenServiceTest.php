@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Exception\InputException;
@@ -12,7 +12,7 @@ use Magento\Integration\Model\Oauth\Token as TokenModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test class for \Magento\Integration\Service\V1\CustomerTokenService.
+ * Test class for \Magento\Integration\Model\CustomerTokenService.
  */
 class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +36,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\CustomerTokenService');
+        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Model\CustomerTokenService');
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Api\AccountManagementInterface'
         );

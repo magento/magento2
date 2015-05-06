@@ -1,15 +1,15 @@
 <?php
 /**
- * Test for \Magento\Integration\Service\V1\Integration
+ * Test for \Magento\Integration\Model\IntegrationService
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Test\Unit\Service\V1;
+namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Integration;
 
-class IntegrationTest extends \PHPUnit_Framework_TestCase
+class IntegrationServiceTest extends \PHPUnit_Framework_TestCase
 {
     const VALUE_INTEGRATION_ID = 1;
 
@@ -34,7 +34,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     private $_emptyIntegrationMock;
 
-    /** @var \Magento\Integration\Service\V1\Integration */
+    /** @var \Magento\Integration\Model\IntegrationService */
     private $_service;
 
     /** @var array */
@@ -77,7 +77,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         );
 
         $oauthConsumerHelper = $this->getMockBuilder(
-            'Magento\Integration\Service\V1\Oauth'
+            'Magento\Integration\Model\OauthService'
         )->disableOriginalConstructor()->getMock();
         $oauthConsumer = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\Consumer'
@@ -91,7 +91,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         );
         $oauthConsumerHelper->expects($this->any())->method('loadConsumer')->will($this->returnValue($oauthConsumer));
 
-        $this->_service = new \Magento\Integration\Service\V1\Integration(
+        $this->_service = new \Magento\Integration\Model\IntegrationService(
             $this->_integrationFactory,
             $oauthConsumerHelper
         );

@@ -127,9 +127,9 @@ class ShippingMethodManagementTest extends WebapiAbstract
 
         $this->quote->load('test_order_1', 'reserved_order_id');
 
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -223,9 +223,9 @@ class ShippingMethodManagementTest extends WebapiAbstract
 
         $this->quote->load('test_order_1', 'reserved_order_id');
 
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -293,9 +293,9 @@ class ShippingMethodManagementTest extends WebapiAbstract
 
         $this->quote->load('test_order_1', 'reserved_order_id');
 
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Model;
 
 use Magento\Authorization\Model\UserContextInterface;
 
@@ -29,7 +29,7 @@ class AuthorizationServiceTest extends \PHPUnit_Framework_TestCase
         $loggerMock = $this->getMockBuilder('Psr\\Log\\LoggerInterface')->disableOriginalConstructor()->getMock();
         $loggerMock->expects($this->any())->method('critical')->will($this->returnSelf());
         $this->_service = $objectManager->create(
-            'Magento\Integration\Service\V1\AuthorizationService',
+            'Magento\Integration\Model\AuthorizationService',
             [
                 'logger' => $loggerMock
             ]

@@ -3,14 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Api;
 
 use Magento\Integration\Model\Oauth\Token as OauthTokenModel;
 
 /**
  * Integration oAuth Service Interface
+ *
+ * @api
  */
-interface OauthInterface
+interface OauthServiceInterface
 {
     /**
      * Create a new consumer account.

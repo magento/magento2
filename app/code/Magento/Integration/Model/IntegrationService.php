@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Model;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Integration\Model\IntegrationFactory;
-use Magento\Integration\Service\V1\OauthInterface as IntegrationOauthService;
+use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
 use Magento\Framework\Exception\IntegrationException;
 
 /**
@@ -15,7 +15,7 @@ use Magento\Framework\Exception\IntegrationException;
  *
  * This service is used to interact with integrations.
  */
-class Integration implements \Magento\Integration\Service\V1\IntegrationInterface
+class IntegrationService implements \Magento\Integration\Api\IntegrationServiceInterface
 {
     /**
      * @var IntegrationFactory
