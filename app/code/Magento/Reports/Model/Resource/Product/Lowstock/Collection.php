@@ -68,6 +68,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * @param \Magento\Catalog\Model\Resource\Product $product
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
+     * @param \Magento\Quote\Model\Resource\Quote\Collection $quoteResource
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource
@@ -98,6 +99,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
         \Magento\Catalog\Model\Resource\Product $product,
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
+        \Magento\Quote\Model\Resource\Quote\Collection $quoteResource,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource,
@@ -126,6 +128,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
             $product,
             $eventTypeFactory,
             $productType,
+            $quoteResource,
             $connection
         );
         $this->stockRegistry = $stockRegistry;

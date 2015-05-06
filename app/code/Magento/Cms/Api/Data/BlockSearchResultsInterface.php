@@ -9,6 +9,7 @@ use Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * Interface for cms block search results.
+ * @api
  */
 interface BlockSearchResultsInterface extends SearchResultsInterface
 {

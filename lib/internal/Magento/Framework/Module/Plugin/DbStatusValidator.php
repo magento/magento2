@@ -57,7 +57,8 @@ class DbStatusValidator
                 $formattedErrors = $this->formatErrors($errors);
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(
-                        'Please update your database: Run "php -f index.php update" from the Magento root/setup directory. %1The following modules are outdated:%2%3',
+                        'Please upgrade your database: Run "bin/magento setup:upgrade" from the Magento root directory.'
+                        . ' %1The following modules are outdated:%2%3',
                         [PHP_EOL, PHP_EOL, implode(PHP_EOL, $formattedErrors)]
                     )
                 );

@@ -40,6 +40,8 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
 
         $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity');
 
+        $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
+
         $this->invoiceMock = $this->getMock(
             '\Magento\Sales\Model\Order\Invoice',
             ['getStore', '__wakeup', 'getOrder'],
@@ -58,7 +60,9 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
-            $this->addressRendererMock
+            $this->loggerMock,
+            $this->addressRenderer,
+            $this->eventManagerMock
         );
     }
 

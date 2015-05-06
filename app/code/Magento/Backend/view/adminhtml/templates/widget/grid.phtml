@@ -55,7 +55,7 @@ $numColumns = sizeof($block->getColumns());
                             <?php echo __('View') ?>
                             <select name="<?php echo $block->getVarNameLimit() ?>"
                                     onchange="<?php echo $block->getJsObjectName() ?>.loadByElement(this)" <?php echo $block->getUiId('per-page') ?>
-                                    class="select">
+                                    class="select admin__control-select">
                                 <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
                                     selected="selected"<?php endif; ?>>20
                                 </option>
@@ -108,11 +108,11 @@ $numColumns = sizeof($block->getColumns());
                             <a href="#" title="<?php echo __('Previous page') ?>" class="action-previous"
                                onclick="<?php echo $block->getJsObjectName() ?>.setPage('<?php echo($_curPage - 1) ?>');return false;"><span><?php echo __('Previous page') ?></span></a>
                         <?php else: ?>
-                            <span class="action-previous disabled"><span><?php echo __('Previous page') ?></span></span>
+                            <span class="action-default action-previous disabled"><span><?php echo __('Previous page') ?></span></span>
                         <?php endif; ?>
 
                         <input type="text" name="<?php echo $block->getVarNamePage() ?>" value="<?php echo $_curPage ?>"
-                               class="input-text page"
+                               class="input-text admin__control-text page"
                                onkeypress="<?php echo $block->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')" <?php echo $block->getUiId('current-page') ?> />
 
                         <span class="pages-total">
@@ -123,7 +123,7 @@ $numColumns = sizeof($block->getColumns());
                             <a href="#" title="<?php echo __('Next page') ?>" class="action-next"
                                onclick="<?php echo $block->getJsObjectName() ?>.setPage('<?php echo($_curPage + 1) ?>');return false;"><span><?php echo __('Next page') ?></span></a>
                         <?php else: ?>
-                            <span class="action-next disabled"><span><?php echo __('Next page') ?></span></span>
+                            <span class="action-default action-next disabled"><span><?php echo __('Next page') ?></span></span>
                         <?php endif; ?>
                         <?php if ($block->getChildBlock('grid.bottom.links')): ?>
                             <?php echo $block->getChildHtml('grid.bottom.links') ?>

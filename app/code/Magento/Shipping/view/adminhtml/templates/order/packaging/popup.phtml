@@ -53,149 +53,186 @@ require([
     <div class="popup-window-wrapper">
         <div class="popup-window-title">
             <div class="actions">
-                <button type="button" class="action-add AddPackageBtn" onclick="packaging.newPackage();">
+                <button type="button" class="action-add action-secondary AddPackageBtn" onclick="packaging.newPackage();">
                     <span><?php echo __('Add Package') ?></span>
                 </button>
             </div>
             <span class="title"><?php echo __('Create Packages') ?></span>
         </div>
         <div class="packaging-content popup-window-content">
-            <div class="messages" style="display:none;"></div>
+            <div class="message message-warning" style="display: none"></div>
             <div id="package_template" style="display:none;">
                 <div class="package-number popup-fieldset-title">
-                    <div class="title"><?php echo __('Package') ?><span></span></div>
+                    <div class="title">
+                        <?php echo __('Package') ?>
+                        <span></span>
+                    </div>
                 </div>
-                <table class="data-table" cellspacing="0">
-                    <thead>
-                        <th class="col-type"><?php echo __('Type') ?></th>
-                        <?php if ($girthEnabled == 1): ?>
-                        <th class="col-size"><?php echo __('Size') ?></th>
-                        <th class="col-girth"><?php echo __('Girth') ?></th>
-                        <th>&nbsp;</th>
-                            <?php endif; ?>
-                        <th class="col-custom" <?php echo $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
-                            <?php echo __('Customs Value') ?>
-                        </th>
-                        <th class="col-total-weight"><?php echo __('Total Weight') ?></th>
-                        <th class="col-length"><?php echo __('Length') ?></th>
-                        <th class="col-width"><?php echo __('Width') ?></th>
-                        <th class="col-height"><?php echo __('Height') ?></th>
-                        <th>&nbsp;</th>
-                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
-                        <th class="col-signature"><?php echo __('Signature Confirmation') ?></th>
-                            <?php endif; ?>
-                        <th class="col-actions">&nbsp;</th>
-                    </thead>
-                    <tbody>
-                        <td class="col-type">
-                            <?php $containers = $block->getContainers(); ?>
-                            <select name="package_container" onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?php echo  $girthEnabled ?>);"<?php if (empty($containers)):?>
-                                    title="<?php echo __('USPS domestic shipments don\'t use package types.') ?>"
-                                    disabled="" class="disabled"
-                                <?php endif; ?>>
-                                <?php foreach ($block->getContainers() as $key => $value): ?>
-                                <option value="<?php echo $key ?>" >
-                                    <?php echo $value ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                        <?php if ($girthEnabled == 1 && !empty($sizeSource)): ?>
-                        <td>
-                            <select name="package_size" onchange="packaging.checkSizeAndGirthParameter(this, <?php echo  $girthEnabled ?>);">
-                                <?php foreach ($sizeSource as $key => $value): ?>
-                                <option value="<?php echo $sizeSource[$key]['value'] ?>">
-                                    <?php echo $sizeSource[$key]['label'] ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                        <td><input type="text" class="input-text validate-greater-than-zero" name="container_girth" /></td>
-                        <td>
-                            <select name="container_girth_dimension_units" class="options-units-dimensions measures" onchange="packaging.changeMeasures(this);">
-                                <option value="<?php echo Zend_Measure_Length::INCH ?>" selected="selected" ><?php echo __('in') ?></option>
-                                <option value="<?php echo Zend_Measure_Length::CENTIMETER ?>" ><?php echo __('cm') ?></option>
-                            </select>
-                        </td>
-                            <?php endif; ?>
-                        <?php
-                        if ($block->displayCustomsValue()) {
-                            $customsValueDisplay = '';
-                            $customsValueValidation = ' validate-zero-or-greater ';
-                        } else {
-                            $customsValueDisplay = ' style="display: none;" ';
-                            $customsValueValidation = '';
-                        }
-                        ?>
-                        <td class="col-custom" <?php echo $customsValueDisplay ?>>
-                            <input type="text" class="customs-value input-text <?php echo $customsValueValidation ?>" name="package_customs_value" />
-                            <span class="customs-value-currency">[<?php echo $block->getCustomValueCurrencyCode(); ?>]</span>
-                        </td>
-                        <td class="col-total-weight">
-                            <input type="text" class="options-weight input-text required-entry validate-greater-than-zero" name="container_weight" />
-                            <select name="container_weight_units" class="options-units-weight measures" onchange="packaging.changeMeasures(this);">
-                                <option value="<?php echo Zend_Measure_Weight::POUND ?>" selected="selected"  ><?php echo __('lb') ?></option>
-                                <option value="<?php echo Zend_Measure_Weight::KILOGRAM ?>" ><?php echo __('kg') ?></option>
-                            </select>
-                        </td>
-                        <td class="col-length">
-                            <input type="text" class="input-text validate-greater-than-zero" name="container_length" />
-                        </td>
-                        <td class="col-width">
-                            <input type="text" class="input-text validate-greater-than-zero" name="container_width" />
-                        </td>
-                        <td class="col-height">
-                            <input type="text" class="input-text validate-greater-than-zero" name="container_height" />
-                        </td>
-                        <td class="col-measure">
-                            <select name="container_dimension_units" class="options-units-dimensions measures" onchange="packaging.changeMeasures(this);">
-                                <option value="<?php echo Zend_Measure_Length::INCH ?>" selected="selected" ><?php echo __('in') ?></option>
-                                <option value="<?php echo Zend_Measure_Length::CENTIMETER ?>" ><?php echo __('cm') ?></option>
-                            </select>
-                        </td>
-                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
-                        <td>
-                            <select name="delivery_confirmation_types">
-                                <?php foreach ($block->getDeliveryConfirmationTypes() as $key => $value): ?>
-                                <option value="<?php echo $key ?>" >
-                                    <?php echo $value ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                            <?php endif; ?>
-                        <td class="col-actions">
-                            <button type="button" class="action-add AddItemsBtn" onclick="packaging.getItemsForPack(this);">
-                                <span><?php echo __('Add Products') ?></span>
-                            </button>
-                            <button type="button" class="action-delete DeletePackageBtn" onclick="packaging.deletePackage(this);">
-                                <span><?php echo __('Delete Package') ?></span>
-                            </button>
-                        </td>
-                    </tbody>
-                </table>
+                <div class="admin__control-table-wrapper">
+                    <table class="data-table admin__control-table">
+                        <thead>
+                            <th class="col-type"><?php echo __('Type') ?></th>
+                            <?php if ($girthEnabled == 1): ?>
+                            <th class="col-size"><?php echo __('Size') ?></th>
+                            <th class="col-girth"><?php echo __('Girth') ?></th>
+                            <th>&nbsp;</th>
+                                <?php endif; ?>
+                            <th class="col-custom" <?php echo $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
+                                <?php echo __('Customs Value') ?>
+                            </th>
+                            <th class="col-total-weight"><?php echo __('Total Weight') ?></th>
+                            <th class="col-length"><?php echo __('Length') ?></th>
+                            <th class="col-width"><?php echo __('Width') ?></th>
+                            <th class="col-height"><?php echo __('Height') ?></th>
+                            <th>&nbsp;</th>
+                            <?php if ($block->getDeliveryConfirmationTypes()): ?>
+                            <th class="col-signature"><?php echo __('Signature Confirmation') ?></th>
+                                <?php endif; ?>
+                            <th class="col-actions">&nbsp;</th>
+                        </thead>
+                        <tbody>
+                            <td class="col-type">
+                                <?php $containers = $block->getContainers(); ?>
+                                <select name="package_container"
+                                        onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?php echo  $girthEnabled ?>);"
+                                        <?php if (empty($containers)):?>
+                                            title="<?php echo __('USPS domestic shipments don\'t use package types.') ?>"
+                                            disabled=""
+                                            class="admin__control-select disabled"
+                                        <?php else: ?>
+                                            class="admin__control-select"
+                                        <?php endif; ?>>
+                                    <?php foreach ($block->getContainers() as $key => $value): ?>
+                                        <option value="<?php echo $key ?>" >
+                                            <?php echo $value ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                            <?php if ($girthEnabled == 1 && !empty($sizeSource)): ?>
+                            <td>
+                                <select name="package_size"
+                                        class="admin__control-select"
+                                        onchange="packaging.checkSizeAndGirthParameter(this, <?php echo  $girthEnabled ?>);">
+                                    <?php foreach ($sizeSource as $key => $value): ?>
+                                    <option value="<?php echo $sizeSource[$key]['value'] ?>">
+                                        <?php echo $sizeSource[$key]['label'] ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       class="input-text admin__control-text validate-greater-than-zero"
+                                       name="container_girth" />
+                            </td>
+                            <td>
+                                <select name="container_girth_dimension_units"
+                                        class="options-units-dimensions measures admin__control-select"
+                                        onchange="packaging.changeMeasures(this);">
+                                    <option value="<?php echo Zend_Measure_Length::INCH ?>" selected="selected" ><?php echo __('in') ?></option>
+                                    <option value="<?php echo Zend_Measure_Length::CENTIMETER ?>" ><?php echo __('cm') ?></option>
+                                </select>
+                            </td>
+                                <?php endif; ?>
+                            <?php
+                            if ($block->displayCustomsValue()) {
+                                $customsValueDisplay = '';
+                                $customsValueValidation = ' validate-zero-or-greater ';
+                            } else {
+                                $customsValueDisplay = ' style="display: none;" ';
+                                $customsValueValidation = '';
+                            }
+                            ?>
+                            <td class="col-custom" <?php echo $customsValueDisplay ?>>
+                                <input type="text"
+                                       class="customs-value input-text admin__control-text <?php echo $customsValueValidation ?>"
+                                       name="package_customs_value" />
+                                <span class="customs-value-currency">[<?php echo $block->getCustomValueCurrencyCode(); ?>]</span>
+                            </td>
+                            <td class="col-total-weight">
+                                <input type="text"
+                                       class="options-weight input-text admin__control-text required-entry validate-greater-than-zero"
+                                       name="container_weight" />
+                                <select name="container_weight_units"
+                                        class="options-units-weight measures admin__control-select"
+                                        onchange="packaging.changeMeasures(this);">
+                                    <option value="<?php echo Zend_Measure_Weight::POUND ?>" selected="selected"  ><?php echo __('lb') ?></option>
+                                    <option value="<?php echo Zend_Measure_Weight::KILOGRAM ?>" ><?php echo __('kg') ?></option>
+                                </select>
+                            </td>
+                            <td class="col-length">
+                                <input type="text"
+                                       class="input-text admin__control-text validate-greater-than-zero"
+                                       name="container_length" />
+                            </td>
+                            <td class="col-width">
+                                <input type="text"
+                                       class="input-text admin__control-text validate-greater-than-zero"
+                                       name="container_width" />
+                            </td>
+                            <td class="col-height">
+                                <input type="text"
+                                       class="input-text admin__control-text validate-greater-than-zero"
+                                       name="container_height" />
+                            </td>
+                            <td class="col-measure">
+                                <select name="container_dimension_units"
+                                        class="options-units-dimensions measures admin__control-select"
+                                        onchange="packaging.changeMeasures(this);">
+                                    <option value="<?php echo Zend_Measure_Length::INCH ?>" selected="selected" ><?php echo __('in') ?></option>
+                                    <option value="<?php echo Zend_Measure_Length::CENTIMETER ?>" ><?php echo __('cm') ?></option>
+                                </select>
+                            </td>
+                            <?php if ($block->getDeliveryConfirmationTypes()): ?>
+                            <td>
+                                <select name="delivery_confirmation_types" class="admin__control-select">
+                                    <?php foreach ($block->getDeliveryConfirmationTypes() as $key => $value): ?>
+                                    <option value="<?php echo $key ?>" >
+                                        <?php echo $value ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                                <?php endif; ?>
+                            <td class="col-actions">
+                                <button type="button" class="action-add AddItemsBtn" onclick="packaging.getItemsForPack(this);">
+                                    <span><?php echo __('Add') ?></span>
+                                </button>
+                                <button type="button" class="action-delete DeletePackageBtn" onclick="packaging.deletePackage(this);">
+                                    <span><?php echo __('Delete Package') ?></span>
+                                </button>
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
 
                 <?php if ($block->getContentTypes()): ?>
-                <table class="package-options package-options-contents data-table" cellspacing="0">
-                    <thead>
-                        <th><?php echo __('Contents') ?></th>
-                        <th><?php echo __('Explanation') ?></th>
-                    </thead>
-                    <tbody>
-                        <td>
-                            <select name="content_type" onchange="packaging.changeContentTypes(this);">
-                                <?php foreach ($block->getContentTypes() as $key => $value): ?>
-                                <option value="<?php echo $key ?>" >
-                                    <?php echo $value ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                        <td>
-                            <input name="content_type_other" type="text" class="input-text options-content-type disabled" disabled="disabled" />
-                        </td>
-                    </tbody>
-                </table>
+                    <table class="package-options package-options-contents data-table" cellspacing="0">
+                        <thead>
+                            <th><?php echo __('Contents') ?></th>
+                            <th><?php echo __('Explanation') ?></th>
+                        </thead>
+                        <tbody>
+                            <td>
+                                <select name="content_type"
+                                        class="admin__control-select"
+                                        onchange="packaging.changeContentTypes(this);">
+                                    <?php foreach ($block->getContentTypes() as $key => $value): ?>
+                                    <option value="<?php echo $key ?>" >
+                                        <?php echo $value ?>
+                                    </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                            <td>
+                                <input name="content_type_other"
+                                       type="text"
+                                       class="input-text admin__control-text options-content-type disabled"
+                                       disabled="disabled" />
+                            </td>
+                        </tbody>
+                    </table>
                 <?php endif; ?>
                 <div class="package-add-products">
                     <div class="package_prapare" style="display:none">
@@ -214,7 +251,11 @@ require([
             <div id="packages_content"></div>
         </div>
         <div class="popup-window-buttons-set">
-            <button type="button" class="action-ok disabled SavePackagesBtn" disabled="disabled" onclick="packaging.confirmPackaging();" title="<?php echo __('Products should be added to package(s)')?>">
+            <button type="button"
+                    class="action-save action-secondary disabled SavePackagesBtn"
+                    disabled="disabled"
+                    onclick="packaging.confirmPackaging();"
+                    title="<?php echo __('Products should be added to package(s)')?>">
                 <span><?php echo __('OK') ?></span>
             </button>
             <button type="button" class="action-close" onclick="packaging.cancelPackaging();">

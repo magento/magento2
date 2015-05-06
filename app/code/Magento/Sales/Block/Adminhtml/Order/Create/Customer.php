@@ -30,7 +30,7 @@ class Customer extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreat
      */
     public function getHeaderText()
     {
-        return __('Please select a customer.');
+        return __('Please select a customer');
     }
 
     /**

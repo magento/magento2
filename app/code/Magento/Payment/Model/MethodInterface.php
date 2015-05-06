@@ -15,6 +15,7 @@ interface MethodInterface
      * Retrieve payment method code
      *
      * @return string
+     * @api
      */
     public function getCode();
 
@@ -22,6 +23,7 @@ interface MethodInterface
      * Retrieve block type for method form generation
      *
      * @return string
+     * @api
      */
     public function getFormBlockType();
 
@@ -29,6 +31,7 @@ interface MethodInterface
      * Retrieve payment method title
      *
      * @return string
+     * @api
      */
     public function getTitle();
 }

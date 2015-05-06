@@ -73,16 +73,18 @@
         position: relative;
         text-align: center;
         z-index: @menu__z-index;
-        &:focus {
-            background-color: @menu-item__active__background-color;
-            box-shadow: none;
-            + .admin__menu {
-                .level-0 {
-                    &:first-child {
-                        > a {
-                            background-color: @menu__background-color;
-                            &:after {
-                                display: none;
+        ._keyfocus & {
+            &:focus {
+                background-color: @menu-item__active__background-color;
+                box-shadow: none;
+                + .admin__menu {
+                    .level-0 {
+                        &:first-child {
+                            > a {
+                                background-color: @menu__background-color;
+                                &:after {
+                                    display: none;
+                                }
                             }
                         }
                     }
@@ -166,7 +168,7 @@
             text-decoration: none;
             text-transform: uppercase;
             transition: background-color .1s linear;
-            word-break: break-all;
+            word-wrap: break-word;
             z-index: @menu__z-index;
             &:focus {
                 box-shadow: none;

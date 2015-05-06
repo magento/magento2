@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
-use \Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
+use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 
 class ShipmentSenderTest extends AbstractSenderTest
 {
@@ -15,51 +15,34 @@ class ShipmentSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $shipmentMock;
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $paymentHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Resource\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $shipmentResource;
+    protected $shipmentResourceMock;
 
     protected function setUp()
     {
         $this->stepMockSetup();
-        $this->paymentHelper = $this->getMock('\Magento\Payment\Helper\Data', ['getInfoBlockHtml'], [], '', false);
-        $this->paymentHelper->expects($this->any())
-            ->method('getInfoBlockHtml')
-            ->will($this->returnValue('payment'));
 
-        $this->shipmentResource = $this->getMock(
+        $this->shipmentResourceMock = $this->getMock(
             '\Magento\Sales\Model\Resource\Order\Shipment',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\ShipmentIdentity');
-
-        $paymentInfoMock = $this->getMock(
-            '\Magento\Payment\Model\Info',
-            [],
+            ['saveAttribute'],
             [],
             '',
             false
         );
-        $this->orderMock->expects($this->once())
-            ->method('getPayment')
-            ->will($this->returnValue($paymentInfoMock));
 
         $this->shipmentMock = $this->getMock(
             '\Magento\Sales\Model\Order\Shipment',
-            ['getStore', '__wakeup', 'getOrder'],
+            [
+                'getStore', '__wakeup', 'getOrder',
+                'setSendEmail', 'setEmailSent', 'getCustomerNoteNotify',
+                'getCustomerNote'
+            ],
             [],
             '',
             false
@@ -71,98 +54,156 @@ class ShipmentSenderTest extends AbstractSenderTest
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
 
-        $this->sender = new ShipmentSender(
-            $this->templateContainerMock,
-            $this->identityContainerMock,
-            $this->senderBuilderFactoryMock,
-            $this->paymentHelper,
-            $this->shipmentResource,
-            $this->addressRendererMock
-        );
-    }
-
-    public function testSendFalse()
-    {
-        $this->stepAddressFormat($this->addressMock);
-        $result = $this->sender->send($this->shipmentMock);
-        $this->assertFalse($result);
-    }
-
-    public function testSendTrueWithCustomerCopy()
-    {
-        $billingAddress = $this->addressMock;
-        $comment = 'comment_test';
-
-        $this->orderMock->expects($this->once())
-            ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
-        $this->stepAddressFormat($billingAddress);
-
-        $this->identityContainerMock->expects($this->once())
-            ->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->templateContainerMock->expects($this->once())
-            ->method('setTemplateVars')
-            ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'shipment' => $this->shipmentMock,
-                        'comment' => $comment,
-                        'billing' => $billingAddress,
-                        'payment_html' => 'payment',
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1
-                    ]
-                )
-            );
-        $paymentInfoMock = $this->getMock(
-            '\Magento\Payment\Model\Info',
-            [],
+        $this->identityContainerMock = $this->getMock(
+            '\Magento\Sales\Model\Order\Email\Container\ShipmentIdentity',
+            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'],
             [],
             '',
             false
         );
-        $this->orderMock->expects($this->once())
-            ->method('getPayment')
-            ->will($this->returnValue($paymentInfoMock));
-        $this->stepSendWithoutSendCopy();
-        $result = $this->sender->send($this->shipmentMock, true, $comment);
-        $this->assertTrue($result);
+        $this->identityContainerMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($this->storeMock));
+
+        $this->sender = new ShipmentSender(
+            $this->templateContainerMock,
+            $this->identityContainerMock,
+            $this->senderBuilderFactoryMock,
+            $this->loggerMock,
+            $this->paymentHelper,
+            $this->shipmentResourceMock,
+            $this->globalConfig,
+            $this->addressRenderer,
+            $this->eventManagerMock
+        );
     }
 
-    public function testSendTrueWithoutCustomerCopy()
+    /**
+     * @param int $configValue
+     * @param bool|null $forceSyncMode
+     * @param bool|null $customerNoteNotify
+     * @param bool|null $emailSendingResult
+     * @dataProvider sendDataProvider
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testSend($configValue, $forceSyncMode, $customerNoteNotify, $emailSendingResult)
     {
-        $billingAddress = $this->addressMock;
         $comment = 'comment_test';
+        $address = 'address_test';
+        $configPath = 'sales_email/general/async_sending';
 
-        $this->orderMock->expects($this->once())
-            ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
-        $this->stepAddressFormat($billingAddress);
+        $this->shipmentMock->expects($this->once())
+            ->method('setSendEmail')
+            ->with(true);
 
-        $this->identityContainerMock->expects($this->once())
-            ->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->templateContainerMock->expects($this->once())
-            ->method('setTemplateVars')
-            ->with(
-                $this->equalTo(
+        $this->globalConfig->expects($this->once())
+            ->method('getValue')
+            ->with($configPath)
+            ->willReturn($configValue);
+
+        if (!$configValue || $forceSyncMode) {
+            $addressMock = $this->getMock(
+                'Magento\Sales\Model\Order\Address',
+                [],
+                [],
+                '',
+                false
+            );
+
+            $this->addressRenderer->expects($this->any())
+                ->method('format')
+                ->with($addressMock, 'html')
+                ->willReturn($address);
+
+            $this->orderMock->expects($this->any())
+                ->method('getBillingAddress')
+                ->willReturn($addressMock);
+
+            $this->orderMock->expects($this->any())
+                ->method('getShippingAddress')
+                ->willReturn($addressMock);
+
+            $this->shipmentMock->expects($this->once())
+                ->method('getCustomerNoteNotify')
+                ->willReturn($customerNoteNotify);
+
+            $this->shipmentMock->expects($this->any())
+                ->method('getCustomerNote')
+                ->willReturn($comment);
+
+            $this->templateContainerMock->expects($this->once())
+                ->method('setTemplateVars')
+                ->with(
                     [
                         'order' => $this->orderMock,
                         'shipment' => $this->shipmentMock,
-                        'billing' => $billingAddress,
+                        'comment' => $customerNoteNotify ? $comment : '',
+                        'billing' => $addressMock,
                         'payment_html' => 'payment',
-                        'comment' => $comment,
                         'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1
+                        'formattedShippingAddress' => $address,
+                        'formattedBillingAddress' => $address
                     ]
-                )
+                );
+
+            $this->identityContainerMock->expects($this->once())
+                ->method('isEnabled')
+                ->willReturn($emailSendingResult);
+
+            if ($emailSendingResult) {
+                $this->senderBuilderFactoryMock->expects($this->once())
+                    ->method('create')
+                    ->willReturn($this->senderMock);
+
+                $this->senderMock->expects($this->once())->method('send');
+
+                $this->senderMock->expects($this->once())->method('sendCopyTo');
+
+                $this->shipmentMock->expects($this->once())
+                    ->method('setEmailSent')
+                    ->with(true);
+
+                $this->shipmentResourceMock->expects($this->once())
+                    ->method('saveAttribute')
+                    ->with($this->shipmentMock, ['send_email', 'email_sent']);
+
+                $this->assertTrue(
+                    $this->sender->send($this->shipmentMock)
+                );
+            } else {
+                $this->shipmentResourceMock->expects($this->once())
+                    ->method('saveAttribute')
+                    ->with($this->shipmentMock, 'send_email');
+
+                $this->assertFalse(
+                    $this->sender->send($this->shipmentMock)
+                );
+            }
+        } else {
+            $this->shipmentResourceMock->expects($this->once())
+                ->method('saveAttribute')
+                ->with($this->shipmentMock, 'send_email');
+
+            $this->assertFalse(
+                $this->sender->send($this->shipmentMock)
             );
-        $this->stepSendWithCallSendCopyTo();
-        $result = $this->sender->send($this->shipmentMock, false, $comment);
-        $this->assertTrue($result);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function sendDataProvider()
+    {
+        return [
+            [0, 0, 1, true],
+            [0, 0, 0, true],
+            [0, 0, 1, false],
+            [0, 0, 0, false],
+            [0, 1, 1, true],
+            [0, 1, 0, true],
+            [1, null, null, null]
+        ];
     }
 }

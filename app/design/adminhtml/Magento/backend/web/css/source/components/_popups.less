@@ -26,6 +26,8 @@
 
 @popup-overlay__background-color: rgba(0, 0, 0, .35);
 
+@popup-fieldset__margin-left: 34%;
+
 //
 //  Jquery UI popup window
 //  _____________________________________________
@@ -313,6 +315,23 @@
 
         .x-tree {
             margin-bottom: @indent__base;
+        }
+    }
+}
+
+.ui-dialog {
+    .admin__fieldset {
+        > .admin__legend {
+            float: none;
+            font-size: 1.8rem;
+            margin: 0 0 @indent__base @popup-fieldset__margin-left;
+            width: auto;
+        }
+        .product-options {
+            margin-left: @popup-fieldset__margin-left;
+            .admin__field-control {
+                margin-bottom: @indent__base;
+            }
         }
     }
 }
