@@ -42,6 +42,9 @@
 //  ---------------------------------------------
 
 .grid {
+    .hor-scroll {
+        overflow-x: auto;
+    }
     table {
         &:not(.data-table) {
             border: none;
@@ -111,7 +114,7 @@
                 border: @data-grid-temp-cell__border-width @data-grid-temp-th__border-style @data-grid-temp-th__border-color;
                 color: @data-grid-temp-th__color;
                 font-weight: @font-weight__semibold;
-                padding: @data-grid-temp-cell__padding-vertical @data-grid-temp-cell__padding-horizontal;;
+                padding: @data-grid-temp-cell__padding-vertical @data-grid-temp-cell__padding-horizontal;
                 text-align: left;
                 &:first-child {
                     border-left-color: @data-grid-temp-th__border-color;
@@ -183,6 +186,9 @@
                             height: 2.9rem;
                             margin-left: .5rem;
                             width: 3.5rem;
+                        }
+                        &:after {
+                            display: none;
                         }
                     }
                 }

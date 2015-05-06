@@ -39,13 +39,6 @@ abstract class AbstractCatalogRuleEntityTest extends Injectable
     protected $adminCache;
 
     /**
-     * Fixture CatalogRule.
-     *
-     * @var array
-     */
-    protected $catalogRules = [];
-
-    /**
      * Fixture factory.
      *
      * @var FixtureFactory
@@ -80,12 +73,6 @@ abstract class AbstractCatalogRuleEntityTest extends Injectable
      */
     public function tearDown()
     {
-        foreach ($this->catalogRules as $catalogRule) {
-            $filter = ['name' => $catalogRule->getName()];
-            $this->catalogRuleIndex->open();
-            $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
-            $this->catalogRuleNew->getFormPageActions()->delete();
-        }
-        $this->catalogRules = [];
+        $this->objectManager->create('\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep')->run();
     }
 }

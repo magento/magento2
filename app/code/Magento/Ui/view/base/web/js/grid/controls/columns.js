@@ -3,11 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'mageUtils',
-    'mage/translate',
     'underscore',
     'Magento_Ui/js/lib/collapsible'
-], function (utils, $t, _, Collapsible) {
+], function (_, Collapsible) {
     'use strict';
 
     return Collapsible.extend({
@@ -38,7 +36,8 @@ define([
         },
 
         /**
-         * Helper, wich helps to stop resizing and
+         * Helper, which helps to stop resizing.
+         * viewportSize limits number of elements.
          * @returns {Boolean}
          */
         hasOverflow: function () {
@@ -56,8 +55,8 @@ define([
             var visible = this.countVisible();
 
             return elem.visible() ?
-                visible === this.minVisible :
-                visible === this.maxVisible;
+                    visible === this.minVisible :
+                    visible === this.maxVisible;
         },
 
         /**

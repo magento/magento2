@@ -1,3 +1,23 @@
+0.74.0-beta7
+=============
+* Framework improvements
+    * Exceptions are caught and logged before reaching the Phrase::__toString() method
+    * Refactored controller actions in the Checkout area
+    * Refactored controller actions in the Tax area
+    * Implemented new look & feel for the Edit Order page (View/Edit Order)
+    * Replaced the end-to-end test for Onepage Checkout with online shipment methods with the scenario test
+* Fixed bugs
+    * Fixed an issue where a success message was absent when adding a product with options from Wishlist to Shopping Cart
+    * Fixed an issue where an exception was thrown when trying to sort Customer Groups by Tax Class
+    * Fixed an issue where the background color changed to the “on focus” state when clicking  the Admin Menu logo
+    * Fixed an issue with Mini Shopping Cart containing extra empty space
+* GitHub issues
+    * [#1173] (https://github.com/magento/magento2/pull/1173) -- Change to HttpClient4 from Java client; fix regex issues
+    * [#1185] (https://github.com/magento/magento2/pull/1185) -- Error message for duplicated phrases not allowed in Generator.php
+    * [#1199] (https://github.com/magento/magento2/pull/1199) -- Add Event for sales_order_state_change_before during Order->saveState()
+    * [#1201] (https://github.com/magento/magento2/pull/1101) -- Add customer_validate event
+    * [#1202] (https://github.com/magento/magento2/pull/1102) -- Email sending events
+
 0.74.0-beta6
 =============
 * Framework improvements
