@@ -115,7 +115,8 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 self::INPUT_KEY_SERIALIZER,
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Serializer function that should be used (serialize|igbinary) default: serialize'
+                'Serializer function that should be used (' . self::SERIALIZER_VALUE_SERIALIZE . '|'
+                . self::SERIALIZER_VALUE_IGBINARY . ') default: ' . self::SERIALIZER_VALUE_SERIALIZE
             ),
             new InputOption(
                 self::INPUT_KEY_EXTRA_CLASSES_FILE,
