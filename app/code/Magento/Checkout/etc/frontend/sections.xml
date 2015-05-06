@@ -28,64 +28,13 @@
     <action name="checkout/cart/estimateUpdatePost">
         <section name="cart"/>
     </action>
-
     <action name="checkout/onepage/saveOrder">
         <section name="cart"/>
     </action>
-
     <action name="checkout/sidebar/removeItem">
         <section name="cart"/>
     </action>
     <action name="checkout/sidebar/updateItemQty">
-        <section name="cart"/>
-    </action>
-
-    <action name="wishlist/index/fromcart">
-        <section name="cart"/>
-    </action>
-    <action name="wishlist/index/cart">
-        <section name="cart"/>
-    </action>
-    <action name="wishlist/index/allcart">
-        <section name="cart"/>
-    </action>
-    <action name="wishlist/shared/allcart">
-        <section name="cart"/>
-        <section name="wishlist"/>
-    </action>
-
-    <action name="customer_order/cart/updateFailedItemOptions">
-        <section name="cart"/>
-    </action>
-
-    <action name="wishlist/search/addtocart">
-        <section name="cart"/>
-        <section name="wishlist"/>
-    </action>
-
-    <action name="sales/guest/reorder">
-        <section name="cart"/>
-    </action>
-    <action name="sales/order/reorder">
-        <section name="cart"/>
-    </action>
-
-    <action name="customer_order/cart/advancedAdd">
-        <section name="cart"/>
-    </action>
-    <action name="checkout/cart/advancedAdd">
-        <section name="cart"/>
-    </action>
-    <action name="checkout/cart/addFailedItems">
-        <section name="cart"/>
-    </action>
-    <action name="customer_order/cart/addFailedItems">
-        <section name="cart"/>
-    </action>
-    <action name="checkout/cart/uploadSkuCsv">
-        <section name="cart"/>
-    </action>
-    <action name="customer_order/cart/uploadSkuCsv">
         <section name="cart"/>
     </action>
 </config>
