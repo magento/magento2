@@ -47,6 +47,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     const INPUT_KEY_EXCLUDE_PATTERN= 'exclude-pattern';
     /**#@- */
 
+    /**#@+
+     * Possible values for serializer
+     */
+    const SERIALIZER_VALUE_SERIALIZE = 'serialize';
+    const SERIALIZER_VALUE_IGBINARY = 'igbinary';
+    /**#@- */
+
     /**
      * Object Manager
      *
@@ -381,9 +388,10 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             }
             switch ($key) {
                 case self::INPUT_KEY_SERIALIZER:
-                    if (($value !== 'serialize') || ($value !== 'igbinary')) {
+                    if (($value !== self::SERIALIZER_VALUE_SERIALIZE) || ($value !== self::SERIALIZER_VALUE_IGBINARY)) {
                         $errors[] = '<error>Invalid value for command option \'' . self::INPUT_KEY_SERIALIZER
-                            . '\'. Possible values (serialize|igbinary).</error>';
+                            . '\'. Possible values (' . self::SERIALIZER_VALUE_SERIALIZE . '|'
+                            . self::SERIALIZER_VALUE_IGBINARY . ').</error>';
                     }
                     break;
                 case self::INPUT_KEY_EXTRA_CLASSES_FILE:
