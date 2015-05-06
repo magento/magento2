@@ -44,7 +44,16 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteAddressMock = $this->getMock(
             '\Magento\Quote\Model\Quote\Address',
-            ['setSameAsBilling', 'setCollectShippingRates', '__wakeup', 'collectTotals', 'save'],
+            [
+                'setSameAsBilling',
+                'setCollectShippingRates',
+                '__wakeup',
+                'collectTotals',
+                'save',
+                'getId',
+                'getCustomerAddressId',
+                'getSaveInAddressBook'
+            ],
             [],
             '',
             false
@@ -82,6 +91,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAddress()
     {
+        $addressId = 1;
         $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
@@ -96,12 +106,15 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteAddressMock->expects($this->once())->method('collectTotals')->willReturnSelf();
         $this->quoteAddressMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->quoteAddressMock->expects($this->once())->method('getId')->will($this->returnValue($addressId));
 
-        $addressId = 1;
-        $shippingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
-        $shippingAddressMock->expects($this->once())->method('getId')->will($this->returnValue($addressId));
-        $quoteMock->expects($this->once())->method('getShippingAddress')
-            ->will($this->returnValue($shippingAddressMock));
+        $quoteMock->expects($this->any())
+            ->method('setShippingAddress')
+            ->with($this->quoteAddressMock)
+            ->willReturnSelf();
+        $quoteMock->expects($this->any())
+            ->method('getShippingAddress')
+            ->will($this->returnValue($this->quoteAddressMock));
         $quoteMock->expects($this->once())->method('validateMinimumAmount')->willReturn(true);
 
         $this->assertEquals($addressId, $this->service->assign('cart867', $this->quoteAddressMock));
@@ -119,11 +132,11 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->with('cart867')
             ->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
+        $quoteMock->expects($this->once())->method('setShippingAddress');
 
         $this->quoteAddressMock->expects($this->never())->method('getCustomerAddressId');
         $this->quoteAddressMock->expects($this->never())->method('setSaveInAddressBook');
 
-        $quoteMock->expects($this->never())->method('setShippingAddress');
         $quoteMock->expects($this->never())->method('save');
 
         $this->service->assign('cart867', $this->quoteAddressMock);
@@ -146,6 +159,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->with('cart867')
             ->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
+        $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($this->quoteAddressMock);
 
         $this->validatorMock->expects($this->once())->method('validate')
             ->with($this->quoteAddressMock)
