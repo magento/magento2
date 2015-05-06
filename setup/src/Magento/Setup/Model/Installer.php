@@ -1026,7 +1026,7 @@ class Installer
      */
     public function cleanupDb()
     {
-        // stops cleanup if app/etc/config.php does not exist
+        // stops cleanup if configuration does not exist
         if ($this->deploymentConfig->isAvailable()) {
             $config = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT);
             if ($config) {
