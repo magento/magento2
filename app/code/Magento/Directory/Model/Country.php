@@ -73,8 +73,11 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Load country by code
+     *
      * @param string $code
      * @return $this
+     * @api
      */
     public function loadByCode($code)
     {
@@ -83,7 +86,10 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get regions
+     *
      * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @api
      */
     public function getRegions()
     {
@@ -152,9 +158,10 @@ T: {{telephone}}";
     }
 
     /**
-     * Retrieve formats for
+     * Retrieve country formats
      *
      * @return \Magento\Directory\Model\Resource\Country\Format\Collection
+     * @api
      */
     public function getFormats()
     {
@@ -172,10 +179,11 @@ T: {{telephone}}";
     }
 
     /**
-     * Retrieve format
+     * Retrieve country format
      *
      * @param string $type
      * @return \Magento\Directory\Model\Country\Format|null
+     * @api
      */
     public function getFormat($type)
     {
@@ -190,7 +198,10 @@ T: {{telephone}}";
     }
 
     /**
+     * Get country name
+     *
      * @return string
+     * @api
      */
     public function getName()
     {

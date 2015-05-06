@@ -116,6 +116,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * Get currency code
      *
      * @return string
+     * @api
      */
     public function getCode()
     {
@@ -123,7 +124,10 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get currency code
+
      * @return string
+     * @api
      */
     public function getCurrencyCode()
     {
