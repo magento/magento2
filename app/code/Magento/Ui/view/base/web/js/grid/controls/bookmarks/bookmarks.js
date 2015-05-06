@@ -23,6 +23,8 @@ define([
             template: 'ui/grid/controls/bookmarks/bookmarks',
             defaultIndex: 'default',
             activeIndex: 'default',
+            hasChanges: false,
+            initialSet: true,
             listens: {
                 activeIndex: 'onActiveChange',
                 current: 'onDataChange'
@@ -42,6 +44,8 @@ define([
         },
 
         initialize: function () {
+            utils.limit(this, 'onDataChange', 600);
+
             this._super()
                 .restore();
 
@@ -52,13 +56,24 @@ define([
             return this;
         },
 
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Bookmarks} Chainable.
+         */
         initObservable: function () {
             this._super()
-                .observe('activeView');
+                .observe('activeView hasChanges');
 
             return this;
         },
 
+        /**
+         * Called when another element was added to current component.
+         *
+         * @param {Object} elem - Instance of an element that was added.
+         * @returns {Bookmarks} Chainable.
+         */
         initElement: function (elem) {
             if (elem.index === this.defaultIndex) {
                 this.defaultView = elem;
@@ -156,9 +171,9 @@ define([
         saveView: function (view) {
             var data;
 
-            if (!view.changed()) {
-                return this;
-            }
+            this.hasChanges(false);
+
+            view.setData(this.current);
 
             if (view.isNew) {
                 view.active(true);
@@ -176,7 +191,33 @@ define([
         },
 
         /**
-         * Retrives last saved data of a current view.
+         * Saves current data state.
+         *
+         * @returns {Bookmarks} Chainable.
+         */
+        saveCurrent: function () {
+            this.store('current');
+
+            return this;
+        },
+
+        /**
+         * Defines whether current state is different
+         * from a saved state of an active view.
+         *
+         * @returns {Bookmarks} Chainable.
+         */
+        checkChanges: function () {
+            var view = this.activeView(),
+                diff = utils.compare(view.getSaved(), this.current);
+
+            this.hasChanges(!diff.equal);
+
+            return this;
+        },
+
+        /**
+         * Retrieves last saved data of a current view.
          *
          * @returns {Object}
          */
@@ -185,7 +226,7 @@ define([
         },
 
         /**
-         * Retrives default data.
+         * Retrieves default data.
          *
          * @returns {Object}
          */
@@ -194,13 +235,22 @@ define([
         },
 
         defaultPolyfill: function () {
-            var active = this.activeView();
+            var view = this.activeView();
 
-            if (active && active.index === this.defaultIndex) {
-                active.data.items = utils.copy(this.current);
-                active.changed(true);
-                this.saveView(active);
+            if (view && view.index === this.defaultIndex && !view.restored) {
+                view.data.items = utils.copy(this.current);
+
+                view.save();
+
+                this.store('views.' + view.index, {
+                    index: view.index,
+                    label: view.label(),
+                    restored: true,
+                    data: this.current
+                });
             }
+
+            this.checkChanges();
         },
 
         /**
@@ -209,25 +259,26 @@ define([
          * @param {String} index - Index of the active view.
          */
         onActiveChange: function (index) {
-            var view = this.elems.findWhere({index: index}),
-                data = view.getData();
+            var view = this.elems.findWhere({index: index});
 
             this.store('activeIndex')
                 .activeView(view);
 
-            if (_.size(data)) {
-                this.set('current', data);
+            if (!this.initialSet) {
+                this.set('current', view.getData());
             }
+
+            this.initialSet = false;
         },
 
         /**
          * Listens changes of current data object.
          */
         onDataChange: function () {
-            var active = this.activeView();
+            this.saveCurrent();
 
-            if (active) {
-                active.setData(this.current);
+            if (this.activeView()) {
+                this.checkChanges();
             }
         },
 

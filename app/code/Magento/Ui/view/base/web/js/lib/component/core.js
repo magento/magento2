@@ -21,7 +21,7 @@ define([
         },
 
         initialize: function (options) {
-            _.bindAll(this, '_insert');
+            _.bindAll(this, '_insert', 'trigger');
 
             this.initConfig(options)
                 .initProperties()

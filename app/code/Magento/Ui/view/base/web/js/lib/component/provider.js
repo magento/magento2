@@ -58,6 +58,16 @@ define([
         localStorage.setItem(ns, JSON.stringify(stored));
     }
 
+    function notify(diffs, callback) {
+        diffs.changes.forEach(function (change) {
+            callback(change.path, change.value, change);
+        });
+
+        _.each(diffs.containers, function (changes, name) {
+            callback(name, changes);
+        });
+    }
+
     return {
         /**
          * If 2 params passed, path is considered as key.
@@ -96,23 +106,23 @@ define([
 
         /**
          * Sets value property to path and triggers update by path, passing result
-         * @param {String|*} path
-         * @param {String|*} value
-         * @return {Object} reference to instance
+         * @param {String} path
+         * @param {*} value
+         * @returns {Component} Chainable.
          */
         set: function (path, value) {
             var data = utils.nested(this, path),
+                diffs;
+
+            if (typeof data !== 'function') {
                 diffs = utils.compare(data, value, path);
 
-            utils.nested(this, path, value);
+                utils.nested(this, path, value);
 
-            diffs.changes.forEach(function (change) {
-                this.trigger(change.name, change.value, change);
-            }, this);
-
-            _.each(diffs.containers, function (changes, name) {
-                this.trigger(name, changes);
-            }, this);
+                notify(diffs, this.trigger);
+            } else {
+                utils.nested(this, path, value);
+            }
 
             return this;
         },
