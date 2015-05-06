@@ -76,7 +76,7 @@
             class="action-tertiary action-clear"
             type="button"
             data-action="grid-filter-reset"
-            data-bind="text: $t('Clear all'), click: clear.bind($data, false)"></button>
+            data-bind="text: $t('Clear all'), click: clear.bind($data, false), attr: {'data-action': active().length ? 'grid-filter-reset' : ''}"></button>
     </div>
 </div>
 
