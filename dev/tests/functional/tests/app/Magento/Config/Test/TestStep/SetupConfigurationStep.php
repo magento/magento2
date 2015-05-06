@@ -77,6 +77,8 @@ class SetupConfigurationStep implements TestStepInterface
     }
 
     /**
+     * Rollback configuration.
+     *
      * @return void
      */
     public function cleanup()
