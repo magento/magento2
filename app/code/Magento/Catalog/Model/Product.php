@@ -233,6 +233,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
+     * @var \Magento\Catalog\Model\Resource\Category\Collection
+     */
+    protected $categoryCollection;
+
+    /**
      * @var Product\Image\CacheFactory
      */
     protected $imageCacheFactory;
@@ -624,7 +629,22 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCategoryCollection()
     {
-        return $this->_getResource()->getCategoryCollection($this);
+        if ($this->categoryCollection === null) {
+            $categoryCollection = $this->_getResource()->getCategoryCollection($this);
+            $this->setCategoryCollection($categoryCollection);
+        }
+        return $this->categoryCollection;
+    }
+
+    /**
+     * Set product categories
+     * @param \Magento\Framework\Data\Collection $categoryCollection
+     * @return $this
+     */
+    protected function setCategoryCollection(\Magento\Framework\Data\Collection $categoryCollection)
+    {
+        $this->categoryCollection = $categoryCollection;
+        return $this;
     }
 
     /**

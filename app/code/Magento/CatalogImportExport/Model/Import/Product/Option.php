@@ -502,7 +502,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!$this->_oldCustomOptions) {
             $oldCustomOptions = [];
             $optionTitleTable = $this->_tables['catalog_product_option_title'];
-            $productIds = array_values($this->_productsSkuToId);
             foreach ($this->_storeCodeToId as $storeId) {
                 $addCustomOptions = function (
                     \Magento\Catalog\Model\Product\Option $customOption
@@ -526,7 +525,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 };
                 /** @var $collection \Magento\Catalog\Model\Resource\Product\Option\Collection */
                 $this->_optionCollection->reset();
-                $this->_optionCollection->addProductToFilter($productIds);
                 $this->_optionCollection->getSelect()->join(
                     ['option_title' => $optionTitleTable],
                     'option_title.option_id = main_table.option_id',
@@ -888,19 +886,28 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         $this->_validatedRows[$rowNumber] = true;
 
-        if ($this->_isRowWithCustomOption($rowData)) {
-            if ($this->_isMainOptionRow($rowData)) {
-                if (!$this->_validateMainRow($rowData, $rowNumber)) {
-                    return false;
+
+        $multiRowData = $this->_getMultiRowFormat($rowData);
+
+        foreach ($multiRowData as $optionData) {
+
+            $combinedData = array_merge($rowData, $optionData);
+
+            if ($this->_isRowWithCustomOption($combinedData)) {
+                if ($this->_isMainOptionRow($combinedData)) {
+                    if (!$this->_validateMainRow($combinedData, $rowNumber)) {
+                        return false;
+                    }
                 }
-            }
-            if ($this->_isSecondaryOptionRow($rowData)) {
-                if (!$this->_validateSecondaryRow($rowData, $rowNumber)) {
-                    return false;
+                if ($this->_isSecondaryOptionRow($combinedData)) {
+                    if (!$this->_validateSecondaryRow($combinedData, $rowNumber)) {
+                        return false;
+                    }
                 }
+                return true;
             }
-            return true;
         }
+
         return false;
     }
 
@@ -1016,6 +1023,50 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Get multiRow format from one line data
+     *
+     * @param array $rowData
+     * @return array
+     */
+    protected function _getMultiRowFormat($rowData)
+    {
+        $multiRow = array();
+        if (empty($rowData['custom_options'])) {
+            return $multiRow;
+        }
+
+        $i = 0;
+
+        foreach ($rowData['custom_options'] as $name => $customOption) {
+            $i++;
+            foreach ($customOption as $rowOrder => $optionRow) {
+                $row = array(
+                    self::COLUMN_STORE => '',
+                    self::COLUMN_TYPE => $name ? $optionRow['type'] : '',
+                    self::COLUMN_TITLE => $name,
+                    self::COLUMN_IS_REQUIRED => $optionRow['required'],
+                    self::COLUMN_SORT_ORDER => $i,
+                    self::COLUMN_ROW_TITLE => isset($optionRow['option_title']) ? $optionRow['option_title'] : '',
+                    self::COLUMN_ROW_SKU => $optionRow['sku'],
+                    self::COLUMN_ROW_SORT => $rowOrder,
+                    self::COLUMN_PREFIX . 'sku' => $optionRow['sku']
+                );
+
+                $percent_suffix = isset($optionRow['price']) && ($optionRow['price'] == 'percent') ? '%' : '';
+                $row[self::COLUMN_ROW_PRICE] = isset($optionRow['price']) ? $optionRow['price'] . $percent_suffix : '';
+                $row[self::COLUMN_PREFIX . 'price'] = $row[self::COLUMN_ROW_PRICE];
+
+                $name = '';
+
+                $multiRow[] = $row;
+            }
+
+        }
+
+        return $multiRow;
+    }
+
+    /**
      * Import data rows
      *
      * @return boolean
@@ -1042,33 +1093,41 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $childCount = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
-                if (!$this->isRowAllowedToImport($rowData, $rowNumber)) {
-                    continue;
+
+                $multiRowData = $this->_getMultiRowFormat($rowData);
+
+                foreach ($multiRowData as $optionData) {
+
+                    $combinedData = array_merge($rowData, $optionData);
+
+                    if (!$this->isRowAllowedToImport($combinedData, $rowNumber)) {
+                        continue;
+                    }
+                    if (!$this->_parseRequiredData($combinedData)) {
+                        continue;
+                    }
+                    $optionData = $this->_collectOptionMainData(
+                        $combinedData,
+                        $prevOptionId,
+                        $nextOptionId,
+                        $products,
+                        $prices
+                    );
+                    if ($optionData != null) {
+                        $options[] = $optionData;
+                    }
+                    $this->_collectOptionTypeData(
+                        $combinedData,
+                        $prevOptionId,
+                        $nextValueId,
+                        $typeValues,
+                        $typePrices,
+                        $typeTitles,
+                        $parentCount,
+                        $childCount
+                    );
+                    $this->_collectOptionTitle($combinedData, $prevOptionId, $titles);
                 }
-                if (!$this->_parseRequiredData($rowData)) {
-                    continue;
-                }
-                $optionData = $this->_collectOptionMainData(
-                    $rowData,
-                    $prevOptionId,
-                    $nextOptionId,
-                    $products,
-                    $prices
-                );
-                if ($optionData != null) {
-                    $options[] = $optionData;
-                }
-                $this->_collectOptionTypeData(
-                    $rowData,
-                    $prevOptionId,
-                    $nextValueId,
-                    $typeValues,
-                    $typePrices,
-                    $typeTitles,
-                    $parentCount,
-                    $childCount
-                );
-                $this->_collectOptionTitle($rowData, $prevOptionId, $titles);
             }
 
             // Save prepared custom options data !!!
@@ -1080,6 +1139,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if ($this->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
                     $this->_compareOptionsWithExisting($options, $titles, $prices, $typeValues);
                 }
+
                 $this->_saveOptions(
                     $options
                 )->_saveTitles(

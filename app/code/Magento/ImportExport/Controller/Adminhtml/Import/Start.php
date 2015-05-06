@@ -25,6 +25,7 @@ class Start extends \Magento\ImportExport\Controller\Adminhtml\Import
             $importModel = $this->_objectManager->create('Magento\ImportExport\Model\Import');
 
             try {
+                $importModel->setData($data);
                 $importModel->importSource();
                 $importModel->invalidateIndex();
                 $resultBlock->addAction(

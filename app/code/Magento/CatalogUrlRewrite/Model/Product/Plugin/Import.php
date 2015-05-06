@@ -47,9 +47,8 @@ class Import
      */
     public function afterImportData(ImportProduct $import, $result)
     {
-        if ($import->getAffectedEntityIds()) {
-            foreach ($import->getAffectedEntityIds() as $productId) {
-                $product = $this->productRepository->getById($productId);
+        if ($products = $import->getAffectedProducts()) {
+            foreach ($products as $product) {
                 $productUrls = $this->productUrlRewriteGenerator->generate($product);
                 if ($productUrls) {
                     $this->urlPersist->replace($productUrls);

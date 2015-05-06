@@ -22,7 +22,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /** @var Validator\Media|\PHPUnit_Framework_MockObject_MockObject */
     protected $validator1;
 
-    /** @var Validator\Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Validator\Website|\PHPUnit_Framework_MockObject_MockObject */
     protected $validator2;
 
     protected function setUp()
@@ -35,7 +35,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->validator2 = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product\Validator\Category',
+            'Magento\CatalogImportExport\Model\Import\Product\Validator\Website',
             [],
             [],
             '',

@@ -72,6 +72,16 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                     'shortDescription' => 'Subject type name',
                     'tags' => [['name' => 'var', 'description' => 'string']],
                 ]
+            ],
+            [
+                'name' => 'cachedPlugins',
+                'visibility' => 'protected',
+                'static' => true,
+                'defaultValue' => [],
+                'docblock' => [
+                    'shortDescription' => 'Dynamic cached plugin calls',
+                    'tags' => [['name' => 'var', 'description' => 'array']],
+                ]
             ]
         ];
     }
@@ -240,7 +250,13 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $methodInfo = [
             'name' => $method->getName(),
             'parameters' => $parameters,
-            'body' => "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
+            'body' =>
+            "if (!array_key_exists('{$method->getName()}', self::\$cachedPlugins)) {\n" .
+            "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
+            "self::\$cachedPlugins['{$method->getName()}'] = \$pluginInfo;\n" .
+            "} else {\n" .
+            "\$pluginInfo = self::\$cachedPlugins['{$method->getName()}'];\n" .
+            "}\n".
             "if (!\$pluginInfo) {\n" .
             "    return parent::{$method->getName()}({$this->_getParameterList(
                 $parameters

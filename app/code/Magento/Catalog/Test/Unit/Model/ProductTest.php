@@ -330,6 +330,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Magento\Framework\Data\Collection', $this->model->getCategoryCollection());
     }
 
+    public function testSetCategoryCollection()
+    {
+        $collection = $this->getMockBuilder('\Magento\Framework\Data\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resource->expects($this->once())->method('getCategoryCollection')->will($this->returnValue($collection));
+        $this->assertSame($this->model->getCategoryCollection(), $this->model->getCategoryCollection());
+    }
+
     public function testGetCategory()
     {
         $this->category->expects($this->any())->method('getId')->will($this->returnValue(10));

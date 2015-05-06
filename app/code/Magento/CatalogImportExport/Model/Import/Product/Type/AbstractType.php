@@ -195,6 +195,25 @@ abstract class AbstractType
     }
 
     /**
+     * In case we've dynamically added new attribute option during import we need to add it to our cache
+     * in order to keep it up to date.
+     *
+     * @param string $code
+     * @param string $optionKey
+     * @param string $optionValue
+     * @return $this
+     */
+    public function addAttributeOption($code, $optionKey, $optionValue)
+    {
+        foreach ($this->_attributes as $attrSetName => $attrSetValue) {
+            if (isset($attrSetValue[$code])) {
+                $this->_attributes[$attrSetName][$code]['options'][$optionKey] = $optionValue;
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Have we check attribute for is_required? Used as last chance to disable this type of check.
      *
      * @param string $attrCode
@@ -270,7 +289,7 @@ abstract class AbstractType
                         ))
                     ) {
                         $this->_entityModel->addRowError(
-                            \Magento\CatalogImportExport\Model\Import\Product::ERROR_VALUE_IS_REQUIRED,
+                            \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
                             $rowNum,
                             $attrCode
                         );

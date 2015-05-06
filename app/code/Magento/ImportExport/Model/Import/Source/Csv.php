@@ -18,7 +18,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
     /**
      * @var string
      */
-    protected $_delimiter = '';
+    protected $_delimiter = ',';
 
     /**
      * @var string
@@ -47,7 +47,9 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \LogicException("Unable to open file: '{$file}'");
         }
-        $this->_delimiter = $delimiter;
+        if ($delimiter) {
+            $this->_delimiter = $delimiter;
+        }
         $this->_enclosure = $enclosure;
         parent::__construct($this->_getNextRow());
     }

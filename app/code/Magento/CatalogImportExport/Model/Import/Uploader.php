@@ -6,6 +6,7 @@
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Import entity product model
@@ -47,12 +48,34 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     protected $_validator;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    protected $_directory;
+
+    /**
+     * @var \Magento\Framework\Filesystem\File\ReadFactory
+     */
+    protected $_readFactory;
+
+    /**
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     */
+    protected $_coreFileStorageDb;
+
+    /**
+     * @var \Magento\MediaStorage\Helper\File\Storage
+     */
+    protected $_coreFileStorage;
+
+    /**
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param string $filePath
+     * @param \Magento\Framework\Filesystem\File\ReadFactory $readFactory
+     * @param null $filePath
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb,
@@ -60,6 +83,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         \Magento\Framework\Image\AdapterFactory $imageFactory,
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator,
         \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\File\ReadFactory $readFactory,
         $filePath = null
     ) {
         if ($filePath !== null) {
@@ -70,10 +94,11 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $this->_readFactory = $readFactory;
     }
 
     /**
-     * Initiate uploader defoult settings
+     * Initiate uploader default settings
      *
      * @return void
      */
@@ -96,6 +121,16 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      */
     public function move($fileName)
     {
+        if (preg_match('/\bhttps?:\/\//i', $fileName, $matches)) {
+            $url = str_replace($matches[0], '', $fileName);
+            $read = $this->_readFactory->create($url, DriverPool::HTTP);
+            $fileName = preg_replace('/[^a-z0-9\._-]+/i','', $fileName);
+            $this->_directory->writeFile(
+                $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName),
+                $read->readAll()
+            );
+        }
+
         $filePath = $this->_directory->getRelativePath($this->getTmpDir() . '/' . $fileName);
         $this->_setUploadFile($filePath);
         $result = $this->save($this->getDestDir());
@@ -130,7 +165,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      */
     protected function _readFileInfo($filePath)
     {
-        $fileInfo = pathinfo($filePath);
+        $fullFilePath = $this->_directory->getAbsolutePath($filePath);
+        $fileInfo = pathinfo($fullFilePath);
         return [
             'name' => $fileInfo['basename'],
             'type' => $this->_getMimeTypeByExt($fileInfo['extension']),
