@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Utility\Files;
 use Magento\Setup\Module\Dependency\ServiceLocator;
 
@@ -13,6 +14,22 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
  */
 class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
 {
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
+     * Constructor
+     *
+     * @param DirectoryList $directoryList
+     */
+    public function __construct(DirectoryList $directoryList)
+    {
+        $this->directoryList = $directoryList;
+        parent::__construct();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -41,7 +58,13 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
      */
     protected function buildReport($outputPath)
     {
-        $filesForParse = Files::init()->getFiles([Files::init()->getPathToSource() . '/app/code/Magento'], '*');
+        $root = $this->directoryList->getRoot();
+        $filePath = str_replace(
+            $root,
+            Files::init()->getPathToSource(),
+            $this->directoryList->getPath(DirectoryList::MODULES) . '/Magento'
+        );
+        $filesForParse = Files::init()->getFiles([$filePath], '*');
         $configFiles = Files::init()->getConfigFiles('module.xml', [], false);
 
         ServiceLocator::getFrameworkDependenciesReportBuilder()->build(
