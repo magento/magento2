@@ -28,7 +28,9 @@ define(
                     password: customer.getDetails('password')
                 }, customParams);
                 customer.setAddressAsDefaultBilling(customer.addCustomerAddress(quote.getBillingAddress()()));
-                customer.setAddressAsDefaultShipping(customer.addCustomerAddress(quote.getShippingAddress()()));
+                if (!quote.isVirtual()) {
+                    customer.setAddressAsDefaultShipping(customer.addCustomerAddress(quote.getShippingAddress()()));
+                }
                 storage.post(
                     urlBuilder.createUrl('/guest-carts/:quoteId/order-with-registration', {quoteId: quote.getQuoteId()}),
                     JSON.stringify(payload)

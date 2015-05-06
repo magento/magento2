@@ -122,8 +122,13 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
         $this->rateModelMock->expects($this->once())->method('getCarrier')->will($this->returnValue('CARRIER_CODE'));
         $this->rateModelMock->expects($this->once())->method('getMethod')->will($this->returnValue('METHOD_CODE'));
         $this->rateModelMock->expects($this->any())->method('getPrice')->will($this->returnValue($price));
-        $this->currencyMock->expects($this->once())
-            ->method('convert')->with(90.12, 'USD')->will($this->returnValue(100.12));
+        $this->currencyMock->expects($this->at(0))
+            ->method('convert')->with($price, 'USD')->willReturn(100.12);
+        $this->currencyMock->expects($this->at(1))
+            ->method('convert')->with($shippingPriceExclTax, 'USD')->willReturn($shippingPriceExclTax);
+        $this->currencyMock->expects($this->at(2))
+            ->method('convert')->with($shippingPriceInclTax, 'USD')->willReturn($shippingPriceInclTax);
+
         $this->rateModelMock->expects($this->once())
             ->method('getCarrierTitle')->will($this->returnValue('CARRIER_TITLE'));
         $this->rateModelMock->expects($this->once())

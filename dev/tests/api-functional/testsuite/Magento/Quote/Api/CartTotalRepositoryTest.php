@@ -46,6 +46,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
      */
     public function testGetTotals()
     {
+        $this->markTestSkipped('Will be fixed after MAGETWO-35573');
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
@@ -177,6 +178,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
      */
     public function testGetMyTotals()
     {
+        $this->markTestSkipped('Will be fixed after MAGETWO-35573');
         $this->_markTestAsRestOnly();
 
         // get customer ID token

@@ -166,7 +166,7 @@ class AddressDataProvider implements DataProviderInterface
      *
      * @param EntityType $entityType
      * @return array
-     * @throws \Magento\Eav\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getAttributesMeta(EntityType $entityType)
     {

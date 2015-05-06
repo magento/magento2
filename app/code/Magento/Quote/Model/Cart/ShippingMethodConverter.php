@@ -61,8 +61,12 @@ class ShippingMethodConverter
             ->setBaseAmount($rateModel->getPrice())
             ->setAvailable(empty($errorMessage))
             ->setErrorMessage(empty($errorMessage) ? false : $errorMessage)
-            ->setPriceExclTax($this->getShippingPriceWithFlag($rateModel, false))
-            ->setPriceInclTax($this->getShippingPriceWithFlag($rateModel, true));
+            ->setPriceExclTax(
+                $currency->convert($this->getShippingPriceWithFlag($rateModel, false), $quoteCurrencyCode)
+            )
+            ->setPriceInclTax(
+                $currency->convert($this->getShippingPriceWithFlag($rateModel, true), $quoteCurrencyCode)
+            );
     }
 
     /**

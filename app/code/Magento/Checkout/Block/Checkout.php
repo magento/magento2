@@ -96,7 +96,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         );
         $this->formKey = $formKey;
         $this->_isScopePrivate = true;
-        $this->jsLayout = is_array($data['jsLayout']) ? $data['jsLayout'] : [];
+        $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         $this->addressDataProvider = $addressDataProvider;
         $this->configProvider = $configProvider;
         $this->customLayoutProviders = $customLayoutProviders;

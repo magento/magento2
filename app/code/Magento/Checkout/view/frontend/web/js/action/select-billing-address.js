@@ -37,8 +37,14 @@ define(
                 }
                 selectShippingAddress(billingAddress, useForShipping, additionalData);
             } else if (quote.isVirtual()) {
+                var serviceUrl;
+                if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
+                    serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
+                } else {
+                    serviceUrl =  urlBuilder.createUrl('/carts/mine/addresses', {});
+                }
                 storage.post(
-                    urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()}),
+                    serviceUrl,
                     JSON.stringify({
                         billingAddress: quote.getBillingAddress()(),
                         additionalData: {extensionAttributes : additionalData},
@@ -48,14 +54,18 @@ define(
                     function (result) {
                         paymentService.setPaymentMethods(result.payment_methods);
                         navigator.setCurrent('billingAddress').goNext();
-                        actionCallback(true);
+                        if (typeof actionCallback == 'function') {
+                            actionCallback(true);
+                        }
                     }
                 ).fail(
                     function (response) {
                         var error = JSON.parse(response.responseText);
                         errorList.add(error);
                         quote.setBillingAddress(null);
-                        actionCallback(false);
+                        if (typeof actionCallback == 'function') {
+                            actionCallback(false);
+                        }
                     }
                 );
             } else {

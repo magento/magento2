@@ -70,29 +70,30 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address)
     {
+        $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
+        $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
+        $customerAddressId = $address->getCustomerAddressId();
+
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $this->addressValidator->validate($address);
-
+        $quote->setShippingAddress($address);
+        $address = $quote->getShippingAddress();
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
                 __('Cart contains virtual product(s) only. Shipping address is not applicable.')
             );
         }
-        $customerAddressId = $address->getCustomerAddressId();
-        $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
+
         if ($customerAddressId) {
             $addressData = $this->addressRepository->getById($customerAddressId);
-
-            $address =  $quote->getShippingAddress()->importCustomerAddressData($addressData);
-            $address->setSameAsBilling($address->getSameAsBilling());
+            $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
         }
+        $address->setSameAsBilling($sameAsBilling);
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
-        $quote->setShippingAddress($address);
-        $quote->setDataChanges(true);
         try {
-            $this->quoteRepository->save($quote);
+            $address->collectTotals()->save();
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(__('Unable to save address. Please, check input data.'));

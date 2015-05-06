@@ -245,13 +245,14 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->_quote = $quote;
         }
 
-        if (!$this->_customerSession->isLoggedIn() && $this->getQuoteId()) {
+        if (!$this->isQuoteMasked() && !$this->_customerSession->isLoggedIn() && $this->getQuoteId()) {
             $quoteId = $this->getQuoteId();
             /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
-            $quoteIdMask = $this->quoteIdMaskFactory->create();
-            if ($quoteIdMask->load($quoteId)) {
+            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quoteId);
+            if ($quoteIdMask->getMaskedId() === null) {
                 $quoteIdMask->setId($quoteId)->save();
             }
+            $this->setIsQuoteMasked(true);
         }
 
         $remoteAddress = $this->_remoteAddress->getRemoteAddress();
@@ -478,5 +479,21 @@ class Session extends \Magento\Framework\Session\SessionManager
             }
         }
         return false;
+    }
+
+    /**
+     * @param $isQuoteMasked bool
+     */
+    public function setIsQuoteMasked($isQuoteMasked)
+    {
+        $this->storage->setData('quote_id_masked', $isQuoteMasked);
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isQuoteMasked()
+    {
+        return $this->storage->getData('quote_id_masked');
     }
 }

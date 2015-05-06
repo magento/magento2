@@ -28,11 +28,26 @@ define(
                 if (quote.getPaymentMethod()) {
                     className('opc-block-progress order-review-step')
                 }
-                return this.className
+                return className()
             },
 
             isShowStep: function (stepName) {
-                return navigator.findStepByName(stepName).isEnabled
+                switch(stepName){
+                    case 'shippingAddress':
+                        if (quote.isVirtual()) {
+                            return false
+                        }
+                        return navigator.findStepByName(stepName).isEnabled;
+                        break;
+                    case 'shippingMethod':
+                        if (quote.isVirtual()) {
+                            return false
+                        }
+                        return navigator.findStepByName(stepName).isEnabled;
+                        break;
+                    default:
+                        return navigator.findStepByName(stepName).isEnabled;
+                }
             },
             isStepComplete: function(stepName) {
                 switch(stepName){
