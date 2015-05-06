@@ -70,10 +70,10 @@ class InvoiceSenderTest extends AbstractSenderTest
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
+            $this->addressRenderer,
             $this->paymentHelper,
             $this->invoiceResourceMock,
             $this->globalConfig,
-            $this->addressRenderer,
             $this->eventManagerMock
         );
     }
