@@ -416,18 +416,18 @@ class Application
         );
 
         // enable only specified list of caches
-        $cacheScript = BP . '/dev/shell/cache.php';
         $initParamsQuery = $this->getInitParamsQuery();
-        $this->_shell->execute('php -f %s -- --set=0 --bootstrap=%s', [$cacheScript, $initParamsQuery]);
-        $cacheTypes = [
-            \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
-            \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
-            \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
-            \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
-        ];
+        $this->_shell->execute('php -f %s cache:disable --all --bootstrap=%s', [BP . '/bin/magento', $initParamsQuery]);
         $this->_shell->execute(
-            'php -f %s -- --set=1 --types=%s --bootstrap=%s',
-            [$cacheScript, implode(',', $cacheTypes), $initParamsQuery]
+            'php -f %s cache:enable %s %s %s %s --bootstrap=%s',
+            [
+                BP . '/bin/magento',
+                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
+                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
+                $initParamsQuery,
+            ]
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
