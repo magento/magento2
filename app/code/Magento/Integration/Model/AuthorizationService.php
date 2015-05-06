@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Model;
 
 use Magento\Authorization\Model\Resource\Role\CollectionFactory as RoleCollectionFactory;
 use Magento\Authorization\Model\Resource\Rules\CollectionFactory as RulesCollectionFactory;
@@ -24,7 +24,7 @@ use Psr\Log\LoggerInterface as Logger;
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AuthorizationService implements AuthorizationServiceInterface
+class AuthorizationService implements \Magento\Integration\Api\AuthorizationServiceInterface
 {
     /**
      * @var AclBuilder

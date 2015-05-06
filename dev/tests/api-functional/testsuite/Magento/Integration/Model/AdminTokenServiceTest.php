@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Model;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Integration\Model\Oauth\Token as TokenModel;
@@ -14,7 +14,7 @@ use Magento\User\Model\User as UserModel;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
- * api-functional test for \Magento\Integration\Service\V1\AdminTokenService.
+ * api-functional test for \Magento\Integration\Model\AdminTokenService.
  */
 class AdminTokenServiceTest extends WebapiAbstract
 {
@@ -24,7 +24,7 @@ class AdminTokenServiceTest extends WebapiAbstract
     const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
 
     /**
-     * @var AdminTokenServiceInterface
+     * @var \Magento\Integration\Api\AdminTokenServiceInterface
      */
     private $tokenService;
 
@@ -44,7 +44,7 @@ class AdminTokenServiceTest extends WebapiAbstract
     public function setUp()
     {
         $this->_markTestAsRestOnly();
-        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\AdminTokenService');
+        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Model\AdminTokenService');
         $this->tokenModel = Bootstrap::getObjectManager()->get('Magento\Integration\Model\Oauth\Token');
         $this->userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
     }

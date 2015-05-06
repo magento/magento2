@@ -6,7 +6,7 @@
 namespace Magento\Integration\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
-use Magento\Integration\Service\V1\OauthInterface as IntegrationOauthService;
+use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
 
 /**
  * Controller for integrations management.
@@ -31,7 +31,7 @@ class Integration extends Action
     /** @var \Psr\Log\LoggerInterface */
     protected $_logger;
 
-    /** @var \Magento\Integration\Service\V1\IntegrationInterface */
+    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
     protected $_integrationService;
 
     /** @var IntegrationOauthService */
@@ -55,7 +55,7 @@ class Integration extends Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Integration\Service\V1\IntegrationInterface $integrationService
+     * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param IntegrationOauthService $oauthService
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Integration\Helper\Data $integrationData
@@ -66,7 +66,7 @@ class Integration extends Action
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $registry,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Integration\Service\V1\IntegrationInterface $integrationService,
+        \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
         IntegrationOauthService $oauthService,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Integration\Helper\Data $integrationData,

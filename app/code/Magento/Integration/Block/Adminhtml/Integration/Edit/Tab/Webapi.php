@@ -42,7 +42,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
-     * @param \Magento\Integration\Service\V1\Integration $integrationService
+     * @param \Magento\Integration\Model\IntegrationService $integrationService
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -54,7 +54,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
-        \Magento\Integration\Service\V1\Integration $integrationService,
+        \Magento\Integration\Model\IntegrationService $integrationService,
         array $data = []
     ) {
         $this->_rootResource = $rootResource;

@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Api;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Interface for integration permissions management.
+ *
+ * @api
  */
 interface AuthorizationServiceInterface
 {

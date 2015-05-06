@@ -9,7 +9,7 @@ namespace Magento\Webapi\Model\Authorization;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Oauth\Helper\Request as OauthRequestHelper;
 use Magento\Framework\Oauth\OauthInterface as OauthService;
-use Magento\Integration\Service\V1\Integration as IntegrationService;
+use Magento\Integration\Model\IntegrationService as IntegrationService;
 use Magento\Framework\Webapi\Request;
 
 /**

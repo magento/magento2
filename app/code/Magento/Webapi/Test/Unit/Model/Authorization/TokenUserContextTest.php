@@ -29,7 +29,7 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
     protected $tokenFactory;
 
     /**
-     * @var \Magento\Integration\Service\V1\Integration
+     * @var \Magento\Integration\Model\IntegrationService
      */
     protected $integrationService;
 
@@ -52,7 +52,7 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->integrationService = $this->getMockBuilder('Magento\Integration\Service\V1\Integration')
+        $this->integrationService = $this->getMockBuilder('Magento\Integration\Model\IntegrationService')
             ->disableOriginalConstructor()
             ->setMethods(['findByConsumerId'])
             ->getMock();

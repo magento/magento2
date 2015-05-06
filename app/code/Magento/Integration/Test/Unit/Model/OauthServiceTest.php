@@ -1,16 +1,16 @@
 <?php
 /**
- * Test for \Magento\Integration\Service\V1\Oauth
+ * Test for \Magento\Integration\Model\OauthService
  *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Test\Unit\Service\V1;
+namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Integration\Model\Integration;
 use Magento\Integration\Model\Oauth\Token;
 
-class OauthTest extends \PHPUnit_Framework_TestCase
+class OauthServiceTest extends \PHPUnit_Framework_TestCase
 {
     const VALUE_CONSUMER_ID = 1;
 
@@ -35,7 +35,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      */
     private $_tokenMock;
 
-    /** @var \Magento\Integration\Service\V1\Oauth */
+    /** @var \Magento\Integration\Model\OauthService */
     private $_service;
 
     /** @var array */
@@ -93,7 +93,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_consumerMock)
         );
 
-        $this->_service = new \Magento\Integration\Service\V1\Oauth(
+        $this->_service = new \Magento\Integration\Model\OauthService(
             $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false),
             $this->_consumerFactory,
             $this->_tokenFactoryMock,

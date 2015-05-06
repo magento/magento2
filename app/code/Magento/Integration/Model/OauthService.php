@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Model;
 
 use Magento\Framework\Oauth\Helper\Oauth as OauthHelper;
 use Magento\Integration\Helper\Oauth\Data as IntegrationOauthHelper;
@@ -19,7 +19,7 @@ use Magento\Framework\Exception\IntegrationException;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Oauth implements OauthInterface
+class OauthService implements \Magento\Integration\Api\OauthServiceInterface
 {
     /**
      * @var  \Magento\Store\Model\StoreManagerInterface

@@ -3,14 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Integration\Service\V1;
+namespace Magento\Integration\Api;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**
  * Integration Service Interface
+ *
+ * @api
  */
-interface IntegrationInterface
+interface IntegrationServiceInterface
 {
     /**
      * Create a new Integration

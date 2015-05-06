@@ -112,8 +112,8 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
         $this->_integration = $factory->create()->setName(md5(rand()))->save();
 
         /** Grant permissions to integrations */
-        /** @var \Magento\Integration\Service\V1\AuthorizationService $authorizationService */
-        $authorizationService = $objectManager->create('Magento\Integration\Service\V1\AuthorizationService');
+        /** @var \Magento\Integration\Model\AuthorizationService $authorizationService */
+        $authorizationService = $objectManager->create('Magento\Integration\Model\AuthorizationService');
         $authorizationService->grantAllPermissions($this->_integration->getId());
     }
 }
