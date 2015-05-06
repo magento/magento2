@@ -6,11 +6,12 @@
  */
 namespace Magento\Tax\Controller\Adminhtml\Rule;
 
+use Magento\Framework\Controller\ResultFactory;
 
 class Edit extends \Magento\Tax\Controller\Adminhtml\Rule
 {
     /**
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
@@ -25,8 +26,9 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rule
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 $backendSession->unsRuleData();
                 $this->messageManager->addError(__('This rule no longer exists.'));
-                $this->_redirect('tax/*/');
-                return;
+                /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+                return $resultRedirect->setPath('tax/*/');
             }
         } else {
             $pageTitle = __('New Tax Rule');
@@ -36,9 +38,10 @@ class Edit extends \Magento\Tax\Controller\Adminhtml\Rule
             $this->_coreRegistry->register('tax_rule_form_data', $data);
         }
         $breadcrumb = $taxRuleId ? __('Edit Rule') : __('New Rule');
-        $this->_initAction()->_addBreadcrumb($breadcrumb, $breadcrumb);
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Rules'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend($pageTitle);
-        $this->_view->renderLayout();
+        $resultPage = $this->initResultPage();
+        $resultPage->addBreadcrumb($breadcrumb, $breadcrumb);
+        $resultPage->getConfig()->getTitle()->prepend(__('Tax Rules'));
+        $resultPage->getConfig()->getTitle()->prepend($pageTitle);
+        return $resultPage;
     }
 }

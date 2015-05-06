@@ -47,7 +47,6 @@ class Fieldset extends AbstractComponent
         parent::__construct($context, $components, $data);
     }
 
-
     /**
      * Get component name
      *

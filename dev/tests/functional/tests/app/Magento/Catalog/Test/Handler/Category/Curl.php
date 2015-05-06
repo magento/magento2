@@ -6,6 +6,7 @@
 
 namespace Magento\Catalog\Test\Handler\Category;
 
+use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlInterface;
@@ -58,20 +59,24 @@ class Curl extends AbstractCurl implements CategoryInterface
      *
      * @param FixtureInterface|null $fixture [optional]
      * @return array
+     * @throws \Exception
      */
     public function persist(FixtureInterface $fixture = null)
     {
         $data = $this->prepareData($fixture);
-
         $url = $_ENV['app_backend_url'] . 'catalog/category/save/store/0/parent/' . $data['general']['parent_id'] . '/';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
         $curl->close();
 
+        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+            $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
+            throw new \Exception('Category creation by curl handler was not successful!');
+        }
+
         preg_match('#http://.+/id/(\d+).+store/#m', $response, $matches);
         $id = isset($matches[1]) ? (int)$matches[1] : null;
-
         return ['id' => $id];
     }
 
@@ -83,11 +88,15 @@ class Curl extends AbstractCurl implements CategoryInterface
      */
     protected function prepareData(FixtureInterface $fixture)
     {
-        $data['general'] = $this->replaceMappingData($fixture->getData());
-        $data['is_anchor'] = isset($data['is_anchor']) ? $data['is_anchor'] : 0;
+        $data = ['general' => $this->replaceMappingData($fixture->getData())];
+        $data['general']['is_anchor'] = isset($data['general']['is_anchor']) ? $data['general']['is_anchor'] : 0;
+
         if ($fixture->hasData('landing_page')) {
             $data['general']['landing_page'] = $this->getBlockId($fixture->getLandingPage());
         }
+
+        $data['category_products'] = $this->prepareCategoryProducts($fixture);
+        unset($data['general']['category_products']);
 
         $diff = array_diff($this->dataUseConfig, array_keys($data['general']));
         if (!empty($diff)) {
@@ -95,6 +104,28 @@ class Curl extends AbstractCurl implements CategoryInterface
         }
 
         return $data;
+    }
+
+    /**
+     * Prepare category products data for curl.
+     *
+     * @param FixtureInterface $category
+     * @return array
+     */
+    protected function prepareCategoryProducts(FixtureInterface $category)
+    {
+        $categoryProducts = [];
+        $defaultPosition = 0;
+
+        /** @var Category $category */
+        if ($category->hasData('category_products')) {
+            $products = $category->getDataFieldConfig('category_products')['source']->getProducts();
+            foreach ($products as $product) {
+                $categoryProducts[$product->getId()] = $defaultPosition;
+            }
+        }
+
+        return json_encode($categoryProducts);
     }
 
     /**

@@ -6,7 +6,7 @@
 
 namespace Magento\SalesRule\Test\TestCase;
 
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteNew;
@@ -115,10 +115,10 @@ class CreateSalesRuleEntityTest extends Injectable
     /**
      * Create Sales Rule Entity.
      *
-     * @param SalesRuleInjectable $salesRule
+     * @param SalesRule $salesRule
      * @return void
      */
-    public function testCreateSalesRule(SalesRuleInjectable $salesRule)
+    public function testCreateSalesRule(SalesRule $salesRule)
     {
         // Preconditions
         $this->salesRuleName = $salesRule->getName();
