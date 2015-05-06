@@ -47,10 +47,10 @@ class OrderSenderTest extends AbstractSenderTest
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
+            $this->addressRenderer,
             $this->paymentHelper,
             $this->orderResourceMock,
             $this->globalConfig,
-            $this->addressRenderer,
             $this->eventManagerMock
         );
     }

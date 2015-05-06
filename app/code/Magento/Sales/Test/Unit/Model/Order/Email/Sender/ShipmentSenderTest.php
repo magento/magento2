@@ -70,10 +70,10 @@ class ShipmentSenderTest extends AbstractSenderTest
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
+            $this->addressRenderer,
             $this->paymentHelper,
             $this->shipmentResourceMock,
             $this->globalConfig,
-            $this->addressRenderer,
             $this->eventManagerMock
         );
     }
