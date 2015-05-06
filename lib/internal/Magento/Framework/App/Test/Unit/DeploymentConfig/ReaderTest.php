@@ -74,10 +74,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testCustomLoad($file, $expected)
     {
         $configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
-        $configFilePool->expects($this->any())->method('getPaths')->willReturn(['custom.php']);
-        $configFilePool->expects($this->any())->method('getPath')->willReturn('custom.php');
-        $object = new Reader($this->dirList, $configFilePool, 'custom.php');
-        $this->assertSame(['bazKey' => 'baz'], $object->load());
+        $configFilePool->expects($this->any())->method('getPaths')->willReturn([$file]);
+        $configFilePool->expects($this->any())->method('getPath')->willReturn($file);
+        $object = new Reader($this->dirList, $configFilePool, $file);
+        $this->assertSame($expected, $object->load());
     }
 
     /**

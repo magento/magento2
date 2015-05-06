@@ -191,8 +191,11 @@ class ObjectManagerFactory
      * @param array $arguments
      * @return DeploymentConfig
      */
-    protected function createDeploymentConfig(DirectoryList $directoryList, ConfigFilePool $configFilePool, array $arguments)
-    {
+    protected function createDeploymentConfig(
+        DirectoryList $directoryList,
+        ConfigFilePool $configFilePool,
+        array $arguments
+    ) {
         $customFile = isset($arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG_FILE])
             ? $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG_FILE]
             : null;

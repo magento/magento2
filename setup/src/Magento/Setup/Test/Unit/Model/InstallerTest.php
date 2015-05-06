@@ -206,13 +206,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
         ];
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
-//        $this->config->expects($this->any())->method('getSegment')->will($this->returnValueMap([
-//            [SetupConfigOptionsList::KEY_DB, self::$dbConfig],
-//            [
-//                'crypt',
-//                [SetupConfigOptionsList::KEY_ENCRYPTION_KEY => 'encryption_key']
-//            ]
-//        ]));
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
         $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
@@ -355,17 +348,26 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->configReader->expects($this->once())->method('getFiles')->willReturn(['ConfigOne.php', 'ConfigTwo.php']);
         $configDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $configDir->expects($this->exactly(2))->method('getAbsolutePath')->will(
-        $this->returnValueMap([
-            ['ConfigOne.php', '/config/ConfigOne.php'],
-            ['ConfigTwo.php', '/config/ConfigTwo.php']
-        ]));
+        $configDir
+            ->expects($this->exactly(2))
+            ->method('getAbsolutePath')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['ConfigOne.php', '/config/ConfigOne.php'],
+                        ['ConfigTwo.php', '/config/ConfigTwo.php']
+                    ]
+                )
+            );
         $this->filesystem
             ->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValueMap([
-                [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
-            ]));
+            ->will($this->returnValueMap(
+                    [
+                        [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
+                    ]
+                )
+            );
         $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
         $this->logger
             ->expects($this->at(1))

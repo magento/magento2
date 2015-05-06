@@ -78,7 +78,7 @@ class Reader
         } else {
             $configFiles = $this->configFilePool->getPaths();
             $result = [];
-            foreach ($configFiles as $fileKey => $config) {
+            foreach (array_keys($configFiles) as $fileKey) {
                 $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
                 $fileData = @include $configFile;
                 if (empty($fileData)) {
