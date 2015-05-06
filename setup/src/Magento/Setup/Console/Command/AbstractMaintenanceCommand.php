@@ -6,7 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Setup\Model\IpValidator;
+use Magento\Setup\Validator\IpValidator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -80,7 +80,7 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $addresses = $input->getOption(self::INPUT_KEY_IP);
-        $messages = $this->ipValidator->validateIps($addresses, true);
+        $messages = $this->validate($addresses);
         if (!empty($messages)) {
             $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $messages));
             return;
@@ -98,5 +98,16 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
                 . '</info>'
             );
         }
+    }
+
+    /**
+     * Validates IP addresses and return error messages
+     *
+     * @param string[] $addresses
+     * @return string[]
+     */
+    protected function validate(array $addresses)
+    {
+        return $this->ipValidator->validateIps($addresses, true);
     }
 }

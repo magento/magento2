@@ -7,7 +7,7 @@
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\MaintenanceAllowIpsCommand;
-use Magento\Setup\Model\IpValidator;
+use Magento\Setup\Validator\IpValidator;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class MaintenanceAllowIpsCommandTest extends \PHPUnit_Framework_TestCase

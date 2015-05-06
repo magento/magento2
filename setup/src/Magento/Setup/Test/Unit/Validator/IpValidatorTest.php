@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Test\Unit\Model;
+namespace Magento\Setup\Test\Unit\Validator;
 
-use Magento\Setup\Model\IpValidator;
+use Magento\Setup\Validator\IpValidator;
 
 class IpValidatorTest extends \PHPUnit_Framework_TestCase
 {
