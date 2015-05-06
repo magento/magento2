@@ -17,15 +17,20 @@ class InfoTimezoneListCommandTest extends \PHPUnit_Framework_TestCase
             'timezone' => 'timezone description'
         ];
 
+        $table = $this->getMock('Symfony\Component\Console\Helper\Table', [], [], '', false);
+        $table->expects($this->once())->method('setHeaders')->with(['Timezone', 'Code']);
+        $table->expects($this->once())->method('addRow')->with(['timezone description', 'timezone']);
+
+        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
+        $helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
+        $helperSet->expects($this->once())->method('get')->with('table')->will($this->returnValue($table));
+
         /** @var \Magento\Setup\Model\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
         $list = $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
         $list->expects($this->once())->method('getTimezoneList')->will($this->returnValue($timezones));
-        $commandTester = new CommandTester(new InfoTimezoneListCommand($list));
+        $command = new InfoTimezoneListCommand($list);
+        $command->setHelperSet($helperSet);
+        $commandTester = new CommandTester($command);
         $commandTester->execute([]);
-        $this->assertStringMatchesFormat(
-            'timezone => timezone description',
-            $commandTester->getDisplay()
-        );
-
     }
 }

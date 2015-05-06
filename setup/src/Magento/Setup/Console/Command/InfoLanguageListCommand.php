@@ -48,8 +48,14 @@ class InfoLanguageListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $table = $this->getHelperSet()->get('table');
+        $table->setHeaders(['Language', 'Code']);
+
         foreach ($this->lists->getLocaleList() as $key => $locale) {
-            $output->writeln($key . ' => ' . $locale);
+            $table->addRow([$locale, $key]);
         }
+
+        $table->render($output);
+
     }
 }

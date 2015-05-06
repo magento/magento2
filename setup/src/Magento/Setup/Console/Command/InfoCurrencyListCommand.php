@@ -48,8 +48,13 @@ class InfoCurrencyListCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $table = $this->getHelperSet()->get('table');
+        $table->setHeaders(['Currency', 'Code']);
+
         foreach ($this->lists->getCurrencyList() as $key => $currency) {
-            $output->writeln($key . ' => ' . $currency);
+            $table->addRow([$currency, $key]);
         }
+
+        $table->render($output);
     }
 }
