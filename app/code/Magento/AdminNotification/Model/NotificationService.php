@@ -31,7 +31,6 @@ class NotificationService
      * @param int $notificationId
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @api
      */
     public function markAsRead($notificationId)
     {
