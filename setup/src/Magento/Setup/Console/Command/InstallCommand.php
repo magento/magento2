@@ -33,6 +33,11 @@ class InstallCommand extends AbstractSetupCommand
     const INPUT_KEY_USE_SAMPLE_DATA = 'use_sample_data';
 
     /**
+     * Regex for sales_order_increment_prefix validation.
+     */
+    const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
+
+    /**
      * Installer service factory
      *
      * @var InstallerFactory
@@ -134,11 +139,26 @@ class InstallCommand extends AbstractSetupCommand
         }
         $errors = $this->configModel->validate($configOptionsToValidate);
         $errors = array_merge($errors, $this->adminUser->validate($input));
+        $errors = array_merge($errors, $this->validate($input));
+
         if (!empty($errors)) {
             foreach ($errors as $error) {
                 $output->writeln("<error>$error</error>");
             }
             throw new \InvalidArgumentException('Parameters validation is failed');
         }
+    }
+
+    /**
+     * @param InputInterface $input
+     * @return Array of error messages
+     */
+    public function validate(InputInterface $input) {
+        $errors = [];
+        $value=$input->getOption(self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX);
+        if(preg_match(self::SALES_ORDER_INCREMENT_PREFIX_RULE, $value) != 1) {
+            $errors[]=self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX." validation failed.";
+        }
+        return $errors;
     }
 }
