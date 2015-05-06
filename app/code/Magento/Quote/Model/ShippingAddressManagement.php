@@ -73,7 +73,8 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $this->addressValidator->validate($address);
-
+        $quote->setShippingAddress($address);
+        $address = $quote->getShippingAddress();
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
                 __('Cart contains virtual product(s) only. Shipping address is not applicable.')
