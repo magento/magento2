@@ -37,7 +37,6 @@ class Region extends \Magento\Framework\Model\AbstractModel
      * If name is no declared, then default_name is used
      *
      * @return string
-     * @api
      */
     public function getName()
     {
