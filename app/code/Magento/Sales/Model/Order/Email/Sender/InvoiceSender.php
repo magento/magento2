@@ -67,10 +67,10 @@ class InvoiceSender extends Sender
         InvoiceIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         \Psr\Log\LoggerInterface $logger,
+        Renderer $addressRenderer,
         PaymentHelper $paymentHelper,
         InvoiceResource $invoiceResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        Renderer $addressRenderer,
         ManagerInterface $eventManager
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
