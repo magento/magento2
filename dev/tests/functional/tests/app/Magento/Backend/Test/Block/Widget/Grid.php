@@ -49,13 +49,6 @@ abstract class Grid extends Block
     protected $resetButton = '[data-action="grid-filter-reset"]';
 
     /**
-     * Locator value for filter chips list
-     *
-     * @var string
-     */
-    protected $filterAppliedList = '[data-role="filter-list"]';
-
-    /**
      * The first row in grid. For this moment we suggest that we should strictly define what we are going to search
      *
      * @var string
@@ -319,9 +312,9 @@ abstract class Grid extends Block
      */
     public function resetFilter()
     {
-        $filterAppliedList = $this->_rootElement->find($this->filterAppliedList, Locator::SELECTOR_CSS);
-        if ($filterAppliedList->isVisible()) {
-            $this->_rootElement->find($this->resetButton, Locator::SELECTOR_CSS)->click();
+        $resetButton = $this->_rootElement->find($this->resetButton, Locator::SELECTOR_CSS);
+        if ($resetButton->isVisible()) {
+            $resetButton->click();
             $this->waitLoader();
         }
     }
