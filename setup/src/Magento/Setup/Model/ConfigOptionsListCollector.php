@@ -9,7 +9,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
