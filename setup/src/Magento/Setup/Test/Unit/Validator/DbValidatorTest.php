@@ -45,6 +45,20 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
     }
 
+    public function testCheckDatabaseTablePrefix()
+    {
+        $this->assertEquals(true, $this->dbValidator->checkDatabaseTablePrefix('test'));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Please correct the table prefix format
+     */
+    public function testCheckDatabaseTablePrefixWrongFormat()
+    {
+        $this->assertEquals(true, $this->dbValidator->checkDatabaseTablePrefix('_wrong_format'));
+    }
+
     /**
      * @expectedException \Magento\Setup\Exception
      * @expectedExceptionMessage Database connection failure.
