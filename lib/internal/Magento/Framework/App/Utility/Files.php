@@ -135,7 +135,7 @@ class Files
                     glob($this->_path . '/*.php', GLOB_NOSORT),
                     glob($this->_path . '/pub/*.php', GLOB_NOSORT),
                     $this->getFilesSubset(["{$this->_path}/lib/internal/Magento"], '*.php', $this->libTestDirs),
-                    self::getFiles(["{$this->_path}/dev/tools/Magento/Tools/SampleData"], '*.php')
+                    self::getFiles(["{$this->_path}/app/code/Magento/SampleData"], '*.php')
                 );
             }
             if ($tests) {
