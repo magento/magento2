@@ -8,6 +8,7 @@
 namespace Magento\Tax\Api;
 
 /**
+ * Interface for managing classes rates.
  * @api
  */
 interface TaxClassManagementInterface

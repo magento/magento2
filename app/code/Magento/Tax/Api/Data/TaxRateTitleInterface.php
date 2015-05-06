@@ -8,6 +8,7 @@
 namespace Magento\Tax\Api\Data;
 
 /**
+ * Tax rate title interface.
  * @api
  */
 interface TaxRateTitleInterface extends \Magento\Framework\Api\ExtensibleDataInterface

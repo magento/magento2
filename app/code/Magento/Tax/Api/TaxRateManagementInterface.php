@@ -9,6 +9,7 @@ namespace Magento\Tax\Api;
 use Magento\Tax\Api\Data\TaxRateInterface;
 
 /**
+ * Interface for managing tax rates.
  * @api
  */
 interface TaxRateManagementInterface

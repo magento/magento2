@@ -7,6 +7,7 @@
 namespace Magento\Tax\Api\Data;
 
 /**
+ * Tax details interface.
  * @api
  */
 interface TaxDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface

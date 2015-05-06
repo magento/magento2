@@ -7,6 +7,7 @@
 namespace Magento\Tax\Api;
 
 /**
+ * Tax calculation interface.
  * @api
  */
 interface TaxCalculationInterface
