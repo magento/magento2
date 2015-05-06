@@ -7,7 +7,7 @@
 namespace Magento\SalesRule\Test\TestStep;
 
 use Magento\Sales\Test\Page\Adminhtml\OrderCreateIndex;
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
@@ -25,16 +25,16 @@ class ApplySalesRuleOnBackendStep implements TestStepInterface
     /**
      * SalesRule fixture.
      *
-     * @var SalesRuleInjectable
+     * @var SalesRule
      */
     protected $salesRule;
 
     /**
      * @constructor
      * @param OrderCreateIndex $orderCreateIndex
-     * @param SalesRuleInjectable $salesRule
+     * @param SalesRule $salesRule
      */
-    public function __construct(OrderCreateIndex $orderCreateIndex, SalesRuleInjectable $salesRule = null)
+    public function __construct(OrderCreateIndex $orderCreateIndex, SalesRule $salesRule = null)
     {
         $this->orderCreateIndex = $orderCreateIndex;
         $this->salesRule = $salesRule;

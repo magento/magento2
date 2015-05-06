@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CurrencySymbol\Test\Block\Adminhtml\System\Currency;
+namespace Magento\CurrencySymbol\Test\Block\Adminhtml\System\Currency\Rate;
 
 use Magento\Backend\Test\Block\PageActions;
-use Magento\Backend\Test\Block\Messages;
 
 /**
  * Grid page actions on the SystemCurrencyIndex page.
@@ -46,22 +45,6 @@ class GridPageActions extends PageActions
                 $message = $browser->find($selector);
                 return $message->isVisible() ? true : null;
             }
-        );
-        if ($this->getMessageBlock()->isVisibleMessage('warning')) {
-            throw new \Exception($this->getMessageBlock()->getWarningMessages());
-        }
-    }
-
-    /**
-     * Get message block.
-     *
-     * @return Messages
-     */
-    protected function getMessageBlock()
-    {
-        return $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Messages',
-            ['element' => $this->_rootElement->find($this->message)]
         );
     }
 }

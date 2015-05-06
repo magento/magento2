@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\SalesRule\Test\Handler\SalesRuleInjectable;
+namespace Magento\SalesRule\Test\Handler\SalesRule;
 
 use Magento\Backend\Test\Handler\Conditions;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -15,7 +15,7 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 /**
  * Curl handler for creating sales rule.
  */
-class Curl extends Conditions implements SalesRuleInjectableInterface
+class Curl extends Conditions implements SalesRuleInterface
 {
     /**
      * Map of type parameter.

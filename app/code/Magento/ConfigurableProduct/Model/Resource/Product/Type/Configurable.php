@@ -180,10 +180,6 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 implode(
                     ' AND ',
                     [
-                        $this->_getReadAdapter()->quoteInto(
-                            'entity_value.entity_type_id = ?',
-                            $product->getEntityTypeId()
-                        ),
                         'entity_value.attribute_id = super_attribute.attribute_id',
                         'entity_value.store_id = 0',
                         'entity_value.entity_id = product_link.product_id'
