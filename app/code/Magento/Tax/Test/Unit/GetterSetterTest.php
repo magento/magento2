@@ -36,8 +36,11 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
                 $variableValue = $obj;
                 $variables[$variableName] = $variableValue;
             }
-            $this->assertNotFalse(call_user_func(
-                [$classObject, $setterName], $variableValue),
+            $this->assertNotFalse(
+                call_user_func(
+                    [$classObject, $setterName],
+                    $variableValue
+                ),
                 "Calling method " . $setterName . " failed in " . $className
             );
         }
@@ -55,7 +58,8 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
                 "Calling method " . $getterName . " failed in " . $className
             );
             $this->assertSame(
-                $result, $variableValue,
+                $result,
+                $variableValue,
                 "Value from " . $getterName . "did not match in " . $className
             );
         }
