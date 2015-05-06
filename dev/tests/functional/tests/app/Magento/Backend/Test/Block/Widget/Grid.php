@@ -320,7 +320,7 @@ abstract class Grid extends Block
     public function resetFilter()
     {
         $filterAppliedList = $this->_rootElement->find($this->filterAppliedList, Locator::SELECTOR_CSS);
-        if($filterAppliedList->isVisible()) {
+        if ($filterAppliedList->isVisible()) {
             $this->_rootElement->find($this->resetButton, Locator::SELECTOR_CSS)->click();
             $this->waitLoader();
         }
