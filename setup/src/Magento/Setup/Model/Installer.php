@@ -1039,7 +1039,7 @@ class Installer
                     $this->log->log($e->getMessage() . ' - skipping database cleanup');
                     return;
                 }
-                $dbName = $connection->quoteIdentifier($config['dbname']);
+                $dbName = $connection->quoteIdentifier($config[ConfigOptionsList::KEY_NAME]);
                 $this->log->log("Recreating database {$dbName}");
                 $connection->query("DROP DATABASE IF EXISTS {$dbName}");
                 $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
@@ -1095,23 +1095,23 @@ class Installer
     {
         $this->checkDatabaseConnection(
             $this->deploymentConfig->get(
-                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_NAME
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsList::KEY_NAME
             ),
             $this->deploymentConfig->get(
-                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_HOST
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsList::KEY_HOST
             ),
             $this->deploymentConfig->get(
-                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_USER
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsList::KEY_USER
             ),
             $this->deploymentConfig->get(
-                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PASSWORD
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsList::KEY_PASSWORD
             )
         );
         if (null !== $this->deploymentConfig->get(
-            ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PREFIX
+            ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsList::KEY_PREFIX
         )) {
             $this->checkDatabaseTablePrefix($this->deploymentConfig->get(
-                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsList::KEY_PREFIX
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsList::KEY_PREFIX
             ));
         }
     }

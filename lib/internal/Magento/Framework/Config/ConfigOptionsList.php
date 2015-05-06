@@ -24,7 +24,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const CONFIG_PATH_SESSION_SAVE = 'session/save';
     const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
     const CONFIG_PATH_RESOURCE_DEFAULT_SETUP = 'resource/default_setup/connection';
-    const CONFIG_PATH_DB_CONNECTION_DEFAULT = 'db/connection/default/';
+    const CONFIG_PATH_DB_CONNECTION_DEFAULT = 'db/connection/default';
     const CONFIG_PATH_DB_CONNECTIONS= 'db/connection';
     const CONFIG_PATH_DB_PREFIX = 'db/table_prefix';
     /**#@-*/
@@ -137,28 +137,28 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 self::INPUT_KEY_DB_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_HOST,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . self::KEY_HOST,
                 'Database server host',
                 'localhost'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_NAME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_NAME,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . self::KEY_NAME,
                 'Database name',
                 'magento2'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_USER,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_USER,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . self::KEY_USER,
                 'Database server username',
                 'root'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_PASSWORD,
                 TextConfigOption::FRONTEND_WIZARD_PASSWORD,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_PASSWORD,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . self::KEY_PASSWORD,
                 'Database server password',
                 ''
             ),
@@ -172,14 +172,14 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 self::INPUT_KEY_DB_MODEL,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_MODEL,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . self::KEY_MODEL,
                 'Database type',
                 'mysql4'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_DB_INIT_STATEMENTS,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_INIT_STATEMENTS,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . self::KEY_INIT_STATEMENTS,
                 'Database  initial set of commands',
                 'SET NAMES utf8;'
             ),
