@@ -89,10 +89,8 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
         $address->setSameAsBilling($sameAsBilling);
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
-        $quote->setShippingAddress($address);
-        $quote->setDataChanges(true);
         try {
-            $this->quoteRepository->save($quote);
+            $address->collectTotals()->save();
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(__('Unable to save address. Please, check input data.'));
