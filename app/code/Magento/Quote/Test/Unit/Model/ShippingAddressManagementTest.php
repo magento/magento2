@@ -44,7 +44,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteAddressMock = $this->getMock(
             '\Magento\Quote\Model\Quote\Address',
-            ['setSameAsBilling', 'setCollectShippingRates', '__wakeup'],
+            ['setSameAsBilling', 'setCollectShippingRates', '__wakeup', 'collectTotals', 'save'],
             [],
             '',
             false
@@ -94,9 +94,8 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->with($this->quoteAddressMock)
             ->will($this->returnValue(true));
 
-        $quoteMock->expects($this->once())->method('setShippingAddress')->with($this->quoteAddressMock);
-        $quoteMock->expects($this->once())->method('setDataChanges')->with(true);
-        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
+        $this->quoteAddressMock->expects($this->once())->method('collectTotals')->willReturnSelf();
+        $this->quoteAddressMock->expects($this->once())->method('save')->willReturnSelf();
 
         $addressId = 1;
         $shippingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
@@ -136,6 +135,11 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
+        $this->quoteAddressMock->expects($this->once())->method('collectTotals')->willReturnSelf();
+        $this->quoteAddressMock->expects($this->once())->method('save')->willThrowException(
+            new \Exception('Unable to save address. Please, check input data.')
+        );
+
         $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
@@ -146,15 +150,6 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $this->validatorMock->expects($this->once())->method('validate')
             ->with($this->quoteAddressMock)
             ->will($this->returnValue(true));
-
-        $quoteMock->expects($this->once())->method('setShippingAddress')->with($this->quoteAddressMock);
-        $quoteMock->expects($this->once())->method('setDataChanges')->with(true);
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($quoteMock)
-            ->willThrowException(
-                new \Exception('Some DB Error')
-            );
         $this->service->assign('cart867', $this->quoteAddressMock);
     }
 
