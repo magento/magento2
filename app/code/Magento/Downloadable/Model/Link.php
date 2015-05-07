@@ -43,9 +43,11 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     const KEY_NUMBER_OF_DOWNLOADS = 'number_of_downloads';
     const KEY_LINK_TYPE = 'link_type';
     const KEY_LINK_FILE = 'link_file';
+    const KEY_LINK_FILE_CONTENT = 'link_file_content';
     const KEY_LINK_URL = 'link_url';
     const KEY_SAMPLE_TYPE = 'sample_type';
     const KEY_SAMPLE_FILE = 'sample_file';
+    const KEY_SAMPLE_FILE_CONTENT = 'sample_file_content';
     const KEY_SAMPLE_URL = 'sample_url';
     /**#@-*/
 
@@ -214,6 +216,16 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
+     * Return file content
+     *
+     * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null
+     */
+    public function getLinkFileContent()
+    {
+        return $this->getData(self::KEY_LINK_FILE_CONTENT);
+    }
+
+    /**
      * {@inheritdoc}
      * @codeCoverageIgnore
      */
@@ -238,6 +250,16 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     public function getSampleFile()
     {
         return $this->getData(self::KEY_SAMPLE_FILE);
+    }
+
+    /**
+     * Return sample file content when type is 'file'
+     *
+     * @return \Magento\Downloadable\Api\Data\File\ContentInterface|null relative file path
+     */
+    public function getSampleFileContent()
+    {
+        return $this->getData(self::KEY_SAMPLE_FILE_CONTENT);
     }
 
     /**
@@ -321,6 +343,17 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     /**
+     * Set file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent
+     * @return $this
+     */
+    public function setLinkFileContent(\Magento\Downloadable\Api\Data\File\ContentInterface $linkFileContent = null)
+    {
+        return $this->setData(self::KEY_LINK_FILE_CONTENT, $linkFileContent);
+    }
+
+    /**
      * Set URL
      *
      * @param string $linkUrl
@@ -350,6 +383,19 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     {
         return $this->setData(self::KEY_SAMPLE_FILE, $sampleFile);
     }
+
+    /**
+     * Set sample file content
+     *
+     * @param \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent
+     * @return $this
+     */
+    public function setSampleFileContent(
+        \Magento\Downloadable\Api\Data\File\ContentInterface $sampleFileContent = null
+    ) {
+        return $this->setData(self::KEY_SAMPLE_FILE_CONTENT, $sampleFileContent);
+    }
+
 
     /**
      * Set URL

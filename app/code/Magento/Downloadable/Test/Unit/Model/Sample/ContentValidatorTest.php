@@ -51,15 +51,17 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->sampleFileMock = $this->getMock('\Magento\Downloadable\Api\Data\File\ContentInterface');
-        $this->validator = new \Magento\Downloadable\Model\Sample\ContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
+        $this->validator = new ContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
     }
 
     public function testIsValid()
     {
+        $sampleFileContentMock = $this->getMock('Magento\Downloadable\Api\Data\File\ContentInterface');
         $sampleContentData = [
             'title' => 'Title',
             'sort_order' => 1,
             'sample_type' => 'file',
+            'sample_file_content' => $sampleFileContentMock,
         ];
         $this->fileValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
         $this->urlValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue(true));
@@ -103,7 +105,7 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSampleContentMock(array $sampleContentData)
     {
-        $contentMock = $this->getMock('\Magento\Downloadable\Api\Data\SampleContentInterface');
+        $contentMock = $this->getMock('\Magento\Downloadable\Api\Data\SampleInterface');
         $contentMock->expects($this->any())->method('getTitle')->will($this->returnValue(
             $sampleContentData['title']
         ));
@@ -118,6 +120,10 @@ class ContentValidatorTest extends \PHPUnit_Framework_TestCase
             $contentMock->expects($this->any())->method('getSampleUrl')->will($this->returnValue(
                 $sampleContentData['sample_url']
             ));
+        }
+        if (isset($sampleContentData['sample_file_content'])) {
+            $contentMock->expects($this->any())->method('getSampleFileContent')
+                ->willReturn($sampleContentData['sample_file_content']);
         }
         $contentMock->expects($this->any())->method('getSampleFile')->will($this->returnValue(
             $this->sampleFileMock
