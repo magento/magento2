@@ -311,6 +311,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $storage->expects($this->any())
             ->method('setData');
 
+        /** @var \Magento\Checkout\Model\Session  $session */
         $session = $this->_helper->getObject(
             'Magento\Checkout\Model\Session',
             [
@@ -318,6 +319,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
                 'storage' => $storage
             ]
         );
+
+        $session->setIsQuoteMasked($replaceQuoteId);
 
         $session->replaceQuote($quote);
 
