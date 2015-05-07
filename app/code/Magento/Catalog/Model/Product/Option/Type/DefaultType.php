@@ -11,7 +11,7 @@ namespace Magento\Catalog\Model\Product\Option\Type;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Catalog product option selected type
+ * Catalog product option default type
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -324,7 +324,7 @@ class DefaultType extends \Magento\Framework\Object
     }
 
     /**
-     * Return Price for selected option
+     * Return Price for default option
      *
      * @param string $optionValue Prepared for cart option value
      * @param float $basePrice For percent price type
