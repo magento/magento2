@@ -25,7 +25,10 @@
             <strong class="product name" style="width:100px;" data-bind="text: name"></strong>
         </div>
         <div class="options">
-            <!-- <div class="options-items-container"></div> -->
+            <!--<div class="options-items-container"></div> -->
+            <!-- ko foreach: $parent.getRegion('item-level-additional-data') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko -->
             <a href="#" class="action activate message" data-bind="click: $parent.setItemLevelGiftMessageHidden(item_id), text: $t('Gift Message')"></a>
             <div id="gift-messages-for-item-container" class="block message" data-bind="visible: $parent.isItemLevelGiftMessagesHidden[item_id]">
                 <fieldset class="fieldset">

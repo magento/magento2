@@ -29,7 +29,7 @@ define([
                     this.dispose();
                 });
                 this._super();
-                giftOptions.addOrderLevelGiftOptions(this);
+                giftOptions.addOrderLevelGiftOptions(this, 10);
             },
             isOrderLevelGiftMessageVisible: ko.observable(true),
             setOrderLevelGiftMessageVisible: function() {

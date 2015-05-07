@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define([],
-    function() {
+define(['underscore'],
+    function(_) {
         "use strict";
         var isOrderLevelGiftOptionsEnabled = window.checkoutConfig.isOrderLevelGiftOptionsEnabled || false,
             isItemLevelGiftOptionsEnabled = window.checkoutConfig.isItemLevelGiftOptionsEnabled || false;
@@ -22,16 +22,30 @@ define([],
                 return isItemLevelGiftOptionsEnabled;
             },
             getOrderLevelGiftOptions: function() {
-                return this.orderLevelGiftOptions;
+                return _.map(
+                    _.sortBy(this.orderLevelGiftOptions, function(giftOption){
+                        return giftOption.sortOrder
+                    }),
+                    function(giftOption) {
+                        return giftOption.option
+                    }
+                );
             },
             getItemLevelGiftOptions: function() {
-                return this.itemLevelGiftOptions;
+                return _.map(
+                    _.sortBy(this.itemLevelGiftOptions, function(giftOption){
+                        return giftOption.sortOrder
+                    }),
+                    function(giftOption) {
+                        return giftOption.option
+                    }
+                );
             },
-            addOrderLevelGiftOptions: function(giftOption) {
-                this.orderLevelGiftOptions.push(giftOption);
+            addOrderLevelGiftOptions: function(giftOption, sortOrder) {
+                this.orderLevelGiftOptions.push({'option': giftOption, 'sortOrder': sortOrder});
             },
-            addItemLevelGiftOptions: function(giftOption) {
-                this.itemLevelGiftOptions.push(giftOption);
+            addItemLevelGiftOptions: function(giftOption, sortOrder) {
+                this.itemLevelGiftOptions.push({'option': giftOption, 'sortOrder': sortOrder});
             }
         };
     }
