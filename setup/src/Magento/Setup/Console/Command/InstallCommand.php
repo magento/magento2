@@ -35,7 +35,7 @@ class InstallCommand extends AbstractSetupCommand
     /**
      * Regex for sales_order_increment_prefix validation.
      */
-    const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{1,20}$/';
+    const SALES_ORDER_INCREMENT_PREFIX_RULE = '/^.{0,20}$/';
 
     /**
      * Installer service factory
@@ -151,6 +151,9 @@ class InstallCommand extends AbstractSetupCommand
 
     /**
      * Validate sales_order_increment_prefix value
+     *
+     * It will save the value which discarding characters after 20th to the database so it should be
+     * validated in advance.
      *
      * @param InputInterface $input
      * @return string[] Array of error messages
