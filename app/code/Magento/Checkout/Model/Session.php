@@ -88,6 +88,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $quoteIdMaskFactory;
 
     /**
+     * @param bool
+     */
+    protected $isQuoteMasked;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -490,7 +495,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function setIsQuoteMasked($isQuoteMasked)
     {
-        $this->storage->setData('quote_id_masked', $isQuoteMasked);
+        $this->isQuoteMasked = $isQuoteMasked;
     }
 
     /**
@@ -498,6 +503,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      */
     public function isQuoteMasked()
     {
-        return $this->storage->getData('quote_id_masked');
+        return $this->isQuoteMasked;
     }
 }
