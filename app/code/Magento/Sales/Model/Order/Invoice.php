@@ -11,7 +11,6 @@ use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
 
 /**
- * @method \Magento\Sales\Model\Order\Invoice setCreatedAt(string $value)
  * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
  * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
  * @method string getCustomerNote()
@@ -967,6 +966,14 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function getCreatedAt()
     {
         return $this->getData(InvoiceInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(InvoiceInterface::CREATED_AT, $createdAt);
     }
 
     /**

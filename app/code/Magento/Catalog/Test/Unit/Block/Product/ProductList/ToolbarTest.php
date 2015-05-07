@@ -106,9 +106,6 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->catalogConfig->expects($this->any())
-            ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue(['name' => [], 'price' => []]));
 
         $context = $this->getMock(
             'Magento\Framework\View\Element\Template\Context',
@@ -133,9 +130,6 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->productListHelper->expects($this->any())
-            ->method('getAvailableViewMode')
-            ->will($this->returnValue(['list' => 'List']));
 
         $this->urlEncoder = $this->getMock('Magento\Framework\Url\EncoderInterface', ['encode'], [], '', false);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -187,6 +181,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
         $this->model->expects($this->once())
             ->method('getOrder')
             ->will($this->returnValue($order));
+        $this->catalogConfig->expects($this->once())
+            ->method('getAttributeUsedForSortByArray')
+            ->will($this->returnValue(['name' => [], 'price' => []]));
 
         $this->assertEquals($order, $this->block->getCurrentOrder());
     }
@@ -206,11 +203,48 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     {
         $mode = 'list';
 
+        $this->productListHelper->expects($this->once())
+            ->method('getAvailableViewMode')
+            ->will($this->returnValue(['list' => 'List']));
         $this->model->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue($mode));
 
         $this->assertEquals($mode, $this->block->getCurrentMode());
+    }
+
+    public function testGetModes()
+    {
+        $mode = ['list' => 'List'];
+        $this->productListHelper->expects($this->once())
+            ->method('getAvailableViewMode')
+            ->will($this->returnValue($mode));
+
+        $this->assertEquals($mode, $this->block->getModes());
+        $this->assertEquals($mode, $this->block->getModes());
+    }
+
+    /**
+     * @param string[] $mode
+     * @param string[] $expected
+     * @dataProvider setModesDataProvider
+     */
+    public function testSetModes($mode, $expected)
+    {
+        $this->productListHelper->expects($this->once())
+            ->method('getAvailableViewMode')
+            ->will($this->returnValue($mode));
+
+        $block = $this->block->setModes(['mode' => 'mode']);
+        $this->assertEquals($expected, $block->getModes());
+    }
+
+    public function setModesDataProvider()
+    {
+        return [
+            [['list' => 'List'], ['list' => 'List']],
+            [null, ['mode' => 'mode']],
+        ];
     }
 
     public function testGetLimit()
@@ -232,6 +266,9 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             ->method('getDefaultLimitPerPageValue')
             ->with($this->equalTo('list'))
             ->will($this->returnValue(10));
+        $this->productListHelper->expects($this->any())
+            ->method('getAvailableViewMode')
+            ->will($this->returnValue(['list' => 'List']));
 
         $this->assertEquals($limit, $this->block->getLimit());
     }
@@ -279,5 +316,49 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->assertTrue($this->block->getPagerHtml());
+    }
+
+    public function testSetDefaultOrder()
+    {
+        $this->catalogConfig->expects($this->atLeastOnce())
+            ->method('getAttributeUsedForSortByArray')
+            ->will($this->returnValue(['name' => [], 'price' => []]));
+
+        $this->block->setDefaultOrder('field');
+    }
+
+    public function testGetAvailableOrders()
+    {
+        $data = ['name' => [], 'price' => []];
+        $this->catalogConfig->expects($this->once())
+            ->method('getAttributeUsedForSortByArray')
+            ->will($this->returnValue($data));
+
+        $this->assertEquals($data, $this->block->getAvailableOrders());
+        $this->assertEquals($data, $this->block->getAvailableOrders());
+    }
+
+    public function testAddOrderToAvailableOrders()
+    {
+        $data = ['name' => [], 'price' => []];
+        $this->catalogConfig->expects($this->once())
+            ->method('getAttributeUsedForSortByArray')
+            ->will($this->returnValue($data));
+        $expected = $data;
+        $expected['order'] = 'value';
+        $toolbar = $this->block->addOrderToAvailableOrders('order', 'value');
+        $this->assertEquals($expected, $toolbar->getAvailableOrders());
+    }
+
+    public function testRemoveOrderFromAvailableOrders()
+    {
+        $data = ['name' => [], 'price' => []];
+        $this->catalogConfig->expects($this->once())
+            ->method('getAttributeUsedForSortByArray')
+            ->will($this->returnValue($data));
+        $toolbar = $this->block->removeOrderFromAvailableOrders('order', 'value');
+        $this->assertEquals($data, $toolbar->getAvailableOrders());
+        $toolbar2 = $this->block->removeOrderFromAvailableOrders('name');
+        $this->assertEquals(['price' => []], $toolbar2->getAvailableOrders());
     }
 }
