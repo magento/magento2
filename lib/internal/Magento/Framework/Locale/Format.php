@@ -97,7 +97,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     public function getPriceFormat($localeCode = null, $currencyCode = null)
     {
         $localeCode = $localeCode ?: $this->_localeResolver->getLocale();
-        if ($currencyCode ) {
+        if ($currencyCode) {
             $currency = $this->currencyFactory->create()->load($currencyCode);
         } else {
             $currency = $this->_scopeResolver->getScope()->getCurrentCurrency();

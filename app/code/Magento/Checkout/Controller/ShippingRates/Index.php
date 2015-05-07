@@ -18,7 +18,7 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $result;
 
     /**
-     *  @var \Magento\Checkout\Model\Session
+     * @var \Magento\Checkout\Model\Session
      */
     protected $checkoutSession;
 

@@ -58,7 +58,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Returns is captcha case sensitive
      *
-     * @param $formId
+     * @param string $formId
      * @return bool
      */
     protected function isCaseSensitive($formId)

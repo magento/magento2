@@ -6,7 +6,7 @@
 namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor;
-use Magento\Quote\Api\Data\TotalsAdditionalDataInterface;;
+use Magento\Quote\Api\Data\TotalsAdditionalDataInterface;
 
 /**
  * Shopping cart gift message item repository object.
