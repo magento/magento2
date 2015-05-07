@@ -13,7 +13,7 @@ return [
     'db_name'                      => 'magento_functional_tests',
     'db_user'                      => 'root',
     'db_password'                  => '',
-    'backend_frontname'            => 'backend',
+    'backend-frontname'            => 'backend',
     'base_url'                     => 'http://localhost/',
     'use_secure'                   => '0',
     'use_rewrites'                 => '0',

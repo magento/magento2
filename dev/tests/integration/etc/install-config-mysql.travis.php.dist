@@ -10,7 +10,7 @@ return [
     'db_password' => '',
     'db_name' => 'magento_integration_tests',
     'db_prefix' => 'travis_',
-    'backend_frontname' => 'backend',
+    'backend-frontname' => 'backend',
     'admin_user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
     'admin_password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
     'admin_email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,

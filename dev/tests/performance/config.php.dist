@@ -26,7 +26,7 @@ return array(
                 'admin_user'                 => 'admin',
                 'admin_password'             => '123123q',
                 'admin_use_security_key'     => '0',
-                'backend_frontname'          => 'backend',
+                'backend-frontname'          => 'backend',
             ),
             'options_no_value' => array(
                 'cleanup_database',

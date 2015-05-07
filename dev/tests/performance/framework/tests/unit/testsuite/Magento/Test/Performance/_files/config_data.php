@@ -12,7 +12,7 @@ return [
             'options' => [
                 'option1' => 'value 1',
                 'option2' => 'value 2',
-                'backend_frontname' => 'backend',
+                'backend-frontname' => 'backend',
                 'admin_user' => 'admin',
                 'admin_password' => 'password1',
             ],

@@ -28,7 +28,7 @@ class Scenario
 
     const ARG_ADMIN_PASSWORD = 'admin_password';
 
-    const ARG_BACKEND_FRONTNAME = 'backend_frontname';
+    const ARG_BACKEND_FRONTNAME = 'backend-frontname';
 
     /**#@-*/
 
