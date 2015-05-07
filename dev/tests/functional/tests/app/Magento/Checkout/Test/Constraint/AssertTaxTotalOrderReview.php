@@ -28,8 +28,7 @@ class AssertTaxTotalOrderReview extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $reviewTaxTotal,
             number_format($taxTotal, 2),
-            'Tax price: \'' . $reviewTaxTotal
-            . '\' not equals with price from data set: \'' . $taxTotal . '\''
+            "Tax price '$reviewTaxTotal' not equals with price from data set '$taxTotal'."
         );
     }
 
