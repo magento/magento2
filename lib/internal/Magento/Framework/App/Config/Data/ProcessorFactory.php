@@ -30,21 +30,22 @@ class ProcessorFactory
     /**
      * Get concrete Processor Interface instance
      *
-     * @param string $model
+     * @param string $processorModel Classname of the instance to get
      * @return ProcessorInterface
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException In case the given classname is not an instance of ProcessorInterface
+     * @api
      */
-    public function get($model)
+    public function get($processorModel)
     {
-        if (!isset($this->_pool[$model])) {
-            $instance = $this->_objectManager->create($model);
+        if (!isset($this->_pool[$processorModel])) {
+            $instance = $this->_objectManager->create($processorModel);
             if (!$instance instanceof ProcessorInterface) {
                 throw new \InvalidArgumentException(
-                    $model . ' is not instance of \Magento\Framework\App\Config\Data\ProcessorInterface'
+                    $processorModel . ' is not instance of \Magento\Framework\App\Config\Data\ProcessorInterface'
                 );
             }
-            $this->_pool[$model] = $instance;
+            $this->_pool[$processorModel] = $instance;
         }
-        return $this->_pool[$model];
+        return $this->_pool[$processorModel];
     }
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config\Structure;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class AbstractElementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -77,7 +79,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->_storeManager->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_model->setData(
             ['showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 0],
-            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         $this->assertTrue($this->_model->isVisible());
     }
@@ -87,7 +89,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->_storeManager->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_model->setData(
             ['hide_in_single_store_mode' => 1, 'showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 0],
-            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         $this->assertFalse($this->_model->isVisible());
     }
@@ -100,7 +102,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->_storeManager->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
         $this->_model->setData(
             ['showInDefault' => 0, 'showInStore' => 0, 'showInWebsite' => 0],
-            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
         $this->assertFalse($this->_model->isVisible());
     }
@@ -121,7 +123,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 ['showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 0],
-                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             ],
             [
                 ['showInDefault' => 0, 'showInStore' => 1, 'showInWebsite' => 0],
@@ -150,7 +152,7 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 ['showInDefault' => 0, 'showInStore' => 1, 'showInWebsite' => 1],
-                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             ],
             [
                 ['showInDefault' => 1, 'showInStore' => 0, 'showInWebsite' => 1],

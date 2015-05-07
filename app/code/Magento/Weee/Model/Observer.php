@@ -209,12 +209,17 @@ class Observer extends \Magento\Framework\Model\AbstractModel
             if (is_array($priceConfig)) {
                 foreach ($priceConfig as $keyConfigs => $configs) {
                     if (is_array($configs)) {
-                        foreach ($configs as $keyConfig => $config) {
-                            $priceConfig[$keyConfigs][$keyConfig]['prices']['weeePrice']= [
-                                'amount' => $config['prices']['finalPrice']['amount'],
+                        if (array_key_exists('prices', $configs)) {
+                            $priceConfig[$keyConfigs]['prices']['weeePrice'] = [
+                                'amount' => $configs['prices']['finalPrice']['amount'],
                             ];
+                        } else {
+                            foreach ($configs as $keyConfig => $config) {
+                                $priceConfig[$keyConfigs][$keyConfig]['prices']['weeePrice'] = [
+                                    'amount' => $config['prices']['finalPrice']['amount'],
+                                ];
+                            }
                         }
-
                     }
                 }
             }
