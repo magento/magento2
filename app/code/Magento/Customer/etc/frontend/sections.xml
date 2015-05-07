@@ -10,7 +10,4 @@
     <action name="customer/account/logout"/>
     <action name="customer/account/loginPost"/>
     <action name="customer/account/createPost"/>
-    <action name="customer/account/editPost">
-        <section name="account"/>
-    </action>
 </config>

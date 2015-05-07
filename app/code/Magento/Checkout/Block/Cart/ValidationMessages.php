@@ -51,11 +51,11 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
     protected function _prepareLayout()
     {
         if ($this->cartHelper->getItemsCount()) {
-            $this->validateMinimunAmount();
+            $this->validateMinimumAmount();
             $this->addQuoteMessages();
-            return parent::_prepareLayout();
+            $this->addMessages($this->messageManager->getMessages(true));
         }
-        return $this;
+        return parent::_prepareLayout();
     }
 
     /**
@@ -63,7 +63,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      *
      * @return void
      */
-    public function validateMinimunAmount()
+    protected function validateMinimumAmount()
     {
         if (!$this->cartHelper->getQuote()->validateMinimumAmount()) {
             $warning = $this->_scopeConfig->getValue(
@@ -89,7 +89,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      *
      * @return void
      */
-    public function addQuoteMessages()
+    protected function addQuoteMessages()
     {
         // Compose array of messages to add
         $messages = [];
