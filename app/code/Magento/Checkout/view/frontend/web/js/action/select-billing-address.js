@@ -52,6 +52,7 @@ define(
                 ).done(
                     function (result) {
                         paymentService.setPaymentMethods(result.payment_methods);
+                        quote.setFormattedBillingAddress(result.formatted_billing_address);
                         navigator.setCurrent('billingAddress').goNext();
                         if (typeof actionCallback == 'function') {
                             actionCallback(true);
