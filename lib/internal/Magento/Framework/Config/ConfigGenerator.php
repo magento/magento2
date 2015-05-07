@@ -176,7 +176,8 @@ class ConfigGenerator
 
         if ($currentStatus === null) {
             $configData->set(
-                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsList::KEY_ACTIVE, '1'
+                ConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsList::KEY_ACTIVE,
+                '1'
             );
         }
 
