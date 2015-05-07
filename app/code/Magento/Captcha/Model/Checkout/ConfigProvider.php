@@ -49,7 +49,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
                 'imageHeight' => $this->getImageHeight($formId),
                 'imageSrc' => $this->getImageSrc($formId),
                 'refreshUrl' => $this->getRefreshUrl(),
-                'isRequired' => $this->getIsRequired($formId)
+                'isRequired' => $this->isRequired($formId)
             ];
         }
         return $config;
@@ -85,7 +85,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected function getImageSrc($formId)
     {
-        if ($this->getIsRequired($formId)) {
+        if ($this->isRequired($formId)) {
             $captcha = $this->getCaptchaModel($formId);
             $captcha->generate();
             return $captcha->getImgSrc();
@@ -110,7 +110,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      * @param string $formId
      * @return bool
      */
-    protected function getIsRequired($formId)
+    protected function isRequired($formId)
     {
         return (boolean)$this->getCaptchaModel($formId)->isRequired();
     }

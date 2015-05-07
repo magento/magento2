@@ -11,6 +11,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Onepage checkout block
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
@@ -61,6 +63,7 @@ class Checkout extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface[] $customLayoutProviders
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

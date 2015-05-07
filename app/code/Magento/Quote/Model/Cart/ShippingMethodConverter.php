@@ -79,7 +79,7 @@ class ShippingMethodConverter
      */
     private function getShippingPriceWithFlag($rateModel, $flag)
     {
-        return $price = $this->taxHelper->getShippingPrice(
+        return $this->taxHelper->getShippingPrice(
             $rateModel->getPrice(),
             $flag,
             $rateModel->getAddress(),

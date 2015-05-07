@@ -22,6 +22,9 @@ use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DefaultConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -109,6 +112,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param ConfigurationPool $configurationPool
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param LocaleFormat $localeFormat
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CheckoutHelper $checkoutHelper,

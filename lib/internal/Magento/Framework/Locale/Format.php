@@ -93,6 +93,7 @@ class Format implements \Magento\Framework\Locale\FormatInterface
      * @param string $currencyCode Currency code.
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getPriceFormat($localeCode = null, $currencyCode = null)
     {

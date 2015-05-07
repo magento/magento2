@@ -23,6 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Class QuoteManagement
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 {

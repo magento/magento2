@@ -62,6 +62,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
 
     /**
      * {@inheritDoc}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
     {
