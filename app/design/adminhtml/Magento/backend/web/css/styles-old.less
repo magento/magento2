@@ -2013,13 +2013,9 @@ input.no-display,
         }
     }
 
-    .col-2-left-layout,
-    .col-1-layout {
+    .col-2-left-layout {
         margin: 0 auto;
         position: relative;
-    }
-
-    .col-2-left-layout {
         &:before {
             position: absolute;
             content: "";
@@ -3167,8 +3163,7 @@ input.no-display,
         border-radius: 5px;
     }
 
-    .adminhtml-rma-new .order-totals,
-    .order-comments-history .order-comments-history {
+    .adminhtml-rma-new .order-totals {
         float: none;
         width: 100%;
     }
@@ -3310,40 +3305,6 @@ input.no-display,
             padding: 10px;
             background: #fff;
         }
-    }
-
-    //
-    //  Order view
-    // --------------------------------------
-
-    .order-comments-history fieldset {
-        border: 0;
-        margin: 0;
-        padding: 0;
-    }
-
-    .order-comments-history textarea,
-    .rma-history-form textarea {
-        height: 6em;
-        margin: 5px 0 10px;
-        resize: vertical;
-        width: 100%;
-    }
-
-    .order-comments-history input[type="checkbox"] {
-        margin-right: 5px;
-    }
-
-    .order-history-comments-options {
-        float: left;
-    }
-
-    .order-comments-history .actions {
-        float: right;
-    }
-
-    [class*="-order-"] .fieldset-wrapper address {
-        overflow: auto;
     }
 
     //
@@ -4077,6 +4038,12 @@ input.no-display,
         display: none;
     }
 
+    .section-config > .config {
+        &.collapseable {
+            display: none;
+        }
+    }
+
     .accordion > dt.open,
     .section-config.active > .collapseable,
     .accordion .collapseable.open {
@@ -4797,7 +4764,6 @@ input.no-display,
     .page-layout-admin-1column .page-columns,
     .catalog-product-edit,
     .catalog-product-new,
-    .sales-order-view,
     .catalog-category-edit {
         table.data {
             table-layout: fixed;
@@ -4822,7 +4788,6 @@ input.no-display,
     .custom-options .data-table,
     .ui-dialog .data,
     .page-layout-admin-1column .page-columns .data,
-    .sales-order-view .data,
     .catalog-category-edit .data {
         word-wrap: break-word;
         table-layout: fixed;
@@ -5074,8 +5039,6 @@ input.no-display,
     }
 }
 
-[class*="-order-"] .admin__scope-old .order-history,
-[class*="-order-"] .admin__scope-old .order-comments-history,
 [class*="-order-"] .admin__scope-old .order-information,
 [class*="-order-"] .admin__scope-old .order-billing-address,
 [class*="-order-"] .admin__scope-old .order-payment-method,
@@ -5302,19 +5265,6 @@ input.no-display,
     }
 }
 
-.sales-order-view {
-    .admin__scope-old {
-        .grid  {
-            .col-name {
-                &:extend(.col-150-max all);
-            }
-            .col-period {
-                &:extend(.col-70-max all);
-            }
-        }
-    }
-}
-
 .sales-order-index {
     .admin__scope-old {
         .grid .col-name {
@@ -5373,15 +5323,6 @@ input.no-display,
         .grid .col-product {
             max-width: 770px;
             width: 770px;
-        }
-    }
-}
-
-//  Sales -> View order
-[class^=' sales-order-view'] {
-    .admin__scope-old {
-        .grid .col-customer_name {
-            &:extend(.col-110-max all);
         }
     }
 }

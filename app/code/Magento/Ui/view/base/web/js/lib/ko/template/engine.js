@@ -5,9 +5,8 @@
 define([
     'ko',
     './observable_source',
-    '../../renderer/renderer',
-    'mage/apply/main'
-], function (ko, Source, Renderer, Mage) {
+    '../../renderer/renderer'
+], function (ko, Source, Renderer) {
     'use strict';
 
     var sources = {};
@@ -27,7 +26,7 @@ define([
     /**
      * Remote template engine class. Is used to be able to load remote templates via knockout template binding.
      */
-    var RemoteTemplateEngine = function() {};
+    var RemoteTemplateEngine = function () {};
     var NativeTemplateEngine = ko.nativeTemplateEngine;
 
     RemoteTemplateEngine.prototype = new NativeTemplateEngine;
@@ -42,9 +41,8 @@ define([
      * @param  {Object} options - options, passed to template binding
      * @return {TemplateSource} - object with methods 'nodes' and 'data'.
      */
-    RemoteTemplateEngine.prototype.makeTemplateSource = function(template, templateDocument, options) {
+    RemoteTemplateEngine.prototype.makeTemplateSource = function (template, templateDocument, options) {
         var source,
-            extenders = options.extenders || [],
             templateId;
 
         if (typeof template === 'string') {
@@ -55,9 +53,8 @@ define([
                 source = new Source(template);
                 sources[templateId] = source;
 
-                Renderer.render(template, extenders).done(function(rendered) {
+                Renderer.render(template).done(function (rendered) {
                     source.nodes(rendered);
-                    Mage.apply();
                 });
             }
 

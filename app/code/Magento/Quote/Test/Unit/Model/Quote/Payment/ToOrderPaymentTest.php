@@ -113,7 +113,7 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
         );
         $orderPayment->expects($this->once())
             ->method('setAdditionalInformation')
-            ->with(serialize(array_merge($additionalInfo, [Substitution::INFO_KEY_TITLE => $paymentMethodTitle])))
+            ->with(array_merge($additionalInfo, [Substitution::INFO_KEY_TITLE => $paymentMethodTitle]))
             ->willReturnSelf();
         $orderPayment->expects($this->once())
             ->method('setCcNumber')

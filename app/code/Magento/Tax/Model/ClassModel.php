@@ -19,6 +19,14 @@ use Magento\Tax\Api\Data\TaxClassInterface;
 class ClassModel extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\TaxClassInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_ID   = 'class_id';
+    const KEY_NAME = 'class_name';
+    const KEY_TYPE = 'class_type';
+    /**#@-*/
+
     /**
      * Defines Customer Tax Class string
      */

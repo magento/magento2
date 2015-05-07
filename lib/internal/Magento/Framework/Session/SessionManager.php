@@ -11,6 +11,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
  * Session Manager
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SessionManager implements SessionManagerInterface
 {
@@ -87,8 +88,11 @@ class SessionManager implements SessionManagerInterface
     protected $cookieMetadataFactory;
 
     /**
-     * Constructor
-     *
+     * @var \Magento\Framework\App\State
+     */
+    private $appState;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param SidResolverInterface $sidResolver
      * @param ConfigInterface $sessionConfig
@@ -97,6 +101,8 @@ class SessionManager implements SessionManagerInterface
      * @param StorageInterface $storage
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Framework\App\State $appState
+     * @throws \Magento\Framework\Exception\SessionException
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -106,7 +112,8 @@ class SessionManager implements SessionManagerInterface
         ValidatorInterface $validator,
         StorageInterface $storage,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\App\State $appState
     ) {
         $this->request = $request;
         $this->sidResolver = $sidResolver;
@@ -116,9 +123,11 @@ class SessionManager implements SessionManagerInterface
         $this->storage = $storage;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->appState = $appState;
 
         // Enable session.use_only_cookies
         ini_set('session.use_only_cookies', '1');
+        $this->start();
     }
 
     /**
@@ -152,12 +161,25 @@ class SessionManager implements SessionManagerInterface
     /**
      * Configure session handler and start session
      *
+     * @throws \Magento\Framework\Exception\SessionException
      * @return $this
      */
     public function start()
     {
         if (!$this->isSessionExists()) {
             \Magento\Framework\Profiler::start('session_start');
+
+            try {
+                $this->appState->getAreaCode();
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                throw new \Magento\Framework\Exception\SessionException(
+                    new \Magento\Framework\Phrase(
+                        'Area code not set: Area code must be set before starting a session.'
+                    ),
+                    $e
+                );
+            }
+
             // Need to apply the config options so they can be ready by session_start
             $this->initIniOptions();
             $this->registerSaveHandler();
