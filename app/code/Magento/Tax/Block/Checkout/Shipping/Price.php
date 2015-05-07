@@ -7,6 +7,10 @@ namespace Magento\Tax\Block\Checkout\Shipping;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 class Price extends \Magento\Checkout\Block\Shipping\Price
 {
     /**
