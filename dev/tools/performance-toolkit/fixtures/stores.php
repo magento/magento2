@@ -19,9 +19,9 @@ class StoresFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $websitesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('websites', 2);
-        $storeGroupsCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('store_groups', 3);
-        $storesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('store_views', 5);
+        $websitesCount = $this->application->getValue('websites', 2);
+        $storeGroupsCount = $this->application->getValue('store_groups', 3);
+        $storesCount = $this->application->getValue('store_views', 5);
         $this->application->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */

@@ -10,6 +10,11 @@
 namespace Magento\ToolkitFramework;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Indexer\Console\Command\IndexerReindexCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\OutputInterface;
+
 
 class Application
 {
@@ -36,11 +41,6 @@ class Application
     protected $_application;
 
     /**
-     * @var \Magento\Framework\Shell
-     */
-    protected $_shell;
-
-    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager;
@@ -60,24 +60,25 @@ class Application
     protected $_paramLabels = [];
 
     /**
-     * @var string
-     */
-    protected $_applicationBaseDir;
-
-    /**
      * @var array
      */
     protected $_initArguments;
 
     /**
-     * @param string $applicationBaseDir
-     * @param \Magento\Framework\Shell $shell
+     * Configuration array
+     *
+     * @var array
      */
-    public function __construct($applicationBaseDir, \Magento\Framework\Shell $shell, array $initArguments)
+    protected $config = [];
+
+    /**
+     * Constructor
+     *
+     */
+    public function __construct(IndexerReindexCommand $reindexCommand, $initArguments = [])
     {
-        $this->_applicationBaseDir = $applicationBaseDir;
-        $this->_shell = $shell;
         $this->_initArguments = $initArguments;
+        $this->reindexCommand = $reindexCommand;
     }
 
     /**
@@ -119,15 +120,11 @@ class Application
 
     /**
      * Run reindex
-     *
-     * @return Application
      */
-    public function reindex()
+    public function reindex(OutputInterface $output)
     {
-        $this->_shell->execute(
-            'php -f ' . $this->_applicationBaseDir . '/bin/magento indexer:reindex --all'
-        );
-        return $this;
+        $input = new ArrayInput([]);
+        $this->reindexCommand->run($input, $output);
     }
 
     /**
@@ -204,5 +201,34 @@ class Application
         $this->_objectManager = null;
         $this->bootstrap();
         return $this;
+    }
+
+    /**
+     * Load config from file
+     *
+     * @param string $filename
+     * @throws \Exception
+     *
+     * @return void
+     */
+    public function loadConfig($filename)
+    {
+        if (!is_readable($filename)) {
+            throw new \Exception("Profile configuration file `{$filename}` is not readable or does not exists.");
+        }
+        $this->config = (new \Magento\Framework\Xml\Parser())->load($filename)->xmlToArray();
+    }
+
+    /**
+     * Get profile configuration value
+     *
+     * @param string $key
+     * @param null|mixed $default
+     *
+     * @return mixed
+     */
+    public function getValue($key, $default = null)
+    {
+        return isset($this->config['config']['profile'][$key]) ? $this->config['config']['profile'][$key] : $default;
     }
 }

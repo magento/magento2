@@ -820,7 +820,7 @@ class ConfigurableProductsFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $configurablesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('configurable_products', 90);
+        $configurablesCount = $this->application->getValue('configurable_products', 90);
         $this->application->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */

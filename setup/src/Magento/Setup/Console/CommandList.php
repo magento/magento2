@@ -49,6 +49,7 @@ class CommandList
             'Magento\Setup\Console\Command\DeployStaticContentCommand',
             'Magento\Setup\Console\Command\DiCompileCommand',
             'Magento\Setup\Console\Command\DiCompileMultiTenantCommand',
+            'Magento\Setup\Console\Command\GenerateFixturesCommand',
             'Magento\Setup\Console\Command\I18nCollectPhrasesCommand',
             'Magento\Setup\Console\Command\I18nPackCommand',
             'Magento\Setup\Console\Command\InfoCurrencyListCommand',
