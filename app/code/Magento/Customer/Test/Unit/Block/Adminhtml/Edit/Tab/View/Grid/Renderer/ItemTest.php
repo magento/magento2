@@ -101,7 +101,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testRender($amountOption, $expectedHtml)
     {
         $this->configure($amountOption);
-        $realHtml = $this->itemBlock->render($this->item);
+        $realHtml = '<xhtml>' . $this->itemBlock->render($this->item) . '</xhtml>';
         $this->assertXmlStringEqualsXmlString($expectedHtml, $realHtml);
     }
 
@@ -111,27 +111,27 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             [
                 2,
                 <<<HTML
-                        <div class="product-title">
-                            testProductName
-                        </div>
-                        <dl class="item-options">
-                            <dt>testLabel1</dt>
-                            <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
-                            <dt>testLabel2</dt>
-                            <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
-                        </dl>
+                        <xhtml>
+                            <div class="product-title">testProductName</div>
+                            <dl class="item-options">
+                                <dt>testLabel1</dt>
+                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                                <dt>testLabel2</dt>
+                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                            </dl>
+                        </xhtml>
 HTML
             ],
             [
                 1,
                 <<<HTML
-                        <div class="product-title">
-                            testProductName
-                        </div>
-                        <dl class="item-options">
-                            <dt>testLabel1</dt>
-                            <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
-                        </dl>
+                        <xhtml>
+                            <div class="product-title">testProductName</div>
+                            <dl class="item-options">
+                                <dt>testLabel1</dt>
+                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                            </dl>
+                        </xhtml>
 HTML
             ],
         ];
