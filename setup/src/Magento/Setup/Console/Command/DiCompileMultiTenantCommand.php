@@ -402,13 +402,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                     }
                     break;
                 case self::INPUT_KEY_GENERATION:
-                    $errorMsg = $this->getErrorMsg($value, self::INPUT_KEY_GENERATION);
+                    $errorMsg = $this->validateOutputPath($value, self::INPUT_KEY_GENERATION);
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
                     }
                     break;
                 case self::INPUT_KEY_DI:
-                    $errorMsg = $this->getErrorMsg($value, self::INPUT_KEY_DI);
+                    $errorMsg = $this->validateOutputPath($value, self::INPUT_KEY_DI);
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
                     }
@@ -425,13 +425,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     }
 
     /**
-     * Get error message based on type
+     * Validate output path based on type
      *
      * @param string $value
      * @param string $type
      * @return string
      */
-    private function getErrorMsg($value, $type)
+    private function validateOutputPath($value, $type)
     {
         $errorMsg = '';
         if (!file_exists($value)) {
