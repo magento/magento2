@@ -324,7 +324,7 @@ class DefaultType extends \Magento\Framework\Object
     }
 
     /**
-     * Return Price for default option
+     * Return Price for selected option
      *
      * @param string $optionValue Prepared for cart option value
      * @param float $basePrice For percent price type
@@ -339,7 +339,7 @@ class DefaultType extends \Magento\Framework\Object
     }
 
     /**
-     * Return SKU for default option
+     * Return SKU for selected option
      *
      * @param string $optionValue Prepared for cart option value
      * @param string $skuDelimiter Delimiter for Sku parts
