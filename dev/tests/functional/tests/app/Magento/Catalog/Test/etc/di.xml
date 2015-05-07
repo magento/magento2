@@ -141,4 +141,9 @@
       <argument name="severity" xsi:type="string">high</argument>
     </arguments>
   </type>
+  <type name="Magento\Catalog\Test\Constraint\AssertMenuProductType">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
 </config>
