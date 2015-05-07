@@ -20,7 +20,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
         try {
             $rateData = $this->_processRateData($this->getRequest()->getPostValue());
             /** @var \Magento\Tax\Api\Data\TaxRateInterface  $taxRate */
-            $taxRate = $this->populateTaxRateData($rateData);
+            $taxRate = $this->_taxRateConverter->populateTaxRateData($rateData);
             $this->_taxRateRepository->save($taxRate);
             $responseContent = [
                 'success' => true,

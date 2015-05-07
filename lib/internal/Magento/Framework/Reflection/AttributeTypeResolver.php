@@ -44,7 +44,7 @@ class AttributeTypeResolver implements AttributeTypeResolverInterface
         $config = isset($data[$context]) ? $data[$context] : [];
         $output = get_class($value);
         if (isset($config[$attributeCode])) {
-            $type = $config[$attributeCode];
+            $type = $config[$attributeCode]['type'];
             $output = $this->typeProcessor->getArrayItemType($type);
             if (!(class_exists($output) || interface_exists($output))) {
                 throw new \LogicException(

@@ -18,6 +18,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerFactory;
 
+    /** @var \Magento\Eav\Model\Entity\Type */
+    protected $eavConfigType;
+
     protected function setUp()
     {
         $this->addressResource = (new ObjectManagerHelper($this))->getObject(
@@ -178,16 +181,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $eavConfigType = $this->getMock(
+        $this->eavConfigType = $this->getMock(
             'Magento\Eav\Model\Entity\Type',
             ['getEntityIdField', 'getId', 'getEntityTable', '__wakeup'],
             [],
             '',
             false
         );
-        $eavConfigType->expects($this->any())->method('getEntityIdField')->willReturn(false);
-        $eavConfigType->expects($this->any())->method('getId')->willReturn(false);
-        $eavConfigType->expects($this->any())->method('getEntityTable')->willReturn('customer_address_entity');
+        $this->eavConfigType->expects($this->any())->method('getEntityIdField')->willReturn(false);
+        $this->eavConfigType->expects($this->any())->method('getId')->willReturn(false);
+        $this->eavConfigType->expects($this->any())->method('getEntityTable')->willReturn('customer_address_entity');
 
         $eavConfig = $this->getMock(
             'Magento\Eav\Model\Config',
@@ -199,10 +202,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $eavConfig->expects($this->any())
             ->method('getEntityType')
             ->with('customer_address')
-            ->willReturn($eavConfigType);
+            ->willReturn($this->eavConfigType);
         $eavConfig->expects($this->any())
             ->method('getEntityAttributeCodes')
-            ->with($eavConfigType)
+            ->with($this->eavConfigType)
             ->willReturn(
                 [
                     'entity_type_id',
@@ -217,13 +220,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $eavConfig->expects($this->any())
             ->method('getAttribute')
             ->willReturnMap([
-                [$eavConfigType, 'entity_type_id', $attributeMock],
-                [$eavConfigType, 'attribute_set_id', $attributeMock],
-                [$eavConfigType, 'created_at', $attributeMock],
-                [$eavConfigType, 'updated_at', $attributeMock],
-                [$eavConfigType, 'parent_id', $attributeMock],
-                [$eavConfigType, 'increment_id', $attributeMock],
-                [$eavConfigType, 'entity_id', $attributeMock],
+                [$this->eavConfigType, 'entity_type_id', $attributeMock],
+                [$this->eavConfigType, 'attribute_set_id', $attributeMock],
+                [$this->eavConfigType, 'created_at', $attributeMock],
+                [$this->eavConfigType, 'updated_at', $attributeMock],
+                [$this->eavConfigType, 'parent_id', $attributeMock],
+                [$this->eavConfigType, 'increment_id', $attributeMock],
+                [$this->eavConfigType, 'entity_id', $attributeMock],
             ]);
 
         return $eavConfig;
@@ -260,5 +263,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->customerFactory = $this->getMock('Magento\Customer\Model\CustomerFactory', ['create'], [], '', false);
         return $this->customerFactory;
+    }
+
+    public function testGetType()
+    {
+        $this->assertSame($this->eavConfigType, $this->addressResource->getEntityType());
     }
 }

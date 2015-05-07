@@ -166,7 +166,6 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         ];
         $option = [
             'attribute_id' => 'test_configurable',
-            'type' => 'select',
             'label' => 'Test',
             'values' => [
                 [
