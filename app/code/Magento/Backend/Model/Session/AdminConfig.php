@@ -95,16 +95,9 @@ class AdminConfig extends Config
     {
         $parsedUrl = parse_url($this->_storeManager->getStore()->getBaseUrl());
         $baseUrl = $parsedUrl['path'];
-
-        $backendApp = $this->backendAppList->getBackendApp();
-        $cookiePath = null;
-        if ($backendApp) {
-            $cookiePath = $backendApp->getCookiePath();
-        } else {
-            $cookiePath = $this->_frontNameResolver->getFrontName();
-        }
-
-        $adminPath = $baseUrl . $cookiePath;
-        return $adminPath;
+        $backendApp = $this->backendAppList->getCurrentApp();
+        $cookiePath = $backendApp ? $backendApp->getCookiePath() : $this->_frontNameResolver->getFrontName();
+        $cookiePath = $baseUrl . $cookiePath;
+        return $cookiePath;
     }
 }

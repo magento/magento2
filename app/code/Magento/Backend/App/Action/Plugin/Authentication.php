@@ -46,9 +46,9 @@ class Authentication
     protected $messageManager;
 
     /**
-     * @var \Magento\Backend\App\Action\Context
+     * @var \Magento\Backend\Model\UrlInterface
      */
-    protected $context;
+    protected $backendUrl;
 
     /**
      * @var \Magento\Backend\App\BackendAppList
@@ -56,12 +56,18 @@ class Authentication
     protected $backendAppList;
 
     /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\App\BackendAppList $backendAppList
      */
     public function __construct(
@@ -70,7 +76,8 @@ class Authentication
         \Magento\Framework\App\ResponseInterface $response,
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\BackendAppList $backendAppList
     ) {
         $this->_auth = $auth;
@@ -78,7 +85,8 @@ class Authentication
         $this->_response = $response;
         $this->_actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
-        $this->context = $context;
+        $this->backendUrl = $backendUrl;
+        $this->resultRedirectFactory = $resultRedirectFactory;
         $this->backendAppList = $backendAppList;
     }
 
@@ -109,16 +117,12 @@ class Authentication
 
                 $backendApp = null;
                 if ($request->getParam('app')) {
-                    $backendApp = $this->backendAppList->getBackendApp($request->getParam('app'));
+                    $backendApp = $this->backendAppList->getCurrentApp();
                 }
 
                 if ($backendApp) {
-                    //if (!$this->context->getAuthorization()->isAllowed($backendApp->getAclResource())) {
-                    //    $this->_auth->logout();
-                    //    $this->_processNotLoggedInUser($request);
-                    //}
-                    $resultRedirect = $this->context->getResultRedirectFactory()->create();
-                    $url = $this->context->getBackendUrl()->getBaseUrl() . $backendApp->getStartupPage();
+                    $resultRedirect = $this->resultRedirectFactory->create();
+                    $url = $this->backendUrl->getBaseUrl() . $backendApp->getStartupPage();
                     return $resultRedirect->setUrl($url);
                 }
             }

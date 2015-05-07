@@ -10,8 +10,14 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Model\ObjectManagerProvider;
 
+/**
+ * Main controller of the Setup Wizard
+ */
 class Index extends AbstractActionController
 {
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $objectManager;
 
     /**
@@ -24,19 +30,19 @@ class Index extends AbstractActionController
     }
 
     /**
-     * @return ViewModel
+     * @return ViewModel|\Zend\Http\Response
      */
     public function indexAction()
     {
         if ($this->objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
-
-            $this->objectManager->create('Magento\Backend\Model\Auth\Session', [
+            $this->objectManager->create(
+                'Magento\Backend\Model\Auth\Session', [
                 'sessionConfig' => $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig')
             ]);
             if (!$this->objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
                 /** @var \Magento\Backend\Helper\Data $urlHelper */
                 $urlHelper = $this->objectManager->get('Magento\Backend\Helper\Data');
-                $url = $urlHelper->getUrl('setup/index/index', []);
+                $url = $urlHelper->getUrl('admin/backendapp/redirect', ['app' => 'setup']);
                 $response = $this->getPluginManager()
                     ->get('Redirect')
                     ->toUrl($url);

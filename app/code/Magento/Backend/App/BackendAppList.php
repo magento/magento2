@@ -7,7 +7,7 @@
 namespace Magento\Backend\App;
 
 /**
- * Backend Application which uses Magento Backend authentication process
+ * List of Backend Applications to allow injection of them through the DI
  */
 class BackendAppList
 {
@@ -31,7 +31,6 @@ class BackendAppList
     ) {
         $this->backendApps = $backendApps;
         $this->request = $request;
-
     }
 
     /**
@@ -39,12 +38,24 @@ class BackendAppList
      *
      * @return BackendApp|null
      */
-    public function getBackendApp()
+    public function getCurrentApp()
     {
         $appName = $this->request->getQuery('app');
         if ($appName === null) {
             return;
         }
+        if (isset($this->backendApps[$appName])) {
+            return $this->backendApps[$appName];
+        }
+        return null;
+    }
+
+    /**
+     * @param string $appName
+     * @return BackendApp|null
+     */
+    public function getBackendApp($appName)
+    {
         if (isset($this->backendApps[$appName])) {
             return $this->backendApps[$appName];
         }
