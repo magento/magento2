@@ -43,10 +43,10 @@ class Index extends AbstractActionController
                 /** @var \Magento\Backend\Helper\Data $urlHelper */
                 $urlHelper = $this->objectManager->get('Magento\Backend\Helper\Data');
                 $url = $urlHelper->getUrl('admin/backendapp/redirect', ['app' => 'setup']);
+                /** @var \Zend\Mvc\Controller\Plugin\Redirect $response */
                 $response = $this->getPluginManager()
-                    ->get('Redirect')
-                    ->toUrl($url);
-                $this->getEvent()->setResponse($response);
+                    ->get('Redirect');
+                $this->getEvent()->setResponse($response->refresh()->setStatusCode(401));
 
                 return $response;
             }
