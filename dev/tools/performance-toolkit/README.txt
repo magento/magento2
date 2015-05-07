@@ -32,8 +32,8 @@ Scenario can accept parameters that are described bellow in format <parameter_na
 <customer_checkout_percent:4/> Percentage of users that will reach the (logged-in) customer checkout stage. Default is '4'.
 <loops:1/> Number of loops to run. Default is '1'.
 <admin_path:admin/> Admin backend path. Default is 'admin'.
-<admin_user:admin/> Admin backend user. Default is 'admin'.
-<admin_password:123123q/> Admin backend password. Default is '123123q'.
+<admin-user:admin/> Admin backend user. Default is 'admin'.
+<admin-password:123123q/> Admin backend password. Default is '123123q'.
 <think_time_deviation:1000> Deviation (ms) for "think time" emulation. Default is '1000'.
 <think_time_delay_offset:2000> Constant delay offset (ms) for "think time" emulation. Default is '2000'.
 
