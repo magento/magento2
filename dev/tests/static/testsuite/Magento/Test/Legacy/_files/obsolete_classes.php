@@ -3161,4 +3161,5 @@ return [
     ['Magento\Framework\Exception\File\ValidatorException'],
     ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
     ['Magento\Shipping\Exception'],
+    ['Magento\Search\Model\Resource\Helper'],
 ];
