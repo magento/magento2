@@ -27,6 +27,7 @@ class BackendTemplate extends Template
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Email\Model\Template\FilterFactory $emailFilterFactory
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Config\Model\Config\Structure $structure
@@ -44,6 +45,7 @@ class BackendTemplate extends Template
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Config\Model\Config\Structure $structure,
@@ -59,6 +61,7 @@ class BackendTemplate extends Template
             $assetRepo,
             $viewFileSystem,
             $scopeConfig,
+            $objectManager,
             $emailFilterFactory,
             $emailConfig,
             $data

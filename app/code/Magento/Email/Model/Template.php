@@ -137,6 +137,13 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     protected $_scopeConfig;
 
     /**
+     * Object manager
+     *
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager;
+
+    /**
      * @var \Magento\Email\Model\Template\Config
      */
     private $_emailConfig;
@@ -160,6 +167,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\FilterFactory $emailFilterFactory
      * @param Template\Config $emailConfig
      * @param array $data
@@ -176,6 +184,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
         array $data = []
@@ -184,6 +193,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         $this->_filesystem = $filesystem;
         $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
+        $this->_objectManager = $objectManager;
         $this->_emailFilterFactory = $emailFilterFactory;
         $this->_emailConfig = $emailConfig;
         parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
@@ -421,12 +431,22 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @param array $variables
      * @return string
      */
-    public function getInclude($template, array $variables)
+    public function getInclude($templateId, array $variables)
     {
+        // TODO: @Erik Refactor this to load templates that are overridden in the core_email_template module
         $thisClass = __CLASS__;
-        $includeTemplate = new $thisClass();
+        $includeTemplate = $this->_objectManager->create($thisClass);
+        $includeTemplate->setUseAbsoluteLinks(
+            $this->getUseAbsoluteLinks()
+        )->setStoreId(
+            $this->getDesignConfig()->getStore()
+        );
 
-        $includeTemplate->loadByCode($template);
+        if (is_numeric($templateId)) {
+            $includeTemplate->load($templateId);
+        } else {
+            $includeTemplate->loadDefault($templateId);
+        }
 
         return $includeTemplate->getProcessedTemplate($variables);
     }
