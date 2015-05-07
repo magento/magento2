@@ -18,6 +18,7 @@
         </testsuite>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
+            <directory suffix="Test.php">../../../update/dev/tests/integration/testsuite</directory>
             <exclude>testsuite/Magento/Test/Integrity</exclude>
             <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
         </testsuite>
@@ -27,6 +28,7 @@
         <whitelist addUncoveredFilesFromWhiteList="true">
             <directory suffix=".php">../../../app/code/Magento</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
+            <directory suffix=".php">../../../update/app/code</directory>
         </whitelist>
     </filter>
     <!-- PHP INI settings and constants definition -->

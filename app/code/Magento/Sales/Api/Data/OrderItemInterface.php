@@ -579,6 +579,14 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getCreatedAt();
 
     /**
+     * Sets the created-at timestamp for the order item.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
+    /**
      * Gets the description for the order item.
      *
      * @return string Description.
