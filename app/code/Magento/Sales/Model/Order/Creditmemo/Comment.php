@@ -12,7 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment getResource()
- * @method \Magento\Sales\Model\Order\Creditmemo\Comment setCreatedAt(string $value)
  */
 class Comment extends AbstractModel implements CreditmemoCommentInterface
 {
@@ -124,6 +123,14 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
     public function getCreatedAt()
     {
         return $this->getData(CreditmemoCommentInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(CreditmemoCommentInterface::CREATED_AT, $createdAt);
     }
 
     /**
