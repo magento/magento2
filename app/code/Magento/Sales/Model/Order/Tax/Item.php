@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Tax\Model\Sales\Order\Tax;
+namespace Magento\Sales\Model\Order\Tax;
 
 /**
- * @codeCoverageIgnore
+ * Sales Order Tax Item model
  */
 class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface
@@ -16,7 +16,7 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\Resource\Sales\Order\Tax\Item');
+        $this->_init('Magento\Sales\Model\Resource\Order\Tax\Item');
     }
 
     /**
