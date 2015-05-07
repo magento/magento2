@@ -14,6 +14,7 @@ use Magento\Setup\Model\ConfigModel;
 
 /**
  * Command to install Magento application
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallCommand extends AbstractSetupCommand
 {
