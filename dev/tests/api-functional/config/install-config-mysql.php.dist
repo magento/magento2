@@ -25,6 +25,6 @@ return [
     'admin_use_security_key'       => '0',
     /* PayPal has limitation for order number - 20 characters. 10 digits prefix + 8 digits number is good enough */
     'sales_order_increment_prefix' => time(),
-    'session_save'                 => 'db',
+    'session-save'                 => 'db',
     'cleanup_database'             => true,
 ];
