@@ -61,7 +61,14 @@ define([
                 sidebarInitialized = false;
             });
         },
-        initSidebar: ko.observable(initSidebar),
+        initSidebar: initSidebar,
+        closeSidebar: function(element) {
+            $("#btn-minicart-close").on('click', function(event) {
+                event.stopPropagation();
+                $("div.block.block-minicart").dropdownDialog("close");
+            });
+            return true;
+        },
         getItemRenderer: function (productType) {
             return this.itemRenderer[productType] || 'defaultRenderer';
         }
