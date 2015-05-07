@@ -80,4 +80,14 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
     {
         return $this->_downloadableProductConfiguration->getLinksTitle($this->getProduct());
     }
+
+    /**
+     * Get list of all options for product
+     *
+     * @return array
+     */
+    public function getOptionList()
+    {
+        return $this->_downloadableProductConfiguration->getOptions($this->getItem());
+    }
 }
