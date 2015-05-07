@@ -26,7 +26,6 @@
     <preference for="Magento\Quote\Api\Data\TotalsInterface" type="\Magento\Quote\Model\Cart\Totals" />
     <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="\Magento\Quote\Model\Quote\Cart\Totals\Item" />
     <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="\Magento\Quote\Model\Cart\Currency" />
-
     <preference for="Magento\Quote\Api\GuestCartManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartManagement" />
     <preference for="Magento\Quote\Api\GuestCartRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartRepository" />
     <preference for="Magento\Quote\Api\GuestCartItemRepositoryInterface" type="Magento\Quote\Model\GuestCart\GuestCartItemRepository" />
@@ -38,12 +37,21 @@
     <preference for="Magento\Quote\Api\GuestBillingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestBillingAddressManagement" />
     <preference for="Magento\Quote\Api\GuestAddressDetailsManagementInterface" type="Magento\Quote\Model\GuestCart\GuestAddressDetailsManagement" />
     <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
-
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
             <argument name="paramOverriders" xsi:type="array">
                 <item name="%cart_id%" xsi:type="object">Magento\Quote\Model\Webapi\ParamOverriderCartId</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\QuoteRepository">
+        <arguments>
+            <argument name="quoteCollection" xsi:type="object">Magento\Quote\Model\Resource\Quote\Collection\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Address">
+        <arguments>
+            <argument name="addressConfig" xsi:type="object">Magento\Customer\Model\Address\Config\Proxy</argument>
         </arguments>
     </type>
     <preference for="Magento\Quote\Api\AddressDetailsManagementInterface" type="Magento\Quote\Model\AddressDetailsManagement" />

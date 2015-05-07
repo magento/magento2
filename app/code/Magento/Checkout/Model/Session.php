@@ -96,6 +96,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Session\StorageInterface $storage
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
@@ -103,6 +104,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @throws \Magento\Framework\Exception\SessionException
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -115,6 +117,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Session\StorageInterface $storage,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\App\State $appState,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
@@ -140,9 +143,9 @@ class Session extends \Magento\Framework\Session\SessionManager
             $validator,
             $storage,
             $cookieManager,
-            $cookieMetadataFactory
+            $cookieMetadataFactory,
+            $appState
         );
-        $this->start();
     }
 
     /**

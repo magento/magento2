@@ -29,6 +29,8 @@
         <!-- The price rule condition: minimum products amount in shopping cart for price rule to be applied -->
         <customers>20</customers>
         <!-- Number of customers to generate -->
+        <orders>80</orders>
+        <!-- Orders count -->
         <configs> <!-- Config variables and values for change -->
             <config>
                 <path>admin/security/use_form_key</path>
@@ -79,5 +81,39 @@
                 <value>8080</value>
             </config>
         </configs>
+        <indexers> <!-- Indexer mode value (true - Update by Schedule, false - Update on Save) -->
+            <indexer>
+                <id>catalog_category_product</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalog_product_category</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalog_product_price</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalog_product_attribute</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>cataloginventory_stock</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalogrule_rule</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalogrule_product</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+            <indexer>
+                <id>catalogsearch_fulltext</id>
+                <set_scheduled>false</set_scheduled>
+            </indexer>
+        </indexers>
     </profile>
 </config>

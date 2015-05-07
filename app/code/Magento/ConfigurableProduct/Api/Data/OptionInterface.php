@@ -42,17 +42,6 @@ interface OptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setLabel($label);
 
     /**
-     * @return string|null
-     */
-    public function getType();
-
-    /**
-     * @param string $type
-     * @return $this
-     */
-    public function setType($type);
-
-    /**
      * @return int|null
      */
     public function getPosition();
