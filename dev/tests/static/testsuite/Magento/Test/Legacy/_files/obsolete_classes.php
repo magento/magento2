@@ -3415,9 +3415,9 @@ return [
     ['Magento\Tools\SampleData\SetupInterface', 'Magento\SampleData\Model\SetupInterface'],
     [
         'Magento\Tools\SampleData\Module\Bundle\Setup\Product\Converter',
-        'Magento\SampleData\Module\Bundle\Setup\Product\Converter'],
-    ['Magento\Tools\SampleData\Module\Bundle\Setup\Product', 'Magento\SampleData\Module\Bundle\Setup\Product'
+        'Magento\SampleData\Module\Bundle\Setup\Product\Converter'
     ],
+    ['Magento\Tools\SampleData\Module\Bundle\Setup\Product', 'Magento\SampleData\Module\Bundle\Setup\Product'],
     ['Magento\Tools\SampleData\Module\Bundle\Setup', 'Magento\SampleData\Module\Bundle\Setup'],
     ['Magento\Tools\SampleData\Module\Catalog\Setup\Attribute', 'Magento\SampleData\Module\Catalog\Setup\Attribute'],
     ['Magento\Tools\SampleData\Module\Catalog\Setup\Category', 'Magento\SampleData\Module\Catalog\Setup\Category'],
@@ -3454,8 +3454,11 @@ return [
     ],
     [
         'Magento\Tools\SampleData\Module\ConfigurableProduct\Setup\Product',
-        'Magento\SampleData\Module\ConfigurableProduct\Setup\Product'],
-    ['Magento\Tools\SampleData\Module\ConfigurableProduct\Setup', 'Magento\SampleData\Module\ConfigurableProduct\Setup'
+        'Magento\SampleData\Module\ConfigurableProduct\Setup\Product'
+    ],
+    [
+        'Magento\Tools\SampleData\Module\ConfigurableProduct\Setup',
+        'Magento\SampleData\Module\ConfigurableProduct\Setup'
     ],
     ['Magento\Tools\SampleData\Module\Customer\Setup\Customer', 'Magento\SampleData\Module\Customer\Setup\Customer'],
     ['Magento\Tools\SampleData\Module\Customer\Setup', 'Magento\SampleData\Module\Customer\Setup'],
@@ -3526,4 +3529,5 @@ return [
     ],
     ['Magento\Tools\SampleData\Module\Wishlist\Setup\Wishlist', 'Magento\SampleData\Module\Wishlist\Setup\Wishlist'],
     ['Magento\Tools\SampleData\Module\Wishlist\Setup', 'Magento\SampleData\Module\Wishlist\Setup'],
+    ['Magento\Tools\SampleData\InstallerApp'],
 ];
