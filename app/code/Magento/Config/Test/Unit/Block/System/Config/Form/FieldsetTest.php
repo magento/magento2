@@ -49,14 +49,12 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMock(
-            'Magento\Framework\App\RequestInterface',
-            [],
-            [],
-            '',
-            false,
-            false
-        );
+        $this->_requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturn('Test Param');
         $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false, false);
         $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false, false);
         $groupMock = $this->getMock(
@@ -153,13 +151,20 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
             false,
             true
         );
-
         $fieldMock->expects($this->any())->method('getId')->will($this->returnValue('test_field_id'));
         $fieldMock->expects($this->any())->method('getTooltip')->will($this->returnValue('test_field_tootip'));
         $fieldMock->expects($this->any())->method('toHtml')->will($this->returnValue('test_field_toHTML'));
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $fieldSetMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Fieldset')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $fieldSetMock->expects($this->any())->method('getId')->will($this->returnValue('test_field_id'));
+        $fieldSetMock->expects($this->any())->method('getTooltip')->will($this->returnValue('test_field_tootip'));
+        $fieldSetMock->expects($this->any())->method('toHtml')->will($this->returnValue('test_field_toHTML'));
+        $fieldSetMock->expects($this->any())->method('getHtmlId')->willReturn('test_fieldSet_HTML_id');
+
         $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
+
         $factoryColl = $this->getMock(
             'Magento\Framework\Data\Form\Element\CollectionFactory',
             [],
@@ -167,12 +172,17 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $formMock = $this->getMock('Magento\Framework\Data\Form\AbstractForm', [], [$factory, $factoryColl]);
+
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $collection = $helper->getObject(
             'Magento\Framework\Data\Form\Element\Collection',
             ['container' => $formMock]
         );
         $collection->add($fieldMock);
+        $collection->add($fieldSetMock);
+
         $this->_elementMock->expects($this->any())->method('getElements')->will($this->returnValue($collection));
 
         $actual = $this->_object->render($this->_elementMock);
