@@ -50,7 +50,7 @@ define([
         localStorage.setItem(ns, JSON.stringify(stored));
     }
 
-    function removeStored(ns, property){
+    function removeStored(ns, property) {
         var stored = getStored(ns);
 
         utils.nestedRemove(stored, property);
@@ -58,13 +58,15 @@ define([
         localStorage.setItem(ns, JSON.stringify(stored));
     }
 
-    function notify(diffs, callback) {
+    function notify(diffs, data, callback) {
         diffs.changes.forEach(function (change) {
             callback(change.path, change.value, change);
         });
 
         _.each(diffs.containers, function (changes, name) {
-            callback(name, changes);
+            var value = utils.nested(data, name);
+
+            callback(name, value, changes);
         });
     }
 
@@ -119,7 +121,7 @@ define([
 
                 utils.nested(this, path, value);
 
-                notify(diffs, this.trigger);
+                notify(diffs, this, this.trigger);
             } else {
                 utils.nested(this, path, value);
             }

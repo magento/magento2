@@ -21,7 +21,7 @@ define([
         data = utils.flatten(data);
 
         data = _.omit(data, function (value, key) {
-            return value === '';
+            return value === '' || typeof value === 'undefined';
         });
 
         return utils.unflatten(data);
@@ -35,10 +35,14 @@ define([
                 namespace: 'current.filters'
             },
             listens: {
-                active: 'extractPreviews'
+                active: 'extractPreviews',
+                applied: 'cancel extractActive'
             },
-            imports: {
-                onStateChange: '<%= states.provider %>:<%= states.namespace %>'
+            links: {
+                applied: '<%= states.provider %>:<%= states.namespace %>'
+            },
+            exports: {
+                applied: '<%= provider %>:params.filters'
             },
             modules: {
                 source: '<%= provider %>',
@@ -47,10 +51,9 @@ define([
         },
 
         initialize: function () {
-            _.bindAll(this, 'exportStates', 'exportParams');
-
             this._super()
-                .apply();
+                .cancel()
+                .extractActive();
 
             return;
         },
@@ -72,21 +75,18 @@ define([
             return this;
         },
 
-        apply: function () {
-            this.extractActive();
-
-            this.applied = removeEmpty(this.filters);
-
-            this.statesProvider(this.exportStates);
-            this.source(this.exportParams);
-        },
-
         clear: function (filter) {
             filter ?
                 filter.clear() :
                 this.active.each('clear');
 
             this.apply();
+
+            return this;
+        },
+
+        apply: function () {
+            this.set('applied', removeEmpty(this.filters));
 
             return this;
         },
@@ -127,21 +127,6 @@ define([
             this.previews(_.compact(previews));
 
             return this;
-        },
-
-        exportStates: function (states) {
-            states.set(this.states.namespace, this.applied);
-        },
-
-        exportParams: function (source) {
-            source.set('params.filters', this.applied);
-        },
-
-        onStateChange: function () {
-            var data = this.statesProvider().get(this.states.namespace);
-
-            this.set('filters', utils.copy(data))
-                .apply();
         }
     });
 });
