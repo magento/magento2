@@ -14,9 +14,9 @@ return [
     'db-user'                      => 'root',
     'db-password'                  => '',
     'backend-frontname'            => 'backend',
-    'base_url'                     => 'http://localhost/',
-    'use_secure'                   => '0',
-    'use_rewrites'                 => '0',
+    'base-url'                     => 'http://localhost/',
+    'use-secure'                   => '0',
+    'use-rewrites'                 => '0',
     'admin-lastname'               => 'Admin',
     'admin-firstname'              => 'Admin',
     'admin-email'                  => 'admin@example.com',
@@ -24,7 +24,7 @@ return [
     'admin-password'               => '123123q',
     'admin-use-security-key'       => '0',
     /* PayPal has limitation for order number - 20 characters. 10 digits prefix + 8 digits number is good enough */
-    'sales_order_increment_prefix' => time(),
+    'sales-order-increment-prefix' => time(),
     'session-save'                 => 'db',
-    'cleanup_database'             => true,
+    'cleanup-database'             => true,
 ];

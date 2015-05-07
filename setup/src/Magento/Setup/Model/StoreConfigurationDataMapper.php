@@ -22,10 +22,10 @@ class StoreConfigurationDataMapper
     /**#@+
      * Model data keys
      */
-    const KEY_USE_SEF_URL = 'use_rewrites';
-    const KEY_BASE_URL = 'base_url';
-    const KEY_BASE_URL_SECURE = 'base_url_secure';
-    const KEY_IS_SECURE = 'use_secure';
+    const KEY_USE_SEF_URL = 'use-rewrites';
+    const KEY_BASE_URL = 'base-url';
+    const KEY_BASE_URL_SECURE = 'base-url-secure';
+    const KEY_IS_SECURE = 'use-secure';
     const KEY_IS_SECURE_ADMIN = 'use-secure-admin';
     const KEY_LANGUAGE = 'language';
     const KEY_TIMEZONE = 'timezone';
