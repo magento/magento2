@@ -13,11 +13,6 @@ use Magento\Framework\App\ResponseInterface;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Framework\Controller\ResultFactory
-     */
-    protected $resultFactory;
-
-    /**
      * @var \Magento\Framework\Controller\ResultInterface
      */
     protected $result;
@@ -30,15 +25,12 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param \Magento\Checkout\Model\Session $session
-     * @param \Magento\Framework\Controller\ResultFactory $resultFactory
      */
     public function __construct(
         Context $context,
-        \Magento\Checkout\Model\Session $session,
-        \Magento\Framework\Controller\ResultFactory $resultFactory
+        \Magento\Checkout\Model\Session $session
     ) {
         $this->checkoutSession = $session;
-        $this->resultFactory = $resultFactory;
         parent::__construct($context);
     }
 
