@@ -96,7 +96,7 @@ class WeeeConfigProvider implements ConfigProviderInterface
     {
         $flag = $this->weeeHelper->typeOfDisplay(
             WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
-            'cart',//$this->getZone(),
+            'cart',
             $this->storeManager->getStore()->getId()
         );
 
@@ -126,7 +126,7 @@ class WeeeConfigProvider implements ConfigProviderInterface
     {
         $includeWeee = $this->weeeHelper->typeOfDisplay(
             [WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL],
-            'cart',//$this->getZone(),
+            'cart',
             $this->getStoreId()
         );
         return $includeWeee;

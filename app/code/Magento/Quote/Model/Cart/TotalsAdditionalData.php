@@ -27,6 +27,7 @@ class TotalsAdditionalData extends AbstractExtensibleModel implements TotalsAddi
      * Set an extension attributes object.
      *
      * @param \Magento\Quote\Api\Data\TotalsAdditionalDataExtensionInterface $extensionAttributes
+     * @return void
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\TotalsAdditionalDataExtensionInterface $extensionAttributes

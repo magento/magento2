@@ -28,8 +28,8 @@ class AgreementsDataProvider implements DataProviderInterface
     protected $escaper;
 
     /**
-     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
-     * @var \Magento\Framework\Escaper $escaper
+     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
+     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository,

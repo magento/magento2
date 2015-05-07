@@ -38,7 +38,7 @@ class TotalsDataProcessorPlugin
     /**
      * Set gift messages from additional data.
      *
-     * @prarm \Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor $subject
+     * @param \Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor $subject
      * @param \Magento\Quote\Model\Cart\TotalsAdditionalData $additionalData
      * @param int $cartId
      * @return void
@@ -47,7 +47,7 @@ class TotalsDataProcessorPlugin
     public function beforeProcess(TotalsAdditionalDataProcessor $subject, TotalsAdditionalData $additionalData, $cartId)
     {
         $giftMessages = $additionalData->getExtensionAttributes()->getGiftMessages();
-        foreach($giftMessages as $giftMessage) {
+        foreach ($giftMessages as $giftMessage) {
             /** @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
             $entityType = $giftMessage->getExtensionAttributes()->getEntityType();
             $entityId = $giftMessage->getExtensionAttributes()->getEntityId();

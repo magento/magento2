@@ -33,7 +33,7 @@ class Index extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $formId = $this->_request->getPost('formId');
-        if (is_null($formId)) {
+        if (null === $formId) {
             try {
                 $params = \Zend_Json::decode($this->_request->getContent());
                 $formId = isset($params['formId']) ? $params['formId'] : null;

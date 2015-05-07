@@ -8,8 +8,8 @@ namespace Magento\Quote\Model;
 /**
  * @codeCoverageIgnoreStart
  */
-class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements \Magento\Quote\Api\Data\AddressDetailsInterface
+class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Quote\Api\Data\AddressDetailsInterface
 {
     /**
      * @{inheritdoc}

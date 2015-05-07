@@ -69,7 +69,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Returns captcha image height
      *
-     * @param $formId
+     * @param string $formId
      * @return int
      */
     protected function getImageHeight($formId)
@@ -80,7 +80,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Returns captcha image source path
      *
-     * @param $formId
+     * @param string $formId
      * @return string
      */
     protected function getImageSrc($formId)
@@ -107,7 +107,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Whether captcha is required to be inserted to this form
      *
-     * @param $formId
+     * @param string $formId
      * @return bool
      */
     protected function getIsRequired($formId)
@@ -118,7 +118,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Return captcha model for specified form
      *
-     * @param $formId
+     * @param string $formId
      * @return \Magento\Captcha\Model\ModelInterface
      */
     protected function getCaptchaModel($formId)

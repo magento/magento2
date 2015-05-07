@@ -332,7 +332,7 @@ class AddressDataProvider implements DataProviderInterface
      * @param array $fields
      * @return array
      */
-    public function getAdditionalAddressFields($providerName, $dataScopePrefix, array $fields = array())
+    public function getAdditionalAddressFields($providerName, $dataScopePrefix, array $fields = [])
     {
         foreach ($this->getFieldsMetaInfo('address') as $attributeCode => $attributeConfig) {
             $additionalConfig = isset($fields[$attributeCode]) ? $fields[$attributeCode] : [];
@@ -404,7 +404,7 @@ class AddressDataProvider implements DataProviderInterface
         ];
 
         $defaultValue = $this->getDefaultValue($attributeCode);
-        if (!is_null($defaultValue)) {
+        if (null !== $defaultValue) {
             $element['default'] = $defaultValue;
         }
         return $element;
@@ -433,7 +433,7 @@ class AddressDataProvider implements DataProviderInterface
      * @param array $additionalConfig field configuration provided via layout XML
      * @return bool
      */
-    protected function isFieldVisible($attributeCode, array $attributeConfig, array $additionalConfig = array())
+    protected function isFieldVisible($attributeCode, array $attributeConfig, array $additionalConfig = [])
     {
         // TODO move this logic to separate model so it can be customized
         if ($attributeConfig['visible'] == false

@@ -89,6 +89,8 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     /**
      * Functions returns array with price formatting info
      *
+     * @param string $localeCode Locale code.
+     * @param string $currencyCode Currency code.
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

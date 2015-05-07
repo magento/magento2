@@ -78,7 +78,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
         if ($customerAddressId) {
             try {
                 $addressData = $this->addressRepository->getById($customerAddressId);
-            }  catch (NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
                 // do nothing if customer is not found by id
             }
             $address = $quote->getBillingAddress()->importCustomerAddressData($addressData);

@@ -330,7 +330,6 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * Get billing/shipping email
      *
      * @return string
-     * @return strin
      */
     public function getEmail();
 

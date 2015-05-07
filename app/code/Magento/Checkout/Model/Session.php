@@ -104,8 +104,8 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @throws \Magento\Framework\Exception\SessionException
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -486,6 +486,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
     /**
      * @param $isQuoteMasked bool
+     * @return void
      */
     public function setIsQuoteMasked($isQuoteMasked)
     {
