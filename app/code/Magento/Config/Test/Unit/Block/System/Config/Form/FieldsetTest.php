@@ -175,8 +175,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
 
         $formMock = $this->getMock('Magento\Framework\Data\Form\AbstractForm', [], [$factory, $factoryColl]);
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $collection = $helper->getObject(
+        $collection = $this->_testHelper->getObject(
             'Magento\Framework\Data\Form\Element\Collection',
             ['container' => $formMock]
         );
