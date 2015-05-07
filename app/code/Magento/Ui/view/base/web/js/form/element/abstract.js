@@ -34,18 +34,12 @@ define([
 
             links: {
                 value: '<%= provider %>:<%= dataScope %>'
-            },
-
-            imports: {
-                setPreview: '<%= name %>:value'
             }
         },
 
         /**
-         * Invokes initialize method of parent class, contains initialization
-         *     logic
-         *
-         * @param {Object} config - form element configuration
+         * Invokes initialize method of parent class,
+         * contains initialization logic
          */
         initialize: function () {
             _.bindAll(this, 'reset');
@@ -113,17 +107,6 @@ define([
         },
 
         /**
-         * Sets value to preview observable
-         *
-         * @returns {Abstract} Chainable.
-         */
-        setPreview: function (value) {
-            this.preview(value);
-
-            return this;
-        },
-
-        /**
          * Sets 'value' as 'hidden' propertie's value, triggers 'toggle' event,
          * sets instance's hidden identifier in params storage based on
          * 'value'.
@@ -142,7 +125,7 @@ define([
          * @returns {String} Value of the preview observable.
          */
         getPreview: function () {
-            return this.preview();
+            return this.value();
         },
 
         /**
@@ -176,6 +159,10 @@ define([
             this.value(this.initialValue);
         },
 
+        clear: function () {
+            this.value('');
+        },
+
         /**
          * Validates itself by it's validation rules using validator object.
          * If validation of a rule did not pass, writes it's message to
@@ -200,7 +187,7 @@ define([
          * Callback that fires when 'value' property is updated.
          */
         onUpdate: function () {
-            this.trigger('update', this.hasChanged());
+            this.bubble('update', this.hasChanged());
 
             this.validate();
         }

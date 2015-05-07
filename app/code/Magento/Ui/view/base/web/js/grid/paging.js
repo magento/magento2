@@ -140,10 +140,6 @@ define([
             return this.current() === 1;
         },
 
-        reload: function () {
-            this.source.reload();
-        },
-
         /**
          * Calculates number of pages.
          */

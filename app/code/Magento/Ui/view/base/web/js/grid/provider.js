@@ -11,6 +11,10 @@ define([
     'use strict';
 
     return Component.extend({
+        listens: {
+            'params': 'reload'
+        },
+
         initialize: function () {
             utils.limit(this, 'reload', 50);
             _.bindAll(this, 'onReload');

@@ -12,9 +12,7 @@
     </argument>
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing_data_source</item>
-            </item>
+            <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing_data_source</item>
             <item name="deps" xsi:type="string">cms_block_listing.cms_block_listing_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">cms_block_columns</item>
@@ -53,11 +51,15 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
-                    <item name="dataScope" xsi:type="string">params.filters</item>
-                </item>
-                <item name="childDefaults" xsi:type="array">
-                     <item name="imports" xsi:type="array">
-                        <item name="visible" xsi:type="string"><![CDATA[cms_block_listing.cms_block_listing.listing_top.bookmarks:current.columns.<%= index %>.visible]]></item>
+                    <item name="dataScope" xsi:type="string">filters</item>
+                    <item name="states" xsi:type="array">
+                        <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks</item>
+                    </item>
+                    <item name="childDefaults" xsi:type="array">
+                        <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.listing_filters</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string"><![CDATA[cms_block_listing.cms_block_listing.listing_top.bookmarks:current.columns.<%= index %>.visible]]></item>
+                        </item>
                     </item>
                 </item>
             </argument>
@@ -66,6 +68,9 @@
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">block_id</item>
                         <item name="label" xsi:type="string" translate="true">ID</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.listing_filters</item>
+                        </item>
                     </item>
                 </argument>
                 <filterInput name="from">
@@ -139,6 +144,9 @@
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">creation_time</item>
                         <item name="label" xsi:type="string" translate="true">Created</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.listing_filters</item>
+                        </item>
                     </item>
                 </argument>
                 <filterDate name="from">
@@ -147,6 +155,7 @@
                             <item name="dataScope" xsi:type="string">from</item>
                             <item name="label" xsi:type="string" translate="true">From</item>
                             <item name="placeholder" xsi:type="string" translate="true">From</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
                         </item>
                     </argument>
                 </filterDate>
@@ -156,6 +165,7 @@
                             <item name="dataScope" xsi:type="string">to</item>
                             <item name="label" xsi:type="string" translate="true">To</item>
                             <item name="placeholder" xsi:type="string" translate="true">To</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
                         </item>
                     </argument>
                 </filterDate>
@@ -165,6 +175,9 @@
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">update_time</item>
                         <item name="label" xsi:type="string" translate="true">Modified</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.listing_filters</item>
+                        </item>
                     </item>
                 </argument>
                 <filterDate name="from">
@@ -173,6 +186,7 @@
                             <item name="dataScope" xsi:type="string">from</item>
                             <item name="label" xsi:type="string" translate="true">From</item>
                             <item name="placeholder" xsi:type="string" translate="true">From</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
                         </item>
                     </argument>
                 </filterDate>
@@ -182,6 +196,7 @@
                             <item name="dataScope" xsi:type="string">to</item>
                             <item name="label" xsi:type="string" translate="true">To</item>
                             <item name="placeholder" xsi:type="string" translate="true">To</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
                         </item>
                     </argument>
                 </filterDate>

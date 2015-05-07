@@ -102,14 +102,14 @@
                 class="action-tertiary"
                 type="button"
                 data-action="grid-filter-cancel"
-                data-bind="click: close">
+                data-bind="click: function(){ $data.close().cancel(); }">
                 <span data-bind="text: $t('Cancel')"></span>
             </button>
             <button
                 class="action-secondary"
                 type="button"
                 data-action="grid-filter-apply"
-                data-bind="click: onApply">
+                data-bind="click: function(){ $data.close().apply(); }">
                 <span data-bind="text: $t('Apply Filters')"></span>
             </button>
         </div>

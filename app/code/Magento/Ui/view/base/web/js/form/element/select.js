@@ -250,13 +250,14 @@ define([
          * @param {String} value
          * @returns {Select} Chainable.
          */
-        setPreview: function (value) {
-            var option = this.indexedOptions[value],
+        getPreview: function () {
+            var value = this.value(),
+                option = this.indexedOptions[value],
                 preview = option ? option.label : '';
 
             this.preview(preview);
 
-            return this;
+            return preview;
         }
     });
 });

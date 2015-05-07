@@ -22,11 +22,11 @@ define([
                 sorting: '<%= states.provider %>:current.<%= states.namespace %>.sorting'
             },
             imports: {
-                setSortClass: 'sorting'
+                setSortClass: 'sorting',
+                push: 'sorting'
             },
             listens: {
-                '<%= provider %>:params.sorting.field': 'onSortChange',
-                sorting: 'push'
+                '<%= provider %>:params.sorting.field': 'onSortChange'
             },
             modules: {
                 source: '<%= provider %>'
@@ -61,8 +61,6 @@ define([
                 field: this.index,
                 direction: sorting
             });
-
-            this.source('reload');
         },
 
         toggleDirection: function () {

@@ -4,8 +4,9 @@
  */
 define([
     'underscore',
+    'mageUtils',
     'Magento_Ui/js/lib/collapsible'
-], function (_, Collapsible) {
+], function (_, utils, Collapsible) {
     'use strict';
 
     function extractPreview(elem) {
@@ -16,12 +17,42 @@ define([
         };
     }
 
+    function removeEmpty(data) {
+        data = utils.flatten(data);
+
+        data = _.omit(data, function (value, key) {
+            return value === '';
+        });
+
+        return utils.unflatten(data);
+    }
+
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
+            applied: {},
+            states: {
+                namespace: 'current.filters'
+            },
             listens: {
                 active: 'extractPreviews'
+            },
+            imports: {
+                onStateChange: '<%= states.provider %>:<%= states.namespace %>'
+            },
+            modules: {
+                source: '<%= provider %>',
+                statesProvider: '<%= states.provider %>'
             }
+        },
+
+        initialize: function () {
+            _.bindAll(this, 'exportStates', 'exportParams');
+
+            this._super()
+                .apply();
+
+            return;
         },
 
         initObservable: function () {
@@ -34,19 +65,36 @@ define([
             return this;
         },
 
+        initElement: function () {
+            this._super()
+                .extractActive();
+
+            return this;
+        },
+
         apply: function () {
             this.extractActive();
 
-            this.source.trigger('params.applyFilters');
-            this.source.reload();
+            this.applied = removeEmpty(this.filters);
+
+            this.statesProvider(this.exportStates);
+            this.source(this.exportParams);
         },
 
         clear: function (filter) {
             filter ?
-                filter.reset() :
-                this.active.each('reset');
+                filter.clear() :
+                this.active.each('clear');
 
             this.apply();
+
+            return this;
+        },
+
+        cancel: function () {
+            this.set('filters', utils.copy(this.applied));
+
+            return this;
         },
 
         isOpened: function () {
@@ -68,9 +116,7 @@ define([
         },
 
         extractActive: function () {
-            var active = this.elems.filter('hasData');
-
-            this.active(active);
+            this.active(this.elems.filter('hasData'));
 
             return this;
         },
@@ -83,8 +129,18 @@ define([
             return this;
         },
 
-        onApply: function () {
-            this.close()
+        exportStates: function (states) {
+            states.set(this.states.namespace, this.applied);
+        },
+
+        exportParams: function (source) {
+            source.set('params.filters', this.applied);
+        },
+
+        onStateChange: function () {
+            var data = this.statesProvider().get(this.states.namespace);
+
+            this.set('filters', utils.copy(data))
                 .apply();
         }
     });

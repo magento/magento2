@@ -40,9 +40,13 @@ define([
             },
 
             listens: {
-                '<%= ns %>.applyFilters': 'deselectAll',
+                '<%= ns %>.filters': 'deselectAll',
                 selected: 'onSelectedChange',
                 rows: 'onRowsChange'
+            },
+
+            modules: {
+                source: '<%= provider %>'
             }
         },
 
@@ -216,7 +220,7 @@ define([
             data[type] = this[type]();
             data.total = this.totalSelected();
 
-            this.source.set('config.multiselect', data);
+            this.source('set', 'config.multiselect', data);
         },
 
         /**

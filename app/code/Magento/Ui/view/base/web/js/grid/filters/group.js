@@ -19,6 +19,12 @@ define([
             return this;
         },
 
+        clear: function () {
+            this.elems.each('clear');
+
+            return this;
+        },
+
         hasData: function () {
             return this.elems.some('hasData');
         },
