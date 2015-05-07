@@ -284,7 +284,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId', '__wakeup'])
             ->getMock();
-        $store->expects($this->exactly(2))
+        $store->expects($this->any())
             ->method('getWebsiteId')
             ->will($this->returnValue($websiteId));
 
@@ -304,13 +304,12 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setData', 'getData'])
             ->getMock();
-        $storage->expects($this->once())
-            ->method('setData')
-            ->with('quote_id_' . $websiteId, $replaceQuoteId);
-        $storage->expects($this->once())
+
+        $storage->expects($this->any())
             ->method('getData')
-            ->with('quote_id_' . $websiteId)
-            ->will($this->returnValue($replaceQuoteId));;
+            ->willReturn($replaceQuoteId);
+        $storage->expects($this->any())
+            ->method('setData');
 
         $session = $this->_helper->getObject(
             'Magento\Checkout\Model\Session',

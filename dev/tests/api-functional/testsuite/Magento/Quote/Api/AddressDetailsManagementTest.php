@@ -32,7 +32,7 @@ class AddressDetailsManagementTest extends \Magento\TestFramework\TestCase\Webap
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $quote->getId() . '/addresses',
+                'resourcePath' => self::RESOURCE_PATH . 'mine/addresses',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -58,7 +58,7 @@ class AddressDetailsManagementTest extends \Magento\TestFramework\TestCase\Webap
             'fax' => '44332255',
         ];
         $requestData = [
-            'cartId' => $quote->getId(),
+            'cart_id' => $quote->getId(),
             'billingAddress' => $addressData,
             'shippingAddress' => $addressData
         ];

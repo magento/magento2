@@ -7,6 +7,7 @@
 define(
     [
         'jquery',
+        'underscore',
         'uiComponent',
         '../model/quote',
         '../model/shipping-service',
@@ -14,7 +15,7 @@ define(
         'Magento_Catalog/js/price-utils',
         'Magento_Checkout/js/model/step-navigator'
     ],
-    function ($, Component, quote, shippingService, selectShippingMethod, priceUtils, navigator) {
+    function ($, _, Component, quote, shippingService, selectShippingMethod, priceUtils, navigator) {
         var stepName = 'shippingMethod';
         return Component.extend({
             defaults: {
@@ -37,9 +38,16 @@ define(
             },
 
             setShippingMethod: function (form) {
+                var item,
+                    customOptions = {};
+                for (item in this.elems()) {
+                    if ('submit' in this.elems()[item]) {
+                        customOptions = _.extend(customOptions, this.elems()[item].submit());
+                    }
+                }
                 form = $(form);
                 var code = form.find("input[name='shipping_method']:checked").val();
-                selectShippingMethod(code);
+                selectShippingMethod(code, customOptions);
             },
 
             isActive: function() {

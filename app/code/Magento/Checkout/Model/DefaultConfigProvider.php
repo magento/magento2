@@ -19,6 +19,8 @@ use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
 use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
+use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 
 
 class DefaultConfigProvider implements ConfigProviderInterface
@@ -84,6 +86,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $configurationPool;
 
     /**
+     * @param QuoteIdMaskFactory
+     */
+    protected $quoteIdMaskFactory;
+
+    /**
+     * @var LocaleFormat
+     */
+    protected $localeFormat;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRegistration $customerRegistration
@@ -96,6 +108,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param QuoteItemRepository $quoteItemRepository
      * @param ShippingMethodManager $shippingMethodManager
      * @param ConfigurationPool $configurationPool
+     * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param LocaleFormat $localeFormat
      */
     public function __construct(
         CheckoutHelper $checkoutHelper,
@@ -109,7 +123,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
         QuoteRepository $quoteRepository,
         QuoteItemRepository $quoteItemRepository,
         ShippingMethodManager $shippingMethodManager,
-        ConfigurationPool $configurationPool
+        ConfigurationPool $configurationPool,
+        QuoteIdMaskFactory $quoteIdMaskFactory,
+        LocaleFormat $localeFormat
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -123,6 +139,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->quoteItemRepository = $quoteItemRepository;
         $this->shippingMethodManager = $shippingMethodManager;
         $this->configurationPool = $configurationPool;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->localeFormat = $localeFormat;
     }
 
     /**
@@ -135,7 +153,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'quoteData' => $this->getQuoteData(),
             'quoteItemData' => $this->getQuoteItemData(),
             'isCustomerLoggedIn' => $this->isCustomerLoggedIn(),
-            'currencySymbol' => $this->getCurrencySymbol(),
             'baseCurrencySymbol' => $this->getBaseCurrencySymbol(),
             'selectedShippingMethod' => $this->getSelectedShippingMethod(),
             'storeCode' => $this->getStoreCode(),
@@ -145,7 +162,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'isCustomerLoginRequired' => $this->isCustomerLoginRequired(),
             'registerUrl' => $this->getRegisterUrl(),
             'customerAddressCount' => $this->getCustomerAddressCount(),
-            'forgotPasswordUrl' => $this->getForgotPasswordUrl()
+            'forgotPasswordUrl' => $this->getForgotPasswordUrl(),
+            'priceFormat' => $this->localeFormat->getPriceFormat(
+                null,
+                $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
+            )
         ];
     }
 
@@ -188,17 +209,29 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function getQuoteData()
     {
         $quoteData = [];
-        if ($this->getQuote()->getId()) {
-            $quote = $this->quoteRepository->get($this->getQuote()->getId());
+        if ($this->checkoutSession->getQuote()->getId()) {
+            $quote = $this->quoteRepository->get($this->checkoutSession->getQuote()->getId());
             // the following condition is a legacy logic left here for compatibility
             if (!$quote->getCustomer()->getId()) {
-                $this->quoteRepository->save($this->getQuote()->setCheckoutMethod('guest'));
+                $this->quoteRepository->save($this->checkoutSession->getQuote()->setCheckoutMethod('guest'));
             } else {
-                $this->quoteRepository->save($this->getQuote()->setCheckoutMethod(null));
+                $this->quoteRepository->save($this->checkoutSession->getQuote()->setCheckoutMethod(null));
             }
 
             $quoteData = $quote->toArray();
             $quoteData['is_virtual'] = $quote->getIsVirtual();
+
+            /**
+             * Temporary workaround for guest customer API issue.
+             */
+            if (!$quote->getCustomer()->getId()) {
+                /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
+                $quoteIdMask = $this->quoteIdMaskFactory->create();
+                $quoteData['entity_id'] = $quoteIdMask->load(
+                    $this->checkoutSession->getQuote()->getId()
+                )->getMaskedId();
+            }
+
         }
         return $quoteData;
     }
@@ -211,7 +244,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function getQuoteItemData()
     {
         $quoteItemData = [];
-        $quoteId = $this->getQuote()->getId();
+        $quoteId = $this->checkoutSession->getQuote()->getId();
         if ($quoteId) {
             $quoteItems = $this->quoteItemRepository->getList($quoteId);
             foreach($quoteItems as $index => $quoteItem) {
@@ -247,22 +280,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Retrieve active quote currency symbol
-     *
-     * @return string
-     */
-    private function getCurrencySymbol()
-    {
-        $currencySymbol = '';
-        if ($this->getQuote()->getId()) {
-            $quote = $this->quoteRepository->get($this->getQuote()->getId());
-            $currency = $this->currencyManager->getCurrency($quote->getQuoteCurrencyCode());
-            $currencySymbol = $currency->getSymbol() ? $currency->getSymbol() : $currency->getShortName();
-        }
-        return $currencySymbol;
-    }
-
-    /**
      * Retrieve base currency symbol
      *
      * @return string
@@ -295,7 +312,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         // Shipping method ID contains carrier code and shipping method code
         $shippingMethodId = '';
         try {
-            $quoteId = $this->getQuote()->getId();
+            $quoteId = $this->checkoutSession->getQuote()->getId();
             $shippingMethod = $this->shippingMethodManager->get($quoteId);
             if ($shippingMethod) {
                 $shippingMethodId = $shippingMethod->getCarrierCode() . '_' . $shippingMethod->getMethodCode();
@@ -364,16 +381,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function isMethodRegister()
     {
         return $this->checkoutSession->getQuote()->getCheckoutMethod() == OnepageCheckout::METHOD_REGISTER;
-    }
-
-    /**
-     * Retrieve current quote
-     *
-     * @return \Magento\Quote\Model\Quote
-     */
-    private function getQuote()
-    {
-        return $this->checkoutSession->getQuote();
     }
 
     /**

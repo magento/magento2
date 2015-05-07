@@ -13,7 +13,6 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Quote\Api\ShippingMethodManagementInterface;
-use Magento\Quote\Api\Data\ShippingMethodInterfaceFactory;
 
 /**
  * Shipping method read service.
@@ -28,13 +27,6 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     protected $quoteRepository;
 
     /**
-     * Shipping data factory.
-     *
-     * @var \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory
-     */
-    protected $methodDataFactory;
-
-    /**
      * Shipping method converter
      *
      * @var \Magento\Quote\Model\Cart\ShippingMethodConverter
@@ -45,16 +37,13 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
      * Constructs a shipping method read service object.
      *
      * @param QuoteRepository $quoteRepository Quote repository.
-     * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $methodDataFactory Shipping method factory.
      * @param \Magento\Quote\Model\Cart\ShippingMethodConverter $converter Shipping method converter.
      */
     public function __construct(
         QuoteRepository $quoteRepository,
-        \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $methodDataFactory,
         Cart\ShippingMethodConverter $converter
     ) {
         $this->quoteRepository = $quoteRepository;
-        $this->methodDataFactory = $methodDataFactory;
         $this->converter = $converter;
     }
 
@@ -77,35 +66,10 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
             return null;
         }
 
-        list($carrierCode, $methodCode) = $this->divideNames('_', $shippingAddress->getShippingMethod());
-        list($carrierTitle, $methodTitle) = $this->divideNames(' - ', $shippingAddress->getShippingDescription());
-
-        return $this->methodDataFactory->create()
-            ->setCarrierCode($carrierCode)
-            ->setMethodCode($methodCode)
-            ->setCarrierTitle($carrierTitle)
-            ->setMethodTitle($methodTitle)
-            ->setAmount($shippingAddress->getShippingAmount())
-            ->setBaseAmount($shippingAddress->getBaseShippingAmount())
-            ->setAvailable(true);
-    }
-
-    /**
-     * Divides names at specified delimiter character on a specified line.
-     *
-     * @param string $delimiter The delimiter character.
-     * @param string $line The line.
-     * @return array Array of names.
-     * @throws \Magento\Framework\Exception\InputException The specified line does not contain the specified delimiter character.
-     */
-    protected function divideNames($delimiter, $line)
-    {
-        if (strpos($line, $delimiter) === false) {
-            throw new InputException(
-                __('Line "%1" doesn\'t contain delimiter %2', $line, $delimiter)
-            );
-        }
-        return explode($delimiter, $line);
+        $shippingAddress->collectShippingRates();
+        /** @var \Magento\Quote\Model\Quote\Address\Rate $shippingRate */
+        $shippingRate = $shippingAddress->getShippingRateByCode($shippingMethod);
+        return $this->converter->modelToDataObject($shippingRate, $quote->getQuoteCurrencyCode());
     }
 
     /**

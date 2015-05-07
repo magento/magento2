@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Directory\Test\TestCase\CreateCurrencyRateTest">
+        <variation name="CreateCurrencyRateTestVariation1">
+            <data name="currencyRate/data/currency_from" xsi:type="string">USD</data>
+            <data name="currencyRate/data/currency_to" xsi:type="string">EUR</data>
+            <data name="currencyRate/data/rate" xsi:type="number">0.8</data>
+            <data name="currencySymbol/dataSet" xsi:type="string">currency_symbols_eur</data>
+            <data name="product/dataSet" xsi:type="string">simple_10_dollar</data>
+            <data name="config/dataSet" xsi:type="string">config_currency_symbols_usd_and_eur</data>
+            <data name="basePrice" xsi:type="string">$10.00</data>
+            <data name="convertedPrice" xsi:type="string">€8.00</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateSuccessSaveMessage"/>
+            <constraint name="Magento\Directory\Test\Constraint\AssertCurrencyRateAppliedOnCatalogPage"/>
+        </variation>
+    </testCase>
+</config>

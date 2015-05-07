@@ -8,11 +8,12 @@ define(
         '../model/quote',
         '../model/url-builder',
         '../model/step-navigator',
+        '../model/payment-service',
         'Magento_Ui/js/model/errorlist',
         'mage/storage',
         'underscore'
     ],
-    function(quote, urlBuilder, navigator, errorList, storage, _) {
+    function(quote, urlBuilder, navigator, service, errorList, storage, _) {
         "use strict";
         return function (methodView) {
             var defaultMethodData = {
@@ -34,16 +35,23 @@ define(
                 shippingMethodData = {
                     "shippingCarrierCode" : shippingMethodCode[0],
                     "shippingMethodCode" : shippingMethodCode[1]
-                };
+                },
+                serviceUrl;
+            if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()});
+            } else {
+                serviceUrl = urlBuilder.createUrl('/carts/mine/collect-totals', {});
+            }
             if (quote.isVirtual()) {
                 return storage.put(
-                    urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()}),
+                    serviceUrl,
                     JSON.stringify(_.extend(paymentMethodData))
                 ).done(
                     function (response) {
                         if (methodView.afterSave()) {
                             quote.setPaymentMethod(methodView.getCode());
-                            quote.setPaymentData(defaultMethodData);
+                            service.setSelectedPaymentData(defaultMethodData);
+                            service.setSelectedPaymentInfo(methodView.getInfo());
                             quote.setTotals(response);
                             navigator.setCurrent('paymentMethod').goNext();
                         }
@@ -56,14 +64,25 @@ define(
                     }
                 );
             } else {
+                if (!_.isEmpty(quote.getShippingCustomOptions()())) {
+                    shippingMethodData = _.extend(
+                        shippingMethodData,
+                        {
+                            additionalData: {
+                                extension_attributes: quote.getShippingCustomOptions()()
+                            }
+                        }
+                    );
+                }
                 return storage.put(
-                    urlBuilder.createUrl('/carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()}),
+                    serviceUrl,
                     JSON.stringify(_.extend(paymentMethodData, shippingMethodData))
                 ).done(
                     function (response) {
                         if (methodView.afterSave()) {
                             quote.setPaymentMethod(methodView.getCode());
-                            quote.setPaymentData(defaultMethodData);
+                            service.setSelectedPaymentData(defaultMethodData);
+                            service.setSelectedPaymentInfo(methodView.getInfo());
                             quote.setTotals(response);
                             navigator.setCurrent('paymentMethod').goNext();
                         }

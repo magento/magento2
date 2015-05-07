@@ -14,6 +14,10 @@ interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataI
 
     const PAYMENT_METHODS = 'payment_methods';
 
+    const FORMATTED_BILLING_ADDRESS = 'formatted_billing_address';
+
+    const FORMATTED_SHIPPING_ADDRESS = 'formatted_shipping_address';
+
     /**#@-*/
 
     /**
@@ -37,4 +41,26 @@ interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @return $this
      */
     public function setPaymentMethods($paymentMethods);
+
+    /**
+     * @return string|null
+     */
+    public function getFormattedShippingAddress();
+
+    /**
+     * @return string
+     */
+    public function getFormattedBillingAddress();
+
+    /**
+     * @param string $formattedBillingAddress
+     * @return $this
+     */
+    public function setFormattedBillingAddress($formattedBillingAddress);
+
+    /**
+     * @param string $formattedShippingAddress
+     * @return $this
+     */
+    public function setFormattedShippingAddress($formattedShippingAddress);
 }

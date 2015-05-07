@@ -21,6 +21,9 @@
                     <span><!-- ko text: $t('Payment Information')--><!-- /ko --></span>`
                 </legend>
                 <br>
+                <!-- ko foreach: getRegion('beforeMethods') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
                 <div id="checkout-payment-method-load" class="opc-payment">
                     <dl class="items methods-payment">
                         <!-- ko foreach: getAvailableViews() -->
@@ -46,6 +49,9 @@
                     -->
                     <!-- TODO g1ftcardacc0unt module injects its content here -->
                 </div>
+                <!-- ko foreach: getRegion('afterMethods') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
             </fieldset>
             <div class="actions-toolbar" id="payment-buttons-container">
                 <div class="primary">

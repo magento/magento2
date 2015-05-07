@@ -19,14 +19,14 @@ class Grid extends ParentGrid
      *
      * @var string
      */
-    protected $searchButton = '.action.primary.action-apply';
+    protected $searchButton = '[data-action="grid-filter-apply"]';
 
     /**
      * Locator value for 'Reset' button.
      *
      * @var string
      */
-    protected $resetButton = '.action.secondary.action-reset';
+    protected $resetButton = '[data-action="grid-filter-reset"]';
 
     /**
      * Locator value for link in action column.

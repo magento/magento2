@@ -41,10 +41,10 @@ try {
     $diDir = $opt->getOption('di') ? $opt->getOption('di') : $rootDir . '/var/di';
 
     $testExcludePatterns = [
-        "#^$rootDir/app/code/[\\w]+/[\\w]+/Test#",
-        "#^$rootDir/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#",
-        "#^$rootDir/setup/src/Magento/Setup/Test#",
-        "#^$rootDir/dev/tools/Magento/Tools/[\\w]+/Test#"
+        "#^" . preg_quote($rootDir, "#") . "/app/code/[\\w]+/[\\w]+/Test#",
+        "#^" . preg_quote($rootDir, "#") . "/lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#",
+        "#^" . preg_quote($rootDir, "#") . "/setup/src/Magento/Setup/Test#",
+        "#^" . preg_quote($rootDir, "#") . "/dev/tools/Magento/Tools/[\\w]+/Test#"
     ];
     $fileExcludePatterns = $opt->getOption('exclude-pattern') ?
         [$opt->getOption('exclude-pattern')] : ['#[\\\\/]M1[\\\\/]#i'];

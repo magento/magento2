@@ -1,8 +1,6 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
@@ -32,7 +30,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().subtotal;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             isBothPricesDisplayed: function() {
                 return 'both' == this.displaySubtotalMode;
@@ -45,7 +43,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().subtotal_incl_tax;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             }
         });
     }

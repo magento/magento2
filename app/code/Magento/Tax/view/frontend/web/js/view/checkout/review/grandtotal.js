@@ -1,8 +1,6 @@
 /**
- * {license_notice}
- *
- * @copyright   {copyright}
- * @license     {license_link}
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
@@ -35,7 +33,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().grand_total;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             getBaseValue: function() {
                 var price = 0;
@@ -54,7 +52,7 @@ define(
                 if (amount < 0) {
                     return 0;
                 }
-                return quote.getCurrencySymbol() + priceUtils.formatPrice(amount);
+                return priceUtils.formatPrice(amount, quote.getPriceFormat());
             },
             isBaseGrandTotalDisplayNeeded: function() {
                 var totals = this.totals();

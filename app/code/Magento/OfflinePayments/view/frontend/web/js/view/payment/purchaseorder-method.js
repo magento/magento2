@@ -22,6 +22,11 @@ define(
             },
             getData: function() {
                 return {'po_number': this.purchaseOrderNumber()};
+            },
+            getInfo: function() {
+                return [
+                    {'name': 'Purchase Order Number', value: this.purchaseOrderNumber()}
+                ];
             }
         });
     }

@@ -18,19 +18,24 @@
             <div class="img photo container">
                 <span class="product-image-container" style="width:100px;">
                     <span class="product-image-wrapper" style="padding-bottom: 100%;">
+                        <!-- ko ifnot: product.thumbnail == null -->
                         <img class="product-image-photo" data-bind="attr: {src: '/pub/media/catalog/product' + product.thumbnail, alt: name}">
+                        <!-- /ko -->
+                        <!-- ko if: product.thumbnail == null -->
+                        <img class="product-image-photo" data-bind="attr: {src: '/pub/static/frontend/Magento/blank/en_US/Magento_Catalog/images/product/placeholder/thumbnail.jpg', alt: name}">
+                        <!-- /ko -->
                     </span>
                 </span>
             </div>
             <strong class="product name" style="width:100px;" data-bind="text: name"></strong>
         </div>
         <div class="options">
-            <!--<div class="options-items-container"></div> -->
+            <!-- <div class="options-items-container"></div> -->
             <!-- ko foreach: $parent.getRegion('item-level-additional-data') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko -->
-            <a href="#" class="action activate message" data-bind="click: $parent.setItemLevelGiftMessageHidden(item_id), text: $t('Gift Message')"></a>
-            <div id="gift-messages-for-item-container" class="block message" data-bind="visible: $parent.isItemLevelGiftMessagesHidden[item_id]">
+            <a href="#" class="action activate message" data-bind="click: $parent.setItemLevelGiftMessageHidden, text: $t('Gift Message')"></a>
+            <div id="gift-messages-for-item-container" class="block message" data-bind="visible: isItemLevelGiftMessageVisible">
                 <fieldset class="fieldset">
                     <p data-bind="text: $t('You can leave a box blank if you don\'t wish to add a gift message for the item.')"></p>
                     <div class="field from">

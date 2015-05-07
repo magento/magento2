@@ -7,26 +7,32 @@ define(
     [
         '../model/quote',
         '../model/url-builder',
+        '../model/payment-service',
         'mage/storage',
         'mage/url',
         'Magento_Ui/js/model/errorlist',
         'Magento_Customer/js/model/customer',
         'underscore'
     ],
-    function(quote, urlBuilder, storage, url, errorList, customer, _) {
+    function(quote, urlBuilder, paymentService, storage, url, errorList, customer, _) {
         "use strict";
         return function(customParams, callback) {
             var payload;
-            customParams = customParams || {cartId: quote.getQuoteId(), paymentMethod: quote.getPaymentData()()};
+            customParams = customParams || {
+                cartId: quote.getQuoteId(),
+                paymentMethod: paymentService.getSelectedPaymentData()
+            };
             if (quote.getCheckoutMethod()() === 'register') {
                 payload = _.extend({
                     customer: customer.customerData,
                     password: customer.getDetails('password')
                 }, customParams);
                 customer.setAddressAsDefaultBilling(customer.addCustomerAddress(quote.getBillingAddress()()));
-                customer.setAddressAsDefaultShipping(customer.addCustomerAddress(quote.getShippingAddress()()));
+                if (!quote.isVirtual()) {
+                    customer.setAddressAsDefaultShipping(customer.addCustomerAddress(quote.getShippingAddress()()));
+                }
                 storage.post(
-                    urlBuilder.createUrl('/carts/:quoteId/order-with-registration', {quoteId: quote.getQuoteId()}),
+                    urlBuilder.createUrl('/guest-carts/:quoteId/order-with-registration', {quoteId: quote.getQuoteId()}),
                     JSON.stringify(payload)
                 ).done(
                     function() {
@@ -41,10 +47,18 @@ define(
                     }
                 );
             } else {
+                /**
+                 * Checkout for guest and registered customer.
+                 */
+                var serviceUrl;
+                if (quote.getCheckoutMethod()() === 'guest') {
+                    serviceUrl =  urlBuilder.createUrl('/guest-carts/:quoteId/order', {quoteId: quote.getQuoteId()});
+                } else {
+                    serviceUrl = urlBuilder.createUrl('/carts/mine/order', {});
+                }
                 payload = customParams;
                 storage.put(
-                    urlBuilder.createUrl('/carts/:quoteId/order', {quoteId: quote.getQuoteId()}),
-                    JSON.stringify(payload)
+                    serviceUrl, JSON.stringify(payload)
                 ).done(
                     function() {
                         if (!_.isFunction(callback) || callback()) {

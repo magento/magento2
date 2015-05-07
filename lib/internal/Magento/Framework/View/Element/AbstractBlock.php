@@ -46,13 +46,6 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     protected $_sidResolver;
 
     /**
-     * Translator
-     *
-     * @var \Magento\Framework\TranslateInterface
-     */
-    protected $_translator;
-
-    /**
      * Block name in layout
      *
      * @var string
@@ -172,7 +165,6 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         $this->_layout = $context->getLayout();
         $this->_eventManager = $context->getEventManager();
         $this->_urlBuilder = $context->getUrlBuilder();
-        $this->_translator = $context->getTranslator();
         $this->_cache = $context->getCache();
         $this->_design = $context->getDesignPackage();
         $this->_session = $context->getSession();

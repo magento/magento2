@@ -10,13 +10,21 @@ use Magento\Quote\Api\Data\PaymentInterface;
 interface CartManagementInterface
 {
     /**
-     * Enables an administrative or guest user to create an empty cart and quote for an anonymous customer.
+     * Creates an empty cart and quote for a guest.
      *
-     * @param int $storeId
-     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
      * @return int Cart ID.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
      */
-    public function createEmptyCart($storeId);
+    public function createEmptyCart();
+
+    /**
+     * Creates an empty cart and quote for a specified customer.
+     *
+     * @param int $customerId The customer ID.
+     * @return int Cart ID.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
+     */
+    public function createEmptyCartForCustomer($customerId);
 
     /**
      * Returns information for the cart for a specified customer.

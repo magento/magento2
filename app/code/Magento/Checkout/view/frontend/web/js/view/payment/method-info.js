@@ -12,7 +12,8 @@ define(
     function (Component, paymentService) {
         return Component.extend({
             defaults: {
-                titleTemplate: 'Magento_Checkout/payment/generic-title'
+                titleTemplate: 'Magento_Checkout/payment/generic-title',
+                displayArea: 'paymentMethods'
             },
             getCode: function() {
                 return this.index;
@@ -33,6 +34,9 @@ define(
             },
             getData: function() {
                 return {};
+            },
+            getInfo: function() {
+                return [];
             },
             afterSave: function() {
                 return true;

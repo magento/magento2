@@ -29,7 +29,6 @@ class Template
         $document = new \DOMDocument(static::XML_VERSION, static::XML_ENCODING);
         $document->loadXML($content);
         $this->templateNode = $document->documentElement;
-
     }
 
     /**

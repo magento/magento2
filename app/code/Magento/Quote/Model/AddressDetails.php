@@ -42,4 +42,36 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         return $this->setData(self::PAYMENT_METHODS, $paymentMethods);
     }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function getFormattedShippingAddress()
+    {
+        return $this->getData(self::FORMATTED_SHIPPING_ADDRESS);
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function getFormattedBillingAddress()
+    {
+        return $this->getData(self::FORMATTED_BILLING_ADDRESS);
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function setFormattedBillingAddress($formattedBillingAddress)
+    {
+        return $this->setData(self::FORMATTED_BILLING_ADDRESS, $formattedBillingAddress);
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function setFormattedShippingAddress($formattedShippingAddress)
+    {
+        return $this->setData(self::FORMATTED_SHIPPING_ADDRESS, $formattedShippingAddress);
+    }
 }

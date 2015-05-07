@@ -18,7 +18,8 @@ define(
     ],
     function (quote, addressList, navigator, selectShippingAddress, registry, urlBuilder, storage, paymentService) {
         "use strict";
-        return function (billingAddress, useForShipping, additionalData) {
+        var actionCallback;
+        var result = function (billingAddress, useForShipping, additionalData) {
             additionalData = additionalData || {};
             quote.setBillingAddress(billingAddress);
             if (useForShipping === '1' && !quote.isVirtual()) {
@@ -36,8 +37,14 @@ define(
                 }
                 selectShippingAddress(billingAddress, useForShipping, additionalData);
             } else if (quote.isVirtual()) {
+                var serviceUrl;
+                if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
+                    serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
+                } else {
+                    serviceUrl =  urlBuilder.createUrl('/carts/mine/addresses', {});
+                }
                 storage.post(
-                    urlBuilder.createUrl('/carts/:quoteId/addresses', {quoteId: quote.getQuoteId()}),
+                    serviceUrl,
                     JSON.stringify({
                         billingAddress: quote.getBillingAddress()(),
                         additionalData: {extensionAttributes : additionalData},
@@ -47,17 +54,27 @@ define(
                     function (result) {
                         paymentService.setPaymentMethods(result.payment_methods);
                         navigator.setCurrent('billingAddress').goNext();
+                        if (typeof actionCallback == 'function') {
+                            actionCallback(true);
+                        }
                     }
                 ).fail(
                     function (response) {
                         var error = JSON.parse(response.responseText);
                         errorList.add(error);
                         quote.setBillingAddress(null);
+                        if (typeof actionCallback == 'function') {
+                            actionCallback(false);
+                        }
                     }
                 );
             } else {
                 navigator.setCurrent('billingAddress').goNext();
             }
         };
+        result.setActionCallback = function (value) {
+            actionCallback = value;
+        };
+        return result;
     }
 );

@@ -1034,6 +1034,12 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $errors[] = __('Gender is required.');
         }
 
+        $transport = new \Magento\Framework\Object(
+            ['errors' => $errors]
+        );
+        $this->_eventManager->dispatch('customer_validate', ['customer' => $this, 'transport' => $transport]);
+        $errors = $transport->getErrors();
+
         if (empty($errors)) {
             return true;
         }

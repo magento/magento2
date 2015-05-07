@@ -17,23 +17,19 @@ define(
                 'customer/ajax/login',
                 JSON.stringify(loginData)
             ).done(function (response) {
-                if (response) {
+                if (response.errors) {
+                    customer.increaseFailedLoginAttempt();
+                    errorlist.add(response);
+                } else {
                     if (redirectUrl) {
                         window.location.href = redirectUrl;
                     } else {
                         location.reload();
                     }
-                } else {
-                    customer.increaseFailedLoginAttempt();
-                    errorlist.add({'message': 'Server returned no response'});
                 }
-            }).fail(function (response) {
+            }).fail(function () {
                 customer.increaseFailedLoginAttempt();
-                if (response.status == 401) {
-                    errorlist.add({'message': 'Invalid login or password'});
-                } else {
-                    errorlist.add({'message': 'Could not authenticate. Please try again later'});
-                }
+                errorlist.add({'message': 'Could not authenticate. Please try again later'});
             });
         };
     }

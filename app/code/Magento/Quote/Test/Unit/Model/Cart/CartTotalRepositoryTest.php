@@ -6,10 +6,20 @@
  */
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
-use \Magento\Quote\Model\Cart\CartTotalRepository;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $configurationPoolMock;
+
     /**
      * @var \Magento\Quote\Model\Cart\CartTotalRepository
      */
@@ -42,6 +52,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->objectManager = new ObjectManager($this);
         $this->totalsFactoryMock = $this->getMock(
             'Magento\Quote\Api\Data\TotalsInterfaceFactory',
             ['create'],
@@ -55,31 +66,74 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->configurationPoolMock = $this->getMock(
+            '\Magento\Catalog\Helper\Product\ConfigurationPool',
+            [],
+            [],
+            '',
+            false
+        );
 
-        $this->model = new CartTotalRepository(
-            $this->totalsFactoryMock,
-            $this->quoteRepositoryMock,
-            $this->dataObjectHelperMock
+        $this->model = $this->objectManager->getObject(
+            '\Magento\Quote\Model\Cart\CartTotalRepository',
+            [
+                'totalsFactory' => $this->totalsFactoryMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'configurationPool' => $this->configurationPoolMock,
+            ]
         );
     }
 
-    public function testGetTotals()
+    public function testGet()
     {
         $cartId = 12;
+        $itemMock = $this->getMock(
+            'Magento\Quote\Model\Quote\Item',
+            ['setWeeeTaxApplied', 'getWeeeTaxApplied', 'toArray', 'getProductType'],
+            [],
+            '',
+            false
+        );
+        $itemToArray = ['name' => 'item'];
+        $visibleItems = [
+            11 => $itemMock,
+        ];
+        $configMock1 = $this->getMock('\Magento\Catalog\Helper\Product\Configuration', [], [], '', false);
+        $configMock2 = $this->getMock('\Magento\Catalog\Helper\Product\Configuration', [], [], '', false);
+        $typesMap = [['simple', $configMock1], ['default', $configMock2]];
+
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)
             ->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($this->addressMock);
         $this->addressMock->expects($this->once())->method('getData')->willReturn(['addressData']);
         $this->quoteMock->expects($this->once())->method('getData')->willReturn(['quoteData']);
 
-        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $this->quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$item]));
+        $this->quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn($visibleItems);
+        $itemMock->expects($this->once())->method('setWeeeTaxApplied')->with([1, 2, 3]);
+        $itemMock->expects($this->once())->method('getWeeeTaxApplied')->willReturn(serialize([1, 2, 3]));
+        $itemMock->expects($this->once())->method('toArray')->willReturn($itemToArray);
 
-        $totals = $this->getMock('Magento\Quote\Model\Cart\Totals', ['setItems'], [], '', false);
-        $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totals);
+        $totalsMock = $this->getMock('Magento\Quote\Model\Cart\Totals', ['setItems'], [], '', false);
+        $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totalsMock);
         $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray');
-        $totals->expects($this->once())->method('setItems');
+        //expectations of method getFormattedOptionsValue()
+        $itemMock->expects($this->any())->method('getProductType')->willReturn('simple');
+        $this->configurationPoolMock->expects($this->atLeastOnce())
+            ->method('getByProductType')
+            ->willReturnMap($typesMap);
+        $configMock1->expects($this->once())->method('getOptions')->willReturn([4 => ['label' => 'justLabel']]);
+        $configMock2->expects($this->once())->method('getFormattedOptionValue');
+        //back in get()
+        $totalsMock->expects($this->once())->method('setItems')->with(
+            [
+            11 => [
+                    'name' => 'item',
+                    'options' => [ 4 => ['label' => 'justLabel']],
+                ],
+            ]
+        );
 
-        $this->model->get($cartId);
+        $this->assertEquals($totalsMock, $this->model->get($cartId));
     }
 }

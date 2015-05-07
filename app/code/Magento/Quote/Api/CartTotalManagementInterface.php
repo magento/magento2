@@ -6,25 +6,25 @@
 namespace Magento\Quote\Api;
 
 /**
- * Interface CartTotalManagementInterface
- *
- * Collect cart totals based on shipping and payment methods.
+ * Bundled API to collect totals for cart based on shipping/payment methods and additional data.
  */
 interface CartTotalManagementInterface
 {
     /**
-     * Set shipping and billing methods for cart and collect totals.
+     * Set shipping/billing methods and additional data for cart and collect totals.
      *
      * @param int $cartId The cart ID.
      * @param string $shippingCarrierCode The carrier code.
      * @param string $shippingMethodCode The shipping method code.
      * @param \Magento\Quote\Api\Data\PaymentInterface Payment method data.
+     * @param \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData Additional data to collect totals.
      * @return \Magento\Quote\Api\Data\TotalsInterface Quote totals data.
      */
     public function collectTotals(
         $cartId,
         $shippingCarrierCode = null,
         $shippingMethodCode = null,
-        \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
+        \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
+        \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
     );
 }
