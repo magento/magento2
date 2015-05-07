@@ -702,4 +702,26 @@ return [
         'Use \Magento\Eav\Model\Entity\Type::getDefaultAttributeSetId() method instead',
     ],
     ['CONFIG_PATH_WSDL_CACHE_ENABLED', 'Magento\Webapi\Model\Soap\Server'],
+    ['ENTITY', 'Magento\Framework\App\Config\ValueInterface'],
+    ['XML_PATH_ALLOW_CURRENCIES_INSTALLED', 'Magento\Framework\Locale\CurrencyInterface'],
+    [
+        'DEFAULT_CURRENCY',
+        'Magento\Framework\Locale\CurrencyInterface',
+        'Magento\Framework\Locale\Currency::DEFAULT_CURRENCY'
+    ],
+    [
+        'DEFAULT_LOCALE',
+        'Magento\Framework\Locale\ResolverInterface',
+        'Magento\Framework\Locale\Resolver::DEFAULT_LOCALE'
+    ],
+    [
+        'DEFAULT_GROUP',
+        'Magento\Framework\Message\ManagerInterface',
+        'Magento\Framework\Message\Manager::DEFAULT_GROUP'
+    ],
+    [
+        'SCOPE_DEFAULT',
+        'Magento\Framework\App\ScopeInterface',
+        'Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT'
+    ]
 ];
