@@ -71,7 +71,8 @@ class FieldTest extends \PHPUnit_Framework_TestCase
                 'getInherit',
                 'getCanUseWebsiteValue',
                 'getCanUseDefaultValue',
-                'setDisabled'
+                'setDisabled',
+                'getTooltip',
             ],
             [],
             '',
@@ -136,6 +137,19 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             '<p class="note"><span>' .
             $testComment .
             '</span></p></td>';
+        $actual = $this->_object->render($this->_elementMock);
+        $this->assertContains($expected, $actual);
+    }
+
+    public function testRenderValueWithTooltipBlock()
+    {
+        $testTooltip = 'test_tooltip';
+        $this->_elementMock->expects($this->any())->method('getTooltip')->will($this->returnValue($testTooltip));
+        $expected = '<td class="value with-tooltip">' .
+            $this->_testData['elementHTML'] .
+            '<div class="tooltip"><span class="help"><span></span></span><div class="tooltip-content">' .
+            $testTooltip .
+            '</div></div></td>';
         $actual = $this->_object->render($this->_elementMock);
         $this->assertContains($expected, $actual);
     }
