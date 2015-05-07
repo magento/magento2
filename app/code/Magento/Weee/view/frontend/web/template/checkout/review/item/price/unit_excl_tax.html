@@ -7,21 +7,21 @@
 
 <!-- ko if:  (isDisplayPriceWithWeeeDetails(item)) -->
     <span class="cart-tax-total" data-bind="mageInit:{taxToggle: {itemTaxId : '#eunit-item-tax-details' + item.item_id}}">
-        <span class="price" data-bind="text: getFormattedPrice(getUnitDisplayPriceExclTax(item))"></span>
+        <span class="price" data-bind="text: getFormattedPrice(item.price)"></span>
     </span>
 <!-- /ko -->
 <!-- ko ifnot:  (isDisplayPriceWithWeeeDetails(item)) -->
-    <span class="cart-price"><span class="price" data-bind="text: getFormattedPrice(getUnitDisplayPriceExclTax(item))"></span></span>
+    <span class="cart-price"><span class="price" data-bind="text: getFormattedPrice(item.price)"></span></span>
 <!-- /ko -->
 
 
-<!--ko if:  (item.weee_tax_applied.length > 0)-->
+<!--ko if:  (JSON.parse(item.weee_tax_applied).length > 0)-->
     <!-- ko ifnot:  (isDisplayPriceWithWeeeDetails(item))-->
         <span class="cart-tax-info" data-bind ="attr: {'id': 'eunit-item-tax-details' + item.item_id}" style="display: none;"></span>
     <!-- /ko-->
     <!-- ko if:  (isDisplayPriceWithWeeeDetails(item))-->
         <span class="cart-tax-info" data-bind ="attr: {'id': 'eunit-item-tax-details' + item.item_id}" style="display: none;">
-             <!-- ko foreach: item.weee_tax_applied-->
+             <!-- ko foreach: JSON.parse(item.weee_tax_applied)-->
                 <span class="weee" data-bind="attr:{'data-label':title}">
                     <span class="price" data-bind="text: $parent.getFormattedPrice(amount)"></span>
                 </span>
