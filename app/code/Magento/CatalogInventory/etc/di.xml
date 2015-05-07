@@ -52,6 +52,11 @@
     <type name="Magento\Catalog\Block\Product\View">
         <plugin name="quantityValidators" type="Magento\CatalogInventory\Block\Plugin\ProductView" />
     </type>
+    <type name="Magento\CatalogInventory\Model\Configuration">
+        <arguments>
+            <argument name="config" xsi:type="object">Magento\Catalog\Model\ProductTypes\Config\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="catalogInventoryAfterLoad" type="\Magento\CatalogInventory\Model\Plugin\AfterProductLoad"/>
     </type>

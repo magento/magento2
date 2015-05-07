@@ -5,6 +5,8 @@
  */
 namespace Magento\Tax\Model\Config;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Tax Config Notification
  */
@@ -59,7 +61,7 @@ class Notification extends \Magento\Framework\App\Config\Value
      */
     protected function _resetNotificationFlag($path)
     {
-        $this->resourceConfig->saveConfig($path, 0, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, 0);
+        $this->resourceConfig->saveConfig($path, 0, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         return $this;
     }
 }
