@@ -22,12 +22,21 @@ class SaveAttributeStep implements TestStepInterface
     protected $attributeNew;
 
     /**
+     * Delete attribute step.
+     *
+     * @var DeleteAttributeStep
+     */
+    protected $deleteAttribute;
+
+    /**
      * @constructor
      * @param CatalogProductAttributeNew $attributeNew
+     * @param DeleteAttributeStep $deleteAttribute
      */
-    public function __construct(CatalogProductAttributeNew $attributeNew)
+    public function __construct(CatalogProductAttributeNew $attributeNew, DeleteAttributeStep $deleteAttribute)
     {
         $this->attributeNew = $attributeNew;
+        $this->deleteAttribute = $deleteAttribute;
     }
 
     /**
@@ -38,5 +47,15 @@ class SaveAttributeStep implements TestStepInterface
     public function run()
     {
         $this->attributeNew->getPageActions()->save();
+    }
+
+    /**
+     * Delete attribute after test.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->deleteAttribute->run();
     }
 }
