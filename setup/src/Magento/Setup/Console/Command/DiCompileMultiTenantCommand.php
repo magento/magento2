@@ -389,7 +389,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             }
             switch ($key) {
                 case self::INPUT_KEY_SERIALIZER:
-                    if (($value !== self::SERIALIZER_VALUE_SERIALIZE) || ($value !== self::SERIALIZER_VALUE_IGBINARY)) {
+                    if (($value !== self::SERIALIZER_VALUE_SERIALIZE) && ($value !== self::SERIALIZER_VALUE_IGBINARY)) {
                         $errors[] = '<error>Invalid value for command option \'' . self::INPUT_KEY_SERIALIZER
                             . '\'. Possible values (' . self::SERIALIZER_VALUE_SERIALIZE . '|'
                             . self::SERIALIZER_VALUE_IGBINARY . ').</error>';
