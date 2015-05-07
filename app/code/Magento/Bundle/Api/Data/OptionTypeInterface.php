@@ -6,6 +6,10 @@
  */
 namespace Magento\Bundle\Api\Data;
 
+/**
+ * Interface OptionTypeInterface
+ * @api
+ */
 interface OptionTypeInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
