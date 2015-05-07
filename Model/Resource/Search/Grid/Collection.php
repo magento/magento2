@@ -20,6 +20,7 @@ class Collection extends \Magento\Search\Model\Resource\Query\Collection
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Framework\Registry $registry
      * @param mixed $connection
      * @param mixed $resource
@@ -30,6 +31,7 @@ class Collection extends \Magento\Search\Model\Resource\Query\Collection
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Framework\Registry $registry,
         $connection = null,
         $resource = null
@@ -41,6 +43,7 @@ class Collection extends \Magento\Search\Model\Resource\Query\Collection
             $fetchStrategy,
             $eventManager,
             $storeManager,
+            $resourceHelper,
             $connection,
             $resource
         );
