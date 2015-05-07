@@ -126,6 +126,16 @@ class View extends \Magento\Framework\Object
     }
 
     /**
+     * Return product image size attributes
+     *
+     * @return string
+     */
+    public function getSizeAttributes()
+    {
+        return $this->_helperImage->getSizeAttributes();
+    }
+
+    /**
      * Return product image label
      *
      * @return string

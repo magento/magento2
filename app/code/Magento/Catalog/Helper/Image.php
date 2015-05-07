@@ -429,6 +429,16 @@ class Image extends AbstractHelper
     }
 
     /**
+     * Return product image size attributes
+     *
+     * @return string
+     */
+    public function getSizeAttributes()
+    {
+        return $this->_getModel()->getSizeAttributes();
+    }
+
+    /**
      * @return string
      */
     protected function getDefaultPlaceholderUrl()

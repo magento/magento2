@@ -918,4 +918,19 @@ class Image extends \Magento\Framework\Model\AbstractModel
             );
         }
     }
+
+    /**
+     * Get actual image size attributes as height/width text string to be used inside <img> tag
+     *
+     * @return string
+     */
+    public function getSizeAttributes()
+    {
+        if ($this->_newFile === true) {
+            $attributes = '';
+        } else {
+            $attributes = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile))[3];
+        }
+        return $attributes;
+    }
 }

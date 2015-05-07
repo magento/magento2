@@ -15,5 +15,6 @@ $ratio = $block->getProductImageView()->getHeight() / $block->getProductImageVie
         <img class="product-image-photo"
              <?php echo $block->getAddAttribute(); ?>
              src="<?php echo $block->getProductImageView()->getUrl() ?>"
+             <?php echo $block->getProductImageView()->getSizeAttributes();?>
              alt="<?php echo $block->stripTags($block->getProductImageView()->getLabel(), null, true) ?>"/></span>
 </span>
