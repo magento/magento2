@@ -9,5 +9,7 @@
     <extension_attributes for="Magento\Quote\Api\Data\AddressAdditionalDataInterface">
         <attribute code="captcha_string" type="string" />
         <attribute code="captcha_form_id" type="string" />
-    </extension_attributes>>
+    </extension_attributes>
 </config>
+
+
