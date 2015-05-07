@@ -54,6 +54,13 @@ class Grid extends ParentGrid
     ];
 
     /**
+     * Container for applied filters.
+     *
+     * @var string
+     */
+    protected $appliedFiltersList = '[data-role="filter-list"]';
+
+    /**
      * Search item and open it on front.
      *
      * @param array $filter
@@ -69,6 +76,18 @@ class Grid extends ParentGrid
             $this->waitForElement();
         } else {
             throw new \Exception('Searched item was not found.');
+        }
+    }
+
+    /**
+     * Clear all applied Filters
+     */
+    public function resetFilter()
+    {
+        $chipsHolder = $this->_rootElement->find($this->appliedFiltersList);
+        if ($chipsHolder->isVisible()) {
+            $this->_rootElement->find($this->resetButton)->click();
+            $this->waitLoader();
         }
     }
 }
