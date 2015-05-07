@@ -39,12 +39,8 @@ class RepositoryScanner implements ScannerInterface
                     && $replacementType !== null
                     && (substr($forType->nodeValue, -19) == 'RepositoryInterface')
                 ) {
-                    if (!$this->useAutoload) {
-                        $classExists = class_exists($replacementType->nodeValue, $this->useAutoload);
-                    } else {
-                        $classExists = AutoloaderRegistry::getAutoloader()->loadClass($replacementType->nodeValue);
-                    }
-                    if (!$classExists) {
+                    if (!class_exists($replacementType->nodeValue, false)
+                        && !AutoloaderRegistry::getAutoloader()->loadClass($replacementType->nodeValue)) {
                         $persistor = str_replace('\\Repository', 'InterfacePersistor', $replacementType->nodeValue);
                         $factory = str_replace('\\Repository', 'InterfaceFactory', $replacementType->nodeValue);
                         $searchResultFactory
