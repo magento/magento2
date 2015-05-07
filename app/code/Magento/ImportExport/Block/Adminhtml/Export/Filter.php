@@ -100,8 +100,8 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $fromValue
         )->getHtml() . '&nbsp;<strong class="admin__control-support-text">
 ' . __(
-            'To'
-        ) . ':</strong>&nbsp;' . $dateBlock->setId(
+    'To'
+) . ':</strong>&nbsp;' . $dateBlock->setId(
             $dateBlock->getId() . '_to'
         )->setValue(
             $toValue
