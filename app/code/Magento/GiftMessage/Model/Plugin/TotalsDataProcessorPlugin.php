@@ -6,7 +6,7 @@
 namespace Magento\GiftMessage\Model\Plugin;
 
 use Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor;
-use Magento\Quote\Model\Cart\TotalsAdditionalData;
+use Magento\Quote\Api\Data\TotalsAdditionalDataInterface;;
 
 /**
  * Shopping cart gift message item repository object.
@@ -39,13 +39,16 @@ class TotalsDataProcessorPlugin
      * Set gift messages from additional data.
      *
      * @param \Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor $subject
-     * @param \Magento\Quote\Model\Cart\TotalsAdditionalData $additionalData
+     * @param TotalsAdditionalDataInterface $additionalData
      * @param int $cartId
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeProcess(TotalsAdditionalDataProcessor $subject, TotalsAdditionalData $additionalData, $cartId)
-    {
+    public function beforeProcess(
+        TotalsAdditionalDataProcessor $subject,
+        TotalsAdditionalDataInterface $additionalData,
+        $cartId
+    ) {
         $giftMessages = $additionalData->getExtensionAttributes()->getGiftMessages();
         foreach ($giftMessages as $giftMessage) {
             /** @var \Magento\GiftMessage\Api\Data\MessageInterface $giftMessage */
