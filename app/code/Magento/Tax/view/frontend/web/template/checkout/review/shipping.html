@@ -23,7 +23,7 @@
     <!-- /ko -->
     <!-- ko if: isExcludingDisplayed() -->
     <tr class="totals shipping excl">
-        <th data-bind="text: $t(getTitle()0, attr: {'style':style, 'colspan': getColspan }" class="mark" scope="row"></th>
+        <th data-bind="text: $t(getTitle()), attr: {'style':style, 'colspan': getColspan }" class="mark" scope="row"></th>
         <td  data-bind="text: getValue(), attr: {'style':style, 'data-th': $t(getTitle())}" class="amount"></td>
     </tr>
     <!-- /ko -->
