@@ -414,7 +414,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                     }
                     break;
                 case self::INPUT_KEY_EXCLUDE_PATTERN:
-                    if (@preg_match(self::INPUT_KEY_EXCLUDE_PATTERN, null) === false) {
+                    if (@preg_match($value, null) === false) {
                         $errors[] = '<error>Invalid pattern for command option \'' . self::INPUT_KEY_EXCLUDE_PATTERN
                             . '\'.</error>';
                     }
