@@ -379,7 +379,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[]
      */
-    public function validate(InputInterface $input)
+    private function validate(InputInterface $input)
     {
         $errors = [];
         $options = $input->getOptions();
