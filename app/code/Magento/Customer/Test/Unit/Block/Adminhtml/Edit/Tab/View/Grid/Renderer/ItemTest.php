@@ -111,27 +111,27 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             [
                 2,
                 <<<HTML
-                        <div class="bundle-product-options">
-                            <strong>testProductName</strong>
-                            <dl>
-                                <dt>testLabel1</dt>
-                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
-                                <dt>testLabel2</dt>
-                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
-                            </dl>
+                        <div class="product-title">
+                            testProductName
                         </div>
+                        <dl class="item-options">
+                            <dt>testLabel1</dt>
+                            <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                            <dt>testLabel2</dt>
+                            <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                        </dl>
 HTML
             ],
             [
                 1,
                 <<<HTML
-                        <div class="bundle-product-options">
-                            <strong>testProductName</strong>
-                            <dl>
-                                <dt>testLabel1</dt>
-                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
-                            </dl>
+                        <div class="product-title">
+                            testProductName
                         </div>
+                        <dl class="item-options">
+                            <dt>testLabel1</dt>
+                            <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                        </dl>
 HTML
             ],
         ];
