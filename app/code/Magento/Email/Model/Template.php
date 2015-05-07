@@ -64,10 +64,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
 
     const XML_PATH_SENDING_RETURN_PATH_EMAIL = 'system/smtp/return_path_email';
 
-    const XML_PATH_DESIGN_EMAIL_LOGO = 'design/email/logo';
-
-    const XML_PATH_DESIGN_EMAIL_LOGO_ALT = 'design/email/logo_alt';
-
     /**
      * Config path to mail sending setting that shows if email communications are disabled
      */
@@ -204,32 +200,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     }
 
     /**
-     * Return logo URL for emails. Take logo from theme if custom logo is undefined
-     *
-     * @param  \Magento\Store\Model\Store|int|string $store
-     * @return string
-     */
-    protected function _getLogoUrl($store)
-    {
-        $store = $this->_storeManager->getStore($store);
-        $fileName = $this->_scopeConfig->getValue(
-            self::XML_PATH_DESIGN_EMAIL_LOGO,
-            ScopeInterface::SCOPE_STORE,
-            $store
-        );
-        if ($fileName) {
-            $uploadDir = \Magento\Config\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
-            $mediaDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
-            if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
-                return $this->_storeManager->getStore()->getBaseUrl(
-                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                ) . $uploadDir . '/' . $fileName;
-            }
-        }
-        return $this->getDefaultEmailLogo();
-    }
-
-    /**
      * Get default email logo image
      *
      * @return string
@@ -240,26 +210,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
             'Magento_Email::logo_email.png',
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]
         );
-    }
-
-    /**
-     * Return logo alt for emails
-     *
-     * @param  \Magento\Store\Model\Store|int|string $store
-     * @return string
-     */
-    protected function _getLogoAlt($store)
-    {
-        $store = $this->_storeManager->getStore($store);
-        $alt = $this->_scopeConfig->getValue(
-            self::XML_PATH_DESIGN_EMAIL_LOGO_ALT,
-            ScopeInterface::SCOPE_STORE,
-            $store
-        );
-        if ($alt) {
-            return $alt;
-        }
-        return $store->getFrontendName();
     }
 
     /**
@@ -425,19 +375,21 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
             $processor->setStoreId($variables['subscriber']->getStoreId());
         }
 
-        if (!isset($variables['logo_url'])) {
-            $variables['logo_url'] = $this->_getLogoUrl($processor->getStoreId());
-        }
-        if (!isset($variables['logo_alt'])) {
-            $variables['logo_alt'] = $this->_getLogoAlt($processor->getStoreId());
-        }
+        $this->_applyDesignConfig();
+
+        // Populate the variables array with store, store info, logo, etc. variables
+        $variables = $this->_addEmailVariables($variables, $processor->getStoreId());
 
         $processor->setIncludeProcessor([$this, 'getInclude'])->setVariables($variables);
 
-        $this->_applyDesignConfig();
         $storeId = $this->getDesignConfig()->getStore();
         try {
-            $processedResult = $processor->setStoreId($storeId)->filter($this->getPreparedTemplateText());
+            // Filter the template text so that all HTML content will be present
+            $result = $processor->setStoreId($storeId)->filter($this->getTemplateText());
+            // If the {{inlinecss file=""}} directive was included in the template, grab filename to use for inlining
+            $this->setInlineCssFiles($processor->getInlineCssFiles());
+            // Now that all HTML has been assembled, run email through CSS inlining process
+            $processedResult = $this->getPreparedTemplateText($result);
         } catch (\Exception $e) {
             $this->_cancelDesignConfig();
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
@@ -448,16 +400,18 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     /**
      * Makes additional text preparations for HTML templates
      *
+     * @param string $html
      * @return string
      */
-    public function getPreparedTemplateText()
+    public function getPreparedTemplateText($html = null)
     {
-        if ($this->isPlain() || !$this->getTemplateStyles()) {
+        if ($this->isPlain() && $html) {
+            return $html;
+        } elseif ($this->isPlain()) {
             return $this->getTemplateText();
         }
-        // wrap styles into style tag
-        $html = "<style type=\"text/css\">\n%s\n</style>\n%s";
-        return sprintf($html, $this->getTemplateStyles(), $this->getTemplateText());
+
+        return $this->_applyInlineCss($html);
     }
 
     /**

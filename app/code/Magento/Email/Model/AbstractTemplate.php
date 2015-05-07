@@ -7,6 +7,7 @@ namespace Magento\Email\Model;
 
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Template model class
@@ -19,6 +20,34 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * Default design area for emulation
      */
     const DEFAULT_DESIGN_AREA = 'frontend';
+
+    /**
+     * Email logo url
+     *
+     * @var string
+     */
+    const XML_PATH_DESIGN_EMAIL_LOGO = 'design/email/logo';
+
+    /**
+     * Email logo alt text
+     *
+     * @var string
+     */
+    const XML_PATH_DESIGN_EMAIL_LOGO_ALT = 'design/email/logo_alt';
+
+    /**
+     * Email logo width
+     *
+     * @var string
+     */
+    const XML_PATH_DESIGN_EMAIL_LOGO_WIDTH      = 'design/email/logo_width';
+
+    /**
+     * Email logo height
+     *
+     * @var string
+     */
+    const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT     = 'design/email/logo_height';
 
     /**
      * Configuration of design package for template
@@ -104,6 +133,191 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $this->_appEmulation->startEnvironmentEmulation($storeId, $area);
         }
         return $this;
+    }
+
+    /**
+     * Merge HTML and CSS and returns HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
+     * in order to support all email clients.
+     *
+     * @param $html
+     * @return string
+     */
+    protected function _applyInlineCss($html)
+    {
+        // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline
+        $inlineCssFiles = $this->getInlineCssFiles();
+        // Only run Emogrify if HTML exists and if there is at least one file to inline
+        if ($html && !empty($inlineCssFiles)) {
+            try {
+                $cssToInline = $this->_getCssFilesContent($inlineCssFiles);
+                $emogrifier = new \Pelago\Emogrifier();
+                $emogrifier->setHtml($html);
+                $emogrifier->setCss($cssToInline);
+                // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
+                // TODO: Submit PR to Emogrifier to disable parsing inline styles: https://github.com/jjriv/emogrifier/issues/155
+    //                $emogrifier->setParseInlineStyleTags(false);
+
+                $processedHtml = $emogrifier->emogrify();
+            } catch (Exception $e) {
+                $processedHtml = '{CSS inlining error: ' . $e->getMessage() . '}' . PHP_EOL . $html;
+            }
+        } else {
+            $processedHtml = $html;
+        }
+        return $processedHtml;
+    }
+
+    /**
+     * Load CSS content from filesystem
+     *
+     * @param string $filename
+     * @return string
+     */
+    protected function _getCssFilesContent($filenames)
+    {
+        // TODO: @Greg convert this code to trigger LESS compilation (if necessary) and load file using theme fallback mechanism
+        $css = '';
+        foreach ($filenames as $filename) {
+            $file = BP . '/pub/static/frontend/Magento/blank/en_US/css/' . $filename;
+            if (file_exists($file)) {
+                $css .= file_get_contents($file);
+            }
+        }
+        return $css;
+        // OLD M1 Code
+//        $storeId = $this->getDesignConfig()->getStore();
+//        $area = $this->getDesignConfig()->getArea();
+//        // This method should always be called within the context of the email's store, so these values will be correct
+//        $package = Mage::getDesign()->getPackageName();
+//        $theme = Mage::getDesign()->getTheme('skin');
+//
+//        $filePath = Mage::getDesign()->getFilename(
+//            'css' . DS . $filename,
+//            array(
+//                '_type' => 'skin',
+//                '_default' => false,
+//                '_store' => $storeId,
+//                '_area' => $area,
+//                '_package' => $package,
+//                '_theme' => $theme,
+//            )
+//        );
+//
+//        if (is_readable($filePath)) {
+//            return (string) file_get_contents($filePath);
+//        }
+//
+//        // If file can't be found, return empty string
+//        return '';
+    }
+
+    /**
+     * Return logo URL for emails. Take logo from theme if custom logo is undefined
+     *
+     * @param  \Magento\Store\Model\Store|int|string $store
+     * @return string
+     */
+    protected function _getLogoUrl($store)
+    {
+        $store = $this->_storeManager->getStore($store);
+        $fileName = $this->_scopeConfig->getValue(
+            self::XML_PATH_DESIGN_EMAIL_LOGO,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        if ($fileName) {
+            $uploadDir = \Magento\Config\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
+            $mediaDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
+                return $this->_storeManager->getStore()->getBaseUrl(
+                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ) . $uploadDir . '/' . $fileName;
+            }
+        }
+        return $this->getDefaultEmailLogo();
+    }
+
+    /**
+     * Return logo alt for emails
+     *
+     * @param  \Magento\Store\Model\Store|int|string $store
+     * @return string
+     */
+    protected function _getLogoAlt($store)
+    {
+        $store = $this->_storeManager->getStore($store);
+        $alt = $this->_scopeConfig->getValue(
+            self::XML_PATH_DESIGN_EMAIL_LOGO_ALT,
+            ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        if ($alt) {
+            return $alt;
+        }
+        return $store->getFrontendName();
+    }
+
+    /**
+     * Add variables that are used by transactional and newsletter emails
+     *
+     * @param $variables
+     * @param $storeId
+     * @return mixed
+     */
+    protected function _addEmailVariables($variables, $storeId)
+    {
+        $store = $this->_storeManager->getStore($storeId);
+        if (!isset($variables['store'])) {
+            $variables['store'] = $store;
+        }
+        if (!isset($variables['logo_url'])) {
+            $variables['logo_url'] = $this->_getLogoUrl($storeId);
+        }
+        if (!isset($variables['logo_alt'])) {
+            $variables['logo_alt'] = $this->_getLogoAlt($storeId);
+        }
+        if (!isset($variables['logo_width'])) {
+            $variables['logo_width'] = $this->_scopeConfig->getValue(
+                self::XML_PATH_DESIGN_EMAIL_LOGO_WIDTH,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            );
+        }
+        if (!isset($variables['logo_height'])) {
+            $variables['logo_height'] = $this->_scopeConfig->getValue(
+                self::XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            );
+        }
+        if (!isset($variables['store_phone'])) {
+            $variables['store_phone'] = $this->_scopeConfig->getValue(
+                \Magento\Store\Model\Store::XML_PATH_STORE_STORE_PHONE,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            );
+        }
+        if (!isset($variables['store_hours'])) {
+            $variables['store_hours'] = $this->_scopeConfig->getValue(
+                \Magento\Store\Model\Store::XML_PATH_STORE_STORE_HOURS,
+                ScopeInterface::SCOPE_STORE,
+                $store
+            );
+        }
+        if (!isset($variables['store_email'])) {
+            $variables['store_email'] = $this->_scopeConfig->getValue(
+                // TODO: @Erik replace this with constant. Need to create constant.
+                'trans_email/ident_support/email',
+                ScopeInterface::SCOPE_STORE,
+                $store
+            );
+        }
+        // If template is text mode, don't include styles
+        if (!$this->isPlain() && !isset($variables['non_inline_styles'])) {
+            $variables['non_inline_styles'] = $this->_getNonInlineCssTag();
+        }
+
+        return $variables;
     }
 
     /**
