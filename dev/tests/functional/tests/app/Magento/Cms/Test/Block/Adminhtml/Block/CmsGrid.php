@@ -61,4 +61,23 @@ class CmsGrid extends Grid
      * @var string
      */
     protected $editLink = '.action-menu-item';
+
+    /**
+     * Container for applied filters.
+     *
+     * @var string
+     */
+    protected $appliedFiltersList = '[data-role="filter-list"]';
+
+    /**
+     * Clear all applied Filters
+     */
+    public function resetFilter()
+    {
+        $chipsHolder = $this->_rootElement->find($this->appliedFiltersList);
+        if ($chipsHolder->isVisible()) {
+            $this->_rootElement->find($this->resetButton)->click();
+            $this->waitLoader();
+        }
+    }
 }
