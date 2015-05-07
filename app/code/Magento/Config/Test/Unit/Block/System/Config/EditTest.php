@@ -145,4 +145,43 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedUrl, $this->_object->getSaveUrl());
     }
+
+    public function testPrepareLayout()
+    {
+        $expectedHeader = 'Test Header';
+        $expectedLabel  = 'Test  Label';
+        $expectedBlock  = 'Test  Block';
+
+        $blockMock = $this->getMockBuilder('Magento\Framework\View\Element\Template')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->_sectionMock->expects($this->once())
+            ->method('getFrontendModel')
+            ->willReturn($expectedBlock);
+        $this->_sectionMock->expects($this->once())
+            ->method('getLabel')
+            ->willReturn($expectedLabel);
+        $this->_sectionMock->expects($this->once())
+            ->method('getHeaderCss')
+            ->willReturn($expectedHeader);
+        $this->_layoutMock->expects($this->once())
+            ->method('getBlock')
+            ->with('page.actions.toolbar')
+            ->willReturn($blockMock);
+        $this->_layoutMock->expects($this->once())
+            ->method('createBlock')
+            ->with($expectedBlock)
+            ->willReturn($blockMock);
+        $blockMock->expects($this->once())
+            ->method('getNameInLayout')
+            ->willReturn($expectedBlock);
+        $this->_layoutMock->expects($this->once())
+            ->method('setChild')
+            ->with($expectedBlock, $expectedBlock, 'form')
+            ->willReturn($this->_layoutMock);
+
+        $this->_object->setNameInLayout($expectedBlock);
+        $this->_object->setLayout($this->_layoutMock);
+    }
 }
