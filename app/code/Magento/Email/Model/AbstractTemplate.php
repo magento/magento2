@@ -211,6 +211,57 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 //        return '';
     }
 
+    // TODO: Determine if we're going to keep this method
+    /**
+     * Accepts a path to a System Config setting that contains a comma-delimited list of files to load. Loads those
+     * files and then returns the concatenated content.
+     *
+     * @param $configPath
+     * @return string
+     */
+    protected function _getCssByConfig($configPath)
+    {
+        // TODO: @Greg convert this code to trigger LESS compilation (if necessary) and load file using theme fallback mechanism
+        $file = BP . '/pub/static/frontend/Magento/blank/en_US/css/email-non-inline.css';
+        if (file_exists($file)) {
+            return file_get_contents($file);
+        }
+
+        // OLD M1 Code
+//        if (!isset($this->_cssFileCache[$configPath])) {
+//            $filesToLoad = Mage::getStoreConfig($configPath);
+//            if (!$filesToLoad) {
+//                return '';
+//            }
+//            $files = array_map('trim', explode(",", $filesToLoad));
+//
+//            $css = '';
+//            foreach($files as $fileName) {
+//                $css .= $this->_getCssFileContent($fileName) . "\n";
+//            }
+//            $this->_cssFileCache[$configPath] = $css;
+//        }
+//
+//        return $this->_cssFileCache[$configPath];
+    }
+
+    /**
+     * Loads content of files with non-inline CSS styles and merges them with any CSS styles that are specified
+     * within the <!--@styles @--> comments or in the Transactional Emails
+     *
+     * @return string
+     */
+    protected function _getNonInlineCssTag()
+    {
+        $styleTagWrapper = "<style type=\"text/css\">\n%s\n</style>\n";
+        // Load the non-inline CSS styles from theme so they can be included in the style tag
+        // TODO: Refactor
+        $styleTagContent = $this->_getCssByConfig('TODO: REFACTOR THIS CODE');
+        // Load the CSS that is included in the <!--@styles @--> comment or is added via Transactional Emails in admin
+        $styleTagContent .= $this->getTemplateStyles();
+        return sprintf($styleTagWrapper, $styleTagContent);
+    }
+
     /**
      * Return logo URL for emails. Take logo from theme if custom logo is undefined
      *
