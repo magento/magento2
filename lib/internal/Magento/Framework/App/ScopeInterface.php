@@ -8,11 +8,6 @@ namespace Magento\Framework\App;
 interface ScopeInterface
 {
     /**
-     * Default scope type
-     */
-    const SCOPE_DEFAULT = 'default';
-
-    /**
      * Retrieve scope code
      *
      * @return string

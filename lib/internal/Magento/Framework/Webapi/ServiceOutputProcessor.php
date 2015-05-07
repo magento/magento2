@@ -8,6 +8,7 @@ namespace Magento\Framework\Webapi;
 use Magento\Framework\Api\AbstractExtensibleObject;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Reflection\MethodsMap;
 
 /**
  * Data object converter for REST
@@ -20,11 +21,20 @@ class ServiceOutputProcessor
     protected $dataObjectProcessor;
 
     /**
-     * @param DataObjectProcessor $dataObjectProcessor
+     * @var MethodsMap
      */
-    public function __construct(DataObjectProcessor $dataObjectProcessor)
-    {
+    protected $methodsMapProcessor;
+
+    /**
+     * @param DataObjectProcessor $dataObjectProcessor
+     * @param MethodsMap $methodsMapProcessor
+     */
+    public function __construct(
+        DataObjectProcessor $dataObjectProcessor,
+        MethodsMap $methodsMapProcessor
+    ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->methodsMapProcessor = $methodsMapProcessor;
     }
 
     /**
@@ -44,7 +54,7 @@ class ServiceOutputProcessor
     public function process($data, $serviceClassName, $serviceMethodName)
     {
         /** @var string $dataType */
-        $dataType = $this->dataObjectProcessor->getMethodReturnType($serviceClassName, $serviceMethodName);
+        $dataType = $this->methodsMapProcessor->getMethodReturnType($serviceClassName, $serviceMethodName);
         if (is_array($data)) {
             $result = [];
             $arrayElementType = substr($dataType, 0, -2);
