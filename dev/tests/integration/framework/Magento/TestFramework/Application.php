@@ -172,10 +172,10 @@ class Application
                 $dbName = $dbInfo['dbname'];
             } else {
                 $installConfig = $this->getInstallConfig();
-                $host = $installConfig['db_host'];
-                $user = $installConfig['db_user'];
-                $password = $installConfig['db_password'];
-                $dbName = $installConfig['db_name'];
+                $host = $installConfig['db-host'];
+                $user = $installConfig['db-user'];
+                $password = $installConfig['db-password'];
+                $dbName = $installConfig['db-name'];
             }
             $this->_db = new Db\Mysql(
                 $host,

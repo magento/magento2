@@ -5,11 +5,11 @@
  */
 
 return [
-    'db_host' => 'localhost',
-    'db_user' => 'root',
-    'db_password' => '',
-    'db_name' => 'magento_integration_tests',
-    'db_prefix' => '',
+    'db-host' => 'localhost',
+    'db-user' => 'root',
+    'db-password' => '',
+    'db-name' => 'magento_integration_tests',
+    'db-prefix' => '',
     'backend-frontname' => 'backend',
     'admin_user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
     'admin_password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
