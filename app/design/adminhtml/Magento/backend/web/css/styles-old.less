@@ -1188,6 +1188,7 @@ input.no-display,
     .fieldset-wrapper .fieldset-wrapper {
         border: 1px solid #cac3b4;
         border-radius: 2px;
+        margin-bottom: 5px;
         padding: 0;
     }
 
@@ -1253,6 +1254,11 @@ input.no-display,
     }
 
     // Sortable fieldsets
+
+    .ui-sortable {
+        margin-bottom: 15px; // should be the same as .sortable-wrapper
+    }
+
     .ui-sortable .entry-edit .fieldset-wrapper-title,
     #product_options_container_top .fieldset-wrapper-title {
         padding-left: 30px;
@@ -2432,6 +2438,10 @@ input.no-display,
     #create_new_attribute > .loading-mask {
         left: -25px;
         top: -50px;
+    }
+
+    #front_fieldset-wrapper {
+        border-bottom: 0;
     }
 
     .attribute-popup {
