@@ -176,6 +176,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
      */
     protected function processRatingCodes(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -193,10 +194,12 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $insert[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId, 'value' => $title];
         }
         $this->insertRatingData($table, $insert);
+        return $this;
     }
 
     /**
      * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
      */
     protected function processRatingStores(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -214,12 +217,14 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $insert[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId];
         }
         $this->insertRatingData($table, $insert);
+        return $this;
     }
 
     /**
      * @param int $ratingId
      * @param string $table
      * @param array $data
+     * @return void
      */
     protected function deleteRatingData($ratingId, $table, array $data)
     {
@@ -241,6 +246,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param string $table
      * @param array $data
+     * @return void
      */
     protected function insertRatingData($table, array $data)
     {
