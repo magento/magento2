@@ -12,6 +12,13 @@ namespace Magento\Newsletter\Block\Adminhtml\Template;
 class Preview extends \Magento\Backend\Block\Widget
 {
     /**
+     * Name for profiler
+     *
+     * @var string
+     */
+    protected $profilerName = "newsletter_template_proccessing";
+
+    /**
      * @var \Magento\Newsletter\Model\TemplateFactory
      */
     protected $_templateFactory;
@@ -49,14 +56,14 @@ class Preview extends \Magento\Backend\Block\Widget
         $template = $this->_templateFactory->create();
 
         if ($id = (int)$this->getRequest()->getParam('id')) {
-            $template->load($id);
+            $this->loadTemplate($template, $id);
         } else {
             $template->setTemplateType($this->getRequest()->getParam('type'));
             $template->setTemplateText($this->getRequest()->getParam('text'));
             $template->setTemplateStyles($this->getRequest()->getParam('styles'));
         }
 
-        \Magento\Framework\Profiler::start("newsletter_template_proccessing");
+        \Magento\Framework\Profiler::start($this->profilerName);
         $vars = [];
 
         $vars['subscriber'] = $this->_subscriberFactory->create();
@@ -76,7 +83,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
         }
 
-        \Magento\Framework\Profiler::stop("newsletter_template_proccessing");
+        \Magento\Framework\Profiler::stop($this->profilerName);
 
         return $templateProcessed;
     }
@@ -102,5 +109,16 @@ class Preview extends \Magento\Backend\Block\Widget
         }
 
         return $defaultStore ? $defaultStore->getId() : null;
+    }
+
+    /**
+     * @param \Magento\Newsletter\Model\Template $template
+     * @param string $id
+     * @return $this
+     */
+    protected function loadTemplate(\Magento\Newsletter\Model\Template $template, $id)
+    {
+        $template->load($id);
+        return $this;
     }
 }
