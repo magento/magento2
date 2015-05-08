@@ -41,16 +41,14 @@ class BackendAppList
     public function getCurrentApp()
     {
         $appName = $this->request->getQuery('app');
-        if ($appName === null) {
-            return;
-        }
-        if (isset($this->backendApps[$appName])) {
+        if ($appName && isset($this->backendApps[$appName])) {
             return $this->backendApps[$appName];
         }
-        return null;
     }
 
     /**
+     * Retrieve backend application by name
+     *
      * @param string $appName
      * @return BackendApp|null
      */
