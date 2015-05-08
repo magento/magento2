@@ -11,34 +11,26 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountIndex;
-use Magento\Customer\Test\Page\CustomerAccountLogin;
-use Magento\Customer\Test\Page\CustomerAccountLogout;
 use Magento\Wishlist\Test\Page\WishlistIndex;
 use Magento\Wishlist\Test\Page\WishlistShare;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for ShareWishlistEntity
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Create Customer Account
- * 2. Create product
+ * 1. Create Customer Account.
+ * 2. Create product.
  *
  * Steps:
- * 1. Login to frontend as a Customer
- * 2. Add product to Wish List
- * 3. Click "Share Wish List" button
- * 4. Fill in all data according to data set
- * 5. Click "Share Wishlist" button
- * 6. Perform all assertions
+ * 1. Login to frontend as a Customer.
+ * 2. Add product to Wish List.
+ * 3. Click "Share Wish List" button.
+ * 4. Fill in all data according to data set.
+ * 5. Click "Share Wishlist" button.
+ * 6. Perform all assertions.
  *
  * @group Wishlist_(CS)
  * @ZephyrId MAGETWO-23394
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShareWishlistEntityTest extends Injectable
 {
@@ -49,56 +41,42 @@ class ShareWishlistEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Cms index page
+     * Cms index page.
      *
      * @var CmsIndex
      */
     protected $cmsIndex;
 
     /**
-     * Customer login page
-     *
-     * @var CustomerAccountLogin
-     */
-    protected $customerAccountLogin;
-
-    /**
-     * Customer account index page
+     * Customer account index page.
      *
      * @var CustomerAccountIndex
      */
     protected $customerAccountIndex;
 
     /**
-     * Product view page
+     * Product view page.
      *
      * @var CatalogProductView
      */
     protected $catalogProductView;
 
     /**
-     * Page CustomerAccountLogout
-     *
-     * @var CustomerAccountLogout
-     */
-    protected $customerAccountLogout;
-
-    /**
-     * Wishlist index page
+     * Wishlist index page.
      *
      * @var WishlistIndex
      */
     protected $wishlistIndex;
 
     /**
-     * Wishlist share page
+     * Wishlist share page.
      *
      * @var WishlistShare
      */
     protected $wishlistShare;
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param Customer $customer
      * @param CatalogProductSimple $product
@@ -118,12 +96,10 @@ class ShareWishlistEntityTest extends Injectable
     }
 
     /**
-     * Injection data
+     * Inject pages.
      *
      * @param CmsIndex $cmsIndex
-     * @param CustomerAccountLogin $customerAccountLogin
      * @param CustomerAccountIndex $customerAccountIndex
-     * @param CustomerAccountLogout $customerAccountLogout
      * @param CatalogProductView $catalogProductView
      * @param WishlistIndex $wishlistIndex
      * @param WishlistShare $wishlistShare
@@ -131,24 +107,20 @@ class ShareWishlistEntityTest extends Injectable
      */
     public function __inject(
         CmsIndex $cmsIndex,
-        CustomerAccountLogin $customerAccountLogin,
         CustomerAccountIndex $customerAccountIndex,
-        CustomerAccountLogout $customerAccountLogout,
         CatalogProductView $catalogProductView,
         WishlistIndex $wishlistIndex,
         WishlistShare $wishlistShare
     ) {
         $this->cmsIndex = $cmsIndex;
-        $this->customerAccountLogin = $customerAccountLogin;
         $this->customerAccountIndex = $customerAccountIndex;
-        $this->customerAccountLogout = $customerAccountLogout;
         $this->catalogProductView = $catalogProductView;
         $this->wishlistIndex = $wishlistIndex;
         $this->wishlistShare = $wishlistShare;
     }
 
     /**
-     * Share wish list
+     * Share wish list.
      *
      * @param BrowserInterface $browser
      * @param Customer $customer
@@ -174,27 +146,16 @@ class ShareWishlistEntityTest extends Injectable
     }
 
     /**
-     * Login customer
+     * Login customer.
      *
      * @param Customer $customer
      * @return void
      */
     protected function loginCustomer(Customer $customer)
     {
-        $this->cmsIndex->open();
-        if (!$this->cmsIndex->getLinksBlock()->isLinkVisible('Log Out')) {
-            $this->cmsIndex->getLinksBlock()->openLink("Log In");
-            $this->customerAccountLogin->getLoginBlock()->login($customer);
-        }
-    }
-
-    /**
-     * Log out after test
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        $this->customerAccountLogout->open();
+        $this->objectManager->create(
+            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            ['customer' => $customer]
+        )->run();
     }
 }

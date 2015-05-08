@@ -12,7 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment getResource()
- * @method \Magento\Sales\Model\Order\Invoice\Comment setCreatedAt(string $value)
  */
 class Comment extends AbstractModel implements InvoiceCommentInterface
 {
@@ -124,6 +123,14 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
     public function getCreatedAt()
     {
         return $this->getData(InvoiceCommentInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(InvoiceCommentInterface::CREATED_AT, $createdAt);
     }
 
     /**

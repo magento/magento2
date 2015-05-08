@@ -76,6 +76,14 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getTransactionId();
 
     /**
+     * Sets the transaction ID for the transaction.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setTransactionId($id);
+
+    /**
      * Gets the parent ID for the transaction.
      *
      * @return int|null The parent ID for the transaction. Otherwise, null.
@@ -137,6 +145,14 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return string Created-at timestamp.
      */
     public function getCreatedAt();
+
+    /**
+     * Sets the created-at timestamp for the transaction.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
 
     /**
      * Gets an array of child transactions for the transaction.

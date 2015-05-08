@@ -25,10 +25,40 @@ class Config extends TagScope implements CacheInterface
     const CACHE_TAG = 'CONFIG';
 
     /**
-     * @param FrontendPool $cacheFrontendPool
+     * @var \Magento\Framework\App\Cache\Type\FrontendPool
      */
-    public function __construct(FrontendPool $cacheFrontendPool)
+    private $cacheFrontendPool;
+
+    /**
+     * @param \Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool
+     */
+    public function __construct(\Magento\Framework\App\Cache\Type\FrontendPool $cacheFrontendPool)
     {
-        parent::__construct($cacheFrontendPool->get(self::TYPE_IDENTIFIER), self::CACHE_TAG);
+        $this->cacheFrontendPool = $cacheFrontendPool;
+    }
+
+    /**
+     * Retrieve cache frontend instance being decorated
+     *
+     * @return \Magento\Framework\Cache\FrontendInterface
+     */
+    protected function _getFrontend()
+    {
+        $frontend = parent::_getFrontend();
+        if (!$frontend) {
+            $frontend = $this->cacheFrontendPool->get(self::TYPE_IDENTIFIER);
+            $this->setFrontend($frontend);
+        }
+        return $frontend;
+    }
+
+    /**
+     * Retrieve cache tag name
+     *
+     * @return string
+     */
+    public function getTag()
+    {
+        return self::CACHE_TAG;
     }
 }

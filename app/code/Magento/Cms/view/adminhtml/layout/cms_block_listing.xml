@@ -92,14 +92,6 @@
                         </item>
                     </item>
                 </argument>
-                <argument name="row_data_provider" xsi:type="array">
-                    <item name="actions" xsi:type="array">
-                        <item name="class" xsi:type="string">Magento\Cms\Ui\DataProvider\Block\Row\Actions</item>
-                    </item>
-                    <item name="store_id" xsi:type="array">
-                        <item name="class" xsi:type="string">Magento\Store\Ui\DataProvider\Row</item>
-                    </item>
-                </argument>
             </arguments>
         </referenceBlock>
         <referenceBlock name="sorting">

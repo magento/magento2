@@ -19,7 +19,6 @@ use Magento\Sales\Model\AbstractModel;
  *
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Payment\Transaction getResource()
- * @method \Magento\Sales\Model\Order\Payment\Transaction setCreatedAt(string $value)
 
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -923,6 +922,14 @@ class Transaction extends AbstractModel implements TransactionInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function setTransactionId($id)
+    {
+        return $this->setData(TransactionInterface::TRANSACTION_ID, $id);
+    }
+
+    /**
      * Returns method
      *
      * @return string
@@ -1002,8 +1009,9 @@ class Transaction extends AbstractModel implements TransactionInterface
         return $this->getData(TransactionInterface::IS_CLOSED);
     }
 
+    //@codeCoverageIgnoreStart
     /**
-     * Returns created_at
+     * Gets the created-at timestamp for the transaction.
      *
      * @return string
      */
@@ -1012,7 +1020,14 @@ class Transaction extends AbstractModel implements TransactionInterface
         return $this->getData(TransactionInterface::CREATED_AT);
     }
 
-    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(TransactionInterface::CREATED_AT, $createdAt);
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -6,11 +6,12 @@
 namespace Magento\Ui\Component\Control;
 
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\UiComponent\Control\ControlInterface;
 
 /**
  * Class Button
  */
-class Button extends Template
+class Button extends Template implements ControlInterface
 {
     /**
      * Define block template
@@ -72,7 +73,7 @@ class Button extends Template
         } else {
             $url = $this->hasData('url') ? $this->getData('url') : $this->getUrl();
             if (!empty($url)) {
-                return sprintf("setLocation('%s');", $url);
+                return sprintf("location.href = '%s';", $url);
             }
 
             return null;

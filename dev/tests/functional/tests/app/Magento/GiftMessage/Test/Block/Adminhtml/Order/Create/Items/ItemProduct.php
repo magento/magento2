@@ -29,11 +29,11 @@ class ItemProduct extends \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
     protected $giftMessageForm = './/*[@role="dialog"][*[@id="gift_options_configure"]]';
 
     /**
-     * Magento varienLoader.js loader.
+     * Magento loader.
      *
      * @var string
      */
-    protected $loadingMask = '//*[@id="loading-mask"]/*[@id="loading_mask_loader"]';
+    protected $loader = '[data-role="loader"]';
 
     /**
      * Fill GiftMessage form.
@@ -58,10 +58,11 @@ class ItemProduct extends \Magento\Sales\Test\Block\Adminhtml\Order\Create\Items
             ['element' => $this->browser->find($this->giftMessageForm, Locator::SELECTOR_XPATH)]
         );
         $giftMessageForm->fill($giftMessage);
-        $loadingMask = $this->browser->find($this->loadingMask, Locator::SELECTOR_XPATH);
+        $loader = $this->loader;
         $this->browser->waitUntil(
-            function () use ($loadingMask) {
-                return !$loadingMask->isVisible() ? true : null;
+            function () use ($browser, $loader) {
+                $element = $this->browser->find($loader);
+                return $element->isVisible() == false ? true : null;
             }
         );
     }
