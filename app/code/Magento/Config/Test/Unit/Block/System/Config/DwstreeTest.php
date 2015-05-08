@@ -37,8 +37,6 @@ class DwstreeTest extends \PHPUnit_Framework_TestCase
      */
     protected $context;
 
-
-
     protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
@@ -74,6 +72,9 @@ class DwstreeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $section
+     * @param $website
+     * @param $store
      * @dataProvider initTabsDataProvider
      */
     public function testInitTabs($section, $website, $store)
