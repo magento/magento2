@@ -3,8 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
+
+use Magento\Framework\Controller\ResultFactory;
 
 class AllcartTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,6 +39,21 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
      */
     protected $response;
 
+    /**
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultRedirectMock;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultForwardMock;
+
     protected function setUp()
     {
         $this->context = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
@@ -46,6 +62,24 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
         $this->formKeyValidator = $this->getMock('Magento\Framework\Data\Form\FormKey\Validator', [], [], '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->response = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultForwardMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Forward')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturnMap(
+                [
+                    [ResultFactory::TYPE_REDIRECT, [], $this->resultRedirectMock],
+                    [ResultFactory::TYPE_FORWARD, [], $this->resultForwardMock]
+                ]
+            );
     }
 
     protected function prepareContext()
@@ -94,6 +128,9 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getMessageManager')
             ->will($this->returnValue($messageManager));
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactoryMock);
     }
 
     public function getController()
@@ -114,24 +151,13 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->request)
             ->will($this->returnValue(false));
-
-        $this->request
-            ->expects($this->once())
-            ->method('initForward')
-            ->will($this->returnValue(true));
-        $this->request
-            ->expects($this->once())
-            ->method('setActionName')
+        $this->resultForwardMock->expects($this->once())
+            ->method('forward')
             ->with('noroute')
-            ->will($this->returnValue(true));
-        $this->request
-            ->expects($this->once())
-            ->method('setDispatched')
-            ->with(false)
-            ->will($this->returnValue(true));
+            ->willReturnSelf();
 
         $controller = $this->getController();
-        $controller->execute();
+        $this->assertSame($this->resultForwardMock, $controller->execute());
     }
 
     public function testExecuteWithoutWishlist()
@@ -141,63 +167,43 @@ class AllcartTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->with($this->request)
             ->will($this->returnValue(true));
-
-        $this->request
-            ->expects($this->once())
-            ->method('initForward')
-            ->will($this->returnValue(true));
-        $this->request
-            ->expects($this->once())
-            ->method('setActionName')
-            ->with('noroute')
-            ->will($this->returnValue(true));
-        $this->request
-            ->expects($this->once())
-            ->method('setDispatched')
-            ->with(false)
-            ->will($this->returnValue(true));
-
         $this->wishlistProvider
             ->expects($this->once())
             ->method('getWishlist')
             ->will($this->returnValue(null));
+        $this->resultForwardMock->expects($this->once())
+            ->method('forward')
+            ->with('noroute')
+            ->willReturnSelf();
 
-
-        $this->getController()->execute();
+        $this->assertSame($this->resultForwardMock, $this->getController()->execute());
     }
 
     public function testExecutePassed()
     {
+        $url = 'http://redirect-url.com';
         $wishlist = $this->getMock('Magento\Wishlist\Model\Wishlist', [], [], '', false);
         
-        $this->formKeyValidator
-            ->expects($this->once())
+        $this->formKeyValidator->expects($this->once())
             ->method('validate')
             ->with($this->request)
             ->will($this->returnValue(true));
-
-        $this->request
-            ->expects($this->once())
+        $this->request->expects($this->once())
             ->method('getParam')
             ->with('qty')
             ->will($this->returnValue(2));
-
-        $this->response
-            ->expects($this->once())
-            ->method('setRedirect')
-            ->will($this->returnValue('http://redirect-url.com'));
-
-        $this->wishlistProvider
-            ->expects($this->once())
+        $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')
             ->will($this->returnValue($wishlist));
-        
-        $this->itemCarrier
-            ->expects($this->once())
+        $this->itemCarrier->expects($this->once())
             ->method('moveAllToCart')
             ->with($wishlist, 2)
-            ->will($this->returnValue('http://redirect-url.com'));
+            ->willReturn($url);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setUrl')
+            ->with($url)
+            ->willReturnSelf();
 
-        $this->getController()->execute();
+        $this->assertSame($this->resultRedirectMock, $this->getController()->execute());
     }
 }

@@ -7,32 +7,6 @@ namespace Magento\Tax\Api\Data;
 
 interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    /**#@+
-     * Constants defined for keys of array, makes typos less likely
-     */
-    const KEY_CODE = 'code';
-
-    const KEY_TYPE = 'type';
-
-    const KEY_TAX_CLASS_KEY = 'tax_class_key';
-
-    const KEY_UNIT_PRICE = 'unit_price';
-
-    const KEY_QUANTITY = 'quantity';
-
-    const KEY_TAX_INCLUDED = 'tax_included';
-
-    const KEY_SHORT_DESCRIPTION = 'short_description';
-
-    const KEY_DISCOUNT_AMOUNT = 'discount_amount';
-
-    const KEY_PARENT_CODE = 'parent_code';
-
-    const KEY_ASSOCIATED_ITEM_CODE = 'associated_item_code';
-
-    const KEY_TAX_CLASS_ID = 'tax_class_id';
-    /**#@-*/
-
     /**
      * Get code (sku or shipping code)
      *
@@ -172,7 +146,7 @@ interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDat
     /**
      * Get associated item code if this item is associated with another item, null otherwise
      *
-     * @return mixed|null
+     * @return int|null
      */
     public function getAssociatedItemCode();
 

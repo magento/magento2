@@ -98,6 +98,7 @@
     <type name="Magento\Catalog\Model\Product">
         <arguments>
             <argument name="catalogProductStatus" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Source\Status\Proxy</argument>
+            <argument name="productLink" xsi:type="object">Magento\Catalog\Model\Product\Link\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Resource\Product\Collection">
@@ -398,6 +399,11 @@
             <argument name="validatorFile" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Attribute\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Catalog\Model\Attribute\Config\Data\Proxy</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Catalog\Model\Layer\Search\Context" type="Magento\Catalog\Model\Layer\Context">
         <arguments>
             <argument name="collectionProvider" xsi:type="object">Magento\Catalog\Model\Layer\Search\ItemCollectionProvider</argument>
@@ -461,4 +467,12 @@
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface" type="\Magento\Catalog\Model\Product\Option\Value" />
     <virtualType name="Magento\Catalog\Model\Resource\Attribute\Collection" type="Magento\Eav\Model\Resource\Entity\Attribute\Collection">
     </virtualType>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="transactionWrapper" type="\Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper" sortOrder="-1"/>
+    </type>
+    <type name="Magento\Catalog\Model\CategoryRepository">
+        <arguments>
+            <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\Resource\Category\Proxy</argument>
+        </arguments>
+    </type>
 </config>

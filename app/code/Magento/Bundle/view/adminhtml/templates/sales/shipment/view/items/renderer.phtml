@@ -43,8 +43,8 @@
         <?php if (!$_item->getParentItem()): ?>
         <td class="col-product">
             <div class="product-title"><?php echo $block->escapeHtml($_item->getName()) ?></div>
-            <div>
-                <strong><?php echo __('SKU') ?>:</strong>
+            <div class="product-sku-block">
+                <span><?php echo __('SKU') ?>:</span>
                 <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
             </div>
         </td>

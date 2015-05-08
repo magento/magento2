@@ -30,7 +30,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * necessary for further process, else date string
      *
      * @param \Magento\Framework\Object $object
-     * @throws \Magento\Eav\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */
     public function beforeSave($object)
@@ -41,7 +41,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
             try {
                 $value = $this->formatDate($object->getData($attributeName));
             } catch (\Exception $e) {
-                throw new \Magento\Eav\Exception(__('Invalid date'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid date'));
             }
 
             if (is_null($value)) {

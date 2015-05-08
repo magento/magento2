@@ -5,7 +5,7 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
-use Magento\Eav\Exception as EavException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Entity/Attribute/Model - attribute backend abstract
@@ -214,7 +214,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      *
      * @param \Magento\Framework\Object $object
      * @return bool
-     * @throws EavException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate($object)
@@ -223,7 +223,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         $attrCode = $attribute->getAttributeCode();
         $value = $object->getData($attrCode);
         if ($attribute->getIsVisible() && $attribute->getIsRequired() && $attribute->isValueEmpty($value)) {
-            throw new EavException(__('The value of attribute "%1" must be set', $attrCode));
+            throw new LocalizedException(__('The value of attribute "%1" must be set', $attrCode));
         }
 
         if ($attribute->getIsUnique()
@@ -236,7 +236,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         if ($attribute->getIsUnique()) {
             if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {
                 $label = $attribute->getFrontend()->getLabel();
-                throw new EavException(__('The value of attribute "%1" must be unique', $label));
+                throw new LocalizedException(__('The value of attribute "%1" must be unique', $label));
             }
         }
 

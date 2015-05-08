@@ -66,10 +66,10 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testLargeSizeException()
+    public function testLargeSizeFile()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Exception\File\LargeSizeException',
+            '\Magento\Framework\Exception\LocalizedException',
             sprintf('The file you uploaded is larger than %s Megabytes allowed by server', $this->maxFileSizeInMb)
         );
         $this->prepareEnv();
@@ -108,7 +108,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\File\ValidatorException
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please specify the product's required option(s).
      * @return void
      */
@@ -131,7 +131,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
     public function testInvalidateFile()
     {
         $this->setExpectedException(
-            '\Magento\Framework\Exception\File\ValidatorException',
+            '\Magento\Framework\Exception\LocalizedException',
             "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "The file 'test.jpg' for 'MediaOption' has an invalid extension.\n"
             . "Maximum allowed image size for 'MediaOption' is 2000x2000 px.\n"

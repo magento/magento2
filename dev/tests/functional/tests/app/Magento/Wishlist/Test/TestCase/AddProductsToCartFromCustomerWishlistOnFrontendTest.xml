@@ -27,34 +27,30 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertWishlistIsEmpty" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation4">
-            <data name="products" xsi:type="string">groupedProduct::three_simple_products_default_qty</data>
+            <data name="products" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="qty" xsi:type="string">-</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation5">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-36224</data>
             <data name="products" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="qty" xsi:type="string">-</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation6">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-36224</data>
             <data name="products" xsi:type="string">configurableProduct::default</data>
             <data name="qty" xsi:type="string">3</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation7">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-36224</data>
             <data name="products" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <data name="qty" xsi:type="string">2</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductsIsAbsentInWishlist" />
         </variation>
         <variation name="AddProductsToCartFromCustomerWishlistOnFrontendTestVariation8">
-            <data name="issue" xsi:type="string">Bug: MAGETWO-36224</data>
             <data name="products" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="qty" xsi:type="string">2</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />

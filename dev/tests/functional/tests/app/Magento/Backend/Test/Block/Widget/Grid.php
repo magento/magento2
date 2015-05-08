@@ -46,7 +46,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $resetButton = '.action-reset';
+    protected $resetButton = '[data-action="grid-filter-reset"]';
 
     /**
      * The first row in grid. For this moment we suggest that we should strictly define what we are going to search
@@ -144,7 +144,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $active = '.active';
+    protected $active = '[class=*_active]';
 
     /**
      * Secondary part of row locator template for getRow() method
@@ -417,7 +417,6 @@ abstract class Grid extends Block
      */
     public function isRowVisible(array $filter, $isSearchable = true, $isStrict = true)
     {
-        $this->openFilterBlock();
         return $this->getRow($filter, $isSearchable, $isStrict)->isVisible();
     }
 
@@ -446,14 +445,14 @@ abstract class Grid extends Block
     {
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
 
-        $button = $this->_rootElement->find($this->filterButton);
-        if ($button->isVisible() && !$this->_rootElement->find($this->filterButton . $this->active)->isVisible()) {
-            $button->click();
+        $toggleFilterButton = $this->_rootElement->find($this->filterButton);
+        $searchButton = $this->_rootElement->find($this->searchButton);
+        if ($toggleFilterButton->isVisible() && !$searchButton->isVisible()) {
+            $toggleFilterButton->click();
             $browser = $this->_rootElement;
-            $selector = $this->searchButton;
             $browser->waitUntil(
-                function () use ($browser, $selector) {
-                    return $browser->find($selector)->isVisible() ? true : null;
+                function () use ($searchButton) {
+                    return $searchButton->isVisible() ? true : null;
                 }
             );
         }
