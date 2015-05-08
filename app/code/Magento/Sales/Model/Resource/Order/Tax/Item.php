@@ -4,14 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 
 /**
  * Sales order tax resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Tax\Model\Resource\Sales\Order\Tax;
+namespace Magento\Sales\Model\Resource\Order\Tax;
 
 class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
@@ -23,30 +20,6 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('sales_order_tax_item', 'tax_item_id');
-    }
-
-    /**
-     * Get Tax Items with order tax information
-     *
-     * @param int $item_id
-     * @return array
-     */
-    public function getTaxItemsByItemId($item_id)
-    {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
-            ['item' => $this->getTable('sales_order_tax_item')],
-            ['tax_id', 'tax_percent']
-        )->join(
-            ['tax' => $this->getTable('sales_order_tax')],
-            'item.tax_id = tax.tax_id',
-            ['title', 'percent', 'base_amount']
-        )->where(
-            'item_id = ?',
-            $item_id
-        );
-
-        return $adapter->fetchAll($select);
     }
 
     /**
