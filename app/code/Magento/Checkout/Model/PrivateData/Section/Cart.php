@@ -82,7 +82,6 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
             'subtotal' => isset($totals['subtotal'])
                 ? $this->checkoutHelper->formatPrice($totals['subtotal']->getValue())
                 : 0,
-            'cart_empty_message' => '',
             'possible_onepage_checkout' => $this->isPossibleOnepageCheckout(),
             'items' => $this->getRecentItems(),
         ];
