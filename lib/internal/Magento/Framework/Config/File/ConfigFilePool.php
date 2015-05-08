@@ -15,7 +15,7 @@ class ConfigFilePool
     const APP_ENV = 'app_env';
 
     /**
-     * Default application config
+     * Default files for configuration and environment
      *
      * @var array
      */

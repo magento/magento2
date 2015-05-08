@@ -66,30 +66,58 @@ class Reader
     /**
      * Loads the configuration file
      *
-     * @param string $configFile
-     * @throws \Exception
+     * @param string $fileKey
      * @return array
+     * @throws \Exception
      */
-    public function load($configFile = null)
+    public function load($fileKey = null)
     {
         $path = $this->dirList->getPath(DirectoryList::CONFIG);
-        if ($configFile) {
-            $result = @include $path . '/' . $this->configFilePool->getPath($configFile);
+        if ($fileKey) {
+            $result = @include $path . '/' . $this->configFilePool->getPath($fileKey);
         } else {
             $configFiles = $this->configFilePool->getPaths();
             $result = [];
             foreach (array_keys($configFiles) as $fileKey) {
                 $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
                 $fileData = @include $configFile;
-                if (empty($fileData)) {
-                    $result = array_merge($result, []);
-                } elseif (empty(array_intersect_key($result, $fileData))) {
-                    $result = array_replace_recursive($result, $fileData);
-                } else {
-                    throw new \Exception('Duplicate keys are present');
+                if (!empty($fileData)) {
+                    $result = array_merge_recursive($result, $fileData);
+                    $this->flattenParams($result);
                 }
             }
         }
         return $result ?: [];
+    }
+
+    /**
+     * Convert associative array of arbitrary depth to a flat associative array with concatenated key path as keys
+     * each level of array is accessible by path key
+     *
+     * @param array $params
+     * @param string $path
+     * @return array
+     * @throws \Exception
+     */
+    public function flattenParams(array $params, $path = null)
+    {
+        $cache = [];
+
+        foreach ($params as $key => $param) {
+            if ($path) {
+                $newPath = $path . '/' . $key;
+            } else {
+                $newPath = $key;
+            }
+            if (isset($cache[$newPath])) {
+                throw new \Exception("Key collision {$newPath} is already defined.");
+            }
+            $cache[$newPath] = $param;
+            if (is_array($param)) {
+                $cache = array_merge($cache, $this->flattenParams($param, $newPath));
+            }
+        }
+
+        return $cache;
     }
 }

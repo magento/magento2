@@ -4,4 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-return ['barKey' => 'someOtherBar'];
+return [
+    'otherFooKey' => ['otherFooValueOne' => ['yetAnotherFooKey' => 'yetAnotherFooValue']]
+];

@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Config\File\ConfigFilePool;
 
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -77,7 +76,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $configFilePool->expects($this->any())->method('getPaths')->willReturn([$file]);
         $configFilePool->expects($this->any())->method('getPath')->willReturn($file);
         $object = new Reader($this->dirList, $configFilePool, $file);
-        $this->assertSame($expected, $object->load());
+        $this->assertSame($expected, $object->load($file));
     }
 
     /**
@@ -91,14 +90,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Duplicate keys are present
-     */
-    public function testDuplicateLoad()
+    public function testMerging()
     {
         $configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
-        $files = [['configKeyOne', 'config.php'], ['configKeyTwo','duplicateConfig.php']];
+        $files = [['configKeyOne', 'mergeOne.php'], ['configKeyTwo','mergeTwo.php']];
         $configFilePool
             ->expects($this->any())
             ->method('getPath')
@@ -106,8 +101,37 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $configFilePool
             ->expects($this->any())
             ->method('getPaths')
-            ->willReturn(['configKeyOne' => 'config.php', 'configKeyTwo' => 'duplicateConfig.php']);
+            ->willReturn(['configKeyOne' => 'mergeOne.php', 'configKeyTwo' => 'mergeTwo.php']);
         $object = new Reader($this->dirList, $configFilePool);
-        $this->assertSame(['fooKey' =>'foo', 'barKey' => 'bar'], $object->load());
+        $expected = [
+            'otherFooKey' => [
+                'otherFooValueOne' => ['yetAnotherFooKey' => 'yetAnotherFooValue'],
+                'otherFooValueTwo' => ['yetAnotherFooKeyTwo' => 'yetAnotherFooValueTwo']
+            ]
+        ];
+        $this->assertSame($expected, $object->load());
+    }
+
+    /**
+     * @param array $data
+     * @expectedException \Exception
+     * @expectedExceptionMessage Key collision
+     * @dataProvider flattenParamsDataProvider
+     */
+    public function testFlattenParams(array $data)
+    {
+        $object = new Reader($this->dirList, $this->configFilePool);
+        $object->flattenParams($data);
+    }
+
+    public function flattenParamsDataProvider()
+    {
+        return [
+            [
+                ['foo' => ['bar' => '1'], 'foo/bar' => '2'],
+                ['foo/bar' => '1', 'foo' => ['bar' => '2']],
+                ['foo' => ['subfoo' => ['subbar' => '1'], 'subfoo/subbar' => '2'], 'bar' => '3'],
+            ]
+        ];
     }
 }

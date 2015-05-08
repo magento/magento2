@@ -133,38 +133,7 @@ class DeploymentConfig
                 $this->data = array_replace($this->data, $this->overrideData);
             }
             // flatten data for config retrieval using get()
-            $this->flatData = $this->flattenParams($this->data);
+            $this->flatData = $this->reader->flattenParams($this->data);
         }
-    }
-
-    /**
-     * Convert associative array of arbitrary depth to a flat associative array with concatenated key path as keys
-     * each level of array is accessible by path key
-     *
-     * @param array $params
-     * @param string $path
-     * @return array
-     * @throws \Exception
-     */
-    private function flattenParams(array $params, $path = null)
-    {
-        $cache = [];
-
-        foreach ($params as $key => $param) {
-            if ($path) {
-                $newPath = $path . '/' . $key;
-            } else {
-                $newPath = $key;
-            }
-            if (isset($cache[$newPath])) {
-                throw new \Exception("Key collision {$newPath} is already defined.");
-            }
-            $cache[$newPath] = $param;
-            if (is_array($param)) {
-                $cache = array_merge($cache, $this->flattenParams($param, $newPath));
-            }
-        }
-
-        return $cache;
     }
 }

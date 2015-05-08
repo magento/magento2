@@ -5,7 +5,6 @@
  */
 namespace Magento\TestFramework;
 
-use Magento\Framework\Code\Generator\FileResolver;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
