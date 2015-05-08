@@ -24,13 +24,12 @@
                 <span><?php echo $code; ?> (<?php echo $data['displayName']; ?>)</span>
             </label>
             <div class="admin__field-control">
-                <input
-                    id="custom_currency_symbol<?php echo $code; ?>"
-                    class="required-entry admin__control-text"
-                    type="text"
-                    value="<?php echo $block->escapeQuote($data['displaySymbol']); ?>"
-                    <?php echo $data['inherited'] ? ' disabled="disabled"' : '';?>
-                    name="custom_currency_symbol[<?php echo $code; ?>]">
+                <input id="custom_currency_symbol<?php echo $code; ?>"
+                       class="required-entry admin__control-text"
+                       type="text"
+                       value="<?php echo $block->escapeQuote($data['displaySymbol']); ?>"
+                       <?php echo $data['inherited'] ? ' disabled="disabled"' : '';?>
+                       name="custom_currency_symbol[<?php echo $code; ?>]">
                 <div class="admin__field admin__field-option">
                     <input id="custom_currency_symbol_inherit<?php echo $code; ?>"
                            class="admin__control-checkbox" type="checkbox"
