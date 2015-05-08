@@ -74,4 +74,20 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel
     {
         return $this->setData(self::FORMATTED_SHIPPING_ADDRESS, $formattedShippingAddress);
     }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function getGrandTotal()
+    {
+        return $this->getData(self::GRAND_TOTAL);
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function setGrandTotal($grandTotal)
+    {
+        return $this->setData(self::GRAND_TOTAL, $grandTotal);
+    }
 }
