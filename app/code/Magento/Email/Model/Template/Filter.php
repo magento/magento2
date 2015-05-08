@@ -47,6 +47,13 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_plainTemplateMode = false;
 
     /**
+     * List of CSS files that should be inlined on this template
+     *
+     * @var array
+     */
+    protected $_inlineCssFiles = array();
+
+    /**
      * @var \Magento\Framework\View\Asset\Repository
      */
     protected $_assetRepo;
@@ -602,6 +609,45 @@ class Filter extends \Magento\Framework\Filter\Template
             }
         }
         return $customVarValue;
+    }
+
+    /**
+     * This directive will allow CSS files to be applied inline to the HTML in the email template.
+     * Syntax: {{inlinecss file=""}}  If this directive is used, the files will be stored on this object so that
+     * it can be retrieved later
+     *
+     * @param string[] $construction
+     * @return string
+     */
+    public function inlinecssDirective($construction)
+    {
+        $params = $this->_getIncludeParameters($construction[2]);
+        if (isset($params['file'])) {
+            $this->_addInlineCssFile($params['file']);
+        }
+        return '';
+    }
+
+    /**
+     * Add filename of CSS file to inline
+     *
+     * @param string $filename
+     * @return $this
+     */
+    protected function _addInlineCssFile($filename)
+    {
+        $this->_inlineCssFiles[] = $filename;
+        return $this;
+    }
+
+    /**
+     * Get filename of CSS file to inline
+     *
+     * @return array
+     */
+    public function getInlineCssFiles()
+    {
+        return $this->_inlineCssFiles;
     }
 
     /**
