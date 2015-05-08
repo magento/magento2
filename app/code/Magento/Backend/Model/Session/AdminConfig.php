@@ -93,11 +93,17 @@ class AdminConfig extends Config
      */
     private function extractAdminPath()
     {
-        $parsedUrl = parse_url($this->_storeManager->getStore()->getBaseUrl());
-        $baseUrl = $parsedUrl['path'];
         $backendApp = $this->backendAppList->getCurrentApp();
-        $cookiePath = $backendApp ? $backendApp->getCookiePath() : $this->_frontNameResolver->getFrontName();
-        $cookiePath = $baseUrl . $cookiePath;
+        $cookiePath = null;
+        $baseUrl = $parsedUrl = parse_url($this->_storeManager->getStore()->getBaseUrl(), PHP_URL_PATH);
+        if (!$backendApp) {
+            $cookiePath = $baseUrl . $this->_frontNameResolver->getFrontName();
+            return $cookiePath;
+        }
+        //In case of application authenticating through the admin login, the script name should be removed
+        //from the path, because application has own script.
+        $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($baseUrl);
+        $cookiePath = $baseUrl . $backendApp->getCookiePath();
         return $cookiePath;
     }
 }

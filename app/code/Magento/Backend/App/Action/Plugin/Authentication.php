@@ -122,8 +122,9 @@ class Authentication
 
                 if ($backendApp) {
                     $resultRedirect = $this->resultRedirectFactory->create();
-                    $url = $this->backendUrl->getBaseUrl() . $backendApp->getStartupPage();
-                    return $resultRedirect->setUrl($url);
+                    $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($this->backendUrl->getBaseUrl());
+                    $baseUrl = $baseUrl . $backendApp->getStartupPage();
+                    return $resultRedirect->setUrl($baseUrl);
                 }
             }
         }
