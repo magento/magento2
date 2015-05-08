@@ -113,6 +113,26 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Key collision
+     */
+    public function testMergingWithDuplicateEndValues()
+    {
+        $configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
+        $files = [['configKeyOne', 'config.php'], ['configKeyTwo','duplicateConfig.php']];
+        $configFilePool
+            ->expects($this->any())
+            ->method('getPath')
+            ->will($this->returnValueMap($files));
+        $configFilePool
+            ->expects($this->any())
+            ->method('getPaths')
+            ->willReturn(['configKeyOne' => 'config.php', 'configKeyTwo' => 'duplicateConfig.php']);
+        $object = new Reader($this->dirList, $configFilePool);
+        $object->load();
+    }
+
+    /**
      * @param array $data
      * @expectedException \Exception
      * @expectedExceptionMessage Key collision
@@ -131,6 +151,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
                 ['foo' => ['bar' => '1'], 'foo/bar' => '2'],
                 ['foo/bar' => '1', 'foo' => ['bar' => '2']],
                 ['foo' => ['subfoo' => ['subbar' => '1'], 'subfoo/subbar' => '2'], 'bar' => '3'],
+                ['foo' => ['bar' => '1'], 'somevalue'],
+                [1 => 'foo', 2 => 'bar']
             ]
         ];
     }

@@ -109,7 +109,7 @@ class Reader
             } else {
                 $newPath = $key;
             }
-            if (isset($cache[$newPath])) {
+            if (isset($cache[$newPath]) || is_int($key)) {
                 throw new \Exception("Key collision {$newPath} is already defined.");
             }
             $cache[$newPath] = $param;
