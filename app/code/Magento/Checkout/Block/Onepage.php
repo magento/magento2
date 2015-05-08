@@ -10,7 +10,6 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 
 /**
  * Onepage checkout block
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
@@ -61,6 +60,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface[] $customLayoutProviders
      * @param array $data
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
