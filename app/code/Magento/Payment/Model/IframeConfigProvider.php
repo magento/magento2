@@ -41,6 +41,8 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
     protected $paymentHelper;
 
     /**
+     * Payment method code
+     *
      * @var string
      */
     protected $methodCode;

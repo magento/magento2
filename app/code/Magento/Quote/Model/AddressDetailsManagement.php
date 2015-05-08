@@ -96,7 +96,7 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         if ($additionalData !== null) {
             $this->dataProcessor->process($additionalData);
         }
-        if (!is_null($checkoutMethod)) {
+        if ($checkoutMethod != null) {
             $this->quoteRepository->save(
                 $this->quoteRepository->getActive($cartId)
                     ->setCheckoutMethod($checkoutMethod)
