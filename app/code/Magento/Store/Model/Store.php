@@ -755,7 +755,12 @@ class Store extends AbstractModel implements
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
-        if (!$secureBaseUrl) {
+        if (!$secureBaseUrl ||
+            !$this->_config->getValue(
+                self::XML_PATH_SECURE_IN_FRONTEND,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        ) {
             return false;
         }
 
