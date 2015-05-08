@@ -6,7 +6,7 @@
 'use strict';
 
 var banner = {
-    firstLine: 'Copyright © <%= grunt.template.today("yyyy") %> Magento. All rights reserved.',
+    firstLine: 'Copyright © 2015 Magento. All rights reserved.',
     secondLine: 'See COPYING.txt for license details.',
 
     css: function () {
