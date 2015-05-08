@@ -44,7 +44,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const INPUT_KEY_DB_MODEL = 'db_model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
     const INPUT_KEY_RESOURCE = 'resource';
-    const INPUT_KEY_SKIP_DB_VALIDATION = 'skip_db_validation';
+    const INPUT_KEY_SKIP_DB_VALIDATION = 'skip-db-validation';
     /**#@-*/
 
     /**#@+
