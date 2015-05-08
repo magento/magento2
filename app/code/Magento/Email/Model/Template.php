@@ -374,8 +374,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      */
     public function getProcessedTemplate(array $variables = [])
     {
-        $processor = $this->getTemplateFilter();
-        $processor->setUseSessionInUrl(false)->setPlainTemplateMode($this->isPlain());
+        $processor = $this->getTemplateFilter()
+            ->setUseSessionInUrl(false)->setPlainTemplateMode($this->isPlain())
+            ->setIsChildTemplate($this->getIsChildTemplate());
 
         if (!$this->_preprocessFlag) {
             $variables['this'] = $this;
@@ -447,6 +448,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         } else {
             $includeTemplate->loadDefault($templateId);
         }
+
+        // Indicate that this is a child template so that when the template is being filtered, directives such as
+        // {{inlinecss}} can respond accordingly
+        $includeTemplate->setIsChildTemplate(true);
 
         return $includeTemplate->getProcessedTemplate($variables);
     }

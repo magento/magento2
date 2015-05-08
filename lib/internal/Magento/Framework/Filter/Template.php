@@ -23,6 +23,8 @@ class Template implements \Zend_Filter_Interface
 
     const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
+    const CONSTRUCTION_INCLUDE_PATTERN = '/{{(include)(.*?)}}/si';
+
     /**#@-*/
 
     /**
@@ -100,10 +102,11 @@ class Template implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        // "depend" and "if" operands should be first
+        // "depend", "if", and "include" directives should be first
         foreach ([
                      self::CONSTRUCTION_DEPEND_PATTERN => 'dependDirective',
                      self::CONSTRUCTION_IF_PATTERN => 'ifDirective',
+                     self::CONSTRUCTION_INCLUDE_PATTERN => 'includeDirective',
                  ] as $pattern => $directive) {
             if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {

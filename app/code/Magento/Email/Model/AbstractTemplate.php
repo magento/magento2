@@ -57,6 +57,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $_designConfig;
 
     /**
+     * Whether template is child of another template
+     *
+     * @var bool
+     */
+    protected $_isChildTemplate = false;
+
+    /**
      * Configuration of emulated design package.
      *
      * @var \Magento\Framework\Object|boolean
@@ -416,6 +423,28 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             throw new \Magento\Framework\Exception\LocalizedException(__('Design config must have area and store.'));
         }
         $this->getDesignConfig()->setData($config);
+        return $this;
+    }
+
+    /**
+     * Gets whether template is child of another template
+     *
+     * @return bool
+     */
+    public function getIsChildTemplate()
+    {
+        return $this->_isChildTemplate;
+    }
+
+    /**
+     * Sets whether template is child of another template
+     *
+     * @param bool $isChildTemplate
+     * @return $this
+     */
+    public function setIsChildTemplate($isChildTemplate)
+    {
+        $this->_isChildTemplate = $isChildTemplate;
         return $this;
     }
 

@@ -35,6 +35,13 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_modifiers = ['nl2br' => ''];
 
     /**
+     * Whether template being filtered is child of another template
+     *
+     * @var bool
+     */
+    protected $_isChildTemplate = false;
+
+    /**
      * Store id
      *
      * @var int
@@ -196,6 +203,28 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $this->_plainTemplateMode = (bool)$plainTemplateMode;
         return $this;
+    }
+
+    /**
+     * Sets whether template being filtered is child of another template
+     *
+     * @param bool $isChildTemplate
+     * @return $this
+     */
+    public function setIsChildTemplate($isChildTemplate)
+    {
+        $this->_isChildTemplate = (bool)$isChildTemplate;
+        return $this;
+    }
+
+    /**
+     * Gets whether template being filtered is child of another template
+     *
+     * @return bool
+     */
+    public function getIsChildTemplate()
+    {
+        return $this->_isChildTemplate;
     }
 
     /**
@@ -621,6 +650,12 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function inlinecssDirective($construction)
     {
+        // If this template is a child of another template, skip processing so that the parent template will process
+        // this directive. This is important as CSS inlining must operate on the entire HTML document.
+        if ($this->getIsChildTemplate()) {
+            return $construction[0];
+        }
+
         $params = $this->_getIncludeParameters($construction[2]);
         if (isset($params['file'])) {
             $this->_addInlineCssFile($params['file']);
