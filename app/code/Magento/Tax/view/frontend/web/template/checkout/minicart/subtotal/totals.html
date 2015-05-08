@@ -6,15 +6,15 @@
 -->
 
 <div class="amount price-container">
-    <!-- ko if: displaySubtotalExclTax -->
+    <!-- ko if: display_cart_subtotal_excl_tax -->
         <span class="price-wrapper" data-bind="html: cart().subtotal_excl_tax"></span>
     <!-- /ko -->
 
-    <!-- ko if: !displaySubtotalExclTax && displaySubtotalInclTax -->
+    <!-- ko if: !display_cart_subtotal_excl_tax && display_subtotal_incl_tax -->
         <span class="price-wrapper" data-bind="html: cart().subtotal_incl_tax"></span>
     <!-- /ko -->
 
-    <!-- ko if: !displaySubtotalExclTax && !displaySubtotalInclTax -->
+    <!-- ko if: !display_cart_subtotal_excl_tax && !display_subtotal_incl_tax -->
         <span class="price-wrapper price-including-tax"
               data-bind="attr: { 'data-label': $t('Incl. Tax') }, html: cart().subtotal_incl_tax">
         </span>

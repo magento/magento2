@@ -14,7 +14,7 @@ define([
 
     function initSidebar() {
         var minicart = $("[data-block='minicart']");
-        minicart.trigger('contentUpdated')
+        minicart.trigger('contentUpdated');
         if (sidebarInitialized) {
             return false;
         }

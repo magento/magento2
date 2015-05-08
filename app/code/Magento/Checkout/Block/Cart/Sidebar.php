@@ -21,11 +21,6 @@ class Sidebar extends AbstractCart
     const XML_PATH_CHECKOUT_SIDEBAR_DISPLAY = 'checkout/sidebar/display';
 
     /**
-     * @var \Magento\Tax\Model\Config
-     */
-    protected $_taxConfig;
-
-    /**
      * @var \Magento\Catalog\Model\Product\Image\View
      */
     protected $imageView;
@@ -34,21 +29,22 @@ class Sidebar extends AbstractCart
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Catalog\Model\Product\Image\View $imageView
+     * @param \Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
      * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Tax\Model\Config $taxConfig,
         \Magento\Catalog\Model\Product\Image\View $imageView,
+        \Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
         array $data = []
     ) {
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = false;
-        $this->_taxConfig = $taxConfig;
         $this->imageView = $imageView;
+        $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
     }
 
     /**
@@ -79,28 +75,6 @@ class Sidebar extends AbstractCart
     public function getShoppingCartUrl()
     {
         return $this->getUrl('checkout/cart');
-    }
-
-    /**
-     * Return whether subtotal should be displayed including tax
-     * TODO: dependence on taxConfig
-     * @return int
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getDisplaySubtotalInclTax()
-    {
-        return (int)$this->_taxConfig->displayCartSubtotalInclTax();
-    }
-
-    /**
-     * Return whether subtotal should be displayed excluding tax
-     * TODO: dependence on taxConfig
-     * @return int
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getDisplaySubtotalExclTax()
-    {
-        return (int)$this->_taxConfig->displayCartSubtotalExclTax();
     }
 
     /**

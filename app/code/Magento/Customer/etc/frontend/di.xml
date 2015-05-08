@@ -53,4 +53,6 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPoolInterface"
+                type="Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPool"/>
 </config>
