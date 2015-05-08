@@ -105,12 +105,18 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
         $localizedException->expects($this->any())->method('getLogMessage')
             ->will($this->returnValue('Invalid value. Value must be a URL or one of placeholders:'));
         $baseUrl= $this->getMock('Magento\Config\Model\Config\Backend\Baseurl', [], [], '', false);
-        $baseUrl->expects($this->any())->method('beforeSave')->will($this->throwException($localizedException));
+        if (!isset($option['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE])) {
+            $baseUrl->expects($this->any())->method('beforeSave')->will($this->throwException($localizedException));
+        } else {
 
-        $lists= $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
-        $lists->expects($this->any())->method('getLocaleList')->will($this->returnValue(['A' => 'B']));
-        $lists->expects($this->any())->method('getTimezoneList')->will($this->returnValue(['C' => 'D']));
-        $lists->expects($this->any())->method('getCurrencyList')->will($this->returnValue(['E' => 'F']));
+        }
+
+        $localeLists= $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
+        $localeLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
+        $timezoneLists= $this->getMock('Magento\Framework\Validator\Timezone', [], [], '', false);
+        $timezoneLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
+        $currencyLists= $this->getMock('Magento\Framework\Validator\Currency', [], [], '', false);
+        $currencyLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
 
         $returnValueMapOM = [
             [
@@ -118,8 +124,16 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
                 $baseUrl
             ],
             [
-                'Magento\Setup\Model\Lists',
-                $lists
+                'Magento\Framework\Validator\Locale',
+                $localeLists
+            ],
+            [
+                'Magento\Framework\Validator\Timezone',
+                $timezoneLists
+            ],
+            [
+                'Magento\Framework\Validator\Currency',
+                $currencyLists
             ],
         ];
         $this->objectManager->expects($this->any())
@@ -172,9 +186,9 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
                 . '\': Invalid value. Possible values (0|1).'
             ],
             [
-                ['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'sampleUrl'],
+                ['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE => 'http://www.sample.com'],
                 'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE
-                . '\': Invalid value. Value must be a URL or one of placeholders:'
+                . '\': Invalid secure URL.'
             ],
             [
                 ['--' . StoreConfigurationDataMapper::KEY_IS_SECURE_ADMIN => 'invalidValue'],

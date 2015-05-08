@@ -16,7 +16,7 @@ use Magento\Framework\View\Asset\SourceFileGeneratorPool;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Developer\Console\Command\CssDeployCommand;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Locale\Validator;
+use Magento\Framework\Validator\Locale;
 
 class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,7 +66,7 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
     private $filesystem;
 
     /**
-     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
      */
     private $validator;
 
@@ -88,7 +88,7 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface'
         );
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->validator = $this->getMock('Magento\Framework\Locale\Validator', [], [], '', false);
+        $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
 
         $this->command = new CssDeployCommand(
             $this->objectManager,

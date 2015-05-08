@@ -3526,4 +3526,5 @@ return [
     ],
     ['Magento\Tools\SampleData\Module\Wishlist\Setup\Wishlist', 'Magento\SampleData\Module\Wishlist\Setup\Wishlist'],
     ['Magento\Tools\SampleData\Module\Wishlist\Setup', 'Magento\SampleData\Module\Wishlist\Setup'],
+    ['Magento\Framework\Locale\Validator', 'Magento\Framework\Validator\Locale'],
 ];

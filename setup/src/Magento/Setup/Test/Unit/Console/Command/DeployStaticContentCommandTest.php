@@ -7,7 +7,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\DeployStaticContentCommand;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Locale\Validator;
+use Magento\Framework\Validator\Locale;
 
 class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +42,7 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
     private $command;
 
     /**
-     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
      */
     private $validator;
 
@@ -53,7 +53,7 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
         $this->deployer = $this->getMock('Magento\Setup\Model\Deployer', [], [], '', false);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->filesUtil = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
-        $this->validator = $this->getMock('Magento\Framework\Locale\Validator', [], [], '', false);
+        $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
         $this->command = new DeployStaticContentCommand(
             $this->objectManagerProvider,
             $this->deploymentConfig,

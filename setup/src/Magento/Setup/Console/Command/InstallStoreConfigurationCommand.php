@@ -15,8 +15,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\ObjectManagerInterface;
-use \Magento\Framework\Exception\LocalizedException;
-use \Magento\Store\Model\Store;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Store;
+use Magento\Framework\Validator\Locale;
+use Magento\Framework\Validator\Timezone;
+use Magento\Framework\Validator\Currency;
 
 class InstallStoreConfigurationCommand extends AbstractSetupCommand
 {
@@ -167,8 +170,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
             if (!$value) {
                 continue;
             }
-            /** @var \Magento\Setup\Model\Lists $lists */
-            $lists = $this->objectManager->get('Magento\Setup\Model\Lists');
             switch ($key) {
                 case StoreConfigurationDataMapper::KEY_BASE_URL:
                     try {
@@ -179,24 +180,27 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_LANGUAGE:
-                    if (!in_array($value, array_keys($lists->getLocaleList()))) {
-                        $errors[] = '<error>' . 'Command option \'' . StoreConfigurationDataMapper::KEY_LANGUAGE
-                            . '\': Invalid value. To see possible values, run command ' .
-                            "'bin/magento info:language:list'.</error>";
+                    /** @var Locale $lists */
+                    $lists = $this->objectManager->get('Magento\Framework\Validator\Locale');
+                    $errorMsg = $this->validateCodes($lists, $value, StoreConfigurationDataMapper::KEY_LANGUAGE);
+                    if ($errorMsg !== '') {
+                        $errors[] = $errorMsg;
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_TIMEZONE:
-                    if (!in_array($value, array_keys($lists->getTimezoneList()))) {
-                        $errors[] = '<error>' . 'Command option \'' . StoreConfigurationDataMapper::KEY_TIMEZONE
-                            . '\': Invalid value. To see possible values, run command ' .
-                            "'bin/magento info:timezone:list'.</error>";
+                    /** @var Timezone $lists */
+                    $lists = $this->objectManager->get('Magento\Framework\Validator\Timezone');
+                    $errorMsg = $this->validateCodes($lists, $value, StoreConfigurationDataMapper::KEY_TIMEZONE);
+                    if ($errorMsg !== '') {
+                        $errors[] = $errorMsg;
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_CURRENCY:
-                    if (!in_array($value, array_keys($lists->getCurrencyList()))) {
-                        $errors[] = '<error>' . 'Command option \'' . StoreConfigurationDataMapper::KEY_CURRENCY
-                            . '\': Invalid value. To see possible values, run command ' .
-                            "'bin/magento info:currency:list'.</error>";
+                    /** @var Currency $lists */
+                    $lists = $this->objectManager->get('Magento\Framework\Validator\Currency');
+                    $errorMsg = $this->validateCodes($lists, $value, StoreConfigurationDataMapper::KEY_CURRENCY);
+                    if ($errorMsg !== '') {
+                        $errors[] = $errorMsg;
                     }
                     break;
                 case StoreConfigurationDataMapper::KEY_USE_SEF_URL:
@@ -204,7 +208,6 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;
                     }
-                    break;
                     break;
                 case StoreConfigurationDataMapper::KEY_IS_SECURE:
                     $errorMsg = $this->validateBinaryValue($value, StoreConfigurationDataMapper::KEY_IS_SECURE);
@@ -215,7 +218,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                 case StoreConfigurationDataMapper::KEY_BASE_URL_SECURE:
                     try {
                         $this->validateURL($value, Store::XML_PATH_SECURE_BASE_URL);
-                        if (strpos($value,'https:') === false) {
+                        if (strpos($value, 'https:') === false) {
                             throw new LocalizedException(new \Magento\Framework\Phrase("Invalid secure URL."));
                         }
                     } catch (LocalizedException $e) {
@@ -272,6 +275,24 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
         $errorMsg = '';
         if ($value !== '0' && $value !== '1') {
             $errorMsg = '<error>' . 'Command option \'' . $key . '\': Invalid value. Possible values (0|1).</error>';
+        }
+        return $errorMsg;
+    }
+
+    /**
+     * Validate codes for languages, currencies or timezones
+     *
+     * @param Locale|Timezone|Currency  $lists
+     * @param string  $code
+     * @param string  $type
+     * @return string
+     */
+    private function validateCodes($lists, $code, $type)
+    {
+        $errorMsg = '';
+        if (!$lists->isValid($code)) {
+            $errorMsg = '<error>' . 'Command option \'' . $type . '\': Invalid value. To see possible values, '
+                . "run command 'bin/magento info:" . $type . ':list\'.</error>';
         }
         return $errorMsg;
     }

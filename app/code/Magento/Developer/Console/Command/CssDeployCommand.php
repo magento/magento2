@@ -20,7 +20,7 @@ use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\View\Asset\SourceFileGeneratorPool;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Locale\Validator;
+use Magento\Framework\Validator\Locale;
 
 /**
  * Class CssDeployCommand - collects, processes and publishes source files like LESS or SASS
@@ -94,7 +94,7 @@ class CssDeployCommand extends Command
     private $filesystem;
 
     /**
-     * @var Validator
+     * @var Locale
      */
     private $validator;
 
@@ -109,7 +109,7 @@ class CssDeployCommand extends Command
      * @param SourceFileGeneratorPool $sourceFileGeneratorPoll
      * @param ChainFactoryInterface $chainFactory
      * @param Filesystem $filesystem
-     * @param Validator $validator
+     * @param Locale $validator
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -120,7 +120,7 @@ class CssDeployCommand extends Command
         SourceFileGeneratorPool $sourceFileGeneratorPoll,
         ChainFactoryInterface $chainFactory,
         Filesystem $filesystem,
-        Validator $validator
+        Locale $validator
     ) {
         $this->state = $state;
         $this->objectManager = $objectManager;

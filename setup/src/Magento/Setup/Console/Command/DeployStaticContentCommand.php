@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\Locale\Validator;
+use Magento\Framework\Validator\Locale;
 
 /**
  * Command for deploy static content
@@ -45,7 +45,7 @@ class DeployStaticContentCommand extends Command
     private $deploymentConfig;
 
     /**
-     * @var Validator
+     * @var Locale
      */
     private $validator;
 
@@ -54,12 +54,12 @@ class DeployStaticContentCommand extends Command
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param DeploymentConfig $deploymentConfig
-     * @param Validator $validator
+     * @param Locale $validator
      */
     public function __construct(
         ObjectManagerProvider $objectManagerProvider,
         DeploymentConfig $deploymentConfig,
-        Validator $validator
+        Locale $validator
     ) {
         $this->objectManagerProvider = $objectManagerProvider;
         $this->deploymentConfig = $deploymentConfig;
