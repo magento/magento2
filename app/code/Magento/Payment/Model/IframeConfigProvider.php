@@ -42,11 +42,6 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
     protected $paymentHelper;
 
     /**
-     * @var Encoder
-     */
-    protected $jsonEncoder;
-
-    /**
      * @var string
      */
     protected $methodCode;
@@ -61,7 +56,6 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
      * @param RequestInterface $request
      * @param UrlInterface $urlBuilder
      * @param LoggerInterface $logger
-     * @param Encoder $jsonEncoder
      * @param PaymentHelper $paymentHelper
      */
     public function __construct(
@@ -69,15 +63,13 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
         RequestInterface $request,
         UrlInterface $urlBuilder,
         LoggerInterface $logger,
-        PaymentHelper $paymentHelper,
-        Encoder $jsonEncoder
+        PaymentHelper $paymentHelper
     ) {
         $this->assetRepo = $assetRepo;
         $this->request = $request;
         $this->urlBuilder = $urlBuilder;
         $this->logger = $logger;
         $this->paymentHelper = $paymentHelper;
-        $this->jsonEncoder = $jsonEncoder;
         $this->method = $this->paymentHelper->getMethodInstance($this->methodCode);
     }
 
@@ -128,12 +120,11 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
      */
     protected function getCardFieldsMap()
     {
-        $result = $this->jsonEncoder->encode([]);
+        $result = [];
         if ($this->method->isAvailable()) {
             $configData = $this->getMethodConfigData('ccfields');
             $keys = ['cccvv', 'ccexpdate', 'ccnum'];
-            $ccfields = array_combine($keys, explode(',', $configData));
-            $result = $this->jsonEncoder->encode($ccfields);
+            $result = array_combine($keys, explode(',', $configData));
         }
 
         return $result;

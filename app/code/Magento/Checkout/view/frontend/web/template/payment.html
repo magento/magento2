@@ -16,6 +16,7 @@
          aria-hidden="false"
          data-bind="fadeVisible: isVisible() && quoteHasShippingMethod()">
         <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
+            <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
             <fieldset class="fieldset">
                 <legend class="legend payments-title">
                     <span><!-- ko text: $t('Payment Information')--><!-- /ko --></span>`
