@@ -117,11 +117,19 @@ class Application
     protected $dirList;
 
     /**
+     * Config file for integration tests
+     *
+     * @var string
+     */
+    private $globalConfigFile;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Shell $shell
      * @param string $installDir
      * @param array $installConfigFile
+     * @param string $globalConfigFile
      * @param string $globalConfigDir
      * @param string $appMode
      * @param AutoloaderInterface $autoloadWrapper
@@ -130,6 +138,7 @@ class Application
         \Magento\Framework\Shell $shell,
         $installDir,
         $installConfigFile,
+        $globalConfigFile,
         $globalConfigDir,
         $appMode,
         AutoloaderInterface $autoloadWrapper
@@ -151,6 +160,7 @@ class Application
         $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
+        $this->globalConfigFile = $globalConfigFile;
     }
 
     /**
@@ -336,6 +346,8 @@ class Application
         /** @var \Magento\TestFramework\Db\Sequence $sequence */
         $sequence = $objectManager->get('Magento\TestFramework\Db\Sequence');
         $sequence->generateSequences();
+        $objectManager->create('Magento\TestFramework\Config', ['configPath' => $this->globalConfigFile])
+            ->rewriteAdditionalConfig();
     }
 
     /**
