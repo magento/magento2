@@ -9,7 +9,6 @@ namespace Magento\Customer\Test\Constraint;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
-use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
 
 /**
  * Assert that customer forgot password message is present on customer account forgot password page.
@@ -23,18 +22,13 @@ class AssertCustomerForgotPasswordSuccessMessage extends AbstractConstraint
      * Assert that customer forgot password message is present on customer account forgot password page.
      *
      * @param CustomerAccountLogin $customerLogin
-     * @param CustomerAccountForgotPassword $forgotPassword
      * @param Customer $customer
      * @return void
      */
     public function processAssert(
         CustomerAccountLogin $customerLogin,
-        CustomerAccountForgotPassword $forgotPassword,
         Customer $customer
     ) {
-        $forgotPassword->open();
-        $forgotPassword->getForgotPasswordForm()->resetForgotPassword($customer);
-
         $message = sprintf(
             self::SUCCESS_MESSAGE_FIRST_PART . self::SUCCESS_MESSAGE_SECOND_PART,
             $customer->getEmail()

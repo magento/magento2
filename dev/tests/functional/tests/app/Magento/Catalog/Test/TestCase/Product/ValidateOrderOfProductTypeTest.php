@@ -15,6 +15,7 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
  * 2. Navigate to PRODUCTS -> Catalog.
  *
  * @group Products_(MX)
+ * @ZephyrId MAGETWO-37146
  */
 class ValidateOrderOfProductTypeTest extends Injectable
 {

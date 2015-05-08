@@ -8,12 +8,19 @@ namespace Magento\Customer\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
 
 /**
  * Precondition:
  * 1. Customer is created.
  *
+ * Steps:
+ * 1. Open forgot password page.
+ * 2. Fill e-mail.
+ * 3. Click forgot password button.
+ *
  * @group Customer_(CS)
+ * @ZephyrId MAGETWO-37145
  */
 class ForgotPasswordOnFrontendTest extends Injectable
 {
@@ -26,11 +33,16 @@ class ForgotPasswordOnFrontendTest extends Injectable
      * Create customer.
      *
      * @param Customer $customer
+     * @param CustomerAccountForgotPassword $forgotPassword
      * @return void
      */
-    public function test(Customer $customer)
+    public function test(Customer $customer, CustomerAccountForgotPassword $forgotPassword)
     {
         // Precondition
         $customer->persist();
+
+        // Steps
+        $forgotPassword->open();
+        $forgotPassword->getForgotPasswordForm()->resetForgotPassword($customer);
     }
 }

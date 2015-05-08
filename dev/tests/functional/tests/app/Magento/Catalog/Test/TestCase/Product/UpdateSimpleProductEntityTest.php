@@ -53,6 +53,13 @@ class UpdateSimpleProductEntityTest extends Injectable
     protected $editProductPage;
 
     /**
+     * Configuration data.
+     *
+     * @var string
+     */
+    protected $configData;
+
+    /**
      * Injection data
      *
      * @param CatalogProductIndex $productGrid
@@ -72,10 +79,12 @@ class UpdateSimpleProductEntityTest extends Injectable
      *
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
+     * @param string $configData
      * @return array
      */
-    public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product)
+    public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product, $configData = '')
     {
+        $this->configData = $configData;
         // Preconditions
         $initialProduct->persist();
         $initialCategory = $initialProduct->hasData('category_ids')
@@ -84,6 +93,12 @@ class UpdateSimpleProductEntityTest extends Injectable
         $category = $product->hasData('category_ids') && $product->getCategoryIds()[0]
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
             : $initialCategory;
+        if ($configData) {
+            $this->objectManager->create(
+                'Magento\Config\Test\TestStep\SetupConfigurationStep',
+                ['configData' => $configData]
+            )->run();
+        }
 
         // Steps
         $filter = ['sku' => $initialProduct->getSku()];
@@ -94,5 +109,20 @@ class UpdateSimpleProductEntityTest extends Injectable
         $this->editProductPage->getFormPageActions()->save();
 
         return ['category' => $category];
+    }
+
+    /**
+     * Clear data after test
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        if ($this->configData) {
+            $this->objectManager->create(
+                'Magento\Config\Test\TestStep\SetupConfigurationStep',
+                ['configData' => $this->configData, 'rollback' => true]
+            )->run();
+        }
     }
 }

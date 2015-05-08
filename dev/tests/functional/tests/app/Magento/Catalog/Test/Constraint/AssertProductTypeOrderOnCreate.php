@@ -39,6 +39,6 @@ class AssertProductTypeOrderOnCreate extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Order and filling of types on product page equals to incoming data.';
+        return 'Order and types of product on product page equals to incoming data.';
     }
 }
