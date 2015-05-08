@@ -383,6 +383,15 @@ interface CreditmemoInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @return string Credit memo created-at timestamp.
      */
     public function getCreatedAt();
+
+    /**
+     * Sets the credit memo created-at timestamp.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
     /**
      * Gets the credit memo status.
      *

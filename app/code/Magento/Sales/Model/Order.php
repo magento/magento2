@@ -35,7 +35,6 @@ use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryColle
  * @method \Magento\Sales\Model\Resource\Order getResource()
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
- * @method \Magento\Sales\Model\Order setCreatedAt(string $value)
  * @method bool hasBillingAddressId()
  * @method \Magento\Sales\Model\Order unsBillingAddressId()
  * @method bool hasShippingAddressId()
@@ -2479,6 +2478,14 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCreatedAt()
     {
         return $this->getData(OrderInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(OrderInterface::CREATED_AT, $createdAt);
     }
 
     /**

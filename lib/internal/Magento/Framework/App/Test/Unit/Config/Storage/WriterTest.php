@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config\Storage;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeInterface;
 
 class WriterTest extends \PHPUnit_Framework_TestCase
@@ -40,7 +41,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     {
         $this->resource->expects($this->once())
             ->method('deleteConfig')
-            ->with('path', ScopeInterface::SCOPE_DEFAULT, 0);
+            ->with('path', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         $this->model->delete('path');
     }
 
@@ -58,7 +59,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     {
         $this->resource->expects($this->once())
             ->method('saveConfig')
-            ->with('path', 'value', ScopeInterface::SCOPE_DEFAULT, 0);
+            ->with('path', 'value', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
         $this->model->save('path', 'value');
     }
 }

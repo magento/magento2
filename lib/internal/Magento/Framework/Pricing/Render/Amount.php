@@ -143,6 +143,14 @@ class Amount extends Template implements AmountRenderInterface
     }
 
     /**
+     * @return string
+     */
+    public function getDisplayCurrencySymbol()
+    {
+        return $this->priceCurrency->getCurrencySymbol();
+    }
+
+    /**
      * @return bool
      */
     public function hasAdjustmentsHtml()

@@ -263,7 +263,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             $values = $this->getPriceValues();
 
             foreach ($values as $data) {
-                $this->getItemById($data['product_super_attribute_id'])->addPrice($data);
+                $item = $this->getItemById($data['product_super_attribute_id']);
+                //the price values is cached, it could have gotten out of sync with current items
+                //when a filter is added, in that case, we just ignore the data from the cache
+                if ($item) {
+                    $item->addPrice($data);
+                }
             }
         }
         return $this;
