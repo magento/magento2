@@ -49,7 +49,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
                 'imageHeight' => $this->getImageHeight($formId),
                 'imageSrc' => $this->getImageSrc($formId),
                 'refreshUrl' => $this->getRefreshUrl(),
-                'isRequired' => $this->getIsRequired($formId)
+                'isRequired' => $this->isRequired($formId)
             ];
         }
         return $config;
@@ -58,7 +58,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Returns is captcha case sensitive
      *
-     * @param $formId
+     * @param string $formId
      * @return bool
      */
     protected function isCaseSensitive($formId)
@@ -69,7 +69,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Returns captcha image height
      *
-     * @param $formId
+     * @param string $formId
      * @return int
      */
     protected function getImageHeight($formId)
@@ -80,12 +80,12 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Returns captcha image source path
      *
-     * @param $formId
+     * @param string $formId
      * @return string
      */
     protected function getImageSrc($formId)
     {
-        if ($this->getIsRequired($formId)) {
+        if ($this->isRequired($formId)) {
             $captcha = $this->getCaptchaModel($formId);
             $captcha->generate();
             return $captcha->getImgSrc();
@@ -107,10 +107,10 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Whether captcha is required to be inserted to this form
      *
-     * @param $formId
+     * @param string $formId
      * @return bool
      */
-    protected function getIsRequired($formId)
+    protected function isRequired($formId)
     {
         return (boolean)$this->getCaptchaModel($formId)->isRequired();
     }
@@ -118,7 +118,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
     /**
      * Return captcha model for specified form
      *
-     * @param $formId
+     * @param string $formId
      * @return \Magento\Captcha\Model\ModelInterface
      */
     protected function getCaptchaModel($formId)

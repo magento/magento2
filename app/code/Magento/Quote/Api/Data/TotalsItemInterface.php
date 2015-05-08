@@ -91,6 +91,27 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      */
     const KEY_BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
 
+    /**
+     * Item options data.
+     */
+    const KEY_OPTIONS = 'options';
+
+    /**
+     * Item Weee Tax Applied Amount.
+     */
+    const KEY_WEEE_TAX_APPLIED_AMOUNT = 'weee_tax_applied_amount';
+
+
+    /**
+     * Item Weee Tax Applied Amount.
+     */
+    const KEY_WEEE_TAX_APPLIED = 'weee_tax_applied';
+
+    /**
+     * Item name.
+     */
+    const KEY_NAME = 'name';
+
     /**#@-*/
 
     /**
@@ -334,11 +355,70 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
     public function setBaseRowTotalInclTax($baseRowTotalInclTax);
 
     /**
+     * Returns the item options data.
+     *
+     * @return string Item price in quote currency.
+     */
+    public function getOptions();
+
+    /**
+     * Sets the item options data.
+     *
+     * @param string $options
+     * @return $this
+     */
+    public function setOptions($options);
+
+    /**
+     * Returns the item weee tax applied amount in quote currency.
+     *
+     * @return float Item weee tax applied amount in quote currency.
+     */
+    public function getWeeeTaxAppliedAmount();
+
+    /**
+     * Sets the item weee tax applied amount in quote currency.
+     *
+     * @param float $weeeTaxAppliedAmount
+     * @return $this
+     */
+    public function setWeeeTaxAppliedAmount($weeeTaxAppliedAmount);
+
+    /**
+     * Returns the item weee tax applied in quote currency.
+     *
+     * @return string Item weee tax applied in quote currency.
+     */
+    public function getWeeeTaxApplied();
+
+    /**
+     * Sets the item weee tax applied in quote currency.
+     *
+     * @param string $weeeTaxApplied
+     * @return $this
+     */
+    public function setWeeeTaxApplied($weeeTaxApplied);
+    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\TotalsItemExtensionInterface|null
      */
     public function getExtensionAttributes();
+
+    /**
+     * Returns the product name.
+     *
+     * @return string|null Product name. Otherwise, null.
+     */
+    public function getName();
+
+    /**
+     * Sets the product name.
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
 
     /**
      * Set an extension attributes object.

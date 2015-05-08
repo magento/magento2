@@ -6,9 +6,9 @@
 -->
 <td class="col item" data-th="Product Name"><strong class="product name product-item-name" data-bind="text: $t(item.name)"></strong>
     <!-- additional info block skipped -->
-    <!-- ko if: (item.options)-->
+    <!-- ko if: (JSON.parse(item.options).length > 0)-->
     <dl class="item-options">
-        <!--ko foreach: item.options-->
+        <!--ko foreach: JSON.parse(item.options)-->
         <dt data-bind="text: $t(label)"></dt>
             <!-- ko if: ($data.full_view)-->
             <dd data-bind="html: full_view"></dd>

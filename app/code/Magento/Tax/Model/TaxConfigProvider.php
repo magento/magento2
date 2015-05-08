@@ -22,11 +22,10 @@ class TaxConfigProvider implements ConfigProviderInterface
 
     /**
      * @param TaxHelper $taxHelper
+     * @param Config $taxConfig
      */
-    public function __construct(
-        TaxHelper $taxHelper,
-        Config $taxConfig
-    ) {
+    public function __construct(TaxHelper $taxHelper, Config $taxConfig)
+    {
         $this->taxHelper = $taxHelper;
         $this->taxConfig = $taxConfig;
     }

@@ -55,9 +55,9 @@ class CartTotalManagement implements CartTotalManagementInterface
      */
     public function collectTotals(
         $cartId,
+        \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         $shippingCarrierCode = null,
         $shippingMethodCode = null,
-        \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\TotalsAdditionalDataInterface $additionalData = null
     ) {
         if ($shippingCarrierCode && $shippingMethodCode) {

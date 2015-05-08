@@ -5,6 +5,10 @@
  */
 /*jshint jquery:true*/
 /*global alert*/
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 define([
     "jquery",
     "jquery/ui",

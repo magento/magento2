@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 
 /**
  * TODO implement all methods declared in the interface. Now only getMeta() has proper implementation.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddressDataProvider implements DataProviderInterface
 {
@@ -212,6 +213,7 @@ class AddressDataProvider implements DataProviderInterface
      *
      * @param mixed $config
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setConfigData($config)
     {
@@ -249,7 +251,8 @@ class AddressDataProvider implements DataProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addFilter($field, $condition = null)
     {
@@ -262,6 +265,7 @@ class AddressDataProvider implements DataProviderInterface
      * @param string|array $field
      * @param string|null $alias
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addField($field, $alias = null)
     {
@@ -274,6 +278,7 @@ class AddressDataProvider implements DataProviderInterface
      * @param string $field
      * @param string $direction
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addOrder($field, $direction)
     {
@@ -286,6 +291,7 @@ class AddressDataProvider implements DataProviderInterface
      * @param int $offset
      * @param int $size
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setLimit($offset, $size)
     {
@@ -298,6 +304,7 @@ class AddressDataProvider implements DataProviderInterface
      * @param string|null $field
      * @param bool $isAlias Alias identifier
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function removeField($field, $isAlias = false)
     {
@@ -332,7 +339,7 @@ class AddressDataProvider implements DataProviderInterface
      * @param array $fields
      * @return array
      */
-    public function getAdditionalAddressFields($providerName, $dataScopePrefix, array $fields = array())
+    public function getAdditionalAddressFields($providerName, $dataScopePrefix, array $fields = [])
     {
         foreach ($this->getFieldsMetaInfo('address') as $attributeCode => $attributeConfig) {
             $additionalConfig = isset($fields[$attributeCode]) ? $fields[$attributeCode] : [];
@@ -359,6 +366,8 @@ class AddressDataProvider implements DataProviderInterface
      * @param string $providerName name of the storage container used by UI component
      * @param string $dataScopePrefix
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getFieldConfig(
         $attributeCode,
@@ -404,7 +413,7 @@ class AddressDataProvider implements DataProviderInterface
         ];
 
         $defaultValue = $this->getDefaultValue($attributeCode);
-        if (!is_null($defaultValue)) {
+        if (null !== $defaultValue) {
             $element['default'] = $defaultValue;
         }
         return $element;
@@ -433,7 +442,7 @@ class AddressDataProvider implements DataProviderInterface
      * @param array $additionalConfig field configuration provided via layout XML
      * @return bool
      */
-    protected function isFieldVisible($attributeCode, array $attributeConfig, array $additionalConfig = array())
+    protected function isFieldVisible($attributeCode, array $attributeConfig, array $additionalConfig = [])
     {
         // TODO move this logic to separate model so it can be customized
         if ($attributeConfig['visible'] == false

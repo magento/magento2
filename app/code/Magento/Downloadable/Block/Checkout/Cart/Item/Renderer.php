@@ -93,7 +93,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 
     /**
      * Get list of all options for product
-     *
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      * @return array
      */
     public function getOption($item)

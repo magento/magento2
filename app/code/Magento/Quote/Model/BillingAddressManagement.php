@@ -62,6 +62,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
 
     /**
      * {@inheritDoc}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address, $useForShipping = false)
     {
@@ -78,7 +79,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
         if ($customerAddressId) {
             try {
                 $addressData = $this->addressRepository->getById($customerAddressId);
-            }  catch (NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
                 // do nothing if customer is not found by id
             }
             $address = $quote->getBillingAddress()->importCustomerAddressData($addressData);

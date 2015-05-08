@@ -46,7 +46,7 @@ class CreditmemoCommentSender extends NotifySender
         Renderer $addressRenderer,
         ManagerInterface $eventManager
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->addressRenderer = $addressRenderer;
         $this->eventManager = $eventManager;
     }
@@ -62,33 +62,22 @@ class CreditmemoCommentSender extends NotifySender
     public function send(Creditmemo $creditmemo, $notify = true, $comment = '')
     {
         $order = $creditmemo->getOrder();
-        if ($order->getShippingAddress()) {
-            $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
-        } else {
-            $formattedShippingAddress = '';
-        }
-        $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
-
-        $transport = new \Magento\Framework\Object(
-            ['template_vars' =>
-                 [
-                     'order'                    => $order,
-                     'creditmemo'               => $creditmemo,
-                     'comment'                  => $comment,
-                     'billing'                  => $order->getBillingAddress(),
-                     'store'                    => $order->getStore(),
-                     'formattedShippingAddress' => $formattedShippingAddress,
-                     'formattedBillingAddress'  => $formattedBillingAddress,
-                 ]
-            ]
-        );
+        $transport = [
+            'order' => $order,
+            'creditmemo' => $creditmemo,
+            'comment' => $comment,
+            'billing' => $order->getBillingAddress(),
+            'store' => $order->getStore(),
+            'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
+            'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+        ];
 
         $this->eventManager->dispatch(
             'email_creditmemo_comment_set_template_vars_before',
             ['sender' => $this, 'transport' => $transport]
         );
 
-        $this->templateContainer->setTemplateVars($transport->getTemplateVars());
+        $this->templateContainer->setTemplateVars($transport);
 
         return $this->checkAndSend($order, $notify);
     }

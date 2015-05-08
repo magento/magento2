@@ -223,7 +223,7 @@ class StockItemTest extends WebapiAbstract
                     'enable_qty_increments' => '',
                     'use_config_manage_stock' => 1,
                     'manage_stock' => 1,
-                    'low_stock_date' => 0,
+                    'low_stock_date' => '',
                     'is_decimal_divided' => '',
                     'stock_status_changed_auto' => 0
                 ],

@@ -89,13 +89,16 @@ class Format implements \Magento\Framework\Locale\FormatInterface
     /**
      * Functions returns array with price formatting info
      *
+     * @param string $localeCode Locale code.
+     * @param string $currencyCode Currency code.
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getPriceFormat($localeCode = null, $currencyCode = null)
     {
         $localeCode = $localeCode ?: $this->_localeResolver->getLocale();
-        if ($currencyCode ) {
+        if ($currencyCode) {
             $currency = $this->currencyFactory->create()->load($currencyCode);
         } else {
             $currency = $this->_scopeResolver->getScope()->getCurrentCurrency();

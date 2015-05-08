@@ -13,6 +13,7 @@ use \Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteManagementTest extends \PHPUnit_Framework_TestCase
 {
@@ -121,6 +122,9 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $agreementsValidatorMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

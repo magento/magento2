@@ -12,17 +12,16 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
     ['resourceName' => 'catalog_setup']
 );
 
-/* Create simple products per each option */
-/** @var $options \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
-$options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
-);
-$options->setAttributeFilter($attribute->getId());
+/* Create simple products per each option value*/
+
+/** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $options */
+$options = $attribute->getOptions();
 
 $attributeValues = [];
 $productIds = [];
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $productIds = [10, 20];
+array_shift($options); //remove the first option which is empty
 foreach ($options as $option) {
     /** @var $product \Magento\Catalog\Model\Product */
     $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
@@ -36,13 +35,13 @@ foreach ($options as $option) {
     )->setWebsiteIds(
         [1]
     )->setName(
-        'Configurable Option' . $option->getId()
+        'Configurable Option' . $option->getLabel()
     )->setSku(
         'simple_' . $productId
     )->setPrice(
         10
     )->setTestConfigurable(
-        $option->getId()
+        $option->getValue()
     )->setVisibility(
         \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
     )->setStatus(
@@ -54,7 +53,7 @@ foreach ($options as $option) {
     $attributeValues[] = [
         'label' => 'test',
         'attribute_id' => $attribute->getId(),
-        'value_index' => $option->getId(),
+        'value_index' => $option->getValue(),
         'is_percent' => false,
         'pricing_value' => 5,
     ];
