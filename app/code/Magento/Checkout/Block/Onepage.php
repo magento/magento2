@@ -10,6 +10,7 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 
 /**
  * Onepage checkout block
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
@@ -141,11 +142,11 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getSteps()
     {
-        $steps = array();
+        $steps = [];
         $stepCodes = $this->_getStepCodes();
 
         if ($this->isCustomerLoggedIn()) {
-            $stepCodes = array_diff($stepCodes, array('login'));
+            $stepCodes = array_diff($stepCodes, ['login']);
         }
 
         foreach ($stepCodes as $step) {
