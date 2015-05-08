@@ -6,37 +6,31 @@
 
 namespace Magento\Customer\Test\TestCase;
 
-use Magento\Mtf\Factory\Factory;
-use Magento\Mtf\TestCase\Functional;
+use Magento\Mtf\TestCase\Injectable;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
- * Reset password on frontend
+ * Precondition:
+ * 1. Customer is created.
+ *
+ * @group Customer_(CS)
  */
-class ForgotPasswordOnFrontendTest extends Functional
+class ForgotPasswordOnFrontendTest extends Injectable
 {
+    /* tags */
+    const MVP = 'yes';
+    const DOMAIN = 'CS';
+    /* end tags */
+
     /**
-     * Reset password on frontend
+     * Create customer.
+     *
+     * @param Customer $customer
+     * @return void
      */
-    public function testForgotPassword()
+    public function test(Customer $customer)
     {
-        // Create Customer
-        $customer = $this->objectManager->getInstance()->create(
-            'Magento\Customer\Test\Fixture\Customer',
-            ['dataSet' => 'customer_US_1']
-        );
+        // Precondition
         $customer->persist();
-
-        $customerAccountLoginPage = Factory::getPageFactory()->getCustomerAccountLogin();
-        $forgotPasswordPage = Factory::getPageFactory()->getCustomerAccountForgotpassword();
-        $forgotPasswordPage->open();
-
-        $forgotPasswordPage->getForgotPasswordForm()->resetForgotPassword($customer);
-
-        //Verifying
-        $message = sprintf(
-            'If there is an account associated with %s you will receive an email with a link to reset your password.',
-            $customer->getEmail()
-        );
-        $this->assertContains($message, $customerAccountLoginPage->getMessages()->getSuccessMessages());
     }
 }
