@@ -42,4 +42,11 @@
         <plugin name="catalog-session-depersonalize"
                 type="Magento\Catalog\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
     </type>
+    <type name="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="compare-products" xsi:type="string">Magento\Catalog\PrivateData\Section\CompareProducts</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

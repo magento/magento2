@@ -8,7 +8,6 @@
 
 namespace Magento\Checkout\Block\Cart;
 
-use Magento\Framework\View\Block\IdentityInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -20,11 +19,6 @@ class Sidebar extends AbstractCart
      * Xml pah to checkout sidebar count value
      */
     const XML_PATH_CHECKOUT_SIDEBAR_DISPLAY = 'checkout/sidebar/display';
-
-    /**
-     * @var array
-     */
-    protected $jsLayout;
 
     /**
      * @var \Magento\Tax\Model\Config
@@ -55,15 +49,6 @@ class Sidebar extends AbstractCart
         $this->_isScopePrivate = false;
         $this->_taxConfig = $taxConfig;
         $this->imageView = $imageView;
-        $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
-    }
-
-    /**
-     * @return string
-     */
-    public function getJsLayout()
-    {
-        return \Zend_Json::encode($this->jsLayout);
     }
 
     /**
