@@ -8,27 +8,43 @@
 <mapping strict="0">
     <wrapper>billing</wrapper>
     <fields>
-        <firstname />
-        <lastname />
-        <email />
-        <company />
+        <firstname>
+            <selector>[name='billingAddress[firstname]']</selector>
+        </firstname>
+        <lastname>
+            <selector>[name='billingAddress[lastname]']</selector>
+        </lastname>
+        <email>
+            <selector>[name='customerDetails[email]']</selector>
+        </email>
+        <company>
+            <selector>[name='billingAddress[company]']</selector>
+        </company>
         <street>
-            <selector>[id='billing:street1']</selector>
+            <selector>[name='billingAddress[street][0]']</selector>
         </street>
-        <city />
+        <city>
+            <selector>[name='billingAddress[city]']</selector>
+        </city>
         <region_id>
             <input>select</input>
+            <selector>[name='billingAddress[region_id]']</selector>
         </region_id>
-        <postcode />
+        <postcode>
+            <selector>[name='billingAddress[postcode]']</selector>
+        </postcode>
         <country_id>
             <input>select</input>
+            <selector>[name='billingAddress[country_id]']</selector>
         </country_id>
-        <telephone />
+        <telephone>
+            <selector>[name='billingAddress[telephone]']</selector>
+        </telephone>
         <password>
-            <selector>[name='billing[customer_password]']</selector>
+            <selector>[name='customerDetails[password]']</selector>
         </password>
         <password_confirmation>
-            <selector>[name='billing[confirm_password]']</selector>
+            <selector>[name='customerDetails[confirm_password]']</selector>
         </password_confirmation>
     </fields>
 </mapping>
