@@ -204,11 +204,30 @@
                                             <item name="shipping" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item>
                                                 <item name="sortOrder" xsi:type="string">4</item>
-                                                <item name="additional" xsi:type="array"></item>
+                                                <item name="additional" xsi:type="array">
+                                                    <!-- merge your payment methods here -->
+                                                </item>
                                             </item>
                                             <item name="payment" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
                                                 <item name="sortOrder" xsi:type="string">5</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="beforeMethods" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">beforeMethods</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge additional data before payment methods here -->
+                                                        </item>
+                                                    </item>
+                                                    <!-- merge your payment methods here -->
+                                                    <item name="afterMethods" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">afterMethods</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge additional data after payment methods here -->
+                                                        </item>
+                                                    </item>
+                                                </item>
                                             </item>
                                             <item name="review" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/review</item>
@@ -237,10 +256,24 @@
                                                     </item>
                                                     <item name="beforePlaceOrder" xsi:type="array">
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/beforePlaceOrder</item>
-                                                        <item name="children" xsi:type="array"></item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge your components here -->
+                                                        </item>
                                                     </item>
                                                     <item name="totals" xsi:type="array">
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/totals</item>
+                                                    </item>
+                                                    <item name="actions" xsi:type="array">
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/review/actions</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <item name="@default" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/review/actions/default</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="isDefault" xsi:type="boolean">true</item>
+                                                                </item>
+                                                            </item>
+                                                            <!-- merge your components here -->
+                                                        </item>
                                                     </item>
                                                 </item>
                                             </item>
