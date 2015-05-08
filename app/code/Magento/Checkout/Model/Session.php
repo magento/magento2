@@ -493,7 +493,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param $isQuoteMasked bool
      * @return void
      */
-    public function setIsQuoteMasked($isQuoteMasked)
+    protected function setIsQuoteMasked($isQuoteMasked)
     {
         $this->isQuoteMasked = $isQuoteMasked;
     }
@@ -501,7 +501,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @return bool|null
      */
-    public function isQuoteMasked()
+    protected function isQuoteMasked()
     {
         return $this->isQuoteMasked;
     }
