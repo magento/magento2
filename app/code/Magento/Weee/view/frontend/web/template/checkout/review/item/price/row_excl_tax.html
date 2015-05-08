@@ -13,13 +13,13 @@
     <span class="cart-price"><span class="price" data-bind="text: getFormattedPrice(item.row_total)"></span></span>
 <!-- /ko -->
 
-<!--ko if:  (JSON.parse(item.weee_tax_applied).length > 0)-->
+<!--ko if:  (getWeeeTaxApplied(item).length > 0)-->
 <!-- ko ifnot:  (isDisplayPriceWithWeeeDetails(item))-->
 <span class="cart-tax-info" data-bind ="attr: {'id': 'esubtotal-item-tax-details' + item.item_id}" style="display: none;"></span>
 <!-- /ko-->
 <!-- ko if:  (isDisplayPriceWithWeeeDetails(item))-->
 <span class="cart-tax-info" data-bind ="attr: {'id': 'esubtotal-item-tax-details' + item.item_id}" style="display: none;">
-         <!-- ko foreach: JSON.parse(item.weee_tax_applied)-->
+         <!-- ko foreach: getWeeeTaxApplied(item)-->
             <span class="weee" data-bind="attr:{'data-label':title}">
                 <span class="price" data-bind="text: $parent.getFormattedPrice(row_amount)"></span>
             </span>

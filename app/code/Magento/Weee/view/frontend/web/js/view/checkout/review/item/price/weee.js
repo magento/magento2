@@ -28,6 +28,13 @@ define(
             },
             getFormattedPrice: function (price) {
                 return priceUtils.formatPrice(price, quote.getPriceFormat());
+            },
+            getWeeeTaxApplied: function(item) {
+                if (item.weee_tax_applied) {
+                    return JSON.parse(item.weee_tax_applied)
+                }
+                return [];
+
             }
         });
     }
