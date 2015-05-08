@@ -40,17 +40,12 @@ class Index extends AbstractActionController
                 'sessionConfig' => $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig')
             ]);
             if (!$this->objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
-                /** @var \Magento\Backend\Helper\Data $urlHelper */
-                $urlHelper = $this->objectManager->get('Magento\Backend\Helper\Data');
-                $url = $urlHelper->getUrl('admin/backendapp/redirect', ['app' => 'setup']);
-                /** @var \Zend\Mvc\Controller\Plugin\Redirect $response */
-                $response = $this->getPluginManager()
-                    ->get('Redirect');
-                $this->getEvent()->setResponse($response->refresh()->setStatusCode(401));
-
-                return $response;
+                $view = new ViewModel();
+                $view->setTemplate('/error/401.phtml');
+                $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_401);
+                return $view;
             }
         }
-        return new ViewModel;
+        return new ViewModel();
     }
 }
