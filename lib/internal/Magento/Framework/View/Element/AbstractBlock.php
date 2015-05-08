@@ -67,6 +67,13 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     protected $_layout;
 
     /**
+     * JS layout configuration
+     *
+     * @var array
+     */
+    protected $jsLayout = [];
+
+    /**
      * Request
      *
      * @var \Magento\Framework\App\RequestInterface
@@ -186,8 +193,22 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         $this->filterManager = $context->getFilterManager();
         $this->_localeDate = $context->getLocaleDate();
         $this->inlineTranslation = $context->getInlineTranslation();
+        if (isset($data['jsLayout'])) {
+            $this->jsLayout = $data['jsLayout'];
+            unset($data['jsLayout']);
+        }
         parent::__construct($data);
         $this->_construct();
+    }
+
+    /**
+     * Retrieve serialized JS layout configuration ready to use in template
+     *
+     * @return string
+     */
+    public function getJsLayout()
+    {
+        return json_encode($this->jsLayout);
     }
 
     /**
