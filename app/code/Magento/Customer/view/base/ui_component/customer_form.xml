@@ -32,28 +32,13 @@
     <dataSource name="customer_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Customer\Model\Customer\DataProvider</argument>
+            <argument name="name" xsi:type="string">customer_form_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="meta" xsi:type="array">
-                <item name="customer" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Account Information</item>
-                    </item>
-                </item>
-                <item name="address" xsi:type="array">
-                    <item name="is_collection" xsi:type="boolean">true</item>
-                    <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Addresses</item>
-                    </item>
-                </item>
-            </argument>
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-                </item>
                 <item name="config" xsi:type="array">
-                    <item name="submit_url" xsi:type="string">customer/index/save</item>
-                    <item name="validate_url" xsi:type="string">customer/index/validate</item>
+                    <item name="submit_url" xsi:type="url" path="customer/index/save"/>
+                    <item name="validate_url" xsi:type="url" path="customer/index/validate"/>
                 </item>
             </argument>
         </argument>

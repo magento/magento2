@@ -176,6 +176,7 @@
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
                 <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
+                <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
             </argument>
             <argument name="discriminator" xsi:type="string">xsi:type</argument>
         </arguments>

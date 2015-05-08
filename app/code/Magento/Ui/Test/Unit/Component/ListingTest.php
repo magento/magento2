@@ -215,6 +215,6 @@ class ListingTest extends \PHPUnit_Framework_TestCase
             ->with('config')
             ->willReturn(['testConfig' => 'testConfigValue']);
 
-        $this->assertEquals($listing->getDataSourceData(), $result);
+        $this->assertEquals($listing->getContext()->getDataSourceData($listing), $result);
     }
 }

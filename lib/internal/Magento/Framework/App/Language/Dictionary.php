@@ -145,7 +145,7 @@ class Dictionary
      */
     private function readPackCsv($vendor, $package)
     {
-        $files = $this->dir->search("{$vendor}/{$package}/*.csv");
+        $files = $this->dir->search("{$vendor}/{$package}/*/*.csv");
         sort($files);
         $result = [];
         foreach ($files as $path) {

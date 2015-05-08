@@ -15,6 +15,17 @@ class MassAction extends AbstractComponent
     const NAME = 'massaction';
 
     /**
+     * Default component data
+     *
+     * @var array
+     */
+    protected $_data = [
+        'config' => [
+            'actions' => []
+        ]
+    ];
+
+    /**
      * Get component name
      *
      * @return string
@@ -31,7 +42,6 @@ class MassAction extends AbstractComponent
      */
     public function prepare()
     {
-        $this->prepareConfiguration();
         $config = $this->getData('config');
         if (isset($config['actions'])) {
             $config['actions'] = array_values($config['actions']);
@@ -48,17 +58,6 @@ class MassAction extends AbstractComponent
             $this->setData('config', $config);
         }
 
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
-    }
-
-    /**
-     * Get default parameters
-     *
-     * @return array
-     */
-    protected function getDefaultConfiguration()
-    {
-        return ['actions' => []];
+        parent::prepare();
     }
 }

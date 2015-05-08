@@ -37,7 +37,7 @@ class Json extends AbstractContentType
      */
     public function render(UiComponentInterface $component, $template = '')
     {
-        $data = $component->getDataSourceData();
+        $data = $component->getContext()->getDataSourceData($component);
         $data = reset($data);
 
         return json_encode($data['config']['data']);
