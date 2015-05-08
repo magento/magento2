@@ -75,6 +75,9 @@ define(
             isFormValid: function() {
                 $(this.paymentForm).validation();
                 return $(this.paymentForm).validation('isValid');
+            },
+            getFormKey: function() {
+                return window.checkoutConfig.formKey;
             }
         });
     }
