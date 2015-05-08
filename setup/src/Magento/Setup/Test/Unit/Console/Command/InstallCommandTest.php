@@ -12,7 +12,6 @@ use Magento\Setup\Model\AdminAccount;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
-use \InvalidArgumentException;
 
 class InstallCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -222,7 +221,7 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * Test install command with invalid sales_order_increment_prefix value
      *
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @dataProvider validateWithExceptionDataProvider
      * @param $prefixValue
      */
