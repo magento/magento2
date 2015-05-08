@@ -378,7 +378,6 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
 
     /**
      * Sets the item weee tax applied amount in quote currency.
-
      *
      * @param float $weeeTaxAppliedAmount
      * @return $this

@@ -29,7 +29,6 @@ class Item
     public function __construct(
         WeeeHelper $weeeHelper,
         StoreManagerInterface $storeManager
-
     ) {
         $this->weeeHelper = $weeeHelper;
         $this->storeManager = $storeManager;

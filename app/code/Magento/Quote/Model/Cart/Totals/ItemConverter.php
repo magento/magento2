@@ -41,7 +41,8 @@ class ItemConverter
      *
      * @param ConfigurationPool $configurationPool
      * @param EventManager $eventManager
-     * \Magento\Quote\Api\Data\TotalsItemInterfaceFactory $totalsItemFactory
+     * @param \Magento\Quote\Api\Data\TotalsItemInterfaceFactory $totalsItemFactory
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         ConfigurationPool $configurationPool,
