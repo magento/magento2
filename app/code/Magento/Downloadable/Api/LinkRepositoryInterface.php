@@ -10,20 +10,12 @@ use Magento\Downloadable\Api\Data\LinkContentInterface;
 interface LinkRepositoryInterface
 {
     /**
-     * List of samples for downloadable product
-     *
-     * @param string $sku
-     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
-     */
-    public function getSamples($sku);
-
-    /**
      * List of links with associated samples
      *
      * @param string $sku
      * @return \Magento\Downloadable\Api\Data\LinkInterface[]
      */
-    public function getLinks($sku);
+    public function getList($sku);
 
     /**
      * Update downloadable link of the given product (link type and its resources cannot be changed)

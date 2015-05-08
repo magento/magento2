@@ -10,6 +10,14 @@ use Magento\Downloadable\Api\Data\SampleContentInterface;
 interface SampleRepositoryInterface
 {
     /**
+     * List of samples for downloadable product
+     *
+     * @param string $sku
+     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
+     */
+    public function getList($sku);
+
+    /**
      * Update downloadable sample of the given product (sample type and its resource cannot be changed)
      *
      * @param string $productSku
