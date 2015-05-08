@@ -26,7 +26,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Authorization service mock
      *
-     * @var \Magento\Integration\Model\AuthorizationService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Api\AuthorizationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $integrationAuthorizationServiceMock;
 
@@ -51,13 +51,13 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $this->integrationServiceMock = $this->getMockBuilder(
-            '\Magento\Integration\Model\IntegrationService'
+            '\Magento\Integration\Api\IntegrationServiceInterface'
         )->disableOriginalConstructor()->setMethods(
             ['findByName']
         )->getMock();
 
         $this->integrationAuthorizationServiceMock = $this->getMockBuilder(
-            '\Magento\Integration\Model\AuthorizationService'
+            '\Magento\Integration\Api\AuthorizationServiceInterface'
         )->disableOriginalConstructor()->setMethods(
             ['grantPermissions']
         )->getMock();

@@ -77,7 +77,7 @@ class IntegrationServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $oauthConsumerHelper = $this->getMockBuilder(
-            'Magento\Integration\Model\OauthService'
+            'Magento\Integration\Api\OauthServiceInterface'
         )->disableOriginalConstructor()->getMock();
         $oauthConsumer = $this->getMockBuilder(
             'Magento\Integration\Model\Oauth\Consumer'

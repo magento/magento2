@@ -3171,4 +3171,5 @@ return [
     ['Magento\Integration\Service\V1\CustomerTokenService', 'Magento\Integration\Model\CustomerTokenService'],
     ['Magento\Integration\Service\V1\Integration', 'Magento\Integration\Model\IntegrationService'],
     ['Magento\Integration\Service\V1\Oauth', 'Magento\Integration\Model\OauthService'],
+    ['Magento\Integration\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Integration'],
 ];
