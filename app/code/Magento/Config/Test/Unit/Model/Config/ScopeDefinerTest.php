@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Test\Unit\Model\Config;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
@@ -31,7 +32,7 @@ class ScopeDefinerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScopeReturnsDefaultScopeIfNoScopeDataIsSpecified()
     {
-        $this->assertEquals(\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, $this->_model->getScope());
+        $this->assertEquals(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $this->_model->getScope());
     }
 
     public function testGetScopeReturnsStoreScopeIfStoreIsSpecified()

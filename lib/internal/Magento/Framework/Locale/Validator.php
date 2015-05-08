@@ -29,10 +29,12 @@ class Validator
     }
 
     /**
-     * Validate locale code
+     * Validate locale code. Code must be in the list of allowed locales.
      *
      * @param string $localeCode
      * @return bool
+     *
+     * @api
      */
     public function isValid($localeCode)
     {

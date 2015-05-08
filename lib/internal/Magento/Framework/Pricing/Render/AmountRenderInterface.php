@@ -53,5 +53,10 @@ interface AmountRenderInterface
     /**
      * @return string
      */
+    public function getDisplayCurrencySymbol();
+
+    /**
+     * @return string
+     */
     public function getAdjustmentsHtml();
 }
