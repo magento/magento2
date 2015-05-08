@@ -13,8 +13,6 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
- *
  * Precondition:
  * 1. Category is created.
  * 2. Product is created and assigned to created category.
@@ -28,7 +26,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Perform asserts.
  *
  * @group Products_(MX)
- * @ZephyrId MAGETWO-23544
+ * @ZephyrId MAGETWO-23544, MAGETWO-21125
  */
 class UpdateSimpleProductEntityTest extends Injectable
 {
@@ -39,14 +37,14 @@ class UpdateSimpleProductEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Product page with a grid
+     * Product page with a grid.
      *
      * @var CatalogProductIndex
      */
     protected $productGrid;
 
     /**
-     * Page to update a product
+     * Page to update a product.
      *
      * @var CatalogProductEdit
      */
@@ -60,7 +58,7 @@ class UpdateSimpleProductEntityTest extends Injectable
     protected $configData;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductEdit $editProductPage
@@ -75,7 +73,7 @@ class UpdateSimpleProductEntityTest extends Injectable
     }
 
     /**
-     * Run update product simple entity test
+     * Run update product simple entity test.
      *
      * @param CatalogProductSimple $initialProduct
      * @param CatalogProductSimple $product
@@ -93,12 +91,11 @@ class UpdateSimpleProductEntityTest extends Injectable
         $category = $product->hasData('category_ids') && $product->getCategoryIds()[0]
             ? $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
             : $initialCategory;
-        if ($configData) {
-            $this->objectManager->create(
-                'Magento\Config\Test\TestStep\SetupConfigurationStep',
-                ['configData' => $configData]
-            )->run();
-        }
+
+        $this->objectManager->create(
+            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            ['configData' => $configData]
+        )->run();
 
         // Steps
         $filter = ['sku' => $initialProduct->getSku()];
@@ -112,7 +109,7 @@ class UpdateSimpleProductEntityTest extends Injectable
     }
 
     /**
-     * Clear data after test
+     * Clear data after test.
      *
      * @return void
      */

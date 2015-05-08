@@ -18,6 +18,7 @@ use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
  * 1. Open forgot password page.
  * 2. Fill e-mail.
  * 3. Click forgot password button.
+ * 4. Check forgot password message.
  *
  * @group Customer_(CS)
  * @ZephyrId MAGETWO-37145
