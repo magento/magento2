@@ -18,6 +18,11 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
  */
 class ValidateOrderOfProductTypeTest extends Injectable
 {
+    /* tags */
+    const MVP = 'no';
+    const DOMAIN = 'MX';
+    /* end tags */
+
     /**
      * Open catalog product index page.
      *

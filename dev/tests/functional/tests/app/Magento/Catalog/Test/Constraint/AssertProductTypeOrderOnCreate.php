@@ -10,18 +10,18 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 
 /**
- * Assert that order and filling of types on product page equals to incoming data.
+ * Assert that order and types of product on product page equals to incoming data.
  */
-class AssertMenuProductType extends AbstractConstraint
+class AssertProductTypeOrderOnCreate extends AbstractConstraint
 {
     /**
-     * Assert that order and filling of types on product page equals to incoming data.
+     * Assert that order and types of product on product page equals to incoming data.
      *
      * @param CatalogProductIndex $catalogProductIndex
      * @param array $menu
      * @return void
      */
-    public function processAssert(CatalogProductIndex $catalogProductIndex, $menu = [])
+    public function processAssert(CatalogProductIndex $catalogProductIndex, array $menu)
     {
         $catalogProductIndex->open();
         ksort($menu);
