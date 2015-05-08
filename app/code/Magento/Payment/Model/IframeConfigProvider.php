@@ -8,7 +8,6 @@ namespace Magento\Payment\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Json\Encoder;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Payment\Helper\Data as PaymentHelper;
@@ -84,8 +83,7 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
                     'dateDelim' => [$this->methodCode => $this->getDateDelim()],
                     'cardFieldsMap' => [$this->methodCode => $this->getCardFieldsMap()],
                     'source' =>  [$this->methodCode => $this->getViewFileUrl('blank.html')],
-                    // @TODO: After checkout will be moved to onepage please use $this->getController();
-                    'controllerName' => [$this->methodCode => 'onepage'],
+                    'controllerName' => [$this->methodCode => $this->getController()],
                     'cgiUrl' => [$this->methodCode => $this->getCgiUrl()],
                     'placeOrderUrl' => [$this->methodCode => $this->getPlaceOrderUrl()],
                     'saveOrderUrl' => [$this->methodCode => $this->getSaveOrderUrl()],
