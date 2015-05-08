@@ -89,4 +89,16 @@
             <argument name="groupManagement" xsi:type="object">Magento\Customer\Api\GroupManagementInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
+        <arguments>
+            <argument name="serviceEntityTypeMap" xsi:type="array">
+                <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="const">Magento\Customer\Api\CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER</item>
+            </argument>
+            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
+                <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="array">
+                    <item name="Magento\Eav\Model\Attribute\Data\Image" xsi:type="string">Magento\Framework\Api\Data\ImageInterface</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -128,6 +128,7 @@
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
     <preference for="Magento\Framework\Model\Resource\Db\TransactionManagerInterface" type="Magento\Framework\Model\Resource\Db\TransactionManager" />
+    <preference for="Magento\Framework\Api\Data\ImageInterface" type="Magento\Framework\Api\Image" />
     <type name="Magento\Framework\Model\Resource\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>

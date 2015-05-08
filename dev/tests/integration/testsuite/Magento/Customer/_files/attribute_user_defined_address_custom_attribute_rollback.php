@@ -10,3 +10,6 @@ $model->load('custom_attribute_test', 'attribute_code')->delete();
 
 $model2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
 $model2->load('custom_attributes_test', 'attribute_code')->delete();
+
+$model3 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model3->load('customer_image', 'customer_image')->delete();

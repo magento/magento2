@@ -21,6 +21,11 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
     private $attributeRepository;
 
     /**
+     * @var \Magento\Framework\Stdlib\String
+     */
+    private $stringUtility;
+
+    /**
      * @var array
      */
     private $serviceEntityTypeMap;
@@ -54,10 +59,12 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
+        \Magento\Framework\Stdlib\String $stringUtility,
         array $serviceEntityTypeMap = [],
         array $serviceBackendModelDataInterfaceMap = []
     ) {
         $this->attributeRepository = $attributeRepository;
+        $this->stringUtility = $stringUtility;
         $this->serviceEntityTypeMap = $serviceEntityTypeMap;
         $this->serviceBackendModelDataInterfaceMap = $serviceBackendModelDataInterfaceMap;
     }
@@ -74,11 +81,19 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
         }
 
         try {
-            $backendModel = $this->attributeRepository
-                ->get($this->serviceEntityTypeMap[$serviceClass], $attributeCode)
-                ->getBackendModel();
+            $attribute = $this->attributeRepository->get($this->serviceEntityTypeMap[$serviceClass], $attributeCode);
+            $backendModel = $attribute->getBackendModel();
         } catch (NoSuchEntityException $e) {
             return null;
+        }
+
+        //If empty backend model, check if it can be derived
+        if(empty($backendModel)) {
+            $backendModelClass = sprintf(
+                'Magento\Eav\Model\Attribute\Data\%s',
+                $this->stringUtility->upperCaseWords($attribute->getFrontendInput())
+            );
+            $backendModel = class_exists($backendModelClass) ? $backendModelClass : null;
         }
 
         $dataInterface = isset($this->serviceBackendModelDataInterfaceMap[$serviceClass][$backendModel])
