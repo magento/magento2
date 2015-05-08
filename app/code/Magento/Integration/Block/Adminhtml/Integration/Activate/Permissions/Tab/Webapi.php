@@ -31,7 +31,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /** @var \Magento\Framework\Json\Encoder */
     protected $encoder;
 
-    /** @var \Magento\Integration\Model\IntegrationService */
+    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
     protected $integrationService;
 
     /**
@@ -44,7 +44,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Json\Encoder $encoder
-     * @param \Magento\Integration\Model\IntegrationService $integrationService
+     * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param array $data
      */
     public function __construct(
@@ -55,7 +55,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Acl\Resource\ProviderInterface $resourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Json\Encoder $encoder,
-        \Magento\Integration\Model\IntegrationService $integrationService,
+        \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
         array $data = []
     ) {
         $this->_rootResource = $rootResource;

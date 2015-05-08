@@ -7,11 +7,28 @@
 
 namespace Magento\Customer\Controller\Adminhtml\Customer;
 
+use Magento\Integration\Api\CustomerTokenServiceInterface;
+
 /**
  *  Class to invalidate tokens for customers
  */
 class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
 {
+    /**
+     * @var CustomerTokenServiceInterface
+     */
+    protected $tokenService;
+
+    /**
+     * Inject dependencies.
+     *
+     * @param CustomerTokenServiceInterface $tokenService
+     */
+    public function __construct(CustomerTokenServiceInterface $tokenService)
+    {
+        $this->tokenService = $tokenService;
+    }
+
     /**
      * Reset customer's tokens handler
      *
@@ -22,9 +39,7 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($customerId = $this->getRequest()->getParam('customer_id')) {
             try {
-                /** @var \Magento\Integration\Model\CustomerTokenService $tokenService */
-                $tokenService = $this->_objectManager->get('Magento\Integration\Model\CustomerTokenService');
-                $tokenService->revokeCustomerAccessToken($customerId);
+                $this->tokenService->revokeCustomerAccessToken($customerId);
                 $this->messageManager->addSuccess(__('You have revoked the customer\'s tokens.'));
                 $resultRedirect->setPath('customer/index/edit', ['id' => $customerId, '_current' => true]);
             } catch (\Exception $e) {

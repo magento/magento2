@@ -36,8 +36,8 @@ class OauthHelper
     {
         $integration = self::_createIntegration('all');
         $objectManager = Bootstrap::getObjectManager();
-        /** @var $oauthService \Magento\Integration\Model\OauthService */
-        $oauthService = $objectManager->get('Magento\Integration\Model\OauthService');
+        /** @var $oauthService \Magento\Integration\Api\OauthServiceInterface */
+        $oauthService = $objectManager->get('Magento\Integration\Api\OauthServiceInterface');
         $consumer = $oauthService->loadConsumer($integration->getConsumerId());
         $url = TESTS_BASE_URL;
         $consumer->setCallbackUrl($url);
@@ -111,8 +111,8 @@ class OauthHelper
         if (!self::$_apiCredentials) {
             $integration = $integrationModel === null ? self::_createIntegration($resources) : $integrationModel;
             $objectManager = Bootstrap::getObjectManager();
-            /** @var \Magento\Integration\Model\OauthService $oauthService */
-            $oauthService = $objectManager->get('Magento\Integration\Model\OauthService');
+            /** @var \Magento\Integration\Api\OauthServiceInterface $oauthService */
+            $oauthService = $objectManager->get('Magento\Integration\Api\OauthServiceInterface');
             $oauthService->createAccessToken($integration->getConsumerId());
             $accessToken = $oauthService->getAccessToken($integration->getConsumerId());
             if (!$accessToken) {

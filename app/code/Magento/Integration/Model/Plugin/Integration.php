@@ -4,19 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Model\Plugin\Service\V1;
+namespace Magento\Integration\Model\Plugin;
 
 use Magento\Authorization\Model\Acl\AclRetriever;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Api\AuthorizationServiceInterface as IntegrationAuthorizationInterface;
+use Magento\Integration\Api\AuthorizationServiceInterface;
+use Magento\Integration\Api\IntegrationServiceInterface;
 
 /**
  * Plugin for \Magento\Integration\Model\IntegrationService.
  */
 class Integration
 {
-    /** @var IntegrationAuthorizationInterface */
+    /** @var AuthorizationServiceInterface */
     protected $integrationAuthorizationService;
 
     /** @var  AclRetriever */
@@ -25,11 +26,11 @@ class Integration
     /**
      * Initialize dependencies.
      *
-     * @param IntegrationAuthorizationInterface $integrationAuthorizationService
+     * @param AuthorizationServiceInterface $integrationAuthorizationService
      * @param AclRetriever $aclRetriever
      */
     public function __construct(
-        IntegrationAuthorizationInterface $integrationAuthorizationService,
+        AuthorizationServiceInterface $integrationAuthorizationService,
         AclRetriever $aclRetriever
     ) {
         $this->integrationAuthorizationService = $integrationAuthorizationService;
@@ -39,13 +40,13 @@ class Integration
     /**
      * Persist API permissions.
      *
-     * @param \Magento\Integration\Model\IntegrationService $subject
+     * @param IntegrationServiceInterface $subject
      * @param IntegrationModel $integration
      *
      * @return IntegrationModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterCreate(\Magento\Integration\Model\IntegrationService $subject, $integration)
+    public function afterCreate(IntegrationServiceInterface $subject, $integration)
     {
         $this->_saveApiPermissions($integration);
         return $integration;
@@ -54,13 +55,13 @@ class Integration
     /**
      * Persist API permissions.
      *
-     * @param \Magento\Integration\Model\IntegrationService $subject
+     * @param IntegrationServiceInterface $subject
      * @param IntegrationModel $integration
      *
      * @return IntegrationModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterUpdate(\Magento\Integration\Model\IntegrationService $subject, $integration)
+    public function afterUpdate(IntegrationServiceInterface $subject, $integration)
     {
         $this->_saveApiPermissions($integration);
         return $integration;
@@ -69,13 +70,13 @@ class Integration
     /**
      * Add API permissions to integration data.
      *
-     * @param \Magento\Integration\Model\IntegrationService $subject
+     * @param IntegrationServiceInterface $subject
      * @param IntegrationModel $integration
      *
      * @return IntegrationModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGet(\Magento\Integration\Model\IntegrationService $subject, $integration)
+    public function afterGet(IntegrationServiceInterface $subject, $integration)
     {
         $this->_addAllowedResources($integration);
         return $integration;
@@ -126,13 +127,13 @@ class Integration
     /**
      * Process integration resource permissions after the integration is created
      *
-     * @param \Magento\Integration\Model\IntegrationService $subject
+     * @param IntegrationServiceInterface $subject
      * @param array $integrationData Data of integration deleted
      *
      * @return array $integrationData
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(\Magento\Integration\Model\IntegrationService $subject, array $integrationData)
+    public function afterDelete(IntegrationServiceInterface $subject, array $integrationData)
     {
         //No check needed for integration data since it cannot be empty in the parent invocation - delete
         $integrationId = (int)$integrationData[IntegrationModel::ID];
