@@ -41,10 +41,15 @@ class Sidebar extends AbstractCart
         \Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
         array $data = []
     ) {
+        if (isset($data['jsLayout'])) {
+            $this->jsLayout = array_merge_recursive($jsLayoutDataProvider->getData(), $data['jsLayout']);
+            unset($data['jsLayout']);
+        } else {
+            $this->jsLayout = $jsLayoutDataProvider->getData();
+        }
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = false;
         $this->imageView = $imageView;
-        $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
     }
 
     /**
