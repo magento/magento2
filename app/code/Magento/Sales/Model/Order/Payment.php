@@ -655,7 +655,6 @@ class Payment extends Info implements OrderPaymentInterface
     public function refund($creditmemo)
     {
         $baseAmountToRefund = $this->_formatAmount($creditmemo->getBaseGrandTotal());
-        $order = $this->getOrder();
 
         $this->_generateTransactionId(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND);
 

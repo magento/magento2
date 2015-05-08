@@ -56,7 +56,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected $transactionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $transactionCollectionFactory;
 
@@ -150,21 +150,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->payment = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Sales\Model\Order\Payment',
-            [
-                'context'       => $context,
-                'paymentData'   => $this->helperMock,
-                'priceCurrency' => $this->priceCurrencyMock,
-                'transactionFactory' => $this->transactionFactory,
-                'transactionCollectionFactory' => $this->transactionCollectionFactory
-            ]
-        );
-
-        $this->payment->setMethod('any');
-        $this->payment->setOrder($this->orderMock);
-
-        $this->transactionId = 100;
+        $this->initPayment($context);
     }
 
     protected function tearDown()
@@ -992,5 +978,27 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             [true],
             [false]
         ];
+    }
+
+    /**
+     * @param $context
+     */
+    protected function initPayment($context)
+    {
+        $this->payment = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+            'Magento\Sales\Model\Order\Payment',
+            [
+                'context' => $context,
+                'paymentData' => $this->helperMock,
+                'priceCurrency' => $this->priceCurrencyMock,
+                'transactionFactory' => $this->transactionFactory,
+                'transactionCollectionFactory' => $this->transactionCollectionFactory
+            ]
+        );
+
+        $this->payment->setMethod('any');
+        $this->payment->setOrder($this->orderMock);
+
+        $this->transactionId = 100;
     }
 }

@@ -69,7 +69,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetOrder()
     {
         $orderId = 123;
-        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false );
+        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
         $order->expects($this->once())
             ->method('getId')
             ->willReturn($orderId);
@@ -84,7 +84,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         //set order_id and get order by id
         $orderId = 123;
-        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false );
+        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
         $order->expects($this->once())
             ->method('load')
             ->with($orderId)
@@ -111,9 +111,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider getStatusIdDataProvider
      */
-    public function testGetStatusId($qtyBackOrdered, $qtyCanceled, $qtyInvoiced, $qtyOrdered,
-                                    $qtyRefunded, $qtyShipped, $expectedStatus)
-    {
+    public function testGetStatusId(
+        $qtyBackOrdered,
+        $qtyCanceled,
+        $qtyInvoiced,
+        $qtyOrdered,
+        $qtyRefunded,
+        $qtyShipped,
+        $expectedStatus
+    ) {
         $this->model->setQtyBackordered($qtyBackOrdered);
         $this->model->setQtyCanceled($qtyCanceled);
         $this->model->setQtyInvoiced($qtyInvoiced);
@@ -128,21 +134,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [0, 0, 0, null, 0, 0, \Magento\Sales\Model\Order\Item::STATUS_PENDING],
-
             [0, 10, 1, 100, 10, 80, \Magento\Sales\Model\Order\Item::STATUS_SHIPPED],
             [1, 10, 1, 100, 10, 80, \Magento\Sales\Model\Order\Item::STATUS_SHIPPED],
             [1, 10, 1, 100, 10, 99, \Magento\Sales\Model\Order\Item::STATUS_MIXED],
-
             [0, 10, 80, 100, 10, 0, \Magento\Sales\Model\Order\Item::STATUS_INVOICED],
             [1, 10, 80, 100, 10, 0, \Magento\Sales\Model\Order\Item::STATUS_INVOICED],
             [1, 10, 99, 100, 10, 0, \Magento\Sales\Model\Order\Item::STATUS_MIXED],
-
             [80, 10, null, 100, 10, null, \Magento\Sales\Model\Order\Item::STATUS_BACKORDERED],
-
             [null, null, null, 9, 9, null, \Magento\Sales\Model\Order\Item::STATUS_REFUNDED],
-
             [null, 9, null, 9, null, null, \Magento\Sales\Model\Order\Item::STATUS_CANCELED],
-
             [1, 10, 70, 100, 10, 79, \Magento\Sales\Model\Order\Item::STATUS_PARTIAL],
             [0, 10, 70, 100, 10, 79, \Magento\Sales\Model\Order\Item::STATUS_PARTIAL]
         ];
