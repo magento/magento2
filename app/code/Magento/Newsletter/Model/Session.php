@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Model;
 /**
  * Newsletter session model
  */
-class Session extends \Magento\Framework\Session\Generic
+class Session extends \Magento\Framework\Session\SessionManager
 {
     /**
      * Set error message
