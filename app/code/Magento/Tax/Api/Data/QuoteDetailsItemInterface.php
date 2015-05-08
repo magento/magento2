@@ -5,6 +5,10 @@
  */
 namespace Magento\Tax\Api\Data;
 
+/**
+ * Quote details item interface.
+ * @api
+ */
 interface QuoteDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
