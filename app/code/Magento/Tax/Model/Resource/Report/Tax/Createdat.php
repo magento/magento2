@@ -51,6 +51,8 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
         $to = $this->_dateToUtc($to);
 
         $writeAdapter = $this->_getWriteAdapter();
+        $salesAdapter = $this->_resources->getConnection('sales_read');
+
         $writeAdapter->beginTransaction();
 
         try {
@@ -66,14 +68,16 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 $subSelect = null;
             }
 
-            $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
+            $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect, false, $salesAdapter);
             // convert dates from UTC to current admin timezone
             $periodExpr = $writeAdapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['e' => $this->getTable('sales_order')],
                     'e.' . $aggregationField,
                     $from,
-                    $to
+                    $to,
+                    null,
+                    $salesAdapter
                 )
             );
 
@@ -103,13 +107,16 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             );
 
             if ($subSelect !== null) {
-                $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
+                $select->having($this->_makeConditionFromDateRangeSelect($subSelect, 'period', $salesAdapter));
             }
 
             $select->group([$periodExpr, 'e.store_id', 'code', 'tax.percent', 'e.status']);
 
-            $insertQuery = $writeAdapter->insertFromSelect($select, $this->getMainTable(), array_keys($columns));
-            $writeAdapter->query($insertQuery);
+            $aggregatedData = $salesAdapter->fetchAll($select);
+
+            if ($aggregatedData) {
+                $writeAdapter->insertArray($this->getMainTable(), array_keys($columns), $aggregatedData);
+            }
 
             $select->reset();
 
@@ -126,7 +133,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             $select->from($this->getMainTable(), $columns)->where('store_id <> ?', 0);
 
             if ($subSelect !== null) {
-                $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period'));
+                $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period', $salesAdapter));
             }
 
             $select->group(['period', 'code', 'percent', 'order_status']);
