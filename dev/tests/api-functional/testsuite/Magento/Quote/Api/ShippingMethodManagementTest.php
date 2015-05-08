@@ -53,7 +53,9 @@ class ShippingMethodManagementTest extends WebapiAbstract
     {
         $this->quote->load('test_order_1', 'reserved_order_id');
         $serviceInfo = $this->getServiceInfo();
-
+        $shippingAddress = $this->quote->getShippingAddress();
+        $shippingAddress->setCollectShippingRates(true);
+        $shippingAddress->collectTotals()->save();
         $requestData = [
             'cartId' => $this->quote->getId(),
             'carrierCode' => 'flatrate',
@@ -146,7 +148,9 @@ class ShippingMethodManagementTest extends WebapiAbstract
             'carrierCode' => 'flatrate',
             'methodCode' => 'flatrate',
         ]; // cartId 999 will be overridden
-
+        $shippingAddress = $this->quote->getShippingAddress();
+        $shippingAddress->setCollectShippingRates(true);
+        $shippingAddress->collectTotals()->save();
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(true, $result);
 
@@ -162,7 +166,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
      */
     public function testGetMethod()
     {
@@ -172,9 +176,10 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $shippingMethodManagementService = $this->objectManager->create(
             'Magento\Quote\Api\ShippingMethodManagementInterface'
         );
-        $shippingMethodManagementService->set($this->quote->getId(), 'flatrate', 'flatrate');
 
         $shippingAddress = $this->quote->getShippingAddress();
+        $shippingAddress->setCollectShippingRates(true);
+        $shippingAddress->collectTotals()->save();
         list($carrierCode, $methodCode) = explode('_', $shippingAddress->getShippingMethod());
         list($carrierTitle, $methodTitle) = explode(' - ', $shippingAddress->getShippingDescription());
         $shippingMethod = $shippingMethodManagementService->get($this->quote->getId());
@@ -225,7 +230,7 @@ class ShippingMethodManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture  Magento/Checkout/_files/quote_with_shipping_method.php
      */
     public function testGetMethodForMyCart()
     {
@@ -240,10 +245,9 @@ class ShippingMethodManagementTest extends WebapiAbstract
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         /** @var \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagementService */
-        $shippingMethodManagementService = $this->objectManager->create(
-            'Magento\Quote\Api\ShippingMethodManagementInterface'
-        );
-        $shippingMethodManagementService->set($this->quote->getId(), 'flatrate', 'flatrate');
+        $shippingAddress = $this->quote->getShippingAddress();
+        $shippingAddress->setCollectShippingRates(true);
+        $shippingAddress->collectTotals()->save();
 
         $serviceInfo = [
             'rest' => [
