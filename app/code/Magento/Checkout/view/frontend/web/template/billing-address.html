@@ -52,6 +52,9 @@
                 <input type="radio" name="billing[use_for_shipping]" id="billing:use_for_shipping_no" value="0" class="radio" data-bind="checked: useForShipping" />
                 <label class="label" for="billing:use_for_shipping_no"><span><!-- ko text: $t('Ship to different address')--><!-- /ko --></span></label>
             </div>
+                <!-- ko foreach: getRegion('additional-field-choice') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
             <!-- /ko -->
 
             <input type="hidden" name="billing[use_for_shipping]" value="1" />
