@@ -3161,4 +3161,7 @@ return [
     ['Magento\Framework\Exception\File\ValidatorException'],
     ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
     ['Magento\Shipping\Exception'],
+    ['Magento\Tax\Model\Resource\Sales\Order\Tax\Item\Collection'],
+    ['Magento\Tax\Model\Resource\Sales\Order\Tax\Item'],
+    ['Magento\Tax\Model\Sales\Order\Tax\Item'],
 ];
