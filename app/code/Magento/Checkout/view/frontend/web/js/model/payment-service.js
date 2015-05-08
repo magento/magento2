@@ -20,12 +20,12 @@ define(
                 if (code) {
                     var paymentMethodsArray = this.availablePaymentMethods();
                     paymentMethodsArray.forEach(function (entry) {
-                        if (entry.code = code) {
+                        if (entry.code == code) {
                             paymentMethodTitle = entry.title
                         }
                     });
-                    return paymentMethodTitle;
                 }
+                return paymentMethodTitle
             }
         }
     }

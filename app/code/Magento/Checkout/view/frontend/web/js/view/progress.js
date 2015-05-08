@@ -78,7 +78,7 @@ define(
                 return quote.getShippingMethod()
             },
             getPaymentMethod: function() {
-                var code = quote.getPaymentMethod();
+                var code = quote.getPaymentMethod()();
                 return paymentService.getPaymentMethodTitle(code);
             },
             goToStep: function(stepName) {
