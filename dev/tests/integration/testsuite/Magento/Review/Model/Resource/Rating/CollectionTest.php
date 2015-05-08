@@ -27,7 +27,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $ratingData = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\Registry')
             ->registry('rating_data');
-        $this->collection->addEntitySummaryToItem($ratingData->getEntityId(), $ratingData->getStoreId());
+
+        $result = $this->collection->addEntitySummaryToItem($ratingData->getEntityId(), $ratingData->getStoreId());
+        $this->assertEquals($this->collection, $result);
+    }
+
+    public function testAddEntitySummaryToItemEmpty()
+    {
+        foreach ($this->collection->getItems() as $item) {
+            $item->delete();
+        }
+        $this->collection->clear();
+        $result = $this->collection->addEntitySummaryToItem(1, 1);
+        $this->assertEquals($this->collection, $result);
     }
 
     public function testAddStoreData()
