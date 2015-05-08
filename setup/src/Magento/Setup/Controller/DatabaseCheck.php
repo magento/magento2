@@ -15,13 +15,6 @@ use Magento\Setup\Validator\DbValidator;
 class DatabaseCheck extends AbstractActionController
 {
     /**
-     * Installer service factory
-     *
-     * @var \Magento\Setup\Model\InstallerFactory
-     */
-    private $installerFactory;
-
-    /**
      * WebLogger to access log
      *
      * @var WebLogger
@@ -37,13 +30,11 @@ class DatabaseCheck extends AbstractActionController
     /**
      * Constructor
      *
-     * @param InstallerFactory $installerFactory
      * @param WebLogger $webLogger
      * @param DbValidator $dbValidator
      */
-    public function __construct(InstallerFactory $installerFactory, WebLogger $webLogger, DbValidator $dbValidator)
+    public function __construct(WebLogger $webLogger, DbValidator $dbValidator)
     {
-        $this->installerFactory = $installerFactory;
         $this->webLogger = $webLogger;
         $this->dbValidator = $dbValidator;
     }
@@ -58,7 +49,6 @@ class DatabaseCheck extends AbstractActionController
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
 
         try {
-            $installer = $this->installerFactory->create($this->webLogger);
             $password = isset($params['password']) ? $params['password'] : '';
             $this->dbValidator->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
             $tablePrefix = isset($params['tablePrefix']) ? $params['tablePrefix'] : '';

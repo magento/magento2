@@ -274,6 +274,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
+     * Returns other parts of existing db config in case is only one value is presented by user
+     *
      * @param array $options
      * @param DeploymentConfig $deploymentConfig
      *

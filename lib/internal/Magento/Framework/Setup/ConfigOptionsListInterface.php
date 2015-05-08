@@ -33,7 +33,7 @@ interface ConfigOptionsListInterface
     /**
      * Validates user input option values and returns error messages
      *
-     * @param array $options]
+     * @param array $options
      * @param DeploymentConfig $deploymentConfig
      * @return string[]
      */
