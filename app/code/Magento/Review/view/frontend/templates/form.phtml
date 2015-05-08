@@ -14,7 +14,7 @@
     <div class="block-title"><strong><?php echo __('Write Your Own Review') ?></strong></div>
 <div class="block-content">
 <?php if ($block->getAllowWriteReviewFlag()): ?>
-<form action="<?php echo $block->getAction() ?>" class="review-form" method="post" id="review-form" data-bind="scope: 'review-form'">
+<form action="<?php echo $block->getAction() ?>" class="review-form" method="post" data-role="product-review-form" data-bind="scope: 'review-form'">
     <?php echo $block->getBlockHtml('formkey'); ?>
     <?php echo $block->getChildHtml('form_fields_before')?>
     <fieldset class="fieldset review-fieldset" data-hasrequired="<?php __('* Required Fields'); ?>">
@@ -101,7 +101,7 @@ require([
 </script>
 <script type="text/x-magento-init">
 {
-    "#review-form": {
+    "[data-role=product-review-form]": {
         "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
     }
 }
