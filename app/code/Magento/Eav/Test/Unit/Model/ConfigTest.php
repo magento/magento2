@@ -77,53 +77,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param boolean $cacheEnabled
      * @param int $loadCalls
      * @param string $cachedValue
-     * @param array $factoryCalls
      * @dataProvider getAttributeCacheDataProvider
      * @return void
      */
-    public function testGetAttributeCache($cacheEnabled, $loadCalls, $cachedValue, $factoryCalls)
-    {
-        $this->stateMock
-            ->expects($this->atLeastOnce())
-            ->method('isEnabled')
-            ->with(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)
-            ->willReturn($cacheEnabled);
-        $this->cacheMock
-            ->expects($this->exactly($loadCalls))
-            ->method('load')
-            ->with(Config::ATTRIBUTES_CACHE_ID)
-            ->willReturn($cachedValue);
-
-        $collectionStub = new Object([
-            ['entity_type_code' => 'type_code_1', 'entity_type_id' => 1]
-        ]);
-        $this->collectionFactoryMock
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn($collectionStub);
-
-        $this->typeFactoryMock
-            ->expects($this->any())
-            ->method('create')
-            ->willReturn(new Object(['id' => 101]));
-
-        $this->universalFactoryMock
-            ->expects($this->exactly(count($factoryCalls)))
-            ->method('create')
-            ->will($this->returnValueMap($factoryCalls));
-
-        $entityType = $this->getMockBuilder('\Magento\Eav\Model\Entity\Type')
-            ->setMethods(['getEntity'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->config->getAttribute($entityType, 'attribute_code_1');
-    }
-
-    /**
-     * @return array
-     */
-    public function getAttributeCacheDataProvider()
+    public function testGetAttributeCache($cacheEnabled, $loadCalls, $cachedValue)
     {
         $attributeCollectionMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Collection')
             ->disableOriginalConstructor()
@@ -141,38 +98,73 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['dummy'])
             ->disableOriginalConstructor()
             ->getMock();
+        $factoryCalls = [
+            ['Magento\Eav\Model\Resource\Entity\Attribute\Collection', [], $attributeCollectionMock],
+            ['Magento\Eav\Model\Entity\Attribute', [], $entityAttributeMock],
+        ];
 
+        $this->stateMock
+            ->expects($this->atLeastOnce())
+            ->method('isEnabled')
+            ->with(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)
+            ->willReturn($cacheEnabled);
+        $this->cacheMock
+            ->expects($this->exactly($loadCalls))
+            ->method('load')
+            ->with(Config::ATTRIBUTES_CACHE_ID)
+            ->willReturn($cachedValue);
+
+        $collectionStub = new Object([
+            ['entity_type_code' => 'type_code_1', 'entity_type_id' => 1],
+        ]);
+        $this->collectionFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($collectionStub);
+
+        $this->typeFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn(new Object(['id' => 101]));
+
+        $this->universalFactoryMock
+            ->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValueMap($factoryCalls));
+
+        $entityType = $this->getMockBuilder('\Magento\Eav\Model\Entity\Type')
+            ->setMethods(['getEntity'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->config->getAttribute($entityType, 'attribute_code_1');
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributeCacheDataProvider()
+    {
         return [
             'cache-disabled' => [
                 false,
                 0,
                 false,
-                [
-                    ['Magento\Eav\Model\Resource\Entity\Attribute\Collection', [], $attributeCollectionMock],
-                    ['Magento\Eav\Model\Entity\Attribute', [], $entityAttributeMock]
-                ]
             ],
             'cache-miss' => [
                 true,
                 1,
                 false,
-                [
-                    ['Magento\Eav\Model\Resource\Entity\Attribute\Collection', [], $attributeCollectionMock],
-                    ['Magento\Eav\Model\Entity\Attribute', [], $entityAttributeMock]
-                ]
             ],
             'cached' => [
                 true,
                 1,
                 serialize(
                     [
-                        ['attribute_code' => 'attribute_code_1', 'attribute_id' => 1]
+                        ['attribute_code' => 'attribute_code_1', 'attribute_id' => 1],
                     ]
                 ),
-                [
-                    ['Magento\Eav\Model\Entity\Attribute', [], $entityAttributeMock]
-                ]
-            ]
+            ],
         ];
     }
 
@@ -185,7 +177,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo(
                     [
                         \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                        \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                        \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
                     ]
                 )
             );

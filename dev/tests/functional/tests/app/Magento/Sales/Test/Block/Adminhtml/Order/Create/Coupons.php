@@ -7,7 +7,7 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\Create;
 
 use Magento\Backend\Test\Block\Widget\Form;
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Client\Locator;
 
 /**
@@ -32,10 +32,10 @@ class Coupons extends Form
     /**
      * Enter discount code and click apply button.
      *
-     * @param SalesRuleInjectable $code
+     * @param SalesRule $code
      * @return void
      */
-    public function applyCouponCode(SalesRuleInjectable $code)
+    public function applyCouponCode(SalesRule $code)
     {
         $this->_rootElement->find($this->couponCode)->setValue($code->getCouponCode());
         $this->_rootElement->find($this->applyButton, Locator::SELECTOR_XPATH)->click();

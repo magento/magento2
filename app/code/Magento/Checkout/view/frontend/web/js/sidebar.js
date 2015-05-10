@@ -60,11 +60,13 @@ define([
          * @private
          */
         _isOverflowed: function() {
-            var list = $(this.options.minicart.list);
+            var list = $(this.options.minicart.list),
+                cssOverflowClass = 'overflowed';
+
             if (this.scrollHeight > list.innerHeight()) {
-                list.parent().addClass('overflowed');
+                list.parent().addClass(cssOverflowClass);
             } else {
-                list.parent().removeClass('overflowed');
+                list.parent().removeClass(cssOverflowClass);
             }
         },
 
@@ -185,9 +187,9 @@ define([
             this.scrollHeight = 0;
             target.children().each(function() {
                 if (counter-- > 0) {
-                    height += $(this).height() - 15;
+                    height += $(this).height();
                 }
-                self.scrollHeight += $(this).height() - 15;
+                self.scrollHeight += $(this).height();
             });
 
             target.remove();

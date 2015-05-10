@@ -915,6 +915,14 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getCreatedAt();
 
     /**
+     * Sets the created-at timestamp for the order.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
+    /**
      * Gets the customer date-of-birth (DOB) for the order.
      *
      * @return string Customer date-of-birth (DOB).
