@@ -230,7 +230,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
 
-        $this->_sitemapItems[] = new \Magento\Framework\Object(
+        $sitemapItems = [];
+        $sitemapItems[] = new \Magento\Framework\Object(
             [
                 'changefreq' => $helper->getCategoryChangefreq($storeId),
                 'priority' => $helper->getCategoryPriority($storeId),
@@ -238,7 +239,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
             ]
         );
 
-        $this->_sitemapItems[] = new \Magento\Framework\Object(
+        $sitemapItems[] = new \Magento\Framework\Object(
             [
                 'changefreq' => $helper->getProductChangefreq($storeId),
                 'priority' => $helper->getProductPriority($storeId),
@@ -246,13 +247,19 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
             ]
         );
 
-        $this->_sitemapItems[] = new \Magento\Framework\Object(
+        $sitemapItems[] = new \Magento\Framework\Object(
             [
                 'changefreq' => $helper->getPageChangefreq($storeId),
                 'priority' => $helper->getPagePriority($storeId),
                 'collection' => $this->_cmsFactory->create()->getCollection($storeId),
             ]
         );
+
+        $transport = new \Magento\Framework\Object(
+            ['items' => $sitemapItems]
+        );
+        $this->_eventManager->dispatch('sitemap_init_items' , ['transport' => $transport]);
+        $this->_sitemapItems = $transport->getItems();
 
         $this->_tags = [
             self::TYPE_INDEX => [
