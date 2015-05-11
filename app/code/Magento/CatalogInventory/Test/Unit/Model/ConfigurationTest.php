@@ -70,7 +70,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ->willReturn($id);
         $this->storeManagerMock->expects($this->once())
             ->method('getWebsite')
-            ->with(true)
             ->willReturn($websiteMock);
         $this->assertEquals($id, $this->model->getDefaultWebsiteId());
     }
