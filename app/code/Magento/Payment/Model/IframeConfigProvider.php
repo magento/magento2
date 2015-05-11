@@ -101,7 +101,7 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
      */
     protected function getDateDelim()
     {
-        $result = null;
+        $result = '';
         if ($this->method->isAvailable()) {
             $configData = $this->getMethodConfigData('date_delim');
             if ($configData !== null) {
