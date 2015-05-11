@@ -22,8 +22,14 @@ class CartPriceRulesFixture extends Fixture
     public function execute()
     {
         $this->fixtureModel->resetObjectManager();
-        $cartPriceRulesCount = $this->fixtureModel->getValue('cart_price_rules', 9);
-        $cartPriceRulesProductsFloor = $this->fixtureModel->getValue('cart_price_rules_floor', 3);
+        $cartPriceRulesCount = $this->fixtureModel->getValue('cart_price_rules', 0);
+        if (!$cartPriceRulesCount) {
+            return;
+        }
+        $cartPriceRulesProductsFloor = $this->fixtureModel->getValue(
+            'cart_price_rules_floor',
+            3
+        );
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */
         $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');

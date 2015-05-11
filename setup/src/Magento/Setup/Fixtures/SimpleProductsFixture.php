@@ -23,7 +23,10 @@ class SimpleProductsFixture extends Fixture
      */
     public function execute()
     {
-        $simpleProductsCount = $this->fixtureModel->getValue('simple_products', 180);
+        $simpleProductsCount = $this->fixtureModel->getValue('simple_products', 0);
+        if (!$simpleProductsCount) {
+            return;
+        }
         $this->fixtureModel->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */

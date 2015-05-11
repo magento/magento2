@@ -11,7 +11,7 @@ define([
 
     // Mark notification as read via AJAX call
     var markNotificationAsRead = function (notificationId) {
-            var requestUrl = $('.notifications-wrapper .notifications-list').attr('data-mark-as-read-url');
+            var requestUrl = $('.notifications-wrapper .admin__action-dropdown-menu').attr('data-mark-as-read-url');
             $.ajax({
                 url: requestUrl,
                 type: 'POST',
@@ -33,7 +33,7 @@ define([
 
             if (notificationCount == 0) {
                 // Change appearance of the bubble and its behavior when the last notification is removed
-                $('.notifications-wrapper .notifications-list').remove();
+                $('.notifications-wrapper .admin__action-dropdown-menu').remove();
                 var notificationIcon = $('.notifications-wrapper .notifications-icon');
                 notificationIcon.removeAttr('data-toggle');
                 notificationIcon.off('click.dropdown');
@@ -45,7 +45,7 @@ define([
                 }
                 $('.notifications-entry-last .notifications-counter').text(notificationCount);
                 // Modify caption of the 'See All' link
-                var actionElement = $('.notifications-wrapper .notifications-list .last .action-more');
+                var actionElement = $('.notifications-wrapper .admin__action-dropdown-menu .last .action-more');
                 actionElement.text(actionElement.text().replace(/\d+/, notificationCount));
             }
         },
@@ -65,7 +65,7 @@ define([
         };
 
     // Show notification description when corresponding item is clicked
-    $('.notifications-wrapper .notifications-list .notifications-entry').on('click.showNotification', function (event) {
+    $('.notifications-wrapper .admin__action-dropdown-menu .notifications-entry').on('click.showNotification', function (event) {
         // hide notification dropdown
         $('.notifications-wrapper .notifications-icon').trigger('click.dropdown');
 

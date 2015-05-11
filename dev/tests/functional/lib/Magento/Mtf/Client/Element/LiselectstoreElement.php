@@ -65,7 +65,7 @@ class LiselectstoreElement extends SimpleElement
     public function setValue($value)
     {
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-        $this->driver->find($this->toggleSelector)->click();
+        $this->context->find($this->toggleSelector)->click();
 
         $value = explode('/', $value);
         $optionSelector = [];
@@ -88,7 +88,7 @@ class LiselectstoreElement extends SimpleElement
      */
     protected function getLiElements()
     {
-        $this->driver->find($this->toggleSelector)->click();
+        $this->find($this->toggleSelector)->click();
         $elements = $this->driver->getElements($this, 'li', Locator::SELECTOR_TAG_NAME);
         $dropdownData = [];
         foreach ($elements as $element) {

@@ -825,7 +825,10 @@ class ConfigurableProductsFixture extends Fixture
      */
     public function execute()
     {
-        $configurablesCount = $this->fixtureModel->getValue('configurable_products', 90);
+        $configurablesCount = $this->fixtureModel->getValue('configurable_products', 0);
+        if (!$configurablesCount) {
+            return;
+        }
         $this->fixtureModel->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */

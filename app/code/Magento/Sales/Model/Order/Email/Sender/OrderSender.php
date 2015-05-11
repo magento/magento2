@@ -12,9 +12,11 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Resource\Order as OrderResource;
 use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class OrderSender
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderSender extends Sender
 {
@@ -41,6 +43,13 @@ class OrderSender extends Sender
     protected $addressRenderer;
 
     /**
+     * Application Event Dispatcher
+     *
+     * @var ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * @param Template $templateContainer
      * @param OrderIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
@@ -49,6 +58,7 @@ class OrderSender extends Sender
      * @param OrderResource $orderResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param Renderer $addressRenderer
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         Template $templateContainer,
@@ -58,13 +68,15 @@ class OrderSender extends Sender
         PaymentHelper $paymentHelper,
         OrderResource $orderResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        Renderer $addressRenderer
+        Renderer $addressRenderer,
+        ManagerInterface $eventManager
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
         $this->paymentHelper = $paymentHelper;
         $this->orderResource = $orderResource;
         $this->globalConfig = $globalConfig;
         $this->addressRenderer = $addressRenderer;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -89,9 +101,7 @@ class OrderSender extends Sender
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             if ($this->checkAndSend($order)) {
                 $order->setEmailSent(true);
-
                 $this->orderResource->saveAttribute($order, ['send_email', 'email_sent']);
-
                 return true;
             }
         }
@@ -109,16 +119,26 @@ class OrderSender extends Sender
      */
     protected function prepareTemplate(Order $order)
     {
-        $this->templateContainer->setTemplateVars(
-            [
-                'order' => $order,
-                'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
-                'store' => $order->getStore(),
-                'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
-                'formattedBillingAddress' => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
+        $transport = new \Magento\Framework\Object(
+            ['template_vars' =>
+                 [
+                     'order'                    => $order,
+                     'billing'                  => $order->getBillingAddress(),
+                     'payment_html'             => $this->getPaymentHtml($order),
+                     'store'                    => $order->getStore(),
+                     'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
+                     'formattedBillingAddress'  => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
+                 ]
             ]
         );
+
+        $this->eventManager->dispatch(
+            'email_order_set_template_vars_before',
+            ['sender' => $this, 'transport' => $transport]
+        );
+
+        $this->templateContainer->setTemplateVars($transport->getTemplateVars());
+
         parent::prepareTemplate($order);
     }
 

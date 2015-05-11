@@ -120,7 +120,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
-            ->with(\Magento\Tax\Api\Data\TaxClassInterface::KEY_TYPE)
+            ->with(\Magento\Tax\Model\ClassModel::KEY_TYPE)
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setValue')

@@ -32,8 +32,8 @@ Scenario can accept parameters that are described bellow in format <parameter_na
 <customer_checkout_percent:4/> Percentage of users that will reach the (logged-in) customer checkout stage. Default is '4'.
 <loops:1/> Number of loops to run. Default is '1'.
 <admin_path:admin/> Admin backend path. Default is 'admin'.
-<admin_user:admin/> Admin backend user. Default is 'admin'.
-<admin_password:123123q/> Admin backend password. Default is '123123q'.
+<admin-user:admin/> Admin backend user. Default is 'admin'.
+<admin-password:123123q/> Admin backend password. Default is '123123q'.
 <think_time_deviation:1000> Deviation (ms) for "think time" emulation. Default is '1000'.
 <think_time_delay_offset:2000> Constant delay offset (ms) for "think time" emulation. Default is '2000'.
 
@@ -85,22 +85,3 @@ Details http://jmeter.apache.org/usermanual/component_reference.html#View_Result
 
 About other types read on
 http://jmeter.apache.org/usermanual/component_reference.html
-
-
-Testing environment
------------
-
-jMeter: apache-jmeter-2.11
-OS (where jMeter is running): Windows 7 SP1
-Server (where Magento is hosted): Intel(R) Core(TM)2 Duo CPU T7700  @2.40GHz, memtotal 4gb.
-PHP:  5.4.19 (memory_limit 2Gb)
-MySQL: 5.5.29 MySQL Community Server
-Magento version:  ver. 2.0.0.0-dev70 (rev 16b68a0f8e0fad4375f33b7238e2f2964ac3aadc)
-Magento database (Small plan in Fixture Generation Tool):
-jMeter parameters (all default parameters):
-  users: 100
-  ramp_period: 300
-  view_product_add_to_cart_percent: 62
-  view_catalog_percent: 30
-  guest_checkout_percent: 4
-  customer_checkout_percent: 4

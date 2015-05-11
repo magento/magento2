@@ -77,6 +77,14 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function getCreatedAt();
 
     /**
+     * Sets the created-at timestamp for the shipment package.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
+    /**
      * Gets the description for the shipment package.
      *
      * @return string Description.

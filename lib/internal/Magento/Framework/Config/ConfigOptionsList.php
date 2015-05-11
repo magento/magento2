@@ -32,20 +32,20 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * Input keys for the options
      */
     const INPUT_KEY_ENCRYPTION_KEY = 'key';
-    const INPUT_KEY_SESSION_SAVE = 'session_save';
-    const INPUT_KEY_DEFINITION_FORMAT = 'definition_format';
-    const INPUT_KEY_DB_HOST = 'db_host';
-    const INPUT_KEY_DB_NAME = 'db_name';
-    const INPUT_KEY_DB_USER = 'db_user';
-    const INPUT_KEY_DB_PASSWORD = 'db_password';
-    const INPUT_KEY_DB_PREFIX = 'db_prefix';
-    const INPUT_KEY_DB_MODEL = 'db_model';
-    const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
+    const INPUT_KEY_SESSION_SAVE = 'session-save';
+    const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';
+    const INPUT_KEY_DB_HOST = 'db-host';
+    const INPUT_KEY_DB_NAME = 'db-name';
+    const INPUT_KEY_DB_USER = 'db-user';
+    const INPUT_KEY_DB_PASSWORD = 'db-password';
+    const INPUT_KEY_DB_PREFIX = 'db-prefix';
+    const INPUT_KEY_DB_MODEL = 'db-model';
+    const INPUT_KEY_DB_INIT_STATEMENTS = 'db-init-statements';
     const INPUT_KEY_RESOURCE = 'resource';
     /**#@-*/
 
     /**#@+
-     * Values for session_save
+     * Values for session-save
      */
     const SESSION_SAVE_FILES = 'files';
     const SESSION_SAVE_DB = 'db';

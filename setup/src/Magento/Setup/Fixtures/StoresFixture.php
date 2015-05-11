@@ -21,9 +21,12 @@ class StoresFixture extends Fixture
      */
     public function execute()
     {
-        $websitesCount = $this->fixtureModel->getValue('websites', 2);
-        $storeGroupsCount = $this->fixtureModel->getValue('store_groups', 3);
-        $storesCount = $this->fixtureModel->getValue('store_views', 5);
+        $websitesCount = $this->fixtureModel->getValue('websites', 0);
+        $storeGroupsCount = $this->fixtureModel->getValue('store_groups', 0);
+        $storesCount = $this->fixtureModel->getValue('store_views', 0);
+        if (!$websitesCount || !$storeGroupsCount || !$storesCount) {
+            return;
+        }
         $this->fixtureModel->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */

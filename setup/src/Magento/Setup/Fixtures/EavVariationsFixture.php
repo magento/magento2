@@ -23,6 +23,10 @@ class EavVariationsFixture extends Fixture
      */
     public function execute()
     {
+        $configurablesCount = $this->fixtureModel->getValue('configurable_products', 0);
+        if (!$configurablesCount) {
+            return;
+        }
         $this->fixtureModel->resetObjectManager();
 
         /* @var $model \Magento\Catalog\Model\Resource\Eav\Attribute */

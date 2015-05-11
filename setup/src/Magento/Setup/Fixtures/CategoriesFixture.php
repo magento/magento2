@@ -21,7 +21,10 @@ class CategoriesFixture extends Fixture
      */
     public function execute()
     {
-        $categoriesNumber = $this->fixtureModel->getValue('categories', 18);
+        $categoriesNumber = $this->fixtureModel->getValue('categories', 0);
+        if (!$categoriesNumber) {
+            return;
+        }
         $maxNestingLevel = $this->fixtureModel->getValue('categories_nesting_level', 3);
         $this->fixtureModel->resetObjectManager();
 

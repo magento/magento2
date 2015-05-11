@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit;
 
-use Magento\Ui\Component\Control\ButtonProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class InvalidateTokenButton

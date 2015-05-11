@@ -50,7 +50,8 @@ class OrderSenderTest extends AbstractSenderTest
             $this->paymentHelper,
             $this->orderResourceMock,
             $this->globalConfig,
-            $this->addressRenderer
+            $this->addressRenderer,
+            $this->eventManagerMock
         );
     }
 

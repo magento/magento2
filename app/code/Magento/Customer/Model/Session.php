@@ -102,6 +102,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Session\StorageInterface $storage
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Framework\App\State $appState
      * @param Share $configShare
      * @param \Magento\Framework\Url\Helper\Data $coreUrl
      * @param \Magento\Customer\Model\Url $customerUrl
@@ -113,6 +114,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param CustomerRepositoryInterface $customerRepository
      * @param GroupManagementInterface $groupManagement
+     * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -124,6 +126,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Session\StorageInterface $storage,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\App\State $appState,
         Config\Share $configShare,
         \Magento\Framework\Url\Helper\Data $coreUrl,
         \Magento\Customer\Model\Url $customerUrl,
@@ -154,9 +157,9 @@ class Session extends \Magento\Framework\Session\SessionManager
             $validator,
             $storage,
             $cookieManager,
-            $cookieMetadataFactory
+            $cookieMetadataFactory,
+            $appState
         );
-        $this->start();
         $this->groupManagement = $groupManagement;
         $this->_eventManager->dispatch('customer_session_init', ['customer_session' => $this]);
     }

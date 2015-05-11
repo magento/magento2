@@ -26,23 +26,23 @@
 
 @popup-overlay__background-color: rgba(0, 0, 0, .35);
 
+@popup-fieldset__margin-left: 34%;
+
 //
 //  Jquery UI popup window
 //  _____________________________________________
 
 .ui-dialog {
+    .appearing__off();
     background: @popup__background-color;
     min-width: 40%;
-    opacity: 0;
     transform: scale(0.7);
     transition: all 0.3s;
-    visibility: hidden;
     width: 75%;
 
     &.ui-dialog-active {
+        .appearing__on();
         transform: scale(1);
-        opacity: 1;
-        visibility: visible;
     }
 
     &.ui-draggable {
@@ -322,14 +322,13 @@
         > .admin__legend {
             float: none;
             font-size: 1.8rem;
-            margin: 0 0 2rem 34%;
+            margin: 0 0 @indent__base @popup-fieldset__margin-left;
             width: auto;
         }
-    }
-    .gift_options-popup {
-        .admin__fieldset {
-            > .admin__legend {
-                margin-left: 0;
+        .product-options {
+            margin-left: @popup-fieldset__margin-left;
+            .admin__field-control {
+                margin-bottom: @indent__base;
             }
         }
     }

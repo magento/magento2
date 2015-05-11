@@ -21,7 +21,10 @@ class CatalogPriceRulesFixture extends Fixture
      */
     public function execute()
     {
-        $catalogPriceRulesCount = $this->fixtureModel->getValue('catalog_price_rules', 3);
+        $catalogPriceRulesCount = $this->fixtureModel->getValue('catalog_price_rules', 0);
+        if (!$catalogPriceRulesCount) {
+            return;
+        }
         $this->fixtureModel->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */

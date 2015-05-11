@@ -21,6 +21,10 @@ class TaxRatesFixture extends Fixture
      */
     public function execute()
     {
+        $taxRatesFile = $this->fixtureModel->getValue('tax_rates_file', null);
+        if (empty($taxRatesFile)) {
+            return;
+        }
         $this->fixtureModel->resetObjectManager();
         /** Clean predefined tax rates to maintain consistency */
         /** @var $collection Magento\Tax\Model\Resource\Calculation\Rate\Collection */
@@ -38,7 +42,7 @@ class TaxRatesFixture extends Fixture
         /**
          * Import tax rates with import handler
          */
-        $filename = realpath(__DIR__ . '/tax_rates.csv');
+        $filename = realpath(__DIR__ . '/' . $taxRatesFile);
         $file = [
             'name' => $filename,
             'type' => 'fixtureModel/vnd.ms-excel',

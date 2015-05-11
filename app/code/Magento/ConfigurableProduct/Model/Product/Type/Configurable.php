@@ -378,6 +378,18 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Reset the cached configurable attributes of a product
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return $this
+     */
+    public function resetConfigurableAttributes($product)
+    {
+        $product->unsetData($this->_configurableAttributes);
+        return $this;
+    }
+
+    /**
      * Retrieve Configurable Attributes as array
      *
      * @param  \Magento\Catalog\Model\Product $product

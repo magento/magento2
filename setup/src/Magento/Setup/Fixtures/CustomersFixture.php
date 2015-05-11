@@ -23,7 +23,10 @@ class CustomersFixture extends Fixture
      */
     public function execute()
     {
-        $customersNumber = $this->fixtureModel->getValue('customers', 10);
+        $customersNumber = $this->fixtureModel->getValue('customers', 0);
+        if (!$customersNumber) {
+            return;
+        }
         $this->fixtureModel->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */
