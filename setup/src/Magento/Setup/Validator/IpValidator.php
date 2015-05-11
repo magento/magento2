@@ -31,6 +31,7 @@ class IpValidator
      * @param string[] $ips
      * @param bool $noneAllowed
      * @return string[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateIps(array $ips, $noneAllowed)
     {
