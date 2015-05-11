@@ -23,7 +23,7 @@ class GenerateFixturesCommand extends Command
     const PROFILE_ARGUMENT = 'profile';
 
     /**
-     * @var Application
+     * @var FixtureModel
      */
     private $application;
 
