@@ -43,6 +43,12 @@ define(
                 return totals
             },
             setTotals: function(totalsData) {
+                if (_.isObject(totalsData.extension_attributes)) {
+                    _.each(totalsData.extension_attributes, function(element, index) {
+                        totalsData[index] = element;
+                    });
+                    delete totalsData.extension_attributes;
+                }
                 totals(totalsData);
             },
             setBillingAddress: function (address) {

@@ -184,7 +184,6 @@ define(
                     methods = _.union(methods, elem.elems());
                 });
                 return methods;
-            }            
             },
             getMethodControlAdditionalClass: function() {
                 return this.getAvailableViews().length == 1 ? ' hidden' : '';
