@@ -11,6 +11,21 @@ namespace Magento\Setup\Validator;
 class IpValidator
 {
     /**
+     * @var string[]
+     */
+    private $none;
+
+    /**
+     * @var string[]
+     */
+    private $validIps;
+
+    /**
+     * @var string[]
+     */
+    private $invalidIps;
+
+    /**
      * Validates list of ips
      *
      * @param string[] $ips
@@ -19,32 +34,44 @@ class IpValidator
      */
     public function validateIps(array $ips, $noneAllowed)
     {
-        $none = [];
-        $validIps = [];
-        $invalidIps = [];
+        $this->none = [];
+        $this->validIps = [];
+        $this->invalidIps = [];
         $messages = [];
-        foreach ($ips as $ip) {
-            if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                $validIps[] = $ip;
-            }
-            elseif ($ip == 'none') {
-                $none[] = $ip;
-            } else {
-                $invalidIps[] = $ip;
-            }
-        }
 
-        if (sizeof($none) > 0 && !$noneAllowed) {
+        $this->filterIps($ips);
+
+        if (sizeof($this->none) > 0 && !$noneAllowed) {
             $messages[] = "'none' is not allowed";
-        } elseif ($noneAllowed && sizeof($none) > 1) {
+        } elseif ($noneAllowed && sizeof($this->none) > 1) {
             $messages[] = "'none' can be only used once";
-        } elseif ($noneAllowed && sizeof($none) > 0 && (sizeof($validIps) > 0 || sizeof($invalidIps) > 0)) {
+        } elseif ($noneAllowed && sizeof($this->none) > 0 &&
+            (sizeof($this->validIps) > 0 || sizeof($this->invalidIps) > 0)
+        ) {
             $messages[] = "Multiple values are not allowed when 'none' is used";
         } else {
-            foreach ($invalidIps as $invalidIp) {
+            foreach ($this->invalidIps as $invalidIp) {
                 $messages[] = "Invalid IP $invalidIp";
             }
         }
         return $messages;
+    }
+
+    /**
+     * Filter ips into 'none', valid and invalid ips
+     *
+     * @param array $ips
+     */
+    private function filterIps(array $ips)
+    {
+        foreach ($ips as $ip) {
+            if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                $this->validIps[] = $ip;
+            } elseif ($ip == 'none') {
+                $this->none[] = $ip;
+            } else {
+                $this->invalidIps[] = $ip;
+            }
+        }
     }
 }
