@@ -1,7 +1,3 @@
-dev/tools/Magento/Tools/Di/Test/Unit/_files/app/code/Magento/SomeModule/Model/Test.php
-dev/tools/Magento/Tools/Di/Test/Unit/_files/app/code/Magento/SomeModule/Helper/Test.php
-dev/tools/Magento/Tools/Di/Test/Unit/_files/app/code/Magento/SomeModule/Element.php
-dev/tools/Magento/Tools/Di/Test/Unit/_files/app/code/Magento/SomeModule/ElementFactory.php
 lib/internal/Magento/Framework/Code/Test/Unit/_files/app/code/Magento/SomeModule/Model/Proxy.php
 lib/internal/Magento/Framework/Code/Test/Unit/_files/app/code/Magento/SomeModule/Model/ElementFactory.php
 lib/internal/Magento/Framework/Code/Test/Unit/_files/app/code/Magento/SomeModule/Model/One/Test.php
@@ -21,13 +17,13 @@ lib/internal/Magento/Framework/ObjectManager/Test/Unit/_files/Aggregate/Aggregat
 lib/internal/Magento/Framework/ObjectManager/Test/Unit/_files/Aggregate/Child.php
 lib/internal/Magento/Framework/Api/Test/Unit/Code/Generator/_files/Sample.php
 lib/internal/Magento/Framework/Api/Test/Unit/Code/Generator/_files/ExtensibleSample.php
-dev/tools/Magento/Tools/I18n/Zend/Exception.php
-dev/tools/Magento/Tools/I18n/Zend/Console/Getopt/Exception.php
-dev/tools/Magento/Tools/I18n/Zend/Console/Getopt.php
-dev/tests/integration/testsuite/Magento/Test/Tools/I18n/Dictionary/_files/source/app/code/Magento/FirstModule/Model/Model.php
-dev/tests/integration/testsuite/Magento/Test/Tools/I18n/Dictionary/_files/source/app/code/Magento/SecondModule/Model/Model.php
-dev/tests/integration/testsuite/Magento/Test/Tools/I18n/Dictionary/_files/source/not_magento_dir/Model.php
-dev/tests/integration/testsuite/Magento/Test/Tools/I18n/Dictionary/_files/source/app/code/Magento/FirstModule/Helper/Helper.php
+setup/src/Magento/Setup/Module/I18n/Zend/Exception.php
+setup/src/Magento/Setup/Module/I18n/Zend/Console/Getopt/Exception.php
+setup/src/Magento/Setup/Module/I18n/Zend/Console/Getopt.php
+dev/tests/integration/testsuite/Magento/Setup/Module/I18n/Dictionary/_files/source/app/code/Magento/FirstModule/Model/Model.php
+dev/tests/integration/testsuite/Magento/Setup/Module/I18n/Dictionary/_files/source/app/code/Magento/SecondModule/Model/Model.php
+dev/tests/integration/testsuite/Magento/Setup/Module/I18n/Dictionary/_files/source/not_magento_dir/Model.php
+dev/tests/integration/testsuite/Magento/Setup/Module/I18n/Dictionary/_files/source/app/code/Magento/FirstModule/Helper/Helper.php
 dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Api/Data/FakeAddressInterface.php
 dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Api/Data/FakeExtensibleOneInterface.php
 dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Api/Data/FakeExtensibleTwoInterface.php
@@ -96,3 +92,7 @@ dev/tests/integration/testsuite/Magento/Test/Tools/Dependency/_files/code/Magent
 dev/tests/integration/testsuite/Magento/Framework/Code/_expected/SourceClassWithNamespaceFactory.php
 dev/tests/integration/testsuite/Magento/Framework/Code/_expected/SourceClassWithNamespaceInterceptor.php
 dev/tests/integration/testsuite/Magento/Framework/Code/_expected/SourceClassWithNamespaceProxy.php
+setup/src/Magento/Setup/Test/Unit/Module/Di/_files/app/code/Magento/SomeModule/Model/Test.php
+setup/src/Magento/Setup/Test/Unit/Module/Di/_files/app/code/Magento/SomeModule/Helper/Test.php
+setup/src/Magento/Setup/Test/Unit/Module/Di/_files/app/code/Magento/SomeModule/Element.php
+setup/src/Magento/Setup/Test/Unit/Module/Di/_files/app/code/Magento/SomeModule/ElementFactory.php
