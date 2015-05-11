@@ -162,7 +162,8 @@ class InstallCommand extends AbstractSetupCommand
         $errors = [];
         $value = $input->getOption(self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX);
         if (preg_match(self::SALES_ORDER_INCREMENT_PREFIX_RULE, $value) != 1) {
-            $errors[] = self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX." validation failed.";
+            $errors[] = 'Validation failed, ' . self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX
+                . ' must be 20 characters or less';
         }
         return $errors;
     }
