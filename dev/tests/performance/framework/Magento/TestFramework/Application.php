@@ -118,7 +118,7 @@ class Application
     public function reindex()
     {
         $this->_shell->execute(
-            'php -f ' . $this->_config->getApplicationBaseDir() . '/dev/shell/indexer.php -- reindexall'
+            'php -f ' . $this->_config->getApplicationBaseDir() . '/bin/magento indexer:reindex --all'
         );
         return $this;
     }

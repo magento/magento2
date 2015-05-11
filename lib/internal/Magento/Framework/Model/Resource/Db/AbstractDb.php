@@ -233,6 +233,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @throws LocalizedException
      * @return string
+     * @api
      */
     public function getIdFieldName()
     {
@@ -248,6 +249,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @throws LocalizedException
      * @return string
+     * @api
      */
     public function getMainTable()
     {
@@ -262,6 +264,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      *
      * @param string $tableName
      * @return string
+     * @api
      */
     public function getTable($tableName)
     {
@@ -391,6 +394,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @api
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

@@ -312,6 +312,16 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return currency symbol for current locale and currency code
+     *
+     * @return string
+     */
+    public function getCurrencySymbol()
+    {
+        return $this->_localeCurrency->getCurrency($this->getCode())->getSymbol();
+    }
+
+    /**
      * @return string
      */
     public function getOutputFormat()
