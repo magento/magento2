@@ -35,7 +35,8 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $installer;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->input = [
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_HOST => 'localhost',
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_NAME => 'magento',

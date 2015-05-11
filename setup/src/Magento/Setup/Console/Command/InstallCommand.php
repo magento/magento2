@@ -158,7 +158,8 @@ class InstallCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[] Array of error messages
      */
-    public function validate(InputInterface $input) {
+    public function validate(InputInterface $input)
+    {
         $errors = [];
         $value = $input->getOption(self::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX);
         if (preg_match(self::SALES_ORDER_INCREMENT_PREFIX_RULE, $value) != 1) {
