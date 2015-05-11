@@ -137,5 +137,27 @@
                 <item name="value" xsi:type="string">USD</item>
             </field>
         </dataset>
+
+        <dataset name="config_currency_symbols_usd_and_eur">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="US Dollar" xsi:type="string">USD</item>
+                    <item name="Euro" xsi:type="string">EUR</item>
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="config_currency_symbols_usd_and_gbp">
+            <field name="currency/options/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">currency</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="US Dollar" xsi:type="string">USD</item>
+                    <item name="British Pound Sterling" xsi:type="string">GBP</item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>

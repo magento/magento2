@@ -172,10 +172,10 @@ class Application
                 $dbName = $dbInfo['dbname'];
             } else {
                 $installConfig = $this->getInstallConfig();
-                $host = $installConfig['db_host'];
-                $user = $installConfig['db_user'];
-                $password = $installConfig['db_password'];
-                $dbName = $installConfig['db_name'];
+                $host = $installConfig['db-host'];
+                $user = $installConfig['db-user'];
+                $password = $installConfig['db-password'];
+                $dbName = $installConfig['db-name'];
             }
             $this->_db = new Db\Mysql(
                 $host,
@@ -379,7 +379,7 @@ class Application
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            'php -f %s setup:uninstall -n --magento_init_params=%s',
+            'php -f %s setup:uninstall -n --magento-init-params=%s',
             [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
@@ -466,7 +466,7 @@ class Application
          * Literal value is used instead of constant, because autoloader is not integrated with Magento Setup app
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
-        $params['magento_init_params'] = $this->getInitParamsQuery();
+        $params['magento-init-params'] = $this->getInitParamsQuery();
         $result = [];
         foreach ($params as $key => $value) {
             if (!empty($value)) {

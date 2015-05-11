@@ -796,6 +796,9 @@ class Installer
     public function installUserConfig($data)
     {
         $userConfig = new StoreConfigurationDataMapper();
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $this->objectManagerProvider->get()->get('Magento\Framework\App\State');
+        $appState->setAreaCode('setup');
         $configData = $userConfig->getConfigData($data);
         if (count($configData) === 0) {
             return;

@@ -14,23 +14,24 @@ use Magento\Setup\Model\ConfigModel;
 
 /**
  * Command to install Magento application
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InstallCommand extends AbstractSetupCommand
 {
     /**
      * Parameter indicating command whether to cleanup database in the install routine
      */
-    const INPUT_KEY_CLEANUP_DB = 'cleanup_database';
+    const INPUT_KEY_CLEANUP_DB = 'cleanup-database';
 
     /**
      * Parameter to specify an order_increment_prefix
      */
-    const INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX = 'sales_order_increment_prefix';
+    const INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX = 'sales-order-increment-prefix';
 
     /**
      * Parameter indicating command whether to install Sample Data
      */
-    const INPUT_KEY_USE_SAMPLE_DATA = 'use_sample_data';
+    const INPUT_KEY_USE_SAMPLE_DATA = 'use-sample-data';
 
     /**
      * Regex for sales_order_increment_prefix validation.

@@ -22,15 +22,9 @@
         <step name="placeOrder" module="Magento_Checkout" />
     </scenario>
     <scenario name="CreateGiftMessageOnBackendTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Config" next="createProducts">
-            <item name="configData" value="cashondelivery, enable_gift_messages" />
-        </step>
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
         <step name="createProducts" module="Magento_Catalog" next="createCustomer" />
-        <step name="createCustomer" module="Magento_Customer" next="openSalesOrders">
-            <item name="customer">
-                <item name="dataSet" value="johndoe_with_addresses" />
-            </item>
-        </step>
+        <step name="createCustomer" module="Magento_Customer" next="openSalesOrders" />
         <step name="openSalesOrders" module="Magento_Sales" next="createNewOrder" />
         <step name="createNewOrder" module="Magento_Sales" next="selectCustomerOrder" />
         <step name="selectCustomerOrder" module="Magento_Sales" next="selectStore" />

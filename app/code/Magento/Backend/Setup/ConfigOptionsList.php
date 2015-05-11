@@ -19,7 +19,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * Input key for the options
      */
-    const INPUT_KEY_BACKEND_FRONTNAME = 'backend_frontname';
+    const INPUT_KEY_BACKEND_FRONTNAME = 'backend-frontname';
 
     /**
      * Path to the values in the deployment config

@@ -242,12 +242,21 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
         $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
+        $appState = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+            'Magento\Framework\App\State'
+        );
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
                 ['Magento\Setup\Module\Setup', ['resource' => $resource], $setup],
                 ['Magento\Setup\Module\DataSetup', [], $dataSetup],
                 ['Magento\Framework\App\Cache\Manager', [], $cacheManager],
+                ['Magento\Framework\App\State', [], $appState],
+            ]));
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\State', $appState],
             ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
             $this->getMock('Magento\Setup\Model\AdminAccount', [], [], '', false)

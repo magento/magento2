@@ -199,11 +199,11 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         $customerId = 100;
         $taxClassId = 200;
         $taxDetailsData = [
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_SUBTOTAL => 0.0,
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_TAX_AMOUNT => 0.0,
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT => 0.0,
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_APPLIED_TAXES => [],
-            \Magento\Tax\Api\Data\TaxDetailsInterface::KEY_ITEMS => [],
+            \Magento\Tax\Model\TaxDetails\TaxDetails::KEY_SUBTOTAL => 0.0,
+            \Magento\Tax\Model\TaxDetails\TaxDetails::KEY_TAX_AMOUNT => 0.0,
+            \Magento\Tax\Model\TaxDetails\TaxDetails::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT => 0.0,
+            \Magento\Tax\Model\TaxDetails\TaxDetails::KEY_APPLIED_TAXES => [],
+            \Magento\Tax\Model\TaxDetails\TaxDetails::KEY_ITEMS => [],
         ];
 
         $quoteDetailsMock = $this->getMock('\Magento\Tax\Api\Data\QuoteDetailsInterface');

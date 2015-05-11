@@ -408,6 +408,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testResetConfigurableAttributes()
+    {
+        $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['unsetData', '__wakeup', '__sleep'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->any())->method('unsetData')
+            ->with('_cache_instance_configurable_attributes')
+            ->will($this->returnSelf());
+
+        $this->assertEquals($this->_model, $this->_model->resetConfigurableAttributes($product));
+    }
+
     public function testHasOptions()
     {
         $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
@@ -584,10 +597,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getId', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMock();
-        $productResource = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product')
-            ->setMethods(['__wakeup', 'loadAllAttributes', 'getSortedAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $productCollection = $this->getMockBuilder(
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection'
         )
@@ -616,14 +625,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('_cache_instance_store_filter')
             ->willReturn('some_filter');
-        $productMock->expects($this->once())->method('hasData')->willReturn(true);
-        $productMock->expects($this->at(3))->method('getData')->willReturn([$usedProductMock]);
-        $productMock->expects($this->once())->method('getResource')->willReturn($productResource);
-        $productMock->expects($this->once())->method('getAttributeSetId')->willReturn(5);
-        $productResource->expects($this->once())->method('loadAllAttributes')->with($productMock)->willReturnSelf();
-        $productResource->expects($this->once())
-            ->method('getSortedAttributes')
-            ->with(5)
+        $productMock->expects($this->any())->method('hasData')->willReturn(true);
+        $productMock->expects($this->at(3))->method('getData')
+            ->with('_cache_instance_products')
+            ->willReturn([$usedProductMock]);
+        $productMock->expects($this->at(5))->method('getData')
+            ->with('_cache_instance_product_set_attributes')
             ->willReturn([$eavAttributeMock]);
         $eavAttributeMock->expects($this->once())->method('getId')->willReturn(1);
         $eavAttributeMock->expects($this->once())->method('getAttributeCode')->willReturn('attr_code');

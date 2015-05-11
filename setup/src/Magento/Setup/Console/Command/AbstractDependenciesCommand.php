@@ -11,6 +11,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Abstract class for dependency report commands
+ */
 abstract class AbstractDependenciesCommand extends Command
 {
     /**
