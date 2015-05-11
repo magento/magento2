@@ -60,7 +60,8 @@ class IpValidator
     /**
      * Filter ips into 'none', valid and invalid ips
      *
-     * @param array $ips
+     * @param string[] $ips
+     * @return void
      */
     private function filterIps(array $ips)
     {
