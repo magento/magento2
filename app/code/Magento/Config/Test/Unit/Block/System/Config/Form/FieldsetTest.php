@@ -177,8 +177,6 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
         $fieldMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\Text')
             ->setMethods(['getId', 'getTooltip', 'toHtml', 'getHtmlId' , 'getIsNested', 'getExpanded'])
             ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->enableAutoload()
             ->getMock();
         $fieldMock->expects($this->any())->method('getId')->will($this->returnValue('test_field_id'));
         $fieldMock->expects($this->any())->method('getTooltip')->will($this->returnValue('test_field_tootip'));
