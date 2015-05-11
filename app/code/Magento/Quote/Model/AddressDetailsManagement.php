@@ -106,6 +106,10 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         $addressDetails->setFormattedBillingAddress(
             $this->billingAddressManagement->get($cartId)->format('html')
         );
+        $addressDetails->setGrandTotal(
+            $this->quoteRepository->getActive($cartId)
+                ->getBaseGrandTotal()
+        );
         return $addressDetails;
     }
 }

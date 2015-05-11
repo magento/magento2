@@ -32,19 +32,85 @@ define(
                 return quote.isVirtual() || quote.getShippingMethod();
             },
             setPaymentMethod: function() {
+                var self = this,
+                    isPaymentSelected = false,
+                    availableCodes = this.getAvailableCodes();
+
+                _.each(this.getRegion('paymentMethods')(), function(elem) {
+                    if (elem.isEnabled() && _.contains(availableCodes, elem.getCode())) {
+                        isPaymentSelected = true;
+                    }
+                });
+
+                _.each(this.getAdditionalMethods(), function(elem) {
+                    if (elem.isActive() && !isPaymentSelected) {
+                        self.activeMethod('free');
+                    }
+                });
+
                 if (!this.activeMethod()) {
                     alert('Please specify payment method.');
                     return;
                 }
+
                 if (this.isFormValid()) {
-                    selectPaymentMethod(this.getActiveMethodView());
+                    selectPaymentMethod(
+                        this.getPaymentMethodData(),
+                        this.getPaymentMethodInfo(),
+                        this.getPaymentMethodCallbacks()
+                    );
                 }
+            },
+            getPaymentMethodData: function() {
+                var data = _.extend({
+                    "method": this.activeMethod(),
+                    "po_number": null,
+                    "cc_owner": null,
+                    "cc_number": null,
+                    "cc_type": null,
+                    "cc_exp_year": null,
+                    "cc_exp_month": null,
+                    "additional_data": null
+                }, this.getActiveMethodView().getData());
+
+                _.each(this.getAdditionalMethods(), function(elem) {
+                    if (elem.isActive()) {
+                        data = _.extend(data, elem.getData());
+                    }
+                });
+
+                return data;
+            },
+            getPaymentMethodInfo: function() {
+                var info = this.getActiveMethodView().getInfo();
+
+                _.each(this.getAdditionalMethods(), function(elem) {
+                    if (elem.isActive()) {
+                        info = _.union(info, elem.getInfo());
+                    }
+                });
+
+                return info;
+            },
+            getPaymentMethodCallbacks: function() {
+                var callbacks = [this.getActiveMethodView().afterSave];
+
+                _.each(this.getAdditionalMethods(), function(elem) {
+                    if (elem.isActive()) {
+                        callbacks = _.union(callbacks, [elem.afterSave]);
+                    }
+                });
+
+                return callbacks;
+            },
+            getFreeMethodView: function() {
+                return this.getRegion('freeMethod')()[0];
             },
             getAvailableViews: function () {
                 var sortedElems = [],
                     self = this;
 
-                _.each(paymentService.getAvailablePaymentMethods()(), function (originElem) {
+                _.each(this.getAvailableMethods(), function (originElem) {
                     var method = self.getMethodViewByCode(originElem.code);
                     if (method && method.isAvailable()) {
                         sortedElems.push(method);
@@ -53,13 +119,25 @@ define(
 
                 return sortedElems;
             },
+            getAvailableMethods: function() {
+                return paymentService.getAvailablePaymentMethods()();
+            },
+            getAvailableCodes: function() {
+                return _.pluck(this.getAvailableMethods(), 'code');
+            },
             getMethodViewByCode: function(code) {
                 return _.find(this.getRegion('paymentMethods')(), function(elem) {
                     return elem.getCode() == code;
                 });
             },
             getActiveMethodView: function() {
-                return this.getMethodViewByCode(this.activeMethod());
+                var methodView;
+                if (this.activeMethod() == 'free') {
+                    methodView = this.getFreeMethodView();
+                } else {
+                    methodView = this.getMethodViewByCode(this.activeMethod());
+                }
+                return methodView;
             },
             backToShippingMethod: function() {
                 navigator.setCurrent(stepName).goBack();
@@ -78,7 +156,31 @@ define(
             },
             getFormKey: function() {
                 return window.checkoutConfig.formKey;
-            }
+            },
+            toggleMethods: function(code, value) {
+                var methods = _.union(this.getAdditionalMethods(), this.getRegion('paymentMethods')());
+                _.each(methods, function(elem) {
+                    if (code != elem.getCode()) {
+                        elem.isEnabled(value);
+                    }
+                });
+            },
+            enableMethods: function(code) {
+                this.toggleMethods(code, true);
+            },
+            disableMethods: function(code) {
+                this.toggleMethods(code, false);
+            },
+            getAdditionalMethods: function() {
+                var methods = [];
+                _.each(this.getRegion('beforeMethods')(), function(elem) {
+                    methods = _.union(methods, elem.elems());
+                });
+                _.each(this.getRegion('afterMethods')(), function(elem) {
+                    methods = _.union(methods, elem.elems());
+                });
+                return methods;
+            }            
         });
     }
 );

@@ -30,15 +30,15 @@
                         <!-- ko foreach: getAvailableViews() -->
                         <dt data-bind='attr: {class: "item-title " + getCode()}'>
                             <!-- ko if: $parent.getAvailableViews().length == 1 -->
-                            <input data-bind='attr: {id: "p_method_" + getCode(), value: getCode()}, checked: $parent.activeMethod' type="radio" name="payment[method]" checked="checked" class="radio no-display" />
+                            <input data-bind='attr: {id: "p_method_" + getCode(), value: getCode()}, checked: $parent.activeMethod, enable: isEnabled' type="radio" name="payment[method]" checked="checked" class="radio no-display" />
                             <!-- /ko -->
                             <!-- ko ifnot: $parent.getAvailableViews().length == 1 -->
-                            <input data-bind='attr: {id: "p_method_" + getCode(), value: getCode(), title: getTitle()}, checked: $parent.activeMethod' type="radio" name="payment[method]" class="radio" />
+                            <input data-bind='attr: {id: "p_method_" + getCode(), value: getCode(), title: getTitle()}, checked: $parent.activeMethod, enable: isEnabled' type="radio" name="payment[method]" class="radio" />
                             <!-- /ko -->
                             <label data-bind='attr: {for: "p_method_" + getCode()}'><!-- ko template: titleTemplate --><!--/ko--></label>
                         </dt>
                         <!-- ko if: $data.formTemplate -->
-                        <dd data-bind='attr: {class: "item-content " + getCode()}, visible: $parent.isMethodActive(getCode())'><!-- ko template: formTemplate --><!--/ko--></dd>
+                        <dd data-bind='attr: {class: "item-content " + getCode()}, visible: $parent.isMethodActive(getCode()), enable: isEnabled'><!-- ko template: formTemplate --><!--/ko--></dd>
                         <!-- /ko -->
                         <!-- /ko -->
                         <!-- ko ifnot: getAvailableViews().length > 0 -->
