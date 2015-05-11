@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -12,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**
-     * export action from import/export tax
+     * Export action from import/export tax
      *
      * @return ResponseInterface
      */
@@ -82,7 +81,6 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 
             $content .= $rate->toString($template) . "\n";
         }
-        $this->_view->loadLayout();
         return $this->fileFactory->create('tax_rates.csv', $content, DirectoryList::VAR_DIR);
     }
 }

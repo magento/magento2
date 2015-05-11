@@ -1,0 +1,49 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Order Address Information
+//  ---------------------------------------------
+
+.order-details {
+    .order-search-items {
+        .col-qty {
+            .admin__control-text {
+                &:extend(.abs-control-qty);
+            }
+        }
+    }
+
+    .order-items,
+    .order-search-items,
+    .order-additional-area {
+        .admin__page-section-title {
+            .actions {
+                float: right;
+                margin-bottom: @order-create-sidebar__margin__reqular;
+                margin-top: -.3rem;
+            }
+            .action-secondary {
+                margin-left: @indent__base;
+            }
+        }
+    }
+
+    .admin__field-option {
+        .admin__field-label {
+            display: block;
+            width: auto;
+        }
+    }
+}
+
+.field-vat-number {
+    .action-default {
+        &:extend(.action-tertiary all);
+        font-weight: @font-weight__regular;
+        margin-top: @indent__s;
+        padding: 0;
+    }
+}

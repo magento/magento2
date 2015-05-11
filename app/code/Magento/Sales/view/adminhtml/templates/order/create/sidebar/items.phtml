@@ -9,7 +9,7 @@
 ?>
 <?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
 <div class="create-order-sidebar-block" id="sidebar_data_<?php echo $block->getDataId() ?>">
-    <div class="head">
+    <div class="head sidebar-title-block">
         <a href="#" class="action-refresh"
            title="<?php echo $block->escapeHtml(__('Refresh')); ?>"
            onclick="order.loadArea('sidebar_<?php echo $block->getDataId() ?>', 'sidebar_data_<?php echo $block->getDataId() ?>');return false;">
@@ -23,7 +23,7 @@
     <div class="content">
         <div class="auto-scroll">
         <?php if ($block->getItemCount()): ?>
-        <table class="table-info">
+        <table class="admin__table-primary">
             <thead>
                 <tr>
                     <th class="col-item"><?php echo __('Item') ?></th>

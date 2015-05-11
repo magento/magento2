@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Model\Config;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
@@ -38,6 +39,6 @@ class ScopeDefiner
             'store'
         ) ? StoreScopeInterface::SCOPE_STORE : ($this->_request->getParam(
             'website'
-        ) ? StoreScopeInterface::SCOPE_WEBSITE : \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
+        ) ? StoreScopeInterface::SCOPE_WEBSITE : ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,6 +8,7 @@ namespace Magento\Wishlist\Controller\Index;
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class Remove extends Action\Action implements IndexInterface
 {
@@ -32,7 +32,7 @@ class Remove extends Action\Action implements IndexInterface
     /**
      * Remove item
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @throws NotFoundException
      */
     public function execute()
@@ -69,6 +69,9 @@ class Remove extends Action\Action implements IndexInterface
         } else {
             $redirectUrl = $this->_redirect->getRedirectUrl($this->_url->getUrl('*/*'));
         }
-        $this->getResponse()->setRedirect($redirectUrl);
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setUrl($redirectUrl);
+        return $resultRedirect;
     }
 }

@@ -70,6 +70,13 @@ class Application
     protected $_initArguments;
 
     /**
+     * Indexers states values
+     *
+     * @var array
+     */
+    public $indexersStates;
+
+    /**
      * @param string $applicationBaseDir
      * @param \Magento\Framework\Shell $shell
      */

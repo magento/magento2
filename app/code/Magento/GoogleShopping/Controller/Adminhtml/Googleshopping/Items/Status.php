@@ -11,16 +11,16 @@ class Status extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping
     /**
      * Retrieve background process status
      *
-     * @return \Magento\Framework\App\Response\Http
+     * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
     {
         if ($this->getRequest()->isAjax()) {
             $this->getResponse()->setHeader('Content-Type', 'application/json');
             $params = ['is_running' => $this->_getFlag()->isLocked()];
-            return $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($params)
-            );
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            $resultJson = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_JSON);
+            return $resultJson->setData($params);
         }
     }
 }

@@ -34,6 +34,10 @@ class Curl extends AbstractCurl implements CustomerInterface
             'United States' => 'US',
             'United Kingdom' => 'GB'
         ],
+        'gender' => [
+            'Male' => 1,
+            'Female' => 2,
+        ],
         'region_id' => [
             'California' => 12,
             'New York' => 43,
@@ -47,14 +51,15 @@ class Curl extends AbstractCurl implements CustomerInterface
      * @var array
      */
     protected $curlMapping = [
-        'account' => [
+        'customer' => [
             'group_id',
             'firstname',
             'lastname',
             'email',
             'dob',
             'taxvat',
-            'gender'
+            'gender',
+            'entity_id',
         ]
     ];
 
@@ -77,12 +82,11 @@ class Curl extends AbstractCurl implements CustomerInterface
      */
     public function persist(FixtureInterface $customer = null)
     {
-        $address = [];
-        $result = [];
         /** @var Customer $customer */
-        $url = $_ENV['app_frontend_url'] . 'customer/account/createpost/?nocookie=true';
         $data = $customer->getData();
         $data['group_id'] = $this->getCustomerGroup($customer);
+        $address = [];
+        $url = $_ENV['app_frontend_url'] . 'customer/account/createpost/?nocookie=true';
 
         if ($customer->hasData('address')) {
             $address = $customer->getAddress();
@@ -98,15 +102,14 @@ class Curl extends AbstractCurl implements CustomerInterface
             throw new \Exception("Customer entity creating  by curl handler was not successful! Response: $response");
         }
 
-        $result['id'] = $this->getCustomerId($customer->getEmail());
-        $data['customer_id'] = $result['id'];
+        $data['entity_id'] = $this->getCustomerId($customer->getEmail());
 
         if (!empty($address)) {
             $data['address'] = $address;
         }
         $this->updateCustomer($data);
 
-        return $result;
+        return ['id' => $data['entity_id']];
     }
 
     /**
@@ -167,19 +170,19 @@ class Curl extends AbstractCurl implements CustomerInterface
         }
         unset($data['password'], $data['password_confirmation']);
 
-        $curlData = $this->replaceMappingData(array_merge($curlData, $data));
+        $curlData = $this->replaceMappingData(array_replace_recursive($curlData, $data));
         if (!empty($data['address'])) {
             $curlData = $this->prepareAddressData($curlData);
         }
 
-        $url = $_ENV['app_backend_url'] . 'customer/index/save/id/' . $data['customer_id'];
+        $url = $_ENV['app_backend_url'] . 'customer/index/save/id/' . $curlData['customer']['entity_id'];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $curlData);
         $response = $curl->read();
         $curl->close();
 
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
-            $this->_eventManager->dispatchEvent(['curl_failed', [$response]]);
+            $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
             throw new \Exception('Failed to update customer!');
         }
     }
@@ -200,7 +203,6 @@ class Curl extends AbstractCurl implements CustomerInterface
                 $curlData['address'][$key]['street'] = [];
                 $curlData['address'][$key]['street'][] = $street;
             }
-            $newKey = 'new_' . ($key);
             if (isset($curlData['address'][$key]['default_billing'])) {
                 $value = $curlData['address'][$key]['default_billing'] === 'Yes' ? 'true' : 'false';
                 $curlData['address'][$key]['default_billing'] = $value;
@@ -209,9 +211,7 @@ class Curl extends AbstractCurl implements CustomerInterface
                 $value = $curlData['address'][$key]['default_shipping'] === 'Yes' ? 'true' : 'false';
                 $curlData['address'][$key]['default_shipping'] = $value;
             }
-            $curlData['account']['customer_address'][$newKey] = $curlData['address'][$key];
         }
-        unset($curlData['address']);
 
         return $curlData;
     }

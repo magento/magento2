@@ -19,17 +19,12 @@ define([], function () {
          * @returns {Array} Array of values.
          */
         get: function (elems) {
-            var data = this.data,
-                record;
+            var data = this.data;
 
             elems = elems || [];
 
             return elems.map(function (elem) {
-                record = data[elem];
-
-                if (record) {
-                    return record.value;
-                }
+                return data[elem];
             });
         },
 
@@ -41,10 +36,9 @@ define([], function () {
          * returns {storage} Chainable.
          */
         set: function (elem, value) {
-            var data    = this.data,
-                record  = data[elem] = data[elem] || {};
+            var data  = this.data;
 
-            record.value = value;
+            data[elem] = value;
 
             return this;
         },

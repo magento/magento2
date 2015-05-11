@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Model\Config\Backend\Address;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Line count config model for customer address street attribute
  *
@@ -64,7 +66,7 @@ class Street extends \Magento\Framework\App\Config\Value
                 }
                 break;
 
-            case \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT:
+            case ScopeConfigInterface::SCOPE_TYPE_DEFAULT:
                 $attribute->setData('multiline_count', $value);
                 break;
         }
