@@ -19,6 +19,8 @@ use Magento\Framework\View\LayoutInterface as PageLayoutInterface;
 
 /**
  * Class Context
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Context implements ContextInterface
 {
