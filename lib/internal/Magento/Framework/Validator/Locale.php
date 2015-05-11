@@ -11,7 +11,7 @@ use Magento\Setup\Model\Lists;
 /**
  * Locale validator model
  */
-class locale
+class Locale
 {
     /**
      * @var Lists

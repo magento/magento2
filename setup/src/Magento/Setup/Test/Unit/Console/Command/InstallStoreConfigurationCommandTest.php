@@ -57,7 +57,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager );
+        $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->command = new InstallStoreConfigurationCommand(
             $this->installerFactory,
             $this->deploymentConfig,
