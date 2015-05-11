@@ -93,7 +93,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
             ->willReturn(Listing::NAME);
         $this->contextMock->expects($this->once())
             ->method('addComponentDefinition')
-            ->with($listing->getComponentName(), ['extends' => 'test_config_extends', 'testData' => 'testValue',]);
+            ->with($listing->getComponentName(), ['extends' => 'test_config_extends', 'testData' => 'testValue']);
         $this->contextMock->expects($this->once())
             ->method('addButtons')
             ->with($buttons, $listing);
