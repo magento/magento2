@@ -18,7 +18,7 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
             <!-- ko if: (customerAddressCount)-->
-            <div class="field addresses">
+            <div class="field addresses" data-bind="visible: visible">
                 <label class="label" for="shipping:address-select"><span data-bind="text: $t('Select a shipping address from your address book or enter a new address.')"></span></label>
                 <div class="control">
                     <select name="shipping_address_id" id="shipping:address-select" data-bind="
@@ -51,7 +51,7 @@
                 <!-- /ko -->
             </fieldset>
 
-            <div class="choice field">
+            <div class="choice field" data-bind="visible: visible">
                 <input type="checkbox"
                        name="shipping[same_as_billing]"
                        id="shipping:same_as_billing"
