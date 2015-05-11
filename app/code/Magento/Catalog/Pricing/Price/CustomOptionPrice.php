@@ -26,39 +26,63 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     protected $priceOptions;
 
     /**
-     * Get minimal optoin item values
+     * Get minimal and maximal option values
      *
-     * @return bool|float
+     * @return array
      */
     public function getValue()
     {
-        $requiredMinimalOptions = [];
+        $optionValues = [];
         $options = $this->product->getOptions();
         if ($options) {
             /** @var $optionItem \Magento\Catalog\Model\Product\Option */
             foreach ($options as $optionItem) {
+                $min = null;
                 if (!$optionItem->getIsRequire()) {
-                    continue;
+                    $min = 0.;;
                 }
-                $min = 0.;
+                $max = 0.;
                 /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
                 foreach ($optionItem->getValues() as $optionValue) {
                     $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
-                    if (!$min) {
+                    if ($min === null) {
+                        $min = $price;
+                    } elseif ($price < $min) {
                         $min = $price;
                     }
-                    if ($price < $min) {
-                        $min = $price;
+                    if ($price > $max) {
+                        $max = $price;
                     }
                 }
-                $requiredMinimalOptions[] = [
+                $optionValues[] = [
                     'option_id' => $optionItem->getId(),
                     'type' => $optionItem->getType(),
-                    'min' => $min,
+                    'min' => ($min === null) ? 0. : $min,
+                    'max' => $max,
                 ];
             }
         }
-        return $requiredMinimalOptions;
+        return $optionValues;
+    }
+
+    /**
+     * Return the minimal or maximal price for custom options
+     *
+     * @param bool $getMin
+     * @return float
+     */
+    public function getCustomOptionRange($getMin)
+    {
+        $optionValue = 0.;
+        $options = $this->getValue();
+        foreach ($options as $option) {
+            if ($getMin) {
+                $optionValue += $option['min'];
+            } else {
+                $optionValue += $option['max'];
+            }
+        }
+        return $this->priceCurrency->convertAndRound($optionValue);
     }
 
     /**
