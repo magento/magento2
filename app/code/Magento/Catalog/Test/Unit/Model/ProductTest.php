@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use \Magento\Catalog\Model\Product;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -998,20 +999,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'disabled' => false,
                     'types' => ['image'],
                     'content' => [
-                        'entry_data' => 'content_data',
-                        'mime_type' => 'image/jpg',
-                        'name' => 'product_image',
+                        ImageContentInterface::NAME => 'product_image',
+                        ImageContentInterface::MIME_TYPE => 'image/jpg',
+                        ImageContentInterface::BASE64_ENCODED_DATA => 'content_data'
                     ]
                 ]
             ],
         ];
 
         $contentMock =
-            $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface')
-                ->setMethods(['getEntryData', 'getMimeType', 'getName'])
+            $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterfaceFactory')
+                ->setMethods(['getBase64EncodedData', 'getMimeType', 'getName'])
                 ->getMockForAbstractClass();
-        $contentMock->expects($this->once())->method('getEntryData')
-            ->willReturn($expectedResult['images'][0]['content']['entry_data']);
+        $contentMock->expects($this->once())->method('getBase64EncodedData')
+            ->willReturn($expectedResult['images'][0]['content']['base64_encoded_data']);
         $contentMock->expects($this->once())->method('getMimeType')
             ->willReturn($expectedResult['images'][0]['content']['mime_type']);
         $contentMock->expects($this->once())->method('getName')

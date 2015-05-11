@@ -9,39 +9,23 @@ namespace Magento\Framework\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Image Data Interface
+ * Product Media Content
  */
-interface ImageInterface extends ExtensibleDataInterface
+interface ImageContentInterface extends ExtensibleDataInterface
 {
     const BASE64_ENCODED_DATA = 'base64_encoded_data';
-    const TYPE = 'type';
+    const MIME_TYPE = 'mime_type';
     const NAME = 'name';
-    const ID = 'id';
 
     /**
-     * Retrieve image ID
-     *
-     * @return int|null
-     */
-    public function getId();
-
-    /**
-     * Set image ID
-     *
-     * @param int $id
-     * @return $this
-     */
-    public function setId($id);
-
-    /**
-     * Retrieve image data (base64 encoded content)
+     * Retrieve media data (base64 encoded content)
      *
      * @return string
      */
     public function getBase64EncodedData();
 
     /**
-     * Set image data (base64 encoded content)
+     * Set media data (base64 encoded content)
      *
      * @param string $data
      * @return $this
@@ -49,19 +33,19 @@ interface ImageInterface extends ExtensibleDataInterface
     public function setBase64EncodedData($data);
 
     /**
-     * Retrieve Image type
+     * Retrieve MIME type
      *
      * @return string
      */
-    public function getType();
+    public function getMimeType();
 
     /**
-     * Set Image type
+     * Set MIME type
      *
-     * @param string $type
+     * @param string $mimeType
      * @return $this
      */
-    public function setType($type);
+    public function setMimeType($mimeType);
 
     /**
      * Retrieve image name
@@ -79,19 +63,19 @@ interface ImageInterface extends ExtensibleDataInterface
     public function setName($name);
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
+     * Retrieve existing extension attributes object.
      *
-     * @api
-     * @return \Magento\Framework\Api\Data\ImageExtensionInterface|null
+     * @return \Magento\Framework\Api\Data\ImageContentExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @api
-     * @param \Magento\Framework\Api\Data\ImageExtensionInterface $extensionAttributes
+     * @param \Magento\Framework\Api\Data\ImageContentExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Framework\Api\Data\ImageExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(
+        \Magento\Framework\Api\Data\ImageContentExtensionInterface $extensionAttributes
+    );
 }

@@ -4,20 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Model\Product\Media;
+namespace Magento\Framework\Api;
 
 /**
  * @codeCoverageIgnore
  */
-class GalleryEntryContent extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface
+class ImageContent extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Framework\Api\Data\ImageContentInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getEntryData()
+    public function getBase64EncodedData()
     {
-        return $this->getData(self::DATA);
+        return $this->getData(self::BASE64_ENCODED_DATA);
     }
 
     /**
@@ -39,12 +39,12 @@ class GalleryEntryContent extends \Magento\Framework\Model\AbstractExtensibleMod
     /**
      * Set media data (base64 encoded content)
      *
-     * @param string $entryData
+     * @param string $data
      * @return $this
      */
-    public function setEntryData($entryData)
+    public function setBase64EncodedData($data)
     {
-        return $this->setData(self::DATA, $entryData);
+        return $this->setData(self::BASE64_ENCODED_DATA, $data);
     }
 
     /**
@@ -72,7 +72,7 @@ class GalleryEntryContent extends \Magento\Framework\Model\AbstractExtensibleMod
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentExtensionInterface|null
+     * @return \Magento\Framework\Api\Data\ImageContentExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -82,11 +82,11 @@ class GalleryEntryContent extends \Magento\Framework\Model\AbstractExtensibleMod
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentExtensionInterface $extensionAttributes
+     * @param \Magento\Framework\Api\Data\ImageContentExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentExtensionInterface $extensionAttributes
+        \Magento\Framework\Api\Data\ImageContentExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

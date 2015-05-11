@@ -4,12 +4,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Product\Gallery;
+namespace Magento\Framework\Api;
 
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Exception\InputException;
 
-class ContentValidator
+class ImageContentValidator implements ImageContentValidatorInterface
 {
     /**
      * @var array
@@ -38,13 +38,13 @@ class ContentValidator
     /**
      * Check if gallery entry content is valid
      *
-     * @param ProductAttributeMediaGalleryEntryContentInterface $entryContent
+     * @param ImageContentInterface $entryContent
      * @return bool
      * @throws InputException
      */
-    public function isValid(ProductAttributeMediaGalleryEntryContentInterface $entryContent)
+    public function isValid(ImageContentInterface $entryContent)
     {
-        $fileContent = @base64_decode($entryContent->getEntryData(), true);
+        $fileContent = @base64_decode($entryContent->getBase64EncodedData(), true);
         if (empty($fileContent)) {
             throw new InputException(__('The image content must be valid base64 encoded data.'));
         }

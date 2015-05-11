@@ -9,6 +9,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -107,7 +108,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $contentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Gallery\ContentValidator
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\ImageContentValidator
      */
     protected $contentValidatorMock;
 
@@ -196,9 +197,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mimeTypeExtensionMapMock =
             $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap')->getMock();
         $this->contentFactoryMock = $this->getMockBuilder(
-            'Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterfaceFactory'
+            'Magento\Framework\Api\Data\ImageContentInterfaceFactory'
         )->disableOriginalConstructor()->setMethods(['create'])->getMockForAbstractClass();
-        $this->contentValidatorMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\ContentValidator')
+        $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ContentValidator')
             ->disableOriginalConstructor()
             ->getMock();
         $optionConverter = $this->objectManager->getObject('Magento\Catalog\Model\Product\Option\Converter');
@@ -990,9 +991,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
                 'content' => [
-                    'name' => 'filename',
-                    'mime_type' => 'image/jpeg',
-                    'entry_data' => 'encoded_content',
+                    ImageContentInterface::NAME => 'filename',
+                    ImageContentInterface::MIME_TYPE => 'image/jpeg',
+                    ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
                 ],
             ],
         ];
@@ -1044,7 +1045,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($mediaConfigMock);
 
         //verify new entries
-        $contentDataObject = $this->getMockBuilder('Magento\Catalog\Model\Product\Media\GalleryEntryContent')
+        $contentDataObject = $this->getMockBuilder('Magento\Framework\Api\ImageContent')
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();

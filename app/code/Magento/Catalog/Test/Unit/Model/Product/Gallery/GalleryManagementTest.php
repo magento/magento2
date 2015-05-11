@@ -50,7 +50,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
-        $this->contentValidatorMock = $this->getMock('\Magento\Catalog\Model\Product\Gallery\ContentValidator');
+        $this->contentValidatorMock = $this->getMock('\Magento\Framework\Api\ContentValidator');
         $this->productMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
             [
@@ -96,7 +96,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithInvalidImageException()
     {
         $entryContentMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface'
+            '\Magento\Framework\Api\Data\ImageContentInterfaceFactory'
         );
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 
@@ -117,7 +117,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     {
         $productSku = 'mediaProduct';
         $entryContentMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface'
+            '\Magento\Framework\Api\Data\ImageContentInterfaceFactory'
         );
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 
@@ -140,7 +140,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     {
         $productSku = 'mediaProduct';
         $entryContentMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface'
+            '\Magento\Framework\Api\Data\ImageContentInterfaceFactory'
         );
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 

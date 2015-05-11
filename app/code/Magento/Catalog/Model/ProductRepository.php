@@ -14,9 +14,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\StateException;
-use Magento\Catalog\Model\Product\Gallery\ContentValidator;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface;
+use Magento\Framework\Api\ImageContentValidatorInterface;
+use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 
 /**
@@ -116,12 +116,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $fileSystem;
 
     /**
-     * @var ContentValidator
+     * @var ImageContentValidatorInterface
      */
     protected $contentValidator;
 
     /**
-     * @var ProductAttributeMediaGalleryEntryContentInterfaceFactory
+     * @var ImageContentInterfaceFactory
      */
     protected $contentFactory;
 
@@ -147,8 +147,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Option\Converter $optionConverter
      * @param \Magento\Framework\Filesystem $fileSystem
-     * @param ContentValidator $contentValidator
-     * @param ProductAttributeMediaGalleryEntryContentInterfaceFactory $contentFactory
+     * @param ImageContentValidatorInterface $contentValidator
+     * @param ImageContentInterfaceFactory $contentFactory
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -168,8 +168,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Catalog\Model\Product\Option\Converter $optionConverter,
         \Magento\Framework\Filesystem $fileSystem,
-        ContentValidator $contentValidator,
-        ProductAttributeMediaGalleryEntryContentInterfaceFactory $contentFactory,
+        ImageContentValidatorInterface $contentValidator,
+        ImageContentInterfaceFactory $contentFactory,
         MimeTypeExtensionMap $mimeTypeExtensionMap,
         \Magento\Eav\Model\Config $eavConfig
     ) {
@@ -426,13 +426,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ProductInterface $product,
         array  $newEntry
     ) {
-        /** @var ProductAttributeMediaGalleryEntryContentInterface $contentDataObject */
+        /** @var ImageContentInterface $contentDataObject */
         $contentDataObject = $newEntry['content'];
         if (!$this->contentValidator->isValid($contentDataObject)) {
             throw new InputException(__('The image content is not valid.'));
         }
 
-        $fileContent = @base64_decode($contentDataObject->getEntryData(), true);
+        $fileContent = @base64_decode($contentDataObject->getBase64EncodedData(), true);
         $fileName = $contentDataObject->getName();
         $mimeType = $contentDataObject->getMimeType();
 
@@ -524,11 +524,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if (!isset($newEntry['content'])) {
                 throw new InputException(__('The image content is not valid.'));
             }
-            /** @var ProductAttributeMediaGalleryEntryContentInterface $contentDataObject */
+            /** @var ImageContentInterface $contentDataObject */
             $contentDataObject = $this->contentFactory->create()
-                ->setName($newEntry['content']['name'])
-                ->setEntryData($newEntry['content']['entry_data'])
-                ->setMimeType($newEntry['content']['mime_type']);
+                ->setName($newEntry['content'][ImageContentInterface::NAME])
+                ->setBase64EncodedData($newEntry['content'][ImageContentInterface::BASE64_ENCODED_DATA])
+                ->setMimeType($newEntry['content'][ImageContentInterface::MIME_TYPE]);
             $newEntry['content'] = $contentDataObject;
             $this->processNewMediaGalleryEntry($product, $newEntry);
         }

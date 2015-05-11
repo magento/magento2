@@ -96,7 +96,7 @@
             </argument>
             <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
                 <item name="Magento\Customer\Api\Data\CustomerInterface" xsi:type="array">
-                    <item name="Magento\Eav\Model\Attribute\Data\Image" xsi:type="string">Magento\Framework\Api\Data\ImageInterface</item>
+                    <item name="Magento\Eav\Model\Attribute\Data\Image" xsi:type="string">Magento\Framework\Api\Data\ImageContentInterface</item>
                 </item>
             </argument>
         </arguments>

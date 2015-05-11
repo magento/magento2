@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterface;
 
 /**
  * Catalog product model
@@ -2519,19 +2519,19 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * @param ProductAttributeMediaGalleryEntryContentInterface $content
+     * @param ImageContentInterface $content
      * @return array
      */
     protected function convertFromMediaGalleryEntryContentInterface(
-        ProductAttributeMediaGalleryEntryContentInterface $content = null
+        ImageContentInterface $content = null
     ) {
         if ($content == null) {
             return null;
         } else {
             return [
-                "entry_data" => $content->getEntryData(),
-                "mime_type" => $content->getMimeType(),
-                "name" => $content->getName(),
+                ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
+                ImageContentInterface::MIME_TYPE => $content->getMimeType(),
+                ImageContentInterface::NAME => $content->getName(),
             ];
         }
     }

@@ -65,7 +65,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
             'Magento\Framework\Reflection\DataObjectProcessor'
         );
 
-        $this->imageFactory = Bootstrap::getObjectManager()->get('Magento\Framework\Api\ImageFactory');
+        $this->imageFactory = Bootstrap::getObjectManager()->get('Magento\Framework\Api\ImageContentFactory');
     }
 
     public function tearDown()
@@ -112,13 +112,13 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         ];
 
         $image = $this->imageFactory->create()
-            ->setType('png')
+            ->setMimeType('png')
             ->setName('sample.png')
             ->setBase64EncodedData($imageData);
 
         $imageData = $this->dataObjectProcessor->buildOutputDataArray(
             $image,
-            '\Magento\Framework\Api\Data\ImageInterface'
+            '\Magento\Framework\Api\Data\ImageContentInterface'
         );
 
         $customerData = $this->customerHelper->createSampleCustomerDataObject();
