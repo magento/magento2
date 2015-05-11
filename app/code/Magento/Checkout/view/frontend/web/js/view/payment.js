@@ -117,6 +117,10 @@ define(
                     }
                 });
 
+                if (sortedElems.length == 1) {
+                    this.activeMethod(sortedElems[0].getCode());
+                }
+
                 return sortedElems;
             },
             getAvailableMethods: function() {
@@ -181,6 +185,10 @@ define(
                 });
                 return methods;
             }            
+            },
+            getMethodControlAdditionalClass: function() {
+                return this.getAvailableViews().length == 1 ? ' hidden' : '';
+            }
         });
     }
 );

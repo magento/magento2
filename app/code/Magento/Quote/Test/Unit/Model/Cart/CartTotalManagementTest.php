@@ -67,7 +67,7 @@ class CartTotalManagementTest extends \PHPUnit_Framework_TestCase
         $this->cartTotalMock->expects($this->once())->method('get')->with($cartId)->willReturn($total);
         $this->assertEquals(
             $total,
-            $this->model->collectTotals($cartId, $shippingCarrierCode, $shippingMethodCode, $paymentDataMock)
+            $this->model->collectTotals($cartId, $paymentDataMock, $shippingCarrierCode, $shippingMethodCode)
         );
     }
 
@@ -89,7 +89,7 @@ class CartTotalManagementTest extends \PHPUnit_Framework_TestCase
         $this->cartTotalMock->expects($this->once())->method('get')->with($cartId)->willReturn($total);
         $this->assertEquals(
             $total,
-            $this->model->collectTotals($cartId, $shippingCarrierCode, $shippingMethodCode, $paymentDataMock)
+            $this->model->collectTotals($cartId, $paymentDataMock, $shippingCarrierCode, $shippingMethodCode)
         );
     }
 

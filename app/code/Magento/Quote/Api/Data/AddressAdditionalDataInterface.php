@@ -23,6 +23,7 @@ interface AddressAdditionalDataInterface extends CustomAttributesDataInterface
      * Set an extension attributes object.
      *
      * @param \Magento\Quote\Api\Data\AddressAdditionalDataExtensionInterface $extensionAttributes
+     * @return void
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\AddressAdditionalDataExtensionInterface $extensionAttributes

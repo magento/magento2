@@ -8,6 +8,10 @@ namespace Magento\Checkout\Controller\Onepage;
 
 use Magento\Checkout\Controller\Onepage;
 
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 class Review extends Onepage
 {
     /**

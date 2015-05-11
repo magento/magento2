@@ -10,6 +10,7 @@ use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Quote\Model\Cart\Totals\ItemConverter;
 
 /**
  * Cart totals data object.
@@ -38,24 +39,24 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     /**
      * @var ConfigurationPool
      */
-    private $configurationPool;
+    private $converter;
 
     /**
      * @param Api\Data\TotalsInterfaceFactory $totalsFactory
      * @param QuoteRepository $quoteRepository
      * @param DataObjectHelper $dataObjectHelper
-     * @param ConfigurationPool $configurationPool
+     * @param ItemConverter $converter
      */
     public function __construct(
         Api\Data\TotalsInterfaceFactory $totalsFactory,
         QuoteRepository $quoteRepository,
         DataObjectHelper $dataObjectHelper,
-        ConfigurationPool $configurationPool
+        ItemConverter $converter
     ) {
         $this->totalsFactory = $totalsFactory;
         $this->quoteRepository = $quoteRepository;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->configurationPool = $configurationPool;
+        $this->converter = $converter;
     }
 
     /**
@@ -78,36 +79,10 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $this->dataObjectHelper->populateWithArray($totals, $totalsData, '\Magento\Quote\Api\Data\TotalsInterface');
         $items = [];
         foreach ($quote->getAllVisibleItems() as $index => $item) {
-            $item->setWeeeTaxApplied(unserialize($item->getWeeeTaxApplied()));
-            $items[$index] = $item->toArray();
-            $items[$index]['options'] = $this->getFormattedOptionValue($item);
+            $items[$index] = $this->converter->modelToDataObject($item);
         }
         $totals->setItems($items);
 
         return $totals;
-    }
-
-    /**
-     * Retrieve formatted item options view
-     *
-     * @param \Magento\Quote\Api\Data\CartItemInterface $item
-     * @return array
-     */
-    private function getFormattedOptionValue($item)
-    {
-        $optionsData = [];
-        $options = $this->configurationPool->getByProductType($item->getProductType())->getOptions($item);
-        foreach ($options as $index => $optionValue) {
-            /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
-            $helper = $this->configurationPool->getByProductType('default');
-            $params = [
-                'max_length' => 55,
-                'cut_replacer' => ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>'
-            ];
-            $option = $helper->getFormattedOptionValue($optionValue, $params);
-            $optionsData[$index] = $option;
-            $optionsData[$index]['label'] = $optionValue['label'];
-        }
-        return $optionsData;
     }
 }

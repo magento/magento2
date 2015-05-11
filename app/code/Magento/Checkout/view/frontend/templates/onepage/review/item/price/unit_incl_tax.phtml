@@ -8,6 +8,11 @@
 
 /** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
 
+/**
+ * @deprecated
+ * @removeCandidate
+ */
+
 $_item = $block->getItem();
 ?>
 <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item); ?>

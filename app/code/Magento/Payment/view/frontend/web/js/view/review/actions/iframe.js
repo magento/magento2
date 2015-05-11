@@ -36,6 +36,9 @@ define(
             },
             getCode: function() {
                 return this.index;
+            },
+            originalPlaceOrder: function(parent) {
+                return parent.placeOrder.bind(parent);
             }
         });
     }

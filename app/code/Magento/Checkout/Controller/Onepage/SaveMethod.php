@@ -6,6 +6,10 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 class SaveMethod extends \Magento\Checkout\Controller\Onepage
 {
     /**

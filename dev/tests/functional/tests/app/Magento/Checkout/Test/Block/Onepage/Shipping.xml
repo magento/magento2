@@ -8,21 +8,34 @@
 <mapping strict="1">
     <wrapper>shipping</wrapper>
     <fields>
-        <firstname />
-        <lastname />
-        <email />
-        <company />
+        <firstname>
+            <selector>[name='shippingAddress[firstname]']</selector>
+        </firstname>
+        <lastname>
+            <selector>[name='shippingAddress[lastname]']</selector>
+        </lastname>
+        <company>
+            <selector>[name='shippingAddress[company]']</selector>
+        </company>
         <street>
-            <selector>[id='billing:street1']</selector>
+            <selector>[name='shippingAddress[street][0]']</selector>
         </street>
-        <city />
+        <city>
+            <selector>[name='shippingAddress[city]']</selector>
+        </city>
         <region_id>
             <input>select</input>
+            <selector>[name='shippingAddress[region_id]']</selector>
         </region_id>
-        <postcode />
+        <postcode>
+            <selector>[name='shippingAddress[postcode]']</selector>
+        </postcode>
         <country_id>
             <input>select</input>
+            <selector>[name='shippingAddress[country_id]']</selector>
         </country_id>
-        <telephone />
+        <telephone>
+            <selector>[name='shippingAddress[telephone]']</selector>
+        </telephone>
     </fields>
 </mapping>

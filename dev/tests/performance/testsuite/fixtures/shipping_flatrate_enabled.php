@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /** @var \Magento\TestFramework\Application $this */
 
@@ -13,7 +14,7 @@ $configData = $this->getObjectManager()->create('Magento\Framework\App\Config\Va
 $configData->setPath(
     'carriers/flatrate/active'
 )->setScope(
-    \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+    ScopeConfigInterface::SCOPE_TYPE_DEFAULT
 )->setScopeId(
     0
 )->setValue(

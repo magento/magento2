@@ -23,7 +23,9 @@ use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 
-
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DefaultConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -117,6 +119,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param LocaleFormat $localeFormat
      * @param FormKey $formKey
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CheckoutHelper $checkoutHelper,
@@ -257,7 +260,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $quoteId = $this->checkoutSession->getQuote()->getId();
         if ($quoteId) {
             $quoteItems = $this->quoteItemRepository->getList($quoteId);
-            foreach($quoteItems as $index => $quoteItem) {
+            foreach ($quoteItems as $index => $quoteItem) {
                 $quoteItemData[$index] = $quoteItem->toArray();
                 $quoteItemData[$index]['options'] = $this->getFormattedOptionValue($quoteItem);
             }

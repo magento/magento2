@@ -14,6 +14,8 @@ use Magento\Quote\Model\Quote\Address;
  * One page checkout status
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated
+ * @removeCandidate
  */
 class Progress extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {

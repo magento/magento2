@@ -66,6 +66,24 @@ interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataI
      */
     public function setFormattedShippingAddress($formattedShippingAddress);
 
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Quote\Api\Data\AddressDetailsExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Quote\Api\Data\AddressDetailsExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Quote\Api\Data\AddressDetailsExtensionInterface $extensionAttributes
+    );
+
     /**
      * @return float
      */

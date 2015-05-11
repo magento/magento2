@@ -28,8 +28,8 @@ class AgreementsDataProvider implements DataProviderInterface
     protected $escaper;
 
     /**
-     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
-     * @var \Magento\Framework\Escaper $escaper
+     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
+     * @param \Magento\Framework\Escaper $escaper
      */
     public function __construct(
         \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository,
@@ -89,6 +89,7 @@ class AgreementsDataProvider implements DataProviderInterface
      *
      * @param mixed $config
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setConfigData($config)
     {
@@ -166,6 +167,7 @@ class AgreementsDataProvider implements DataProviderInterface
      * @param string|array $field
      * @param string|null $alias
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addField($field, $alias = null)
     {
@@ -178,6 +180,7 @@ class AgreementsDataProvider implements DataProviderInterface
      * @param string $field
      * @param string $direction
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function addOrder($field, $direction)
     {
@@ -190,6 +193,7 @@ class AgreementsDataProvider implements DataProviderInterface
      * @param int $offset
      * @param int $size
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setLimit($offset, $size)
     {
@@ -202,6 +206,7 @@ class AgreementsDataProvider implements DataProviderInterface
      * @param string|null $field
      * @param bool $isAlias Alias identifier
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function removeField($field, $isAlias = false)
     {

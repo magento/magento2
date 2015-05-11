@@ -380,7 +380,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
         $this->shippingAddressMock->expects($this->once())
-            ->method('requestShippingRates')->will($this->returnValue(false));
+            ->method('getShippingRateByCode')->will($this->returnValue(false));
         $this->shippingAddressMock->expects($this->never())->method('save');
 
         $this->model->set($cartId, $carrierCode, $methodCode);
@@ -421,7 +421,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
         $this->shippingAddressMock->expects($this->once())
-            ->method('requestShippingRates')->will($this->returnValue(true));
+            ->method('getShippingRateByCode')->will($this->returnValue(true));
         $exception = new \Exception('Custom Error');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnSelf());
         $this->quoteRepositoryMock->expects($this->once())
@@ -482,7 +482,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingAddressMock->expects($this->once())
             ->method('setShippingMethod')->with($carrierCode . '_' . $methodCode);
         $this->shippingAddressMock->expects($this->once())
-            ->method('requestShippingRates')->will($this->returnValue(true));
+            ->method('getShippingRateByCode')->will($this->returnValue(true));
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnSelf());
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
 

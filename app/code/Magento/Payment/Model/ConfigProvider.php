@@ -11,10 +11,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository;
 use Psr\Log\LoggerInterface;
+use Magento\Payment\Model\Config as PaymentConfig;
 
 class ConfigProvider implements ConfigProviderInterface
 {
-    /** @var Config */
+    /** @var PaymentConfig */
     protected $config;
 
     /**
@@ -38,20 +39,20 @@ class ConfigProvider implements ConfigProviderInterface
     protected $logger;
 
     /**
-     * @param Config $config
+     * @param PaymentConfig $paymentConfig
      * @param Repository $assetRepo
      * @param RequestInterface $request
      * @param UrlInterface $urlBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Config $config,
+        PaymentConfig $paymentConfig,
         Repository $assetRepo,
         RequestInterface $request,
         UrlInterface $urlBuilder,
         LoggerInterface $logger
     ) {
-        $this->config = $config;
+        $this->config = $paymentConfig;
         $this->assetRepo = $assetRepo;
         $this->request = $request;
         $this->urlBuilder = $urlBuilder;

@@ -49,6 +49,7 @@ class AddressDataProcessorPlugin
      * @param AddressAdditionalDataProcessor $subject
      * @param AddressAdditionalData $additionalData
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeProcess(AddressAdditionalDataProcessor $subject, AddressAdditionalData $additionalData)
     {

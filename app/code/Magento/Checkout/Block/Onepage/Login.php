@@ -12,6 +12,8 @@ use Magento\Framework\Message\Collection;
 /**
  * One page checkout status
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @removeCandidate
  */
 class Login extends AbstractOnepage
 {
