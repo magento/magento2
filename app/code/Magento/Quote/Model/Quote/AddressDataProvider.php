@@ -404,7 +404,9 @@ class AddressDataProvider implements DataProviderInterface
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'label' => $attributeConfig['label'],
             'provider' => $providerName,
-            'sortOrder' => $attributeConfig['sortOrder'],
+            'sortOrder' => isset($additionalConfig['sortOrder'])
+                ? $additionalConfig['sortOrder']
+                : $attributeConfig['sortOrder'],
             'validation' => $this->mergeConfigurationNode('validation', $additionalConfig, $attributeConfig),
             'options' => isset($attributeConfig['options']) ? $attributeConfig['options'] : [],
             'filterBy' => isset($additionalConfig['filterBy']) ? $additionalConfig['filterBy'] : null,
