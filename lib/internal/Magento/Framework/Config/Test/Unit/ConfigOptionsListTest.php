@@ -63,7 +63,10 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[9]);
         $this->assertSame('Database  initial set of commands', $options[9]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\FlagConfigOption', $options[10]);
-        $this->assertSame('If specified, then db connection validation will be skipped', $options[10]->getDescription());
+        $this->assertSame(
+            'If specified, then db connection validation will be skipped',
+            $options[10]->getDescription()
+        );
         $this->assertEquals(11, count($options));
     }
 

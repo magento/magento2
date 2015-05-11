@@ -21,6 +21,11 @@ class DbValidator
      */
     private $connectionFactory;
 
+    /**
+     * Constructor
+     * 
+     * @param ConnectionFactory $connectionFactory
+     */
     public function __construct(ConnectionFactory $connectionFactory)
     {
         $this->connectionFactory = $connectionFactory;
