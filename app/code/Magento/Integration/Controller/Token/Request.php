@@ -45,7 +45,7 @@ class Request extends \Magento\Framework\App\Action\Action
             $request = $this->_helper->prepareRequest($this->getRequest(), $requestUrl);
 
             // Request request token
-            $response = $this->_oauthService->getRequestToken($request, $requestUrl, $this->getRequest()->getMethod());
+            $response = $this->_oauthService->getRequestToken($request, $requestUrl);
         } catch (\Exception $exception) {
             $response = $this->_helper->prepareErrorResponse($exception, $this->getResponse());
         }
