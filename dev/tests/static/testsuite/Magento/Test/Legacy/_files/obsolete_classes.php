@@ -3530,4 +3530,18 @@ return [
     ['Magento\Tools\SampleData\Module\Wishlist\Setup\Wishlist', 'Magento\SampleData\Module\Wishlist\Setup\Wishlist'],
     ['Magento\Tools\SampleData\Module\Wishlist\Setup', 'Magento\SampleData\Module\Wishlist\Setup'],
     ['Magento\Tools\SampleData\InstallerApp'],
+    [
+        'Magento\ToolkitFramework\ImportExport\Fixture\Complex\Generator',
+        'Magento\Setup\Model\Complex\Generator'
+    ],
+    [
+        'Magento\ToolkitFramework\ImportExport\Fixture\Complex\Pattern',
+        'Magento\Setup\Model\Complex\Pattern'
+    ],
+    [
+        'Magento\ToolkitFramework\ImportExport\Fixture\Generator',
+        'Magento\Setup\Model\Generator'
+    ],
+    ['Magento\ToolkitFramework\Helper\Cli'],
+    ['Magento\ToolkitFramework\Config'],
 ];

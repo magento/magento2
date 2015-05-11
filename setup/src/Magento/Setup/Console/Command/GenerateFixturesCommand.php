@@ -10,10 +10,11 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\ToolkitFramework\Config;
-use Magento\ToolkitFramework\Application;
+use Magento\Setup\Fixtures\FixtureModel;
 
-
+/**
+ * Command generates fixtures for performance tests
+ */
 class GenerateFixturesCommand extends Command
 {
     /**
@@ -32,12 +33,10 @@ class GenerateFixturesCommand extends Command
     private $config;
 
     /**
-     * @param Application $application
-     * @param Config $config
+     * @param FixtureModel $application
      */
-    public function __construct(Application $application, Config $config)
+    public function __construct(FixtureModel $application)
     {
-        $this->config = $config;
         $this->application = $application;
         parent::__construct();
     }
@@ -69,7 +68,7 @@ class GenerateFixturesCommand extends Command
 
 
             $application = $this->application;
-            $application->bootstrap();
+            $application->initObjectManager();
             $application->loadFixtures();
             $application->loadConfig($input->getArgument(self::PROFILE_ARGUMENT));
 
@@ -92,12 +91,12 @@ class GenerateFixturesCommand extends Command
             }
 
             foreach ($application->getFixtures() as $fixture) {
-                echo $fixture->getActionTitle() . '... ';
+                $output->write($fixture->getActionTitle() . '... ');
                 $startTime = microtime(true);
                 $fixture->execute();
                 $endTime = microtime(true);
                 $resultTime = $endTime - $startTime;
-                echo ' done in ' . gmdate('H:i:s', $resultTime) . PHP_EOL;
+                $output->writeln(' done in ' . gmdate('H:i:s', $resultTime));
             }
 
             foreach ($indexerListIds as $indexerId) {
