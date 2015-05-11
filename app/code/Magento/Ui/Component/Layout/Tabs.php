@@ -12,7 +12,6 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
-use Magento\Framework\View\Element\UiComponent\JsConfigInterface;
 
 /**
  * Class Tabs
@@ -189,6 +188,7 @@ class Tabs extends Generic implements LayoutInterface
      *
      * @param \Magento\Ui\Component\Wrapper\Block $childComponent
      * @param array $areas
+     * @return void
      */
     protected function addWrappedBlock(\Magento\Ui\Component\Wrapper\Block $childComponent, array &$areas)
     {
@@ -385,30 +385,6 @@ class Tabs extends Generic implements LayoutInterface
                 'extends' => $this->namespace
             ]
         );
-    }
-
-    /**
-     * Create tab component
-     *
-     * @param UiComponentInterface $childComponent
-     * @param string $name
-     * @return UiComponentInterface
-     * @throws Exception
-     */
-    protected function createTabComponent(UiComponentInterface $childComponent, $name)
-    {
-        $tabComponent = $this->uiComponentFactory->create(
-            $name,
-            'tab',
-            [
-                'context' => $this->component->getContext(),
-                'components' => [$childComponent->getName() => $childComponent]
-            ]
-        );
-        $tabComponent->prepare();
-        $this->component->addComponent($name, $tabComponent);
-
-        return $tabComponent;
     }
 
     /**
