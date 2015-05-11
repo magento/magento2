@@ -39,7 +39,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
             foreach ($options as $optionItem) {
                 $min = null;
                 if (!$optionItem->getIsRequire()) {
-                    $min = 0.;;
+                    $min = 0.;
                 }
                 $max = 0.;
                 /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
