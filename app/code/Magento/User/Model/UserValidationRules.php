@@ -94,7 +94,7 @@ class UserValidationRules
      * Adds validation rule for user password confirmation
      *
      * @param \Magento\Framework\Validator\Object $validator
-     * @param $passwordConfirmation
+     * @param string $passwordConfirmation
      * @return \Magento\Framework\Validator\Object
      */
     public function addPasswordConfirmationRule(
