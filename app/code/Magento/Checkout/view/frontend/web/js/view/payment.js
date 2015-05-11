@@ -51,6 +51,10 @@ define(
                     }
                 });
 
+                if (sortedElems.length == 1) {
+                    this.activeMethod(sortedElems[0].getCode());
+                }
+
                 return sortedElems;
             },
             getMethodViewByCode: function(code) {
@@ -78,6 +82,9 @@ define(
             },
             getFormKey: function() {
                 return window.checkoutConfig.formKey;
+            },
+            getMethodControlAdditionalClass: function() {
+                return this.getAvailableViews().length == 1 ? ' hidden' : '';
             }
         });
     }
