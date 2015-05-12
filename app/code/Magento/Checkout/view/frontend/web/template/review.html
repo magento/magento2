@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-review" class="section allow active">
+<li id="opc-review" data-bind="attr: {'class': stepClassAttributes() }" role="presentation">
     <div class="step-title" data-role="title">
         <span class="number" data-bind="text: stepNumber()"></span>
         <h2 data-bind="text: $t('Order Review')"></h2>

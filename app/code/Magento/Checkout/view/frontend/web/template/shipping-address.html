@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-shipping" class="section allow active" data-bind="fadeVisible: isActive()">
+<li id="opc-shipping" data-bind="fadeVisible: isActive(), attr: {'class': stepClassAttributes() }">
     <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <span class="number" data-bind="text: stepNumber()"></span>
         <h2 data-bind="text: $t('Shipping Information')"></h2>
@@ -23,7 +23,7 @@
                 <div class="control">
                     <select name="shipping_address_id" id="shipping:address-select" data-bind="
                     options: addresses,
-                    optionsText: function(item) { return item.getFullAddress(); },
+                    optionsText: function(item) { return item.getAddressInline(); },
                     optionsValue: 'customerAddressId',
                     value: selectedAddressId,
                     event: {change: onAddressChange}

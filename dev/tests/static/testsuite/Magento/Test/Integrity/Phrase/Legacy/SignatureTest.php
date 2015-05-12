@@ -9,20 +9,20 @@
  */
 namespace Magento\Test\Integrity\Phrase\Legacy;
 
-use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer;
-use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector;
+use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
+use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector;
 
 class SignatureTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 {
     /**
-     * @var \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector
+     * @var \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector
      */
     protected $_phraseCollector;
 
     protected function setUp()
     {
-        $this->_phraseCollector = new \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector(
-            new \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer()
+        $this->_phraseCollector = new MethodCollector(
+            new Tokenizer()
         );
     }
 

@@ -23,6 +23,9 @@ define(
                 template: 'Magento_Checkout/shipping-address',
                 visible: true
             },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             stepNumber: navigator.getStepNumber(stepName),
             addresses: customer.getShippingAddressList(),
             selectedAddressId: ko.observable(addressList.getAddresses()[0].id),

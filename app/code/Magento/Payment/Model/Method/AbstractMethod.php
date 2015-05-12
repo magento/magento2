@@ -916,14 +916,4 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return array
-     */
-    public function getAdditionalInfo()
-    {
-        return [[]];
-    }
 }

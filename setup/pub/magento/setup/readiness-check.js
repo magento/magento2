@@ -32,7 +32,7 @@ angular.module('readiness-check', [])
             processed: false,
             expanded: false
         };
-        $scope.rawpost = {
+        $scope.settings = {
             visible: false,
             processed: false,
             expanded: false
@@ -62,16 +62,16 @@ angular.module('readiness-check', [])
                     $scope.stopProgress();
                 }
             },
-            'php-rawpost': {
-                url:'index.php/environment/php-rawpost',
+            'php-settings': {
+                url:'index.php/environment/php-settings',
                 show: function() {
                     $scope.startProgress();
-                    $scope.rawpost.visible = true;
+                    $scope.settings.visible = true;
                 },
                 process: function(data) {
-                    $scope.rawpost.processed = true;
-                    angular.extend($scope.rawpost, data);
-                    $scope.updateOnProcessed($scope.rawpost.responseType);
+                    $scope.settings.processed = true;
+                    angular.extend($scope.settings, data);
+                    $scope.updateOnProcessed($scope.settings.responseType);
                     $scope.stopProgress();
                 }
             },
