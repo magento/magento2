@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    'underscore',
+    'mageUtils',
     './core',
     './links',
     './manip',
@@ -11,12 +11,12 @@ define([
     './provider',
     'Magento_Ui/js/lib/class',
     'Magento_Ui/js/lib/ko/initialize'
-], function (_, core, links, manip, traversal, provider, Class) {
+], function (utils, core, links, manip, traversal, provider, Class) {
     'use strict';
 
     var extenders;
 
-    extenders = _.extend({}, core, links, manip, traversal, provider);
+    extenders = utils.extend({}, core, links, manip, traversal, provider);
 
     return Class.extend(extenders);
 });

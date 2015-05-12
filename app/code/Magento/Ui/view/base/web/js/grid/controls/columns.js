@@ -3,9 +3,10 @@
  * See COPYING.txt for license details.
  */
 define([
-    'underscore',
+    'mageUtils',
+    'mage/translate',
     'Magento_Ui/js/lib/collapsible'
-], function (_, Collapsible) {
+], function (utils, $t, Collapsible) {
     'use strict';
 
     return Collapsible.extend({
@@ -13,7 +14,10 @@ define([
             template: 'ui/grid/controls/columns',
             minVisible: 1,
             maxVisible: 30,
-            viewportSize: 18
+            viewportSize: 18,
+            templates: {
+                headerMsg: $t('${ $.visible } out of ${ $.total } visible')
+            }
         },
 
         /**
@@ -29,8 +33,7 @@ define([
          * Action Cancel
          */
         cancel: function () {
-            this.close()
-                .elems.each('applyState', 'visible', 'last');
+            this.elems.each('applyState', 'visible', 'last');
 
             return this;
         },
@@ -73,8 +76,8 @@ define([
          * @param {String} text - underscore-format template
          * @returns {String}
          */
-        getHeaderMessage: function (text) {
-            return _.template(text)({
+        getHeaderMessage: function () {
+            return utils.template(this.templates.headerMsg, {
                 visible: this.countVisible(),
                 total: this.elems().length
             });

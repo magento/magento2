@@ -22,10 +22,10 @@ define([
             },
             listens: {
                 label: 'setLabel',
-                '<%= parentName %>:activeIndex': 'onActiveChange'
+                '${ $.parentName }:activeIndex': 'onActiveChange'
             },
             modules: {
-                states: '<%= parentName %>'
+                states: '${ $.parentName }'
             }
         },
 

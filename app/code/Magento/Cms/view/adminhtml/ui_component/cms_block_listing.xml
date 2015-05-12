@@ -52,13 +52,14 @@
                 <item name="config" xsi:type="array">
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="dataScope" xsi:type="string">filters</item>
-                    <item name="states" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.filters</item>
                     </item>
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.listing_filters</item>
                         <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string"><![CDATA[cms_block_listing.cms_block_listing.listing_top.bookmarks:current.columns.<%= index %>.visible]]></item>
+                            <item name="visible" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
                         </item>
                     </item>
                 </item>
@@ -221,8 +222,9 @@
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="states" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
@@ -280,8 +282,10 @@
                     <item name="actionField" xsi:type="string">actions</item>
                     <item name="clickAction" xsi:type="string">edit</item>
                     <item name="appendTo" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.columns_controls</item>
-                    <item name="states" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">cms_block_listing.cms_block_listing.listing_top.bookmarks</item>
+                        <item name="root" xsi:type="string">columns.${ $.index }</item>
+                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
                     </item>
                 </item>
             </item>
