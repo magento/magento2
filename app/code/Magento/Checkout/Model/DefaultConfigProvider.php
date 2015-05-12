@@ -24,6 +24,7 @@ use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class DefaultConfigProvider implements ConfigProviderInterface
 {
@@ -211,6 +212,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Set additional customer address data
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
+     * @return string
      */
     private function getCustomerAddressInline($address)
     {
