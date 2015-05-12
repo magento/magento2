@@ -18,9 +18,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->dataHelper = $helper->getObject('Magento\Integration\Helper\Data');
     }
 
-    /**
-     * @dataProvider
-     */
     public function testMapResources()
     {
         $testData = require __DIR__ . '/_files/acl.php';
@@ -28,27 +25,37 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedData, $this->dataHelper->mapResources($testData));
     }
 
-    public function testIsConfigType()
+    /**
+     * @dataProvider integrationDataProvider
+     */
+    public function testIsConfigType($integrationsData, $expectedResult)
     {
-        $integrationsData = [
-            'id' => 1,
-            Integration::NAME => 'TestIntegration1',
-            Integration::EMAIL => 'test-integration1@magento.com',
-            Integration::ENDPOINT => 'http://endpoint.com',
-            Integration::SETUP_TYPE => 1,
-        ];
-        $this->assertTrue($this->dataHelper->isConfigType($integrationsData));
+        $this->assertEquals($expectedResult, $this->dataHelper->isConfigType($integrationsData));
     }
 
-    public function testIsConfigTypeFalse()
+    public function integrationDataProvider()
     {
-        $integrationsData = [
-            'id' => 1,
-            Integration::NAME => 'TestIntegration1',
-            Integration::EMAIL => 'test-integration1@magento.com',
-            Integration::ENDPOINT => 'http://endpoint.com',
-            Integration::SETUP_TYPE => 0,
+        return [
+            [
+                [
+                    'id' => 1,
+                    Integration::NAME => 'TestIntegration1',
+                    Integration::EMAIL => 'test-integration1@magento.com',
+                    Integration::ENDPOINT => 'http://endpoint.com',
+                    Integration::SETUP_TYPE => 1,
+                ],
+                true,
+            ],
+            [
+                [
+                    'id' => 1,
+                    Integration::NAME => 'TestIntegration1',
+                    Integration::EMAIL => 'test-integration1@magento.com',
+                    Integration::ENDPOINT => 'http://endpoint.com',
+                    Integration::SETUP_TYPE => 0,
+                ],
+                false,
+            ]
         ];
-        $this->assertFalse($this->dataHelper->isConfigType($integrationsData));
     }
 }

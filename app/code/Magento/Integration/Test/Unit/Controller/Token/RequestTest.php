@@ -94,13 +94,16 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->layout->expects($this->any())->method('getUpdate')->will($this->returnValue($this->update));
 
-        $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
-            ->disableOriginalConstructor()->getMock();
+        $this->pageConfig = $this->getMock('Magento\Framework\View\Page\Config', [], [], '', false);
         $this->pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
 
-        $this->page = $this->getMockBuilder('Magento\Framework\View\Page')
-            ->setMethods(['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout'])
-            ->disableOriginalConstructor()->getMock();
+        $this->page = $this->getMock(
+            'Magento\Framework\View\Page',
+            ['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout'],
+            [],
+            '',
+            false
+        );
         $this->page->expects($this->any())->method('getConfig')->will($this->returnValue($this->pageConfig));
         $this->page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
         $this->page->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
@@ -121,10 +124,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getResultFactory')
             ->will($this->returnValue($this->resultFactory));
 
-        $this->helperMock = $this->getMockBuilder('Magento\Framework\Oauth\Helper\Request')
-            ->disableOriginalConstructor()->getMock();
-        $this->frameworkOauthSvcMock = $this->getMockBuilder('Magento\Framework\Oauth\OauthInterface')
-            ->disableOriginalConstructor()->getMock();
+        $this->helperMock = $this->getMock('Magento\Framework\Oauth\Helper\Request', [], [], '', false);
+        $this->frameworkOauthSvcMock = $this->getMock('Magento\Framework\Oauth\OauthInterface', [], [], '', false);
 
         /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager $objectManagerHelper */
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

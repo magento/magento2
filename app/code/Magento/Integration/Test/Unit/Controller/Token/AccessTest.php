@@ -95,27 +95,30 @@ class AccessTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
-        $this->response = $this->getMock('Magento\Framework\App\Console\Response');
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->response = $this->getMock('Magento\Framework\App\Console\Response', [], [], '', false);
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
-        $this->update = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface');
+        $this->update = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->layout->expects($this->any())->method('getUpdate')->will($this->returnValue($this->update));
 
-        $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
-            ->disableOriginalConstructor()->getMock();
+        $this->pageConfig = $this->getMock('Magento\Framework\View\Page\Config', [], [], '', false);
         $this->pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
 
-        $this->page = $this->getMockBuilder('Magento\Framework\View\Page')
-            ->setMethods(['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout'])
-            ->disableOriginalConstructor()->getMock();
+        $this->page = $this->getMock(
+            'Magento\Framework\View\Page',
+            ['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout'],
+            [],
+            '',
+            false
+        );
         $this->page->expects($this->any())->method('getConfig')->will($this->returnValue($this->pageConfig));
         $this->page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
         $this->page->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
 
-        $this->view = $this->getMock('Magento\Framework\App\ViewInterface');
+        $this->view = $this->getMock('Magento\Framework\App\ViewInterface', [], [], '', false);
         $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
 
         $this->resultFactory = $this->getMock('Magento\Framework\Controller\ResultFactory', [], [], '', false);
@@ -131,14 +134,16 @@ class AccessTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getResultFactory')
             ->will($this->returnValue($this->resultFactory));
 
-        $this->helperMock = $this->getMockBuilder('Magento\Framework\Oauth\Helper\Request')
-            ->disableOriginalConstructor()->getMock();
-        $this->frameworkOauthSvcMock = $this->getMockBuilder('Magento\Framework\Oauth\OauthInterface')
-            ->disableOriginalConstructor()->getMock();
-        $this->intOauthServiceMock = $this->getMockBuilder('Magento\Integration\Api\OauthServiceInterface')
-            ->disableOriginalConstructor()->getMock();
-        $this->integrationServiceMock = $this->getMockBuilder('Magento\Integration\Api\IntegrationServiceInterface')
-            ->disableOriginalConstructor()->getMock();
+        $this->helperMock = $this->getMock('Magento\Framework\Oauth\Helper\Request', [], [], '', false);
+        $this->frameworkOauthSvcMock = $this->getMock('Magento\Framework\Oauth\OauthInterface', [], [], '', false);
+        $this->intOauthServiceMock = $this->getMock('Magento\Integration\Api\OauthServiceInterface', [], [], '', false);
+        $this->integrationServiceMock = $this->getMock(
+            'Magento\Integration\Api\IntegrationServiceInterface',
+            [],
+            [],
+            '',
+            false
+        );
 
         /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager $objectManagerHelper */
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -167,16 +172,14 @@ class AccessTest extends \PHPUnit_Framework_TestCase
             ->method('getAccessToken')
             ->willReturn(['response']);
         /** @var \Magento\Integration\Model\Oauth\Consumer|\PHPUnit_Framework_MockObject_MockObject */
-        $consumerMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\Consumer')
-            ->disableOriginalConstructor()->getMock();
+        $consumerMock = $this->getMock('Magento\Integration\Model\Oauth\Consumer', [], [], '', false);
         $consumerMock->expects($this->once())
             ->method('getId');
         $this->intOauthServiceMock->expects($this->once())
             ->method('loadConsumerByKey')
             ->willReturn($consumerMock);
         /** @var \Magento\Integration\Model\Integration|\PHPUnit_Framework_MockObject_MockObject */
-        $integrationMock = $this->getMockBuilder('Magento\Integration\Model\Integration')
-            ->disableOriginalConstructor()->getMock();
+        $integrationMock = $this->getMock('Magento\Integration\Model\Integration', [], [], '', false);
         $integrationMock->expects($this->once())
             ->method('save')
             ->willReturnSelf();
