@@ -6,34 +6,41 @@
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
+
 /**
  * @codeCoverageIgnore
  */
-class ImageContent extends \Magento\Framework\Model\AbstractExtensibleModel implements
-    \Magento\Framework\Api\Data\ImageContentInterface
+class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject implements ImageContentInterface
 {
     /**
-     * {@inheritdoc}
+     * Retrieve media data (base64 encoded content)
+     *
+     * @return string
      */
     public function getBase64EncodedData()
     {
-        return $this->getData(self::BASE64_ENCODED_DATA);
+        return $this->_get(self::BASE64_ENCODED_DATA);
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve MIME type
+     *
+     * @return string
      */
     public function getMimeType()
     {
-        return $this->getData(self::MIME_TYPE);
+        return $this->_get(self::MIME_TYPE);
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve image name
+     *
+     * @return string
      */
     public function getName()
     {
-        return $this->getData(self::NAME);
+        return $this->_get(self::NAME);
     }
 
     /**

@@ -111,6 +111,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
         $this->validate($customer);
+        //TODO : Check and Process Image attributes using ImageProcessor
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
