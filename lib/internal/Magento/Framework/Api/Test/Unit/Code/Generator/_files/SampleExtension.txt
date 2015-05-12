@@ -6,7 +6,7 @@ namespace Magento\Catalog\Api\Data;
 class ProductExtension extends \Magento\Framework\Api\AbstractSimpleObject implements \Magento\Catalog\Api\Data\ProductExtensionInterface
 {
     /**
-     * @return string
+     * @return string|null
      */
     public function getStringAttribute()
     {
@@ -24,7 +24,7 @@ class ProductExtension extends \Magento\Framework\Api\AbstractSimpleObject imple
     }
 
     /**
-     * @return \Magento\Bundle\Api\Data\OptionInterface[]
+     * @return \Magento\Bundle\Api\Data\OptionInterface[]|null
      */
     public function getComplexObjectAttribute()
     {

@@ -12,7 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Comment getResource()
- * @method \Magento\Sales\Model\Order\Shipment\Comment setCreatedAt(string $value)
  */
 class Comment extends AbstractModel implements ShipmentCommentInterface
 {
@@ -124,6 +123,14 @@ class Comment extends AbstractModel implements ShipmentCommentInterface
     public function getCreatedAt()
     {
         return $this->getData(ShipmentCommentInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(ShipmentCommentInterface::CREATED_AT, $createdAt);
     }
 
     /**

@@ -65,6 +65,14 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     public function getCreatedAt();
 
     /**
+     * Sets the created-at timestamp for the order status history.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
+    /**
      * Gets the ID for the order status history.
      *
      * @return int Order status history ID.
