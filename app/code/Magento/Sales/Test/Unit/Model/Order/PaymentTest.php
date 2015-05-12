@@ -94,45 +94,61 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->paymentMethodMock = $this->getMockBuilder('Magento\Payment\Model\Method\AbstractMethod')
             ->disableOriginalConstructor()
-            ->setMethods([
-                'canVoid',
-                'authorize',
-                'getConfigData',
-                'getConfigPaymentAction',
-                'validate',
-                'setStore',
-                'acceptPayment',
-                'denyPayment',
-                'fetchTransactionInfo',
-                'canCapture',
-                'canRefund'
-            ])
+            ->setMethods(
+                [
+                    'canVoid',
+                    'authorize',
+                    'getConfigData',
+                    'getConfigPaymentAction',
+                    'validate',
+                    'setStore',
+                    'acceptPayment',
+                    'denyPayment',
+                    'fetchTransactionInfo',
+                    'canCapture',
+                    'canRefund'
+                ]
+            )
             ->getMock();
 
         $this->invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
-            ->setMethods(['getTransactionId', 'load', 'getId', 'pay', 'getBaseGrandTotal', 'cancel'])
+            ->setMethods(
+                [
+                    'getTransactionId',
+                    'load',
+                    'getId',
+                    'pay',
+                    'cancel',
+                    'getGrandTotal',
+                    'getBaseGrandTotal',
+                    'getShippingAmount',
+                    'getBaseShippingAmount'
+                ]
+            )
             ->getMock();
         $this->helperMock->method('getMethodInstance')
             ->will($this->returnValue($this->paymentMethodMock));
 
         $this->orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
-            ->setMethods([
-                'getConfig',
-                'setState',
-                'getStoreId',
-                'getBaseGrandTotal',
-                'getBaseCurrency',
-                'getBaseCurrencyCode',
-                'getTotalDue',
-                'getBaseTotalDue',
-                'getInvoiceCollection',
-                'addRelatedObject',
-                'getState',
-                'addStatusHistoryComment',
-                'registerCancellation',
-            ])
+            ->setMethods(
+                [
+                    'getConfig',
+                    'setState',
+                    'getStoreId',
+                    'getBaseGrandTotal',
+                    'getBaseCurrency',
+                    'getBaseCurrencyCode',
+                    'getTotalDue',
+                    'getBaseTotalDue',
+                    'getInvoiceCollection',
+                    'addRelatedObject',
+                    'getState',
+                    'addStatusHistoryComment',
+                    'registerCancellation',
+                ]
+            )
             ->getMock();
 
         $this->transactionFactory = $this->getMock(
@@ -959,6 +975,70 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->assertTrue($this->payment->canCapture());
+    }
+
+    public function testPay()
+    {
+        $expects = [
+            'amount_paid' => 10,
+            'base_amount_paid' => 10,
+            'shipping_captured' => 5,
+            'base_shipping_captured' => 5,
+        ];
+        $this->assertNull($this->payment->getData('amount_paid'));
+        $this->invoiceMock->expects($this->once())->method('getGrandTotal')->willReturn($expects['amount_paid']);
+        $this->invoiceMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(
+            $expects['base_amount_paid']
+        );
+        $this->invoiceMock->expects($this->once())->method('getShippingAmount')->willReturn(
+            $expects['shipping_captured']
+        );
+        $this->invoiceMock->expects($this->once())->method('getBaseShippingAmount')->willReturn(
+            $expects['base_shipping_captured']
+        );
+        $this->eventManagerMock->expects($this->once())->method('dispatch')->with(
+            'sales_order_payment_pay',
+            ['payment' => $this->payment, 'invoice' => $this->invoiceMock]
+        );
+        $this->assertSame($this->payment, $this->payment->pay($this->invoiceMock));
+        $this->assertEquals($expects['amount_paid'], $this->payment->getData('amount_paid'));
+        $this->assertEquals($expects['base_amount_paid'], $this->payment->getData('base_amount_paid'));
+        $this->assertEquals($expects['shipping_captured'], $this->payment->getData('shipping_captured'));
+        $this->assertEquals($expects['base_shipping_captured'], $this->payment->getData('base_shipping_captured'));
+    }
+
+
+    public function testCancelInvoice()
+    {
+        $expects = [
+            'amount_paid' => 10,
+            'base_amount_paid' => 10,
+            'shipping_captured' => 5,
+            'base_shipping_captured' => 5,
+        ];
+        $this->assertNull($this->payment->getData('amount_paid'));
+        $this->invoiceMock->expects($this->once())->method('getGrandTotal')->willReturn($expects['amount_paid']);
+        $this->invoiceMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(
+            $expects['base_amount_paid']
+        );
+        $this->invoiceMock->expects($this->once())->method('getShippingAmount')->willReturn(
+            $expects['shipping_captured']
+        );
+        $this->invoiceMock->expects($this->once())->method('getBaseShippingAmount')->willReturn(
+            $expects['base_shipping_captured']
+        );
+        $this->eventManagerMock->expects($this->once())->method('dispatch')->with(
+            'sales_order_payment_cancel_invoice',
+            ['payment' => $this->payment, 'invoice' => $this->invoiceMock]
+        );
+        $this->assertSame($this->payment, $this->payment->cancelInvoice($this->invoiceMock));
+        $this->assertEquals(-1 * $expects['amount_paid'], $this->payment->getData('amount_paid'));
+        $this->assertEquals(-1 * $expects['base_amount_paid'], $this->payment->getData('base_amount_paid'));
+        $this->assertEquals(-1 * $expects['shipping_captured'], $this->payment->getData('shipping_captured'));
+        $this->assertEquals(
+            -1 * $expects['base_shipping_captured'],
+            $this->payment->getData('base_shipping_captured')
+        );
     }
 
     /**
