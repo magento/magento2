@@ -85,13 +85,25 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->will($this->returnValue([]));
 
+        $installStoreConfiguration = $this->getMock('Magento\Setup\Console\Command\InstallStoreConfigurationCommand',
+            [],
+            [],
+            '',
+            false
+        );
+        $installStoreConfiguration
+            ->expects($this->once())
+            ->method('validate')
+            ->will($this->returnValue([]));
+
         $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
         $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
         $this->command = new InstallCommand(
             $this->installerFactory,
             $configModel,
             $userConfig,
-            $adminUser
+            $adminUser,
+            $installStoreConfiguration
         );
     }
 
