@@ -5,21 +5,19 @@
  */
 
 // @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
  * @see \Magento\Payment\Block\Info
  */
 ?>
-<?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
 
-<?php if ($_specificInfo = $block->getSpecificInformation()):?>
+<?php if ($additional_info = $block->getAdditionalInfo()):?>
 <table class="data-table" cellspacing="0">
-<?php foreach ($_specificInfo as $_label => $_value):?>
+<?php foreach ($additional_info as $label => $value):?>
     <tr>
-        <th><?php echo $block->escapeHtml($_label)?>:</th>
-        <td><?php echo nl2br(implode("\n", $block->getValueAsArray($_value, true)))?></td>
+        <th><?php echo $block->escapeHtml($label)?>:&nbsp;</th>
+        <td><?php echo nl2br(implode("\n", $block->getValueAsArray($value, true)))?></td>
     </tr>
 <?php endforeach; ?>
 </table>
