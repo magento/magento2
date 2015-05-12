@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="ui-dialog">
+    <div class="dialog-header">
+        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+            <span id="ui-id-3" class="ui-dialog-title"></span>
+            <a class="ui-dialog-titlebar-close ui-corner-all" role="button">
+                <span class="ui-icon ui-icon-closethick">close</span>
+            </a>
+        </div>
+    </div>
+    <div class="dialog-content"></div>
+    <div class="dialog-actions">
+        <% _.each(data.buttons, function(button) { %>
+            <button type="button" class="<%= button.class %>"><%= button.text %></button>
+        <% }); %>
+    </div>
+</div>

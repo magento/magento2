@@ -7,7 +7,7 @@
 define([
     'jquery',
     'jquery/ui',
-    'mage/dialog',
+    'Magento_Ui/js/dialog/dialog',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation'
@@ -54,7 +54,7 @@ define([
             });
             this.element.dialog({
                 type: 'slideOut',
-                className:  'mage-new-category-dialog form-inline',
+                dialogClass: 'mage-new-category-dialog form-inline',
                 title: $.mage.__('Create Category'),
                 buttons: [{
                     text: $.mage.__('Create Category'),
@@ -94,7 +94,7 @@ define([
                                         $('#new_category_name, #new_category_parent-suggest').val('');
                                         $('#category_ids-suggest').val('');
                                         clearParentCategory();
-                                        widget.element.trigger('close');
+                                        widget.element.trigger('closeDialog');
                                     } else {
                                         $('#new_category_messages').html(data.messages);
                                     }

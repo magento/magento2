@@ -7,7 +7,7 @@
 define([
     "jquery",
     "jquery/ui",
-    "mage/dialog",
+    'Magento_Ui/js/dialog/dialog',
     "mage/translate"
 ], function($){
     "use strict";
@@ -29,7 +29,7 @@ define([
          * Show dialog
          */
         showDialog: function() {
-            this.options.dialog.html(this.options.message).trigger('open');
+            this.options.dialog.html(this.options.message).trigger('openDialog');
         },
 
         /**
@@ -48,7 +48,7 @@ define([
 
             this.options.dialog = $('<div class="ui-dialog-content ui-widget-content"></div>').dialog({
                 type: 'modal',
-                className: 'edit-order-popup',
+                dialogClass: 'edit-order-popup',
                 title: $.mage.__('Edit Order'),
                 buttons: [{
                     text: $.mage.__('Ok'),
@@ -60,7 +60,7 @@ define([
                     text: $.mage.__('Cancel'),
                     'class': 'action-close',
                     click: function(){
-                        self.options.dialog.trigger('close');
+                        self.options.dialog.trigger('closeDialog');
                     }
                 }]
             });
