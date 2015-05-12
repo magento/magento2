@@ -21,9 +21,7 @@ class AddressAdditionalData extends AbstractExtensibleModel implements AddressAd
     }
 
     /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\Quote\Api\Data\AddressAdditionalDataExtensionInterface $extensionAttributes
+     * {@inheritdoc}
      */
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\AddressAdditionalDataExtensionInterface $extensionAttributes

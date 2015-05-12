@@ -39,21 +39,21 @@ class Review extends Block
      *
      * @var string
      */
-    protected $grandTotal = '[class="grand totals"] span';
+    protected $grandTotal = '[class="grand totals"] td>strong';
 
     /**
      * Grand total excluding tax search mask
      *
      * @var string
      */
-    protected $grandTotalExclTax = '[class="grand totals excl"] span';
+    protected $grandTotalExclTax = '[class="grand totals excl"] td>strong';
 
     /**
      * Grand total including tax search mask
      *
      * @var string
      */
-    protected $grandTotalInclTax = '[class="grand totals incl"] span';
+    protected $grandTotalInclTax = '[class="grand totals incl"] td>strong';
 
     /**
      * Subtotal search mask

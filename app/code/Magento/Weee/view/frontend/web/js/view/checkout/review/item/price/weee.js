@@ -27,8 +27,14 @@ define(
                 return window.checkoutConfig.isDisplayFinalPrice;
             },
             getFormattedPrice: function (price) {
-                //todo add format data
                 return priceUtils.formatPrice(price, quote.getPriceFormat());
+            },
+            getWeeeTaxApplied: function(item) {
+                if (item.weee_tax_applied) {
+                    return JSON.parse(item.weee_tax_applied)
+                }
+                return [];
+
             }
         });
     }

@@ -15,43 +15,39 @@ define(
     ],
     function(quote, urlBuilder, navigator, service, errorList, storage, _) {
         "use strict";
-        return function (methodView) {
-            var defaultMethodData = {
-                "method": methodView.getCode(),
-                "po_number": null,
-                "cc_owner": null,
-                "cc_number": null,
-                "cc_type": null,
-                "cc_exp_year": null,
-                "cc_exp_month": null,
-                "additional_data": null
-            };
-            _.extend(defaultMethodData, methodView.getData());
+        return function (methodData, methodInfo, callbacks) {
             var paymentMethodData = {
                 "cartId": quote.getQuoteId(),
-                "paymentMethod": defaultMethodData
+                "paymentMethod": methodData
             };
+
             var shippingMethodCode = quote.getSelectedShippingMethod()().split("_"),
                 shippingMethodData = {
                     "shippingCarrierCode" : shippingMethodCode[0],
                     "shippingMethodCode" : shippingMethodCode[1]
                 },
                 serviceUrl;
+
             if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()});
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/collect-totals', {});
             }
+
             if (quote.isVirtual()) {
                 return storage.put(
                     serviceUrl,
-                    JSON.stringify(_.extend(paymentMethodData))
+                    JSON.stringify(paymentMethodData)
                 ).done(
                     function (response) {
-                        if (methodView.afterSave()) {
-                            quote.setPaymentMethod(methodView.getCode());
-                            service.setSelectedPaymentData(defaultMethodData);
-                            service.setSelectedPaymentInfo(methodView.getInfo());
+                        var proceed = true;
+                        _.each(callbacks, function(callback) {
+                            proceed = proceed && callback();
+                        });
+                        if (proceed) {
+                            quote.setPaymentMethod(methodData.method);
+                            service.setSelectedPaymentData(methodData);
+                            service.setSelectedPaymentInfo(methodInfo);
                             quote.setTotals(response);
                             navigator.setCurrent('paymentMethod').goNext();
                         }
@@ -79,10 +75,14 @@ define(
                     JSON.stringify(_.extend(paymentMethodData, shippingMethodData))
                 ).done(
                     function (response) {
-                        if (methodView.afterSave()) {
-                            quote.setPaymentMethod(methodView.getCode());
-                            service.setSelectedPaymentData(defaultMethodData);
-                            service.setSelectedPaymentInfo(methodView.getInfo());
+                        var proceed = true;
+                        _.each(callbacks, function(callback) {
+                            proceed = proceed && callback();
+                        });
+                        if (proceed) {
+                            quote.setPaymentMethod(methodData.method);
+                            service.setSelectedPaymentData(methodData);
+                            service.setSelectedPaymentInfo(methodInfo);
                             quote.setTotals(response);
                             navigator.setCurrent('paymentMethod').goNext();
                         }

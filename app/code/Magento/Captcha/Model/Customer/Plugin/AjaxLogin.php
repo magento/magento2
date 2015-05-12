@@ -35,7 +35,7 @@ class AjaxLogin
         CaptchaHelper $helper,
         SessionManagerInterface $sessionManager,
         JsonFactory $resultJsonFactory
-    ){
+    ) {
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
         $this->resultJsonFactory = $resultJsonFactory;

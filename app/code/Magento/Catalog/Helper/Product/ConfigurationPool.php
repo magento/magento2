@@ -56,7 +56,7 @@ class ConfigurationPool
     }
 
     /**
-     * @param $productType
+     * @param string $productType
      * @return Configuration\ConfigurationInterface
      */
     public function getByProductType($productType)

@@ -20,7 +20,8 @@ define(
         var newAddressSelected = ko.observable(false);
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/shipping-address'
+                template: 'Magento_Checkout/shipping-address',
+                visible: true
             },
             stepNumber: navigator.getStepNumber(stepName),
             addresses: customer.getShippingAddressList(),
@@ -28,6 +29,11 @@ define(
             sameAsBilling: ko.observable(null),
             quoteHasBillingAddress: quote.getBillingAddress(),
             isVisible: navigator.isStepVisible(stepName),
+            initObservable: function () {
+                this._super()
+                    .observe('visible');
+                return this;
+            },
             isActive: function() {
                 if (quote.isVirtual()) {
                     navigator.setStepEnabled(stepName, false);

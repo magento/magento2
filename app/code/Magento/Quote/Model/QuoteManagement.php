@@ -24,6 +24,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Class QuoteManagement
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 {
@@ -505,7 +506,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * Prepare quote for customer order submit
      *
-     * @param $quote
+     * @param Quote $quote
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -546,5 +547,4 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $billing->setCustomerAddressData($billingAddress);
         }
     }
-
 }

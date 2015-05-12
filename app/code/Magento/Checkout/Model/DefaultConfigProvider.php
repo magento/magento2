@@ -14,6 +14,7 @@ use Magento\Customer\Model\Registration as CustomerRegistration;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Url as CustomerUrlManager;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Locale\CurrencyInterface as CurrencyManager;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Api\CartItemRepositoryInterface as QuoteItemRepository;
@@ -22,7 +23,9 @@ use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 
-
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DefaultConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -96,6 +99,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $localeFormat;
 
     /**
+     * @var FormKey
+     */
+    protected $formKey;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRegistration $customerRegistration
@@ -110,6 +118,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param ConfigurationPool $configurationPool
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param LocaleFormat $localeFormat
+     * @param FormKey $formKey
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CheckoutHelper $checkoutHelper,
@@ -125,7 +135,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         ShippingMethodManager $shippingMethodManager,
         ConfigurationPool $configurationPool,
         QuoteIdMaskFactory $quoteIdMaskFactory,
-        LocaleFormat $localeFormat
+        LocaleFormat $localeFormat,
+        FormKey $formKey
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -141,6 +152,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->configurationPool = $configurationPool;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->localeFormat = $localeFormat;
+        $this->formKey = $formKey;
     }
 
     /**
@@ -149,6 +161,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         return [
+            'formKey' => $this->formKey->getFormKey(),
             'customerData' => $this->getCustomerData(),
             'quoteData' => $this->getQuoteData(),
             'quoteItemData' => $this->getQuoteItemData(),
@@ -247,7 +260,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $quoteId = $this->checkoutSession->getQuote()->getId();
         if ($quoteId) {
             $quoteItems = $this->quoteItemRepository->getList($quoteId);
-            foreach($quoteItems as $index => $quoteItem) {
+            foreach ($quoteItems as $index => $quoteItem) {
                 $quoteItemData[$index] = $quoteItem->toArray();
                 $quoteItemData[$index]['options'] = $this->getFormattedOptionValue($quoteItem);
             }

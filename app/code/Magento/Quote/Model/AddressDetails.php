@@ -8,8 +8,8 @@ namespace Magento\Quote\Model;
 /**
  * @codeCoverageIgnoreStart
  */
-class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements \Magento\Quote\Api\Data\AddressDetailsInterface
+class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Quote\Api\Data\AddressDetailsInterface
 {
     /**
      * @{inheritdoc}
@@ -73,5 +73,43 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel
     public function setFormattedShippingAddress($formattedShippingAddress)
     {
         return $this->setData(self::FORMATTED_SHIPPING_ADDRESS, $formattedShippingAddress);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Quote\Api\Data\AddressDetailsExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Quote\Api\Data\AddressDetailsExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Quote\Api\Data\AddressDetailsExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function getGrandTotal()
+    {
+        return $this->getData(self::GRAND_TOTAL);
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function setGrandTotal($grandTotal)
+    {
+        return $this->setData(self::GRAND_TOTAL, $grandTotal);
     }
 }

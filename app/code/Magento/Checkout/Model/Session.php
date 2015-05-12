@@ -88,6 +88,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $quoteIdMaskFactory;
 
     /**
+     * @param bool
+     */
+    protected $isQuoteMasked;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -96,6 +101,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\Session\StorageInterface $storage
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
@@ -104,6 +110,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -115,6 +122,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Session\StorageInterface $storage,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\App\State $appState,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
@@ -140,9 +148,9 @@ class Session extends \Magento\Framework\Session\SessionManager
             $validator,
             $storage,
             $cookieManager,
-            $cookieMetadataFactory
+            $cookieMetadataFactory,
+            $appState
         );
-        $this->start();
     }
 
     /**
@@ -483,17 +491,18 @@ class Session extends \Magento\Framework\Session\SessionManager
 
     /**
      * @param $isQuoteMasked bool
+     * @return void
      */
-    public function setIsQuoteMasked($isQuoteMasked)
+    protected function setIsQuoteMasked($isQuoteMasked)
     {
-        $this->storage->setData('quote_id_masked', $isQuoteMasked);
+        $this->isQuoteMasked = $isQuoteMasked;
     }
 
     /**
      * @return bool|null
      */
-    public function isQuoteMasked()
+    protected function isQuoteMasked()
     {
-        return $this->storage->getData('quote_id_masked');
+        return $this->isQuoteMasked;
     }
 }

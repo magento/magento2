@@ -6,6 +6,10 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 class SaveShippingMethod extends \Magento\Checkout\Controller\Onepage
 {
     /**

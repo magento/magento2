@@ -5,6 +5,10 @@
  */
 namespace Magento\Checkout\Block\Onepage;
 
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 class Review extends AbstractOnepage
 {
     /**

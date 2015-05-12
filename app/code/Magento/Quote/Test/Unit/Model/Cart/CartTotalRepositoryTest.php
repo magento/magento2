@@ -18,7 +18,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configurationPoolMock;
+    protected $converterMock;
 
     /**
      * @var \Magento\Quote\Model\Cart\CartTotalRepository
@@ -66,8 +66,8 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configurationPoolMock = $this->getMock(
-            '\Magento\Catalog\Helper\Product\ConfigurationPool',
+        $this->converterMock = $this->getMock(
+            'Magento\Quote\Model\Cart\Totals\ItemConverter',
             [],
             [],
             '',
@@ -80,7 +80,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
                 'totalsFactory' => $this->totalsFactoryMock,
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
-                'configurationPool' => $this->configurationPoolMock,
+                'converter' => $this->converterMock,
             ]
         );
     }
@@ -90,19 +90,18 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $cartId = 12;
         $itemMock = $this->getMock(
             'Magento\Quote\Model\Quote\Item',
-            ['setWeeeTaxApplied', 'getWeeeTaxApplied', 'toArray', 'getProductType'],
+            [],
             [],
             '',
             false
         );
-        $itemToArray = ['name' => 'item'];
         $visibleItems = [
             11 => $itemMock,
         ];
-        $configMock1 = $this->getMock('\Magento\Catalog\Helper\Product\Configuration', [], [], '', false);
-        $configMock2 = $this->getMock('\Magento\Catalog\Helper\Product\Configuration', [], [], '', false);
-        $typesMap = [['simple', $configMock1], ['default', $configMock2]];
-
+        $itemArray = [
+            'name' => 'item',
+            'options' => [ 4 => ['label' => 'justLabel']],
+        ];
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with($cartId)
             ->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($this->addressMock);
@@ -110,27 +109,19 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('getData')->willReturn(['quoteData']);
 
         $this->quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn($visibleItems);
-        $itemMock->expects($this->once())->method('setWeeeTaxApplied')->with([1, 2, 3]);
-        $itemMock->expects($this->once())->method('getWeeeTaxApplied')->willReturn(serialize([1, 2, 3]));
-        $itemMock->expects($this->once())->method('toArray')->willReturn($itemToArray);
 
         $totalsMock = $this->getMock('Magento\Quote\Model\Cart\Totals', ['setItems'], [], '', false);
         $this->totalsFactoryMock->expects($this->once())->method('create')->willReturn($totalsMock);
         $this->dataObjectHelperMock->expects($this->once())->method('populateWithArray');
-        //expectations of method getFormattedOptionsValue()
-        $itemMock->expects($this->any())->method('getProductType')->willReturn('simple');
-        $this->configurationPoolMock->expects($this->atLeastOnce())
-            ->method('getByProductType')
-            ->willReturnMap($typesMap);
-        $configMock1->expects($this->once())->method('getOptions')->willReturn([4 => ['label' => 'justLabel']]);
-        $configMock2->expects($this->once())->method('getFormattedOptionValue');
+        $this->converterMock->expects($this->once())
+            ->method('modelToDataObject')
+            ->with($itemMock)
+            ->willReturn($itemArray);
+
         //back in get()
         $totalsMock->expects($this->once())->method('setItems')->with(
             [
-            11 => [
-                    'name' => 'item',
-                    'options' => [ 4 => ['label' => 'justLabel']],
-                ],
+            11 => $itemArray,
             ]
         );
 

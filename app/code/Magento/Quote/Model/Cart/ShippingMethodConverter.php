@@ -28,6 +28,7 @@ class ShippingMethodConverter
      *
      * @param \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $shippingMethodDataFactory Shipping method factory.
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager Store manager interface.
+     * @param \Magento\Tax\Helper\Data $taxHelper Tax data helper.
      */
     public function __construct(
         \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory $shippingMethodDataFactory,
@@ -78,7 +79,7 @@ class ShippingMethodConverter
      */
     private function getShippingPriceWithFlag($rateModel, $flag)
     {
-        return $price = $this->taxHelper->getShippingPrice(
+        return $this->taxHelper->getShippingPrice(
             $rateModel->getPrice(),
             $flag,
             $rateModel->getAddress(),

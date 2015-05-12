@@ -8,7 +8,7 @@ define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_GiftMessage/Item-level-gift-message',
+                template: 'Magento_GiftMessage/item-level-gift-message',
                 displayArea: 'itemLevelGiftMessage'
             },
             messages: {},

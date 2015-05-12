@@ -18,6 +18,8 @@ interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataI
 
     const FORMATTED_SHIPPING_ADDRESS = 'formatted_shipping_address';
 
+    const GRAND_TOTAL = 'grand_total';
+
     /**#@-*/
 
     /**
@@ -63,4 +65,33 @@ interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @return $this
      */
     public function setFormattedShippingAddress($formattedShippingAddress);
+
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Quote\Api\Data\AddressDetailsExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Quote\Api\Data\AddressDetailsExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Quote\Api\Data\AddressDetailsExtensionInterface $extensionAttributes
+    );
+
+    /**
+     * @return float
+     */
+    public function getGrandTotal();
+
+    /**
+     * @param float $grandTotal
+     * @return $this
+     */
+    public function setGrandTotal($grandTotal);
 }

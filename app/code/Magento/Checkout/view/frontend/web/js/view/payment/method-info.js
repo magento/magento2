@@ -6,17 +6,20 @@
 /*global define*/
 define(
     [
-        'uiComponent',
+        'Magento_Checkout/js/view/payment/generic',
         '../../model/payment-service'
     ],
-    function (Component, paymentService) {
-        return Component.extend({
+    function (generic, paymentService) {
+        return generic.extend({
             defaults: {
                 titleTemplate: 'Magento_Checkout/payment/generic-title',
-                displayArea: 'paymentMethods'
+                displayArea: 'paymentMethods',
+                isEnabled: true
             },
-            getCode: function() {
-                return this.index;
+            initObservable: function () {
+                this._super()
+                    .observe('isEnabled');
+                return this;
             },
             getMethod: function() {
                 var paymentMethods = _.indexBy(paymentService.getAvailablePaymentMethods()(), 'code');
@@ -31,15 +34,6 @@ define(
             },
             isActive: function(parent) {
                 return this.isAvailable() && parent.isMethodActive(this.getCode());
-            },
-            getData: function() {
-                return {};
-            },
-            getInfo: function() {
-                return [];
-            },
-            afterSave: function() {
-                return true;
             }
         });
     }

@@ -8,10 +8,9 @@ define(
         '../model/quote',
         '../model/url-builder',
         '../model/step-navigator',
-        'mage/storage',
-        'Magento_Ui/js/model/errorlist'
+        'Magento_Checkout/js/model/shipping-service'
     ],
-    function (quote, urlBuilder, navigator, storage, errorList) {
+    function (quote, urlBuilder, navigator, shippingService) {
         "use strict";
         return function (code, customOptions) {
             if (!code) {
@@ -22,6 +21,7 @@ define(
             quote.setShippingMethod(shippingMethodCode);
             quote.setSelectedShippingMethod(code);
             quote.setShippingCustomOptions(customOptions);
+            quote.setSubtotal('shipping-method', shippingService.getRateByCode(shippingMethodCode));
             navigator.setCurrent('shippingMethod').goNext();
         };
     }

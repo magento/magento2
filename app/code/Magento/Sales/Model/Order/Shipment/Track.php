@@ -12,7 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Track _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Shipment\Track getResource()
- * @method \Magento\Sales\Model\Order\Shipment\Track setCreatedAt(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -230,6 +229,14 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     public function getCreatedAt()
     {
         return $this->getData(ShipmentTrackInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(ShipmentTrackInterface::CREATED_AT, $createdAt);
     }
 
     /**
