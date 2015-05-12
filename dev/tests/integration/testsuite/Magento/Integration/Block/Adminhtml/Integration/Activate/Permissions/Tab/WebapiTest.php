@@ -7,18 +7,13 @@
 namespace Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab;
 
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
-use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info as IntegrationInfoTab;
+use Magento\Integration\Model\Integration;
 
 /**
  * @magentoDataFixture Magento/Integration/_files/integration_all_permissions.php
  */
 class WebapiTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi
-     */
-    protected $apiTabBlock;
-
     /** @var \Magento\Framework\Registry */
     protected $registry;
 
@@ -69,7 +64,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     public function testCanShowTabPositive()
     {
         $integrationData = $this->getFixtureIntegration()->getData();
-        $integrationData[IntegrationInfoTab::DATA_SETUP_TYPE] = \Magento\Integration\Model\Integration::TYPE_CONFIG;
+        $integrationData[Integration::SETUP_TYPE] = Integration::TYPE_CONFIG;
         $this->registry->register(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
         $this->assertTrue($this->createApiTabBlock()->canShowTab());
     }
@@ -86,11 +81,11 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Integration\Model\Integration
+     * @return Integration
      */
     protected function getFixtureIntegration()
     {
-        /** @var $integration \Magento\Integration\Model\Integration */
+        /** @var $integration Integration */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $integration = $objectManager->create('Magento\Integration\Model\Integration');
         return $integration->load('Fixture Integration', 'name');
