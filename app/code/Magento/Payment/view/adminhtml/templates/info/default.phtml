@@ -14,6 +14,10 @@
 ?>
 <?php echo $block->escapeHtml($block->getMethod()->getTitle()) ?>
 
+<?php if ($fraud_msg = $block->escapeHtml($block->getMethod()->getFraudMessage())):?>
+    <br/><b><?php echo __('Fraud status')?>:</b> <?php echo __($fraud_msg)?>
+<?php endif;?>
+
 <?php if ($_specificInfo = $block->getSpecificInformation()):?>
 <table class="data-table" cellspacing="0">
 <?php foreach ($_specificInfo as $_label => $_value):?>

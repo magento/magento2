@@ -766,6 +766,17 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     }
 
     /**
+     * Retrieve fraud message if exists
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getFraudMessage()
+    {
+        return $this->getInfoInstance()->getAdditionalInformation('fraud_msg');
+    }
+
+    /**
      * Retrieve information from payment configuration
      *
      * @param string $field
