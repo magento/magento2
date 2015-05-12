@@ -147,7 +147,7 @@ class InstallCommand extends AbstractSetupCommand
             foreach ($errors as $error) {
                 $output->writeln("<error>$error</error>");
             }
-            throw new \InvalidArgumentException('Parameters validation is failed');
+            throw new \InvalidArgumentException('Parameter validation failed');
         }
     }
 
