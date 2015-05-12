@@ -47,6 +47,7 @@ class SwitcherTest extends \PHPUnit_Framework_TestCase
         $this->corePostDataHelper->expects($this->any())->method('getPostData')
             ->with(null, ['___store' => 'new-store', '___from_store' => 'current-store']);
 
+        $this->markTestIncomplete('MAGETWO-36789');
         $this->switcher->getTargetStorePostData($store);
     }
 
