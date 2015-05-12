@@ -68,7 +68,10 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         );
         $this->configurableTypeFactoryMock = $this->getMockBuilder(
             '\Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory'
-        )->disableOriginalConstructor()->getMock();
+            )
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->priceDataMock = $this->getMockBuilder(
             '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data'
         )->disableOriginalConstructor()->getMock();
@@ -85,6 +88,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->productFactoryMock = $this->getMockBuilder('\Magento\Catalog\Model\ProductFactory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

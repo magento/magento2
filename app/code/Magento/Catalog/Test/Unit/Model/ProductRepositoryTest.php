@@ -197,7 +197,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap')->getMock();
         $this->contentFactoryMock = $this->getMockBuilder(
             'Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterfaceFactory'
-        )->disableOriginalConstructor()->setMethods(['create'])->getMockForAbstractClass();
+        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->contentValidatorMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\ContentValidator')
             ->disableOriginalConstructor()
             ->getMock();
