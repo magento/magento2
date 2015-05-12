@@ -18,7 +18,7 @@ interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataI
 
     const FORMATTED_SHIPPING_ADDRESS = 'formatted_shipping_address';
 
-    const GRAND_TOTAL = 'grand_total';
+    const SUBTOTAL = 'subtotal';
 
     /**#@-*/
 
@@ -87,11 +87,11 @@ interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * @return float
      */
-    public function getGrandTotal();
+    public function getSubtotal();
 
     /**
-     * @param float $grandTotal
+     * @param float $subtotal
      * @return $this
      */
-    public function setGrandTotal($grandTotal);
+    public function setSubtotal($subtotal);
 }

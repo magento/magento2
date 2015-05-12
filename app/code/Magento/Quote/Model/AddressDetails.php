@@ -100,16 +100,16 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     /**
      * @{inheritdoc}
      */
-    public function getGrandTotal()
+    public function getSubtotal()
     {
-        return $this->getData(self::GRAND_TOTAL);
+        return $this->getData(self::SUBTOTAL);
     }
 
     /**
      * @{inheritdoc}
      */
-    public function setGrandTotal($grandTotal)
+    public function setSubtotal($subtotal)
     {
-        return $this->setData(self::GRAND_TOTAL, $grandTotal);
+        return $this->setData(self::SUBTOTAL, $subtotal);
     }
 }
