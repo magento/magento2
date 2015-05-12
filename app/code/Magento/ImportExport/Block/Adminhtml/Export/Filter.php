@@ -94,18 +94,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $toValue = $this->escapeHtml(next($value));
         }
 
-        return '<strong class="admin__control-support-text">' . __(
-            'From'
-        ) . ':</strong>&nbsp;' . $dateBlock->setValue(
-            $fromValue
-        )->getHtml() . '&nbsp;<strong class="admin__control-support-text">
-' . __(
-    'To'
-) . ':</strong>&nbsp;' . $dateBlock->setId(
-            $dateBlock->getId() . '_to'
-        )->setValue(
-            $toValue
-        )->getHtml();
+        return '<strong class="admin__control-support-text">' . __('From') . ':</strong>&nbsp;'
+            . $dateBlock->setValue($fromValue)->getHtml()
+            . '&nbsp;<strong class="admin__control-support-text">' . __('To') . ':</strong>&nbsp;'
+            . $dateBlock->setId($dateBlock->getId() . '_to')->setValue($toValue)->getHtml();
     }
 
     /**

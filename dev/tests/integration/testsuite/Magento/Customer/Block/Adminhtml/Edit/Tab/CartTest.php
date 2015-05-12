@@ -81,7 +81,10 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->_block->setCollection($mockCollection);
-        $this->assertContains("<div class=\"admin__data-grid-header admin__data-grid-toolbar\"", $this->_block->getGridParentHtml());
+        $this->assertContains(
+            "<div class=\"admin__data-grid-header admin__data-grid-toolbar\"",
+            $this->_block->getGridParentHtml()
+        );
     }
 
     public function testGetRowUrl()

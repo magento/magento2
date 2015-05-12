@@ -87,7 +87,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($helper));
 
         $this->itemBlock = new \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item(
-            $context, $productConfig, $productConfigPool
+            $context,
+            $productConfig,
+            $productConfigPool
         );
     }
 
