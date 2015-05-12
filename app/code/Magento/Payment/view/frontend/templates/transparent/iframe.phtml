@@ -18,6 +18,10 @@ $params = $block->getParams();
             window.top.location="<?php echo $block->escapeUrl($params['redirect_parent']) ?>";
         <?php elseif (isset($params['error_msg'])): ?>
             window.top.alert(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
+            var require = window.top.require;
+            require(['jquery'], function($) {
+                $('#opc-review').trigger('hideAjaxLoader');
+            });
         <?php elseif (isset($params['order_success'])): ?>
             window.top.location = "<?php echo $params['order_success'] ?>";
         <?php else: ?>
