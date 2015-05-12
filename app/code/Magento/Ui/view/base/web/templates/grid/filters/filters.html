@@ -7,21 +7,15 @@
 
 <div class="data-grid-search-control-wrap">
     <input
-        class="admin__control-text data-grid-search-control"
-        placeholder="Search by keyword"
-        type="text"/>
+            class="admin__control-text data-grid-search-control"
+            data-bind='attr: {placeholder: $t("Search by keyword")}'
+            type="text"/>
     <button
-        class="action-submit"
-        type="submit"><span data-bind="text: $t('Search')"></span></button>
+            class="action-submit"
+            type="submit"><span data-bind="text: $t('Search')"></span></button>
     <ul class="action-menu _active">
         <li>
-            <a class="action-menu-item" href>Lorem</a>
-        </li>
-        <li>
-            <a class="action-menu-item" href>Lorem 1</a>
-        </li>
-        <li>
-            <a class="action-menu-item" href>Lorem 2</a>
+            <a class="action-menu-item"></a>
         </li>
     </ul>
 </div>

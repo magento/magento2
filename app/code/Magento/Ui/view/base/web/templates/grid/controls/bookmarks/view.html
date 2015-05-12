@@ -16,14 +16,14 @@
             class="action-submit"
             data-bind="click: function(){ $parent.close().saveView($data) }, attr: {title: $t('Save all changes')}"
             type="button">
-            <span data-bind="text: $t('Submit')">Submit</span>
+            <span data-bind="text: $t('Submit')"></span>
         </button>
         <div class="action-dropdown-menu-item-actions">
             <button
                 data-bind="click: function(){ $parent.close().removeView($data) }, attr: {title: $t('Delete bookmark')}"
                 class="action-delete"
                 type="button">
-                <span data-bind="text: $t('Delete')">Delete</span>
+                <span data-bind="text: $t('Delete')"></span>
             </button>
         </div>
     </div>
