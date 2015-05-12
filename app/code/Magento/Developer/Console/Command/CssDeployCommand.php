@@ -191,7 +191,7 @@ class CssDeployCommand extends Command
 
         if (!$this->validator->isValid($locale)) {
             throw new \InvalidArgumentException(
-                $locale . ' argument has invalid value please run info:language:list for list of available locales'
+                $locale . ' argument has invalid value, please run info:language:list for list of available locales'
             );
         }
 

@@ -108,7 +108,7 @@ class DeployStaticContentCommand extends Command
 
             if (!$this->validator->isValid($lang)) {
                 throw new \InvalidArgumentException(
-                    $lang . ' argument has invalid value please run info:language:list for list of available locales'
+                    $lang . ' argument has invalid value, please run info:language:list for list of available locales'
                 );
             }
         }

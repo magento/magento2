@@ -108,7 +108,7 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ARG_IS_WRONG argument has invalid value please run info:language:list
+     * @expectedExceptionMessage ARG_IS_WRONG argument has invalid value, please run info:language:list
      */
     public function testExecuteInvalidLanguageArgument()
     {

@@ -159,7 +159,7 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage WRONG_LOCALE argument has invalid value please run info:language:list
+     * @expectedExceptionMessage WRONG_LOCALE argument has invalid value, please run info:language:list
      */
     public function testExecuteWithWrongFormat()
     {
