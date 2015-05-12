@@ -28,7 +28,7 @@ define(['jquery'], function($) {
             return addresses;
         },
         newAddress: {
-            getFullAddress: function() {
+            getAddressInline: function() {
                 return 'New Address';
             },
             customerAddressId: null

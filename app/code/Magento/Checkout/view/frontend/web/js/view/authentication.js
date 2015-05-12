@@ -43,6 +43,9 @@ define(
                     login(loginData);
                 }
             },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             isActive: function() {
                 if (customer.isLoggedIn()()) {
                     navigator.setStepEnabled(stepName, false);

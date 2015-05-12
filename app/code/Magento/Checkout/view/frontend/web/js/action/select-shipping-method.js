@@ -17,11 +17,13 @@ define(
                 alert('Please specify a shipping method');
             }
 
-            var shippingMethodCode = code.split("_");
+            var shippingMethodCode = code.split("_"),
+                shippingRate = shippingService.getRateByCode(shippingMethodCode)[0];
+
             quote.setShippingMethod(shippingMethodCode);
             quote.setSelectedShippingMethod(code);
             quote.setShippingCustomOptions(customOptions);
-            quote.setSubtotal('shipping-method', shippingService.getRateByCode(shippingMethodCode));
+            quote.setCollectedTotals('shipping', shippingRate.amount);
             navigator.setCurrent('shippingMethod').goNext();
         };
     }

@@ -21,6 +21,9 @@ define(
             defaults: {
                 template: 'Magento_Checkout/shipping-method'
             },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             stepNumber: navigator.getStepNumber(stepName),
             rates: shippingService.getSippingRates(),
             // Checkout step navigation

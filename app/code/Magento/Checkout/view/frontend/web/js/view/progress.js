@@ -22,10 +22,10 @@ define(
             getClassName: function()
             {
                 className('opc-block-progress');
-                if(quote.getBillingAddress()) {
+                if(quote.getBillingAddress()() && quote.getShippingAddress()()) {
                     className('opc-block-progress active')
                 }
-                if (quote.getPaymentMethod()) {
+                if (quote.getPaymentMethod()()) {
                     className('opc-block-progress order-review-step')
                 }
                 return className()
