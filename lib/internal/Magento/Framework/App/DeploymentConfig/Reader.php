@@ -82,42 +82,20 @@ class Reader
                 $configFile = $path . '/' . $this->configFilePool->getPath($fileKey);
                 $fileData = @include $configFile;
                 if (!empty($fileData)) {
-                    $result = array_merge_recursive($result, $fileData);
-                    $this->flattenParams($result);
+                    $intersection = array_intersect_key($result, $fileData);
+                    if (!empty($intersection)) {
+                        $displayList = '';
+                        foreach (array_keys($intersection) as $key) {
+                            $displayList .= $key . PHP_EOL;
+                        }
+                        throw new \Exception(
+                            "Key collision! The following keys occur in multiple config files:" . PHP_EOL . $displayList
+                        );
+                    }
+                    $result = array_merge($result, $fileData);
                 }
             }
         }
         return $result ?: [];
-    }
-
-    /**
-     * Convert associative array of arbitrary depth to a flat associative array with concatenated key path as keys
-     * each level of array is accessible by path key
-     *
-     * @param array $params
-     * @param string $path
-     * @return array
-     * @throws \Exception
-     */
-    public function flattenParams(array $params, $path = null)
-    {
-        $cache = [];
-
-        foreach ($params as $key => $param) {
-            if ($path) {
-                $newPath = $path . '/' . $key;
-            } else {
-                $newPath = $key;
-            }
-            if (isset($cache[$newPath]) || is_int($key)) {
-                throw new \Exception("Key collision {$newPath} is already defined.");
-            }
-            $cache[$newPath] = $param;
-            if (is_array($param)) {
-                $cache = array_merge($cache, $this->flattenParams($param, $newPath));
-            }
-        }
-
-        return $cache;
     }
 }

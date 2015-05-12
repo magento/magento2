@@ -78,7 +78,6 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetters()
     {
-        $this->reader->expects($this->once())->method('flattenParams')->willReturn(self::$flattenedFixture);
         $this->reader->expects($this->once())->method('load')->willReturn(self::$fixture);
         $this->assertSame(self::$flattenedFixture, $this->_deploymentConfig->get());
         // second time to ensure loader will be invoked only once
@@ -89,7 +88,6 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAvailable()
     {
-        $this->reader->expects($this->once())->method('flattenParams')->willReturn(['a' => 1]);
         $this->reader->expects($this->once())->method('load')->willReturn(['a' => 1]);
         $object = new DeploymentConfig($this->reader);
         $this->assertTrue($object->isAvailable());
@@ -97,7 +95,6 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testNotAvailable()
     {
-        $this->reader->expects($this->once())->method('flattenParams')->willReturn([]);
         $this->reader->expects($this->once())->method('load')->willReturn([]);
         $object = new DeploymentConfig($this->reader);
         $this->assertFalse($object->isAvailable());
@@ -106,11 +103,33 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
     public function testNotAvailableThenAvailable()
     {
         $this->reader->expects($this->at(0))->method('load')->willReturn([]);
-        $this->reader->expects($this->at(1))->method('flattenParams')->willReturn([]);
-        $this->reader->expects($this->at(2))->method('load')->willReturn(['a' => 1]);
-        $this->reader->expects($this->at(3))->method('flattenParams')->willReturn(['a' => 1]);
+        $this->reader->expects($this->at(1))->method('load')->willReturn(['a' => 1]);
         $object = new DeploymentConfig($this->reader);
         $this->assertFalse($object->isAvailable());
         $this->assertTrue($object->isAvailable());
+    }
+
+    /**
+     * @param array $data
+     * @expectedException \Exception
+     * @expectedExceptionMessage Key collision
+     * @dataProvider keyCollisionDataProvider
+     */
+    public function testKeyCollision(array $data)
+    {
+        $this->reader->expects($this->once())->method('load')->willReturn($data);
+        $object = new DeploymentConfig($this->reader);
+        $object->get();
+    }
+
+    public function keyCollisionDataProvider()
+    {
+        return [
+            [
+                ['foo' => ['bar' => '1'], 'foo/bar' => '2'],
+                ['foo/bar' => '1', 'foo' => ['bar' => '2']],
+                ['foo' => ['subfoo' => ['subbar' => '1'], 'subfoo/subbar' => '2'], 'bar' => '3'],
+            ]
+        ];
     }
 }

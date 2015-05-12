@@ -90,6 +90,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Key collision
+     */
     public function testMerging()
     {
         $configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
@@ -103,13 +107,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('getPaths')
             ->willReturn(['configKeyOne' => 'mergeOne.php', 'configKeyTwo' => 'mergeTwo.php']);
         $object = new Reader($this->dirList, $configFilePool);
-        $expected = [
-            'otherFooKey' => [
-                'otherFooValueOne' => ['yetAnotherFooKey' => 'yetAnotherFooValue'],
-                'otherFooValueTwo' => ['yetAnotherFooKeyTwo' => 'yetAnotherFooValueTwo']
-            ]
-        ];
-        $this->assertSame($expected, $object->load());
+        $object->load();
     }
 
     /**
@@ -130,30 +128,5 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['configKeyOne' => 'config.php', 'configKeyTwo' => 'duplicateConfig.php']);
         $object = new Reader($this->dirList, $configFilePool);
         $object->load();
-    }
-
-    /**
-     * @param array $data
-     * @expectedException \Exception
-     * @expectedExceptionMessage Key collision
-     * @dataProvider flattenParamsDataProvider
-     */
-    public function testFlattenParams(array $data)
-    {
-        $object = new Reader($this->dirList, $this->configFilePool);
-        $object->flattenParams($data);
-    }
-
-    public function flattenParamsDataProvider()
-    {
-        return [
-            [
-                ['foo' => ['bar' => '1'], 'foo/bar' => '2'],
-                ['foo/bar' => '1', 'foo' => ['bar' => '2']],
-                ['foo' => ['subfoo' => ['subbar' => '1'], 'subfoo/subbar' => '2'], 'bar' => '3'],
-                ['foo' => ['bar' => '1'], 'somevalue'],
-                [1 => 'foo', 2 => 'bar']
-            ]
-        ];
     }
 }
