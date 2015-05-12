@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eb32c28075b2f343240b21d18a62385e",
+    "hash": "ec90753bbe386d72e3210ce0135b5a36",
     "packages": [
         {
             "name": "composer/composer",
@@ -2016,16 +2016,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.7",
+            "version": "v1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "6425aeb97ab921371182712a18c280d546e7769b"
+                "reference": "93c723fe0c50ed54292006e7249a4c1173cf5847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/6425aeb97ab921371182712a18c280d546e7769b",
-                "reference": "6425aeb97ab921371182712a18c280d546e7769b",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/93c723fe0c50ed54292006e7249a4c1173cf5847",
+                "reference": "93c723fe0c50ed54292006e7249a4c1173cf5847",
                 "shasum": ""
             },
             "require": {
@@ -2065,8 +2065,8 @@
                     "email": "fabien@symfony.com"
                 }
             ],
-            "description": "A script to automatically fix Symfony Coding Standard",
-            "time": "2015-04-16 07:21:30"
+            "description": "A tool to automatically fix PHP code style",
+            "time": "2015-05-04 17:06:20"
         },
         {
             "name": "league/climate",
