@@ -25,19 +25,14 @@ class GenerateFixturesCommand extends Command
     /**
      * @var FixtureModel
      */
-    private $application;
+    private $fixtureModel;
 
     /**
-     * @var Config
+     * @param FixtureModel $fixtureModel
      */
-    private $config;
-
-    /**
-     * @param FixtureModel $application
-     */
-    public function __construct(FixtureModel $application)
+    public function __construct(FixtureModel $fixtureModel)
     {
-        $this->application = $application;
+        $this->fixtureModel = $fixtureModel;
         parent::__construct();
     }
 
@@ -66,23 +61,22 @@ class GenerateFixturesCommand extends Command
         try {
             $totalStartTime = microtime(true);
 
-
-            $application = $this->application;
-            $application->initObjectManager();
-            $application->loadFixtures();
-            $application->loadConfig($input->getArgument(self::PROFILE_ARGUMENT));
+            $fixtureModel = $this->fixtureModel;
+            $fixtureModel->initObjectManager();
+            $fixtureModel->loadFixtures();
+            $fixtureModel->loadConfig($input->getArgument(self::PROFILE_ARGUMENT));
 
             $output->writeln('<info>Generating profile with following params:</info>');
 
-            foreach ($application->getParamLabels() as $configKey => $label) {
-                $output->writeln('<info> |- ' . $label . ': ' . $application->getValue($configKey) . '</info>');
+            foreach ($fixtureModel->getParamLabels() as $configKey => $label) {
+                $output->writeln('<info> |- ' . $label . ': ' . $fixtureModel->getValue($configKey) . '</info>');
             }
 
             /** @var $config \Magento\Indexer\Model\Config */
-            $config = $application->getObjectManager()->get('Magento\Indexer\Model\Config');
+            $config = $fixtureModel->getObjectManager()->get('Magento\Indexer\Model\Config');
             $indexerListIds = $config->getIndexers();
             /** @var $indexerRegistry \Magento\Indexer\Model\IndexerRegistry */
-            $indexerRegistry = $application->getObjectManager()->create('Magento\Indexer\Model\IndexerRegistry');
+            $indexerRegistry = $fixtureModel->getObjectManager()->create('Magento\Indexer\Model\IndexerRegistry');
             $indexersState = [];
             foreach ($indexerListIds as $key => $indexerId) {
                 $indexer = $indexerRegistry->get($indexerId['indexer_id']);
@@ -90,7 +84,7 @@ class GenerateFixturesCommand extends Command
                 $indexer->setScheduled(true);
             }
 
-            foreach ($application->getFixtures() as $fixture) {
+            foreach ($fixtureModel->getFixtures() as $fixture) {
                 $output->write($fixture->getActionTitle() . '... ');
                 $startTime = microtime(true);
                 $fixture->execute();
@@ -105,7 +99,7 @@ class GenerateFixturesCommand extends Command
                 $indexer->setScheduled($indexersState[$indexerId['indexer_id']]);
             }
 
-            $application->reindex($output);
+            $fixtureModel->reindex($output);
             $totalEndTime = microtime(true);
             $totalResultTime = $totalEndTime - $totalStartTime;
 

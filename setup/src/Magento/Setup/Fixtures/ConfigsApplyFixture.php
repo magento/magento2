@@ -25,6 +25,7 @@ class ConfigsApplyFixture extends Fixture
         if (empty($configs)) {
             return;
         }
+        $configs = $this->fixtureModel->getValue('configs', []);
         $this->fixtureModel->resetObjectManager();
 
         foreach ($configs['config'] as $config) {

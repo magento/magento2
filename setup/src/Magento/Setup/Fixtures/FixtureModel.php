@@ -14,7 +14,6 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Xml\Parser;
 
-
 class FixtureModel
 {
     /**
@@ -42,7 +41,7 @@ class FixtureModel
     /**
      * List of fixtures applied to the application
      *
-     * @var \Magento\ToolkitFramework\Fixture[]
+     * @var \Magento\Setup\Fixtures\Fixture[]
      */
     protected $fixtures = [];
 

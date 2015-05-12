@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Model\Complex;
+namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\Generator;
 

@@ -8,7 +8,6 @@ namespace Magento\Setup\Fixtures;
 
 /**
  * Class Fixture
- * @package Magento\ToolkitFramework
  */
 abstract class Fixture
 {

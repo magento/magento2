@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Setup\Fixtures;
+
 /**
  * Class OrdersFixture
  */
-class OrdersFixture extends \Magento\ToolkitFramework\Fixture
+class OrdersFixture extends Fixture
 {
     /**
      * @var int
@@ -19,11 +21,11 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $ordersCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('orders', 0);
+        $ordersCount = $this->fixtureModel->getValue('orders', 0);
         if ($ordersCount < 1) {
             return;
         }
-        $this->application->resetObjectManager();
+        $this->fixtureModel->resetObjectManager();
 
         $writeAdapter = $this->getConnection('write');
 
@@ -84,11 +86,11 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
             '\Magento\Eav\Model\Resource\Entity\Store'
         );
         /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->application->getObjectManager()->create('Magento\Store\Model\StoreManager');
+        $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = $this->application->getObjectManager()->get('Magento\Catalog\Model\Category');
+        $category = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Category');
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = $this->application->getObjectManager()->get('Magento\Catalog\Model\Product');
+        $product = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Product');
 
         $result = [];
         $stores = $storeManager->getStores();
@@ -120,10 +122,10 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
                 //Not use root categories
                 if (trim($resultsCategoryName) != '') {
                     /** @var $productCategory \Magento\Catalog\Model\Category */
-                    $productCategory = $this->application->getObjectManager()->get('Magento\Catalog\Model\Category');
+                    $productCategory = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Category');
 
                     /** @var $simpleProductCollection \Magento\Catalog\Model\Resource\Product\Collection */
-                    $simpleProductCollection = $this->application->getObjectManager()->create(
+                    $simpleProductCollection = $this->fixtureModel->getObjectManager()->create(
                         'Magento\Catalog\Model\Resource\Product\Collection'
                     );
 
@@ -293,7 +295,7 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function getTableName($tableName, $resourceName)
     {
-        $resource = $this->application->getObjectManager()->get($resourceName);
+        $resource = $this->fixtureModel->getObjectManager()->get($resourceName);
         return $this->getConnection('write')->getTableName($resource->getTable($tableName));
     }
 
@@ -305,10 +307,8 @@ class OrdersFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function getConnection($resourceName)
     {
-        return $this->application->getObjectManager()->get(
+        return $this->fixtureModel->getObjectManager()->get(
             'Magento\Framework\App\Resource'
         )->getConnection($resourceName);
     }
 }
-
-return new OrdersFixture($this);

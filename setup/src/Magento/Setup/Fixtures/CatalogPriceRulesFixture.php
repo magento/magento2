@@ -18,6 +18,7 @@ class CatalogPriceRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     *
      */
     public function execute()
     {

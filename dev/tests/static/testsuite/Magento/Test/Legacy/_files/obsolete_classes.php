@@ -3544,4 +3544,6 @@ return [
     ],
     ['Magento\ToolkitFramework\Helper\Cli'],
     ['Magento\ToolkitFramework\Config'],
+    ['Magento\ToolkitFramework\Fixture', 'Magento\Setup\Fixtures\Fixture'],
+    ['Magento\ToolkitFramework\Application', 'Magento\Setup\Fixtures\FixtureModel'],
 ];
