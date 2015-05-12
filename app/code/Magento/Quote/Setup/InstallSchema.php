@@ -390,7 +390,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'address_type',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            10,
             [],
             'Address Type'
         )->addColumn(
@@ -408,19 +408,19 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'firstname',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Firstname'
         )->addColumn(
             'middlename',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            40,
+            20,
             [],
             'Middlename'
         )->addColumn(
             'lastname',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Lastname'
         )->addColumn(
@@ -438,19 +438,19 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'street',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'Street'
         )->addColumn(
             'city',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'City'
         )->addColumn(
             'region',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'Region'
         )->addColumn(
@@ -462,25 +462,25 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'postcode',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Postcode'
         )->addColumn(
             'country_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            30,
             [],
             'Country Id'
         )->addColumn(
             'telephone',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Phone Number'
         )->addColumn(
             'fax',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Fax'
         )->addColumn(
@@ -498,7 +498,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'shipping_method',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'Shipping Method'
         )->addColumn(
@@ -1541,13 +1541,22 @@ class InstallSchema implements InstallSchemaInterface
         $table = $installer->getConnection()->newTable(
             $installer->getTable('quote_id_mask')
         )->addColumn(
+            'entity_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Entity Id'
+        )->addColumn(
             'quote_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['identity' => true, 'unsigned' => true, 'nullable' => false],
+            ['unsigned' => true, 'nullable' => false, 'primary' => true],
             'Quote ID'
+        )->addIndex(
+            $installer->getIdxName('quote_id_mask', ['quote_id']),
+            ['quote_id']
         )->addForeignKey(
-            'quote_id',
+            $installer->getFkName('quote_id_mask', 'quote_id', 'quote', 'entity_id'),
             'quote_id',
             $installer->getTable('quote'),
             'entity_id',
