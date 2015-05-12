@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Tests for \Magento\Framework\Data\Form\Element\File
  */
@@ -26,7 +24,7 @@ class HeadingTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $htmlId = 'test_HTML_id';
-        $label = 'test_label';
+        $label  = 'test_label';
 
         $elementMock = $this->getMockBuilder('Magento\Framework\Data\Form\Element\AbstractElement')
             ->disableOriginalConstructor()
