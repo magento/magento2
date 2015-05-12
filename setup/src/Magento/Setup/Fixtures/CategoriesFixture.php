@@ -33,7 +33,6 @@ class CategoriesFixture extends Fixture
         /** @var $category \Magento\Catalog\Model\Category */
         $category = $this->fixtureModel->getObjectManager()->create('Magento\Catalog\Model\Category');
 
-        $groups = [];
         $storeGroups = $storeManager->getGroups();
         $i = 0;
         foreach ($storeGroups as $storeGroup) {

@@ -78,7 +78,7 @@ class GenerateFixturesCommand extends Command
             /** @var $indexerRegistry \Magento\Indexer\Model\IndexerRegistry */
             $indexerRegistry = $fixtureModel->getObjectManager()->create('Magento\Indexer\Model\IndexerRegistry');
             $indexersState = [];
-            foreach ($indexerListIds as $key => $indexerId) {
+            foreach ($indexerListIds as $indexerId) {
                 $indexer = $indexerRegistry->get($indexerId['indexer_id']);
                 $indexersState[$indexerId['indexer_id']] = $indexer->isScheduled();
                 $indexer->setScheduled(true);
