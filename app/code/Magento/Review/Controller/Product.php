@@ -172,7 +172,7 @@ class Product extends \Magento\Framework\App\Action\Action
     /**
      * Initialize and check product
      *
-     * @return CatalogProduct
+     * @return \Magento\Catalog\Model\Product|bool
      */
     protected function initProduct()
     {

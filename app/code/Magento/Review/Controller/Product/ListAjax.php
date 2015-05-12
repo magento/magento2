@@ -13,7 +13,7 @@ class ListAjax extends ProductController
     /**
      * Show list of product's reviews
      *
-     * @return void
+     * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()
     {
