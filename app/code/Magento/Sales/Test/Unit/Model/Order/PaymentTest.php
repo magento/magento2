@@ -36,6 +36,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     protected $priceCurrencyMock;
 
     /**
+     * @var \Magento\Directory\Model\Currency | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $currencyMock;
+
+    /**
      * @var \Magento\Sales\Model\Order | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderMock;
@@ -60,6 +65,21 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected $transactionCollectionFactory;
 
+    /**
+     * @var \Magento\Sales\Model\Service\OrderFactory | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $serviceOrderFactory;
+
+    /**
+     * @var \Magento\Sales\Model\Service\Order | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $serviceOrder;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Creditmemo | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $creditMemoMock;
+
     protected function setUp()
     {
         $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\Manager')
@@ -82,6 +102,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrencyMock = $this->getMockBuilder('Magento\Directory\Model\PriceCurrency')
             ->disableOriginalConstructor()
             ->setMethods(['format'])
+            ->getMock();
+        $this->currencyMock = $this->getMockBuilder('Magento\Directory\Model\Currency')
+            ->disableOriginalConstructor()
+            ->setMethods(['formatTxt'])
             ->getMock();
 
         $this->priceCurrencyMock->expects($this->any())
@@ -161,6 +185,35 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->transactionCollectionFactory = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory',
             [],
+            [],
+            '',
+            false
+        );
+        $this->serviceOrderFactory = $this->getMock(
+            'Magento\Sales\Model\Service\OrderFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->serviceOrder = $this->getMock(
+            'Magento\Sales\Model\Service\Order',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->creditMemoMock = $this->getMock(
+            'Magento\Sales\Model\Order\Creditmemo',
+            [
+                'setPaymentRefundDisallowed',
+                'getItemsCollection',
+                'getItems',
+                'setAutomaticallyCreated',
+                'register',
+                'addComment',
+                'save'
+            ],
             [],
             '',
             false
@@ -633,8 +686,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int $transactionId
+     * @param int $countCall
      */
-    protected function mockInvoice($transactionId)
+    protected function mockInvoice($transactionId, $countCall = 1)
     {
         $this->invoiceMock->expects($this->once())
             ->method('getTransactionId')
@@ -645,7 +699,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->invoiceMock->expects($this->once())
             ->method('getId')
             ->willReturn($transactionId);
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects($this->exactly($countCall))
             ->method('getInvoiceCollection')
             ->willReturn([$this->invoiceMock]);
     }
@@ -1041,6 +1095,39 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testRegisterRefundNotificationTransactionExists()
+    {
+        $amount = 10;
+        $this->payment->setParentTransactionId($this->transactionId);
+        $transaction = $this->getMock(
+            'Magento\Sales\Model\Resource\Order\Payment\Transaction',
+            ['setOrderPaymentObject', 'loadByTxnId', 'getId'],
+            [],
+            '',
+            false
+        );
+        $this->transactionFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($transaction);
+        $transaction->expects($this->atLeastOnce())
+            ->method('setOrderPaymentObject')
+            ->with($this->payment)
+            ->willReturnSelf();
+        $transaction->expects($this->exactly(2))
+            ->method('loadByTxnId')
+            ->withConsecutive(
+                [$this->transactionId],
+                [$this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND]
+            )->willReturnSelf();
+        $transaction->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturnOnConsecutiveCalls(
+                $this->transactionId,
+                $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
+            );
+        $this->assertSame($this->payment, $this->payment->registerRefundNotification($amount));
+    }
+
     /**
      * @dataProvider boolProvider
      */
@@ -1069,6 +1156,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Order\Payment',
             [
                 'context' => $context,
+                'serviceOrderFactory' => $this->serviceOrderFactory,
                 'paymentData' => $this->helperMock,
                 'priceCurrency' => $this->priceCurrencyMock,
                 'transactionFactory' => $this->transactionFactory,
