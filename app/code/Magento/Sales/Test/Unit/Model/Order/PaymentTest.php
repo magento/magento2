@@ -1231,7 +1231,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($grandTotalCreditMemo, $this->payment->getData('amount_refunded'));
     }
 
-    public function testRegisterRefundNotificationNotRightAmount()
+    public function testRegisterRefundNotificationWrongAmount()
     {
         $amount = 30;
         $grandTotalCreditMemo = 50;
