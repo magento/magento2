@@ -5,6 +5,7 @@
  */
 namespace Magento\Checkout\Block;
 
+use Magento\Checkout\Block\Checkout\LayoutProcessorInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Config as AddressConfig;
 
@@ -30,19 +31,14 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $jsLayout;
 
     /**
-     * @var \Magento\Quote\Model\Quote\AddressDataProvider
-     */
-    protected $addressDataProvider;
-
-    /**
      * @var \Magento\Checkout\Model\CompositeConfigProvider
      */
     protected $configProvider;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface[]
+     * @var array|Checkout\LayoutProcessorInterface[]
      */
-    protected $customLayoutProviders;
+    protected $layoutProcessors;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -57,9 +53,8 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Framework\Data\Form\FormKey $formKey
-     * @param \Magento\Quote\Model\Quote\AddressDataProvider $addressDataProvider
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
-     * @param \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface[] $customLayoutProviders
+     * @param LayoutProcessorInterface[] $layoutProcessors
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -76,9 +71,8 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         \Magento\Framework\Data\Form\FormKey $formKey,
-        \Magento\Quote\Model\Quote\AddressDataProvider $addressDataProvider,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
-        array $customLayoutProviders = [],
+        array $layoutProcessors = [],
         array $data = []
     ) {
         parent::__construct(
@@ -98,9 +92,8 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         $this->formKey = $formKey;
         $this->_isScopePrivate = true;
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
-        $this->addressDataProvider = $addressDataProvider;
         $this->configProvider = $configProvider;
-        $this->customLayoutProviders = $customLayoutProviders;
+        $this->layoutProcessors = $layoutProcessors;
     }
 
     /**
@@ -108,28 +101,8 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      */
     public function getJsLayout()
     {
-        // The following code is a workaround for custom address attributes
-        if (isset($this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
-            ['children']['billing-address-fieldset']['children']
-        )) {
-            $fields = $this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
-                ['children']['billing-address-fieldset']['children'];
-            $this->jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
-                ['children']['billing-address-fieldset']['children'] = $this->addressDataProvider
-                    ->getAdditionalAddressFields('checkoutProvider', 'billingAddress', $fields);
-        }
-        if (isset($this->jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
-            ['children']['shipping-address-fieldset']['children']
-        )) {
-            $fields = $this->jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
-            ['children']['shipping-address-fieldset']['children'];
-            $this->jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
-            ['children']['shipping-address-fieldset']['children'] = $this->addressDataProvider
-                ->getAdditionalAddressFields('checkoutProvider', 'shippingAddress', $fields);
-        }
-        foreach ($this->customLayoutProviders as $dataProvider) {
-            $customFormLayout = $dataProvider->getData();
-            $this->jsLayout = array_merge_recursive($this->jsLayout, $customFormLayout);
+        foreach ($this->layoutProcessors as $processor) {
+            $this->jsLayout = $processor->process($this->jsLayout);
         }
         return \Zend_Json::encode($this->jsLayout);
     }
