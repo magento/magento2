@@ -63,7 +63,7 @@ class AsyncIndexingTest extends \PHPUnit_Framework_TestCase
     public function testAfterSave($value, $oldValue, $eventName)
     {
         $path = 'dev/grid/async_indexing';
-        $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT;
+        $scope = \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
 
         $this->object->setData(['value' => $value, 'path' => $path, 'scope' => $scope]);
 

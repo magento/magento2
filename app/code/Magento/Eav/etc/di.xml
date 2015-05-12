@@ -57,4 +57,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Entity\Attribute">
+        <arguments>
+            <argument name="reservedAttributeList" xsi:type="object">Magento\Catalog\Model\Product\ReservedAttributeList\Proxy</argument>
+        </arguments>
+    </type>
 </config>

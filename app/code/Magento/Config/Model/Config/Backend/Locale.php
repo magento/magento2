@@ -9,6 +9,8 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class Locale extends \Magento\Framework\App\Config\Value
 {
     /**
@@ -91,7 +93,7 @@ class Locale extends \Magento\Framework\App\Config\Value
                     }
 
                     switch ($data->getScope()) {
-                        case \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT:
+                        case ScopeConfigInterface::SCOPE_TYPE_DEFAULT:
                             $scopeName = __('Default scope');
                             break;
 

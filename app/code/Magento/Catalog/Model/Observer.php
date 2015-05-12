@@ -34,7 +34,14 @@ class Observer
      *
      * @var \Magento\Catalog\Model\Layer
      */
-    protected $_catalogLayer;
+    private $_catalogLayer = null;
+
+    /**
+     * Catalog layer resolver
+     *
+     * @var \Magento\Catalog\Model\Layer\Resolver
+     */
+    protected $layerResolver;
 
     /**
      * Store manager
@@ -95,7 +102,7 @@ class Observer
         $this->_categoryResource = $categoryResource;
         $this->_catalogProduct = $catalogProduct;
         $this->_storeManager = $storeManager;
-        $this->_catalogLayer = $layerResolver->get();
+        $this->layerResolver = $layerResolver;
         $this->_catalogCategory = $catalogCategory;
         $this->_catalogData = $catalogData;
         $this->categoryFlatConfig = $categoryFlatState;
@@ -184,16 +191,29 @@ class Observer
      */
     protected function hasActive($category)
     {
-        if (!$this->_catalogLayer) {
+        $catalogLayer = $this->getCatalogLayer();
+        if (!$catalogLayer) {
             return false;
         }
 
-        $currentCategory = $this->_catalogLayer->getCurrentCategory();
+        $currentCategory = $catalogLayer->getCurrentCategory();
         if (!$currentCategory) {
             return false;
         }
 
         $categoryPathIds = explode(',', $currentCategory->getPathInStore());
         return in_array($category->getId(), $categoryPathIds);
+    }
+
+    /**
+     * Get catalog layer
+     * @return \Magento\Catalog\Model\Layer
+     */
+    private function getCatalogLayer()
+    {
+        if ($this->_catalogLayer === null) {
+            $this->_catalogLayer = $this->layerResolver->get();
+        }
+        return $this->_catalogLayer;
     }
 }

@@ -14,9 +14,8 @@
         data-bind="click: toggleOpened"
         data-toggle="dropdown"
         aria-haspopup="true">
-        <span class="admin__action-dropdown-text">
-            <!-- ko text: activeView() ? activeView().label() : 'Default View'--><!-- /ko -->
-        </span>
+        <span class="admin__action-dropdown-text"
+                data-bind="text: activeView() ? activeView().label() : $t('Default View') "></span>
     </button>
     <ul class="admin__action-dropdown-menu">
         <!-- ko foreach: elems -->
