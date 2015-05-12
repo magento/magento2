@@ -270,7 +270,7 @@ abstract class AbstractType
                         ))
                     ) {
                         $this->_entityModel->addRowError(
-                            \Magento\CatalogImportExport\Model\Import\Product::ERROR_VALUE_IS_REQUIRED,
+                            \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
                             $rowNum,
                             $attrCode
                         );
