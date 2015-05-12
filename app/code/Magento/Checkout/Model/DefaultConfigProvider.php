@@ -149,7 +149,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         QuoteIdMaskFactory $quoteIdMaskFactory,
         LocaleFormat $localeFormat,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
-        \Magento\Customer\Model\Address\Config $addressConfig
+        \Magento\Customer\Model\Address\Config $addressConfig,
         FormKey $formKey
     ) {
         $this->checkoutHelper = $checkoutHelper;
@@ -221,6 +221,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Set additional customer address data
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
+     * @return array
      */
     private function getCustomerAddressInline($address)
     {
