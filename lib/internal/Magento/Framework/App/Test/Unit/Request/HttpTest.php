@@ -9,6 +9,7 @@
 
 namespace Magento\Framework\App\Test\Unit\Request;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use \Magento\Framework\App\Request\Http;
 use Magento\Framework\App\ScopeInterface;
 use Zend\Stdlib\Parameters;
@@ -325,7 +326,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $configMock->expects($this->exactly($configCall))
             ->method('getValue')
-            ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeInterface::SCOPE_DEFAULT)
+            ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
             ->willReturn($configOffloadHeader);
         $this->objectManager->expects($this->exactly($configCall))
             ->method('get')

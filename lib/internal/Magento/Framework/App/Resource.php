@@ -126,6 +126,7 @@ class Resource
      * @param   string|string[] $modelEntity
      * @param   string $connectionName
      * @return  string
+     * @api
      */
     public function getTableName($modelEntity, $connectionName = self::DEFAULT_READ_RESOURCE)
     {

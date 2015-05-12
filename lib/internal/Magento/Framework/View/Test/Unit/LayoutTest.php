@@ -134,9 +134,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->readerContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->readerContextFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->readerContextMock);
         $this->generatorContextFactoryMock = $this->getMockBuilder(
             'Magento\Framework\View\Layout\Generator\ContextFactory'
         )->disableOriginalConstructor()
@@ -683,6 +680,9 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerateElementsWithoutCache()
     {
+        $this->readerContextFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->readerContextMock);
         $layoutCacheId = 'layout_cache_id';
         $handles = ['default', 'another'];
         /** @var \Magento\Framework\View\Layout\Element $xml */
@@ -806,5 +806,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             ->willReturn($elements);
 
         $this->model->generateElements();
+    }
+
+    public function testGetXml()
+    {
+        $xml = '<layout/>';
+        $this->assertSame($xml, \Magento\Framework\View\Layout::LAYOUT_NODE);
     }
 }
