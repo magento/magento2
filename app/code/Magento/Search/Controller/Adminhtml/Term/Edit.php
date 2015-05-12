@@ -17,7 +17,7 @@ class Edit extends TermController
      *
      * @var \Magento\Framework\Registry
      */
-    protected $coreRegistry = null;
+    protected $coreRegistry;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
