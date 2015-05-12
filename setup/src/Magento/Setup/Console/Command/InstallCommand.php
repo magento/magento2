@@ -61,31 +61,23 @@ class InstallCommand extends AbstractSetupCommand
     protected $adminUser;
 
     /**
-     * @var InstallStoreConfigurationCommand
-     */
-    protected $installStoreConfiguration;
-
-    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
      * @param ConfigModel $configModel
      * @param InstallStoreConfigurationCommand $userConfig
      * @param AdminUserCreateCommand $adminUser
-     * @param InstallStoreConfigurationCommand $installStoreConfiguration
      */
     public function __construct(
         InstallerFactory $installerFactory,
         ConfigModel $configModel,
         InstallStoreConfigurationCommand $userConfig,
-        AdminUserCreateCommand $adminUser,
-        InstallStoreConfigurationCommand $installStoreConfiguration
+        AdminUserCreateCommand $adminUser
     ) {
         $this->installerFactory = $installerFactory;
         $this->configModel = $configModel;
         $this->userConfig = $userConfig;
         $this->adminUser = $adminUser;
-        $this->installStoreConfiguration = $installStoreConfiguration;
         parent::__construct();
     }
 
@@ -149,7 +141,7 @@ class InstallCommand extends AbstractSetupCommand
         $errors = $this->configModel->validate($configOptionsToValidate);
         $errors = array_merge($errors, $this->adminUser->validate($input));
         $errors = array_merge($errors, $this->validate($input));
-        $errors = array_merge($errors, $this->installStoreConfiguration->validate($input));
+        $errors = array_merge($errors, $this->userConfig->validate($input));
 
         if (!empty($errors)) {
             foreach ($errors as $error) {

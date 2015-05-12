@@ -74,6 +74,10 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getOptionsList')
             ->will($this->returnValue($this->getOptionsListUserConfig()));
+        $userConfig
+            ->expects($this->once())
+            ->method('validate')
+            ->will($this->returnValue([]));
 
         $adminUser = $this->getMock('Magento\Setup\Console\Command\AdminUserCreateCommand', [], [], '', false);
         $adminUser
@@ -85,25 +89,13 @@ class InstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('validate')
             ->will($this->returnValue([]));
 
-        $installStoreConfiguration = $this->getMock('Magento\Setup\Console\Command\InstallStoreConfigurationCommand',
-            [],
-            [],
-            '',
-            false
-        );
-        $installStoreConfiguration
-            ->expects($this->once())
-            ->method('validate')
-            ->will($this->returnValue([]));
-
         $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
         $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
         $this->command = new InstallCommand(
             $this->installerFactory,
             $configModel,
             $userConfig,
-            $adminUser,
-            $installStoreConfiguration
+            $adminUser
         );
     }
 
