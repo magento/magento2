@@ -33,7 +33,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->file = $objectManager->getObject(
-            '\Magento\Config\Block\System\Config\Form\Field\File',
+            'Magento\Config\Block\System\Config\Form\Field\File',
             [
                 'factoryElement'    => $factoryMock,
                 'factoryCollection' => $collectionFactoryMock,

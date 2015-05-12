@@ -12,11 +12,6 @@ namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 class HeadingTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_objectManagerMock;
-
-    /**
      * @var \Magento\Config\Block\System\Config\Form\Field\File
      */
     protected $file;
@@ -35,7 +30,7 @@ class HeadingTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $heading = $objectManager->getObject('\Magento\Config\Block\System\Config\Form\Field\Heading', []);
+        $heading = $objectManager->getObject('Magento\Config\Block\System\Config\Form\Field\Heading', []);
 
         $html = $heading->render($elementMock);
 
