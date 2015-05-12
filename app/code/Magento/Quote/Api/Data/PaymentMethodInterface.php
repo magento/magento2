@@ -22,13 +22,6 @@ interface PaymentMethodInterface extends \Magento\Framework\Api\ExtensibleDataIn
     public function getTitle();
 
     /**
-     * Get payment method additional info
-     *
-     * @return array
-     */
-    public function getAdditionalInfo();
-
-    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Quote\Api\Data\PaymentMethodExtensionInterface|null
