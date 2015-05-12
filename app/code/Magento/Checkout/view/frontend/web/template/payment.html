@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-payment" class="section allow active" role="presentation">
+<li id="opc-payment" data-bind=", attr: {'class': stepClassAttributes() }" role="presentation">
     <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <span class="number" data-bind="text: stepNumber()"></span>
         <h2 data-bind="text: $t('Payment Information')"></h2>

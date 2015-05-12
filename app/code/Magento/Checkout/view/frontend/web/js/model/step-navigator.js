@@ -13,6 +13,9 @@ define(
     ],
     function($, ko, customer, errorList) {
         var customerIsLoggedIn = customer.isLoggedIn()();
+        var defaultStepClass = 'section';
+        var allowedStepClass = 'allow';
+        var activeStepClass = 'active';
         return {
             currentStep: null,
             steps: [
@@ -20,37 +23,43 @@ define(
                     name: 'authentication',
                     isVisible: ko.observable(!customerIsLoggedIn),
                     isEnabled: true,
-                    number: ko.observable(1)
+                    number: ko.observable(1),
+                    classAttributes: ko.observable(defaultStepClass)
                 },
                 {
                     name: 'billingAddress',
                     isVisible: ko.observable(customerIsLoggedIn),
                     isEnabled: true,
-                    number: ko.observable(2)
+                    number: ko.observable(2),
+                    classAttributes: ko.observable(defaultStepClass)
                 },
                 {
                     name: 'shippingAddress',
                     isVisible: ko.observable(false),
                     isEnabled: true,
-                    number: ko.observable(3)
+                    number: ko.observable(3),
+                    classAttributes: ko.observable(defaultStepClass)
                 },
                 {
                     name: 'shippingMethod',
                     isVisible: ko.observable(false),
                     isEnabled: true,
-                    number: ko.observable(4)
+                    number: ko.observable(4),
+                    classAttributes: ko.observable(defaultStepClass)
                 },
                 {
                     name: 'paymentMethod',
                     isVisible: ko.observable(false),
                     isEnabled: true,
-                    number: ko.observable(5)
+                    number: ko.observable(5),
+                    classAttributes: ko.observable(defaultStepClass)
                 },
                 {
                     name: 'review',
                     isVisible: ko.observable(false),
                     isEnabled: true,
-                    number: ko.observable(6)
+                    number: ko.observable(6),
+                    classAttributes: ko.observable(defaultStepClass)
                 }
             ],
             setCurrent: function(step) {
@@ -99,10 +108,40 @@ define(
                     this.toStep(previousStep.name);
                 }
             },
-            goToStep: function(name) {
+            getStepClassAttributes: function(name) {
+                return this.findStepByName(name).classAttributes;
+            },
+            setStepClassAttributes: function(name) {
+                var stepClass = defaultStepClass;
+                var step = this.findStepByName(name);
+                if (step.isVisible()) {
+                    stepClass += ' ' + activeStepClass;
+                }
+                if (this.isStepAvailable(step.name)) {
+                    stepClass += ' ' + allowedStepClass;
+                }
+                step.classAttributes(stepClass);
+            },
+            updateStepsClassAttributes: function() {
+                var self = this;
+                $.each(this.steps, function(key, step) {
+                    var stepClass = defaultStepClass;
+                    if (step.isVisible()) {
+                        stepClass += ' ' + activeStepClass;
+                    }
+                    if (self.isStepAvailable(step.name)) {
+                        stepClass += ' ' + allowedStepClass;
+                    }
+                    step.classAttributes(stepClass);
+                });
+            },
+            isStepAvailable: function(name) {
                 var visibleStep = this.getCurrentVisibleStep();
                 var step = this.findStepByName(name);
-                if (step.number() < visibleStep.number()) {
+                return (step.number() < visibleStep.number());
+            },
+            goToStep: function(name) {
+                if (this.isStepAvailable(name)) {
                     this.toStep(name);
                 }
             },
@@ -112,6 +151,7 @@ define(
                         step.isVisible(false);
                     });
                     this.findStepByName(name).isVisible(true);
+                    this.updateStepsClassAttributes();
                     errorList.clear();
                 }
             },
@@ -126,6 +166,7 @@ define(
                 return step;
             },
             isStepVisible: function(step) {
+                this.setStepClassAttributes(step);
                 return this.findStepByName(step).isVisible;
             },
             setStepVisible: function(step, flag) {

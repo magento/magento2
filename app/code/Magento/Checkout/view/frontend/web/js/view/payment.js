@@ -20,6 +20,9 @@ define(
             defaults: {
                 template: 'Magento_Checkout/payment'
             },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             stepNumber: navigator.getStepNumber(stepName),
             quoteHasShippingMethod: function() {
                 return quote.isVirtual() || quote.getShippingMethod();

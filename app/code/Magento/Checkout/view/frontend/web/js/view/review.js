@@ -23,6 +23,9 @@ define(
             defaults: {
                 template: 'Magento_Checkout/review'
             },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             stepNumber: navigator.getStepNumber(stepName),
             quoteHasPaymentMethod: quote.getPaymentMethod(),
             itemsBefore: itemsBefore,
