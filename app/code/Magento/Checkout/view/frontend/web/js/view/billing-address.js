@@ -35,7 +35,7 @@ define(
             quoteIsVirtual: quote.isVirtual(),
             isEmailCheckComplete: $.Deferred(),
             billingAddressesOptionsText: function(item) {
-                return item.getFullAddress();
+                return item.getAddressInline();
             },
             submitBillingAddress: function() {
                 if (quote.getCheckoutMethod()() === 'register') {
