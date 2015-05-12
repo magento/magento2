@@ -60,7 +60,9 @@ define(
                         additionalData
                     );
                 } else {
-                    this.validate();
+                    if (this.visible()) {
+                        this.validate();
+                    }
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get('shippingAddress');
                         if (quote.getCheckoutMethod()() !== 'register') {
