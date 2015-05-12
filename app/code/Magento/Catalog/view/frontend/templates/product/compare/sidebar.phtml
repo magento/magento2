@@ -30,9 +30,7 @@
                 <a data-bind="attr: {'href': compareProducts().listUrl}" class="action compare primary"><span><?php echo __('Compare') ?></span></a>
             </div>
             <div class="secondary">
-                <a id="compare-clear-all" href="#" class="action clear"
-                   data-post="<?php echo $this->helper('Magento\Catalog\Helper\Product\Compare')->getPostDataClearList() ?>"
-                >
+                <a id="compare-clear-all" href="#" class="action clear" data-post='<?= $this->helper('Magento\Catalog\Helper\Product\Compare')->getPostDataClearList() ?>'>
                     <span><?php echo __('Clear All') ?></span>
                 </a>
             </div>
