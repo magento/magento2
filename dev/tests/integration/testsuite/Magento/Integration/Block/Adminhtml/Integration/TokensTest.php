@@ -8,7 +8,6 @@
 namespace Magento\Integration\Block\Adminhtml\Integration;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 
 /**
  * Test class for \Magento\Integration\Block\Adminhtml\Integration\Tokens
