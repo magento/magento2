@@ -20,7 +20,7 @@
                 <div class="control">
                     <select name="shipping_address_id" id="shipping:address-select" data-bind="
                     options: addresses,
-                    optionsText: function(item) { return item.getFullAddress(); },
+                    optionsText: function(item) { return item.getAddressInline(); },
                     optionsValue: 'customerAddressId',
                     value: selectedAddressId,
                     event: {change: onAddressChange}

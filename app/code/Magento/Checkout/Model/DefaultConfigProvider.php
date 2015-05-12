@@ -99,6 +99,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $localeFormat;
 
     /**
+     * @var \Magento\Customer\Model\Address\Mapper
+     */
+    protected $addressMapper;
+
+    /**
+     * @var \Magento\Customer\Model\Address\Config
+     */
+    protected $addressConfig;
+
+    /**
      * @var FormKey
      */
     protected $formKey;
@@ -118,6 +128,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param ConfigurationPool $configurationPool
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param LocaleFormat $localeFormat
+     * @param \Magento\Customer\Model\Address\Mapper $addressMapper
+     * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param FormKey $formKey
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -136,6 +148,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         ConfigurationPool $configurationPool,
         QuoteIdMaskFactory $quoteIdMaskFactory,
         LocaleFormat $localeFormat,
+        \Magento\Customer\Model\Address\Mapper $addressMapper,
+        \Magento\Customer\Model\Address\Config $addressConfig
         FormKey $formKey
     ) {
         $this->checkoutHelper = $checkoutHelper;
@@ -152,6 +166,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->configurationPool = $configurationPool;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->localeFormat = $localeFormat;
+        $this->addressMapper = $addressMapper;
+        $this->addressConfig = $addressConfig;
         $this->formKey = $formKey;
     }
 
@@ -194,8 +210,25 @@ class DefaultConfigProvider implements ConfigProviderInterface
         if ($this->isCustomerLoggedIn()) {
             $customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
             $customerData = $customer->__toArray();
+            foreach ($customer->getAddresses() as $key => $address) {
+                $customerData['addresses'][$key]['inline'] = $this->getCustomerAddressInline($address);
+            }
         }
         return $customerData;
+    }
+
+    /**
+     * Set additional customer address data
+     *
+     * @param \Magento\Customer\Api\Data\AddressInterface $address
+     */
+    private function getCustomerAddressInline($address)
+    {
+        $builtOutputAddressData = $this->addressMapper->toFlatArray($address);
+        return $this->addressConfig
+            ->getFormatByCode(\Magento\Customer\Model\Address\Config::DEFAULT_ADDRESS_FORMAT)
+            ->getRenderer()
+            ->renderArray($builtOutputAddressData);
     }
 
     /**
