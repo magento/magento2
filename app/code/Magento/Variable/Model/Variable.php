@@ -69,6 +69,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      *
      * @param integer $storeId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setStoreId($storeId)
     {
@@ -80,6 +81,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      * Getter
      *
      * @return integer
+     * @codeCoverageIgnore
      */
     public function getStoreId()
     {
@@ -91,6 +93,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $code
      * @return $this
+     * @codeCoverageIgnore
      */
     public function loadByCode($code)
     {
