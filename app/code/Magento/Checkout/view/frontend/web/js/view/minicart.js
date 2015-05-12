@@ -63,9 +63,10 @@ define([
         },
         initSidebar: initSidebar,
         closeSidebar: function(element) {
-            $("#btn-minicart-close").on('click', function(event) {
+            var minicart = $('[data-block="minicart"]');
+            minicart.on('click', '[data-action="close"]', function(event) {
                 event.stopPropagation();
-                $("div.block.block-minicart").dropdownDialog("close");
+                minicart.find('[data-role="dropdownDialog"]').dropdownDialog("close");
             });
             return true;
         },
