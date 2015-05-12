@@ -59,6 +59,10 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $aggregation
+     * @param array $aggregationAliases
+     * @param string $expectedType
+     *
      * @dataProvider getBestsellersReportUpdateRatingPosProvider
      */
     public function testGetBestsellersReportUpdateRatingPos($aggregation, $aggregationAliases, $expectedType)
@@ -79,6 +83,9 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function getBestsellersReportUpdateRatingPosProvider()
     {
         return [
