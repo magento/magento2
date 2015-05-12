@@ -19,9 +19,10 @@ class ConfigurableProductsFixture extends Fixture
      */
     protected $priority = 50;
 
+    //@codingStandardsIgnoreStart
     /**
      * Get CSV template headers
-     *
+     * @SuppressWarnings(PHPMD)
      * @return array
      */
     protected function getHeaders()
@@ -145,6 +146,9 @@ class ConfigurableProductsFixture extends Fixture
      * @param Closure|mixed $productCategory
      * @param Closure|mixed $productRootCategory
      * @param Closure|mixed $productWebsite
+     *
+     * @SuppressWarnings(PHPMD)
+     *
      * @return array
      */
     protected function getRows($productCategory, $productRootCategory, $productWebsite)
@@ -903,6 +907,7 @@ class ConfigurableProductsFixture extends Fixture
         $import->importSource();
 
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * {@inheritdoc}

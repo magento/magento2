@@ -18,7 +18,7 @@ class CatalogPriceRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
-     *
+     * @SuppressWarnings(PHPMD)
      */
     public function execute()
     {

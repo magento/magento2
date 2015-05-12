@@ -18,6 +18,7 @@ class OrdersFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD)
      */
     public function execute()
     {
@@ -197,6 +198,8 @@ class OrdersFixture extends Fixture
             $simpleProductIdLen[0] = strlen($simpleProductId[0]($entityId));
             $simpleProductIdLen[1] = strlen($simpleProductId[1]($entityId));
 
+            //@codingStandardsIgnoreStart
+
             $queries .= "INSERT INTO `{$eavEntityStoreTableName}` (`entity_store_id`, `entity_type_id`, `store_id`, `increment_prefix`, `increment_last_id`) VALUES ({$productStoreId($entityId)}, 5, {$productStoreId($entityId)}, '{$productStoreId($entityId)}', '{$orderNumber}') ON DUPLICATE KEY UPDATE `increment_last_id`='{$orderNumber}';";
 
             $quoteId = $entityId;
@@ -262,6 +265,7 @@ class OrdersFixture extends Fixture
             $salesOrderStatusHistoryId = $salesOrderId;
             $queries .= "INSERT INTO `{$salesOrderStatusHistoryTableName}` (`entity_id`, `parent_id`, `is_customer_notified`, `is_visible_on_front`, `comment`, `status`, `created_at`, `entity_name`) VALUES ({$salesOrderStatusHistoryId}, {$salesOrderId}, 1, 0, NULL, 'pending', '{$time}', 'order');";
 
+            // @codingStandardsIgnoreEnd
             $writeAdapter->multiQuery($queries);
 
             $entityId++;

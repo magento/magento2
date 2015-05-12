@@ -18,6 +18,7 @@ class StoresFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD)
      */
     public function execute()
     {

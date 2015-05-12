@@ -18,6 +18,7 @@ class CartPriceRulesFixture extends Fixture
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD)
      */
     public function execute()
     {
