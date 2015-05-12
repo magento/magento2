@@ -30,6 +30,6 @@ class Store extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getHeaderText()
     {
-        return __('Please select a store.');
+        return __('Please select a store');
     }
 }

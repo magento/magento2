@@ -11,19 +11,17 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 
 /**
- * Test Creation for UpdateCatalogPriceRuleEntity
- *
- * Test Flow:
  * Preconditions:
- * 1. Catalog Price Rule is created
+ * 1. Catalog Price Rule is created.
+ *
  * Steps:
- * 1. Login to backend
- * 2. Navigate to MARKETING > Catalog Price Rules
- * 3. Click Catalog Price Rule from grid
- * 4. Edit test value(s) according to dataSet
- * 5. Click 'Save'/ 'Apply' button
- * 6. Create simple product with category
- * 7. Perform all asserts
+ * 1. Login to backend.
+ * 2. Navigate to MARKETING > Catalog Price Rules.
+ * 3. Click Catalog Price Rule from grid.
+ * 4. Edit test value(s) according to dataSet.
+ * 5. Click 'Save'/ 'Apply' button.
+ * 6. Create simple product with category.
+ * 7. Perform all asserts.
  *
  * @group Catalog_Price_Rules_(MX)
  * @ZephyrId MAGETWO-25187
@@ -37,7 +35,7 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
     /* end tags */
 
     /**
-     * Update catalog price rule
+     * Update catalog price rule.
      *
      * @param CatalogRule $catalogPriceRule
      * @param CatalogRule $catalogPriceRuleOriginal
@@ -80,9 +78,6 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->$saveAction();
-
-        // Prepare data for tear down
-        $this->catalogRules[] = $catalogPriceRule;
 
         // Create simple product with category
         $productSimple->persist();

@@ -171,7 +171,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
                 'customer/online_customers/online_minutes_interval',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->willReturn(60); //TODO: it's value mocked because unit tests run data providers before all testsuite
+            ->willReturn(240); //TODO: it's value mocked because unit tests run data providers before all testsuite
 
         $this->customerLog->expects($this->any())->method('getLastLoginAt')->willReturn($lastLoginAt);
         $this->customerLog->expects($this->any())->method('getLastVisitAt')->willReturn($lastVisitAt);

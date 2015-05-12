@@ -315,7 +315,7 @@ class DataProvider implements DataProviderInterface
      *
      * @param Type $entityType
      * @return array
-     * @throws \Magento\Eav\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function getAttributesMeta(Type $entityType)
     {

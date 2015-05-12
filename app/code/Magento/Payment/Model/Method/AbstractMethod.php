@@ -254,6 +254,20 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         $this->_scopeConfig = $scopeConfig;
         $this->_eventManager = $context->getEventDispatcher();
         $this->logger = $context->getLogger();
+        $this->initializeData($data);
+    }
+
+    /**
+     * Initializes injected data
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function initializeData($data = [])
+    {
+        if (!empty($data['formBlockType'])) {
+            $this->_formBlockType = $data['formBlockType'];
+        }
     }
 
     /**

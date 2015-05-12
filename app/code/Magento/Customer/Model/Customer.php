@@ -12,6 +12,7 @@ use Magento\Customer\Model\Resource\Address\CollectionFactory;
 use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Data\Customer as CustomerData;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
@@ -1034,6 +1035,12 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $errors[] = __('Gender is required.');
         }
 
+        $transport = new \Magento\Framework\Object(
+            ['errors' => $errors]
+        );
+        $this->_eventManager->dispatch('customer_validate', ['customer' => $this, 'transport' => $transport]);
+        $errors = $transport->getErrors();
+
         if (empty($errors)) {
             return true;
         }
@@ -1304,7 +1311,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         return (int)$this->_scopeConfig->getValue(
             self::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD,
-            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         );
     }
 
