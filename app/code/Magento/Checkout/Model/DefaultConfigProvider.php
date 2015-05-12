@@ -25,6 +25,7 @@ use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class DefaultConfigProvider implements ConfigProviderInterface
 {
