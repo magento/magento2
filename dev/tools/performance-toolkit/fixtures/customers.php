@@ -19,7 +19,10 @@ class CustomersFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $customersNumber = \Magento\ToolkitFramework\Config::getInstance()->getValue('customers', 10);
+        $customersNumber = \Magento\ToolkitFramework\Config::getInstance()->getValue('customers', 0);
+        if (!$customersNumber) {
+            return;
+        }
         $this->application->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */

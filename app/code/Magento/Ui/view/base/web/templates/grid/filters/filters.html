@@ -1,0 +1,108 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="data-grid-search-control-wrap">
+    <input
+        class="admin__control-text data-grid-search-control"
+        placeholder="Search by keyword"
+        type="text"/>
+    <button
+        class="action-submit"
+        type="submit"><span data-bind="text: $t('Search')"></span></button>
+    <ul class="action-menu _active">
+        <li>
+            <a class="action-menu-item" href>Lorem</a>
+        </li>
+        <li>
+            <a class="action-menu-item" href>Lorem 1</a>
+        </li>
+        <li>
+            <a class="action-menu-item" href>Lorem 2</a>
+        </li>
+    </ul>
+</div>
+
+<div class="data-grid-filters-actions-wrap">
+    <div class="data-grid-filters-action-wrap">
+        <button
+            class="action-default _active"
+            data-action="grid-filter-expand"
+            data-bind="click: toggleOpened, css: { _active: opened }">
+            <span data-bind="text: $t('Filters')"></span>
+        </button>
+    </div>
+</div>
+
+<div
+    class="admin__data-grid-filters-current"
+    data-bind="css: {_show: active().length && !opened()}">
+    <div class="admin__current-filters-title-wrap">
+        <span
+            class="admin__current-filters-title"
+            data-bind="text: $t('Active filters:')"></span>
+    </div>
+    <div class="admin__current-filters-list-wrap">
+        <ul class="admin__current-filters-list">
+            <!-- ko foreach: previews -->
+            <li>
+                <span data-bind="text: label + ':'"></span>
+                <span data-bind="text: preview"></span>
+                <button
+                    class="action-remove"
+                    data-bind="click: $parent.reset.bind($parent, elem)"
+                    type="button">
+                    <span data-bind="text: $t('Remove')"></span>
+                </button>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+</div>
+
+<div
+    class="admin__data-grid-filters-wrap"
+    data-bind="css: { _show: opened }"
+    data-part="filter-form">
+
+    <fieldset class="admin__fieldset admin__data-grid-filters">
+        <legend class="admin__filters-legend">
+            <span data-bind="text: $t('Advanced filter')"></span>
+        </legend>
+        <!-- ko foreach: elems -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+    </fieldset>
+
+    <div class="admin__data-grid-filters-footer">
+        <div class="admin__footer-secondary-actions">
+            <button
+                class="action-tertiary"
+                type="button"
+                data-action="grid-filter-reset"
+                data-bind="click: reset">
+                <span data-bind="text: $t('Reset')"></span>
+            </button>
+        </div>
+        <div class="admin__footer-main-actions">
+            <button
+                class="action-tertiary"
+                type="button"
+                data-action="grid-filter-cancel"
+                data-bind="click: close">
+                <span data-bind="text: $t('Cancel')"></span>
+            </button>
+            <button
+                class="action-secondary"
+                type="button"
+                data-action="grid-filter-apply"
+                data-bind="click: apply">
+                <span data-bind="text: $t('Apply Filters')"></span>
+            </button>
+        </div>
+    </div>
+
+</div>

@@ -8,9 +8,9 @@
 <tabs>
     <account_information>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#tab_account</selector>
+        <selector>#tab_customer</selector>
         <strategy>css selector</strategy>
-        <wrapper>account</wrapper>
+        <wrapper>data[customer]</wrapper>
         <fields>
             <website_id>
                 <input>select</input>
@@ -28,7 +28,7 @@
     </account_information>
     <addresses>
         <class>\Magento\Customer\Test\Block\Adminhtml\Edit\Tab\Addresses</class>
-        <selector>#tab_customer_address</selector>
+        <selector>#tab_address</selector>
         <strategy>css selector</strategy>
     </addresses>
 </tabs>

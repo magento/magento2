@@ -24,10 +24,10 @@ class Data
 
     /**
      * @param int $productId
-     * @param array $priceData
+     * @param array|null $priceData
      * @return void
      */
-    public function setProductPrice($productId, array $priceData)
+    public function setProductPrice($productId, array $priceData = null)
     {
         $this->prices[$productId] = $priceData;
     }

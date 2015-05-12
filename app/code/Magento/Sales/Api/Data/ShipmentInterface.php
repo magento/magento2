@@ -104,6 +104,14 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getCreatedAt();
 
     /**
+     * Sets the created-at timestamp for the shipment.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
+    /**
      * Gets the customer ID for the shipment.
      *
      * @return int Customer ID.

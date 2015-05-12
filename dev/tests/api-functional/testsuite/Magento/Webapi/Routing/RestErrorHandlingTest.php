@@ -81,7 +81,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/errortest/otherexception',
+                'resourcePath' => '/V1/errortest/otherException',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
         ];

@@ -8,6 +8,7 @@
 
 namespace Magento\Store\Test\Unit\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Store\Model\Store;
@@ -399,7 +400,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 ['catalog/price/scope', ScopeInterface::SCOPE_STORE, 'scope_code', $priceScope],
                 [
                     \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
-                    \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+                    ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                     null,
                     'USD'
                 ],
@@ -546,12 +547,15 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      *
      * @param bool $expected
      * @param array $value
+     * @param bool $requestSecure
+     * @param bool $useSecureInFrontend
      * @param string|null $secureBaseUrl
      */
     public function testIsCurrentlySecure(
         $expected,
         $value,
         $requestSecure = false,
+        $useSecureInFrontend = true,
         $secureBaseUrl = 'https://example.com:443'
     ) {
         /* @var ReinitableConfigInterface|PHPUnit_Framework_MockObject_MockObject $configMock */
@@ -565,6 +569,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                             null,
                             $secureBaseUrl
                         ],
+                        [
+                            Store::XML_PATH_SECURE_IN_FRONTEND,
+                            ScopeInterface::SCOPE_STORE,
+                            null,
+                            $useSecureInFrontend
+                        ]
                     ]));
 
         $this->requestMock->expects($this->any())
@@ -594,8 +604,12 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         return [
             'secure request, no server setting' => [true, [], true],
             'unsecure request, using registered port' => [true, 443],
-            'unsecure request, no secure base url registered' => [false, 443, false, null],
+            'unsecure request, no secure base url registered' => [false, 443, false, true, null],
             'unsecure request, not using registered port' => [false, 80],
+            'unsecure request, using registered port, not using secure in frontend' => [false, 443, false, false],
+            'unsecure request, no secure base url registered, not using secure in frontend' =>
+                [false, 443, false, false, null],
+            'unsecure request, not using registered port, not using secure in frontend' => [false, 80, false, false],
         ];
     }
 

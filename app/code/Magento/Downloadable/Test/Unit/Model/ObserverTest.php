@@ -497,6 +497,33 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Magento\Downloadable\Model\Observer', $result);
     }
 
+    public function testSaveDownloadableOrderItemNotDownloadableItem()
+    {
+        $itemId = 100;
+        $itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $itemMock->expects($this->any())
+            ->method('getId')
+            ->willReturn($itemId);
+        $itemMock->expects($this->any())
+            ->method('getProductType')
+            ->willReturn('simple');
+        $itemMock->expects($this->never())
+            ->method('getProduct');
+        $event = new \Magento\Framework\Object(
+            [
+                'item' => $itemMock,
+            ]
+        );
+        $observer = new \Magento\Framework\Object(
+            [
+                'event' => $event
+            ]
+        );
+        $this->observer->saveDownloadableOrderItem($observer);
+    }
+
     /**
      * @param $id
      * @param int $statusId

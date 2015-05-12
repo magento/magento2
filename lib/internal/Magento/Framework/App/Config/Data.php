@@ -42,10 +42,7 @@ class Data implements DataInterface
     }
 
     /**
-     * Retrieve configuration value by path
-     *
-     * @param null|string $path
-     * @return array|string
+     * @inheritdoc
      */
     public function getValue($path = null)
     {
@@ -65,11 +62,7 @@ class Data implements DataInterface
     }
 
     /**
-     * Set configuration value
-     *
-     * @param string $path
-     * @param mixed $value
-     * @return void
+     * @inheritdoc
      */
     public function setValue($path, $value)
     {

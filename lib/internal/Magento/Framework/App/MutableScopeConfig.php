@@ -9,6 +9,7 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class MutableScopeConfig extends Config implements MutableScopeConfigInterface
 {
@@ -24,7 +25,7 @@ class MutableScopeConfig extends Config implements MutableScopeConfigInterface
     public function setValue(
         $path,
         $value,
-        $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeCode = null
     ) {
         if (empty($scopeCode)) {

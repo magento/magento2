@@ -46,6 +46,21 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:complexType name="configurableObject" mixed="true">
+        <xs:complexContent>
+            <xs:extension base="argumentType">
+                <xs:sequence>
+                    <xs:element name="argument" type="argumentType" minOccurs="1" maxOccurs="unbounded">
+                        <xs:key name="argumentConfigurableObjectName">
+                            <xs:selector xpath="argument"/>
+                            <xs:field xpath="@name"/>
+                        </xs:key>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
     <xs:complexType name="number">
         <xs:complexContent>
             <xs:extension base="argumentType"/>
