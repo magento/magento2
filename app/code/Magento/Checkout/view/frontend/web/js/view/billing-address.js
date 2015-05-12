@@ -27,6 +27,9 @@ define(
             defaults: {
                 template: 'Magento_Checkout/billing-address'
             },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             stepNumber: navigator.getStepNumber(stepName),
             billingAddresses: customer.getBillingAddressList(),
             selectedBillingAddressId: addressList.getAddresses()[0].id,

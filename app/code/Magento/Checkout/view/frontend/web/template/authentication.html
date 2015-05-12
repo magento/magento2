@@ -4,8 +4,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-billing" class="section allow active" data-bind="visible: isActive()">
-    <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
+<li id="opc-billing"
+    data-bind="visible: isActive(), attr: {'class': stepClassAttributes() }"
+    role="presentation"
+    data-collapsible="true">
+    <div class="step-title"
+         data-role="title"
+         data-bind="click: navigateToCurrentStep"
+         aria-controls="checkout-step-login"
+         role="tab">
         <span class="number" data-bind="text: stepNumber()"></span>
         <h2 data-bind="text: $t('Checkout Method')"></h2>
     </div>

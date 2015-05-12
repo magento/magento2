@@ -222,7 +222,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Set additional customer address data
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
-     * @return array
+     * @return string
      */
     private function getCustomerAddressInline($address)
     {

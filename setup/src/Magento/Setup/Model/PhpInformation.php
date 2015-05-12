@@ -11,6 +11,12 @@ use Magento\Framework\Filesystem;
 
 class PhpInformation
 {
+
+    /**
+     * Allowed XDebug nested level
+     */
+    const XDEBUG_NESTED_LEVEL = 200;
+
     /**
      * List of required extensions
      *
@@ -57,6 +63,15 @@ class PhpInformation
         } else {
             throw new \Exception('Missing key \'platform=>php\' in \'composer.lock\' file');
         }
+    }
+
+    /**
+     * Returns minimum required XDebug nested level
+     * @return int
+     */
+    public function getRequiredMinimumXDebugNestedLevel()
+    {
+        return self::XDEBUG_NESTED_LEVEL;
     }
 
     /**

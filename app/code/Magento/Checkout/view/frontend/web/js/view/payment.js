@@ -20,6 +20,9 @@ define(
                 template: 'Magento_Checkout/payment',
                 activeMethod: ''
             },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             stepNumber: navigator.getStepNumber(stepName),
             isVisible: navigator.isStepVisible(stepName),
             paymentForm: '#co-payment-form',
