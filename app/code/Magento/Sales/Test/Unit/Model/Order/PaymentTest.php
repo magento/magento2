@@ -147,7 +147,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                     'getGrandTotal',
                     'getBaseGrandTotal',
                     'getShippingAmount',
-                    'getBaseShippingAmount'
+                    'getBaseShippingAmount',
+                    'getBaseTotalRefunded'
                 ]
             )
             ->getMock();
@@ -212,7 +213,8 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 'setAutomaticallyCreated',
                 'register',
                 'addComment',
-                'save'
+                'save',
+                'getGrandTotal'
             ],
             [],
             '',
@@ -1125,6 +1127,164 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
                 $this->transactionId,
                 $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
             );
+        $this->assertSame($this->payment, $this->payment->registerRefundNotification($amount));
+    }
+
+    public function testRegisterRefundNotification()
+    {
+        $message = 'Registered notification about refunded amount of . Transaction ID: "100-refund"';
+        $amount = 50;
+        $grandTotalCreditMemo = 50;
+        $invoiceBaseGrandTotal = 50;
+        $invoiceBaseTotalRefunded = 0;
+        $this->invoiceMock->expects($this->any())->method('getBaseGrandTotal')->willReturn($invoiceBaseGrandTotal);
+        $this->invoiceMock->expects($this->any())->method('getBaseTotalRefunded')->willReturn(
+            $invoiceBaseTotalRefunded
+        );
+        $this->creditMemoMock->expects($this->any())->method('getGrandTotal')->willReturn($grandTotalCreditMemo);
+        $this->payment->setParentTransactionId($this->transactionId);
+        $this->mockInvoice($this->transactionId, 1);
+        $this->serviceOrderFactory->expects($this->once())->method('create')->with(
+            ['order' => $this->orderMock]
+        )->willReturn($this->serviceOrder);
+        $this->serviceOrder->expects($this->once())->method('prepareInvoiceCreditmemo')->with(
+            $this->invoiceMock,
+            ['adjustment_negative' => $invoiceBaseGrandTotal - $amount]
+        )->willReturn(
+            $this->creditMemoMock
+        );
+        $this->creditMemoMock->expects($this->once())->method('setPaymentRefundDisallowed')->willReturnSelf();
+        $this->creditMemoMock->expects($this->once())->method('setAutomaticallyCreated')->willReturnSelf();
+        $this->creditMemoMock->expects($this->once())->method('register')->willReturnSelf();
+        $this->creditMemoMock->expects($this->once())->method('addComment')->willReturnSelf();
+        $this->creditMemoMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
+
+        $newTransaction = $this->getMock(
+            'Magento\Sales\Model\Order\Payment\Transaction',
+            [
+                'getId',
+                'setOrderPaymentObject',
+                'loadByTxnId',
+                'setTxnId',
+                'setTxnType',
+                'isFailsafe',
+                'getTxnId',
+                'getTxnType'
+            ],
+            [],
+            '',
+            false
+        );
+
+        $parentTransaction = $this->getMock(
+            'Magento\Sales\Model\Order\Payment\Transaction',
+            ['setOrderPaymentObject', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType'],
+            [],
+            '',
+            false
+        );
+        $this->transactionFactory->expects($this->exactly(3))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($parentTransaction, $newTransaction, $newTransaction, $newTransaction);
+        $parentTransaction->expects($this->atLeastOnce())
+            ->method('setOrderPaymentObject')
+            ->with($this->payment)
+            ->willReturnSelf();
+        $parentTransaction->expects($this->exactly(1))
+            ->method('loadByTxnId')
+            ->with($this->transactionId)->willReturnSelf();
+        $newTransaction->expects($this->exactly(1))
+            ->method('loadByTxnId')
+            ->with($this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND)
+            ->willReturnSelf();
+        $parentTransaction->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturnOnConsecutiveCalls(
+                $this->transactionId,
+                $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
+            )->willReturnOnConsecutiveCalls(
+                $this->transactionId,
+                $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
+            );
+        $newTransaction->expects($this->once())->method('setTxnId')->with(
+            $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
+        )->willReturn($newTransaction);
+        $newTransaction->expects($this->atLeastOnce())->method('getTxnId')->willReturn(
+            $this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
+        );
+        $newTransaction->expects($this->atLeastOnce())
+            ->method('setOrderPaymentObject')
+            ->willReturnSelf();
+        $newTransaction->expects($this->once())->method('setTxnType')->with(
+            \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND
+        )->willReturn($newTransaction);
+        $newTransaction->expects($this->once())->method('isFailsafe')->with(
+            false
+        )->willReturn($newTransaction);
+        $this->orderMock->expects($this->atLeastOnce())->method('addRelatedObject');
+
+
+        $this->orderMock->expects($this->once())->method('setState')->with(Order::STATE_PROCESSING, true, $message);
+        $this->assertSame($this->payment, $this->payment->registerRefundNotification($amount));
+        $this->assertSame($this->creditMemoMock, $this->payment->getData('created_creditmemo'));
+        $this->assertEquals($grandTotalCreditMemo, $this->payment->getData('amount_refunded'));
+    }
+
+    public function testRegisterRefundNotificationNotRightAmount()
+    {
+        $amount = 30;
+        $grandTotalCreditMemo = 50;
+        $invoiceBaseGrandTotal = 50;
+        $invoiceBaseTotalRefunded = 0;
+        $this->invoiceMock->expects($this->any())->method('getBaseGrandTotal')->willReturn($invoiceBaseGrandTotal);
+        $this->invoiceMock->expects($this->any())->method('getBaseTotalRefunded')->willReturn(
+            $invoiceBaseTotalRefunded
+        );
+        $this->creditMemoMock->expects($this->any())->method('getGrandTotal')->willReturn($grandTotalCreditMemo);
+        $this->payment->setParentTransactionId($this->transactionId);
+        $this->mockInvoice($this->transactionId, 1);
+        $this->orderMock->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
+        $parentTransaction = $this->getMock(
+            'Magento\Sales\Model\Order\Payment\Transaction',
+            ['setOrderPaymentObject', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType'],
+            [],
+            '',
+            false
+        );
+        $parentTransaction->expects($this->atLeastOnce())
+            ->method('setOrderPaymentObject')
+            ->with($this->payment)
+            ->willReturnSelf();
+        $parentTransaction->expects($this->exactly(1))
+            ->method('loadByTxnId')
+            ->with($this->transactionId)->willReturnSelf();
+        $newTransaction = $this->getMock(
+            'Magento\Sales\Model\Order\Payment\Transaction',
+            [
+                'getId',
+                'setOrderPaymentObject',
+                'loadByTxnId',
+                'setTxnId',
+                'setTxnType',
+                'isFailsafe',
+                'getTxnId',
+                'getTxnType'
+            ],
+            [],
+            '',
+            false
+        );
+        $this->transactionFactory->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($parentTransaction, $newTransaction);
+        $newTransaction->expects($this->exactly(1))
+            ->method('loadByTxnId')
+            ->with($this->transactionId . '-' . \Magento\Sales\Model\Order\Payment\Transaction::TYPE_REFUND)
+            ->willReturnSelf();
+        $newTransaction->expects($this->atLeastOnce())
+            ->method('setOrderPaymentObject')
+            ->willReturnSelf();
         $this->assertSame($this->payment, $this->payment->registerRefundNotification($amount));
     }
 
