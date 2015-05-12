@@ -84,42 +84,4 @@ class DataGrid extends Grid
         $this->openFilterBlock();
         parent::search($filter);
     }
-
-//    /**
-//     * Search item and open it
-//     *
-//     * @param array $filter
-//     * @throws \Exception
-//     */
-//    public function searchAndOpen(array $filter)
-//    {
-//        $this->openFilterBlock();
-//        parent::searchAndOpen($filter);
-//    }
-//
-//    /**
-//     * Search for item and select it
-//     *
-//     * @param array $filter
-//     * @throws \Exception
-//     */
-//    public function searchAndSelect(array $filter)
-//    {
-//        $this->openFilterBlock();
-//        parent::searchAndSelect($filter);
-//    }
-//
-//    /**
-//     * Obtain specific row in grid
-//     *
-//     * @param array $filter
-//     * @param bool $isSearchable
-//     * @param bool $isStrict
-//     * @return \Magento\Mtf\Client\Element\SimpleElement|void
-//     */
-//    protected function getRow(array $filter, $isSearchable = true, $isStrict = true)
-//    {
-//        $this->openFilterBlock();
-//        parent::getRow($filter, $isSearchable, $isStrict);
-//    }
 }
