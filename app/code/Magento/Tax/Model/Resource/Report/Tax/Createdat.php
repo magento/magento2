@@ -91,17 +91,14 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 'tax_base_amount_sum' => 'SUM(tax.base_amount * e.base_to_global_rate)',
             ];
 
-            $select = $writeAdapter->select();
-            $select->from(
+            $select = $writeAdapter->select()->from(
                 ['tax' => $this->getTable('sales_order_tax')],
                 $columns
             )->joinInner(
                 ['e' => $this->getTable('sales_order')],
                 'e.entity_id = tax.order_id',
                 []
-            )->useStraightJoin();
-
-            $select->where(
+            )->useStraightJoin()->where(
                 'e.state NOT IN (?)',
                 [\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT, \Magento\Sales\Model\Order::STATE_NEW]
             );
@@ -118,8 +115,6 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 $writeAdapter->insertArray($this->getMainTable(), array_keys($columns), $aggregatedData);
             }
 
-            $select->reset();
-
             $columns = [
                 'period' => 'period',
                 'store_id' => new \Zend_Db_Expr(\Magento\Store\Model\Store::DEFAULT_STORE_ID),
@@ -130,7 +125,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
                 'tax_base_amount_sum' => 'SUM(tax_base_amount_sum)',
             ];
 
-            $select->from($this->getMainTable(), $columns)->where('store_id <> ?', 0);
+            $select->reset()->from($this->getMainTable(), $columns)->where('store_id <> ?', 0);
 
             if ($subSelect !== null) {
                 $select->where($this->_makeConditionFromDateRangeSelect($subSelect, 'period', $salesAdapter));
