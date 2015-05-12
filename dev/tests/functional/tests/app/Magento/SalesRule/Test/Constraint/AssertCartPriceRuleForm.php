@@ -6,7 +6,7 @@
 
 namespace Magento\SalesRule\Test\Constraint;
 
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteEdit;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -34,15 +34,15 @@ class AssertCartPriceRuleForm extends AbstractConstraint
      *
      * @param PromoQuoteIndex $promoQuoteIndex
      * @param PromoQuoteEdit $promoQuoteEdit
-     * @param SalesRuleInjectable $salesRule
-     * @param SalesRuleInjectable $salesRuleOrigin
+     * @param SalesRule $salesRule
+     * @param SalesRule $salesRuleOrigin
      * @return void
      */
     public function processAssert(
         PromoQuoteIndex $promoQuoteIndex,
         PromoQuoteEdit $promoQuoteEdit,
-        SalesRuleInjectable $salesRule,
-        SalesRuleInjectable $salesRuleOrigin = null
+        SalesRule $salesRule,
+        SalesRule $salesRuleOrigin = null
     ) {
         $filter = [
             'name' => $salesRule->hasData('name') ? $salesRule->getName() : $salesRuleOrigin->getName(),

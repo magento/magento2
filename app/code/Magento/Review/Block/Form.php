@@ -163,7 +163,11 @@ class Form extends \Magento\Framework\View\Element\Template
      */
     public function getProductInfo()
     {
-        return $this->productRepository->getById($this->getProductId());
+        return $this->productRepository->getById(
+            $this->getProductId(),
+            false,
+            $this->_storeManager->getStore()->getId()
+        );
     }
 
     /**

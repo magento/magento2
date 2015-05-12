@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Message\Test\Unit;
 
+use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Message\ManagerInterface;
 
@@ -86,7 +87,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultGroup()
     {
-        $this->assertEquals(ManagerInterface::DEFAULT_GROUP, $this->model->getDefaultGroup());
+        $this->assertEquals(Manager::DEFAULT_GROUP, $this->model->getDefaultGroup());
 
         $customDefaultGroup = 'some_group';
         $customManager = $this->objectManager->getObject(
@@ -117,7 +118,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getData'
         )->with(
-            ManagerInterface::DEFAULT_GROUP
+            Manager::DEFAULT_GROUP
         )->will(
             $this->returnValue(null)
         );
@@ -126,7 +127,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setData'
         )->with(
-            ManagerInterface::DEFAULT_GROUP,
+            Manager::DEFAULT_GROUP,
             $messageCollection
         )->will(
             $this->returnValue($this->session)
@@ -136,7 +137,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getData'
         )->with(
-            ManagerInterface::DEFAULT_GROUP
+            Manager::DEFAULT_GROUP
         )->will(
             $this->returnValue($messageCollection)
         );
@@ -161,7 +162,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getData'
         )->with(
-            ManagerInterface::DEFAULT_GROUP
+            Manager::DEFAULT_GROUP
         )->will(
             $this->returnValue($messageCollection)
         );
@@ -209,7 +210,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getData'
         )->with(
-            ManagerInterface::DEFAULT_GROUP
+            Manager::DEFAULT_GROUP
         )->will(
             $this->returnValue($messageCollection)
         );
