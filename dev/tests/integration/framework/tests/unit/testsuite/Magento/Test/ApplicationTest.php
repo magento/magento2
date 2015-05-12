@@ -27,6 +27,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             $shell,
             $tempDir,
             'config.php',
+            'global-config.php',
             '',
             $appMode,
             $autoloadWrapper

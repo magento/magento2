@@ -20,7 +20,7 @@ module.exports = function (grunt) {
         ok('"pub/static" is empty.');
 
         log('Deploying Magento application...');
-        deploy = spawn('php', ['dev/tools/Magento/Tools/View/deploy.php']);
+        deploy = spawn('php', ['bin/magento', 'setup:static-content:deploy']);
 
         deploy.stdout.on('data', function (data) {
             log(data);
