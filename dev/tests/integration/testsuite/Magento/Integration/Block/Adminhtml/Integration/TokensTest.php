@@ -8,7 +8,7 @@
 namespace Magento\Integration\Block\Adminhtml\Integration;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Integration\Block\Adminhtml\Integration\Tokens;
+use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
 
 /**
  * Test class for \Magento\Integration\Block\Adminhtml\Integration\Tokens
@@ -65,5 +65,19 @@ class TokensTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $this->assertEquals($expectedData, $this->tokensBlock->getFormFields());
+
+        $htmlContent = $this->tokensBlock->toHtml();
+
+        $this->assertEquals(1, preg_match('/consumer_key/' , $htmlContent));
+        $this->assertEquals(1, preg_match('/Consumer\sKey/' , $htmlContent));
+
+        $this->assertEquals(1, preg_match('/consumer_secret/' , $htmlContent));
+        $this->assertEquals(1, preg_match('/Consumer\sSecret/' , $htmlContent));
+
+        $this->assertEquals(1, preg_match('/token/' , $htmlContent));
+        $this->assertEquals(1, preg_match('/Access\sToken/' , $htmlContent));
+
+        $this->assertEquals(1, preg_match('/token_secret/' , $htmlContent));
+        $this->assertEquals(1, preg_match('/Access\sToken\sSecret/' , $htmlContent));
     }
 }
