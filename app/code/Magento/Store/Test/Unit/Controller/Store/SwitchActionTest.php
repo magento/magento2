@@ -8,7 +8,7 @@ namespace Magento\Store\Test\Unit\Controller\Store;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class SwitchAction extends \PHPUnit_Framework_TestCase
+class SwitchActionTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;

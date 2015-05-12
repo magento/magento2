@@ -9,10 +9,10 @@
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="append_bundle_data_to_order" type="Magento\Bundle\Model\Plugin\QuoteItem"/>
     </type>
-    <type name="Magento\Checkout\Model\PrivateData\Section\ItemPoolInterface">
+    <type name="Magento\Checkout\CustomerData\ItemPoolInterface">
         <arguments>
             <argument name="itemMap" xsi:type="array">
-                <item name="bundle" xsi:type="string">Magento\Bundle\Model\Checkout\PrivateData\Section\BundleItem</item>
+                <item name="bundle" xsi:type="string">Magento\Bundle\CustomerData\BundleItem</item>
             </argument>
         </arguments>
     </type>

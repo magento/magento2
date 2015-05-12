@@ -30,7 +30,7 @@ class Sidebar extends AbstractCart
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Product\Image\View $imageView
-     * @param \Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
+     * @param \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
      * @param array $data
      */
     public function __construct(
@@ -38,7 +38,7 @@ class Sidebar extends AbstractCart
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Model\Product\Image\View $imageView,
-        \Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
+        \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
         array $data = []
     ) {
         if (isset($data['jsLayout'])) {

@@ -28,8 +28,8 @@
                 <item name="/config/action/section" xsi:type="string">name</item>
             </argument>
             <argument name="fileName" xsi:type="string">sections.xml</argument>
-            <argument name="converter" xsi:type="object">Magento\Customer\Model\PrivateData\Section\Config\Converter</argument>
-            <argument name="schemaLocator" xsi:type="object">Magento\Customer\Model\PrivateData\Section\Config\SchemaLocator</argument>
+            <argument name="converter" xsi:type="object">\Magento\Customer\CustomerData\SectionConfigConverter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Customer\CustomerData\SchemaLocator</argument>
             <argument name="defaultScope" xsi:type="string">frontend</argument>
         </arguments>
     </virtualType>
@@ -44,15 +44,15 @@
             <argument name="sectionConfig" xsi:type="object">SectionInvalidationConfigData</argument>
         </arguments>
     </type>
-    <preference for="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface"
-                type="Magento\Customer\Model\PrivateData\Section\SectionPool"/>
-    <type name="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface">
+    <preference for="Magento\Customer\CustomerData\SectionPoolInterface"
+                type="Magento\Customer\CustomerData\SectionPool"/>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
-                <item name="customer" xsi:type="string">Magento\Customer\Model\PrivateData\Section\Customer</item>
+                <item name="customer" xsi:type="string">Magento\Customer\CustomerData\Customer</item>
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPoolInterface"
-                type="Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPool"/>
+    <preference for="Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface"
+                type="Magento\Customer\CustomerData\JsLayoutDataProviderPool"/>
 </config>

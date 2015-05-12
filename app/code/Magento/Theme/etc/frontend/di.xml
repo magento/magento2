@@ -7,10 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface">
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
-                <item name="messages" xsi:type="string">Magento\Theme\Model\PrivateData\Section\Messages</item>
+                <item name="messages" xsi:type="string">Magento\Theme\CustomerData\Messages</item>
             </argument>
         </arguments>
     </type>

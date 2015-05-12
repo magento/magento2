@@ -14,13 +14,13 @@
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Checkout\Model\PrivateData\Section\Cart">
-        <plugin name="cart_private_data_tax" type="Magento\Tax\Interceptor\Model\PrivateData\Section\CartInterceptor"/>
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="cart_private_data_tax" type="Magento\Tax\Plugin\Checkout\CustomerData\Cart"/>
     </type>
-    <type name="Magento\Customer\Model\PrivateData\Section\JsLayoutDataProviderPoolInterface">
+    <type name="Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface">
         <arguments>
             <argument name="jsLayoutDataProviders" xsi:type="array">
-                <item name="checkout_totals" xsi:type="object">Magento\Tax\Model\Checkout\PrivateData\Section\CheckoutTotalsJsLayoutDataProvider</item>
+                <item name="checkout_totals" xsi:type="object">Magento\Tax\CustomerData\CheckoutTotalsJsLayoutDataProvider</item>
             </argument>
         </arguments>
     </type>

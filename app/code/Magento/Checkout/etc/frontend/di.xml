@@ -18,18 +18,18 @@
         <plugin name="checkout-session-depersonalize"
                 type="Magento\Checkout\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
     </type>
-    <type name="Magento\Customer\Model\PrivateData\Section\SectionPoolInterface">
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
-                <item name="cart" xsi:type="string">Magento\Checkout\Model\PrivateData\Section\Cart</item>
+                <item name="cart" xsi:type="string">Magento\Checkout\CustomerData\Cart</item>
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Checkout\Model\PrivateData\Section\ItemPoolInterface"
-                type="Magento\Checkout\Model\PrivateData\Section\ItemPool"/>
-    <type name="Magento\Checkout\Model\PrivateData\Section\ItemPoolInterface">
+    <preference for="Magento\Checkout\CustomerData\ItemPoolInterface"
+                type="Magento\Checkout\CustomerData\ItemPool"/>
+    <type name="Magento\Checkout\CustomerData\ItemPoolInterface">
         <arguments>
-            <argument name="defaultItemId" xsi:type="string">Magento\Checkout\Model\PrivateData\Section\DefaultItem</argument>
+            <argument name="defaultItemId" xsi:type="string">Magento\Checkout\CustomerData\DefaultItem</argument>
         </arguments>
     </type>
 </config>

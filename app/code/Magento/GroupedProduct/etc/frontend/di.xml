@@ -7,10 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Checkout\Model\PrivateData\Section\ItemPoolInterface">
+    <type name="Magento\Checkout\CustomerData\ItemPoolInterface">
         <arguments>
             <argument name="itemMap" xsi:type="array">
-                <item name="grouped" xsi:type="string">Magento\GroupedProduct\Model\Checkout\PrivateData\Section\GroupedItem</item>
+                <item name="grouped" xsi:type="string">Magento\GroupedProduct\CustomerData\GroupedItem</item>
             </argument>
         </arguments>
     </type>

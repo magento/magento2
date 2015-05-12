@@ -12,7 +12,7 @@ define([
         initialize: function () {
             this._super();
 
-            this.messages = customerData.get('messages').extend({disposablePrivateData: 'messages'});
+            this.messages = customerData.get('messages').extend({disposableCustomerData: 'messages'});
         }
     });
 });

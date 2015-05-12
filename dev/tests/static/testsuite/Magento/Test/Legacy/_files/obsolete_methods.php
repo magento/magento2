@@ -2167,18 +2167,18 @@ return [
     [
         'initOrders',
         'Magento\Sales\Block\Reorder\Sidebar',
-        'Moved to \Magento\Sales\PrivateData\Section\LastOrderedItems',
+        'Moved to \Magento\Sales\CustomerData\LastOrderedItems',
     ],
-    ['getItems', 'Magento\Sales\Block\Reorder\Sidebar', 'Moved to \Magento\Sales\PrivateData\Section\LastOrderedItems'],
+    ['getItems', 'Magento\Sales\Block\Reorder\Sidebar', 'Moved to \Magento\Sales\CustomerData\LastOrderedItems'],
     [
         'isItemAvailableForReorder',
         'Magento\Sales\Block\Reorder\Sidebar',
-        'Moved to \Magento\Sales\PrivateData\Section\LastOrderedItems',
+        'Moved to \Magento\Sales\CustomerData\LastOrderedItems',
     ],
     [
         'getLastOrder',
         'Magento\Sales\Block\Reorder\Sidebar',
-        'Moved to \Magento\Sales\PrivateData\Section\LastOrderedItems',
+        'Moved to \Magento\Sales\CustomerData\LastOrderedItems',
     ],
     ['getIdentities', 'Magento\Sales\Block\Reorder\Sidebar'],
 ];

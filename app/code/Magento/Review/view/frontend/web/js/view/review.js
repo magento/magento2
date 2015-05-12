@@ -13,7 +13,7 @@ define([
         initialize: function () {
             this._super();
 
-            this.review = customerData.get('review').extend({disposablePrivateData: 'review'});
+            this.review = customerData.get('review').extend({disposableCustomerData: 'review'});
         },
         nickname: function() {
             return this.review().nickname || customerData.get('customer')().firstname;

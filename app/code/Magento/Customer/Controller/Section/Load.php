@@ -5,10 +5,9 @@
  */
 namespace Magento\Customer\Controller\Section;
 
-use Magento\Customer\Model\PrivateData\Section\SectionPoolInterface;
+use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -22,11 +21,6 @@ class Load extends \Magento\Framework\App\Action\Action
     protected $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
-     */
-    protected $redirectFactory;
-
-    /**
      * @var SectionPoolInterface
      */
     protected $sectionPool;
@@ -34,18 +28,15 @@ class Load extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
-     * @param RedirectFactory $redirectFactory
      * @param SectionPoolInterface $sectionPool
      */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
-        RedirectFactory $redirectFactory,
         SectionPoolInterface $sectionPool
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->redirectFactory = $redirectFactory;
         $this->sectionPool = $sectionPool;
     }
 
@@ -56,7 +47,7 @@ class Load extends \Magento\Framework\App\Action\Action
     {
         if (!$this->getRequest()->isAjax()) {
             // TODO: MAGETWO-34824 redirect correct url
-            return $this->redirectFactory->create()->setPath('*/*/index');
+            return $this->resultRedirectFactory->create()->setPath('*/*/index');
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
