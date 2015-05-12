@@ -11,6 +11,7 @@ namespace Magento\Quote\Model;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
@@ -1857,10 +1858,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Payment $payment
+     * Adds a payment to quote
+     *
+     * @param PaymentInterface $payment
      * @return $this
      */
-    public function addPayment(\Magento\Quote\Model\Quote\Payment $payment)
+    public function addPayment(PaymentInterface $payment)
     {
         $payment->setQuote($this);
         if (!$payment->getId()) {
@@ -1870,10 +1873,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Payment $payment
-     * @return \Magento\Quote\Model\Quote\Payment
+     * Sets payment to current quote
+     *
+     * @param PaymentInterface $payment
+     * @return PaymentInterface
      */
-    public function setPayment(\Magento\Quote\Model\Quote\Payment $payment)
+    public function setPayment(PaymentInterface $payment)
     {
         if (!$this->getIsMultiPayment() && ($old = $this->getPayment())) {
             $payment->setId($old->getId());
