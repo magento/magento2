@@ -920,16 +920,16 @@ class Image extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get actual image size attributes as height/width text string to be used inside <img> tag
+     * Return resized product image information
      *
-     * @return string
+     * @return array
      */
-    public function getSizeAttributes()
+    public function getResizedImageInfo()
     {
         if ($this->_newFile === true) {
             $attributes = '';
         } else {
-            $attributes = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile))[3];
+            $attributes = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile));
         }
         return $attributes;
     }

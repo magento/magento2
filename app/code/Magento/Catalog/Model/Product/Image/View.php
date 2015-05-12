@@ -12,6 +12,16 @@ namespace Magento\Catalog\Model\Product\Image;
 class View extends \Magento\Framework\Object
 {
     /**
+     * Index of width image information
+     */
+    const IMAGE_INFO_WIDTH_INDEX = 0;
+
+    /**
+     * Index of height image information
+     */
+    const IMAGE_INFO_HEIGHT_INDEX = 1;
+
+    /**
      * Separator between location and suffix
      */
     const VAR_NAME_SEPARATOR = ':';
@@ -126,13 +136,34 @@ class View extends \Magento\Framework\Object
     }
 
     /**
-     * Return product image size attributes
+     * Return resized product image information
      *
-     * @return string
+     * @return array
      */
-    public function getSizeAttributes()
+
+    public function getResizedImageInfo()
     {
-        return $this->_helperImage->getSizeAttributes();
+        return $this->_helperImage->getResizedImageInfo();
+    }
+
+    /**
+     * Return resized product image width
+     *
+     * @return int
+     */
+    public function getResizedImageWidth()
+    {
+        return $this->getResizedImageInfo()[self::IMAGE_INFO_WIDTH_INDEX];
+    }
+
+    /**
+     * Return resized product image height
+     *
+     * @return int
+     */
+    public function getResizedImageHeight()
+    {
+        return $this->getResizedImageInfo()[self::IMAGE_INFO_HEIGHT_INDEX];
     }
 
     /**

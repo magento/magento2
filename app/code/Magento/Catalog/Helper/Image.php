@@ -429,13 +429,13 @@ class Image extends AbstractHelper
     }
 
     /**
-     * Return product image size attributes
+     * Return resized product image information
      *
-     * @return string
+     * @return array
      */
-    public function getSizeAttributes()
+    public function getResizedImageInfo()
     {
-        return $this->_getModel()->getSizeAttributes();
+        return $this->_getModel()->getResizedImageInfo();
     }
 
     /**
