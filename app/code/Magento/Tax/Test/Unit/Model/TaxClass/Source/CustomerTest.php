@@ -181,4 +181,115 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ['isEmpty' => true, 'expected' => []]
         ];
     }
+
+    /**
+     * Run test getAllOptions method for names integrity
+     *
+     * @param array $value
+     * @dataProvider dataProviderGetAllOptionsNameIntegrity
+     */
+    public function testGetAllOptionsNameIntegrity(array $value)
+    {
+        $filterMock = $this->getMock(
+            'Magento\Framework\Api\Filter',
+            [],
+            [],
+            '',
+            false
+        );
+        $searchCriteriaMock = $this->getMock(
+            'Magento\Framework\Api\SearchCriteria',
+            [],
+            [],
+            '',
+            false
+        );
+        $searchResultsMock = $this->getMockForAbstractClass(
+            'Magento\Tax\Api\Data\TaxClassSearchResultsInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getItems']
+        );
+        $taxClassMock = $this->getMockForAbstractClass(
+            'Magento\Tax\Api\Data\TaxClassInterface',
+            ['getClassId', 'getClassName'],
+            '',
+            false,
+            true,
+            true
+        );
+
+        $this->filterBuilderMock->expects($this->once())
+            ->method('setField')
+            ->with(\Magento\Tax\Model\ClassModel::KEY_TYPE)
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->once())
+            ->method('setValue')
+            ->with(\Magento\Tax\Api\TaxClassManagementInterface::TYPE_CUSTOMER)
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->once())
+            ->method('create')
+            ->willReturn($filterMock);
+        $this->searchCriteriaBuilderMock->expects($this->once())
+            ->method('addFilter')
+            ->with([$filterMock])
+            ->willReturnSelf();
+        $this->searchCriteriaBuilderMock->expects($this->once())
+            ->method('create')
+            ->willReturn($searchCriteriaMock);
+        $this->taxClassRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willReturn($searchResultsMock);
+
+
+        $taxClassMock->expects($this->once())
+            ->method('getClassId')
+            ->willReturn($value['value']);
+        $taxClassMock->expects($this->once())
+            ->method('getClassName')
+            ->willReturn($value['label']);
+
+        $items = [$taxClassMock];
+        $searchResultsMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn($items);
+
+        $result=($this->customer->getAllOptions());
+        $expected=$value;
+        $this->assertEquals([$expected], $result);
+    }
+
+    /**
+     * Data provider for testGetAllOptionsNameIntegrity
+     *
+     * @return array
+     */
+    public function dataProviderGetAllOptionsNameIntegrity()
+    {
+        return [
+            [
+                'value' => ['value' => 1, 'label' => 'unescaped name'],
+            ],
+            [
+                'value' => ['value' => 2, 'label' => 'tax < 50%'],
+            ],
+            [
+                'value' => ['value' => 3, 'label' => 'rule for 1 & 2'],
+            ],
+            [
+                'value' => ['value' => 4, 'label' => 'html <tag>'],
+            ],
+            [
+                'value' => ['value' => 5, 'label' => 'comment <!-- comment -->'],
+            ],
+            [
+                'value' => ['value' => 6, 'label' => 'php tag <?php echo "2"; ?>'],
+            ],
+
+        ];
+    }
 }

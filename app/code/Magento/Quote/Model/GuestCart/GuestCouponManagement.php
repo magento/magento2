@@ -47,7 +47,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->couponManagement->get($quoteIdMask->getId());
+        return $this->couponManagement->get($quoteIdMask->getQuoteId());
     }
 
     /**
@@ -57,7 +57,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->couponManagement->set($quoteIdMask->getId(), $couponCode);
+        return $this->couponManagement->set($quoteIdMask->getQuoteId(), $couponCode);
     }
 
     /**
@@ -67,6 +67,6 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->couponManagement->remove($quoteIdMask->getId());
+        return $this->couponManagement->remove($quoteIdMask->getQuoteId());
     }
 }
