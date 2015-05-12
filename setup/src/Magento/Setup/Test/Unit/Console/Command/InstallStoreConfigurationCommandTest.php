@@ -11,6 +11,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Setup\Model\Installer;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
+use Magento\Framework\Url\Validator;
 
 class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -101,16 +102,13 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInvalidData(array $option, $error)
     {
-        $localizedException= $this->getMock('Magento\Framework\Exception\LocalizedException', [], [], '', false);
-        $localizedException->expects($this->any())->method('getLogMessage')
-            ->will($this->returnValue('Invalid value. Value must be a URL or one of placeholders:'));
-        $baseUrl= $this->getMock('Magento\Config\Model\Config\Backend\Baseurl', [], [], '', false);
+        $url= $this->getMock('Magento\Framework\Url\Validator', [], [], '', false);
+        $url->expects($this->any())->method('isValid')->will($this->returnValue(false));
         if (!isset($option['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE])) {
-            $baseUrl->expects($this->any())->method('beforeSave')->will($this->throwException($localizedException));
-        } else {
-
+            $url->expects($this->any())->method('getMessages')->will($this->returnValue([
+                Validator::INVALID_URL => 'Invalid URL.'
+            ]));
         }
-
         $localeLists= $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
         $localeLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
         $timezoneLists= $this->getMock('Magento\Framework\Validator\Timezone', [], [], '', false);
@@ -120,8 +118,8 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
 
         $returnValueMapOM = [
             [
-                'Magento\Config\Model\Config\Backend\Baseurl',
-                $baseUrl
+                'Magento\Framework\Url\Validator',
+                $url
             ],
             [
                 'Magento\Framework\Validator\Locale',
@@ -157,8 +155,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 ['--' . StoreConfigurationDataMapper::KEY_BASE_URL => 'sampleUrl'],
-                'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL
-                . '\': Invalid value. Value must be a URL or one of placeholders:'
+                'Command option \'' . StoreConfigurationDataMapper::KEY_BASE_URL . '\': Invalid URL.'
             ],
             [
                 ['--' . StoreConfigurationDataMapper::KEY_LANGUAGE => 'sampleLanguage'],
