@@ -12,23 +12,23 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Assert that Order Grand Total is correct on checkoutOnePage.
  */
-class AssertOrderTotalOnReviewPage extends AbstractConstraint
+class AssertGrandTotalOrderReview extends AbstractConstraint
 {
     /**
      * Assert that Order Grand Total is correct on checkoutOnePage
      *
      * @param CheckoutOnepage $checkoutOnepage
-     * @param array $prices
+     * @param string $grandTotal
      * @return void
      */
-    public function processAssert(CheckoutOnepage $checkoutOnepage, array $prices)
+    public function processAssert(CheckoutOnepage $checkoutOnepage, $grandTotal)
     {
         $checkoutReviewGrandTotal = $checkoutOnepage->getReviewBlock()->getGrandTotal();
 
         \PHPUnit_Framework_Assert::assertEquals(
             $checkoutReviewGrandTotal,
-            number_format($prices['grandTotal'], 2),
-            "Grand Total price: $checkoutReviewGrandTotal not equals with price from data set: " . $prices['grandTotal']
+            number_format($grandTotal, 2),
+            "Grand Total price: $checkoutReviewGrandTotal not equals with price from data set: " . $grandTotal
         );
     }
 
