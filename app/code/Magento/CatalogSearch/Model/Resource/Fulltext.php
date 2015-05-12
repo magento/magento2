@@ -71,7 +71,7 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function resetSearchResults()
     {
         $adapter = $this->_getWriteAdapter();
-        $adapter->update($this->getTable('search_query'), ['is_processed' => 0]);
+        $adapter->update($this->getTable('search_query'), ['is_processed' => 0], ['is_processed != 0']);
         $this->_eventManager->dispatch('catalogsearch_reset_search_result');
         return $this;
     }
