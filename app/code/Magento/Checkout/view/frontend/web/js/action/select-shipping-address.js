@@ -44,7 +44,7 @@ define(
                     paymentService.setPaymentMethods(result.payment_methods);
                     quote.setFormattedBillingAddress(result.formatted_billing_address);
                     quote.setFormattedShippingAddress(result.formatted_shipping_address);
-                    quote.setGrandTotal(result.grand_total);
+                    quote.setSubtotal(result.subtotal);
                     navigator.setCurrent('shippingAddress').goNext();
                     if (typeof actionCallback == 'function') {
                         actionCallback(true);
@@ -58,7 +58,7 @@ define(
                     quote.setBillingAddress(null);
                     quote.setFormattedBillingAddress(null);
                     quote.setFormattedShippingAddress(null);
-                    quote.setGrandTotal(null);
+                    quote.setSubtotal(null);
                     if (typeof actionCallback == 'function') {
                         actionCallback(false);
                     }
