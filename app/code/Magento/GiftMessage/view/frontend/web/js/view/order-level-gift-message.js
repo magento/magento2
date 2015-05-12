@@ -18,6 +18,7 @@ define([
                 displayArea: 'orderLevelGiftMessage'
             },
             message: {},
+            optionType: 'gift_messages',
             initialize: function() {
                 var that = this;
                 quote.getShippingAddress().subscribe(function(shippingAddress) {
