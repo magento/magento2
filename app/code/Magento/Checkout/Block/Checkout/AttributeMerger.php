@@ -58,9 +58,9 @@ class AttributeMerger
     /**
      * Merge additional address fields for given provider
      *
-     * @param $elements
+     * @param array $elements
      * @param string $providerName name of the storage container used by UI component
-     * @param $dataScopePrefix
+     * @param string $dataScopePrefix
      * @param array $fields
      * @return array
      */

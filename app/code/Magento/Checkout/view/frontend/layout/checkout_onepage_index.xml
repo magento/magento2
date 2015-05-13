@@ -63,7 +63,7 @@
                                                                 <item name="visible" xsi:type="boolean">false</item>
                                                             </item>
                                                             <item name="region_id" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
@@ -168,7 +168,7 @@
                                                                 <item name="visible" xsi:type="boolean">false</item>
                                                             </item>
                                                             <item name="region_id" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
