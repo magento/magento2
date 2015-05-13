@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class Config implements \Magento\Framework\App\Config\ScopeConfigInterface
 {
     /**
@@ -37,7 +39,7 @@ class Config implements \Magento\Framework\App\Config\ScopeConfigInterface
      */
     public function getValue(
         $path = null,
-        $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
         $scopeCode = null
     ) {
         return $this->_scopePool->getScope($scope, $scopeCode)->getValue($path);
@@ -51,7 +53,7 @@ class Config implements \Magento\Framework\App\Config\ScopeConfigInterface
      * @param null|string $scopeCode
      * @return bool
      */
-    public function isSetFlag($path, $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
+    public function isSetFlag($path, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
         return (bool) $this->getValue($path, $scope, $scopeCode);
     }

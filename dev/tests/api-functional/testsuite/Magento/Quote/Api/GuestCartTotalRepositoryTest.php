@@ -45,7 +45,7 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
     {
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMaskFactory')->create();
-        $quoteIdMask->load($quoteId);
+        $quoteIdMask->load($quoteId, 'quote_id');
         return $quoteIdMask->getMaskedId();
     }
 
