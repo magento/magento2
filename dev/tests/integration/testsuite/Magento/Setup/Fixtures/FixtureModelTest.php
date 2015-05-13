@@ -43,7 +43,8 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
     {
         $reindexCommand = Bootstrap::getObjectManager()->get('Magento\Indexer\Console\Command\IndexerReindexCommand');
         $parser = Bootstrap::getObjectManager()->get('Magento\Framework\Xml\Parser');
-        $model = new FixtureModel($reindexCommand, $parser, []);
+        $itfApplication = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication();
+        $model = new FixtureModel($reindexCommand, $parser, $itfApplication->getInitParams());
         $model->loadConfig(__DIR__ . '/_files/small.xml');
         $model->initObjectManager();
 
