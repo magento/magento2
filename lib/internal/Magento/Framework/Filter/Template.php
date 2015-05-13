@@ -216,12 +216,12 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Return associative array of include construction.
+     * Return associative array of parameters.
      *
      * @param string $value raw parameters
      * @return array
      */
-    protected function _getIncludeParameters($value)
+    protected function _getParameters($value)
     {
         $tokenizer = new \Magento\Framework\Filter\Template\Tokenizer\Parameter();
         $tokenizer->setString($value);

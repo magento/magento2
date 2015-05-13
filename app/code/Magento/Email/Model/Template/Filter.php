@@ -263,7 +263,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function blockDirective($construction)
     {
         $skipParams = ['class', 'id', 'output'];
-        $blockParameters = $this->_getIncludeParameters($construction[2]);
+        $blockParameters = $this->_getParameters($construction[2]);
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -308,7 +308,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function layoutDirective($construction)
     {
-        $this->_directiveParams = $this->_getIncludeParameters($construction[2]);
+        $this->_directiveParams = $this->_getParameters($construction[2]);
         if (!isset($this->_directiveParams['area'])) {
             $this->_directiveParams['area'] = 'frontend';
         }
@@ -387,7 +387,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function viewDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         $url = $this->_assetRepo->getUrlWithParams($params['url'], $params);
         return $url;
     }
@@ -400,7 +400,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
@@ -414,7 +414,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function storeDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         if (!isset($params['_query'])) {
             $params['_query'] = [];
         }
@@ -467,7 +467,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function escapehtmlDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         if (!isset($params['var'])) {
             return '';
         }
@@ -567,7 +567,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function protocolDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         $store = null;
         if (isset($params['store'])) {
             try {
@@ -601,7 +601,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function configDirective($construction)
     {
         $configValue = '';
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         $storeId = $this->getStoreId();
         if (isset($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
@@ -622,7 +622,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function customvarDirective($construction)
     {
         $customVarValue = '';
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         if (isset($params['code'])) {
             $variable = $this->_variableFactory->create()->setStoreId(
                 $this->getStoreId()
@@ -656,7 +656,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return $construction[0];
         }
 
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         if (isset($params['file'])) {
             $this->_addInlineCssFile($params['file']);
         }

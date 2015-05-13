@@ -93,7 +93,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function viewDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         $params['_absolute'] = $this->_useAbsoluteLinks;
         /**
          * @bug: the "_absolute" key is not supported by underlying services
@@ -122,7 +122,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 
@@ -136,7 +136,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function storeDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         if (!isset($params['_query'])) {
             $params['_query'] = [];
         }

@@ -77,7 +77,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function widgetDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
 
         // Determine what name block should have in layout
         $name = null;
@@ -119,7 +119,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function mediaDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->_getParameters($construction[2]);
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
