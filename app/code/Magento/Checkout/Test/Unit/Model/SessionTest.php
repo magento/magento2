@@ -313,14 +313,14 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $quoteIdMaskMock = $this->getMock(
             '\Magento\Quote\Model\QuoteIdMask',
-            ['getMaskedId', 'load', 'setId', 'save'],
+            ['getMaskedId', 'load', 'setId', 'save', 'setQuoteId'],
             [],
             '',
             false
         );
         $quoteIdMaskMock->expects($this->once())->method('load')->with($replaceQuoteId)->willReturnSelf();
         $quoteIdMaskMock->expects($this->once())->method('getMaskedId')->willReturn(null);
-        $quoteIdMaskMock->expects($this->once())->method('setId')->with($replaceQuoteId)->willReturnSelf();
+        $quoteIdMaskMock->expects($this->once())->method('setQuoteId')->with($replaceQuoteId)->willReturnSelf();
         $quoteIdMaskMock->expects($this->once())->method('save');
 
         $quoteIdMaskFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteIdMaskFactory', [], [], '', false);
