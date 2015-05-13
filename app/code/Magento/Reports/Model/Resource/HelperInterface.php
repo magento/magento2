@@ -24,11 +24,12 @@ interface HelperInterface
     /**
      * Update rating position
      *
-     * @param string $type day|month|year
-     * @param string $column
-     * @param string $mainTable
-     * @param string $aggregationTable
-     * @return \Magento\Framework\DB\Helper\AbstractHelper
+     * @param $adapter
+     * @param $type
+     * @param $column
+     * @param $mainTable
+     * @param $aggregationTable
+     * @return mixed
      */
-    public function updateReportRatingPos($type, $column, $mainTable, $aggregationTable);
+    public function updateReportRatingPos($adapter, $type, $column, $mainTable, $aggregationTable);
 }

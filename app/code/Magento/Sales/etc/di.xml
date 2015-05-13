@@ -205,4 +205,14 @@
             <argument name="resourcePrefix" xsi:type="string">sales</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Resource\Report\Order\Createdat">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Resource\Report\Bestsellers">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
 </config>
