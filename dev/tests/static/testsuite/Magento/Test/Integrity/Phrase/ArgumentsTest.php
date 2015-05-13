@@ -10,12 +10,12 @@
  */
 namespace Magento\Test\Integrity\Phrase;
 
-use Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer;
+use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
 class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 {
     /**
-     * @var \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
+     * @var \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
      */
     protected $_phraseCollector;
 
@@ -29,8 +29,8 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
 
     protected function setUp()
     {
-        $this->_phraseCollector = new \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
-            new \Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer()
+        $this->_phraseCollector = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
+            new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer()
         );
 
         $rootDir = \Magento\Framework\App\Utility\Files::init()->getPathToSource();

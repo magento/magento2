@@ -99,7 +99,8 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                            title="<?php echo $block->escapeHtml(__('Qty')); ?>"
                            class="input-text qty"
                            maxlength="12"
-                           data-validate="{required:true,'validate-greater-than-zero':true}" />
+                           data-validate="{required:true,'validate-greater-than-zero':true}"
+                           data-role="cart-item-qty"/>
                 </div>
             </div>
             <?php $cols++; ?>
