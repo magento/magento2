@@ -60,17 +60,13 @@ class ImageProcessor implements ImageProcessorInterface
         }
 
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
-        $fileName = $imageContent->getName();
-        $mimeType = $imageContent->getMimeType();
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
 
-        $tmpDirectory = sys_get_temp_dir();
-        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $mediaDirectory->create($tmpDirectory);
-        $fileName = $fileName . substr(md5(rand()), 0, 7) . '.' . $this->getMimeTypeExtension($mimeType);
-        $relativeFilePath = $tmpDirectory . DIRECTORY_SEPARATOR . $fileName;
-        $mediaDirectory->writeFile($relativeFilePath, $fileContent);
+        $fileName =  substr(md5(rand()), 0, 7) . '.' . $imageContent->getName();
+        $tmpDirectory->writeFile($fileName, $fileContent);
 
-        return $fileName;
+        $absolutePath = $tmpDirectory->getAbsolutePath() . $fileName;
+        return $absolutePath;
     }
 
     /**

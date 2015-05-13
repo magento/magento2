@@ -2530,7 +2530,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         } else {
             return [
                 ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
-                ImageContentInterface::MIME_TYPE => $content->getMimeType(),
+                ImageContentInterface::TYPE => $content->getType(),
                 ImageContentInterface::NAME => $content->getName(),
             ];
         }

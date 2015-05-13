@@ -14,7 +14,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 interface ImageContentInterface extends ExtensibleDataInterface
 {
     const BASE64_ENCODED_DATA = 'base64_encoded_data';
-    const MIME_TYPE = 'mime_type';
+    const TYPE = 'type';
     const NAME = 'name';
 
     /**
@@ -37,7 +37,7 @@ interface ImageContentInterface extends ExtensibleDataInterface
      *
      * @return string
      */
-    public function getMimeType();
+    public function getType();
 
     /**
      * Set MIME type
@@ -45,7 +45,7 @@ interface ImageContentInterface extends ExtensibleDataInterface
      * @param string $mimeType
      * @return $this
      */
-    public function setMimeType($mimeType);
+    public function setType($mimeType);
 
     /**
      * Retrieve image name

@@ -7,6 +7,8 @@
 namespace Magento\Customer\Model\Resource;
 
 use Magento\Customer\Model\Data\CustomerSecure;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -68,6 +70,16 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     protected $extensibleDataObjectConverter;
 
     /**
+     * @var DataObjectHelper
+     */
+    protected $dataObjectHelper;
+
+    /**
+     * @var ImageProcessorInterface
+     */
+    protected $imageProcessor;
+
+    /**
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\Data\CustomerSecureFactory $customerSecureFactory
      * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
@@ -78,6 +90,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param DataObjectHelper $dataObjectHelper
+     * @param ImageProcessorInterface $imageProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -90,7 +104,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        DataObjectHelper $dataObjectHelper,
+        ImageProcessorInterface $imageProcessor
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -102,6 +118,8 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->imageProcessor = $imageProcessor;
     }
 
     /**
@@ -111,7 +129,18 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
         $this->validate($customer);
-        //TODO : Check and Process Image attributes using ImageProcessor
+        //Check and Process Image attributes using ImageProcessor
+        $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
+            $customer->getCustomAttributes(),
+            '\Magento\Framework\Api\Data\ImageContentInterface'
+        );
+        $customerImageData = [];
+        /** @var $imageDataObject \Magento\Framework\Api\AttributeValue */
+        foreach($imageDataObjects as $imageDataObject) {
+            $customerImageData[$imageDataObject->getAttributeCode()] = $this->imageProcessor->save(
+                $imageDataObject->getValue()
+            );
+        }
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
@@ -119,6 +148,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             [],
             '\Magento\Customer\Api\Data\CustomerInterface'
         );
+        // Replace image attributes with new data
+        foreach($customerImageData as $dataKey => $value) {
+            $customerData[$dataKey]['tmp_name'] = $value;
+        }
+
         $customer->setAddresses($origAddresses);
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
         $storeId = $customerModel->getStoreId();
@@ -135,10 +169,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         }
         // Populate model with secure data
         if ($customer->getId()) {
-            /*
-             * TODO: Check \Magento\Customer\Model\Resource\Customer::changeResetPasswordLinkToken setAttribute
-             * and make sure its consistent
-             */
             $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
             $customerModel->setRpToken($customerSecure->getRpToken());
             $customerModel->setRpTokenCreatedAt($customerSecure->getRpTokenCreatedAt());

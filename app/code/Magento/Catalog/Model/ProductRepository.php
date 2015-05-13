@@ -434,7 +434,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $fileContent = @base64_decode($contentDataObject->getBase64EncodedData(), true);
         $fileName = $contentDataObject->getName();
-        $mimeType = $contentDataObject->getMimeType();
+        $mimeType = $contentDataObject->getType();
 
         /** @var \Magento\Catalog\Model\Product\Media\Config $mediaConfig */
         $mediaConfig = $product->getMediaConfig();
@@ -528,7 +528,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $contentDataObject = $this->contentFactory->create()
                 ->setName($newEntry['content'][ImageContentInterface::NAME])
                 ->setBase64EncodedData($newEntry['content'][ImageContentInterface::BASE64_ENCODED_DATA])
-                ->setMimeType($newEntry['content'][ImageContentInterface::MIME_TYPE]);
+                ->setType($newEntry['content'][ImageContentInterface::TYPE]);
             $newEntry['content'] = $contentDataObject;
             $this->processNewMediaGalleryEntry($product, $newEntry);
         }

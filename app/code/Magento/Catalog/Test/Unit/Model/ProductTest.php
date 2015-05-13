@@ -1000,7 +1000,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'types' => ['image'],
                     'content' => [
                         ImageContentInterface::NAME => 'product_image',
-                        ImageContentInterface::MIME_TYPE => 'image/jpg',
+                        ImageContentInterface::TYPE => 'image/jpg',
                         ImageContentInterface::BASE64_ENCODED_DATA => 'content_data'
                     ]
                 ]
@@ -1009,12 +1009,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $contentMock =
             $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterfaceFactory')
-                ->setMethods(['getBase64EncodedData', 'getMimeType', 'getName'])
+                ->setMethods(['getBase64EncodedData', 'getType', 'getName'])
                 ->getMockForAbstractClass();
         $contentMock->expects($this->once())->method('getBase64EncodedData')
             ->willReturn($expectedResult['images'][0]['content']['base64_encoded_data']);
-        $contentMock->expects($this->once())->method('getMimeType')
-            ->willReturn($expectedResult['images'][0]['content']['mime_type']);
+        $contentMock->expects($this->once())->method('getType')
+            ->willReturn($expectedResult['images'][0]['content']['type']);
         $contentMock->expects($this->once())->method('getName')
             ->willReturn($expectedResult['images'][0]['content']['name']);
 

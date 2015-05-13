@@ -38,13 +38,13 @@ class ImageContentValidator implements ImageContentValidatorInterface
     /**
      * Check if gallery entry content is valid
      *
-     * @param ImageContentInterface $entryContent
+     * @param ImageContentInterface $imageContent
      * @return bool
      * @throws InputException
      */
-    public function isValid(ImageContentInterface $entryContent)
+    public function isValid(ImageContentInterface $imageContent)
     {
-        $fileContent = @base64_decode($entryContent->getBase64EncodedData(), true);
+        $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
         if (empty($fileContent)) {
             throw new InputException(__('The image content must be valid base64 encoded data.'));
         }
@@ -53,10 +53,10 @@ class ImageContentValidator implements ImageContentValidatorInterface
             throw new InputException(__('The image content must be valid base64 encoded data.'));
         }
         $sourceMimeType = $imageProperties['mime'];
-        if ($sourceMimeType != $entryContent->getMimeType() || !$this->isMimeTypeValid($sourceMimeType)) {
+        if ($sourceMimeType != $imageContent->getType() || !$this->isMimeTypeValid($sourceMimeType)) {
             throw new InputException(__('The image MIME type is not valid or not supported.'));
         }
-        if (!$this->isNameValid($entryContent->getName())) {
+        if (!$this->isNameValid($imageContent->getName())) {
             throw new InputException(__('Provided image name contains forbidden characters.'));
         }
         return true;

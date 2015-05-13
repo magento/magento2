@@ -28,9 +28,9 @@ class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject imple
      *
      * @return string
      */
-    public function getMimeType()
+    public function getType()
     {
-        return $this->_get(self::MIME_TYPE);
+        return $this->_get(self::TYPE);
     }
 
     /**
@@ -60,9 +60,9 @@ class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject imple
      * @param string $mimeType
      * @return $this
      */
-    public function setMimeType($mimeType)
+    public function setType($mimeType)
     {
-        return $this->setData(self::MIME_TYPE, $mimeType);
+        return $this->setData(self::TYPE, $mimeType);
     }
 
     /**

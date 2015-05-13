@@ -324,7 +324,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'label' => 'tiny1',
                 'types' => [],
                 'content' => [
-                    'mime_type' => 'image/jpeg',
+                    'type' => 'image/jpeg',
                     'name' => $filename1,
                     'entry_data' => $encodedImage,
                 ]
@@ -335,7 +335,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'label' => 'tiny2',
                 'types' => ['image', 'small_image'],
                 'content' => [
-                    'mime_type' => 'image/jpeg',
+                    'type' => 'image/jpeg',
                     'name' => $filename2,
                     'entry_data' => $encodedImage,
                 ]

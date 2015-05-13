@@ -992,7 +992,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'types' => ['image', 'small_image'],
                 'content' => [
                     ImageContentInterface::NAME => 'filename',
-                    ImageContentInterface::MIME_TYPE => 'image/jpeg',
+                    ImageContentInterface::TYPE => 'image/jpeg',
                     ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
                 ],
             ],

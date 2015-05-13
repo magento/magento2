@@ -112,7 +112,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'disabled' => false,
             'content' => [
                 ImageContentInterface::BASE64_ENCODED_DATA => base64_encode(file_get_contents($this->testImagePath)),
-                ImageContentInterface::MIME_TYPE => 'image/jpeg',
+                ImageContentInterface::TYPE => 'image/jpeg',
                 ImageContentInterface::NAME => 'test_image'
             ]
         ];
@@ -144,7 +144,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'disabled' => false,
             'content' => [
                 'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                'mime_type' => 'image/jpeg',
+                'type' => 'image/jpeg',
                 'name' => 'test_image',
             ]
         ];
@@ -285,7 +285,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'disabled' => false,
             'content' => [
                 'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                'mime_type' => 'image/jpeg',
+                'type' => 'image/jpeg',
                 'name' => 'test_image',
             ]
         ];
@@ -309,7 +309,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'disabled' => false,
             'content' => [
                 'entry_data' => $encodedContent,
-                'mime_type' => 'image/jpeg',
+                'type' => 'image/jpeg',
                 'name' => 'test_image',
             ]
         ];
@@ -333,7 +333,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'disabled' => false,
             'content' => [
                 'entry_data' => $encodedContent,
-                'mime_type' => 'image/jpeg',
+                'type' => 'image/jpeg',
                 'name' => 'test_image',
             ]
         ];
@@ -357,7 +357,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'disabled' => false,
             'content' => [
                 'entry_data' => $encodedContent,
-                'mime_type' => 'wrong_mime_type',
+                'type' => 'wrong_mime_type',
                 'name' => 'test_image',
             ]
         ];
@@ -381,7 +381,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'disabled' => false,
             'content' => [
                 'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                'mime_type' => 'image/jpeg',
+                'type' => 'image/jpeg',
                 'name' => 'test_image',
             ]
         ];
@@ -404,7 +404,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'disabled' => false,
             'content' => [
                 'entry_data' => base64_encode(file_get_contents($this->testImagePath)),
-                'mime_type' => 'image/jpeg',
+                'type' => 'image/jpeg',
                 'name' => 'test/\\{}|:"<>', // Cannot contain \ / : * ? " < > |
             ]
         ];

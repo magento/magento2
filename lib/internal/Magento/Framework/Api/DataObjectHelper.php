@@ -189,4 +189,25 @@ class DataObjectHelper
         $this->_setDataValues($firstDataObject, $secondObjectArray, $interfaceName);
         return $this;
     }
+
+    /**
+     * Get attribute value object array for a provided type from the array of custom attribute value objects
+     *
+     * @param AttributeValue[] $attributeValues Array of custom att
+     * @param $type
+     * @return AttributeValue[]
+     */
+    public function getCustomAttributeValueByType(array $attributeValues, $type)
+    {
+        $attributeValueArray = [];
+        if(empty($attributeValues)) {
+            return $attributeValueArray;
+        }
+        foreach($attributeValues as $attributeValue) {
+            if($attributeValue->getValue() instanceof $type) {
+                $attributeValueArray[] = $attributeValue;
+            }
+        }
+        return $attributeValueArray;
+    }
 }

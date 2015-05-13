@@ -112,8 +112,8 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         ];
 
         $image = $this->imageFactory->create()
-            ->setMimeType('png')
-            ->setName('sample.png')
+            ->setType('image/jpeg')
+            ->setName('sample.jpeg')
             ->setBase64EncodedData($imageData);
 
         $imageData = $this->dataObjectProcessor->buildOutputDataArray(
@@ -137,5 +137,12 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         ];
         $customerData = $this->_webApiCall($serviceInfo, $requestData);
         $this->currentCustomerId[] = $customerData['id'];
+
+        /** @var $customerService \Magento\Customer\Api\CustomerRepositoryInterface */
+        $customerService = Bootstrap::getObjectManager()->get('Magento\Customer\Api\CustomerRepositoryInterface');
+
+        $customerData = $customerService->getById($customerData['id']);
+
+        $this->assertNotNull($customerData['customer_image']);
     }
 }
