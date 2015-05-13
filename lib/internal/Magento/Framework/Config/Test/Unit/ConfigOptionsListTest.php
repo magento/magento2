@@ -48,14 +48,16 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[5]);
         $this->assertSame('Database server username', $options[5]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[6]);
-        $this->assertSame('Database server password', $options[6]->getDescription());
+        $this->assertSame('Database server engine', $options[6]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[7]);
-        $this->assertSame('Database table prefix', $options[7]->getDescription());
+        $this->assertSame('Database server password', $options[7]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[8]);
-        $this->assertSame('Database type', $options[8]->getDescription());
+        $this->assertSame('Database table prefix', $options[8]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[9]);
-        $this->assertSame('Database  initial set of commands', $options[9]->getDescription());
-        $this->assertEquals(10, count($options));
+        $this->assertSame('Database type', $options[9]->getDescription());
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[10]);
+        $this->assertSame('Database  initial set of commands', $options[10]->getDescription());
+        $this->assertEquals(11, count($options));
     }
 
     public function testCreateOptions()

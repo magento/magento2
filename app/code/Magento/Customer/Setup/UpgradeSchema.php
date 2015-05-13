@@ -46,7 +46,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     $installer->getIdxName(
                         $installer->getTable($table),
                         ['entity_type_id'],
-                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
                     )
                 );
                 $connection->dropColumn($installer->getTable($table), 'entity_type_id');

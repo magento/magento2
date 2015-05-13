@@ -1086,7 +1086,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $createSql = $this->getCreateTable($tableName, $schemaName);
 
             // collect CONSTRAINT
-            $regExp  = '#,\s+CONSTRAINT `([^`]*)` FOREIGN KEY \(`([^`]*)`\) '
+            $regExp  = '#,\s+CONSTRAINT `([^`]*)` FOREIGN KEY ?\(`([^`]*)`\) '
                 . 'REFERENCES (`([^`]*)`\.)?`([^`]*)` \(`([^`]*)`\)'
                 . '( ON DELETE (RESTRICT|CASCADE|SET NULL|NO ACTION))?'
                 . '( ON UPDATE (RESTRICT|CASCADE|SET NULL|NO ACTION))?#';
@@ -1935,6 +1935,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         if ($schemaName !== null) {
             $table->setSchema($schemaName);
         }
+        if (isset($this->_config['engine'])) {
+            $table->setOption('type', $this->_config['engine']);
+        }
 
         return $table;
     }
@@ -1962,7 +1965,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         );
         $tableOptions   = $this->_getOptionsDefinition($table);
         $sql = sprintf(
-            "CREATE TABLE %s (\n%s\n) %s",
+            "CREATE TABLE IF NOT EXISTS %s (\n%s\n) %s",
             $this->quoteIdentifier($table->getName()),
             implode(",\n", $sqlFragment),
             implode(" ", $tableOptions)
