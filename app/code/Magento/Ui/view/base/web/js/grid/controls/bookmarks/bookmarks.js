@@ -5,9 +5,11 @@
 define([
     'underscore',
     'mageUtils',
+    'uiRegistry',
+    './storage',
     'Magento_Ui/js/lib/collapsible',
     'Magento_Ui/js/core/renderer/layout'
-], function (_, utils, Collapsible, layout) {
+], function (_, utils, registry, Storage, Collapsible, layout) {
     'use strict';
 
     return Collapsible.extend({
@@ -17,10 +19,6 @@ define([
             activeIndex: 'default',
             hasChanges: false,
             initialSet: true,
-            listens: {
-                activeIndex: 'onActiveChange',
-                current: 'onDataChange'
-            },
             templates: {
                 view: {
                     parent: '${ $.$data.name }',
@@ -35,12 +33,22 @@ define([
                     isNew: true
                 }
             },
+            storageConfig: {
+                provider: '${ $.storageConfig.namespace }.bookmarks.storage',
+                name: '${ $.storageConfig.provider }',
+                saveUrl: 'path/to/save',
+                deleteUrl: 'path/to/delete'
+            },
             views: {
                 default: {
                     label: 'Default View',
                     index: 'default',
                     editable: false
                 }
+            },
+            listens: {
+                activeIndex: 'onActiveChange',
+                current: 'onDataChange'
             }
         },
 
@@ -67,6 +75,14 @@ define([
                 .observe('activeView hasChanges');
 
             return this;
+        },
+
+        initStorage: function () {
+            var storage = new Storage(this.storageConfig);
+
+            registry.set(this.storageConfig.name, storage);
+
+            return this._super();
         },
 
         /**
