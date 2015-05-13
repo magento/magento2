@@ -1180,7 +1180,7 @@ class Installer
                 $interface = self::DATA_UPGRADE;
                 break;
             default:
-                throw  new \Magento\Setup\Exception("$className does not exist");
+                throw new \Magento\Setup\Exception("$className does not exist");
         }
 
         return $this->createSchemaDataHandler($className, $interface);
