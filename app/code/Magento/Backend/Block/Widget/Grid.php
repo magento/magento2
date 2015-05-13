@@ -441,6 +441,10 @@ class Grid extends \Magento\Backend\Block\Widget
                     'onclick' => $this->getJsObjectName() . '.resetFilter()',
                     'class' => 'action-reset action-tertiary'
                 ]
+            )->setDataAttribute(
+                [
+                    'action' => 'grid-filter-reset'
+                ]
             )
         );
         $this->setChild(
