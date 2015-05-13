@@ -64,19 +64,38 @@ class TokensTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $this->assertEquals($expectedData, $this->tokensBlock->getFormFields());
+    }
 
+    public function testToHtml()
+    {
         $htmlContent = $this->tokensBlock->toHtml();
 
-        $this->assertEquals(1, preg_match('/consumer_key/' , $htmlContent));
-        $this->assertEquals(1, preg_match('/Consumer\sKey/' , $htmlContent));
+        $this->assertContains('name="consumer_key"', $htmlContent);
+        $this->assertContains(
+            '<span>Consumer Key</span>',
+            $htmlContent,
+            "HTML content of token block should contain information about 'Consumer Key'."
+        );
 
-        $this->assertEquals(1, preg_match('/consumer_secret/' , $htmlContent));
-        $this->assertEquals(1, preg_match('/Consumer\sSecret/' , $htmlContent));
+        $this->assertContains('name="consumer_secret"', $htmlContent);
+        $this->assertContains(
+            '<span>Consumer Secret</span>',
+            $htmlContent,
+            "HTML content of token block should contain information about 'Consumer Secret'."
+        );
 
-        $this->assertEquals(1, preg_match('/token/' , $htmlContent));
-        $this->assertEquals(1, preg_match('/Access\sToken/' , $htmlContent));
+        $this->assertContains('name="token"', $htmlContent);
+        $this->assertContains(
+            '<span>Access Token</span>',
+            $htmlContent,
+            "HTML content of token block should contain information about 'Access Token'."
+        );
 
-        $this->assertEquals(1, preg_match('/token_secret/' , $htmlContent));
-        $this->assertEquals(1, preg_match('/Access\sToken\sSecret/' , $htmlContent));
+        $this->assertContains('name="token_secret"', $htmlContent);
+        $this->assertContains(
+            '<span>Access Token Secret</span>',
+            $htmlContent,
+            "HTML content of token block should contain information about 'Access Token Secret'."
+        );
     }
 }
