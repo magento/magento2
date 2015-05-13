@@ -55,6 +55,7 @@ class ApplyVatIdTest extends AbstractApplyVatIdTest
      *
      * @param CustomerAccountIndex $customerAccountIndex
      * @param CustomerAddressEdit $customerAddressEdit
+     * @return void
      */
     public function __inject(CustomerAccountIndex $customerAccountIndex, CustomerAddressEdit $customerAddressEdit)
     {
