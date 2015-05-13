@@ -85,12 +85,27 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
-        $this->response = $this->getMock('Magento\Framework\App\Console\Response');
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $this->request = $this->getMock('Magento\Framework\App\RequestInterface',
+            [
+                'getMethod',
+                'getModuleName',
+                'setModuleName',
+                'getActionName',
+                'setActionName',
+                'getParam',
+                'setParams',
+                'getParams',
+                'getCookie',
+                'isSecure'
+            ],
+            [],
+            '',
+            false);
+        $this->response = $this->getMock('Magento\Framework\App\Console\Response', [], [], '', false);
+        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
-        $this->update = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface');
+        $this->update = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->layout->expects($this->any())->method('getUpdate')->will($this->returnValue($this->update));
 
@@ -108,7 +123,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
         $this->page->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
 
-        $this->view = $this->getMock('Magento\Framework\App\ViewInterface');
+        $this->view = $this->getMock('Magento\Framework\App\ViewInterface', [], [], '', false);
         $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
 
         $this->resultFactory = $this->getMock('Magento\Framework\Controller\ResultFactory', [], [], '', false);
@@ -140,10 +155,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test the basic Access action.
+     * Test the basic Request action.
      */
-    public function testrequestAction()
+    public function testRequestAction()
     {
+        $this->request->expects($this->any())
+            ->method('getMethod')
+            ->willReturn('GET');
         $this->helperMock->expects($this->once())
             ->method('getRequestUrl');
         $this->helperMock->expects($this->once())
