@@ -5,7 +5,7 @@
  */
 namespace Magento\Downloadable\Model;
 
-use Magento\Downloadable\Api\Data\LinkContentInterface;
+use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Api\Data\File\ContentUploaderInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -79,9 +79,18 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      */
     public function getList($sku)
     {
-        $linkList = [];
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($sku);
+        return $this->getLinksByProduct($product);
+    }
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return array
+     */
+    public function getLinksByProduct(\Magento\Catalog\Api\Data\ProductInterface $product)
+    {
+        $linkList = [];
         $links = $this->downloadableType->getLinks($product);
         /** @var \Magento\Downloadable\Model\Link $link */
         foreach ($links as $link) {
@@ -139,113 +148,149 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function save($sku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false)
+    public function save($sku, LinkInterface $link, $isGlobalScopeContent = false)
     {
         $product = $this->productRepository->get($sku, true);
-        if ($linkId) {
-
-            /** @var $link \Magento\Downloadable\Model\Link */
-            $link = $this->linkFactory->create()->load($linkId);
-            if (!$link->getId()) {
-                throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
-            }
-            if ($link->getProductId() != $product->getId()) {
-                throw new InputException(__('Provided downloadable link is not related to given product.'));
-            }
-            if (!$this->contentValidator->isValid($linkContent)) {
-                throw new InputException(__('Provided link information is invalid.'));
-            }
-            if ($isGlobalScopeContent) {
-                $product->setStoreId(0);
-            }
-            $title = $linkContent->getTitle();
-            if (empty($title)) {
-                if ($isGlobalScopeContent) {
-                    throw new InputException(__('Link title cannot be empty.'));
-                }
-                // use title from GLOBAL scope
-                $link->setTitle(null);
-            } else {
-                $link->setTitle($linkContent->getTitle());
-            }
-
-            $link->setProductId($product->getId())
-                ->setStoreId($product->getStoreId())
-                ->setWebsiteId($product->getStore()->getWebsiteId())
-                ->setProductWebsiteIds($product->getWebsiteIds())
-                ->setSortOrder($linkContent->getSortOrder())
-                ->setPrice($linkContent->getPrice())
-                ->setIsShareable($linkContent->isShareable())
-                ->setNumberOfDownloads($linkContent->getNumberOfDownloads())
-                ->save();
-            return $link->getId();
+        if ($link->getId() !== null) {
+            return $this->updateLink($product, $link, $isGlobalScopeContent);
         } else {
-            $product = $this->productRepository->get($sku, true);
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
                 throw new InputException(__('Product type of the product must be \'downloadable\'.'));
             }
-            if (!$this->contentValidator->isValid($linkContent)) {
+            if (!$this->contentValidator->isValid($link)) {
                 throw new InputException(__('Provided link information is invalid.'));
             }
 
-            if (!in_array($linkContent->getLinkType(), ['url', 'file'])) {
+            if (!in_array($link->getLinkType(), ['url', 'file'])) {
                 throw new InputException(__('Invalid link type.'));
             }
-            $title = $linkContent->getTitle();
+            $title = $link->getTitle();
             if (empty($title)) {
                 throw new InputException(__('Link title cannot be empty.'));
             }
-
-            $linkData = [
-                'link_id' => 0,
-                'is_delete' => 0,
-                'type' => $linkContent->getLinkType(),
-                'sort_order' => $linkContent->getSortOrder(),
-                'title' => $linkContent->getTitle(),
-                'price' => $linkContent->getPrice(),
-                'number_of_downloads' => $linkContent->getNumberOfDownloads(),
-                'is_shareable' => $linkContent->isShareable(),
-            ];
-
-            if ($linkContent->getLinkType() == 'file') {
-                $linkData['file'] = $this->jsonEncoder->encode(
-                    [
-                        $this->fileContentUploader->upload($linkContent->getLinkFile(), 'link_file'),
-                    ]
-                );
-            } else {
-                $linkData['link_url'] = $linkContent->getLinkUrl();
-            }
-
-            if ($linkContent->getSampleType() == 'file') {
-                $linkData['sample']['type'] = 'file';
-                $linkData['sample']['file'] = $this->jsonEncoder->encode(
-                    [
-                        $this->fileContentUploader->upload($linkContent->getSampleFile(), 'link_sample_file'),
-                    ]
-                );
-            } elseif ($linkContent->getSampleType() == 'url') {
-                $linkData['sample']['type'] = 'url';
-                $linkData['sample']['url'] = $linkContent->getSampleUrl();
-            }
-
-            $downloadableData = ['link' => [$linkData]];
-            $product->setDownloadableData($downloadableData);
-            if ($isGlobalScopeContent) {
-                $product->setStoreId(0);
-            }
-            $product->save();
-            return $product->getLastAddedLinkId();
+            return $this->saveLink($product, $link, $isGlobalScopeContent);
         }
+    }
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param LinkInterface $link
+     * @param bool $isGlobalScopeContent
+     * @return int
+     */
+    protected function saveLink(
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        LinkInterface $link,
+        $isGlobalScopeContent
+    ) {
+        $linkData = [
+            'link_id' => $link->getid() === null ? 0 : $link->getid(),
+            'is_delete' => 0,
+            'type' => $link->getLinkType(),
+            'sort_order' => $link->getSortOrder(),
+            'title' => $link->getTitle(),
+            'price' => $link->getPrice(),
+            'number_of_downloads' => $link->getNumberOfDownloads(),
+            'is_shareable' => $link->getIsShareable(),
+        ];
+
+        if ($link->getLinkType() == 'file' && $link->getLinkFile() === null) {
+            $linkData['file'] = $this->jsonEncoder->encode(
+                [
+                    $this->fileContentUploader->upload($link->getLinkFileContent(), 'link_file'),
+                ]
+            );
+        } elseif ($link->getLinkType() === 'url') {
+            $linkData['link_url'] = $link->getLinkUrl();
+        } else {
+            //existing link file
+            $linkData['file'] = $this->jsonEncoder->encode(
+                [
+                    [
+                        'file' => $link->getLinkFile(),
+                        'status' => 'old',
+                    ]
+                ]
+            );
+        }
+
+        if ($link->getSampleType() == 'file' && $link->getSampleFile() === null) {
+            $linkData['sample']['type'] = 'file';
+            $linkData['sample']['file'] = $this->jsonEncoder->encode(
+                [
+                    $this->fileContentUploader->upload($link->getSampleFileContent(), 'link_sample_file'),
+                ]
+            );
+        } elseif ($link->getSampleType() == 'url') {
+            $linkData['sample']['type'] = 'url';
+            $linkData['sample']['url'] = $link->getSampleUrl();
+        }
+
+        $downloadableData = ['link' => [$linkData]];
+        $product->setDownloadableData($downloadableData);
+        if ($isGlobalScopeContent) {
+            $product->setStoreId(0);
+        }
+        $this->downloadableType->save($product);
+        return $product->getLastAddedLinkId();
+    }
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @param LinkInterface $link
+     * @param bool $isGlobalScopeContent
+     * @return mixed
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function updateLink(
+        \Magento\Catalog\Api\Data\ProductInterface $product,
+        LinkInterface $link,
+        $isGlobalScopeContent
+    ) {
+        /** @var $existingLink \Magento\Downloadable\Model\Link */
+        $existingLink = $this->linkFactory->create()->load($link->getId());
+        if (!$existingLink->getId()) {
+            throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
+        }
+        if ($existingLink->getProductId() != $product->getId()) {
+            throw new InputException(__('Provided downloadable link is not related to given product.'));
+        }
+        $validateLinkContent = $link->getLinkFileContent() === null ? false : true;
+        $validateSampleContent = $link->getSampleFileContent() === null ? false : true;
+        if (!$this->contentValidator->isValid($link, $validateLinkContent, $validateSampleContent)) {
+            throw new InputException(__('Provided link information is invalid.'));
+        }
+        if ($isGlobalScopeContent) {
+            $product->setStoreId(0);
+        }
+        $title = $link->getTitle();
+        if (empty($title)) {
+            if ($isGlobalScopeContent) {
+                throw new InputException(__('Link title cannot be empty.'));
+            }
+        }
+
+        if ($link->getLinkType() == 'file' && $link->getLinkFileContent() === null) {
+            $link->setLinkFile($existingLink->getLinkFile());
+        }
+        if ($link->getSampleType() == 'file' && $link->getSampleFileContent() === null) {
+            $link->setSampleFile($existingLink->getSampleFile());
+        }
+
+        $this->saveLink($product, $link, $isGlobalScopeContent);
+        return $existingLink->getId();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function delete($linkId)
+    public function delete($id)
     {
         /** @var $link \Magento\Downloadable\Model\Link */
-        $link = $this->linkFactory->create()->load($linkId);
+        $link = $this->linkFactory->create()->load($id);
         if (!$link->getId()) {
             throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
         }

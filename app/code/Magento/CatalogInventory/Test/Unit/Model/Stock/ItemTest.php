@@ -395,4 +395,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             [0, $this->storeId],
         ];
     }
+
+    public function testGetLowStockDate()
+    {
+        // ensure we do *not* return '2015' due to casting to an int
+        $date = '2015-4-17';
+        $this->item->setLowStockDate($date);
+        $this->assertEquals($date, $this->item->getLowStockDate());
+    }
 }

@@ -5,8 +5,12 @@
  */
 namespace Magento\Downloadable\Api;
 
-use Magento\Downloadable\Api\Data\LinkContentInterface;
+use Magento\Downloadable\Api\Data\LinkInterface;
 
+/**
+ * Interface LinkRepositoryInterface
+ * @package Magento\Downloadable\Api
+ */
 interface LinkRepositoryInterface
 {
     /**
@@ -18,21 +22,28 @@ interface LinkRepositoryInterface
     public function getList($sku);
 
     /**
+     * List of links with associated samples
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return \Magento\Downloadable\Api\Data\LinkInterface[]
+     */
+    public function getLinksByProduct(\Magento\Catalog\Api\Data\ProductInterface $product);
+
+    /**
      * Update downloadable link of the given product (link type and its resources cannot be changed)
      *
      * @param string $sku
-     * @param \Magento\Downloadable\Api\Data\LinkContentInterface $linkContent
-     * @param int $linkId
+     * @param \Magento\Downloadable\Api\Data\LinkInterface $link
      * @param bool $isGlobalScopeContent
      * @return int
      */
-    public function save($sku, LinkContentInterface $linkContent, $linkId = null, $isGlobalScopeContent = false);
+    public function save($sku, LinkInterface $link, $isGlobalScopeContent = false);
 
     /**
      * Delete downloadable link
      *
-     * @param int $linkId
+     * @param int $id
      * @return bool
      */
-    public function delete($linkId);
+    public function delete($id);
 }

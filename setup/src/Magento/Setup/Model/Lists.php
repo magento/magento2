@@ -10,6 +10,7 @@ use Magento\Framework\Locale\Bundle\CurrencyBundle;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
 use Magento\Framework\Locale\ConfigInterface;
+use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
 
 class Lists
@@ -42,7 +43,7 @@ class Lists
             $list[$code] = \IntlTimeZone::createTimeZone($code)->getDisplayName(
                 false,
                 \IntlTimeZone::DISPLAY_LONG,
-                ResolverInterface::DEFAULT_LOCALE
+                Resolver::DEFAULT_LOCALE
             ) . ' (' . $code . ')';
         }
         asort($list);
@@ -56,7 +57,7 @@ class Lists
      */
     public function getCurrencyList()
     {
-        $currencies = (new CurrencyBundle())->get(ResolverInterface::DEFAULT_LOCALE)['Currencies'];
+        $currencies = (new CurrencyBundle())->get(Resolver::DEFAULT_LOCALE)['Currencies'];
         $list = [];
         foreach ($currencies as $code => $data) {
             $list[$code] = $data[1] . ' (' . $code . ')';
@@ -72,8 +73,8 @@ class Lists
      */
     public function getLocaleList()
     {
-        $languages = (new LanguageBundle())->get(ResolverInterface::DEFAULT_LOCALE)['Languages'];
-        $countries = (new RegionBundle())->get(ResolverInterface::DEFAULT_LOCALE)['Countries'];
+        $languages = (new LanguageBundle())->get(Resolver::DEFAULT_LOCALE)['Languages'];
+        $countries = (new RegionBundle())->get(Resolver::DEFAULT_LOCALE)['Countries'];
         $locales = \ResourceBundle::getLocales(null);
 
         $list = [];

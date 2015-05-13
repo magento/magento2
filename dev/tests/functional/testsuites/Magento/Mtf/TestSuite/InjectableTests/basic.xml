@@ -15,6 +15,7 @@
     <rule scope="testcase">
         <deny>
             <tag group="test_type" value="3rd_party_test" />
+	    <tag group="test_type" value="3rd_party_test_deprecated" />
         </deny>
     </rule>
 </config>
