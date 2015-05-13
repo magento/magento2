@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="field" data-bind="css: {'required': element.required}">
+<div class="field" data-bind="css: element.additionalClass, css: getStyles()">
     <label class="label">
         <span data-bind="text: element.label"></span>
     </label>

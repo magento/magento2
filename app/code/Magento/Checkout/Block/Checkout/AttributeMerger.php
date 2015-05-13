@@ -203,11 +203,12 @@ class AttributeMerger
                     // customScope is used to group elements within a single form e.g. they can be validated separately
                     'customScope' => $dataScopePrefix,
                     'template' => 'ui/form/field',
-                    'elementTmpl' => 'ui/form/element/input',
+                    'elementTmpl' => 'ui/form/element/input'
                 ],
                 'dataScope' => $lineIndex,
                 'provider' => $providerName,
                 'validation' => $isFirstLine ? ['required-entry' => true] : [],
+                'additionalClasses' => $isFirstLine ? : 'additional'
             ];
         }
         return [
@@ -220,6 +221,7 @@ class AttributeMerger
             'type' => 'group',
             'config' => [
                 'template' => 'ui/group/group',
+                'additionalClasses' => 'street'
             ],
             'children' => $streetLines,
         ];
