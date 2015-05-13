@@ -97,12 +97,6 @@ class ClassGeneratorTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_propertyData = [
-        'TEST_CONSTANT' => [
-            'name' => 'TEST_CONSTANT',
-            'const' => true,
-            'defaultValue' => 'default constant value',
-            'docblock' => ['shortDescription' => 'test description'],
-        ],
         '_protectedProperty' => [
             'name' => '_protectedProperty',
             'visibility' => 'protected',

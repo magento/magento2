@@ -65,13 +65,13 @@ class OrderSender extends Sender
         OrderIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         \Psr\Log\LoggerInterface $logger,
+        Renderer $addressRenderer,
         PaymentHelper $paymentHelper,
         OrderResource $orderResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        Renderer $addressRenderer,
         ManagerInterface $eventManager
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;
         $this->orderResource = $orderResource;
         $this->globalConfig = $globalConfig;
@@ -119,25 +119,21 @@ class OrderSender extends Sender
      */
     protected function prepareTemplate(Order $order)
     {
-        $transport = new \Magento\Framework\Object(
-            ['template_vars' =>
-                 [
-                     'order'                    => $order,
-                     'billing'                  => $order->getBillingAddress(),
-                     'payment_html'             => $this->getPaymentHtml($order),
-                     'store'                    => $order->getStore(),
-                     'formattedShippingAddress' => $this->addressRenderer->format($order->getShippingAddress(), 'html'),
-                     'formattedBillingAddress'  => $this->addressRenderer->format($order->getBillingAddress(), 'html'),
-                 ]
-            ]
-        );
+        $transport = [
+            'order' => $order,
+            'billing' => $order->getBillingAddress(),
+            'payment_html' => $this->getPaymentHtml($order),
+            'store' => $order->getStore(),
+            'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
+            'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+        ];
 
         $this->eventManager->dispatch(
             'email_order_set_template_vars_before',
             ['sender' => $this, 'transport' => $transport]
         );
 
-        $this->templateContainer->setTemplateVars($transport->getTemplateVars());
+        $this->templateContainer->setTemplateVars($transport);
 
         parent::prepareTemplate($order);
     }
