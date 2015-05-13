@@ -65,7 +65,7 @@ class Access extends \Magento\Framework\App\Action\Action
             $request = $this->helper->prepareRequest($this->getRequest(), $requestUrl);
 
             // Request access token in exchange of a pre-authorized token
-            $response = $this->oauthService->getAccessToken($request, $requestUrl);
+            $response = $this->oauthService->getAccessToken($request, $requestUrl, $this->getRequest()->getMethod());
             //After sending the access token, update the integration status to active;
             $consumer = $this->intOauthService->loadConsumerByKey($request['oauth_consumer_key']);
             $integration = $this->integrationService->findByConsumerId($consumer->getId());

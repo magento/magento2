@@ -95,7 +95,22 @@ class AccessTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
+        $this->request = $this->getMock('Magento\Framework\App\RequestInterface',
+            [
+                'getMethod',
+                'getModuleName',
+                'setModuleName',
+                'getActionName',
+                'setActionName',
+                'getParam',
+                'setParams',
+                'getParams',
+                'getCookie',
+                'isSecure'
+            ],
+            [],
+            '',
+            false);
         $this->response = $this->getMock('Magento\Framework\App\Console\Response', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
         $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
@@ -164,6 +179,9 @@ class AccessTest extends \PHPUnit_Framework_TestCase
      */
     public function testAccessAction()
     {
+        $this->request->expects($this->any())
+            ->method('getMethod')
+            ->willReturn('GET');
         $this->helperMock->expects($this->once())
             ->method('getRequestUrl');
         $this->helperMock->expects($this->once())
