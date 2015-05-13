@@ -17,19 +17,22 @@ class AssertMassProductUpdateSuccessMessage extends AbstractConstraint
     /**
      * Text value to be checked.
      */
-    const SUCCESS_MESSAGE = 'A total of 1 record(s) were updated.';
+    const SUCCESS_MESSAGE = 'A total of %s record(s) were updated.';
 
     /**
      * Assert that after mass update successful message appears.
      *
      * @param CatalogProductIndex $productGrid
+     * @param array $products
      * @return void
      */
-    public function processAssert(CatalogProductIndex $productGrid)
+    public function processAssert(CatalogProductIndex $productGrid, $products = [])
     {
+        $countProducts = count($products) ? count($products) : 1;
+        $expectedMessage = sprintf(self::SUCCESS_MESSAGE, $countProducts);
         $actualMessage = $productGrid->getMessagesBlock()->getSuccessMessages();
         \PHPUnit_Framework_Assert::assertEquals(
-            self::SUCCESS_MESSAGE,
+            $expectedMessage,
             $actualMessage,
             'Wrong success message is displayed.'
         );
