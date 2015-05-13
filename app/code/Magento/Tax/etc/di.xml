@@ -62,4 +62,14 @@
     <type name="Magento\Quote\Model\Quote\Address\ToOrder">
         <plugin name="add_tax_to_order" type="Magento\Tax\Model\Quote\ToOrderConverter"/>
     </type>
+    <type name="Magento\Tax\Model\Resource\Report\Tax\Createdat">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Model\Resource\Report\Tax\Updatedat">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
 </config>
