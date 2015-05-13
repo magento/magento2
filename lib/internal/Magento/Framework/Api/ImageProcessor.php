@@ -51,7 +51,7 @@ class ImageProcessor implements ImageProcessorInterface
      * @param Filesystem $fileSystem
      * @param ImageContentValidatorInterface $contentValidator
      * @param DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Api\Data\EavImageContentInterfaceFactory$eavImageContentFactory
+     * @param \Magento\Framework\Api\Data\EavImageContentInterfaceFactory $eavImageContentFactory
      */
     public function __construct(
         Filesystem $fileSystem,
