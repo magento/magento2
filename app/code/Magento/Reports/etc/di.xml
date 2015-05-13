@@ -30,5 +30,4 @@
         </arguments>
     </type>
     <preference for="Magento\Reports\Model\Resource\Quote\CollectionFactoryInterface" type="Magento\Reports\Model\Resource\Quote\CollectionFactory"/>
-    <preference for="Magento\Reports\Model\Resource\Quote\Item\CollectionFactoryInterface" type="Magento\Reports\Model\Resource\Quote\Item\CollectionFactory"/>
 </config>

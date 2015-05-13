@@ -16,7 +16,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     /**
      * @var \Magento\Reports\Model\Resource\Quote\CollectionFactory
      */
-    protected $_quoteItemsFactory;
+    protected $quoteItemCollectionFactory;
 
     /**
      * @var \Magento\Quote\Model\QueryResolver
@@ -26,18 +26,18 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Reports\Model\Resource\Quote\Item\CollectionFactoryInterface $quoteItemsFactory
+     * @param \Magento\Reports\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param \Magento\Quote\Model\QueryResolver $queryResolver
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Reports\Model\Resource\Quote\Item\CollectionFactoryInterface $quoteItemsFactory,
         \Magento\Quote\Model\QueryResolver $queryResolver,
+        \Magento\Reports\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
         array $data = []
     ) {
-        $this->_quoteItemsFactory = $quoteItemsFactory;
+        $this->quoteItemCollectionFactory = $quoteItemCollectionFactory;
         $this->queryResolver = $queryResolver;
         parent::__construct($context, $backendHelper, $data);
     }
@@ -57,7 +57,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
     protected function _prepareCollection()
     {
         /** @var \Magento\Reports\Model\Resource\Quote\Item\Collection $collection */
-        $collection = $this->_quoteItemsFactory->create();
+        $collection = $this->quoteItemCollectionFactory->create();
         $collection->prepareActiveCartItems();
         $this->setCollection($collection);
         return parent::_prepareCollection();
