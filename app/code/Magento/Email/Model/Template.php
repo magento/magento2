@@ -416,10 +416,12 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      */
     public function getPreparedTemplateText($html = null)
     {
-        if ($this->isPlain() && $html) {
+        if (!$html) {
+            $html = $this->getTemplateText();
+        }
+
+        if ($this->isPlain()) {
             return $html;
-        } elseif ($this->isPlain()) {
-            return $this->getTemplateText();
         }
 
         return $this->_applyInlineCss($html);
