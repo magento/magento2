@@ -5,11 +5,11 @@
 define([
     'underscore',
     'uiRegistry',
-    './abstract'
-], function (_, registry, Abstract) {
+    './select'
+], function (_, registry, Select) {
     'use strict';
 
-    return Abstract.extend({
+    return Select.extend({
         defaults: {
             imports: {
                 update: '<%= parentName %>.country_id:value'
@@ -27,14 +27,14 @@ define([
 
             option = options[value];
 
-            if (option.is_zipcode_optional) {
+            if (!option.is_region_required) {
                 this.error(false);
                 this.validation = _.omit(this.validation, 'required-entry');
             } else {
                 this.validation['required-entry'] = true;
             }
 
-            this.required(!option.is_zipcode_optional);
+            this.required(!!option.is_region_required);
         }
     });
 });

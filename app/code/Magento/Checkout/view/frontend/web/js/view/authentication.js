@@ -21,8 +21,6 @@ define(
         return Component.extend({
             stepNumber: navigator.getStepNumber(stepName),
             isGuestCheckoutAllowed: window.checkoutConfig.isGuestCheckoutAllowed,
-            isRegistrationAllowed: window.checkoutConfig.isRegistrationAllowed,
-            isMethodRegister: window.checkoutConfig.isMethodRegister,
             isCustomerLoginRequired: window.checkoutConfig.isCustomerLoginRequired,
             registerUrl: window.checkoutConfig.registerUrl,
             forgotPasswordUrl: window.checkoutConfig.forgotPasswordUrl,
@@ -59,12 +57,9 @@ define(
                 return false;
             },
             setCheckoutMethod: function() {
-                var guestChecked    = $( '[data-role=checkout-method-guest]' ).is( ':checked' );
-                if (guestChecked) {
-                    quote.setCheckoutMethod('guest');
-                    $('[name="customerDetails.password"]').hide();
-                    $('[name="customerDetails.confirm_password"]').hide();
-                }
+                quote.setCheckoutMethod('guest');
+                $('[name="customerDetails.password"]').hide();
+                $('[name="customerDetails.confirm_password"]').hide();
                 navigator.setCurrent('authentication').goNext();
             },
             navigateToCurrentStep: function() {

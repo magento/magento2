@@ -37,7 +37,7 @@ define(
                     "shippingMethodCode" : shippingMethodCode[1]
                 },
                 serviceUrl;
-            if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
+            if (quote.getCheckoutMethod()() === 'guest') {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/collect-totals', {quoteId: quote.getQuoteId()});
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/collect-totals', {});

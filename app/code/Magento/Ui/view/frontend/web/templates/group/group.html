@@ -25,10 +25,12 @@
 
         <!-- /ko -->
 
-        <!-- ko foreach: { data: elems, as: 'element' } -->
+        <!-- ko if: validateWholeGroup -->
+        <!-- ko  foreach: { data: elems, as: 'element' } -->
             <!-- ko if: element.error() && element.visible() -->
                 <label class="error" data-bind="attr: { for: uid }, text: element.error"></label>
             <!-- /ko -->
+        <!-- /ko -->
         <!-- /ko -->
     </div>
 </div>

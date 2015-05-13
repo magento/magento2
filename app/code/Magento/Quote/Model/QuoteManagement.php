@@ -298,7 +298,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null)
+    public function placeOrder($cartId, $agreements = null)
     {
         if (!$this->agreementsValidator->isValid($agreements)) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
@@ -337,24 +337,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->checkoutSession->setLastOrderId($order->getId());
         $this->checkoutSession->setLastRealOrderId($order->getIncrementId());
         return $order->getId();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function placeOrderCreatingAccount(
-        $cartId,
-        $customer,
-        $password,
-        $agreements = null,
-        PaymentInterface $paymentMethod = null
-    ) {
-        $customer = $this->accountManagement->createAccount($customer, $password);
-        $quote = $this->quoteRepository->getActive($cartId)->assignCustomer($customer);
-        $quote->setCheckoutMethod('register');
-        $orderId = $this->placeOrder($cartId, $agreements, $paymentMethod);
-        $this->customerSession->loginById($customer->getId());
-        return $orderId;
     }
 
     /**
