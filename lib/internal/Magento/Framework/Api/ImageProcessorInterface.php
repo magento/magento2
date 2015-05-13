@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\Api;
 
-use Magento\Framework\Api\Data\ImageContentInterface;
-
 /**
  * Interface ImageProcessorInterface
  *
@@ -19,8 +17,8 @@ interface ImageProcessorInterface
      * Process base64 encoded image data and save the image file in directory path used for temporary files
      *
      * @api
-     * @param ImageContentInterface $image
+     * @param CustomAttributesDataInterface $image
      * @return string Image path
      */
-    public function save(ImageContentInterface $image);
+    public function save(CustomAttributesDataInterface $image);
 }

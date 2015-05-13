@@ -129,18 +129,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
         $this->validate($customer);
-        //Check and Process Image attributes using ImageProcessor
-        $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
-            $customer->getCustomAttributes(),
-            '\Magento\Framework\Api\Data\ImageContentInterface'
-        );
-        $customerImageData = [];
-        /** @var $imageDataObject \Magento\Framework\Api\AttributeValue */
-        foreach($imageDataObjects as $imageDataObject) {
-            $customerImageData[$imageDataObject->getAttributeCode()] = $this->imageProcessor->save(
-                $imageDataObject->getValue()
-            );
-        }
+
+        $customer = $this->imageProcessor->save($customer);
+
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);
         $customerData = $this->extensibleDataObjectConverter->toNestedArray(
@@ -148,10 +139,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             [],
             '\Magento\Customer\Api\Data\CustomerInterface'
         );
-        // Replace image attributes with new data
-        foreach($customerImageData as $dataKey => $value) {
-            $customerData[$dataKey]['tmp_name'] = $value;
-        }
 
         $customer->setAddresses($origAddresses);
         $customerModel = $this->customerFactory->create(['data' => $customerData]);
