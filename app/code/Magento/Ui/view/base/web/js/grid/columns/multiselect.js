@@ -19,7 +19,7 @@ define([
             indetermine: false,
             selected: [],
             excluded: [],
-            ns: '<%= provider %>:params',
+            ns: '${ $.provider }:params',
             actions: [{
                 value: 'selectAll',
                 label: $t('Select all')
@@ -35,18 +35,18 @@ define([
             }],
 
             imports: {
-                totalRecords: '<%= provider %>:data.totalRecords',
-                rows: '<%= provider %>:data.items'
+                totalRecords: '${ $.provider }:data.totalRecords',
+                rows: '${ $.provider }:data.items'
             },
 
             listens: {
-                '<%= ns %>.filters': 'deselectAll',
+                '${ $.ns }.filters': 'deselectAll',
                 selected: 'onSelectedChange',
                 rows: 'onRowsChange'
             },
 
             modules: {
-                source: '<%= provider %>'
+                source: '${ $.provider }'
             }
         },
 

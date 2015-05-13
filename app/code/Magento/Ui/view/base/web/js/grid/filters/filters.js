@@ -20,7 +20,7 @@ define([
     function removeEmpty(data) {
         data = utils.flatten(data);
 
-        data = _.omit(data, function (value, key) {
+        data = _.omit(data, function (value) {
             return value === '' || typeof value === 'undefined';
         });
 
@@ -31,22 +31,16 @@ define([
         defaults: {
             template: 'ui/grid/filters/filters',
             applied: {},
-            states: {
-                namespace: 'current.filters'
-            },
             listens: {
                 active: 'extractPreviews',
                 applied: 'cancel extractActive'
             },
             links: {
-                applied: '<%= states.provider %>:<%= states.namespace %>'
+                applied: '${ $.storageConfig.path }',
+                opened: 'localStorage:${$.name}.opened'
             },
             exports: {
-                applied: '<%= provider %>:params.filters'
-            },
-            modules: {
-                source: '<%= provider %>',
-                statesProvider: '<%= states.provider %>'
+                applied: '${ $.provider }:params.filters'
             }
         },
 

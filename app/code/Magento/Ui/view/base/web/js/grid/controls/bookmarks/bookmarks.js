@@ -10,14 +10,6 @@ define([
 ], function (_, utils, Collapsible, layout) {
     'use strict';
 
-    var itemTmpl = {
-        parent: '<%= $data.name %>',
-        name: '<%= $data.index %>',
-        label: '<%= $data.label %>',
-        provider: '<%= $data.provider %>',
-        component: 'Magento_Ui/js/grid/controls/bookmarks/view'
-    };
-
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/controls/bookmarks/bookmarks',
@@ -29,10 +21,19 @@ define([
                 activeIndex: 'onActiveChange',
                 current: 'onDataChange'
             },
-            newViewTmpl: {
-                label: 'New View',
-                editing: true,
-                isNew: true
+            templates: {
+                view: {
+                    parent: '${ $.$data.name }',
+                    name: '${ $.$data.index }',
+                    label: '${ $.$data.label }',
+                    provider: '${ $.$data.provider }',
+                    component: 'Magento_Ui/js/grid/controls/bookmarks/view'
+                },
+                newView: {
+                    label: 'New View',
+                    editing: true,
+                    isNew: true
+                }
             },
             views: {
                 default: {
@@ -114,7 +115,7 @@ define([
          */
         createView: function (item) {
             var data = _.extend({}, this, item),
-                child = utils.template(itemTmpl, data);
+                child = utils.template(this.templates.view, data);
 
             _.extend(child, item);
 
@@ -133,7 +134,7 @@ define([
          * @returns {Bookmarks} Chainable.
          */
         createNewView: function () {
-            var view = this.newViewTmpl;
+            var view = this.templates.newView;
 
             view.index = Date.now();
             view.data = this.current;
@@ -263,6 +264,8 @@ define([
 
             this.store('activeIndex')
                 .activeView(view);
+
+            this.hasChanges(false);
 
             if (!this.initialSet) {
                 this.set('current', view.getData());

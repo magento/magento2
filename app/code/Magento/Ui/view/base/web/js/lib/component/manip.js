@@ -73,7 +73,7 @@ define([
          * @param {Number} [position=-1] - Position at which to insert elements.
          * @returns {Component} Chainable.
          */
-        insert: function (elem, position) {
+        insertChild: function (elem, position) {
             reserve(this._elems, elem, position);
             registry.get(elem, this._insert);
 
@@ -86,7 +86,7 @@ define([
          * @param {Object} elem - Element to be removed.
          * @returns {Component} Chainable.
          */
-        remove: function (elem) {
+        removeChild: function (elem) {
             utils.remove(this._elems, elem);
             this._update();
 
@@ -140,12 +140,10 @@ define([
             registry.remove(this.name);
 
             this.containers.forEach(function (parent) {
-                parent.remove(this);
+                parent.removeChild(this);
             }, this);
 
-            this.elems().forEach(function (child) {
-                child.destroy();
-            });
+            this.elems.each('destroy');
 
             return this;
         },

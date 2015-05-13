@@ -28,12 +28,12 @@ define([
 
             listens: {
                 value: 'onUpdate',
-                '<%= provider %>:data.reset': 'reset',
-                '<%= provider %>:data.validate': 'validate'
+                '${ $.provider }:data.reset': 'reset',
+                '${ $.provider }:data.validate': 'validate'
             },
 
             links: {
-                value: '<%= provider %>:<%= dataScope %>'
+                value: '${ $.provider }:${ $.dataScope }'
             }
         },
 

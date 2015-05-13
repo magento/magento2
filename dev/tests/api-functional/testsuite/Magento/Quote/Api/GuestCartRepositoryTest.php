@@ -24,10 +24,12 @@ class GuestCartRepositoryTest extends WebapiAbstract
     {
         try {
             $cart = $this->getCart('test01');
+            $cartId = $cart->getId();
             $cart->delete();
             /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
             $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMask');
-            $quoteIdMask->delete($cart->getId());
+            $quoteIdMask->load($cartId, 'quote_id');
+            $quoteIdMask->delete();
         } catch (\InvalidArgumentException $e) {
             // Do nothing if cart fixture was not used
         }
@@ -64,8 +66,7 @@ class GuestCartRepositoryTest extends WebapiAbstract
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Quote\Model\QuoteIdMaskFactory')
             ->create();
-        $quoteIdMask->load($cartId);
-
+        $quoteIdMask->load($cartId, 'quote_id');
 
         $serviceInfo = [
             'rest' => [

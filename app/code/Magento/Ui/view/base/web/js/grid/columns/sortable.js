@@ -15,21 +15,18 @@ define([
                 'asc': '_ascend',
                 'desc': '_descend'
             },
-            states: {
-                namespace: 'columns.<%= index %>'
-            },
             links: {
-                sorting: '<%= states.provider %>:current.<%= states.namespace %>.sorting'
+                sorting: '${ $.storageConfig.path }.sorting'
             },
             imports: {
                 setSortClass: 'sorting',
                 push: 'sorting'
             },
             listens: {
-                '<%= provider %>:params.sorting.field': 'onSortChange'
+                '${ $.provider }:params.sorting.field': 'onSortChange'
             },
             modules: {
-                source: '<%= provider %>'
+                source: '${ $.provider }'
             }
         },
 
