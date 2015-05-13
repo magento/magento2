@@ -209,6 +209,7 @@ class View extends AbstractConfigureBlock
     public function paypalCheckout()
     {
         $this->_rootElement->find($this->paypalCheckout, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementNotVisible($this->paypalCheckout);
     }
 
     /**

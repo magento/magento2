@@ -46,7 +46,7 @@ class GuestShippingAddressManagement implements GuestShippingAddressManagementIn
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->shippingAddressManagement->assign($quoteIdMask->getId(), $address);
+        return $this->shippingAddressManagement->assign($quoteIdMask->getQuoteId(), $address);
     }
 
     /**
@@ -56,6 +56,6 @@ class GuestShippingAddressManagement implements GuestShippingAddressManagementIn
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->shippingAddressManagement->get($quoteIdMask->getId());
+        return $this->shippingAddressManagement->get($quoteIdMask->getQuoteId());
     }
 }
