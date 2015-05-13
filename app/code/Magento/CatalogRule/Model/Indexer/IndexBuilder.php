@@ -167,7 +167,7 @@ class IndexBuilder
             $this->doReindexFull();
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 
