@@ -262,14 +262,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $quoteData = $quote->toArray();
             $quoteData['is_virtual'] = $quote->getIsVirtual();
 
-            /**
-             * Temporary workaround for guest customer API issue.
-             */
             if (!$quote->getCustomer()->getId()) {
                 /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
                 $quoteIdMask = $this->quoteIdMaskFactory->create();
                 $quoteData['entity_id'] = $quoteIdMask->load(
-                    $this->checkoutSession->getQuote()->getId()
+                    $this->checkoutSession->getQuote()->getId(), 'quote_id'
                 )->getMaskedId();
             }
 
