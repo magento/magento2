@@ -15,7 +15,7 @@ Plugins (only if you want to use additional reports (like graphs)):
 
 Usage
 -----------
-Before running the jMeter tests for the first time, you will need to first use bin/magento setup:perf:generate-fixtures command to generate the test data.
+Before running the jMeter tests for the first time, you will need to first use bin/magento setup:performance:generate-fixtures command to generate the test data.
 
 1. Run via console
 Scenario can accept parameters that are described bellow in format <parameter_name:default_value>:

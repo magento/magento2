@@ -41,7 +41,7 @@ class GenerateFixturesCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('setup:perf:generate-fixtures')
+        $this->setName('setup:performance:generate-fixtures')
             ->setDescription('Generates fixtures')
             ->setDefinition([
                 new InputArgument(
