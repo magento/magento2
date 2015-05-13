@@ -1152,8 +1152,6 @@ class Installer
      * @param string $type
      * @return InstallSchemaInterface | UpgradeSchemaInterface | InstallDataInterface | UpgradeDataInterface | null
      * @throws \Magento\Setup\Exception
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getSchemaDataHandler($moduleName, $type)
     {
