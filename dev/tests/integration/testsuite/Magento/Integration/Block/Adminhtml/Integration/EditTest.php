@@ -15,7 +15,6 @@ use Magento\Integration\Model\Integration;
  * Test class for \Magento\Integration\Block\Adminhtml\Integration\Edit
  *
  * @magentoAppArea adminhtml
- * @magentoDbIsolation enabled
  */
 class EditTest extends \PHPUnit_Framework_TestCase
 {

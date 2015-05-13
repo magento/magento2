@@ -10,6 +10,6 @@ $integration = $objectManager->create('Magento\Integration\Model\Integration');
 $integration->setName('Fixture Integration')->save();
 
 /** Grant permissions to integrations */
-/** @var \Magento\Integration\Service\V1\AuthorizationService $authorizationService */
-$authorizationService = $objectManager->create('Magento\Integration\Service\V1\AuthorizationService');
+/** @var \Magento\Integration\Api\AuthorizationServiceInterface */
+$authorizationService = $objectManager->create('Magento\Integration\Api\AuthorizationServiceInterface');
 $authorizationService->grantAllPermissions($integration->getId());
