@@ -11,9 +11,10 @@ define(
         '../model/quote',
         '../action/select-payment-method',
         'Magento_Checkout/js/model/step-navigator',
-        'Magento_Checkout/js/model/payment-service'
+        'Magento_Checkout/js/model/payment-service',
+        'mage/translate'
     ],
-    function ($, Component, quote, selectPaymentMethod, navigator, paymentService) {
+    function ($, Component, quote, selectPaymentMethod, navigator, paymentService, $t) {
         var stepName = 'paymentMethod';
         return Component.extend({
             defaults: {
@@ -36,7 +37,7 @@ define(
             },
             setPaymentMethod: function() {
                 if (!this.activeMethod()) {
-                    alert('Please specify payment method.');
+                    alert($t('Please specify payment method.'));
                     return;
                 }
                 if (this.isFormValid()) {

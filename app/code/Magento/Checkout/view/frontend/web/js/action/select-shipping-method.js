@@ -8,14 +8,13 @@ define(
         '../model/quote',
         '../model/url-builder',
         '../model/step-navigator',
-        'mage/storage',
-        'Magento_Ui/js/model/errorlist'
+        'mage/translate'
     ],
-    function (quote, urlBuilder, navigator, storage, errorList) {
+    function (quote, urlBuilder, navigator, $t) {
         "use strict";
         return function (code, customOptions) {
             if (!code) {
-                alert('Please specify a shipping method');
+                alert($t('Please specify a shipping method'));
             }
 
             var shippingMethodCode = code.split("_");

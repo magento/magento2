@@ -5,7 +5,6 @@
  */
 namespace Magento\Payment\Model;
 
-use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
@@ -13,7 +12,7 @@ use Magento\Framework\View\Asset\Repository;
 use Psr\Log\LoggerInterface;
 use Magento\Payment\Model\Config as PaymentConfig;
 
-class ConfigProvider implements ConfigProviderInterface
+class CcConfig
 {
     /** @var PaymentConfig */
     protected $config;
@@ -60,31 +59,11 @@ class ConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getConfig()
-    {
-        return [
-            'payment' => [
-                'cc' => [
-                    'availableTypes' => $this->getCcAvailableTypes(),
-                    'months' => $this->getCcMonths(),
-                    'years' => $this->getCcYears(),
-                    'hasVerification' => $this->hasVerification(),
-                    'hasSsCardType' => $this->hasSsCardType(),
-                    'ssStartYears' => $this->getSsStartYears(),
-                    'cvvImage' => $this->getCvvImage(),
-                ],
-            ],
-        ];
-    }
-
-    /**
      * Solo/switch card start years
      *
      * @return array
      */
-    protected function getSsStartYears()
+    public function getSsStartYears()
     {
         $years = [];
         $first = date("Y");
@@ -101,7 +80,7 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return array
      */
-    protected function getCcAvailableTypes()
+    public function getCcAvailableTypes()
     {
         return $this->config->getCcTypes();
     }
@@ -111,7 +90,7 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return array
      */
-    protected function getCcMonths()
+    public function getCcMonths()
     {
         return $this->config->getMonths();
     }
@@ -121,7 +100,7 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return array
      */
-    protected function getCcYears()
+    public function getCcYears()
     {
         return $this->config->getYears();
     }
@@ -131,7 +110,7 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    protected function hasVerification()
+    public function hasVerification()
     {
         return true;
     }
@@ -141,21 +120,19 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    protected function hasSsCardType()
+    public function hasSsCardType()
     {
         return false;
     }
 
     /**
-     * Retrieve image content
+     * Retrieve CVV tooltip image url
      *
      * @return string
      */
-    protected function getCvvImage()
+    public function getCvvImageUrl()
     {
-        $imageUrl = $this->getViewFileUrl('Magento_Checkout::cvv.png');
-        return '<img src="' . $imageUrl . '" alt="' . __('Card Verification Number Visual Reference')
-            . '" title="' . __('Card Verification Number Visual Reference') . '" />';
+        return $this->getViewFileUrl('Magento_Checkout::cvv.png');
     }
 
     /**
@@ -165,7 +142,7 @@ class ConfigProvider implements ConfigProviderInterface
      * @param array $params
      * @return string
      */
-    protected function getViewFileUrl($fileId, array $params = [])
+    public function getViewFileUrl($fileId, array $params = [])
     {
         try {
             $params = array_merge(['_secure' => $this->request->isSecure()], $params);
