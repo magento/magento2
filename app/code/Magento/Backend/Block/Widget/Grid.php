@@ -441,11 +441,7 @@ class Grid extends \Magento\Backend\Block\Widget
                     'onclick' => $this->getJsObjectName() . '.resetFilter()',
                     'class' => 'action-reset action-tertiary'
                 ]
-            )->setDataAttribute(
-                [
-                    'action' => 'grid-filter-reset'
-                ]
-            )
+            )->setDataAttribute(['action' => 'grid-filter-reset'])
         );
         $this->setChild(
             'search_button',
@@ -457,11 +453,7 @@ class Grid extends \Magento\Backend\Block\Widget
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
                     'class' => 'action-secondary',
                 ]
-            )->setDataAttribute(
-                [
-                    'action' => 'grid-filter-apply'
-                ]
-            )
+            )->setDataAttribute(['action' => 'grid-filter-apply'])
         );
     }
 
