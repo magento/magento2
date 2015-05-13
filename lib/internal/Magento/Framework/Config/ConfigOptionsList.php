@@ -257,18 +257,11 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             }
         }
 
-        if (isset($options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY])
-            && !$options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY]) {
-            $errors[] = 'Invalid encryption key.';
-        }
-
-        if (isset($options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
-            if ($options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] != ConfigOptionsList::SESSION_SAVE_FILES &&
-                $options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] != ConfigOptionsList::SESSION_SAVE_DB
-            ) {
-                $errors[] = 'Invalid session save location.';
-            }
-        }
+        $errors = array_merge(
+            $errors,
+            $this->validateSessionSave($options),
+            $this->validateEncryptionKey($options)
+        );
 
         return $errors;
     }
@@ -304,5 +297,44 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         }
 
         return $options;
+    }
+
+    /**
+     * Validates session save param
+     *
+     * @param array $options
+     * @return string[]
+     */
+    private function validateSessionSave(array $options)
+    {
+        $errors = [];
+
+        if (isset($options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
+            if ($options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] != ConfigOptionsList::SESSION_SAVE_FILES &&
+                $options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] != ConfigOptionsList::SESSION_SAVE_DB
+            ) {
+                $errors[] = 'Invalid session save location.';
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Validates encryption key param
+     *
+     * @param array $options
+     * @return string[]
+     */
+    private function validateEncryptionKey(array $options)
+    {
+        $errors = [];
+
+        if (isset($options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY])
+            && !$options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY]) {
+            $errors[] = 'Invalid encryption key.';
+        }
+
+        return $errors;
     }
 }
