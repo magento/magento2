@@ -6,6 +6,8 @@
 // @codingStandardsIgnoreFile
 namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 
+use Magento\Framework\Api\Config\Converter;
+
 class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,11 +46,21 @@ class ExtensionAttributesGeneratorTest extends \PHPUnit_Framework_TestCase
             ->willReturn(
                 [
                     'Magento\Catalog\Api\Data\ProductInterface' => [
-                        'string_attribute' => 'string',
-                        'complex_object_attribute' => '\Magento\Bundle\Api\Data\OptionInterface[]'
+                        'string_attribute' => [
+                            Converter::DATA_TYPE => 'string',
+                            Converter::RESOURCE_PERMISSIONS => [],
+
+                        ],
+                        'complex_object_attribute' => [
+                            Converter::DATA_TYPE => '\Magento\Bundle\Api\Data\OptionInterface[]',
+                            Converter::RESOURCE_PERMISSIONS => [],
+                        ],
                     ],
                     'Magento\Catalog\Api\Data\Product' => [
-                        'should_not_include' => 'string',
+                        'should_not_include' => [
+                            Converter::DATA_TYPE => 'string',
+                            Converter::RESOURCE_PERMISSIONS => [],
+                        ],
                     ],
                 ]
             );

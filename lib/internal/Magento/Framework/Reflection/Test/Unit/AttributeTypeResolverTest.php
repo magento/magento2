@@ -62,7 +62,13 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
         $code = 'some_code';
         $value = new \stdClass();
         $context = '\Some\Class';
-        $config = ['Some\Class' => ['some_code' => '\Magento\Framework\Object']];
+        $config = [
+            'Some\Class' => [
+                'some_code' => [
+                    'type' => '\Magento\Framework\Object',
+                ],
+            ]
+        ];
 
         $this->typeProcessor->expects($this->once())
             ->method('getArrayItemType')
@@ -82,7 +88,13 @@ class AttributeTypeResolverTest extends \PHPUnit_Framework_TestCase
         $code = 'some_code';
         $value = new \stdClass();
         $context = '\Some\Class';
-        $config = ['Some\Class' => ['some_code' => '\Some\Class']];
+        $config = [
+            'Some\Class' => [
+                'some_code' => [
+                    'type' => '\Some\Class',
+                ]
+            ]
+        ];
 
         $this->typeProcessor->expects($this->once())
             ->method('getArrayItemType')

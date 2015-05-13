@@ -76,12 +76,24 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $expectedArray = [
             'Magento\Tax\Api\Data\TaxRateInterface' => [],
             'Magento\Catalog\Api\Data\Product' => [
-                'stock_item' => "Magento\CatalogInventory\Api\Data\StockItem",
+                'stock_item' => [
+                    "type" => "Magento\CatalogInventory\Api\Data\StockItem",
+                    "resourceRefs" => [],
+                ],
             ],
             'Magento\Customer\Api\Data\CustomerInterface' => [
-                'custom_1' => "Magento\Customer\Api\Data\CustomerCustom",
-                'custom_2' => "Magento\CustomerExtra\Api\Data\CustomerCustom22",
-                'custom_3' => "Magento\Customer\Api\Data\CustomerCustom3",
+                'custom_1' => [
+                    "type" => "Magento\Customer\Api\Data\CustomerCustom",
+                    "resourceRefs" => [],
+                ],
+                'custom_2' => [
+                    "type" => "Magento\CustomerExtra\Api\Data\CustomerCustom22",
+                    "resourceRefs" => [],
+                ],
+                'custom_3' => [
+                    "type" => "Magento\Customer\Api\Data\CustomerCustom3",
+                    "resourceRefs" => [],
+                ],
             ],
         ];
 

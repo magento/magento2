@@ -5,6 +5,7 @@
  */
 namespace Magento\Config\Model\Config\Backend;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
@@ -196,7 +197,7 @@ class File extends \Magento\Framework\App\Config\Value
     protected function _prependScopeInfo($path)
     {
         $scopeInfo = $this->getScope();
-        if (\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
+        if (ScopeConfigInterface::SCOPE_TYPE_DEFAULT != $this->getScope()) {
             $scopeInfo .= '/' . $this->getScopeId();
         }
         return $scopeInfo . '/' . $path;
@@ -213,7 +214,7 @@ class File extends \Magento\Framework\App\Config\Value
     protected function _appendScopeInfo($path)
     {
         $path .= '/' . $this->getScope();
-        if (\Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT != $this->getScope()) {
+        if (ScopeConfigInterface::SCOPE_TYPE_DEFAULT != $this->getScope()) {
             $path .= '/' . $this->getScopeId();
         }
         return $path;
