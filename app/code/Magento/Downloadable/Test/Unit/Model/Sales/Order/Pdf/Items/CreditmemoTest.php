@@ -159,7 +159,7 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
                     'discount_amount' => 5.00,
                     'qty' => 1,
                     'tax_amount' => 2.00,
-                    'hidden_tax_amount' => 0.00,
+                    'discount_tax_compensation_amount' => 0.00,
                     'order_item' => new \Magento\Framework\Object(
                         [
                             'product_options' => [

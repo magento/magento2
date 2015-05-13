@@ -195,8 +195,8 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
         $orderItem->setTaxInvoiced($orderItem->getTaxInvoiced() + $this->getTaxAmount());
         $orderItem->setBaseTaxInvoiced($orderItem->getBaseTaxInvoiced() + $this->getBaseTaxAmount());
-        $orderItem->setHiddenTaxInvoiced($orderItem->getHiddenTaxInvoiced() + $this->getHiddenTaxAmount());
-        $orderItem->setBaseHiddenTaxInvoiced($orderItem->getBaseHiddenTaxInvoiced() + $this->getBaseHiddenTaxAmount());
+        $orderItem->setDiscountTaxCompensationInvoiced($orderItem->getDiscountTaxCompensationInvoiced() + $this->getDiscountTaxCompensationAmount());
+        $orderItem->setBaseDiscountTaxCompensationInvoiced($orderItem->getBaseDiscountTaxCompensationInvoiced() + $this->getBaseDiscountTaxCompensationAmount());
 
         $orderItem->setDiscountInvoiced($orderItem->getDiscountInvoiced() + $this->getDiscountAmount());
         $orderItem->setBaseDiscountInvoiced($orderItem->getBaseDiscountInvoiced() + $this->getBaseDiscountAmount());
@@ -218,8 +218,8 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
         $orderItem->setTaxInvoiced($orderItem->getTaxInvoiced() - $this->getTaxAmount());
         $orderItem->setBaseTaxInvoiced($orderItem->getBaseTaxInvoiced() - $this->getBaseTaxAmount());
-        $orderItem->setHiddenTaxInvoiced($orderItem->getHiddenTaxInvoiced() - $this->getHiddenTaxAmount());
-        $orderItem->setBaseHiddenTaxInvoiced($orderItem->getBaseHiddenTaxInvoiced() - $this->getBaseHiddenTaxAmount());
+        $orderItem->setDiscountTaxCompensationInvoiced($orderItem->getDiscountTaxCompensationInvoiced() - $this->getDiscountTaxCompensationAmount());
+        $orderItem->setBaseDiscountTaxCompensationInvoiced($orderItem->getBaseDiscountTaxCompensationInvoiced() - $this->getBaseDiscountTaxCompensationAmount());
 
         $orderItem->setDiscountInvoiced($orderItem->getDiscountInvoiced() - $this->getDiscountAmount());
         $orderItem->setBaseDiscountInvoiced($orderItem->getBaseDiscountInvoiced() - $this->getBaseDiscountAmount());
@@ -309,13 +309,13 @@ class Item extends AbstractModel implements InvoiceItemInterface
     }
 
     /**
-     * Returns base_hidden_tax_amount
+     * Returns base_discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount()
+    public function getBaseDiscountTaxCompensationAmount()
     {
-        return $this->getData(InvoiceItemInterface::BASE_HIDDEN_TAX_AMOUNT);
+        return $this->getData(InvoiceItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -389,13 +389,13 @@ class Item extends AbstractModel implements InvoiceItemInterface
     }
 
     /**
-     * Returns hidden_tax_amount
+     * Returns discount_tax_compensation_amount
      *
      * @return float
      */
-    public function getHiddenTaxAmount()
+    public function getDiscountTaxCompensationAmount()
     {
-        return $this->getData(InvoiceItemInterface::HIDDEN_TAX_AMOUNT);
+        return $this->getData(InvoiceItemInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**
@@ -672,17 +672,17 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * {@inheritdoc}
      */
-    public function setHiddenTaxAmount($amount)
+    public function setDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(InvoiceItemInterface::HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(InvoiceItemInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setBaseHiddenTaxAmount($amount)
+    public function setBaseDiscountTaxCompensationAmount($amount)
     {
-        return $this->setData(InvoiceItemInterface::BASE_HIDDEN_TAX_AMOUNT, $amount);
+        return $this->setData(InvoiceItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT, $amount);
     }
 
     /**

@@ -79,10 +79,10 @@ use Magento\Quote\Model\Quote;
  * @method \Magento\Quote\Model\Quote\Address\Item setBaseRowTotalInclTax(float $value)
  * @method int getGiftMessageId()
  * @method \Magento\Quote\Model\Quote\Address\Item setGiftMessageId(int $value)
- * @method float getHiddenTaxAmount()
- * @method \Magento\Quote\Model\Quote\Address\Item setHiddenTaxAmount(float $value)
- * @method float getBaseHiddenTaxAmount()
- * @method \Magento\Quote\Model\Quote\Address\Item setBaseHiddenTaxAmount(float $value)
+ * @method float getDiscountTaxCompensationAmount()
+ * @method \Magento\Quote\Model\Quote\Address\Item setDiscountTaxCompensationAmount(float $value)
+ * @method float getBaseDiscountTaxCompensationAmount()
+ * @method \Magento\Quote\Model\Quote\Address\Item setBaseDiscountTaxCompensationAmount(float $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

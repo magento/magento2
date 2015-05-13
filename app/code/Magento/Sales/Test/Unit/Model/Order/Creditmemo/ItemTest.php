@@ -177,10 +177,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getBaseTaxRefunded')
             ->willReturn(1);
         $orderItemMock->expects($this->once())
-            ->method('getHiddenTaxRefunded')
+            ->method('getDiscountTaxCompensationRefunded')
             ->willReturn(1);
         $orderItemMock->expects($this->once())
-            ->method('getBaseHiddenTaxRefunded')
+            ->method('getBaseDiscountTaxCompensationRefunded')
             ->willReturn(1);
         $orderItemMock->expects($this->once())
             ->method('getAmountRefunded')
@@ -198,8 +198,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             'qty' => 1,
             'tax_amount' => 1,
             'base_tax_amount' => 1,
-            'hidden_tax_amount' => 1,
-            'base_hidden_tax_amount' => 1,
+            'discount_tax_compensation_amount' => 1,
+            'base_discount_tax_compensation_amount' => 1,
             'row_total' => 1,
             'base_row_total' => 1,
             'discount_amount' => 1,
@@ -223,9 +223,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                     'getBaseTaxAmount',
                     'getQtyOrdered',
                     'setTaxRefunded',
-                    'setHiddenTaxRefunded',
-                    'getHiddenTaxRefunded',
-                    'getHiddenTaxAmount'
+                    'setDiscountTaxCompensationRefunded',
+                    'getDiscountTaxCompensationRefunded',
+                    'getDiscountTaxCompensationAmount'
                 ]
             )
             ->getMock();
@@ -249,13 +249,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with(5);
 
         $orderItemMock->expects($this->once())
-            ->method('setHiddenTaxRefunded')
+            ->method('setDiscountTaxCompensationRefunded')
             ->with(0);
         $orderItemMock->expects($this->once())
-            ->method('getHiddenTaxRefunded')
+            ->method('getDiscountTaxCompensationRefunded')
             ->willReturn(10);
         $orderItemMock->expects($this->once())
-            ->method('getHiddenTaxAmount')
+            ->method('getDiscountTaxCompensationAmount')
             ->willReturn(10);
 
         $this->item->setData('qty', 1);

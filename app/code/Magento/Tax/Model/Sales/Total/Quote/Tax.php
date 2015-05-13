@@ -43,7 +43,7 @@ class Tax extends CommonTaxCollector
      *
      * @var array
      */
-    protected $_hiddenTaxes = [];
+    protected $_discountTaxCompensationes = [];
 
     /**
      * Class constructor
@@ -137,10 +137,10 @@ class Tax extends CommonTaxCollector
         $address->setBaseTotalAmount('subtotal', 0);
         $address->setTotalAmount('tax', 0);
         $address->setBaseTotalAmount('tax', 0);
-        $address->setTotalAmount('hidden_tax', 0);
-        $address->setBaseTotalAmount('hidden_tax', 0);
-        $address->setTotalAmount('shipping_hidden_tax', 0);
-        $address->setBaseTotalAmount('shipping_hidden_tax', 0);
+        $address->setTotalAmount('discount_tax_compensation', 0);
+        $address->setBaseTotalAmount('discount_tax_compensation', 0);
+        $address->setTotalAmount('shipping_discount_tax_compensation', 0);
+        $address->setBaseTotalAmount('shipping_discount_tax_compensation', 0);
         $address->setSubtotalInclTax(0);
         $address->setBaseSubtotalInclTax(0);
     }

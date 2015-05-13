@@ -640,25 +640,25 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Base Subtotal Total Incl Tax'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
             'Hidden Tax Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
             'Base Hidden Tax Amount'
         )->addColumn(
-            'shipping_hidden_tax_amount',
+            'shipping_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
             'Shipping Hidden Tax Amount'
         )->addColumn(
-            'base_shipping_hidden_tax_amnt',
+            'base_shipping_discount_tax_compensation_amnt',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
@@ -935,13 +935,13 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Base Row Total Incl Tax'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
             'Hidden Tax Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
@@ -1209,13 +1209,13 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Base Row Total Incl Tax'
         )->addColumn(
-            'hidden_tax_amount',
+            'discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
             'Hidden Tax Amount'
         )->addColumn(
-            'base_hidden_tax_amount',
+            'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],

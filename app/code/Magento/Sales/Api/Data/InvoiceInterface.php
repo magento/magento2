@@ -162,19 +162,19 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /*
      * Hidden tax amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
      * Base hidden tax amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /*
      * Shipping hidden tax amount.
      */
-    const SHIPPING_HIDDEN_TAX_AMOUNT = 'shipping_hidden_tax_amount';
+    const SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'shipping_discount_tax_compensation_amount';
     /*
      * Base shipping hidden tax amount.
      */
-    const BASE_SHIPPING_HIDDEN_TAX_AMNT = 'base_shipping_hidden_tax_amnt';
+    const BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT = 'base_shipping_discount_tax_compensation_amnt';
     /*
      * Shipping including tax.
      */
@@ -226,7 +226,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return float Base hidden tax amount.
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the base shipping amount for the invoice.
@@ -240,7 +240,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return float Base shipping hidden tax amount.
      */
-    public function getBaseShippingHiddenTaxAmnt();
+    public function getBaseShippingDiscountTaxCompensationAmnt();
 
     /**
      * Gets the base shipping including tax for the invoice.
@@ -382,7 +382,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return float Hidden tax amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the increment ID for the invoice.
@@ -431,7 +431,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      *
      * @return float Shipping hidden tax amount.
      */
-    public function getShippingHiddenTaxAmount();
+    public function getShippingDiscountTaxCompensationAmount();
 
     /**
      * Gets the shipping including tax for the invoice.
@@ -832,7 +832,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the base hidden tax amount for the invoice.
@@ -840,7 +840,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the shipping hidden tax amount for the invoice.
@@ -848,7 +848,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @param float $amount
      * @return $this
      */
-    public function setShippingHiddenTaxAmount($amount);
+    public function setShippingDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the base shipping hidden tax amount for the invoice.
@@ -856,7 +856,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @param float $amnt
      * @return $this
      */
-    public function setBaseShippingHiddenTaxAmnt($amnt);
+    public function setBaseShippingDiscountTaxCompensationAmnt($amnt);
 
     /**
      * Sets the shipping including tax for the invoice.

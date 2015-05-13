@@ -269,16 +269,16 @@
             <field name="base_grand_total">
                 <aspect name="to_order" />
             </field>
-            <field name="hidden_tax_amount">
+            <field name="discount_tax_compensation_amount">
                 <aspect name="to_order" />
             </field>
-            <field name="base_hidden_tax_amount">
+            <field name="base_discount_tax_compensation_amount">
                 <aspect name="to_order" />
             </field>
-            <field name="shipping_hidden_tax_amount">
+            <field name="shipping_discount_tax_compensation_amount">
                 <aspect name="to_order" />
             </field>
-            <field name="base_shipping_hidden_tax_amount">
+            <field name="base_shipping_discount_tax_compensation_amount">
                 <aspect name="to_order" />
             </field>
             <field name="prefix">
@@ -473,10 +473,10 @@
             <field name="store_id">
                 <aspect name="to_order_item" />
             </field>
-            <field name="hidden_tax_amount">
+            <field name="discount_tax_compensation_amount">
                 <aspect name="to_order_item" />
             </field>
-            <field name="base_hidden_tax_amount">
+            <field name="base_discount_tax_compensation_amount">
                 <aspect name="to_order_item" />
             </field>
             <field name="free_shipping">

@@ -106,11 +106,11 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /*
      * Hidden tax amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
      * Base hidden tax amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
 
     /**
      * Gets the additional data for the invoice item.
@@ -138,7 +138,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @return float Base hidden tax amount.
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the base price for the invoice item.
@@ -209,7 +209,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      *
      * @return float Hidden tax amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the name for the invoice item.
@@ -462,7 +462,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the base hidden tax amount for the invoice item.
@@ -470,7 +470,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

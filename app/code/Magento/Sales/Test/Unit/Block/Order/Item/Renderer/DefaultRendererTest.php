@@ -65,7 +65,7 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
             'getRowTotal',
             'getTaxAmount',
             'getDiscountAmount',
-            'getHiddenTaxAmount',
+            'getDiscountTaxCompensationAmount',
             'getWeeeTaxAppliedRowAmount',
         ];
         $this->itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
@@ -138,11 +138,11 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
     {
         $rowTotal = 100;
         $taxAmount = 10;
-        $hiddenTaxAmount = 2;
+        $discountTaxCompensationAmount = 2;
         $discountAmount = 20;
         $weeeTaxAppliedRowAmount = 10;
 
-        $expectedResult = $rowTotal + $taxAmount + $hiddenTaxAmount - $discountAmount + $weeeTaxAppliedRowAmount;
+        $expectedResult = $rowTotal + $taxAmount + $discountTaxCompensationAmount - $discountAmount + $weeeTaxAppliedRowAmount;
         $this->itemMock->expects($this->once())
             ->method('getRowTotal')
             ->will($this->returnValue($rowTotal));
@@ -150,8 +150,8 @@ class DefaultRendererTest extends \PHPUnit_Framework_TestCase
             ->method('getTaxAmount')
             ->will($this->returnValue($taxAmount));
         $this->itemMock->expects($this->once())
-            ->method('getHiddenTaxAmount')
-            ->will($this->returnValue($hiddenTaxAmount));
+            ->method('getDiscountTaxCompensationAmount')
+            ->will($this->returnValue($discountTaxCompensationAmount));
         $this->itemMock->expects($this->once())
             ->method('getDiscountAmount')
             ->will($this->returnValue($discountAmount));

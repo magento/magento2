@@ -516,35 +516,35 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /*
      * Hidden tax amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
      * Base hidden tax amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /*
      * Shipping hidden tax amount.
      */
-    const SHIPPING_HIDDEN_TAX_AMOUNT = 'shipping_hidden_tax_amount';
+    const SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'shipping_discount_tax_compensation_amount';
     /*
      * Base shipping hidden tax amount.
      */
-    const BASE_SHIPPING_HIDDEN_TAX_AMNT = 'base_shipping_hidden_tax_amnt';
+    const BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT = 'base_shipping_discount_tax_compensation_amnt';
     /*
      * Hidden tax invoiced.
      */
-    const HIDDEN_TAX_INVOICED = 'hidden_tax_invoiced';
+    const DISCOUNT_TAX_COMPENSATION_INVOICED = 'discount_tax_compensation_invoiced';
     /*
      * Base hidden tax invoiced.
      */
-    const BASE_HIDDEN_TAX_INVOICED = 'base_hidden_tax_invoiced';
+    const BASE_DISCOUNT_TAX_COMPENSATION_INVOICED = 'base_discount_tax_compensation_invoiced';
     /*
      * Hidden tax refunded.
      */
-    const HIDDEN_TAX_REFUNDED = 'hidden_tax_refunded';
+    const DISCOUNT_TAX_COMPENSATION_REFUNDED = 'discount_tax_compensation_refunded';
     /*
      * Base hidden tax refunded.
      */
-    const BASE_HIDDEN_TAX_REFUNDED = 'base_hidden_tax_refunded';
+    const BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED = 'base_discount_tax_compensation_refunded';
     /*
      * Shipping including tax.
      */
@@ -660,21 +660,21 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return float Base hidden tax amount.
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the base hidden tax invoiced amount for the order.
      *
      * @return float Base hidden tax invoiced.
      */
-    public function getBaseHiddenTaxInvoiced();
+    public function getBaseDiscountTaxCompensationInvoiced();
 
     /**
      * Gets the base hidden tax refunded amount for the order.
      *
      * @return float Base hidden tax refunded.
      */
-    public function getBaseHiddenTaxRefunded();
+    public function getBaseDiscountTaxCompensationRefunded();
 
     /**
      * Gets the base shipping amount for the order.
@@ -702,7 +702,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return float Base shipping hidden tax amount.
      */
-    public function getBaseShippingHiddenTaxAmnt();
+    public function getBaseShippingDiscountTaxCompensationAmnt();
 
     /**
      * Gets the base shipping including tax for the order.
@@ -1124,21 +1124,21 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return float Hidden tax amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the hidden tax invoiced amount for the order.
      *
      * @return float Hidden tax invoiced amount.
      */
-    public function getHiddenTaxInvoiced();
+    public function getDiscountTaxCompensationInvoiced();
 
     /**
      * Gets the hidden tax refunded amount for the order.
      *
      * @return float Hidden tax refunded amount.
      */
-    public function getHiddenTaxRefunded();
+    public function getDiscountTaxCompensationRefunded();
 
     /**
      * Gets the hold before state for the order.
@@ -1292,7 +1292,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      *
      * @return float Shipping hidden tax amount.
      */
-    public function getShippingHiddenTaxAmount();
+    public function getShippingDiscountTaxCompensationAmount();
 
     /**
      * Gets the shipping including tax amount for the order.
@@ -2607,7 +2607,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the base hidden tax amount for the order.
@@ -2615,7 +2615,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the shipping hidden tax amount for the order.
@@ -2623,7 +2623,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param float $amount
      * @return $this
      */
-    public function setShippingHiddenTaxAmount($amount);
+    public function setShippingDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the base shipping hidden tax amount for the order.
@@ -2631,39 +2631,39 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param float $amnt
      * @return $this
      */
-    public function setBaseShippingHiddenTaxAmnt($amnt);
+    public function setBaseShippingDiscountTaxCompensationAmnt($amnt);
 
     /**
      * Sets the hidden tax invoiced amount for the order.
      *
-     * @param float $hiddenTaxInvoiced
+     * @param float $discountTaxCompensationInvoiced
      * @return $this
      */
-    public function setHiddenTaxInvoiced($hiddenTaxInvoiced);
+    public function setDiscountTaxCompensationInvoiced($discountTaxCompensationInvoiced);
 
     /**
      * Sets the base hidden tax invoiced amount for the order.
      *
-     * @param float $baseHiddenTaxInvoiced
+     * @param float $baseDiscountTaxCompensationInvoiced
      * @return $this
      */
-    public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced);
+    public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced);
 
     /**
      * Sets the hidden tax refunded amount for the order.
      *
-     * @param float $hiddenTaxRefunded
+     * @param float $discountTaxCompensationRefunded
      * @return $this
      */
-    public function setHiddenTaxRefunded($hiddenTaxRefunded);
+    public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded);
 
     /**
      * Sets the base hidden tax refunded amount for the order.
      *
-     * @param float $baseHiddenTaxRefunded
+     * @param float $baseDiscountTaxCompensationRefunded
      * @return $this
      */
-    public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded);
+    public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded);
 
     /**
      * Sets the shipping including tax amount for the order.

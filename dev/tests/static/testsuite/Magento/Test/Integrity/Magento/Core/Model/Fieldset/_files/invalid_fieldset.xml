@@ -269,18 +269,18 @@
                 <base_grand_total>
                     <to_order>*</to_order>
                 </base_grand_total>
-                <hidden_tax_amount>
+                <discount_tax_compensation_amount>
                     <to_order>*</to_order>
-                </hidden_tax_amount>
-                <base_hidden_tax_amount>
+                </discount_tax_compensation_amount>
+                <base_discount_tax_compensation_amount>
                     <to_order>*</to_order>
-                </base_hidden_tax_amount>
-                <shipping_hidden_tax_amount>
+                </base_discount_tax_compensation_amount>
+                <shipping_discount_tax_compensation_amount>
                     <to_order>*</to_order>
-                </shipping_hidden_tax_amount>
-                <base_shipping_hidden_tax_amount>
+                </shipping_discount_tax_compensation_amount>
+                <base_shipping_discount_tax_compensation_amount>
                     <to_order>*</to_order>
-                </base_shipping_hidden_tax_amount>
+                </base_shipping_discount_tax_compensation_amount>
                 <prefix>
                     <to_order_address>*</to_order_address>
                     <to_customer_address>*</to_customer_address>
@@ -473,12 +473,12 @@
                 <store_id>
                     <to_order_item>*</to_order_item>
                 </store_id>
-                <hidden_tax_amount>
+                <discount_tax_compensation_amount>
                     <to_order_item>*</to_order_item>
-                </hidden_tax_amount>
-                <base_hidden_tax_amount>
+                </discount_tax_compensation_amount>
+                <base_discount_tax_compensation_amount>
                     <to_order_item>*</to_order_item>
-                </base_hidden_tax_amount>
+                </base_discount_tax_compensation_amount>
                 <free_shipping>
                     <to_order_item>*</to_order_item>
                 </free_shipping>

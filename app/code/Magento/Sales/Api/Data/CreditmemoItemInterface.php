@@ -109,11 +109,11 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
     /*
      * Hidden tax amount.
      */
-    const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
+    const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
      * Base hidden tax amount.
      */
-    const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /*
      * WEEE tax disposition.
      */
@@ -177,7 +177,7 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @return float
      */
-    public function getBaseHiddenTaxAmount();
+    public function getBaseDiscountTaxCompensationAmount();
 
     /**
      * Gets the base price for a credit memo item.
@@ -276,7 +276,7 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      *
      * @return float Hidden tax amount.
      */
-    public function getHiddenTaxAmount();
+    public function getDiscountTaxCompensationAmount();
 
     /**
      * Gets the name for a credit memo item.
@@ -564,7 +564,7 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @param float $amount
      * @return $this
      */
-    public function setHiddenTaxAmount($amount);
+    public function setDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the base hidden tax amount for a credit memo item.
@@ -572,7 +572,7 @@ interface CreditmemoItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @param float $amount
      * @return $this
      */
-    public function setBaseHiddenTaxAmount($amount);
+    public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
      * Sets the WEEE tax disposition for a credit memo item.
