@@ -37,12 +37,13 @@ class AfterProductLoadTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->optionValueFactory = $this->getMockBuilder(
-                '\Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory'
-            )
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->optionValueFactory = $this->getMock(
+            '\Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();

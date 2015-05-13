@@ -92,7 +92,6 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $describeTable = ['column' => 'column'];
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));
-        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $connectionMock->expects($this->any())->method('select')->will($this->throwException(new \Exception()));
         $this->_resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));

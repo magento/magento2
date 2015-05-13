@@ -66,12 +66,13 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->productOptionRepositoryMock = $this->getMock(
             'Magento\ConfigurableProduct\Api\OptionRepositoryInterface'
         );
-        $this->configurableTypeFactoryMock = $this->getMockBuilder(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory'
-            )
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configurableTypeFactoryMock = $this->getMock(
+            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->priceDataMock = $this->getMockBuilder(
             '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Price\Data'
         )->disableOriginalConstructor()->getMock();
