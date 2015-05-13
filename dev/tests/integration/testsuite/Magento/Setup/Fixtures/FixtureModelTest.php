@@ -27,14 +27,14 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_generatorWorkingDir = realpath(__DIR__ . '/../../../../../../setup/performance-toolkit');
+        self::$_generatorWorkingDir = realpath(__DIR__ . '/../../../../../../../setup/src/Magento/Setup/Fixtures');
         copy(
-            self::$_generatorWorkingDir . '/fixtures/tax_rates.csv',
-            self::$_generatorWorkingDir . '/fixtures/tax_rates.csv.bak'
+            self::$_generatorWorkingDir . '/tax_rates.csv',
+            self::$_generatorWorkingDir . '/tax_rates.csv.bak'
         );
         copy(
             __DIR__ . '/_files/tax_rates.csv',
-            self::$_generatorWorkingDir . '/../src/Magento/Setup/Fixtures/tax_rates.csv'
+            self::$_generatorWorkingDir . '/tax_rates.csv'
         );
         parent::setUpBeforeClass();
     }
