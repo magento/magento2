@@ -126,23 +126,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Applying of design config
-     *
-     * @return $this
-     */
-    protected function _applyDesignConfig()
-    {
-        $designConfig = $this->getDesignConfig();
-        $store = $designConfig->getStore();
-        $storeId = is_object($store) ? $store->getId() : $store;
-        $area = $designConfig->getArea();
-        if ($storeId !== null) {
-            $this->_appEmulation->startEnvironmentEmulation($storeId, $area);
-        }
-        return $this;
-    }
-
-    /**
      * Merge HTML and CSS and returns HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
      * in order to support all email clients.
      *
@@ -376,6 +359,23 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         }
 
         return $variables;
+    }
+
+    /**
+     * Applying of design config
+     *
+     * @return $this
+     */
+    protected function _applyDesignConfig()
+    {
+        $designConfig = $this->getDesignConfig();
+        $store = $designConfig->getStore();
+        $storeId = is_object($store) ? $store->getId() : $store;
+        $area = $designConfig->getArea();
+        if ($storeId !== null) {
+            $this->_appEmulation->startEnvironmentEmulation($storeId, $area);
+        }
+        return $this;
     }
 
     /**
