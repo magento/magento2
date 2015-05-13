@@ -10,7 +10,7 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Backend Cms Page grid.
+ * Backend Data Grid for managing "CMS Page" entities.
  */
 class Grid extends DataGrid
 {
@@ -26,14 +26,14 @@ class Grid extends DataGrid
     ];
 
     /**
-     * Locator value for link in action column.
+     * Locator value for "Preview" link inside action column.
      *
      * @var string
      */
     protected $previewCmsPage = '.action-menu-item';
 
     /**
-     * Search item and open it on front.
+     * Search item and open it on Frontend.
      *
      * @param array $filter
      * @throws \Exception
