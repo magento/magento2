@@ -53,27 +53,17 @@ define(
                 return !customer.isLoggedIn()();
             },
             isChecked: function() {
-                if (isMethodRegister || !isGuestCheckoutAllowed) {
+                if (!isGuestCheckoutAllowed) {
                     return 'register';
                 }
                 return false;
             },
             setCheckoutMethod: function() {
                 var guestChecked    = $( '[data-role=checkout-method-guest]' ).is( ':checked' );
-                var registerChecked = $( '[data-role=checkout-method-register]').is( ':checked' );
-                if( !guestChecked && !registerChecked ){
-                    alert('Please choose to register or to checkout as a guest.');
-                    return false;
-                }
                 if (guestChecked) {
                     quote.setCheckoutMethod('guest');
                     $('[name="customerDetails.password"]').hide();
                     $('[name="customerDetails.confirm_password"]').hide();
-                }
-                if (registerChecked) {
-                    quote.setCheckoutMethod('register');
-                    $('[name="customerDetails.password"]').show();
-                    $('[name="customerDetails.confirm_password"]').show();
                 }
                 navigator.setCurrent('authentication').goNext();
             },

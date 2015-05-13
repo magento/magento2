@@ -183,7 +183,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'quoteData' => $this->getQuoteData(),
             'quoteItemData' => $this->getQuoteItemData(),
             'isCustomerLoggedIn' => $this->isCustomerLoggedIn(),
-            'baseCurrencySymbol' => $this->getBaseCurrencySymbol(),
             'selectedShippingMethod' => $this->getSelectedShippingMethod(),
             'storeCode' => $this->getStoreCode(),
             'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
@@ -196,6 +195,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'priceFormat' => $this->localeFormat->getPriceFormat(
                 null,
                 $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
+            ),
+            'basePriceFormat' => $this->localeFormat->getPriceFormat(
+                null,
+                $this->currencyManager->getDefaultCurrency()
             )
         ];
     }
@@ -269,14 +272,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $quoteData = $quote->toArray();
             $quoteData['is_virtual'] = $quote->getIsVirtual();
 
-            /**
-             * Temporary workaround for guest customer API issue.
-             */
             if (!$quote->getCustomer()->getId()) {
                 /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
                 $quoteIdMask = $this->quoteIdMaskFactory->create();
                 $quoteData['entity_id'] = $quoteIdMask->load(
-                    $this->checkoutSession->getQuote()->getId()
+                    $this->checkoutSession->getQuote()->getId(), 'quote_id'
                 )->getMaskedId();
             }
 
@@ -325,19 +325,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $optionsData[$index]['label'] = $optionValue['label'];
         }
         return $optionsData;
-    }
-
-    /**
-     * Retrieve base currency symbol
-     *
-     * @return string
-     */
-    private function getBaseCurrencySymbol()
-    {
-        $defaultCurrency = $this->currencyManager->getCurrency($this->currencyManager->getDefaultCurrency());
-        $currencySymbol = $defaultCurrency->getSymbol()
-            ? $defaultCurrency->getSymbol() : $defaultCurrency->getShortName();
-        return $currencySymbol;
     }
 
     /**

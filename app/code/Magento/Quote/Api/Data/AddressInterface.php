@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Api\Data;
 
-interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
