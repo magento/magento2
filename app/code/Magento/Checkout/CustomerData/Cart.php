@@ -49,11 +49,17 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $summeryCount;
 
     /**
+     * @var \Magento\Catalog\Block\ShortcutButtons
+     */
+    protected $shortcutButtons;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param ItemPoolInterface $itemPoolInterface
+     * @param \Magento\Catalog\Block\ShortcutButtons $shortcutButtons
      * @param array $data
      */
     public function __construct(
@@ -62,6 +68,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         ItemPoolInterface $itemPoolInterface,
+        \Magento\Catalog\Block\ShortcutButtons $shortcutButtons,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
@@ -69,6 +76,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         $this->checkoutCart = $checkoutCart;
         $this->checkoutHelper = $checkoutHelper;
         $this->itemPoolInterface = $itemPoolInterface;
+        $this->shortcutButtons = $shortcutButtons;
     }
 
     /**
@@ -84,6 +92,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
                 : 0,
             'possible_onepage_checkout' => $this->isPossibleOnepageCheckout(),
             'items' => $this->getRecentItems(),
+            'extra_actions' => $this->shortcutButtons->toHtml(),
         ];
     }
 

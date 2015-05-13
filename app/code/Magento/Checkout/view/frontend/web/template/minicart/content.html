@@ -56,9 +56,7 @@
                         data-bind="attr: {title: $t('Go to Checkout')}">
                     <!-- ko text: $t('Go to Checkout') --><!-- /ko -->
                 </button>
-                <!-- ko foreach: getRegion('extraActions') -->
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                <!-- /ko -->
+                <div data-bind="html: cart().extra_actions"></div>
             </div>
         </div>
         <!-- /ko -->
