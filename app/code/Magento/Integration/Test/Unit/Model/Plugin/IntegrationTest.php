@@ -15,7 +15,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Integration\Model\Plugin\Integration
      */
-    protected $integrationV1Plugin;
+    protected $integrationPlugin;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -39,7 +39,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->aclRetrieverMock = $this->getMockBuilder('Magento\Authorization\Model\Acl\AclRetriever')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->integrationV1Plugin = new \Magento\Integration\Model\Plugin\Integration(
+        $this->integrationPlugin = new \Magento\Integration\Model\Plugin\Integration(
             $this->integrationAuthServiceMock,
             $this->aclRetrieverMock
         );
@@ -59,6 +59,6 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->integrationAuthServiceMock->expects($this->once())
             ->method('removePermissions')
             ->with($integrationId);
-        $this->integrationV1Plugin->afterDelete($this->subjectMock, $integrationsData);
+        $this->integrationPlugin->afterDelete($this->subjectMock, $integrationsData);
     }
 }

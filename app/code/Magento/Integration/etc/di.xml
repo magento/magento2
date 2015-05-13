@@ -25,6 +25,6 @@
         </arguments>
     </type>
     <type name="Magento\Integration\Api\IntegrationServiceInterface">
-        <plugin name="webapiIntegrationServiceV1" type="Magento\Integration\Model\Plugin\Integration"/>
+        <plugin name="webapiIntegrationService" type="Magento\Integration\Model\Plugin\Integration"/>
     </type>
 </config>
