@@ -162,6 +162,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      *
      * @param InputInterface $input
      * @return string[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate(InputInterface $input)
     {
