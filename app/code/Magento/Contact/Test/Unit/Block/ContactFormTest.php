@@ -35,7 +35,7 @@ class ContactFormTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @return void
      */
     public function testScope()
     {
