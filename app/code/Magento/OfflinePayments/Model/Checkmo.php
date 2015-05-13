@@ -12,10 +12,14 @@ namespace Magento\OfflinePayments\Model;
  */
 class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
 {
+    const PAYMENT_METHOD_CHECKMO_CODE = 'checkmo';
+
     /**
+     * Payment method code
+     *
      * @var string
      */
-    protected $_code = 'checkmo';
+    protected $_code = self::PAYMENT_METHOD_CHECKMO_CODE;
 
     /**
      * @var string
