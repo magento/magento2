@@ -33,7 +33,6 @@ class CategoriesFixture extends Fixture
         /** @var $category \Magento\Catalog\Model\Category */
         $category = $this->fixtureModel->getObjectManager()->create('Magento\Catalog\Model\Category');
 
-        $groups = [];
         $storeGroups = $storeManager->getGroups();
         $i = 0;
         foreach ($storeGroups as $storeGroup) {
@@ -44,7 +43,6 @@ class CategoriesFixture extends Fixture
             $i++;
         }
         $groupNumber = 0;
-        $anchorStep = 2;
         $categoryIndex = 1;
 
         while ($categoryIndex <= $categoriesNumber) {
@@ -58,7 +56,6 @@ class CategoriesFixture extends Fixture
                 ->setAvailableSortBy('name')
                 ->setDefaultSortBy('name')
                 ->setIsActive(true)
-                //->setIsAnchor($categoryIndex++ % $anchorStep == 0)
                 ->save();
             $categoryIndex++;
             $categoryPath[$groupNumber] .=  '/' . $category->getName();

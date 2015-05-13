@@ -31,8 +31,6 @@ class CustomersFixture extends Fixture
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */
         $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
-        /** @var $category \Magento\Catalog\Model\Category */
-        $category = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Category');
         /** @var $defaultStoreView \Magento\Store\Model\Store */
         $defaultStoreView = $storeManager->getDefaultStoreView();
         $defaultStoreViewId = $defaultStoreView->getStoreId();

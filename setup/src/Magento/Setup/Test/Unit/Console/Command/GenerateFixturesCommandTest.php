@@ -17,6 +17,11 @@ class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $fixtureModel;
 
+    /**
+     * @var GenerateFixturesCommand|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $command;
+
     public function setUp()
     {
         $this->fixtureModel = $this->getMock('Magento\Setup\Fixtures\FixtureModel', [], [], '', false);

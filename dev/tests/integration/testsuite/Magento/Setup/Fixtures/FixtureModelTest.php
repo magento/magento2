@@ -3,12 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ToolkitFramework;
+
+namespace Magento\Setup\Fixtures;
+
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class Application test
  */
-class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
+class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
      * Profile generator working directory
@@ -24,31 +27,27 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_generatorWorkingDir = realpath(__DIR__ . '/../../../../../tools/performance-toolkit');
+        self::$_generatorWorkingDir = realpath(__DIR__ . '/../../../../../../../setup/src/Magento/Setup/Fixtures');
         copy(
-            self::$_generatorWorkingDir . '/fixtures/tax_rates.csv',
-            self::$_generatorWorkingDir . '/fixtures/tax_rates.csv.bak'
+            self::$_generatorWorkingDir . '/tax_rates.csv',
+            self::$_generatorWorkingDir . '/tax_rates.csv.bak'
         );
-        copy(__DIR__ . '/_files/tax_rates.csv', self::$_generatorWorkingDir . '/fixtures/tax_rates.csv');
+        copy(
+            __DIR__ . '/_files/tax_rates.csv',
+            self::$_generatorWorkingDir . '/tax_rates.csv'
+        );
         parent::setUpBeforeClass();
     }
 
     public function testTest()
     {
-        $config = \Magento\ToolkitFramework\Config::getInstance();
-        $config->loadConfig(__DIR__ . '/_files/small.xml');
-        /** @var \Magento\TestFramework\Application $itfApplication */
-        $itfApplication = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication();
-        $shell = $this->getMock('Magento\Framework\Shell', [], [], '', false);
+        $reindexCommand = Bootstrap::getObjectManager()->get('Magento\Indexer\Console\Command\IndexerReindexCommand');
+        $parser = Bootstrap::getObjectManager()->get('Magento\Framework\Xml\Parser');
+        $model = new FixtureModel($reindexCommand, $parser, []);
+        $model->loadConfig(__DIR__ . '/_files/small.xml');
+        $model->initObjectManager();
 
-        $application = new \Magento\ToolkitFramework\Application(
-            $itfApplication->getTempDir(),
-            $shell,
-            $itfApplication->getInitParams()
-        );
-
-        $application->bootstrap();
-        foreach ($application->loadFixtures()->getFixtures() as $fixture) {
+        foreach ($model->loadFixtures()->getFixtures() as $fixture) {
             $fixture->execute();
         }
     }
@@ -56,13 +55,13 @@ class ApplicationTest extends \Magento\TestFramework\Indexer\TestCase
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
-        unlink(self::$_generatorWorkingDir . '/fixtures/tax_rates.csv');
+        unlink(self::$_generatorWorkingDir . '/tax_rates.csv');
         rename(
-            self::$_generatorWorkingDir . '/fixtures/tax_rates.csv.bak',
-            self::$_generatorWorkingDir . '/fixtures/tax_rates.csv'
+            self::$_generatorWorkingDir . '/tax_rates.csv.bak',
+            self::$_generatorWorkingDir . '/tax_rates.csv'
         );
         /** @var $appCache \Magento\Framework\App\Cache */
-        $appCache = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache');
+        $appCache = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache');
         $appCache->clean(
             [
                 \Magento\Eav\Model\Cache\Type::CACHE_TAG,

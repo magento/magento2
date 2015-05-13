@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Setup\Fixtures;
+
 /**
  * Class IndexersStatesApplyFixture
  */
-class IndexersStatesApplyFixture extends \Magento\ToolkitFramework\Fixture
+class IndexersStatesApplyFixture extends Fixture
 {
     /**
      * @var int
@@ -19,15 +21,15 @@ class IndexersStatesApplyFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $indexers = \Magento\ToolkitFramework\Config::getInstance()->getValue('indexers', []);
+        $indexers = $this->fixtureModel->getValue('indexers', []);
         if (!isset($indexers["indexer"]) || empty($indexers["indexer"])) {
             return;
         }
-        $this->application->resetObjectManager();
+        $this->fixtureModel->resetObjectManager();
         foreach ($indexers["indexer"] as $indexer) {
-            $this->application->indexersStates[$indexer['id']] = ($indexer['set_scheduled'] == "true");
+            $this->fixtureModel->indexersStates[$indexer['id']] = ($indexer['set_scheduled'] == "true");
         }
-        $this->application->getObjectManager()->get('Magento\Framework\App\CacheInterface')
+        $this->fixtureModel->getObjectManager()->get('Magento\Framework\App\CacheInterface')
             ->clean([\Magento\Framework\App\Config::CACHE_TAG]);
     }
 
@@ -47,5 +49,3 @@ class IndexersStatesApplyFixture extends \Magento\ToolkitFramework\Fixture
         return [];
     }
 }
-
-return new IndexersStatesApplyFixture($this);
