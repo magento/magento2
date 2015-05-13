@@ -49,9 +49,9 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $summeryCount;
 
     /**
-     * @var \Magento\Catalog\Block\ShortcutButtons
+     * @var \Magento\Framework\View\LayoutInterface
      */
-    protected $shortcutButtons;
+    protected $layout;
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -59,7 +59,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param ItemPoolInterface $itemPoolInterface
-     * @param \Magento\Catalog\Block\ShortcutButtons $shortcutButtons
+     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
      */
     public function __construct(
@@ -68,7 +68,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         ItemPoolInterface $itemPoolInterface,
-        \Magento\Catalog\Block\ShortcutButtons $shortcutButtons,
+        \Magento\Framework\View\LayoutInterface $layout,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
@@ -76,7 +76,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         $this->checkoutCart = $checkoutCart;
         $this->checkoutHelper = $checkoutHelper;
         $this->itemPoolInterface = $itemPoolInterface;
-        $this->shortcutButtons = $shortcutButtons;
+        $this->layout = $layout;
     }
 
     /**
@@ -92,7 +92,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
                 : 0,
             'possible_onepage_checkout' => $this->isPossibleOnepageCheckout(),
             'items' => $this->getRecentItems(),
-            'extra_actions' => $this->shortcutButtons->toHtml(),
+            'extra_actions' => $this->layout->createBlock('Magento\Catalog\Block\ShortcutButtons')->toHtml(),
         ];
     }
 
