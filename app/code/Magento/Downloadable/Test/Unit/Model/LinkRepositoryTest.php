@@ -566,5 +566,4 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
         $resource->expects($this->any())->method('getLinkUrl')
             ->will($this->returnValue($inputData['link_url']));
     }
-
 }
