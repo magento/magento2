@@ -141,7 +141,7 @@ class CssDeployCommand extends Command
     protected function configure()
     {
         $this->setName('dev:css:deploy')
-            ->setDescription('Collects, processes and publishes source files like LESS or SASS')
+            ->setDescription('Collects, processes and publishes source LESS files')
             ->setDefinition([
                 new InputArgument(
                     self::TYPE_ARGUMENT,
