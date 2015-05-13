@@ -298,8 +298,14 @@ label.mage-error {
         }
     }
     .range-line {
+        position: relative;
         + .range-line {
             margin-top: .5rem;
+        }
+    }
+    .col-qty {
+        .admin__control-text {
+            &:extend(.abs-control-qty all);
         }
     }
     .field-row {

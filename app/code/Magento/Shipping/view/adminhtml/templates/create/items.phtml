@@ -51,11 +51,13 @@
                     <label class="admin__field-label"
                            for="shipment_comment_text">
                         <span><?php echo __('Comment Text') ?></span></label>
-                    <textarea id="shipment_comment_text"
-                              class="admin__control-textarea"
-                              name="shipment[comment_text]"
-                              rows="3"
-                              cols="5"><?php echo $block->getShipment()->getCommentText(); ?></textarea>
+                    <div class="admin__field-control">
+                        <textarea id="shipment_comment_text"
+                                  class="admin__control-textarea"
+                                  name="shipment[comment_text]"
+                                  rows="3"
+                                  cols="5"><?php echo $block->getShipment()->getCommentText(); ?></textarea>
+                    </div>
                 </div>
             </div>
         </div>
