@@ -322,19 +322,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public function placeOrderCreatingAccount($cartId, $customer, $password, $agreements = null)
-    {
-        $customer = $this->accountManagement->createAccount($customer, $password);
-        $quote = $this->quoteRepository->getActive($cartId)->assignCustomer($customer);
-        $quote->setCheckoutMethod('register');
-        $orderId = $this->placeOrder($cartId, $agreements);
-        $this->customerSession->loginById($customer->getId());
-        return $orderId;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getCartForCustomer($customerId)
