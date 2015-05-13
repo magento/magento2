@@ -298,7 +298,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function placeOrder($cartId, $agreements = null)
+    public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null)
     {
         if (!$this->agreementsValidator->isValid($agreements)) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
