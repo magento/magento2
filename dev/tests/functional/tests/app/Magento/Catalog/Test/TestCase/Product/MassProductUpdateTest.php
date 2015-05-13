@@ -84,6 +84,7 @@ class MassProductUpdateTest extends Injectable
      */
     public function test(CatalogProductSimple $initialProduct, CatalogProductSimple $product, $configData)
     {
+        $this->markTestIncomplete('Bug: MAGETWO-37154');
         $this->configData = $configData;
 
         // Preconditions
