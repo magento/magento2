@@ -85,8 +85,16 @@
             <span data-bind="text: $t('Advanced filter')"></span>
         </legend>
         <!-- ko foreach: elems -->
-            <!-- ko if: $parent.isFilterVisible($data) -->
+            <!-- ko if: $data.isGroup -->
+            <fieldset class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data)">
                 <!-- ko template: getTemplate() --><!-- /ko -->
+            </fieldset>
+            <!-- /ko -->
+
+            <!-- ko ifnot: $data.isGroup -->
+            <div class="admin__form-field" data-bind="visible: $parent.isFilterVisible($data)">
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            </div>
             <!-- /ko -->
         <!-- /ko -->
     </fieldset>

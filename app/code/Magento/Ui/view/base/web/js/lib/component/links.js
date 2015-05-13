@@ -10,17 +10,18 @@ define([
 ], function (ko, _, utils, registry) {
     'use strict';
 
-    function extractData(owner, str) {
-        var data = str.split(':');
+    function extractData(placeholder, data, direction) {
+        data = data.split(':');
 
         if (!data[1]) {
             data[1] = data[0];
-            data[0] = owner.name;
+            data[0] = placeholder;
         }
 
         return {
             target: data[0],
-            property: data[1]
+            property: data[1],
+            direction: direction
         };
     }
 
@@ -28,11 +29,24 @@ define([
         return typeof value !== 'undefined' && value != null;
     }
 
-    function update(owner, value) {
+    function update(data, owner, value) {
         var component = owner.component,
-            property = owner.property;
+            property = owner.property,
+            linked = data.linked;
+
+        if (data.mute) {
+            return;
+        }
+
+        if (linked) {
+            linked.mute = true;
+        }
 
         component.set(property, value);
+
+        if (linked) {
+            linked.mute = false;
+        }
     }
 
     function getValue(owner) {
@@ -66,27 +80,77 @@ define([
         return result;
     }
 
-    function setData(store, direction, property, data) {
-        var maps;
-
-        if (!store.maps) {
-            store.maps = {};
+    function setLinked(map, data) {
+        var hasLink,
+            match;
+        
+        if (!map) {
+            return;
         }
 
-        maps = store.maps;
+        hasLink = map.some(function (item) {
+            match = item;
 
-        maps[direction] = maps[direction] || {};
+            return !item.linked &&
+                item.target === data.target &&
+                item.property === data.property;
+        });
 
-        if (!Array.isArray(maps[direction][property])) {
-            maps[direction][property] = [];
+        if (hasLink) {
+            match.linked = data;
+            data.linked = match;
         }
+    }
 
-        maps[direction][property].push(data);
+    function setData(maps, property, data) {
+        var direction = data.direction,
+            map = maps[direction];
+
+        (map[property] = map[property] || []).push(data);
+
+        direction = direction === 'imports' ? 'exports' : 'imports';
+
+        setLinked(maps[direction][property], data);
+    }
+
+    function transfer(owner, property, data, type) {
+        var direction = data.direction;
+
+        registry.get(data.target, function (target) {
+            var formated = form(target, owner, data.property, property, direction),
+                callback,
+                value;
+
+            owner = formated.owner;
+            target = formated.target;
+
+            if (type === 'link' || type === 'both') {
+                callback = update.bind(null, data, target);
+
+                owner.component.on(owner.property, callback);
+            }
+
+            if (type === 'transfer' || type === 'both') {
+                value = getValue(owner);
+
+                if (notEmpty(value)) {
+                    update(data, target, value);
+                }
+            }
+        });
     }
 
     return {
+        defaults: {
+            maps: {
+                exports: {},
+                imports: {}
+            }
+        },
+
         setListners: function (listeners) {
-            var data;
+            var owner = this,
+                data;
 
             _.each(listeners, function (callbacks, sources) {
                 sources = sources.split(' ');
@@ -94,71 +158,29 @@ define([
 
                 sources.forEach(function (target) {
                     callbacks.forEach(function (callback) {
-                        data = extractData(this, target);
+                        data = extractData(owner.name, target, 'imports');
 
-                        setData(this, 'imports', callback, data);
-
-                        this.link(callback, data, 'imports');
-                    }, this);
-                }, this);
-            }, this);
+                        setData(owner.maps, callback, data);
+                        transfer(owner, callback, data, 'link');
+                    });
+                });
+            });
+            
+            return this;
         },
 
         setLinks: function (links, direction) {
-            _.each(links, function (data, property) {
-                data = extractData(this, data);
+            var property,
+                data;
 
-                setData(this, direction, property, data);
+            for (property in links) {
+                data = extractData(this.name, links[property], direction);
 
-                this.link(property, data, direction)
-                    .transfer(direction, property, data);
-            }, this);
-
-            return this;
-        },
-
-        link: function (property, data, direction) {
-            var owner,
-                formated;
-
-            registry.get(data.target, function (component) {
-                var callback;
-
-                formated = form(component, this, data.property, property, direction);
-                owner = formated.owner;
-
-                callback = update.bind(null, formated.target);
-
-                owner.component.on(owner.property, callback);
-            }.bind(this));
+                setData(this.maps, property, data);
+                transfer(this, property, data, 'both');
+            }
 
             return this;
-        },
-
-        transfer: function (direction, property, data) {
-            var formated,
-                value;
-
-            registry.get(data.target, function (component) {
-                formated = form(component, this, data.property, property, direction);
-                value = getValue(formated.owner);
-
-                if (!notEmpty(value)) {
-                    return;
-                }
-
-                update(formated.target, value);
-            }.bind(this));
-
-            return this;
-        },
-
-        export: function (property, data) {
-            return this.transfer('exports', property, data);
-        },
-
-        import: function (property, data) {
-            return this.transfer('imports', property, data);
         }
     };
 });

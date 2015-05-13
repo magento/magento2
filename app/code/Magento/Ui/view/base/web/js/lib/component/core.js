@@ -6,41 +6,38 @@ define([
     'ko',
     'mageUtils',
     'underscore',
-    'uiRegistry'
+    'uiRegistry',
+    'Magento_Ui/js/lib/storage'
 ], function (ko, utils, _, registry) {
     'use strict';
 
     return {
         defaults: {
-            parentName: '<%= $data.getPart(name, -2) %>',
-            parentScope: '<%= $data.getPart(dataScope, -2) %>',
             template: 'ui/collection',
+            parentName: '${ $.$data.getPart( $.name, -2) }',
+            parentScope:'${ $.$data.getPart( $.dataScope, -2) }',
             containers: [],
             _elems: [],
-            elems: []
+            elems: [],
+
+            storageConfig: {
+                provider: 'localStorage',
+                namespace: '${ $.name }',
+                path: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }'
+            }
         },
 
-        initialize: function (options) {
+        initialize: function () {
             _.bindAll(this, '_insert', 'trigger');
 
-            this.initConfig(options)
+            this._super()
                 .initProperties()
                 .initObservable()
+                .initStorage()
                 .initModules()
                 .initUnique()
                 .initLinks()
                 .setListners(this.listens);
-
-            return this;
-        },
-
-        initConfig: function (options) {
-            var defaults = this.constructor.defaults,
-                config = utils.extend({}, defaults, options);
-
-            config = utils.template(config, this);
-
-            _.extend(this, config);
 
             return this;
         },
@@ -51,7 +48,9 @@ define([
          * @returns {Component} Chainable.
          */
         initProperties: function () {
-            this.source = registry.get(this.provider);
+            _.extend(this, {
+                source: registry.get(this.provider)
+            });
 
             return this;
         },
@@ -63,6 +62,12 @@ define([
          */
         initObservable: function () {
             this.observe('elems');
+
+            return this;
+        },
+
+        initStorage: function () {
+            this.storage = registry.async(this.storageConfig.provider);
 
             return this;
         },
@@ -132,6 +137,14 @@ define([
         },
 
         /**
+         * Returns path to components' template.
+         * @returns {String}
+         */
+        getTemplate: function () {
+            return this.template;
+        },
+
+        /**
          * Splits incoming string and returns its' part specified by offset.
          *
          * @param {String} parts
@@ -147,14 +160,6 @@ define([
             parts.splice(offset, 1);
 
             return parts.join(delimiter) || '';
-        },
-
-        /**
-         * Returns path to components' template.
-         * @returns {String}
-         */
-        getTemplate: function () {
-            return this.template;
         },
 
         /**

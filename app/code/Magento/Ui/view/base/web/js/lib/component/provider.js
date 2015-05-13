@@ -36,28 +36,6 @@ define([
         obj[key] = ko[method](value);
     }
 
-    function getStored(ns) {
-        var stored = localStorage.getItem(ns);
-
-        return !_.isNull(stored) ? JSON.parse(stored) : {};
-    }
-
-    function store(ns, property, data) {
-        var stored = getStored(ns);
-
-        utils.nested(stored, property, data);
-
-        localStorage.setItem(ns, JSON.stringify(stored));
-    }
-
-    function removeStored(ns, property) {
-        var stored = getStored(ns);
-
-        utils.nestedRemove(stored, property);
-
-        localStorage.setItem(ns, JSON.stringify(stored));
-    }
-
     function notify(diffs, data, callback) {
         diffs.changes.forEach(function (change) {
             callback(change.path, change.value, change);
@@ -71,6 +49,49 @@ define([
     }
 
     return {
+        /**
+         * Retrieves nested data.
+         *
+         * @param {String} path - Path to the property.
+         * @returns {*}
+         */
+        get: function (path) {
+            return utils.nested(this, path);
+        },
+
+        /**
+         * Sets value property to path and triggers update by path, passing result.
+         *
+         * @param {String} path
+         * @param {*} value
+         * @returns {Component} Chainable.
+         */
+        set: function (path, value) {
+            var data = utils.nested(this, path),
+                diffs;
+
+            if (typeof data !== 'function') {
+                diffs = utils.compare(data, value, path);
+
+                utils.nested(this, path, value);
+
+                notify(diffs, this, this.trigger);
+            } else {
+                utils.nested(this, path, value);
+            }
+
+            return this;
+        },
+
+        /**
+         * Removes nested data from the object.
+         *
+         * @param {String} path - Path to the property that should be removed.
+         */
+        remove: function (path) {
+            utils.nestedRemove(this, path);
+        },
+
         /**
          * If 2 params passed, path is considered as key.
          * Else, path is considered as object.
@@ -97,58 +118,29 @@ define([
             return this;
         },
 
-        /**
-         * If path specified, returnes this.data[path], else returns this.data
-         * @param  {String} path
-         * @return {*} this.data[path] or simply this.data
-         */
-        get: function (path) {
-            return utils.nested(this, path);
-        },
-
-        /**
-         * Sets value property to path and triggers update by path, passing result
-         * @param {String} path
-         * @param {*} value
-         * @returns {Component} Chainable.
-         */
-        set: function (path, value) {
-            var data = utils.nested(this, path),
-                diffs;
-
-            if (typeof data !== 'function') {
-                diffs = utils.compare(data, value, path);
-
-                utils.nested(this, path, value);
-
-                notify(diffs, this, this.trigger);
-            } else {
-                utils.nested(this, path, value);
-            }
-
-            return this;
-        },
-
-        removeData: function (path) {
-            utils.nestedRemove(this, path);
-        },
-
         restore: function () {
-            var stored = getStored(this.name);
+            var ns = this.storageConfig.namespace,
+                stored = this.storage().get(ns);
 
             utils.extend(this, stored);
         },
 
         store: function (property, data) {
+            var ns = this.storageConfig.namespace,
+                path = utils.fullPath(ns, property);
+
             data = data || this.get(property);
 
-            store(this.name, property, data);
+            this.storage().set(path, data);
 
             return this;
         },
 
         removeStored: function (property) {
-            removeStored(this.name, property);
+            var ns = this.storageConfig.namespace,
+                path = utils.fullPath(ns, property);
+
+            this.storage().remove(path);
         }
     };
 });

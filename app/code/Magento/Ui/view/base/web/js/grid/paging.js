@@ -24,28 +24,23 @@ define([
             pageSize: 20,
             current: 1,
 
-            states: {
-                namespace: 'current.paging'
-            },
-
             imports: {
-                totalSelected: '<%= provider %>:config.multiselect.total',
-                totalRecords: '<%= provider %>:data.totalRecords'
+                totalSelected: '${ $.provider }:config.multiselect.total',
+                totalRecords: '${ $.provider }:data.totalRecords'
             },
 
             exports: {
-                pageSize: '<%= provider %>:params.paging.pageSize',
-                current: '<%= provider %>:params.paging.current',
-                pages: '<%= provider %>:data.pages'
+                pageSize: '${ $.provider }:params.paging.pageSize',
+                current: '${ $.provider }:params.paging.current',
+                pages: '${ $.provider }:data.pages'
             },
 
             links: {
-                pageSize: '<%= states.provider %>:<%= states.namespace %>.pageSize'
+                pageSize: '${ $.storageConfig.path }.pageSize'
             },
 
             listens: {
                 'pageSize': 'onSizeChange',
-                'pageSize current': 'reload',
                 'pageSize totalRecords': 'countPages'
             }
         },
@@ -153,9 +148,7 @@ define([
          * Is being triggered on user interaction with page size select.
          * Resets current page to first if needed.
          */
-        onSizeChange: function () {
-            var size = this.pageSize();
-
+        onSizeChange: function (size) {
             if (size * this.current() > this.totalRecords()) {
                 this.current(1);
             }

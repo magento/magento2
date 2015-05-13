@@ -3,9 +3,10 @@
  * See COPYING.txt for license details.
  */
 define([
+    'underscore',
     'mageUtils',
     'uiComponent'
-], function (utils, Component) {
+], function (_, utils, Component) {
     'use strict';
 
     return Component.extend({
@@ -14,14 +15,8 @@ define([
             bodyTmpl: 'ui/grid/cells/text',
             sortable: false,
             visible: true,
-            states: {
-                namespace: 'columns.<%= index %>'
-            },
             links: {
-                visible: '<%= states.provider %>:current.<%= states.namespace %>.visible'
-            },
-            modules: {
-                statesProvider: '<%= states.provider %>'
+                visible: '${ $.storageConfig.path }.visible'
             }
         },
 
@@ -33,15 +28,15 @@ define([
         },
 
         applyState: function (property, state) {
-            var provider = this.statesProvider(),
-                namespace = this.states.namespace + '.' + property,
+            var storage = this.storage(),
+                namespace = this.storageConfig.root + '.' + property,
                 data,
                 value;
 
             if (state === 'default') {
-                data = provider.getDefault();
+                data = storage.getDefault();
             } else if (state === 'last') {
-                data = provider.getSaved();
+                data = storage.getSaved();
             }
 
             value = utils.nested(data, namespace);

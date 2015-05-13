@@ -10,7 +10,8 @@ define([
 
     return Group.extend({
         defaults: {
-            template: 'ui/grid/filters/elements/group'
+            template: 'ui/grid/filters/elements/group',
+            isGroup: true
         },
 
         reset: function () {

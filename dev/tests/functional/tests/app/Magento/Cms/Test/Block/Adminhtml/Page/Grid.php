@@ -21,7 +21,7 @@ class Grid extends DataGrid
      */
     protected $filters = [
         'title' => [
-            'selector' => '[name="params[filters][title]"]',
+            'selector' => '[name="filters[title]"]',
         ],
     ];
 
