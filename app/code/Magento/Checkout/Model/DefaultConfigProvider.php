@@ -266,7 +266,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
                 /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
                 $quoteIdMask = $this->quoteIdMaskFactory->create();
                 $quoteData['entity_id'] = $quoteIdMask->load(
-                    $this->checkoutSession->getQuote()->getId(), 'quote_id'
+                    $this->checkoutSession->getQuote()->getId(),
+                    'quote_id'
                 )->getMaskedId();
             }
 
