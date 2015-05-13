@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\Unit\Pricing\Price;
 use \Magento\Catalog\Pricing\Price\CustomOptionPrice;
 
 use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Catalog\Model\Product\Option\Value;
 
 /**
  * Class OptionPriceTest
@@ -123,6 +124,46 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         return $options;
     }
 
+    protected function setupSingleValueOptions($optionsData)
+    {
+        $options = [];
+        foreach ($optionsData as $optionData) {
+            $optionItemMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+                ->disableOriginalConstructor()
+                ->setMethods([
+                    'getValues',
+                    '__wakeup',
+                    'getIsRequire',
+                    'getId',
+                    'getType',
+                    'getPriceType',
+                    'getPrice',
+                ])
+                ->getMock();
+            $optionItemMock->expects($this->any())
+                ->method('getId')
+                ->will($this->returnValue($optionData['id']));
+            $optionItemMock->expects($this->any())
+                ->method('getType')
+                ->will($this->returnValue($optionData['type']));
+            $optionItemMock->expects($this->any())
+                ->method('getIsRequire')
+                ->will($this->returnValue($optionData['is_require']));
+            $optionItemMock->expects($this->any())
+                ->method('getValues')
+                ->will($this->returnValue(null));
+            $optionItemMock->expects($this->any())
+                ->method('getPriceType')
+                ->willReturn($optionData['price_type']);
+            $optionItemMock->expects($this->any())
+                ->method('getPrice')
+                ->with($optionData['price_type'] == Value::TYPE_PERCENT)
+                ->willReturn($optionData['price']);
+            $options[] = $optionItemMock;
+        }
+        return $options;
+    }
+
     /**
      * Test getValue()
      */
@@ -133,7 +174,7 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         $option1MinPrice = 10;
         $option1Type = 'select';
 
-        $option2Id = '2';
+        $option2Id = 2;
         $option2MaxPrice = 200;
         $option2MinPrice = 20;
         $option2Type = 'choice';
@@ -154,7 +195,25 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
                 'is_require' => false,
             ]
         ];
+
+        $singleValueOptionId = 3;
+        $singleValueOptionPrice = '50';
+        $singleValueOptionType = 'text';
+
+        $singleValueOptions = $this->setupSingleValueOptions(
+            [
+                [
+                    'id' => $singleValueOptionId,
+                    'type' => $singleValueOptionType,
+                    'price' => $singleValueOptionPrice,
+                    'price_type' => 'fixed',
+                    'is_require' => true,
+                ],
+            ]
+        );
+
         $options = $this->setupOptions($optionsData);
+        $options[] = $singleValueOptions[0];
         $this->product->expects($this->once())
             ->method('getOptions')
             ->will($this->returnValue($options));
@@ -171,6 +230,12 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
                 'type' => $option2Type,
                 'min' => 0.,
                 'max' => $option2MaxPrice,
+            ],
+            [
+                'option_id' => $singleValueOptionId,
+                'type' => $singleValueOptionType,
+                'min' => $singleValueOptionPrice,
+                'max' => $singleValueOptionPrice,
             ]
         ];
         $result = $this->object->getValue();

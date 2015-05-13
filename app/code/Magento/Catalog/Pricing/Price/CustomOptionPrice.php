@@ -42,9 +42,8 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                     $min = 0.;
                 }
                 $max = 0.;
-                /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
-                foreach ($optionItem->getValues() as $optionValue) {
-                    $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
+                if ($optionItem->getValues() === null && $optionItem->getPrice() !== null) {
+                    $price = $optionItem->getPrice($optionItem->getPriceType() == Value::TYPE_PERCENT);
                     if ($min === null) {
                         $min = $price;
                     } elseif ($price < $min) {
@@ -52,6 +51,19 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                     }
                     if ($price > $max) {
                         $max = $price;
+                    }
+                } else {
+                    /** @var $optionValue \Magento\Catalog\Model\Product\Option\Value */
+                    foreach ($optionItem->getValues() as $optionValue) {
+                        $price = $optionValue->getPrice($optionValue->getPriceType() == Value::TYPE_PERCENT);
+                        if ($min === null) {
+                            $min = $price;
+                        } elseif ($price < $min) {
+                            $min = $price;
+                        }
+                        if ($price > $max) {
+                            $max = $price;
+                        }
                     }
                 }
                 $optionValues[] = [
