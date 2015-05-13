@@ -219,6 +219,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $_rateRequestFactory;
 
     /**
+     * @var Address\CustomAttributeListInterface
+     */
+    protected $attributeList;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -247,6 +252,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param Address\CustomAttributeListInterface $attributeList
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -277,6 +283,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         Address\Validator $validator,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
+        Address\CustomAttributeListInterface $attributeList,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
@@ -295,6 +302,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->addressDataFactory = $addressDataFactory;
         $this->validator = $validator;
         $this->addressMapper = $addressMapper;
+        $this->attributeList = $attributeList;
         parent::__construct(
             $context,
             $registry,
@@ -1677,5 +1685,13 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function setExtensionAttributes(\Magento\Quote\Api\Data\AddressExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCustomAttributesCodes()
+    {
+        return array_keys($this->attributeList->getAttributes());
     }
 }

@@ -3,45 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Quote\Model\Quote;
+namespace Magento\Checkout\Block\Checkout;
 
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\Customer\Helper\Address as AddressHelper;
-use Magento\Ui\DataProvider\EavValidationRul;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
-/**
- * TODO implement all methods declared in the interface. Now only getMeta() has proper implementation.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
-class AddressDataProvider implements DataProviderInterface
+class AttributeMerger
 {
-    /**
-     * @var EavConfig
-     */
-    private $eavConfig;
-
-    /**
-     * @var EavValidationRul
-     */
-    private $eavValidationRule;
-
-    /**
-     * @var array
-     */
-    private $meta = [];
-
-    /**
-     * Provider configuration data
-     *
-     * @var array
-     */
-    private $data = [];
-
     /**
      * @var AddressHelper
      */
@@ -68,59 +38,17 @@ class AddressDataProvider implements DataProviderInterface
     private $directoryHelper;
 
     /**
-     * Form element mapping
-     *
-     * @var array
-     */
-    private $formElementMap = [
-        'text' => 'input',
-        'hidden' => 'input',
-        'boolean' => 'checkbox',
-    ];
-
-    /**
-     * EAV attribute properties to fetch from meta storage
-     * @var array
-     */
-    private $metaPropertiesMap = [
-        'dataType' => 'frontend_input',
-        'visible' => 'is_visible',
-        'required' => 'is_required',
-        'label' => 'frontend_label',
-        'sortOrder' => 'sort_order',
-        'notice' => 'note',
-        'default' => 'default_value',
-        'size' => 'scope_multiline_count'
-    ];
-
-    /**
-     * @param EavValidationRul $eavValidationRule
-     * @param EavConfig $eavConfig
      * @param AddressHelper $addressHelper
      * @param Session $customerSession
      * @param CustomerRepository $customerRepository
      * @param DirectoryHelper $directoryHelper
-     * @param array $meta
-     * @param array $data
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
-        EavValidationRul $eavValidationRule,
-        EavConfig $eavConfig,
         AddressHelper $addressHelper,
         Session $customerSession,
         CustomerRepository $customerRepository,
-        DirectoryHelper $directoryHelper,
-        array $meta = [],
-        array $data = []
+        DirectoryHelper $directoryHelper
     ) {
-        $this->eavValidationRule = $eavValidationRule;
-        $this->eavConfig = $eavConfig;
-        $this->meta = $meta;
-        $this->meta['address']['fields'] = $this->getAttributesMeta(
-            $this->eavConfig->getEntityType('customer_address')
-        );
-        $this->data = $data;
         $this->addressHelper = $addressHelper;
         $this->customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
@@ -128,220 +56,17 @@ class AddressDataProvider implements DataProviderInterface
     }
 
     /**
-     * Get meta data
+     * Merge additional address fields for given provider
      *
-     * @return array
-     */
-    public function getMeta()
-    {
-        return $this->meta;
-    }
-
-    /**
-     * Get fields meta info
-     *
-     * @param string $fieldSetName
-     * @return array
-     */
-    public function getFieldsMetaInfo($fieldSetName)
-    {
-        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
-    }
-
-    /**
-     * Get field meta info
-     *
-     * @param string $fieldSetName
-     * @param string $fieldName
-     * @return array
-     */
-    public function getFieldMetaInfo($fieldSetName, $fieldName)
-    {
-        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
-            ? $this->meta[$fieldSetName]['fields'][$fieldName]
-            : [];
-    }
-
-    /**
-     * Get attributes meta
-     *
-     * @param EntityType $entityType
-     * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function getAttributesMeta(EntityType $entityType)
-    {
-        $meta = [];
-        $attributes = $entityType->getAttributeCollection();
-        /* @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        foreach ($attributes as $attribute) {
-            $code = $attribute->getAttributeCode();
-            // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
-            foreach ($this->metaPropertiesMap as $metaName => $originalName) {
-                $value = $attribute->getDataUsingMethod($originalName);
-                $meta[$code][$metaName] = $value;
-                if ('frontend_input' === $originalName) {
-                    $meta[$code]['formElement'] = isset($this->formElementMap[$value])
-                        ? $this->formElementMap[$value]
-                        : $value;
-                }
-                if ($attribute->usesSource()) {
-                    $meta[$code]['options'] = $attribute->getSource()->getAllOptions();
-                }
-            }
-
-            $rules = $this->eavValidationRule->build($attribute, $meta[$code]);
-            if (!empty($rules)) {
-                $meta[$code]['validation'] = $rules;
-            }
-        }
-        return $meta;
-    }
-
-    /**
-     * Get config data
-     *
-     * @return mixed
-     */
-    public function getConfigData()
-    {
-        return [];
-    }
-
-    /**
-     * Set data
-     *
-     * @param mixed $config
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function setConfigData($config)
-    {
-        // do nothing
-    }
-
-    /**
-     * Get data
-     *
-     * @return array
-     */
-    public function getData()
-    {
-        return [];
-    }
-
-    /**
-     * Get field name in request
-     *
-     * @return string
-     */
-    public function getRequestFieldName()
-    {
-        return null;
-    }
-
-    /**
-     * Get primary field name
-     *
-     * @return string
-     */
-    public function getPrimaryFieldName()
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function addFilter($field, $condition = null)
-    {
-        // do nothing
-    }
-
-    /**
-     * Add field to select
-     *
-     * @param string|array $field
-     * @param string|null $alias
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function addField($field, $alias = null)
-    {
-        // do nothing
-    }
-
-    /**
-     * self::setOrder() alias
-     *
-     * @param string $field
-     * @param string $direction
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function addOrder($field, $direction)
-    {
-        // do nothing
-    }
-
-    /**
-     * Set Query limit
-     *
-     * @param int $offset
-     * @param int $size
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function setLimit($offset, $size)
-    {
-        // do nothing
-    }
-
-    /**
-     * Removes field from select
-     *
-     * @param string|null $field
-     * @param bool $isAlias Alias identifier
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function removeField($field, $isAlias = false)
-    {
-        // do nothing
-    }
-
-    /**
-     * Removes all fields from select
-     *
-     * @return void
-     */
-    public function removeAllFields()
-    {
-        // do nothing
-    }
-
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return 0;
-    }
-
-    /**
-     * Retrieve additional address fields for given provider
-     *
+     * @param array $elements
      * @param string $providerName name of the storage container used by UI component
      * @param string $dataScopePrefix
      * @param array $fields
      * @return array
      */
-    public function getAdditionalAddressFields($providerName, $dataScopePrefix, array $fields = [])
+    public function merge($elements, $providerName, $dataScopePrefix, array $fields = [])
     {
-        foreach ($this->getFieldsMetaInfo('address') as $attributeCode => $attributeConfig) {
+        foreach ($elements as $attributeCode => $attributeConfig) {
             $additionalConfig = isset($fields[$attributeCode]) ? $fields[$attributeCode] : [];
             if (!$this->isFieldVisible($attributeCode, $attributeConfig, $additionalConfig)) {
                 continue;

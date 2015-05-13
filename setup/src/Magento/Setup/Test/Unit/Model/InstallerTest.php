@@ -122,7 +122,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
                 SetupConfigOptionsList::KEY_HOST => '127.0.0.1',
                 SetupConfigOptionsList::KEY_NAME => 'magento',
                 SetupConfigOptionsList::KEY_USER => 'magento',
-                SetupConfigOptionsList::KEY_PASSWORD => '',
+                SetupConfigOptionsList::KEY_PASS => '',
             ],
         ],
     ];

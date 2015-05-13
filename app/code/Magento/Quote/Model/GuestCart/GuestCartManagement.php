@@ -52,7 +52,7 @@ class GuestCartManagement implements GuestCartManagementInterface
         /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create();
         $cartId = $this->quoteManagement->createEmptyCart();
-        $quoteIdMask->setId($cartId)->save();
+        $quoteIdMask->setQuoteId($cartId)->save();
         return $quoteIdMask->getMaskedId();
     }
 
@@ -63,7 +63,7 @@ class GuestCartManagement implements GuestCartManagementInterface
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->quoteManagement->assignCustomer($quoteIdMask->getId(), $customerId, $storeId);
+        return $this->quoteManagement->assignCustomer($quoteIdMask->getQuoteId(), $customerId, $storeId);
     }
 
     /**
@@ -73,7 +73,7 @@ class GuestCartManagement implements GuestCartManagementInterface
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->quoteManagement->placeOrder($quoteIdMask->getId(), $agreements, $paymentMethod);
+        return $this->quoteManagement->placeOrder($quoteIdMask->getQuoteId(), $agreements, $paymentMethod);
     }
 
     /**
@@ -89,7 +89,7 @@ class GuestCartManagement implements GuestCartManagementInterface
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->quoteManagement->placeOrderCreatingAccount(
-            $quoteIdMask->getId(),
+            $quoteIdMask->getQuoteId(),
             $customer,
             $password,
             $agreements,

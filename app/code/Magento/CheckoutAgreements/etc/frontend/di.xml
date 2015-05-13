@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Checkout\Block\Checkout">
+    <type name="Magento\Checkout\Block\Onepage">
         <arguments>
-            <argument name="customLayoutProviders" xsi:type="array">
-                <item name="checkoutAgreements_data_provider" xsi:type="object">Magento\CheckoutAgreements\Model\AgreementsDataProvider</item>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="checkoutAgreements" xsi:type="object">Magento\CheckoutAgreements\Block\Checkout\LayoutProcessor</item>
             </argument>
         </arguments>
     </type>

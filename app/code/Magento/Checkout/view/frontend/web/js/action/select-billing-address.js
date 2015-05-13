@@ -38,7 +38,7 @@ define(
                 selectShippingAddress(billingAddress, useForShipping, additionalData);
             } else if (quote.isVirtual()) {
                 var serviceUrl;
-                if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
+                if (quote.getCheckoutMethod()() === 'guest') {
                     serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
                 } else {
                     serviceUrl =  urlBuilder.createUrl('/carts/mine/addresses', {});

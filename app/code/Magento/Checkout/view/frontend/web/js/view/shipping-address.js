@@ -68,10 +68,6 @@ define(
                     }
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get('shippingAddress');
-                        if (quote.getCheckoutMethod()() !== 'register') {
-                            var addressBookCheckBox =  $("input[name = 'shipping[save_in_address_book]']:checked");
-                            addressData.save_in_address_book = addressBookCheckBox.val();
-                        }
                         selectShippingAddress(addressData, this.sameAsBilling(), additionalData);
                     }
                 }

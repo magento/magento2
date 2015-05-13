@@ -47,7 +47,7 @@ class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemReposit
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        $cartItemList = $this->repository->getList($quoteIdMask->getId());
+        $cartItemList = $this->repository->getList($quoteIdMask->getQuoteId());
         /** @var $item CartItemInterface */
         foreach ($cartItemList as $item) {
             $item->setQuoteId($quoteIdMask->getMaskedId());
@@ -62,7 +62,7 @@ class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemReposit
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartItem->getQuoteId(), 'masked_id');
-        $cartItem->setQuoteId($quoteIdMask->getId());
+        $cartItem->setQuoteId($quoteIdMask->getQuoteId());
         return $this->repository->save($cartItem);
     }
 
@@ -73,6 +73,6 @@ class GuestCartItemRepository implements \Magento\Quote\Api\GuestCartItemReposit
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->repository->deleteById($quoteIdMask->getId(), $itemId);
+        return $this->repository->deleteById($quoteIdMask->getQuoteId(), $itemId);
     }
 }

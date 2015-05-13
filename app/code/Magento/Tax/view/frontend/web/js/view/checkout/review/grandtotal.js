@@ -40,7 +40,7 @@ define(
                 if (this.totals()) {
                     price = this.totals().base_grand_total;
                 }
-                return quote.getBaseCurrencySymbol() + priceUtils.formatPrice(price);
+                return priceUtils.formatPrice(price, quote.getBasePriceFormat());
             },
             isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
             getGrandTotalExclTax: function() {

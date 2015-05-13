@@ -42,7 +42,7 @@ class GuestAddressDetailsManagement implements \Magento\Quote\Api\GuestAddressDe
     ) {
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->addressDetailsManagement->saveAddresses(
-            $quoteIdMask->getId(),
+            $quoteIdMask->getQuoteId(),
             $billingAddress,
             $shippingAddress,
             $additionalData

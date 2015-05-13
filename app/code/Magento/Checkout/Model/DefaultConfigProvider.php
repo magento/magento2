@@ -40,11 +40,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $checkoutSession;
 
     /**
-     * @var CustomerRegistration
-     */
-    private $customerRegistration;
-
-    /**
      * @var CustomerRepository
      */
     private $customerRepository;
@@ -117,7 +112,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
-     * @param CustomerRegistration $customerRegistration
      * @param CustomerRepository $customerRepository
      * @param CustomerSession $customerSession
      * @param CustomerUrlManager $customerUrlManager
@@ -137,7 +131,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     public function __construct(
         CheckoutHelper $checkoutHelper,
         CheckoutSession $checkoutSession,
-        CustomerRegistration $customerRegistration,
         CustomerRepository $customerRepository,
         CustomerSession $customerSession,
         CustomerUrlManager $customerUrlManager,
@@ -156,7 +149,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
         $this->customerRepository = $customerRepository;
-        $this->customerRegistration = $customerRegistration;
         $this->customerSession = $customerSession;
         $this->customerUrlManager = $customerUrlManager;
         $this->httpContext = $httpContext;
@@ -183,12 +175,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'quoteData' => $this->getQuoteData(),
             'quoteItemData' => $this->getQuoteItemData(),
             'isCustomerLoggedIn' => $this->isCustomerLoggedIn(),
-            'baseCurrencySymbol' => $this->getBaseCurrencySymbol(),
             'selectedShippingMethod' => $this->getSelectedShippingMethod(),
             'storeCode' => $this->getStoreCode(),
             'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
-            'isRegistrationAllowed' => $this->isRegistrationAllowed(),
-            'isMethodRegister' => $this->isMethodRegister(),
             'isCustomerLoginRequired' => $this->isCustomerLoginRequired(),
             'registerUrl' => $this->getRegisterUrl(),
             'customerAddressCount' => $this->getCustomerAddressCount(),
@@ -196,6 +185,10 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'priceFormat' => $this->localeFormat->getPriceFormat(
                 null,
                 $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
+            ),
+            'basePriceFormat' => $this->localeFormat->getPriceFormat(
+                null,
+                $this->currencyManager->getDefaultCurrency()
             )
         ];
     }
@@ -269,14 +262,12 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $quoteData = $quote->toArray();
             $quoteData['is_virtual'] = $quote->getIsVirtual();
 
-            /**
-             * Temporary workaround for guest customer API issue.
-             */
             if (!$quote->getCustomer()->getId()) {
                 /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
                 $quoteIdMask = $this->quoteIdMaskFactory->create();
                 $quoteData['entity_id'] = $quoteIdMask->load(
-                    $this->checkoutSession->getQuote()->getId()
+                    $this->checkoutSession->getQuote()->getId(),
+                    'quote_id'
                 )->getMaskedId();
             }
 
@@ -325,19 +316,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
             $optionsData[$index]['label'] = $optionValue['label'];
         }
         return $optionsData;
-    }
-
-    /**
-     * Retrieve base currency symbol
-     *
-     * @return string
-     */
-    private function getBaseCurrencySymbol()
-    {
-        $defaultCurrency = $this->currencyManager->getCurrency($this->currencyManager->getDefaultCurrency());
-        $currencySymbol = $defaultCurrency->getSymbol()
-            ? $defaultCurrency->getSymbol() : $defaultCurrency->getShortName();
-        return $currencySymbol;
     }
 
     /**
@@ -409,26 +387,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function isCustomerLoginRequired()
     {
         return $this->checkoutHelper->isCustomerMustBeLogged();
-    }
-
-    /**
-     * Check if customer registration is allowed
-     *
-     * @return bool
-     */
-    private function isRegistrationAllowed()
-    {
-        return $this->customerRegistration->isAllowed();
-    }
-
-    /**
-     * Check if checkout method is 'Register'
-     *
-     * @return bool
-     */
-    private function isMethodRegister()
-    {
-        return $this->checkoutSession->getQuote()->getCheckoutMethod() == OnepageCheckout::METHOD_REGISTER;
     }
 
     /**

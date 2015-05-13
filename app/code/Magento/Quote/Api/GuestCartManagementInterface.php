@@ -35,7 +35,7 @@ interface GuestCartManagementInterface
      *
      * @param string $cartId The cart ID.
      * @param int[]|null $agreements
-     * @param PaymentInterface $paymentMethod
+     * @param PaymentInterface|null $paymentMethod
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
@@ -48,7 +48,7 @@ interface GuestCartManagementInterface
      * @param \Magento\Customer\Api\Data\CustomerInterface $customer
      * @param string $password
      * @param int[]|null $agreements
-     * @param PaymentInterface $paymentMethod
+     * @param PaymentInterface|null $paymentMethod
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
