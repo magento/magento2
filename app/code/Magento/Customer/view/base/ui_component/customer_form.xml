@@ -448,7 +448,7 @@
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="filterBy" xsi:type="array">
-                        <item name="target" xsi:type="string"><![CDATA[<%= provider %>:<%= parentScope %>.country_id]]></item>
+                        <item name="target" xsi:type="string">${ $.provider }:${ $.parentScope }.country_id</item>
                         <item name="field" xsi:type="string">country_id</item>
                     </item>
                 </item>

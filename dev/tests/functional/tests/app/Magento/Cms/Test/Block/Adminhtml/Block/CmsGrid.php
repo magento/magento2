@@ -6,12 +6,12 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Block;
 
-use Magento\Backend\Test\Block\Widget\Grid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Adminhtml Cms Block management grid.
+ * Backend Data Grid for managing "CMS Block" entities.
  */
-class CmsGrid extends Grid
+class CmsGrid extends DataGrid
 {
     /**
      * Filters array mapping.
@@ -20,7 +20,7 @@ class CmsGrid extends Grid
      */
     protected $filters = [
         'title' => [
-            'selector' => '[name="params[filters][title]"]',
+            'selector' => '[name="filters[title]"]',
         ],
         'identifier' => [
             'selector' => '[name="params[filters][identifier]"]',
@@ -40,25 +40,4 @@ class CmsGrid extends Grid
             'input' => 'selectstore'
         ],
     ];
-
-    /**
-     * Locator value for 'Search' button.
-     *
-     * @var string
-     */
-    protected $searchButton = '[data-action="grid-filter-apply"]';
-
-    /**
-     * Locator value for 'Reset' button.
-     *
-     * @var string
-     */
-    protected $resetButton = '[data-action="grid-filter-reset"]';
-
-    /**
-     * Locator value for link in action column.
-     *
-     * @var string
-     */
-    protected $editLink = '.action-menu-item';
 }

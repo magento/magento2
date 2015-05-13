@@ -25,19 +25,22 @@ define([
             current: 1,
 
             imports: {
-                totalSelected: '<%= provider %>:config.multiselect.total',
-                totalRecords: '<%= provider %>:data.totalRecords'
+                totalSelected: '${ $.provider }:config.multiselect.total',
+                totalRecords: '${ $.provider }:data.totalRecords'
             },
 
             exports: {
-                pageSize: '<%= provider %>:params.paging.pageSize',
-                current: '<%= provider %>:params.paging.current',
-                pages: '<%= provider %>:data.pages'
+                pageSize: '${ $.provider }:params.paging.pageSize',
+                current: '${ $.provider }:params.paging.current',
+                pages: '${ $.provider }:data.pages'
+            },
+
+            links: {
+                pageSize: '${ $.storageConfig.path }.pageSize'
             },
 
             listens: {
                 'pageSize': 'onSizeChange',
-                'pageSize current': 'reload',
                 'pageSize totalRecords': 'countPages'
             }
         },
@@ -49,8 +52,20 @@ define([
             return this;
         },
 
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Paging} Chainable.
+         */
         initObservable: function () {
-            this._super();
+            this._super()
+                .observe([
+                    'totalSelected',
+                    'totalRecords',
+                    'pageSize',
+                    'current',
+                    'pages'
+                ]);
 
             this._current = ko.pureComputed({
                 read: function () {
@@ -120,10 +135,6 @@ define([
             return this.current() === 1;
         },
 
-        reload: function () {
-            this.source.reload();
-        },
-
         /**
          * Calculates number of pages.
          */
@@ -137,9 +148,7 @@ define([
          * Is being triggered on user interaction with page size select.
          * Resets current page to first if needed.
          */
-        onSizeChange: function () {
-            var size = this.pageSize();
-
+        onSizeChange: function (size) {
             if (size * this.current() > this.totalRecords()) {
                 this.current(1);
             }

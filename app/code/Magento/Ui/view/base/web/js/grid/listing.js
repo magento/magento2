@@ -12,17 +12,24 @@ define([
         defaults: {
             template: 'ui/grid/listing',
             imports: {
-                rows: '<%= provider %>:data.items'
+                rows: '${ $.provider }:data.items'
             },
             listens: {
-                '<%= provider %>:reload': 'showLoader',
-                '<%= provider %>:reloaded': 'hideLoader'
+                '${ $.provider }:reload': 'showLoader',
+                '${ $.provider }:reloaded': 'hideLoader'
             }
         },
 
         initialize: function () {
             this._super()
                 .hideLoader();
+
+            return this;
+        },
+
+        initObservable: function () {
+            this._super()
+                .observe('rows');
 
             return this;
         },

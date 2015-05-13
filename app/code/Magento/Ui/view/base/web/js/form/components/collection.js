@@ -12,10 +12,10 @@ define([
     'use strict';
 
     var childTemplate = {
-        template: '<%= $data.name %>.<%= $data.itemTemplate %>',
-        parent: '<%= $data.name %>',
-        name: '<%= $data.childIndex %>',
-        dataScope: '<%= name %>'
+        template: '${ $.$data.name }.${ $.$data.itemTemplate }',
+        parent: '${ $.$data.name }',
+        name: '${ $.$data.childIndex }',
+        dataScope: '${ $.name }'
     };
 
     return Component.extend({

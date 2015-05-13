@@ -6,11 +6,15 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/provider'
-], function ($, _, utils, Provider) {
+    'uiComponent'
+], function ($, _, utils, Component) {
     'use strict';
 
-    return Provider.extend({
+    return Component.extend({
+        listens: {
+            'params': 'reload'
+        },
+
         initialize: function () {
             utils.limit(this, 'reload', 50);
             _.bindAll(this, 'onReload');
@@ -22,7 +26,7 @@ define([
             this.trigger('reload');
 
             $.ajax({
-                url: this.data.update_url,
+                url: this.update_url,
                 method: 'GET',
                 data: this.get('params'),
                 dataType: 'json'

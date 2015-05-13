@@ -6,42 +6,14 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Page;
 
-use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Backend Cms Page grid.
+ * Backend Data Grid for managing "CMS Page" entities.
  */
-class Grid extends ParentGrid
+class Grid extends DataGrid
 {
-    /**
-     * Locator value for 'Search' button.
-     *
-     * @var string
-     */
-    protected $searchButton = '[data-action="grid-filter-apply"]';
-
-    /**
-     * Locator value for 'Reset' button.
-     *
-     * @var string
-     */
-    protected $resetButton = '[data-action="grid-filter-reset"]';
-
-    /**
-     * Locator value for link in action column.
-     *
-     * @var string
-     */
-    protected $editLink = '[data-action="grid-row-edit"]';
-
-    /**
-     * 'Preview' cms page link.
-     *
-     * @var string
-     */
-    protected $previewCmsPage = "//a[contains(text(),'Preview')]";
-
     /**
      * Filters array mapping.
      *
@@ -49,12 +21,19 @@ class Grid extends ParentGrid
      */
     protected $filters = [
         'title' => [
-            'selector' => '[name="params[filters][title]"]',
+            'selector' => '[name="filters[title]"]',
         ],
     ];
 
     /**
-     * Search item and open it on front.
+     * Locator value for "Preview" link inside action column.
+     *
+     * @var string
+     */
+    protected $previewCmsPage = '.action-menu-item';
+
+    /**
+     * Search item and open it on Frontend.
      *
      * @param array $filter
      * @throws \Exception
@@ -65,7 +44,7 @@ class Grid extends ParentGrid
         $this->search($filter);
         $rowItem = $this->_rootElement->find($this->rowItem);
         if ($rowItem->isVisible()) {
-            $rowItem->find($this->previewCmsPage, Locator::SELECTOR_XPATH)->click();
+            $rowItem->find($this->previewCmsPage)->click();
             $this->waitForElement();
         } else {
             throw new \Exception('Searched item was not found.');

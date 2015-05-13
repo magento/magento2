@@ -12,7 +12,7 @@ define([
     return Abstract.extend({
         defaults: {
             imports: {
-                update: '<%= parentName %>.country_id:value'
+                update: '${ $.parentName }.country_id:value'
             }
         },
 
