@@ -9,7 +9,7 @@ namespace Magento\Cms\Test\Block\Adminhtml\Block;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Adminhtml Cms Block management grid.
+ * Backend Data Grid for managing "CMS Block" entities.
  */
 class CmsGrid extends DataGrid
 {

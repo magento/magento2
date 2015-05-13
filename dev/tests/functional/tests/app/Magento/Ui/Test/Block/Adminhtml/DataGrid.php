@@ -9,40 +9,42 @@ namespace Magento\Ui\Test\Block\Adminhtml;
 use Magento\Backend\Test\Block\Widget\Grid;
 
 /**
- * Adminhtml Data Grid with advanced functionality for managing entities.
+ * Backend Data Grid with advanced functionality for managing entities.
  */
 class DataGrid extends Grid
 {
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
     protected $filters = [];
 
     /**
-     * Locator value for link in action column.
+     * Locator value for "Edit" link inside action column.
      *
      * @var string
      */
     protected $editLink = '[data-action="grid-row-edit"]';
 
     /**
-     * Container for applied filters.
+     * Locator value for container of applied Filters.
      *
      * @var string
      */
     protected $appliedFiltersList = '[data-role="filter-list"]';
 
     /**
-     * Filter button
+     * Locator value for "Filter" button.
      *
      * @var string
      */
     protected $filterButton = '[data-action="grid-filter-expand"]';
 
     /**
-     * Clear all applied Filters
+     * Clear all applied Filters.
+     *
+     * @return void
      */
     public function resetFilter()
     {
@@ -53,7 +55,7 @@ class DataGrid extends Grid
     }
 
     /**
-     * Open Filter Block
+     * Open "Filter" block.
      *
      * @return void
      */
@@ -75,9 +77,10 @@ class DataGrid extends Grid
     }
 
     /**
-     * Search item via grid filter
+     * Search item using Data Grid Filter.
      *
      * @param array $filter
+     * @return void
      */
     public function search(array $filter)
     {
