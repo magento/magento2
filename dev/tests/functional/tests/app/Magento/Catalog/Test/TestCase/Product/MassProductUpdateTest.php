@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\TestCase\Product;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Catalog\Test\Page\Product\CatalogProductActionAttributeEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductActionAttributeEdit;
 
 /**
  * Precondition:
@@ -22,7 +22,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductActionAttributeEdit;
  * 3. Find Product (from preconditions) in Products grid.
  * 4. Select Product's check-box.
  * 5. Select "Update Attributes" value in "Select Product Actions" drop-down list.
- * 6. Click on the "Submit" button. "Attributes" page is opened (/catalog/product_action_attribute/edit/).
+ * 6. Click on the "Submit" button.
  * 7. Open "Attributes" tab.
  * 8. Fill data.
  * 9. Click on the "Save" button.
@@ -31,7 +31,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductActionAttributeEdit;
  * @group Products_(MX)
  * @ZephyrId MAGETWO-21128
  */
-class MassProductPriceUpdateTest extends Injectable
+class MassProductUpdateTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
@@ -99,7 +99,6 @@ class MassProductPriceUpdateTest extends Injectable
         $this->productGrid->getProductGrid()->updateAttributes([['sku' => $initialProduct->getSku()]]);
         $this->attributeMassActionPage->getAttributesBlockForm()->fill($product);
         $this->attributeMassActionPage->getFormPageActions()->save();
-        $this->productGrid->getMessagesBlock()->waitSuccessMessage();
         $data = array_merge($initialProduct->getData(), $product->getData());
         $product = $this->objectManager->create(
             'Magento\Catalog\Test\Fixture\CatalogProductSimple',

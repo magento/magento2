@@ -16,13 +16,6 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class Attribute extends Form
 {
     /**
-     * CSS selector for 'save' button.
-     *
-     * @var string
-     */
-    protected $saveButton = '[data-ui-id="page-actions-toolbar-save-button"]';
-
-    /**
      * Fill the root form.
      *
      * @param FixtureInterface $fixture
@@ -33,7 +26,7 @@ class Attribute extends Form
     {
         $data = $fixture->getData();
         foreach ($data as $name => $dataValue) {
-            $fields['toggle_' . $name ] = 'Yes';
+            $fields['toggle_' . $name] = 'Yes';
             $fields[$name] = $dataValue;
         }
         $mapping = $this->dataMapping($fields);

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
+namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action;
 
 /**
  * Form action.
