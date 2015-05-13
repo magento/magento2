@@ -195,4 +195,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesSequence\Model\Resource\Meta">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesSequence\Model\Resource\Profile">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
 </config>
