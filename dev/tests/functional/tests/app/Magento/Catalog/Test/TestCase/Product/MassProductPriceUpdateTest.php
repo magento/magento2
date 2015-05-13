@@ -97,9 +97,8 @@ class MassProductPriceUpdateTest extends Injectable
         // Steps
         $this->productGrid->open();
         $this->productGrid->getProductGrid()->updateAttributes([['sku' => $initialProduct->getSku()]]);
-        $formBlock = $this->attributeMassActionPage->getAttributesBlockForm();
-        $formBlock->fill($product);
-        $formBlock->save();
+        $this->attributeMassActionPage->getAttributesBlockForm()->fill($product);
+        $this->attributeMassActionPage->getFormPageActions()->save();
         $this->productGrid->getMessagesBlock()->waitSuccessMessage();
         $data = array_merge($initialProduct->getData(), $product->getData());
         $product = $this->objectManager->create(

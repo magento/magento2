@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Action;
 
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Backend\Test\Block\Widget\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
@@ -24,28 +23,7 @@ class Attribute extends Form
     protected $saveButton = '[data-ui-id="page-actions-toolbar-save-button"]';
 
     /**
-     * XPath selector for checkbox that enables price editing.
-     *
-     * @var string
-     */
-    protected $priceFieldEnablerSelector = '//*[@id="attribute-price-container"]/div[1]/div/label//*[@type="checkbox"]';
-
-    /**
-     * Enable price field editing.
-     *
-     * @return void
-     */
-    public function enablePriceEdit()
-    {
-        $this->_rootElement->find(
-            $this->priceFieldEnablerSelector,
-            Locator::SELECTOR_XPATH,
-            'checkbox'
-        )->setValue('Yes');
-    }
-
-    /**
-     * Fill the root form
+     * Fill the root form.
      *
      * @param FixtureInterface $fixture
      * @param SimpleElement|null $element
