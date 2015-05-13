@@ -146,4 +146,9 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
 </config>

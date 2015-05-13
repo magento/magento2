@@ -11,6 +11,7 @@
             <data name="configData" xsi:type="string">product_flat</data>
             <data name="initialProduct/dataSet" xsi:type="string">simple_10_dollar</data>
             <data name="product/data/price/value" xsi:type="string">1.99</data>
+            <constraint name="Magento\Catalog\Test\Constraint\AssertMassProductUpdateSuccessMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
         </variation>
