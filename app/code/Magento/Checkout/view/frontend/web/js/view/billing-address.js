@@ -27,6 +27,10 @@ define(
             defaults: {
                 template: 'Magento_Checkout/billing-address'
             },
+            initObservable: function () {
+                this._super().observe('useForShipping');
+                return this;
+            },
             stepClassAttributes: function() {
                 return navigator.getStepClassAttributes(stepName);
             },
@@ -59,6 +63,10 @@ define(
                         if (!that.source.get('params.invalid')) {
                             var addressData = that.source.get('billingAddress');
                             var additionalData = {};
+                            if (that.useForShipping() instanceof Object) {
+                                additionalData = that.useForShipping().getAdditionalData();
+                                that.useForShipping('1');
+                            }
                             /**
                              * All the the input fields that are not a part of the address but need to be submitted
                              * in the same request must have data-scope attribute set
