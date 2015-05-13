@@ -7,17 +7,12 @@
 // @codingStandardsIgnoreFile
 
 /**
- * Tests for \Magento\Framework\Data\Form\Element\Image
+ * Tests for \Magento\Framework\Data\Form\Field\Image
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
 class ImageTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_objectManagerMock;
-
     /**
      * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
      */

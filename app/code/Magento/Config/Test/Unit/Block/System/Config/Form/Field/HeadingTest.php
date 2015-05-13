@@ -5,17 +5,12 @@
  */
 
 /**
- * Tests for \Magento\Framework\Data\Form\Element\File
+ * Tests for \Magento\Framework\Data\Form\Field\Heading
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
 class HeadingTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\File
-     */
-    protected $file;
-
     public function testRender()
     {
         $htmlId = 'test_HTML_id';

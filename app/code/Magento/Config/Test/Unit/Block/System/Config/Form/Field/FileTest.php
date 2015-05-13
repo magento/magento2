@@ -5,7 +5,7 @@
  */
 
 /**
- * Tests for \Magento\Framework\Data\Form\Element\File
+ * Tests for \Magento\Framework\Data\Form\Field\File
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
