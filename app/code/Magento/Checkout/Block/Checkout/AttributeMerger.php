@@ -58,12 +58,13 @@ class AttributeMerger
     /**
      * Merge additional address fields for given provider
      *
+     * @param $elements
      * @param string $providerName name of the storage container used by UI component
-     * @param string $dataScopePrefix
+     * @param $dataScopePrefix
      * @param array $fields
      * @return array
      */
-    public function merge($elements, $providerName, $dataScopePrefix, array $fields = array())
+    public function merge($elements, $providerName, $dataScopePrefix, array $fields = [])
     {
         foreach ($elements as $attributeCode => $attributeConfig) {
             $additionalConfig = isset($fields[$attributeCode]) ? $fields[$attributeCode] : [];
@@ -168,7 +169,7 @@ class AttributeMerger
      * @param array $additionalConfig field configuration provided via layout XML
      * @return bool
      */
-    protected function isFieldVisible($attributeCode, array $attributeConfig, array $additionalConfig = array())
+    protected function isFieldVisible($attributeCode, array $attributeConfig, array $additionalConfig = [])
     {
         // TODO move this logic to separate model so it can be customized
         if ($attributeConfig['visible'] == false
