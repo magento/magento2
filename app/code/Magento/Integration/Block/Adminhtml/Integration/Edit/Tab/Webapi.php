@@ -68,6 +68,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get tab label
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -78,6 +79,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get tab title
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -101,6 +103,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Whether tab is visible
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -131,7 +134,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Check if everything is allowed
      *
-     * @return boolean
+     * @return bool
      */
     public function isEverythingAllowed()
     {
