@@ -176,10 +176,12 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         $orderItem->setQtyRefunded($orderItem->getQtyRefunded() + $this->getQty());
         $orderItem->setTaxRefunded($orderItem->getTaxRefunded() + $this->getTaxAmount());
         $orderItem->setBaseTaxRefunded($orderItem->getBaseTaxRefunded() + $this->getBaseTaxAmount());
-        $orderItem->setDiscountTaxCompensationRefunded($orderItem->getDiscountTaxCompensationRefunded() +
-            $this->getDiscountTaxCompensationAmount());
-        $orderItem->setBaseDiscountTaxCompensationRefunded($orderItem->getBaseDiscountTaxCompensationRefunded() +
-            $this->getBaseDiscountTaxCompensationAmount());
+        $orderItem->setDiscountTaxCompensationRefunded(
+            $orderItem->getDiscountTaxCompensationRefunded() + $this->getDiscountTaxCompensationAmount()
+        );
+        $orderItem->setBaseDiscountTaxCompensationRefunded(
+            $orderItem->getBaseDiscountTaxCompensationRefunded() + $this->getBaseDiscountTaxCompensationAmount()
+        );
         $orderItem->setAmountRefunded($orderItem->getAmountRefunded() + $this->getRowTotal());
         $orderItem->setBaseAmountRefunded($orderItem->getBaseAmountRefunded() + $this->getBaseRowTotal());
         $orderItem->setDiscountRefunded($orderItem->getDiscountRefunded() + $this->getDiscountAmount());
@@ -196,11 +198,14 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         $this->getOrderItem()->setQtyRefunded($this->getOrderItem()->getQtyRefunded() - $this->getQty());
         $this->getOrderItem()->setTaxRefunded(
             $this->getOrderItem()->getTaxRefunded() -
-            $this->getOrderItem()->getBaseTaxAmount() * $this->getQty() / $this->getOrderItem()->getQtyOrdered()
+            $this->getOrderItem()->getBaseTaxAmount() *
+            $this->getQty() /
+            $this->getOrderItem()->getQtyOrdered()
         );
         $this->getOrderItem()->setDiscountTaxCompensationRefunded(
             $this->getOrderItem()->getDiscountTaxCompensationRefunded() -
-            $this->getOrderItem()->getDiscountTaxCompensationAmount() * $this->getQty() /
+            $this->getOrderItem()->getDiscountTaxCompensationAmount() *
+            $this->getQty() /
             $this->getOrderItem()->getQtyOrdered()
         );
         return $this;

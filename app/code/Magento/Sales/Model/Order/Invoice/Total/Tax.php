@@ -46,8 +46,9 @@ class Tax extends AbstractTotal
                     $availableQty = $orderItemQty - $orderItem->getQtyInvoiced();
                     $tax = $invoice->roundPrice($tax / $availableQty * $item->getQty());
                     $baseTax = $invoice->roundPrice($baseTax / $availableQty * $item->getQty(), 'base');
-                    $discountTaxCompensation = $invoice->roundPrice($discountTaxCompensation /
-                        $availableQty * $item->getQty());
+                    $discountTaxCompensation = $invoice->roundPrice(
+                        $discountTaxCompensation / $availableQty * $item->getQty()
+                    );
                     $baseDiscountTaxCompensation = $invoice->roundPrice(
                         $baseDiscountTaxCompensation /
                         $availableQty * $item->getQty(),

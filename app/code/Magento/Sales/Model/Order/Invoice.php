@@ -418,10 +418,12 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $order->setTaxInvoiced($order->getTaxInvoiced() - $this->getTaxAmount());
         $order->setBaseTaxInvoiced($order->getBaseTaxInvoiced() - $this->getBaseTaxAmount());
 
-        $order->setDiscountTaxCompensationInvoiced($order->getDiscountTaxCompensationInvoiced() -
-            $this->getDiscountTaxCompensationAmount());
-        $order->setBaseDiscountTaxCompensationInvoiced($order->getBaseDiscountTaxCompensationInvoiced() -
-            $this->getBaseDiscountTaxCompensationAmount());
+        $order->setDiscountTaxCompensationInvoiced(
+            $order->getDiscountTaxCompensationInvoiced() - $this->getDiscountTaxCompensationAmount()
+        );
+        $order->setBaseDiscountTaxCompensationInvoiced(
+            $order->getBaseDiscountTaxCompensationInvoiced() - $this->getBaseDiscountTaxCompensationAmount()
+        );
 
         $order->setShippingTaxInvoiced($order->getShippingTaxInvoiced() - $this->getShippingTaxAmount());
         $order->setBaseShippingTaxInvoiced($order->getBaseShippingTaxInvoiced() - $this->getBaseShippingTaxAmount());
@@ -624,10 +626,12 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $order->setTaxInvoiced($order->getTaxInvoiced() + $this->getTaxAmount());
         $order->setBaseTaxInvoiced($order->getBaseTaxInvoiced() + $this->getBaseTaxAmount());
 
-        $order->setDiscountTaxCompensationInvoiced($order->getDiscountTaxCompensationInvoiced() +
-            $this->getDiscountTaxCompensationAmount());
-        $order->setBaseDiscountTaxCompensationInvoiced($order->getBaseDiscountTaxCompensationInvoiced() +
-            $this->getBaseDiscountTaxCompensationAmount());
+        $order->setDiscountTaxCompensationInvoiced(
+            $order->getDiscountTaxCompensationInvoiced() + $this->getDiscountTaxCompensationAmount()
+        );
+        $order->setBaseDiscountTaxCompensationInvoiced(
+            $order->getBaseDiscountTaxCompensationInvoiced() + $this->getBaseDiscountTaxCompensationAmount()
+        );
 
         $order->setShippingTaxInvoiced($order->getShippingTaxInvoiced() + $this->getShippingTaxAmount());
         $order->setBaseShippingTaxInvoiced($order->getBaseShippingTaxInvoiced() + $this->getBaseShippingTaxAmount());
