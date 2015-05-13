@@ -16,9 +16,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
     private $redirect;
 
-    /** @var  \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $objectManager;
-
     /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $messageManager;
 
@@ -65,17 +62,17 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $this->objectManager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
+        $objectManager = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMockForAbstractClass();
         $this->context->expects($this->any())
             ->method('getObjectManager')
-            ->willReturn($this->objectManager);
+            ->willReturn($objectManager);
 
         $this->messageManager = $this->getMockBuilder('\Magento\Framework\Message\ManagerInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['addSuccess', 'addError' ,'addException'])
+            ->setMethods(['addSuccess', 'addError', 'addException'])
             ->getMockForAbstractClass();
         $this->context->expects($this->any())
             ->method('getMessageManager')
@@ -98,12 +95,20 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'load', 'addData', 'setIsProcessed', 'save', 'loadByQueryText', 'setStoreId'])
             ->getMock();
+        $queryFactory = $this->getMockBuilder('Magento\Search\Model\QueryFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $queryFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->query));
 
         $this->controller = $objectManagerHelper->getObject(
             'Magento\Search\Controller\Adminhtml\Term\Save',
             [
                 'context' => $this->context,
                 'resultPageFactory' => $pageFactory,
+                'queryFactory' => $queryFactory,
             ]
         );
     }
@@ -138,7 +143,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $queryText = '';
         $this->mockGetRequestData($queryText, $queryId);
 
-        $this->objectManager->expects($this->once())->method('create')->willReturn($this->query);
         $this->query->expects($this->once())->method('getId')->willReturn(false);
         $this->query->expects($this->once())->method('load')->with($queryId);
 
@@ -154,7 +158,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
 
-        $this->objectManager->expects($this->once())->method('create')->willReturn($this->query);
         $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
@@ -173,7 +176,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
 
-        $this->objectManager->expects($this->once())->method('create')->willReturn($this->query);
         $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
@@ -194,7 +196,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
 
-        $this->objectManager->expects($this->once())->method('create')->willReturn($this->query);
         $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');
@@ -213,7 +214,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $queryText = 'search';
         $this->mockGetRequestData($queryText, $queryId);
 
-        $this->objectManager->expects($this->once())->method('create')->willReturn($this->query);
         $this->request->expects($this->at(4))->method('getPost')->with('store_id', false)->willReturn(1);
 
         $this->query->expects($this->once())->method('setStoreId');

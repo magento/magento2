@@ -6,8 +6,31 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Search\Model\QueryFactory;
+
 class Save extends \Magento\Search\Controller\Adminhtml\Term
 {
+    /**
+     * @var QueryFactory
+     */
+    private $queryFactory;
+
+    /**
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     * @param QueryFactory $queryFactory
+     */
+    public function __construct(
+        Context $context,
+        PageFactory $resultPageFactory,
+        QueryFactory $queryFactory
+    ) {
+        parent::__construct($context, $resultPageFactory);
+        $this->queryFactory = $queryFactory;
+    }
+
     /**
      * Save search query
      *
@@ -51,7 +74,7 @@ class Save extends \Magento\Search\Controller\Adminhtml\Term
         $queryId = $this->getRequest()->getPost('query_id', null);
 
         /* @var $model \Magento\Search\Model\Query */
-        $model = $this->_objectManager->create('Magento\Search\Model\Query');
+        $model = $this->queryFactory->create();
         if ($queryText) {
             $storeId = $this->getRequest()->getPost('store_id', false);
             $model->setStoreId($storeId);
@@ -71,7 +94,7 @@ class Save extends \Magento\Search\Controller\Adminhtml\Term
     /**
      * Redirect to Edit page
      *
-     * @param $data
+     * @param array $data
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     private function proceedToEdit($data)
