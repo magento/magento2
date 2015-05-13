@@ -4365,7 +4365,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced)
     {
-        return $this->setData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_INVOICED, $baseDiscountTaxCompensationInvoiced);
+        return $this->setData(
+            OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_INVOICED,
+            $baseDiscountTaxCompensationInvoiced
+        );
     }
 
     /**
@@ -4373,7 +4376,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function setDiscountTaxCompensationRefunded($discountTaxCompensationRefunded)
     {
-        return $this->setData(OrderInterface::DISCOUNT_TAX_COMPENSATION_REFUNDED, $discountTaxCompensationRefunded);
+        return $this->setData(
+            OrderInterface::DISCOUNT_TAX_COMPENSATION_REFUNDED,
+            $discountTaxCompensationRefunded
+        );
     }
 
     /**
@@ -4381,7 +4387,10 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded)
     {
-        return $this->setData(OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED, $baseDiscountTaxCompensationRefunded);
+        return $this->setData(
+            OrderInterface::BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED,
+            $baseDiscountTaxCompensationRefunded
+        );
     }
 
     /**

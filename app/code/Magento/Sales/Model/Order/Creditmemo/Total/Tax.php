@@ -43,14 +43,18 @@ class Tax extends AbstractTotal
 
                 $tax = $orderItemTax - $orderItem->getTaxRefunded();
                 $baseTax = $baseOrderItemTax - $orderItem->getTaxRefunded();
-                $discountTaxCompensation = $orderItem->getDiscountTaxCompensationInvoiced() - $orderItem->getDiscountTaxCompensationRefunded();
-                $baseDiscountTaxCompensation = $orderItem->getBaseDiscountTaxCompensationInvoiced() - $orderItem->getBaseDiscountTaxCompensationRefunded();
+                $discountTaxCompensation = $orderItem->getDiscountTaxCompensationInvoiced() -
+                    $orderItem->getDiscountTaxCompensationRefunded();
+                $baseDiscountTaxCompensation = $orderItem->getBaseDiscountTaxCompensationInvoiced() -
+                    $orderItem->getBaseDiscountTaxCompensationRefunded();
                 if (!$item->isLast()) {
                     $availableQty = $orderItemQty - $orderItem->getQtyRefunded();
                     $tax = $creditmemo->roundPrice($tax / $availableQty * $item->getQty());
                     $baseTax = $creditmemo->roundPrice($baseTax / $availableQty * $item->getQty(), 'base');
-                    $discountTaxCompensation = $creditmemo->roundPrice($discountTaxCompensation / $availableQty * $item->getQty());
-                    $baseDiscountTaxCompensation = $creditmemo->roundPrice($baseDiscountTaxCompensation / $availableQty * $item->getQty(), 'base');
+                    $discountTaxCompensation =
+                        $creditmemo->roundPrice($discountTaxCompensation / $availableQty * $item->getQty());
+                    $baseDiscountTaxCompensation =
+                        $creditmemo->roundPrice($baseDiscountTaxCompensation / $availableQty * $item->getQty(), 'base');
                 }
 
                 $item->setTaxAmount($tax);
@@ -73,15 +77,20 @@ class Tax extends AbstractTotal
                 $shippingTaxAmount = $invoice->getShippingTaxAmount() * $taxFactor;
                 $baseShippingTaxAmount = $invoice->getBaseShippingTaxAmount() * $taxFactor;
                 $totalDiscountTaxCompensation += $invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor;
-                $baseTotalDiscountTaxCompensation += $invoice->getBaseShippingDiscountTaxCompensationAmnt() * $taxFactor;
-                $shippingDiscountTaxCompensationAmount = $invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor;
-                $baseShippingDiscountTaxCompensationAmount = $invoice->getBaseShippingDiscountTaxCompensationAmnt() * $taxFactor;
+                $baseTotalDiscountTaxCompensation +=
+                    $invoice->getBaseShippingDiscountTaxCompensationAmnt() * $taxFactor;
+                $shippingDiscountTaxCompensationAmount =
+                    $invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor;
+                $baseShippingDiscountTaxCompensationAmount =
+                    $invoice->getBaseShippingDiscountTaxCompensationAmnt() * $taxFactor;
                 $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount);
                 $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
                 $totalDiscountTaxCompensation = $creditmemo->roundPrice($totalDiscountTaxCompensation);
                 $baseTotalDiscountTaxCompensation = $creditmemo->roundPrice($baseTotalDiscountTaxCompensation, 'base');
-                $shippingDiscountTaxCompensationAmount = $creditmemo->roundPrice($shippingDiscountTaxCompensationAmount);
-                $baseShippingDiscountTaxCompensationAmount = $creditmemo->roundPrice($baseShippingDiscountTaxCompensationAmount, 'base');
+                $shippingDiscountTaxCompensationAmount =
+                    $creditmemo->roundPrice($shippingDiscountTaxCompensationAmount);
+                $baseShippingDiscountTaxCompensationAmount =
+                    $creditmemo->roundPrice($baseShippingDiscountTaxCompensationAmount, 'base');
                 if ($taxFactor < 1 && $invoice->getShippingTaxAmount() > 0) {
                     $isPartialShippingRefunded = true;
                 }
@@ -107,11 +116,14 @@ class Tax extends AbstractTotal
                 $shippingTaxAmount = $order->getShippingTaxAmount() * $part;
                 $baseShippingTaxAmount = $order->getBaseShippingTaxAmount() * $basePart;
                 $shippingDiscountTaxCompensationAmount = $order->getShippingDiscountTaxCompensationAmount() * $part;
-                $baseShippingDiscountTaxCompensationAmount = $order->getBaseShippingDiscountTaxCompensationAmnt() * $basePart;
+                $baseShippingDiscountTaxCompensationAmount =
+                    $order->getBaseShippingDiscountTaxCompensationAmnt() * $basePart;
                 $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount);
                 $baseShippingTaxAmount = $creditmemo->roundPrice($baseShippingTaxAmount, 'base');
-                $shippingDiscountTaxCompensationAmount = $creditmemo->roundPrice($shippingDiscountTaxCompensationAmount);
-                $baseShippingDiscountTaxCompensationAmount = $creditmemo->roundPrice($baseShippingDiscountTaxCompensationAmount, 'base');
+                $shippingDiscountTaxCompensationAmount =
+                    $creditmemo->roundPrice($shippingDiscountTaxCompensationAmount);
+                $baseShippingDiscountTaxCompensationAmount =
+                    $creditmemo->roundPrice($baseShippingDiscountTaxCompensationAmount, 'base');
                 if ($part < 1 && $order->getShippingTaxAmount() > 0) {
                     $isPartialShippingRefunded = true;
                 }
@@ -152,8 +164,10 @@ class Tax extends AbstractTotal
         } else {
             $totalTax = min($allowedTax, $totalTax);
             $baseTotalTax = min($allowedBaseTax, $baseTotalTax);
-            $totalDiscountTaxCompensation = min($allowedDiscountTaxCompensation, $totalDiscountTaxCompensation);
-            $baseTotalDiscountTaxCompensation = min($allowedBaseDiscountTaxCompensation, $baseTotalDiscountTaxCompensation);
+            $totalDiscountTaxCompensation =
+                min($allowedDiscountTaxCompensation, $totalDiscountTaxCompensation);
+            $baseTotalDiscountTaxCompensation =
+                min($allowedBaseDiscountTaxCompensation, $baseTotalDiscountTaxCompensation);
         }
 
         $creditmemo->setTaxAmount($creditmemo->getTaxAmount() + $totalTax);
@@ -165,7 +179,10 @@ class Tax extends AbstractTotal
         $creditmemo->setBaseShippingTaxAmount($baseShippingTaxAmount);
 
         $creditmemo->setGrandTotal($creditmemo->getGrandTotal() + $totalTax + $totalDiscountTaxCompensation);
-        $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() + $baseTotalTax + $baseTotalDiscountTaxCompensation);
+        $creditmemo->setBaseGrandTotal(
+            $creditmemo->getBaseGrandTotal() +
+            $baseTotalTax + $baseTotalDiscountTaxCompensation
+        );
         return $this;
     }
 }

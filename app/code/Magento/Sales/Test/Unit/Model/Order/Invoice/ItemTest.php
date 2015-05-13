@@ -61,9 +61,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Order\Item',
             [
                 'load', 'isDummy', 'getIsQtyDecimal', 'getQtyToInvoice', 'getQtyInvoiced', 'getTaxInvoiced',
-                'getBaseTaxInvoiced', 'getDiscountTaxCompensationInvoiced', 'getBaseDiscountTaxCompensationInvoiced', 'getDiscountInvoiced',
+                'getBaseTaxInvoiced', 'getDiscountTaxCompensationInvoiced',
+                'getBaseDiscountTaxCompensationInvoiced', 'getDiscountInvoiced',
                 'getBaseDiscountInvoiced', 'getRowInvoiced', 'getBaseRowInvoiced', 'setQtyInvoiced', 'setTaxInvoiced',
-                'setBaseTaxInvoiced', 'setDiscountTaxCompensationInvoiced', 'setBaseDiscountTaxCompensationInvoiced', 'setDiscountInvoiced',
+                'setBaseTaxInvoiced', 'setDiscountTaxCompensationInvoiced',
+                'setBaseDiscountTaxCompensationInvoiced', 'setDiscountInvoiced',
                 'setBaseDiscountInvoiced', 'setRowInvoiced', 'setBaseRowInvoiced', 'getQtyOrdered', 'getRowTotal',
                 'getBaseRowTotal', 'getRowTotalInclTax', 'getBaseRowTotalInclTax'
             ],
@@ -140,8 +142,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->orderItemMock->expects($this->once())->method('setQtyInvoiced')->with(2)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setTaxInvoiced')->with(2)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setBaseTaxInvoiced')->with(2)->willReturnSelf();
-        $this->orderItemMock->expects($this->once())->method('setDiscountTaxCompensationInvoiced')->with(2)->willReturnSelf();
-        $this->orderItemMock->expects($this->once())->method('setBaseDiscountTaxCompensationInvoiced')->with(2)->willReturnSelf();
+        $this->orderItemMock->expects($this->once())
+            ->method('setDiscountTaxCompensationInvoiced')->with(2)->willReturnSelf();
+        $this->orderItemMock->expects($this->once())
+            ->method('setBaseDiscountTaxCompensationInvoiced')->with(2)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setDiscountInvoiced')->with(2)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setBaseDiscountInvoiced')->with(2)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setRowInvoiced')->with(2)->willReturnSelf();
@@ -179,8 +183,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->orderItemMock->expects($this->once())->method('setQtyInvoiced')->with(0)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setTaxInvoiced')->with(0)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setBaseTaxInvoiced')->with(0)->willReturnSelf();
-        $this->orderItemMock->expects($this->once())->method('setDiscountTaxCompensationInvoiced')->with(0)->willReturnSelf();
-        $this->orderItemMock->expects($this->once())->method('setBaseDiscountTaxCompensationInvoiced')->with(0)->willReturnSelf();
+        $this->orderItemMock->expects($this->once())->method('setDiscountTaxCompensationInvoiced')
+            ->with(0)->willReturnSelf();
+        $this->orderItemMock->expects($this->once())->method('setBaseDiscountTaxCompensationInvoiced')
+            ->with(0)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setDiscountInvoiced')->with(0)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setBaseDiscountInvoiced')->with(0)->willReturnSelf();
         $this->orderItemMock->expects($this->once())->method('setRowInvoiced')->with(0)->willReturnSelf();

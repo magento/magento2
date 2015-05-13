@@ -373,7 +373,15 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()
-            ->setMethods(['getRowTotal', 'getTaxAmount', 'getDiscountTaxCompensationAmount', 'getDiscountAmount', '__wakeup'])
+            ->setMethods(
+                [
+                'getRowTotal',
+                'getTaxAmount',
+                'getDiscountTaxCompensationAmount',
+                'getDiscountAmount',
+                '__wakeup'
+                ]
+            )
             ->getMock();
 
         $itemMock->expects($this->once())
@@ -407,7 +415,13 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $itemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()
             ->setMethods(
-                ['getBaseRowTotal', 'getBaseTaxAmount', 'getBaseDiscountTaxCompensationAmount', 'getBaseDiscountAmount', '__wakeup']
+                [
+                    'getBaseRowTotal',
+                    'getBaseTaxAmount',
+                    'getBaseDiscountTaxCompensationAmount',
+                    'getBaseDiscountAmount',
+                    '__wakeup'
+                ]
             )
             ->getMock();
 

@@ -2068,7 +2068,10 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function setBaseDiscountTaxCompensationInvoiced($baseDiscountTaxCompensationInvoiced)
     {
-        return $this->setData(OrderItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_INVOICED, $baseDiscountTaxCompensationInvoiced);
+        return $this->setData(
+            OrderItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_INVOICED,
+            $baseDiscountTaxCompensationInvoiced
+        );
     }
 
     /**
@@ -2084,7 +2087,10 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function setBaseDiscountTaxCompensationRefunded($baseDiscountTaxCompensationRefunded)
     {
-        return $this->setData(OrderItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED, $baseDiscountTaxCompensationRefunded);
+        return $this->setData(
+            OrderItemInterface::BASE_DISCOUNT_TAX_COMPENSATION_REFUNDED,
+            $baseDiscountTaxCompensationRefunded
+        );
     }
 
     /**

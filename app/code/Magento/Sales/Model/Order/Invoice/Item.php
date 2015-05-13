@@ -195,8 +195,10 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
         $orderItem->setTaxInvoiced($orderItem->getTaxInvoiced() + $this->getTaxAmount());
         $orderItem->setBaseTaxInvoiced($orderItem->getBaseTaxInvoiced() + $this->getBaseTaxAmount());
-        $orderItem->setDiscountTaxCompensationInvoiced($orderItem->getDiscountTaxCompensationInvoiced() + $this->getDiscountTaxCompensationAmount());
-        $orderItem->setBaseDiscountTaxCompensationInvoiced($orderItem->getBaseDiscountTaxCompensationInvoiced() + $this->getBaseDiscountTaxCompensationAmount());
+        $orderItem->setDiscountTaxCompensationInvoiced($orderItem->getDiscountTaxCompensationInvoiced() +
+            $this->getDiscountTaxCompensationAmount());
+        $orderItem->setBaseDiscountTaxCompensationInvoiced($orderItem->getBaseDiscountTaxCompensationInvoiced() +
+            $this->getBaseDiscountTaxCompensationAmount());
 
         $orderItem->setDiscountInvoiced($orderItem->getDiscountInvoiced() + $this->getDiscountAmount());
         $orderItem->setBaseDiscountInvoiced($orderItem->getBaseDiscountInvoiced() + $this->getBaseDiscountAmount());
@@ -218,8 +220,10 @@ class Item extends AbstractModel implements InvoiceItemInterface
 
         $orderItem->setTaxInvoiced($orderItem->getTaxInvoiced() - $this->getTaxAmount());
         $orderItem->setBaseTaxInvoiced($orderItem->getBaseTaxInvoiced() - $this->getBaseTaxAmount());
-        $orderItem->setDiscountTaxCompensationInvoiced($orderItem->getDiscountTaxCompensationInvoiced() - $this->getDiscountTaxCompensationAmount());
-        $orderItem->setBaseDiscountTaxCompensationInvoiced($orderItem->getBaseDiscountTaxCompensationInvoiced() - $this->getBaseDiscountTaxCompensationAmount());
+        $orderItem->setDiscountTaxCompensationInvoiced($orderItem->getDiscountTaxCompensationInvoiced() -
+            $this->getDiscountTaxCompensationAmount());
+        $orderItem->setBaseDiscountTaxCompensationInvoiced($orderItem->getBaseDiscountTaxCompensationInvoiced() -
+            $this->getBaseDiscountTaxCompensationAmount());
 
         $orderItem->setDiscountInvoiced($orderItem->getDiscountInvoiced() - $this->getDiscountAmount());
         $orderItem->setBaseDiscountInvoiced($orderItem->getBaseDiscountInvoiced() - $this->getBaseDiscountAmount());

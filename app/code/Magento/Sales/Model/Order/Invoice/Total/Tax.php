@@ -38,14 +38,21 @@ class Tax extends AbstractTotal
                  */
                 $tax = $orderItem->getTaxAmount() - $orderItem->getTaxInvoiced();
                 $baseTax = $orderItem->getBaseTaxAmount() - $orderItem->getBaseTaxInvoiced();
-                $discountTaxCompensation = $orderItem->getDiscountTaxCompensationAmount() - $orderItem->getDiscountTaxCompensationInvoiced();
-                $baseDiscountTaxCompensation = $orderItem->getBaseDiscountTaxCompensationAmount() - $orderItem->getBaseDiscountTaxCompensationInvoiced();
+                $discountTaxCompensation = $orderItem->getDiscountTaxCompensationAmount() -
+                    $orderItem->getDiscountTaxCompensationInvoiced();
+                $baseDiscountTaxCompensation = $orderItem->getBaseDiscountTaxCompensationAmount() -
+                    $orderItem->getBaseDiscountTaxCompensationInvoiced();
                 if (!$item->isLast()) {
                     $availableQty = $orderItemQty - $orderItem->getQtyInvoiced();
                     $tax = $invoice->roundPrice($tax / $availableQty * $item->getQty());
                     $baseTax = $invoice->roundPrice($baseTax / $availableQty * $item->getQty(), 'base');
-                    $discountTaxCompensation = $invoice->roundPrice($discountTaxCompensation / $availableQty * $item->getQty());
-                    $baseDiscountTaxCompensation = $invoice->roundPrice($baseDiscountTaxCompensation / $availableQty * $item->getQty(), 'base');
+                    $discountTaxCompensation = $invoice->roundPrice($discountTaxCompensation /
+                        $availableQty * $item->getQty());
+                    $baseDiscountTaxCompensation = $invoice->roundPrice(
+                        $baseDiscountTaxCompensation /
+                        $availableQty * $item->getQty(),
+                        'base'
+                    );
                 }
 
                 $item->setTaxAmount($tax);
@@ -90,7 +97,10 @@ class Tax extends AbstractTotal
             $totalTax = min($allowedTax, $totalTax);
             $baseTotalTax = min($allowedBaseTax, $baseTotalTax);
             $totalDiscountTaxCompensation = min($allowedDiscountTaxCompensation, $totalDiscountTaxCompensation);
-            $baseTotalDiscountTaxCompensation = min($allowedBaseDiscountTaxCompensation, $baseTotalDiscountTaxCompensation);
+            $baseTotalDiscountTaxCompensation = min(
+                $allowedBaseDiscountTaxCompensation,
+                $baseTotalDiscountTaxCompensation
+            );
         }
 
         $invoice->setTaxAmount($totalTax);
