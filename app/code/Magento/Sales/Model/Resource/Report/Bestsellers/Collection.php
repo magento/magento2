@@ -153,37 +153,37 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         $select = $this->getSelect();
 
         // if grouping by product, not by period
-        if (!$this->_period) {
-            $cols = $this->_getSelectedColumns();
-            $cols[$this->getOrderedField()] = 'SUM(' . $this->getOrderedField() . ')';
-            if ($this->_from || $this->_to) {
-                $mainTable = $this->getTable($this->getTableByAggregationPeriod('daily'));
-                $select->from($mainTable, $cols);
-            } else {
-                $mainTable = $this->getTable($this->getTableByAggregationPeriod('yearly'));
-                $select->from($mainTable, $cols);
-            }
-
-            //exclude removed products
-            $subSelect = $this->getConnection()->select();
-            $subSelect->from(
-                ['existed_products' => $this->getTable('catalog_product_entity')],
-                new \Zend_Db_Expr('1)')
-            );
-
-            $select->exists(
-                $subSelect,
-                $mainTable . '.product_id = existed_products.entity_id'
-            )->group(
-                'product_id'
-            )->order(
-                $this->getOrderedField() . ' ' . \Magento\Framework\DB\Select::SQL_DESC
-            )->limit(
-                $this->_ratingLimit
-            );
-
-            return $this;
-        }
+//        if (!$this->_period) {
+//            $cols = $this->_getSelectedColumns();
+//            $cols[$this->getOrderedField()] = 'SUM(' . $this->getOrderedField() . ')';
+//            if ($this->_from || $this->_to) {
+//                $mainTable = $this->getTable($this->getTableByAggregationPeriod('daily'));
+//                $select->from($mainTable, $cols);
+//            } else {
+//                $mainTable = $this->getTable($this->getTableByAggregationPeriod('yearly'));
+//                $select->from($mainTable, $cols);
+//            }
+//
+//            //exclude removed products
+//            $subSelect = $this->getConnection()->select();
+//            $subSelect->from(
+//                ['existed_products' => $this->getTable('catalog_product_entity')],
+//                new \Zend_Db_Expr('1)')
+//            );
+//
+//            $select->exists(
+//                $subSelect,
+//                $mainTable . '.product_id = existed_products.entity_id'
+//            )->group(
+//                'product_id'
+//            )->order(
+//                $this->getOrderedField() . ' ' . \Magento\Framework\DB\Select::SQL_DESC
+//            )->limit(
+//                $this->_ratingLimit
+//            );
+//
+//            return $this;
+//        }
 
         if ('year' == $this->_period) {
             $mainTable = $this->getTable($this->getTableByAggregationPeriod('yearly'));

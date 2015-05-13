@@ -88,24 +88,25 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     public function aggregateProductsByTypes($orderId, $productTypeIds = [], $isProductTypeIn = false)
     {
-        $adapter = $this->getReadConnection();
-        $select = $adapter->select()->from(
-            ['o' => $this->getTable('sales_order_item')],
-            ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
-        )->joinInner(
-            ['p' => $this->getTable('catalog_product_entity')],
-            'o.product_id=p.entity_id',
-            []
-        )->where(
-            'o.order_id=?',
-            $orderId
-        )->group(
-            'o.product_type'
-        );
-        if ($productTypeIds) {
-            $select->where(sprintf('(o.product_type %s (?))', $isProductTypeIn ? 'IN' : 'NOT IN'), $productTypeIds);
-        }
-        return $adapter->fetchPairs($select);
+//        $adapter = $this->getReadConnection();
+//        $select = $adapter->select()->from(
+//            ['o' => $this->getTable('sales_order_item')],
+//            ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
+//        )->joinInner(
+//            ['p' => $this->getTable('catalog_product_entity')],
+//            'o.product_id=p.entity_id',
+//            []
+//        )->where(
+//            'o.order_id=?',
+//            $orderId
+//        )->group(
+//            'o.product_type'
+//        );
+//        if ($productTypeIds) {
+//            $select->where(sprintf('(o.product_type %s (?))', $isProductTypeIn ? 'IN' : 'NOT IN'), $productTypeIds);
+//        }
+//        return $adapter->fetchPairs($select);
+        return [];
     }
 
     /**
