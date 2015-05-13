@@ -11,13 +11,6 @@ namespace Magento\Reports\Model\Resource\Quote\Item;
  */
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
-    const SELECT_COUNT_SQL_TYPE_CART = 1;
-
-    /**
-     * @var int
-     */
-    protected $_selectCountSqlType = 0;
-
     /**
      * Join fields
      *
@@ -26,7 +19,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_joinedFields = [];
 
     /**
-     * Map
+     * Fields map for correlation names & real selected fields
      *
      * @var array
      */
@@ -55,7 +48,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Catalog\Model\Resource\Product\Collection $productResource
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param \Magento\Sales\Model\Resource\Order\Collection $orderResource
-     * @param null $connection
+     * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -92,17 +85,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $this->_init('Magento\Quote\Model\Quote\Item', 'Magento\Quote\Model\Resource\Quote\Item');
     }
 
-    /**
-     * Set type for COUNT SQL select
-     *
-     * @param int $type
-     * @return $this
-     */
-    public function setSelectCountSqlType($type)
-    {
-        $this->_selectCountSqlType = $type;
-        return $this;
-    }
 
     /**
      * Prepare select query for products in carts report
@@ -230,32 +212,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             (int)$attrLastNameId
         );
         return $select;
-    }
-
-    /**
-     * Resolve customers data based on ids quote table.
-     *
-     * @return void
-     */
-    public function resolveCustomerNames()
-    {
-        $select = $this->customerResource->getReadConnection()->select();
-        $customerName = $select->getAdapter()->getConcatSql(['cust_fname.value', 'cust_lname.value'], ' ');
-
-        $select->from(
-            ['customer' => 'customer_entity']
-        )->columns(
-            ['customer_name' => $customerName]
-        )->where(
-            'customer.entity_id IN (?)',
-            array_column($this->getData(), 'customer_id')
-        );
-        $customersData = $select->getAdapter()->fetchAll($this->getCustomerNames($select));
-
-        foreach ($this->getItems() as $item) {
-            $item->setData(array_merge($item->getData(), current($customersData)));
-            next($customersData);
-        }
     }
 
     /**
