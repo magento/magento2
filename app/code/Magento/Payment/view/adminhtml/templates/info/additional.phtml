@@ -17,7 +17,15 @@
 <?php foreach ($additional_info as $label => $value):?>
     <tr>
         <th><?php echo $block->escapeHtml($label)?>:&nbsp;</th>
-        <td><?php echo nl2br(implode("\n", $block->getValueAsArray($value, true)))?></td>
+        <td>
+            <?php if (is_array($value)):?>
+                <?php foreach ($value as $label => $val):?>
+                    <?php echo $block->escapeHtml($label . ': ' . $val)?><br/>
+                <?php endforeach;?>
+            <?php else:?>
+                <?php echo $block->escapeHtml($value)?><br/>
+            <?php endif;?>
+        </td>
     </tr>
 <?php endforeach; ?>
 </table>
