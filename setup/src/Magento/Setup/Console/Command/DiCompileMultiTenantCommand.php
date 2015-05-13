@@ -378,6 +378,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
      *
      * @param InputInterface $input
      * @return string[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function validate(InputInterface $input)
     {
