@@ -320,6 +320,14 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getCreatedAt();
 
     /**
+     * Sets the created-at timestamp for the invoice.
+     *
+     * @param string $createdAt timestamp
+     * @return $this
+     */
+    public function setCreatedAt($createdAt);
+
+    /**
      * Gets the discount amount for the invoice.
      *
      * @return float Discount amount.

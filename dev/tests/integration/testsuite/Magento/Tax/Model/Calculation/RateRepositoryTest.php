@@ -9,6 +9,7 @@ namespace Magento\Tax\Model\Calculation;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Api\Data\TaxRateInterface;
+use Magento\Tax\Model\Calculation\Rate;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -566,14 +567,14 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 
         return [
             'eq' => [
-                [$filterBuilder->setField(TaxRateInterface::KEY_REGION_ID)->setValue(42)->create()],
+                [$filterBuilder->setField(Rate::KEY_REGION_ID)->setValue(42)->create()],
                 null,
                 ['US - 42 - 7.5', 'US - 42 - 22'],
             ],
             'and' => [
                 [
-                    $filterBuilder->setField(TaxRateInterface::KEY_REGION_ID)->setValue(42)->create(),
-                    $filterBuilder->setField(TaxRateInterface::KEY_PERCENTAGE_RATE)->setValue(22.0)->create(),
+                    $filterBuilder->setField(Rate::KEY_REGION_ID)->setValue(42)->create(),
+                    $filterBuilder->setField(Rate::KEY_PERCENTAGE_RATE)->setValue(22.0)->create(),
                 ],
                 [],
                 ['US - 42 - 22'],
@@ -581,15 +582,14 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             'or' => [
                 [],
                 [
-                    $filterBuilder->setField(TaxRateInterface::KEY_PERCENTAGE_RATE)->setValue(22.0)->create(),
-                    $filterBuilder->setField(TaxRateInterface::KEY_PERCENTAGE_RATE)->setValue(10.0)->create(),
+                    $filterBuilder->setField(Rate::KEY_PERCENTAGE_RATE)->setValue(22.0)->create(),
+                    $filterBuilder->setField(Rate::KEY_PERCENTAGE_RATE)->setValue(10.0)->create(),
                 ],
                 ['US - 42 - 22', 'US - 12 - 10'],
             ],
             'like' => [
                 [
-                    $filterBuilder->setField(TaxRateInterface::KEY_CODE)->setValue('%7.5')->setConditionType('like')
-                        ->create(),
+                    $filterBuilder->setField(Rate::KEY_CODE)->setValue('%7.5')->setConditionType('like')->create(),
                 ],
                 [],
                 ['US - 42 - 7.5', 'US - 12 - 7.5'],
