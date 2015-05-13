@@ -55,10 +55,10 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
-        unlink(self::$_generatorWorkingDir . '/../src/Magento/Setup/Fixtures/tax_rates.csv');
+        unlink(self::$_generatorWorkingDir . '/tax_rates.csv');
         rename(
-            self::$_generatorWorkingDir . '/../src/Magento/Setup/Fixtures/tax_rates.csv.bak',
-            self::$_generatorWorkingDir . '/../src/Magento/Setup/Fixtures/tax_rates.csv'
+            self::$_generatorWorkingDir . '/tax_rates.csv.bak',
+            self::$_generatorWorkingDir . '/tax_rates.csv'
         );
         /** @var $appCache \Magento\Framework\App\Cache */
         $appCache = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache');
