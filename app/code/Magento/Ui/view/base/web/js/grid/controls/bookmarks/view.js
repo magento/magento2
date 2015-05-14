@@ -14,21 +14,25 @@ define([
             active: false,
             editable: true,
             editing: false,
-            changed: false,
             isNew: false,
-            saved: {},
+            statesProvider: '${ $.parentName }',
             exports: {
                 active: 'onActivate'
             },
             listens: {
                 label: 'setLabel',
-                '${ $.parentName }:activeIndex': 'onActiveChange'
+                '${ $.statesProvider }:activeIndex': 'onActiveChange'
             },
             modules: {
-                states: '${ $.parentName }'
+                states: '${ $.statesProvider }'
             }
         },
 
+        /**
+         * Initializes view component.
+         *
+         * @returns {View} Chainable.
+         */
         initialize: function () {
             this._super();
 
@@ -37,9 +41,7 @@ define([
                 items: this.data || {}
             };
 
-            !this.isNew ?
-                this.save() :
-                this.changed(true);
+            return this;
         },
 
         /**
@@ -49,18 +51,9 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('active label editing changed');
+                .observe('active label editing');
 
             return this;
-        },
-
-        /**
-         * Retrieves saved data.
-         *
-         * @returns {Object}
-         */
-        getSaved: function () {
-            return utils.copy(this.saved.items);
         },
 
         /**
@@ -74,16 +67,13 @@ define([
 
         /**
          * Replaces current data with a provided one.
-         * Performs dirty checking.
          *
          * @param {Object} data - New data object.
          * @returns {View} Chainable.
          */
         setData: function (data) {
             if (this.editable) {
-                this.data.items = utils.copy(data);
-
-                this.checkChanges();
+                this.set('data.items', utils.copy(data));
             }
 
             return this;
@@ -91,7 +81,6 @@ define([
 
         /**
          * Sets new label.
-         * Performs dirty checking.
          *
          * @param {String} label - New label value.
          * @returns {View} Chainable.
@@ -99,10 +88,8 @@ define([
         setLabel: function (label) {
             label = label.trim() || this.data.label;
 
-            this.data.label = label;
             this.label(label);
-
-            this.checkChanges();
+            this.set('data.label', label);
 
             return this;
         },
@@ -130,31 +117,16 @@ define([
         },
 
         /**
-         * Sets current data to a saved state.
+         * Returns views' data including 'label' and 'index' properties.
          *
-         * @returns {Object} Current data.
+         * @returns {Object}
          */
-        save: function () {
-            this.saved = utils.copy(this.data);
-            this.isNew = false;
-
-            this.changed(false);
-
-            return this.saved.items;
-        },
-
-        /**
-         * Checks if current data is different from its saved state.
-         *
-         * @returns {Boolean} Whether data has been changed.
-         */
-        checkChanges: function () {
-            var diff = utils.compare(this.saved, this.data),
-                changed = !diff.equal;
-
-            this.changed(changed);
-
-            return changed;
+        exportView: function () {
+            return {
+                index: this.index,
+                label: this.label(),
+                data: this.data.items
+            };
         },
 
         /**
