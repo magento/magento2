@@ -13,7 +13,7 @@
     <span class="cart-price"><span class="price" data-bind="text: getFormattedPrice(item.row_total_incl_tax)"></span></span>
 <!-- /ko -->
 
-<!--ko if:  getWeeeTaxApplied(item).length > 0)-->
+<!--ko if:  (getWeeeTaxApplied(item).length > 0)-->
 <!-- ko ifnot:  (isDisplayPriceWithWeeeDetails(item))-->
 <span class="cart-tax-info" data-bind ="attr: {'id': 'subtotal-item-tax-details' + item.item_id}" style="display: none;"></span>
 <!-- /ko-->
