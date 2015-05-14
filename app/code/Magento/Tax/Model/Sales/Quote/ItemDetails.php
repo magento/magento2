@@ -13,12 +13,28 @@ use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
  */
 class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_CODE                 = 'code';
+    const KEY_TYPE                 = 'type';
+    const KEY_TAX_CLASS_KEY        = 'tax_class_key';
+    const KEY_UNIT_PRICE           = 'unit_price';
+    const KEY_QUANTITY             = 'quantity';
+    const KEY_TAX_INCLUDED         = 'tax_included';
+    const KEY_SHORT_DESCRIPTION    = 'short_description';
+    const KEY_DISCOUNT_AMOUNT      = 'discount_amount';
+    const KEY_PARENT_CODE          = 'parent_code';
+    const KEY_ASSOCIATED_ITEM_CODE = 'associated_item_code';
+    const KEY_TAX_CLASS_ID         = 'tax_class_id';
+    /**#@-*/
+
     /**
      * {@inheritdoc}
      */
     public function getCode()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_CODE);
+        return $this->getData(self::KEY_CODE);
     }
 
     /**
@@ -26,7 +42,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getType()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_TYPE);
+        return $this->getData(self::KEY_TYPE);
     }
 
     /**
@@ -34,7 +50,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getTaxClassKey()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_TAX_CLASS_KEY);
+        return $this->getData(self::KEY_TAX_CLASS_KEY);
     }
 
     /**
@@ -42,7 +58,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getUnitPrice()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_UNIT_PRICE);
+        return $this->getData(self::KEY_UNIT_PRICE);
     }
 
     /**
@@ -50,7 +66,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getQuantity()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_QUANTITY);
+        return $this->getData(self::KEY_QUANTITY);
     }
 
     /**
@@ -58,7 +74,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getTaxIncluded()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_TAX_INCLUDED);
+        return $this->getData(self::KEY_TAX_INCLUDED);
     }
 
     /**
@@ -66,7 +82,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getShortDescription()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_SHORT_DESCRIPTION);
+        return $this->getData(self::KEY_SHORT_DESCRIPTION);
     }
 
     /**
@@ -74,7 +90,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getDiscountAmount()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_DISCOUNT_AMOUNT);
+        return $this->getData(self::KEY_DISCOUNT_AMOUNT);
     }
 
     /**
@@ -82,7 +98,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getParentCode()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_PARENT_CODE);
+        return $this->getData(self::KEY_PARENT_CODE);
     }
 
     /**
@@ -90,7 +106,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getAssociatedItemCode()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_ASSOCIATED_ITEM_CODE);
+        return $this->getData(self::KEY_ASSOCIATED_ITEM_CODE);
     }
 
     /**
@@ -98,7 +114,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function getTaxClassId()
     {
-        return $this->getData(QuoteDetailsItemInterface::KEY_TAX_CLASS_ID);
+        return $this->getData(self::KEY_TAX_CLASS_ID);
     }
 
     /**
@@ -109,7 +125,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setCode($code)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_CODE, $code);
+        return $this->setData(self::KEY_CODE, $code);
     }
 
     /**
@@ -120,7 +136,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setType($type)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_TYPE, $type);
+        return $this->setData(self::KEY_TYPE, $type);
     }
 
     /**
@@ -131,7 +147,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setTaxClassKey(\Magento\Tax\Api\Data\TaxClassKeyInterface $taxClassKey = null)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_TAX_CLASS_KEY, $taxClassKey);
+        return $this->setData(self::KEY_TAX_CLASS_KEY, $taxClassKey);
     }
 
     /**
@@ -142,7 +158,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setUnitPrice($unitPrice)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_UNIT_PRICE, $unitPrice);
+        return $this->setData(self::KEY_UNIT_PRICE, $unitPrice);
     }
 
     /**
@@ -153,7 +169,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setQuantity($quantity)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_QUANTITY, $quantity);
+        return $this->setData(self::KEY_QUANTITY, $quantity);
     }
 
     /**
@@ -164,7 +180,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setIsTaxIncluded($isTaxIncluded)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_TAX_INCLUDED, $isTaxIncluded);
+        return $this->setData(self::KEY_TAX_INCLUDED, $isTaxIncluded);
     }
 
     /**
@@ -175,7 +191,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setShortDescription($shortDescription)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_SHORT_DESCRIPTION, $shortDescription);
+        return $this->setData(self::KEY_SHORT_DESCRIPTION, $shortDescription);
     }
 
     /**
@@ -186,7 +202,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setDiscountAmount($discountAmount)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_DISCOUNT_AMOUNT, $discountAmount);
+        return $this->setData(self::KEY_DISCOUNT_AMOUNT, $discountAmount);
     }
 
     /**
@@ -197,7 +213,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setParentCode($parentCode)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_PARENT_CODE, $parentCode);
+        return $this->setData(self::KEY_PARENT_CODE, $parentCode);
     }
 
     /**
@@ -208,7 +224,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setAssociatedItemCode($associatedItemCode)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_ASSOCIATED_ITEM_CODE, $associatedItemCode);
+        return $this->setData(self::KEY_ASSOCIATED_ITEM_CODE, $associatedItemCode);
     }
 
     /**
@@ -219,7 +235,7 @@ class ItemDetails extends AbstractExtensibleModel implements QuoteDetailsItemInt
      */
     public function setTaxClassId($taxClassId)
     {
-        return $this->setData(QuoteDetailsItemInterface::KEY_TAX_CLASS_ID, $taxClassId);
+        return $this->setData(self::KEY_TAX_CLASS_ID, $taxClassId);
     }
 
     /**

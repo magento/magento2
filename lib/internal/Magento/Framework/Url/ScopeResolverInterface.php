@@ -15,7 +15,7 @@ interface ScopeResolverInterface extends \Magento\Framework\App\ScopeResolverInt
     /**
      * Retrieve area code
      *
-     * @return \Magento\Framework\Url\ScopeInterface[]
+     * @return string|null
      */
     public function getAreaCode();
 }

@@ -33,7 +33,7 @@ class DataProviderFactory
         ScopeConfigInterface $scopeConfig,
         $configPath,
         $dataProviders,
-        $scope = ScopeInterface::SCOPE_DEFAULT
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT
     ) {
         $this->objectManager = $objectManager;
         $configValue = $scopeConfig->getValue($configPath, $scope);

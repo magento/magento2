@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use \Magento\Framework\Search\Adapter\Mysql\Dimensions;
 
 use Magento\Framework\Search\Adapter\Mysql\Dimensions as DimensionsBuilder;
@@ -103,7 +104,7 @@ class DimensionsTest extends \PHPUnit_Framework_TestCase
     {
         $tableAlias = 'search_index';
         $name = 'scope';
-        $value = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT;
+        $value = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
         $scopeId = -123456;
 
         $this->dimension->expects($this->once())
