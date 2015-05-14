@@ -1,25 +1,28 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sendfriend\Controller\Product;
+
+use Magento\Framework\Controller\ResultFactory;
 
 class Send extends \Magento\Sendfriend\Controller\Product
 {
     /**
      * Show Send to a Friend Form
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $product = $this->_initProduct();
 
         if (!$product) {
-            $this->_forward('noroute');
-            return;
+            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+            $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
         /* @var $session \Magento\Catalog\Model\Session */
         $catalogSession = $this->_objectManager->get('Magento\Catalog\Model\Session');
@@ -30,19 +33,20 @@ class Send extends \Magento\Sendfriend\Controller\Product
             );
         }
 
-        $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->getLayout()->initMessages();
 
         $this->_eventManager->dispatch('sendfriend_product', ['product' => $product]);
         $data = $catalogSession->getSendfriendFormData();
         if ($data) {
             $catalogSession->setSendfriendFormData(true);
-            $block = $this->_view->getLayout()->getBlock('sendfriend.send');
+            $block = $resultPage->getLayout()->getBlock('sendfriend.send');
             if ($block) {
                 $block->setFormData($data);
             }
         }
 
-        $this->_view->renderLayout();
+        return $resultPage;
     }
 }
