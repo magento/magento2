@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class UpdateItemOptions extends Action\Action implements IndexInterface
 {
@@ -49,14 +49,16 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
     /**
      * Action to accept new configuration for a wishlist item
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
         $productId = (int)$this->getRequest()->getParam('product');
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$productId) {
-            $this->_redirect('*/');
-            return;
+            $resultRedirect->setPath('*/');
+            return $resultRedirect;
         }
 
         try {
@@ -67,8 +69,8 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
 
         if (!$product || !$product->isVisibleInCatalog()) {
             $this->messageManager->addError(__('We can\'t specify a product.'));
-            $this->_redirect('*/');
-            return;
+            $resultRedirect->setPath('*/');
+            return $resultRedirect;
         }
 
         try {
@@ -78,8 +80,8 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
             $item->load($id);
             $wishlist = $this->wishlistProvider->getWishlist($item->getWishlistId());
             if (!$wishlist) {
-                $this->_redirect('*/');
-                return;
+                $resultRedirect->setPath('*/');
+                return $resultRedirect;
             }
 
             $buyRequest = new \Magento\Framework\Object($this->getRequest()->getParams());
@@ -102,6 +104,7 @@ class UpdateItemOptions extends Action\Action implements IndexInterface
             $this->messageManager->addError(__('An error occurred while updating wish list.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
-        $this->_redirect('*/*', ['wishlist_id' => $wishlist->getId()]);
+        $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);
+        return $resultRedirect;
     }
 }

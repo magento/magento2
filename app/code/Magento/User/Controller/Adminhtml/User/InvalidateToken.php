@@ -35,6 +35,8 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
     public function execute()
     {
         if ($userId = $this->getRequest()->getParam('user_id')) {
+            /** @var \Magento\Integration\Service\V1\AdminTokenService $tokenService */
+            $tokenService = $this->_objectManager->get('Magento\Integration\Service\V1\AdminTokenService');
             try {
                 $this->tokenService->revokeAdminAccessToken($userId);
                 $this->messageManager->addSuccess(__('You have revoked the user\'s tokens.'));

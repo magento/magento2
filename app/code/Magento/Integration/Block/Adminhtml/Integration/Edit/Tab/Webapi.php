@@ -58,6 +58,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
+        \Magento\Integration\Model\IntegrationService $integrationService,
         array $data = []
     ) {
         $this->rootResource = $rootResource;
@@ -71,6 +72,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get tab label
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -81,6 +83,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get tab title
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -94,7 +97,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     public function canShowTab()
     {
-        $integrationData = $this->coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
+        $integrationData = $this->_coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
         return !isset(
             $integrationData[Info::DATA_SETUP_TYPE]
         ) || $integrationData[Info::DATA_SETUP_TYPE] != IntegrationModel::TYPE_CONFIG;
@@ -104,6 +107,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Whether tab is visible
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -118,7 +122,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected function _construct()
     {
         parent::_construct();
-        $integrationData = $this->coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
+        $integrationData = $this->_coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
         if (is_array($integrationData)
             && isset($integrationData['integration_id'])
             && $integrationData['integration_id']
@@ -134,7 +138,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Check if everything is allowed
      *
-     * @return boolean
+     * @return bool
      */
     public function isEverythingAllowed()
     {

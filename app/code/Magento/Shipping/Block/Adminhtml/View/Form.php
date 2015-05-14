@@ -79,7 +79,11 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         return $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->setData(
-            ['label' => __('Create Shipping Label...'), 'onclick' => 'packaging.showWindow();']
+            [
+                'label' => __('Create Shipping Label...'),
+                'onclick' => 'packaging.showWindow();',
+                'class' => 'action-create-label'
+            ]
         )->toHtml();
     }
 

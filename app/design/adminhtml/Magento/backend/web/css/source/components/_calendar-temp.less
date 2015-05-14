@@ -16,32 +16,35 @@
 @ui-datepicker__border: 1px solid #007dbd;
 @ui-datepicker__indent: 3px;
 @ui-datepicker__padding: 20px;
-@ui-datepicker__shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+@ui-datepicker__shadow: @component__box-shadow__base;
 
 //
 //  Datepicker control
 //  ---------------------------------------------
 
-.admin__control-text.hasDatepicker {
-    width: 15rem;
-}
-
 .admin__control-text {
+    &.hasDatepicker {
+        width: 15rem;
+    }
     + .ui-datepicker-trigger {
         .button-reset();
         .icon-font(
-            @icon-calendar,
-            @_icon-font-size: 3.8rem,
-            @_icon-font-line-height: 33px,
+            @_icon-font-content: @icon-calendar__content,
+            @_icon-font: @icons-admin__font-name,
+            @_icon-font-size: 2.1rem,
+            @_icon-font-line-height: @action__height,
             @_icon-font-text-hide: true,
             @_icon-font-position: after,
             @_icon-font-color: @ui-datepicker-icon__color
         );
-        height: 3.3rem;
+        height: @action__height;
         overflow: hidden;
         vertical-align: top;
-        margin-left: -4rem;
+        margin-left: -@action__height;
         display: inline-block;
+        &:active {
+            .scale(.975);
+        }
     }
 }
 
@@ -52,6 +55,7 @@
 .ui-datepicker {
     box-sizing: border-box;
     display: none;
+    opacity: @component-modal__opacity;
     padding: @ui-datepicker__padding + @ui-datepicker__indent  @ui-datepicker__padding;
     width: auto;
     z-index: 999999 !important;
