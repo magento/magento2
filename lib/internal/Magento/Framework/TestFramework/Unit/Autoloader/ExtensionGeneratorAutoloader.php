@@ -95,4 +95,3 @@ class ExtensionGeneratorAutoloader
         return substr($className, -strlen($suffix), strlen($suffix)) === $suffix;
     }
 }
-
