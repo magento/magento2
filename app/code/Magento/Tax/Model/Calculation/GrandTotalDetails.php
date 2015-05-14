@@ -69,4 +69,26 @@ class GrandTotalDetails extends AbstractExtensibleModel implements GrandTotalDet
     {
         return $this->setData(self::RATES, $rates);
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

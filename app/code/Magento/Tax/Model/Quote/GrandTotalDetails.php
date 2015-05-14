@@ -55,6 +55,10 @@ class GrandTotalDetails
         $this->quoteRepository = $quoteRepository;
     }
 
+    /**
+     * @param $rates
+     * @return array
+     */
     protected function getRatesData($rates)
     {
         $taxRates = [];
