@@ -18,12 +18,16 @@ define(
                 return window.checkoutConfig.payment.checkmo.payableTo;
             },
             getInfo: function() {
-                return [
-                    {name: $t('Make Check payable to')},
-                    {value: this.getPayableTo()},
-                    {name: $t('Send Check to')},
-                    {html: this.getMailingAddress()}
-                ];
+                var info = [];
+                if (this.getPayableTo()) {
+                    info.push({name: $t('Make Check payable to')});
+                    info.push({value: this.getPayableTo()});
+                }
+                if (this.getMailingAddress()) {
+                    info.push({name: $t('Send Check to')});
+                    info.push({html: this.getMailingAddress()});
+                }
+                return info;
             }
         });
     }

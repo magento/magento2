@@ -14,9 +14,11 @@ define(
                 return window.checkoutConfig.payment.instructions[this.getCode()];
             },
             getInfo: function() {
-                return [
-                    {html: this.getInstructions()}
-                ];
+                var info = [];
+                if (this.getInstructions()) {
+                    info.push({html: this.getInstructions()});
+                }
+                return info;
             }
         });
     }
