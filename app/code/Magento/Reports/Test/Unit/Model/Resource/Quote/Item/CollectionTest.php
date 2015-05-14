@@ -271,6 +271,4 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->collection->getItems()[0]->getData()
         );
     }
-
 }
-
