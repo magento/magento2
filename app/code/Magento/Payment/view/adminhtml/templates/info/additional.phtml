@@ -5,28 +5,20 @@
  */
 
 // @codingStandardsIgnoreFile
-?>
-<?php
 /**
  * @see \Magento\Payment\Block\Info
  */
 ?>
 
 <?php if ($additional_info = $block->getAdditionalInfo()):?>
-<table class="data-table" cellspacing="0">
-<?php foreach ($additional_info as $label => $value):?>
-    <tr>
-        <th><?php echo $block->escapeHtml($label)?>:&nbsp;</th>
-        <td>
+        <?php foreach ($additional_info as $label => $value):?>
             <?php if (is_array($value)):?>
+                <b><?php echo $block->escapeHtml($label)?>:</b><br/>
                 <?php foreach ($value as $label => $val):?>
-                    <?php echo $block->escapeHtml($label . ': ' . $val)?><br/>
+                    &nbsp;&nbsp;-&nbsp;<U><?php echo $block->escapeHtml($label)?></U>:&nbsp;<?php echo $block->escapeHtml($val)?><br/>
                 <?php endforeach;?>
             <?php else:?>
-                <?php echo $block->escapeHtml($value)?><br/>
+                <b><?php echo $block->escapeHtml($label)?>:&nbsp;</b><?php echo $block->escapeHtml($value)?><br/>
             <?php endif;?>
-        </td>
-    </tr>
-<?php endforeach; ?>
-</table>
+        <?php endforeach; ?>
 <?php endif;?>
