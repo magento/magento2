@@ -8,7 +8,6 @@ namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Setup\Lists;
 
-
 class ListsTest extends \PHPUnit_Framework_TestCase
 {
     /**
