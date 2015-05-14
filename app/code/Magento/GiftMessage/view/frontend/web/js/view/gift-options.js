@@ -26,15 +26,28 @@ define(['uiComponent', 'ko', '../model/gift-options', '../model/gift-message', '
                 return giftOptions.isItemLevelGiftOptionsEnabled();
             },
             getOrderLevelGiftOptions: function() {
-                return giftOptions.getOrderLevelGiftOptions();
+                return this.filterOptions(giftOptions.getOrderLevelGiftOptions());
             },
             getItemLevelGiftOptions: function() {
-                return giftOptions.getItemLevelGiftOptions();
+                return this.filterOptions(giftOptions.getItemLevelGiftOptions());
             },
             getExtraGiftOptions: function() {
-                return giftOptions.getExtraGiftOptions();
+                return this.filterOptions(giftOptions.getExtraGiftOptions());
+            },
+            filterOptions: function(options) {
+                return _.filter(options, function(option) {
+                        var result = true;
+                        if (option.isDirectRendering !== 'undefined') {
+                            result = !option.isDirectRendering;
+                        }
+                        return result;
+                    }
+                );
             },
             collectOptions: function(giftOption, additionalFlag) {
+                if (!this.isAvailableForSubmiting(giftOption)) {
+                    return false;
+                }
                 var self = this;
                 if (giftOption.optionType === 'undefined') {
                     errorList.add('You should define type of your custom option');
@@ -48,13 +61,16 @@ define(['uiComponent', 'ko', '../model/gift-options', '../model/gift-message', '
                     self.options[giftOption.optionType].push(optionItem);
                 });
             },
+            isAvailableForSubmiting: function(option) {
+                return typeof option.isSubmit == 'undefined' || option.isSubmit ? true : false;
+            },
             submit: function() {
                 var self = this;
                 var removeOrder = (giftMessage.isOrderLevelGiftOptionsSelected()
                 && this.isOrderLevelGiftOptionsSelected() !== giftMessage.isOrderLevelGiftOptionsSelected())
                     ? true
                     : false;
-                _.each(this.getOrderLevelGiftOptions(), function(option) {
+                _.each(giftOptions.getOrderLevelGiftOptions(), function(option) {
                     self.collectOptions(option, removeOrder);
                 });
 
@@ -62,11 +78,11 @@ define(['uiComponent', 'ko', '../model/gift-options', '../model/gift-message', '
                 && this.isItemLevelGiftOptionsSelected() !== giftMessage.isItemLevelGiftOptionsSelected())
                     ? true
                     : false;
-                _.each(this.getItemLevelGiftOptions(), function(option) {
+                _.each(giftOptions.getItemLevelGiftOptions(), function(option) {
                     self.collectOptions(option, removeItem);
                 });
 
-                _.each(this.getExtraGiftOptions(), function(option) {
+                _.each(giftOptions.getExtraGiftOptions(), function(option) {
                     self.collectOptions(option);
                 });
 
