@@ -900,8 +900,8 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         $this->addFieldToFilter(
             $fieldToFilter,
             [
-                'from' => $from->format(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT),
-                'to' => $to->format(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)
+                'from' => $from->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+                'to' => $to->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT)
             ]
         );
 
