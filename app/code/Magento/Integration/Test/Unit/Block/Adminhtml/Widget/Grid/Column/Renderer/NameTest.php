@@ -47,7 +47,9 @@ class NameTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->contextMock->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaperMock));
-        $this->contextMock->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilderMock));
+        $this->contextMock->expects($this->any())
+            ->method('getUrlBuilder')
+            ->will($this->returnValue($this->urlBuilderMock));
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->nameRenderer = $this->objectManagerHelper->getObject(
