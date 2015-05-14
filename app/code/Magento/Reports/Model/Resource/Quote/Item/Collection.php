@@ -8,6 +8,8 @@ namespace Magento\Reports\Model\Resource\Quote\Item;
 
 /**
  * Collection of Magento\Quote\Model\Quote\Item
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {

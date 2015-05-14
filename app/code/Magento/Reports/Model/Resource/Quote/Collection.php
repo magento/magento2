@@ -81,7 +81,8 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
             $this->getSelect()->columns(
                 ['subtotal' => '(main_table.base_subtotal_with_discount*main_table.base_to_global_rate)']
             );
-            $this->_joinedFields['subtotal'] = '(main_table.base_subtotal_with_discount*main_table.base_to_global_rate)';
+            $this->_joinedFields['subtotal'] =
+                '(main_table.base_subtotal_with_discount*main_table.base_to_global_rate)';
         } else {
             $this->getSelect()->columns(['subtotal' => 'main_table.base_subtotal_with_discount']);
             $this->_joinedFields['subtotal'] = 'main_table.base_subtotal_with_discount';
