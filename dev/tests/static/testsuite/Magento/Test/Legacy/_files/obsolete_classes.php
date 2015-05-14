@@ -3334,4 +3334,5 @@ return [
     ['Magento\Log\Model\LogFactory\Clean'],
     ['Magento\Log\Model\Shell\CommandInterface'],
     ['Magento\Framework\App\Filesystem\DirectoryList\AbstractShell'],
+    ['Magento\Search\Model\Resource\Helper'],
 ];
