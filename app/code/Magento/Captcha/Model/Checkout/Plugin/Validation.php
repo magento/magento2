@@ -5,7 +5,8 @@
  */
 namespace Magento\Captcha\Model\Checkout\Plugin;
 
-use Magento\Framework\Exception;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\InputException;
 
 class Validation
 {
@@ -34,7 +35,8 @@ class Validation
     /**
      * @param \Magento\Quote\Model\AddressAdditionalDataProcessor $subject
      * @param \Magento\Quote\Api\Data\AddressAdditionalDataInterface $additionalData
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\InputException
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -46,12 +48,12 @@ class Validation
         $captchaText = $additionalData->getExtensionAttributes()->getCaptchaString();
 
         if ($formId !== null && !in_array($formId, $this->formIds)) {
-            throw new Exception\NoSuchEntityException(__('Provided form does not exist'));
+            throw new NoSuchEntityException(__('Provided form does not exist'));
         }
         $captchaModel = $this->captchaHelper->getCaptcha($formId);
         if ($captchaModel->isRequired()) {
             if (!$captchaModel->isCorrect($captchaText)) {
-                throw new Exception\InputException(__('Incorrect CAPTCHA'));
+                throw new InputException(__('Incorrect CAPTCHA'));
             }
         }
     }
