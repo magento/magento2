@@ -9,12 +9,14 @@ namespace Magento\Framework\Api;
 use Magento\Framework\Api\Data\ImageContentInterface;
 
 /**
+ * Image Content data object
+ *
  * @codeCoverageIgnore
  */
 class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject implements ImageContentInterface
 {
     /**
-     * Retrieve media data (base64 encoded content)
+     * {@inheritdoc}
      *
      * @return string
      */
@@ -24,7 +26,7 @@ class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject imple
     }
 
     /**
-     * Retrieve MIME type
+     * {@inheritdoc}
      *
      * @return string
      */
@@ -34,7 +36,7 @@ class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject imple
     }
 
     /**
-     * Retrieve image name
+     * {@inheritdoc}
      *
      * @return string
      */
@@ -44,7 +46,7 @@ class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject imple
     }
 
     /**
-     * Set media data (base64 encoded content)
+     * {@inheritdoc}
      *
      * @param string $data
      * @return $this
@@ -55,7 +57,7 @@ class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject imple
     }
 
     /**
-     * Set MIME type
+     * {@inheritdoc}
      *
      * @param string $mimeType
      * @return $this
@@ -66,7 +68,7 @@ class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject imple
     }
 
     /**
-     * Set image name
+     * {@inheritdoc}
      *
      * @param string $name
      * @return $this

@@ -9,6 +9,11 @@ namespace Magento\Framework\Api;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * Image content validation interface
+ *
+ * @api
+ */
 interface ImageContentValidatorInterface
 {
     /**

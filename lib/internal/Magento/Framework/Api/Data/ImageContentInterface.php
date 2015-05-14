@@ -9,7 +9,9 @@ namespace Magento\Framework\Api\Data;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
- * Product Media Content
+ * Image Content data interface
+ *
+ * @api
  */
 interface ImageContentInterface extends ExtensibleDataInterface
 {
