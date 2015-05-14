@@ -39,9 +39,14 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     protected $dataObjectHelperMock;
 
     /**
-     * @var \Magento\Framework\Api\Data\EavImageContentInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eavImageContentFactoryMock;
+    protected $loggerMock;
+
+    /**
+     * @var \Magento\Framework\Api\Uploader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $uploaderMock;
 
     public function setUp()
     {
@@ -56,9 +61,20 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eavImageContentFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Api\Data\EavImageContentInterfaceFactory'
-        )
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->uploaderMock = $this->getMockBuilder('Magento\Framework\Api\Uploader')
+            ->setMethods(
+                [
+                    'processFileAttributes',
+                    'setFilesDispersion',
+                    'setFilenamesCaseSensitivity',
+                    'setAllowRenameFiles',
+                    'save',
+                    'getUploadedFileName'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -68,17 +84,18 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
                 'fileSystem' => $this->fileSystemMock,
                 'contentValidator' => $this->contentValidatorMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
-                'eavImageContentFactory' => $this->eavImageContentFactoryMock,
+                'logger' => $this->loggerMock,
+                'uploader' => $this->uploaderMock
             ]
         );
     }
 
     public function testSaveWithNoImageData()
     {
-        $imageData = $this->getMockBuilder('Magento\Framework\Api\CustomAttributesDataInterface')
+        $imageDataMock = $this->getMockBuilder('Magento\Framework\Api\CustomAttributesDataInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $imageData->expects($this->once())
+        $imageDataMock->expects($this->once())
             ->method('getCustomAttributes')
             ->willReturn([]);
 
@@ -86,7 +103,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomAttributeValueByType')
             ->willReturn([]);
 
-        $this->assertEquals($imageData, $this->imageProcessor->save($imageData));
+        $this->assertEquals($imageDataMock, $this->imageProcessor->save($imageDataMock, 'testEntityType'));
     }
 
     /**
@@ -120,7 +137,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->willReturn(false);
 
-        $this->imageProcessor->save($imageDataMock);
+        $this->imageProcessor->save($imageDataMock, 'testEntityType');
     }
 
     public function testSave()
@@ -131,7 +148,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $imageContent->expects($this->any())
             ->method('getBase64EncodedData')
             ->willReturn('testImageData');
-        $imageContent->expects($this->once())
+        $imageContent->expects($this->any())
             ->method('getName')
             ->willReturn('testFileName');
 
@@ -150,9 +167,6 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectHelperMock->expects($this->once())
             ->method('getCustomAttributeValueByType')
             ->willReturn([$imageDataObject]);
-        $this->dataObjectHelperMock->expects($this->once())
-            ->method('mergeDataObjects')
-            ->willReturnSelf();
 
         $this->contentValidatorMock->expects($this->once())
             ->method('isValid')
@@ -160,20 +174,14 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
 
         $directoryWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
 
-        $directoryWrite->expects($this->once())
+        $directoryWrite->expects($this->any())
             ->method('getAbsolutePath')
             ->willReturn('testPath');
 
-        $this->fileSystemMock->expects($this->once())
+        $this->fileSystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->willReturn($directoryWrite);
 
-        $eavImageContent = $this->getMockForAbstractClass('Magento\Framework\Api\Data\EavImageContentInterface');
-
-        $this->eavImageContentFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($eavImageContent);
-
-        $this->assertEquals($imageData, $this->imageProcessor->save($imageData));
+        $this->assertEquals($imageData, $this->imageProcessor->save($imageData, 'testEntityType'));
     }
 }
