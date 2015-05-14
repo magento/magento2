@@ -27,17 +27,6 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
         $fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $fullModuleListMock->expects($this->once())->method('getNames')->willReturn(['Magento_Backend']);
 
-        /** @var \Magento\Setup\Model\ConfigOptionsListCollector $object */
-        $object = $objectManager->create(
-            'Magento\Setup\Model\ConfigOptionsListCollector',
-            [
-                'objectManagerProvider' => $this->objectManagerProvider,
-                'fullModuleList' => $fullModuleListMock,
-                'serviceLocator' => $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface')
-            ]
-        );
-        $result = $object->collectOptionsLists();
-
         $dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
         $configGenerator = $this->getMock('Magento\Setup\Model\ConfigGenerator', [], [], '', false);
 
@@ -49,6 +38,28 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
                     'dbValidator' => $dbValidator
                 ]
             );
+
+        $serviceLocator = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface');
+
+        $serviceLocator->expects($this->once())
+            ->method('get')
+            ->with('Magento\Setup\Model\ConfigOptionsList')
+            ->willReturn($setupOptions);
+
+
+
+        /** @var \Magento\Setup\Model\ConfigOptionsListCollector $object */
+        $object = $objectManager->create(
+            'Magento\Setup\Model\ConfigOptionsListCollector',
+            [
+                'objectManagerProvider' => $this->objectManagerProvider,
+                'fullModuleList' => $fullModuleListMock,
+                'serviceLocator' => $serviceLocator
+            ]
+        );
+        $result = $object->collectOptionsLists();
+
+
 
         $backendOptions = new \Magento\Backend\Setup\ConfigOptionsList();
         $expected = [
