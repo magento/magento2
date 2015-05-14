@@ -43,32 +43,24 @@ class ImageProcessor implements ImageProcessorInterface
     private $dataObjectHelper;
 
     /**
-     * @var \Magento\Framework\Api\Data\EavImageContentInterfaceFactory
-     */
-    private $eavImageContentFactory;
-
-    /**
      * @param Filesystem $fileSystem
      * @param ImageContentValidatorInterface $contentValidator
      * @param DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Api\Data\EavImageContentInterfaceFactory $eavImageContentFactory
      */
     public function __construct(
         Filesystem $fileSystem,
         ImageContentValidatorInterface $contentValidator,
-        DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Api\Data\EavImageContentInterfaceFactory $eavImageContentFactory)
-    {
+        DataObjectHelper $dataObjectHelper
+    ) {
         $this->filesystem = $fileSystem;
         $this->contentValidator = $contentValidator;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->eavImageContentFactory = $eavImageContentFactory;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function save(CustomAttributesDataInterface $dataObjectWithCustomAttributes)
+    public function save(CustomAttributesDataInterface $dataObjectWithCustomAttributes, $entityType)
     {
         //Get all Image related custom attributes
         $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
@@ -77,7 +69,7 @@ class ImageProcessor implements ImageProcessorInterface
         );
 
         // Return if no images to process
-        if(empty($imageDataObjects)) {
+        if (empty($imageDataObjects)) {
             return $dataObjectWithCustomAttributes;
         }
 
@@ -94,23 +86,30 @@ class ImageProcessor implements ImageProcessorInterface
 
             $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
             $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
-
             $fileName = substr(md5(rand()), 0, 7) . '.' . $imageContent->getName();
             $tmpDirectory->writeFile($fileName, $fileContent);
 
-            $absolutePath = $tmpDirectory->getAbsolutePath() . $fileName;
+            $fileAttributes = [
+                'tmp_name' => $tmpDirectory->getAbsolutePath() . $fileName,
+                'name' => $imageContent->getName()
+            ];
 
-            $eavImageContent = $this->eavImageContentFactory->create();
-            $this->dataObjectHelper->mergeDataObjects(
-                '\Magento\Framework\Api\Data\ImageContentInterface',
-                $eavImageContent,
-                $imageContent
-            );
-
-            $eavImageContent->setSize(@stat($imageContent->getBase64EncodedData()['size']));
-            $eavImageContent->setTmpName($absolutePath);
-
-            $dataObjectWithCustomAttributes->setCustomAttribute($imageDataObject->getAttributeCode(), $eavImageContent);
+            try {
+                $uploader = new \Magento\Framework\Api\Uploader($fileAttributes);
+                $uploader->setFilesDispersion(true);
+                $uploader->setFilenamesCaseSensitivity(false);
+                $uploader->setAllowRenameFiles(true);
+                $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+                $destinationFolder = $entityType;
+                $uploader->save($mediaDirectory->getAbsolutePath($destinationFolder), $imageContent->getName());
+                //Set filename from static media location into data object
+                $dataObjectWithCustomAttributes->setCustomAttribute(
+                    $imageDataObject->getAttributeCode(),
+                    $uploader->getUploadedFileName()
+                );
+            } catch (\Exception $e) {
+                $this->_logger->critical($e);
+            }
         }
 
         return $dataObjectWithCustomAttributes;

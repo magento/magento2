@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Model\Resource;
 
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
@@ -130,7 +131,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     {
         $this->validate($customer);
 
-        $customer = $this->imageProcessor->save($customer);
+        $customer = $this->imageProcessor->save($customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);

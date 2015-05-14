@@ -18,7 +18,8 @@ interface ImageProcessorInterface
      *
      * @api
      * @param CustomAttributesDataInterface $image
+     * @param string $entityType entity set id
      * @return string Image path
      */
-    public function save(CustomAttributesDataInterface $image);
+    public function save(CustomAttributesDataInterface $image, $entityType);
 }

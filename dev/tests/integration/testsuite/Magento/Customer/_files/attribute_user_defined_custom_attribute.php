@@ -67,6 +67,6 @@ $model3->setName(
     'customer_image'
 )->setSortOrder(
     1223
-);
+)->setBackendType("varchar");
 
 $model3->save();

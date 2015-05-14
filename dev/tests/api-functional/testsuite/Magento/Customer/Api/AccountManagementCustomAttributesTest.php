@@ -6,6 +6,8 @@
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Model\AccountManagement;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -90,6 +92,10 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
             }
         }
         unset($this->accountManagement);
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');
+        $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory->delete(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
     }
 
     /**
@@ -143,6 +149,10 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
 
         $customerData = $customerService->getById($customerData['id']);
 
-        $this->assertNotNull($customerData['customer_image']);
+        /** @var AttributeValue $customerImageAttribute */
+        $customerImageAttribute = $customerData->getCustomAttribute('customer_image');
+
+        $this->assertEquals('customer_image', $customerImageAttribute->getAttributeCode());
+        $this->assertContains('sample.jpeg', $customerImageAttribute->getValue());
     }
 }
