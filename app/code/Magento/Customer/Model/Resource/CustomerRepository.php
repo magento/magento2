@@ -131,7 +131,15 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     {
         $this->validate($customer);
 
-        $customer = $this->imageProcessor->save($customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $prevCustomerData = null;
+        if($customer->getId()) {
+            $prevCustomerData = $this->getById($customer->getId());
+        }
+        $customer = $this->imageProcessor->save(
+            $customer,
+            $prevCustomerData,
+            CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER
+        );
 
         $origAddresses = $customer->getAddresses();
         $customer->setAddresses([]);

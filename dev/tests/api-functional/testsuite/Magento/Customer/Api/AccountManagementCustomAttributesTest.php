@@ -5,12 +5,15 @@
  */
 namespace Magento\Customer\Api;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
  * Test class for Customer's custom attributes
@@ -53,6 +56,11 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
     private $imageFactory;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    private $fileSystem;
+
+    /**
      * Execute per test initialization.
      */
     public function setUp()
@@ -68,6 +76,8 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         );
 
         $this->imageFactory = Bootstrap::getObjectManager()->get('Magento\Framework\Api\ImageContentFactory');
+
+        $this->fileSystem = Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');;
     }
 
     public function tearDown()
@@ -92,19 +102,37 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
             }
         }
         unset($this->accountManagement);
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');
-        $mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->delete(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     * Create customer with a sample image file
      */
-    public function testCreateCustomer()
+    protected function createCustomerWithDefaultImageAttribute()
     {
         $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
         $imageData = base64_encode(file_get_contents($testImagePath));
+        $image = $this->imageFactory->create()
+            ->setType('image/jpeg')
+            ->setName('sample.jpeg')
+            ->setBase64EncodedData($imageData);
+
+        $imageData = $this->dataObjectProcessor->buildOutputDataArray(
+            $image,
+            '\Magento\Framework\Api\Data\ImageContentInterface'
+        );
+        return $this->createCustomerWithImageAttribute($imageData);
+    }
+
+    /**
+     * Create customer with image attribute
+     *
+     * @param array $imageData
+     * @return array Customer data as array
+     */
+    protected function createCustomerWithImageAttribute($imageData)
+    {
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
@@ -116,16 +144,6 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'CreateAccount',
             ],
         ];
-
-        $image = $this->imageFactory->create()
-            ->setType('image/jpeg')
-            ->setName('sample.jpeg')
-            ->setBase64EncodedData($imageData);
-
-        $imageData = $this->dataObjectProcessor->buildOutputDataArray(
-            $image,
-            '\Magento\Framework\Api\Data\ImageContentInterface'
-        );
 
         $customerData = $this->customerHelper->createSampleCustomerDataObject();
 
@@ -142,17 +160,114 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
             'password' => \Magento\TestFramework\Helper\Customer::PASSWORD
         ];
         $customerData = $this->_webApiCall($serviceInfo, $requestData);
+
+        return $customerData;
+    }
+
+    protected function verifyImageAttribute($customAttributeArray, $expectedFileName)
+    {
+        $imageAttributeFound = false;
+        foreach ($customAttributeArray as $customAttribute) {
+            if ($customAttribute[AttributeValue::ATTRIBUTE_CODE] == 'customer_image') {
+                $this->assertContains($expectedFileName, $customAttribute[AttributeValue::VALUE]);
+                $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+                $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+                $imageAttributeFound = file_exists($customerMediaPath . $customAttribute[AttributeValue::VALUE]);
+                $this->assertTrue($imageAttributeFound , 'Expected file was not created');
+            }
+        }
+        if(!$imageAttributeFound) {
+            $this->fail('Expected image attribute missing.');
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     */
+    public function atestCreateCustomerWithImageAttribute()
+    {
+        $customerData = $this->createCustomerWithDefaultImageAttribute();
         $this->currentCustomerId[] = $customerData['id'];
+        $this->verifyImageAttribute($customerData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES], 'sample.jpeg');
+    }
 
-        /** @var $customerService \Magento\Customer\Api\CustomerRepositoryInterface */
-        $customerService = Bootstrap::getObjectManager()->get('Magento\Customer\Api\CustomerRepositoryInterface');
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     */
+    public function atestCreateCustomerWithInvalidImageAttribute()
+    {
+        $image = $this->imageFactory->create()
+            ->setType('image/jpeg')
+            ->setName('sample.jpeg')
+            ->setBase64EncodedData('INVALID_IMAGE_DATA');
 
-        $customerData = $customerService->getById($customerData['id']);
+        $imageData = $this->dataObjectProcessor->buildOutputDataArray(
+            $image,
+            '\Magento\Framework\Api\Data\ImageContentInterface'
+        );
+        $expectedMessage = 'The image content must be valid base64 encoded data.';
+        try {
+            $this->createCustomerWithImageAttribute($imageData);
+        } catch (\SoapFault $e) {
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage(),
+                "Exception message does not match"
+            );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+        }
+      }
 
-        /** @var AttributeValue $customerImageAttribute */
-        $customerImageAttribute = $customerData->getCustomAttribute('customer_image');
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     */
+    public function testUpdateCustomerWithImageAttribute()
+    {
+        $customerDataArray = $this->createCustomerWithDefaultImageAttribute();
+        $previousCustomerData = $customerDataArray;
 
-        $this->assertEquals('customer_image', $customerImageAttribute->getAttributeCode());
-        $this->assertContains('sample.jpeg', $customerImageAttribute->getValue());
+        $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'buttons.png';
+        $imageData = base64_encode(file_get_contents($testImagePath));
+        $image = $this->imageFactory->create()
+            ->setType('image/png')
+            ->setName('buttons.png')
+            ->setBase64EncodedData($imageData);
+        $imageData = $this->dataObjectProcessor->buildOutputDataArray(
+            $image,
+            '\Magento\Framework\Api\Data\ImageContentInterface'
+        );
+
+        //Replace image attribute
+        $customerDataArray['custom_attributes'][1] = [
+            'attribute_code' => 'customer_image',
+            'value' => $imageData,
+        ];
+        $requestData = [
+            'customer' => $customerDataArray,
+            'password' => \Magento\TestFramework\Helper\Customer::PASSWORD
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . "/{$customerDataArray[CustomerInterface::ID]}",
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $customerData = $this->_webApiCall($serviceInfo, $requestData);
+        $this->verifyImageAttribute($customerData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES], 'buttons.png');
+
+        //Verify that the previous image is deleted
+        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $previousImagePath = $previousCustomerData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES][1][AttributeValue::VALUE];
+        $this->assertFalse(file_exists($customerMediaPath . $previousImagePath));
     }
 }

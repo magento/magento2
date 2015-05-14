@@ -76,8 +76,11 @@ class ImageProcessor implements ImageProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function save(CustomAttributesDataInterface $dataObjectWithCustomAttributes, $entityType)
-    {
+    public function save(
+        CustomAttributesDataInterface $dataObjectWithCustomAttributes,
+        CustomAttributesDataInterface $previousCustomerData = null,
+        $entityType
+    ) {
         //Get all Image related custom attributes
         $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
             $dataObjectWithCustomAttributes->getCustomAttributes(),
@@ -110,12 +113,13 @@ class ImageProcessor implements ImageProcessorInterface
                 'name' => $imageContent->getName()
             ];
 
+            $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+
             try {
                 $this->uploader->processFileAttributes($fileAttributes);
                 $this->uploader->setFilesDispersion(true);
                 $this->uploader->setFilenamesCaseSensitivity(false);
                 $this->uploader->setAllowRenameFiles(true);
-                $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
                 $destinationFolder = $entityType;
                 $this->uploader->save($mediaDirectory->getAbsolutePath($destinationFolder), $imageContent->getName());
                 //Set filename from static media location into data object
@@ -125,6 +129,19 @@ class ImageProcessor implements ImageProcessorInterface
                 );
             } catch (\Exception $e) {
                 $this->logger->critical($e);
+            }
+
+            //Delete previous
+            if ($previousCustomerData) {
+                $previousImageAttribute = $previousCustomerData->getCustomAttribute(
+                    $imageDataObject->getAttributeCode()
+                );
+                if ($previousImageAttribute) {
+                    $previousImagePath = $previousImageAttribute->getValue();
+                    if (!empty($previousImagePath)) {
+                        @unlink($mediaDirectory->getAbsolutePath() . $entityType . $previousImagePath);
+                    }
+                }
             }
         }
 
