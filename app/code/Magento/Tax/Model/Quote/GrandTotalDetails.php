@@ -56,7 +56,7 @@ class GrandTotalDetails
     }
 
     /**
-     * @param $rates
+     * @param array $rates
      * @return array
      */
     protected function getRatesData($rates)
