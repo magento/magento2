@@ -47,4 +47,21 @@ interface GrandTotalDetailsInterface extends \Magento\Framework\Api\ExtensibleDa
      * @return $this
      */
     public function setGroupId($id);
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface $extensionAttributes
+    );
 }
