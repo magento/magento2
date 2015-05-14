@@ -46,8 +46,6 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Setup\Model\ConfigOptionsList')
             ->willReturn($setupOptions);
 
-
-
         /** @var \Magento\Setup\Model\ConfigOptionsListCollector $object */
         $object = $objectManager->create(
             'Magento\Setup\Model\ConfigOptionsListCollector',
@@ -58,9 +56,7 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $result = $object->collectOptionsLists();
-
-
-
+        
         $backendOptions = new \Magento\Backend\Setup\ConfigOptionsList();
         $expected = [
             'setup' => $setupOptions,
