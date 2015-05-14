@@ -17,7 +17,6 @@ class GrandTotalDetails extends AbstractExtensibleModel implements GrandTotalDet
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const TAX_ITERATION = 'tax_iteration';
     const AMOUNT        = 'amount';
     const RATES         = 'rates';
     const GROUP_ID      = 'group_id';
@@ -53,22 +52,6 @@ class GrandTotalDetails extends AbstractExtensibleModel implements GrandTotalDet
     public function setAmount($amount)
     {
         return $this->setData(self::AMOUNT, $amount);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaxIteration()
-    {
-        return $this->getData(self::TAX_ITERATION);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTaxIteration($iteration = null)
-    {
-        return $this->setData(self::TAX_ITERATION, $iteration);
     }
 
     /**

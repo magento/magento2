@@ -77,13 +77,11 @@ class GrandTotalDetails
      */
     public function aroundGet(CartTotalRepository $subject, \Closure $proceed, $cartId)
     {
-        global $taxIter;
         $result = $proceed($cartId);
         $quote = $this->quoteRepository->getActive($cartId);
         $taxes = $quote->getShippingAddress()->getAppliedTaxes();
 
 
-        $iteration = ++$taxIter;
         $detailsId = 1;
         $finalData = [];
         foreach ($taxes as $info) {
@@ -95,7 +93,6 @@ class GrandTotalDetails
 
             $taxDetails = $this->detailsFactory->create([]);
             $taxDetails->setAmount($info['amount']);
-            $taxDetails->setTaxIteration($iteration);
             $taxRates = $this->getRatesData($info['rates']);
             $taxDetails->setRates($taxRates);
             $taxDetails->setGroupId($detailsId);

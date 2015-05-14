@@ -14,7 +14,7 @@
 <!-- ko if: isFullTaxSummaryDisplayed -->
     <!-- ko foreach: getDetails() -->
         <!-- ko foreach: rates -->
-        <tr data-bind="attr: {'class': 'totals-tax-details details-' + $parents[0].tax_iteration }">
+        <tr class="totals-tax-details">
             <!-- ko if: percent -->
                 <th class="mark" scope="row" data-bind="text: title + ' (' + percent + '%)', attr: {'style': $parents[1].style, 'colspan': $parents[1].colspan}">
                 </th>

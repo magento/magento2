@@ -10,19 +10,6 @@ namespace Magento\Tax\Api\Data;
 interface GrandTotalDetailsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
-     * Get counter of tax iteration
-     *
-     * @return int
-     */
-    public function getTaxIteration();
-
-    /**
-     * @param int|null $iteration
-     * @return $this
-     */
-    public function setTaxIteration($iteration = null);
-
-    /**
      * Get tax amount value
      *
      * @return float|string
