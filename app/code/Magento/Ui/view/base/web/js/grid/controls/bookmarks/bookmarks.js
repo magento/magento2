@@ -29,6 +29,7 @@ define([
                 },
                 newView: {
                     label: 'New View',
+                    index: '${ Date.now() }',
                     editing: true,
                     isNew: true
                 }
@@ -47,20 +48,25 @@ define([
                 }
             },
             listens: {
-                activeIndex: 'onActiveChange',
-                current: 'onDataChange'
+                activeIndex: 'onActiveIndexChange',
+                activeView: 'checkChanges',
+                current: 'onStateChange'
             }
         },
 
+        /**
+         * Initializes bookmarks component.
+         *
+         * @returns {Bookmarks} Chainable.
+         */
         initialize: function () {
-            utils.limit(this, 'onDataChange', 600);
+            utils.limit(this, 'saveSate', 2000);
+            utils.limit(this, 'checkChanges', 200);
+            utils.limit(this, '_defaultPolyfill', 1000);
 
             this._super()
-                .restore();
-
-            this.initViews();
-
-            setTimeout(this.defaultPolyfill.bind(this), 1000);
+                .restore()
+                .initViews();
 
             return this;
         },
@@ -77,6 +83,11 @@ define([
             return this;
         },
 
+        /**
+         * Creates custom storage instance.
+         *
+         * @returns {Bookmarks} Chainable.
+         */
         initStorage: function () {
             var storage = new Storage(this.storageConfig);
 
@@ -86,14 +97,20 @@ define([
         },
 
         /**
-         * Called when another element was added to current component.
+         * Called when another element was added to the current component.
          *
          * @param {Object} elem - Instance of an element that was added.
          * @returns {Bookmarks} Chainable.
          */
         initElement: function (elem) {
-            if (elem.index === this.defaultIndex) {
+            var index = elem.index;
+
+            if (index === this.defaultIndex) {
                 this.defaultView = elem;
+            }
+
+            if (index === this.activeIndex) {
+                this.activeView(elem);
             }
 
             elem.on({
@@ -117,8 +134,6 @@ define([
             }
 
             _.each(views, this.createView, this);
-
-            this.activeIndex = '';
 
             return this;
         },
@@ -152,7 +167,6 @@ define([
         createNewView: function () {
             var view = this.templates.newView;
 
-            view.index = Date.now();
             view.data = this.current;
 
             this.createView(view);
@@ -179,30 +193,44 @@ define([
         },
 
         /**
-         * Saves data of a specified view;
-         * only if view has unsaved changes.
+         * Saves data of a specified view.
          *
          * @param {View} view - View to be saved.
          * @returns {Bookmarks} Chainable.
          */
         saveView: function (view) {
-            var data;
+            if (view.isNew || view.active()) {
+                view.setData(this.current);
 
-            this.hasChanges(false);
-
-            view.setData(this.current);
+                this.hasChanges(false);
+            }
 
             if (view.isNew) {
+                view.isNew = false;
+
                 view.active(true);
             }
 
-            data = view.save();
+            this.store('views.' + view.index, view.exportView());
 
-            this.store('views.' + view.index, {
-                index: view.index,
-                label: view.label(),
-                data: data
-            });
+            return this;
+        },
+
+        /**
+         * Activates specified view and applies its' data.
+         *
+         * @param {View|String} view - View to be applied.
+         * @returns {Bookmarks} Chainable.
+         */
+        applyView: function (view) {
+            if (typeof view === 'string') {
+                view = this.elems.findWhere({index: view});
+            }
+
+            view.active(true);
+
+            this.activeView(view);
+            this.set('current', view.getData());
 
             return this;
         },
@@ -212,7 +240,7 @@ define([
          *
          * @returns {Bookmarks} Chainable.
          */
-        saveCurrent: function () {
+        saveSate: function () {
             this.store('current');
 
             return this;
@@ -226,7 +254,7 @@ define([
          */
         checkChanges: function () {
             var view = this.activeView(),
-                diff = utils.compare(view.getSaved(), this.current);
+                diff = utils.compare(view.getData(), this.current);
 
             this.hasChanges(!diff.equal);
 
@@ -239,7 +267,7 @@ define([
          * @returns {Object}
          */
         getSaved: function () {
-            return this.activeView().getSaved();
+            return this.activeView().getData();
         },
 
         /**
@@ -248,26 +276,35 @@ define([
          * @returns {Object}
          */
         getDefault: function () {
-            return this.defaultView.getSaved();
+            return this.defaultView.getData();
         },
 
-        defaultPolyfill: function () {
-            var view = this.activeView();
+        /**
+         * Defines default data if it wasn't gathered previously.
+         * Assumes that if theres is no views available,
+         * then current data object is the default configuration.
+         *
+         * @private
+         * @returns {Bookmarks} Chainbale.
+         */
+        _defaultPolyfill: function () {
+            var view = this.defaultView,
+                data;
 
-            if (view && view.index === this.defaultIndex && !view.restored) {
+            if (!view.restored) {
                 view.data.items = utils.copy(this.current);
 
-                view.save();
+                data = view.exportView();
+                data.restored = true;
 
-                this.store('views.' + view.index, {
-                    index: view.index,
-                    label: view.label(),
-                    restored: true,
-                    data: this.current
-                });
+                this.store('views.' + view.index, data);
             }
 
+            this.defaultDefined = true;
+
             this.checkChanges();
+
+            return this;
         },
 
         /**
@@ -275,29 +312,23 @@ define([
          *
          * @param {String} index - Index of the active view.
          */
-        onActiveChange: function (index) {
-            var view = this.elems.findWhere({index: index});
-
+        onActiveIndexChange: function (index) {
             this.store('activeIndex')
-                .activeView(view);
-
-            this.hasChanges(false);
-
-            if (!this.initialSet) {
-                this.set('current', view.getData());
-            }
-
-            this.initialSet = false;
+                .applyView(index);
         },
 
         /**
-         * Listens changes of current data object.
+         * Listens changes of a current data object.
          */
-        onDataChange: function () {
-            this.saveCurrent();
+        onStateChange: function () {
+            this.saveSate();
 
             if (this.activeView()) {
                 this.checkChanges();
+            }
+
+            if (!this.defaultDefined) {
+                this._defaultPolyfill();
             }
         },
 

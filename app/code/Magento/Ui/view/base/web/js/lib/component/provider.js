@@ -19,7 +19,7 @@ define([
     function observe(obj, key, value) {
         var method = Array.isArray(value) ? 'observableArray' : 'observable';
 
-        if(_.isFunction(obj[key]) && !ko.isObservable(obj[key])){
+        if (_.isFunction(obj[key]) && !ko.isObservable(obj[key])) {
             return;
         }
 
@@ -123,6 +123,8 @@ define([
                 stored = this.storage().get(ns);
 
             utils.extend(this, stored);
+
+            return this;
         },
 
         store: function (property, data) {
@@ -141,6 +143,8 @@ define([
                 path = utils.fullPath(ns, property);
 
             this.storage().remove(path);
+
+            return this;
         }
     };
 });

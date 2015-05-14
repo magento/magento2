@@ -11,12 +11,14 @@ define([
     'use strict';
 
     return Component.extend({
-        listens: {
-            'params': 'reload'
+        defaults: {
+            listens: {
+                params: 'reload'
+            }
         },
 
         initialize: function () {
-            utils.limit(this, 'reload', 50);
+            utils.limit(this, 'reload', 200);
             _.bindAll(this, 'onReload');
 
             return this._super();
@@ -34,8 +36,8 @@ define([
         },
 
         onReload: function (data) {
-            this.set('data', data);
-            this.trigger('reloaded');
+            this.set('data', data)
+                .trigger('reloaded');
         }
     });
 });

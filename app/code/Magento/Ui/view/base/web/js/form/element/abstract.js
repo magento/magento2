@@ -159,8 +159,15 @@ define([
             this.value(this.initialValue);
         },
 
+        /**
+         * Clears 'value' property.
+         *
+         * @returns {Abstract} Chainable.
+         */
         clear: function () {
             this.value('');
+
+            return this;
         },
 
         /**
