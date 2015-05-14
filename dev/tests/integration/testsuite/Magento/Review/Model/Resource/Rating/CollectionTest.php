@@ -51,5 +51,4 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->collection->setStoreFilter(1);
     }
-
 }

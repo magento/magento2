@@ -33,8 +33,8 @@ class Preview extends \Magento\Newsletter\Block\Adminhtml\Template\Preview
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
-        \Magento\Newsletter\Model\QueueFactory $queueFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
+        \Magento\Newsletter\Model\QueueFactory $queueFactory,
         array $data = []
     ) {
         $this->_queueFactory = $queueFactory;

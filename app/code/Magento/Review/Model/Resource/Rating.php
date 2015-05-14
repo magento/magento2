@@ -214,7 +214,7 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $insert = [];
         foreach (array_diff_assoc($new, $old) as $storeId => $title) {
-            $insert[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId];
+            $insert[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId, 'value' => $title];
         }
         $this->insertRatingData($table, $insert);
         return $this;

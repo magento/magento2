@@ -11,8 +11,8 @@ namespace Magento\Framework\App\Rss;
 class UrlBuilder implements UrlBuilderInterface
 {
     /**
-     * @param array $queryParams
-     * @return string
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getUrl(array $queryParams = [])
     {
