@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,7 +9,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Search\Model\QueryFactory;
 
-class Save extends \Magento\Search\Controller\Adminhtml\Term
+use Magento\Search\Controller\Adminhtml\Term as TermController;
+use Magento\Framework\Exception\LocalizedException;
+
+class Save extends TermController
 {
     /**
      * @var QueryFactory
@@ -47,7 +49,7 @@ class Save extends \Magento\Search\Controller\Adminhtml\Term
                 $model->setIsProcessed(0);
                 $model->save();
                 $this->messageManager->addSuccess(__('You saved the search term.'));
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 return $this->proceedToEdit($data);
             } catch (\Exception $e) {
@@ -56,8 +58,8 @@ class Save extends \Magento\Search\Controller\Adminhtml\Term
             }
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultRedirectFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $redirectResult->setPath('search/*');
     }
 
