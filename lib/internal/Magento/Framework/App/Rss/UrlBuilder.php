@@ -7,7 +7,6 @@ namespace Magento\Framework\App\Rss;
 
 /**
  * Class UrlBuilder
- * @package Magento\Rss\Model
  */
 class UrlBuilder implements UrlBuilderInterface
 {
