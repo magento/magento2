@@ -31,6 +31,11 @@ class WriterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $dirRead;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $formatter;
 
     /**
@@ -61,10 +66,17 @@ class WriterTest extends \PHPUnit_Framework_TestCase
         );
         $this->reader->expects($this->any())->method('getFile')->willReturn('test.php');
         $this->dirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $this->dirRead = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->dirRead->expects($this->any())
+            ->method('getAbsolutePath');
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::CONFIG)
             ->willReturn($this->dirWrite);
+        $filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::CONFIG)
+            ->willReturn($this->dirRead);
     }
 
     public function testSaveConfig()
