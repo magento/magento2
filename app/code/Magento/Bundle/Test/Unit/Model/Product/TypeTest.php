@@ -2456,16 +2456,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(
                 [
-//                    'getOptions',
-//                    'prepareCustomOptions',
-//                    'addCustomOption',
-//                    'setCartQty',
-//                    'setQty',
-//                    'getSkipCheckRequiredOption',
-//                    'getTypeInstance',
                     'getStoreId',
                     'getOrigData',
-//                    'hasData',
                     'getData',
                     'getBundleOptionsData',
                     'getBundleSelectionsData'
