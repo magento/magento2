@@ -41,6 +41,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const INPUT_KEY_DB_PREFIX = 'db_prefix';
     const INPUT_KEY_DB_MODEL = 'db_model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db_init_statements';
+    const INPUT_KEY_DB_ENGINE = 'db_engine';
     const INPUT_KEY_RESOURCE = 'resource';
     /**#@-*/
 
@@ -62,7 +63,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     const KEY_HOST = 'host';
     const KEY_NAME = 'dbname';
     const KEY_USER = 'username';
-    const KEY_PASSWORD = 'password';
+    const KEY_PASS = 'password';
+    const KEY_ENGINE = 'engine';
     const KEY_PREFIX = 'table_prefix';
     const KEY_MODEL = 'model';
     const KEY_INIT_STATEMENTS = 'initStatements';
@@ -155,9 +157,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'root'
             ),
             new TextConfigOption(
+                self::INPUT_KEY_DB_ENGINE,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_ENGINE,
+                'Database server engine',
+                'innodb'
+            ),
+            new TextConfigOption(
                 self::INPUT_KEY_DB_PASSWORD,
                 TextConfigOption::FRONTEND_WIZARD_PASSWORD,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_PASSWORD,
+                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_PASS,
                 'Database server password',
                 ''
             ),
