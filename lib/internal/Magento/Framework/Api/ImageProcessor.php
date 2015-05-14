@@ -43,18 +43,26 @@ class ImageProcessor implements ImageProcessorInterface
     private $dataObjectHelper;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param Filesystem $fileSystem
      * @param ImageContentValidatorInterface $contentValidator
      * @param DataObjectHelper $dataObjectHelper
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         Filesystem $fileSystem,
         ImageContentValidatorInterface $contentValidator,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->filesystem = $fileSystem;
         $this->contentValidator = $contentValidator;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -108,7 +116,7 @@ class ImageProcessor implements ImageProcessorInterface
                     $uploader->getUploadedFileName()
                 );
             } catch (\Exception $e) {
-                $this->_logger->critical($e);
+                $this->logger->critical($e);
             }
         }
 

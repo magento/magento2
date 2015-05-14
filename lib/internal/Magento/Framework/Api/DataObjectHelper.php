@@ -191,10 +191,10 @@ class DataObjectHelper
     }
 
     /**
-     * Get attribute value object array for a provided type from the array of custom attribute value objects
+     * Filter attribute value objects for a provided data interface type from an array of custom attribute value objects
      *
-     * @param AttributeValue[] $attributeValues Array of custom att
-     * @param $type
+     * @param AttributeValue[] $attributeValues Array of custom attribute
+     * @param string $type Data interface type
      * @return AttributeValue[]
      */
     public function getCustomAttributeValueByType(array $attributeValues, $type)
