@@ -46,21 +46,21 @@ class Load extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         if (!$this->getRequest()->isAjax()) {
-            // TODO: MAGETWO-34824 redirect correct url
             return $this->resultRedirectFactory->create()->setPath('*/*/index');
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         try {
-            // TODO: MAGETWO-34824 temporary solution for load layout dependent data (Price render)
-            $this->_view->loadLayout();
             $sectionNames = $this->getRequest()->getParam('sections');
             $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
 
             $response = $this->sectionPool->getSectionsData($sectionNames);
-        } catch (LocalizedException $e) {
-            // TODO: MAGETWO-34824 replace on const
-            $resultJson->setStatusHeader(400, \Zend\Http\AbstractMessage::VERSION_11, 'Bad request');
+        } catch (\Exception $e) {
+            $resultJson->setStatusHeader(
+                \Zend\Http\Response::STATUS_CODE_400,
+                \Zend\Http\AbstractMessage::VERSION_11,
+                'Bad Request'
+            );
             $response = ['message' => $e->getMessage()];
         }
 

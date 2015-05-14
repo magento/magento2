@@ -26,17 +26,22 @@ class Wishlist implements SectionSourceInterface
     /** @var \Magento\Catalog\Model\Product\Image\View */
     protected $productImageView;
 
+    /** @var \Magento\Framework\App\ViewInterface */
+    protected $view;
+
     /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
-        \Magento\Catalog\Model\Product\Image\View $productImageView
+        \Magento\Catalog\Model\Product\Image\View $productImageView,
+        \Magento\Framework\App\ViewInterface $view
     ) {
         $this->wishlistHelper = $wishlistHelper;
         $this->productImageView = $productImageView;
         $this->block = $block;
+        $this->view = $view;
     }
 
     /**
@@ -82,6 +87,7 @@ class Wishlist implements SectionSourceInterface
      */
     protected function getItems()
     {
+        $this->view->loadLayout();
         $collection = $this->wishlistHelper->getWishlistItemCollection();
         $collection->clear()->setPageSize(self::SIDEBAR_ITEMS_NUMBER)
             ->setInStockFilter(true)->setOrder('added_at');
