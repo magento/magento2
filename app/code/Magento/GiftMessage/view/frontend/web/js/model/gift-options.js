@@ -37,23 +37,14 @@ define(['underscore'],
                 return this.getGiftOptions(this.itemLevelGiftOptions);
             },
             getGiftOptions: function(options) {
-                return _.filter(
-                    _.map(
-                        _.sortBy(options, function(giftOption){
-                            return giftOption.sortOrder
-                        }),
-                        function(giftOption) {
-                            return giftOption.option
-                        }
-                    ), function(option) {
-                        var result = true;
-                        if (option.isDirectRendering !== 'undefined') {
-                            result = !option.isDirectRendering;
-                        }
-
-                        return result;
+                return _.map(
+                    _.sortBy(options, function(giftOption){
+                        return giftOption.sortOrder
+                    }),
+                    function(giftOption) {
+                        return giftOption.option
                     }
-                );
+                )
             },
             setExtraGiftOptions: function (giftOption, sortOrder) {
                 this.extraGiftOptions.push({'option': giftOption, 'sortOrder': sortOrder});
