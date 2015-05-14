@@ -39,19 +39,21 @@
 //  _____________________________________________
 
 .admin__fieldset-wrapper-title {
-    .extend__clearfix();
+    &:extend(.abs-clearfix all);
     border-bottom: 1px solid @color-gray80;
+    font-size: 1.7rem;
     margin-bottom: 30px;
     padding: 14px 0 16px;
-    strong,
     .title {
-        &:extend(h2);
-    }
-    .title {
-        float: left;
-        margin: .7rem 0 0;
+        font-weight: 600;
+        &.active {
+            ~ .actions {
+                display: none;
+            }
+        }
     }
     .actions {
+        display: block;
         float: right;
     }
 }
@@ -229,6 +231,7 @@ label.mage-error {
 //
 //  Login page captcha field @todo ui - Create new captcha markup - Change reload button
 //  _____________________________________________
+
 .page-layout-admin-login {
     .field-captcha {
         padding-left: 30px;
@@ -245,3 +248,15 @@ label.mage-error {
 //  _____________________________________________
 
 .ui-datepicker .ui-datepicker-title select:extend(.admin__control-select all) {};
+
+//
+//  Popups
+//  _____________________________________________
+
+.attribute-popup {
+    background-color: @color-white;
+    #edit_form {
+        padding-left: 1.8rem;
+        padding-right: 1.8rem;
+    }
+}

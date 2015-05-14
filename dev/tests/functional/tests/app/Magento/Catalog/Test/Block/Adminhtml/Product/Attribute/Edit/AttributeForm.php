@@ -24,7 +24,7 @@ class AttributeForm extends FormTabs
      *
      * @var string
      */
-    protected $closedToggle = '//*[contains(@class,"collapsable-wrapper") and not(contains(@class,"opened"))]//strong';
+    protected $closedToggle = '.admin__collapsible-block-wrapper:not(.opened) [data-toggle="collapse"]';
 
     /**
      * Properties tab selector.
@@ -87,7 +87,7 @@ class AttributeForm extends FormTabs
      */
     protected function expandAllToggles()
     {
-        $closedToggles = $this->_rootElement->getElements($this->closedToggle, Locator::SELECTOR_XPATH);
+        $closedToggles = $this->_rootElement->getElements($this->closedToggle);
         foreach ($closedToggles as $toggle) {
             $toggle->click();
         }
