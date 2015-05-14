@@ -33,12 +33,23 @@ class ConfigOptionsListCollectorTest extends \PHPUnit_Framework_TestCase
             [
                 'objectManagerProvider' => $this->objectManagerProvider,
                 'fullModuleList' => $fullModuleListMock,
+                'serviceLocator' => $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface')
             ]
         );
         $result = $object->collectOptionsLists();
 
+        $dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
+        $configGenerator = $this->getMock('Magento\Setup\Model\ConfigGenerator', [], [], '', false);
+
         $setupOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Setup\Model\ConfigOptionsList');
+            ->create(
+                'Magento\Setup\Model\ConfigOptionsList',
+                [
+                    'configGenerator' => $configGenerator,
+                    'dbValidator' => $dbValidator
+                ]
+            );
+
         $backendOptions = new \Magento\Backend\Setup\ConfigOptionsList();
         $expected = [
             'setup' => $setupOptions,
