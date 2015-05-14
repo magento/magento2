@@ -12,15 +12,25 @@ define(
     ],
     function (Component, quote, priceUtils) {
         "use strict";
-        var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal || false;
+        var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal;
+        var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed;
         return Component.extend({
             defaults: {
                 isTaxDisplayedInGrandTotal: isTaxDisplayedInGrandTotal,
                 template: 'Magento_Tax/checkout/review/tax_total'
             },
-            getColspan: 3,
+            colspan: 3,
             totals: quote.getTotals(),
-            style: "",
+            style: "123",
+            isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
+            lastTaxGroupId: null,
+            isFirst: function(taxGroupId) {
+                if (this.lastTaxGroupId != taxGroupId) {
+                    this.lastTaxGroupId = taxGroupId;
+                    return true;
+                }
+                return false;
+            },
             getTitle: function() {
                 return "Tax";
             },
@@ -30,6 +40,16 @@ define(
                     amount = this.totals().tax_amount;
                 }
                 return priceUtils.formatPrice(amount, quote.getPriceFormat());
+            },
+            formatPrice: function(amount) {
+                return priceUtils.formatPrice(amount, quote.getPriceFormat());
+            },
+            getDetails: function() {
+                var totals = quote.getTotals()();
+                if (totals.extension_attributes) {
+                    return totals.extension_attributes.tax_grandtotal_details;
+                }
+                return [];
             }
         });
     }
