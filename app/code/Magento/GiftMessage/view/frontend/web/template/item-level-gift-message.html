@@ -18,12 +18,7 @@
             <div class="img photo container">
                 <span class="product-image-container" style="width:100px;">
                     <span class="product-image-wrapper" style="padding-bottom: 100%;">
-                        <!-- ko ifnot: product.thumbnail == null -->
-                        <img class="product-image-photo" data-bind="attr: {src: '/pub/media/catalog/product' + product.thumbnail, alt: name}">
-                        <!-- /ko -->
-                        <!-- ko if: product.thumbnail == null -->
-                        <img class="product-image-photo" data-bind="attr: {src: '/pub/static/frontend/Magento/blank/en_US/Magento_Catalog/images/product/placeholder/thumbnail.jpg', alt: name}">
-                        <!-- /ko -->
+                        <img class="product-image-photo" data-bind="attr: {src: thumbnail || $parent.imagePlaceholder, alt: name}">
                     </span>
                 </span>
             </div>

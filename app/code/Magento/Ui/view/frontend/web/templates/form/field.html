@@ -6,11 +6,11 @@
 -->
 <div class="field" data-bind="visible: visible, attr: {'name': element.dataScope}, css: getStyles()">
 
-    <!-- ko if: element.label -->
     <label class="label" data-bind="attr: { for: element.uid }">
+        <!-- ko if: element.label -->
         <span data-bind="text: element.label"></span>
+        <!-- /ko -->
     </label>
-    <!-- /ko -->
 
     <div class="control">
         <!-- ko ifnot: element.hasAddons() -->
