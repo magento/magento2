@@ -5,6 +5,8 @@
  */
 namespace Magento\GroupedProduct\Test\Unit\Controller\Adminhtml\Edit;
 
+use Magento\Framework\Controller\ResultFactory;
+
 class PopupTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -16,6 +18,11 @@ class PopupTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\GroupedProduct\Controller\Adminhtml\Edit\Popup
      */
     protected $action;
+
+    /**
+     * @var \Magento\Backend\App\Action\Context
+     */
+    protected $context;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -33,25 +40,46 @@ class PopupTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $view;
+    protected $resultFactoryMock;
+
+    /**
+     * @var \Magento\Framework\View\Result\Layout|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultLayoutMock;
 
     protected function setUp()
     {
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
         $this->factory = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
         $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->view = $this->getMock('Magento\Framework\App\ViewInterface', [], [], '', false);
+        $this->resultFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultLayoutMock = $this->getMockBuilder('Magento\Framework\View\Result\Layout')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(ResultFactory::TYPE_LAYOUT, [])
+            ->willReturn($this->resultLayoutMock);
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->context = $this->objectManager->getObject(
+            'Magento\Backend\App\Action\Context',
+            [
+                'request' => $this->request,
+                'resultFactory' => $this->resultFactoryMock
+            ]
+        );
         $this->action = $this->objectManager->getObject(
             'Magento\GroupedProduct\Controller\Adminhtml\Edit\Popup',
             [
-                'request' => $this->request,
+                'context' => $this->context,
                 'factory' => $this->factory,
-                'registry' => $this->registry,
-                'view' => $this->view
+                'registry' => $this->registry
             ]
         );
     }
@@ -90,10 +118,7 @@ class PopupTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(3))->method('getParam')->with('set')->will($this->returnValue($setId));
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
-        $this->view->expects($this->once())->method('loadLayout')->with(false);
-        $this->view->expects($this->once())->method('renderLayout');
-
-        $this->action->execute();
+        $this->assertSame($this->resultLayoutMock, $this->action->execute());
     }
 
     public function testPopupActionWithProductIdNoSetId()
@@ -130,9 +155,6 @@ class PopupTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->at(3))->method('getParam')->with('set')->will($this->returnValue($setId));
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
-        $this->view->expects($this->once())->method('loadLayout')->with(false);
-        $this->view->expects($this->once())->method('renderLayout');
-
-        $this->action->execute();
+        $this->assertSame($this->resultLayoutMock, $this->action->execute());
     }
 }
