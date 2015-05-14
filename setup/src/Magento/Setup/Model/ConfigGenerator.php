@@ -66,7 +66,7 @@ class ConfigGenerator
      */
     public function createInstallConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE) === null) {
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE, date('r'));
@@ -83,7 +83,7 @@ class ConfigGenerator
     {
         $currentKey = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
 
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])) {
             if ($currentKey !== null) {
                 $key = $currentKey . "\n" . $data[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY];
@@ -112,7 +112,7 @@ class ConfigGenerator
      */
     public function createSessionConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         if (isset($data[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])) {
             $configData->set(
@@ -132,7 +132,7 @@ class ConfigGenerator
      */
     public function createDefinitionsConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         if (!empty($data[ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT])) {
             $configData->set(
@@ -152,7 +152,7 @@ class ConfigGenerator
      */
     public function createDbConfig(array $data)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         $optional = [
             ConfigOptionsListConstants::INPUT_KEY_DB_HOST,
@@ -174,19 +174,20 @@ class ConfigGenerator
         foreach ($optional as $key) {
             if (isset($data[$key])) {
                 $configData->set(
-                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::$paramMap[$key],
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . self::$paramMap[$key],
                     $data[$key]
                 );
             }
         }
 
         $currentStatus = $this->deploymentConfig->get(
-            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_ACTIVE
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_ACTIVE
         );
 
         if ($currentStatus === null) {
             $configData->set(
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_ACTIVE,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
+                . '/' . ConfigOptionsListConstants::KEY_ACTIVE,
                 '1'
             );
         }
@@ -201,7 +202,7 @@ class ConfigGenerator
      */
     public function createResourceConfig()
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP) === null) {
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');

@@ -74,36 +74,40 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_HOST,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_HOST,
                 'Database server host',
                 'localhost'
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_NAME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_NAME,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_NAME,
                 'Database name',
                 'magento2'
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_USER,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_USER,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_USER,
                 'Database server username',
                 'root'
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_ENGINE,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_ENGINE,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_ENGINE,
                 'Database server engine',
                 'innodb'
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD,
                 TextConfigOption::FRONTEND_WIZARD_PASSWORD,
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
-                . ConfigOptionsListConstants::KEY_PASSWORD,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_PASSWORD,
                 'Database server password',
                 ''
             ),
@@ -117,15 +121,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_MODEL,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_MODEL,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_MODEL,
                 'Database type',
                 'mysql4'
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_INIT_STATEMENTS,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
-                . ConfigOptionsListConstants::KEY_INIT_STATEMENTS,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_INIT_STATEMENTS,
                 'Database  initial set of commands',
                 'SET NAMES utf8;'
             ),
@@ -216,29 +221,32 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] === null) {
             $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] =
                 $deploymentConfig->get(
-                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_NAME
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_NAME
                 );
         }
 
         if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST] === null) {
             $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST] =
                 $deploymentConfig->get(
-                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_HOST
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_HOST
                 );
         }
 
         if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_USER] === null) {
             $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER] =
                 $deploymentConfig->get(
-                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_USER
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_USER
                 );
         }
 
         if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] === null) {
             $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] =
                 $deploymentConfig->get(
-                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
-                    . ConfigOptionsListConstants::KEY_PASSWORD
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_PASSWORD
                 );
         }
 
