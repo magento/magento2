@@ -46,7 +46,12 @@ define(['underscore'],
                             return giftOption.option
                         }
                     ), function(option) {
-                        return !(option.hasOwnProperty('isDirectRendering') && option.isDirectRendering);
+                        var result = true;
+                        if (option.isDirectRendering !== 'undefined') {
+                            result = !option.isDirectRendering;
+                        }
+
+                        return result;
                     }
                 );
             },

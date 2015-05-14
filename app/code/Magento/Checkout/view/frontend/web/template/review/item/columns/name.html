@@ -5,7 +5,10 @@
  */
 -->
 <td class="col item" data-th="Product Name"><strong class="product name product-item-name" data-bind="text: $t(item.name)"></strong>
-    <!-- additional info block skipped -->
+    <!-- ko foreach: elems() -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+
     <!-- ko if: (JSON.parse(item.options).length > 0)-->
     <dl class="item-options">
         <!--ko foreach: JSON.parse(item.options)-->
