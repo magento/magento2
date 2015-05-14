@@ -147,32 +147,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     }
 
     /**
-     * Add customer data
-     *
-     * @param array|null $filter
-     * @return $this
-     */
-    public function addCustomerData($filter = null)
-    {
-        $customersSelect = $this->customerResource->getReadConnection()->select();
-        $customersSelect->from(['customer' => $this->customerResource->getTable('customer_entity')], 'entity_id');
-        if (isset($filter['customer_name'])) {
-            $customersSelect = $this->getCustomerNames($customersSelect);
-            $customerName = $customersSelect->getAdapter()->getConcatSql(['cust_fname.value', 'cust_lname.value'], ' ');
-            $customersSelect->where(
-                $customerName . ' LIKE ?',
-                '%' . $filter['customer_name'] . '%'
-            );
-        }
-        if (isset($filter['email'])) {
-            $customersSelect->where('customer.email LIKE ?', '%' . $filter['email'] . '%');
-        }
-        $filteredCustomers = $this->customerResource->getReadConnection()->fetchCol($customersSelect);
-        $this->getSelect()->where('main_table.customer_id IN (?)', $filteredCustomers);
-        return $this;
-    }
-
-    /**
      * Get select count sql
      *
      * @return \Magento\Framework\DB\Select
@@ -184,36 +158,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             ->reset(\Zend_Db_Select::GROUP)
             ->columns('COUNT(DISTINCT main_table.product_id)');
         return $countSelect;
-    }
-
-    /**
-     * @param \Magento\Framework\DB\Select $select
-     * @return \Magento\Framework\DB\Select
-     */
-    protected function getCustomerNames($select)
-    {
-        $attrFirstName = $this->customerResource->getAttribute('firstname');
-        $attrFirstNameId = (int)$attrFirstName->getAttributeId();
-        $attrFirstNameTableName = $attrFirstName->getBackend()->getTable();
-        $attrLastName = $this->customerResource->getAttribute('lastname');
-        $attrLastNameId = (int)$attrLastName->getAttributeId();
-        $attrLastNameTableName = $attrLastName->getBackend()->getTable();
-        $select->joinInner(
-            ['cust_fname' => $attrFirstNameTableName],
-            'customer.entity_id = cust_fname.entity_id',
-            ['firstname' => 'cust_fname.value']
-        )->joinInner(
-            ['cust_lname' => $attrLastNameTableName],
-            'customer.entity_id = cust_lname.entity_id',
-            ['lastname' => 'cust_lname.value']
-        )->where(
-            'cust_fname.attribute_id = ?',
-            (int)$attrFirstNameId
-        )->where(
-            'cust_lname.attribute_id = ?',
-            (int)$attrLastNameId
-        );
-        return $select;
     }
 
     /**
