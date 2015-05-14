@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Model;
+namespace Magento\Setup\Test\Unit;
 
 use Magento\Framework\Setup\Lists;
 
