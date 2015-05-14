@@ -46,7 +46,7 @@ define(
             selectShippingAddress: function() {
                 var additionalData = {};
                 var billingAddress = quote.getBillingAddress()();
-                if (!billingAddress.customerAddressId) {
+                if (!billingAddress.customerAddressId || !this.visible()) {
                     /**
                      * All the the input fields that are not a part of the address but need to be submitted
                      * in the same request must have data-scope attribute set
