@@ -265,8 +265,11 @@
         }
 
         .breadcrumbs {
+            list-style: none;
             padding-left: 0;
             li {
+                display: inline-block;
+                margin: 0 @indent__xs @indent__xs 0;
                 &:after {
                     content: '';
                     margin: 0 @indent__xs 0 0;

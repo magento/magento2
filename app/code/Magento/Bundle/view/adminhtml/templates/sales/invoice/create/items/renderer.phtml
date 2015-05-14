@@ -71,7 +71,7 @@
                 <table class="qty-table">
                     <tr>
                         <th><?php echo __('Ordered') ?></th>
-                        <td><strong><?php echo $_item->getOrderItem()->getQtyOrdered()*1 ?></strong></td>
+                        <td><span><?php echo $_item->getOrderItem()->getQtyOrdered()*1 ?></span></td>
                     </tr>
                     <?php if ((float) $_item->getOrderItem()->getQtyInvoiced()): ?>
                     <tr>
