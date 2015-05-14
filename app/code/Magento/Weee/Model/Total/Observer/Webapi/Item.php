@@ -43,14 +43,15 @@ class Item
         /** @var  \Magento\Quote\Model\Quote\Item $item */
         $item = $observer->getEvent()->getItem();
 
-        if ($item->getWeeeTaxApplied()) {
-            $weeeTaxApplied = unserialize($item->getWeeeTaxApplied());
-            $item->setWeeeTaxApplied(\Zend_Json::encode($weeeTaxApplied));
-        }
         $item->setRowTotal($this->getRowTotal($item))
             ->setRowTotalInclTax($this->getRowTotalInclTax($item))
             ->setPrice($this->getUnitDisplayPriceExclTax($item))
             ->setPriceInclTax($this->getUnitDisplayPriceInclTax($item));
+
+        if ($item->getWeeeTaxApplied()) {
+            $weeeTaxApplied = unserialize($item->getWeeeTaxApplied());
+            $item->setWeeeTaxApplied(\Zend_Json::encode($weeeTaxApplied));
+        }
         return $item;
     }
 
