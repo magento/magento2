@@ -21,7 +21,6 @@ define(
         var shippingCustomOptions = ko.observable(null);
         var formattedShippingAddress = ko.observable(null);
         var formattedBillingAddress = ko.observable(null);
-        var subtotal = ko.observable(null);
         var collectedTotals = ko.observable({});
         return {
             getQuoteId: function() {
@@ -50,6 +49,7 @@ define(
                     delete totalsData.extension_attributes;
                 }
                 totals(totalsData);
+                this.setCollectedTotals('subtotal_with_discount', parseFloat(totalsData.subtotal_with_discount));
             },
             setBillingAddress: function (address) {
                 billingAddress(address);
@@ -107,13 +107,6 @@ define(
             },
             getShippingCustomOptions: function() {
                 return shippingCustomOptions;
-            },
-            getSubtotal: function() {
-                return subtotal;
-            },
-            setSubtotal: function(value) {
-                subtotal(parseFloat(value));
-                this.setCollectedTotals('subtotal', value);
             },
             setCollectedTotals: function(code, value) {
                 var totals = collectedTotals();
