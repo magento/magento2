@@ -1,14 +1,21 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Customer;
 
-class View extends \Magento\Review\Controller\Customer
+use Magento\Review\Controller\Customer as CustomerController;
+use Magento\Framework\App\Action\Context;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Review\Model\ReviewFactory;
+use Magento\Framework\Controller\ResultFactory;
+
+class View extends CustomerController
 {
-    /** @var \Magento\Review\Model\ReviewFactory */
+    /**
+     * @var \Magento\Review\Model\ReviewFactory
+     */
     protected $reviewFactory;
 
     /**
@@ -17,29 +24,33 @@ class View extends \Magento\Review\Controller\Customer
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Review\Model\ReviewFactory $reviewFactory
+        Context $context,
+        CustomerSession $customerSession,
+        ReviewFactory $reviewFactory
     ) {
-        parent::__construct($context, $customerSession);
         $this->reviewFactory = $reviewFactory;
+        parent::__construct($context, $customerSession);
     }
     /**
      * Render review details
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         $review = $this->reviewFactory->create()->load($this->getRequest()->getParam('id'));
-        if ($review->getCustomerId() != $this->_customerSession->getCustomerId()) {
-            return $this->_forward('noroute');
+        if ($review->getCustomerId() != $this->customerSession->getCustomerId()) {
+            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+            $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
-        $this->_view->loadLayout();
-        if ($navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation')) {
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        if ($navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation')) {
             $navigationBlock->setActive('review/customer');
         }
-        $this->_view->getPage()->getConfig()->getTitle()->set(__('Review Details'));
-        $this->_view->renderLayout();
+        $resultPage->getConfig()->getTitle()->set(__('Review Details'));
+        return $resultPage;
     }
 }
