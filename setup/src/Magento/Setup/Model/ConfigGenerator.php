@@ -30,6 +30,7 @@ class ConfigGenerator
         ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD => ConfigOptionsListConstants::KEY_PASSWORD,
         ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX => ConfigOptionsListConstants::KEY_PREFIX,
         ConfigOptionsListConstants::INPUT_KEY_DB_MODEL => ConfigOptionsListConstants::KEY_MODEL,
+        ConfigOptionsListConstants::INPUT_KEY_DB_ENGINE => ConfigOptionsListConstants::KEY_ENGINE,
         ConfigOptionsListConstants::INPUT_KEY_DB_INIT_STATEMENTS => ConfigOptionsListConstants::KEY_INIT_STATEMENTS,
         ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => ConfigOptionsListConstants::KEY_ENCRYPTION_KEY,
         ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE => ConfigOptionsListConstants::KEY_SAVE,
@@ -159,6 +160,7 @@ class ConfigGenerator
             ConfigOptionsListConstants::INPUT_KEY_DB_USER,
             ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD,
             ConfigOptionsListConstants::INPUT_KEY_DB_MODEL,
+            ConfigOptionsListConstants::INPUT_KEY_DB_ENGINE,
             ConfigOptionsListConstants::INPUT_KEY_DB_INIT_STATEMENTS,
         ];
 

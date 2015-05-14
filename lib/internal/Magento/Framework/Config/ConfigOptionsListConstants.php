@@ -36,6 +36,7 @@ class ConfigOptionsListConstants
     const INPUT_KEY_DB_PREFIX = 'db-prefix';
     const INPUT_KEY_DB_MODEL = 'db-model';
     const INPUT_KEY_DB_INIT_STATEMENTS = 'db-init-statements';
+    const INPUT_KEY_DB_ENGINE = 'db-engine';
     const INPUT_KEY_RESOURCE = 'resource';
     const INPUT_KEY_SKIP_DB_VALIDATION = 'skip-db-validation';
     /**#@-*/
@@ -59,6 +60,7 @@ class ConfigOptionsListConstants
     const KEY_NAME = 'dbname';
     const KEY_USER = 'username';
     const KEY_PASSWORD = 'password';
+    const KEY_ENGINE = 'engine';
     const KEY_PREFIX = 'table_prefix';
     const KEY_MODEL = 'model';
     const KEY_INIT_STATEMENTS = 'initStatements';

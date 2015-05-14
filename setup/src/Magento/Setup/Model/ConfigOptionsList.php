@@ -93,6 +93,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'root'
             ),
             new TextConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_DB_ENGINE,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_ENGINE,
+                'Database server engine',
+                'innodb'
+            ),
+            new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD,
                 TextConfigOption::FRONTEND_WIZARD_PASSWORD,
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
