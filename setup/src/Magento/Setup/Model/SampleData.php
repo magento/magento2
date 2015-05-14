@@ -53,11 +53,16 @@ class SampleData
      * @param ObjectManagerInterface $objectManager
      * @param LoggerInterface $logger
      * @param string $userName
+     * @param array $modules
      * @throws \Exception
      * @return void
      */
-    public function install(ObjectManagerInterface $objectManager, LoggerInterface $logger, $userName)
-    {
+    public function install(
+        ObjectManagerInterface $objectManager,
+        LoggerInterface $logger,
+        $userName,
+        array $modules = []
+    ) {
         /** @var \Magento\SampleData\Model\Logger $sampleDataLogger */
         $sampleDataLogger = $objectManager->get('Magento\SampleData\Model\Logger');
         $sampleDataLogger->setSubject($logger);
@@ -70,8 +75,8 @@ class SampleData
         $configLoader = $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
         $objectManager->configure($configLoader->load($areaCode));
 
-        /** @var \Magento\Tools\SampleData\Installer $installer */
-        $installer = $objectManager->get('Magento\Tools\SampleData\Installer');
-        $installer->run($userName);
+        /** @var \Magento\SampleData\Model\Installer $installer */
+        $installer = $objectManager->get('Magento\SampleData\Model\Installer');
+        $installer->run($userName, $modules);
     }
 }
