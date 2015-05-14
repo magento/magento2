@@ -21,9 +21,11 @@ class Observer
     {
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $observer->getEvent()->getPayment();
-        if ($payment->getMethod() === Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE
-            || $payment->getMethod() === Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE
-        ) {
+        $instructionMethods = [
+            Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE,
+            Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE
+        ];
+        if (in_array($payment->getMethod(), $instructionMethods)) {
             $payment->setAdditionalInformation(
                 'instructions',
                 $payment->getMethodInstance()->getInstructions()
