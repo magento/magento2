@@ -6,10 +6,10 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
-class ListsTest extends \PHPUnit_Framework_TestCase
+class TranslatedListsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Locale\Lists
+     * @var \Magento\Framework\Locale\TranslatedLists
      */
     protected $listsModel;
 
@@ -35,7 +35,7 @@ class ListsTest extends \PHPUnit_Framework_TestCase
             ->method('getLocale')
             ->will($this->returnValue('en_US'));
 
-        $this->listsModel = new \Magento\Framework\Locale\Lists(
+        $this->listsModel = new \Magento\Framework\Locale\TranslatedLists(
             $this->mockConfig,
             $this->mockLocaleResolver
         );

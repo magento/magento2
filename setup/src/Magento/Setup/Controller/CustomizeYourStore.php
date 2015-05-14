@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Controller;
 
-use Magento\Setup\Model\Lists;
+use Magento\Framework\Setup\Lists;
 use Magento\Setup\Model\SampleData;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;

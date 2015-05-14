@@ -4,28 +4,28 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\Validator;
+
+use Magento\Framework\Setup\Lists;
+
 /**
  * Locale validator model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\Locale;
-
-class Validator
+class Locale
 {
     /**
-     * @var \Magento\Framework\Locale\ConfigInterface
+     * @var Lists
      */
-    protected $_localeConfig;
+    protected $lists;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Locale\ConfigInterface $localeConfig
+     * @param Lists $lists
      */
-    public function __construct(\Magento\Framework\Locale\ConfigInterface $localeConfig)
+    public function __construct(Lists $lists)
     {
-        $this->_localeConfig = $localeConfig;
+        $this->lists = $lists;
     }
 
     /**
@@ -39,7 +39,7 @@ class Validator
     public function isValid($localeCode)
     {
         $isValid = true;
-        $allowedLocaleCodes = $this->_localeConfig->getAllowedLocales();
+        $allowedLocaleCodes = array_keys($this->lists->getLocaleList());
 
         if (!$localeCode || !in_array($localeCode, $allowedLocaleCodes)) {
             $isValid = false;

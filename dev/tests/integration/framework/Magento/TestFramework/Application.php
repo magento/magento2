@@ -10,7 +10,7 @@ use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\DeploymentConfig\Reader;
 
 /**
@@ -174,7 +174,7 @@ class Application
             if ($this->isInstalled()) {
                 $reader = new Reader($this->dirList);
                 $deploymentConfig = new DeploymentConfig($reader, []);
-                $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
+                $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_DB);
                 $dbInfo = $dbConfig['connection']['default'];
                 $host = $dbInfo['host'];
                 $user = $dbInfo['username'];

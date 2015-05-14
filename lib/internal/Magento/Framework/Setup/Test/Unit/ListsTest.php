@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Model;
+namespace Magento\Framework\Setup\Test\Unit;
 
-use \Magento\Setup\Model\Lists;
-
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Setup\Lists;
 
 class ListsTest extends \PHPUnit_Framework_TestCase
 {

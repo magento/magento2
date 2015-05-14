@@ -18,7 +18,7 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction($expected)
     {
         $sampleData = $this->getMock('\Magento\Setup\Model\SampleData', [], [], '', false);
-        $lists = $this->getMock('\Magento\Setup\Model\Lists', [], [], '', false);
+        $lists = $this->getMock('\Magento\Framework\Setup\Lists', [], [], '', false);
         $controller = new CustomizeYourStore($lists, $sampleData);
 
         $sampleData->expects($this->once())->method('isDeployed')->willReturn($expected['isSampledataEnabled']);

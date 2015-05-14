@@ -60,7 +60,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * {@inheritdoc}
      */
-    public function validate(array $options)
+    public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
         $errors = [];
         if (isset($options[self::INPUT_KEY_BACKEND_FRONTNAME])

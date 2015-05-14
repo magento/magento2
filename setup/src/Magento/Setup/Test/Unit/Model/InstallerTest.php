@@ -7,12 +7,13 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
 use \Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
+use Magento\Setup\Validator\DbValidator;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -111,6 +112,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $cleanupFiles;
 
     /**
+     * @var DbValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dbValidator;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
@@ -159,6 +165,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
+        $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -196,7 +203,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $objectManagerProvider,
             $this->contextMock,
             $this->configModel,
-            $this->cleanupFiles
+            $this->cleanupFiles,
+            $this->dbValidator
         );
     }
 
@@ -425,41 +433,5 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->at(2))->method('query')->with('CREATE DATABASE IF NOT EXISTS `magento`');
         $this->logger->expects($this->once())->method('log')->with('Recreating database `magento`');
         $this->object->cleanupDb();
-    }
-
-    public function testCheckDatabaseConnection()
-    {
-        $this->connection
-            ->expects($this->once())
-            ->method('fetchOne')
-            ->with('SELECT version()')
-            ->willReturn('5.6.0-0ubuntu0.12.04.1');
-        $this->assertEquals(true, $this->object->checkDatabaseConnection('name', 'host', 'user', 'password'));
-    }
-
-    /**
-     * @expectedException \Magento\Setup\Exception
-     * @expectedExceptionMessage Database connection failure.
-     */
-    public function testCheckDatabaseConnectionFailed()
-    {
-        $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
-        $connectionFactory->expects($this->once())->method('create')->willReturn(false);
-        $object = $this->createObject($connectionFactory);
-        $object->checkDatabaseConnection('name', 'host', 'user', 'password');
-    }
-
-    /**
-     * @expectedException \Magento\Setup\Exception
-     * @expectedExceptionMessage Sorry, but we support MySQL version
-     */
-    public function testCheckDatabaseConnectionIncompatible()
-    {
-        $this->connection
-            ->expects($this->once())
-            ->method('fetchOne')
-            ->with('SELECT version()')
-            ->willReturn('5.5.40-0ubuntu0.12.04.1');
-        $this->object->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 }

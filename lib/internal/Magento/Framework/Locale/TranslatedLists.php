@@ -13,7 +13,7 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
 
-class Lists implements ListsInterface
+class TranslatedLists implements ListsInterface
 {
     /**
      * @var \Magento\Framework\Locale\ConfigInterface
