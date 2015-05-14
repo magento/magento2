@@ -119,7 +119,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         $customerName = $select->getAdapter()->getConcatSql(['cust_fname.value', 'cust_lname.value'], ' ');
 
         $select->from(
-            ['customer' => 'customer_entity']
+            ['customer' => $this->customerResource->getTable('customer_entity')]
         )->columns(
             ['customer_name' => $customerName]
         )->where(
