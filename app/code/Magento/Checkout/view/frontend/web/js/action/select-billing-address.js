@@ -41,7 +41,7 @@ define(
                 if (quote.getCheckoutMethod()() === 'guest') {
                     serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
                 } else {
-                    serviceUrl =  urlBuilder.createUrl('/carts/mine/addresses', {});
+                    serviceUrl = urlBuilder.createUrl('/carts/mine/addresses', {});
                 }
                 storage.post(
                     serviceUrl,
