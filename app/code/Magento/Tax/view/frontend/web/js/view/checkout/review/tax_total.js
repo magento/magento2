@@ -21,7 +21,7 @@ define(
             },
             colspan: 3,
             totals: quote.getTotals(),
-            style: "123",
+            style: "",
             isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
             lastTaxGroupId: null,
             isFirst: function(taxGroupId) {
