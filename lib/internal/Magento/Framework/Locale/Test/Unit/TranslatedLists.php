@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Locale\Test\Unit;
 
-class ListsTest extends \PHPUnit_Framework_TestCase
+class TranslatedListsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\Locale\TranslatedLists
