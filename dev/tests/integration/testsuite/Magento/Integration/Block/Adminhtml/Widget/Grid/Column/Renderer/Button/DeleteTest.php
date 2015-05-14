@@ -39,8 +39,9 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $buttonHtml = $this->deleteButtonBlock->render($integration);
         $this->assertContains('title="Remove"', $buttonHtml);
         $this->assertContains(
-            'onclick="this.setAttribute(\'data-url\', \'http://localhost/index.php/backend/admin/integration/delete/id/'
-                . $integration->getId(),
+            'onclick="this.setAttribute(\'data-url\', '
+            . '\'http://localhost/index.php/backend/admin/integration/delete/id/'
+            . $integration->getId(),
             $buttonHtml
         );
         $this->assertNotContains('disabled', $buttonHtml);
@@ -53,8 +54,9 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $buttonHtml = $this->deleteButtonBlock->render($integration);
         $this->assertContains('title="Uninstall the extension to remove this integration"', $buttonHtml);
         $this->assertContains(
-            'onclick="this.setAttribute(\'data-url\', \'http://localhost/index.php/backend/admin/integration/delete/id/'
-                . $integration->getId(),
+            'onclick="this.setAttribute(\'data-url\', '
+            . '\'http://localhost/index.php/backend/admin/integration/delete/id/'
+            . $integration->getId(),
             $buttonHtml
         );
         $this->assertContains('disabled="disabled"', $buttonHtml);

@@ -95,7 +95,8 @@ class AccessTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface',
+        $this->request = $this->getMock(
+            'Magento\Framework\App\RequestInterface',
             [
                 'getMethod',
                 'getModuleName',
@@ -110,7 +111,8 @@ class AccessTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->response = $this->getMock('Magento\Framework\App\Console\Response', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
         $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
@@ -164,7 +166,8 @@ class AccessTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->accessAction = $this->objectManagerHelper->getObject(
-            'Magento\Integration\Controller\Token\Access', [
+            'Magento\Integration\Controller\Token\Access',
+            [
                 'context' => $this->context,
                 'oauthService'=> $this->frameworkOauthSvcMock,
                 'intOauthService' => $this->intOauthServiceMock,

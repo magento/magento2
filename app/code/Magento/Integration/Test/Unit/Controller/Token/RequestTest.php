@@ -85,7 +85,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface',
+        $this->request = $this->getMock(
+            'Magento\Framework\App\RequestInterface',
             [
                 'getMethod',
                 'getModuleName',
@@ -100,7 +101,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             ],
             [],
             '',
-            false);
+            false
+        );
         $this->response = $this->getMock('Magento\Framework\App\Console\Response', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
         $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
@@ -146,7 +148,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->requestAction = $this->objectManagerHelper->getObject(
-            'Magento\Integration\Controller\Token\Request', [
+            'Magento\Integration\Controller\Token\Request',
+            [
                 'context' => $this->context,
                 'oauthService'=> $this->frameworkOauthSvcMock,
                 'helper' => $this->helperMock,

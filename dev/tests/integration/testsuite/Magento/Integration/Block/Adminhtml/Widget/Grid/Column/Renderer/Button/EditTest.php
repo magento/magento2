@@ -41,7 +41,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('class="action edit"', $buttonHtml);
         $this->assertContains(
             'onclick="window.location.href=\'http://localhost/index.php/backend/admin/integration/edit/id/'
-                . $integration->getId(),
+            . $integration->getId(),
             $buttonHtml
         );
     }

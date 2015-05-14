@@ -155,7 +155,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         $this->webapiBlock = $this->getWebapiBlock();
         $resources = [
-            1 => [ 'children' => [1,2,3] ]
+            1 => [ 'children' => [1, 2, 3] ]
         ];
         $this->aclResourceProvider->expects($this->once())
             ->method('getAclResources')
@@ -163,7 +163,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
         $rootArray = "rootArrayValue";
         $this->integrationHelper->expects($this->once())
             ->method('mapResources')
-            ->with([1,2,3])
+            ->with([1, 2, 3])
             ->will($this->returnValue($rootArray));
         $this->assertEquals($rootArray, $this->webapiBlock->getTree());
     }
