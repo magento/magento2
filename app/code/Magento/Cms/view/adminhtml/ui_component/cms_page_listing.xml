@@ -168,7 +168,7 @@
                             </item>
                             <item name="enable" xsi:type="array">
                                 <item name="value" xsi:type="string">1</item>
-                                <item name="label" xsi:type="string" translate="true">Enabled</item>
+                                <item name="label" xsi:type="string" translate="true">Published</item>
                             </item>
                         </item>
                     </item>

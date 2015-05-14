@@ -20,8 +20,44 @@ class Grid extends DataGrid
      * @var array
      */
     protected $filters = [
+        'page_id_from' => [
+            'selector' => '[name="filters[page_id][from]"]',
+        ],
+        'page_id_to' => [
+            'selector' => '[name="filters[page_id][to]"]',
+        ],
         'title' => [
             'selector' => '[name="filters[title]"]',
+        ],
+        'identifier' => [
+            'selector' => '[name="filters[identifier]"]',
+        ],
+        'page_layout' => [
+            'selector' => '[name="filters[page_layout]"]',
+            'input' => 'select',
+        ],
+        'store_id' => [
+            'selector' => '[name="filters[store_id]"]',
+            'input' => 'selectstore'
+        ],
+        'is_active' => [
+            'selector' => '[name="filters[is_active]"]',
+            'input' => 'select',
+        ],
+        'creation_time_from' => [
+            'selector' => '[name="filters[creation_time][from]"]',
+        ],
+        'creation_time_to' => [
+            'selector' => '[name="filters[creation_time][to]"]',
+        ],
+        'update_time_from' => [
+            'selector' => '[name="filters[update_time][from]"]',
+        ],
+        'update_time_to' => [
+            'selector' => '[name="filters[update_time][to]"]',
+        ],
+        'under_version_control' => [
+            'selector' => '[name="filters[under_version_control]"]',
         ],
     ];
 
