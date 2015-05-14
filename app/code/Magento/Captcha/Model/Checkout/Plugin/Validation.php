@@ -5,6 +5,8 @@
  */
 namespace Magento\Captcha\Model\Checkout\Plugin;
 
+use Magento\Framework\Exception;
+
 class Validation
 {
     /**
@@ -44,12 +46,12 @@ class Validation
         $captchaText = $additionalData->getExtensionAttributes()->getCaptchaString();
 
         if ($formId !== null && !in_array($formId, $this->formIds)) {
-            throw new \Exception(__('Provided form does not exist'));
+            throw new Exception\NoSuchEntityException(__('Provided form does not exist'));
         }
         $captchaModel = $this->captchaHelper->getCaptcha($formId);
         if ($captchaModel->isRequired()) {
             if (!$captchaModel->isCorrect($captchaText)) {
-                throw new \Exception(__('Incorrect CAPTCHA'));
+                throw new Exception\InputException(__('Incorrect CAPTCHA'));
             }
         }
     }
