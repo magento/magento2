@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Exception\InputException;
+
 /**
  * Interface ImageProcessorInterface
  *
@@ -14,17 +17,28 @@ namespace Magento\Framework\Api;
 interface ImageProcessorInterface
 {
     /**
-     * Process base64 encoded image data and save the image file in directory path used for temporary files
+     * Process Data objects with image type custom attributes and update the custom attribute values with saved image
+     * paths
      *
      * @api
      * @param CustomAttributesDataInterface $dataObjectWithCustomAttributes
      * @param CustomAttributesDataInterface $previousCustomerData
-     * @param string $entityType entity set id
-     * @return string Image path
+     * @param string $entityType entity type
+     * @return CustomAttributesDataInterface
      */
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
         CustomAttributesDataInterface $previousCustomerData = null,
         $entityType
     );
+
+    /**
+     * Process image and save it to the entity's media directory
+     *
+     * @param string $entityType
+     * @param ImageContentInterface $imageContent
+     * @return string Relative path of the file where image was saved
+     * @throws InputException
+     */
+    public function processImageContent($entityType, $imageContent);
 }

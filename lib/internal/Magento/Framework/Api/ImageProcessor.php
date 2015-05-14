@@ -53,6 +53,11 @@ class ImageProcessor implements ImageProcessorInterface
     private $uploader;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $mediaDirectory;
+
+    /**
      * @param Filesystem $fileSystem
      * @param ImageContentValidatorInterface $contentValidator
      * @param DataObjectHelper $dataObjectHelper
@@ -71,6 +76,7 @@ class ImageProcessor implements ImageProcessorInterface
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
         $this->uploader = $uploader;
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
@@ -99,39 +105,15 @@ class ImageProcessor implements ImageProcessorInterface
             /** @var $imageContent \Magento\Framework\Api\Data\ImageContentInterface */
             $imageContent = $imageDataObject->getValue();
 
-            if (!$this->contentValidator->isValid($imageContent)) {
-                throw new InputException(__('The image content is not valid.'));
-            }
+            $filename = $this->processImageContent($entityType, $imageContent);
 
-            $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
-            $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
-            $fileName = substr(md5(rand()), 0, 7) . '.' . $imageContent->getName();
-            $tmpDirectory->writeFile($fileName, $fileContent);
+            //Set filename from static media location into data object
+            $dataObjectWithCustomAttributes->setCustomAttribute(
+                $imageDataObject->getAttributeCode(),
+                $filename
+            );
 
-            $fileAttributes = [
-                'tmp_name' => $tmpDirectory->getAbsolutePath() . $fileName,
-                'name' => $imageContent->getName()
-            ];
-
-            $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-
-            try {
-                $this->uploader->processFileAttributes($fileAttributes);
-                $this->uploader->setFilesDispersion(true);
-                $this->uploader->setFilenamesCaseSensitivity(false);
-                $this->uploader->setAllowRenameFiles(true);
-                $destinationFolder = $entityType;
-                $this->uploader->save($mediaDirectory->getAbsolutePath($destinationFolder), $imageContent->getName());
-                //Set filename from static media location into data object
-                $dataObjectWithCustomAttributes->setCustomAttribute(
-                    $imageDataObject->getAttributeCode(),
-                    $this->uploader->getUploadedFileName()
-                );
-            } catch (\Exception $e) {
-                $this->logger->critical($e);
-            }
-
-            //Delete previous
+            //Delete previously saved image if it exists
             if ($previousCustomerData) {
                 $previousImageAttribute = $previousCustomerData->getCustomAttribute(
                     $imageDataObject->getAttributeCode()
@@ -139,13 +121,45 @@ class ImageProcessor implements ImageProcessorInterface
                 if ($previousImageAttribute) {
                     $previousImagePath = $previousImageAttribute->getValue();
                     if (!empty($previousImagePath)) {
-                        @unlink($mediaDirectory->getAbsolutePath() . $entityType . $previousImagePath);
+                        @unlink($this->mediaDirectory->getAbsolutePath() . $entityType . $previousImagePath);
                     }
                 }
             }
         }
 
         return $dataObjectWithCustomAttributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function processImageContent($entityType, $imageContent)
+    {
+        if (!$this->contentValidator->isValid($imageContent)) {
+            throw new InputException(__('The image content is not valid.'));
+        }
+
+        $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+        $fileName = substr(md5(rand()), 0, 7) . '.' . $imageContent->getName();
+        $tmpDirectory->writeFile($fileName, $fileContent);
+
+        $fileAttributes = [
+            'tmp_name' => $tmpDirectory->getAbsolutePath() . $fileName,
+            'name' => $imageContent->getName()
+        ];
+
+        try {
+            $this->uploader->processFileAttributes($fileAttributes);
+            $this->uploader->setFilesDispersion(true);
+            $this->uploader->setFilenamesCaseSensitivity(false);
+            $this->uploader->setAllowRenameFiles(true);
+            $destinationFolder = $entityType;
+            $this->uploader->save($this->mediaDirectory->getAbsolutePath($destinationFolder), $imageContent->getName());
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+        }
+        return $this->uploader->getUploadedFileName();
     }
 
     /**
