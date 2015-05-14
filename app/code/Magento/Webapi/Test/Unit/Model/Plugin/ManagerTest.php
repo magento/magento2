@@ -53,13 +53,26 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->integrationServiceMock = $this->getMockBuilder(
             '\Magento\Integration\Api\IntegrationServiceInterface'
         )->disableOriginalConstructor()->setMethods(
-            ['findByName']
+            [
+                'findByName',
+                'update',
+                'create',
+                'get',
+                'findByConsumerId',
+                'findActiveIntegrationByConsumerId',
+                'delete',
+                'getSelectedResources'
+            ]
         )->getMock();
 
         $this->integrationAuthorizationServiceMock = $this->getMockBuilder(
             '\Magento\Integration\Api\AuthorizationServiceInterface'
         )->disableOriginalConstructor()->setMethods(
-            ['grantPermissions']
+            [
+                'grantPermissions',
+                'grantAllPermissions',
+                'removePermissions'
+            ]
         )->getMock();
 
         $this->subjectMock = $this->getMock(

@@ -3161,9 +3161,18 @@ return [
     ['Magento\Framework\Exception\File\ValidatorException'],
     ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
     ['Magento\Shipping\Exception'],
-    ['Magento\Integration\Service\V1\AdminTokenServiceInterface', 'Magento\Integration\Api\AdminTokenServiceInterface'],
-    ['Magento\Integration\Service\V1\AuthorizationServiceInterface', 'Magento\Integration\Api\AuthorizationServiceInterface'],
-    ['Magento\Integration\Service\V1\CustomerTokenServiceInterface', 'Magento\Integration\Api\CustomerTokenServiceInterface'],
+    [
+        'Magento\Integration\Service\V1\AdminTokenServiceInterface',
+        'Magento\Integration\Api\AdminTokenServiceInterface'
+    ],
+    [
+        'Magento\Integration\Service\V1\AuthorizationServiceInterface',
+        'Magento\Integration\Api\AuthorizationServiceInterface'
+    ],
+    [
+        'Magento\Integration\Service\V1\CustomerTokenServiceInterface',
+        'Magento\Integration\Api\CustomerTokenServiceInterface'
+    ],
     ['Magento\Integration\Service\V1\IntegrationInterface', 'Magento\Integration\Api\IntegrationServiceInterface'],
     ['Magento\Integration\Service\V1\OauthInterface', 'Magento\Integration\Api\OauthServiceInterface'],
     ['Magento\Integration\Service\V1\AdminTokenService', 'Magento\Integration\Model\AdminTokenService'],

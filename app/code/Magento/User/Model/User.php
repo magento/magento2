@@ -707,7 +707,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function setFirstName($firstName)
     {
-        return $this->_data['firstname'] = $firstName;
+        $this->_data['firstname'] = $firstName;
+        return $this;
     }
 
     /**
@@ -723,7 +724,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function setLastName($lastName)
     {
-        return $this->_data['lastname'] = $lastName;
+        $this->_data['lastname'] = $lastName;
+        return $this;
     }
 
     /**
@@ -739,7 +741,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function setEmail($email)
     {
-        return $this->_data['email'] = $email;
+        $this->_data['email'] = $email;
+        return $this;
     }
 
     /**
@@ -755,7 +758,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function setUserName($userName)
     {
-        return $this->_data['username'] = $userName;
+        $this->_data['username'] = $userName;
+        return $this;
     }
 
     /**
@@ -771,7 +775,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function setPassword($password)
     {
-        return $this->_data['password'] = $password;
+        $this->_data['password'] = $password;
+        return $this;
     }
 
     /**
@@ -787,7 +792,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function setCreated($created)
     {
-        return $this->_data['created'] = $created;
+        $this->_data['created'] = $created;
+        return $this;
     }
 
     /**
@@ -803,7 +809,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function setModified($modified)
     {
-        return $this->_data['modified'] = $modified;
+        $this->_data['modified'] = $modified;
+        return $this;
     }
 
     /**
@@ -819,7 +826,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function setIsActive($isActive)
     {
-        return $this->_data['is_active'] = $isActive;
+        $this->_data['is_active'] = $isActive;
+        return $this;
     }
 
     /**
@@ -835,6 +843,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function setInterfaceLocale($interfaceLocale)
     {
-        return $this->_data['interface_locale'] = $interfaceLocale;
+        $this->_data['interface_locale'] = $interfaceLocale;
+        return $this;
     }
 }

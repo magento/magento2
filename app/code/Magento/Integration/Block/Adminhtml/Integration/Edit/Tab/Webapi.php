@@ -58,7 +58,6 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
-        \Magento\Integration\Model\IntegrationService $integrationService,
         array $data = []
     ) {
         $this->rootResource = $rootResource;

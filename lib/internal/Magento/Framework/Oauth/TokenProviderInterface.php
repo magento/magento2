@@ -6,9 +6,9 @@
 namespace Magento\Framework\Oauth;
 
 /**
- * TokenProviderInterface provides token manipulation, such as creating a request token and getting an access token as well
- * as methods for performing certain validations on tokens and token requests. Consumer methods are also provided to
- * help clients manipulating tokens validate and acquire the associated token consumer.
+ * TokenProviderInterface provides token manipulation, such as creating a request token and getting an access token
+ * as well as methods for performing certain validations on tokens and token requests. Consumer methods are also
+ * provided to help clients manipulating tokens validate and acquire the associated token consumer.
  *
  * @api
  */
