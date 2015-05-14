@@ -5,7 +5,7 @@
  */
 namespace Magento\CacheInvalidate\Model;
 
-use Psr\Log\LoggerInterface as LoggerHandler;
+use Magento\Framework\Cache\InvalidateLogger;
 
 /**
  * Class Observer
@@ -30,7 +30,7 @@ class Observer
     protected $_curlAdapter;
 
     /**
-     * @var LoggerHandler
+     * @var InvalidateLogger
      */
     private $logger;
 
@@ -40,13 +40,13 @@ class Observer
      * @param \Magento\PageCache\Model\Config $config
      * @param \Magento\PageCache\Helper\Data $helper
      * @param \Magento\Framework\HTTP\Adapter\Curl $curlAdapter
-     * @param LoggerHandler $logger
+     * @param InvalidateLogger $logger
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
         \Magento\PageCache\Helper\Data $helper,
         \Magento\Framework\HTTP\Adapter\Curl $curlAdapter,
-        LoggerHandler $logger
+        InvalidateLogger $logger
     ) {
         $this->_config = $config;
         $this->_helper = $helper;
@@ -75,7 +75,6 @@ class Observer
                 $this->sendPurgeRequest(implode('|', array_unique($tags)));
             }
         }
-        $this->logger->debug('cache_invalidate: ', (array)'invalidateVarnish');
     }
 
     /**
@@ -90,7 +89,6 @@ class Observer
         if ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH && $this->_config->isEnabled()) {
             $this->sendPurgeRequest('.*');
         }
-        $this->logger->debug('cache_invalidate: ', (array)'flushAllCache');
     }
 
     /**
@@ -107,5 +105,7 @@ class Observer
         $this->_curlAdapter->write('', $this->_helper->getUrl('*'), '1.1', $headers);
         $this->_curlAdapter->read();
         $this->_curlAdapter->close();
+
+        $this->logger->execute(compact('tagsPattern'));
     }
 }
