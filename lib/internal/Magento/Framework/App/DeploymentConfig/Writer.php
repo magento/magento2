@@ -109,6 +109,11 @@ class Writer
 
                 $contents = $this->formatter->format($config);
                 $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($paths[$fileKey], $contents);
+                if (function_exists('opcache_invalidate')) {
+                    opcache_invalidate(
+                        $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath($paths[$fileKey])
+                    );
+                }
             }
         }
         $this->deploymentConfig->resetData();
