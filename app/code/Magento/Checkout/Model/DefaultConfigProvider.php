@@ -22,6 +22,7 @@ use Magento\Quote\Api\ShippingMethodManagementInterface as ShippingMethodManager
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
+use Magento\Framework\UrlInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -110,6 +111,16 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $formKey;
 
     /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $imageHelper;
+
+    /**
+     * @var \Magento\Framework\View\ConfigInterface
+     */
+    protected $viewConfig;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -126,6 +137,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param \Magento\Customer\Model\Address\Config $addressConfig
      * @param FormKey $formKey
+     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -144,7 +157,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
         LocaleFormat $localeFormat,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         \Magento\Customer\Model\Address\Config $addressConfig,
-        FormKey $formKey
+        FormKey $formKey,
+        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Framework\View\ConfigInterface $viewConfig
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -162,6 +177,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->addressMapper = $addressMapper;
         $this->addressConfig = $addressConfig;
         $this->formKey = $formKey;
+        $this->imageHelper = $imageHelper;
+        $this->viewConfig = $viewConfig;
     }
 
     /**
@@ -182,6 +199,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'registerUrl' => $this->getRegisterUrl(),
             'customerAddressCount' => $this->getCustomerAddressCount(),
             'forgotPasswordUrl' => $this->getForgotPasswordUrl(),
+            'staticBaseUrl' => $this->getStaticBaseUrl(),
             'priceFormat' => $this->localeFormat->getPriceFormat(
                 null,
                 $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
@@ -289,6 +307,14 @@ class DefaultConfigProvider implements ConfigProviderInterface
             foreach ($quoteItems as $index => $quoteItem) {
                 $quoteItemData[$index] = $quoteItem->toArray();
                 $quoteItemData[$index]['options'] = $this->getFormattedOptionValue($quoteItem);
+                $thumbnailSize = $this->viewConfig->getViewConfig()->getVarValue(
+                    'Magento_Catalog',
+                    'product_thumbnail_image_size'
+                );
+                $quoteItemData[$index]['thumbnail'] = (string) $this->imageHelper->init(
+                    $quoteItem->getProduct(),
+                    'thumbnail'
+                )->resize($thumbnailSize);
             }
         }
         return $quoteItemData;
@@ -397,5 +423,15 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function getForgotPasswordUrl()
     {
         return $this->customerUrlManager->getForgotPasswordUrl();
+    }
+
+    /**
+     * Return base static url.
+     *
+     * @return string
+     */
+    protected function getStaticBaseUrl()
+    {
+        return $this->checkoutSession->getQuote()->getStore()->getBaseUrl(UrlInterface::URL_TYPE_STATIC);
     }
 }
