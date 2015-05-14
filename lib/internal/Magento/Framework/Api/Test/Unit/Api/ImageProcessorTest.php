@@ -103,7 +103,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomAttributeValueByType')
             ->willReturn([]);
 
-        $this->assertEquals($imageDataMock, $this->imageProcessor->save($imageDataMock, 'testEntityType'));
+        $this->assertEquals($imageDataMock, $this->imageProcessor->save($imageDataMock, null, 'testEntityType'));
     }
 
     /**
@@ -137,10 +137,10 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->willReturn(false);
 
-        $this->imageProcessor->save($imageDataMock, 'testEntityType');
+        $this->imageProcessor->save($imageDataMock, null, 'testEntityType');
     }
 
-    public function testSave()
+    public function testSaveWithNoPreviousData()
     {
         $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
             ->disableOriginalConstructor()
@@ -182,6 +182,61 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->willReturn($directoryWrite);
 
-        $this->assertEquals($imageData, $this->imageProcessor->save($imageData, 'testEntityType'));
+        $this->assertEquals($imageData, $this->imageProcessor->save($imageData, null, 'testEntityType'));
+    }
+
+    public function testSaveWithPreviousData()
+    {
+        $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $imageContent->expects($this->any())
+            ->method('getBase64EncodedData')
+            ->willReturn('testImageData');
+        $imageContent->expects($this->any())
+            ->method('getName')
+            ->willReturn('testFileName');
+
+        $imageDataObject = $this->getMockBuilder('Magento\Framework\Api\AttributeValue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $imageDataObject->expects($this->once())
+            ->method('getValue')
+            ->willReturn($imageContent);
+
+        $imageData = $this->getMockForAbstractClass('Magento\Framework\Api\CustomAttributesDataInterface');
+        $imageData->expects($this->once())
+            ->method('getCustomAttributes')
+            ->willReturn([]);
+
+        $this->dataObjectHelperMock->expects($this->once())
+            ->method('getCustomAttributeValueByType')
+            ->willReturn([$imageDataObject]);
+
+        $this->contentValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+
+        $directoryWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+
+        $directoryWrite->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn('testPath');
+
+        $this->fileSystemMock->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturn($directoryWrite);
+
+        $prevImageAttribute = $this->getMockForAbstractClass('Magento\Framework\Api\AttributeInterface');
+        $prevImageAttribute->expects($this->once())
+            ->method('getValue')
+            ->willReturn('testImagePath');
+
+        $prevImageData = $this->getMockForAbstractClass('Magento\Framework\Api\CustomAttributesDataInterface');
+        $prevImageData->expects($this->once())
+            ->method('getCustomAttribute')
+            ->willReturn($prevImageAttribute);
+
+        $this->assertEquals($imageData, $this->imageProcessor->save($imageData, $prevImageData, 'testEntityType'));
     }
 }
