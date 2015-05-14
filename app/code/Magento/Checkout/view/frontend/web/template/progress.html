@@ -102,10 +102,32 @@
                         <!-- ko if: getPaymentMethodInfo().length > 0 -->
                         <table class="data table">
                             <tbody data-bind="foreach: {data: getPaymentMethodInfo(), as: 'item'}">
+                            <!-- ko if: item.name && (item.value || item.html) -->
                             <tr>
-                                <th scope="row"><!-- ko text: $t(item.name) --><!--/ko--></th>
-                                <td><!-- ko text: $t(item.value) --><!--/ko--></td>
+                                <th scope="row" data-bind="html: $t(item.name)"></th>
+                                <!-- ko if: item.value -->
+                                <td data-bind="text: $t(item.value)"></td>
+                                <!--/ko-->
+                                <!-- ko if: !item.value && item.html -->
+                                <td data-bind="html: $t(item.html)"></td>
+                                <!--/ko-->
                             </tr>
+                            <!--/ko-->
+                            <!-- ko if: item.name && !item.value && !item.html -->
+                            <tr>
+                                <th colspan="2" scope="row"><!-- ko text: $t(item.name) --><!--/ko--></th>
+                            </tr>
+                            <!--/ko-->
+                            <!-- ko if: !item.name && (item.value || item.html) -->
+                            <tr>
+                                <!-- ko if: item.value -->
+                                <td colspan="2" data-bind="text: $t(item.value)"></td>
+                                <!--/ko-->
+                                <!-- ko if: !item.value && item.html -->
+                                <td colspan="2" data-bind="html: $t(item.html)"></td>
+                                <!--/ko-->
+                            </tr>
+                            <!--/ko-->
                             </tbody>
                         </table>
                         <!--/ko-->

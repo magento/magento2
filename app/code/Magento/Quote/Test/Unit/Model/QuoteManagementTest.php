@@ -790,58 +790,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($orderId, $service->placeOrder($cartId));
     }
 
-    public function testPlaceOrderCreatingAccount()
-    {
-        $cartId = 9549;
-        $orderId = 2321;
-        $password = 'SoMeP@ssW0rd';
-        $customerId = 25;
-        $customerMock = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
-
-        $this->accountManagementMock->expects($this->once())
-            ->method('createAccount')
-            ->with($customerMock, $password)
-            ->willReturn($customerMock);
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('getActive')
-            ->with($cartId)
-            ->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('assignCustomer')->with($customerMock)->willReturnSelf();
-        $this->quoteMock->expects($this->once())->method('setCheckoutMethod')->with('register');
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
-        $service = $this->getMock(
-            '\Magento\Quote\Model\QuoteManagement',
-            ['placeOrder'],
-            [
-                'eventManager' => $this->eventManager,
-                'quoteValidator' => $this->quoteValidator,
-                'orderFactory' => $this->orderFactory,
-                'orderManagement' => $this->orderManagement,
-                'customerManagement' => $this->customerManagement,
-                'quoteAddressToOrder' => $this->quoteAddressToOrder,
-                'quoteAddressToOrderAddress' => $this->quoteAddressToOrderAddress,
-                'quoteItemToOrderItem' => $this->quoteItemToOrderItem,
-                'quotePaymentToOrderPayment' => $this->quotePaymentToOrderPayment,
-                'userContext' => $this->userContextMock,
-                'quoteRepository' => $this->quoteRepositoryMock,
-                'customerRepository' => $this->customerRepositoryMock,
-                'customerModelFactory' => $this->customerFactoryMock,
-                'dataObjectHelper' => $this->dataObjectHelperMock,
-                'storeManager' => $this->storeManagerMock,
-                'checkoutSession' => $this->checkoutSessionMock,
-                'customerSession' => $this->customerSessionMock,
-                'accountManagement' => $this->accountManagementMock,
-                'agreementsValidator' => $this->agreementsValidatorMock,
-            ]
-        );
-
-        $service->expects($this->once())->method('placeOrder')->willReturn($orderId);
-        $customerMock->expects($this->once())->method('getId')->willReturn($customerId);
-        $this->customerSessionMock->expects($this->once())->method('loginById')->with($customerId);
-        $this->assertEquals($orderId, $service->placeOrderCreatingAccount($cartId, $customerMock, $password));
-    }
-
     /**
      * @param $isGuest
      * @param $isVirtual

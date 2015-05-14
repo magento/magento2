@@ -21,10 +21,21 @@ class Observer
     {
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $observer->getEvent()->getPayment();
-        if ($payment->getMethod() === Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE) {
+        if ($payment->getMethod() === Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE
+            || $payment->getMethod() === Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE
+        ) {
             $payment->setAdditionalInformation(
                 'instructions',
-                $payment->getMethodInstance()->getConfigData('instructions')
+                $payment->getMethodInstance()->getInstructions()
+            );
+        } elseif ($payment->getMethod() === Checkmo::PAYMENT_METHOD_CHECKMO_CODE) {
+            $payment->setAdditionalInformation(
+                'payable_to',
+                $payment->getMethodInstance()->getPayableTo()
+            );
+            $payment->setAdditionalInformation(
+                'mailing_address',
+                $payment->getMethodInstance()->getMailingAddress()
             );
         }
     }
