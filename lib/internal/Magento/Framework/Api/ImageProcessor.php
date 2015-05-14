@@ -48,21 +48,29 @@ class ImageProcessor implements ImageProcessorInterface
     protected $logger;
 
     /**
+     * @var Uploader
+     */
+    private $uploader;
+
+    /**
      * @param Filesystem $fileSystem
      * @param ImageContentValidatorInterface $contentValidator
      * @param DataObjectHelper $dataObjectHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Uploader $uploader
      */
     public function __construct(
         Filesystem $fileSystem,
         ImageContentValidatorInterface $contentValidator,
         DataObjectHelper $dataObjectHelper,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        Uploader $uploader
     ) {
         $this->filesystem = $fileSystem;
         $this->contentValidator = $contentValidator;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->logger = $logger;
+        $this->uploader = $uploader;
     }
 
     /**
@@ -103,17 +111,17 @@ class ImageProcessor implements ImageProcessorInterface
             ];
 
             try {
-                $uploader = new \Magento\Framework\Api\Uploader($fileAttributes);
-                $uploader->setFilesDispersion(true);
-                $uploader->setFilenamesCaseSensitivity(false);
-                $uploader->setAllowRenameFiles(true);
+                $this->uploader->processFileAttributes($fileAttributes);
+                $this->uploader->setFilesDispersion(true);
+                $this->uploader->setFilenamesCaseSensitivity(false);
+                $this->uploader->setAllowRenameFiles(true);
                 $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
                 $destinationFolder = $entityType;
-                $uploader->save($mediaDirectory->getAbsolutePath($destinationFolder), $imageContent->getName());
+                $this->uploader->save($mediaDirectory->getAbsolutePath($destinationFolder), $imageContent->getName());
                 //Set filename from static media location into data object
                 $dataObjectWithCustomAttributes->setCustomAttribute(
                     $imageDataObject->getAttributeCode(),
-                    $uploader->getUploadedFileName()
+                    $this->uploader->getUploadedFileName()
                 );
             } catch (\Exception $e) {
                 $this->logger->critical($e);

@@ -11,7 +11,19 @@ namespace Magento\Framework\Api;
  */
 class Uploader extends \Magento\Framework\File\Uploader
 {
-    public function __construct($fileAttributes)
+
+    public function __construct()
+    {
+
+    }
+
+    /**
+     * Explicitly set the the file attributes instead of setting it via constructor
+     *
+     * @param $fileAttributes
+     * @throws \Exception
+     */
+    public function processFileAttributes($fileAttributes)
     {
         $this->_file = $fileAttributes;
         if (!file_exists($this->_file['tmp_name'])) {
