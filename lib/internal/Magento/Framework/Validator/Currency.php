@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Validator;
 
-use Magento\Setup\Model\Lists;
+use Magento\Framework\Setup\Lists;
 
 /**
  * Currency validator model

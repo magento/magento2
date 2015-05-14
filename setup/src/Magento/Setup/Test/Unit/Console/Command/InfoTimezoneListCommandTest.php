@@ -25,8 +25,8 @@ class InfoTimezoneListCommandTest extends \PHPUnit_Framework_TestCase
         $helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
         $helperSet->expects($this->once())->method('get')->with('table')->will($this->returnValue($table));
 
-        /** @var \Magento\Setup\Model\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
-        $list = $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
+        /** @var \Magento\Framework\Setup\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
+        $list = $this->getMock('Magento\Framework\Setup\Lists', [], [], '', false);
         $list->expects($this->once())->method('getTimezoneList')->will($this->returnValue($timezones));
         $command = new InfoTimezoneListCommand($list);
         $command->setHelperSet($helperSet);

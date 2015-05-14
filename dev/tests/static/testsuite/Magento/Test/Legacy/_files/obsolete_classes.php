@@ -3547,4 +3547,6 @@ return [
     ['Magento\Framework\Locale\Validator', 'Magento\Framework\Validator\Locale'],
     ['Magento\ToolkitFramework\Fixture', 'Magento\Setup\Fixtures\Fixture'],
     ['Magento\ToolkitFramework\Application', 'Magento\Setup\Fixtures\FixtureModel'],
+    ['Magento\Framework\Locale\Lists', 'Magento\Framework\Locale\TranslatedLists'],
+    ['Magento\Setup\Model\Lists', 'Magento\Framework\Setup\Lists'],
 ];

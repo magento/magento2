@@ -4,14 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Setup;
 
 use Magento\Framework\Locale\Bundle\CurrencyBundle;
 use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
 use Magento\Framework\Locale\ConfigInterface;
 use Magento\Framework\Locale\Resolver;
-use Magento\Framework\Locale\ResolverInterface;
 
 class Lists
 {
