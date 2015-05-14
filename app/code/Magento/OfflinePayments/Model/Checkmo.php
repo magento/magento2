@@ -43,6 +43,7 @@ class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @param mixed $data
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function assignData($data)
     {
