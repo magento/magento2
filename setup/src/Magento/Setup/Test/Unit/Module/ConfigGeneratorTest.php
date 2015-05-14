@@ -52,12 +52,18 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $testData = [ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE => 'files'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['session' => ['save' => ConfigOptionsListConstants::SESSION_SAVE_FILES]], $returnValue->getData());
+        $this->assertEquals(
+            ['session' => ['save' => ConfigOptionsListConstants::SESSION_SAVE_FILES]],
+            $returnValue->getData()
+        );
 
         $testData = [ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE => 'db'];
         $returnValue = $this->configGeneratorObject->createSessionConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
-        $this->assertEquals(['session' => ['save' => ConfigOptionsListConstants::SESSION_SAVE_DB]], $returnValue->getData());
+        $this->assertEquals(
+            ['session' => ['save' => ConfigOptionsListConstants::SESSION_SAVE_DB]],
+            $returnValue->getData()
+        );
     }
 
     public function testCreateSessionConfigWithoutInput()
@@ -69,7 +75,7 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateDefinitionsConfig()
     {
-        $testData = [\Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT => 'test-format'];
+        $testData = [ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT => 'test-format'];
         $returnValue = $this->configGeneratorObject->createDefinitionsConfig($testData);
         $this->assertEquals(ConfigFilePool::APP_CONFIG, $returnValue->getFileKey());
         $this->assertEquals(['definition' => ['format' => 'test-format']], $returnValue->getData());

@@ -37,7 +37,8 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId);
 
-        foreach ($deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_RESOURCE) as $resourceName => $resourceData) {
+        $resource = $deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_RESOURCE);
+        foreach ($resource as $resourceName => $resourceData) {
             if (!isset($resourceData['connection'])) {
                 throw new \InvalidArgumentException('Invalid initial resource configuration');
             }
