@@ -40,7 +40,10 @@ class ExtendTest extends \PHPUnit_Framework_TestCase
     public function getProduct()
     {
         $product = $this->getMockBuilder(Product::class)->disableOriginalConstructor()->getMock();
-        $this->registry->expects($this->once())->method('registry')->with('product')->will(
+        $this->registry->expects($this->once())
+            ->method('registry')
+            ->with('product')
+            ->will(
                 $this->returnValue($product)
             );
         return $product;

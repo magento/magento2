@@ -111,10 +111,11 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
     public function isDisabledField()
     {
         return $this->_getData('is_disabled_field')
-            || $this->getProduct()->getId()
-            && ($this->getAttribute()->getAttributeCode() === 'price'
-                || $this->getElement()->getReadonly()
-            );
+            || ($this->getProduct()->getId()
+                && $this->getAttribute()->getAttributeCode() === 'price'
+            )
+            || $this->getElement()->getReadonly();
+
     }
 
     /**
