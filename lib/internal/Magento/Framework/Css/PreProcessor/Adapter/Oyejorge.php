@@ -29,7 +29,7 @@ class Oyejorge implements \Magento\Framework\Css\PreProcessor\AdapterInterface
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         State $appState
-    ){
+    ) {
         $this->logger = $logger;
         $this->appState = $appState;
     }
