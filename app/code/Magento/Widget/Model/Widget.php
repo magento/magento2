@@ -10,8 +10,6 @@ namespace Magento\Widget\Model;
 
 /**
  * Widget model for different purposes
- *
- * @api
  */
 class Widget
 {
@@ -86,6 +84,7 @@ class Widget
      *
      * @param string $type Widget type
      * @return null|array
+     * @api
      */
     public function getWidgetByClassType($type)
     {
@@ -108,6 +107,7 @@ class Widget
      *
      * @param string $type Widget type
      * @return null|\Magento\Framework\Simplexml\Element
+     * @api
      */
     public function getConfigAsXml($type)
     {
@@ -121,6 +121,7 @@ class Widget
      * @return \Magento\Framework\Object
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @api
      */
     public function getConfigAsObject($type)
     {
@@ -185,6 +186,7 @@ class Widget
      *
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
+     * @api
      */
     public function getWidgets($filters = [])
     {
@@ -215,6 +217,7 @@ class Widget
      *
      * @param array $filters Key-value array of filters for widget node properties
      * @return array
+     * @api
      */
     public function getWidgetsArray($filters = [])
     {
@@ -241,6 +244,7 @@ class Widget
      * @param array $params Pre-configured Widget Params
      * @param bool $asIs Return result as widget directive(true) or as placeholder image(false)
      * @return string Widget directive ready to parse
+     * @api
      */
     public function getWidgetDeclaration($type, $params = [], $asIs = true)
     {
