@@ -220,7 +220,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * @param $sku
+     * @param string $sku
      * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute
      * @throws CouldNotSaveException
@@ -262,7 +262,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     }
 
     /**
-     * @param $sku
+     * @param string $sku
      * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute
      * @return void
