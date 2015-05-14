@@ -63,7 +63,7 @@
                                                                 <item name="visible" xsi:type="boolean">false</item>
                                                             </item>
                                                             <item name="region_id" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
@@ -151,6 +151,13 @@
                                                             </item>
                                                         </item>
                                                     </item>
+                                                    <item name="billing-address-choice" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">additional-field-choice</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- this region for different choice -->
+                                                        </item>
+                                                    </item>
                                                 </item>
                                             </item>
                                             <item name="shippingAddress" xsi:type="array">
@@ -158,6 +165,13 @@
                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                 <item name="sortOrder" xsi:type="string">3</item>
                                                 <item name="children" xsi:type="array">
+                                                    <item name="before-fields" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">before-fields</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- before fields -->
+                                                        </item>
+                                                    </item>
                                                     <item name="shipping-address-fieldset" xsi:type="array">
                                                         <item name="component" xsi:type="string">uiComponent</item>
                                                         <item name="displayArea" xsi:type="string">additional-fieldsets</item>
@@ -168,7 +182,7 @@
                                                                 <item name="visible" xsi:type="boolean">false</item>
                                                             </item>
                                                             <item name="region_id" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
                                                                     <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>

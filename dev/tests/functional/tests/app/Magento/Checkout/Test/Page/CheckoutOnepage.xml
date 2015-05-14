@@ -12,6 +12,6 @@
     <block name="shippingBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping" locator="#checkout-step-shipping" strategy="css selector"/>
     <block name="shippingMethodBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping\Method" locator="#checkout-step-shipping_method" strategy="css selector"/>
     <block name="paymentMethodsBlock" class="Magento\Checkout\Test\Block\Onepage\Payment\Methods" locator="#checkout-step-payment" strategy="css selector"/>
-    <block name="reviewBlock" class="Magento\Checkout\Test\Block\Onepage\Review" locator="#checkout-step-review" strategy="css selector"/>
+    <block name="reviewBlock" class="Magento\Checkout\Test\Block\Onepage\Review" locator=".columns" strategy="css selector"/>
   </page>
 </config>

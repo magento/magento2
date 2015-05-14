@@ -4,8 +4,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<li id="opc-billing" class="section allow active" data-bind="visible: isActive()">
-    <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
+<li id="opc-billing"
+    data-bind="visible: isActive(), attr: {'class': stepClassAttributes() }"
+    role="presentation"
+    data-collapsible="true">
+    <div class="step-title"
+         data-role="title"
+         data-bind="click: navigateToCurrentStep"
+         aria-controls="checkout-step-login"
+         role="tab">
         <span class="number" data-bind="text: stepNumber()"></span>
         <h2 data-bind="text: $t('Checkout Method')"></h2>
     </div>
@@ -14,43 +21,17 @@
             <div class="block block-guest">
                 <div class="block-title">
                     <strong id="block-guest-heading" role="heading" aria-level="2">
-                    <!-- ko if: (isGuestCheckoutAllowed && isRegistrationAllowed)-->
-                    <!--ko text: $t('Checkout as a Guest or Register')--><!--/ko-->
-                    <!-- /ko -->
-                    <!-- ko if: (isGuestCheckoutAllowed && !isRegistrationAllowed) -->
+                    <!-- ko if: (isGuestCheckoutAllowed) -->
                     <!--ko text: $t('Checkout as a Guest')--><!--/ko-->
-                    <!-- /ko -->
-                    <!-- ko ifnot: ((isGuestCheckoutAllowed && isRegistrationAllowed) ||(isGuestCheckoutAllowed && !isRegistrationAllowed)) -->
-                    <!--ko text: $t('Register to Create an Account')--><!--/ko-->
                     <!-- /ko -->
                     </strong>
                 </div>
                 <div class="block-content" aria-labelledby="block-guest-heading">
-                    <!-- ko if: (!isGuestCheckoutAllowed && isRegistrationAllowed)-->
-                        <p><strong><!-- ko text: $t('Register and save time!')--><!-- /ko --></strong><br />
-                            <!-- ko text: $t('Register with us for future convenience:')--><!-- /ko -->
-                        </p>
-                        <ul>
-                            <li data-bind="text: $t('Fast and easy check out')"></li>
-                            <li data-bind="text: $t('Easy access to your order history and status')"></li>
-                        </ul>
-                    <!-- /ko -->
-                    <p class="note" data-bind="visible: (isGuestCheckoutAllowed && isRegistrationAllowed), text: $t('Register with us for future convenience:')"></p>
-                    <!-- ko if: (isGuestCheckoutAllowed)-->
-                    <fieldset class="fieldset guest">
-                        <div class="field choice">
-                            <input type="radio" name="checkout_method" data-role="checkout-method-guest" id="login:guest" value="guest" checked="checked" class="radio"/>
-                            <label class="label" for="login:guest"><span data-bind="text: $t('Checkout as Guest')"></span></label>
-                        </div>
-                        <div class="field choice" data-bind="visible: isRegistrationAllowed">
-                            <input type="radio" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" data-bind="checked: isChecked" class="radio"/>
-                            <label class="label" for="login:register"><span data-bind="text: $t('Register'), "></span></label>
-                        </div>
-                    </fieldset>
-                    <!-- /ko -->
                     <div class="actions-toolbar">
                         <div class="primary">
+                            <!-- ko if: (isGuestCheckoutAllowed)-->
                             <button data-bind="visible: isGuestCheckoutAllowed, click: setCheckoutMethod" data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action continue primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span data-bind="text: $t('Continue')"></span></button>
+                            <!-- /ko -->
                             <!-- ko ifnot: isGuestCheckoutAllowed -->
                                 <!-- ko if: isCustomerLoginRequired -->
                                     <input type="checkbox" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" checked="checked" style="display: none"/>

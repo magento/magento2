@@ -96,12 +96,6 @@
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/guest-carts/:cartId/order-with-registration" method="POST">
-        <service class="Magento\Quote\Api\GuestCartManagementInterface" method="placeOrderCreatingAccount"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
 
     <!-- Managing Cart Shipment Method -->
     <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">

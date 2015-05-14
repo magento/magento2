@@ -47,7 +47,7 @@ class GuestCartTotalManagement implements GuestCartTotalManagementInterface
     ) {
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         return $this->cartTotalManagement->collectTotals(
-            $quoteIdMask->getId(),
+            $quoteIdMask->getQuoteId(),
             $paymentMethod,
             $shippingCarrierCode,
             $shippingMethodCode,

@@ -22,56 +22,30 @@ define(
                 cartId: quote.getQuoteId(),
                 paymentMethod: paymentService.getSelectedPaymentData()
             };
-            if (quote.getCheckoutMethod()() === 'register') {
-                payload = _.extend({
-                    customer: customer.customerData,
-                    password: customer.getDetails('password')
-                }, customParams);
-                customer.setAddressAsDefaultBilling(customer.addCustomerAddress(quote.getBillingAddress()()));
-                if (!quote.isVirtual()) {
-                    customer.setAddressAsDefaultShipping(customer.addCustomerAddress(quote.getShippingAddress()()));
-                }
-                storage.post(
-                    urlBuilder.createUrl('/guest-carts/:quoteId/order-with-registration', {quoteId: quote.getQuoteId()}),
-                    JSON.stringify(payload)
-                ).done(
-                    function() {
-                        if (!_.isFunction(callback) || callback()) {
-                            window.location.href = url.build('checkout/onepage/success/');
-                        }
-                    }
-                ).fail(
-                    function(response) {
-                        var error = JSON.parse(response.responseText);
-                        errorList.add(error);
-                    }
-                );
+            /**
+             * Checkout for guest and registered customer.
+             */
+            var serviceUrl;
+            if (quote.getCheckoutMethod()() === 'guest') {
+                serviceUrl =  urlBuilder.createUrl('/guest-carts/:quoteId/order', {quoteId: quote.getQuoteId()});
             } else {
-                /**
-                 * Checkout for guest and registered customer.
-                 */
-                var serviceUrl;
-                if (quote.getCheckoutMethod()() === 'guest') {
-                    serviceUrl =  urlBuilder.createUrl('/guest-carts/:quoteId/order', {quoteId: quote.getQuoteId()});
-                } else {
-                    serviceUrl = urlBuilder.createUrl('/carts/mine/order', {});
-                }
-                payload = customParams;
-                storage.put(
-                    serviceUrl, JSON.stringify(payload)
-                ).done(
-                    function() {
-                        if (!_.isFunction(callback) || callback()) {
-                            window.location.replace(url.build('checkout/onepage/success/'));
-                        }
-                    }
-                ).fail(
-                    function(response) {
-                        var error = JSON.parse(response.responseText);
-                        errorList.add(error);
-                    }
-                );
+                serviceUrl = urlBuilder.createUrl('/carts/mine/order', {});
             }
+            payload = customParams;
+            storage.put(
+                serviceUrl, JSON.stringify(payload)
+            ).done(
+                function() {
+                    if (!_.isFunction(callback) || callback()) {
+                        window.location.replace(url.build('checkout/onepage/success/'));
+                    }
+                }
+            ).fail(
+                function(response) {
+                    var error = JSON.parse(response.responseText);
+                    errorList.add(error);
+                }
+            );
         };
     }
 );

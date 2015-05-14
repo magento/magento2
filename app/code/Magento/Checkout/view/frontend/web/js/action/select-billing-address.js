@@ -22,7 +22,7 @@ define(
         var result = function (billingAddress, useForShipping, additionalData) {
             additionalData = additionalData || {};
             quote.setBillingAddress(billingAddress);
-            if (useForShipping === '1' && !quote.isVirtual()) {
+            if (useForShipping() === '1' && !quote.isVirtual()) {
                 if (!billingAddress.id) {
                     // update shipping address data in corresponding provider
                     var shippingAddressSource = registry.get('checkoutProvider');
@@ -38,7 +38,7 @@ define(
                 selectShippingAddress(billingAddress, useForShipping, additionalData);
             } else if (quote.isVirtual()) {
                 var serviceUrl;
-                if (quote.getCheckoutMethod()() === 'guest' || quote.getCheckoutMethod()() === 'register') {
+                if (quote.getCheckoutMethod()() === 'guest') {
                     serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
                 } else {
                     serviceUrl =  urlBuilder.createUrl('/carts/mine/addresses', {});

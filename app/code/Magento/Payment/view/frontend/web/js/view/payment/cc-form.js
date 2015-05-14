@@ -7,9 +7,10 @@
 define(
     [
         'underscore',
-        'uiComponent'
+        'uiComponent',
+        'mage/translate'
     ],
-    function (_, component) {
+    function (_, component, $t) {
         return component.extend({
             defaults: {
                 template: 'Magento_Payment/payment/cc-form',
@@ -51,40 +52,58 @@ define(
                 };
             },
             getCcAvailableTypes: function() {
-                return _.map(window.checkoutConfig.payment.cc.availableTypes, function(value, key) {
+                return window.checkoutConfig.payment.ccform.availableTypes[this.getCode()];
+            },
+            getCcMonths: function() {
+                return window.checkoutConfig.payment.ccform.months[this.getCode()];
+            },
+            getCcYears: function() {
+                return window.checkoutConfig.payment.ccform.years[this.getCode()];
+            },
+            hasVerification: function() {
+                return window.checkoutConfig.payment.ccform.hasVerification[this.getCode()];
+            },
+            hasSsCardType: function() {
+                return window.checkoutConfig.payment.ccform.hasSsCardType[this.getCode()];
+            },
+            getCvvImageUrl: function() {
+                return window.checkoutConfig.payment.ccform.cvvImageUrl[this.getCode()];
+            },
+            getCvvImageHtml: function() {
+                return '<img src="' + this.getCvvImageUrl()
+                    + '" alt="' + $t('Card Verification Number Visual Reference')
+                    + '" title="' + $t('Card Verification Number Visual Reference')
+                    + '" />';
+            },
+            getSsStartYears: function() {
+                return window.checkoutConfig.payment.ccform.ssStartYears[this.getCode()];
+            },
+            getCcAvailableTypesValues: function() {
+                return _.map(this.getCcAvailableTypes(), function(value, key) {
                     return {
                         'value': key,
                         'type': value
                     }
                 });
             },
-            getCcMonths: function() {
-                return _.map(window.checkoutConfig.payment.cc.months, function(value, key) {
+            getCcMonthsValues: function() {
+                return _.map(this.getCcMonths(), function(value, key) {
                     return {
                         'value': key,
                         'month': value
                     }
                 });
             },
-            getCcYears: function() {
-                return _.map(window.checkoutConfig.payment.cc.years, function(value, key) {
+            getCcYearsValues: function() {
+                return _.map(this.getCcYears(), function(value, key) {
                     return {
                         'value': key,
                         'year': value
                     }
                 });
             },
-            hasVerification: function() {
-                return window.checkoutConfig.payment.cc.hasVerification;
-            },
-            hasSsCardType: function() {
-                return window.checkoutConfig.payment.cc.hasSsCardType;
-            },
-            getCvvImage: function() {
-                return window.checkoutConfig.payment.cc.cvvImage;
-            },
-            getSsStartYears: function() {
-                return _.map(window.checkoutConfig.payment.cc.ssStartYears, function(value, key) {
+            getSsStartYearsValues: function() {
+                return _.map(this.getSsStartYears(), function(value, key) {
                     return {
                         'value': key,
                         'year': value
@@ -96,7 +115,7 @@ define(
             },
             getCcTypeTitleByCode: function(code) {
                 var title = '';
-                _.each(this.getCcAvailableTypes(), function (value) {
+                _.each(this.getCcAvailableTypesValues(), function (value) {
                     if (value['value'] == code) {
                         title = value['type'];
                     }

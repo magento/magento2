@@ -37,7 +37,6 @@ define(
                 return quoteItem.name;
             },
             getFormattedPrice: function (price) {
-                //todo add format data further
                 return priceUtils.formatPrice(price, quote.getPriceFormat());
             }
         });

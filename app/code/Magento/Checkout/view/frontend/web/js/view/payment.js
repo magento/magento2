@@ -11,14 +11,18 @@ define(
         '../model/quote',
         '../action/select-payment-method',
         'Magento_Checkout/js/model/step-navigator',
-        'Magento_Checkout/js/model/payment-service'
+        'Magento_Checkout/js/model/payment-service',
+        'mage/translate'
     ],
-    function ($, Component, quote, selectPaymentMethod, navigator, paymentService) {
+    function ($, Component, quote, selectPaymentMethod, navigator, paymentService, $t) {
         var stepName = 'paymentMethod';
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/payment',
                 activeMethod: ''
+            },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
             },
             stepNumber: navigator.getStepNumber(stepName),
             isVisible: navigator.isStepVisible(stepName),
@@ -49,7 +53,7 @@ define(
                 });
 
                 if (!this.activeMethod()) {
-                    alert('Please specify payment method.');
+                    alert($t('Please specify payment method.'));
                     return;
                 }
 

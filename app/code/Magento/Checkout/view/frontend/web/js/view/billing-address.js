@@ -27,6 +27,13 @@ define(
             defaults: {
                 template: 'Magento_Checkout/billing-address'
             },
+            initObservable: function () {
+                this._super().observe('useForShipping');
+                return this;
+            },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             stepNumber: navigator.getStepNumber(stepName),
             billingAddresses: customer.getBillingAddressList(),
             selectedBillingAddressId: addressList.getAddresses()[0].id,
@@ -35,15 +42,9 @@ define(
             quoteIsVirtual: quote.isVirtual(),
             isEmailCheckComplete: $.Deferred(),
             billingAddressesOptionsText: function(item) {
-                return item.getFullAddress();
+                return item.getAddressInline();
             },
             submitBillingAddress: function() {
-                if (quote.getCheckoutMethod()() === 'register') {
-                    customer.customerData.email = this.source.get('customerDetails.email');
-                    customer.customerData.firstname = this.source.get('billingAddress.firstname');
-                    customer.customerData.lastname = this.source.get('billingAddress.lastname');
-                    customer.setDetails('password', this.source.get('customerDetails.password'));
-                }
                 if (this.selectedBillingAddressId) {
                     selectBillingAddress(
                         addressList.getAddressById(this.selectedBillingAddressId),
@@ -56,6 +57,10 @@ define(
                         if (!that.source.get('params.invalid')) {
                             var addressData = that.source.get('billingAddress');
                             var additionalData = {};
+                            if (that.useForShipping() instanceof Object) {
+                                additionalData = that.useForShipping().getAdditionalData();
+                                that.useForShipping('1');
+                            }
                             /**
                              * All the the input fields that are not a part of the address but need to be submitted
                              * in the same request must have data-scope attribute set
@@ -64,10 +69,6 @@ define(
                             additionalFields.forEach(function (field) {
                                 additionalData[field.name] = field.value;
                             });
-                            if (quote.getCheckoutMethod()() !== 'register') {
-                                var addressBookCheckbox = $("input[name='billing[save_in_address_book]']:checked");
-                                addressData.save_in_address_book = addressBookCheckbox.val();
-                            }
                             if (quote.getCheckoutMethod()() && !customer.isLoggedIn()()) {
                                 addressData.email = that.source.get('customerDetails.email');
                             }
@@ -106,15 +107,7 @@ define(
                 this.source.set('params.invalid', false);
                 this.source.trigger('billingAddress.data.validate');
                 this.validateAdditionalAddressFields();
-
-                if (quote.getCheckoutMethod()() === 'register') {
-                    this.source.trigger('customerDetails.data.validate');
-                    if (!this.source.get('params.invalid')) {
-                        checkEmailAvailability(this.isEmailCheckComplete);
-                    }
-                } else {
-                    this.isEmailCheckComplete.resolve();
-                }
+                this.isEmailCheckComplete.resolve();
             },
             validateAdditionalAddressFields: function() {
                 $(billingFormSelector).validation();

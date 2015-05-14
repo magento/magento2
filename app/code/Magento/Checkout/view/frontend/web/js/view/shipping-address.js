@@ -23,6 +23,9 @@ define(
                 template: 'Magento_Checkout/shipping-address',
                 visible: true
             },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             stepNumber: navigator.getStepNumber(stepName),
             addresses: customer.getShippingAddressList(),
             selectedAddressId: ko.observable(addressList.getAddresses()[0].id),
@@ -60,13 +63,11 @@ define(
                         additionalData
                     );
                 } else {
-                    this.validate();
+                    if (this.visible()) {
+                        this.validate();
+                    }
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get('shippingAddress');
-                        if (quote.getCheckoutMethod()() !== 'register') {
-                            var addressBookCheckBox =  $("input[name = 'shipping[save_in_address_book]']:checked");
-                            addressData.save_in_address_book = addressBookCheckBox.val();
-                        }
                         selectShippingAddress(addressData, this.sameAsBilling(), additionalData);
                     }
                 }

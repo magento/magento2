@@ -12,7 +12,7 @@ define(
         var shippingMethod = ko.observable(null);
         var paymentMethod = ko.observable(null);
         var quoteData = window.checkoutConfig.quoteData;
-        var baseCurrencySymbol = window.checkoutConfig.baseCurrencySymbol;
+        var basePriceFormat = window.checkoutConfig.basePriceFormat;
         var priceFormat = window.checkoutConfig.priceFormat;
         var selectedShippingMethod = ko.observable(window.checkoutConfig.selectedShippingMethod);
         var storeCode = window.checkoutConfig.storeCode;
@@ -33,8 +33,8 @@ define(
             getPriceFormat: function() {
                 return priceFormat;
             },
-            getBaseCurrencySymbol: function() {
-                return baseCurrencySymbol;
+            getBasePriceFormat: function() {
+                return basePriceFormat;
             },
             getItems: function() {
                 return window.checkoutConfig.quoteItemData;

@@ -16,7 +16,7 @@
             <select name="payment[cc_type]" class="select"
                 data-bind="attr: {id: getCode() + '_cc_type', 'data-container': getCode() + '-cc-type', 'data-validate': JSON.stringify({required:true, 'validate-cc-type-select':'#' + getCode() + '_cc_number'})},
                 mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
-                enable: isActive($parents), options: getCcAvailableTypes(), optionsValue: 'value', optionsText: 'type', optionsCaption: $t('--Please Select--'), value: creditCardType">
+                enable: isActive($parents), options: getCcAvailableTypesValues(), optionsValue: 'value', optionsText: 'type', optionsCaption: $t('--Please Select--'), value: creditCardType">
             </select>
         </div>
     </div>
@@ -40,7 +40,7 @@
                     <div class="control">
                         <select  name="payment[cc_exp_month]" class="select month"
                             data-bind="attr: {id: getCode() + '_expiration', 'data-container': getCode() + '-cc-month', 'data-validate': JSON.stringify({required:true, 'validate-cc-exp':'#' + getCode() + '_expiration_yr'})},
-                            enable: isActive($parents), options: getCcMonths(), optionsValue: 'value', optionsText: 'month', optionsCaption: $t('Month'), value: creditCardExpMonth">
+                            enable: isActive($parents), options: getCcMonthsValues(), optionsValue: 'value', optionsText: 'month', optionsCaption: $t('Month'), value: creditCardExpMonth">
                         </select>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class="control">
                         <select name="payment[cc_exp_year]" class="select year"
                             data-bind="attr: {id: getCode() + '_expiration_yr', 'data-container': getCode() + '-cc-year', 'data-validate': JSON.stringify({required:true})},
-                            enable: isActive($parents), options: getCcYears(), optionsValue: 'value', optionsText: 'year', optionsCaption: $t('Year'), value: creditCardExpYear">
+                            enable: isActive($parents), options: getCcYearsValues(), optionsValue: 'value', optionsText: 'year', optionsCaption: $t('Year'), value: creditCardExpYear">
                         </select>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
             <input type="number" class="input-text cvv" name="payment[cc_cid]" value=""
                     data-bind="attr: {id: getCode() + '_cc_cid', title: $t('Card Verification Number'), 'data-container': getCode() + '-cc-cvv', 'data-validate': JSON.stringify({'required-number':true, 'validate-cc-cvn':'#' + getCode() + '_cc_type'})}, enable: isActive($parents), value: creditCardVerificationNumber"/>
             <div class="note">
-                <a href="#" class="action cvv" data-bind="attr: {title: $t('What is this?')}, mageInit:{'tooltip': {'content': getCvvImage()}}"><span><!-- ko text: $t('What is this?')--><!-- /ko --></span></a>
+                <a href="#" class="action cvv" data-bind="attr: {title: $t('What is this?')}, mageInit:{'tooltip': {'content': getCvvImageHtml()}}"><span><!-- ko text: $t('What is this?')--><!-- /ko --></span></a>
             </div>
         </div>
     </div>
@@ -90,7 +90,7 @@
                             <div class="control">
                                 <select name="payment[cc_ss_start_month]" class="select month"
                                         data-bind="attr: {id: getCode() + '_start_month', 'data-container': getCode() + '-cc-start-month', 'data-validate': JSON.stringify({'validate-cc-ukss':true})},
-                                        enable: isActive($parents), options: getCcMonths(), optionsValue: 'value', optionsText: 'month', optionsCaption: $t('Month'), value: creditCardSsStartMonth">
+                                        enable: isActive($parents), options: getCcMonthsValues(), optionsValue: 'value', optionsText: 'month', optionsCaption: $t('Month'), value: creditCardSsStartMonth">
                                 </select>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                             <div class="control">
                                 <select name="payment[cc_ss_start_year]" class="select year"
                                         data-bind="attr: {id: getCode() + '_start_year', 'data-container': getCode() + '-cc-start-year', 'data-validate': JSON.stringify({'validate-cc-ukss':true})},
-                                        enable: isActive($parents), options: getSsStartYears(), optionsValue: 'value', optionsText: 'year', optionsCaption: $t('Year'), value: creditCardSsStartYear">
+                                        enable: isActive($parents), options: getSsStartYearsValues(), optionsValue: 'value', optionsText: 'year', optionsCaption: $t('Year'), value: creditCardSsStartYear">
                                 </select>
                             </div>
                         </div>

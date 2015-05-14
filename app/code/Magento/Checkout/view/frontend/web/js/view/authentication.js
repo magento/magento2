@@ -21,8 +21,6 @@ define(
         return Component.extend({
             stepNumber: navigator.getStepNumber(stepName),
             isGuestCheckoutAllowed: window.checkoutConfig.isGuestCheckoutAllowed,
-            isRegistrationAllowed: window.checkoutConfig.isRegistrationAllowed,
-            isMethodRegister: window.checkoutConfig.isMethodRegister,
             isCustomerLoginRequired: window.checkoutConfig.isCustomerLoginRequired,
             registerUrl: window.checkoutConfig.registerUrl,
             forgotPasswordUrl: window.checkoutConfig.forgotPasswordUrl,
@@ -43,6 +41,9 @@ define(
                     login(loginData);
                 }
             },
+            stepClassAttributes: function() {
+                return navigator.getStepClassAttributes(stepName);
+            },
             isActive: function() {
                 if (customer.isLoggedIn()()) {
                     navigator.setStepEnabled(stepName, false);
@@ -50,28 +51,15 @@ define(
                 return !customer.isLoggedIn()();
             },
             isChecked: function() {
-                if (isMethodRegister || !isGuestCheckoutAllowed) {
+                if (!isGuestCheckoutAllowed) {
                     return 'register';
                 }
                 return false;
             },
             setCheckoutMethod: function() {
-                var guestChecked    = $( '[data-role=checkout-method-guest]' ).is( ':checked' );
-                var registerChecked = $( '[data-role=checkout-method-register]').is( ':checked' );
-                if( !guestChecked && !registerChecked ){
-                    alert('Please choose to register or to checkout as a guest.');
-                    return false;
-                }
-                if (guestChecked) {
-                    quote.setCheckoutMethod('guest');
-                    $('[name="customerDetails.password"]').hide();
-                    $('[name="customerDetails.confirm_password"]').hide();
-                }
-                if (registerChecked) {
-                    quote.setCheckoutMethod('register');
-                    $('[name="customerDetails.password"]').show();
-                    $('[name="customerDetails.confirm_password"]').show();
-                }
+                quote.setCheckoutMethod('guest');
+                $('[name="customerDetails.password"]').hide();
+                $('[name="customerDetails.confirm_password"]').hide();
                 navigator.setCurrent('authentication').goNext();
             },
             navigateToCurrentStep: function() {
