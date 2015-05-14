@@ -4,4 +4,4 @@
  * See COPYING.txt for license details.
  */
 
-return ['bazKey' => 'baz'];
+return ['barKey' => 'someOtherBar'];

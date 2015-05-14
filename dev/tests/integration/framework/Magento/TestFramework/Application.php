@@ -5,7 +5,6 @@
  */
 namespace Magento\TestFramework;
 
-use Magento\Framework\Code\Generator\FileResolver;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -157,7 +156,8 @@ class Application
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         ];
         $driverPool = new \Magento\Framework\Filesystem\DriverPool;
-        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool);
+        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool;
+        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool, $configFilePool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
         $this->globalConfigFile = $globalConfigFile;
@@ -172,14 +172,25 @@ class Application
     {
         if (null === $this->_db) {
             if ($this->isInstalled()) {
-                $reader = new Reader($this->dirList);
+                $configPool = new \Magento\Framework\Config\File\ConfigFilePool();
+                $reader = new Reader($this->dirList, $configPool);
                 $deploymentConfig = new DeploymentConfig($reader, []);
-                $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_DB);
-                $dbInfo = $dbConfig['connection']['default'];
-                $host = $dbInfo['host'];
-                $user = $dbInfo['username'];
-                $password = $dbInfo['password'];
-                $dbName = $dbInfo['dbname'];
+                $host = $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_HOST
+                );
+                $user = $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_USER
+                );
+                $password = $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_PASSWORD
+                );
+                $dbName = $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_NAME
+                );
             } else {
                 $installConfig = $this->getInstallConfig();
                 $host = $installConfig['db-host'];

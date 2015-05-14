@@ -981,11 +981,9 @@ class Installer
      */
     public function cleanupDb()
     {
-        // stops cleanup if app/etc/config.php does not exist
+        // stops cleanup if configuration does not exist
         if ($this->deploymentConfig->isAvailable()) {
-            $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_DB);
-            $config = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
-
+            $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
             if ($config) {
                 try {
                     $connection = $this->connectionFactory->create($config);
@@ -996,7 +994,7 @@ class Installer
                     $this->log->log($e->getMessage() . ' - skipping database cleanup');
                     return;
                 }
-                $dbName = $connection->quoteIdentifier($config['dbname']);
+                $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
                 $this->log->log("Recreating database {$dbName}");
                 $connection->query("DROP DATABASE IF EXISTS {$dbName}");
                 $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
@@ -1014,17 +1012,19 @@ class Installer
     private function deleteDeploymentConfig()
     {
         $configDir = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-        $file = 'config.php';
-        $absolutePath = $configDir->getAbsolutePath($file);
-        if (!$configDir->isFile($file)) {
-            $this->log->log("The file '{$absolutePath}' doesn't exist - skipping cleanup");
-            return;
-        }
-        try {
-            $this->log->log($absolutePath);
-            $configDir->delete($file);
-        } catch (FileSystemException $e) {
-            $this->log->log($e->getMessage());
+        $configFiles = $this->deploymentConfigReader->getFiles();
+        foreach ($configFiles as $configFile) {
+            $absolutePath = $configDir->getAbsolutePath($configFile);
+            if (!$configDir->isFile($configFile)) {
+                $this->log->log("The file '{$absolutePath}' doesn't exist - skipping cleanup");
+                continue;
+            }
+            try {
+                $this->log->log($absolutePath);
+                $configDir->delete($configFile);
+            } catch (FileSystemException $e) {
+                $this->log->log($e->getMessage());
+            }
         }
     }
 
@@ -1048,16 +1048,30 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_DB);
-        $connectionConfig = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
         $this->dbValidator->checkDatabaseConnection(
-            $connectionConfig[ConfigOptionsListConstants::KEY_NAME],
-            $connectionConfig[ConfigOptionsListConstants::KEY_HOST],
-            $connectionConfig[ConfigOptionsListConstants::KEY_USER],
-            $connectionConfig[ConfigOptionsListConstants::KEY_PASSWORD]
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_NAME
+            ),
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_HOST
+            ),
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_USER
+            ),
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_PASSWORD
+            )
         );
-        if (isset($connectionConfig[ConfigOptionsListConstants::KEY_PREFIX])) {
-            $this->dbValidator->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsListConstants::KEY_PREFIX]);
+        if (null !== $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_PREFIX
+        )) {
+            $this->dbValidator->checkDatabaseTablePrefix($this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_PREFIX
+            ));
         }
     }
 

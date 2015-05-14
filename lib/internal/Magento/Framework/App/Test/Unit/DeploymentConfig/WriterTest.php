@@ -64,7 +64,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             $this->deploymentConfig,
             $this->formatter
         );
-        $this->reader->expects($this->any())->method('getFile')->willReturn('test.php');
+        $this->reader->expects($this->any())->method('getFiles')->willReturn('test.php');
         $this->dirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $this->dirRead = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
         $this->dirRead->expects($this->any())

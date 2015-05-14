@@ -59,21 +59,18 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->deploymentConfig->expects($this->any())
-            ->method('getConfigData')
-            ->with(ConfigOptionsListConstants::KEY_DB)
+            ->method('get')
             ->will($this->returnValue(
                     [
-                        'connection' => [
-                            'default' => [
-                                'host' => 'localhost',
-                                'dbname' => 'magento',
-                                'username' => 'username',
-                            ],
-                            self::CONNECTION_NAME => [
-                                'host' => 'localhost',
-                                'dbname' => 'magento',
-                                'username' => 'username',
-                            ],
+                        'default' => [
+                            'host' => 'localhost',
+                            'dbname' => 'magento',
+                            'username' => 'username',
+                        ],
+                        self::CONNECTION_NAME => [
+                            'host' => 'localhost',
+                            'dbname' => 'magento',
+                            'username' => 'username',
                         ],
                     ]
                 )

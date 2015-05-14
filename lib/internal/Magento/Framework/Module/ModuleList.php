@@ -140,7 +140,7 @@ class ModuleList implements ModuleListInterface
     private function loadConfigData()
     {
         if (null === $this->configData && ($this->config->isAvailable())) {
-            $this->configData = $this->config->getConfigData(ConfigOptionsListConstants::KEY_MODULES);
+            $this->configData = $this->config->get(ConfigOptionsListConstants::KEY_MODULES);
         }
     }
 }

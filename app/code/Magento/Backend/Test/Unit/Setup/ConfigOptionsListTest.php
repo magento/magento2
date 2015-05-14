@@ -42,7 +42,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 
         $expectedData = [
             [
-                'file' => ConfigFilePool::APP_CONFIG,
+                'file' => ConfigFilePool::APP_ENV,
                 'segment' => 'backend',
                 'data' => [
                     'backend' => ['frontName' => 'admin']

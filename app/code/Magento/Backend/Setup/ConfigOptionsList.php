@@ -48,7 +48,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
-        $configData = new ConfigData(ConfigFilePool::APP_CONFIG);
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
 
         if (isset($options[self::INPUT_KEY_BACKEND_FRONTNAME])) {
             $configData->set(self::CONFIG_PATH_BACKEND_FRONTNAME, $options[self::INPUT_KEY_BACKEND_FRONTNAME]);

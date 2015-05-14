@@ -104,11 +104,10 @@ class Resource
             return $this->_connections[$connectionName];
         }
 
-        $dbInfo = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_DB);
-        if (null === $dbInfo) {
-            return false;
-        }
-        $connectionConfig = $dbInfo['connection'][$connectionName];
+        $connectionConfig = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . $connectionName
+        );
+
         if ($connectionConfig) {
             $connection = $this->_connectionFactory->create($connectionConfig);
         }

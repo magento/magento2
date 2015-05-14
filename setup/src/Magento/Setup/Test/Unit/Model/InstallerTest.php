@@ -122,15 +122,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private static $dbConfig = [
-        SetupConfigOptionsList::KEY_PREFIX => '',
-        'connection' => [
-            'default' => [
-                SetupConfigOptionsList::KEY_HOST => '127.0.0.1',
-                SetupConfigOptionsList::KEY_NAME => 'magento',
-                SetupConfigOptionsList::KEY_USER => 'magento',
-                SetupConfigOptionsList::KEY_PASS => '',
-            ],
-        ],
+        SetupConfigOptionsList::KEY_HOST => '127.0.0.1',
+        SetupConfigOptionsList::KEY_NAME => 'magento',
+        SetupConfigOptionsList::KEY_USER => 'magento',
+        SetupConfigOptionsList::KEY_PASSWORD => '',
     ];
 
     /**
@@ -218,13 +213,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
         ];
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
-        $this->config->expects($this->any())->method('getSegment')->will($this->returnValueMap([
-            [SetupConfigOptionsList::KEY_DB, self::$dbConfig],
-            [
-                'crypt',
-                [SetupConfigOptionsList::KEY_ENCRYPTION_KEY => 'encryption_key']
-            ]
-        ]));
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
         $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
@@ -374,8 +362,19 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function testUninstall()
     {
         $this->config->expects($this->once())->method('isAvailable')->willReturn(false);
+        $this->configReader->expects($this->once())->method('getFiles')->willReturn(['ConfigOne.php', 'ConfigTwo.php']);
         $configDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $configDir->expects($this->once())->method('getAbsolutePath')->willReturn('/config/config.php');
+        $configDir
+            ->expects($this->exactly(2))
+            ->method('getAbsolutePath')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['ConfigOne.php', '/config/ConfigOne.php'],
+                        ['ConfigTwo.php', '/config/ConfigTwo.php']
+                    ]
+                )
+            );
         $this->filesystem
             ->expects($this->any())
             ->method('getDirectoryWrite')
@@ -407,7 +406,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger
             ->expects($this->at(6))
             ->method('log')
-            ->with("The file '/config/config.php' doesn't exist - skipping cleanup");
+            ->with("The file '/config/ConfigOne.php' doesn't exist - skipping cleanup");
+        $this->logger
+            ->expects($this->at(7))
+            ->method('log')
+            ->with("The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup");
         $this->logger->expects($this->once())->method('logSuccess')->with('Magento uninstallation complete.');
         $this->cleanupFiles->expects($this->once())->method('clearAllFiles')->will(
             $this->returnValue(
@@ -425,8 +428,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->config->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->once())
-            ->method('getConfigData')
-            ->with(SetupConfigOptionsList::KEY_DB)
+            ->method('get')
+            ->with(SetupConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
