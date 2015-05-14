@@ -14,6 +14,7 @@ define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model
             messages: {},
             quoteItems: [],
             quoteItemsCount: 0,
+            optionType: 'gift_messages',
             initialize: function() {
                 var item,
                     that = this,

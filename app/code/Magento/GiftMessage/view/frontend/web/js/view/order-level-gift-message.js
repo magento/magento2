@@ -18,6 +18,7 @@ define([
                 displayArea: 'orderLevelGiftMessage'
             },
             message: {},
+            optionType: 'gift_messages',
             initialize: function() {
                 var that = this;
                 quote.getShippingAddress().subscribe(function(shippingAddress) {
@@ -30,7 +31,7 @@ define([
                     this.dispose();
                 });
                 this._super();
-                giftOptions.addOrderLevelGiftOptions(this);
+                giftOptions.addOrderLevelGiftOptions(this, 10);
             },
             isOrderLevelGiftMessageVisible: ko.observable(false),
             setOrderLevelGiftMessageVisible: function(data, event) {
