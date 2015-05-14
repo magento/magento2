@@ -61,7 +61,7 @@ define([
                 sidebarInitialized = false;
             });
         },
-        initSidebar: initSidebar,
+        initSidebar: ko.observable(initSidebar),
         closeSidebar: function(element) {
             var minicart = $('[data-block="minicart"]');
             minicart.on('click', '[data-action="close"]', function(event) {
