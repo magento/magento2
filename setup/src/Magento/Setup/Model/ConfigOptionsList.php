@@ -3,7 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Config;
+
+namespace Magento\Setup\Model;
 
 use Magento\Framework\ObjectManager\DefinitionFactory;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
@@ -11,6 +12,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Validator\DbValidator;
 
 /**
@@ -18,80 +20,6 @@ use Magento\Setup\Validator\DbValidator;
  */
 class ConfigOptionsList implements ConfigOptionsListInterface
 {
-    /**#@+
-     * Path to the values in the deployment config
-     */
-    const CONFIG_PATH_INSTALL_DATE = 'install/date';
-    const CONFIG_PATH_CRYPT_KEY = 'crypt/key';
-    const CONFIG_PATH_SESSION_SAVE = 'session/save';
-    const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
-    const CONFIG_PATH_RESOURCE_DEFAULT_SETUP = 'resource/default_setup/connection';
-    const CONFIG_PATH_DB_CONNECTION_DEFAULT = 'db/connection/default/';
-    const CONFIG_PATH_DB_PREFIX = 'db/table_prefix';
-    /**#@-*/
-
-    /**#@+
-     * Input keys for the options
-     */
-    const INPUT_KEY_ENCRYPTION_KEY = 'key';
-    const INPUT_KEY_SESSION_SAVE = 'session-save';
-    const INPUT_KEY_DEFINITION_FORMAT = 'definition-format';
-    const INPUT_KEY_DB_HOST = 'db-host';
-    const INPUT_KEY_DB_NAME = 'db-name';
-    const INPUT_KEY_DB_USER = 'db-user';
-    const INPUT_KEY_DB_PASSWORD = 'db-password';
-    const INPUT_KEY_DB_PREFIX = 'db-prefix';
-    const INPUT_KEY_DB_MODEL = 'db-model';
-    const INPUT_KEY_DB_INIT_STATEMENTS = 'db-init-statements';
-    const INPUT_KEY_RESOURCE = 'resource';
-    const INPUT_KEY_SKIP_DB_VALIDATION = 'skip-db-validation';
-    /**#@-*/
-
-    /**#@+
-     * Values for session-save
-     */
-    const SESSION_SAVE_FILES = 'files';
-    const SESSION_SAVE_DB = 'db';
-    /**#@-*/
-
-    /**
-     * Array Key for session save method
-     */
-    const KEY_SAVE = 'save';
-
-    /**#@+
-     * Array keys for Database configuration
-     */
-    const KEY_HOST = 'host';
-    const KEY_NAME = 'dbname';
-    const KEY_USER = 'username';
-    const KEY_PASSWORD = 'password';
-    const KEY_PREFIX = 'table_prefix';
-    const KEY_MODEL = 'model';
-    const KEY_INIT_STATEMENTS = 'initStatements';
-    const KEY_ACTIVE = 'active';
-    /**#@-*/
-    
-    /**
-     * Db config key
-     */
-    const KEY_DB = 'db';
-
-    /**
-     * Array Key for encryption key in deployment config file
-     */
-    const KEY_ENCRYPTION_KEY = 'key';
-
-    /**
-     * Resource config key
-     */
-    const KEY_RESOURCE = 'resource';
-
-    /**
-     * Key for modules
-     */
-    const KEY_MODULES = 'modules';
-
     /**
      * Generate config data for individual segments
      *
@@ -123,77 +51,79 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         return [
             new TextConfigOption(
-                self::INPUT_KEY_ENCRYPTION_KEY,
+                ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_CRYPT_KEY,
+                ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY,
                 'Encryption key'
             ),
             new SelectConfigOption(
-                self::INPUT_KEY_SESSION_SAVE,
+                ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                [self::SESSION_SAVE_FILES, self::SESSION_SAVE_DB],
-                self::CONFIG_PATH_SESSION_SAVE,
+                [ConfigOptionsListConstants::SESSION_SAVE_FILES, ConfigOptionsListConstants::SESSION_SAVE_DB],
+                ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE,
                 'Session save location',
-                self::SESSION_SAVE_FILES
+                ConfigOptionsListConstants::SESSION_SAVE_FILES
             ),
             new SelectConfigOption(
-                self::INPUT_KEY_DEFINITION_FORMAT,
+                ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 DefinitionFactory::getSupportedFormats(),
-                self::CONFIG_PATH_DEFINITION_FORMAT,
+                ConfigOptionsListConstants::CONFIG_PATH_DEFINITION_FORMAT,
                 'Type of definitions used by Object Manager'
             ),
             new TextConfigOption(
-                self::INPUT_KEY_DB_HOST,
+                ConfigOptionsListConstants::INPUT_KEY_DB_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_HOST,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_HOST,
                 'Database server host',
                 'localhost'
             ),
             new TextConfigOption(
-                self::INPUT_KEY_DB_NAME,
+                ConfigOptionsListConstants::INPUT_KEY_DB_NAME,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_NAME,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_NAME,
                 'Database name',
                 'magento2'
             ),
             new TextConfigOption(
-                self::INPUT_KEY_DB_USER,
+                ConfigOptionsListConstants::INPUT_KEY_DB_USER,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_USER,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_USER,
                 'Database server username',
                 'root'
             ),
             new TextConfigOption(
-                self::INPUT_KEY_DB_PASSWORD,
+                ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD,
                 TextConfigOption::FRONTEND_WIZARD_PASSWORD,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_PASSWORD,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
+                . ConfigOptionsListConstants::KEY_PASSWORD,
                 'Database server password',
                 ''
             ),
             new TextConfigOption(
-                self::INPUT_KEY_DB_PREFIX,
+                ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_PREFIX,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX,
                 'Database table prefix',
                 ''
             ),
             new TextConfigOption(
-                self::INPUT_KEY_DB_MODEL,
+                ConfigOptionsListConstants::INPUT_KEY_DB_MODEL,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_MODEL,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_MODEL,
                 'Database type',
                 'mysql4'
             ),
             new TextConfigOption(
-                self::INPUT_KEY_DB_INIT_STATEMENTS,
+                ConfigOptionsListConstants::INPUT_KEY_DB_INIT_STATEMENTS,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
-                self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_INIT_STATEMENTS,
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
+                . ConfigOptionsListConstants::KEY_INIT_STATEMENTS,
                 'Database  initial set of commands',
                 'SET NAMES utf8;'
             ),
             new FlagConfigOption(
-                self::INPUT_KEY_SKIP_DB_VALIDATION,
+                ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION,
                 '',
                 'If specified, then db connection validation will be skipped',
                 '-s'
@@ -226,20 +156,20 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         $errors = [];
 
-        if (isset($options[ConfigOptionsList::INPUT_KEY_DB_PREFIX])) {
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])) {
             try {
-                $this->dbValidator->checkDatabaseTablePrefix($options[ConfigOptionsList::INPUT_KEY_DB_PREFIX]);
+                $this->dbValidator->checkDatabaseTablePrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX]);
             } catch (\InvalidArgumentException $exception) {
                 $errors[] = $exception->getMessage();
             }
         }
 
-        if (!$options[ConfigOptionsList::INPUT_KEY_SKIP_DB_VALIDATION] &&
+        if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION] &&
             (
-                $options[ConfigOptionsList::INPUT_KEY_DB_NAME] !== null
-                || $options[ConfigOptionsList::INPUT_KEY_DB_HOST] !== null
-                || $options[ConfigOptionsList::INPUT_KEY_DB_USER] !== null
-                || $options[ConfigOptionsList::INPUT_KEY_DB_PASSWORD] !== null
+                $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] !== null
+                || $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST] !== null
+                || $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER] !== null
+                || $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] !== null
             )
         ) {
             try {
@@ -247,10 +177,10 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 $options = $this->getDbSettings($options, $deploymentConfig);
 
                 $this->dbValidator->checkDatabaseConnection(
-                    $options[ConfigOptionsList::INPUT_KEY_DB_NAME],
-                    $options[ConfigOptionsList::INPUT_KEY_DB_HOST],
-                    $options[ConfigOptionsList::INPUT_KEY_DB_USER],
-                    $options[ConfigOptionsList::INPUT_KEY_DB_PASSWORD]
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME],
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST],
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER],
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD]
                 );
             } catch (\Exception $exception) {
                 $errors[] = $exception->getMessage();
@@ -276,24 +206,33 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     private function getDbSettings(array $options, DeploymentConfig $deploymentConfig)
     {
-        if ($options[ConfigOptionsList::INPUT_KEY_DB_NAME] === null) {
-            $options[ConfigOptionsList::INPUT_KEY_DB_NAME] =
-                $deploymentConfig->get(self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_NAME);
+        if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] === null) {
+            $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] =
+                $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_NAME
+                );
         }
 
-        if ($options[ConfigOptionsList::INPUT_KEY_DB_HOST] === null) {
-            $options[ConfigOptionsList::INPUT_KEY_DB_HOST] =
-                $deploymentConfig->get(self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_HOST);
+        if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST] === null) {
+            $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST] =
+                $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_HOST
+                );
         }
 
-        if ($options[ConfigOptionsList::INPUT_KEY_DB_USER] === null) {
-            $options[ConfigOptionsList::INPUT_KEY_DB_USER] =
-                $deploymentConfig->get(self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_USER);
+        if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_USER] === null) {
+            $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER] =
+                $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . ConfigOptionsListConstants::KEY_USER
+                );
         }
 
-        if ($options[ConfigOptionsList::INPUT_KEY_DB_PASSWORD] === null) {
-            $options[ConfigOptionsList::INPUT_KEY_DB_PASSWORD] =
-                $deploymentConfig->get(self::CONFIG_PATH_DB_CONNECTION_DEFAULT . self::KEY_PASSWORD);
+        if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] === null) {
+            $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] =
+                $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
+                    . ConfigOptionsListConstants::KEY_PASSWORD
+                );
         }
 
         return $options;
@@ -309,9 +248,11 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         $errors = [];
 
-        if (isset($options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE])) {
-            if ($options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] != ConfigOptionsList::SESSION_SAVE_FILES &&
-                $options[ConfigOptionsList::INPUT_KEY_SESSION_SAVE] != ConfigOptionsList::SESSION_SAVE_DB
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])) {
+            if ($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]
+                != ConfigOptionsListConstants::SESSION_SAVE_FILES
+                && $options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]
+                != ConfigOptionsListConstants::SESSION_SAVE_DB
             ) {
                 $errors[] = 'Invalid session save location.';
             }
@@ -330,8 +271,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         $errors = [];
 
-        if (isset($options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY])
-            && !$options[ConfigOptionsList::INPUT_KEY_ENCRYPTION_KEY]) {
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])
+            && !$options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]) {
             $errors[] = 'Invalid encryption key.';
         }
 

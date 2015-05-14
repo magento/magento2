@@ -10,7 +10,7 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Resource\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class Resource
 {
@@ -104,7 +104,7 @@ class Resource
             return $this->_connections[$connectionName];
         }
 
-        $dbInfo = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
+        $dbInfo = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_DB);
         if (null === $dbInfo) {
             return false;
         }
@@ -233,7 +233,7 @@ class Resource
     {
         if (null === $this->_tablePrefix) {
             $this->_tablePrefix = (string)$this->deploymentConfig->get(
-                ConfigOptionsList::CONFIG_PATH_DB_PREFIX
+                ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX
             );
         }
         return $this->_tablePrefix;

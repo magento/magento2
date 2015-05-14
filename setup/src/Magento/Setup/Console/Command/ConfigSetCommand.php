@@ -7,7 +7,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\ConfigModel;
 use Symfony\Component\Console\Input\InputInterface;
@@ -105,13 +105,13 @@ class ConfigSetCommand extends AbstractSetupCommand
         );
 
         $optionsToChange = array_intersect(array_keys($inputOptions), array_keys($commandOptions));
-        $optionsToChange = array_diff($optionsToChange, [ConfigOptionsList::INPUT_KEY_SKIP_DB_VALIDATION]);
+        $optionsToChange = array_diff($optionsToChange, [ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]);
 
         $this->configModel->process($inputOptions);
 
         $optionsWithDefaultValues = array_diff(
             $optionsWithDefaultValues,
-            [ConfigOptionsList::INPUT_KEY_SKIP_DB_VALIDATION]
+            [ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]
         );
 
         if (count($optionsWithDefaultValues) > 0) {

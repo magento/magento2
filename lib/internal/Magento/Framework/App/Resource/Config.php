@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\App\Resource;
 
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInterface
 {
@@ -37,7 +37,7 @@ class Config extends \Magento\Framework\Config\Data\Scoped implements ConfigInte
     ) {
         parent::__construct($reader, $configScope, $cache, $cacheId);
 
-        foreach ($deploymentConfig->getConfigData(ConfigOptionsList::KEY_RESOURCE) as $resourceName => $resourceData) {
+        foreach ($deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_RESOURCE) as $resourceName => $resourceData) {
             if (!isset($resourceData['connection'])) {
                 throw new \InvalidArgumentException('Invalid initial resource configuration');
             }

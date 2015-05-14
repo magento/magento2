@@ -7,7 +7,7 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
 use \Magento\Setup\Model\Installer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;

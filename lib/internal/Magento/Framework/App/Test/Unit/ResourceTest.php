@@ -9,7 +9,7 @@
 namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\Resource;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +60,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->deploymentConfig->expects($this->any())
             ->method('getConfigData')
-            ->with(ConfigOptionsList::KEY_DB)
+            ->with(ConfigOptionsListConstants::KEY_DB)
             ->will($this->returnValue(
                     [
                         'connection' => [

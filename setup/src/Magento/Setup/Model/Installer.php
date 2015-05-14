@@ -11,7 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Resource\Config;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Model\Resource\Db\Context;
@@ -426,9 +426,9 @@ class Installer
         $userData = is_array($data) ? $data : $data->getArrayCopy();
         $this->setupConfigModel->process($userData);
         if ($this->deploymentConfig->isAvailable()) {
-            $deploymentConfigData = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
+            $deploymentConfigData = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
             if (isset($deploymentConfigData)) {
-                $this->installInfo[ConfigOptionsList::KEY_ENCRYPTION_KEY] = $deploymentConfigData;
+                $this->installInfo[ConfigOptionsListConstants::KEY_ENCRYPTION_KEY] = $deploymentConfigData;
             }
         }
         // reset object manager now that there is a deployment config
@@ -983,7 +983,7 @@ class Installer
     {
         // stops cleanup if app/etc/config.php does not exist
         if ($this->deploymentConfig->isAvailable()) {
-            $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
+            $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_DB);
             $config = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
 
             if ($config) {
@@ -1048,16 +1048,16 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
+        $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_DB);
         $connectionConfig = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
         $this->dbValidator->checkDatabaseConnection(
-            $connectionConfig[ConfigOptionsList::KEY_NAME],
-            $connectionConfig[ConfigOptionsList::KEY_HOST],
-            $connectionConfig[ConfigOptionsList::KEY_USER],
-            $connectionConfig[ConfigOptionsList::KEY_PASSWORD]
+            $connectionConfig[ConfigOptionsListConstants::KEY_NAME],
+            $connectionConfig[ConfigOptionsListConstants::KEY_HOST],
+            $connectionConfig[ConfigOptionsListConstants::KEY_USER],
+            $connectionConfig[ConfigOptionsListConstants::KEY_PASSWORD]
         );
-        if (isset($connectionConfig[ConfigOptionsList::KEY_PREFIX])) {
-            $this->dbValidator->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsList::KEY_PREFIX]);
+        if (isset($connectionConfig[ConfigOptionsListConstants::KEY_PREFIX])) {
+            $this->dbValidator->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsListConstants::KEY_PREFIX]);
         }
     }
 
