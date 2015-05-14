@@ -39,27 +39,6 @@ class Checkmo extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_isOffline = true;
 
     /**
-     * Assign data to info model instance
-     *
-     * @param mixed $data
-     * @return $this
-     */
-    public function assignData($data)
-    {
-        $details = [];
-        if ($this->getPayableTo()) {
-            $details['payable_to'] = $this->getPayableTo();
-        }
-        if ($this->getMailingAddress()) {
-            $details['mailing_address'] = $this->getMailingAddress();
-        }
-        if (!empty($details)) {
-            $this->getInfoInstance()->setAdditionalData(serialize($details));
-        }
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getPayableTo()
