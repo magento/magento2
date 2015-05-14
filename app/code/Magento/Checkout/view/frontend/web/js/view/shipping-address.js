@@ -28,7 +28,7 @@ define(
             },
             stepNumber: navigator.getStepNumber(stepName),
             addresses: customer.getShippingAddressList(),
-            selectedAddressId: ko.observable(addressList.getAddresses()[0].id),
+            selectedAddressId: ko.observable(addressList.getAddresses()[0].customerAddressId),
             sameAsBilling: ko.observable(null),
             quoteHasBillingAddress: quote.getBillingAddress(),
             isVisible: navigator.isStepVisible(stepName),

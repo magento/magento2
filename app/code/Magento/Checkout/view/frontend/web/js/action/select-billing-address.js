@@ -23,7 +23,7 @@ define(
             additionalData = additionalData || {};
             quote.setBillingAddress(billingAddress);
             if (useForShipping() === '1' && !quote.isVirtual()) {
-                if (!billingAddress.id) {
+                if (!billingAddress.customerAddressId) {
                     // update shipping address data in corresponding provider
                     var shippingAddressSource = registry.get('checkoutProvider');
                     var shippingAddress = shippingAddressSource.get('shippingAddress');
@@ -41,7 +41,7 @@ define(
                 if (quote.getCheckoutMethod()() === 'guest') {
                     serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
                 } else {
-                    serviceUrl =  urlBuilder.createUrl('/carts/mine/addresses', {});
+                    serviceUrl = urlBuilder.createUrl('/carts/mine/addresses', {});
                 }
                 storage.post(
                     serviceUrl,

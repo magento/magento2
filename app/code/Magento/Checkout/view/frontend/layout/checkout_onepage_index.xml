@@ -149,6 +149,16 @@
                                                                     <item name="equalTo" xsi:type="string"><![CDATA[[name='customerDetails[password]']]]></item>
                                                                 </item>
                                                             </item>
+                                                            <item name="save_in_address_book" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
+                                                                </item>
+                                                                <item name="description" xsi:type="string">Save in address book</item>
+                                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                <item name="dataScope" xsi:type="string">billingAddress.save_in_address_book</item>
+                                                            </item>
                                                         </item>
                                                     </item>
                                                     <item name="billing-address-choice" xsi:type="array">
@@ -216,6 +226,16 @@
                                                             </item>
                                                             <item name="country_id" xsi:type="array">
                                                                 <item name="sortOrder" xsi:type="string">115</item>
+                                                            </item>
+                                                            <item name="save_in_address_book" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                                                                <item name="config" xsi:type="array">
+                                                                    <item name="template" xsi:type="string">ui/form/field</item>
+                                                                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
+                                                                </item>
+                                                                <item name="description" xsi:type="string">Save in address book</item>
+                                                                <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                <item name="dataScope" xsi:type="string">shippingAddress.save_in_address_book</item>
                                                             </item>
                                                         </item>
                                                     </item>

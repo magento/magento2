@@ -36,7 +36,7 @@ define(
             },
             stepNumber: navigator.getStepNumber(stepName),
             billingAddresses: customer.getBillingAddressList(),
-            selectedBillingAddressId: addressList.getAddresses()[0].id,
+            selectedBillingAddressId: addressList.getAddresses()[0].customerAddressId,
             isVisible: navigator.isStepVisible(stepName),
             useForShipping: "1",
             quoteIsVirtual: quote.isVirtual(),
