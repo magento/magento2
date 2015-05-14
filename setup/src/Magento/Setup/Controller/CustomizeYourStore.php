@@ -55,7 +55,7 @@ class CustomizeYourStore extends AbstractActionController
      */
     public function defaultTimeZoneAction()
     {
-        $defaultTimeZone = trim(date_default_timezone_get());
+        $defaultTimeZone = trim(@date_default_timezone_get());
         if (empty($defaultTimeZone)) {
             return new JsonModel(['defaultTimeZone' => 'UTC']);
         } else {

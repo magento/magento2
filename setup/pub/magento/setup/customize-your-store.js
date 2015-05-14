@@ -29,9 +29,13 @@ angular.module('customize-your-store', ['ngStorage', 'ngSanitize'])
         $scope.loading = false;
 
         if (!$localStorage.store) {
-            $http.get('index.php/customize-your-store/default-time-zone').success(function (data) {
-                $scope.store.timezone = data.defaultTimeZone;
-            });
+            $http.get('index.php/customize-your-store/default-time-zone',{'responseType' : 'json'})
+                .success(function (data) {
+                    $scope.store.timezone = data.defaultTimeZone;
+                })
+                .error(function (data) {
+                    $scope.store.timezone = 'UTC';
+                });
         }
 
         if ($localStorage.store) {
