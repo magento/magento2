@@ -19,49 +19,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected $response;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectManager;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $eventManager;
-
-    /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $layout;
-
-    /**
-     * @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $update;
-
-    /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $view;
-
-    /**
-     * @var Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resultFactory;
-
-    /**
      * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
-
-    /**
-     * @var \Magento\Framework\View\Page|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $page;
-
-    /**
-     * @var \Magento\Framework\View\Page\Config
-     */
-    protected $pageConfig;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager $objectManagerHelper
@@ -104,42 +64,50 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->response = $this->getMock('Magento\Framework\App\Console\Response', [], [], '', false);
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
+        /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
-        $this->update = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
-        $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
-        $this->layout->expects($this->any())->method('getUpdate')->will($this->returnValue($this->update));
+        /** @var \Magento\Framework\View\Layout\ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject */
+        $update = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface', [], [], '', false);
+        /** @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject */
+        $layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
+        $layout->expects($this->any())->method('getUpdate')->will($this->returnValue($update));
 
-        $this->pageConfig = $this->getMock('Magento\Framework\View\Page\Config', [], [], '', false);
-        $this->pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
+        /** @var \Magento\Framework\View\Page\Config */
+        $pageConfig = $this->getMock('Magento\Framework\View\Page\Config', [], [], '', false);
+        $pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
 
-        $this->page = $this->getMock(
+        /** @var \Magento\Framework\View\Page|\PHPUnit_Framework_MockObject_MockObject */
+        $page = $this->getMock(
             'Magento\Framework\View\Page',
             ['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout'],
             [],
             '',
             false
         );
-        $this->page->expects($this->any())->method('getConfig')->will($this->returnValue($this->pageConfig));
-        $this->page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
-        $this->page->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
+        $page->expects($this->any())->method('getConfig')->will($this->returnValue($pageConfig));
+        $page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
+        $page->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
 
-        $this->view = $this->getMock('Magento\Framework\App\ViewInterface', [], [], '', false);
-        $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
+        /** @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
+        $view = $this->getMock('Magento\Framework\App\ViewInterface', [], [], '', false);
+        $view->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
 
-        $this->resultFactory = $this->getMock('Magento\Framework\Controller\ResultFactory', [], [], '', false);
-        $this->resultFactory->expects($this->any())->method('create')->will($this->returnValue($this->page));
+        /** @var Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject */
+        $resultFactory = $this->getMock('Magento\Framework\Controller\ResultFactory', [], [], '', false);
+        $resultFactory->expects($this->any())->method('create')->will($this->returnValue($page));
 
         $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
         $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
         $this->context->expects($this->any())->method('getResponse')->will($this->returnValue($this->response));
         $this->context->expects($this->any())->method('getObjectManager')
-            ->will($this->returnValue($this->objectManager));
-        $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
-        $this->context->expects($this->any())->method('getView')->will($this->returnValue($this->view));
+            ->will($this->returnValue($objectManager));
+        $this->context->expects($this->any())->method('getEventManager')->will($this->returnValue($eventManager));
+        $this->context->expects($this->any())->method('getView')->will($this->returnValue($view));
         $this->context->expects($this->any())->method('getResultFactory')
-            ->will($this->returnValue($this->resultFactory));
+            ->will($this->returnValue($resultFactory));
 
         $this->helperMock = $this->getMock('Magento\Framework\Oauth\Helper\Request', [], [], '', false);
         $this->frameworkOauthSvcMock = $this->getMock('Magento\Framework\Oauth\OauthInterface', [], [], '', false);
