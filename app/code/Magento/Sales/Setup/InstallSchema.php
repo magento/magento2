@@ -778,49 +778,49 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
             'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Shipping Hidden Tax Amount'
+            'Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'base_shipping_discount_tax_compensation_amnt',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Shipping Hidden Tax Amount'
+            'Base Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'discount_tax_compensation_invoiced',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Invoiced'
+            'Discount Tax Compensation Invoiced'
         )->addColumn(
             'base_discount_tax_compensation_invoiced',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Invoiced'
+            'Base Discount Tax Compensation Invoiced'
         )->addColumn(
             'discount_tax_compensation_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Refunded'
+            'Discount Tax Compensation Refunded'
         )->addColumn(
             'base_discount_tax_compensation_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Refunded'
+            'Base Discount Tax Compensation Refunded'
         )->addColumn(
             'shipping_incl_tax',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -1615,37 +1615,37 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
             'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
             'discount_tax_compensation_invoiced',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Invoiced'
+            'Discount Tax Compensation Invoiced'
         )->addColumn(
             'base_discount_tax_compensation_invoiced',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Invoiced'
+            'Base Discount Tax Compensation Invoiced'
         )->addColumn(
             'discount_tax_compensation_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Refunded'
+            'Discount Tax Compensation Refunded'
         )->addColumn(
             'base_discount_tax_compensation_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Refunded'
+            'Base Discount Tax Compensation Refunded'
         )->addColumn(
             'tax_canceled',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -1657,7 +1657,7 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Canceled'
+            'Discount Tax Compensation Canceled'
         )->addColumn(
             'tax_refunded',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -2763,25 +2763,25 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
             'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Shipping Hidden Tax Amount'
+            'Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'base_shipping_discount_tax_compensation_amnt',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Shipping Hidden Tax Amount'
+            'Base Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_incl_tax',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -3132,13 +3132,13 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
             'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
             'tax_ratio',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -3473,25 +3473,25 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
             'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Shipping Hidden Tax Amount'
+            'Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'base_shipping_discount_tax_compensation_amnt',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Shipping Hidden Tax Amount'
+            'Base Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_incl_tax',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -3878,13 +3878,13 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
             'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
             'tax_ratio',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,

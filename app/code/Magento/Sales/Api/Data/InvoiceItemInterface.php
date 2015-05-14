@@ -104,11 +104,11 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      */
     const NAME = 'name';
     /*
-     * Hidden tax amount.
+     * Discount tax compensation amount.
      */
     const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
-     * Base hidden tax amount.
+     * Base discount tax compensation amount.
      */
     const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
 
@@ -134,9 +134,9 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getBaseDiscountAmount();
 
     /**
-     * Gets the base hidden tax amount for the invoice item.
+     * Gets the base discount tax compensation amount for the invoice item.
      *
-     * @return float Base hidden tax amount.
+     * @return float Base discount tax compensation amount.
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -205,9 +205,9 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setEntityId($entityId);
 
     /**
-     * Gets the hidden tax amount for the invoice item.
+     * Gets the discount tax compensation amount for the invoice item.
      *
-     * @return float Hidden tax amount.
+     * @return float Discount tax compensation amount.
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -457,7 +457,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setName($name);
 
     /**
-     * Sets the hidden tax amount for the invoice item.
+     * Sets the discount tax compensation amount for the invoice item.
      *
      * @param float $amount
      * @return $this
@@ -465,7 +465,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the base hidden tax amount for the invoice item.
+     * Sets the base discount tax compensation amount for the invoice item.
      *
      * @param float $amount
      * @return $this

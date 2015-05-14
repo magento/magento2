@@ -39,7 +39,7 @@ class Tax extends CommonTaxCollector
     protected $_config;
 
     /**
-     * Hidden taxes array
+     * Discount tax compensationes array
      *
      * @var array
      */

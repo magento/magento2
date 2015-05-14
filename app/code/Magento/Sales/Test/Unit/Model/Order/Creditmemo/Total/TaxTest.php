@@ -378,7 +378,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         ];
 
         // scenario 4: 3 items, 2 invoiced, price includes tax
-        // partial credit memo, make sure that hidden tax is calculated correctly
+        // partial credit memo, make sure that discount tax compensation is calculated correctly
         $result['partial_invoice_partial_creditmemo_price_incl_tax'] = [
             'order_data' => [
                 'data_fields' => [

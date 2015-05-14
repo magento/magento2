@@ -160,19 +160,19 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      */
     const UPDATED_AT = 'updated_at';
     /*
-     * Hidden tax amount.
+     * Discount tax compensation amount.
      */
     const DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
     /*
-     * Base hidden tax amount.
+     * Base discount tax compensation amount.
      */
     const BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'base_discount_tax_compensation_amount';
     /*
-     * Shipping hidden tax amount.
+     * Shipping discount tax compensation amount.
      */
     const SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'shipping_discount_tax_compensation_amount';
     /*
-     * Base shipping hidden tax amount.
+     * Base shipping discount tax compensation amount.
      */
     const BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT = 'base_shipping_discount_tax_compensation_amnt';
     /*
@@ -222,9 +222,9 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getBaseGrandTotal();
 
     /**
-     * Gets the base hidden tax amount for the invoice.
+     * Gets the base discount tax compensation amount for the invoice.
      *
-     * @return float Base hidden tax amount.
+     * @return float Base discount tax compensation amount.
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -236,9 +236,9 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getBaseShippingAmount();
 
     /**
-     * Gets the base shipping hidden tax amount for the invoice.
+     * Gets the base shipping discount tax compensation amount for the invoice.
      *
-     * @return float Base shipping hidden tax amount.
+     * @return float Base shipping discount tax compensation amount.
      */
     public function getBaseShippingDiscountTaxCompensationAmnt();
 
@@ -378,9 +378,9 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getGrandTotal();
 
     /**
-     * Gets the hidden tax amount for the invoice.
+     * Gets the discount tax compensation amount for the invoice.
      *
-     * @return float Hidden tax amount.
+     * @return float Discount tax compensation amount.
      */
     public function getDiscountTaxCompensationAmount();
 
@@ -427,9 +427,9 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function getShippingAmount();
 
     /**
-     * Gets the shipping hidden tax amount for the invoice.
+     * Gets the shipping discount tax compensation amount for the invoice.
      *
-     * @return float Shipping hidden tax amount.
+     * @return float Shipping discount tax compensation amount.
      */
     public function getShippingDiscountTaxCompensationAmount();
 
@@ -827,7 +827,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setIncrementId($id);
 
     /**
-     * Sets the hidden tax amount for the invoice.
+     * Sets the discount tax compensation amount for the invoice.
      *
      * @param float $amount
      * @return $this
@@ -835,7 +835,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the base hidden tax amount for the invoice.
+     * Sets the base discount tax compensation amount for the invoice.
      *
      * @param float $amount
      * @return $this
@@ -843,7 +843,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setBaseDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the shipping hidden tax amount for the invoice.
+     * Sets the shipping discount tax compensation amount for the invoice.
      *
      * @param float $amount
      * @return $this
@@ -851,7 +851,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     public function setShippingDiscountTaxCompensationAmount($amount);
 
     /**
-     * Sets the base shipping hidden tax amount for the invoice.
+     * Sets the base shipping discount tax compensation amount for the invoice.
      *
      * @param float $amnt
      * @return $this

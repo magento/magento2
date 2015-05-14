@@ -644,25 +644,25 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
             'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Shipping Hidden Tax Amount'
+            'Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'base_shipping_discount_tax_compensation_amnt',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Shipping Hidden Tax Amount'
+            'Base Shipping Discount Tax Compensation Amount'
         )->addColumn(
             'shipping_incl_tax',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
@@ -939,13 +939,13 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
             'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addIndex(
             $installer->getIdxName('quote_item', ['parent_item_id']),
             ['parent_item_id']
@@ -1213,13 +1213,13 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Hidden Tax Amount'
+            'Discount Tax Compensation Amount'
         )->addColumn(
             'base_discount_tax_compensation_amount',
             \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
             '12,4',
             [],
-            'Base Hidden Tax Amount'
+            'Base Discount Tax Compensation Amount'
         )->addIndex(
             $installer->getIdxName('quote_address_item', ['quote_address_id']),
             ['quote_address_id']
