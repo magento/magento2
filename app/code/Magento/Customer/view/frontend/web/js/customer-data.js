@@ -22,10 +22,9 @@ define([
     var invalidateCacheBySessionTimeOut = function(options) {
         if (new Date($.localStorage.get('mage-cache-timeout')) < new Date()) {
             storage.removeAll();
+            var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
+            $.localStorage.set('mage-cache-timeout', date);
         }
-        //TODO: probably easier to track changes in the session of the backend area
-        var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
-        $.localStorage.set('mage-cache-timeout', date);
     };
 
     var invalidateCacheByCloseCookieSession = function() {
