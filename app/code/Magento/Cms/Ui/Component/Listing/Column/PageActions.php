@@ -16,31 +16,27 @@ use Magento\Framework\UrlInterface;
  */
 class PageActions extends Column
 {
-    /**
-     * Url path
-     */
-    const URL_PATH = 'cms/page/edit';
+    /** Url path */
+    const CMS_URL_PATH = 'cms/page/edit';
 
-    /**
-     * @var UrlBuilder
-     */
+    /** @var UrlBuilder */
     protected $actionUrlBuilder;
 
-    /**
-     * @var UrlInterface
-     */
+    /** @var UrlInterface */
     protected $urlBuilder;
 
+    /** @var string */
+    protected $url;
+
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param UrlBuilder $actionUrlBuilder
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
+     * @param string $url
      */
     public function __construct(
         ContextInterface $context,
@@ -48,10 +44,12 @@ class PageActions extends Column
         UrlBuilder $actionUrlBuilder,
         UrlInterface $urlBuilder,
         array $components = [],
-        array $data = []
+        array $data = [],
+        $url = self::CMS_URL_PATH
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->actionUrlBuilder = $actionUrlBuilder;
+        $this->url = $url;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -64,7 +62,7 @@ class PageActions extends Column
         foreach ($items as & $item) {
             if (isset($item['page_id'])) {
                 $item[$this->getData('name')]['edit'] = [
-                    'href' => $this->urlBuilder->getUrl(static::URL_PATH, ['page_id' => $item['page_id']]),
+                    'href' => $this->urlBuilder->getUrl($this->url, ['page_id' => $item['page_id']]),
                     'label' => __('Edit'),
                     'hidden' => true
                 ];
