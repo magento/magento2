@@ -945,7 +945,6 @@ class Files
             '/app/code/',
             '/lib/internal/',
             '/dev/tools/',
-            '/dev/tools/performance-toolkit/framework/',
             '/dev/tests/api-functional/framework/',
             '/dev/tests/integration/framework/',
             '/dev/tests/integration/framework/tests/unit/testsuite/',
