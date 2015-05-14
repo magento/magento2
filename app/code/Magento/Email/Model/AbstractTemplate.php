@@ -5,6 +5,7 @@
  */
 namespace Magento\Email\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\ScopeInterface;
@@ -97,6 +98,23 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $_appEmulation;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $_filesystem;
+
+    /**
+     * Object manager
+     *
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager;
+
+    /**
+     * @var \Magento\Email\Model\Template\Config
+     */
+    protected $_emailConfig;
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -107,6 +125,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param Template\Config $emailConfig
      * @param array $data
      */
     public function __construct(
@@ -115,6 +136,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Email\Model\Template\Config $emailConfig,
         array $data = []
     ) {
         $this->_design = $design;
@@ -122,7 +146,112 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->_store = isset($data['store']) ? $data['store'] : null;
         $this->_appEmulation = $appEmulation;
         $this->_storeManager = $storeManager;
+        $this->_filesystem = $filesystem;
+        $this->_objectManager = $objectManager;
+        $this->_emailConfig = $emailConfig;
         parent::__construct($context, $registry, null, null, $data);
+    }
+
+    /**
+     * Get contents of the included template for template directive
+     *
+     * @param string $configPath
+     * @param array $variables
+     * @return string
+     */
+    public function getTemplateContent($configPath, array $variables)
+    {
+        $thisClass = get_class($this);
+        $template = $this->_objectManager->create($thisClass);
+        $template->loadByConfigPath($configPath, $variables);
+
+        // Indicate that this is a child template so that when the template is being filtered, directives such as
+        // inlinecss can respond accordingly
+        $template->setIsChildTemplate(true);
+
+        return $template->getProcessedTemplate($variables);
+    }
+
+    /**
+     * Load template by XML configuration path. Loads template from database if it exists and has been override in
+     * configuration. Otherwise loads from the filesystem.
+     *
+     * @param string $configPath
+     * @return \Magento\Email\Model\AbstractTemplate
+     */
+    public function loadByConfigPath($configPath)
+    {
+        $templateId = $this->_scopeConfig->getValue(
+            $configPath
+        );
+
+        if (is_numeric($templateId)) {
+            // Template was overridden in backend, so load template from database
+            $this->load($templateId);
+        } else {
+            // Load from filesystem
+            $this->loadDefault($templateId);
+        }
+
+        // Templates loaded via the {{template config_path=""}} syntax don't support the subject/vars/styles
+        // comment blocks, so strip them out
+        $templateText = preg_replace('/<!--@(\w+)\s*(.*?)\s*@-->/us', '', $this->getTemplateText());
+        // Remove comment lines and extra spaces
+        $templateText = trim(preg_replace('#\{\*.*\*\}#suU', '', $templateText));
+
+        $this->setTemplateText($templateText);
+
+        return $this;
+    }
+
+    /**
+     * Load default email template
+     *
+     * @param string $templateId
+     * @return $this
+     */
+    public function loadDefault($templateId)
+    {
+        $templateFile = $this->_emailConfig->getTemplateFilename($templateId);
+        $templateType = $this->_emailConfig->getTemplateType($templateId);
+        $templateTypeCode = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
+        $this->setTemplateType($templateTypeCode);
+
+        $modulesDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $templateText = $modulesDirectory->readFile($modulesDirectory->getRelativePath($templateFile));
+
+        /**
+         * trim copyright message for text templates
+         */
+        if ('html' != $templateType
+            && preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches)
+            && strpos($matches[0], 'Copyright') > 0
+        ) {
+            $templateText = str_replace($matches[0], '', $templateText);
+        }
+
+        if (preg_match('/<!--@subject\s*(.*?)\s*@-->/u', $templateText, $matches)) {
+            $this->setTemplateSubject($matches[1]);
+            $templateText = str_replace($matches[0], '', $templateText);
+        }
+
+        if (preg_match('/<!--@vars\s*((?:.)*?)\s*@-->/us', $templateText, $matches)) {
+            $this->setData('orig_template_variables', str_replace("\n", '', $matches[1]));
+            $templateText = str_replace($matches[0], '', $templateText);
+        }
+
+        if (preg_match('/<!--@styles\s*(.*?)\s*@-->/s', $templateText, $matches)) {
+            $this->setTemplateStyles($matches[1]);
+            $templateText = str_replace($matches[0], '', $templateText);
+        }
+
+        // Remove comment lines and extra spaces
+        $templateText = trim(preg_replace('#\{\*.*\*\}#suU', '', $templateText));
+
+        $this->setTemplateText($templateText);
+        $this->setId($templateId);
+
+        return $this;
     }
 
     /**
@@ -444,7 +573,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function setIsChildTemplate($isChildTemplate)
     {
-        $this->_isChildTemplate = $isChildTemplate;
+        $this->_isChildTemplate = (bool) $isChildTemplate;
         return $this;
     }
 

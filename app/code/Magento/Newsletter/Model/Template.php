@@ -99,6 +99,9 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Newsletter\Model\Template\Filter $filter
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param Template\Config $emailConfig
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param array $data
@@ -113,11 +116,14 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\Filter $filter,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Framework\Filter\FilterManager $filterManager,
         array $data = []
     ) {
-        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $filesystem, $objectManager, $emailConfig, $data);
         $this->_storeManager = $storeManager;
         $this->_request = $request;
         $this->_filter = $filter;
@@ -184,18 +190,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
     }
 
     /**
-     * Load template by code
-     *
-     * @param string $templateCode
-     * @return $this
-     */
-    public function loadByCode($templateCode)
-    {
-        $this->_getResource()->loadByCode($this, $templateCode);
-        return $this;
-    }
-
-    /**
      * Getter for template type
      *
      * @return int|string
@@ -249,7 +243,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             $this->_filter->setStoreId($this->_request->getParam('store_id'));
         }
 
-        $this->_filter->setIncludeProcessor([$this, 'getInclude'])->setVariables($variables);
+        $this->_filter->setTemplateProcessor([$this, 'getTemplate'])->setVariables($variables);
 
         if ($usePreprocess && $this->isPreprocessed()) {
             return $this->_filter->filter($this->getPreparedTemplateText(true));
@@ -274,21 +268,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         // wrap styles into style tag
         $html = "<style type=\"text/css\">\n%s\n</style>\n%s";
         return sprintf($html, $this->getTemplateStyles(), $text);
-    }
-
-    /**
-     * Retrieve included template
-     *
-     * @param string $templateCode
-     * @param array $variables
-     * @return string
-     */
-    public function getInclude($templateCode, array $variables)
-    {
-        /** @var \Magento\Newsletter\Model\Template $template */
-        $template = $this->_templateFactory->create();
-        $template->loadByCode($templateCode)->getProcessedTemplate($variables);
-        return $template;
     }
 
     /**

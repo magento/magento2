@@ -42,7 +42,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $filter = $this->getMock('Magento\Newsletter\Model\Template\Filter', [], [], '', false);
         $appEmulation = $this->getMock('Magento\Store\Model\App\Emulation', [], [], '', false);
         $filter->expects($this->once())->method('setStoreId')->with('test_id');
-        $filter->expects($this->once())->method('setIncludeProcessor')->will($this->returnSelf());
+        $filter->expects($this->once())->method('setTemplateProcessor')->will($this->returnSelf());
         $filter->expects(
             $this->once()
         )->method(

@@ -62,6 +62,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     private $scopeConfig;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManager;
+
+    /**
      * @var \Magento\Email\Model\Template\FilterFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $emailFilterFactory;
@@ -100,6 +105,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->emailFilterFactory = $this->getMockBuilder('Magento\Email\Model\Template\FilterFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -129,6 +137,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->assetRepo,
                     $this->viewFileSystem,
                     $this->scopeConfig,
+                    $this->objectManager,
                     $this->emailFilterFactory,
                     $this->emailConfig
                 ]
@@ -298,28 +307,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'expectedTemplateStyles' => null,
             ],
         ];
-    }
-
-    public function testLoadByCode()
-    {
-        $templateCode = 'templateCode';
-        $templateData = ['templateData'];
-        $resource = $this->getMockBuilder('Magento\Email\Model\Resource\Template')
-            ->setMethods(['loadByCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resource->expects($this->once())
-            ->method('loadByCode')
-            ->with($templateCode)
-            ->will($this->returnValue($templateData));
-        $model = $this->getModelMock(['addData', 'getResource']);
-        $model->expects($this->once())
-            ->method('getResource')
-            ->will($this->returnValue($resource));
-        $model->expects($this->once())
-            ->method('addData')
-            ->with($templateData);
-        $this->assertEquals($model, $model->loadByCode($templateCode));
     }
 
     public function testGetAndSetId()
@@ -765,6 +752,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false),
                 $this->getMock('Magento\Framework\View\FileSystem', [], [], '', false),
                 $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
+                $this->getMock('Magento\Framework\ObjectManagerInterface'),
                 $this->getMock('Magento\Email\Model\Template\FilterFactory', [], [], '', false),
                 $emailConfig,
                 ['template_id' => 10],

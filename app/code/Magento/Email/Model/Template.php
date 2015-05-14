@@ -6,7 +6,6 @@
 namespace Magento\Email\Model;
 
 use Magento\Email\Model\Template\Filter;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filter\Template as FilterTemplate;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -115,11 +114,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     protected $_sendingException = null;
 
     /**
-     * @var \Magento\Framework\Filesystem
-     */
-    protected $_filesystem;
-
-    /**
      * @var \Magento\Framework\View\Asset\Repository
      */
     protected $_assetRepo;
@@ -135,18 +129,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
-
-    /**
-     * Object manager
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $_objectManager;
-
-    /**
-     * @var \Magento\Email\Model\Template\Config
-     */
-    private $_emailConfig;
 
     /**
      * Constructor
@@ -190,13 +172,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
-        $this->_filesystem = $filesystem;
         $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
-        $this->_objectManager = $objectManager;
         $this->_emailFilterFactory = $emailFilterFactory;
-        $this->_emailConfig = $emailConfig;
-        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $filesystem, $objectManager, $emailConfig, $data);
     }
 
     /**
@@ -250,70 +229,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
             );
         }
         return $this->_templateFilter;
-    }
-
-    /**
-     * Load template by code
-     *
-     * @param string $templateCode
-     * @return $this
-     */
-    public function loadByCode($templateCode)
-    {
-        $this->addData($this->getResource()->loadByCode($templateCode));
-        return $this;
-    }
-
-    /**
-     * Load default email template
-     *
-     * @param string $templateId
-     * @return $this
-     */
-    public function loadDefault($templateId)
-    {
-        $templateFile = $this->_emailConfig->getTemplateFilename($templateId);
-        $templateType = $this->_emailConfig->getTemplateType($templateId);
-        $templateTypeCode = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
-        $this->setTemplateType($templateTypeCode);
-
-        $modulesDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MODULES);
-        $templateText = $modulesDirectory->readFile($modulesDirectory->getRelativePath($templateFile));
-
-        /**
-         * trim copyright message for text templates
-         */
-        if ('html' != $templateType
-            && preg_match('/^<!--[\w\W]+?-->/m', $templateText, $matches)
-            && strpos($matches[0], 'Copyright') > 0
-        ) {
-            $templateText = str_replace($matches[0], '', $templateText);
-        }
-
-        if (preg_match('/<!--@subject\s*(.*?)\s*@-->/u', $templateText, $matches)) {
-            $this->setTemplateSubject($matches[1]);
-            $templateText = str_replace($matches[0], '', $templateText);
-        }
-
-        if (preg_match('/<!--@vars\s*((?:.)*?)\s*@-->/us', $templateText, $matches)) {
-            $this->setData('orig_template_variables', str_replace("\n", '', $matches[1]));
-            $templateText = str_replace($matches[0], '', $templateText);
-        }
-
-        if (preg_match('/<!--@styles\s*(.*?)\s*@-->/s', $templateText, $matches)) {
-            $this->setTemplateStyles($matches[1]);
-            $templateText = str_replace($matches[0], '', $templateText);
-        }
-
-        /**
-         * Remove comment lines and extra spaces
-         */
-        $templateText = trim(preg_replace('#\{\*.*\*\}#suU', '', $templateText));
-
-        $this->setTemplateText($templateText);
-        $this->setId($templateId);
-
-        return $this;
     }
 
     /**
@@ -391,7 +306,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         // Populate the variables array with store, store info, logo, etc. variables
         $variables = $this->_addEmailVariables($variables, $processor->getStoreId());
 
-        $processor->setIncludeProcessor([$this, 'getInclude'])->setVariables($variables);
+        $processor->setTemplateProcessor([$this, 'getTemplateContent'])->setVariables($variables);
 
         $storeId = $this->getDesignConfig()->getStore();
         try {
@@ -425,37 +340,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         }
 
         return $this->_applyInlineCss($html);
-    }
-
-    /**
-     * Get template code for include directive
-     *
-     * @param string $template
-     * @param array $variables
-     * @return string
-     */
-    public function getInclude($templateId, array $variables)
-    {
-        // TODO: @Erik Refactor this to load templates that are overridden in the core_email_template module
-        $thisClass = __CLASS__;
-        $includeTemplate = $this->_objectManager->create($thisClass);
-        $includeTemplate->setUseAbsoluteLinks(
-            $this->getUseAbsoluteLinks()
-        )->setStoreId(
-            $this->getDesignConfig()->getStore()
-        );
-
-        if (is_numeric($templateId)) {
-            $includeTemplate->load($templateId);
-        } else {
-            $includeTemplate->loadDefault($templateId);
-        }
-
-        // Indicate that this is a child template so that when the template is being filtered, directives such as
-        // {{inlinecss}} can respond accordingly
-        $includeTemplate->setIsChildTemplate(true);
-
-        return $includeTemplate->getProcessedTemplate($variables);
     }
 
     /**

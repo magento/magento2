@@ -112,6 +112,9 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param Template\Config $emailConfig
      * @param \Magento\Newsletter\Model\Template\Filter $templateFilter
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
@@ -128,6 +131,9 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Newsletter\Model\Template\Filter $templateFilter,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
@@ -136,7 +142,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder,
         array $data = []
     ) {
-        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $data);
+        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $filesystem, $objectManager, $emailConfig, $data);
         $this->_templateFilter = $templateFilter;
         $this->_date = $date;
         $this->_templateFactory = $templateFactory;

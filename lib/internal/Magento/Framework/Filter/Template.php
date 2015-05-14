@@ -23,7 +23,7 @@ class Template implements \Zend_Filter_Interface
 
     const CONSTRUCTION_IF_PATTERN = '/{{if\s*(.*?)}}(.*?)({{else}}(.*?))?{{\\/if\s*}}/si';
 
-    const CONSTRUCTION_INCLUDE_PATTERN = '/{{(include)(.*?)}}/si';
+    const CONSTRUCTION_TEMPLATE_PATTERN = '/{{(template)(.*?)}}/si';
 
     /**#@-*/
 
@@ -35,11 +35,11 @@ class Template implements \Zend_Filter_Interface
     protected $_templateVars = [];
 
     /**
-     * Include processor
+     * Template processor
      *
      * @var callable|null
      */
-    protected $_includeProcessor = null;
+    protected $_templateProcessor = null;
 
     /**
      * @var \Magento\Framework\Stdlib\String
@@ -71,25 +71,25 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
-     * Sets the processor of includes.
+     * Sets the processor for template directive.
      *
      * @param callable $callback it must return string
      * @return $this
      */
-    public function setIncludeProcessor(array $callback)
+    public function setTemplateProcessor(array $callback)
     {
-        $this->_includeProcessor = $callback;
+        $this->_templateProcessor = $callback;
         return $this;
     }
 
     /**
-     * Sets the processor of includes.
+     * Sets the processor for template directive.
      *
      * @return callable|null
      */
-    public function getIncludeProcessor()
+    public function getTemplateProcessor()
     {
-        return is_callable($this->_includeProcessor) ? $this->_includeProcessor : null;
+        return is_callable($this->_templateProcessor) ? $this->_templateProcessor : null;
     }
 
     /**
@@ -106,7 +106,7 @@ class Template implements \Zend_Filter_Interface
         foreach ([
                      self::CONSTRUCTION_DEPEND_PATTERN => 'dependDirective',
                      self::CONSTRUCTION_IF_PATTERN => 'ifDirective',
-                     self::CONSTRUCTION_INCLUDE_PATTERN => 'includeDirective',
+                     self::CONSTRUCTION_TEMPLATE_PATTERN => 'templateDirective',
                  ] as $pattern => $directive) {
             if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
@@ -157,22 +157,26 @@ class Template implements \Zend_Filter_Interface
     }
 
     /**
+     * This directive allows templates to be included inside other email templates using the following syntax:
+     * {{template config_path="<PATH>"}}, where <PATH> equals the XPATH to the system configuration value that contains
+     * the value of the template. This directive is useful to include things like a global header/footer.
+     *
      * @param string[] $construction
      * @return mixed
      */
-    public function includeDirective($construction)
+    public function templateDirective($construction)
     {
-        // Processing of {include template=... [...]} statement
-        $includeParameters = $this->_getIncludeParameters($construction[2]);
-        if (!isset($includeParameters['template']) or !$this->getIncludeProcessor()) {
+        // Processing of {template config_path=... [...]} statement
+        $templateParameters = $this->_getParameters($construction[2]);
+        if (!isset($templateParameters['config_path']) or !$this->getTemplateProcessor()) {
             // Not specified template or not set include processor
-            $replacedValue = '{Error in include processing}';
+            $replacedValue = '{Error in template processing}';
         } else {
             // Including of template
-            $templateCode = $includeParameters['template'];
-            unset($includeParameters['template']);
-            $includeParameters = array_merge_recursive($includeParameters, $this->_templateVars);
-            $replacedValue = call_user_func($this->getIncludeProcessor(), $templateCode, $includeParameters);
+            $configPath = $templateParameters['config_path'];
+            unset($templateParameters['config_path']);
+            $templateParameters = array_merge_recursive($templateParameters, $this->_templateVars);
+            $replacedValue = call_user_func($this->getTemplateProcessor(), $configPath, $templateParameters);
         }
         return $replacedValue;
     }

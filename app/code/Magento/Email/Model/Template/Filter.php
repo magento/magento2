@@ -213,7 +213,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setIsChildTemplate($isChildTemplate)
     {
-        $this->_isChildTemplate = (bool)$isChildTemplate;
+        $this->_isChildTemplate = (bool) $isChildTemplate;
         return $this;
     }
 
