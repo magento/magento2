@@ -95,10 +95,7 @@ class RouteTest extends \PHPUnit_Framework_TestCase
             ['/V1/one/two/:threeValue/four/:fiveValue', '/V1/one/two/3/four/5', ['threeValue' => 3, 'fiveValue' => 5]],
 
             ['/v1/One', '/v1/One', []],
-            ['/v1/oNe', '/V1/one', []],
-            ['/v1/onE', '/V1/oNe', []],
 
-            ['/v1/One/:twoValue', '/V1/one/2', ['twoValue' => 2]],
             ['/v1/oNe/:TwoValue', '/v1/oNe/2', ['TwoValue' => 2]],
             ['/v1/onE/:twovalue', '/v1/onE/2', ['twovalue' => 2]],
 
@@ -108,6 +105,9 @@ class RouteTest extends \PHPUnit_Framework_TestCase
             ['/V1/one-one/:two_value', '/V1/one-one/2', ['two_value' => 2]],
 
             // Error
+            ['/v1/oNe', '/V1/one', false],
+            ['/v1/onE', '/V1/oNe', false],
+            ['/v1/One/:twoValue', '/V1/one/2', false],
             ['/V1/one', '/V1/two', false],
             ['/V1/one/:twoValue', '/V1/one', false],
             ['/V1/one/two', '/V1/one', false],

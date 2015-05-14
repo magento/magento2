@@ -23,6 +23,12 @@ use Magento\Framework\View\Layout\ScheduledStructure;
  */
 class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Framework\View\LayoutInterface
 {
+
+    /**
+     * Empty layout xml
+     */
+    const LAYOUT_NODE = '<layout/>';
+
     /**
      * Layout Update module
      *
@@ -173,7 +179,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $cacheable = true
     ) {
         $this->_elementClass = 'Magento\Framework\View\Layout\Element';
-        $this->setXml(simplexml_load_string('<layout/>', $this->_elementClass));
         $this->_renderingOutput = new \Magento\Framework\Object();
 
         $this->_processorFactory = $processorFactory;
@@ -188,8 +193,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
 
         $this->readerContextFactory = $readerContextFactory;
         $this->generatorContextFactory = $generatorContextFactory;
-
-        $this->readerContext = $this->readerContextFactory->create();
     }
 
     /**
@@ -248,7 +251,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             $this->_update = null;
         }
         $this->_blocks = [];
-        $this->_xml = null;
+        parent::__destruct();
     }
 
     /**
@@ -279,14 +282,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     }
 
     /**
-     * @return Layout\Reader\Context
-     */
-    public function getReaderContext()
-    {
-        return $this->readerContext;
-    }
-
-    /**
      * Create structure of elements from the loaded XML configuration
      *
      * @return void
@@ -297,13 +292,12 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $cacheId = 'structure_' . $this->getUpdate()->getCacheId();
         $result = $this->cache->load($cacheId);
         if ($result) {
-            /** @var Layout\Reader\Context $readerContext */
             $this->readerContext = unserialize($result);
         } else {
             \Magento\Framework\Profiler::start('build_structure');
-            $this->readerPool->interpret($this->readerContext, $this->getNode());
+            $this->readerPool->interpret($this->getReaderContext(), $this->getNode());
             \Magento\Framework\Profiler::stop('build_structure');
-            $this->cache->save(serialize($this->readerContext), $cacheId, $this->getUpdate()->getHandles());
+            $this->cache->save(serialize($this->getReaderContext()), $cacheId, $this->getUpdate()->getHandles());
         }
 
         $generatorContext = $this->generatorContextFactory->create(
@@ -314,7 +308,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         );
 
         \Magento\Framework\Profiler::start('generate_elements');
-        $this->generatorPool->process($this->readerContext, $generatorContext);
+        $this->generatorPool->process($this->getReaderContext(), $generatorContext);
         \Magento\Framework\Profiler::stop('generate_elements');
 
         $this->addToOutputRootContainers();
@@ -1035,7 +1029,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     public function isCacheable()
     {
         $this->build();
-        $cacheableXml = !(bool)count($this->_xml->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
+        $cacheableXml = !(bool)count($this->getXml()->xpath('//' . Element::TYPE_BLOCK . '[@cacheable="false"]'));
         return $this->cacheable && $cacheableXml;
     }
 
@@ -1059,5 +1053,31 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     {
         $this->isPrivate = (bool)$isPrivate;
         return $this;
+    }
+
+    /**
+     * Getter and lazy loader for xml element
+     *
+     * @return \Magento\Framework\Simplexml\Element
+     */
+    protected function getXml()
+    {
+        if (!$this->_xml) {
+            $this->setXml(simplexml_load_string(self::LAYOUT_NODE, $this->_elementClass));
+        }
+        return $this->_xml;
+    }
+
+    /**
+     * Getter and lazy loader for reader context
+     *
+     * @return Layout\Reader\Context
+     */
+    public function getReaderContext()
+    {
+        if (!$this->readerContext) {
+            $this->readerContext = $this->readerContextFactory->create();
+        }
+        return $this->readerContext;
     }
 }

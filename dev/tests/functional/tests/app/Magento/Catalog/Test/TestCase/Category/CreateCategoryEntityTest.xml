@@ -69,7 +69,6 @@
             <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
             <data name="category/data/default_product_listing_config" xsi:type="string">Yes</data>
             <data name="category/data/use_config_price_range" xsi:type="string">Yes</data>
-            <data name="category/data/category_products_data/preset" xsi:type="string">default</data>
             <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
@@ -97,7 +96,6 @@
             <data name="category/data/default_sort_by" xsi:type="string">Price</data>
             <data name="category/data/use_config_price_range" xsi:type="string">No</data>
             <data name="category/data/layered_navigation_price_step" xsi:type="string">50</data>
-            <data name="category/data/category_products_data/preset" xsi:type="string">default</data>
             <data name="category/data/category_products/dataSet" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />

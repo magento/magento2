@@ -3,14 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Tab Interface
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Ui\Component\Layout\Tabs;
 
+/**
+ * Interface TabInterface
+ */
 interface TabInterface
 {
     /**

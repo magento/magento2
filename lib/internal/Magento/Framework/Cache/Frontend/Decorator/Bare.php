@@ -28,6 +28,18 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
+     * Set frontend
+     *
+     * @param \Magento\Framework\Cache\FrontendInterface $frontend
+     * @return $this
+     */
+    protected function setFrontend(\Magento\Framework\Cache\FrontendInterface $frontend)
+    {
+        $this->_frontend = $frontend;
+        return $this;
+    }
+
+    /**
      * Retrieve cache frontend instance being decorated
      *
      * @return \Magento\Framework\Cache\FrontendInterface
@@ -42,7 +54,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      */
     public function test($identifier)
     {
-        return $this->_frontend->test($identifier);
+        return $this->_getFrontend()->test($identifier);
     }
 
     /**
@@ -50,7 +62,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      */
     public function load($identifier)
     {
-        return $this->_frontend->load($identifier);
+        return $this->_getFrontend()->load($identifier);
     }
 
     /**
@@ -60,7 +72,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
-        return $this->_frontend->save($data, $identifier, $tags, $lifeTime);
+        return $this->_getFrontend()->save($data, $identifier, $tags, $lifeTime);
     }
 
     /**
@@ -68,7 +80,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      */
     public function remove($identifier)
     {
-        return $this->_frontend->remove($identifier);
+        return $this->_getFrontend()->remove($identifier);
     }
 
     /**
@@ -76,7 +88,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
     {
-        return $this->_frontend->clean($mode, $tags);
+        return $this->_getFrontend()->clean($mode, $tags);
     }
 
     /**
@@ -84,7 +96,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      */
     public function getBackend()
     {
-        return $this->_frontend->getBackend();
+        return $this->_getFrontend()->getBackend();
     }
 
     /**
@@ -92,6 +104,6 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
      */
     public function getLowLevelFrontend()
     {
-        return $this->_frontend->getLowLevelFrontend();
+        return $this->_getFrontend()->getLowLevelFrontend();
     }
 }

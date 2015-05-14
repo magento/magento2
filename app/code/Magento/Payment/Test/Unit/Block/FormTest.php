@@ -119,4 +119,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
+
+    public function testSetMethod()
+    {
+        $methodInterfaceMock = $this->getMockBuilder('\Magento\Payment\Model\MethodInterface')
+            ->getMockForAbstractClass();
+
+        $this->assertSame($this->_object, $this->_object->setMethod($methodInterfaceMock));
+    }
 }

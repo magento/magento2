@@ -23,7 +23,7 @@ class PageActions extends AbstractPageActions
      *
      * @var string
      */
-    protected $scopeSelector = '.actions.dropdown';
+    protected $scopeSelector = '.store-switcher .actions.dropdown';
 
     /**
      * Select store
@@ -41,7 +41,7 @@ class PageActions extends AbstractPageActions
     }
 
     /**
-     * Check if store visible in scope dropdown
+     * Check if store is visible in scope dropdown
      *
      * @param Store $store
      * @return bool

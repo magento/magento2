@@ -28,13 +28,15 @@
 //  Form Fields
 //  _____________________________________________
 
+//
 //  Fieldset
+//  ---------------------------------------------
+
 .admin__fieldset {
     border: 0;
     margin: 0;
     min-width: 0;
     padding: 0;
-
     > .admin__field {
         border: 0;
         margin: 0;
@@ -54,7 +56,24 @@
     }
 }
 
+.admin__form-field {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.admin__form-field-control,
+.admin__field-control {
+    .admin__control-text,
+    .admin__control-textarea {
+        width: 100%;
+    }
+}
+
+//
 //  Label
+//  ---------------------------------------------
+
 .admin__field-label {
     color: @field-label__color;
     margin: 0;
@@ -64,7 +83,7 @@
         display: none;
     }
 
-    [class]:not(.admin__field-option) > & {
+    .admin__field:not(.admin__field-option) > & {
         font-family: @font-family__base;
         font-size: @field-label__font-size;
         font-weight: @font-weight__semibold;
@@ -74,11 +93,10 @@
         word-wrap: break-word;
 
         &:before {
+            .appearing__off();
             content: '.';
             margin-left: -7px;
             overflow: hidden;
-            visibility: hidden;
-            width: 0;
         }
 
         span {
@@ -109,7 +127,10 @@
     }
 }
 
+//
 //  Field
+//  ---------------------------------------------
+
 .admin__field {
     margin-bottom: 0;
 
@@ -163,12 +184,15 @@
         }
     }
 }
-
 .admin__field-control {
     & + & {
         margin-top: 1.5rem;
     }
 }
+
+//
+//  Field messages
+//  ---------------------------------------------
 
 //  Field error message
 .admin__field-error {

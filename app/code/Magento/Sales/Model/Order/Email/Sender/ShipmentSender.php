@@ -13,10 +13,11 @@ use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Resource\Order\Shipment as ShipmentResource;
 use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Class ShipmentSender
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentSender extends Sender
@@ -44,6 +45,13 @@ class ShipmentSender extends Sender
     protected $addressRenderer;
 
     /**
+     * Application Event Dispatcher
+     *
+     * @var ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
      * @param Template $templateContainer
      * @param ShipmentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
@@ -52,22 +60,25 @@ class ShipmentSender extends Sender
      * @param ShipmentResource $shipmentResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param Renderer $addressRenderer
+     * @param ManagerInterface $eventManager
      */
     public function __construct(
         Template $templateContainer,
         ShipmentIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         \Psr\Log\LoggerInterface $logger,
+        Renderer $addressRenderer,
         PaymentHelper $paymentHelper,
         ShipmentResource $shipmentResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
-        Renderer $addressRenderer
+        ManagerInterface $eventManager
     ) {
-        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger);
+        parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;
         $this->shipmentResource = $shipmentResource;
         $this->globalConfig = $globalConfig;
         $this->addressRenderer = $addressRenderer;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -91,32 +102,28 @@ class ShipmentSender extends Sender
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $shipment->getOrder();
+            
+            $transport = [
+                'order' => $order,
+                'shipment' => $shipment,
+                'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
+                'billing' => $order->getBillingAddress(),
+                'payment_html' => $this->getPaymentHtml($order),
+                'store' => $order->getStore(),
+                'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
+                'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
+            ];
 
-            if ($order->getShippingAddress()) {
-                $formattedShippingAddress = $this->addressRenderer->format($order->getShippingAddress(), 'html');
-            } else {
-                $formattedShippingAddress = '';
-            }
-            $formattedBillingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
-
-            $this->templateContainer->setTemplateVars(
-                [
-                    'order' => $order,
-                    'shipment' => $shipment,
-                    'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
-                    'billing' => $order->getBillingAddress(),
-                    'payment_html' => $this->getPaymentHtml($order),
-                    'store' => $order->getStore(),
-                    'formattedShippingAddress' => $formattedShippingAddress,
-                    'formattedBillingAddress' => $formattedBillingAddress
-                ]
+            $this->eventManager->dispatch(
+                'email_shipment_set_template_vars_before',
+                ['sender' => $this, 'transport' => $transport]
             );
+
+            $this->templateContainer->setTemplateVars($transport);
 
             if ($this->checkAndSend($order)) {
                 $shipment->setEmailSent(true);
-
                 $this->shipmentResource->saveAttribute($shipment, ['send_email', 'email_sent']);
-
                 return true;
             }
         }
