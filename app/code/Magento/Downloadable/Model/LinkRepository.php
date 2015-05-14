@@ -121,10 +121,10 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     }
 
     /**
-     * Subroutine for buildLink and buildSample
+     * Subroutine for build link
      *
-     * @param \Magento\Downloadable\Model\Link|\Magento\Downloadable\Model\Sample $resourceData
-     * @param \Magento\Downloadable\Api\Data\LinkInterface|\Magento\Downloadable\Api\Data\SampleInterface $dataObject
+     * @param \Magento\Downloadable\Model\Link $resourceData
+     * @param \Magento\Downloadable\Api\Data\LinkInterface $dataObject
      * @return null
      */
     protected function setBasicFields($resourceData, $dataObject)
