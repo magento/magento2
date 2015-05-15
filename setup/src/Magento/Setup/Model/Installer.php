@@ -1066,12 +1066,12 @@ class Installer
                 '/' . ConfigOptionsListConstants::KEY_PASSWORD
             )
         );
-        if (null !== $this->deploymentConfig->get(
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_PREFIX
-        )) {
-            $this->dbValidator->checkDatabaseTablePrefix($this->deploymentConfig->get(
-                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_PREFIX
-            ));
+        $prefix = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+            '/' . ConfigOptionsListConstants::KEY_PREFIX
+        );
+        if (null !== $prefix) {
+            $this->dbValidator->checkDatabaseTablePrefix($prefix);
         }
     }
 
