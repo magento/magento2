@@ -103,7 +103,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomAttributeValueByType')
             ->willReturn([]);
 
-        $this->assertEquals($imageDataMock, $this->imageProcessor->save($imageDataMock, null, 'testEntityType'));
+        $this->assertEquals($imageDataMock, $this->imageProcessor->save($imageDataMock, 'testEntityType'));
     }
 
     /**
@@ -137,7 +137,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->willReturn(false);
 
-        $this->imageProcessor->save($imageDataMock, null, 'testEntityType');
+        $this->imageProcessor->save($imageDataMock, 'testEntityType');
     }
 
     public function testSaveWithNoPreviousData()
@@ -182,7 +182,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->willReturn($directoryWrite);
 
-        $this->assertEquals($imageData, $this->imageProcessor->save($imageData, null, 'testEntityType'));
+        $this->assertEquals($imageData, $this->imageProcessor->save($imageData, 'testEntityType'));
     }
 
     public function testSaveWithPreviousData()
@@ -237,6 +237,6 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomAttribute')
             ->willReturn($prevImageAttribute);
 
-        $this->assertEquals($imageData, $this->imageProcessor->save($imageData, $prevImageData, 'testEntityType'));
+        $this->assertEquals($imageData, $this->imageProcessor->save($imageData, 'testEntityType', $prevImageData));
     }
 }

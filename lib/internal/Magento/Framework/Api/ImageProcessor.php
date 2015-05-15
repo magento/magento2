@@ -9,6 +9,7 @@ namespace Magento\Framework\Api;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Phrase;
 
 /**
  * Class ImageProcessor
@@ -84,8 +85,8 @@ class ImageProcessor implements ImageProcessorInterface
      */
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
-        CustomAttributesDataInterface $previousCustomerData = null,
-        $entityType
+        $entityType,
+        CustomAttributesDataInterface $previousCustomerData = null
     ) {
         //Get all Image related custom attributes
         $imageDataObjects = $this->dataObjectHelper->getCustomAttributeValueByType(
@@ -136,7 +137,7 @@ class ImageProcessor implements ImageProcessorInterface
     public function processImageContent($entityType, $imageContent)
     {
         if (!$this->contentValidator->isValid($imageContent)) {
-            throw new InputException(__('The image content is not valid.'));
+            throw new InputException(new Phrase('The image content is not valid.'));
         }
 
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);

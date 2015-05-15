@@ -126,19 +126,20 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
         $this->validate($customer);
 
         $prevCustomerData = null;
-        if($customer->getId()) {
+        if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
         }
         $customer = $this->imageProcessor->save(
             $customer,
-            $prevCustomerData,
-            CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER
+            CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+            $prevCustomerData
         );
 
         $origAddresses = $customer->getAddresses();

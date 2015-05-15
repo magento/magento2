@@ -17,6 +17,8 @@ use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
 /**
  * Test class for Customer's custom attributes
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AccountManagementCustomAttributesTest extends WebapiAbstract
 {
@@ -77,7 +79,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
 
         $this->imageFactory = Bootstrap::getObjectManager()->get('Magento\Framework\Api\ImageContentFactory');
 
-        $this->fileSystem = Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');;
+        $this->fileSystem = Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');
     }
 
     public function tearDown()
@@ -173,10 +175,10 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
                 $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
                 $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
                 $imageAttributeFound = file_exists($customerMediaPath . $customAttribute[AttributeValue::VALUE]);
-                $this->assertTrue($imageAttributeFound , 'Expected file was not created');
+                $this->assertTrue($imageAttributeFound, 'Expected file was not created');
             }
         }
-        if(!$imageAttributeFound) {
+        if (!$imageAttributeFound) {
             $this->fail('Expected image attribute missing.');
         }
     }
@@ -219,7 +221,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         }
-      }
+    }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
@@ -267,7 +269,8 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         //Verify that the previous image is deleted
         $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $previousImagePath = $previousCustomerData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES][1][AttributeValue::VALUE];
+        $previousImagePath =
+            $previousCustomerData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES][1][AttributeValue::VALUE];
         $this->assertFalse(file_exists($customerMediaPath . $previousImagePath));
     }
 }

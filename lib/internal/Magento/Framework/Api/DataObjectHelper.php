@@ -171,7 +171,7 @@ class DataObjectHelper
     /**
      * Merges second object onto the first
      *
-     * @param string                  $interfaceName
+     * @param string $interfaceName
      * @param mixed $firstDataObject
      * @param mixed $secondDataObject
      * @return $this
@@ -200,11 +200,11 @@ class DataObjectHelper
     public function getCustomAttributeValueByType(array $attributeValues, $type)
     {
         $attributeValueArray = [];
-        if(empty($attributeValues)) {
+        if (empty($attributeValues)) {
             return $attributeValueArray;
         }
-        foreach($attributeValues as $attributeValue) {
-            if($attributeValue->getValue() instanceof $type) {
+        foreach ($attributeValues as $attributeValue) {
+            if ($attributeValue->getValue() instanceof $type) {
                 $attributeValueArray[] = $attributeValue;
             }
         }

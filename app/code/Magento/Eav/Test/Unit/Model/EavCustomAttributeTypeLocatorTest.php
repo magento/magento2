@@ -76,6 +76,10 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $type, 'Expected: ' . $expected . 'but got: ' . $type);
     }
 
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function getTypeDataProvider()
     {
         $serviceInterface = 'Magento\Catalog\Api\Data\ProductInterface';

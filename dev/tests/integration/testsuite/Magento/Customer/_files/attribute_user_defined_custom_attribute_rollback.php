@@ -13,4 +13,3 @@ $model2->load('custom_attribute2', 'attribute_code')->delete();
 
 $model2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
 $model2->load('customer_image', 'attribute_code')->delete();
-

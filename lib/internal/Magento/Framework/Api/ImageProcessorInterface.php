@@ -22,14 +22,14 @@ interface ImageProcessorInterface
      *
      * @api
      * @param CustomAttributesDataInterface $dataObjectWithCustomAttributes
-     * @param CustomAttributesDataInterface $previousCustomerData
      * @param string $entityType entity type
+     * @param CustomAttributesDataInterface $previousCustomerData
      * @return CustomAttributesDataInterface
      */
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
-        CustomAttributesDataInterface $previousCustomerData = null,
-        $entityType
+        $entityType,
+        CustomAttributesDataInterface $previousCustomerData = null
     );
 
     /**

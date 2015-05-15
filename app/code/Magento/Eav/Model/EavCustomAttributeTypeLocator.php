@@ -39,6 +39,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      * Initialize EavCustomAttributeTypeLocator
      *
      * @param AttributeRepositoryInterface $attributeRepository Attribute repository service
+     * @param \Magento\Framework\Stdlib\String $stringUtility
      * @param array $serviceEntityTypeMap Service Entity Map
      * <pre>
      * [
@@ -71,6 +72,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getType($attributeCode, $serviceClass)
     {
@@ -88,7 +90,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
         }
 
         //If empty backend model, check if it can be derived
-        if(empty($backendModel)) {
+        if (empty($backendModel)) {
             $backendModelClass = sprintf(
                 'Magento\Eav\Model\Attribute\Data\%s',
                 $this->stringUtility->upperCaseWords($attribute->getFrontendInput())

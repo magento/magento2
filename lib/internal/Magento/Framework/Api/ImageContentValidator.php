@@ -9,6 +9,7 @@ namespace Magento\Framework\Api;
 
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Phrase;
 
 /**
  * Class for Image content validation
@@ -50,18 +51,18 @@ class ImageContentValidator implements ImageContentValidatorInterface
     {
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
         if (empty($fileContent)) {
-            throw new InputException(__('The image content must be valid base64 encoded data.'));
+            throw new InputException(new Phrase('The image content must be valid base64 encoded data.'));
         }
         $imageProperties = @getimagesizefromstring($fileContent);
         if (empty($imageProperties)) {
-            throw new InputException(__('The image content must be valid base64 encoded data.'));
+            throw new InputException(new Phrase('The image content must be valid base64 encoded data.'));
         }
         $sourceMimeType = $imageProperties['mime'];
         if ($sourceMimeType != $imageContent->getType() || !$this->isMimeTypeValid($sourceMimeType)) {
-            throw new InputException(__('The image MIME type is not valid or not supported.'));
+            throw new InputException(new Phrase('The image MIME type is not valid or not supported.'));
         }
         if (!$this->isNameValid($imageContent->getName())) {
-            throw new InputException(__('Provided image name contains forbidden characters.'));
+            throw new InputException(new Phrase('Provided image name contains forbidden characters.'));
         }
         return true;
     }
