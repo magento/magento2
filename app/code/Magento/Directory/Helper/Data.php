@@ -324,23 +324,4 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );
     }
-
-    /**
-     * Load region
-     *
-     * @param int $countryId
-     * @param int|string $region
-     * @return \Magento\Directory\Model\Region
-     */
-    public function loadRegion($countryId, $region)
-    {
-        $regCollection = $this->_regCollectionFactory->create();
-        $regCollection->addCountryFilter($countryId);
-        if (!is_numeric($region)) {
-            $regCollection->addRegionCodeOrNameFilter($region);
-        } else {
-            $regCollection->addIdFilter($region);
-        }
-        return $regCollection->load()->getFirstItem();
-    }
 }

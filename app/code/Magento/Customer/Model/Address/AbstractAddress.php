@@ -501,13 +501,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             }
         }
 
-        $regionData = $this->getRegionId() ?: $this->getRegionCode() ?: $this->getRegion();
-        $regionModel = $this->_directoryData->loadRegion($this->getCountryId(), $regionData);
         /** @var RegionInterface $region */
         $region = $this->regionDataFactory->create();
-        $region->setRegion($regionModel->getName())
-            ->setRegionCode($regionModel->getCode())
-            ->setRegionId($regionModel->getId());
+        $region->setRegion($this->getRegion())
+            ->setRegionCode($this->getRegionCode())
+            ->setRegionId($this->getRegionId());
 
         $addressData[AddressData::REGION] = $region;
 

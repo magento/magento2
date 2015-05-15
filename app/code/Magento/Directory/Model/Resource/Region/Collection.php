@@ -19,15 +19,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_regionNameTable;
 
     /**
-     * Identifier field name for collection items
-     *
-     * Can be used by collections with items without defined
-     *
-     * @var string
-     */
-    protected $_idFieldName = 'region_id';
-
-    /**
      * Country table name
      *
      * @var string
@@ -113,17 +104,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             }
         }
         return $this;
-    }
-
-    /**
-     * Filter by id
-     *
-     * @param int $regionId
-     * @return $this
-     */
-    public function addIdFilter($regionId)
-    {
-        return $this->addFieldToFilter('main_table.' . $this->getIdFieldName(), $regionId);
     }
 
     /**
