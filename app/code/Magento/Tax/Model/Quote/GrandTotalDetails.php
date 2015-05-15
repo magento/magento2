@@ -35,6 +35,11 @@ class GrandTotalDetails
     protected $taxConfig;
 
     /**
+     * @var \Magento\Quote\Model\Quote\Address\Total\Tax
+     */
+    protected $taxTotal;
+
+    /**
      * @param \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory
      * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -46,12 +51,14 @@ class GrandTotalDetails
         \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Tax\Model\Config $taxConfig,
+        \Magento\Quote\Model\Quote\Address\Total\Tax $taxTotal,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         $this->detailsFactory = $detailsFactory;
         $this->ratesFactory = $ratesFactory;
         $this->extensionFactory = $extensionFactory;
         $this->taxConfig = $taxConfig;
+        $this->taxTotal = $taxTotal;
         $this->quoteRepository = $quoteRepository;
     }
 
@@ -83,15 +90,20 @@ class GrandTotalDetails
     {
         $result = $proceed($cartId);
         $quote = $this->quoteRepository->getActive($cartId);
-        $taxes = $quote->getShippingAddress()->getAppliedTaxes();
+        $totals = $quote->getTotals();
 
-        if (!is_array($taxes)) {
+        if (!array_key_exists('tax', $totals)) {
+            return $result;
+        }
+
+        $taxes = $totals['tax']->getData();
+        if (!array_key_exists('full_info', $taxes)) {
             return $result;
         }
 
         $detailsId = 1;
         $finalData = [];
-        foreach ($taxes as $info) {
+        foreach ($taxes['full_info'] as $info) {
             if ((array_key_exists('hidden', $info) && $info['hidden'])
                 || ($info['amount'] == 0 && $this->taxConfig->displayCartZeroTax())
             ) {
