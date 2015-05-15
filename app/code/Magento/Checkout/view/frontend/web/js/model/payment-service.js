@@ -56,7 +56,7 @@ define(
             },
             getTitleByCode: function(code) {
                 var methodTitle = '';
-                $.each(this.availablePaymentMethods(), function (key, entity) {
+                $.each(this.getAvailablePaymentMethods(), function (key, entity) {
                     if (entity['code'] == code) {
                         methodTitle = entity['title'];
                     }

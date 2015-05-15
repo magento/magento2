@@ -12,9 +12,10 @@ define(
         '../action/select-payment-method',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Checkout/js/model/payment-service',
-        'mage/translate'
+        'mage/translate',
+        'mageUtils'
     ],
-    function ($, Component, quote, selectPaymentMethod, navigator, paymentService, $t) {
+    function ($, Component, quote, selectPaymentMethod, navigator, paymentService, $t, utils) {
         var stepName = 'paymentMethod';
         return Component.extend({
             defaults: {
@@ -50,7 +51,7 @@ define(
                 }
             },
             getPaymentMethodData: function() {
-                var data = _.extend({
+                var data = {
                     "method": this.activeMethod(),
                     "po_number": null,
                     "cc_owner": null,
@@ -59,11 +60,12 @@ define(
                     "cc_exp_year": null,
                     "cc_exp_month": null,
                     "additional_data": null
-                }, this.getActiveMethodView().getData());
+                };
+                utils.extend(data, this.getActiveMethodView().getData());
 
                 _.each(this.getAdditionalMethods(), function(elem) {
                     if (elem.isActive()) {
-                        data = _.extend(data, elem.getData());
+                        utils.extend(data, elem.getData());
                     }
                 });
 
@@ -139,20 +141,6 @@ define(
             },
             getFormKey: function() {
                 return window.checkoutConfig.formKey;
-            },
-            toggleMethods: function(code, value) {
-                var methods = _.union(this.getAdditionalMethods(), this.getRegion('paymentMethods')());
-                _.each(methods, function(elem) {
-                    if (code != elem.getCode()) {
-                        elem.isEnabled(value);
-                    }
-                });
-            },
-            enableMethods: function(code) {
-                this.toggleMethods(code, true);
-            },
-            disableMethods: function(code) {
-                this.toggleMethods(code, false);
             },
             getAdditionalMethods: function() {
                 var methods = [];

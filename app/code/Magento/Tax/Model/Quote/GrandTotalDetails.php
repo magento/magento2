@@ -85,7 +85,6 @@ class GrandTotalDetails
         $quote = $this->quoteRepository->getActive($cartId);
         $taxes = $quote->getShippingAddress()->getAppliedTaxes();
 
-
         $detailsId = 1;
         $finalData = [];
         foreach ($taxes as $info) {
