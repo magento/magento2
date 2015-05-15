@@ -154,6 +154,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
         $items = $quote->getAllItems();
         $item = array_shift($items);
         return [
+            ItemTotals::KEY_ITEM_ID => intval($item->getItemId()),
             ItemTotals::KEY_PRICE => intval($item->getPrice()),
             ItemTotals::KEY_BASE_PRICE => intval($item->getBasePrice()),
             ItemTotals::KEY_QTY => $item->getQty(),
