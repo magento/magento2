@@ -9,24 +9,32 @@ define(
         '../model/url-builder',
         '../model/step-navigator',
         'Magento_Checkout/js/model/shipping-service',
-        'mage/translate'
+        'mage/translate',
+        'ko'
     ],
-    function (quote, urlBuilder, navigator, shippingService, $t) {
+    function (quote, urlBuilder, navigator, shippingService, $t, ko) {
         "use strict";
-        return function (code, customOptions) {
+        return function (code, customOptions, callbacks) {
             if (!code) {
                 alert($t('Please specify a shipping method'));
                 return;
             }
 
-            var shippingMethodCode = code.split("_"),
-                shippingRate = shippingService.getRateByCode(shippingMethodCode)[0];
+            var proceed = true;
+            _.each(callbacks, function (callback) {
+                proceed = proceed && callback();
+            });
 
-            quote.setShippingMethod(shippingMethodCode);
-            quote.setSelectedShippingMethod(code);
-            quote.setShippingCustomOptions(customOptions);
-            quote.setCollectedTotals('shipping', shippingRate.amount);
-            navigator.setCurrent('shippingMethod').goNext();
+            if (proceed) {
+                var shippingMethodCode = code.split("_"),
+                    shippingRate = shippingService.getRateByCode(shippingMethodCode)[0];
+
+                quote.setShippingMethod(shippingMethodCode);
+                quote.setSelectedShippingMethod(code);
+                quote.setShippingCustomOptions(customOptions);
+                quote.setCollectedTotals('shipping', shippingRate.amount);
+                navigator.setCurrent('shippingMethod').goNext();
+            }
         };
     }
 );
