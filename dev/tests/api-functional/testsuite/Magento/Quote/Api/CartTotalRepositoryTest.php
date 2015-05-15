@@ -78,7 +78,6 @@ class CartTotalRepositoryTest extends WebapiAbstract
             Totals::KEY_BASE_CURRENCY_CODE => $quote->getBaseCurrencyCode(),
             Totals::KEY_QUOTE_CURRENCY_CODE => $quote->getQuoteCurrencyCode(),
             Totals::KEY_ITEMS => [$this->getQuoteItemTotalsData($quote)],
-            'extension_attributes' => ['tax_grandtotal_details' => []],
         ];
 
         $requestData = ['cartId' => $cartId];
@@ -86,6 +85,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
         $data = $this->formatTotalsData($data);
         $actual = $this->_webApiCall($this->getServiceInfoForTotalsService($cartId), $requestData);
         unset($actual['items'][0]['options']);
+        unset($actual['extension_attributes']);
         $this->assertEquals($data, $actual);
     }
 
@@ -230,12 +230,12 @@ class CartTotalRepositoryTest extends WebapiAbstract
             Totals::KEY_BASE_CURRENCY_CODE => $quote->getBaseCurrencyCode(),
             Totals::KEY_QUOTE_CURRENCY_CODE => $quote->getQuoteCurrencyCode(),
             Totals::KEY_ITEMS => [$this->getQuoteItemTotalsData($quote)],
-            'extension_attributes' => ['tax_grandtotal_details' => []],
         ];
 
         $data = $this->formatTotalsData($data);
         $actual = $this->_webApiCall($serviceInfo);
         unset($actual['items'][0]['options']);
+        unset($actual['extension_attributes']);
         $this->assertEquals($data, $actual);
     }
 }
