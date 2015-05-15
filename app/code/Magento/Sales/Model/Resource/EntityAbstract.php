@@ -209,6 +209,7 @@ abstract class EntityAbstract extends AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

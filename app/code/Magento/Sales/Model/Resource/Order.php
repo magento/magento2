@@ -101,9 +101,7 @@ class Order extends SalesResource implements OrderResourceInterface
             $select->where(
                 sprintf(
                     '(o.product_type %s (?))',
-                    $isProductTypeIn
-                        ? 'IN'
-                        : 'NOT IN'
+                    $isProductTypeIn ? 'IN' : 'NOT IN'
                 ),
                 $productTypeIds
             );
