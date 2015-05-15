@@ -33,8 +33,9 @@ class InvalidateLogger
     }
 
     /**
-     * logger invalidate cache
-     * @param $invalidateInfo
+     * Logger invalidate cache
+     * @param mixed $invalidateInfo
+     * @return void
      */
     public function execute($invalidateInfo)
     {
@@ -42,8 +43,8 @@ class InvalidateLogger
     }
 
     /**
-     * make extra data to logger message
-     * @param $invalidateInfo
+     * Make extra data to logger message
+     * @param mixed $invalidateInfo
      * @return array
      */
     private function makeParams($invalidateInfo)

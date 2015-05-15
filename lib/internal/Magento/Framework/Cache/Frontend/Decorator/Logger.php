@@ -50,10 +50,11 @@ class Logger extends Bare
     }
 
     /**
-     * @param array $args
+     * @param mixed $args
+     * @return void
      */
-    public function log(array $args)
+    public function log($args)
     {
-        $this->logger->execute((array)$args);
+        $this->logger->execute($args);
     }
 }
