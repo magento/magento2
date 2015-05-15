@@ -309,7 +309,10 @@ class Payment extends Info implements OrderPaymentInterface
             case ($originalOrderState && $message):
             case ($originalOrderState != $orderState):
             case ($originalOrderStatus != $orderStatus):
-                $order->setState($orderState, $orderStatus, $message, $isCustomerNotified);
+                $order->setState($orderState)
+                    ->setStatus($orderStatus)
+                    ->addStatusHistoryComment($message)
+                    ->setIsCustomerNotified($isCustomerNotified);
                 break;
             default:
                 break;
@@ -429,7 +432,7 @@ class Payment extends Info implements OrderPaymentInterface
             $message = $this->_prependMessage($message);
             $message = $this->_appendTransactionToMessage($transaction, $message);
 
-            $order->setState($state, $status, $message);
+            $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
             $this->getMethodInstance()->processInvoice($invoice, $this);
             return $this;
         }
@@ -514,7 +517,7 @@ class Payment extends Info implements OrderPaymentInterface
         );
         $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState($state, $status, $message);
+        $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
         return $this;
     }
 
@@ -725,7 +728,9 @@ class Payment extends Info implements OrderPaymentInterface
         }
         $message = $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
+        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
+            ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING))
+            ->addStatusHistoryComment($message);
 
         $this->_eventManager->dispatch(
             'sales_order_payment_refund',
@@ -832,7 +837,9 @@ class Payment extends Info implements OrderPaymentInterface
             __('Registered notification about refunded amount of %1.', $this->_formatPrice($amount))
         );
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
+        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
+            ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING))
+            ->addStatusHistoryComment($message);
         return $this;
     }
 
@@ -1008,7 +1015,9 @@ class Payment extends Info implements OrderPaymentInterface
         if (-1 === $result) { // switch won't work with such $result!
             if ($order->getState() != \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
                 $status = $this->getIsFraudDetected() ? \Magento\Sales\Model\Order::STATUS_FRAUD : false;
-                $order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW, $status, $message);
+                $order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW)
+                    ->setStatus($status)
+                    ->addStatusHistoryComment($message);
                 if ($transactionId) {
                     $this->setLastTransId($transactionId);
                 }
@@ -1021,7 +1030,9 @@ class Payment extends Info implements OrderPaymentInterface
                 $this->_updateTotals(['base_amount_paid_online' => $invoice->getBaseGrandTotal()]);
                 $order->addRelatedObject($invoice);
             }
-            $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
+            $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
+                ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING))
+                ->addStatusHistoryComment($message);
         } elseif (false === $result) {
             if ($invoice) {
                 $invoice->cancel();
@@ -1074,7 +1085,7 @@ class Payment extends Info implements OrderPaymentInterface
         $transaction = $this->_addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_ORDER);
         $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState($state, $status, $message);
+        $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
         return $this;
     }
 
@@ -1138,7 +1149,7 @@ class Payment extends Info implements OrderPaymentInterface
         $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
 
-        $order->setState($state, $status, $message);
+        $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
 
         return $this;
     }
@@ -1194,7 +1205,9 @@ class Payment extends Info implements OrderPaymentInterface
             $message .= ' ' . __('Amount: %1.', $this->_formatPrice($amount));
         }
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true, $message);
+        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
+            ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING))
+            ->addStatusHistoryComment($message);
         $order->setDataChanges(true);
         return $this;
     }
