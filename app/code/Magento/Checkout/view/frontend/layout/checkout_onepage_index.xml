@@ -45,8 +45,17 @@
                                         <item name="displayArea" xsi:type="string">steps</item>
                                         <item name="children" xsi:type="array">
                                             <item name="authentication" xsi:type="array">
-                                                <item name="sortOrder" xsi:type="string">1</item>
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item>
+                                                <item name="sortOrder" xsi:type="string">1</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="before" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">before</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge additional data before authentication here -->
+                                                        </item>
+                                                    </item>
+                                                </item>
                                             </item>
                                             <item name="billingAddress" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item>

@@ -17,6 +17,9 @@
         <h2 data-bind="text: $t('Checkout Method')"></h2>
     </div>
     <div id="checkout-step-authentication" class="step-content" data-role="content" data-bind="fadeVisible: isVisible()" >
+        <!-- ko foreach: getRegion('before') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
         <div class="login-wrapper">
             <!-- ko if: (isGuestCheckoutAllowed) -->
             <div class="block block-guest">
