@@ -8,6 +8,11 @@ namespace Magento\Framework\Api;
 
 use Magento\Framework\Reflection\MethodsMap;
 
+/**
+ * Data object helper.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataObjectHelper
 {
     /**
@@ -171,7 +176,7 @@ class DataObjectHelper
     /**
      * Merges second object onto the first
      *
-     * @param string                  $interfaceName
+     * @param string $interfaceName
      * @param mixed $firstDataObject
      * @param mixed $secondDataObject
      * @return $this
@@ -188,5 +193,26 @@ class DataObjectHelper
         $secondObjectArray = $this->objectProcessor->buildOutputDataArray($secondDataObject, $interfaceName);
         $this->_setDataValues($firstDataObject, $secondObjectArray, $interfaceName);
         return $this;
+    }
+
+    /**
+     * Filter attribute value objects for a provided data interface type from an array of custom attribute value objects
+     *
+     * @param AttributeValue[] $attributeValues Array of custom attribute
+     * @param string $type Data interface type
+     * @return AttributeValue[]
+     */
+    public function getCustomAttributeValueByType(array $attributeValues, $type)
+    {
+        $attributeValueArray = [];
+        if (empty($attributeValues)) {
+            return $attributeValueArray;
+        }
+        foreach ($attributeValues as $attributeValue) {
+            if ($attributeValue->getValue() instanceof $type) {
+                $attributeValueArray[] = $attributeValue;
+            }
+        }
+        return $attributeValueArray;
     }
 }
