@@ -7,19 +7,21 @@ define(['underscore'],
     function(_) {
         "use strict";
         var isOrderLevelGiftOptionsEnabled = window.checkoutConfig.isOrderLevelGiftOptionsEnabled || false,
-            isItemLevelGiftOptionsEnabled = window.checkoutConfig.isItemLevelGiftOptionsEnabled || false,
-            isAllowPrintedCard = window.checkoutConfig.giftWrapping.isAllowPrintedCard || false,
-            isAllowGiftReceipt = window.checkoutConfig.giftWrapping.isAllowGiftReceipt || false;
-
+            isItemLevelGiftOptionsEnabled = window.checkoutConfig.isItemLevelGiftOptionsEnabled || false;
         return {
             orderLevelGiftOptions: [],
             itemLevelGiftOptions: [],
             extraGiftOptions: [],
             isGiftOptionsAvailable: function() {
-                return isOrderLevelGiftOptionsEnabled
-                    || isItemLevelGiftOptionsEnabled
-                    || isAllowPrintedCard
-                    || isAllowGiftReceipt;
+                var isAvailable = isOrderLevelGiftOptionsEnabled || isItemLevelGiftOptionsEnabled;
+
+                _.each(this.getExtraGiftOptions(), function(option){
+                    if (typeof option.isAvailable() === 'function') {
+                        isAvailable = isAvailable || option.isAvailable();
+                    }
+                });
+
+                return isAvailable;
             },
             isOrderLevelGiftOptionsEnabled: function() {
                 return isOrderLevelGiftOptionsEnabled;
