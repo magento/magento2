@@ -28,6 +28,7 @@ define([
         },
         _initOptionItem: function () {
             var widget = this;
+            var originalElementClass=$(widget.element).attr('class');
 
             this._on({
                 //Add new tax item
@@ -55,6 +56,10 @@ define([
                     if (data.state) {
                         parentElement.find('[data-role="select-state"]').val(data.state);
                     }
+                    //fpt is a field with multiple sub-fields  so we restore it's required status
+                    var currentElementClass=$(widget.element).attr('class');
+                    if (!originalElementClass.match(/required/) && currentElementClass.match(/required/))
+                        $(widget.element).attr('class',originalElementClass);
                 }
             });
 
