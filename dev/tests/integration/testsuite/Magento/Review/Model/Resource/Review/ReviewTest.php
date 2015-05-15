@@ -21,9 +21,9 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
     protected $reviewResource;
 
     /**
-     * @var \Magento\Review\Model\Review
+     * @var \Magento\Review\Model\Resource\Review\Collection
      */
-    protected $review;
+    protected $reviewCollection;
 
     /**
      * @var \Magento\Framework\App\Resource
@@ -43,7 +43,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
         $this->adapter = $this->resource->getConnection('core_read');
-        $this->review = $this->objectManager->create('Magento\Review\Model\Review');
+        $this->reviewCollection = $this->objectManager->create('Magento\Review\Model\Resource\Review\Collection');
         $this->reviewResource =  $this->objectManager->create('Magento\Review\Model\Resource\Review');
     }
 
@@ -52,7 +52,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
      */
     public function testAggregate()
     {
-        $rating = $this->review->getCollection()->getFirstItem();
+        $rating = $this->reviewCollection->getFirstItem();
         $this->reviewResource->aggregate($rating);
 
         $select = $this->adapter->select()->from($this->resource->getTableName('review_entity_summary'));

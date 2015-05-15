@@ -338,7 +338,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Aggregate review summary
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @param \Magento\Framework\Data\Collection\Db $ratingSummaryObject
+     * @param \Magento\Review\Model\Rating $ratingSummaryObject
      * @return void
      */
     protected function aggregateReviewSummary($object, $ratingSummaryObject)
