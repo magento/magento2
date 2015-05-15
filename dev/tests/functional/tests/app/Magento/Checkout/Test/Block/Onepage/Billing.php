@@ -38,24 +38,28 @@ class Billing extends Form
     protected $waitElement = '.loading-mask';
 
     /**
+     * Field wrapper with label on form.
+     *
+     * @var string
+     */
+    protected $fieldLabel = '#billing-new-address-form > .required';
+
+    /**
      * Fill billing address
      *
      * @param Address $billingAddress
-     * @param Customer $customer
      * @param bool $isShippingAddress
      * @return void
      */
     public function fillBilling(
         Address $billingAddress = null,
-        Customer $customer = null,
         $isShippingAddress = false
     ) {
+        $this->waitFields();
         if ($billingAddress) {
             $this->fill($billingAddress);
         }
-        if ($customer) {
-            $this->fill($customer);
-        }
+
         if ($isShippingAddress) {
             $this->_rootElement->find($this->useForShipping)->click();
         }
@@ -78,5 +82,17 @@ class Billing extends Form
                 return $element->isVisible() == false ? true : null;
             }
         );
+    }
+
+    /**
+     * Wait for User before fill form which calls JS validation on correspondent fields of form.
+     * See details in MAGETWO-31435.
+     *
+     * @return void
+     */
+    protected function waitFields()
+    {
+        /* Wait for field label is visible in the form */
+        $this->waitForElementVisible($this->fieldLabel);
     }
 }

@@ -60,7 +60,7 @@ define(
                 quote.setCheckoutMethod('guest');
                 $('[name="customerDetails.password"]').hide();
                 $('[name="customerDetails.confirm_password"]').hide();
-                $("[name*='save_in_address_book']").parent('.field').hide();
+                $('[name*=".save_in_address_book"]').hide();
                 navigator.setCurrent('authentication').goNext();
             },
             navigateToCurrentStep: function() {

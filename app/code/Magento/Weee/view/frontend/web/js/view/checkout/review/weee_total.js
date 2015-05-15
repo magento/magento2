@@ -27,6 +27,14 @@ define(
             getTitle: function() {
                 return this.title;
             },
+            getPureValue: function() {
+                var items = quote.getItems();
+                var sum = 0;
+                for (var i = 0; i < items.length; i++) {
+                    sum += parseFloat(items[i].weee_tax_applied_row_amount);
+                }
+                return sum;
+            },
             getValue: function() {
                 var items = quote.getItems();
                 var sum = 0;

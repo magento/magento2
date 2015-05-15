@@ -108,41 +108,6 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     }
 
     /**
-     * Get 'one step checkout' step data
-     *
-     * @return array
-     * @deprecated
-     * @removeCandidate
-     */
-    public function getSteps()
-    {
-        $steps = [];
-        $stepCodes = $this->_getStepCodes();
-
-        if ($this->isCustomerLoggedIn()) {
-            $stepCodes = array_diff($stepCodes, ['login']);
-        }
-
-        foreach ($stepCodes as $step) {
-            $steps[$step] = $this->getCheckout()->getStepData($step);
-        }
-
-        return $steps;
-    }
-
-    /**
-     * Get active step
-     *
-     * @return string
-     * @deprecated
-     * @removeCandidate
-     */
-    public function getActiveStep()
-    {
-        return $this->isCustomerLoggedIn() ? 'billing' : 'login';
-    }
-
-    /**
      * Retrieve form key
      *
      * @return string

@@ -149,27 +149,10 @@ class Observer
             if (!$category->getIsActive()) {
                 continue;
             }
-
-            $nodeId = 'category-node-' . $category->getId();
-
             $block->addIdentity(\Magento\Catalog\Model\Category::CACHE_TAG . '_' . $category->getId());
 
             $tree = $parentCategoryNode->getTree();
-
-            $isActiveCategory = false;
-            /** @var \Magento\Catalog\Model\Category $currentCategory */
-            $currentCategory = $this->_registry->registry('current_category');
-            if ($currentCategory && $currentCategory->getId() == $category->getId()) {
-                $isActiveCategory = true;
-            }
-
-            $categoryData = [
-                'name' => $category->getName(),
-                'id' => $nodeId,
-                'url' => $this->_catalogCategory->getCategoryUrl($category),
-                'has_active' => $this->hasActive($category),
-                'is_active' => $isActiveCategory
-            ];
+            $categoryData = $this->getMenuCategoryData($category);
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
 
@@ -181,6 +164,34 @@ class Observer
 
             $this->_addCategoriesToMenu($subcategories, $categoryNode, $block);
         }
+    }
+
+    /**
+     * Get category data to be added to the Menu
+     *
+     * @param \Magento\Framework\Data\Tree\Node $category
+     * @return array
+     */
+    public function getMenuCategoryData($category)
+    {
+        $nodeId = 'category-node-' . $category->getId();
+
+        $isActiveCategory = false;
+        /** @var \Magento\Catalog\Model\Category $currentCategory */
+        $currentCategory = $this->_registry->registry('current_category');
+        if ($currentCategory && $currentCategory->getId() == $category->getId()) {
+            $isActiveCategory = true;
+        }
+
+        $categoryData = [
+            'name' => $category->getName(),
+            'id' => $nodeId,
+            'url' => $this->_catalogCategory->getCategoryUrl($category),
+            'has_active' => $this->hasActive($category),
+            'is_active' => $isActiveCategory,
+        ];
+
+        return $categoryData;
     }
 
     /**

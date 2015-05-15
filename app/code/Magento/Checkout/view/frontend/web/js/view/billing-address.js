@@ -112,8 +112,6 @@ define(
             hideExtraFields: function() {
                 if (!quote.getCheckoutMethod()() && customer.isLoggedIn()()) {
                     $('[name="customerDetails.email"]').hide();
-                    $('[name="customerDetails.password"]').hide();
-                    $('[name="customerDetails.confirm_password"]').hide();
                 }
             }
         });
