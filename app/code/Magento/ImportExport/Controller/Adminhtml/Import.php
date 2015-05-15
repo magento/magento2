@@ -5,12 +5,12 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
+
 /**
  * Import controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Import extends \Magento\Backend\App\Action
+class Import extends Action
 {
     /**
      * Check access (in the ACL) for current user.
