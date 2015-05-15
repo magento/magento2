@@ -8,8 +8,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-use \Magento\Catalog\Model\Product;
-
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -689,6 +688,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Configure environment for `testSave` and `testSaveAndDuplicate` methods
+     *
      * @return array
      */
     protected function configureSaveTest()
@@ -999,9 +999,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'disabled' => false,
                     'types' => ['image'],
                     'content' => [
-                        ImageContentInterface::NAME => 'product_image',
-                        ImageContentInterface::TYPE => 'image/jpg',
-                        ImageContentInterface::BASE64_ENCODED_DATA => 'content_data'
+                        'data' => [
+                            ImageContentInterface::NAME => 'product_image',
+                            ImageContentInterface::TYPE => 'image/jpg',
+                            ImageContentInterface::BASE64_ENCODED_DATA => 'content_data'
+                        ]
                     ]
                 ]
             ],
@@ -1013,11 +1015,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
         $contentMock->expects($this->once())->method('getBase64EncodedData')
-            ->willReturn($expectedResult['images'][0]['content']['base64_encoded_data']);
+            ->willReturn($expectedResult['images'][0]['content']['data']['base64_encoded_data']);
         $contentMock->expects($this->once())->method('getType')
-            ->willReturn($expectedResult['images'][0]['content']['type']);
+            ->willReturn($expectedResult['images'][0]['content']['data']['type']);
         $contentMock->expects($this->once())->method('getName')
-            ->willReturn($expectedResult['images'][0]['content']['name']);
+            ->willReturn($expectedResult['images'][0]['content']['data']['name']);
 
         $entryMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
             ->setMethods(['getId', 'getFile', 'getLabel', 'getPosition', 'isDisabled', 'types', 'getContent'])
