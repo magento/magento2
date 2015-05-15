@@ -10,6 +10,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Product type details
+ * @api
  */
 interface ProductTypeInterface extends ExtensibleDataInterface
 {

@@ -18,6 +18,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  int $ruleAmount
      * @param  float $price
      * @return float|int
+     * @api
      */
     public function calcPriceRule($actionOperator, $ruleAmount, $price)
     {

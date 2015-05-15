@@ -16,6 +16,7 @@ interface UrlPersistInterface
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[] $urls
      * @return void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @api
      */
     public function replace(array $urls);
 
@@ -24,6 +25,7 @@ interface UrlPersistInterface
      *
      * @param array $data
      * @return void
+     * @api
      */
     public function deleteByData(array $data);
 }

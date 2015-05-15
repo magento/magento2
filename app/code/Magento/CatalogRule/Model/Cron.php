@@ -28,6 +28,7 @@ class Cron
      * we should generate data for interval -1 day ... +1 day
      *
      * @return void
+     * @api
      */
     public function dailyCatalogUpdate()
     {

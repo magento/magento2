@@ -37,6 +37,7 @@ class CmsPageUrlRewriteGenerator
      * @param \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory $urlRewriteFactory
      * @param \Magento\CmsUrlRewrite\Model\CmsPageUrlPathGenerator $cmsPageUrlPathGenerator
      * @param StoreManagerInterface $storeManager
+     * @api
      */
     public function __construct(
         UrlRewriteFactory $urlRewriteFactory,

@@ -15,6 +15,7 @@ interface UrlFinderInterface
      *
      * @param array $data
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|null
+     * @api
      */
     public function findOneByData(array $data);
 
@@ -23,6 +24,7 @@ interface UrlFinderInterface
      *
      * @param array $data
      * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
+     * @api
      */
     public function findAllByData(array $data);
 }

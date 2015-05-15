@@ -29,6 +29,7 @@ class Type extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * Get all options
      *
      * @return array
+     * @api
      */
     public function getAllOptions()
     {

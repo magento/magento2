@@ -20,6 +20,7 @@ class CmsPageUrlPathGenerator
      * @param \Magento\Cms\Model\Page $cmsPage
      *
      * @return string
+     * @api
      */
     public function getUrlPath($cmsPage)
     {
@@ -31,6 +32,7 @@ class CmsPageUrlPathGenerator
      *
      * @param \Magento\Cms\Model\Page $cmsPage
      * @return string
+     * @api
      */
     public function getCanonicalUrlPath($cmsPage)
     {
@@ -42,6 +44,7 @@ class CmsPageUrlPathGenerator
      *
      * @param \Magento\Cms\Model\Page $cmsPage
      * @return string
+     * @api
      */
     public function generateUrlKey($cmsPage)
     {

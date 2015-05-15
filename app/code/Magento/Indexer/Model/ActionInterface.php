@@ -11,6 +11,7 @@ interface ActionInterface
      * Execute full indexation
      *
      * @return void
+     * @api
      */
     public function executeFull();
 
@@ -19,6 +20,7 @@ interface ActionInterface
      *
      * @param int[] $ids
      * @return void
+     * @api
      */
     public function executeList(array $ids);
 
@@ -27,6 +29,7 @@ interface ActionInterface
      *
      * @param int $id
      * @return void
+     * @api
      */
     public function executeRow($id);
 }
