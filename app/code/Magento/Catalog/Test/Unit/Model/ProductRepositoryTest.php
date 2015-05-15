@@ -1030,8 +1030,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $mediaConfigMock->expects($this->once())
-            ->method('getBaseTmpMediaPath')
-            ->willReturn($mediaTmpPath);
+            ->method('getTmpMediaShortUrl')
+            ->with($absolutePath)
+            ->willReturn($mediaTmpPath . $absolutePath);
         $this->initializedProductMock->expects($this->any())
             ->method('getGalleryAttributeBackend')
             ->willReturn($galleryAttributeBackendMock);
@@ -1054,7 +1055,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $imageFileUri = "imageFileUri";
         $galleryAttributeBackendMock->expects($this->once())->method('addImage')
-            ->with($this->initializedProductMock, $absolutePath, ['image', 'small_image'], true, false)
+            ->with($this->initializedProductMock, $mediaTmpPath . $absolutePath, ['image', 'small_image'], true, false)
             ->willReturn($imageFileUri);
         $galleryAttributeBackendMock->expects($this->once())->method('updateImage')
             ->with(
