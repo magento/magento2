@@ -14,7 +14,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testListActionDesign($productId, $expectedDesign)
     {
         $this->getRequest()->setParam('id', $productId);
-        $this->dispatch('review/product/list');
+        $this->dispatch('review/product/listAction');
         $result = $this->getResponse()->getBody();
         $this->assertContains("static/frontend/{$expectedDesign}/en_US/Magento_Theme/favicon.ico", $result);
     }
