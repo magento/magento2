@@ -151,12 +151,69 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      */
     public function save($sku, \Magento\ConfigurableProduct\Api\Data\OptionInterface $option)
     {
-        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute */
+        /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
         $configurableAttribute = $this->configurableAttributeFactory->create();
         if ($option->getId()) {
-            $this->saveExistingOption($sku, $option, $configurableAttribute);
+            /** @var \Magento\Catalog\Model\Product $product */
+            $product = $this->getProduct($sku);
+            $configurableAttribute->load($option->getId());
+            if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getId()) {
+                throw new NoSuchEntityException(
+                    __(
+                        'Option with id "%1" not found',
+                        $option->getId()
+                    )
+                );
+            }
+            $configurableAttribute->addData($option->getData());
+            $configurableAttribute->setValues(
+                $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getPrices()
+            );
+
+            try {
+                $configurableAttribute->save();
+            } catch (\Exception $e) {
+                throw new CouldNotSaveException(
+                    __(
+                        'Could not update option with id "%1"',
+                        $option->getId()
+                    )
+                );
+            }
         } else {
-            $this->saveNewOption($sku, $option, $configurableAttribute);
+            $this->validateNewOptionData($option);
+            /** @var \Magento\Catalog\Model\Product $product */
+            $product = $this->productRepository->get($sku);
+            $allowedTypes = [ProductType::TYPE_SIMPLE, ProductType::TYPE_VIRTUAL, ConfigurableType::TYPE_CODE];
+            if (!in_array($product->getTypeId(), $allowedTypes)) {
+                throw new \InvalidArgumentException('Incompatible product type');
+            }
+
+            $eavAttribute = $this->productAttributeRepository->get($option->getAttributeId());
+            $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
+            if ($configurableAttribute->getId()) {
+                throw new CouldNotSaveException(__('Product already has this option'));
+            }
+
+            $configurableAttributesData = [
+                'attribute_id' => $option->getAttributeId(),
+                'position' => $option->getPosition(),
+                'use_default' => $option->getIsUseDefault(),
+                'label' => $option->getLabel(),
+                'values' => $option->getValues()
+            ];
+
+            try {
+                $product->setTypeId(ConfigurableType::TYPE_CODE);
+                $product->setConfigurableAttributesData([$configurableAttributesData]);
+                $product->setStoreId($this->storeManager->getStore(Store::ADMIN_CODE)->getId());
+                $product->save();
+            } catch (\Exception $e) {
+                throw new CouldNotSaveException(__('An error occurred while saving option'));
+            }
+
+            $configurableAttribute = $this->configurableAttributeFactory->create();
+            $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
         }
         if (!$configurableAttribute->getId()) {
             throw new CouldNotSaveException(__('An error occurred while saving option'));
@@ -217,95 +274,5 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         if ($inputException->wasErrorAdded()) {
             throw $inputException;
         }
-    }
-
-    /**
-     * @param string $sku
-     * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @return void
-     */
-    private function saveExistingOption(
-        $sku,
-        \Magento\ConfigurableProduct\Api\Data\OptionInterface $option,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute
-    ) {
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->getProduct($sku);
-        $configurableAttribute->load($option->getId());
-        if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getId()) {
-            throw new NoSuchEntityException(
-                __(
-                    'Option with id "%1" not found',
-                    $option->getId()
-                )
-            );
-        }
-        $configurableAttribute->addData($option->getData());
-        $configurableAttribute->setValues(
-            $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getPrices()
-        );
-
-        try {
-            $configurableAttribute->save();
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(
-                __(
-                    'Could not update option with id "%1"',
-                    $option->getId()
-                )
-            );
-        }
-    }
-
-    /**
-     * @param string $sku
-     * @param \Magento\ConfigurableProduct\Api\Data\OptionInterface $option
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute
-     * @return void
-     * @throws CouldNotSaveException
-     * @throws InputException
-     */
-    private function saveNewOption(
-        $sku,
-        \Magento\ConfigurableProduct\Api\Data\OptionInterface $option,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $configurableAttribute
-    ) {
-        $this->validateNewOptionData($option);
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get($sku);
-        $allowedTypes = [ProductType::TYPE_SIMPLE, ProductType::TYPE_VIRTUAL, ConfigurableType::TYPE_CODE];
-        if (!in_array($product->getTypeId(), $allowedTypes)) {
-            throw new \InvalidArgumentException('Incompatible product type');
-        }
-
-        $eavAttribute = $this->productAttributeRepository->get($option->getAttributeId());
-        $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
-        if ($configurableAttribute->getId()) {
-            throw new CouldNotSaveException(__('Product already has this option'));
-        }
-
-        $configurableAttributesData = [
-            'attribute_id' => $option->getAttributeId(),
-            'position' => $option->getPosition(),
-            'use_default' => $option->getIsUseDefault(),
-            'label' => $option->getLabel(),
-            'values' => $option->getValues()
-        ];
-
-        try {
-            $product->setTypeId(ConfigurableType::TYPE_CODE);
-            $product->setConfigurableAttributesData([$configurableAttributesData]);
-            $product->setStoreId($this->storeManager->getStore(Store::ADMIN_CODE)->getId());
-            $product->save();
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('An error occurred while saving option'));
-        }
-
-        $configurableAttribute = $this->configurableAttributeFactory->create();
-        $configurableAttribute->loadByProductAndAttribute($product, $eavAttribute);
     }
 }
