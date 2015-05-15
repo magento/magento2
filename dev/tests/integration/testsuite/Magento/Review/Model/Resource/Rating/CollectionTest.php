@@ -20,7 +20,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Review/_files/customer_rating.php
+     * @magentoDataFixture Magento/Review/_files/customer_review_with_rating.php
      */
     public function testAddEntitySummaryToItem()
     {
@@ -32,6 +32,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->collection, $result);
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testAddEntitySummaryToItemEmpty()
     {
         foreach ($this->collection->getItems() as $item) {

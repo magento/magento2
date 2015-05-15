@@ -37,6 +37,7 @@ $review
     $review
 );
 
+/** @var \Magento\Review\Model\Resource\Review\Collection $ratingCollection */
 $ratingCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     '\Magento\Review\Model\Rating'
 )->getCollection()
@@ -58,3 +59,8 @@ foreach ($ratingCollection as $rating) {
     $rating->setReviewId($review->getId())
         ->addOptionVote($ratingOption->getId(), $product->getId());
 }
+
+\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry')->register(
+    'rating_data',
+    $ratingCollection->getFirstItem()
+);
