@@ -24,10 +24,19 @@ define([
             }
         },
 
+        /**
+         * Delegates call to the localStorage adapter.
+         */
         get: function () {
             return storage.get.apply(storage, arguments);
         },
 
+        /**
+         * Sends request to store specified data.
+         *
+         * @param {String} path - Path by which data should be stored.
+         * @param {*} value - Value to be sent.
+         */
         set: function (path, value) {
             var property = removeNs(this.namespace, path),
                 config;
@@ -46,9 +55,14 @@ define([
 
             $.ajax(config);
 
-            return storage.set.apply(storage, arguments);
+            storage.set.apply(storage, arguments);
         },
 
+        /**
+         * Sends request to remove specified data.
+         *
+         * @param {String} path - Path to the property to be removed.
+         */
         remove: function (path) {
             var property = removeNs(this.namespace, path),
                 config;
@@ -65,7 +79,7 @@ define([
 
             $.ajax(config);
 
-            return storage.remove.apply(storage, arguments);
+            storage.remove.apply(storage, arguments);
         }
     });
 });

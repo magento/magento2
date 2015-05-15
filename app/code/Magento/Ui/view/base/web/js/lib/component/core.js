@@ -66,6 +66,11 @@ define([
             return this;
         },
 
+        /**
+         * Creates wrapper on a specified storage component.
+         *
+         * @returns {Component} Chainable.
+         */
         initStorage: function () {
             this.storage = registry.async(this.storageConfig.provider);
 

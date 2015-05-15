@@ -17,12 +17,16 @@ define([
         };
     }
 
+    /**
+     * Removes empty properties from the provided object.
+     *
+     * @param {Object} data - Object to be processed.
+     * @returns {Object}
+     */
     function removeEmpty(data) {
         data = utils.flatten(data);
 
-        data = _.omit(data, function (value) {
-            return value === '' || typeof value === 'undefined';
-        });
+        data = _.omit(data, utils.isEmpty);
 
         return utils.unflatten(data);
     }
@@ -36,20 +40,24 @@ define([
                 applied: 'cancel extractActive'
             },
             links: {
-                applied: '${ $.storageConfig.path }',
-                opened: 'localStorage:${$.name}.opened'
+                applied: '${ $.storageConfig.path }'
             },
             exports: {
                 applied: '${ $.provider }:params.filters'
             }
         },
 
+        /**
+         * Initializes filters component.
+         *
+         * @returns {Filters} Chainable.
+         */
         initialize: function () {
             this._super()
                 .cancel()
                 .extractActive();
 
-            return;
+            return this;
         },
 
         /**
@@ -157,14 +165,26 @@ define([
             return this.elems.some(this.isFilterVisible, this);
         },
 
+        /**
+         * Finds filters whith a not empty data
+         * and sets them to the 'active' filters array.
+         *
+         * @returns {Filters} Chainable.
+         */
         extractActive: function () {
             this.active(this.elems.filter('hasData'));
 
             return this;
         },
 
-        extractPreviews: function (elems) {
-            var previews = elems.map(extractPreview);
+        /**
+         * Extract previews of a specified filters.
+         *
+         * @param {Array} filters - Filters to be processed.
+         * @returns {Filters} Chainable.
+         */
+        extractPreviews: function (filters) {
+            var previews = filters.map(extractPreview);
 
             this.previews(_.compact(previews));
 
