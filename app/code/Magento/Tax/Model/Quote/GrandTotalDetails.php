@@ -85,6 +85,9 @@ class GrandTotalDetails
         $quote = $this->quoteRepository->getActive($cartId);
         $taxes = $quote->getShippingAddress()->getAppliedTaxes();
 
+        if (!is_array($taxes)) {
+            return $result;
+        }
 
         $detailsId = 1;
         $finalData = [];

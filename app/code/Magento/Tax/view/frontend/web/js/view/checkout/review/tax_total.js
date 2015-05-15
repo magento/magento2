@@ -6,11 +6,12 @@
 /*global alert*/
 define(
     [
+        'ko',
         'uiComponent',
         'Magento_Checkout/js/model/quote',
         'Magento_Catalog/js/price-utils'
     ],
-    function (Component, quote, priceUtils) {
+    function (ko, Component, quote, priceUtils) {
         "use strict";
         var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal;
         var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed;
@@ -24,6 +25,7 @@ define(
             style: "",
             isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
             lastTaxGroupId: null,
+            isDetailsVisible: ko.observable(),
             isFirst: function(taxGroupId) {
                 if (this.lastTaxGroupId != taxGroupId) {
                     this.lastTaxGroupId = taxGroupId;
@@ -50,6 +52,9 @@ define(
                     return totals.extension_attributes.tax_grandtotal_details;
                 }
                 return [];
+            },
+            toggleDetails: function() {
+                this.isDetailsVisible(!this.isDetailsVisible());
             }
         });
     }

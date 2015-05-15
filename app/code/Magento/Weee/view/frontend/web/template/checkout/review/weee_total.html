@@ -4,7 +4,7 @@
 * See COPYING.txt for license details.
 */
 -->
-<!-- ko if: isIncludedInSubtotal && getValue() > 0 -->
+<!-- ko if: isIncludedInSubtotal && getPureValue() > 0 -->
 <tr class="totals">
     <th data-bind="text: getTitle(), attr: {'colspan': getColspan()}" class="mark" scope="row"></th>
     <td class="amount" data-bind="attr: {'data-th': $t(getTitle()) }">
