@@ -208,13 +208,6 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     protected $_scopeConfig;
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $_eventManager;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
@@ -252,7 +245,6 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
         );
         $this->_paymentData = $paymentData;
         $this->_scopeConfig = $scopeConfig;
-        $this->_eventManager = $context->getEventDispatcher();
         $this->logger = $context->getLogger();
         $this->initializeData($data);
     }
@@ -830,16 +822,31 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     public function isAvailable($quote = null)
     {
         $checkResult = new \StdClass();
-        $isActive = (bool)(int)$this->getConfigData('active', $quote ? $quote->getStoreId() : null);
+        $isActive = $this->isActive($quote ? $quote->getStoreId() : null);
         $checkResult->isAvailable = $isActive;
         $checkResult->isDeniedInConfig = !$isActive;
         // for future use in observers
         $this->_eventManager->dispatch(
             'payment_method_is_active',
-            ['result' => $checkResult, 'method_instance' => $this, 'quote' => $quote]
+            [
+                'result' => $checkResult,
+                'method_instance' => $this,
+                'quote' => $quote
+            ]
         );
 
         return $checkResult->isAvailable;
+    }
+
+    /**
+     * Is active
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    public function isActive($storeId = null)
+    {
+        return (bool)(int)$this->getConfigData('active', $storeId);
     }
 
     /**
