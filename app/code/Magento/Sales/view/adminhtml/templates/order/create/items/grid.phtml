@@ -15,30 +15,32 @@
 
 <?php $_items = $block->getItems() ?>
 <?php if (empty($_items)): ?>
-    <div class="grid" id="order-items_grid">
-        <table class="data-table admin__table-primary order-tables">
-            <thead>
-                <tr class="headings">
-                    <th class="col-product"><span><?php echo __('Product') ?></span></th>
-                    <th class="col-price"><span><?php echo __('Price') ?></span></th>
-                    <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
-                    <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
-                    <th class="col-discount"><span><?php echo __('Discount') ?></span></th>
-                    <th class="col-row-total"><span><?php echo __('Row Subtotal') ?></span></th>
-                    <th class="col-action"><span><?php echo __('Action') ?></span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="even">
-                    <td class="empty-text" colspan="100"><?php echo __('No ordered items') ?></td>
-                </tr>
-            </tbody>
-        </table>
+    <div id="order-items_grid">
+        <div class="admin__table-wrapper">
+            <table class="data-table admin__table-primary order-tables">
+                <thead>
+                    <tr class="headings">
+                        <th class="col-product"><span><?php echo __('Product') ?></span></th>
+                        <th class="col-price"><span><?php echo __('Price') ?></span></th>
+                        <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
+                        <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
+                        <th class="col-discount"><span><?php echo __('Discount') ?></span></th>
+                        <th class="col-row-total"><span><?php echo __('Row Subtotal') ?></span></th>
+                        <th class="col-action"><span><?php echo __('Action') ?></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="even">
+                        <td class="empty-text" colspan="100"><?php echo __('No ordered items') ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 <?php else: ?>
 
-<div class="grid" id="order-items_grid">
-    <div class="hor-scroll">
+<div id="order-items_grid">
+    <div class="admin__table-wrapper">
     <?php if (count($_items)>10): ?>
         <div class="actions update actions-update">
             <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()', 'action-secondary'); ?>
