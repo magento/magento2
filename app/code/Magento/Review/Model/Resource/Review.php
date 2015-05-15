@@ -338,7 +338,8 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Aggregate review summary
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @param $ratingSummaryObject
+     * @param \Magento\Framework\Data\Collection\Db $ratingSummaryObject
+     * @return void
      */
     protected function aggregateReviewSummary($object, $ratingSummaryObject)
     {
@@ -381,6 +382,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param array|bool $oldData
      * @param \Magento\Framework\Object $data
+     * @return void
      */
     protected function writeReviewSummary($oldData, \Magento\Framework\Object $data)
     {

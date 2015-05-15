@@ -43,14 +43,14 @@ $ratingCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()-
     ->setPageSize(2)
     ->setCurPage(1);
 
-foreach($ratingCollection as $rating) {
+foreach ($ratingCollection as $rating) {
     $rating->setStores([$storeId])->setIsActive(1)->save();
 }
 
-foreach($ratingCollection as $rating) {
-    $ratingOption = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-        '\Magento\Review\Model\Rating\Option'
-        )->getCollection()
+foreach ($ratingCollection as $rating) {
+    $ratingOption = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        ->create('\Magento\Review\Model\Rating\Option')
+        ->getCollection()
         ->setPageSize(1)
         ->setCurPage(2)
         ->addRatingFilter($rating->getId())
