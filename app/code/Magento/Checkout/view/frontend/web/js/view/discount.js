@@ -20,6 +20,13 @@ define(
         style: '',
         fieldName: 'Discount',
         totals: quote.getTotals(),
+        getPureValue: function() {
+            var price = 0;
+            if (this.totals()) {
+                price = this.totals().discount_amount;
+            }
+            return price;
+        },
         getValue: function() {
             var price = 0;
             if (this.totals()) {
