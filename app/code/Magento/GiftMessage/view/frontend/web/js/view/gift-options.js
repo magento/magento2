@@ -66,16 +66,17 @@ define(['uiComponent', 'ko', '../model/gift-options', '../model/gift-message', '
             },
             submit: function() {
                 var self = this;
-                var removeOrder = (giftMessage.isOrderLevelGiftOptionsSelected()
-                && this.isOrderLevelGiftOptionsSelected() !== giftMessage.isOrderLevelGiftOptionsSelected())
+
+                var removeOrder = giftOptions.isItemLevelGiftOptionsEnabled() && this.isOrderLevelGiftOptionsEnabled()
+                    && (!this.isGiftOptionsSelected() || !this.isOrderLevelGiftOptionsSelected())
                     ? true
                     : false;
                 _.each(giftOptions.getOrderLevelGiftOptions(), function(option) {
                     self.collectOptions(option, removeOrder);
                 });
 
-                var removeItem = (giftMessage.isItemLevelGiftOptionsSelected()
-                && this.isItemLevelGiftOptionsSelected() !== giftMessage.isItemLevelGiftOptionsSelected())
+                var removeItem = giftOptions.isItemLevelGiftOptionsEnabled() && this.isItemLevelGiftOptionsEnabled()
+                && (!this.isGiftOptionsSelected() || !this.isItemLevelGiftOptionsSelected())
                     ? true
                     : false;
                 _.each(giftOptions.getItemLevelGiftOptions(), function(option) {
