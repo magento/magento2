@@ -57,7 +57,8 @@ class AssertSuccessInstall extends AbstractConstraint
             $allData[$key] = isset($value['value']) ? $value['value'] : $value;
         }
 
-        $allData['admin'] = (isset($allData['https']) ? $allData['https'] : $allData['web']) . $allData['admin'] . '/';
+        $allData['web'] = (isset($allData['https']) ? $allData['https'] : $allData['web']);
+        $allData['admin'] = $allData['web'] . $allData['admin'] . '/';
 
         foreach ($this->adminFieldsList as $field) {
             \PHPUnit_Framework_Assert::assertEquals(
