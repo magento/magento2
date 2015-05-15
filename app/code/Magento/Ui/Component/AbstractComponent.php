@@ -84,7 +84,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
     public function prepare()
     {
         $jsConfig = $this->getJsConfig($this);
-        if (isset($jsConfig['config']['provider'])) {
+        if (isset($jsConfig['provider'])) {
             unset($jsConfig['extends']);
             $this->getContext()->addComponentDefinition($this->getName(), $jsConfig);
         } else {

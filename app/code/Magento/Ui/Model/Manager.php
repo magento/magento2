@@ -102,7 +102,6 @@ class Manager implements ManagerInterface
      * @param AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
      * @param CacheInterface $cache
      * @param InterpreterInterface $argumentInterpreter
-     * @param Bookmark $bookmark
      */
     public function __construct(
         ComponentDefinition $componentConfigProvider,
@@ -111,8 +110,7 @@ class Manager implements ManagerInterface
         ArrayObjectFactory $arrayObjectFactory,
         AggregatedFileCollectorFactory $aggregatedFileCollectorFactory,
         CacheInterface $cache,
-        InterpreterInterface $argumentInterpreter,
-        Bookmark $bookmark
+        InterpreterInterface $argumentInterpreter
     ) {
         $this->componentConfigProvider = $componentConfigProvider;
         $this->domMerger = $domMerger;
@@ -122,7 +120,6 @@ class Manager implements ManagerInterface
         $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
         $this->cache = $cache;
         $this->argumentInterpreter = $argumentInterpreter;
-        $this->bookmark = $bookmark;
     }
 
     /**
@@ -320,7 +317,7 @@ class Manager implements ManagerInterface
      */
     protected function mergeBookmarkConfig($parentName, &$configuration)
     {
-        $data = $this->bookmark->getCurrentBookmarkByIdentifier('cms_page_listing')->getConfig();
+        $data = [];//$this->bookmark->getCurrentBookmarkByIdentifier('cms_page_listing')->getConfig();
 
         if (isset($data[$parentName])) {
             foreach ($data[$parentName] as $name => $fields) {

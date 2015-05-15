@@ -44,11 +44,18 @@ class InstallSchema implements InstallSchemaInterface
                 'User Id'
             )
             ->addColumn(
-                'identifier',
+                'namespace',
                 Table::TYPE_TEXT,
                 255,
                 ['nullable' => false],
                 'Bookmark namespace'
+            )
+            ->addColumn(
+                'identifier',
+                Table::TYPE_TEXT,
+                255,
+                ['nullable' => false],
+                'Bookmark Identifier'
             )
             ->addColumn(
                 'current',
@@ -61,7 +68,15 @@ class InstallSchema implements InstallSchemaInterface
             ->addColumn('config', Table::TYPE_TEXT, Table::MAX_TEXT_SIZE, ['nullable' => true], 'Bookmark config')
             ->addColumn('created_at', Table::TYPE_DATETIME, null, ['nullable' => false], 'Bookmark created at')
             ->addColumn('updated_at', Table::TYPE_DATETIME, null, ['nullable' => false], 'Bookmark updated at')
-            ->addIndex($setup->getIdxName('ui_bookmark', ['identifier', 'user_id']), ['identifier', 'user_id'])
+            ->addIndex(
+                $setup->getIdxName(
+                    'ui_bookmark',
+                    ['user_id', 'namespace', 'identifier'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['user_id', 'namespace', 'identifier'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            )
             ->addForeignKey(
                 $setup->getFkName('ui_bookmark', 'user_id', 'admin_user', 'user_id'),
                 'user_id',

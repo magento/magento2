@@ -11,13 +11,14 @@ use Magento\Framework\Json\Encoder;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Ui\Api\Data\BookmarkInterface;
 use Magento\Ui\Model\Resource\Bookmark\Collection;
 use Magento\Ui\Model\Resource\Bookmark as ResourceBookmark;
 
 /**
  * Domain class Bookmark
  */
-class Bookmark extends AbstractModel
+class Bookmark extends AbstractModel implements BookmarkInterface
 {
     /**
      * @var Encoder
@@ -52,19 +53,6 @@ class Bookmark extends AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
-    /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
-     */
-    const BOOKMARK_ID      = 'bookmark_id';
-    const USER_ID          = 'user_id';
-    const IDENTIFIER       = 'identifier';
-    const TITLE            = 'title';
-    const CONFIG           = 'config';
-    const CREATED_AT       = 'created_at';
-    const UPDATED_AT       = 'updated_at';
-    const CURRENT          = 'current';
-    /**#@-*/
-
     /**
      * Get Id
      *
@@ -83,6 +71,16 @@ class Bookmark extends AbstractModel
     public function getUserId()
     {
         return $this->getData(self::USER_ID);
+    }
+
+    /**
+     * Get namespace
+     *
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->getData(self::BOOKMARKSPACE);
     }
 
     /**
@@ -168,6 +166,17 @@ class Bookmark extends AbstractModel
     }
 
     /**
+     * Set namespace
+     *
+     * @param string $namespace
+     * @return $this
+     */
+    public function setNamespace($namespace)
+    {
+        return $this->setData(self::BOOKMARKSPACE, $namespace);
+    }
+
+    /**
      * Set identifier
      *
      * @param string $identifier
@@ -203,7 +212,7 @@ class Bookmark extends AbstractModel
     /**
      * Set config
      *
-     * @param [] $config
+     * @param array $config
      * @return $this
      */
     public function setConfig($config)
@@ -231,54 +240,5 @@ class Bookmark extends AbstractModel
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(self::UPDATED_AT, $updatedAt);
-    }
-
-    /**
-     * Get current bookmark by identifier for current user
-     *
-     * @param string $identifier
-     * @return $this
-     */
-    public function getCurrentBookmarkByIdentifier($identifier)
-    {
-        $collection = $this->_resourceCollection;
-        /**
-         * @var $collection Collection
-         */
-        return $collection->filterCurrentForIdentifier($identifier)->load()->getLastItem();
-    }
-
-    /**
-     * Save bookmark state
-     *
-     * @param array $data
-     * @return void
-     */
-    public function saveState($data)
-    {
-        if (isset($data['namespace'])) {
-            $bookmark = $this->getCurrentBookmarkByIdentifier($data['namespace']);
-
-            $sorting = [];
-            if (isset($data['sorting']['field'])
-                && isset($data['sorting']['direction'])) {
-                $sorting['columns'] = [];
-                $sorting['columns'][$data['sorting']['field']] = ['sorting' => $data['sorting']['direction']];
-            }
-
-            $paging = [];
-            if (isset($data['paging']['pageSize'])) {
-                $paging['pageSize'] = $data['paging']['pageSize'];
-            }
-
-            $config = [
-                'columns' => isset($data['columns']) ? $data['columns'] : [],
-                'filters' => isset($data['filters']) ? $data['filters'] : [],
-                'paging'  => $paging,
-            ];
-            $config = array_replace_recursive($config, $sorting);
-
-            $bookmark->setConfig($config)->save();
-        }
     }
 }

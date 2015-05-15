@@ -31,6 +31,7 @@
                     <xs:element type="field" name="field"/>
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="argumentType" name="argument"/>
+                    <xs:element type="bookmark" name="bookmark"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -55,7 +56,6 @@
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="columnsConfiguration" name="columns"/>
                     <xs:element type="containerConfiguration" name="container"/>
-                    <xs:element type="bookmark" name="bookmark"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
