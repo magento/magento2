@@ -98,7 +98,15 @@ class Order extends SalesResource implements OrderResourceInterface
             ->where('o.product_id IS NOT NULL')
             ->group('o.product_type');
         if ($productTypeIds) {
-            $select->where(sprintf('(o.product_type %s (?))', $isProductTypeIn ? 'IN' : 'NOT IN'), $productTypeIds);
+            $select->where(
+                sprintf(
+                    '(o.product_type %s (?))',
+                    $isProductTypeIn
+                        ? 'IN'
+                        : 'NOT IN'
+                ),
+                $productTypeIds
+            );
         }
         return $adapter->fetchPairs($select);
     }
