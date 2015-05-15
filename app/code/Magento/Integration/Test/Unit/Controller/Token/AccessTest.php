@@ -97,7 +97,7 @@ class AccessTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $page->expects($this->any())->method('getConfig')->will($this->returnValue(pageConfig));
+        $page->expects($this->any())->method('getConfig')->will($this->returnValue($pageConfig));
         $page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
         $page->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
 
