@@ -43,7 +43,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setPath'])
             ->disableOriginalConstructor()
             ->getMock();
-        $redirectFactory = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
+        $redirectFactory = $this->getMockBuilder('\Magento\Framework\Controller\ResultFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -52,6 +52,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->redirect));
         $this->context->expects($this->any())
             ->method('getResultRedirectFactory')
+            ->willReturn($redirectFactory);
+        $this->context->expects($this->any())
+            ->method('getResultFactory')
             ->willReturn($redirectFactory);
 
         $this->request = $this->getMockBuilder('\Magento\Framework\App\RequestInterface')
@@ -86,11 +89,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getSession')
             ->willReturn($this->session);
 
-        $pageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
-            ->setMethods([])
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->query = $this->getMockBuilder('Magento\Search\Model\Query')
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'load', 'addData', 'setIsProcessed', 'save', 'loadByQueryText', 'setStoreId'])
@@ -107,7 +105,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'Magento\Search\Controller\Adminhtml\Term\Save',
             [
                 'context' => $this->context,
-                'resultPageFactory' => $pageFactory,
                 'queryFactory' => $queryFactory,
             ]
         );

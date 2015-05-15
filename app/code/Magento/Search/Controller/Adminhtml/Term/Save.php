@@ -6,9 +6,8 @@
 namespace Magento\Search\Controller\Adminhtml\Term;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Search\Model\QueryFactory;
-
 use Magento\Search\Controller\Adminhtml\Term as TermController;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -21,15 +20,13 @@ class Save extends TermController
 
     /**
      * @param Context $context
-     * @param PageFactory $resultPageFactory
      * @param QueryFactory $queryFactory
      */
     public function __construct(
         Context $context,
-        PageFactory $resultPageFactory,
         QueryFactory $queryFactory
     ) {
-        parent::__construct($context, $resultPageFactory);
+        parent::__construct($context);
         $this->queryFactory = $queryFactory;
     }
 
@@ -102,8 +99,8 @@ class Save extends TermController
     private function proceedToEdit($data)
     {
         $this->_getSession()->setPageData($data);
-        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultRedirectFactory->create();
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $redirectResult->setPath('search/*/edit', ['id' => $this->getRequest()->getPost('query_id', null)]);
     }
 }
