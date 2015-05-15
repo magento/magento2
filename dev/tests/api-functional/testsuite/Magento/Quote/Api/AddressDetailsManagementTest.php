@@ -70,7 +70,7 @@ class AddressDetailsManagementTest extends \Magento\TestFramework\TestCase\Webap
         $this->assertEquals('flatrate', $response['shipping_methods'][0]['method_code']);
 
         $this->assertArrayHasKey('payment_methods', $response);
-        $this->assertCount(1, $response['payment_methods']);
+        $this->assertCount(2, $response['payment_methods']);
         $this->assertEquals('checkmo', $response['payment_methods'][0]['code']);
     }
 }
