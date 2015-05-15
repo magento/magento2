@@ -12,7 +12,7 @@ interface GuestAddressDetailsManagementInterface
      *
      * @param string $cartId
      * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
-     * @param \Magento\Quote\Api\Data\AddressInterface $shippingAddress
+     * @param \Magento\Quote\Api\Data\AddressInterface|null $shippingAddress
      * @param \Magento\Quote\Api\Data\AddressAdditionalDataInterface|null $additionalData
      * @return \Magento\Quote\Api\Data\AddressDetailsInterface
      */
