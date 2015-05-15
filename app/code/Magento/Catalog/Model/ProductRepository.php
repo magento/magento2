@@ -6,18 +6,19 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\Resource\Product\Collection;
+use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\Api\ImageContentValidatorInterface;
+use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Exception\InputException;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Api\ImageContentValidatorInterface;
-use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
-use Magento\Framework\Api\Data\ImageContentInterface;
-use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -131,6 +132,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $mimeTypeExtensionMap;
 
     /**
+     * @var ImageProcessorInterface
+     */
+    protected $imageProcessor;
+
+    /**
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -140,7 +146,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param Resource\Product $resourceModel
      * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager,
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager ,
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
@@ -150,6 +156,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ImageContentValidatorInterface $contentValidator
      * @param ImageContentInterfaceFactory $contentFactory
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
+     * @param ImageProcessorInterface $imageProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -171,7 +178,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ImageContentValidatorInterface $contentValidator,
         ImageContentInterfaceFactory $contentFactory,
         MimeTypeExtensionMap $mimeTypeExtensionMap,
-        \Magento\Eav\Model\Config $eavConfig
+        \Magento\Eav\Model\Config $eavConfig,
+        ImageProcessorInterface $imageProcessor
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -192,6 +200,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->contentFactory = $contentFactory;
         $this->mimeTypeExtensionMap = $mimeTypeExtensionMap;
         $this->eavConfig = $eavConfig;
+        $this->imageProcessor = $imageProcessor;
     }
 
     /**
@@ -428,23 +437,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     ) {
         /** @var ImageContentInterface $contentDataObject */
         $contentDataObject = $newEntry['content'];
-        if (!$this->contentValidator->isValid($contentDataObject)) {
-            throw new InputException(__('The image content is not valid.'));
-        }
-
-        $fileContent = @base64_decode($contentDataObject->getBase64EncodedData(), true);
-        $fileName = $contentDataObject->getName();
-        $mimeType = $contentDataObject->getType();
 
         /** @var \Magento\Catalog\Model\Product\Media\Config $mediaConfig */
         $mediaConfig = $product->getMediaConfig();
         $mediaTmpPath = $mediaConfig->getBaseTmpMediaPath();
-        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $mediaDirectory->create($mediaTmpPath);
-        $fileName = $fileName . '.' . $this->mimeTypeExtensionMap->getMimeTypeExtension($mimeType);
-        $relativeFilePath = $mediaTmpPath . DIRECTORY_SEPARATOR . $fileName;
-        $absoluteFilePath = $mediaDirectory->getAbsolutePath($relativeFilePath);
-        $mediaDirectory->writeFile($relativeFilePath, $fileContent);
+
+        $relativeFilePath = $this->imageProcessor->processImageContent($mediaTmpPath, $contentDataObject);
 
         /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Media $galleryAttributeBackend */
         $galleryAttributeBackend = $product->getGalleryAttributeBackend();
@@ -454,7 +452,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $imageFileUri = $galleryAttributeBackend->addImage(
             $product,
-            $absoluteFilePath,
+            $relativeFilePath,
             isset($newEntry['types']) ? $newEntry['types'] : [],
             true,
             isset($newEntry['disabled']) ? $newEntry['disabled'] : true

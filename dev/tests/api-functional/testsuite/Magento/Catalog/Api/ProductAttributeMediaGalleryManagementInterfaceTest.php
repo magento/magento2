@@ -113,7 +113,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'content' => [
                 ImageContentInterface::BASE64_ENCODED_DATA => base64_encode(file_get_contents($this->testImagePath)),
                 ImageContentInterface::TYPE => 'image/jpeg',
-                ImageContentInterface::NAME => 'test_image'
+                ImageContentInterface::NAME => 'test_image.jpg'
             ]
         ];
 
@@ -145,7 +145,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'content' => [
                 'base64_encoded_data' => base64_encode(file_get_contents($this->testImagePath)),
                 'type' => 'image/jpeg',
-                'name' => 'test_image',
+                'name' => 'test_image.jpg',
             ]
         ];
 
@@ -286,7 +286,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'content' => [
                 'base64_encoded_data' => base64_encode(file_get_contents($this->testImagePath)),
                 'type' => 'image/jpeg',
-                'name' => 'test_image',
+                'name' => 'test_image.jpg',
             ]
         ];
 
@@ -310,7 +310,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'content' => [
                 'base64_encoded_data' => $encodedContent,
                 'type' => 'image/jpeg',
-                'name' => 'test_image',
+                'name' => 'test_image.jpg',
             ]
         ];
 
@@ -334,7 +334,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'content' => [
                 'base64_encoded_data' => $encodedContent,
                 'type' => 'image/jpeg',
-                'name' => 'test_image',
+                'name' => 'test_image.jpg',
             ]
         ];
 
@@ -358,7 +358,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'content' => [
                 'base64_encoded_data' => $encodedContent,
                 'type' => 'wrong_mime_type',
-                'name' => 'test_image',
+                'name' => 'test_image.jpg',
             ]
         ];
 
@@ -382,7 +382,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
             'content' => [
                 'base64_encoded_data' => base64_encode(file_get_contents($this->testImagePath)),
                 'type' => 'image/jpeg',
-                'name' => 'test_image',
+                'name' => 'test_image.jpg',
             ]
         ];
 

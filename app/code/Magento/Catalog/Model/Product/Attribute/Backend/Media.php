@@ -360,41 +360,20 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function addImage(
         \Magento\Catalog\Model\Product $product,
-        $file,
+        $fileName,
         $mediaAttribute = null,
         $move = false,
         $exclude = true
     ) {
-        $file = $this->_mediaDirectory->getRelativePath($file);
-        if (!$this->_mediaDirectory->isFile($file)) {
-            throw new LocalizedException(__('The image does not exist.'));
-        }
-
-        $pathinfo = pathinfo($file);
-        $imgExtensions = ['jpg', 'jpeg', 'gif', 'png'];
-        if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
-            throw new LocalizedException(__('Please correct the image file type.'));
-        }
-
-        $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
-        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
-        $fileName = $dispretionPath . '/' . $fileName;
-
-        $fileName = $this->_getNotDuplicatedFilename($fileName, $dispretionPath);
-
         $destinationFile = $this->_mediaConfig->getTmpMediaPath($fileName);
 
         try {
             /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
             $storageHelper = $this->_fileStorageDb;
             if ($move) {
-                $this->_mediaDirectory->renameFile($file, $destinationFile);
-
                 //If this is used, filesystem should be configured properly
                 $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
             } else {
-                $this->_mediaDirectory->copyFile($file, $destinationFile);
-
                 $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
                 $this->_mediaDirectory->changePermissions($destinationFile, 0777);
             }
@@ -740,33 +719,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         );
 
         return $this;
-    }
-
-    /**
-     * Get filename which is not duplicated with other files in media temporary and media directories
-     *
-     * @param string $fileName
-     * @param string $dispretionPath
-     * @return string
-     */
-    protected function _getNotDuplicatedFilename($fileName, $dispretionPath)
-    {
-        $fileMediaName = $dispretionPath . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-            $this->_mediaConfig->getMediaPath($fileName)
-        );
-        $fileTmpMediaName = $dispretionPath . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-            $this->_mediaConfig->getTmpMediaPath($fileName)
-        );
-
-        if ($fileMediaName != $fileTmpMediaName) {
-            if ($fileMediaName != $fileName) {
-                return $this->_getNotDuplicatedFileName($fileMediaName, $dispretionPath);
-            } elseif ($fileTmpMediaName != $fileName) {
-                return $this->_getNotDuplicatedFilename($fileTmpMediaName, $dispretionPath);
-            }
-        }
-
-        return $fileMediaName;
     }
 
     /**
