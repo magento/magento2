@@ -3550,4 +3550,5 @@ return [
     ['Magento\Framework\Locale\Lists', 'Magento\Framework\Locale\TranslatedLists'],
     ['Magento\Setup\Model\Lists', 'Magento\Framework\Setup\Lists'],
     ['Magento\Framework\View\Block\IdentityInterface'],
+    ['Magento\Framework\Config\ConfigOptionsList', 'Magento\Setup\Model\ConfigOptionsList'],
 ];
