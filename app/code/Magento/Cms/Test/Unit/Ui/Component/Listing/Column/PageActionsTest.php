@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Cms\Test\Unit\Model\Ui\Component\Listing\Column;
 
 class PageActionsTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +44,11 @@ class PageActionsTest extends \PHPUnit_Framework_TestCase
         ];
 
         // Configure mocks and object data
-        $urlBuilderMock->expects($this->once())->method('getUrl')->with($inputUrl, ['page_id' => 1])->willReturn($fullUrl);
+        $urlBuilderMock->expects($this->once())
+            ->method('getUrl')
+            ->with($inputUrl, ['page_id' => 1])
+            ->willReturn($fullUrl);
+
         $model->setName($name);
         // Run test
         $this->assertEquals(
