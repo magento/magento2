@@ -477,12 +477,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
             $this->addressMapper->toFlatArray($address),
             $this
         );
-        $region = $this->getRegion();
-        $regionId = $this->getRegionId();
-        if (isset($regionId) && isset($region)) {
-            $this->setRegionId($regionId);
-            $this->setRegion($region);
-        }
+
         $quote = $this->getQuote();
         if ($address->getCustomerId() && (!empty($quote) && $address->getCustomerId() == $quote->getCustomerId())) {
             $customer = $quote->getCustomer();
