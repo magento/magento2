@@ -23,6 +23,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     private $appResource;
 
     /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $adapterMock;
+
+    /**
      * @var \Magento\Sales\Model\Resource\Helper
      */
     private $helper;
@@ -43,6 +48,14 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceHelper = $this->getMock(
             'Magento\Reports\Model\Resource\Helper',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->adapterMock = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [],
             [],
             '',
@@ -70,11 +83,16 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $mainTable = 'main_table';
         $aggregationTable = 'aggregation_table';
         $this->resourceHelper->expects($this->once())->method('updateReportRatingPos')->with(
+            $this->adapterMock,
             $expectedType,
             'qty_ordered',
             $mainTable,
             $aggregationTable
         );
+        $this->appResource->expects($this->once())
+            ->method('getConnection')
+            ->with('sales_write')
+            ->willReturn($this->adapterMock);
         $this->helper->getBestsellersReportUpdateRatingPos(
             $aggregation,
             $aggregationAliases,
