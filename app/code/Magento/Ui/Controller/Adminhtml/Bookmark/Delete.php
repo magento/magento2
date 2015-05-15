@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
+use Magento\Ui\Api\BookmarkManagementInterface;
 
 /**
  * Class Delete action
@@ -20,19 +21,26 @@ class Delete extends AbstractAction
      * @var BookmarkRepositoryInterface
      */
     protected $bookmarkRepository;
+    /**
+     * @var BookmarkManagementInterface
+     */
+    private $bookmarkManagement;
 
     /**
      * @param Context $context
      * @param UiComponentFactory $factory
      * @param BookmarkRepositoryInterface $bookmarkRepository
+     * @param BookmarkManagementInterface $bookmarkManagement
      */
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
-        BookmarkRepositoryInterface $bookmarkRepository
+        BookmarkRepositoryInterface $bookmarkRepository,
+        BookmarkManagementInterface $bookmarkManagement
     ) {
         parent::__construct($context, $factory);
         $this->bookmarkRepository = $bookmarkRepository;
+        $this->bookmarkManagement = $bookmarkManagement;
     }
 
     /**
@@ -42,23 +50,15 @@ class Delete extends AbstractAction
      */
     public function execute()
     {
-        $component = $this->factory->create($this->_request->getParam('namespace'));
-        $this->prepareComponent($component);
-        $this->_response->appendBody((string) $component->render());
-    }
+        $viewId = array_pop(explode('.', $this->_request->getParam('data')));
+        $bookmark = $this->bookmarkManagement->getByIdentifierNamespace(
+            $viewId,
+            $this->_request->getParam('namespace')
+        );
 
-    /**
-     * Call prepare method in the component UI
-     *
-     * @param UiComponentInterface $component
-     * @return void
-     */
-    protected function prepareComponent(UiComponentInterface $component)
-    {
-        foreach ($component->getChildComponents() as $child) {
-            $this->prepareComponent($child);
+        if ($bookmark && $bookmark->getId()) {
+            $this->bookmarkRepository->delete($bookmark);
         }
 
-        $component->prepare();
     }
 }

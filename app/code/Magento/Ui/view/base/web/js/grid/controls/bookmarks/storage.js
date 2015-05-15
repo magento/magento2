@@ -54,8 +54,6 @@ define([
             }, this.ajaxSettings, config);
 
             $.ajax(config);
-
-            storage.set.apply(storage, arguments);
         },
 
         /**
@@ -78,8 +76,6 @@ define([
             }, this.ajaxSettings, config);
 
             $.ajax(config);
-
-            storage.remove.apply(storage, arguments);
         }
     });
 });

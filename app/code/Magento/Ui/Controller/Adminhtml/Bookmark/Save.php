@@ -75,28 +75,28 @@ class Save extends AbstractAction
     {
         $bookmark = $this->bookmarkFactory->create();
         $data = $this->_request->getParam('data');
-        //Creation case
         if (isset($data['views'])) {
             foreach ($data['views'] as $identifier => $data) {
+                $updateBookmark = $this->checkBookmark($identifier);
+                if ($updateBookmark !== false) {
+                    $bookmark = $updateBookmark;
+                }
+
                 $this->updateBookmark(
                     $bookmark,
                     $identifier,
                     (isset($data['label']) ? $data['label'] : ''),
-                    (isset($data['data']) ? $data['data'] : '')
+                    $data
                 );
             }
         } else {
-            //Update case
             $identifier = isset($data['activeIndex']) ? $data['activeIndex'] : (isset($data[self::CURRENT_IDENTIFIER]) ? self::CURRENT_IDENTIFIER : '');
-            $updateBookmark = $this->bookmarkManagement->getByIdentifierNamespace(
-                $identifier,
-                $this->_request->getParam('namespace')
-            );
-
-            if ($updateBookmark) {
-                $updateBookmark->setCurrent(true);
-                $this->updateBookmark($updateBookmark, $identifier, '', $data[$identifier]);
+            $updateBookmark = $this->checkBookmark($identifier);
+            if ($updateBookmark !== false) {
+                $bookmark = $updateBookmark;
             }
+
+            $this->updateBookmark($bookmark, $identifier, '', $data[$identifier]);
         }
     }
 
@@ -113,8 +113,39 @@ class Save extends AbstractAction
             ->setNamespace($this->_request->getParam('namespace'))
             ->setIdentifier($identifier)
             ->setTitle($title)
-            ->setConfig($config);
-
+            ->setConfig($config)
+            ->setCurrent(true);
         $this->bookmarkRepository->save($bookmark);
+
+        $bookmarks = $this->bookmarkManagement->loadByNamespace($this->_request->getParam('namespace'));
+        foreach ($bookmarks->getItems() as $bookmark) {
+            if ($bookmark->getIdentifier() == $identifier) {
+                continue;
+            }
+            $bookmark->setCurrent(false);
+            $this->bookmarkRepository->save($bookmark);
+        }
+    }
+
+    /**
+     * Check bookmark by identifier
+     *
+     * @param $identifier
+     * @return bool|BookmarkInterface
+     */
+    protected function checkBookmark($identifier)
+    {
+        $result = false;
+
+        $updateBookmark = $this->bookmarkManagement->getByIdentifierNamespace(
+            $identifier,
+            $this->_request->getParam('namespace')
+        );
+
+        if ($updateBookmark) {
+            $result = $updateBookmark;
+        }
+
+        return $result;
     }
 }

@@ -53,7 +53,7 @@
                     <item name="storageConfig" xsi:type="array">
                         <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
                         <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
-                        <item name="namespace" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">cms_page_listing</item>
                     </item>
                 </item>
             </argument>

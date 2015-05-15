@@ -91,6 +91,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $searchResults = $this->searchResultsFactory->create();
+        $searchResults->setSearchCriteria($searchCriteria);
 
         /** @var \Magento\Ui\Model\Resource\Bookmark\Collection $collection */
         $collection = $this->bookmarkFactory->create()->getCollection();
@@ -118,7 +119,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
             $bookmarks[] = $this->getById($bookmark->getId());
         }
         $searchResults->setItems($bookmarks);
-        $searchResults->setSearchCriteria($searchCriteria);
+
         return $searchResults;
     }
 
@@ -162,15 +163,9 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
-        $fields = [];
-        $conditions = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-            $fields[] = $filter->getField();
-            $conditions[] = [$condition => $filter->getValue()];
-        }
-        if ($fields) {
-            $collection->addFieldToFilter($fields, $conditions);
+            $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
         }
     }
 }

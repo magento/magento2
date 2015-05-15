@@ -36,9 +36,7 @@ define([
             },
             storageConfig: {
                 provider: '${ $.storageConfig.namespace }.bookmarks.storage',
-                name: '${ $.storageConfig.provider }',
-                saveUrl: 'path/to/save',
-                deleteUrl: 'path/to/delete'
+                name: '${ $.storageConfig.provider }'
             },
             views: {
                 default: {
@@ -65,7 +63,6 @@ define([
             utils.limit(this, '_defaultPolyfill', 1000);
 
             this._super()
-                .restore()
                 .initViews();
 
             return this;
