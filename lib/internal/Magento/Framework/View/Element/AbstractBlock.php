@@ -896,6 +896,17 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     }
 
     /**
+     * Escape xss in urls
+     *
+     * @param string $data
+     * @return string
+     */
+    public function escapeXssInUrl($data)
+    {
+        return $this->_escaper->escapeXssInUrl($data);
+    }
+
+    /**
      * Escape quotes inside html attributes
      *
      * Use $addSlashes = false for escaping js that inside html attribute (onClick, onSubmit etc)

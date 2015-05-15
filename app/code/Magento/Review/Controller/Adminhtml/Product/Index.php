@@ -1,29 +1,32 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Controller\Adminhtml\Product;
 
-class Index extends \Magento\Review\Controller\Adminhtml\Product
+use Magento\Review\Controller\Adminhtml\Product as ProductController;
+use Magento\Framework\Controller\ResultFactory;
+
+class Index extends ProductController
 {
     /**
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
         if ($this->getRequest()->getParam('ajax')) {
-            return $this->_forward('reviewGrid');
+            /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
+            $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+            $resultForward->forward('reviewGrid');
+            return $resultForward;
         }
-
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Customer Reviews'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Reviews'));
-
-        $this->_addContent($this->_view->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Main'));
-
-        $this->_view->renderLayout();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_Review::catalog_reviews_ratings_reviews_all');
+        $resultPage->getConfig()->getTitle()->prepend(__('Customer Reviews'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Reviews'));
+        $resultPage->addContent($resultPage->getLayout()->createBlock('Magento\Review\Block\Adminhtml\Main'));
+        return $resultPage;
     }
 }

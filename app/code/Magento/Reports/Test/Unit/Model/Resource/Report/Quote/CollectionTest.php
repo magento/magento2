@@ -33,17 +33,17 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->getConstructArguments('Magento\Reports\Model\Resource\Quote\Collection');
         $collection = $this->getMock(
             'Magento\Reports\Model\Resource\Quote\Collection',
-            ['prepareActiveCartItems', 'getSelect'],
+            ['getSelect'],
             $constructArgs,
             '',
             false
         );
 
-        $collection->expects($this->once())->method('prepareActiveCartItems')->willReturn($this->selectMock);
+        $collection->expects($this->once())->method('getSelect')->willReturn($this->selectMock);
         $this->selectMock->expects($this->atLeastOnce())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->once())
             ->method('columns')
-            ->with('COUNT(DISTINCT quote_items.product_id)')
+            ->with('COUNT(*)')
             ->willReturnSelf();
         $this->assertEquals($this->selectMock, $collection->getSelectCountSql());
     }
@@ -52,9 +52,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
         $constructArgs = $this->objectManager
-            ->getConstructArguments('Magento\Reports\Model\Resource\Quote\Collection');
+            ->getConstructArguments('Magento\Reports\Model\Resource\Quote\Item\Collection');
         $collection = $this->getMock(
-            'Magento\Reports\Model\Resource\Quote\Collection',
+            'Magento\Reports\Model\Resource\Quote\Item\Collection',
             ['getSelect', 'getTable'],
             $constructArgs,
             '',
@@ -76,7 +76,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
         $constructArgs = $this->objectManager
-            ->getConstructArguments('Magento\Reports\Model\Resource\Quote\Collection');
+            ->getConstructArguments('Magento\Reports\Model\Resource\Quote\Item\Collection');
         $constructArgs['eventManager'] = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $readConnectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
         $resourceMock = $this->getMock('\Magento\Quote\Model\Resource\Quote', [], [], '', false);
@@ -87,7 +87,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $constructArgs['orderResource'] = $orderResourceMock;
 
         $collection = $this->getMock(
-            'Magento\Reports\Model\Resource\Quote\Collection',
+            'Magento\Reports\Model\Resource\Quote\Item\Collection',
             [
                 '_beforeLoad',
                 '_renderFilters',
