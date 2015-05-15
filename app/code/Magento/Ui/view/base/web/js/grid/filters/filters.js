@@ -34,10 +34,10 @@ define([
         defaults: {
             template: 'ui/grid/filters/filters',
             applied: {
-                empty: ''
+                placeholder: true
             },
             filters: {
-                empty: ''
+                placeholder: true
             },
             listens: {
                 active: 'extractPreviews',
