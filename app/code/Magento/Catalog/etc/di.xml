@@ -87,6 +87,7 @@
                     <item name="category_ids" xsi:type="string">category_ids</item>
                     <item name="entity_id" xsi:type="string">entity_id</item>
                     <item name="store_id" xsi:type="string">store_id</item>
+                    <item name="website_ids" xsi:type="string">website_ids</item>
                     <item name="visibility" xsi:type="string">visibility</item>
                     <item name="status" xsi:type="string">status</item>
                 </item>

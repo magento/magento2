@@ -2875,7 +2875,7 @@ return [
     ['Magento\Tax\Service\V1\Data\TaxDetails\AppliedTaxRate', 'Magento\Tax\Api\Data\AppliedTaxRateInterface'],
     ['Magento\Tax\Service\V1\Data\TaxDetails\Item', 'Magento\Tax\Api\Data\TaxDetailsItemInterface'],
     ['Magento\Tax\Service\V1\OrderTaxServiceInterface', 'Magento\Tax\Api\OrderTaxManagementInterface'],
-    ['Magento\Tools\I18n\Code', 'Magento\Tools\I18n'],
+    ['Magento\Tools\I18n\Code', 'Magento\Setup\Module\I18n'],
     ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
     ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
     ['Magento\TestFramework\Utility\Files', 'Magento\Framework\App\Utility\Files'],
@@ -3161,5 +3161,178 @@ return [
     ['Magento\Framework\Exception\File\ValidatorException'],
     ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
     ['Magento\Shipping\Exception'],
+    ['Magento\Log\Model\Shell'],
+    ['Magento\Log\App\Shell'],
+    ['Magento\Framework\App\Cache\ManagerApp'],
+    ['Magento\Log\Model\Shell\Command\Factory'],
+    ['Magento\Tools\Di\App\Compiler'],
+    ['Magento\Indexer\App\Shell'],
+    ['Magento\Indexer\Model\Shell'],
+    ['Magento\Tools\I18n\Context', 'Magento\Setup\Module\I18n\Context'],
+    ['Magento\Tools\I18n\Dictionary\Generator', 'Magento\Setup\Module\I18n\Dictionary\Generator'],
+    [
+        'Magento\Tools\I18n\Dictionary\Loader\File\AbstractFile',
+        'Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile'
+    ],
+    ['Magento\Tools\I18n\Dictionary\Loader\File\Csv', 'Magento\Setup\Module\I18n\Dictionary\Loader\File\Csv'],
+    ['Magento\Tools\I18n\Dictionary\Loader\FileInterface', 'Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface'],
+    ['Magento\Tools\I18n\Dictionary\Options\Resolver', 'Magento\Setup\Module\I18n\Dictionary\Options\Resolver'],
+    [
+        'Magento\Tools\I18n\Dictionary\Options\ResolverFactory',
+        'Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory'
+    ],
+    [
+        'Magento\Tools\I18n\Dictionary\Options\ResolverInterface',
+        'Magento\Setup\Module\I18n\Dictionary\Options\ResolverInterface'
+    ],
+    ['Magento\Tools\I18n\Dictionary\Phrase', 'Magento\Setup\Module\I18n\Dictionary\Phrase'],
+    ['Magento\Tools\I18n\Dictionary\Writer\Csv\Stdo', 'Magento\Setup\Module\I18n\Dictionary\Writer\Csv\Stdo'],
+    ['Magento\Tools\I18n\Dictionary\Writer\Csv', 'Magento\Setup\Module\I18n\Dictionary\Writer\Csv'],
+    ['Magento\Tools\I18n\Dictionary\WriterInterface', 'Magento\Setup\Module\I18n\Dictionary\WriterInterface'],
+    ['Magento\Tools\I18n\Dictionary', 'Magento\Setup\Module\I18n\Dictionary'],
+    ['Magento\Tools\I18n\Factory', 'Magento\Setup\Module\I18n\Factory'],
+    ['Magento\Tools\I18n\FilesCollector', 'Magento\Setup\Module\I18n\FilesCollector'],
+    ['Magento\Tools\I18n\Locale', 'Magento\Setup\Module\I18n\Locale'],
+    ['Magento\Tools\I18n\Pack\Generator', 'Magento\Setup\Module\I18n\Pack\Generator'],
+    ['Magento\Tools\I18n\Pack\Writer\File\AbstractFile', 'Magento\Setup\Module\I18n\Pack\Writer\File\AbstractFile'],
+    ['Magento\Tools\I18n\Pack\Writer\File\Csv', 'Magento\Setup\Module\I18n\Pack\Writer\File\Csv'],
+    ['Magento\Tools\I18n\Pack\WriterInterface', 'Magento\Setup\Module\I18n\Pack\WriterInterface'],
+    ['Magento\Tools\I18n\Parser\AbstractParser', 'Magento\Setup\Module\I18n\Parser\AbstractParser'],
+    ['Magento\Tools\I18n\Parser\Adapter\AbstractAdapter', 'Magento\Setup\Module\I18n\Parser\Adapter\AbstractAdapter'],
+    ['Magento\Tools\I18n\Parser\Adapter\Js', 'Magento\Setup\Module\I18n\Parser\Adapter\Js'],
+    [
+        'Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector',
+        'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector'
+    ],
+    [
+        'Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Token',
+        'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token'
+    ],
+    [
+        'Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate',
+        'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate'
+    ],
+    [
+        'Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector',
+        'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Translate\MethodCollector'
+    ],
+    ['Magento\Tools\I18n\Parser\Adapter\Php\Tokenizer', 'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer'],
+    ['Magento\Tools\I18n\Parser\Adapter\Php', 'Magento\Setup\Module\I18n\Parser\Adapter\Php'],
+    ['Magento\Tools\I18n\Parser\Adapter\Xml', 'Magento\Setup\Module\I18n\Parser\Adapter\Xml'],
+    ['Magento\Tools\I18n\Parser\AdapterInterface', 'Magento\Setup\Module\I18n\Parser\AdapterInterface'],
+    ['Magento\Tools\I18n\Parser\Contextual', 'Magento\Setup\Module\I18n\Parser\Contextual'],
+    ['Magento\Tools\I18n\Parser\Parser', 'Magento\Setup\Module\I18n\Parser\Parser'],
+    ['Magento\Tools\I18n\ParserInterface', 'Magento\Setup\Module\I18n\ParserInterface'],
+    ['Magento\Tools\I18n\ServiceLocator', 'Magento\Setup\Module\I18n\ServiceLocator'],
+    ['Magento\Tools\Di\App\Task\Manager', 'Magento\Setup\Module\Di\App\Task\Manager'],
+    [
+        'Magento\Tools\Di\App\Task\Operation\ApplicationCodeGenerator',
+        'Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator'
+    ],
+    ['Magento\Tools\Di\App\Task\Operation\Area', 'Magento\Setup\Module\Di\App\Task\Operation\Area'],
+    ['Magento\Tools\Di\App\Task\Operation\Interception', 'Magento\Setup\Module\Di\App\Task\Operation\Interception'],
+    [
+        'Magento\Tools\Di\App\Task\Operation\InterceptionCache',
+        'Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache'
+    ],
+    [
+        'Magento\Tools\Di\App\Task\Operation\RepositoryGenerator',
+        'Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator'
+    ],
+    ['Magento\Tools\Di\App\Task\OperationException', 'Magento\Setup\Module\Di\App\Task\OperationException'],
+    ['Magento\Tools\Di\App\Task\OperationFactory', 'Magento\Setup\Module\Di\App\Task\OperationFactory'],
+    ['Magento\Tools\Di\App\Task\OperationInterface', 'Magento\Setup\Module\Di\App\Task\OperationInterface'],
+    [
+        'Magento\Tools\Di\Code\Generator\InterceptionConfigurationBuilder',
+        'Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder'
+    ],
+    ['Magento\Tools\Di\Code\Generator\Interceptor', 'Magento\Setup\Module\Di\Code\Generator\Interceptor'],
+    ['Magento\Tools\Di\Code\Generator\PluginList', 'Magento\Setup\Module\Di\Code\Generator\PluginList'],
+    ['Magento\Tools\Di\Code\Generator', 'Magento\Setup\Module\Di\Code\Generator'],
+    ['Magento\Tools\Di\Code\GeneratorFactory', 'Magento\Setup\Module\Di\Code\GeneratorFactory'],
+    ['Magento\Tools\Di\Code\Reader\ClassesScanner', 'Magento\Setup\Module\Di\Code\Reader\ClassesScanner'],
+    [
+        'Magento\Tools\Di\Code\Reader\ClassesScannerInterface',
+        'Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterface'
+    ],
+    ['Magento\Tools\Di\Code\Reader\ClassReaderDecorator', 'Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator'],
+    ['Magento\Tools\Di\Code\Reader\Decorator\Area', 'Magento\Setup\Module\Di\Code\Reader\Decorator\Area'],
+    ['Magento\Tools\Di\Code\Reader\Decorator\Directory', 'Magento\Setup\Module\Di\Code\Reader\Decorator\Directory'],
+    [
+        'Magento\Tools\Di\Code\Reader\Decorator\Interceptions',
+        'Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions'
+    ],
+    ['Magento\Tools\Di\Code\Reader\Type', 'Magento\Setup\Module\Di\Code\Reader\Type'],
+    ['Magento\Tools\Di\Code\Scanner\ArrayScanner', 'Magento\Setup\Module\Di\Code\Scanner\ArrayScanner'],
+    ['Magento\Tools\Di\Code\Scanner\CompositeScanner', 'Magento\Setup\Module\Di\Code\Scanner\CompositeScanner'],
+    ['Magento\Tools\Di\Code\Scanner\DirectoryScanner', 'Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner'],
+    [
+        'Magento\Tools\Di\Code\Scanner\InheritanceInterceptorScanner',
+        'Magento\Setup\Module\Di\Code\Scanner\InheritanceInterceptorScanner'
+    ],
+    [
+        'Magento\Tools\Di\Code\Scanner\InterceptedInstancesScanner',
+        'Magento\Setup\Module\Di\Code\Scanner\InterceptedInstancesScanner'
+    ],
+    ['Magento\Tools\Di\Code\Scanner\PhpScanner', 'Magento\Setup\Module\Di\Code\Scanner\PhpScanner'],
+    ['Magento\Tools\Di\Code\Scanner\PluginScanner', 'Magento\Setup\Module\Di\Code\Scanner\PluginScanner'],
+    ['Magento\Tools\Di\Code\Scanner\RepositoryScanner', 'Magento\Setup\Module\Di\Code\Scanner\RepositoryScanner'],
+    ['Magento\Tools\Di\Code\Scanner\ScannerInterface', 'Magento\Setup\Module\Di\Code\Scanner\ScannerInterface'],
+    [
+        'Magento\Tools\Di\Code\Scanner\XmlInterceptorScanner',
+        'Magento\Setup\Module\Di\Code\Scanner\XmlInterceptorScanner'
+    ],
+    ['Magento\Tools\Di\Code\Scanner\XmlScanner', 'Magento\Setup\Module\Di\Code\Scanner\XmlScanner'],
+    ['Magento\Tools\Di\Compiler\ArgumentsResolver', 'Magento\Setup\Module\Di\Compiler\ArgumentsResolver'],
+    ['Magento\Tools\Di\Compiler\ArgumentsResolverFactory', 'Magento\Setup\Module\Di\Compiler\ArgumentsResolverFactory'],
+    [
+        'Magento\Tools\Di\Compiler\Config\Chain\ArgumentsSerialization',
+        'Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization'
+    ],
+    [
+        'Magento\Tools\Di\Compiler\Config\Chain\BackslashTrim',
+        'Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim'
+    ],
+    [
+        'Magento\Tools\Di\Compiler\Config\Chain\InterceptorSubstitution',
+        'Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution'
+    ],
+    [
+        'Magento\Tools\Di\Compiler\Config\Chain\PreferencesResolving',
+        'Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving'
+    ],
+    [
+        'Magento\Tools\Di\Compiler\Config\ModificationChain',
+        'Magento\Setup\Module\Di\Compiler\Config\ModificationChain'
+    ],
+    [
+        'Magento\Tools\Di\Compiler\Config\ModificationInterface',
+        'Magento\Setup\Module\Di\Compiler\Config\ModificationInterface'
+    ],
+    ['Magento\Tools\Di\Compiler\Config\Reader', 'Magento\Setup\Module\Di\Compiler\Config\Reader'],
+    ['Magento\Tools\Di\Compiler\Config\Writer\Filesystem', 'Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem'],
+    ['Magento\Tools\Di\Compiler\Config\WriterInterface', 'Magento\Setup\Module\Di\Compiler\Config\WriterInterface'],
+    ['Magento\Tools\Di\Compiler\ConstructorArgument', 'Magento\Setup\Module\Di\Compiler\ConstructorArgument'],
+    ['Magento\Tools\Di\Compiler\Log\Log', 'Magento\Setup\Module\Di\Compiler\Log\Log'],
+    ['Magento\Tools\Di\Compiler\Log\Writer\Console', 'Magento\Setup\Module\Di\Compiler\Log\Writer\Console'],
+    ['Magento\Tools\Di\Definition\Collection', 'Magento\Setup\Module\Di\Definition\Collection'],
+    ['Magento\Tools\Di\Definition\Compressor\UniqueList', 'Magento\Setup\Module\Di\Definition\Compressor\UniqueList'],
+    ['Magento\Tools\Di\Definition\Compressor', 'Magento\Setup\Module\Di\Definition\Compressor'],
+    ['Magento\Tools\Di\Definition\Serializer\Igbinary', 'Magento\Setup\Module\Di\Definition\Serializer\Igbinary'],
+    [
+        'Magento\Tools\Di\Definition\Serializer\SerializerInterface',
+        'Magento\Setup\Module\Di\Definition\Serializer\SerializerInterface'
+    ],
+    ['Magento\Tools\Di\Definition\Serializer\Standard', 'Magento\Setup\Module\Di\Definition\Serializer\Standard'],
+    ['Magento\Tools\Di\Compiler\Log\Writer\Quiet'],
+    ['Magento\Tools\Di\Compiler\Log\Writer\WriterInterface'],
+    ['Magento\Tools\View\Deployer', 'Magento\Setup\Model\Deployer'],
+    ['Magento\Tools\Webdev\CliParams'],
+    ['Magento\Tools\Webdev\App\FileAssembler'],
+    ['Magento\Tools\View\Deployer\Log'],
+    ['Magento\Log\Model\Shell\Command\Status'],
+    ['Magento\Log\Model\LogFactory\Clean'],
+    ['Magento\Log\Model\Shell\CommandInterface'],
+    ['Magento\Framework\App\Filesystem\DirectoryList\AbstractShell'],
     ['Magento\Catalog\Model\Product\Gallery\ContentValidator', 'Magento\Framework\Api\ImageContentValidator'],
 ];
