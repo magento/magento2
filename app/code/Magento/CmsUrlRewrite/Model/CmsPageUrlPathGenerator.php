@@ -5,6 +5,8 @@
  */
 namespace Magento\CmsUrlRewrite\Model;
 
+use Magento\Cms\Api\Data\PageInterface;
+
 class CmsPageUrlPathGenerator
 {
     /** @var \Magento\Framework\Filter\FilterManager */
@@ -17,12 +19,12 @@ class CmsPageUrlPathGenerator
     }
 
     /**
-     * @param \Magento\Cms\Model\Page $cmsPage
+     * @param PageInterface $cmsPage
      *
      * @return string
      * @api
      */
-    public function getUrlPath($cmsPage)
+    public function getUrlPath(PageInterface $cmsPage)
     {
         return $cmsPage->getIdentifier();
     }

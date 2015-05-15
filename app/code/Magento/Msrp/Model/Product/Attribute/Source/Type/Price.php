@@ -47,7 +47,6 @@ class Price extends \Magento\Msrp\Model\Product\Attribute\Source\Type
      * Get all options
      *
      * @return array
-     * @api
      */
     public function getAllOptions()
     {
