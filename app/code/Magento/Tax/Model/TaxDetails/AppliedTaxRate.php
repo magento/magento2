@@ -13,12 +13,20 @@ use Magento\Tax\Api\Data\AppliedTaxRateInterface;
  */
 class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_CODE    = 'code';
+    const KEY_TITLE   = 'title';
+    const KEY_PERCENT = 'percent';
+    /**#@-*/
+
     /**
      * {@inheritdoc}
      */
     public function getCode()
     {
-        return $this->getData(AppliedTaxRateInterface::KEY_CODE);
+        return $this->getData(self::KEY_CODE);
     }
 
     /**
@@ -26,7 +34,7 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      */
     public function getTitle()
     {
-        return $this->getData(AppliedTaxRateInterface::KEY_TITLE);
+        return $this->getData(self::KEY_TITLE);
     }
 
     /**
@@ -34,7 +42,7 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      */
     public function getPercent()
     {
-        return $this->getData(AppliedTaxRateInterface::KEY_PERCENT);
+        return $this->getData(self::KEY_PERCENT);
     }
 
     /**
@@ -45,7 +53,7 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      */
     public function setCode($code)
     {
-        return $this->setData(AppliedTaxRateInterface::KEY_CODE, $code);
+        return $this->setData(self::KEY_CODE, $code);
     }
 
     /**
@@ -56,7 +64,7 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      */
     public function setTitle($title)
     {
-        return $this->setData(AppliedTaxRateInterface::KEY_TITLE, $title);
+        return $this->setData(self::KEY_TITLE, $title);
     }
 
     /**
@@ -67,7 +75,7 @@ class AppliedTaxRate extends AbstractExtensibleModel implements AppliedTaxRateIn
      */
     public function setPercent($percent)
     {
-        return $this->setData(AppliedTaxRateInterface::KEY_PERCENT, $percent);
+        return $this->setData(self::KEY_PERCENT, $percent);
     }
 
     /**

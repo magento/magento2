@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Test\Unit\Model\Config\Reader;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 class DefaultReaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -46,7 +48,7 @@ class DefaultReaderTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getData'
         )->with(
-            \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
         )->will(
             $this->returnValue(['config' => ['key1' => 'default_value1', 'key2' => 'default_value2']])
         );

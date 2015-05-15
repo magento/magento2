@@ -787,6 +787,9 @@ class Installer
     public function installUserConfig($data)
     {
         $userConfig = new StoreConfigurationDataMapper();
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $this->objectManagerProvider->get()->get('Magento\Framework\App\State');
+        $appState->setAreaCode('setup');
         $configData = $userConfig->getConfigData($data);
         if (count($configData) === 0) {
             return;
@@ -1099,7 +1102,7 @@ class Installer
             $connectionConfig[ConfigOptionsList::KEY_NAME],
             $connectionConfig[ConfigOptionsList::KEY_HOST],
             $connectionConfig[ConfigOptionsList::KEY_USER],
-            $connectionConfig[ConfigOptionsList::KEY_PASSWORD]
+            $connectionConfig[ConfigOptionsList::KEY_PASS]
         );
         if (isset($connectionConfig[ConfigOptionsList::KEY_PREFIX])) {
             $this->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsList::KEY_PREFIX]);
@@ -1117,6 +1120,7 @@ class Installer
     private function installSampleData($request)
     {
         $userName = isset($request[AdminAccount::KEY_USER]) ? $request[AdminAccount::KEY_USER] : '';
+        $this->objectManagerProvider->reset();
         $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
     }
 
