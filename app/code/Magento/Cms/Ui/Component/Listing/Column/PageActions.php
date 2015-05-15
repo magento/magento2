@@ -26,7 +26,7 @@ class PageActions extends Column
     protected $urlBuilder;
 
     /** @var string */
-    protected $url;
+    private $url;
 
 
     /**
