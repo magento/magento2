@@ -38,11 +38,13 @@ class Status extends EntityAbstract
     protected $logger;
 
     /**
-     * Class constructor
-     *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Sales\Model\Resource\Attribute $attribute
+     * @param Manager $sequenceManager
+     * @param EntitySnapshot $entitySnapshot
      * @param LogWriter $logger
-     * @param string|null $resourcePrefix
+     * @param null $resourcePrefix
+     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,

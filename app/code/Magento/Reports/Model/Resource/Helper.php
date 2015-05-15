@@ -39,10 +39,10 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
     /**
      * Update rating position
      *
-     * @param string $adapter
-     * @param string $type
-     * @param string $column
-     * @param string $mainTable
+     * @param $adapter
+     * @param $type
+     * @param $column
+     * @param $mainTable
      * @param $aggregationTable
      * @return $this
      */

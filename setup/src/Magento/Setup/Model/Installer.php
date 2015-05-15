@@ -806,17 +806,16 @@ class Installer
 
     /**
      * Creates data handler
-     *
      * @param string $className
-     * @param $interface
+     * @param string $interfaceName
      * @return mixed|null
      * @throws \Magento\Setup\Exception
      */
-    protected function createSchemaDataHandler($className, $interface)
+    protected function createSchemaDataHandler($className, $interfaceName)
     {
         if (class_exists($className)) {
-            if (!is_subclass_of($className, $interface) && $className !== $interface) {
-                throw  new \Magento\Setup\Exception($className . ' must implement \\' . $interface);
+            if (!is_subclass_of($className, $interfaceName) && $className !== $interfaceName) {
+                throw  new \Magento\Setup\Exception($className . ' must implement \\' . $interfaceName);
             } else {
                 return $this->objectManagerProvider->get()->create($className);
             }
