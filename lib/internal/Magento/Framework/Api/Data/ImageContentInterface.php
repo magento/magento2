@@ -6,14 +6,12 @@
 
 namespace Magento\Framework\Api\Data;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
-
 /**
  * Image Content data interface
  *
  * @api
  */
-interface ImageContentInterface extends ExtensibleDataInterface
+interface ImageContentInterface
 {
     const BASE64_ENCODED_DATA = 'base64_encoded_data';
     const TYPE = 'type';
@@ -63,21 +61,4 @@ interface ImageContentInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setName($name);
-
-    /**
-     * Retrieve existing extension attributes object.
-     *
-     * @return \Magento\Framework\Api\Data\ImageContentExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\Framework\Api\Data\ImageContentExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(
-        \Magento\Framework\Api\Data\ImageContentExtensionInterface $extensionAttributes
-    );
 }

@@ -8,6 +8,11 @@ namespace Magento\Framework\Api;
 
 use Magento\Framework\Reflection\MethodsMap;
 
+/**
+ * Data object helper.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataObjectHelper
 {
     /**

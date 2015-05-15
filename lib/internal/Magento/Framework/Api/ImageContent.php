@@ -13,7 +13,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
  *
  * @codeCoverageIgnore
  */
-class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject implements ImageContentInterface
+class ImageContent implements ImageContentInterface
 {
     /**
      * {@inheritdoc}
@@ -76,27 +76,5 @@ class ImageContent extends \Magento\Framework\Api\AbstractExtensibleObject imple
     public function setName($name)
     {
         return $this->setData(self::NAME, $name);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Framework\Api\Data\ImageContentExtensionInterface|null
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\Framework\Api\Data\ImageContentExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(
-        \Magento\Framework\Api\Data\ImageContentExtensionInterface $extensionAttributes
-    ) {
-        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
