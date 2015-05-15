@@ -20,7 +20,7 @@ abstract class AbstractInstruction extends \Magento\Payment\Block\Form
     /**
      * Get instructions text from config
      *
-     * @return mixed|string
+     * @return null|string
      */
     public function getInstructions()
     {
