@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface AddressInterface
+ * @api
+ */
 interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
