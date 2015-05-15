@@ -13,7 +13,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
  *
  * @codeCoverageIgnore
  */
-class ImageContent implements ImageContentInterface
+class ImageContent extends AbstractSimpleObject implements ImageContentInterface
 {
     /**
      * {@inheritdoc}
