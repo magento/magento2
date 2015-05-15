@@ -26,9 +26,7 @@ define([
     function removeEmpty(data) {
         data = utils.flatten(data);
 
-        data = _.omit(data, function (value) {
-            return !utils.isEmpty(value);
-        });
+        data = _.omit(data, utils.isEmpty);
 
         return utils.unflatten(data);
     }
