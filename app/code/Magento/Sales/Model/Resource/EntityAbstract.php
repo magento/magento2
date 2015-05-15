@@ -231,12 +231,38 @@ abstract class EntityAbstract extends AbstractDb
                 $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
                 if ($object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
                     $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
-                    $data = $this->_prepareDataForSave($object);
-                    unset($data[$this->getIdFieldName()]);
-                    $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                    /**
+                     * Not auto increment primary key support
+                     */
+                    if ($this->_isPkAutoIncrement) {
+                        $data = $this->prepareDataForUpdate($object);
+                        if (!empty($data)) {
+                            $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                        }
+                    } else {
+                        $select = $this->_getWriteAdapter()->select()->from(
+                            $this->getMainTable(),
+                            [$this->getIdFieldName()]
+                        )->where(
+                            $condition
+                        );
+                        if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
+                            $data = $this->prepareDataForUpdate($object);
+                            if (!empty($data)) {
+                                $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+                            }
+                        } else {
+                            $this->_getWriteAdapter()->insert(
+                                $this->getMainTable(),
+                                $this->_prepareDataForSave($object)
+                            );
+                        }
+                    }
                 } else {
                     $bind = $this->_prepareDataForSave($object);
-                    unset($bind[$this->getIdFieldName()]);
+                    if ($this->_isPkAutoIncrement) {
+                        unset($bind[$this->getIdFieldName()]);
+                    }
                     $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
 
                     $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
@@ -245,9 +271,10 @@ abstract class EntityAbstract extends AbstractDb
                         $object->isObjectNew(false);
                     }
                 }
+
                 $this->unserializeFields($object);
                 $this->_afterSave($object);
-                $this->entitySnapshot->registerSnapshot($object);
+
                 $object->afterSave();
                 $this->processRelations($object);
             }
