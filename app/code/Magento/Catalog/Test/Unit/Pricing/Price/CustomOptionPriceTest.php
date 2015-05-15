@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
 use \Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Catalog\Model\Product\Option;
 
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Catalog\Model\Product\Option\Value;
@@ -177,7 +178,7 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
         $option2Id = 2;
         $option2MaxPrice = 200;
         $option2MinPrice = 20;
-        $option2Type = 'choice';
+        $option2Type = Option::OPTION_TYPE_CHECKBOX;
 
         $optionsData = [
             [
@@ -229,7 +230,7 @@ class CustomOptionPriceTest extends \PHPUnit_Framework_TestCase
                 'option_id' => $option2Id,
                 'type' => $option2Type,
                 'min' => 0.,
-                'max' => $option2MaxPrice,
+                'max' => $option2MaxPrice + $option2MinPrice,
             ],
             [
                 'option_id' => $singleValueOptionId,

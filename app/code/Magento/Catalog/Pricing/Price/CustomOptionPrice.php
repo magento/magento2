@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Pricing\Price;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 
@@ -61,7 +62,10 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
                         } elseif ($price < $min) {
                             $min = $price;
                         }
-                        if ($price > $max) {
+                        $type = $optionItem->getType();
+                        if ($type == Option::OPTION_TYPE_CHECKBOX || $type == Option::OPTION_TYPE_MULTIPLE) {
+                            $max += $price;
+                        } elseif ($price > $max) {
                             $max = $price;
                         }
                     }
