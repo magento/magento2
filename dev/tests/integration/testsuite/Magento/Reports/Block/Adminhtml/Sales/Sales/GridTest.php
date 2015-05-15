@@ -80,7 +80,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $block->setFilterData($filterData);
 
         $block->toHtml();
-        $this->assertEquals($block->getCountTotals(), $expectedResult);
+        $this->assertEquals($expectedResult, $block->getCountTotals());
     }
 
     /**
@@ -90,9 +90,10 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function getCountTotalsDataProvider()
     {
+        $time = time();
         return [
-            [date("Y-m-d", time() + 24 * 60 * 60), date("Y-m-d", time() + 48 * 60 * 60), false],
-            [date("Y-m-d", time() - 24 * 60 * 60), date("Y-m-d", time() + 24 * 60 * 60), true],
+            [date("Y-m-d", $time + 48 * 60 * 60), date("Y-m-d", $time + 72 * 60 * 60), false],
+            [date("Y-m-d", $time - 48 * 60 * 60), date("Y-m-d", $time + 48 * 60 * 60), true],
             [null, null, false],
         ];
     }
