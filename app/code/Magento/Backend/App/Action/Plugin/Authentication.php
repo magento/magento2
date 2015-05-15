@@ -108,10 +108,9 @@ class Authentication
         if ($request->getPost('login') && $this->_performLogin($request)) {
             $isRedirectNeeded = $this->_redirectIfNeededAfterLogin($request);
         }
-        if (!$isRedirectNeeded && !$request->getParam('forwarded')) {
+        if (!$isRedirectNeeded && !$request->isForwarded()) {
             if ($request->getParam('isIframe')) {
-                $request->setParam(
-                    'forwarded',
+                $request->setForwarded(
                     true
                 )->setRouteName(
                     'adminhtml'
@@ -123,8 +122,7 @@ class Authentication
                     false
                 );
             } elseif ($request->getParam('isAjax')) {
-                $request->setParam(
-                    'forwarded',
+                $request->setForwarded(
                     true
                 )->setRouteName(
                     'adminhtml'
@@ -136,8 +134,7 @@ class Authentication
                     false
                 );
             } else {
-                $request->setParam(
-                    'forwarded',
+                $request->setForwarded(
                     true
                 )->setRouteName(
                     'adminhtml'

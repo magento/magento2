@@ -228,14 +228,10 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isUrlChecked()
     {
-        return !$this->_actionFlag->get(
-            '',
-            self::FLAG_IS_URLS_CHECKED
-        ) && !$this->getRequest()->getParam(
-            'forwarded'
-        ) && !$this->_getSession()->getIsUrlNotice(
-            true
-        ) && !$this->_canUseBaseUrl;
+        return !$this->_actionFlag->get('', self::FLAG_IS_URLS_CHECKED)
+        && !$this->getRequest()->isForwarded()
+        && !$this->_getSession()->getIsUrlNotice(true)
+        && !$this->_canUseBaseUrl;
     }
 
     /**
