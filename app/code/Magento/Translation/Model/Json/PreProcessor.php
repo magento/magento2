@@ -11,6 +11,7 @@ use Magento\Translation\Model\Js\DataProviderInterface;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\App\AreaList;
+use Magento\Framework\TranslateInterface;
 
 /**
  * PreProcessor responsible for providing js translation dictionary
@@ -37,6 +38,11 @@ class PreProcessor implements PreProcessorInterface
     protected $areaList;
 
     /**
+     * @var TranslateInterface
+     */
+    protected $translate;
+
+    /**
      * @param Config $config
      * @param DataProviderInterface $dataProvider
      * @param AreaList $areaList
@@ -44,11 +50,13 @@ class PreProcessor implements PreProcessorInterface
     public function __construct(
         Config $config,
         DataProviderInterface $dataProvider,
-        AreaList $areaList
+        AreaList $areaList,
+        TranslateInterface $translate
     ) {
         $this->config = $config;
         $this->dataProvider = $dataProvider;
         $this->areaList = $areaList;
+        $this->translate = $translate;
     }
 
     /**
@@ -68,6 +76,7 @@ class PreProcessor implements PreProcessorInterface
             if ($context instanceof FallbackContext) {
                 $themePath = $context->getThemePath();
                 $areaCode = $context->getAreaCode();
+                $this->translate->setLocale($context->getLocale());
             }
 
             $area = $this->areaList->getArea($areaCode);
