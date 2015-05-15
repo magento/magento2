@@ -24,6 +24,17 @@ define([
             return this._super();
         },
 
+        initConfig: function () {
+            this._super();
+
+            _.extend(this.data, {
+                items: [],
+                totalRecords: 0
+            });
+
+            return this;
+        },
+
         reload: function () {
             this.trigger('reload');
 

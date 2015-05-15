@@ -20,13 +20,11 @@ define([
             }
         },
 
-        initialize: function () {
-            this._super()
-                .hideLoader();
-
-            return this;
-        },
-
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Listing} Chainable.
+         */
         initObservable: function () {
             this._super()
                 .observe('rows');
@@ -34,18 +32,34 @@ define([
             return this;
         },
 
+        /**
+         * Hides loader.
+         */
         hideLoader: function () {
             loader.get(this.name).hide();
         },
 
+        /**
+         * Shows loader.
+         */
         showLoader: function () {
             loader.get(this.name).show();
         },
 
+        /**
+         * Returns total number of columns in grid.
+         *
+         * @returns {Number}
+         */
         getColspan: function () {
             return this.elems().length;
         },
 
+        /**
+         * Checks if grid has data.
+         *
+         * @returns {Boolean}
+         */
         hasData: function () {
             return !!this.rows().length;
         }
