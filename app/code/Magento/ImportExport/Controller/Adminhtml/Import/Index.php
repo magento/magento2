@@ -1,28 +1,31 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
-class Index extends \Magento\ImportExport\Controller\Adminhtml\Import
+use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
+use Magento\Framework\Controller\ResultFactory;
+
+class Index extends ImportController
 {
     /**
      * Index action
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
         $this->messageManager->addNotice(
             $this->_objectManager->get('Magento\ImportExport\Helper\Data')->getMaxUploadSizeMessage()
         );
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_ImportExport::system_convert_import');
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Import/Export'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Import'));
-        $this->_addBreadcrumb(__('Import'), __('Import'));
-        $this->_view->renderLayout();
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_ImportExport::system_convert_import');
+        $resultPage->getConfig()->getTitle()->prepend(__('Import/Export'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Import'));
+        $resultPage->addBreadcrumb(__('Import'), __('Import'));
+        return $resultPage;
     }
 }
