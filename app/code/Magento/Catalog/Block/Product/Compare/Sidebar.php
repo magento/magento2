@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product\Compare\Item as CompareItem;
  * Catalog Compare Products Sidebar Block
  */
 class Sidebar extends \Magento\Catalog\Block\Product\Compare\AbstractCompare implements
-    \Magento\Framework\View\Block\IdentityInterface
+    \Magento\Framework\Object\IdentityInterface
 {
     /**
      * The property is used to define content-scope of block. Can be private or public.

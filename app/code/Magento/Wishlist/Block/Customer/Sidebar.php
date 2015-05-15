@@ -13,7 +13,7 @@ namespace Magento\Wishlist\Block\Customer;
 
 use Magento\Customer\Model\Context;
 
-class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\Framework\View\Block\IdentityInterface
+class Sidebar extends \Magento\Wishlist\Block\AbstractBlock implements \Magento\Framework\Object\IdentityInterface
 {
     /**
      * Retrieve block title

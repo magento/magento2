@@ -6,7 +6,7 @@
 namespace Magento\Sales\Block\Reorder;
 
 use Magento\Customer\Model\Context;
-use Magento\Framework\View\Block\IdentityInterface;
+use Magento\Framework\Object\IdentityInterface;
 
 /**
  * Sales order view block

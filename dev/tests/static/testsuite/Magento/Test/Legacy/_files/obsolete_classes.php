@@ -3549,4 +3549,5 @@ return [
     ['Magento\ToolkitFramework\Application', 'Magento\Setup\Fixtures\FixtureModel'],
     ['Magento\Framework\Locale\Lists', 'Magento\Framework\Locale\TranslatedLists'],
     ['Magento\Setup\Model\Lists', 'Magento\Framework\Setup\Lists'],
+    ['Magento\Framework\View\Block\IdentityInterface'],
 ];
