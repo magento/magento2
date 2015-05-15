@@ -46,24 +46,48 @@ class Authentication
     protected $messageManager;
 
     /**
+     * @var \Magento\Backend\Model\UrlInterface
+     */
+    protected $backendUrl;
+
+    /**
+     * @var \Magento\Backend\App\BackendAppList
+     */
+    protected $backendAppList;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
+
+    /**
      * @param \Magento\Backend\Model\Auth $auth
      * @param \Magento\Backend\Model\UrlInterface $url
      * @param \Magento\Framework\App\ResponseInterface $response
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\App\BackendAppList $backendAppList
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
         \Magento\Backend\Model\UrlInterface $url,
         \Magento\Framework\App\ResponseInterface $response,
         \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\App\BackendAppList $backendAppList
     ) {
         $this->_auth = $auth;
         $this->_url = $url;
         $this->_response = $response;
         $this->_actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
+        $this->backendUrl = $backendUrl;
+        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->backendAppList = $backendAppList;
     }
 
     /**
@@ -90,6 +114,18 @@ class Authentication
                 $this->_processNotLoggedInUser($request);
             } else {
                 $this->_auth->getAuthStorage()->prolong();
+
+                $backendApp = null;
+                if ($request->getParam('app')) {
+                    $backendApp = $this->backendAppList->getCurrentApp();
+                }
+
+                if ($backendApp) {
+                    $resultRedirect = $this->resultRedirectFactory->create();
+                    $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($this->backendUrl->getBaseUrl());
+                    $baseUrl = $baseUrl . $backendApp->getStartupPage();
+                    return $resultRedirect->setUrl($baseUrl);
+                }
             }
         }
         $this->_auth->getAuthStorage()->refreshAcl();
