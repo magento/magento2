@@ -25,7 +25,6 @@ define([
      */
     function removeEmpty(data) {
         data = utils.flatten(data);
-
         data = _.omit(data, utils.isEmpty);
 
         return utils.unflatten(data);
@@ -34,7 +33,12 @@ define([
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
-            applied: {},
+            applied: {
+                empty: ''
+            },
+            filters: {
+                empty: ''
+            },
             listens: {
                 active: 'extractPreviews',
                 applied: 'cancel extractActive'
