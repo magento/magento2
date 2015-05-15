@@ -28,10 +28,10 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
      * @param AdminTokenServiceInterface $tokenService
      */
     public function __construct(
-        AdminTokenServiceInterface $tokenService,
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\User\Model\UserFactory $userFactory
+        \Magento\User\Model\UserFactory $userFactory,
+        AdminTokenServiceInterface $tokenService
     ) {
         parent::__construct($context, $coreRegistry, $userFactory);
         $this->tokenService = $tokenService;
