@@ -81,11 +81,8 @@ class GuestCartManagement implements GuestCartManagementInterface
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-<<<<<<< .merge_file_PPOyn2
+        $this->cartRepository->get($quoteIdMask->getQuoteId())
+            ->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
         return $this->quoteManagement->placeOrder($quoteIdMask->getQuoteId());
-=======
-        $this->cartRepository->get($quoteIdMask->getId())->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
-        return $this->quoteManagement->placeOrder($quoteIdMask->getId());
->>>>>>> .merge_file_x9jgp1
     }
 }
