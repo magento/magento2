@@ -58,8 +58,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setCity('CityM')
             ->setFirstname('John')
             ->setLastname('Smith')
-            ->setCompany('CompanyName')
-            ->setCustomAttributes([]);
+            ->setCompany('CompanyName');
         $address2 = $this->_addressFactory->create()
             ->setId('2')
             ->setCountryId('US')
@@ -71,8 +70,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setCity('CityX')
             ->setTelephone('3234676')
             ->setFirstname('John')
-            ->setLastname('Smith')
-            ->setCustomAttributes([]);
+            ->setLastname('Smith');
 
         $this->_expectedAddresses = [$address, $address2];
     }

@@ -56,8 +56,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setFirstname('John')
             ->setLastname('Smith')
             ->setCompany('CompanyName')
-            ->setRegionId(1)
-            ->setCustomAttributes([]);
+            ->setRegionId(1);
 
         /* XXX: would it be better to have a clear method for this? */
         $address2 = $this->_addressFactory->create()
@@ -71,8 +70,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setTelephone('3234676')
             ->setFirstname('John')
             ->setLastname('Smith')
-            ->setRegionId(1)
-            ->setCustomAttributes([]);
+            ->setRegionId(1);
 
         $this->_expectedAddresses = [$address, $address2];
     }
