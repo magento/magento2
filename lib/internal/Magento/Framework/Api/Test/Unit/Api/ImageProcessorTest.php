@@ -48,13 +48,24 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $uploaderMock;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $directoryWriteMock;
+
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
+        $this->directoryWriteMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Filesystem\Directory\WriteInterface'
+        );
         $this->fileSystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->fileSystemMock->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->directoryWriteMock);
         $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ImageContentValidatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -172,15 +183,9 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->willReturn(true);
 
-        $directoryWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-
-        $directoryWrite->expects($this->any())
+        $this->directoryWriteMock->expects($this->any())
             ->method('getAbsolutePath')
             ->willReturn('testPath');
-
-        $this->fileSystemMock->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->willReturn($directoryWrite);
 
         $this->assertEquals($imageData, $this->imageProcessor->save($imageData, 'testEntityType'));
     }
@@ -217,15 +222,9 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->willReturn(true);
 
-        $directoryWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-
-        $directoryWrite->expects($this->any())
+        $this->directoryWriteMock->expects($this->any())
             ->method('getAbsolutePath')
             ->willReturn('testPath');
-
-        $this->fileSystemMock->expects($this->any())
-            ->method('getDirectoryWrite')
-            ->willReturn($directoryWrite);
 
         $prevImageAttribute = $this->getMockForAbstractClass('Magento\Framework\Api\AttributeInterface');
         $prevImageAttribute->expects($this->once())

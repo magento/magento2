@@ -1021,7 +1021,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
         //setup media attribute backend
         $mediaTmpPath = '/tmp';
-        $relativePath = $mediaTmpPath . DIRECTORY_SEPARATOR . 'filename.jpg';
         $absolutePath = '/a/b/filename.jpg';
         $galleryAttributeBackendMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Attribute\Backend\Media')
             ->disableOriginalConstructor()->getMock();
