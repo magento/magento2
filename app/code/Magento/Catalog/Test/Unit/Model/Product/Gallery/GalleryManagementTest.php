@@ -50,7 +50,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
-        $this->contentValidatorMock = $this->getMock('\Magento\Framework\Api\ContentValidator');
+        $this->contentValidatorMock = $this->getMock('\Magento\Framework\Api\ImageContentValidatorInterface');
         $this->productMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
             [
@@ -95,9 +95,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateWithInvalidImageException()
     {
-        $entryContentMock = $this->getMock(
-            '\Magento\Framework\Api\Data\ImageContentInterfaceFactory'
-        );
+        $entryContentMock = $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 
         $storeId = 0;
@@ -116,9 +116,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithCannotSaveException()
     {
         $productSku = 'mediaProduct';
-        $entryContentMock = $this->getMock(
-            '\Magento\Framework\Api\Data\ImageContentInterfaceFactory'
-        );
+        $entryContentMock = $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->getMock();;
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 
         $storeId = 0;

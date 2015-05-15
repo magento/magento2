@@ -1010,6 +1010,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $contentMock =
             $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterfaceFactory')
                 ->setMethods(['getBase64EncodedData', 'getType', 'getName'])
+                ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
         $contentMock->expects($this->once())->method('getBase64EncodedData')
             ->willReturn($expectedResult['images'][0]['content']['base64_encoded_data']);

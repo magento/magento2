@@ -199,7 +199,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->contentFactoryMock = $this->getMockBuilder(
             'Magento\Framework\Api\Data\ImageContentInterfaceFactory'
         )->disableOriginalConstructor()->setMethods(['create'])->getMockForAbstractClass();
-        $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ContentValidator')
+        $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ImageContentValidatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $optionConverter = $this->objectManager->getObject('Magento\Catalog\Model\Product\Option\Converter');
