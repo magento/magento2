@@ -51,14 +51,14 @@ interface ShipmentCommentInterface extends \Magento\Framework\Api\ExtensibleData
     /**
      * Gets the created-at timestamp for the shipment comment.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
      * Sets the created-at timestamp for the shipment comment.
      *
-     * @param string $createdAt timestamp
+     * @param string|null $createdAt timestamp
      * @return $this
      */
     public function setCreatedAt($createdAt);
@@ -66,14 +66,14 @@ interface ShipmentCommentInterface extends \Magento\Framework\Api\ExtensibleData
     /**
      * Gets the ID for the shipment comment.
      *
-     * @return int Shipment comment ID.
+     * @return int|null Shipment comment ID.
      */
     public function getEntityId();
 
     /**
      * Sets entity ID.
      *
-     * @param int $entityId
+     * @param int|null $entityId
      * @return $this
      */
     public function setEntityId($entityId);

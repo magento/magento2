@@ -60,14 +60,14 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Gets the created-at timestamp for the order status history.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
      * Sets the created-at timestamp for the order status history.
      *
-     * @param string $createdAt timestamp
+     * @param string|null $createdAt timestamp
      * @return $this
      */
     public function setCreatedAt($createdAt);
@@ -75,14 +75,14 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Gets the ID for the order status history.
      *
-     * @return int Order status history ID.
+     * @return int|null Order status history ID.
      */
     public function getEntityId();
 
     /**
      * Sets entity ID.
      *
-     * @param int $entityId
+     * @param int|null $entityId
      * @return $this
      */
     public function setEntityId($entityId);
@@ -90,7 +90,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Gets the entity name for the order status history.
      *
-     * @return string Entity name.
+     * @return string|null Entity name.
      */
     public function getEntityName();
 
@@ -118,7 +118,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Gets the status for the order status history.
      *
-     * @return string Status.
+     * @return string|null Status.
      */
     public function getStatus();
 
@@ -157,7 +157,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Sets the status for the order status history.
      *
-     * @param string $status
+     * @param string|null $status
      * @return $this
      */
     public function setStatus($status);
@@ -165,7 +165,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Sets the entity name for the order status history.
      *
-     * @param string $entityName
+     * @param string|null $entityName
      * @return $this
      */
     public function setEntityName($entityName);

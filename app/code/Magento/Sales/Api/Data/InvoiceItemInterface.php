@@ -115,91 +115,91 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the additional data for the invoice item.
      *
-     * @return string Additional data.
+     * @return string|null Additional data.
      */
     public function getAdditionalData();
 
     /**
      * Gets the base cost for the invoice item.
      *
-     * @return float Base cost.
+     * @return float|null Base cost.
      */
     public function getBaseCost();
 
     /**
      * Gets the base discount amount for the invoice item.
      *
-     * @return float Base discount amount.
+     * @return float|null Base discount amount.
      */
     public function getBaseDiscountAmount();
 
     /**
      * Gets the base hidden tax amount for the invoice item.
      *
-     * @return float Base hidden tax amount.
+     * @return float|null Base hidden tax amount.
      */
     public function getBaseHiddenTaxAmount();
 
     /**
      * Gets the base price for the invoice item.
      *
-     * @return float Base price.
+     * @return float|null Base price.
      */
     public function getBasePrice();
 
     /**
      * Gets the base price including tax for the invoice item.
      *
-     * @return float Base price including tax.
+     * @return float|null Base price including tax.
      */
     public function getBasePriceInclTax();
 
     /**
      * Gets the base row total for the invoice item.
      *
-     * @return float Base row total.
+     * @return float|null Base row total.
      */
     public function getBaseRowTotal();
 
     /**
      * Gets the base row total including tax for the invoice item.
      *
-     * @return float Base row total including tax.
+     * @return float|null Base row total including tax.
      */
     public function getBaseRowTotalInclTax();
 
     /**
      * Gets the base tax amount for the invoice item.
      *
-     * @return float Base tax amount.
+     * @return float|null Base tax amount.
      */
     public function getBaseTaxAmount();
 
     /**
      * Gets the description for the invoice item.
      *
-     * @return string Description.
+     * @return string|null Description.
      */
     public function getDescription();
 
     /**
      * Gets the discount amount for the invoice item.
      *
-     * @return float Discount amount.
+     * @return float|null Discount amount.
      */
     public function getDiscountAmount();
 
     /**
      * Gets the ID for the invoice item.
      *
-     * @return int Invoice item ID.
+     * @return int|null Invoice item ID.
      */
     public function getEntityId();
 
     /**
      * Sets entity ID.
      *
-     * @param int $entityId
+     * @param int|null $entityId
      * @return $this
      */
     public function setEntityId($entityId);
@@ -207,14 +207,14 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the hidden tax amount for the invoice item.
      *
-     * @return float Hidden tax amount.
+     * @return float|null Hidden tax amount.
      */
     public function getHiddenTaxAmount();
 
     /**
      * Gets the name for the invoice item.
      *
-     * @return string Name.
+     * @return string|null Name.
      */
     public function getName();
 
@@ -228,28 +228,28 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the parent ID for the invoice item.
      *
-     * @return int Parent ID.
+     * @return int|null Parent ID.
      */
     public function getParentId();
 
     /**
      * Gets the price for the invoice item.
      *
-     * @return float Price.
+     * @return float|null Price.
      */
     public function getPrice();
 
     /**
      * Gets the price including tax for the invoice item.
      *
-     * @return float Price including tax.
+     * @return float|null Price including tax.
      */
     public function getPriceInclTax();
 
     /**
      * Gets the product ID for the invoice item.
      *
-     * @return int Product ID.
+     * @return int|null Product ID.
      */
     public function getProductId();
 
@@ -263,14 +263,14 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the row total for the invoice item.
      *
-     * @return float Row total.
+     * @return float|null Row total.
      */
     public function getRowTotal();
 
     /**
      * Gets the row total including tax for the invoice item.
      *
-     * @return float Row total including tax.
+     * @return float|null Row total including tax.
      */
     public function getRowTotalInclTax();
 
@@ -284,14 +284,14 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the tax amount for the invoice item.
      *
-     * @return float Tax amount.
+     * @return float|null Tax amount.
      */
     public function getTaxAmount();
 
     /**
      * Sets the parent ID for the invoice item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setParentId($id);
@@ -299,7 +299,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the base price for the invoice item.
      *
-     * @param float $price
+     * @param float|null $price
      * @return $this
      */
     public function setBasePrice($price);
@@ -307,7 +307,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the tax amount for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setTaxAmount($amount);
@@ -315,7 +315,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the base row total for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseRowTotal($amount);
@@ -323,7 +323,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the discount amount for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setDiscountAmount($amount);
@@ -331,7 +331,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the row total for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setRowTotal($amount);
@@ -339,7 +339,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the base discount amount for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseDiscountAmount($amount);
@@ -347,7 +347,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the price including tax for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setPriceInclTax($amount);
@@ -355,7 +355,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the base tax amount for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseTaxAmount($amount);
@@ -363,7 +363,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the base price including tax for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBasePriceInclTax($amount);
@@ -379,7 +379,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the base cost for the invoice item.
      *
-     * @param float $baseCost
+     * @param float|null $baseCost
      * @return $this
      */
     public function setBaseCost($baseCost);
@@ -387,7 +387,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the price for the invoice item.
      *
-     * @param float $price
+     * @param float|null $price
      * @return $this
      */
     public function setPrice($price);
@@ -395,7 +395,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the base row total including tax for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseRowTotalInclTax($amount);
@@ -403,7 +403,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the row total including tax for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setRowTotalInclTax($amount);
@@ -411,7 +411,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the product ID for the invoice item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setProductId($id);
@@ -427,7 +427,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the additional data for the invoice item.
      *
-     * @param string $additionalData
+     * @param string|null $additionalData
      * @return $this
      */
     public function setAdditionalData($additionalData);
@@ -435,7 +435,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the description for the invoice item.
      *
-     * @param string $description
+     * @param string|null $description
      * @return $this
      */
     public function setDescription($description);
@@ -451,7 +451,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the name for the invoice item.
      *
-     * @param string $name
+     * @param string|null $name
      * @return $this
      */
     public function setName($name);
@@ -459,7 +459,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the hidden tax amount for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setHiddenTaxAmount($amount);
@@ -467,7 +467,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the base hidden tax amount for the invoice item.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseHiddenTaxAmount($amount);

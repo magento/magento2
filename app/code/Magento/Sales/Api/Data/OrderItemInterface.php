@@ -399,189 +399,189 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the additional data for the order item.
      *
-     * @return string Additional data.
+     * @return string|null Additional data.
      */
     public function getAdditionalData();
 
     /**
      * Gets the amount refunded for the order item.
      *
-     * @return float Amount refunded.
+     * @return float|null Amount refunded.
      */
     public function getAmountRefunded();
 
     /**
      * Gets the applied rule IDs for the order item.
      *
-     * @return string Applied rule IDs.
+     * @return string|null Applied rule IDs.
      */
     public function getAppliedRuleIds();
 
     /**
      * Gets the base amount refunded for the order item.
      *
-     * @return float Base amount refunded.
+     * @return float|null Base amount refunded.
      */
     public function getBaseAmountRefunded();
 
     /**
      * Gets the base cost for the order item.
      *
-     * @return float Base cost.
+     * @return float|null Base cost.
      */
     public function getBaseCost();
 
     /**
      * Gets the base discount amount for the order item.
      *
-     * @return float Base discount amount.
+     * @return float|null Base discount amount.
      */
     public function getBaseDiscountAmount();
 
     /**
      * Gets the base discount invoiced for the order item.
      *
-     * @return float Base discount invoiced.
+     * @return float|null Base discount invoiced.
      */
     public function getBaseDiscountInvoiced();
 
     /**
      * Gets the base discount refunded for the order item.
      *
-     * @return float Base discount refunded.
+     * @return float|null Base discount refunded.
      */
     public function getBaseDiscountRefunded();
 
     /**
      * Gets the base hidden tax amount for the order item.
      *
-     * @return float Base hidden tax amount.
+     * @return float|null Base hidden tax amount.
      */
     public function getBaseHiddenTaxAmount();
 
     /**
      * Gets the base hidden tax invoiced for the order item.
      *
-     * @return float Base hidden tax invoiced.
+     * @return float|null Base hidden tax invoiced.
      */
     public function getBaseHiddenTaxInvoiced();
 
     /**
      * Gets the base hidden tax refunded for the order item.
      *
-     * @return float Base hidden tax refunded.
+     * @return float|null Base hidden tax refunded.
      */
     public function getBaseHiddenTaxRefunded();
 
     /**
      * Gets the base original price for the order item.
      *
-     * @return float Base original price.
+     * @return float|null Base original price.
      */
     public function getBaseOriginalPrice();
 
     /**
      * Gets the base price for the order item.
      *
-     * @return float Base price.
+     * @return float|null Base price.
      */
     public function getBasePrice();
 
     /**
      * Gets the base price including tax for the order item.
      *
-     * @return float Base price including tax.
+     * @return float|null Base price including tax.
      */
     public function getBasePriceInclTax();
 
     /**
      * Gets the base row invoiced for the order item.
      *
-     * @return float Base row invoiced.
+     * @return float|null Base row invoiced.
      */
     public function getBaseRowInvoiced();
 
     /**
      * Gets the base row total for the order item.
      *
-     * @return float Base row total.
+     * @return float|null Base row total.
      */
     public function getBaseRowTotal();
 
     /**
      * Gets the base row total including tax for the order item.
      *
-     * @return float Base row total including tax.
+     * @return float|null Base row total including tax.
      */
     public function getBaseRowTotalInclTax();
 
     /**
      * Gets the base tax amount for the order item.
      *
-     * @return float Base tax amount.
+     * @return float|null Base tax amount.
      */
     public function getBaseTaxAmount();
 
     /**
      * Gets the base tax before discount for the order item.
      *
-     * @return float Base tax before discount.
+     * @return float|null Base tax before discount.
      */
     public function getBaseTaxBeforeDiscount();
 
     /**
      * Gets the base tax invoiced for the order item.
      *
-     * @return float Base tax invoiced.
+     * @return float|null Base tax invoiced.
      */
     public function getBaseTaxInvoiced();
 
     /**
      * Gets the base tax refunded for the order item.
      *
-     * @return float Base tax refunded.
+     * @return float|null Base tax refunded.
      */
     public function getBaseTaxRefunded();
 
     /**
      * Gets the base WEEE tax applied amount for the order item.
      *
-     * @return float Base WEEE tax applied amount.
+     * @return float|null Base WEEE tax applied amount.
      */
     public function getBaseWeeeTaxAppliedAmount();
 
     /**
      * Gets the base WEEE tax applied row amount for the order item.
      *
-     * @return float Base WEEE tax applied row amount.
+     * @return float|null Base WEEE tax applied row amount.
      */
     public function getBaseWeeeTaxAppliedRowAmnt();
 
     /**
      * Gets the base WEEE tax disposition for the order item.
      *
-     * @return float Base WEEE tax disposition.
+     * @return float|null Base WEEE tax disposition.
      */
     public function getBaseWeeeTaxDisposition();
 
     /**
      * Gets the base WEEE tax row disposition for the order item.
      *
-     * @return float Base WEEE tax row disposition.
+     * @return float|null Base WEEE tax row disposition.
      */
     public function getBaseWeeeTaxRowDisposition();
 
     /**
      * Gets the created-at timestamp for the order item.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
      * Sets the created-at timestamp for the order item.
      *
-     * @param string $createdAt timestamp
+     * @param string|null $createdAt timestamp
      * @return $this
      */
     public function setCreatedAt($createdAt);
@@ -589,266 +589,266 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the description for the order item.
      *
-     * @return string Description.
+     * @return string|null Description.
      */
     public function getDescription();
 
     /**
      * Gets the discount amount for the order item.
      *
-     * @return float Discount amount.
+     * @return float|null Discount amount.
      */
     public function getDiscountAmount();
 
     /**
      * Gets the discount invoiced for the order item.
      *
-     * @return float Discount invoiced.
+     * @return float|null Discount invoiced.
      */
     public function getDiscountInvoiced();
 
     /**
      * Gets the discount percent for the order item.
      *
-     * @return float Discount percent.
+     * @return float|null Discount percent.
      */
     public function getDiscountPercent();
 
     /**
      * Gets the discount refunded for the order item.
      *
-     * @return float Discount refunded.
+     * @return float|null Discount refunded.
      */
     public function getDiscountRefunded();
 
     /**
      * Gets the event ID for the order item.
      *
-     * @return int Event ID.
+     * @return int|null Event ID.
      */
     public function getEventId();
 
     /**
      * Gets the external order item ID for the order item.
      *
-     * @return string External order item ID.
+     * @return string|null External order item ID.
      */
     public function getExtOrderItemId();
 
     /**
      * Gets the free-shipping flag value for the order item.
      *
-     * @return int Free-shipping flag value.
+     * @return int|null Free-shipping flag value.
      */
     public function getFreeShipping();
 
     /**
      * Gets the GW base price for the order item.
      *
-     * @return float GW base price.
+     * @return float|null GW base price.
      */
     public function getGwBasePrice();
 
     /**
      * Gets the GW base price invoiced for the order item.
      *
-     * @return float GW base price invoiced.
+     * @return float|null GW base price invoiced.
      */
     public function getGwBasePriceInvoiced();
 
     /**
      * Gets the GW base price refunded for the order item.
      *
-     * @return float GW base price refunded.
+     * @return float|null GW base price refunded.
      */
     public function getGwBasePriceRefunded();
 
     /**
      * Gets the GW base tax amount for the order item.
      *
-     * @return float GW base tax amount.
+     * @return float|null GW base tax amount.
      */
     public function getGwBaseTaxAmount();
 
     /**
      * Gets the GW base tax amount invoiced for the order item.
      *
-     * @return float GW base tax amount invoiced.
+     * @return float|null GW base tax amount invoiced.
      */
     public function getGwBaseTaxAmountInvoiced();
 
     /**
      * Gets the GW base tax amount refunded for the order item.
      *
-     * @return float GW base tax amount refunded.
+     * @return float|null GW base tax amount refunded.
      */
     public function getGwBaseTaxAmountRefunded();
 
     /**
      * Gets the GW ID for the order item.
      *
-     * @return int GW ID.
+     * @return int|null GW ID.
      */
     public function getGwId();
 
     /**
      * Gets the GW price for the order item.
      *
-     * @return float GW price.
+     * @return float|null GW price.
      */
     public function getGwPrice();
 
     /**
      * Gets the GW price invoiced for the order item.
      *
-     * @return float GW price invoiced.
+     * @return float|null GW price invoiced.
      */
     public function getGwPriceInvoiced();
 
     /**
      * Gets the GW price refunded for the order item.
      *
-     * @return float GW price refunded.
+     * @return float|null GW price refunded.
      */
     public function getGwPriceRefunded();
 
     /**
      * Gets the GW tax amount for the order item.
      *
-     * @return float GW tax amount.
+     * @return float|null GW tax amount.
      */
     public function getGwTaxAmount();
 
     /**
      * Gets the GW tax amount invoiced for the order item.
      *
-     * @return float GW tax amount invoiced.
+     * @return float|null GW tax amount invoiced.
      */
     public function getGwTaxAmountInvoiced();
 
     /**
      * Gets the GW tax amount refunded for the order item.
      *
-     * @return float GW tax amount refunded.
+     * @return float|null GW tax amount refunded.
      */
     public function getGwTaxAmountRefunded();
 
     /**
      * Gets the hidden tax amount for the order item.
      *
-     * @return float Hidden tax amount.
+     * @return float|null Hidden tax amount.
      */
     public function getHiddenTaxAmount();
 
     /**
      * Gets the hidden tax canceled for the order item.
      *
-     * @return float Hidden tax canceled.
+     * @return float|null Hidden tax canceled.
      */
     public function getHiddenTaxCanceled();
 
     /**
      * Gets the hidden tax invoiced for the order item.
      *
-     * @return float Hidden tax invoiced.
+     * @return float|null Hidden tax invoiced.
      */
     public function getHiddenTaxInvoiced();
 
     /**
      * Gets the hidden tax refunded for the order item.
      *
-     * @return float Hidden tax refunded.
+     * @return float|null Hidden tax refunded.
      */
     public function getHiddenTaxRefunded();
 
     /**
      * Gets the is-quantity-decimal flag value for the order item.
      *
-     * @return int Is-quantity-decimal flag value.
+     * @return int|null Is-quantity-decimal flag value.
      */
     public function getIsQtyDecimal();
 
     /**
      * Gets the is-virtual flag value for the order item.
      *
-     * @return int Is-virtual flag value.
+     * @return int|null Is-virtual flag value.
      */
     public function getIsVirtual();
 
     /**
      * Gets the item ID for the order item.
      *
-     * @return int Item ID.
+     * @return int|null Item ID.
      */
     public function getItemId();
 
     /**
      * Gets the locked DO invoice flag value for the order item.
      *
-     * @return int Locked DO invoice flag value.
+     * @return int|null Locked DO invoice flag value.
      */
     public function getLockedDoInvoice();
 
     /**
      * Gets the locked DO ship flag value for the order item.
      *
-     * @return int Locked DO ship flag value.
+     * @return int|null Locked DO ship flag value.
      */
     public function getLockedDoShip();
 
     /**
      * Gets the name for the order item.
      *
-     * @return string Name.
+     * @return string|null Name.
      */
     public function getName();
 
     /**
      * Gets the no discount flag value for the order item.
      *
-     * @return int No-discount flag value.
+     * @return int|null No-discount flag value.
      */
     public function getNoDiscount();
 
     /**
      * Gets the order ID for the order item.
      *
-     * @return int Order ID.
+     * @return int|null Order ID.
      */
     public function getOrderId();
 
     /**
      * Gets the original price for the order item.
      *
-     * @return float Original price.
+     * @return float|null Original price.
      */
     public function getOriginalPrice();
 
     /**
      * Gets the parent item ID for the order item.
      *
-     * @return int Parent item ID.
+     * @return int|null Parent item ID.
      */
     public function getParentItemId();
 
     /**
      * Gets the price for the order item.
      *
-     * @return float Price.
+     * @return float|null Price.
      */
     public function getPrice();
 
     /**
      * Gets the price including tax for the order item.
      *
-     * @return float Price including tax.
+     * @return float|null Price including tax.
      */
     public function getPriceInclTax();
 
     /**
      * Gets the product ID for the order item.
      *
-     * @return int Product ID.
+     * @return int|null Product ID.
      */
     public function getProductId();
 
@@ -870,91 +870,91 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the product type for the order item.
      *
-     * @return string Product type.
+     * @return string|null Product type.
      */
     public function getProductType();
 
     /**
      * Gets the quantity backordered for the order item.
      *
-     * @return float Quantity backordered.
+     * @return float|null Quantity backordered.
      */
     public function getQtyBackordered();
 
     /**
      * Gets the quantity canceled for the order item.
      *
-     * @return float Quantity canceled.
+     * @return float|null Quantity canceled.
      */
     public function getQtyCanceled();
 
     /**
      * Gets the quantity invoiced for the order item.
      *
-     * @return float Quantity invoiced.
+     * @return float|null Quantity invoiced.
      */
     public function getQtyInvoiced();
 
     /**
      * Gets the quantity ordered for the order item.
      *
-     * @return float Quantity ordered.
+     * @return float|null Quantity ordered.
      */
     public function getQtyOrdered();
 
     /**
      * Gets the quantity refunded for the order item.
      *
-     * @return float Quantity refunded.
+     * @return float|null Quantity refunded.
      */
     public function getQtyRefunded();
 
     /**
      * Gets the quantity returned for the order item.
      *
-     * @return float Quantity returned.
+     * @return float|null Quantity returned.
      */
     public function getQtyReturned();
 
     /**
      * Gets the quantity shipped for the order item.
      *
-     * @return float Quantity shipped.
+     * @return float|null Quantity shipped.
      */
     public function getQtyShipped();
 
     /**
      * Gets the quote item ID for the order item.
      *
-     * @return int Quote item ID.
+     * @return int|null Quote item ID.
      */
     public function getQuoteItemId();
 
     /**
      * Gets the row invoiced for the order item.
      *
-     * @return float Row invoiced.
+     * @return float|null Row invoiced.
      */
     public function getRowInvoiced();
 
     /**
      * Gets the row total for the order item.
      *
-     * @return float Row total.
+     * @return float|null Row total.
      */
     public function getRowTotal();
 
     /**
      * Gets the row total including tax for the order item.
      *
-     * @return float Row total including tax.
+     * @return float|null Row total including tax.
      */
     public function getRowTotalInclTax();
 
     /**
      * Gets the row weight for the order item.
      *
-     * @return float Row weight.
+     * @return float|null Row weight.
      */
     public function getRowWeight();
 
@@ -968,98 +968,98 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Gets the store ID for the order item.
      *
-     * @return int Store ID.
+     * @return int|null Store ID.
      */
     public function getStoreId();
 
     /**
      * Gets the tax amount for the order item.
      *
-     * @return float Tax amount.
+     * @return float|null Tax amount.
      */
     public function getTaxAmount();
 
     /**
      * Gets the tax before discount for the order item.
      *
-     * @return float Tax before discount.
+     * @return float|null Tax before discount.
      */
     public function getTaxBeforeDiscount();
 
     /**
      * Gets the tax canceled for the order item.
      *
-     * @return float Tax canceled.
+     * @return float|null Tax canceled.
      */
     public function getTaxCanceled();
 
     /**
      * Gets the tax invoiced for the order item.
      *
-     * @return float Tax invoiced.
+     * @return float|null Tax invoiced.
      */
     public function getTaxInvoiced();
 
     /**
      * Gets the tax percent for the order item.
      *
-     * @return float Tax percent.
+     * @return float|null Tax percent.
      */
     public function getTaxPercent();
 
     /**
      * Gets the tax refunded for the order item.
      *
-     * @return float Tax refunded.
+     * @return float|null Tax refunded.
      */
     public function getTaxRefunded();
 
     /**
      * Gets the updated-at timestamp for the order item.
      *
-     * @return string Updated-at timestamp.
+     * @return string|null Updated-at timestamp.
      */
     public function getUpdatedAt();
 
     /**
      * Gets the WEEE tax applied for the order item.
      *
-     * @return string WEEE tax applied.
+     * @return string|null WEEE tax applied.
      */
     public function getWeeeTaxApplied();
 
     /**
      * Gets the WEEE tax applied amount for the order item.
      *
-     * @return float WEEE tax applied amount.
+     * @return float|null WEEE tax applied amount.
      */
     public function getWeeeTaxAppliedAmount();
 
     /**
      * Gets the WEEE tax applied row amount for the order item.
      *
-     * @return float WEEE tax applied row amount.
+     * @return float|null WEEE tax applied row amount.
      */
     public function getWeeeTaxAppliedRowAmount();
 
     /**
      * Gets the WEEE tax disposition for the order item.
      *
-     * @return float WEEE tax disposition.
+     * @return float|null WEEE tax disposition.
      */
     public function getWeeeTaxDisposition();
 
     /**
      * Gets the WEEE tax row disposition for the order item.
      *
-     * @return float WEEE tax row disposition.
+     * @return float|null WEEE tax row disposition.
      */
     public function getWeeeTaxRowDisposition();
 
     /**
      * Gets the weight for the order item.
      *
-     * @return float Weight.
+     * @return float|null Weight.
      */
     public function getWeight();
 
@@ -1073,7 +1073,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the parent item
      *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $parentItem
+     * @param \Magento\Sales\Api\Data\OrderItemInterface|null $parentItem
      * @return $this
      */
     public function setParentItem($parentItem);
@@ -1081,7 +1081,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the updated-at timestamp for the order item.
      *
-     * @param string $timestamp
+     * @param string|null $timestamp
      * @return $this
      */
     public function setUpdatedAt($timestamp);
@@ -1089,7 +1089,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the item ID for the order item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setItemId($id);
@@ -1097,7 +1097,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the order ID for the order item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setOrderId($id);
@@ -1105,7 +1105,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the parent item ID for the order item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setParentItemId($id);
@@ -1113,7 +1113,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the quote item ID for the order item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setQuoteItemId($id);
@@ -1121,7 +1121,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the store ID for the order item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setStoreId($id);
@@ -1129,7 +1129,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the product ID for the order item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setProductId($id);
@@ -1137,7 +1137,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the product type for the order item.
      *
-     * @param string $productType
+     * @param string|null $productType
      * @return $this
      */
     public function setProductType($productType);
@@ -1145,7 +1145,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the weight for the order item.
      *
-     * @param float $weight
+     * @param float|null$weight
      * @return $this
      */
     public function setWeight($weight);
@@ -1153,7 +1153,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the is-virtual flag value for the order item.
      *
-     * @param int $isVirtual
+     * @param int|null $isVirtual
      * @return $this
      */
     public function setIsVirtual($isVirtual);
@@ -1169,7 +1169,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the name for the order item.
      *
-     * @param string $name
+     * @param string|null $name
      * @return $this
      */
     public function setName($name);
@@ -1177,7 +1177,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the description for the order item.
      *
-     * @param string $description
+     * @param string|null $description
      * @return $this
      */
     public function setDescription($description);
@@ -1185,7 +1185,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the applied rule IDs for the order item.
      *
-     * @param string $appliedRuleIds
+     * @param string|null $appliedRuleIds
      * @return $this
      */
     public function setAppliedRuleIds($appliedRuleIds);
@@ -1193,7 +1193,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the additional data for the order item.
      *
-     * @param string $additionalData
+     * @param string|null $additionalData
      * @return $this
      */
     public function setAdditionalData($additionalData);
@@ -1201,7 +1201,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the is-quantity-decimal flag value for the order item.
      *
-     * @param int $isQtyDecimal
+     * @param int|null $isQtyDecimal
      * @return $this
      */
     public function setIsQtyDecimal($isQtyDecimal);
@@ -1209,7 +1209,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the no discount flag value for the order item.
      *
-     * @param int $noDiscount
+     * @param int|null $noDiscount
      * @return $this
      */
     public function setNoDiscount($noDiscount);
@@ -1217,7 +1217,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the quantity backordered for the order item.
      *
-     * @param float $qtyBackordered
+     * @param float|null$qtyBackordered
      * @return $this
      */
     public function setQtyBackordered($qtyBackordered);
@@ -1225,7 +1225,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the quantity canceled for the order item.
      *
-     * @param float $qtyCanceled
+     * @param float|null$qtyCanceled
      * @return $this
      */
     public function setQtyCanceled($qtyCanceled);
@@ -1233,7 +1233,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the quantity invoiced for the order item.
      *
-     * @param float $qtyInvoiced
+     * @param float|null$qtyInvoiced
      * @return $this
      */
     public function setQtyInvoiced($qtyInvoiced);
@@ -1241,7 +1241,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the quantity ordered for the order item.
      *
-     * @param float $qtyOrdered
+     * @param float|null$qtyOrdered
      * @return $this
      */
     public function setQtyOrdered($qtyOrdered);
@@ -1249,7 +1249,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the quantity refunded for the order item.
      *
-     * @param float $qtyRefunded
+     * @param float|null$qtyRefunded
      * @return $this
      */
     public function setQtyRefunded($qtyRefunded);
@@ -1257,7 +1257,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the quantity shipped for the order item.
      *
-     * @param float $qtyShipped
+     * @param float|null$qtyShipped
      * @return $this
      */
     public function setQtyShipped($qtyShipped);
@@ -1265,7 +1265,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base cost for the order item.
      *
-     * @param float $baseCost
+     * @param float|null$baseCost
      * @return $this
      */
     public function setBaseCost($baseCost);
@@ -1273,7 +1273,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the price for the order item.
      *
-     * @param float $price
+     * @param float|null$price
      * @return $this
      */
     public function setPrice($price);
@@ -1281,7 +1281,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base price for the order item.
      *
-     * @param float $price
+     * @param float|null$price
      * @return $this
      */
     public function setBasePrice($price);
@@ -1289,7 +1289,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the original price for the order item.
      *
-     * @param float $price
+     * @param float|null$price
      * @return $this
      */
     public function setOriginalPrice($price);
@@ -1297,7 +1297,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base original price for the order item.
      *
-     * @param float $price
+     * @param float|null$price
      * @return $this
      */
     public function setBaseOriginalPrice($price);
@@ -1305,7 +1305,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the tax percent for the order item.
      *
-     * @param float $taxPercent
+     * @param float|null$taxPercent
      * @return $this
      */
     public function setTaxPercent($taxPercent);
@@ -1313,7 +1313,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the tax amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setTaxAmount($amount);
@@ -1321,7 +1321,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base tax amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setBaseTaxAmount($amount);
@@ -1329,7 +1329,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the tax invoiced for the order item.
      *
-     * @param float $taxInvoiced
+     * @param float|null$taxInvoiced
      * @return $this
      */
     public function setTaxInvoiced($taxInvoiced);
@@ -1337,7 +1337,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base tax invoiced for the order item.
      *
-     * @param float $baseTaxInvoiced
+     * @param float|null$baseTaxInvoiced
      * @return $this
      */
     public function setBaseTaxInvoiced($baseTaxInvoiced);
@@ -1345,7 +1345,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the discount percent for the order item.
      *
-     * @param float $discountPercent
+     * @param float|null$discountPercent
      * @return $this
      */
     public function setDiscountPercent($discountPercent);
@@ -1353,7 +1353,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the discount amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setDiscountAmount($amount);
@@ -1361,7 +1361,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base discount amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setBaseDiscountAmount($amount);
@@ -1369,7 +1369,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the discount invoiced for the order item.
      *
-     * @param float $discountInvoiced
+     * @param float|null$discountInvoiced
      * @return $this
      */
     public function setDiscountInvoiced($discountInvoiced);
@@ -1377,7 +1377,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base discount invoiced for the order item.
      *
-     * @param float $baseDiscountInvoiced
+     * @param float|null$baseDiscountInvoiced
      * @return $this
      */
     public function setBaseDiscountInvoiced($baseDiscountInvoiced);
@@ -1385,7 +1385,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the amount refunded for the order item.
      *
-     * @param float $amountRefunded
+     * @param float|null$amountRefunded
      * @return $this
      */
     public function setAmountRefunded($amountRefunded);
@@ -1393,7 +1393,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base amount refunded for the order item.
      *
-     * @param float $baseAmountRefunded
+     * @param float|null$baseAmountRefunded
      * @return $this
      */
     public function setBaseAmountRefunded($baseAmountRefunded);
@@ -1401,7 +1401,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the row total for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setRowTotal($amount);
@@ -1409,7 +1409,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base row total for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setBaseRowTotal($amount);
@@ -1417,7 +1417,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the row invoiced for the order item.
      *
-     * @param float $rowInvoiced
+     * @param float|null$rowInvoiced
      * @return $this
      */
     public function setRowInvoiced($rowInvoiced);
@@ -1425,7 +1425,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base row invoiced for the order item.
      *
-     * @param float $baseRowInvoiced
+     * @param float|null$baseRowInvoiced
      * @return $this
      */
     public function setBaseRowInvoiced($baseRowInvoiced);
@@ -1433,7 +1433,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the row weight for the order item.
      *
-     * @param float $rowWeight
+     * @param float|null$rowWeight
      * @return $this
      */
     public function setRowWeight($rowWeight);
@@ -1441,7 +1441,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base tax before discount for the order item.
      *
-     * @param float $baseTaxBeforeDiscount
+     * @param float|null$baseTaxBeforeDiscount
      * @return $this
      */
     public function setBaseTaxBeforeDiscount($baseTaxBeforeDiscount);
@@ -1449,7 +1449,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the tax before discount for the order item.
      *
-     * @param float $taxBeforeDiscount
+     * @param float|null$taxBeforeDiscount
      * @return $this
      */
     public function setTaxBeforeDiscount($taxBeforeDiscount);
@@ -1457,7 +1457,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the external order item ID for the order item.
      *
-     * @param string $id
+     * @param string|null $id
      * @return $this
      */
     public function setExtOrderItemId($id);
@@ -1465,7 +1465,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the locked DO invoice flag value for the order item.
      *
-     * @param int $flag
+     * @param int|null $flag
      * @return $this
      */
     public function setLockedDoInvoice($flag);
@@ -1473,7 +1473,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the locked DO ship flag value for the order item.
      *
-     * @param int $flag
+     * @param int|null $flag
      * @return $this
      */
     public function setLockedDoShip($flag);
@@ -1481,7 +1481,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the price including tax for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setPriceInclTax($amount);
@@ -1489,7 +1489,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base price including tax for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setBasePriceInclTax($amount);
@@ -1497,7 +1497,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the row total including tax for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setRowTotalInclTax($amount);
@@ -1505,7 +1505,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base row total including tax for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setBaseRowTotalInclTax($amount);
@@ -1513,7 +1513,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the hidden tax amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setHiddenTaxAmount($amount);
@@ -1521,7 +1521,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base hidden tax amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setBaseHiddenTaxAmount($amount);
@@ -1529,7 +1529,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the hidden tax invoiced for the order item.
      *
-     * @param float $hiddenTaxInvoiced
+     * @param float|null$hiddenTaxInvoiced
      * @return $this
      */
     public function setHiddenTaxInvoiced($hiddenTaxInvoiced);
@@ -1537,7 +1537,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base hidden tax invoiced for the order item.
      *
-     * @param float $baseHiddenTaxInvoiced
+     * @param float|null$baseHiddenTaxInvoiced
      * @return $this
      */
     public function setBaseHiddenTaxInvoiced($baseHiddenTaxInvoiced);
@@ -1545,7 +1545,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the hidden tax refunded for the order item.
      *
-     * @param float $hiddenTaxRefunded
+     * @param float|null$hiddenTaxRefunded
      * @return $this
      */
     public function setHiddenTaxRefunded($hiddenTaxRefunded);
@@ -1553,7 +1553,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base hidden tax refunded for the order item.
      *
-     * @param float $baseHiddenTaxRefunded
+     * @param float|null$baseHiddenTaxRefunded
      * @return $this
      */
     public function setBaseHiddenTaxRefunded($baseHiddenTaxRefunded);
@@ -1561,7 +1561,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the tax canceled for the order item.
      *
-     * @param float $taxCanceled
+     * @param float|null$taxCanceled
      * @return $this
      */
     public function setTaxCanceled($taxCanceled);
@@ -1569,7 +1569,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the hidden tax canceled for the order item.
      *
-     * @param float $hiddenTaxCanceled
+     * @param float|null$hiddenTaxCanceled
      * @return $this
      */
     public function setHiddenTaxCanceled($hiddenTaxCanceled);
@@ -1577,7 +1577,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the tax refunded for the order item.
      *
-     * @param float $taxRefunded
+     * @param float|null$taxRefunded
      * @return $this
      */
     public function setTaxRefunded($taxRefunded);
@@ -1585,7 +1585,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base tax refunded for the order item.
      *
-     * @param float $baseTaxRefunded
+     * @param float|null$baseTaxRefunded
      * @return $this
      */
     public function setBaseTaxRefunded($baseTaxRefunded);
@@ -1593,7 +1593,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the discount refunded for the order item.
      *
-     * @param float $discountRefunded
+     * @param float|null$discountRefunded
      * @return $this
      */
     public function setDiscountRefunded($discountRefunded);
@@ -1601,7 +1601,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base discount refunded for the order item.
      *
-     * @param float $baseDiscountRefunded
+     * @param float|null$baseDiscountRefunded
      * @return $this
      */
     public function setBaseDiscountRefunded($baseDiscountRefunded);
@@ -1609,7 +1609,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW ID for the order item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setGwId($id);
@@ -1617,7 +1617,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW base price for the order item.
      *
-     * @param float $price
+     * @param float|null$price
      * @return $this
      */
     public function setGwBasePrice($price);
@@ -1625,7 +1625,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW price for the order item.
      *
-     * @param float $price
+     * @param float|null$price
      * @return $this
      */
     public function setGwPrice($price);
@@ -1633,7 +1633,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW base tax amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setGwBaseTaxAmount($amount);
@@ -1641,7 +1641,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW tax amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setGwTaxAmount($amount);
@@ -1649,7 +1649,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW base price invoiced for the order item.
      *
-     * @param float $gwBasePriceInvoiced
+     * @param float|null$gwBasePriceInvoiced
      * @return $this
      */
     public function setGwBasePriceInvoiced($gwBasePriceInvoiced);
@@ -1657,7 +1657,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW price invoiced for the order item.
      *
-     * @param float $gwPriceInvoiced
+     * @param float|null$gwPriceInvoiced
      * @return $this
      */
     public function setGwPriceInvoiced($gwPriceInvoiced);
@@ -1665,7 +1665,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW base tax amount invoiced for the order item.
      *
-     * @param float $gwBaseTaxAmountInvoiced
+     * @param float|null$gwBaseTaxAmountInvoiced
      * @return $this
      */
     public function setGwBaseTaxAmountInvoiced($gwBaseTaxAmountInvoiced);
@@ -1673,7 +1673,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW tax amount invoiced for the order item.
      *
-     * @param float $gwTaxAmountInvoiced
+     * @param float|null$gwTaxAmountInvoiced
      * @return $this
      */
     public function setGwTaxAmountInvoiced($gwTaxAmountInvoiced);
@@ -1681,7 +1681,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW base price refunded for the order item.
      *
-     * @param float $gwBasePriceRefunded
+     * @param float|null$gwBasePriceRefunded
      * @return $this
      */
     public function setGwBasePriceRefunded($gwBasePriceRefunded);
@@ -1689,7 +1689,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW price refunded for the order item.
      *
-     * @param float $gwPriceRefunded
+     * @param float|null$gwPriceRefunded
      * @return $this
      */
     public function setGwPriceRefunded($gwPriceRefunded);
@@ -1697,7 +1697,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW base tax amount refunded for the order item.
      *
-     * @param float $gwBaseTaxAmountRefunded
+     * @param float|null$gwBaseTaxAmountRefunded
      * @return $this
      */
     public function setGwBaseTaxAmountRefunded($gwBaseTaxAmountRefunded);
@@ -1705,7 +1705,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the GW tax amount refunded for the order item.
      *
-     * @param float $gwTaxAmountRefunded
+     * @param float|null$gwTaxAmountRefunded
      * @return $this
      */
     public function setGwTaxAmountRefunded($gwTaxAmountRefunded);
@@ -1713,7 +1713,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the free-shipping flag value for the order item.
      *
-     * @param int $freeShipping
+     * @param int|null $freeShipping
      * @return $this
      */
     public function setFreeShipping($freeShipping);
@@ -1721,7 +1721,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the quantity returned for the order item.
      *
-     * @param float $qtyReturned
+     * @param float|null$qtyReturned
      * @return $this
      */
     public function setQtyReturned($qtyReturned);
@@ -1729,7 +1729,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the event ID for the order item.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setEventId($id);
@@ -1737,7 +1737,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base WEEE tax applied amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setBaseWeeeTaxAppliedAmount($amount);
@@ -1745,7 +1745,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base WEEE tax applied row amount for the order item.
      *
-     * @param float $amnt
+     * @param float|null$amnt
      * @return $this
      */
     public function setBaseWeeeTaxAppliedRowAmnt($amnt);
@@ -1753,7 +1753,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the WEEE tax applied amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setWeeeTaxAppliedAmount($amount);
@@ -1761,7 +1761,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the WEEE tax applied row amount for the order item.
      *
-     * @param float $amount
+     * @param float|null$amount
      * @return $this
      */
     public function setWeeeTaxAppliedRowAmount($amount);
@@ -1769,7 +1769,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the WEEE tax applied for the order item.
      *
-     * @param string $weeeTaxApplied
+     * @param string|null $weeeTaxApplied
      * @return $this
      */
     public function setWeeeTaxApplied($weeeTaxApplied);
@@ -1777,7 +1777,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the WEEE tax disposition for the order item.
      *
-     * @param float $weeeTaxDisposition
+     * @param float|null$weeeTaxDisposition
      * @return $this
      */
     public function setWeeeTaxDisposition($weeeTaxDisposition);
@@ -1785,7 +1785,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the WEEE tax row disposition for the order item.
      *
-     * @param float $weeeTaxRowDisposition
+     * @param float|null$weeeTaxRowDisposition
      * @return $this
      */
     public function setWeeeTaxRowDisposition($weeeTaxRowDisposition);
@@ -1793,7 +1793,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base WEEE tax disposition for the order item.
      *
-     * @param float $baseWeeeTaxDisposition
+     * @param float|null$baseWeeeTaxDisposition
      * @return $this
      */
     public function setBaseWeeeTaxDisposition($baseWeeeTaxDisposition);
@@ -1801,7 +1801,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the base WEEE tax row disposition for the order item.
      *
-     * @param float $baseWeeeTaxRowDisposition
+     * @param float|null$baseWeeeTaxRowDisposition
      * @return $this
      */
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition);

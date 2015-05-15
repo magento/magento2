@@ -203,126 +203,126 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the base currency code for the invoice.
      *
-     * @return string Base currency code.
+     * @return string|null Base currency code.
      */
     public function getBaseCurrencyCode();
 
     /**
      * Gets the base discount amount for the invoice.
      *
-     * @return float Base discount amount.
+     * @return float|null Base discount amount.
      */
     public function getBaseDiscountAmount();
 
     /**
      * Gets the base grand total for the invoice.
      *
-     * @return float Base grand total.
+     * @return float|null Base grand total.
      */
     public function getBaseGrandTotal();
 
     /**
      * Gets the base hidden tax amount for the invoice.
      *
-     * @return float Base hidden tax amount.
+     * @return float|null Base hidden tax amount.
      */
     public function getBaseHiddenTaxAmount();
 
     /**
      * Gets the base shipping amount for the invoice.
      *
-     * @return float Base shipping amount.
+     * @return float|null Base shipping amount.
      */
     public function getBaseShippingAmount();
 
     /**
      * Gets the base shipping hidden tax amount for the invoice.
      *
-     * @return float Base shipping hidden tax amount.
+     * @return float|null Base shipping hidden tax amount.
      */
     public function getBaseShippingHiddenTaxAmnt();
 
     /**
      * Gets the base shipping including tax for the invoice.
      *
-     * @return float Base shipping including tax.
+     * @return float|null Base shipping including tax.
      */
     public function getBaseShippingInclTax();
 
     /**
      * Gets the base shipping tax amount for the invoice.
      *
-     * @return float Base shipping tax amount.
+     * @return float|null Base shipping tax amount.
      */
     public function getBaseShippingTaxAmount();
 
     /**
      * Gets the base subtotal for the invoice.
      *
-     * @return float Base subtotal.
+     * @return float|null Base subtotal.
      */
     public function getBaseSubtotal();
 
     /**
      * Gets the base subtotal including tax for the invoice.
      *
-     * @return float Base subtotal including tax.
+     * @return float|null Base subtotal including tax.
      */
     public function getBaseSubtotalInclTax();
 
     /**
      * Gets the base tax amount for the invoice.
      *
-     * @return float Base tax amount.
+     * @return float|null Base tax amount.
      */
     public function getBaseTaxAmount();
 
     /**
      * Gets the base total refunded for the invoice.
      *
-     * @return float Base total refunded.
+     * @return float|null Base total refunded.
      */
     public function getBaseTotalRefunded();
 
     /**
      * Gets the base-to-global rate for the invoice.
      *
-     * @return float Base-to-global rate.
+     * @return float|null Base-to-global rate.
      */
     public function getBaseToGlobalRate();
 
     /**
      * Gets the base-to-order rate for the invoice.
      *
-     * @return float Base-to-order rate.
+     * @return float|null Base-to-order rate.
      */
     public function getBaseToOrderRate();
 
     /**
      * Gets the billing address ID for the invoice.
      *
-     * @return int Billing address ID.
+     * @return int|null Billing address ID.
      */
     public function getBillingAddressId();
 
     /**
      * Gets the can void flag value for the invoice.
      *
-     * @return int Can void flag value.
+     * @return int|null Can void flag value.
      */
     public function getCanVoidFlag();
 
     /**
      * Gets the created-at timestamp for the invoice.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
      * Sets the created-at timestamp for the invoice.
      *
-     * @param string $createdAt timestamp
+     * @param string|null $createdAt timestamp
      * @return $this
      */
     public function setCreatedAt($createdAt);
@@ -330,35 +330,35 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the discount amount for the invoice.
      *
-     * @return float Discount amount.
+     * @return float|null Discount amount.
      */
     public function getDiscountAmount();
 
     /**
      * Gets the discount description for the invoice.
      *
-     * @return string Discount description.
+     * @return string|null Discount description.
      */
     public function getDiscountDescription();
 
     /**
      * Gets the email-sent flag value for the invoice.
      *
-     * @return int Email-sent flag value.
+     * @return int|null Email-sent flag value.
      */
     public function getEmailSent();
 
     /**
      * Gets the ID for the invoice.
      *
-     * @return int Invoice ID.
+     * @return int|null Invoice ID.
      */
     public function getEntityId();
 
     /**
      * Sets entity ID.
      *
-     * @param int $entityId
+     * @param int|null $entityId
      * @return $this
      */
     public function setEntityId($entityId);
@@ -366,42 +366,42 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the global currency code for the invoice.
      *
-     * @return string Global currency code.
+     * @return string|null Global currency code.
      */
     public function getGlobalCurrencyCode();
 
     /**
      * Gets the grand total for the invoice.
      *
-     * @return float Grand total.
+     * @return float|null Grand total.
      */
     public function getGrandTotal();
 
     /**
      * Gets the hidden tax amount for the invoice.
      *
-     * @return float Hidden tax amount.
+     * @return float|null Hidden tax amount.
      */
     public function getHiddenTaxAmount();
 
     /**
      * Gets the increment ID for the invoice.
      *
-     * @return string Increment ID.
+     * @return string|null Increment ID.
      */
     public function getIncrementId();
 
     /**
      * Gets the is-used-for-refund flag value for the invoice.
      *
-     * @return int Is-used-for-refund flag value.
+     * @return int|null Is-used-for-refund flag value.
      */
     public function getIsUsedForRefund();
 
     /**
      * Gets the order currency code for the invoice.
      *
-     * @return string Order currency code.
+     * @return string|null Order currency code.
      */
     public function getOrderCurrencyCode();
 
@@ -415,91 +415,91 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the shipping address ID for the invoice.
      *
-     * @return int Shipping address ID.
+     * @return int|null Shipping address ID.
      */
     public function getShippingAddressId();
 
     /**
      * Gets the shipping amount for the invoice.
      *
-     * @return float Shipping amount.
+     * @return float|null Shipping amount.
      */
     public function getShippingAmount();
 
     /**
      * Gets the shipping hidden tax amount for the invoice.
      *
-     * @return float Shipping hidden tax amount.
+     * @return float|null Shipping hidden tax amount.
      */
     public function getShippingHiddenTaxAmount();
 
     /**
      * Gets the shipping including tax for the invoice.
      *
-     * @return float Shipping including tax.
+     * @return float|null Shipping including tax.
      */
     public function getShippingInclTax();
 
     /**
      * Gets the shipping tax amount for the invoice.
      *
-     * @return float Shipping tax amount.
+     * @return float|null Shipping tax amount.
      */
     public function getShippingTaxAmount();
 
     /**
      * Gets the state for the invoice.
      *
-     * @return int State.
+     * @return int|null State.
      */
     public function getState();
 
     /**
      * Gets the store currency code for the invoice.
      *
-     * @return string Store currency code.
+     * @return string|null Store currency code.
      */
     public function getStoreCurrencyCode();
 
     /**
      * Gets the store ID for the invoice.
      *
-     * @return int Store ID.
+     * @return int|null Store ID.
      */
     public function getStoreId();
 
     /**
      * Gets the store-to-base rate for the invoice.
      *
-     * @return float Store-to-base rate.
+     * @return float|null Store-to-base rate.
      */
     public function getStoreToBaseRate();
 
     /**
      * Gets the store-to-order rate for the invoice.
      *
-     * @return float Store-to-order rate.
+     * @return float|null Store-to-order rate.
      */
     public function getStoreToOrderRate();
 
     /**
      * Gets the subtotal for the invoice.
      *
-     * @return float Subtotal.
+     * @return float|null Subtotal.
      */
     public function getSubtotal();
 
     /**
      * Gets the subtotal including tax for the invoice.
      *
-     * @return float Subtotal including tax.
+     * @return float|null Subtotal including tax.
      */
     public function getSubtotalInclTax();
 
     /**
      * Gets the tax amount for the invoice.
      *
-     * @return float Tax amount.
+     * @return float|null Tax amount.
      */
     public function getTaxAmount();
 
@@ -513,14 +513,14 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the transaction ID for the invoice.
      *
-     * @return string Transaction ID.
+     * @return string|null Transaction ID.
      */
     public function getTransactionId();
 
     /**
      * Sets the transaction ID for the invoice.
      *
-     * @param string $transactionId
+     * @param string|null $transactionId
      * @return $this
      */
     public function setTransactionId($transactionId);
@@ -528,7 +528,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Gets the updated-at timestamp for the invoice.
      *
-     * @return string Updated-at timestamp.
+     * @return string|null Updated-at timestamp.
      */
     public function getUpdatedAt();
 
@@ -557,7 +557,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the comments, if any, for the invoice.
      *
-     * @param \Magento\Sales\Api\Data\InvoiceCommentInterface[] $comments
+     * @param \Magento\Sales\Api\Data\InvoiceCommentInterface[]|null $comments
      * @return $this
      */
     public function setComments($comments);
@@ -565,7 +565,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the updated-at timestamp for the invoice.
      *
-     * @param string $timestamp
+     * @param string|null $timestamp
      * @return $this
      */
     public function setUpdatedAt($timestamp);
@@ -573,7 +573,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the store ID for the invoice.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setStoreId($id);
@@ -581,7 +581,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base grand total for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseGrandTotal($amount);
@@ -589,7 +589,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the shipping tax amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setShippingTaxAmount($amount);
@@ -597,7 +597,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the tax amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setTaxAmount($amount);
@@ -605,7 +605,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base tax amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseTaxAmount($amount);
@@ -613,7 +613,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the store-to-order rate for the invoice.
      *
-     * @param float $rate
+     * @param float|null $rate
      * @return $this
      */
     public function setStoreToOrderRate($rate);
@@ -621,7 +621,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base shipping tax amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseShippingTaxAmount($amount);
@@ -629,7 +629,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base discount amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseDiscountAmount($amount);
@@ -637,7 +637,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base-to-order rate for the invoice.
      *
-     * @param float $rate
+     * @param float|null $rate
      * @return $this
      */
     public function setBaseToOrderRate($rate);
@@ -645,7 +645,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the grand total for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setGrandTotal($amount);
@@ -653,7 +653,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the shipping amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setShippingAmount($amount);
@@ -661,7 +661,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the subtotal including tax for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setSubtotalInclTax($amount);
@@ -669,7 +669,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base subtotal including tax for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseSubtotalInclTax($amount);
@@ -677,7 +677,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the store-to-base rate for the invoice.
      *
-     * @param float $rate
+     * @param float|null $rate
      * @return $this
      */
     public function setStoreToBaseRate($rate);
@@ -685,7 +685,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base shipping amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseShippingAmount($amount);
@@ -701,7 +701,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base-to-global rate for the invoice.
      *
-     * @param float $rate
+     * @param float|null $rate
      * @return $this
      */
     public function setBaseToGlobalRate($rate);
@@ -709,7 +709,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the subtotal for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setSubtotal($amount);
@@ -717,7 +717,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base subtotal for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseSubtotal($amount);
@@ -725,7 +725,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the discount amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setDiscountAmount($amount);
@@ -733,7 +733,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the billing address ID for the invoice.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setBillingAddressId($id);
@@ -741,7 +741,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the is-used-for-refund flag value for the invoice.
      *
-     * @param int $isUsedForRefund
+     * @param int|null $isUsedForRefund
      * @return $this
      */
     public function setIsUsedForRefund($isUsedForRefund);
@@ -757,7 +757,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the email-sent flag value for the invoice.
      *
-     * @param int $emailSent
+     * @param int|null $emailSent
      * @return $this
      */
     public function setEmailSent($emailSent);
@@ -765,7 +765,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the can void flag value for the invoice.
      *
-     * @param int $canVoidFlag
+     * @param int|null $canVoidFlag
      * @return $this
      */
     public function setCanVoidFlag($canVoidFlag);
@@ -773,7 +773,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the state for the invoice.
      *
-     * @param int $state
+     * @param int|null $state
      * @return $this
      */
     public function setState($state);
@@ -781,7 +781,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the shipping address ID for the invoice.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setShippingAddressId($id);
@@ -789,7 +789,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the store currency code for the invoice.
      *
-     * @param string $code
+     * @param string|null $code
      * @return $this
      */
     public function setStoreCurrencyCode($code);
@@ -797,7 +797,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the order currency code for the invoice.
      *
-     * @param string $code
+     * @param string|null $code
      * @return $this
      */
     public function setOrderCurrencyCode($code);
@@ -805,7 +805,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base currency code for the invoice.
      *
-     * @param string $code
+     * @param string|null $code
      * @return $this
      */
     public function setBaseCurrencyCode($code);
@@ -813,7 +813,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the global currency code for the invoice.
      *
-     * @param string $code
+     * @param string|null $code
      * @return $this
      */
     public function setGlobalCurrencyCode($code);
@@ -821,7 +821,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the increment ID for the invoice.
      *
-     * @param string $id
+     * @param string|null $id
      * @return $this
      */
     public function setIncrementId($id);
@@ -829,7 +829,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the hidden tax amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setHiddenTaxAmount($amount);
@@ -837,7 +837,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base hidden tax amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseHiddenTaxAmount($amount);
@@ -845,7 +845,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the shipping hidden tax amount for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setShippingHiddenTaxAmount($amount);
@@ -853,7 +853,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base shipping hidden tax amount for the invoice.
      *
-     * @param float $amnt
+     * @param float|null $amnt
      * @return $this
      */
     public function setBaseShippingHiddenTaxAmnt($amnt);
@@ -861,7 +861,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the shipping including tax for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setShippingInclTax($amount);
@@ -869,7 +869,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base shipping including tax for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseShippingInclTax($amount);
@@ -877,7 +877,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the base total refunded for the invoice.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseTotalRefunded($amount);
@@ -885,7 +885,7 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     /**
      * Sets the discount description for the invoice.
      *
-     * @param string $description
+     * @param string|null $description
      * @return $this
      */
     public function setDiscountDescription($description);

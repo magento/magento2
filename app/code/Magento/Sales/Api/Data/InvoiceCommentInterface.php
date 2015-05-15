@@ -51,14 +51,14 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Gets the created-at timestamp for the invoice.
      *
-     * @return string Created-at timestamp.
+     * @return string|null Created-at timestamp.
      */
     public function getCreatedAt();
 
     /**
      * Sets the created-at timestamp for the invoice.
      *
-     * @param string $createdAt timestamp
+     * @param string|null $createdAt timestamp
      * @return $this
      */
     public function setCreatedAt($createdAt);
@@ -66,14 +66,14 @@ interface InvoiceCommentInterface extends \Magento\Framework\Api\ExtensibleDataI
     /**
      * Gets the ID for the invoice.
      *
-     * @return int Invoice ID.
+     * @return int|null Invoice ID.
      */
     public function getEntityId();
 
     /**
      * Sets entity ID.
      *
-     * @param int $entityId
+     * @param int|null $entityId
      * @return $this
      */
     public function setEntityId($entityId);

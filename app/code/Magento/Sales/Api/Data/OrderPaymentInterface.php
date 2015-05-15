@@ -244,7 +244,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the additional data for the order payment.
      *
-     * @return string Additional data.
+     * @return string|null Additional data.
      */
     public function getAdditionalData();
 
@@ -258,175 +258,175 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the address status for the order payment.
      *
-     * @return string Address status.
+     * @return string|null Address status.
      */
     public function getAddressStatus();
 
     /**
      * Gets the amount authorized for the order payment.
      *
-     * @return float Amount authorized.
+     * @return float|null Amount authorized.
      */
     public function getAmountAuthorized();
 
     /**
      * Gets the amount canceled for the order payment.
      *
-     * @return float Amount canceled.
+     * @return float|null Amount canceled.
      */
     public function getAmountCanceled();
 
     /**
      * Gets the amount ordered for the order payment.
      *
-     * @return float Amount ordered.
+     * @return float|null Amount ordered.
      */
     public function getAmountOrdered();
 
     /**
      * Gets the amount paid for the order payment.
      *
-     * @return float Amount paid.
+     * @return float|null Amount paid.
      */
     public function getAmountPaid();
 
     /**
      * Gets the amount refunded for the order payment.
      *
-     * @return float Amount refunded.
+     * @return float|null Amount refunded.
      */
     public function getAmountRefunded();
 
     /**
      * Gets the anet transaction method for the order payment.
      *
-     * @return string Anet transaction method.
+     * @return string|null Anet transaction method.
      */
     public function getAnetTransMethod();
 
     /**
      * Gets the base amount authorized for the order payment.
      *
-     * @return float Base amount authorized.
+     * @return float|null Base amount authorized.
      */
     public function getBaseAmountAuthorized();
 
     /**
      * Gets the base amount canceled for the order payment.
      *
-     * @return float Base amount canceled.
+     * @return float|null Base amount canceled.
      */
     public function getBaseAmountCanceled();
 
     /**
      * Gets the base amount ordered for the order payment.
      *
-     * @return float Base amount ordered.
+     * @return float|null Base amount ordered.
      */
     public function getBaseAmountOrdered();
 
     /**
      * Gets the base amount paid for the order payment.
      *
-     * @return float Base amount paid.
+     * @return float|null Base amount paid.
      */
     public function getBaseAmountPaid();
 
     /**
      * Gets the base amount paid online for the order payment.
      *
-     * @return float Base amount paid online.
+     * @return float|null Base amount paid online.
      */
     public function getBaseAmountPaidOnline();
 
     /**
      * Gets the base amount refunded for the order payment.
      *
-     * @return float Base amount refunded.
+     * @return float|null Base amount refunded.
      */
     public function getBaseAmountRefunded();
 
     /**
      * Gets the base amount refunded online for the order payment.
      *
-     * @return float Base amount refunded online.
+     * @return float|null Base amount refunded online.
      */
     public function getBaseAmountRefundedOnline();
 
     /**
      * Gets the base shipping amount for the order payment.
      *
-     * @return float Base shipping amount.
+     * @return float|null Base shipping amount.
      */
     public function getBaseShippingAmount();
 
     /**
      * Gets the base shipping captured for the order payment.
      *
-     * @return float Base shipping captured amount.
+     * @return float|null Base shipping captured amount.
      */
     public function getBaseShippingCaptured();
 
     /**
      * Gets the base shipping refunded amount for the order payment.
      *
-     * @return float Base shipping refunded amount.
+     * @return float|null Base shipping refunded amount.
      */
     public function getBaseShippingRefunded();
 
     /**
      * Gets the credit card approval for the order payment.
      *
-     * @return string Credit card approval.
+     * @return string|null Credit card approval.
      */
     public function getCcApproval();
 
     /**
      * Gets the credit card avs status for the order payment.
      *
-     * @return string Credit card avs status.
+     * @return string|null Credit card avs status.
      */
     public function getCcAvsStatus();
 
     /**
      * Gets the credit card cid status for the order payment.
      *
-     * @return string Credit card CID status.
+     * @return string|null Credit card CID status.
      */
     public function getCcCidStatus();
 
     /**
      * Gets the credit card debug request body for the order payment.
      *
-     * @return string Credit card debug request body.
+     * @return string|null Credit card debug request body.
      */
     public function getCcDebugRequestBody();
 
     /**
      * Gets the credit card debug response body for the order payment.
      *
-     * @return string Credit card debug response body.
+     * @return string|null Credit card debug response body.
      */
     public function getCcDebugResponseBody();
 
     /**
      * Gets the credit card debug response serialized for the order payment.
      *
-     * @return string Credit card debug response serialized.
+     * @return string|null Credit card debug response serialized.
      */
     public function getCcDebugResponseSerialized();
 
     /**
      * Gets the credit card expiration month for the order payment.
      *
-     * @return string Credit card expiration month.
+     * @return string|null Credit card expiration month.
      */
     public function getCcExpMonth();
 
     /**
      * Gets the credit card expiration year for the order payment.
      *
-     * @return string Credit card expiration year.
+     * @return string|null Credit card expiration year.
      */
     public function getCcExpYear();
 
@@ -440,119 +440,119 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the encrypted credit card number for the order payment.
      *
-     * @return string Encrypted credit card number.
+     * @return string|null Encrypted credit card number.
      */
     public function getCcNumberEnc();
 
     /**
      * Gets the credit card owner for the order payment.
      *
-     * @return string Credit card number.
+     * @return string|null Credit card number.
      */
     public function getCcOwner();
 
     /**
      * Gets the credit card secure verify for the order payment.
      *
-     * @return string Credit card secure verify.
+     * @return string|null Credit card secure verify.
      */
     public function getCcSecureVerify();
 
     /**
      * Gets the credit card SS issue for the order payment.
      *
-     * @return string Credit card SS issue.
+     * @return string|null Credit card SS issue.
      */
     public function getCcSsIssue();
 
     /**
      * Gets the credit card SS start month for the order payment.
      *
-     * @return string Credit card SS start month.
+     * @return string|null Credit card SS start month.
      */
     public function getCcSsStartMonth();
 
     /**
      * Gets the credit card SS start year for the order payment.
      *
-     * @return string Credit card SS start year.
+     * @return string|null Credit card SS start year.
      */
     public function getCcSsStartYear();
 
     /**
      * Gets the credit card status for the order payment.
      *
-     * @return string Credit card status.
+     * @return string|null Credit card status.
      */
     public function getCcStatus();
 
     /**
      * Gets the credit card status description for the order payment.
      *
-     * @return string Credit card status description.
+     * @return string|null Credit card status description.
      */
     public function getCcStatusDescription();
 
     /**
      * Gets the credit card transaction id for the order payment.
      *
-     * @return string Credit card transaction ID.
+     * @return string|null Credit card transaction ID.
      */
     public function getCcTransId();
 
     /**
      * Gets the credit card type for the order payment.
      *
-     * @return string Credit card type.
+     * @return string|null Credit card type.
      */
     public function getCcType();
 
     /**
      * Gets the eCheck account name for the order payment.
      *
-     * @return string eCheck account name.
+     * @return string|null eCheck account name.
      */
     public function getEcheckAccountName();
 
     /**
      * Gets the eCheck account type for the order payment.
      *
-     * @return string eCheck account type.
+     * @return string|null eCheck account type.
      */
     public function getEcheckAccountType();
 
     /**
      * Gets the eCheck bank name for the order payment.
      *
-     * @return string eCheck bank name.
+     * @return string|null eCheck bank name.
      */
     public function getEcheckBankName();
 
     /**
      * Gets the eCheck routing number for the order payment.
      *
-     * @return string eCheck routing number.
+     * @return string|null eCheck routing number.
      */
     public function getEcheckRoutingNumber();
 
     /**
      * Gets the eCheck type for the order payment.
      *
-     * @return string eCheck type.
+     * @return string|null eCheck type.
      */
     public function getEcheckType();
 
     /**
      * Gets the entity ID for the order payment.
      *
-     * @return int Entity ID.
+     * @return int|null Entity ID.
      */
     public function getEntityId();
 
     /**
      * Sets entity ID.
      *
-     * @param int $entityId
+     * @param int|null $entityId
      * @return $this
      */
     public function setEntityId($entityId);
@@ -560,7 +560,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the last transaction ID for the order payment.
      *
-     * @return string Last transaction ID.
+     * @return string|null Last transaction ID.
      */
     public function getLastTransId();
 
@@ -574,56 +574,56 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Gets the parent ID for the order payment.
      *
-     * @return int Parent ID.
+     * @return int|null Parent ID.
      */
     public function getParentId();
 
     /**
      * Gets the PO number for the order payment.
      *
-     * @return string PO number.
+     * @return string|null PO number.
      */
     public function getPoNumber();
 
     /**
      * Gets the protection eligibility for the order payment.
      *
-     * @return string Protection eligibility.
+     * @return string|null Protection eligibility.
      */
     public function getProtectionEligibility();
 
     /**
      * Gets the quote payment ID for the order payment.
      *
-     * @return int Quote payment ID.
+     * @return int|null Quote payment ID.
      */
     public function getQuotePaymentId();
 
     /**
      * Gets the shipping amount for the order payment.
      *
-     * @return float Shipping amount.
+     * @return float|null Shipping amount.
      */
     public function getShippingAmount();
 
     /**
      * Gets the shipping captured for the order payment.
      *
-     * @return float Shipping captured.
+     * @return float|null Shipping captured.
      */
     public function getShippingCaptured();
 
     /**
      * Gets the shipping refunded for the order payment.
      *
-     * @return float Shipping refunded.
+     * @return float|null Shipping refunded.
      */
     public function getShippingRefunded();
 
     /**
      * Sets the parent ID for the order payment.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setParentId($id);
@@ -631,7 +631,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base shipping captured for the order payment.
      *
-     * @param float $baseShippingCaptured
+     * @param float|null $baseShippingCaptured
      * @return $this
      */
     public function setBaseShippingCaptured($baseShippingCaptured);
@@ -639,7 +639,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the shipping captured for the order payment.
      *
-     * @param float $shippingCaptured
+     * @param float|null $shippingCaptured
      * @return $this
      */
     public function setShippingCaptured($shippingCaptured);
@@ -647,7 +647,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the amount refunded for the order payment.
      *
-     * @param float $amountRefunded
+     * @param float|null $amountRefunded
      * @return $this
      */
     public function setAmountRefunded($amountRefunded);
@@ -655,7 +655,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base amount paid for the order payment.
      *
-     * @param float $baseAmountPaid
+     * @param float|null $baseAmountPaid
      * @return $this
      */
     public function setBaseAmountPaid($baseAmountPaid);
@@ -663,7 +663,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the amount canceled for the order payment.
      *
-     * @param float $amountCanceled
+     * @param float|null $amountCanceled
      * @return $this
      */
     public function setAmountCanceled($amountCanceled);
@@ -671,7 +671,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base amount authorized for the order payment.
      *
-     * @param float $baseAmountAuthorized
+     * @param float|null $baseAmountAuthorized
      * @return $this
      */
     public function setBaseAmountAuthorized($baseAmountAuthorized);
@@ -679,7 +679,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base amount paid online for the order payment.
      *
-     * @param float $baseAmountPaidOnline
+     * @param float|null $baseAmountPaidOnline
      * @return $this
      */
     public function setBaseAmountPaidOnline($baseAmountPaidOnline);
@@ -687,7 +687,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base amount refunded online for the order payment.
      *
-     * @param float $baseAmountRefundedOnline
+     * @param float|null $baseAmountRefundedOnline
      * @return $this
      */
     public function setBaseAmountRefundedOnline($baseAmountRefundedOnline);
@@ -695,7 +695,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base shipping amount for the order payment.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setBaseShippingAmount($amount);
@@ -703,7 +703,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the shipping amount for the order payment.
      *
-     * @param float $amount
+     * @param float|null $amount
      * @return $this
      */
     public function setShippingAmount($amount);
@@ -711,7 +711,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the amount paid for the order payment.
      *
-     * @param float $amountPaid
+     * @param float|null $amountPaid
      * @return $this
      */
     public function setAmountPaid($amountPaid);
@@ -719,7 +719,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the amount authorized for the order payment.
      *
-     * @param float $amountAuthorized
+     * @param float|null $amountAuthorized
      * @return $this
      */
     public function setAmountAuthorized($amountAuthorized);
@@ -727,7 +727,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base amount ordered for the order payment.
      *
-     * @param float $baseAmountOrdered
+     * @param float|null $baseAmountOrdered
      * @return $this
      */
     public function setBaseAmountOrdered($baseAmountOrdered);
@@ -735,7 +735,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base shipping refunded amount for the order payment.
      *
-     * @param float $baseShippingRefunded
+     * @param float|null $baseShippingRefunded
      * @return $this
      */
     public function setBaseShippingRefunded($baseShippingRefunded);
@@ -743,7 +743,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the shipping refunded for the order payment.
      *
-     * @param float $shippingRefunded
+     * @param float|null $shippingRefunded
      * @return $this
      */
     public function setShippingRefunded($shippingRefunded);
@@ -751,7 +751,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base amount refunded for the order payment.
      *
-     * @param float $baseAmountRefunded
+     * @param float|null $baseAmountRefunded
      * @return $this
      */
     public function setBaseAmountRefunded($baseAmountRefunded);
@@ -759,7 +759,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the amount ordered for the order payment.
      *
-     * @param float $amountOrdered
+     * @param float|null $amountOrdered
      * @return $this
      */
     public function setAmountOrdered($amountOrdered);
@@ -767,7 +767,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the base amount canceled for the order payment.
      *
-     * @param float $baseAmountCanceled
+     * @param float|null $baseAmountCanceled
      * @return $this
      */
     public function setBaseAmountCanceled($baseAmountCanceled);
@@ -775,7 +775,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the quote payment ID for the order payment.
      *
-     * @param int $id
+     * @param int|null $id
      * @return $this
      */
     public function setQuotePaymentId($id);
@@ -783,7 +783,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the additional data for the order payment.
      *
-     * @param string $additionalData
+     * @param string|null $additionalData
      * @return $this
      */
     public function setAdditionalData($additionalData);
@@ -791,7 +791,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card expiration month for the order payment.
      *
-     * @param string $ccExpMonth
+     * @param string|null $ccExpMonth
      * @return $this
      */
     public function setCcExpMonth($ccExpMonth);
@@ -799,7 +799,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card SS start year for the order payment.
      *
-     * @param string $ccSsStartYear
+     * @param string|null $ccSsStartYear
      * @return $this
      */
     public function setCcSsStartYear($ccSsStartYear);
@@ -807,7 +807,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the eCheck bank name for the order payment.
      *
-     * @param string $echeckBankName
+     * @param string|null $echeckBankName
      * @return $this
      */
     public function setEcheckBankName($echeckBankName);
@@ -823,7 +823,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card debug request body for the order payment.
      *
-     * @param string $ccDebugRequestBody
+     * @param string|null $ccDebugRequestBody
      * @return $this
      */
     public function setCcDebugRequestBody($ccDebugRequestBody);
@@ -831,7 +831,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card secure verify for the order payment.
      *
-     * @param string $ccSecureVerify
+     * @param string|null $ccSecureVerify
      * @return $this
      */
     public function setCcSecureVerify($ccSecureVerify);
@@ -839,7 +839,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the protection eligibility for the order payment.
      *
-     * @param string $protectionEligibility
+     * @param string|null $protectionEligibility
      * @return $this
      */
     public function setProtectionEligibility($protectionEligibility);
@@ -847,7 +847,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card approval for the order payment.
      *
-     * @param string $ccApproval
+     * @param string|null $ccApproval
      * @return $this
      */
     public function setCcApproval($ccApproval);
@@ -863,7 +863,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card status description for the order payment.
      *
-     * @param string $description
+     * @param string|null $description
      * @return $this
      */
     public function setCcStatusDescription($description);
@@ -871,7 +871,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the eCheck type for the order payment.
      *
-     * @param string $echeckType
+     * @param string|null $echeckType
      * @return $this
      */
     public function setEcheckType($echeckType);
@@ -879,7 +879,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card debug response serialized for the order payment.
      *
-     * @param string $ccDebugResponseSerialized
+     * @param string|null $ccDebugResponseSerialized
      * @return $this
      */
     public function setCcDebugResponseSerialized($ccDebugResponseSerialized);
@@ -887,7 +887,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card SS start month for the order payment.
      *
-     * @param string $ccSsStartMonth
+     * @param string|null $ccSsStartMonth
      * @return $this
      */
     public function setCcSsStartMonth($ccSsStartMonth);
@@ -895,7 +895,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the eCheck account type for the order payment.
      *
-     * @param string $echeckAccountType
+     * @param string|null $echeckAccountType
      * @return $this
      */
     public function setEcheckAccountType($echeckAccountType);
@@ -903,7 +903,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the last transaction ID for the order payment.
      *
-     * @param string $id
+     * @param string|null $id
      * @return $this
      */
     public function setLastTransId($id);
@@ -911,7 +911,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card cid status for the order payment.
      *
-     * @param string $ccCidStatus
+     * @param string|null $ccCidStatus
      * @return $this
      */
     public function setCcCidStatus($ccCidStatus);
@@ -919,7 +919,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card owner for the order payment.
      *
-     * @param string $ccOwner
+     * @param string|null $ccOwner
      * @return $this
      */
     public function setCcOwner($ccOwner);
@@ -927,7 +927,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card type for the order payment.
      *
-     * @param string $ccType
+     * @param string|null $ccType
      * @return $this
      */
     public function setCcType($ccType);
@@ -935,7 +935,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the PO number for the order payment.
      *
-     * @param string $poNumber
+     * @param string|null $poNumber
      * @return $this
      */
     public function setPoNumber($poNumber);
@@ -943,7 +943,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card expiration year for the order payment.
      *
-     * @param string $ccExpYear
+     * @param string|null $ccExpYear
      * @return $this
      */
     public function setCcExpYear($ccExpYear);
@@ -951,7 +951,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card status for the order payment.
      *
-     * @param string $ccStatus
+     * @param string|null $ccStatus
      * @return $this
      */
     public function setCcStatus($ccStatus);
@@ -959,7 +959,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the eCheck routing number for the order payment.
      *
-     * @param string $echeckRoutingNumber
+     * @param string|null $echeckRoutingNumber
      * @return $this
      */
     public function setEcheckRoutingNumber($echeckRoutingNumber);
@@ -975,7 +975,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the anet transaction method for the order payment.
      *
-     * @param string $anetTransMethod
+     * @param string|null $anetTransMethod
      * @return $this
      */
     public function setAnetTransMethod($anetTransMethod);
@@ -983,7 +983,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card debug response body for the order payment.
      *
-     * @param string $ccDebugResponseBody
+     * @param string|null $ccDebugResponseBody
      * @return $this
      */
     public function setCcDebugResponseBody($ccDebugResponseBody);
@@ -991,7 +991,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card SS issue for the order payment.
      *
-     * @param string $ccSsIssue
+     * @param string|null $ccSsIssue
      * @return $this
      */
     public function setCcSsIssue($ccSsIssue);
@@ -999,7 +999,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the eCheck account name for the order payment.
      *
-     * @param string $echeckAccountName
+     * @param string|null $echeckAccountName
      * @return $this
      */
     public function setEcheckAccountName($echeckAccountName);
@@ -1007,7 +1007,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card avs status for the order payment.
      *
-     * @param string $ccAvsStatus
+     * @param string|null $ccAvsStatus
      * @return $this
      */
     public function setCcAvsStatus($ccAvsStatus);
@@ -1015,7 +1015,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the encrypted credit card number for the order payment.
      *
-     * @param string $ccNumberEnc
+     * @param string|null $ccNumberEnc
      * @return $this
      */
     public function setCcNumberEnc($ccNumberEnc);
@@ -1023,7 +1023,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the credit card transaction id for the order payment.
      *
-     * @param string $id
+     * @param string|null $id
      * @return $this
      */
     public function setCcTransId($id);
@@ -1031,7 +1031,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the address status for the order payment.
      *
-     * @param string $addressStatus
+     * @param string|null $addressStatus
      * @return $this
      */
     public function setAddressStatus($addressStatus);
