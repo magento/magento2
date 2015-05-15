@@ -60,7 +60,6 @@ class Status extends EntityAbstract
             $sequenceManager,
             $entitySnapshot,
             $resourcePrefix,
-            $resourcePrefix,
             $gridAggregator);
     }
 

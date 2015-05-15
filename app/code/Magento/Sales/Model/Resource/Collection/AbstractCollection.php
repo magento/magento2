@@ -38,7 +38,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
         $connection = null,
-        \Magento\Sales\Model\Resource\EntityAbstract $resource = null
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->entitySnapshot = $entitySnapshot;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
