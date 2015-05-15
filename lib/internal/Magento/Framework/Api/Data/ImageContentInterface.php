@@ -6,14 +6,12 @@
 
 namespace Magento\Framework\Api\Data;
 
-use Magento\Framework\Api\AbstractSimpleObjectInterface;
-
 /**
  * Image Content data interface
  *
  * @api
  */
-interface ImageContentInterface extends AbstractSimpleObjectInterface
+interface ImageContentInterface
 {
     const BASE64_ENCODED_DATA = 'base64_encoded_data';
     const TYPE = 'type';

@@ -2529,9 +2529,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             return null;
         } else {
             return [
-                ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
-                ImageContentInterface::TYPE => $content->getType(),
-                ImageContentInterface::NAME => $content->getName(),
+                'data' => [
+                    ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
+                    ImageContentInterface::TYPE => $content->getType(),
+                    ImageContentInterface::NAME => $content->getName(),
+                ],
             ];
         }
     }
