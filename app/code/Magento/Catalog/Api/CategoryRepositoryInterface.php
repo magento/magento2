@@ -18,7 +18,6 @@ interface CategoryRepositoryInterface
      * @param \Magento\Catalog\Api\Data\CategoryInterface $category
      * @return \Magento\Catalog\Api\Data\CategoryInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @api
      */
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category);
 
