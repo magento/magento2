@@ -193,7 +193,9 @@ class OrdersFixture extends Fixture
             $country = 'US';
             $zip = '11111';
             $phone = '911';
-            $time = date("Y-m-d h:i:s");
+            $dateStart = new \DateTime();
+            $dateStart->setTimezone(new \DateTimeZone('Etc/UTC'));
+            $time = $dateStart->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
 
             $simpleProductIdLen[0] = strlen($simpleProductId[0]($entityId));
             $simpleProductIdLen[1] = strlen($simpleProductId[1]($entityId));
