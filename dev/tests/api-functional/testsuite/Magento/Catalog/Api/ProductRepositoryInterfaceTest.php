@@ -326,7 +326,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'content' => [
                     'type' => 'image/jpeg',
                     'name' => $filename1,
-                    'entry_data' => $encodedImage,
+                    'base64_encoded_data' => $encodedImage,
                 ]
             ],
             [
@@ -337,7 +337,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'content' => [
                     'type' => 'image/jpeg',
                     'name' => $filename2,
-                    'entry_data' => $encodedImage,
+                    'base64_encoded_data' => $encodedImage,
                 ]
             ],
         ];
