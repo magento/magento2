@@ -140,7 +140,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     {
         $productSku = 'mediaProduct';
         $entryContentMock = $this->getMock(
-            '\Magento\Framework\Api\Data\ImageContentInterfaceFactory'
+            'Magento\Framework\Api\Data\ImageContentInterface'
         );
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 
