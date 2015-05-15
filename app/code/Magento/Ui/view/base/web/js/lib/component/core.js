@@ -15,7 +15,7 @@ define([
         defaults: {
             template: 'ui/collection',
             parentName: '${ $.$data.getPart( $.name, -2) }',
-            parentScope:'${ $.$data.getPart( $.dataScope, -2) }',
+            parentScope: '${ $.$data.getPart( $.dataScope, -2) }',
             containers: [],
             _elems: [],
             elems: [],
@@ -27,6 +27,11 @@ define([
             }
         },
 
+        /**
+         * Initializes component.
+         *
+         * @returns {Component} Chainable.
+         */
         initialize: function () {
             _.bindAll(this, '_insert', 'trigger');
 
@@ -67,7 +72,7 @@ define([
         },
 
         /**
-         * Creates wrapper on a specified storage component.
+         * Creates async wrapper on a specified storage component.
          *
          * @returns {Component} Chainable.
          */
@@ -77,6 +82,11 @@ define([
             return this;
         },
 
+        /**
+         * Initializes links between properties.
+         *
+         * @returns {Component} Chainbale.
+         */
         initLinks: function () {
             this.setLinks(this.links, 'imports')
                 .setLinks(this.links, 'exports');
@@ -89,6 +99,12 @@ define([
             return this;
         },
 
+        /**
+         * Parses 'modules' object and creates
+         * async wrappers on specified components.
+         *
+         * @returns {Component} Chainable.
+         */
         initModules: function () {
             var modules = this.modules || {};
 

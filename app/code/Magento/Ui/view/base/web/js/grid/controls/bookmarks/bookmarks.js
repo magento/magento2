@@ -182,9 +182,11 @@ define([
                 this.defaultView.active(true);
             }
 
-            view.destroy();
+            if (!view.isNew) {
+                this.removeStored('views.' + view.index);
+            }
 
-            this.removeStored('views.' + view.index);
+            view.destroy();
 
             return this;
         },
@@ -202,13 +204,13 @@ define([
                 this.hasChanges(false);
             }
 
+            this.store('views.' + view.index, view.exportView());
+
             if (view.isNew) {
                 view.isNew = false;
 
                 view.active(true);
             }
-
-            this.store('views.' + view.index, view.exportView());
 
             return this;
         },
@@ -286,15 +288,12 @@ define([
          */
         _defaultPolyfill: function () {
             var view = this.defaultView,
-                data;
+                data = view.data;
 
-            if (!view.restored) {
-                view.data.items = utils.copy(this.current);
+            if (!_.size(data.items)) {
+                data.items = utils.copy(this.current);
 
-                data = view.exportView();
-                data.restored = true;
-
-                this.store('views.' + view.index, data);
+                this.store('views.' + view.index, view.exportView());
             }
 
             this.defaultDefined = true;
