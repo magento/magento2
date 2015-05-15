@@ -11,7 +11,7 @@ use \Magento\Sales\Model\Order\Payment;
 /**
  * Class PaymentTest
  *
- * @package Magento\Sales\Model\Order
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
@@ -80,6 +80,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected $creditMemoMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\Manager')
@@ -1130,6 +1133,9 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->payment, $this->payment->registerRefundNotification($amount));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testRegisterRefundNotification()
     {
         $message = 'Registered notification about refunded amount of . Transaction ID: "100-refund"';
