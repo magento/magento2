@@ -174,7 +174,7 @@ class Collection extends \Magento\Framework\Data\Collection
                 \IntlDateFormatter::SHORT,
                 \IntlDateFormatter::NONE
             ),
-            'start' => $dateStart->format('Y-m-d H:i:s'),
+            'start' => $dateStart->format('Y-m-d 00:00:00'),
             'end' => $dateStart->format('Y-m-d 23:59:59'),
         ];
         return $interval;
