@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\SalesSequence\Model\Manager;
 use \Magento\Sales\Model\Resource\EntityAbstract;
 use \Magento\Sales\Model\Resource\EntitySnapshot;
+
 /**
  * Order status resource model
  *
@@ -62,7 +63,8 @@ class Status extends EntityAbstract
             $sequenceManager,
             $entitySnapshot,
             $resourcePrefix,
-            $gridAggregator);
+            $gridAggregator
+        );
     }
 
     /**

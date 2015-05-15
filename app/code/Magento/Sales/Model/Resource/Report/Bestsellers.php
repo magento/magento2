@@ -135,7 +135,9 @@ class Bestsellers extends AbstractReport
                 'store_id' => 'source_table.store_id',
                 'product_id' => 'order_item.product_id',
                 'product_name' => new \Zend_Db_Expr('MIN(order_item.name)'),
-                'product_price' => new \Zend_Db_Expr('MIN(order_item.base_price) * MIN(source_table.base_to_global_rate)'),
+                'product_price' => new \Zend_Db_Expr(
+                    'MIN(order_item.base_price) * MIN(source_table.base_to_global_rate)'
+                ),
                 'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
             ];
 
@@ -150,7 +152,8 @@ class Bestsellers extends AbstractReport
                 'source_table.state != ?',
                 \Magento\Sales\Model\Order::STATE_CANCELED
             )->where(
-                'order_item.product_type NOT IN(?)', $this->ignoredProductTypes
+                'order_item.product_type NOT IN(?)',
+                $this->ignoredProductTypes
             );
 
             if ($subSelect !== null) {
