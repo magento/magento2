@@ -36,22 +36,6 @@ define(
                 return quote.isVirtual() || quote.getShippingMethod();
             },
             setPaymentMethod: function() {
-                var self = this,
-                    isPaymentSelected = false,
-                    availableCodes = this.getAvailableCodes();
-
-                _.each(this.getRegion('paymentMethods')(), function(elem) {
-                    if (elem.isEnabled() && _.contains(availableCodes, elem.getCode())) {
-                        isPaymentSelected = true;
-                    }
-                });
-
-                _.each(this.getAdditionalMethods(), function(elem) {
-                    if (elem.isActive() && !isPaymentSelected) {
-                        self.activeMethod('free');
-                    }
-                });
-
                 if (!this.activeMethod()) {
                     alert($t('Please specify payment method.'));
                     return;
@@ -107,9 +91,6 @@ define(
 
                 return callbacks;
             },
-            getFreeMethodView: function() {
-                return this.getRegion('freeMethod')()[0];
-            },
             getAvailableViews: function () {
                 var sortedElems = [],
                     self = this;
@@ -128,7 +109,7 @@ define(
                 return sortedElems;
             },
             getAvailableMethods: function() {
-                return paymentService.getAvailablePaymentMethods()();
+                return paymentService.getAvailablePaymentMethods();
             },
             getAvailableCodes: function() {
                 return _.pluck(this.getAvailableMethods(), 'code');
@@ -139,13 +120,7 @@ define(
                 });
             },
             getActiveMethodView: function() {
-                var methodView;
-                if (this.activeMethod() == 'free') {
-                    methodView = this.getFreeMethodView();
-                } else {
-                    methodView = this.getMethodViewByCode(this.activeMethod());
-                }
-                return methodView;
+                return this.getMethodViewByCode(this.activeMethod());
             },
             backToShippingMethod: function() {
                 navigator.setCurrent(stepName).goBack();

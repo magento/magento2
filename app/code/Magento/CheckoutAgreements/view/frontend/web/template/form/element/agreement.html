@@ -9,7 +9,7 @@
     <form class="field choice agree required" id="checkout-agreements">
         <input type="checkbox" class="control-checkbox" data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
         <label class="field-label" data-bind="checked: value, attr: { for: uid }">
-            <span data-bind="text: agreementConfiguration.checkboxText"></span>
+            <span data-bind="html: agreementConfiguration.checkboxText"></span>
         </label>
     </form>
     <!-- ko if: error() -->

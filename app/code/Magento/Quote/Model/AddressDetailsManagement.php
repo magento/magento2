@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Quote\Model\AddressAdditionalDataProcessor;
 
 class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManagementInterface
@@ -45,6 +46,11 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
     protected $quoteRepository;
 
     /**
+     * @var CartTotalRepositoryInterface
+     */
+    protected $cartTotalsRepository;
+
+    /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\ShippingAddressManagementInterface $shippingAddressManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
@@ -52,6 +58,7 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
      * @param AddressDetailsFactory $addressDetailsFactory
      * @param AddressAdditionalDataProcessor $dataProcessor
      * @param QuoteRepository $quoteRepository
+     * @param CartTotalRepositoryInterface $cartTotalsRepository
      */
     public function __construct(
         \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement,
@@ -60,7 +67,8 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManagement,
         \Magento\Quote\Model\AddressDetailsFactory $addressDetailsFactory,
         AddressAdditionalDataProcessor $dataProcessor,
-        QuoteRepository $quoteRepository
+        QuoteRepository $quoteRepository,
+        CartTotalRepositoryInterface $cartTotalsRepository
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->shippingAddressManagement = $shippingAddressManagement;
@@ -69,6 +77,7 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         $this->addressDetailsFactory = $addressDetailsFactory;
         $this->dataProcessor = $dataProcessor;
         $this->quoteRepository = $quoteRepository;
+        $this->cartTotalsRepository = $cartTotalsRepository;
     }
 
     /**
@@ -106,10 +115,8 @@ class AddressDetailsManagement implements \Magento\Quote\Api\AddressDetailsManag
         $addressDetails->setFormattedBillingAddress(
             $this->billingAddressManagement->get($cartId)->format('html')
         );
-        $addressDetails->setSubtotal(
-            $this->quoteRepository->getActive($cartId)
-                ->getSubtotal()
-        );
+
+        $addressDetails->setTotals($this->cartTotalsRepository->get($cartId));
         return $addressDetails;
     }
 }

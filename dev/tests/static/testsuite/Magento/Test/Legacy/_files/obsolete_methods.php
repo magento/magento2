@@ -2164,4 +2164,5 @@ return [
     ['prepareForProductsInCarts', 'Magento\Reports\Model\Resource\Quote\Collection'],
     ['getOrdersSubSelect', 'Magento\Reports\Model\Resource\Quote\Collection'],
     ['isOrderIncrementIdUsed', 'Magento\Quote\Model\Resource\Quote'],
+    ['assignData', 'Magento\OfflinePayments\Model\Checkmo'],
 ];

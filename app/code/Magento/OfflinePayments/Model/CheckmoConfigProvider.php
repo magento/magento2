@@ -43,14 +43,14 @@ class CheckmoConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
-        return [
+        return $this->method->isAvailable() ? [
             'payment' => [
                 'checkmo' => [
                     'mailingAddress' => $this->getMailingAddress(),
                     'payableTo' => $this->getPayableTo(),
                 ],
             ],
-        ];
+        ] : [];
     }
 
     /**

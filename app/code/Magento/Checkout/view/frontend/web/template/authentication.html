@@ -18,12 +18,11 @@
     </div>
     <div id="checkout-step-authentication" class="step-content" data-role="content" data-bind="fadeVisible: isVisible()" >
         <div class="login-wrapper">
+            <!-- ko if: (isGuestCheckoutAllowed) -->
             <div class="block block-guest">
                 <div class="block-title">
                     <strong id="block-guest-heading" role="heading" aria-level="2">
-                    <!-- ko if: (isGuestCheckoutAllowed) -->
                     <!--ko text: $t('Checkout as a Guest')--><!--/ko-->
-                    <!-- /ko -->
                     </strong>
                 </div>
                 <div class="block-content" aria-labelledby="block-guest-heading">
@@ -46,6 +45,7 @@
                     </div>
                 </div>
             </div>
+            <!-- /ko -->
             <div class="block block-customer-login">
                 <div class="block-title">
                     <strong id="block-customer-login-heading" role="heading" aria-level="2" data-bind="text: $t('Login')"></strong>

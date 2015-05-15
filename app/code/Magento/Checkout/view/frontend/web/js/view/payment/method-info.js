@@ -22,7 +22,7 @@ define(
                 return this;
             },
             getMethod: function() {
-                var paymentMethods = _.indexBy(paymentService.getAvailablePaymentMethods()(), 'code');
+                var paymentMethods = _.indexBy(paymentService.getAvailablePaymentMethods(), 'code');
 
                 return paymentMethods[this.getCode()];
             },

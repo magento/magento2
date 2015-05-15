@@ -16,6 +16,7 @@ define(
         return function (code, customOptions) {
             if (!code) {
                 alert($t('Please specify a shipping method'));
+                return;
             }
 
             var shippingMethodCode = code.split("_"),

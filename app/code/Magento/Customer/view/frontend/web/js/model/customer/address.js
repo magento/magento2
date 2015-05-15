@@ -7,7 +7,7 @@
 define([], function() {
     return function (addressData) {
         return {
-            id: addressData.id,
+            customerAddressId: addressData.id,
             email: addressData.email,
             countryId: addressData.country_id,
             regionId: addressData.region.region_id,
@@ -26,7 +26,6 @@ define([], function() {
             prefix: addressData.prefix,
             suffix: addressData.suffix,
             vatId: addressData.vat_id,
-            customerAddressId: addressData.id,
             sameAsBilling: null,
             getAddressInline: function() {
                 return addressData.inline;

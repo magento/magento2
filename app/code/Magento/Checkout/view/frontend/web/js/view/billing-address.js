@@ -36,7 +36,7 @@ define(
             },
             stepNumber: navigator.getStepNumber(stepName),
             billingAddresses: customer.getBillingAddressList(),
-            selectedBillingAddressId: addressList.getAddresses()[0].id,
+            selectedBillingAddressId: addressList.getAddresses()[0].customerAddressId,
             isVisible: navigator.isStepVisible(stepName),
             useForShipping: "1",
             quoteIsVirtual: quote.isVirtual(),
@@ -44,11 +44,21 @@ define(
             billingAddressesOptionsText: function(item) {
                 return item.getAddressInline();
             },
+            checkUseForShipping: function(useForShipping) {
+                var additionalData = {};
+                if (useForShipping() instanceof Object) {
+                    additionalData = useForShipping().getAdditionalData();
+                    useForShipping('1');
+                }
+                return additionalData;
+            },
             submitBillingAddress: function() {
                 if (this.selectedBillingAddressId) {
+                    var additionalData = this.checkUseForShipping(this.useForShipping);
                     selectBillingAddress(
                         addressList.getAddressById(this.selectedBillingAddressId),
-                        this.useForShipping
+                        this.useForShipping,
+                        additionalData
                     );
                 } else {
                     var that = this;
@@ -56,11 +66,7 @@ define(
                     $.when(this.isEmailCheckComplete).done( function() {
                         if (!that.source.get('params.invalid')) {
                             var addressData = that.source.get('billingAddress');
-                            var additionalData = {};
-                            if (that.useForShipping() instanceof Object) {
-                                additionalData = that.useForShipping().getAdditionalData();
-                                that.useForShipping('1');
-                            }
+                            var additionalData = that.checkUseForShipping(that.useForShipping);
                             /**
                              * All the the input fields that are not a part of the address but need to be submitted
                              * in the same request must have data-scope attribute set

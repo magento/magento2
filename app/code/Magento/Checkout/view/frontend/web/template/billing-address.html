@@ -31,17 +31,6 @@
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
-                <!-- ko if: (isCustomerLoggedIn && customerAddressCount)-->
-                <div class="field save choice">
-                    <input id="billing:save_in_address_book" class="checkbox" type="checkbox" title="Save in address book" value="1" name="billing[save_in_address_book]">
-                    <label class="label" for="billing:save_in_address_book">
-                        <span data-bind="text: $t('Save in address book')"></span>
-                    </label>
-                </div>
-                <!-- /ko -->
-                <!-- ko ifnot: (isCustomerLoggedIn && customerAddressCount)-->
-                <input  style="display: none" name="billing[save_in_address_book]" value="1" type="checkbox" checked="checked" />
-                <!-- /ko -->
             </fieldset>
             <!-- ko if: quoteIsVirtual == 0 -->
             <div class="field choice">

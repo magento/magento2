@@ -132,9 +132,9 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             ->with('cart867')
             ->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
-        $quoteMock->expects($this->once())->method('setShippingAddress');
+        $quoteMock->expects($this->never())->method('setShippingAddress');
 
-        $this->quoteAddressMock->expects($this->once())->method('getCustomerAddressId');
+        $this->quoteAddressMock->expects($this->never())->method('getCustomerAddressId');
         $this->quoteAddressMock->expects($this->never())->method('setSaveInAddressBook');
 
         $quoteMock->expects($this->never())->method('save');
