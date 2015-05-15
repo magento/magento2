@@ -9,6 +9,7 @@ use Magento\Framework\Setup\Lists;
 use Magento\Setup\Model\SampleData;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class CustomizeYourStore extends AbstractActionController
 {
@@ -45,5 +46,20 @@ class CustomizeYourStore extends AbstractActionController
         ]);
         $view->setTerminal(true);
         return $view;
+    }
+
+    /**
+     * Getting default time zone from server settings
+     *
+     * @return JsonModel
+     */
+    public function defaultTimeZoneAction()
+    {
+        $defaultTimeZone = trim(@date_default_timezone_get());
+        if (empty($defaultTimeZone)) {
+            return new JsonModel(['defaultTimeZone' => 'UTC']);
+        } else {
+            return new JsonModel(['defaultTimeZone' => $defaultTimeZone]);
+        }
     }
 }
