@@ -45,13 +45,6 @@ class CustomerForm extends FormTabs
     protected $fieldWrapperControl = './/*[contains(@class, "admin__field")]/*[contains(@class,"control")]';
 
     /**
-     * Selector for wainting tab content to load.
-     *
-     * @var string
-     */
-    protected $tabReadiness = 'div:not([style="display: none;"])>.admin__fieldset-wrapper.opened > [class*=content]';
-
-    /**
      * Fill Customer forms on tabs by customer, addresses data.
      *
      * @param FixtureInterface $customer
@@ -143,19 +136,5 @@ class CustomerForm extends FormTabs
         $this->waitForElementVisible($this->fieldLabel, Locator::SELECTOR_XPATH);
         /* Wait for field's control block is visible in the form */
         $this->waitForElementVisible($this->fieldWrapperControl, Locator::SELECTOR_XPATH);
-    }
-
-    /**
-     * Open tab.
-     *
-     * @param string $tabName
-     * @return CustomerForm
-     */
-    public function openTab($tabName)
-    {
-        parent::openTab($tabName);
-        $this->waitForElementVisible($this->tabReadiness);
-
-        return $this;
     }
 }
