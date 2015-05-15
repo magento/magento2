@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface ShippingMethodInterface
+ * @api
+ */
 interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
