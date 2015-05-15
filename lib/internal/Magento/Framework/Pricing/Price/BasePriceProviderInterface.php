@@ -8,6 +8,8 @@ namespace Magento\Framework\Pricing\Price;
 
 /**
  * Interface BasePriceProviderInterface
+ *
+ * @api
  */
 interface BasePriceProviderInterface
 {

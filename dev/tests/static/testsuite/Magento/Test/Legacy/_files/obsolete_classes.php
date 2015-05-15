@@ -2875,7 +2875,7 @@ return [
     ['Magento\Tax\Service\V1\Data\TaxDetails\AppliedTaxRate', 'Magento\Tax\Api\Data\AppliedTaxRateInterface'],
     ['Magento\Tax\Service\V1\Data\TaxDetails\Item', 'Magento\Tax\Api\Data\TaxDetailsItemInterface'],
     ['Magento\Tax\Service\V1\OrderTaxServiceInterface', 'Magento\Tax\Api\OrderTaxManagementInterface'],
-    ['Magento\Tools\I18n\Code', 'Magento\Setup\Module\I18n'],
+    ['Magento\Tools\I18n\Code', 'Magento\Tools\I18n'],
     ['Magento\TestFramework\Utility\AggregateInvoker', 'Magento\Framework\App\Utility\AggregateInvoker'],
     ['Magento\TestFramework\Utility\Classes', 'Magento\Framework\App\Utility\Classes'],
     ['Magento\TestFramework\Utility\Files', 'Magento\Framework\App\Utility\Files'],
@@ -3336,5 +3336,25 @@ return [
     ['Magento\Log\Model\LogFactory\Clean'],
     ['Magento\Log\Model\Shell\CommandInterface'],
     ['Magento\Framework\App\Filesystem\DirectoryList\AbstractShell'],
+    [
+        'Magento\Integration\Service\V1\AdminTokenServiceInterface',
+        'Magento\Integration\Api\AdminTokenServiceInterface'
+    ],
+    [
+        'Magento\Integration\Service\V1\AuthorizationServiceInterface',
+        'Magento\Integration\Api\AuthorizationServiceInterface'
+    ],
+    [
+        'Magento\Integration\Service\V1\CustomerTokenServiceInterface',
+        'Magento\Integration\Api\CustomerTokenServiceInterface'
+    ],
+    ['Magento\Integration\Service\V1\IntegrationInterface', 'Magento\Integration\Api\IntegrationServiceInterface'],
+    ['Magento\Integration\Service\V1\OauthInterface', 'Magento\Integration\Api\OauthServiceInterface'],
+    ['Magento\Integration\Service\V1\AdminTokenService', 'Magento\Integration\Model\AdminTokenService'],
+    ['Magento\Integration\Service\V1\AuthorizationService', 'Magento\Integration\Model\AuthorizationService'],
+    ['Magento\Integration\Service\V1\CustomerTokenService', 'Magento\Integration\Model\CustomerTokenService'],
+    ['Magento\Integration\Service\V1\Integration', 'Magento\Integration\Model\IntegrationService'],
+    ['Magento\Integration\Service\V1\Oauth', 'Magento\Integration\Model\OauthService'],
+    ['Magento\Integration\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Integration'],
     ['Magento\Catalog\Model\Product\Gallery\ContentValidator', 'Magento\Framework\Api\ImageContentValidator'],
 ];
