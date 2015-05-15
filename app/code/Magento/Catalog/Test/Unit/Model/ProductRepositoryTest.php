@@ -118,6 +118,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $linkTypeProviderMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\ImageProcessorInterface
+     */
+    protected $imageProcessorMock;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
@@ -205,6 +210,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $optionConverter = $this->objectManager->getObject('Magento\Catalog\Model\Product\Option\Converter');
         $this->linkTypeProviderMock = $this->getMock('Magento\Catalog\Model\Product\LinkTypeProvider',
             ['getLinkTypes'], [], '', false);
+        $this->imageProcessorMock = $this->getMock('Magento\Framework\Api\ImageProcessorInterface', [], [], '', false);
+
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
             [
@@ -223,7 +230,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'fileSystem' => $this->fileSystemMock,
                 'contentFactory' => $this->contentFactoryMock,
                 'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
-                'linkTypeProvider' => $this->linkTypeProviderMock
+                'linkTypeProvider' => $this->linkTypeProviderMock,
+                'imageProcessor' => $this->imageProcessorMock
             ]
         );
     }
@@ -1025,18 +1033,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $mediaConfigMock->expects($this->once())
             ->method('getBaseTmpMediaPath')
             ->willReturn($mediaTmpPath);
-        $directoryWriteMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
-            ->getMockForAbstractClass();
-        $this->fileSystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->willReturn($directoryWriteMock);
-        $directoryWriteMock->expects($this->once())->method('create')->with($mediaTmpPath);
-        $this->mimeTypeExtensionMapMock->expects($this->once())->method('getMimeTypeExtension')
-            ->with('image/jpeg')
-            ->willReturn("jpg");
-        $directoryWriteMock->expects($this->once())->method('writeFile')
-            ->with($relativePath, false); //decoded value is false as it contains '_'
-        $directoryWriteMock->expects($this->once())->method('getAbsolutePath')->willReturn($absolutePath);
         $this->initializedProductMock->expects($this->any())
             ->method('getGalleryAttributeBackend')
             ->willReturn($galleryAttributeBackendMock);
@@ -1053,9 +1049,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($contentDataObject);
 
-        $this->contentValidatorMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
+        $this->imageProcessorMock->expects($this->once())
+            ->method('processImageContent')
+            ->willReturn($absolutePath);
 
         $imageFileUri = "imageFileUri";
         $galleryAttributeBackendMock->expects($this->once())->method('addImage')
