@@ -184,7 +184,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
      */
-    public function atestCreateCustomerWithImageAttribute()
+    public function testCreateCustomerWithImageAttribute()
     {
         $customerData = $this->createCustomerWithDefaultImageAttribute();
         $this->currentCustomerId[] = $customerData['id'];
@@ -194,7 +194,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
      */
-    public function atestCreateCustomerWithInvalidImageAttribute()
+    public function testCreateCustomerWithInvalidImageAttribute()
     {
         $image = $this->imageFactory->create()
             ->setType('image/jpeg')
