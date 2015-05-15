@@ -7,7 +7,7 @@ namespace Magento\Customer\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class blockTest extends \PHPUnit_Framework_TestCase
+class BlockTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Customer\Block\block */
     protected $block;

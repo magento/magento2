@@ -50,15 +50,13 @@ class LastOrderedItems implements SectionSourceInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param array $data
      */
     public function __construct(
         \Magento\Sales\Model\Resource\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        array $data = []
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_orderCollectionFactory = $orderCollectionFactory;
         $this->_orderConfig = $orderConfig;

@@ -71,6 +71,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
         \Magento\Framework\View\LayoutInterface $layout,
         array $data = []
     ) {
+        parent::__construct($data);
         $this->checkoutSession = $checkoutSession;
         $this->catalogUrl = $catalogUrl;
         $this->checkoutCart = $checkoutCart;

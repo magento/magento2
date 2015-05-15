@@ -131,10 +131,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWithMessages()
     {
-        $layout = $this->getMockBuilder('Magento\Framework\View\Layout')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $title = $this->getMockBuilder('Magento\Framework\View\Page\Title')
             ->disableOriginalConstructor()
             ->getMock();

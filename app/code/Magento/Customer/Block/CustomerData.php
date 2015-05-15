@@ -7,6 +7,10 @@ namespace Magento\Customer\Block;
 
 class CustomerData extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * Get CookieLifeTime
+     * @return null|string scopeCode
+     */
     public function getCookieLifeTime()
     {
         return $this->_scopeConfig->getValue(

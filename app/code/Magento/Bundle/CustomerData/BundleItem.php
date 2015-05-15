@@ -23,6 +23,7 @@ class BundleItem extends \Magento\Checkout\CustomerData\DefaultItem
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Catalog\Helper\Product\Configuration $configurationHelper
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Bundle\Helper\Catalog\Product\Configuration $bundleConfiguration
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Image\View $productImageView,

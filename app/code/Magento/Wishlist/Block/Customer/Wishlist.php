@@ -39,7 +39,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
-
      * @param array $data
      */
     public function __construct(

@@ -30,7 +30,15 @@ class Wishlist implements SectionSourceInterface
     protected $view;
 
     /**
+     * @var \Magento\Wishlist\Block\Customer\Sidebar
+     */
+    protected $block;
+
+    /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
+     * @param \Magento\Wishlist\Block\Customer\Sidebar $block
+     * @param \Magento\Catalog\Model\Product\Image\View $productImageView
+     * @param \Magento\Framework\App\ViewInterface $view
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
