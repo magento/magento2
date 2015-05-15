@@ -365,18 +365,10 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $move = false,
         $exclude = true
     ) {
-        $destinationFile = $this->_mediaConfig->getTmpMediaPath($fileName);
-
         try {
             /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
             $storageHelper = $this->_fileStorageDb;
-            if ($move) {
-                //If this is used, filesystem should be configured properly
-                $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
-            } else {
-                $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
-                $this->_mediaDirectory->changePermissions($destinationFile, 0777);
-            }
+            $storageHelper->saveFile($fileName);
         } catch (\Exception $e) {
             throw new LocalizedException(__('We couldn\'t move this file: %1.', $e->getMessage()));
         }
@@ -624,11 +616,11 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $this->_mediaConfig->getMediaShortUrl($destinationFile)
             );
 
-            $this->_mediaDirectory->delete($this->_mediaConfig->getTmpMediaPath($file));
+            $this->_mediaDirectory->delete($file);
             $this->_mediaDirectory->delete($this->_mediaConfig->getMediaPath($destinationFile));
         } else {
             $this->_mediaDirectory->renameFile(
-                $this->_mediaConfig->getTmpMediaPath($file),
+                $file,
                 $this->_mediaConfig->getMediaPath($destinationFile)
             );
         }

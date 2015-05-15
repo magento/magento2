@@ -443,6 +443,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $mediaTmpPath = $mediaConfig->getBaseTmpMediaPath();
 
         $relativeFilePath = $this->imageProcessor->processImageContent($mediaTmpPath, $contentDataObject);
+        $tmpFilePath = $mediaConfig->getTmpMediaShortUrl($relativeFilePath);
 
         /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Media $galleryAttributeBackend */
         $galleryAttributeBackend = $product->getGalleryAttributeBackend();
@@ -452,7 +453,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         $imageFileUri = $galleryAttributeBackend->addImage(
             $product,
-            $relativeFilePath,
+            $tmpFilePath,
             isset($newEntry['types']) ? $newEntry['types'] : [],
             true,
             isset($newEntry['disabled']) ? $newEntry['disabled'] : true
