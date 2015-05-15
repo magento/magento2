@@ -9,6 +9,7 @@ namespace Magento\Quote\Api;
 
 /**
  * Coupon management interface for guest carts.
+ * @api
  */
 interface GuestCouponManagementInterface
 {
