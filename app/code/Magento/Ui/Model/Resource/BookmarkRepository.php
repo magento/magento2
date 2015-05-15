@@ -7,8 +7,8 @@ namespace Magento\Ui\Model\Resource;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
-use Magento\Ui\Api\Data;
 use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Ui\Api\Data\BookmarkInterface;
 use Magento\Ui\Model\Resource\Bookmark\Collection;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -34,7 +34,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     /**
      * @param \Magento\Ui\Model\BookmarkFactory $bookmarkFactory
      * @param Bookmark $bookmarkResourceModel
-     * @param Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
+     * @param \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
      */
     public function __construct(
         \Magento\Ui\Model\BookmarkFactory $bookmarkFactory,
@@ -50,11 +50,11 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     /**
      * Save bookmark.
      *
-     * @param Data\BookmarkInterface $bookmark
-     * @return Data\BookmarkInterface
+     * @param BookmarkInterface $bookmark
+     * @return BookmarkInterface
      * @throws CouldNotSaveException
      */
-    public function save(Data\BookmarkInterface $bookmark)
+    public function save(BookmarkInterface $bookmark)
     {
         try {
             $this->bookmarkResourceModel->save($bookmark);
@@ -68,7 +68,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
      * Retrieve bookmark.
      *
      * @param int $bookmarkId
-     * @return Data\BookmarkInterface
+     * @return BookmarkInterface
      * @throws NoSuchEntityException
      */
     public function getById($bookmarkId)
@@ -114,7 +114,7 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         $collection->setPageSize($searchCriteria->getPageSize());
 
         $bookmarks = [];
-        /** @var \Magento\Ui\Api\Data\BookmarkInterface $bookmark */
+        /** @var BookmarkInterface $bookmark */
         foreach ($collection->getItems() as $bookmark) {
             $bookmarks[] = $this->getById($bookmark->getId());
         }
@@ -126,11 +126,11 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     /**
      * Delete bookmark.
      *
-     * @param Data\BookmarkInterface $bookmark
+     * @param BookmarkInterface $bookmark
      * @return bool true on success
      * @throws CouldNotDeleteException
      */
-    public function delete(Data\BookmarkInterface $bookmark)
+    public function delete(BookmarkInterface $bookmark)
     {
         try {
             $this->bookmarkResourceModel->delete($bookmark);

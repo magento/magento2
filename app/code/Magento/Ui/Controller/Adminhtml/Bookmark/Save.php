@@ -114,7 +114,7 @@ class Save extends AbstractAction
             ->setIdentifier($identifier)
             ->setTitle($title)
             ->setConfig($config)
-            ->setCurrent(true);
+            ->setCurrent($identifier !== self::CURRENT_IDENTIFIER);
         $this->bookmarkRepository->save($bookmark);
 
         $bookmarks = $this->bookmarkManagement->loadByNamespace($this->_request->getParam('namespace'));

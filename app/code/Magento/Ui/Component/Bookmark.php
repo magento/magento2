@@ -69,14 +69,14 @@ class Bookmark extends AbstractComponent
      */
     public function prepare()
     {
-        $namespace = $this->getContext()->getRequestParam('namespace');
+        $namespace = $this->getContext()->getRequestParam('namespace', $this->getContext()->getNamespace());
         $config = [];
         if (!empty($namespace)) {
             $bookmarks = $this->bookmarkManagement->loadByNamespace($namespace);
             /** @var \Magento\Ui\Api\Data\BookmarkInterface $bookmark */
             foreach ($bookmarks->getItems() as $bookmark) {
-                if ($bookmark->isCurrent()) {
-                    $config['activeIndex'] = $bookmark->getIdentifier();
+                $config['activeIndex'] = ($bookmark->isCurrent() ? $bookmark->getIdentifier() : 'default');
+                if ($bookmark->getIdentifier() == 'current') {
                     $config['current'] = $bookmark->getConfig();
                 } else {
                     $config['views'][$bookmark->getIdentifier()] = $bookmark->getConfig();
