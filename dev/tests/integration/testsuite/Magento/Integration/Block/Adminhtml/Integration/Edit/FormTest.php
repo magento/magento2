@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Block\Adminhtml\Integration\Edit\Tab;
+namespace Magento\Integration\Block\Adminhtml\Integration\Edit;
 
 use Magento\Integration\Controller\Adminhtml\Integration;
 use Magento\Integration\Model\Integration as IntegrationModel;
@@ -55,7 +55,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $coreRegistry->unregister(Integration::REGISTRY_KEY_CURRENT_INTEGRATION);
         $id = 'idValue';
         $integrationData = [
-            Info::DATA_ID => $id,
+            \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_ID => $id,
         ];
         $coreRegistry->register(Integration::REGISTRY_KEY_CURRENT_INTEGRATION, $integrationData);
 
