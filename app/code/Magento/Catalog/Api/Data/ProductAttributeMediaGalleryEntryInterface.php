@@ -112,14 +112,14 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
     /**
      * Get media gallery content
      *
-     * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface|null
+     * @return \Magento\Framework\Api\Data\ImageContentInterface|null
      */
     public function getContent();
     
     /**
      * Set media gallery content
      *
-     * @param $content \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface
+     * @param $content \Magento\Framework\Api\Data\ImageContentInterface
      * @return $this 
      */
     public function setContent($content);

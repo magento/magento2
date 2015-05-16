@@ -11,9 +11,9 @@ class QuoteAddressValidator
     /**
      * Address factory.
      *
-     * @var \Magento\Quote\Model\Quote\AddressFactory
+     * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
-    protected $quoteAddressFactory;
+    protected $addressReporitory;
 
     /**
      * Customer factory.
@@ -25,14 +25,14 @@ class QuoteAddressValidator
     /**
      * Constructs a quote shipping address validator service object.
      *
-     * @param \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory Address factory.
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory Customer factory.
      */
     public function __construct(
-        \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Model\CustomerFactory $customerFactory
     ) {
-        $this->quoteAddressFactory = $quoteAddressFactory;
+        $this->addressReporitory = $addressRepository;
         $this->customerFactory = $customerFactory;
     }
 
@@ -59,9 +59,9 @@ class QuoteAddressValidator
 
         // validate address id
         if ($addressData->getId()) {
-            $address = $this->quoteAddressFactory->create();
-            $address->load($addressData->getId());
-            if (!$address->getId()) {
+            try {
+                $address = $this->addressReporitory->getById($addressData->getId());
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
                     __('Invalid address id %1', $addressData->getId())
                 );

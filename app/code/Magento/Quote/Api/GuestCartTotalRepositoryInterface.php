@@ -12,7 +12,7 @@ namespace Magento\Quote\Api;
 interface GuestCartTotalRepositoryInterface
 {
     /**
-     * Returns quote totals data for a specified cart.
+     * Return quote totals data for a specified cart.
      *
      * @param string $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\TotalsInterface Quote totals data.

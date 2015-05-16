@@ -239,6 +239,8 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Retrieve feed as XML element
+     *
      * @return \SimpleXMLElement
      */
     public function getFeedXml()

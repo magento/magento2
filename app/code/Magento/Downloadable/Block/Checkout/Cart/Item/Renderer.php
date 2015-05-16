@@ -68,7 +68,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      */
     public function getLinks()
     {
-        return $this->_downloadProdConfig->getLinks($this->getItem());
+        return $this->_downloadableProductConfiguration->getLinks($this->getItem());
     }
 
     /**
@@ -78,6 +78,26 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      */
     public function getLinksTitle()
     {
-        return $this->_downloadProdConfig->getLinksTitle($this->getProduct());
+        return $this->_downloadableProductConfiguration->getLinksTitle($this->getProduct());
+    }
+
+    /**
+     * Get list of all options for product
+     *
+     * @return array
+     */
+    public function getOptionList()
+    {
+        return $this->_downloadableProductConfiguration->getOptions($this->getItem());
+    }
+
+    /**
+     * Get list of all options for product
+     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
+     * @return array
+     */
+    public function getOption($item)
+    {
+        return $this->_downloadableProductConfiguration->getOptions($item);
     }
 }

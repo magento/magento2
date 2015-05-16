@@ -7,30 +7,30 @@
 namespace Magento\Integration\Controller\Token;
 
 use Magento\Integration\Model\Integration as IntegrationModel;
-use Magento\Integration\Service\V1\IntegrationInterface as IntegrationService;
-use Magento\Integration\Service\V1\OauthInterface as IntegrationOauthService;
+use Magento\Integration\Api\IntegrationServiceInterface as IntegrationService;
+use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
 
 class Access extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var  \Magento\Framework\Oauth\OauthInterface
+     * @var \Magento\Framework\Oauth\OauthInterface
      */
-    protected $_oauthService;
+    protected $oauthService;
 
     /**
-     * @var  IntegrationOauthService
+     * @var IntegrationOauthService
      */
-    protected $_intOauthService;
+    protected $intOauthService;
 
     /**
-     * @var  IntegrationService
+     * @var IntegrationService
      */
-    protected $_integrationService;
+    protected $integrationService;
 
     /**
-     * @var  \Magento\Framework\Oauth\Helper\Request
+     * @var \Magento\Framework\Oauth\Helper\Request
      */
-    protected $_helper;
+    protected $helper;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -47,10 +47,10 @@ class Access extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Oauth\Helper\Request $helper
     ) {
         parent::__construct($context);
-        $this->_oauthService = $oauthService;
-        $this->_intOauthService = $intOauthService;
-        $this->_integrationService = $integrationService;
-        $this->_helper = $helper;
+        $this->oauthService = $oauthService;
+        $this->intOauthService = $intOauthService;
+        $this->integrationService = $integrationService;
+        $this->helper = $helper;
     }
 
     /**
@@ -61,20 +61,18 @@ class Access extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         try {
-            $requestUrl = $this->_helper->getRequestUrl($this->getRequest());
-            $request = $this->_helper->prepareRequest($this->getRequest(), $requestUrl);
+            $requestUrl = $this->helper->getRequestUrl($this->getRequest());
+            $request = $this->helper->prepareRequest($this->getRequest(), $requestUrl);
 
             // Request access token in exchange of a pre-authorized token
-            $response = $this->_oauthService->getAccessToken($request, $requestUrl, $this->getRequest()->getMethod());
+            $response = $this->oauthService->getAccessToken($request, $requestUrl, $this->getRequest()->getMethod());
             //After sending the access token, update the integration status to active;
-            $consumer = $this->_intOauthService->loadConsumerByKey($request['oauth_consumer_key']);
-            $this->_integrationService->findByConsumerId(
-                $consumer->getId()
-            )->setStatus(
-                IntegrationModel::STATUS_ACTIVE
-            )->save();
+            $consumer = $this->intOauthService->loadConsumerByKey($request['oauth_consumer_key']);
+            $integration = $this->integrationService->findByConsumerId($consumer->getId());
+            $integration->setStatus(IntegrationModel::STATUS_ACTIVE);
+            $integration->save();
         } catch (\Exception $exception) {
-            $response = $this->_helper->prepareErrorResponse($exception, $this->getResponse());
+            $response = $this->helper->prepareErrorResponse($exception, $this->getResponse());
         }
         $this->getResponse()->setBody(http_build_query($response));
     }
