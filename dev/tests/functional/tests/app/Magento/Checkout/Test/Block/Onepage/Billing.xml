@@ -6,45 +6,25 @@
  */
 -->
 <mapping strict="0">
-    <wrapper>billing</wrapper>
+    <wrapper>billingAddress</wrapper>
     <fields>
-        <firstname>
-            <selector>[name='billingAddress[firstname]']</selector>
-        </firstname>
-        <lastname>
-            <selector>[name='billingAddress[lastname]']</selector>
-        </lastname>
+        <firstname />
+        <lastname />
         <email>
             <selector>[name='customerDetails[email]']</selector>
         </email>
-        <company>
-            <selector>[name='billingAddress[company]']</selector>
-        </company>
+        <company />
         <street>
             <selector>[name='billingAddress[street][0]']</selector>
         </street>
-        <city>
-            <selector>[name='billingAddress[city]']</selector>
-        </city>
+        <city />
         <region_id>
             <input>select</input>
-            <selector>[name='billingAddress[region_id]']</selector>
         </region_id>
-        <postcode>
-            <selector>[name='billingAddress[postcode]']</selector>
-        </postcode>
+        <postcode />
         <country_id>
             <input>select</input>
-            <selector>[name='billingAddress[country_id]']</selector>
         </country_id>
-        <telephone>
-            <selector>[name='billingAddress[telephone]']</selector>
-        </telephone>
-        <password>
-            <selector>[name='customerDetails[password]']</selector>
-        </password>
-        <password_confirmation>
-            <selector>[name='customerDetails[confirm_password]']</selector>
-        </password_confirmation>
+        <telephone />
     </fields>
 </mapping>

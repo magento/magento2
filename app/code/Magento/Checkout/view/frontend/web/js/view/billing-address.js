@@ -96,7 +96,10 @@ define(
                 }
             },
             validate: function() {
+                var fields = $(billingFormSelector).find('input, select');
+
                 this.source.set('params.invalid', false);
+                fields.trigger('change');
                 this.source.trigger('billingAddress.data.validate');
                 this.validateAdditionalAddressFields();
                 this.isEmailCheckComplete.resolve();
