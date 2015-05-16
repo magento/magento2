@@ -17,7 +17,7 @@ use \Magento\Sales\Model\Resource\EntitySnapshot;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Status extends EntityAbstract
+class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
      * Status labels table
@@ -32,40 +32,6 @@ class Status extends EntityAbstract
      * @var string
      */
     protected $stateTable;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Sales\Model\Resource\Attribute $attribute
-     * @param Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
-     * @param LogWriter $logger
-     * @param null $resourcePrefix
-     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
-     */
-    public function __construct(
-        \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Sales\Model\Resource\Attribute $attribute,
-        Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
-        LogWriter $logger,
-        $resourcePrefix = null,
-        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
-    ) {
-        $this->logger = $logger;
-        parent::__construct(
-            $context,
-            $attribute,
-            $sequenceManager,
-            $entitySnapshot,
-            $resourcePrefix,
-            $gridAggregator
-        );
-    }
 
     /**
      * Internal constructor

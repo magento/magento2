@@ -215,4 +215,9 @@
             <argument name="resourcePrefix" xsi:type="string">sales</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Resource\Order\Status">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
 </config>
