@@ -242,7 +242,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
         $layoutUpdateXml = 'layoutUpdateXml';
         $contentHeading = 'contentHeading';
         $escapedContentHeading = 'escapedContentHeading';
-        $defaultGroup = 'defaultGroup';
         $pageLoadResultCollection = [
             null,
             $this->pageMock,
