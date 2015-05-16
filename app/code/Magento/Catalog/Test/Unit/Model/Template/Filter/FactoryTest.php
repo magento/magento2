@@ -13,7 +13,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\Newsletter\Model\Template\Filter\Factory
+     * @var \Magento\Catalog\Model\Template\Filter\Factory
      */
     protected $_factory;
 

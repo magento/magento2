@@ -76,7 +76,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         $arguments = [
             'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
             'id' => $this->getFilterElementId($attribute->getAttributeCode()),
-            'class' => 'input-text input-text-range-date',
+            'class' => 'admin__control-text',
             'date_format' => $this->_localeDate->getDateFormat(
                 \IntlDateFormatter::SHORT
             ),
@@ -94,17 +94,10 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $toValue = $this->escapeHtml(next($value));
         }
 
-        return '<strong>' . __(
-            'From'
-        ) . ':</strong>&nbsp;' . $dateBlock->setValue(
-            $fromValue
-        )->getHtml() . '&nbsp;<strong>' . __(
-            'To'
-        ) . ':</strong>&nbsp;' . $dateBlock->setId(
-            $dateBlock->getId() . '_to'
-        )->setValue(
-            $toValue
-        )->getHtml();
+        return '<strong class="admin__control-support-text">' . __('From') . ':</strong>&nbsp;'
+            . $dateBlock->setValue($fromValue)->getHtml()
+            . '&nbsp;<strong class="admin__control-support-text">' . __('To') . ':</strong>&nbsp;'
+            . $dateBlock->setId($dateBlock->getId() . '_to')->setValue($toValue)->getHtml();
     }
 
     /**
@@ -182,7 +175,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $toValue = $this->escapeHtml(next($value));
         }
 
-        return '<strong>' . __(
+        return '<strong class="admin__control-support-text">' . __(
             'From'
         ) .
         ':</strong>&nbsp;' .
@@ -192,7 +185,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         ' value="' .
         $fromValue .
         '"/>&nbsp;' .
-        '<strong>' .
+        '<strong class="admin__control-support-text">' .
         __(
             'To'
         ) .
@@ -268,7 +261,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 'sortable' => false,
                 'index' => 'attribute_id',
                 'header_css_class' => 'col-id',
-                'column_css_class' => 'col-id'
+                'column_css_class' => 'col-id data-grid-checkbox-cell'
             ]
         );
         $this->addColumn(
