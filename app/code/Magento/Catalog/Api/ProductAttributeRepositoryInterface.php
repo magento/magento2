@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 
 /**
  * Interface RepositoryInterface must be implemented in new model
+ * @api
  */
 interface ProductAttributeRepositoryInterface extends \Magento\Framework\Api\MetadataServiceInterface
 {

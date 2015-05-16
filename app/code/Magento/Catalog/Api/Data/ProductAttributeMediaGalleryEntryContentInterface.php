@@ -10,6 +10,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Product Media Content
+ * @api
  */
 interface ProductAttributeMediaGalleryEntryContentInterface extends ExtensibleDataInterface
 {

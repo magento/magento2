@@ -8,6 +8,9 @@
 
 namespace Magento\Catalog\Api\Data;
 
+/**
+ * @api
+ */
 interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**
