@@ -7,7 +7,6 @@ namespace Magento\Catalog\Block\Adminhtml\Rss\Grid;
 
 /**
  * Class Link
- * @package Magento\Review\Block\Adminhtml\Grid\Rss
  */
 class Link extends \Magento\Framework\View\Element\Template
 {
