@@ -14,4 +14,11 @@
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="tax_config_provider" xsi:type="object">Magento\Tax\Model\TaxConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

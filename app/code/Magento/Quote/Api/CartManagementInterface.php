@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\Quote\Api\Data\PaymentInterface;
+
 interface CartManagementInterface
 {
     /**
@@ -47,7 +49,10 @@ interface CartManagementInterface
      * Places an order for a specified cart.
      *
      * @param int $cartId The cart ID.
+     * @param int[]|null $agreements
+     * @param PaymentInterface|null $paymentMethod
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
-    public function placeOrder($cartId);
+    public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null);
 }
