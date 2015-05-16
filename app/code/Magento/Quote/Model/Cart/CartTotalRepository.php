@@ -74,7 +74,11 @@ class CartTotalRepository implements CartTotalRepositoryInterface
          */
         $quote = $this->quoteRepository->getActive($cartId);
         $shippingAddress = $quote->getShippingAddress();
-        $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
+        if ($quote->isVirtual()) {
+            $totalsData = array_merge($quote->getBillingAddress()->getData(), $quote->getData());
+        } else {
+            $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
+        }
         $totals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray($totals, $totalsData, '\Magento\Quote\Api\Data\TotalsInterface');
         $items = [];
