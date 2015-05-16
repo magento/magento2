@@ -51,6 +51,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT     = 'design/email/logo_height';
 
     /**
+     * The directory in which inline CSS files are stored
+     *
+     * @var string
+     */
+    const INLINE_CSS_DIRECTORY = 'css';
+
+    /**
      * Configuration of design package for template
      *
      * @var \Magento\Framework\Object
@@ -98,6 +105,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $_appEmulation;
 
     /**
+     * Asset service
+     *
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    protected $_assetRepo;
+
+    /**
      * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
@@ -118,13 +132,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
-
+    
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\Config $emailConfig
@@ -136,6 +151,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\App\Emulation $appEmulation,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
@@ -146,6 +162,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->_store = isset($data['store']) ? $data['store'] : null;
         $this->_appEmulation = $appEmulation;
         $this->_storeManager = $storeManager;
+        $this->_assetRepo = $assetRepo;
         $this->_filesystem = $filesystem;
         $this->_objectManager = $objectManager;
         $this->_emailConfig = $emailConfig;
@@ -287,20 +304,19 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Load CSS content from filesystem
+     * Loads CSS content from filesystem
      *
-     * @param string $filename
+     * @param array $fileNames
      * @return string
      */
-    protected function _getCssFilesContent($filenames)
+    protected function _getCssFilesContent($files)
     {
-        // TODO: @Greg convert this code to trigger LESS compilation (if necessary) and load file using theme fallback mechanism
+        // Remove duplicate files
+        $files = array_unique($files);
+
         $css = '';
-        foreach ($filenames as $filename) {
-            $file = BP . '/pub/static/frontend/Magento/blank/en_US/css/' . $filename;
-            if (file_exists($file)) {
-                $css .= file_get_contents($file);
-            }
+        foreach ($files as $file) {
+            $css .= $this->_getCssFileContent($file) . PHP_EOL;
         }
         return $css;
         // OLD M1 Code
@@ -330,7 +346,21 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 //        return '';
     }
 
-    // TODO: Determine if we're going to keep this method
+    /**
+     * Loads CSS file from materialized static view directory
+     *
+     * @param $file
+     * @return string
+     */
+    protected function _getCssFileContent($file)
+    {
+        $file = self::INLINE_CSS_DIRECTORY. DIRECTORY_SEPARATOR . $file;
+        $designParams = $this->_design->getDesignParams();
+
+        $asset = $this->_assetRepo->createAsset($file, $designParams);
+        return $asset->getContent();
+    }
+
     /**
      * Accepts a path to a System Config setting that contains a comma-delimited list of files to load. Loads those
      * files and then returns the concatenated content.

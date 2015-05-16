@@ -114,11 +114,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     protected $_sendingException = null;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
-     */
-    protected $_assetRepo;
-
-    /**
      * @var \Magento\Framework\View\FileSystem
      */
     protected $_viewFileSystem;
@@ -172,10 +167,20 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
-        $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
         $this->_emailFilterFactory = $emailFilterFactory;
-        parent::__construct($context, $design, $registry, $appEmulation, $storeManager, $filesystem, $objectManager, $emailConfig, $data);
+        parent::__construct(
+            $context,
+            $design,
+            $registry,
+            $appEmulation,
+            $storeManager,
+            $assetRepo,
+            $filesystem,
+            $objectManager,
+            $emailConfig,
+            $data
+        );
     }
 
     /**
