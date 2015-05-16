@@ -136,7 +136,7 @@ class IndexBuilder
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 
@@ -170,7 +170,7 @@ class IndexBuilder
             $this->doReindexFull();
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 

@@ -32,4 +32,18 @@
             <argument name="defaultItemId" xsi:type="string">Magento\Checkout\CustomerData\DefaultItem</argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="checkout_default_config_provider" xsi:type="object">Magento\Checkout\Model\DefaultConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Onepage">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="addressFormAttributes" xsi:type="object">Magento\Checkout\Block\Checkout\LayoutProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

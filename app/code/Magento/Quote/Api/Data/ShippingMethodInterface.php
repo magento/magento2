@@ -43,6 +43,21 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
     const KEY_AVAILABLE = 'available';
 
     /**
+     * Shipping error message.
+     */
+    const KEY_ERROR_MESSAGE = 'error_message';
+
+    /**
+     * Shipping error message.
+     */
+    const KEY_PRICE_EXCL_TAX = 'price_excl_tax';
+
+    /**
+     * Shipping error message.
+     */
+    const KEY_PRICE_INCL_TAX = 'price_incl_tax';
+
+    /**
      * Returns the shipping carrier code.
      *
      * @return string Shipping carrier code.
@@ -164,4 +179,49 @@ interface ShippingMethodInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\ShippingMethodExtensionInterface $extensionAttributes
     );
+
+    /**
+     * Returns an error message.
+     *
+     * @return string Shipping Error message.
+     */
+    public function getErrorMessage();
+
+    /**
+     * Set an error message.
+     *
+     * @param string $errorMessage
+     * @return $this
+     */
+    public function setErrorMessage($errorMessage);
+
+    /**
+     * Returns shipping price excl tax.
+     *
+     * @return float
+     */
+    public function getPriceExclTax();
+
+    /**
+     * Set a shipping price excl tax.
+     *
+     * @param float $priceExclTax
+     * @return $this
+     */
+    public function setPriceExclTax($priceExclTax);
+
+    /**
+     * Returns shipping price incl tax.
+     *
+     * @return float
+     */
+    public function getPriceInclTax();
+
+    /**
+     * Set a shipping price incl tax.
+     *
+     * @param float $priceInclTax
+     * @return $this
+     */
+    public function setPriceInclTax($priceInclTax);
 }

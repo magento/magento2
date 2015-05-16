@@ -2181,4 +2181,5 @@ return [
         'Moved to \Magento\Sales\CustomerData\LastOrderedItems',
     ],
     ['getIdentities', 'Magento\Sales\Block\Reorder\Sidebar'],
+    ['assignData', 'Magento\OfflinePayments\Model\Checkmo'],
 ];

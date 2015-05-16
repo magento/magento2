@@ -49,4 +49,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
+        <arguments>
+            <argument name="instancesByType" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Helper\Product\Configuration</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
