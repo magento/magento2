@@ -258,9 +258,9 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
-                'service' => self::SERVICE_NAME,
+                'service' => 'customerCustomerRepositoryV1',
                 'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save',
+                'operation' => 'customerCustomerRepositoryV1Save',
             ],
         ];
         $customerData = $this->_webApiCall($serviceInfo, $requestData);

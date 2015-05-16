@@ -14,7 +14,8 @@ use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Class BackendAuthentication
- * @package Magento\Rss\App\Action\Plugin
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentication
 {
@@ -51,6 +52,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param array $aclResources
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
@@ -70,8 +72,16 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
         $this->logger = $logger;
         $this->authorization = $authorization;
         $this->aclResources = $aclResources;
-        parent::__construct($auth, $url, $response, $actionFlag, $messageManager, $backendUrl, $resultRedirectFactory,
-            $backendAppList);
+        parent::__construct(
+            $auth,
+            $url,
+            $response,
+            $actionFlag,
+            $messageManager,
+            $backendUrl,
+            $resultRedirectFactory,
+            $backendAppList
+        );
     }
 
     /**
