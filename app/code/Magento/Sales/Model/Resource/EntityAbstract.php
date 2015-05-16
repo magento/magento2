@@ -209,7 +209,6 @@ abstract class EntityAbstract extends AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -232,38 +231,12 @@ abstract class EntityAbstract extends AbstractDb
                 $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
                 if ($object->getId() !== null && (!$this->_useIsObjectNew || !$object->isObjectNew())) {
                     $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
-                    /**
-                     * Not auto increment primary key support
-                     */
-                    if ($this->_isPkAutoIncrement) {
-                        $data = $this->prepareDataForUpdate($object);
-                        if (!empty($data)) {
-                            $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
-                        }
-                    } else {
-                        $select = $this->_getWriteAdapter()->select()->from(
-                            $this->getMainTable(),
-                            [$this->getIdFieldName()]
-                        )->where(
-                            $condition
-                        );
-                        if ($this->_getWriteAdapter()->fetchOne($select) !== false) {
-                            $data = $this->prepareDataForUpdate($object);
-                            if (!empty($data)) {
-                                $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
-                            }
-                        } else {
-                            $this->_getWriteAdapter()->insert(
-                                $this->getMainTable(),
-                                $this->_prepareDataForSave($object)
-                            );
-                        }
-                    }
+                    $data = $this->_prepareDataForSave($object);
+                    unset($data[$this->getIdFieldName()]);
+                    $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
                 } else {
                     $bind = $this->_prepareDataForSave($object);
-                    if ($this->_isPkAutoIncrement) {
-                        unset($bind[$this->getIdFieldName()]);
-                    }
+                    unset($bind[$this->getIdFieldName()]);
                     $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
 
                     $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
@@ -272,10 +245,9 @@ abstract class EntityAbstract extends AbstractDb
                         $object->isObjectNew(false);
                     }
                 }
-
                 $this->unserializeFields($object);
                 $this->_afterSave($object);
-
+                $this->entitySnapshot->registerSnapshot($object);
                 $object->afterSave();
                 $this->processRelations($object);
             }
