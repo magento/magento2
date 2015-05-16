@@ -429,6 +429,16 @@ class Image extends AbstractHelper
     }
 
     /**
+     * Return resized product image information
+     *
+     * @return array
+     */
+    public function getResizedImageInfo()
+    {
+        return $this->_getModel()->getResizedImageInfo();
+    }
+
+    /**
      * @return string
      */
     protected function getDefaultPlaceholderUrl()
