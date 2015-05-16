@@ -347,23 +347,6 @@ class PageTest extends \PHPUnit_Framework_TestCase
             ->method('setContentHeading')
             ->with($escapedContentHeading)
             ->willReturnSelf();
-        $this->layoutMock->expects($this->any())
-            ->method('getMessagesBlock')
-            ->willReturn($this->messagesBlockMock);
-        $this->messageManagerMock->expects($this->any())
-            ->method('getDefaultGroup')
-            ->willReturn($defaultGroup);
-        $this->messagesBlockMock->expects($this->any())
-            ->method('addStorageType')
-            ->with($defaultGroup);
-        $this->messageManagerMock->expects($this->any())
-            ->method('getMessages')
-            ->with(true)
-            ->willReturn($this->messageCollectionMock);
-        $this->messagesBlockMock->expects($this->any())
-            ->method('addMessages')
-            ->with($this->messageCollectionMock)
-            ->willReturnSelf();
 
         if ($expectedResult) {
             $expectedResult = $this->resultPageMock;

@@ -45,9 +45,6 @@ class Load extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        if (!$this->getRequest()->isAjax()) {
-            return $this->resultRedirectFactory->create()->setPath('*/*/index');
-        }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
         try {
