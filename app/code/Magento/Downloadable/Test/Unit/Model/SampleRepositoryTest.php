@@ -50,6 +50,11 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $service;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sampleDataObjectFactory;
+
     protected function setUp()
     {
         $this->productMock = $this->getMock(
@@ -81,10 +86,23 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->productTypeMock = $this->getMockBuilder('\Magento\Downloadable\Model\Product\Type')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->sampleDataObjectFactory = $this->getMockBuilder('\Magento\Downloadable\Api\Data\SampleInterfaceFactory')
+            ->setMethods(
+                [
+                    'create',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+
 
         $this->service = new \Magento\Downloadable\Model\SampleRepository(
             $this->repositoryMock,
             $this->productTypeMock,
+            $this->sampleDataObjectFactory,
             $this->contentValidatorMock,
             $this->contentUploaderMock,
             $this->jsonEncoderMock,
@@ -370,5 +388,78 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $sampleMock->expects($this->never())->method('delete');
 
         $this->service->delete($sampleId);
+    }
+
+
+    public function testGetList()
+    {
+        $productSku = 'downloadable_sku';
+
+        $sampleData = [
+            'id' => 324,
+            'store_title' => 'rock melody sample',
+            'title' => 'just melody sample',
+            'sort_order' => 21,
+            'sample_type' => 'file',
+            'sample_url' => null,
+            'sample_file' => '/r/o/rock.melody.ogg'
+        ];
+
+        $sampleMock = $this->getMock(
+            '\Magento\Downloadable\Model\Sample',
+            [
+                'getId',
+                'getStoreTitle',
+                'getTitle',
+                'getSampleType',
+                'getSampleFile',
+                'getSampleUrl',
+                'getSortOrder',
+                'getData',
+                '__wakeup'
+            ],
+            [],
+            '',
+            false
+        );
+
+        $sampleInterfaceMock = $this->getMock('\Magento\Downloadable\Api\Data\SampleInterface');
+
+        $this->repositoryMock->expects($this->once())
+            ->method('get')
+            ->with($productSku)
+            ->will($this->returnValue($this->productMock));
+
+        $this->productTypeMock->expects($this->once())
+            ->method('getSamples')
+            ->with($this->productMock)
+            ->will($this->returnValue([$sampleMock]));
+
+        $this->setSampleAssertions($sampleMock, $sampleData);
+
+        $this->sampleDataObjectFactory->expects($this->once())->method('create')->willReturn($sampleInterfaceMock);
+
+        $this->assertEquals([$sampleInterfaceMock], $this->service->getList($productSku));
+    }
+
+    /**
+     * @param $resource
+     * @param $inputData
+     */
+    protected function setSampleAssertions($resource, $inputData)
+    {
+        $resource->expects($this->any())->method('getId')->will($this->returnValue($inputData['id']));
+        $resource->expects($this->any())->method('getStoreTitle')
+            ->will($this->returnValue($inputData['store_title']));
+        $resource->expects($this->any())->method('getTitle')
+            ->will($this->returnValue($inputData['title']));
+        $resource->expects($this->any())->method('getSortOrder')
+            ->will($this->returnValue($inputData['sort_order']));
+        $resource->expects($this->any())->method('getSampleType')
+            ->will($this->returnValue($inputData['sample_type']));
+        $resource->expects($this->any())->method('getSampleFile')
+            ->will($this->returnValue($inputData['sample_file']));
+        $resource->expects($this->any())->method('getSampleUrl')
+            ->will($this->returnValue($inputData['sample_url']));
     }
 }

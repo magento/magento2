@@ -9,7 +9,7 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Main;
 
-class AbstractTest extends \PHPUnit_Framework_TestCase
+class AbstractMainTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @magentoAppIsolation enabled
@@ -38,7 +38,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Eav\Helper\Data'),
                 $objectManager->get('Magento\Config\Model\Config\Source\YesnoFactory'),
                 $objectManager->get('Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory'),
-                $objectManager->get('Magento\Eav\Model\Entity\Attribute\Config')
+                $objectManager->get('Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker')
             ]
         )->setLayout(
             $objectManager->create('Magento\Framework\View\Layout')

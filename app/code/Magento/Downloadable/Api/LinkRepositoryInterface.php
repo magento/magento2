@@ -7,31 +7,19 @@ namespace Magento\Downloadable\Api;
 
 use Magento\Downloadable\Api\Data\LinkInterface;
 
+/**
+ * Interface LinkRepositoryInterface
+ * @package Magento\Downloadable\Api
+ */
 interface LinkRepositoryInterface
 {
-    /**
-     * List of samples for downloadable product
-     *
-     * @param string $sku
-     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
-     */
-    public function getSamples($sku);
-
-    /**
-     * List of samples for downloadable product
-     *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return \Magento\Downloadable\Api\Data\SampleInterface[]
-     */
-    public function getSamplesByProduct(\Magento\Catalog\Api\Data\ProductInterface $product);
-
     /**
      * List of links with associated samples
      *
      * @param string $sku
      * @return \Magento\Downloadable\Api\Data\LinkInterface[]
      */
-    public function getLinks($sku);
+    public function getList($sku);
 
     /**
      * List of links with associated samples

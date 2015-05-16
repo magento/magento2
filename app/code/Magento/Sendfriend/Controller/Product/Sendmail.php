@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +9,7 @@
 namespace Magento\Sendfriend\Controller\Product;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Controller\ResultFactory;
 
 class Sendmail extends \Magento\Sendfriend\Controller\Product
 {
@@ -39,22 +39,27 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
     /**
      * Send Email Post Action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
-            $this->_redirect('sendfriend/product/send', ['_current' => true]);
-            return;
+            $resultRedirect->setPath('sendfriend/product/send', ['_current' => true]);
+            return $resultRedirect;
         }
 
         $product = $this->_initProduct();
         $data = $this->getRequest()->getPostValue();
 
         if (!$product || !$data) {
-            $this->_forward('noroute');
-            return;
+            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
+            $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+            $resultForward->forward('noroute');
+            return $resultForward;
         }
 
         $categoryId = $this->getRequest()->getParam('cat_id', null);
@@ -82,8 +87,8 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
                 $this->sendFriend->send();
                 $this->messageManager->addSuccess(__('The link to a friend was sent.'));
                 $url = $product->getProductUrl();
-                $this->getResponse()->setRedirect($this->_redirect->success($url));
-                return;
+                $resultRedirect->setUrl($this->_redirect->success($url));
+                return $resultRedirect;
             } else {
                 if (is_array($validate)) {
                     foreach ($validate as $errorMessage) {
@@ -103,6 +108,7 @@ class Sendmail extends \Magento\Sendfriend\Controller\Product
         $catalogSession->setSendfriendFormData($data);
 
         $url = $this->_url->getUrl('sendfriend/product/send', ['_current' => true]);
-        $this->getResponse()->setRedirect($this->_redirect->error($url));
+        $resultRedirect->setUrl($this->_redirect->error($url));
+        return $resultRedirect;
     }
 }
