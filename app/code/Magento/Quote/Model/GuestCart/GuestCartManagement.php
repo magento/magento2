@@ -10,6 +10,7 @@ use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
@@ -77,12 +78,33 @@ class GuestCartManagement implements GuestCartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function placeOrder($cartId)
+    public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
         $this->cartRepository->get($quoteIdMask->getQuoteId())
             ->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
-        return $this->quoteManagement->placeOrder($quoteIdMask->getQuoteId());
+        return $this->quoteManagement->placeOrder($quoteIdMask->getQuoteId(), $agreements, $paymentMethod);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function placeOrderCreatingAccount(
+        $cartId,
+        $customer,
+        $password,
+        $agreements = null,
+        PaymentInterface $paymentMethod = null
+    ) {
+        /** @var $quoteIdMask QuoteIdMask */
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        return $this->quoteManagement->placeOrderCreatingAccount(
+            $quoteIdMask->getQuoteId(),
+            $customer,
+            $password,
+            $agreements,
+            $paymentMethod
+        );
     }
 }

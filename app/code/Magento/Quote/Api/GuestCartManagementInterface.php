@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\Quote\Api\Data\PaymentInterface;
+
 /**
  * Cart Management interface for guest carts.
  */
@@ -32,7 +34,29 @@ interface GuestCartManagementInterface
      * Place an order for a specified cart.
      *
      * @param string $cartId The cart ID.
+     * @param int[]|null $agreements
+     * @param PaymentInterface|null $paymentMethod
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
-    public function placeOrder($cartId);
+    public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null);
+
+    /**
+     * Registers a customer and places an order for the specified cart.
+     *
+     * @param string $cartId The cart ID.
+     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param string $password
+     * @param int[]|null $agreements
+     * @param PaymentInterface|null $paymentMethod
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @return int Order ID.
+     */
+    public function placeOrderCreatingAccount(
+        $cartId,
+        $customer,
+        $password,
+        $agreements = null,
+        PaymentInterface $paymentMethod = null
+    );
 }
