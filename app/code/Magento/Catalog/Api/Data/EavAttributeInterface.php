@@ -6,6 +6,9 @@
  */
 namespace Magento\Catalog\Api\Data;
 
+/**
+ * @api
+ */
 interface EavAttributeInterface extends \Magento\Eav\Api\Data\AttributeInterface
 {
     const IS_WYSIWYG_ENABLED = 'is_wysiwyg_enabled';

@@ -220,6 +220,9 @@
                         <item name="tag" xsi:type="string">MAGE</item>
                     </item>
                 </item>
+                <item name="logger" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Framework\Cache\Frontend\Decorator\Logger</item>
+                </item>
             </argument>
             <argument name="resource" xsi:type="object">Magento\Framework\App\Resource\Proxy</argument>
         </arguments>
