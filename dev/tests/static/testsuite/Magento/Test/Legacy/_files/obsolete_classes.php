@@ -3161,6 +3161,8 @@ return [
     ['Magento\Framework\Exception\File\ValidatorException'],
     ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
     ['Magento\Shipping\Exception'],
+    ['Magento\Reports\Block\Adminhtml\Product\Grid'],
+    ['Magento\Reports\Model\Totals'],
     ['Magento\Log\Model\Shell'],
     ['Magento\Log\App\Shell'],
     ['Magento\Framework\App\Cache\ManagerApp'],
@@ -3354,4 +3356,6 @@ return [
     ['Magento\Integration\Service\V1\Integration', 'Magento\Integration\Model\IntegrationService'],
     ['Magento\Integration\Service\V1\Oauth', 'Magento\Integration\Model\OauthService'],
     ['Magento\Integration\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Integration'],
+    ['Magento\Search\Model\Resource\Helper'],
+    ['Magento\Catalog\Model\Product\Gallery\ContentValidator', 'Magento\Framework\Api\ImageContentValidator'],
 ];
