@@ -1139,6 +1139,7 @@ class Installer
     private function installSampleData($request)
     {
         $userName = isset($request[AdminAccount::KEY_USER]) ? $request[AdminAccount::KEY_USER] : '';
+        $this->objectManagerProvider->reset();
         $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
     }
 

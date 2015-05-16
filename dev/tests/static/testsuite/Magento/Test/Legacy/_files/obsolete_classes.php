@@ -3164,6 +3164,8 @@ return [
     ['Magento\Tax\Model\Resource\Sales\Order\Tax\Item\Collection'],
     ['Magento\Tax\Model\Resource\Sales\Order\Tax\Item', 'Magento\Sales\Model\Resource\Order\Tax\Item'],
     ['Magento\Tax\Model\Sales\Order\Tax\Item', 'Magento\Sales\Model\Order\Tax\Item'],
+    ['Magento\Reports\Block\Adminhtml\Product\Grid'],
+    ['Magento\Reports\Model\Totals'],
     ['Magento\Log\Model\Shell'],
     ['Magento\Log\App\Shell'],
     ['Magento\Framework\App\Cache\ManagerApp'],
@@ -3337,4 +3339,5 @@ return [
     ['Magento\Log\Model\LogFactory\Clean'],
     ['Magento\Log\Model\Shell\CommandInterface'],
     ['Magento\Framework\App\Filesystem\DirectoryList\AbstractShell'],
+    ['Magento\Search\Model\Resource\Helper'],
 ];
