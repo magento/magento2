@@ -26,19 +26,12 @@ define(
             isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
             lastTaxGroupId: null,
             isDetailsVisible: ko.observable(),
-            isFirst: function(taxGroupId) {
-                if (this.lastTaxGroupId != taxGroupId) {
-                    this.lastTaxGroupId = taxGroupId;
-                    return true;
-                }
-                return false;
-            },
             getTitle: function() {
                 return "Tax";
             },
             getValue: function() {
                 var amount = 0;
-                if (quote.getTotals()) {
+                if (this.totals()) {
                     amount = this.totals().tax_amount;
                 }
                 return priceUtils.formatPrice(amount, quote.getPriceFormat());
@@ -47,7 +40,7 @@ define(
                 return priceUtils.formatPrice(amount, quote.getPriceFormat());
             },
             getDetails: function() {
-                var totals = quote.getTotals()();
+                var totals = this.totals();
                 if (totals.extension_attributes) {
                     return totals.extension_attributes.tax_grandtotal_details;
                 }

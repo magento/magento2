@@ -32,7 +32,7 @@
                 <th class="mark" scope="row" data-bind="text: title, attr: {'style': $parents[1].style, 'colspan': $parents[1].colspan}">
                 </th>
             <!-- /ko -->
-            <!-- ko if: $parents[1].isFirst($parents[0].group_id) -->
+            <!-- ko if: $index() == 0 -->
                 <td class="amount" data-bind="text: $parents[1].formatPrice($parents[0].amount), attr: {'data-th': title, 'style': $parents[1].style, 'rowspan': $parents[0].rates.length }">
                 </td>
             <!-- /ko -->

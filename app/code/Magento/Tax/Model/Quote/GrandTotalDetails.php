@@ -123,6 +123,7 @@ class GrandTotalDetails
         $taxInfo->setTaxGrandtotalDetails($finalData);
         /** @var $result \Magento\Quote\Model\Cart\Totals */
         $result->setExtensionAttributes($taxInfo);
+        $result->setTaxAmount($taxes['value']);
         return $result;
     }
 }
