@@ -10,9 +10,12 @@
 <?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */ ?>
 <?php echo $block->getTemplatesHtml() ?>
 <script id="custom-option-base-template" type="text/x-magento-template">
-    <div class="fieldset-wrapper collapsable-wrapper opened" id="option_<%- data.id %>">
+    <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="option_<%- data.id %>">
         <div class="fieldset-wrapper-title">
-            <strong class="title" data-toggle="collapse" data-target="#<%- data.id %>-content">
+            <strong
+                class="admin__collapsible-title"
+                data-toggle="collapse"
+                data-target="#<%- data.id %>-content">
                 <span id="option_<%- data.id %>_header_title"><%- data.title %></span>
             </strong>
             <div class="actions">
