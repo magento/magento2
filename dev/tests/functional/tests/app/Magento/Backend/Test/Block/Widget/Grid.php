@@ -88,7 +88,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $massactionAction = '#massaction-select';
+    protected $massactionAction = '[data-menu="grid-mass-select"]';
 
     /**
      * Massaction 'Submit' button
