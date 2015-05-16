@@ -46,7 +46,6 @@ define(
                     _.each(totalsData.extension_attributes, function(element, index) {
                         totalsData[index] = element;
                     });
-                    delete totalsData.extension_attributes;
                 }
                 totals(totalsData);
                 this.setCollectedTotals('subtotal_with_discount', parseFloat(totalsData.subtotal_with_discount));
