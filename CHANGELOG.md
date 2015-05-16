@@ -1,3 +1,57 @@
+0.74.0-beta8
+=============
+* Performance Toolkit improvements
+    * Added order generator
+    * Added indexer mode switcher via profile config
+* UI Improvements
+    * Added hide/show columns for CMS pages/blocks grid on backend
+    * Updated the multi-select functionality & UI for CMS pages/blocks grid on backend
+    * Added the new look & feel for Edit Order Page (view/edit order)
+* Framework Improvements
+    * Updated API framework to support different integration object ACLs
+    * Updated unit and integration tests config files to include tests from the Updater Application
+    * Exceptions caught and logged before reaching Phrase::__toString() method
+* MTF Improvements
+    * Replaced end-to-end One-page Checkout test with online shipment methods with scenario test
+    * Replaced end-to-end Layered Navigation test with injectable test
+    * Replaced end-to-end Shopping Cart price rule test with injectable test
+    * Replaced end-to-end Switch Currency test with injectable test
+    * Fixed the filling condition element
+    * Updated a set of functional tests
+* Various
+    * Eliminated functional logic in constructors
+    * Updated public API definitions
+    * Added information for Downloadable Products to Catalog Product Data Object
+    * Added information for Catalog Inventory data to Catalog Product Data Object
+    * Added information for Grouped Products to Catalog Product Data Object
+    * Added information for Configurable Products to Catalog Product Data Object
+    * Cleaned Tax API data interfaces
+    * Removed OptionTypesListInterface and type field in OptionInterface
+* Fixed bugs
+    * Fixed an issue with focus state appearing on click event in Admin Menu logo.
+    * Fixed an issue where order was placed via Payflow link without providing credit card data
+    * Fixed an issue where titles were displayed for backend navigation menu group when it only contained a single section
+    * Fixed an issue where REST URL paths were not case-sensitive
+    * Implement transparent redirect API
+    * Fixed an issue in cron.php with checking for functions which are disabled in php.ini
+    * Front-end development workflow settings scope changed to Global
+    * Fixed an issue with widget title escape
+    * Fixed the filename filtering
+    * Fixed an issue with universal fatal error in the profiler option #2
+    * Fixed an issue when shipping address in backend could not be changed when creating order
+    * Fixed the performance issue with tax rules creation
+    * The extended attributes became optional
+    * Fixed an issue where final price did not recalculate when option was selected
+    * Fixed an issue with price currency symbols
+    * Fixed an issue when low_stock_date showed incorrect data
+    * Fixed an issue with random integration test failure
+* GitHub issues
+    * [#526] (https://github.com/magento/magento2/issues/526) -- Area Sessions: Magento 2 Should not Allow "area-less" Sessions During an Area Aware Request
+    * [#1212] (https://github.com/magento/magento2/issues/1212) -- Magento 2 0.74.0-beta5 unable to open home page after successful installation
+    * [#1213] (https://github.com/magento/magento2/issues/1213) -- Magento 2 0.74.0-beta6 unable to open home page right after successful installation
+    * [#1157] (https://github.com/magento/magento2/issues/1157) -- Something went wrong with the subscription
+    * [#1228] (https://github.com/magento/magento2/issues/1228) -- PDOException during attempt to export products: Unknown column 'entity_value.entity_type_id' in 'on clause’
+
 0.74.0-beta7
 =============
 * Framework improvements

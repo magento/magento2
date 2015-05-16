@@ -3161,6 +3161,8 @@ return [
     ['Magento\Framework\Exception\File\ValidatorException'],
     ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
     ['Magento\Shipping\Exception'],
+    ['Magento\Reports\Block\Adminhtml\Product\Grid'],
+    ['Magento\Reports\Model\Totals'],
     ['Magento\Log\Model\Shell'],
     ['Magento\Log\App\Shell'],
     ['Magento\Framework\App\Cache\ManagerApp'],
@@ -3334,4 +3336,5 @@ return [
     ['Magento\Log\Model\LogFactory\Clean'],
     ['Magento\Log\Model\Shell\CommandInterface'],
     ['Magento\Framework\App\Filesystem\DirectoryList\AbstractShell'],
+    ['Magento\Search\Model\Resource\Helper'],
 ];
