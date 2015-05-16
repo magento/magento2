@@ -349,6 +349,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $this->customerManagement->populateCustomerInfo($quote);
         }
         $addresses = [];
+        $quote->reserveOrderId();
         if ($quote->isVirtual()) {
             $this->dataObjectHelper->mergeDataObjects(
                 '\Magento\Sales\Api\Data\OrderInterface',

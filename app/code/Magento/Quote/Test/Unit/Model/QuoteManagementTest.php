@@ -651,7 +651,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'getId',
                 'getCustomer',
                 'getAllItems',
-                'getPayment'
+                'getPayment',
+                'reserveOrderId'
             ],
             [],
             '',
