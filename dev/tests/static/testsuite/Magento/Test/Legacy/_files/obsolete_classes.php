@@ -3336,6 +3336,7 @@ return [
     ['Magento\Log\Model\LogFactory\Clean'],
     ['Magento\Log\Model\Shell\CommandInterface'],
     ['Magento\Framework\App\Filesystem\DirectoryList\AbstractShell'],
+    ['Magento\Search\Model\Resource\Helper'],
     ['Magento\Customer\Controller\Address\BillingList'],
     ['Magento\Checkout\Block\Onepage\Login'],
     ['Magento\Checkout\Block\Onepage\Progress'],
