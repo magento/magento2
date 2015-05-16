@@ -68,6 +68,9 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      */
     public function getLinks()
     {
+        if (!$this->getItem()) {
+            return [];
+        }
         return $this->_downloadableProductConfiguration->getLinks($this->getItem());
     }
 

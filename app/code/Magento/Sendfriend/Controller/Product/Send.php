@@ -35,7 +35,6 @@ class Send extends \Magento\Sendfriend\Controller\Product
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->getLayout()->initMessages();
 
         $this->_eventManager->dispatch('sendfriend_product', ['product' => $product]);
         $data = $catalogSession->getSendfriendFormData();

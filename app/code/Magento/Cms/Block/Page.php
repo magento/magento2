@@ -154,7 +154,6 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
     protected function _toHtml()
     {
         $html = $this->_filterProvider->getPageFilter()->filter($this->getPage()->getContent());
-        $html = $this->getLayout()->renderElement('messages') . $html;
         return $html;
     }
 

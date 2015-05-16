@@ -115,6 +115,7 @@ class IndexBuilder
      *
      * @param int $id
      * @return void
+     * @api
      */
     public function reindexById($id)
     {
@@ -127,6 +128,7 @@ class IndexBuilder
      * @param array $ids
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @api
      */
     public function reindexByIds(array $ids)
     {
@@ -134,7 +136,7 @@ class IndexBuilder
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException($e->getMessage(), $e->getCode(), $e);
+            throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()), $e);
         }
     }
 
@@ -160,6 +162,7 @@ class IndexBuilder
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @api
      */
     public function reindexFull()
     {
