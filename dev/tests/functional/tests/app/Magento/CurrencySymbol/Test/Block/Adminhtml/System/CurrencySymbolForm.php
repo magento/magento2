@@ -22,7 +22,7 @@ class CurrencySymbolForm extends Form
      *
      * @var string
      */
-    protected $currencyRow = '//tr[td/label[@for="custom_currency_symbol%s"]]';
+    protected $currencyRow = '//div[input[@id="custom_currency_symbol%s"]]';
 
     /**
      * Fill the root form
