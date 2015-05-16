@@ -918,4 +918,23 @@ class Image extends \Magento\Framework\Model\AbstractModel
             );
         }
     }
+
+    /**
+     * Return resized product image information
+     *
+     * @return array
+     */
+    public function getResizedImageInfo()
+    {
+        if ($this->_newFile === true) {
+            $fileInfo = getimagesize(
+                $this->_assetRepo->createAsset(
+                    "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
+                )->getSourceFile()
+            );
+        } else {
+            $fileInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile));
+        }
+        return $fileInfo;
+    }
 }
