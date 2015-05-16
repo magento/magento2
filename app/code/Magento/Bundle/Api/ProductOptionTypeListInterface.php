@@ -6,6 +6,10 @@
  */
 namespace Magento\Bundle\Api;
 
+/**
+ * Interface ProductOptionTypeListInterface
+ * @api
+ */
 interface ProductOptionTypeListInterface
 {
     /**
