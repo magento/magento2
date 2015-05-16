@@ -44,6 +44,7 @@ class GrandTotalDetails
      * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param \Magento\Quote\Model\Quote\Address\Total\Tax $taxTotal
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
