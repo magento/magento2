@@ -10,6 +10,11 @@ use Magento\Quote\Api\Data\PaymentInterface;
 interface CartManagementInterface
 {
     /**
+     * Checkout types: Checkout as Guest
+     */
+    const METHOD_GUEST = 'guest';
+
+    /**
      * Creates an empty cart and quote for a guest.
      *
      * @return int Cart ID.
