@@ -27,8 +27,7 @@ $params = $block->getParams();
         <?php else: ?>
             var require = window.top.require;
             require(['jquery'], function($) {
-                $('#opc-review').trigger('hideAjaxLoader');
-                $('#opc-review').trigger('saveOrder');
+                $('#originalPlaceOrder').click();
             });
         <?php endif; ?>
         </script>
