@@ -20,7 +20,8 @@ define(
         var newAddressSelected = ko.observable(false);
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/shipping-address'
+                template: 'Magento_Checkout/shipping-address',
+                visible: true
             },
             stepClassAttributes: function() {
                 return navigator.getStepClassAttributes(stepName);
@@ -31,6 +32,11 @@ define(
             sameAsBilling: ko.observable(null),
             quoteHasBillingAddress: quote.getBillingAddress(),
             isVisible: navigator.isStepVisible(stepName),
+            initObservable: function () {
+                this._super()
+                    .observe('visible');
+                return this;
+            },
             isActive: function() {
                 if (quote.isVirtual()) {
                     navigator.setStepEnabled(stepName, false);
@@ -40,7 +46,7 @@ define(
             selectShippingAddress: function() {
                 var additionalData = {};
                 var billingAddress = quote.getBillingAddress()();
-                if (!billingAddress.customerAddressId) {
+                if (!billingAddress.customerAddressId || !this.visible()) {
                     /**
                      * All the the input fields that are not a part of the address but need to be submitted
                      * in the same request must have data-scope attribute set
@@ -57,7 +63,9 @@ define(
                         additionalData
                     );
                 } else {
-                    this.validate();
+                    if (this.visible()) {
+                        this.validate();
+                    }
                     if (!this.source.get('params.invalid')) {
                         var addressData = this.source.get('shippingAddress');
                         selectShippingAddress(addressData, this.sameAsBilling(), additionalData);

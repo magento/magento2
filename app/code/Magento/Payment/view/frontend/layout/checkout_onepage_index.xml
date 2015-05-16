@@ -15,18 +15,10 @@
                             <item name="children" xsi:type="array">
                                 <item name="steps" xsi:type="array">
                                     <item name="children" xsi:type="array">
-                                        <item name="shipping" xsi:type="array">
+                                        <item name="payment" xsi:type="array">
                                             <item name="children" xsi:type="array">
-                                                <item name="additional" xsi:type="array">
-                                                    <item name="component" xsi:type="string">Magento_GiftMessage/js/view/gift-options</item>
-                                                    <item name="children" xsi:type="array">
-                                                        <item name="orderLevelGiftMessage" xsi:type="array">
-                                                            <item name="component" xsi:type="string">Magento_GiftMessage/js/view/order-level-gift-message</item>
-                                                        </item>
-                                                        <item name="itemLevelGiftMessage" xsi:type="array">
-                                                            <item name="component" xsi:type="string">Magento_GiftMessage/js/view/item-level-gift-message</item>
-                                                        </item>
-                                                    </item>
+                                                <item name="free" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Payment/js/view/payment/free-method</item>
                                                 </item>
                                             </item>
                                         </item>

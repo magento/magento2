@@ -12,6 +12,11 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
      */
 
     /**
+     * Item id.
+     */
+    const KEY_ITEM_ID = 'item_id';
+
+    /**
      * Price.
      */
     const KEY_PRICE = 'price';
@@ -113,6 +118,21 @@ interface TotalsItemInterface extends \Magento\Framework\Api\ExtensibleDataInter
     const KEY_NAME = 'name';
 
     /**#@-*/
+
+    /**
+     * Set totals item id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setItemId($id);
+
+    /**
+     * Get totals item id
+     *
+     * @return int Item id
+     */
+    public function getItemId();
 
     /**
      * Returns the item price in quote currency.

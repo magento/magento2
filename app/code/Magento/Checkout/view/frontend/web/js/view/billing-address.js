@@ -27,6 +27,10 @@ define(
             defaults: {
                 template: 'Magento_Checkout/billing-address'
             },
+            initObservable: function () {
+                this._super().observe('useForShipping');
+                return this;
+            },
             stepClassAttributes: function() {
                 return navigator.getStepClassAttributes(stepName);
             },
@@ -40,11 +44,21 @@ define(
             billingAddressesOptionsText: function(item) {
                 return item.getAddressInline();
             },
+            checkUseForShipping: function(useForShipping) {
+                var additionalData = {};
+                if (useForShipping() instanceof Object) {
+                    additionalData = useForShipping().getAdditionalData();
+                    useForShipping('1');
+                }
+                return additionalData;
+            },
             submitBillingAddress: function() {
                 if (this.selectedBillingAddressId) {
+                    var additionalData = this.checkUseForShipping(this.useForShipping);
                     selectBillingAddress(
                         addressList.getAddressById(this.selectedBillingAddressId),
-                        this.useForShipping
+                        this.useForShipping,
+                        additionalData
                     );
                 } else {
                     var that = this;
@@ -52,7 +66,7 @@ define(
                     $.when(this.isEmailCheckComplete).done( function() {
                         if (!that.source.get('params.invalid')) {
                             var addressData = that.source.get('billingAddress');
-                            var additionalData = {};
+                            var additionalData = that.checkUseForShipping(that.useForShipping);
                             /**
                              * All the the input fields that are not a part of the address but need to be submitted
                              * in the same request must have data-scope attribute set

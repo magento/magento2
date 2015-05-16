@@ -50,9 +50,24 @@ define(
                 }
                 form = $(form);
                 var code = form.find("input[name='shipping_method']:checked").val();
-                selectShippingMethod(code, customOptions);
+                selectShippingMethod(code, customOptions, this.getAfterSelectCallbacks());
             },
-
+            getAfterSelectCallbacks: function() {
+                var callbacks = [];
+                _.each(this.getAdditionalMethods(), function(view) {
+                    if (typeof view.afterSelect === 'function') {
+                        callbacks.push(view.afterSelect);
+                    }
+                });
+                return callbacks;
+            },
+            getAdditionalMethods: function() {
+                var methods = [];
+                _.each(this.getRegion('afterSelect')(), function(elem) {
+                    methods = _.union(methods, elem.elems());
+                });
+                return methods;
+            },
             isActive: function() {
                 if (quote.isVirtual()) {
                     navigator.setStepEnabled(stepName, false);

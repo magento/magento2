@@ -45,8 +45,17 @@
                                         <item name="displayArea" xsi:type="string">steps</item>
                                         <item name="children" xsi:type="array">
                                             <item name="authentication" xsi:type="array">
-                                                <item name="sortOrder" xsi:type="string">1</item>
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item>
+                                                <item name="sortOrder" xsi:type="string">1</item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="before" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">before</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge additional data before authentication here -->
+                                                        </item>
+                                                    </item>
+                                                </item>
                                             </item>
                                             <item name="billingAddress" xsi:type="array">
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/billing-address</item>
@@ -127,6 +136,13 @@
                                                             </item>
                                                         </item>
                                                     </item>
+                                                    <item name="billing-address-choice" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">additional-field-choice</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- this region for different choice -->
+                                                        </item>
+                                                    </item>
                                                 </item>
                                             </item>
                                             <item name="shippingAddress" xsi:type="array">
@@ -134,6 +150,13 @@
                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                 <item name="sortOrder" xsi:type="string">3</item>
                                                 <item name="children" xsi:type="array">
+                                                    <item name="before-fields" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">before-fields</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- before fields -->
+                                                        </item>
+                                                    </item>
                                                     <item name="shipping-address-fieldset" xsi:type="array">
                                                         <item name="component" xsi:type="string">uiComponent</item>
                                                         <item name="displayArea" xsi:type="string">additional-fieldsets</item>
@@ -197,7 +220,16 @@
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-method</item>
                                                 <item name="sortOrder" xsi:type="string">4</item>
                                                 <item name="additional" xsi:type="array">
-                                                    <!-- merge your payment methods here -->
+                                                    <!-- merge your shipping methods here -->
+                                                </item>
+                                                <item name="children" xsi:type="array">
+                                                    <item name="afterSelect" xsi:type="array">
+                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="displayArea" xsi:type="string">afterSelect</item>
+                                                        <item name="children" xsi:type="array">
+                                                            <!-- merge additional data after shipping methods here -->
+                                                        </item>
+                                                    </item>
                                                 </item>
                                             </item>
                                             <item name="payment" xsi:type="array">

@@ -16,6 +16,7 @@ define(['uiComponent', 'ko', '../model/gift-options', 'Magento_Checkout/js/model
             quoteItemsCount: 0,
             imagePlaceholder: window.checkoutConfig.staticBaseUrl +
                 '/frontend/Magento/blank/en_US/Magento_Catalog/images/product/placeholder/thumbnail.jpg',
+            optionType: 'gift_messages',
             initialize: function() {
                 var item,
                     that = this,

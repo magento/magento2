@@ -16,6 +16,27 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 class Item extends AbstractExtensibleObject implements TotalsItemInterface
 {
     /**
+     * Set totals item id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setItemId($id)
+    {
+        return $this->setData(self::KEY_ITEM_ID, $id);
+    }
+
+    /**
+     * Get totals item id
+     *
+     * @return int Item id
+     */
+    public function getItemId()
+    {
+        return $this->_get(self::KEY_ITEM_ID);
+    }
+
+    /**
      * Returns the item price in quote currency.
      *
      * @return float Item price in quote currency.

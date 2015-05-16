@@ -96,4 +96,20 @@ class AddressDetails extends \Magento\Framework\Model\AbstractExtensibleModel im
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function getTotals()
+    {
+        return $this->getData(self::TOTALS);
+    }
+
+    /**
+     * @{inheritdoc}
+     */
+    public function setTotals($totals)
+    {
+        return $this->setData(self::TOTALS, $totals);
+    }
 }

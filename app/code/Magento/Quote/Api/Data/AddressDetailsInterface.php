@@ -18,6 +18,8 @@ interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataI
 
     const FORMATTED_SHIPPING_ADDRESS = 'formatted_shipping_address';
 
+    const TOTALS = 'totals';
+
     /**#@-*/
 
     /**
@@ -81,4 +83,15 @@ interface AddressDetailsInterface extends \Magento\Framework\Api\ExtensibleDataI
     public function setExtensionAttributes(
         \Magento\Quote\Api\Data\AddressDetailsExtensionInterface $extensionAttributes
     );
+
+    /**
+     * @return \Magento\Quote\Api\Data\TotalsInterface
+     */
+    public function getTotals();
+
+    /**
+     * @param \Magento\Quote\Api\Data\TotalsInterface $totals
+     * @return $this
+     */
+    public function setTotals($totals);
 }

@@ -14,8 +14,11 @@
          data-role="content"
          data-bind="fadeVisible: isVisible() && quoteHasBillingAddress()">
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
+            <!-- ko foreach: getRegion('before-fields') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
             <!-- ko if: (customerAddressCount)-->
-            <div class="field addresses">
+            <div class="field addresses" data-bind="visible: visible">
                 <label class="label" for="shipping:address-select"><span data-bind="text: $t('Select a shipping address from your address book or enter a new address.')"></span></label>
                 <div class="control">
                     <select name="shipping_address_id" id="shipping:address-select" data-bind="
@@ -30,13 +33,13 @@
             </div>
             <!-- /ko -->
             <fieldset id="shipping-new-address-form" class="fieldset address"
-                      data-bind="fadeVisible: isNewAddressSelected()">
+                      data-bind="fadeVisible: isNewAddressSelected(), visible: visible">
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
             </fieldset>
 
-            <div class="choice field">
+            <div class="choice field" data-bind="visible: visible">
                 <input type="checkbox"
                        name="shipping[same_as_billing]"
                        id="shipping:same_as_billing"

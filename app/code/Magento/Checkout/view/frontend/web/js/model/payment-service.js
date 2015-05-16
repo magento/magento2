@@ -5,17 +5,42 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['ko', 'jquery'],
-    function (ko, $) {
+    [
+        'ko',
+        'jquery',
+        'Magento_Checkout/js/model/quote'
+    ],
+    function (ko, $, quote) {
         return {
+            paymentMethods: ko.observableArray([]),
             availablePaymentMethods: ko.observableArray([]),
             selectedPaymentData: ko.observableArray(),
             selectedPaymentInfo: ko.observableArray([]),
             setPaymentMethods: function(methods) {
-                this.availablePaymentMethods(methods);
+                this.paymentMethods(methods);
             },
             getAvailablePaymentMethods: function () {
-                return this.availablePaymentMethods;
+                var methods = [],
+                    self = this;
+                $.each(this.paymentMethods(), function (key, method) {
+                    if (self.isFreeMethodActive() && (
+                        quote.getCalculatedTotal() <= 0 && method['code'] == 'free'
+                        || quote.getCalculatedTotal() > 0 && method['code'] != 'free'
+                        ) || !self.isFreeMethodActive()
+                    ) {
+                        methods.push(method);
+                    }
+                });
+                return methods;
+            },
+            isFreeMethodActive: function () {
+                var isAvailable = false;
+                $.each(this.paymentMethods(), function (key, method) {
+                    if (method['code'] == 'free') {
+                        isAvailable = true;
+                    }
+                });
+                return isAvailable;
             },
             setSelectedPaymentData: function(data) {
                 this.selectedPaymentData(data);
@@ -31,7 +56,7 @@ define(
             },
             getTitleByCode: function(code) {
                 var methodTitle = '';
-                $.each(this.availablePaymentMethods(), function (key, entity) {
+                $.each(this.getAvailablePaymentMethods(), function (key, entity) {
                     if (entity['code'] == code) {
                         methodTitle = entity['title'];
                     }

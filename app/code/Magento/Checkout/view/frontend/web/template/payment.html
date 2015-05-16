@@ -29,11 +29,11 @@
                     <dl class="items methods-payment">
                         <!-- ko foreach: getAvailableViews() -->
                         <dt data-bind='attr: {class: "item-title " + getCode()}'>
-                            <input data-bind='attr: {id: "p_method_" + getCode(), value: getCode(), title: getTitle(), class: "radio" + $parent.getMethodControlAdditionalClass()}, checked: $parent.activeMethod' type="radio" name="payment[method]"/>
+                            <input data-bind='attr: {id: "p_method_" + getCode(), value: getCode(), title: getTitle(), class: "radio" + $parent.getMethodControlAdditionalClass()}, checked: $parent.activeMethod, enable: isEnabled' type="radio" name="payment[method]"/>
                             <label data-bind='attr: {for: "p_method_" + getCode()}'><!-- ko template: titleTemplate --><!--/ko--></label>
                         </dt>
                         <!-- ko if: $data.formTemplate -->
-                        <dd data-bind='attr: {class: "item-content " + getCode()}, visible: $parent.isMethodActive(getCode())'><!-- ko template: formTemplate --><!--/ko--></dd>
+                        <dd data-bind='attr: {class: "item-content " + getCode()}, visible: $parent.isMethodActive(getCode()), enable: isEnabled'><!-- ko template: formTemplate --><!--/ko--></dd>
                         <!-- /ko -->
                         <!-- /ko -->
                         <!-- ko ifnot: getAvailableViews().length > 0 -->

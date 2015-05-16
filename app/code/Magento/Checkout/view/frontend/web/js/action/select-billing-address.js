@@ -22,7 +22,7 @@ define(
         var result = function (billingAddress, useForShipping, additionalData) {
             additionalData = additionalData || {};
             quote.setBillingAddress(billingAddress);
-            if (useForShipping === '1' && !quote.isVirtual()) {
+            if (useForShipping() === '1' && !quote.isVirtual()) {
                 if (!billingAddress.customerAddressId) {
                     // update shipping address data in corresponding provider
                     var shippingAddressSource = registry.get('checkoutProvider');
