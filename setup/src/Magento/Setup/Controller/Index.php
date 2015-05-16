@@ -36,9 +36,9 @@ class Index extends AbstractActionController
     {
         if ($this->objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
             $this->objectManager->create(
-                'Magento\Backend\Model\Auth\Session', [
-                'sessionConfig' => $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig')
-            ]);
+                'Magento\Backend\Model\Auth\Session',
+                ['sessionConfig' => $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig')]
+            );
             if (!$this->objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
                 $view = new ViewModel();
                 $view->setTemplate('/error/401.phtml');

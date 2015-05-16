@@ -7,6 +7,9 @@ namespace Magento\Backend\App\Action\Plugin;
 
 use Magento\Framework\Exception\AuthenticationException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Authentication
 {
     /**

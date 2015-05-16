@@ -44,10 +44,10 @@ class AdminConfig extends Config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\String $stringHelper
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param Filesystem $filesystem
      * @param DeploymentConfig $deploymentConfig
      * @param string $scopeType
+     * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param FrontNameResolver $frontNameResolver
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $lifetimePath
@@ -59,10 +59,10 @@ class AdminConfig extends Config
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\String $stringHelper,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Backend\App\BackendAppList $backendAppList,
         Filesystem $filesystem,
         DeploymentConfig $deploymentConfig,
         $scopeType,
+        \Magento\Backend\App\BackendAppList $backendAppList,
         FrontNameResolver $frontNameResolver,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         $lifetimePath = self::XML_PATH_COOKIE_LIFETIME,
@@ -95,7 +95,7 @@ class AdminConfig extends Config
     {
         $backendApp = $this->backendAppList->getCurrentApp();
         $cookiePath = null;
-        $baseUrl = $parsedUrl = parse_url($this->_storeManager->getStore()->getBaseUrl(), PHP_URL_PATH);
+        $baseUrl = parse_url($this->_storeManager->getStore()->getBaseUrl(), PHP_URL_PATH);
         if (!$backendApp) {
             $cookiePath = $baseUrl . $this->_frontNameResolver->getFrontName();
             return $cookiePath;
