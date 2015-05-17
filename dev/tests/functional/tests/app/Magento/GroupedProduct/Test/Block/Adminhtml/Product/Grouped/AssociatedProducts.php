@@ -43,7 +43,7 @@ class AssociatedProducts extends Tab
      *
      * @var string
      */
-    protected $deleteButton = '.delete';
+    protected $deleteButton = '[data-role="delete"]';
 
     /**
      * Get search grid
