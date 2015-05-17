@@ -14,8 +14,9 @@ define([
     var inputNode = {
         parent: '${ $.$data.parentName }',
         type: 'form.input',
-        name: '${ $.$data.index }_input',
-        dataScope: '${ $.$data.customEntry }',
+        name: '<%= $data.index %>_input',
+        dataScope: '<%= $data.customEntry %>',
+        customScope: '<%= $data.customScope %>',
         sortOrder: {
             after: '${ $.$data.name }'
         },

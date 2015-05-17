@@ -7,13 +7,12 @@ namespace Magento\Framework\App\Rss;
 
 /**
  * Class UrlBuilder
- * @package Magento\Rss\Model
  */
 class UrlBuilder implements UrlBuilderInterface
 {
     /**
-     * @param array $queryParams
-     * @return string
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getUrl(array $queryParams = [])
     {

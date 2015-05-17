@@ -130,6 +130,7 @@
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="validateWholeGroup" xsi:type="boolean">true</item>
                 </item>
             </argument>
             <field name="group_id">

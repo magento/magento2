@@ -31,7 +31,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Helper\Oauth\Data */
     protected $_dataHelper;
 
-    /** @var \Magento\Integration\Service\V1\OauthInterface */
+    /** @var \Magento\Integration\Api\OauthServiceInterface */
     protected $_oauthService;
 
     /** @var \Psr\Log\LoggerInterface */
@@ -94,7 +94,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             'Psr\Log\LoggerInterface'
         )->getMock();
 
-        $this->_oauthService = new \Magento\Integration\Service\V1\Oauth(
+        $this->_oauthService = new \Magento\Integration\Model\OauthService(
             $this->_storeManagerMock,
             $this->_consumerFactory,
             $this->_tokenFactory,

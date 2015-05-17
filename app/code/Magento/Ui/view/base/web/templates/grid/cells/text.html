@@ -6,7 +6,8 @@
 -->
 
 <!-- ko if: isClickable(row) -->
-<td 
+<td
+    class="_clickable"
     data-bind="click: redirect.bind($data, getClickUrl(row)),
                visible: visible,
                html: getLabel(row[field.index])"

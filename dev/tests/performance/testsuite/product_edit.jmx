@@ -20,7 +20,7 @@
           </elementProp>
           <elementProp name="ADMIN_PATH" elementType="Argument">
             <stringProp name="Argument.name">ADMIN_PATH</stringProp>
-            <stringProp name="Argument.value">${__P(path,/)}${__P(backend_frontname,backend)}/</stringProp>
+            <stringProp name="Argument.value">${__P(path,/)}${__P(backend-frontname,backend)}/</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="USERS" elementType="Argument">
@@ -35,12 +35,12 @@
           </elementProp>
           <elementProp name="ADMIN_USER" elementType="Argument">
             <stringProp name="Argument.name">ADMIN_USER</stringProp>
-            <stringProp name="Argument.value">${__P(admin_user,admin)}</stringProp>
+            <stringProp name="Argument.value">${__P(admin-user,admin)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="ADMIN_PASSWORD" elementType="Argument">
             <stringProp name="Argument.name">ADMIN_PASSWORD</stringProp>
-            <stringProp name="Argument.value">${__P(admin_password,123123q)}</stringProp>
+            <stringProp name="Argument.value">${__P(admin-password,123123q)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="product_sku" elementType="Argument">
