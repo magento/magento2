@@ -53,14 +53,14 @@
             <stringProp name="Argument.value">${__P(admin_path,backend)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="admin_user" elementType="Argument">
-            <stringProp name="Argument.name">admin_user</stringProp>
-            <stringProp name="Argument.value">${__P(admin_user,admin)}</stringProp>
+          <elementProp name="admin-user" elementType="Argument">
+            <stringProp name="Argument.name">admin-user</stringProp>
+            <stringProp name="Argument.value">${__P(admin-user,admin)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="admin_password" elementType="Argument">
-            <stringProp name="Argument.name">admin_password</stringProp>
-            <stringProp name="Argument.value">${__P(admin_password,123123q)}</stringProp>
+          <elementProp name="admin-password" elementType="Argument">
+            <stringProp name="Argument.name">admin-password</stringProp>
+            <stringProp name="Argument.value">${__P(admin-password,123123q)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="response_time_file_name" elementType="Argument">
@@ -259,14 +259,14 @@
               </elementProp>
               <elementProp name="login[password]" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">${admin_password}</stringProp>
+                <stringProp name="Argument.value">${admin-password}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">login[password]</stringProp>
               </elementProp>
               <elementProp name="login[username]" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">${admin_user}</stringProp>
+                <stringProp name="Argument.value">${admin-user}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">login[username]</stringProp>

@@ -68,7 +68,8 @@ class InstallerFactory
                 $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor')
             ),
             $this->serviceLocator->get('Magento\Setup\Model\ConfigModel'),
-            $this->serviceLocator->get('Magento\Framework\App\State\CleanupFiles')
+            $this->serviceLocator->get('Magento\Framework\App\State\CleanupFiles'),
+            $this->serviceLocator->get('Magento\Setup\Validator\DbValidator')
         );
     }
 
