@@ -7,6 +7,7 @@ namespace Magento\Quote\Api;
 
 /**
  * Shipping address management interface for guest carts.
+ * @api
  */
 interface GuestShippingAddressManagementInterface
 {
