@@ -14,6 +14,11 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Class BookmarkRepository
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BookmarkRepository implements BookmarkRepositoryInterface
 {
     /**

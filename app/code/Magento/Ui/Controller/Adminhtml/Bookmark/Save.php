@@ -134,7 +134,7 @@ class Save extends AbstractAction
     /**
      * Check bookmark by identifier
      *
-     * @param $identifier
+     * @param string $identifier
      * @return bool|BookmarkInterface
      */
     protected function checkBookmark($identifier)
