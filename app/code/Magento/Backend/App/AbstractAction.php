@@ -285,7 +285,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected function _processLocaleSettings()
     {
         $forceLocale = $this->getRequest()->getParam('locale', null);
-        if ($this->_objectManager->get('Magento\Framework\Locale\Validator')->isValid($forceLocale)) {
+        if ($this->_objectManager->get('Magento\Framework\Validator\Locale')->isValid($forceLocale)) {
             $this->_getSession()->setSessionLocale($forceLocale);
         }
 

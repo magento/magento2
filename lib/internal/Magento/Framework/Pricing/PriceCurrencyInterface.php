@@ -8,6 +8,8 @@ namespace Magento\Framework\Pricing;
 
 /**
  * Interface PriceCurrencyInterface
+ *
+ * @api
  */
 interface PriceCurrencyInterface
 {

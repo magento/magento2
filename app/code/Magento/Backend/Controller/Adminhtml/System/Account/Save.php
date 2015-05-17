@@ -33,7 +33,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             ->setLastname($this->getRequest()->getParam('lastname', false))
             ->setEmail(strtolower($this->getRequest()->getParam('email', false)));
 
-        if ($this->_objectManager->get('Magento\Framework\Locale\Validator')->isValid($interfaceLocale)) {
+        if ($this->_objectManager->get('Magento\Framework\Validator\Locale')->isValid($interfaceLocale)) {
             $user->setInterfaceLocale($interfaceLocale);
             /** @var \Magento\Backend\Model\Locale\Manager $localeManager */
             $localeManager = $this->_objectManager->get('Magento\Backend\Model\Locale\Manager');
