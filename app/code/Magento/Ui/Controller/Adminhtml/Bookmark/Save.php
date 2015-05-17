@@ -90,7 +90,9 @@ class Save extends AbstractAction
                 );
             }
         } else {
-            $identifier = isset($data['activeIndex']) ? $data['activeIndex'] : (isset($data[self::CURRENT_IDENTIFIER]) ? self::CURRENT_IDENTIFIER : '');
+            $identifier = isset($data['activeIndex'])
+                ? $data['activeIndex']
+                : (isset($data[self::CURRENT_IDENTIFIER]) ? self::CURRENT_IDENTIFIER : '');
             $updateBookmark = $this->checkBookmark($identifier);
             if ($updateBookmark !== false) {
                 $bookmark = $updateBookmark;
@@ -104,11 +106,13 @@ class Save extends AbstractAction
      * Update bookmarks based on request params
      *
      * @param BookmarkInterface $bookmark
-     * @param $identifier
-     * @param $title
+     * @param string $identifier
+     * @param string $title
      * @param array $config
+     * @return void
      */
-    protected function updateBookmark(BookmarkInterface $bookmark, $identifier, $title, array $config = []) {
+    protected function updateBookmark(BookmarkInterface $bookmark, $identifier, $title, array $config = [])
+    {
         $bookmark->setUserId($this->userContext->getUserId())
             ->setNamespace($this->_request->getParam('namespace'))
             ->setIdentifier($identifier)

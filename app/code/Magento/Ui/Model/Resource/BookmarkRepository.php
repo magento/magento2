@@ -102,13 +102,13 @@ class BookmarkRepository implements BookmarkRepositoryInterface
         $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         if ($sortOrders) {
-                foreach ($sortOrders as $sortOrder) {
-                    $field = $sortOrder->getField();
-                    $collection->addOrder(
-                        $field,
-                        ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
-                    );
-                }
+            foreach ($sortOrders as $sortOrder) {
+                $field = $sortOrder->getField();
+                $collection->addOrder(
+                    $field,
+                    ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                );
+            }
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());

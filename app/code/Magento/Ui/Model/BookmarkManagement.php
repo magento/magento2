@@ -108,6 +108,4 @@ class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
 
         return null;
     }
-
-
 }

@@ -43,6 +43,7 @@ class Bookmark extends AbstractDb
 
     /**
      * Prepare data to be saved to database
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
      *
      * @return $this
      */
@@ -54,5 +55,4 @@ class Bookmark extends AbstractDb
         $object->setUpdatedAt($this->dateTime->formatDate(true));
         return $this;
     }
-
 }
