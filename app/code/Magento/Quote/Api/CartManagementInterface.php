@@ -7,6 +7,10 @@ namespace Magento\Quote\Api;
 
 use Magento\Quote\Api\Data\PaymentInterface;
 
+/**
+ * Interface CartManagementInterface
+ * @api
+ */
 interface CartManagementInterface
 {
     /**

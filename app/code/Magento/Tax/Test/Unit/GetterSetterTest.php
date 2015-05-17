@@ -115,13 +115,13 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
                         ],
                     'Items' =>
                         [
-                            'Magento\Tax\Model\Sales\Order\Tax\Item'
+                            'Magento\Sales\Model\Order\Tax\Item'
                         ],
                     'ExtensionAttributes' => 'Magento\Tax\Api\Data\OrderTaxDetailsExtension'
                 ]
             ],
             [
-                'Magento\Tax\Model\Sales\Order\Tax\Item',
+                'Magento\Sales\Model\Order\Tax\Item',
                 [
                     'Type' => 'type',
                     'ItemId' => 1,
@@ -142,7 +142,7 @@ class GetterSetterTest extends \PHPUnit_Framework_TestCase
                     'CustomerId' => 1,
                     'Items' =>
                         [
-                            'Magento\Tax\Model\Sales\Order\Tax\Item'
+                            'Magento\Sales\Model\Order\Tax\Item'
                         ],
                     'CustomerTaxClassId' => 1,
                     'ExtensionAttributes' => 'Magento\Tax\Api\Data\QuoteDetailsExtension'

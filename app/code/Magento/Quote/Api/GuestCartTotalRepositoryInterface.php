@@ -8,6 +8,7 @@ namespace Magento\Quote\Api;
 
 /**
  * Cart totals repository interface for guest carts.
+ * @api
  */
 interface GuestCartTotalRepositoryInterface
 {

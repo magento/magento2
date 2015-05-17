@@ -814,6 +814,25 @@ class Installer
     }
 
     /**
+     * Creates data handler
+     * @param string $className
+     * @param string $interfaceName
+     * @return mixed|null
+     * @throws \Magento\Setup\Exception
+     */
+    protected function createSchemaDataHandler($className, $interfaceName)
+    {
+        if (class_exists($className)) {
+            if (!is_subclass_of($className, $interfaceName) && $className !== $interfaceName) {
+                throw  new \Magento\Setup\Exception($className . ' must implement \\' . $interfaceName);
+            } else {
+                return $this->objectManagerProvider->get()->create($className);
+            }
+        }
+        return null;
+    }
+
+    /**
      * Creates store order increment prefix configuration
      *
      * @param string $orderIncrementPrefix Value to use for order increment prefix
@@ -1097,8 +1116,6 @@ class Installer
      * @param string $type
      * @return InstallSchemaInterface | UpgradeSchemaInterface | InstallDataInterface | UpgradeDataInterface | null
      * @throws \Magento\Setup\Exception
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getSchemaDataHandler($moduleName, $type)
     {
@@ -1106,67 +1123,29 @@ class Installer
         switch ($type) {
             case 'schema-install':
                 $className .= '\InstallSchema';
-                if (class_exists($className)) {
-                    if (false == is_subclass_of($className, self::SCHEMA_INSTALL)
-                        && $className !== self::SCHEMA_INSTALL) {
-                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
-                    } else {
-                        return $this->objectManagerProvider->get()->create($className);
-                    }
-                }
+                $interface = self::SCHEMA_INSTALL;
                 break;
             case 'schema-upgrade':
                 $className .= '\UpgradeSchema';
-                if (class_exists($className)) {
-                    if (false == is_subclass_of($className, self::SCHEMA_UPGRADE)
-                        && $className !== self::SCHEMA_UPGRADE
-                    ) {
-                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_UPGRADE);
-                    } else {
-                        return $this->objectManagerProvider->get()->create($className);
-                    }
-                }
+                $interface = self::SCHEMA_UPGRADE;
                 break;
             case 'schema-recurring':
                 $className .= '\Recurring';
-                if (class_exists($className)) {
-                    if (false == is_subclass_of($className, self::SCHEMA_INSTALL)
-                        && $className !== self::SCHEMA_INSTALL) {
-                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::SCHEMA_INSTALL);
-                    } else {
-                        return $this->objectManagerProvider->get()->create($className);
-                    }
-                }
+                $interface = self::SCHEMA_INSTALL;
                 break;
             case 'data-install':
                 $className .= '\InstallData';
-                if (class_exists($className)) {
-                    if (false == is_subclass_of($className, self::DATA_INSTALL)
-                        && $className !== self::DATA_INSTALL
-                    ) {
-                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_INSTALL);
-                    } else {
-                        return $this->objectManagerProvider->get()->create($className);
-                    }
-                }
+                $interface = self::DATA_INSTALL;
                 break;
             case 'data-upgrade':
                 $className .= '\UpgradeData';
-                if (class_exists($className)) {
-                    if (false == is_subclass_of($className, self::DATA_UPGRADE)
-                        && $className !== self::DATA_UPGRADE
-                    ) {
-                        throw  new \Magento\Setup\Exception($className . ' must implement \\' . self::DATA_UPGRADE);
-                    } else {
-                        return $this->objectManagerProvider->get()->create($className);
-                    }
-                }
+                $interface = self::DATA_UPGRADE;
                 break;
             default:
-                throw  new \Magento\Setup\Exception("$className does not exist");
+                throw new \Magento\Setup\Exception("$className does not exist");
         }
 
-        return null;
+        return $this->createSchemaDataHandler($className, $interface);
     }
 
     /**

@@ -7,6 +7,7 @@ namespace Magento\Quote\Api;
 
 /**
  * Cart Repository interface for guest carts.
+ * @api
  */
 interface GuestCartRepositoryInterface
 {
