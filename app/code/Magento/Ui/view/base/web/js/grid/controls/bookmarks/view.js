@@ -11,6 +11,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'ui/grid/controls/bookmarks/view',
+            value: '${ $.isNew ? "" : $.label }',
             active: false,
             editable: true,
             editing: false,
@@ -20,7 +21,7 @@ define([
                 active: 'onActivate'
             },
             listens: {
-                label: 'setLabel',
+                'editing value': 'syncLabel',
                 '${ $.statesProvider }:activeIndex': 'onActiveChange'
             },
             modules: {
@@ -51,7 +52,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('active label editing');
+                .observe('active label value editing');
 
             return this;
         },
@@ -82,14 +83,17 @@ define([
         /**
          * Sets new label.
          *
-         * @param {String} label - New label value.
          * @returns {View} Chainable.
          */
-        setLabel: function (label) {
+        syncLabel: function () {
+            var label = this.value();
+
             label = label.trim() || this.data.label;
 
             this.label(label);
-            this.set('data.label', label);
+            this.value(label);
+
+            this.data.label = label;
 
             return this;
         },
