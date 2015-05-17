@@ -9,7 +9,7 @@ namespace Magento\Quote\Api\Data;
  * Interface AddressInterface
  * @api
  */
-interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
@@ -51,6 +51,12 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     const KEY_SUFFIX = 'suffix';
 
     const KEY_VAT_ID = 'vat_id';
+
+    const SAME_AS_BILLING = 'same_as_billing';
+
+    const CUSTOMER_ADDRESS_ID = 'customer_address_id';
+
+    const SAVE_IN_ADDRESS_BOOK = 'save_in_address_book';
 
     /**#@-*/
 
@@ -338,6 +344,51 @@ interface AddressInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return $this
      */
     public function setEmail($email);
+
+    /**
+     * Get same as billing flag
+     *
+     * @return int|null
+     */
+    public function getSameAsBilling();
+
+    /**
+     * Set same as billing flag
+     *
+     * @param int $sameAsBilling
+     * @return $this
+     */
+    public function setSameAsBilling($sameAsBilling);
+
+    /**
+     * Get customer address id
+     *
+     * @return int|null
+     */
+    public function getCustomerAddressId();
+
+    /**
+     * Set customer address id
+     *
+     * @param int $customerAddressId
+     * @return $this
+     */
+    public function setCustomerAddressId($customerAddressId);
+
+    /**
+     * Get save in address book flag
+     *
+     * @return int|null
+     */
+    public function getSaveInAddressBook();
+
+    /**
+     * Set save in address book flag
+     *
+     * @param int|null $saveInAddressBook
+     * @return $this
+     */
+    public function setSaveInAddressBook($saveInAddressBook);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

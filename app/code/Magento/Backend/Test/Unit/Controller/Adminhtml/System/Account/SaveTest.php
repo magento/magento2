@@ -33,7 +33,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\User\Model\User */
     protected $_userMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Locale\Validator */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Validator\locale */
     protected $_validatorMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Locale\Manager */
@@ -80,7 +80,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
 
-        $this->_validatorMock = $this->getMockBuilder('Magento\Framework\Locale\Validator')
+        $this->_validatorMock = $this->getMockBuilder('Magento\Framework\Validator\Locale')
             ->disableOriginalConstructor()
             ->setMethods(['isValid'])
             ->getMock();
@@ -172,7 +172,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-            $this->equalTo('Magento\Framework\Locale\Validator')
+            $this->equalTo('Magento\Framework\Validator\Locale')
         )->will(
             $this->returnValue($this->_validatorMock)
         );

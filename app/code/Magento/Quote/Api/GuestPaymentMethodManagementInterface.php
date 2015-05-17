@@ -12,7 +12,7 @@ namespace Magento\Quote\Api;
 interface GuestPaymentMethodManagementInterface
 {
     /**
-     * Adds a specified payment method to a specified shopping cart.
+     * Add a specified payment method to a specified shopping cart.
      *
      * @param string $cartId The cart ID.
      * @param \Magento\Quote\Api\Data\PaymentInterface $method The payment method.
@@ -24,7 +24,7 @@ interface GuestPaymentMethodManagementInterface
     public function set($cartId, \Magento\Quote\Api\Data\PaymentInterface $method);
 
     /**
-     * Returns the payment method for a specified shopping cart.
+     * Return the payment method for a specified shopping cart.
      *
      * @param string $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\PaymentInterface  Payment method object.
@@ -33,7 +33,7 @@ interface GuestPaymentMethodManagementInterface
     public function get($cartId);
 
     /**
-     * Lists available payment methods for a specified shopping cart.
+     * List available payment methods for a specified shopping cart.
      *
      * @param string $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\PaymentMethodInterface[] Array of payment methods.

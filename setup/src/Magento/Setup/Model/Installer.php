@@ -11,7 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Resource\Config;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Model\Resource\Db\Context;
@@ -31,6 +31,7 @@ use Magento\Setup\Module\Setup;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Setup\Validator\DbValidator;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -186,6 +187,11 @@ class Installer
     private $cleanupFiles;
 
     /**
+     * @var DbValidator
+     */
+    private $dbValidator;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -204,6 +210,7 @@ class Installer
      * @param Context $context
      * @param SetupConfigModel $setupConfigModel
      * @param CleanupFiles $cleanupFiles
+     * @param DbValidator $dbValidator
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -223,7 +230,8 @@ class Installer
         ObjectManagerProvider $objectManagerProvider,
         Context $context,
         SetupConfigModel $setupConfigModel,
-        CleanupFiles $cleanupFiles
+        CleanupFiles $cleanupFiles,
+        DbValidator $dbValidator
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -242,6 +250,7 @@ class Installer
         $this->context = $context;
         $this->setupConfigModel = $setupConfigModel;
         $this->cleanupFiles = $cleanupFiles;
+        $this->dbValidator = $dbValidator;
     }
 
     /**
@@ -417,9 +426,9 @@ class Installer
         $userData = is_array($data) ? $data : $data->getArrayCopy();
         $this->setupConfigModel->process($userData);
         if ($this->deploymentConfig->isAvailable()) {
-            $deploymentConfigData = $this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_CRYPT_KEY);
+            $deploymentConfigData = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
             if (isset($deploymentConfigData)) {
-                $this->installInfo[ConfigOptionsList::KEY_ENCRYPTION_KEY] = $deploymentConfigData;
+                $this->installInfo[ConfigOptionsListConstants::KEY_ENCRYPTION_KEY] = $deploymentConfigData;
             }
         }
         // reset object manager now that there is a deployment config
@@ -975,63 +984,6 @@ class Installer
     }
 
     /**
-     * Checks Database Connection
-     *
-     * @param string $dbName
-     * @param string $dbHost
-     * @param string $dbUser
-     * @param string $dbPass
-     * @return boolean
-     * @throws \Magento\Setup\Exception
-     */
-    public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
-    {
-        $connection = $this->connectionFactory->create([
-            'dbname' => $dbName,
-            'host' => $dbHost,
-            'username' => $dbUser,
-            'password' => $dbPass,
-            'active' => true,
-        ]);
-
-        if (!$connection) {
-            throw new \Magento\Setup\Exception('Database connection failure.');
-        }
-
-        $mysqlVersion = $connection->fetchOne('SELECT version()');
-        if ($mysqlVersion) {
-            if (preg_match('/^([0-9\.]+)/', $mysqlVersion, $matches)) {
-                if (isset($matches[1]) && !empty($matches[1])) {
-                    if (version_compare($matches[1], self::MYSQL_VERSION_REQUIRED) < 0) {
-                        throw new \Magento\Setup\Exception(
-                            'Sorry, but we support MySQL version '. self::MYSQL_VERSION_REQUIRED . ' or later.'
-                        );
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Check if database table prefix is valid
-     *
-     * @param string $prefix
-     * @return boolean
-     * @throws \InvalidArgumentException
-     */
-    public function checkDatabaseTablePrefix($prefix)
-    {
-        //The table prefix should contain only letters (a-z), numbers (0-9) or underscores (_);
-        // the first character should be a letter.
-        if ($prefix !== '' && !preg_match('/^([a-zA-Z])([[:alnum:]_]+)$/', $prefix)) {
-            throw new \InvalidArgumentException('Please correct the table prefix format.');
-        }
-
-        return true;
-    }
-
-    /**
      * Return messages
      *
      * @return array
@@ -1048,11 +1000,9 @@ class Installer
      */
     public function cleanupDb()
     {
-        // stops cleanup if app/etc/config.php does not exist
+        // stops cleanup if configuration does not exist
         if ($this->deploymentConfig->isAvailable()) {
-            $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
-            $config = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
-
+            $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
             if ($config) {
                 try {
                     $connection = $this->connectionFactory->create($config);
@@ -1063,7 +1013,7 @@ class Installer
                     $this->log->log($e->getMessage() . ' - skipping database cleanup');
                     return;
                 }
-                $dbName = $connection->quoteIdentifier($config['dbname']);
+                $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
                 $this->log->log("Recreating database {$dbName}");
                 $connection->query("DROP DATABASE IF EXISTS {$dbName}");
                 $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
@@ -1081,17 +1031,19 @@ class Installer
     private function deleteDeploymentConfig()
     {
         $configDir = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-        $file = 'config.php';
-        $absolutePath = $configDir->getAbsolutePath($file);
-        if (!$configDir->isFile($file)) {
-            $this->log->log("The file '{$absolutePath}' doesn't exist - skipping cleanup");
-            return;
-        }
-        try {
-            $this->log->log($absolutePath);
-            $configDir->delete($file);
-        } catch (FileSystemException $e) {
-            $this->log->log($e->getMessage());
+        $configFiles = $this->deploymentConfigReader->getFiles();
+        foreach ($configFiles as $configFile) {
+            $absolutePath = $configDir->getAbsolutePath($configFile);
+            if (!$configDir->isFile($configFile)) {
+                $this->log->log("The file '{$absolutePath}' doesn't exist - skipping cleanup");
+                continue;
+            }
+            try {
+                $this->log->log($absolutePath);
+                $configDir->delete($configFile);
+            } catch (FileSystemException $e) {
+                $this->log->log($e->getMessage());
+            }
         }
     }
 
@@ -1115,16 +1067,30 @@ class Installer
      */
     private function assertDbAccessible()
     {
-        $dbConfig = $this->deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
-        $connectionConfig = $dbConfig['connection'][Config::DEFAULT_SETUP_CONNECTION];
-        $this->checkDatabaseConnection(
-            $connectionConfig[ConfigOptionsList::KEY_NAME],
-            $connectionConfig[ConfigOptionsList::KEY_HOST],
-            $connectionConfig[ConfigOptionsList::KEY_USER],
-            $connectionConfig[ConfigOptionsList::KEY_PASS]
+        $this->dbValidator->checkDatabaseConnection(
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_NAME
+            ),
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_HOST
+            ),
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_USER
+            ),
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_PASSWORD
+            )
         );
-        if (isset($connectionConfig[ConfigOptionsList::KEY_PREFIX])) {
-            $this->checkDatabaseTablePrefix($connectionConfig[ConfigOptionsList::KEY_PREFIX]);
+        $prefix = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+            '/' . ConfigOptionsListConstants::KEY_PREFIX
+        );
+        if (null !== $prefix) {
+            $this->dbValidator->checkDatabaseTablePrefix($prefix);
         }
     }
 

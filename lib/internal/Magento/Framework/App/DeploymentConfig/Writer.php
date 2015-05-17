@@ -78,10 +78,12 @@ class Writer
     public function checkIfWritable()
     {
         $configDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
-        if ($configDirectory->isWritable($this->reader->getFile())) {
-            return true;
+        foreach ($this->reader->getFiles() as $file) {
+            if (!$configDirectory->isWritable($file)) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     /**
@@ -99,7 +101,7 @@ class Writer
             if (isset($paths[$fileKey])) {
 
                 if ($this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->isExist($paths[$fileKey])) {
-                    $currentData = $this->reader->load($paths[$fileKey]);
+                    $currentData = $this->reader->load($fileKey);
                     if ($override) {
                         $config = array_merge($currentData, $config);
                     } else {
@@ -109,6 +111,11 @@ class Writer
 
                 $contents = $this->formatter->format($config);
                 $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile($paths[$fileKey], $contents);
+                if (function_exists('opcache_invalidate')) {
+                    opcache_invalidate(
+                        $this->filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath($paths[$fileKey])
+                    );
+                }
             }
         }
         $this->deploymentConfig->resetData();

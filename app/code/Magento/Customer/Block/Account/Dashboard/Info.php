@@ -52,7 +52,6 @@ class Info extends \Magento\Framework\View\Element\Template
         $this->_subscriberFactory = $subscriberFactory;
         $this->_helperView = $helperView;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
     }
 
     /**

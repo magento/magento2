@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Collects all ConfigOptionsList class in modules and setup
@@ -44,23 +45,33 @@ class ConfigOptionsListCollector
     private $objectManagerProvider;
 
     /**
+     * Service locator
+     *
+     * @var ServiceLocatorInterface
+     */
+    private $serviceLocator;
+
+    /**
      * Constructor
      *
      * @param DirectoryList $directoryList
      * @param Filesystem $filesystem
      * @param FullModuleList $fullModuleList
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param ServiceLocatorInterface $serviceLocator
      */
     public function __construct(
         DirectoryList $directoryList,
         Filesystem $filesystem,
         FullModuleList $fullModuleList,
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        ServiceLocatorInterface $serviceLocator
     ) {
         $this->directoryList = $directoryList;
         $this->filesystem = $filesystem;
         $this->fullModuleList = $fullModuleList;
         $this->objectManagerProvider = $objectManagerProvider;
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
@@ -84,10 +95,10 @@ class ConfigOptionsListCollector
             }
         }
 
-        // check Framework
-        $setupOptionsClassName = 'Magento\Framework\Config\ConfigOptionsList';
+        // check Setup
+        $setupOptionsClassName = 'Magento\Setup\Model\ConfigOptionsList';
         if (class_exists($setupOptionsClassName)) {
-            $setupOptionsClass = $this->objectManagerProvider->get()->create($setupOptionsClassName);
+            $setupOptionsClass = $this->serviceLocator->get($setupOptionsClassName);
             if ($setupOptionsClass instanceof ConfigOptionsListInterface) {
                 $optionsList['setup'] = $setupOptionsClass;
             }

@@ -10,6 +10,7 @@ namespace Magento\Catalog\Api;
 /**
  * @todo implement this interface as a \Magento\Catalog\Model\Product\Attribute\Media\GalleryManagement.
  * Move logic from service there.
+ * @api
  */
 interface ProductAttributeMediaGalleryManagementInterface
 {

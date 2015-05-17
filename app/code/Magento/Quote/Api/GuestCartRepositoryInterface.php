@@ -12,7 +12,7 @@ namespace Magento\Quote\Api;
 interface GuestCartRepositoryInterface
 {
     /**
-     * Enables a guest user to return information for a specified cart.
+     * Enable a guest user to return information for a specified cart.
      *
      * @param string $cartId
      * @return \Magento\Quote\Api\Data\CartInterface

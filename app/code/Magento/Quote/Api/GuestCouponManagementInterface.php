@@ -14,7 +14,7 @@ namespace Magento\Quote\Api;
 interface GuestCouponManagementInterface
 {
     /**
-     * Returns information for a coupon in a specified cart.
+     * Return information for a coupon in a specified cart.
      *
      * @param string $cartId The cart ID.
      * @return string The coupon code data.
@@ -23,7 +23,7 @@ interface GuestCouponManagementInterface
     public function get($cartId);
 
     /**
-     * Adds a coupon by code to a specified cart.
+     * Add a coupon by code to a specified cart.
      *
      * @param string $cartId The cart ID.
      * @param string $couponCode The coupon code data.
@@ -34,7 +34,7 @@ interface GuestCouponManagementInterface
     public function set($cartId, $couponCode);
 
     /**
-     * Deletes a coupon from a specified cart.
+     * Delete a coupon from a specified cart.
      *
      * @param string $cartId The cart ID.
      * @return bool

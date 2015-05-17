@@ -9,7 +9,7 @@
  */
 namespace Magento\Cron\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Console\CLI;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -22,6 +22,12 @@ class Observer
     const CACHE_KEY_LAST_SCHEDULE_GENERATE_AT = 'cron_last_schedule_generate_at';
 
     const CACHE_KEY_LAST_HISTORY_CLEANUP_AT = 'cron_last_history_cleanup_at';
+
+    /**
+     * Flag for internal communication between processes for running
+     * all jobs in a group in parallel as a separate process
+     */
+    const STANDALONE_PROCESS_STARTED = 'standaloneProcessStarted';
 
     /**#@-*/
 
@@ -143,18 +149,17 @@ class Observer
             if ($this->_request->getParam('group') !== null && $this->_request->getParam('group') != $groupId) {
                 continue;
             }
-            if (($this->_request->getParam('standaloneProcessStarted') !== '1') && (
+            if (($this->_request->getParam(self::STANDALONE_PROCESS_STARTED) !== '1') && (
                     $this->_scopeConfig->getValue(
                         'system/cron/' . $groupId . '/use_separate_process',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ) == 1
                 )) {
                 $this->_shell->execute(
-                    'php -f %s -- --group=%s --standaloneProcessStarted=%s',
+                    'php %s cron:run --group=' . $groupId . ' --' . CLI::INPUT_KEY_BOOTSTRAP . '='
+                    . self::STANDALONE_PROCESS_STARTED . '=1',
                     [
-                        BP . '/' . DirectoryList::PUB . '/cron.php',
-                        $groupId,
-                        '1'
+                        BP . '/bin/magento'
                     ]
                 );
                 continue;
