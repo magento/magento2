@@ -64,6 +64,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestIncomplete('MAGETWO-36789');
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->httpContext = $this->getMock('Magento\Framework\App\Http\Context', ['getValue'], [], '', false);
@@ -94,7 +95,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
                 'addAttributeToFilter',
                 'addAttributeToSort',
                 'setPage',
-                'setOrders'
+                'setOrders',
             ],
             [],
             '',
