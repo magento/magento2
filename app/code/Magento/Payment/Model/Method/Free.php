@@ -103,7 +103,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Quote\Model\Quote|null $quote
      * @return bool
      */
-    public function isActive($quote = null)
+    public function isAvailableInConfig($quote = null)
     {
         return parent::isAvailable($quote);
     }
