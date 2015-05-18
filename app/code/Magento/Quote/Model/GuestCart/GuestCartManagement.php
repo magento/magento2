@@ -10,6 +10,8 @@ use Magento\Quote\Api\GuestCartManagementInterface;
 use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 /**
  * Cart Management class for guest carts.
@@ -29,18 +31,26 @@ class GuestCartManagement implements GuestCartManagementInterface
     protected $quoteIdMaskFactory;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    protected $cartRepository;
+
+    /**
      * Initialize dependencies.
      *
      * @param CartManagementInterface $quoteManagement
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param CartRepositoryInterface $cartRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CartManagementInterface $quoteManagement,
-        QuoteIdMaskFactory $quoteIdMaskFactory
+        QuoteIdMaskFactory $quoteIdMaskFactory,
+        CartRepositoryInterface $cartRepository
     ) {
         $this->quoteManagement = $quoteManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->cartRepository = $cartRepository;
     }
 
     /**
@@ -68,10 +78,33 @@ class GuestCartManagement implements GuestCartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function placeOrder($cartId)
+    public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->quoteManagement->placeOrder($quoteIdMask->getQuoteId());
+        $this->cartRepository->get($quoteIdMask->getQuoteId())
+            ->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
+        return $this->quoteManagement->placeOrder($quoteIdMask->getQuoteId(), $agreements, $paymentMethod);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function placeOrderCreatingAccount(
+        $cartId,
+        $customer,
+        $password,
+        $agreements = null,
+        PaymentInterface $paymentMethod = null
+    ) {
+        /** @var $quoteIdMask QuoteIdMask */
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        return $this->quoteManagement->placeOrderCreatingAccount(
+            $quoteIdMask->getQuoteId(),
+            $customer,
+            $password,
+            $agreements,
+            $paymentMethod
+        );
     }
 }

@@ -10,6 +10,7 @@ namespace Magento\Sales\Api\Data;
  *
  * An invoice is a record of the receipt of payment for an order. An invoice can include comments that detail the
  * invoice history.
+ * @api
  */
 interface InvoiceCommentSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {

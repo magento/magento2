@@ -192,6 +192,30 @@ class Session
     }
 
     /**
+     * Set Checked status of "Remember Me"
+     *
+     * @param Observer $observer
+     * @return void
+     */
+    public function setRememberMeStatusForAjaxLogin(Observer $observer)
+    {
+        if (!$this->_persistentData->canProcess($observer)
+            || !$this->_persistentData->isEnabled()
+            || !$this->_persistentData->isRememberMeEnabled()
+        ) {
+            return;
+        }
+
+        /** @var $request \Magento\Framework\App\RequestInterface */
+        $request = $observer->getEvent()->getRequest();
+        if ($request && $request->isXmlHttpRequest()) {
+            $requestData = \Zend_Json::decode($request->getContent());
+            $isRememberMeChecked = empty($requestData['persistent_remember_me']) ? false : true;
+            $this->_persistentSession->setRememberMeChecked((bool)$isRememberMeChecked);
+        }
+    }
+
+    /**
      * Renew persistent cookie
      *
      * @param Observer $observer

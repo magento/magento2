@@ -20,19 +20,21 @@ class SampleData
     /**
      * Path to the sample data application
      */
-    const PATH = 'dev/tools/Magento/Tools/SampleData';
+    const PATH = '/Magento/SampleData';
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * Filesystem Directory List
+     *
+     * @var DirectoryList
      */
-    private $rootDir;
+    private $directoryList;
 
     /**
-     * @param Filesystem $filesystem
+     * @param DirectoryList $directoryList
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(DirectoryList $directoryList)
     {
-        $this->rootDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->directoryList = $directoryList;
     }
 
     /**
@@ -42,7 +44,7 @@ class SampleData
      */
     public function isDeployed()
     {
-        return $this->rootDir->isExist(self::PATH);
+        return file_exists($this->directoryList->getPath(DirectoryList::MODULES) . self::PATH);
     }
 
     /**
@@ -51,13 +53,18 @@ class SampleData
      * @param ObjectManagerInterface $objectManager
      * @param LoggerInterface $logger
      * @param string $userName
+     * @param array $modules
      * @throws \Exception
      * @return void
      */
-    public function install(ObjectManagerInterface $objectManager, LoggerInterface $logger, $userName)
-    {
-        /** @var \Magento\Tools\SampleData\Logger $sampleDataLogger */
-        $sampleDataLogger = $objectManager->get('Magento\Tools\SampleData\Logger');
+    public function install(
+        ObjectManagerInterface $objectManager,
+        LoggerInterface $logger,
+        $userName,
+        array $modules = []
+    ) {
+        /** @var \Magento\SampleData\Model\Logger $sampleDataLogger */
+        $sampleDataLogger = $objectManager->get('Magento\SampleData\Model\Logger');
         $sampleDataLogger->setSubject($logger);
 
         $areaCode = 'adminhtml';
@@ -68,8 +75,8 @@ class SampleData
         $configLoader = $objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
         $objectManager->configure($configLoader->load($areaCode));
 
-        /** @var \Magento\Tools\SampleData\Installer $installer */
-        $installer = $objectManager->get('Magento\Tools\SampleData\Installer');
-        $installer->run($userName);
+        /** @var \Magento\SampleData\Model\Installer $installer */
+        $installer = $objectManager->get('Magento\SampleData\Model\Installer');
+        $installer->run($userName, $modules);
     }
 }

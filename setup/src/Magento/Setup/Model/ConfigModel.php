@@ -148,7 +148,7 @@ class ConfigModel
         $options = $this->collector->collectOptionsLists();
 
         foreach ($options as $option) {
-            $errors = array_merge($errors, $option->validate($inputOptions));
+            $errors = array_merge($errors, $option->validate($inputOptions, $this->deploymentConfig));
         }
 
         return $errors;
