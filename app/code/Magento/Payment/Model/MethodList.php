@@ -55,7 +55,7 @@ class MethodList
         if (!$isFreeAdded) {
             /** @var \Magento\Payment\Model\Method\Free $freeMethod */
             $freeMethod = $this->paymentHelper->getMethodInstance(Free::PAYMENT_METHOD_FREE_CODE);
-            if ($freeMethod->isActive()) {
+            if ($freeMethod->isAvailableInConfig()) {
                 $freeMethod->setInfoInstance($quote->getPayment());
                 $methods[] = $freeMethod;
             }
