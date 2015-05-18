@@ -2381,7 +2381,7 @@ interface OrderInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Sets the customer email address for the order.
      *
-     * @param string customerEmail
+     * @param string $customerEmail
      * @return $this
      */
     public function setCustomerEmail($customerEmail);
