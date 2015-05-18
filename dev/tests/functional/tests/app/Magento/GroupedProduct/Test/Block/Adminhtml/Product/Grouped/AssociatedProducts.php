@@ -104,6 +104,8 @@ class AssociatedProducts extends Tab
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDataFormTab($fields = null, SimpleElement $element = null)
     {
