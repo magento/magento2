@@ -179,7 +179,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the ID for the order address.
      *
-     * @param int|null $entityId
+     * @param int $entityId
      * @return $this
      */
     public function setEntityId($entityId);
@@ -313,7 +313,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the parent ID for the order address.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setParentId($id);
@@ -321,7 +321,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the country address ID for the order address.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setCustomerAddressId($id);
@@ -329,7 +329,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the quote address ID for the order address.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setQuoteAddressId($id);
@@ -337,7 +337,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the region ID for the order address.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setRegionId($id);
@@ -345,7 +345,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the customer ID for the order address.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setCustomerId($id);
@@ -353,7 +353,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the fax number for the order address.
      *
-     * @param string|null $fax
+     * @param string $fax
      * @return $this
      */
     public function setFax($fax);
@@ -361,7 +361,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the region for the order address.
      *
-     * @param string|null $region
+     * @param string $region
      * @return $this
      */
     public function setRegion($region);
@@ -401,7 +401,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the email address for the order address.
      *
-     * @param string|null $email
+     * @param string $email
      * @return $this
      */
     public function setEmail($email);
@@ -441,7 +441,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the prefix for the order address.
      *
-     * @param string|null $prefix
+     * @param string $prefix
      * @return $this
      */
     public function setPrefix($prefix);
@@ -449,7 +449,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the middle name for the order address.
      *
-     * @param string|null $middlename
+     * @param string $middlename
      * @return $this
      */
     public function setMiddlename($middlename);
@@ -457,7 +457,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the suffix for the order address.
      *
-     * @param string|null $suffix
+     * @param string $suffix
      * @return $this
      */
     public function setSuffix($suffix);
@@ -465,7 +465,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the company for the order address.
      *
-     * @param string|null $company
+     * @param string $company
      * @return $this
      */
     public function setCompany($company);
@@ -473,7 +473,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the VAT ID for the order address.
      *
-     * @param string|null $id
+     * @param string $id
      * @return $this
      */
     public function setVatId($id);
@@ -481,7 +481,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the VAT-is-valid flag value for the order address.
      *
-     * @param int|null $vatIsValid
+     * @param int $vatIsValid
      * @return $this
      */
     public function setVatIsValid($vatIsValid);
@@ -489,7 +489,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the VAT request ID for the order address.
      *
-     * @param string|null $id
+     * @param string $id
      * @return $this
      */
     public function setVatRequestId($id);
@@ -497,7 +497,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the VAT request date for the order address.
      *
-     * @param string|null $vatRequestDate
+     * @param string $vatRequestDate
      * @return $this
      */
     public function setVatRequestDate($vatRequestDate);
@@ -505,7 +505,7 @@ interface OrderAddressInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the VAT-request-success flag value for the order address.
      *
-     * @param int|null $vatRequestSuccess
+     * @param int $vatRequestSuccess
      * @return $this
      */
     public function setVatRequestSuccess($vatRequestSuccess);

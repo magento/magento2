@@ -107,7 +107,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the created-at timestamp for the shipment.
      *
-     * @param string|null $createdAt timestamp
+     * @param string $createdAt timestamp
      * @return $this
      */
     public function setCreatedAt($createdAt);
@@ -136,7 +136,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets entity ID.
      *
-     * @param int|null $entityId
+     * @param int $entityId
      * @return $this
      */
     public function setEntityId($entityId);
@@ -165,7 +165,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets any packages for the shipment.
      *
-     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[]|null $packages
+     * @param \Magento\Sales\Api\Data\ShipmentPackageInterface[] $packages
      * @return $this
      */
     public function setPackages(array $packages = null);
@@ -267,7 +267,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the store ID for the shipment.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setStoreId($id);
@@ -275,7 +275,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the total weight for the shipment.
      *
-     * @param float|null $totalWeight
+     * @param float $totalWeight
      * @return $this
      */
     public function setTotalWeight($totalWeight);
@@ -283,7 +283,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the total quantity for the shipment.
      *
-     * @param float|null $qty
+     * @param float $qty
      * @return $this
      */
     public function setTotalQty($qty);
@@ -291,7 +291,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the email-sent flag value for the shipment.
      *
-     * @param int|null $emailSent
+     * @param int $emailSent
      * @return $this
      */
     public function setEmailSent($emailSent);
@@ -299,7 +299,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the order ID for the shipment.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setOrderId($id);
@@ -307,7 +307,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the customer ID for the shipment.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setCustomerId($id);
@@ -315,7 +315,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the shipping address ID for the shipment.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setShippingAddressId($id);
@@ -323,7 +323,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the billing address ID for the shipment.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setBillingAddressId($id);
@@ -331,7 +331,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the shipment status.
      *
-     * @param int|null $shipmentStatus
+     * @param int $shipmentStatus
      * @return $this
      */
     public function setShipmentStatus($shipmentStatus);
@@ -339,7 +339,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the increment ID for the shipment.
      *
-     * @param string|null $id
+     * @param string $id
      * @return $this
      */
     public function setIncrementId($id);
@@ -347,7 +347,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the shipping label for the shipment.
      *
-     * @param string|null $shippingLabel
+     * @param string $shippingLabel
      * @return $this
      */
     public function setShippingLabel($shippingLabel);
@@ -355,7 +355,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Sets the updated-at timestamp for the shipment.
      *
-     * @param string|null $timestamp
+     * @param string $timestamp
      * @return $this
      */
     public function setUpdatedAt($timestamp);

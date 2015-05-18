@@ -90,7 +90,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets entity ID.
      *
-     * @param int|null $entityId
+     * @param int $entityId
      * @return $this
      */
     public function setEntityId($entityId);
@@ -161,7 +161,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the parent ID for the shipment item.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setParentId($id);
@@ -169,7 +169,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the row total for the shipment item.
      *
-     * @param float|null $amount
+     * @param float $amount
      * @return $this
      */
     public function setRowTotal($amount);
@@ -177,7 +177,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the price for the shipment item.
      *
-     * @param float|null $price
+     * @param float $price
      * @return $this
      */
     public function setPrice($price);
@@ -185,7 +185,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the weight for the shipment item.
      *
-     * @param float|null $weight
+     * @param float $weight
      * @return $this
      */
     public function setWeight($weight);
@@ -201,7 +201,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the product ID for the shipment item.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setProductId($id);
@@ -217,7 +217,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the additional data for the shipment item.
      *
-     * @param string|null $additionalData
+     * @param string $additionalData
      * @return $this
      */
     public function setAdditionalData($additionalData);
@@ -225,7 +225,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the description for the shipment item.
      *
-     * @param string|null $description
+     * @param string $description
      * @return $this
      */
     public function setDescription($description);
@@ -233,7 +233,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the name for the shipment item.
      *
-     * @param string|null $name
+     * @param string $name
      * @return $this
      */
     public function setName($name);
@@ -241,7 +241,7 @@ interface ShipmentItemInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Sets the SKU for the shipment item.
      *
-     * @param string|null $sku
+     * @param string $sku
      * @return $this
      */
     public function setSku($sku);

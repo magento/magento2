@@ -79,7 +79,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the transaction ID for the transaction.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setTransactionId($id);
@@ -150,7 +150,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the created-at timestamp for the transaction.
      *
-     * @param string|null $createdAt timestamp
+     * @param string $createdAt timestamp
      * @return $this
      */
     public function setCreatedAt($createdAt);
@@ -165,7 +165,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the parent ID for the transaction.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setParentId($id);
@@ -173,7 +173,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the order ID for the transaction.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setOrderId($id);
@@ -181,7 +181,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the payment ID for the transaction.
      *
-     * @param int|null $id
+     * @param int $id
      * @return $this
      */
     public function setPaymentId($id);
@@ -189,7 +189,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the transaction business ID for the transaction.
      *
-     * @param string|null $id
+     * @param string $id
      * @return $this
      */
     public function setTxnId($id);
@@ -197,7 +197,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the parent transaction business ID for the transaction.
      *
-     * @param string|null $id
+     * @param string $id
      * @return $this
      */
     public function setParentTxnId($id);
@@ -205,7 +205,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the transaction type for the transaction.
      *
-     * @param string|null $txnType
+     * @param string $txnType
      * @return $this
      */
     public function setTxnType($txnType);
@@ -213,7 +213,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Sets the value of the is-closed flag for the transaction.
      *
-     * @param int|null $isClosed
+     * @param int $isClosed
      * @return $this
      */
     public function setIsClosed($isClosed);
@@ -223,7 +223,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Updates data inside the 'additional_information' array
      * Does not allow setting of arrays
      *
-     * @param string|null $key
+     * @param string $key
      * @param mixed $value
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException

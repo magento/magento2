@@ -68,7 +68,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Sets the created-at timestamp for the order status history.
      *
-     * @param string|null $createdAt timestamp
+     * @param string $createdAt timestamp
      * @return $this
      */
     public function setCreatedAt($createdAt);
@@ -83,7 +83,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Sets entity ID.
      *
-     * @param int|null $entityId
+     * @param int $entityId
      * @return $this
      */
     public function setEntityId($entityId);
@@ -158,7 +158,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Sets the status for the order status history.
      *
-     * @param string|null $status
+     * @param string $status
      * @return $this
      */
     public function setStatus($status);
@@ -166,7 +166,7 @@ interface OrderStatusHistoryInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Sets the entity name for the order status history.
      *
-     * @param string|null $entityName
+     * @param string $entityName
      * @return $this
      */
     public function setEntityName($entityName);
