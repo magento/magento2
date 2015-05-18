@@ -325,12 +325,7 @@ class Collection extends \Magento\Framework\Data\Collection
             return [];
         }
         $reportResource = $this->_collectionFactory->create($this->_reportCollection);
-        $reportResource->setDateRange(
-            $this->timeShift($fromDate),
-            $this->timeShift($toDate)
-        )->setStoreIds(
-            $this->getStoreIds()
-        );
+        $reportResource->setDateRange($fromDate, $toDate)->setStoreIds($this->getStoreIds());
         return $reportResource;
     }
 
