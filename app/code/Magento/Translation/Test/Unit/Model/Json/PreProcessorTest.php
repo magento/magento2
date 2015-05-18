@@ -31,12 +31,23 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $areaListMock;
 
+    /**
+     * @var \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $translateMock;
+
     protected function setUp()
     {
         $this->configMock = $this->getMock('Magento\Translation\Model\Js\Config', [], [], '', false);
         $this->dataProviderMock = $this->getMock('Magento\Translation\Model\Js\DataProvider', [], [], '', false);
         $this->areaListMock = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
-        $this->model = new PreProcessor($this->configMock, $this->dataProviderMock, $this->areaListMock);
+        $this->translateMock = $this->getMockForAbstractClass('Magento\Framework\TranslateInterface');
+        $this->model = new PreProcessor(
+            $this->configMock,
+            $this->dataProviderMock,
+            $this->areaListMock,
+            $this->translateMock
+        );
     }
 
     public function testGetData()
