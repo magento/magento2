@@ -52,16 +52,19 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 'stock_item' => [
                     Converter::DATA_TYPE => 'Magento\CatalogInventory\Api\Data\StockItemInterface',
                     Converter::RESOURCE_PERMISSIONS => [],
+                    Converter::JOIN_DIRECTIVE => null,
                 ],
             ],
             'Magento\Customer\Api\Data\CustomerInterface' => [
                 'custom_1' => [
                     Converter::DATA_TYPE => 'Magento\Customer\Api\Data\CustomerCustom',
                     Converter::RESOURCE_PERMISSIONS => [],
+                    Converter::JOIN_DIRECTIVE => null,
                 ],
                 'custom_2' => [
                     Converter::DATA_TYPE => 'Magento\CustomerExtra\Api\Data\CustomerCustom2',
                     Converter::RESOURCE_PERMISSIONS => [],
+                    Converter::JOIN_DIRECTIVE => null,
                 ],
             ],
             'Magento\Customer\Api\Data\CustomerInterface2' => [
@@ -70,6 +73,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     Converter::RESOURCE_PERMISSIONS => [
                         'Magento_Customer::manage',
                     ],
+                    Converter::JOIN_DIRECTIVE => null,
                 ],
                 'custom_with_multiple_permissions' => [
                     Converter::DATA_TYPE => 'Magento\CustomerExtra\Api\Data\CustomerCustom2',
@@ -77,11 +81,47 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                         'Magento_Customer::manage',
                         'Magento_Customer::manage2',
                     ],
+                    Converter::JOIN_DIRECTIVE => null,
                 ],
             ],
         ];
 
         $xmlFile = __DIR__ . '/_files/extension_attributes.xml';
+        $dom = new \DOMDocument();
+        $dom->loadXML(file_get_contents($xmlFile));
+        $result = $this->_converter->convert($dom);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Test converting valid data object config
+     */
+    public function testConvertWithJoinDirectives()
+    {
+        $expected = [
+            'Magento\Customer\Api\Data\CustomerInterface' => [
+                'library_card_id' => [
+                    Converter::DATA_TYPE => 'string',
+                    Converter::RESOURCE_PERMISSIONS => [],
+                    Converter::JOIN_DIRECTIVE => [
+                        Converter::JOIN_REFERENCE_TABLE => "library_account",
+                        Converter::JOIN_SELECT_FIELDS => "library_card_id",
+                        Converter::JOIN_JOIN_ON_FIELD => "customer_id",
+                    ],
+                ],
+                'reviews' => [
+                    Converter::DATA_TYPE => 'Magento\Reviews\Api\Data\Reviews[]',
+                    Converter::RESOURCE_PERMISSIONS => [],
+                    Converter::JOIN_DIRECTIVE => [
+                        Converter::JOIN_REFERENCE_TABLE => "reviews",
+                        Converter::JOIN_SELECT_FIELDS => "comment,rating",
+                        Converter::JOIN_JOIN_ON_FIELD => "customer_id",
+                    ],
+                ],
+            ],
+        ];
+
+        $xmlFile = __DIR__ . '/_files/extension_attributes_with_join_directives.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
         $result = $this->_converter->convert($dom);

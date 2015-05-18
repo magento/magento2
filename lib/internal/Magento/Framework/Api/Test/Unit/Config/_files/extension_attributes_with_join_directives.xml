@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
+        <attribute code="library_card_id" type="string">
+            <join reference_table="library_account"
+                  select_fields="library_card_id"
+                  join_on_field="customer_id"
+            />
+        </attribute>
+        <attribute code="reviews" type="Magento\Reviews\Api\Data\Reviews[]">
+            <join reference_table="reviews"
+                  select_fields="comment,rating"
+                  join_on_field="customer_id"
+            />
+        </attribute>
+    </extension_attributes>
+</config>

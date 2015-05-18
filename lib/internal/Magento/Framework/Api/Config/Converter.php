@@ -9,6 +9,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     const RESOURCE_PERMISSIONS = "resourceRefs";
     const DATA_TYPE = "type";
+    const JOIN_DIRECTIVE = "join";
+    const JOIN_REFERENCE_TABLE = "join_reference_table";
+    const JOIN_SELECT_FIELDS= "join_select_fields";
+    const JOIN_JOIN_ON_FIELD= "join_join_on_field";
 
     /**
      * Convert dom node tree to array
@@ -47,9 +51,22 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     }
                 }
 
+                $joinElement = $attribute->getElementsByTagName('join')->item(0);
+                $join = null;
+                if ($joinElement && $joinElement->nodeType === XML_ELEMENT_NODE) {
+                    $join = [];
+                    $join[self::JOIN_REFERENCE_TABLE] = $joinElement->attributes
+                        ->getNamedItem('reference_table')->nodeValue;
+                    $join[self::JOIN_SELECT_FIELDS] = $joinElement->attributes
+                        ->getNamedItem('select_fields')->nodeValue;
+                    $join[self::JOIN_JOIN_ON_FIELD] = $joinElement->attributes
+                        ->getNamedItem('join_on_field')->nodeValue;
+                }
+
                 $typeConfig[$code] = [
                     self::DATA_TYPE => $codeType,
                     self::RESOURCE_PERMISSIONS => $resourceRefs,
+                    self::JOIN_DIRECTIVE => $join,
                 ];
             }
 

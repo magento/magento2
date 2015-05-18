@@ -23,6 +23,7 @@
         <xs:sequence>
             <xs:element name="resources" type="resourcesType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:element name="join" type="joinType" minOccurs="0" maxOccurs="1"/>
         <xs:attribute type="xs:string" name="code" use="required"/>
         <xs:attribute type="xs:string" name="type" use="required"/>
     </xs:complexType>
@@ -36,6 +37,11 @@
         <xs:sequence>
             <xs:element name="resource" type="resourceType" maxOccurs="unbounded"/>
         </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="joinType">
+        <xs:attribute name="reference_table" use="required" type="xs:string"/>
+        <xs:attribute name="select_fields" use="required" type="xs:string"/>
+        <xs:attribute name="join_on_field" use="required" type="xs:string"/>
     </xs:complexType>
     <xs:complexType name="resourceType">
         <xs:attribute name="ref" use="required">
