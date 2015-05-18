@@ -107,7 +107,6 @@ class Widget
      *
      * @param string $type Widget type
      * @return null|\Magento\Framework\Simplexml\Element
-     * @api
      */
     public function getConfigAsXml($type)
     {
@@ -121,7 +120,6 @@ class Widget
      * @return \Magento\Framework\Object
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @api
      */
     public function getConfigAsObject($type)
     {
