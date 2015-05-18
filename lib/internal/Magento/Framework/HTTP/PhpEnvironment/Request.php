@@ -699,6 +699,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
 
     /**
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isForwarded()
     {
@@ -708,6 +709,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     /**
      * @param bool $forwarded
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setForwarded($forwarded)
     {

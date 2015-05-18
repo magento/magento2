@@ -110,41 +110,23 @@ class Authentication
         }
         if (!$isRedirectNeeded && !$request->isForwarded()) {
             if ($request->getParam('isIframe')) {
-                $request->setForwarded(
-                    true
-                )->setRouteName(
-                    'adminhtml'
-                )->setControllerName(
-                    'auth'
-                )->setActionName(
-                    'deniedIframe'
-                )->setDispatched(
-                    false
-                );
+                $request->setForwarded(true)
+                    ->setRouteName('adminhtml')
+                    ->setControllerName('auth')
+                    ->setActionName('deniedIframe')
+                    ->setDispatched(false);
             } elseif ($request->getParam('isAjax')) {
-                $request->setForwarded(
-                    true
-                )->setRouteName(
-                    'adminhtml'
-                )->setControllerName(
-                    'auth'
-                )->setActionName(
-                    'deniedJson'
-                )->setDispatched(
-                    false
-                );
+                $request->setForwarded(true)
+                    ->setRouteName('adminhtml')
+                    ->setControllerName('auth')
+                    ->setActionName('deniedJson')
+                    ->setDispatched(false);
             } else {
-                $request->setForwarded(
-                    true
-                )->setRouteName(
-                    'adminhtml'
-                )->setControllerName(
-                    'auth'
-                )->setActionName(
-                    'login'
-                )->setDispatched(
-                    false
-                );
+                $request->setForwarded(true)
+                    ->setRouteName('adminhtml')
+                    ->setControllerName('auth')
+                    ->setActionName('login')
+                    ->setDispatched(false);
             }
         }
     }
