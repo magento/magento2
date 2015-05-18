@@ -40,6 +40,8 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
 
         $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity');
 
+        $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
+
         $this->invoiceMock = $this->getMock(
             '\Magento\Sales\Model\Order\Invoice',
             ['getStore', '__wakeup', 'getOrder'],
@@ -59,7 +61,8 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
-            $this->addressRendererMock
+            $this->addressRenderer,
+            $this->eventManagerMock
         );
     }
 
@@ -132,5 +135,32 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         $this->stepSendWithCallSendCopyTo();
         $result = $this->sender->send($this->invoiceMock, false, $comment);
         $this->assertTrue($result);
+    }
+
+    public function testSendVirtualOrder()
+    {
+        $isVirtualOrder = true;
+        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->stepAddressFormat($this->addressMock, $isVirtualOrder);
+
+        $this->identityContainerMock->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(false));
+        $this->templateContainerMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(
+                $this->equalTo(
+                    [
+                        'order' => $this->orderMock,
+                        'invoice' => $this->invoiceMock,
+                        'billing' => $this->addressMock,
+                        'comment' => '',
+                        'store' => $this->storeMock,
+                        'formattedShippingAddress' => null,
+                        'formattedBillingAddress' => 1
+                    ]
+                )
+            );
+        $this->assertFalse($this->sender->send($this->invoiceMock));
     }
 }

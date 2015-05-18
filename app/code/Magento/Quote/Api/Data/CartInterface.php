@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface CartInterface
+ * @api
+ */
 interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+

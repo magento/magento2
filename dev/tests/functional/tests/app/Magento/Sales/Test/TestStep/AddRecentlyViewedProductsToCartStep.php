@@ -47,21 +47,7 @@ class AddRecentlyViewedProductsToCartStep implements TestStepInterface
     public function run()
     {
         $recentlyBlock = $this->orderCreateIndex->getCustomerActivitiesBlock();
-        $recentlyBlock->getRecentlyViewedItemsBlock()->addToOrderByName($this->extractProductNames());
+        $recentlyBlock->getRecentlyViewedItemsBlock()->addProductsToOrder($this->products);
         $recentlyBlock->updateChanges();
-    }
-
-    /**
-     * Extract products name.
-     *
-     * @return array
-     */
-    protected function extractProductNames()
-    {
-        $result = [];
-        foreach ($this->products as $product) {
-            $result[] = $product->getName();
-        }
-        return $result;
     }
 }

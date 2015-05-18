@@ -33,7 +33,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -70,7 +70,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -106,7 +106,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -145,7 +145,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -183,7 +183,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
@@ -253,7 +253,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-methods',
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/selected-payment-method',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -266,22 +266,126 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $requestData = ["cartId" => $cartId];
         $requestResponse = $this->_webApiCall($serviceInfo, $requestData);
 
-        $this->assertArrayHasKey('method', $requestResponse);
-        $this->assertArrayHasKey('po_number', $requestResponse);
-        $this->assertArrayHasKey('cc_owner', $requestResponse);
-        $this->assertArrayHasKey('cc_type', $requestResponse);
-        $this->assertArrayHasKey('cc_exp_year', $requestResponse);
-        $this->assertArrayHasKey('cc_exp_month', $requestResponse);
-        $this->assertArrayHasKey('additional_data', $requestResponse);
-
-        $this->assertNotNull($requestResponse['method']);
-        $this->assertNotNull($requestResponse['po_number']);
-        $this->assertNotNull($requestResponse['cc_owner']);
-        $this->assertNotNull($requestResponse['cc_type']);
-        $this->assertNotNull($requestResponse['cc_exp_year']);
-        $this->assertNotNull($requestResponse['cc_exp_month']);
-        $this->assertNotNull($requestResponse['additional_data']);
+        foreach ($this->getPaymentMethodFieldsForAssert() as $field) {
+            $this->assertArrayHasKey($field, $requestResponse);
+            $this->assertNotNull($requestResponse[$field]);
+        }
 
         $this->assertEquals('checkmo', $requestResponse['method']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testGetListMine()
+    {
+        $this->_markTestAsRestOnly();
+
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_order_1', 'reserved_order_id');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . 'mine/payment-methods',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $this->getCustomerToken()
+            ]
+        ];
+
+        $requestResponse = $this->_webApiCall($serviceInfo);
+
+        $expectedResponse = [
+            'code' => 'checkmo',
+            'title' => 'Check / Money order',
+        ];
+
+        $this->assertGreaterThan(0, count($requestResponse));
+        $this->assertContains($expectedResponse, $requestResponse);
+    }
+
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_payment_saved.php
+     */
+    public function testGetMine()
+    {
+        $this->_markTestAsRestOnly();
+
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_order_1_with_payment', 'reserved_order_id');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . 'mine/selected-payment-method',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $this->getCustomerToken()
+            ]
+        ];
+
+        $requestResponse = $this->_webApiCall($serviceInfo);
+
+        foreach ($this->getPaymentMethodFieldsForAssert() as $field) {
+            $this->assertArrayHasKey($field, $requestResponse);
+            $this->assertNotNull($requestResponse[$field]);
+        }
+        $this->assertEquals('checkmo', $requestResponse['method']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     */
+    public function testSetPaymentWithSimpleProductMine()
+    {
+        $this->_markTestAsRestOnly();
+
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('\Magento\Quote\Model\Quote');
+        $quote->load('test_order_1', 'reserved_order_id');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . 'mine/selected-payment-method',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $this->getCustomerToken()
+            ]
+        ];
+
+        $requestData = [
+            "method" => [
+                'method' => 'checkmo',
+                'po_number' => '200',
+                'cc_owner' => 'tester',
+                'cc_type' => 'test',
+                'cc_exp_year' => '2014',
+                'cc_exp_month' => '1',
+            ],
+        ];
+
+        $this->assertNotNull($this->_webApiCall($serviceInfo, $requestData));
+    }
+
+    /**
+     * @return array
+     */
+    protected function getPaymentMethodFieldsForAssert()
+    {
+        return ['method', 'po_number', 'cc_owner', 'cc_type', 'cc_exp_year', 'cc_exp_month', 'additional_data'];
+    }
+
+    /**
+     * Get customer ID token
+     *
+     * @return string
+     */
+    protected function getCustomerToken()
+    {
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+        return $token;
     }
 }

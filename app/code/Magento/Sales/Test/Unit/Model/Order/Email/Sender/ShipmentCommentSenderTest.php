@@ -23,6 +23,7 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity');
+        $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->shipmentMock = $this->getMock(
             '\Magento\Sales\Model\Order\Shipment',
             ['getStore', '__wakeup', 'getOrder'],
@@ -42,7 +43,8 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
-            $this->addressRendererMock
+            $this->addressRenderer,
+            $this->eventManagerMock
         );
     }
 
@@ -117,5 +119,32 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         $this->stepSendWithCallSendCopyTo();
         $result = $this->sender->send($this->shipmentMock, false, $comment);
         $this->assertTrue($result);
+    }
+
+    public function testSendVirtualOrder()
+    {
+        $isVirtualOrder = true;
+        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->stepAddressFormat($this->addressMock, $isVirtualOrder);
+
+        $this->identityContainerMock->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(false));
+        $this->templateContainerMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(
+                $this->equalTo(
+                    [
+                        'order' => $this->orderMock,
+                        'shipment' => $this->shipmentMock,
+                        'billing' => $this->addressMock,
+                        'comment' => '',
+                        'store' => $this->storeMock,
+                        'formattedShippingAddress' => null,
+                        'formattedBillingAddress' => 1
+                    ]
+                )
+            );
+        $this->assertFalse($this->sender->send($this->shipmentMock));
     }
 }

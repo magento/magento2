@@ -12,6 +12,7 @@ use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Profiler;
+use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * A bootstrap of Magento application
@@ -147,7 +148,8 @@ class Bootstrap
     {
         $dirList = self::createFilesystemDirectoryList($rootDir, $initParams);
         $driverPool = self::createFilesystemDriverPool($initParams);
-        return new ObjectManagerFactory($dirList, $driverPool);
+        $configFilePool = self::createConfigFilePool();
+        return new ObjectManagerFactory($dirList, $driverPool, $configFilePool);
     }
 
     /**
@@ -179,6 +181,16 @@ class Bootstrap
             $extraDrivers = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS];
         };
         return new DriverPool($extraDrivers);
+    }
+
+    /**
+     * Creates instance of configuration files pool
+     *
+     * @return DriverPool
+     */
+    public static function createConfigFilePool()
+    {
+        return new ConfigFilePool();
     }
 
     /**
@@ -274,11 +286,11 @@ class Bootstrap
         $isOn = $this->maintenance->isOn(isset($this->server['REMOTE_ADDR']) ? $this->server['REMOTE_ADDR'] : '');
         if ($isOn && !$isExpected) {
             $this->errorCode = self::ERR_MAINTENANCE;
-            throw new \Exception('Unable to proceed: the maintenance mode is enabled.');
+            throw new \Exception('Unable to proceed: the maintenance mode is enabled. ');
         }
         if (!$isOn && $isExpected) {
             $this->errorCode = self::ERR_MAINTENANCE;
-            throw new \Exception('Unable to proceed: the maintenance mode must be enabled first.');
+            throw new \Exception('Unable to proceed: the maintenance mode must be enabled first. ');
         }
     }
 
@@ -298,11 +310,11 @@ class Bootstrap
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
-            throw new \Exception('Application is not installed yet.');
+            throw new \Exception('Error: Application is not installed yet. ');
         }
         if ($isInstalled && !$isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
-            throw new \Exception('Application is already installed.');
+            throw new \Exception('Error: Application is already installed. ');
         }
     }
 
@@ -406,7 +418,7 @@ class Bootstrap
         if ($this->isDeveloperMode()) {
             echo $e;
         } else {
-            $message = "An error has happened during application run. See debug log for details.\n";
+            $message = "An error has happened during application run. See exception log for details.\n";
             try {
                 if (!$this->objectManager) {
                     throw new \DomainException();

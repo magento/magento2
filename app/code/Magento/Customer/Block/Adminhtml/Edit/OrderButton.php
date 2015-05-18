@@ -5,11 +5,10 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit;
 
-use Magento\Ui\Component\Control\ButtonProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
  * Class OrderButton
- * @package Magento\Customer\Block\Adminhtml\Edit
  */
 class OrderButton extends GenericButton implements ButtonProviderInterface
 {
@@ -42,7 +41,7 @@ class OrderButton extends GenericButton implements ButtonProviderInterface
         if ($customerId && $this->authorization->isAllowed('Magento_Sales::create')) {
             $data = [
                 'label' => __('Create Order'),
-                'on_click' => 'setLocation(\'' . $this->getCreateOrderUrl() . '\')',
+                'on_click' => sprintf("location.href = '%s';", $this->getCreateOrderUrl()),
                 'class' => 'add',
                 'sort_order' => 40,
             ];

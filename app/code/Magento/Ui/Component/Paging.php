@@ -8,39 +8,80 @@ namespace Magento\Ui\Component;
 /**
  * Class Paging
  */
-class Paging extends AbstractView
+class Paging extends AbstractComponent
 {
+    const NAME = 'paging';
+
     /**
-     * Prepare component data
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
+
+    /**
+     * Register component and apply paging settings to Data Provider
      *
      * @return void
      */
     public function prepare()
     {
-        $configData = $this->getDefaultConfiguration();
-        if ($this->hasData('config')) {
-            $configData = array_merge($configData, $this->getData('config'));
-        }
+        parent::prepare();
 
-        $this->prepareConfiguration($configData);
-        $this->updateDataCollection();
+        $this->prepareConfiguration();
+        $this->prepareOptions();
+
+        $paging = $this->getContext()->getRequestParam('paging');
+
+        $this->getContext()->getDataProvider()->setLimit($this->getOffset($paging), $this->getSize($paging));
+
+        $jsConfig = $this->getConfiguration($this);
+        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
     }
 
     /**
-     * Update data collection
+     * Get offset
+     *
+     * @param array|null $paging
+     * @return int
+     */
+    protected function getOffset($paging)
+    {
+        $defaultPage = $this->getData('config/current') ?: 1;
+        return (int) (isset($paging['current']) ? $paging['current'] : $defaultPage);
+    }
+
+    /**
+     * Get size
+     *
+     * @param array|null $paging
+     * @return int
+     */
+    protected function getSize($paging)
+    {
+        $defaultLimit = $this->getData('config/pageSize') ?: 20;
+        return (int) (isset($paging['pageSize']) ? $paging['pageSize'] : $defaultLimit);
+    }
+
+    /**
+     * Prepare paging options
      *
      * @return void
      */
-    protected function updateDataCollection()
+    protected function prepareOptions()
     {
-        $defaultPage = $this->config->getData('current');
-        $offset = $this->renderContext->getRequestParam('page', $defaultPage);
-        $defaultLimit = $this->config->getData('pageSize');
-        $size = $this->renderContext->getRequestParam('limit', $defaultLimit);
-        $this->renderContext->getStorage()
-            ->getDataCollection($this->getParentName())
-            ->setPageSize($size)
-            ->setCurPage($offset);
+        $config = $this->getData('config');
+        if (isset($config['options'])) {
+            $config['options'] = array_values($config['options']);
+            foreach ($config['options'] as &$item) {
+                $item['value'] = (int) $item['value'];
+            }
+            unset($item);
+            $this->setData('config', $config);
+        }
     }
 
     /**
@@ -51,7 +92,28 @@ class Paging extends AbstractView
     protected function getDefaultConfiguration()
     {
         return  [
-            'sizes' => [20, 30, 50, 100, 200],
+            'options' => [
+                '20' => [
+                    'value' => 20,
+                    'label' => 20
+                ],
+                '30' => [
+                    'value' => 30,
+                    'label' => 30
+                ],
+                '50' => [
+                    'value' => 50,
+                    'label' => 50
+                ],
+                '100' => [
+                    'value' => 100,
+                    'label' => 100
+                ],
+                '200' => [
+                    'value' => 200,
+                    'label' => 200
+                ],
+            ],
             'pageSize' => 20,
             'current' => 1
         ];

@@ -7,13 +7,13 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\ConfigModel;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConfigSetCommand extends Command
+class ConfigSetCommand extends AbstractSetupCommand
 {
     /**
      * @var ConfigModel
@@ -63,7 +63,7 @@ class ConfigSetCommand extends Command
             ->setDescription('Sets deployment configuration')
             ->setDefinition($options);
 
-        $this->ignoreValidationErrors();
+        parent::configure();
     }
 
     /**
@@ -84,7 +84,7 @@ class ConfigSetCommand extends Command
                 $dialog = $this->getHelperSet()->get('dialog');
                 if (!$dialog->askConfirmation(
                     $output,
-                    '<question>Overwrite the existing configuration for ' . $option->getName() . '?[Y|n]</question>'
+                    '<question>Overwrite the existing configuration for ' . $option->getName() . '?[Y/n]</question>'
                 )) {
                     $inputOptions[$option->getName()] = null;
                 }
@@ -105,8 +105,14 @@ class ConfigSetCommand extends Command
         );
 
         $optionsToChange = array_intersect(array_keys($inputOptions), array_keys($commandOptions));
+        $optionsToChange = array_diff($optionsToChange, [ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]);
 
         $this->configModel->process($inputOptions);
+
+        $optionsWithDefaultValues = array_diff(
+            $optionsWithDefaultValues,
+            [ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]
+        );
 
         if (count($optionsWithDefaultValues) > 0) {
             $defaultValuesMessage = implode(', ', $optionsWithDefaultValues);
@@ -135,7 +141,7 @@ class ConfigSetCommand extends Command
             foreach ($errors as $error) {
                 $output->writeln("<error>$error</error>");
             }
-            throw new \InvalidArgumentException('Parameters validation is failed');
+            throw new \InvalidArgumentException('Parameter validation failed');
         }
     }
 }

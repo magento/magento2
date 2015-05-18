@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Module\ResourceFactory;
 use Magento\Framework\App\ErrorHandler;
+use Magento\Framework\App\State\CleanupFiles;
 
 class InstallerFactory
 {
@@ -66,7 +67,9 @@ class InstallerFactory
                 $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\TransactionManager'),
                 $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor')
             ),
-            $this->serviceLocator->get('Magento\Setup\Model\ConfigModel')
+            $this->serviceLocator->get('Magento\Setup\Model\ConfigModel'),
+            $this->serviceLocator->get('Magento\Framework\App\State\CleanupFiles'),
+            $this->serviceLocator->get('Magento\Setup\Validator\DbValidator')
         );
     }
 

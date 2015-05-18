@@ -1,12 +1,15 @@
 <?php
 /**
- * Inline translation interface
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Translate;
 
+/**
+ * Inline translation interface
+ *
+ * @api
+ */
 interface InlineInterface
 {
     /**

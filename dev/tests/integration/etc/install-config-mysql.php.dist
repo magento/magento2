@@ -5,15 +5,15 @@
  */
 
 return [
-    'db_host' => 'localhost',
-    'db_user' => 'root',
-    'db_pass' => '',
-    'db_name' => 'magento_integration_tests',
-    'db_prefix' => '',
-    'backend_frontname' => 'backend',
-    'admin_username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-    'admin_password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
-    'admin_email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
-    'admin_firstname' => \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME,
-    'admin_lastname' => \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME,
+    'db-host' => 'localhost',
+    'db-user' => 'root',
+    'db-password' => '',
+    'db-name' => 'magento_integration_tests',
+    'db-prefix' => '',
+    'backend-frontname' => 'backend',
+    'admin-user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+    'admin-password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
+    'admin-email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
+    'admin-firstname' => \Magento\TestFramework\Bootstrap::ADMIN_FIRSTNAME,
+    'admin-lastname' => \Magento\TestFramework\Bootstrap::ADMIN_LASTNAME,
 ];

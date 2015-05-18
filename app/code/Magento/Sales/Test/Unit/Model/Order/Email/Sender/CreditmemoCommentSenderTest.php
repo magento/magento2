@@ -26,6 +26,7 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity');
+        $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->creditmemoMock = $this->getMock(
             '\Magento\Sales\Model\Order\Creditmemo',
             ['getStore', '__wakeup', 'getOrder'],
@@ -44,7 +45,8 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
-            $this->addressRendererMock
+            $this->addressRenderer,
+            $this->eventManagerMock
         );
     }
 
@@ -52,6 +54,30 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
     {
         $billingAddress = $this->addressMock;
         $this->stepAddressFormat($billingAddress);
+        $result = $this->sender->send($this->creditmemoMock);
+        $this->assertFalse($result);
+    }
+
+    public function testSendVirtualOrder()
+    {
+        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, true);
+        $billingAddress = $this->addressMock;
+        $this->templateContainerMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(
+                $this->equalTo(
+                    [
+                        'order' => $this->orderMock,
+                        'creditmemo' => $this->creditmemoMock,
+                        'comment' => '',
+                        'billing' => $billingAddress,
+                        'store' => $this->storeMock,
+                        'formattedShippingAddress' => null,
+                        'formattedBillingAddress' => 1
+                    ]
+                )
+            );
+        $this->stepAddressFormat($billingAddress, true);
         $result = $this->sender->send($this->creditmemoMock);
         $this->assertFalse($result);
     }

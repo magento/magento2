@@ -28,9 +28,9 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCommands()
     {
-        $this->serviceManager->expects($this->at(0))
-            ->method('create')
-            ->with('Magento\Setup\Console\Command\ConfigSetCommand');
+        $this->serviceManager->expects($this->atLeastOnce())
+            ->method('create');
+
         $this->commandList->getCommands();
     }
 }

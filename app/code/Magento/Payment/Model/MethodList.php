@@ -7,6 +7,7 @@
 namespace Magento\Payment\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\Method\Free;
 
 class MethodList
 {
@@ -33,18 +34,30 @@ class MethodList
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return \Magento\Payment\Model\MethodInterface[]
+     * @api
      */
-    public function getAvailableMethods(\Magento\Quote\Model\Quote $quote = null)
+    public function getAvailableMethods(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         $store = $quote ? $quote->getStoreId() : null;
         $methods = [];
-        $specification = $this->methodSpecificationFactory->create([AbstractMethod::CHECK_ZERO_TOTAL]);
+        $isFreeAdded = false;
         foreach ($this->paymentHelper->getStoreMethods($store, $quote) as $method) {
-            if ($this->_canUseMethod($method, $quote) && $specification->isApplicable($method, $quote)) {
+            if ($this->_canUseMethod($method, $quote)) {
                 $method->setInfoInstance($quote->getPayment());
                 $methods[] = $method;
+                if ($method->getCode() == Free::PAYMENT_METHOD_FREE_CODE) {
+                    $isFreeAdded = true;
+                }
+            }
+        }
+        if (!$isFreeAdded) {
+            /** @var \Magento\Payment\Model\Method\Free $freeMethod */
+            $freeMethod = $this->paymentHelper->getMethodInstance(Free::PAYMENT_METHOD_FREE_CODE);
+            if ($freeMethod->isAvailableInConfig()) {
+                $freeMethod->setInfoInstance($quote->getPayment());
+                $methods[] = $freeMethod;
             }
         }
         return $methods;
@@ -54,10 +67,10 @@ class MethodList
      * Check payment method model
      *
      * @param \Magento\Payment\Model\MethodInterface $method
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return bool
      */
-    protected function _canUseMethod($method, \Magento\Quote\Model\Quote $quote)
+    protected function _canUseMethod($method, \Magento\Quote\Api\Data\CartInterface $quote)
     {
         return $this->methodSpecificationFactory->create(
             [

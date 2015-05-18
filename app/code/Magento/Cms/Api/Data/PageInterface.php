@@ -7,7 +7,6 @@ namespace Magento\Cms\Api\Data;
 
 /**
  * CMS page interface.
- *
  * @api
  */
 interface PageInterface

@@ -4,62 +4,37 @@
  */
 define([
     'underscore',
-    'Magento_Ui/js/lib/registry/registry',
+    'uiRegistry',
     './abstract'
 ], function (_, registry, Abstract) {
     'use strict';
 
     return Abstract.extend({
-        /**
-         * Extended list of Listeners
-         *
-         * @return {this}
-         */
-        initListeners: function () {
-            this._super()
-                .update()
-                .provider.data.on('update:' + this.parentScope + '.country_id', this.update.bind(this));
-
-            return this;
+        defaults: {
+            imports: {
+                update: '<%= parentName %>.country_id:value'
+            }
         },
 
-        /**
-         * Fix _postcode_ depend on _country_id_ change:
-         *  - If country in list "Zip/Postal Code is Optional countries" then
-         *    - field "postcode" should not be required
-         *
-         * @returns {this}
-         */
-        update: function () {
-            var parentScope = this.getPart(this.getPart(this.name, -2), -2),
-                option,
-                postcode = this;
+        update: function (value) {
+            var country = registry.get(this.parentName + '.' + 'country_id'),
+                options = country.indexedOptions,
+                option;
 
-            registry.get(parentScope + '.country_id.0', function (countryComponent) {
-                var value = countryComponent.value();
+            if (!value) {
+                return;
+            }
 
-                if (!value) { // empty value discard logic
-                    return;
-                }
+            option = options[value];
 
-                countryComponent
-                    .options()
-                    .some(function (el) {
-                        option = el;
+            if (option.is_zipcode_optional) {
+                this.error(false);
+                this.validation = _.omit(this.validation, 'required-entry');
+            } else {
+                this.validation['required-entry'] = true;
+            }
 
-                        return el.value === value;
-                    });
-
-                if (!option.is_region_required) {
-                    postcode.error(false);
-                    postcode.validation = _.omit(postcode.validation, 'required-entry');
-                } else {
-                    postcode.validation['required-entry'] = true;
-                }
-                postcode.required(!!option.is_region_required);
-            });
-
-            return this;
+            this.required(!option.is_zipcode_optional);
         }
     });
 });

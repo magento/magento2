@@ -11,6 +11,7 @@
         <meta name="meta_name" content="meta_content"/>
         <css src="path/file.css" media="all" />
         <script src="path/file.js" defer="defer"/>
+        <link src="http://url.com" src_type="url"/>
         <remove src="path/remove/file.css"/>
         <attribute name="head_attribute_name" value="head_attribute_value"/>
     </head>

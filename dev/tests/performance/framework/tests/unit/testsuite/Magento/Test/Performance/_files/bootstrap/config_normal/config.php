@@ -10,9 +10,9 @@ return [
         'url_path' => '/',
         'installation' => [
             'options' => [
-                'backend_frontname' => 'backend',
-                'admin_username' => 'admin',
-                'admin_password' => 'password1',
+                'backend-frontname' => 'backend',
+                'admin-user' => 'admin',
+                'admin-password' => 'password1',
             ],
         ],
     ],

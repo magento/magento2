@@ -13,7 +13,7 @@ class Add extends \Magento\Tax\Controller\Adminhtml\Rate
     /**
      * Show Add Form
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
@@ -22,26 +22,18 @@ class Add extends \Magento\Tax\Controller\Adminhtml\Rate
             $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true)
         );
 
-        $this->_initAction()->_addBreadcrumb(
-            __('Manage Tax Rates'),
-            __('Manage Tax Rates'),
-            $this->getUrl('tax/rate')
-        )->_addBreadcrumb(
-            __('New Tax Rate'),
-            __('New Tax Rate')
-        )->_addContent(
-            $this->_view->getLayout()->createBlock(
-                'Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save'
-            )->assign(
-                'header',
-                __('Add New Tax Rate')
-            )->assign(
-                'form',
-                $this->_view->getLayout()->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form')
-            )
-        );
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('New Tax Rate'));
-        $this->_view->renderLayout();
+        $resultPage = $this->initResultPage();
+        $layout = $resultPage->getLayout();
+        $toolbarSaveBlock = $layout->createBlock('Magento\Tax\Block\Adminhtml\Rate\Toolbar\Save')
+            ->assign('header', __('Add New Tax Rate'))
+            ->assign('form', $layout->createBlock('Magento\Tax\Block\Adminhtml\Rate\Form', 'tax_rate_form'));
+
+        $resultPage->addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'), $this->getUrl('tax/rate'))
+            ->addBreadcrumb(__('New Tax Rate'), __('New Tax Rate'))
+            ->addContent($toolbarSaveBlock);
+
+        $resultPage->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
+        $resultPage->getConfig()->getTitle()->prepend(__('New Tax Rate'));
+        return $resultPage;
     }
 }

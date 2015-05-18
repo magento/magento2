@@ -104,7 +104,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
         if ($isSearchable) {
             $this->search($filter);
         }
-        $location = '//div[@class="grid"]//tr[';
+        $location = '//tr[';
         $rowTemplate = 'td[contains(.,normalize-space("%s"))]';
         $rows = [];
         foreach ($filter as $value) {

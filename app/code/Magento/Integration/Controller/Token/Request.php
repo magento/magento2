@@ -11,12 +11,12 @@ class Request extends \Magento\Framework\App\Action\Action
     /**
      * @var  \Magento\Framework\Oauth\OauthInterface
      */
-    protected $_oauthService;
+    protected $oauthService;
 
     /**
      * @var  \Magento\Framework\Oauth\Helper\Request
      */
-    protected $_helper;
+    protected $helper;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -29,8 +29,8 @@ class Request extends \Magento\Framework\App\Action\Action
         \Magento\Framework\Oauth\Helper\Request $helper
     ) {
         parent::__construct($context);
-        $this->_oauthService = $oauthService;
-        $this->_helper = $helper;
+        $this->oauthService = $oauthService;
+        $this->helper = $helper;
     }
 
     /**
@@ -41,13 +41,13 @@ class Request extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         try {
-            $requestUrl = $this->_helper->getRequestUrl($this->getRequest());
-            $request = $this->_helper->prepareRequest($this->getRequest(), $requestUrl);
+            $requestUrl = $this->helper->getRequestUrl($this->getRequest());
+            $request = $this->helper->prepareRequest($this->getRequest(), $requestUrl);
 
             // Request request token
-            $response = $this->_oauthService->getRequestToken($request, $requestUrl, $this->getRequest()->getMethod());
+            $response = $this->oauthService->getRequestToken($request, $requestUrl, $this->getRequest()->getMethod());
         } catch (\Exception $exception) {
-            $response = $this->_helper->prepareErrorResponse($exception, $this->getResponse());
+            $response = $this->helper->prepareErrorResponse($exception, $this->getResponse());
         }
         $this->getResponse()->setBody(http_build_query($response));
     }

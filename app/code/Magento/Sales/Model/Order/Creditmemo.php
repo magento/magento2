@@ -20,7 +20,11 @@ use Magento\Sales\Model\EntityInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo getResource()
- * @method \Magento\Sales\Model\Order\Creditmemo setCreatedAt(string $value)
+ * @method \Magento\Sales\Model\Order\Invoice setSendEmail(bool $value)
+ * @method \Magento\Sales\Model\Order\Invoice setCustomerNote(string $value)
+ * @method string getCustomerNote()
+ * @method \Magento\Sales\Model\Order\Invoice setCustomerNoteNotify(bool $value)
+ * @method bool getCustomerNoteNotify()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -1027,6 +1031,14 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     public function getCreatedAt()
     {
         return $this->getData(CreditmemoInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(CreditmemoInterface::CREATED_AT, $createdAt);
     }
 
     /**

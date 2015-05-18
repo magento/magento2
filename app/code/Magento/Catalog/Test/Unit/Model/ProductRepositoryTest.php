@@ -9,6 +9,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -107,15 +108,28 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $contentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Gallery\ContentValidator
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\ImageContentValidator
      */
     protected $contentValidatorMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $linkTypeProviderMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\ImageProcessorInterface
+     */
+    protected $imageProcessorMock;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', ['create'], [], '', false);
@@ -188,12 +202,16 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mimeTypeExtensionMapMock =
             $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap')->getMock();
         $this->contentFactoryMock = $this->getMockBuilder(
-            'Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterfaceFactory'
+            'Magento\Framework\Api\Data\ImageContentInterfaceFactory'
         )->disableOriginalConstructor()->setMethods(['create'])->getMockForAbstractClass();
-        $this->contentValidatorMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Gallery\ContentValidator')
+        $this->contentValidatorMock = $this->getMockBuilder('Magento\Framework\Api\ImageContentValidatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $optionConverter = $this->objectManager->getObject('Magento\Catalog\Model\Product\Option\Converter');
+        $this->linkTypeProviderMock = $this->getMock('Magento\Catalog\Model\Product\LinkTypeProvider',
+            ['getLinkTypes'], [], '', false);
+        $this->imageProcessorMock = $this->getMock('Magento\Framework\Api\ImageProcessorInterface', [], [], '', false);
+
         $this->model = $this->objectManager->getObject(
             'Magento\Catalog\Model\ProductRepository',
             [
@@ -212,6 +230,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'fileSystem' => $this->fileSystemMock,
                 'contentFactory' => $this->contentFactoryMock,
                 'mimeTypeExtensionMap' => $this->mimeTypeExtensionMapMock,
+                'linkTypeProvider' => $this->linkTypeProviderMock,
+                'imageProcessor' => $this->imageProcessorMock
             ]
         );
     }
@@ -298,6 +318,55 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('load')->with($identifier);
         $this->productMock->expects($this->once())->method('getId')->willReturn($identifier);
         $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
+        //Second invocation should just return from cache
+        $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
+    }
+
+    /**
+     * Test the forceReload parameter
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetByIdForcedReload()
+    {
+        $identifier = "23";
+        $editMode = false;
+        $storeId = 0;
+
+        $this->productFactoryMock->expects($this->exactly(2))->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->productMock->expects($this->exactly(2))->method('load');
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn($identifier);
+        $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
+        //second invocation should just return from cache
+        $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId));
+        //force reload
+        $this->assertEquals($this->productMock, $this->model->getById($identifier, $editMode, $storeId, true));
+    }
+
+    /**
+     * Test forceReload parameter
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetForcedReload()
+    {
+        $sku = "sku";
+        $id = "23";
+        $editMode = false;
+        $storeId = 0;
+
+        $this->productFactoryMock->expects($this->exactly(2))->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->productMock->expects($this->exactly(2))->method('load');
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn($sku);
+        $this->resourceModelMock->expects($this->exactly(2))->method('getIdBySku')
+            ->with($sku)->willReturn($id);
+        $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId));
+        //second invocation should just return from cache
+        $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId));
+        //force reload
+        $this->assertEquals($this->productMock, $this->model->get($sku, $editMode, $storeId, true));
     }
 
     public function testGetByIdWithSetStoreId()
@@ -798,6 +867,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->initializedProductMock->setData("product_links", $existingLinks);
 
         if (!empty($newLinks)) {
+            $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
+            $this->linkTypeProviderMock->expects($this->once())
+                ->method('getLinkTypes')
+                ->willReturn($linkTypes);
+
             $this->initializedProductMock->setData("ignore_links_flag", false);
             $this->resourceModelMock
                 ->expects($this->any())->method('getProductsIdsBySkus')
@@ -809,6 +883,10 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             $inputLink->setLinkedProductSku($newLinks['linked_product_sku']);
             $inputLink->setLinkedProductType($newLinks['linked_product_type']);
             $inputLink->setPosition($newLinks['position']);
+
+            if (isset($newLinks['qty'])) {
+                $inputLink->setQty($newLinks['qty']);
+            }
 
             $this->productData['product_links'] = [$inputLink];
 
@@ -849,6 +927,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 $outputLink->setLinkedProductSku($link['linked_product_sku']);
                 $outputLink->setLinkedProductType($link['linked_product_type']);
                 $outputLink->setPosition($link['position']);
+                if (isset($link['qty'])) {
+                    $outputLink->setQty($link['qty']);
+                }
 
                 $outputLinks[] = $outputLink;
             }
@@ -864,11 +945,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         // Scenario 1
         // No existing, new links
         $data['scenario_1'] = [
-            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0],
+            'newLinks' => ["product_sku" => "Simple Product 1", "link_type" => "associated", "linked_product_sku" =>
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0, "qty" => 1],
             'existingLinks' => [],
-            'expectedData' => [["product_sku" => "Simple Product 1", "link_type" => "related", "linked_product_sku" =>
-                "Simple Product 2", "linked_product_type" => "simple", "position" => 0]]
+            'expectedData' => [["product_sku" => "Simple Product 1", "link_type" => "associated", "linked_product_sku" =>
+                "Simple Product 2", "linked_product_type" => "simple", "position" => 0, "qty" => 1]]
             ];
 
         // Scenario 2
@@ -918,9 +999,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
                 'content' => [
-                    'name' => 'filename',
-                    'mime_type' => 'image/jpeg',
-                    'entry_data' => 'encoded_content',
+                    ImageContentInterface::NAME => 'filename',
+                    ImageContentInterface::TYPE => 'image/jpeg',
+                    ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
                 ],
             ],
         ];
@@ -940,7 +1021,6 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
         //setup media attribute backend
         $mediaTmpPath = '/tmp';
-        $relativePath = $mediaTmpPath . DIRECTORY_SEPARATOR . 'filename.jpg';
         $absolutePath = '/a/b/filename.jpg';
         $galleryAttributeBackendMock = $this->getMockBuilder('\Magento\Catalog\Model\Product\Attribute\Backend\Media')
             ->disableOriginalConstructor()->getMock();
@@ -950,20 +1030,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $mediaConfigMock->expects($this->once())
-            ->method('getBaseTmpMediaPath')
-            ->willReturn($mediaTmpPath);
-        $directoryWriteMock = $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
-            ->getMockForAbstractClass();
-        $this->fileSystemMock->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->willReturn($directoryWriteMock);
-        $directoryWriteMock->expects($this->once())->method('create')->with($mediaTmpPath);
-        $this->mimeTypeExtensionMapMock->expects($this->once())->method('getMimeTypeExtension')
-            ->with('image/jpeg')
-            ->willReturn("jpg");
-        $directoryWriteMock->expects($this->once())->method('writeFile')
-            ->with($relativePath, false); //decoded value is false as it contains '_'
-        $directoryWriteMock->expects($this->once())->method('getAbsolutePath')->willReturn($absolutePath);
+            ->method('getTmpMediaShortUrl')
+            ->with($absolutePath)
+            ->willReturn($mediaTmpPath . $absolutePath);
         $this->initializedProductMock->expects($this->any())
             ->method('getGalleryAttributeBackend')
             ->willReturn($galleryAttributeBackendMock);
@@ -972,7 +1041,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($mediaConfigMock);
 
         //verify new entries
-        $contentDataObject = $this->getMockBuilder('Magento\Catalog\Model\Product\Media\GalleryEntryContent')
+        $contentDataObject = $this->getMockBuilder('Magento\Framework\Api\ImageContent')
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();
@@ -980,13 +1049,13 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($contentDataObject);
 
-        $this->contentValidatorMock->expects($this->once())
-            ->method('isValid')
-            ->willReturn(true);
+        $this->imageProcessorMock->expects($this->once())
+            ->method('processImageContent')
+            ->willReturn($absolutePath);
 
         $imageFileUri = "imageFileUri";
         $galleryAttributeBackendMock->expects($this->once())->method('addImage')
-            ->with($this->initializedProductMock, $absolutePath, ['image', 'small_image'], true, false)
+            ->with($this->initializedProductMock, $mediaTmpPath . $absolutePath, ['image', 'small_image'], true, false)
             ->willReturn($imageFileUri);
         $galleryAttributeBackendMock->expects($this->once())->method('updateImage')
             ->with(

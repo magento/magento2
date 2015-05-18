@@ -7,12 +7,13 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
-use Magento\Framework\Config\ConfigOptionsList as SetupConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
 use \Magento\Setup\Model\Installer;
-use Magento\Framework\Config\ConfigOptionsList;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\App\State\CleanupFiles;
+use Magento\Setup\Validator\DbValidator;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -106,20 +107,25 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $configModel;
 
     /**
+     * @var CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cleanupFiles;
+
+    /**
+     * @var DbValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dbValidator;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
      */
     private static $dbConfig = [
-        SetupConfigOptionsList::KEY_PREFIX => '',
-        'connection' => [
-            'default' => [
-                SetupConfigOptionsList::KEY_HOST => '127.0.0.1',
-                SetupConfigOptionsList::KEY_NAME => 'magento',
-                SetupConfigOptionsList::KEY_USER => 'magento',
-                SetupConfigOptionsList::KEY_PASS => '',
-            ],
-        ],
+        SetupConfigOptionsList::KEY_HOST => '127.0.0.1',
+        SetupConfigOptionsList::KEY_NAME => 'magento',
+        SetupConfigOptionsList::KEY_USER => 'magento',
+        SetupConfigOptionsList::KEY_PASSWORD => '',
     ];
 
     /**
@@ -153,6 +159,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
+        $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
+        $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -189,7 +197,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->sampleData,
             $objectManagerProvider,
             $this->contextMock,
-            $this->configModel
+            $this->configModel,
+            $this->cleanupFiles,
+            $this->dbValidator
         );
     }
 
@@ -203,13 +213,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
         ];
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
-        $this->config->expects($this->any())->method('getSegment')->will($this->returnValueMap([
-            [SetupConfigOptionsList::KEY_DB, self::$dbConfig],
-            [
-                'crypt',
-                [SetupConfigOptionsList::KEY_ENCRYPTION_KEY => 'encryption_key']
-            ]
-        ]));
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
         $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
@@ -227,12 +230,21 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
         $cacheManager->expects($this->once())->method('getAvailableTypes')->willReturn(['foo', 'bar']);
         $cacheManager->expects($this->once())->method('setEnabled')->willReturn(['foo', 'bar']);
+        $appState = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+            'Magento\Framework\App\State'
+        );
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
                 ['Magento\Setup\Module\Setup', ['resource' => $resource], $setup],
                 ['Magento\Setup\Module\DataSetup', [], $dataSetup],
                 ['Magento\Framework\App\Cache\Manager', [], $cacheManager],
+                ['Magento\Framework\App\State', [], $appState],
+            ]));
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\State', $appState],
             ]));
         $this->adminFactory->expects($this->once())->method('create')->willReturn(
             $this->getMock('Magento\Setup\Model\AdminAccount', [], [], '', false)
@@ -300,18 +312,27 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateModulesSequence()
     {
-        $varDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $varDir->expects($this->exactly(2))->method('getAbsolutePath')->willReturn('/var');
-        $this->filesystem
-            ->expects($this->exactly(2))
-            ->method('getDirectoryWrite')
-            ->willReturn($varDir);
-
         $allModules = [
             'Foo_One' => [],
             'Bar_Two' => [],
             'New_Module' => [],
         ];
+        $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses')->will(
+            $this->returnValue(
+                [
+                    "The directory '/generation' doesn't exist - skipping cleanup",
+                ]
+            )
+        );
+
+        $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $cache->expects($this->once())->method('clean');
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\Cache', [], $cache],
+            ]));
+
         $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
 
         $expectedModules = [
@@ -330,9 +351,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->configReader->expects($this->once())->method('load')
             ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
         $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
-        $this->logger->expects($this->at(0))->method('log')->with('File system cleanup:');
-        $this->logger->expects($this->at(1))->method('log')
-            ->with('The directory \'/var\' doesn\'t exist - skipping cleanup');
+        $this->logger->expects($this->at(0))->method('log')->with('Cache cleared successfully');
+        $this->logger->expects($this->at(1))->method('log')->with('File system cleanup:');
+        $this->logger->expects($this->at(2))->method('log')
+            ->with('The directory \'/generation\' doesn\'t exist - skipping cleanup');
         $this->logger->expects($this->at(3))->method('log')->with('Updating modules:');
         $newObject->updateModulesSequence();
     }
@@ -340,18 +362,23 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function testUninstall()
     {
         $this->config->expects($this->once())->method('isAvailable')->willReturn(false);
-        $varDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $varDir->expects($this->once())->method('getAbsolutePath')->willReturn('/var');
-        $staticDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $staticDir->expects($this->once())->method('getAbsolutePath')->willReturn('/static');
+        $this->configReader->expects($this->once())->method('getFiles')->willReturn(['ConfigOne.php', 'ConfigTwo.php']);
         $configDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $configDir->expects($this->once())->method('getAbsolutePath')->willReturn('/config/config.php');
+        $configDir
+            ->expects($this->exactly(2))
+            ->method('getAbsolutePath')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['ConfigOne.php', '/config/ConfigOne.php'],
+                        ['ConfigTwo.php', '/config/ConfigTwo.php']
+                    ]
+                )
+            );
         $this->filesystem
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValueMap([
-                [DirectoryList::VAR_DIR, DriverPool::FILE, $varDir],
-                [DirectoryList::STATIC_VIEW, DriverPool::FILE, $staticDir],
                 [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
             ]));
         $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
@@ -359,20 +386,40 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('log')
             ->with('No database connection defined - skipping database cleanup');
-        $this->logger->expects($this->at(2))->method('log')->with('File system cleanup:');
-        $this->logger
-            ->expects($this->at(3))
-            ->method('log')
-            ->with("The directory '/var' doesn't exist - skipping cleanup");
+        $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $cache->expects($this->once())->method('clean');
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\Cache', [], $cache],
+            ]));
+        $this->logger->expects($this->at(2))->method('log')->with('Cache cleared successfully');
+        $this->logger->expects($this->at(3))->method('log')->with('File system cleanup:');
         $this->logger
             ->expects($this->at(4))
             ->method('log')
-            ->with("The directory '/static' doesn't exist - skipping cleanup");
+            ->with("The directory '/var' doesn't exist - skipping cleanup");
         $this->logger
             ->expects($this->at(5))
             ->method('log')
-            ->with("The file '/config/config.php' doesn't exist - skipping cleanup");
+            ->with("The directory '/static' doesn't exist - skipping cleanup");
+        $this->logger
+            ->expects($this->at(6))
+            ->method('log')
+            ->with("The file '/config/ConfigOne.php' doesn't exist - skipping cleanup");
+        $this->logger
+            ->expects($this->at(7))
+            ->method('log')
+            ->with("The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup");
         $this->logger->expects($this->once())->method('logSuccess')->with('Magento uninstallation complete.');
+        $this->cleanupFiles->expects($this->once())->method('clearAllFiles')->will(
+            $this->returnValue(
+                [
+                    "The directory '/var' doesn't exist - skipping cleanup",
+                    "The directory '/static' doesn't exist - skipping cleanup"
+                ]
+            )
+        );
 
         $this->object->uninstall();
     }
@@ -381,49 +428,13 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->config->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->once())
-            ->method('getConfigData')
-            ->with(SetupConfigOptionsList::KEY_DB)
+            ->method('get')
+            ->with(SetupConfigOptionsList::CONFIG_PATH_DB_CONNECTION_DEFAULT)
             ->willReturn(self::$dbConfig);
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
         $this->connection->expects($this->at(2))->method('query')->with('CREATE DATABASE IF NOT EXISTS `magento`');
         $this->logger->expects($this->once())->method('log')->with('Recreating database `magento`');
         $this->object->cleanupDb();
-    }
-
-    public function testCheckDatabaseConnection()
-    {
-        $this->connection
-            ->expects($this->once())
-            ->method('fetchOne')
-            ->with('SELECT version()')
-            ->willReturn('5.6.0-0ubuntu0.12.04.1');
-        $this->assertEquals(true, $this->object->checkDatabaseConnection('name', 'host', 'user', 'password'));
-    }
-
-    /**
-     * @expectedException \Magento\Setup\Exception
-     * @expectedExceptionMessage Database connection failure.
-     */
-    public function testCheckDatabaseConnectionFailed()
-    {
-        $connectionFactory = $this->getMock('Magento\Setup\Module\ConnectionFactory', [], [], '', false);
-        $connectionFactory->expects($this->once())->method('create')->willReturn(false);
-        $object = $this->createObject($connectionFactory);
-        $object->checkDatabaseConnection('name', 'host', 'user', 'password');
-    }
-
-    /**
-     * @expectedException \Magento\Setup\Exception
-     * @expectedExceptionMessage Sorry, but we support MySQL version
-     */
-    public function testCheckDatabaseConnectionIncompatible()
-    {
-        $this->connection
-            ->expects($this->once())
-            ->method('fetchOne')
-            ->with('SELECT version()')
-            ->willReturn('5.5.40-0ubuntu0.12.04.1');
-        $this->object->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 }

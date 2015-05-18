@@ -36,53 +36,35 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
     }
 
     /**
-     * Initialize general settings for action
-     *
-     * @return $this
-     */
-    protected function _initAction()
-    {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu(
-            'Magento_GoogleShopping::catalog_googleshopping_items'
-        )->_addBreadcrumb(
-            __('Catalog'),
-            __('Catalog')
-        )->_addBreadcrumb(
-            __('Google Content'),
-            __('Google Content')
-        );
-        return $this;
-    }
-
-    /**
      * Manage Items page with two item grids: Magento products and Google Content items
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
         if (0 === (int)$this->getRequest()->getParam('store')) {
-            $this->_redirect(
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
+            return $resultRedirect->setPath(
                 'adminhtml/*/',
                 [
-                    'store' => $this->_objectManager->get(
-                        'Magento\Store\Model\StoreManagerInterface'
-                    )->getStore()->getId(),
+                    'store' => $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                        ->getStore()->getId(),
                     '_current' => true
                 ]
             );
-            return;
         }
 
-        $this->_initAction();
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Google Content Items'));
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('Magento_GoogleShopping::catalog_googleshopping_items')
+            ->addBreadcrumb(__('Catalog'), __('Catalog'))
+            ->addBreadcrumb(__('Google Content'), __('Google Content'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Google Content Items'));
 
-        $contentBlock = $this->_view->getLayout()->createBlock(
-            'Magento\GoogleShopping\Block\Adminhtml\Items'
-        )->setStore(
-            $this->_getStore()
-        );
+        $contentBlock = $resultPage->getLayout()
+            ->createBlock('Magento\GoogleShopping\Block\Adminhtml\Items')
+            ->setStore($this->_getStore());
 
         if ($this->getRequest()->getParam('captcha_token') && $this->getRequest()->getParam('captcha_url')) {
             $contentBlock->setGcontentCaptchaToken(
@@ -97,11 +79,8 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
             );
         }
 
-        if (!$this->_objectManager->get(
-            'Magento\GoogleShopping\Model\Config'
-        )->isValidDefaultCurrencyCode(
-            $this->_getStore()->getId()
-        )
+        if (!$this->_objectManager->get('Magento\GoogleShopping\Model\Config')
+                ->isValidDefaultCurrencyCode($this->_getStore()->getId())
         ) {
             $_countryInfo = $this->_objectManager->get(
                 'Magento\GoogleShopping\Model\Config'
@@ -110,14 +89,14 @@ class Index extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshopping\
             );
             $this->messageManager->addNotice(
                 __(
-                    "The store's currency should be set to %1 for %2 in system configuration. Otherwise item prices won't be correct in Google Content.",
+                    "The store's currency should be set to %1 for %2 in system configuration."
+                        . " Otherwise item prices won't be correct in Google Content.",
                     $_countryInfo['currency_name'],
                     $_countryInfo['name']
                 )
             );
         }
 
-        $this->_addBreadcrumb(__('Items'), __('Items'))->_addContent($contentBlock);
-        $this->_view->renderLayout();
+        return $resultPage->addBreadcrumb(__('Items'), __('Items'))->addContent($contentBlock);
     }
 }

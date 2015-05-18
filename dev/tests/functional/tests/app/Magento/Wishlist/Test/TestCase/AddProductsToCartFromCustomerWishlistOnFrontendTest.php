@@ -10,8 +10,6 @@ use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Customer\Test\Fixture\Customer;
 
 /**
- * Test Flow:
- *
  * Preconditions:
  * 1. Create customer and login to frontend
  * 2. Create products
@@ -43,7 +41,6 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
      */
     public function test(Customer $customer, $products, $qty)
     {
-        $this->markTestIncomplete('Bug: MAGETWO-34757');
         // Preconditions
         $customer->persist();
         $this->loginCustomer($customer);
@@ -71,11 +68,13 @@ class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishli
         $productBlock = $this->wishlistIndex->getWishlistBlock()->getProductItemsBlock();
         foreach ($products as $product) {
             $this->cmsIndex->getLinksBlock()->openLink("My Wish List");
+            $this->cmsIndex->getCmsPageBlock()->waitPageInit();
             if ($qty != '-') {
                 $productBlock->getItemProduct($product)->fillProduct(['qty' => $qty]);
                 $this->wishlistIndex->getWishlistBlock()->clickUpdateWishlist();
             }
             $productBlock->getItemProduct($product)->clickAddToCart();
+            $this->cmsIndex->getCmsPageBlock()->waitPageInit();
             if (!$this->wishlistIndex->getWishlistBlock()->isVisible()) {
                 $this->catalogProductView->getViewBlock()->addToCart($product);
                 $this->catalogProductView->getMessagesBlock()->waitSuccessMessage();

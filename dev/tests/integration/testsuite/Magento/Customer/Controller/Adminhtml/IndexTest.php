@@ -102,7 +102,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     public function testSaveActionWithInvalidCustomerAddressData()
     {
         $post = [
-            'account' => [
+            'customer' => [
                 'middlename' => 'test middlename',
                 'group_id' => 1,
                 'website_id' => 0,
@@ -110,8 +110,8 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                 'lastname' => 'test lastname',
                 'email' => 'example@domain.com',
                 'default_billing' => '_item1',
-                'customer_address' => ['_item1' => []],
             ],
+            'address' => ['_item1' => []],
         ];
         $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/customer/index/save');
@@ -141,7 +141,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $objectManager = Bootstrap::getObjectManager();
 
         $post = [
-            'account' => [
+            'customer' => [
                 'middlename' => 'test middlename',
                 'group_id' => 1,
                 'website_id' => 0,
@@ -150,17 +150,17 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                 'email' => 'example@domain.com',
                 'default_billing' => '_item1',
                 'password' => 'password',
-                'customer_address' => [
-                    '_item1' => [
-                        'firstname' => 'test firstname',
-                        'lastname' => 'test lastname',
-                        'street' => ['test street'],
-                        'city' => 'test city',
-                        'country_id' => 'US',
-                        'postcode' => '01001',
-                        'telephone' => '+7000000001',
-                        'default_billing' => 'true',
-                    ],
+            ],
+            'address' => [
+                '_item1' => [
+                    'firstname' => 'test firstname',
+                    'lastname' => 'test lastname',
+                    'street' => ['test street'],
+                    'city' => 'test city',
+                    'country_id' => 'US',
+                    'postcode' => '01001',
+                    'telephone' => '+7000000001',
+                    'default_billing' => 'true',
                 ],
             ],
         ];
@@ -218,8 +218,8 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     public function testSaveActionExistingCustomerAndExistingAddressData()
     {
         $post = [
-            'customer_id' => '1',
-            'account' => [
+            'customer' => [
+                'entity_id' => '1',
                 'middlename' => 'test middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -232,39 +232,38 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                 'created_at' => '2000-01-01 00:00:00',
                 'default_shipping' => '_item1',
                 'default_billing' => 1,
-                'customer_address' => [
-                    '1' => [
-                        'firstname' => 'update firstname',
-                        'lastname' => 'update lastname',
-                        'street' => ['update street'],
-                        'city' => 'update city',
-                        'country_id' => 'US',
-                        'postcode' => '01001',
-                        'telephone' => '+7000000001',
-                        'default_billing' => 'true',
-                    ],
-                    '_item1' => [
-                        'firstname' => 'new firstname',
-                        'lastname' => 'new lastname',
-                        'street' => ['new street'],
-                        'city' => 'new city',
-                        'country_id' => 'US',
-                        'postcode' => '01001',
-                        'telephone' => '+7000000001',
-                        'default_shipping' => 'true',
-                    ],
-                    '_template_' => [
-                        'firstname' => '',
-                        'lastname' => '',
-                        'street' => [],
-                        'city' => '',
-                        'country_id' => 'US',
-                        'postcode' => '',
-                        'telephone' => '',
-                    ],
+            ],
+            'address' => [
+                '1' => [
+                    'firstname' => 'update firstname',
+                    'lastname' => 'update lastname',
+                    'street' => ['update street'],
+                    'city' => 'update city',
+                    'country_id' => 'US',
+                    'postcode' => '01001',
+                    'telephone' => '+7000000001',
+                    'default_billing' => 'true',
+                ],
+                '_item1' => [
+                    'firstname' => 'new firstname',
+                    'lastname' => 'new lastname',
+                    'street' => ['new street'],
+                    'city' => 'new city',
+                    'country_id' => 'US',
+                    'postcode' => '01001',
+                    'telephone' => '+7000000001',
+                    'default_shipping' => 'true',
+                ],
+                '_template_' => [
+                    'firstname' => '',
+                    'lastname' => '',
+                    'street' => [],
+                    'city' => '',
+                    'country_id' => 'US',
+                    'postcode' => '',
+                    'telephone' => '',
                 ],
             ],
-
             'subscription' => '',
         ];
         $this->getRequest()->setPostValue($post);
@@ -330,7 +329,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals(1, $subscriber->getStatus());
 
         $post = [
-            'customer_id' => $customerId,
+            'customer' => ['entity_id' => $customerId],
         ];
         $this->getRequest()->setPostValue($post);
         $this->getRequest()->setParam('id', 1);
@@ -360,7 +359,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     public function testSaveActionCoreException()
     {
         $post = [
-            'account' => [
+            'customer' => [
                 'middlename' => 'test middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -477,7 +476,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     {
         $customerData = [
             'customer_id' => 0,
-            'account' => [
+            'customer' => [
                 'created_in' => false,
                 'disable_auto_group_change' => false,
                 'email' => false,
@@ -544,7 +543,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParam('id', 1)->setParam('website_id', 1)->setPostValue('delete', 1);
         $this->dispatch('backend/customer/index/cart');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="customer_cart_grid1">', $body);
+        $this->assertContains('<div id="customer_cart_grid1"', $body);
     }
 
     /**
@@ -555,7 +554,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/productReviews');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="reviwGrid">', $body);
+        $this->assertContains('<div id="reviwGrid"', $body);
     }
 
     /**
@@ -887,8 +886,8 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     public function testValidateCustomerWithAddressSuccess()
     {
         $customerData = [
-            'id' => '1',
-            'account' => [
+            'customer' => [
+                'entity_id' => '1',
                 'middlename' => 'new middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -943,8 +942,8 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     public function testValidateCustomerWithAddressFailure()
     {
         $customerData = [
-            'id' => '1',
-            'account' => [
+            'customer' => [
+                'entity_id' => '1',
                 'middlename' => 'new middlename',
                 'group_id' => 1,
                 'website_id' => 1,
@@ -955,30 +954,30 @@ class IndexTest extends \Magento\Backend\Utility\Controller
                 'new_password' => 'auto',
                 'sendemail_store_id' => '1',
                 'sendemail' => '1',
-                'customer_address' => [
-                    '1' => [
-                        'firstname' => '',
-                        'lastname' => '',
-                        'street' => ['update street'],
-                        'city' => 'update city',
-                        'postcode' => '01001',
-                        'telephone' => '',
-                    ],
-                    '_template_' => [
-                        'lastname' => '',
-                        'street' => [],
-                        'city' => '',
-                        'country_id' => 'US',
-                        'postcode' => '',
-                        'telephone' => '',
-                    ],
+            ],
+            'address' => [
+                '1' => [
+                    'firstname' => '',
+                    'lastname' => '',
+                    'street' => ['update street'],
+                    'city' => 'update city',
+                    'postcode' => '01001',
+                    'telephone' => '',
+                ],
+                '_template_' => [
+                    'lastname' => '',
+                    'street' => [],
+                    'city' => '',
+                    'country_id' => 'US',
+                    'postcode' => '',
+                    'telephone' => '',
                 ],
             ],
         ];
         /**
          * set customer data
          */
-        $this->getRequest()->setParams($customerData);
+        $this->getRequest()->setPostValue($customerData);
         $this->dispatch('backend/customer/index/validate');
         $body = $this->getResponse()->getBody();
 

@@ -137,8 +137,7 @@ class ServiceInputProcessor
         if (is_subclass_of($className, self::EXTENSION_ATTRIBUTES_TYPE)) {
             $className = substr($className, 0, -strlen('Interface'));
         }
-        $factory = $this->objectManager->get($className . 'Factory');
-        $object = $factory->create();
+        $object = $this->objectManager->create($className);
 
         foreach ($data as $propertyName => $value) {
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
@@ -183,7 +182,10 @@ class ServiceInputProcessor
         $camelCaseAttributeCodeKey = lcfirst(
             SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
         );
-        foreach ($customAttributesValueArray as $customAttribute) {
+        foreach ($customAttributesValueArray as $key => $customAttribute) {
+            if (!is_array($customAttribute)) {
+                $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
+            }
             if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
                 $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
             } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
@@ -243,6 +245,7 @@ class ServiceInputProcessor
      * @param mixed $value
      * @param string $type Convert given value to the this type
      * @return mixed
+     * @throws WebapiException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _convertValue($value, $type)

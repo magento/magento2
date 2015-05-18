@@ -13,6 +13,7 @@ class CartManagementTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'quoteCartManagementV1';
     const RESOURCE_PATH = '/V1/carts/';
+    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
 
     protected $createdQuotes = [];
 
@@ -26,7 +27,17 @@ class CartManagementTest extends WebapiAbstract
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
-    public function testCreate()
+    public function tearDown()
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        foreach ($this->createdQuotes as $quoteId) {
+            $quote->load($quoteId);
+            $quote->delete();
+        }
+    }
+
+    public function testCreateEmptyCartForGuest()
     {
         $serviceInfo = [
             'rest' => [
@@ -46,14 +57,71 @@ class CartManagementTest extends WebapiAbstract
         $this->createdQuotes[] = $quoteId;
     }
 
-    public function tearDown()
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCreateEmptyCartForCustomer()
     {
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
-        foreach ($this->createdQuotes as $quoteId) {
-            $quote->load($quoteId);
-            $quote->delete();
-        }
+        /** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
+        $repository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
+        $customer = $repository->getById(1);
+        $customerId = $customer->getId();
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/customers/' . $customerId . '/carts',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'CreateEmptyCartForCustomer',
+            ],
+        ];
+
+        $quoteId = $this->_webApiCall($serviceInfo, ['customerId' => $customerId]);
+        $this->assertGreaterThan(0, $quoteId);
+        $this->createdQuotes[] = $quoteId;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCreateEmptyCartAndGetCartForCustomer()
+    {
+        $this->_markTestAsRestOnly();
+
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+                'token' => $token
+            ]
+        ];
+
+        $quoteId = $this->_webApiCall($serviceInfo, ['customerId' => 999]); // customerId 999 will get overridden
+        $this->assertGreaterThan(0, $quoteId);
+        $this->createdQuotes[] = $quoteId;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $token
+            ]
+        ];
+
+        /** @var \Magento\Quote\Api\Data\CartInterface $cart */
+        $cart = $this->_webApiCall($serviceInfo, ['customerId' => 999]); // customerId 999 will get overridden
+        $this->assertEquals($quoteId, $cart['id']);
     }
 
     /**
@@ -298,26 +366,67 @@ class CartManagementTest extends WebapiAbstract
         $items = $order->getAllItems();
         $this->assertCount(1, $items);
         $this->assertEquals('Simple Product', $items[0]->getName());
-        $quote->delete();
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_check_payment.php
+     */
+    public function testPlaceOrderForMyCart()
+    {
+        $this->_markTestAsRestOnly();
+
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine/order',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $token
+            ],
+        ];
+
+        $orderId = $this->_webApiCall($serviceInfo, []);
+
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $this->objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        $items = $order->getAllItems();
+        $this->assertCount(1, $items);
+        $this->assertEquals('Simple Product', $items[0]->getName());
+    }
+
+    /**
+     * Test to get my cart based on customer authentication token or session
+     *
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
      */
     public function testGetCartForCustomer()
     {
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
         $cart = $this->getCart('test01');
         $customerId = $cart->getCustomer()->getId();
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/customer/' . $customerId . '/cart',
+                'resourcePath' => '/V1/carts/mine',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $token
             ],
             'soap' => [
                 'service' => 'quoteCartManagementV1',
                 'serviceVersion' => 'V1',
                 'operation' => 'quoteCartManagementV1GetCartForCustomer',
+                'token' => $token
             ],
         ];
 

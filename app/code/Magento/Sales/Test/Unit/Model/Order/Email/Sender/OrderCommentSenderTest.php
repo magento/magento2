@@ -18,12 +18,14 @@ class OrderCommentSenderTest extends AbstractSenderTest
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity');
+        $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->sender = new OrderCommentSender(
             $this->templateContainerMock,
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
-            $this->addressRendererMock
+            $this->addressRenderer,
+            $this->eventManagerMock
         );
     }
 
@@ -64,5 +66,31 @@ class OrderCommentSenderTest extends AbstractSenderTest
         $this->stepSendWithoutSendCopy();
         $result = $this->sender->send($this->orderMock, true, $comment);
         $this->assertTrue($result);
+    }
+
+    public function testSendVirtualOrder()
+    {
+        $isVirtualOrder = true;
+        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->stepAddressFormat($this->addressMock, $isVirtualOrder);
+
+        $this->identityContainerMock->expects($this->once())
+            ->method('isEnabled')
+            ->will($this->returnValue(false));
+        $this->templateContainerMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(
+                $this->equalTo(
+                    [
+                        'order' => $this->orderMock,
+                        'comment' => '',
+                        'billing' => $this->addressMock,
+                        'store' => $this->storeMock,
+                        'formattedShippingAddress' => null,
+                        'formattedBillingAddress' => 1
+                    ]
+                )
+            );
+        $this->assertFalse($this->sender->send($this->orderMock));
     }
 }
