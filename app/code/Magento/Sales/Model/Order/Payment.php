@@ -310,7 +310,10 @@ class Payment extends Info implements OrderPaymentInterface
             case ($originalOrderState && $message):
             case ($originalOrderState != $orderState):
             case ($originalOrderStatus != $orderStatus):
-                $order->setState($orderState, $orderStatus, $message, $isCustomerNotified);
+                $order->setState($orderState)
+                    ->setStatus($orderStatus)
+                    ->addStatusHistoryComment($message)
+                    ->setIsCustomerNotified($isCustomerNotified);
                 break;
             default:
                 break;
@@ -430,7 +433,7 @@ class Payment extends Info implements OrderPaymentInterface
             $message = $this->_prependMessage($message);
             $message = $this->_appendTransactionToMessage($transaction, $message);
 
-            $order->setState($state, $status, $message);
+            $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
             $this->getMethodInstance()->processInvoice($invoice, $this);
             return $this;
         }
@@ -515,7 +518,7 @@ class Payment extends Info implements OrderPaymentInterface
         );
         $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState($state, $status, $message);
+        $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
         return $this;
     }
 
@@ -1018,7 +1021,9 @@ class Payment extends Info implements OrderPaymentInterface
      */
     protected function setOrderStateProcessing($message)
     {
-        $this->getOrder()->setState(Order::STATE_PROCESSING, true, $message);
+        $this->getOrder()->setState(Order::STATE_PROCESSING)
+            ->setStatus($this->getOrder()->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING))
+            ->addStatusHistoryComment($message);
     }
 
     /**
@@ -1045,8 +1050,11 @@ class Payment extends Info implements OrderPaymentInterface
     protected function setOrderStatePaymentReview($message, $transactionId)
     {
         if ($this->getOrder()->getState() != Order::STATE_PAYMENT_REVIEW) {
-            $status = $this->getIsFraudDetected() ? Order::STATUS_FRAUD : false;
-            $this->getOrder()->setState(Order::STATE_PAYMENT_REVIEW, $status, $message);
+            $this->getOrder()->setState(Order::STATE_PAYMENT_REVIEW)
+                ->addStatusHistoryComment($message);
+            if ($this->getIsFraudDetected()) {
+                $this->getOrder()->setStatus(Order::STATUS_FRAUD);
+            }
             if ($transactionId) {
                 $this->setLastTransId($transactionId);
             }
@@ -1097,7 +1105,7 @@ class Payment extends Info implements OrderPaymentInterface
         $transaction = $this->_addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_ORDER);
         $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
-        $order->setState($state, $status, $message);
+        $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
         return $this;
     }
 
@@ -1161,7 +1169,7 @@ class Payment extends Info implements OrderPaymentInterface
         $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
 
-        $order->setState($state, $status, $message);
+        $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
 
         return $this;
     }

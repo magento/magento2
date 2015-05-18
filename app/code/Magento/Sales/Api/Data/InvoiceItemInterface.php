@@ -112,6 +112,10 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * Base hidden tax amount.
      */
     const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
+    /**
+     * Invoice
+     */
+    const INVOICE = 'invoice';
 
     /**
      * Gets the additional data for the invoice item.
@@ -487,4 +491,19 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return $this
      */
     public function setExtensionAttributes(\Magento\Sales\Api\Data\InvoiceItemExtensionInterface $extensionAttributes);
+
+    /**
+     * Set invoice
+     *
+     * @param InvoiceInterface $invoice
+     * @return $this
+     */
+    public function setInvoice(\Magento\Sales\Api\Data\InvoiceInterface $invoice);
+
+    /**
+     * Get Invoice
+     *
+     * @return \Magento\Sales\Api\Data\InvoiceInterface
+     */
+    public function getInvoice();
 }
