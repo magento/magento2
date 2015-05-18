@@ -402,7 +402,7 @@ class Payment extends Info implements OrderPaymentInterface
                 $invoice->getTransactionId()
             );
         }
-        $status = true;
+        $status = false;
         if (!$invoice->getIsPaid() && !$this->getIsTransactionPending()) {
             // attempt to capture: this can trigger "is_transaction_pending"
             $this->getMethodInstance()->setStore($order->getStoreId())->capture($this, $amountToCapture);
@@ -433,7 +433,13 @@ class Payment extends Info implements OrderPaymentInterface
             $message = $this->_prependMessage($message);
             $message = $this->_appendTransactionToMessage($transaction, $message);
 
-            $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
+            if (!$status) {
+                $status = $order->getConfig()->getStateDefaultStatus($state);
+            }
+
+            $order->setState($state)
+                ->setStatus($status)
+                ->addStatusHistoryComment($message);
             $this->getMethodInstance()->processInvoice($invoice, $this);
             return $this;
         }
@@ -478,7 +484,7 @@ class Payment extends Info implements OrderPaymentInterface
             }
         }
 
-        $status = true;
+        $status = false;
         if ($this->getIsTransactionPending()) {
             $message = __(
                 'An amount of %1 will be captured after being approved at the payment gateway.',
@@ -518,6 +524,11 @@ class Payment extends Info implements OrderPaymentInterface
         );
         $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
+
+        if (!$status) {
+            $status = $order->getConfig()->getStateDefaultStatus($state);
+        }
+
         $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
         return $this;
     }
@@ -1080,7 +1091,7 @@ class Payment extends Info implements OrderPaymentInterface
         // do ordering
         $order = $this->getOrder();
         $state = \Magento\Sales\Model\Order::STATE_PROCESSING;
-        $status = true;
+        $status = false;
         $this->getMethodInstance()->setStore($order->getStoreId())->order($this, $amount);
 
         if ($this->getSkipOrderProcessing()) {
@@ -1105,6 +1116,11 @@ class Payment extends Info implements OrderPaymentInterface
         $transaction = $this->_addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_ORDER);
         $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
+
+        if (!$status) {
+            $status = $order->getConfig()->getStateDefaultStatus($state);
+        }
+
         $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
         return $this;
     }
@@ -1136,7 +1152,7 @@ class Payment extends Info implements OrderPaymentInterface
         // do authorization
         $order = $this->getOrder();
         $state = \Magento\Sales\Model\Order::STATE_PROCESSING;
-        $status = true;
+        $status = false;
         if ($isOnline) {
             // invoke authorization on gateway
             $this->getMethodInstance()->setStore($order->getStoreId())->authorize($this, $amount);
@@ -1168,6 +1184,10 @@ class Payment extends Info implements OrderPaymentInterface
         $transaction = $this->_addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH);
         $message = $this->_prependMessage($message);
         $message = $this->_appendTransactionToMessage($transaction, $message);
+
+        if (!$status) {
+            $status = $order->getConfig()->getStateDefaultStatus($state);
+        }
 
         $order->setState($state)->setStatus($status)->addStatusHistoryComment($message);
 

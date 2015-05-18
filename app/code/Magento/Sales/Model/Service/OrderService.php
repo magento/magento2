@@ -9,6 +9,8 @@ use Magento\Sales\Api\OrderManagementInterface;
 
 /**
  * Class OrderService
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderService implements OrderManagementInterface
 {
@@ -50,6 +52,7 @@ class OrderService implements OrderManagementInterface
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Sales\Model\OrderNotifier $notifier
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
@@ -156,16 +159,15 @@ class OrderService implements OrderManagementInterface
     /**
      * @param \Magento\Sales\Api\Data\OrderInterface $order
      * @return \Magento\Sales\Api\Data\OrderInterface
+     * @throws \Exception
      */
     public function place(\Magento\Sales\Api\Data\OrderInterface $order)
     {
         // transaction will be here
         //begin transaction
         try {
-//            $order = $this->orderRepository->save($order);
             $order->place();
             return $this->orderRepository->save($order);
-
             //commit
         } catch (\Exception $e) {
             throw $e;

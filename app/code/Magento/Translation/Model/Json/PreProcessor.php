@@ -46,6 +46,7 @@ class PreProcessor implements PreProcessorInterface
      * @param Config $config
      * @param DataProviderInterface $dataProvider
      * @param AreaList $areaList
+     * @param TranslateInterface $translate
      */
     public function __construct(
         Config $config,
