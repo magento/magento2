@@ -494,27 +494,21 @@ class TypeProcessor
      *
      * @param ClassReflection $class
      * @param string $camelCaseProperty
+     * @param bool|null $isCaseSensitive
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
      */
-    public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
+    public function findGetterMethodName(ClassReflection $class, $camelCaseProperty, $isCaseSensitive = false)
     {
         $getterName = 'get' . $camelCaseProperty;
         $boolGetterName = 'is' . $camelCaseProperty;
-        if ($class->hasMethod($getterName)) {
-            $methodName = $getterName;
-        } elseif ($class->hasMethod($boolGetterName)) {
-            $methodName = $boolGetterName;
-        } else {
-            throw new \Exception(
-                sprintf(
-                    'Property :"%s" does not exist in the provided class: "%s".',
-                    $camelCaseProperty,
-                    $class->getName()
-                )
-            );
-        }
-        return $methodName;
+        return $this->findAccessorMethodName(
+            $class,
+            $camelCaseProperty,
+            $isCaseSensitive,
+            $getterName,
+            $boolGetterName
+        );
     }
 
     /**
@@ -540,17 +534,47 @@ class TypeProcessor
      *
      * @param ClassReflection $class
      * @param string $camelCaseProperty
+     * @param bool|null $isCaseSensitive
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      */
-    public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
+    public function findSetterMethodName(ClassReflection $class, $camelCaseProperty, $isCaseSensitive = false)
     {
         $setterName = 'set' . $camelCaseProperty;
         $boolSetterName = 'setIs' . $camelCaseProperty;
-        if ($class->hasMethod($setterName)) {
-            $methodName = $setterName;
-        } elseif ($class->hasMethod($boolSetterName)) {
-            $methodName = $boolSetterName;
+        return $this->findAccessorMethodName(
+            $class,
+            $camelCaseProperty,
+            $isCaseSensitive,
+            $setterName,
+            $boolSetterName
+        );
+    }
+
+    /**
+     * Find the accessor method name for a property from the given class
+     *
+     * @param ClassReflection $class
+     * @param $camelCaseProperty
+     * @param $caseSensitive
+     * @param $accessorName
+     * @param $boolAccessorName
+     * @return string processed method name
+     * @throws \Exception If $camelCaseProperty has no corresponding setter method
+     */
+    protected function findAccessorMethodName(
+        ClassReflection $class,
+        $camelCaseProperty,
+        $caseSensitive,
+        $accessorName,
+        $boolAccessorName
+    ) {
+        if ($this->classHasMethod($class, $accessorName, $caseSensitive)) {
+            $methodName = $accessorName;
+            return $methodName;
+        } elseif ($this->classHasMethod($class, $boolAccessorName, $caseSensitive)) {
+            $methodName = $boolAccessorName;
+            return $methodName;
         } else {
             throw new \Exception(
                 sprintf(
@@ -560,6 +584,24 @@ class TypeProcessor
                 )
             );
         }
-        return $methodName;
+    }
+
+    /**
+     * Checks if method is defined
+     *
+     * Case sensitivity of the method is taken into account. It depends on $caseSensitive param
+     *
+     * @param ClassReflection $class
+     * @param $methodName
+     * @param $caseSensitive
+     * @return bool
+     */
+    protected function classHasMethod(ClassReflection $class, $methodName, $caseSensitive)
+    {
+        $result = $class->hasMethod($methodName);
+        if ($caseSensitive) {
+            $result = $result && ($class->getMethod($methodName)->getName() == $methodName);
+        }
+        return $result;
     }
 }

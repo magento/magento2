@@ -143,12 +143,12 @@ class ServiceInputProcessor
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
-            $methodName = $this->typeProcessor->findGetterMethodName($class, $camelCaseProperty);
+            $methodName = $this->typeProcessor->findGetterMethodName($class, $camelCaseProperty, true);
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
                 try {
-                    $setterName = $this->typeProcessor->findSetterMethodName($class, $camelCaseProperty);
+                    $setterName = $this->typeProcessor->findSetterMethodName($class, $camelCaseProperty, true);
                 } catch (\Exception $e) {
                     if (empty($value)) {
                         continue;
