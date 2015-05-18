@@ -4,6 +4,13 @@
 //  */
 
 //
+//  Components
+//  _____________________________________________
+
+@import 'fields/_control-table.less';
+@import 'fields/_field-tooltips.less';
+
+//
 //  Variables
 //  _____________________________________________
 
@@ -44,7 +51,7 @@
         #mix-grid .row();
 
         &.admin__field-wide {
-            .extend__field-rows();
+            &:extend(.abs-field-rows all);
         }
         > .admin__field-control {
             #mix-grid .column(4,9);

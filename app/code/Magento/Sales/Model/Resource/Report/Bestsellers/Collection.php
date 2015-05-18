@@ -152,7 +152,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     {
         $select = $this->getSelect();
 
-        // if grouping by product, not by period
+        //if grouping by product, not by period
         if (!$this->_period) {
             $cols = $this->_getSelectedColumns();
             $cols[$this->getOrderedField()] = 'SUM(' . $this->getOrderedField() . ')';
@@ -165,16 +165,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
             }
 
             //exclude removed products
-            $subSelect = $this->getConnection()->select();
-            $subSelect->from(
-                ['existed_products' => $this->getTable('catalog_product_entity')],
-                new \Zend_Db_Expr('1)')
-            );
-
-            $select->exists(
-                $subSelect,
-                $mainTable . '.product_id = existed_products.entity_id'
-            )->group(
+            $select->where(new \Zend_Db_Expr($mainTable . '.product_id IS NOT NULL'))->group(
                 'product_id'
             )->order(
                 $this->getOrderedField() . ' ' . \Magento\Framework\DB\Select::SQL_DESC

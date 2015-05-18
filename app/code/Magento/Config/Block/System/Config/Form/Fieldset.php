@@ -86,7 +86,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
             $html = '<div class="' . $this->_getFrontendClass($element) . '">';
         }
 
-        $html .= '<div class="entry-edit-head collapseable">' .
+        $html .= '<div class="entry-edit-head admin__collapsible-block">' .
             '<span id="' .
             $element->getHtmlId() .
             '-link" class="entry-edit-head-link"></span>';
@@ -171,7 +171,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
         /** @var \Magento\Config\Model\Config\Structure\Element\Group $group */
         $group = $this->getGroup();
         $configCss = $group->getFieldsetCss();
-        return 'config collapseable' . ($configCss ? ' ' . $configCss : '');
+        return 'config admin__collapsible-block' . ($configCss ? ' ' . $configCss : '');
     }
 
     /**

@@ -26,4 +26,7 @@
         <plugin name="save_gift_message" type="Magento\GiftMessage\Model\Plugin\OrderSave"/>
         <plugin name="get_gift_message" type="Magento\GiftMessage\Model\Plugin\OrderGet"/>
     </type>
+    <type name="\Magento\Quote\Model\Cart\TotalsAdditionalDataProcessor">
+        <plugin name="gift_message_processor" type="Magento\GiftMessage\Model\Plugin\TotalsDataProcessorPlugin" />
+    </type>
 </config>

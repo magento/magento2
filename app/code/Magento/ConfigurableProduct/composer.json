@@ -8,6 +8,7 @@
         "magento/module-catalog-inventory": "0.74.0-beta9",
         "magento/module-sales": "0.74.0-beta9",
         "magento/module-checkout": "0.74.0-beta9",
+        "magento/module-msrp": "0.74.0-beta9",
         "magento/module-backend": "0.74.0-beta9",
         "magento/module-eav": "0.74.0-beta9",
         "magento/module-customer": "0.74.0-beta9",

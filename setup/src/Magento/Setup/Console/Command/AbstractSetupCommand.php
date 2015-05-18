@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 /**
  * An abstract class for all Magento Setup command.
- * It adds InitParamListener's magento_init_params option to all setup command.
+ * It adds InitParamListener's magento-init-params option to all setup command.
  */
 abstract class AbstractSetupCommand extends Command
 {

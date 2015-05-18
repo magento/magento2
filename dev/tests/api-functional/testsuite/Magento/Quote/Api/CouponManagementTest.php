@@ -157,9 +157,9 @@ class CouponManagementTest extends WebapiAbstract
         $this->_markTestAsRestOnly();
 
         // get customer ID token
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -187,9 +187,9 @@ class CouponManagementTest extends WebapiAbstract
         $this->_markTestAsRestOnly();
 
         // get customer ID token
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -219,9 +219,9 @@ class CouponManagementTest extends WebapiAbstract
         $this->_markTestAsRestOnly();
 
         // get customer ID token
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 
@@ -252,9 +252,9 @@ class CouponManagementTest extends WebapiAbstract
         $this->_markTestAsRestOnly();
 
         // get customer ID token
-        /** @var \Magento\Integration\Service\V1\CustomerTokenServiceInterface $customerTokenService */
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         $customerTokenService = $this->objectManager->create(
-            'Magento\Integration\Service\V1\CustomerTokenServiceInterface'
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
         );
         $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
 

@@ -346,6 +346,25 @@ class Http extends Request implements RequestInterface
     }
 
     /**
+     * Return url with no script name
+     *
+     * @param  string $url
+     * @return string
+     */
+    public static function getUrlNoScript($url)
+    {
+        if (!isset($_SERVER['SCRIPT_NAME'])) {
+            return $url;
+        }
+
+        if (($pos = strripos($url, basename($_SERVER['SCRIPT_NAME']))) !== false) {
+            $url = substr($url, 0, $pos);
+        }
+
+        return $url;
+    }
+
+    /**
      * Retrieve full action name
      *
      * @param string $delimiter

@@ -15,19 +15,27 @@ class AfterProductLoad
     protected $linkRepository;
 
     /**
+     * @var \Magento\Downloadable\Api\SampleRepositoryInterface
+     */
+    protected $sampleRepository;
+
+    /**
      * @var \Magento\Catalog\Api\Data\ProductExtensionFactory
      */
     protected $productExtensionFactory;
 
     /**
      * @param \Magento\Downloadable\Api\LinkRepositoryInterface $linkRepository
+     * @param \Magento\Downloadable\Api\SampleRepositoryInterface $sampleRepository
      * @param \Magento\Catalog\Api\Data\ProductExtensionFactory $productExtensionFactory
      */
     public function __construct(
         \Magento\Downloadable\Api\LinkRepositoryInterface $linkRepository,
+        \Magento\Downloadable\Api\SampleRepositoryInterface $sampleRepository,
         \Magento\Catalog\Api\Data\ProductExtensionFactory $productExtensionFactory
     ) {
         $this->linkRepository = $linkRepository;
+        $this->sampleRepository = $sampleRepository;
         $this->productExtensionFactory = $productExtensionFactory;
     }
 
@@ -41,16 +49,13 @@ class AfterProductLoad
         if ($product->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
             return $product;
         }
-
-        $productExtension = $product->getExtensionAttributes();
-        if ($productExtension === null) {
-            $productExtension = $this->productExtensionFactory->create();
-        }
+        $productExtension = $product->getExtensionAttributes()
+            ?: $this->productExtensionFactory->create();
         $links = $this->linkRepository->getLinksByProduct($product);
         if ($links !== null) {
             $productExtension->setDownloadableProductLinks($links);
         }
-        $samples = $this->linkRepository->getSamplesByProduct($product);
+        $samples = $this->sampleRepository->getSamplesByProduct($product);
         if ($samples !== null) {
             $productExtension->setDownloadableProductSamples($samples);
         }
