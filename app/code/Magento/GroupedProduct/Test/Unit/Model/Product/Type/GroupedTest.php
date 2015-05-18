@@ -576,4 +576,26 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
         );
     }
+
+    public function testPrepareForCartAdvancedZeroQty()
+    {
+        $expectedMsg = "Please specify the quantity of product(s).";
+        $associatedId = 9384;
+        $associatedProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $associatedProduct->expects($this->atLeastOnce())->method('getId')->will($this->returnValue($associatedId));
+
+        $buyRequest = new \Magento\Framework\Object();
+        $buyRequest->setSuperGroup([$associatedId => 0]);
+
+        $cached = true;
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('hasData')
+            ->will($this->returnValue($cached));
+        $this->product
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([$associatedProduct]));
+        $this->assertEquals($expectedMsg, $this->_model->prepareForCartAdvanced($buyRequest, $this->product));
+    }
 }

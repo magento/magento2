@@ -9,6 +9,7 @@ namespace Magento\Sales\Api\Data;
  * Invoice interface.
  *
  * An invoice is a record of the receipt of payment for an order.
+ * @api
  */
 interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

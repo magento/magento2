@@ -1,12 +1,15 @@
 <?php
 /**
- * High-level interface for mail templates data that hides format from the client code
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mail\Template;
 
+/**
+ * High-level interface for mail templates data that hides format from the client code
+ *
+ * @api
+ */
 interface ConfigInterface
 {
     /**
