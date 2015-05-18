@@ -15,103 +15,6 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
-    public function testDeserializeRenders()
-    {
-        $childBlock = $this->getMock('Magento\Framework\View\Element\AbstractBlock', [], [], '', false);
-        /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = $this->getMock(
-            'Magento\Framework\View\Layout',
-            ['createBlock', 'getChildName', 'setChild'],
-            [],
-            '',
-            false
-        );
-
-        $rendererList = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\Sidebar',
-            [
-                'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
-                    ['layout' => $layout]
-                )
-            ]
-        );
-        $layout->expects(
-            $this->at(0)
-        )->method(
-            'createBlock'
-        )->with(
-            'Magento\Framework\View\Element\RendererList'
-        )->will(
-            $this->returnValue($rendererList)
-        );
-        $layout->expects(
-            $this->at(4)
-        )->method(
-            'createBlock'
-        )->with(
-            'some-block',
-            '.some-template',
-            ['data' => ['template' => 'some-type']]
-        )->will(
-            $this->returnValue($childBlock)
-        );
-        $layout->expects(
-            $this->at(5)
-        )->method(
-            'getChildName'
-        )->with(
-            null,
-            'some-template'
-        )->will(
-            $this->returnValue(false)
-        );
-        $layout->expects($this->at(6))->method('setChild')->with(null, null, 'some-template');
-
-        /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
-        $block = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\Sidebar',
-            [
-                'context' => $this->_objectManager->getObject(
-                    'Magento\Backend\Block\Template\Context',
-                    ['layout' => $layout]
-                )
-            ]
-        );
-
-        $block->deserializeRenders('some-template|some-block|some-type');
-    }
-
-    public function testGetIdentities()
-    {
-        /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
-        $block = $this->_objectManager->getObject('Magento\Checkout\Block\Cart\Sidebar');
-
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['__wakeup', 'getIdentities'],
-            [],
-            '',
-            false
-        );
-        $identities = [0 => 1, 1 => 2, 2 => 3];
-        $product->expects($this->exactly(2))
-            ->method('getIdentities')
-            ->will($this->returnValue($identities));
-
-        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $item */
-        $item = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
-
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
-        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $quote->expects($this->once())->method('getAllVisibleItems')->will($this->returnValue([$item]));
-
-        $block->setData('custom_quote', $quote);
-        $this->assertEquals($product->getIdentities(), $block->getIdentities());
-    }
-
     public function testGetTotalsHtml()
     {
         $totalsHtml = "$134.36";
@@ -142,9 +45,9 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             ->method('getLayout')
             ->will($this->returnValue($layoutMock));
 
-        /** @var \Magento\Checkout\Block\Cart\SideBar $sidebarBlock */
+        /** @var \Magento\Checkout\Block\Cart\Sidebar $sidebarBlock */
         $sidebarBlock = $this->_objectManager->getObject(
-            'Magento\Checkout\Block\Cart\SideBar',
+            'Magento\Checkout\Block\Cart\Sidebar',
             ['context' => $contextMock]
         );
 

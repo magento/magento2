@@ -8,7 +8,6 @@ namespace Magento\Checkout\Test\TestStep;
 
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Customer\Test\Fixture\Address;
-use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
@@ -32,13 +31,6 @@ class FillBillingInformationStep implements TestStepInterface
     protected $billingAddress;
 
     /**
-     * Customer fixture
-     *
-     * @var Customer
-     */
-    protected $customer;
-
-    /**
      * Checkout method
      *
      * @var string
@@ -49,18 +41,15 @@ class FillBillingInformationStep implements TestStepInterface
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
      * @param Address $billingAddress
-     * @param Customer $customer
      * @param string $checkoutMethod
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         Address $billingAddress,
-        Customer $customer,
         $checkoutMethod
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->billingAddress = $billingAddress;
-        $this->customer = $customer;
         $this->checkoutMethod = $checkoutMethod;
     }
 
@@ -71,8 +60,7 @@ class FillBillingInformationStep implements TestStepInterface
      */
     public function run()
     {
-        $customer = $this->checkoutMethod === 'register' ? $this->customer : null;
-        $this->checkoutOnepage->getBillingBlock()->fillBilling($this->billingAddress, $customer);
+        $this->checkoutOnepage->getBillingBlock()->fillBilling($this->billingAddress);
         $this->checkoutOnepage->getBillingBlock()->clickContinue();
     }
 }

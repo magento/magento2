@@ -21,7 +21,6 @@ class Login extends \Magento\Multishipping\Controller\Checkout
         }
 
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
 
         // set account create url
         $loginForm = $this->_view->getLayout()->getBlock('customer.new');

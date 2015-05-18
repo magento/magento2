@@ -6,13 +6,14 @@
 namespace Magento\Framework\Json;
 
 /**
- * Json decoder
+ * JSON decoder
  *
+ * @api
  */
 interface DecoderInterface
 {
     /**
-     * Decodes the given $data string which is encoded in the JSON format.
+     * Decodes the given $data string which is encoded in the JSON format into a PHP type (array, string literal, etc.)
      *
      * @param string $data
      * @return mixed

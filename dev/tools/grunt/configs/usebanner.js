@@ -5,7 +5,22 @@
 
 'use strict';
 
-var banner = require('./banner');
+var banner = {
+    firstLine: 'Copyright © 2015 Magento. All rights reserved.',
+    secondLine: 'See COPYING.txt for license details.',
+
+    css: function () {
+        return '/**\n * ' + this.firstLine + '\n * ' + this.secondLine + '\n */\n';
+    },
+
+    less: function () {
+        return '// /**\n//  * ' + this.firstLine + '\n//  * ' + this.secondLine + '\n//  */\n';
+    },
+
+    html: function () {
+        return '<!--\n/**\n * ' + this.firstLine + '\n * ' + this.secondLine + '\n */\n-->\n';
+    }
+};
 
 module.exports = {
     options: {

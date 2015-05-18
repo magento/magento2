@@ -16,6 +16,27 @@ use Magento\Framework\Api\AbstractExtensibleObject;
 class Item extends AbstractExtensibleObject implements TotalsItemInterface
 {
     /**
+     * Set totals item id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setItemId($id)
+    {
+        return $this->setData(self::KEY_ITEM_ID, $id);
+    }
+
+    /**
+     * Get totals item id
+     *
+     * @return int Item id
+     */
+    public function getItemId()
+    {
+        return $this->_get(self::KEY_ITEM_ID);
+    }
+
+    /**
      * Returns the item price in quote currency.
      *
      * @return float Item price in quote currency.
@@ -349,6 +370,85 @@ class Item extends AbstractExtensibleObject implements TotalsItemInterface
     public function setBaseRowTotalInclTax($baseRowTotalInclTax)
     {
         return $this->setData(self::KEY_BASE_ROW_TOTAL_INCL_TAX, $baseRowTotalInclTax);
+    }
+
+    /**
+     * Returns the item options data.
+     *
+     * @return string[] Item price in quote currency.
+     */
+    public function getOptions()
+    {
+        return $this->_get(self::KEY_OPTIONS);
+    }
+
+    /**
+     * Sets the item options data.
+     *
+     * @param string $options
+     * @return $this
+     */
+    public function setOptions($options)
+    {
+        return $this->setData(self::KEY_OPTIONS, $options);
+    }
+
+    /**
+     * Returns the item weee tax applied amount in quote currency.
+     *
+     * @return float Item weee tax applied amount in quote currency.
+     */
+    public function getWeeeTaxAppliedAmount()
+    {
+        return $this->_get(self::KEY_WEEE_TAX_APPLIED_AMOUNT);
+    }
+
+    /**
+     * Sets the item weee tax applied amount in quote currency.
+     *
+     * @param float $weeeTaxAppliedAmount
+     * @return $this
+     */
+    public function setWeeeTaxAppliedAmount($weeeTaxAppliedAmount)
+    {
+        return $this->setData(self::KEY_WEEE_TAX_APPLIED_AMOUNT, $weeeTaxAppliedAmount);
+    }
+
+    /**
+     * Returns the item weee tax applied in quote currency.
+     *
+     * @return string[] Item weee tax applied in quote currency.
+     */
+    public function getWeeeTaxApplied()
+    {
+        return $this->_get(self::KEY_WEEE_TAX_APPLIED);
+    }
+
+    /**
+     * Sets the item weee tax applied in quote currency.
+     *
+     * @param string $weeeTaxApplied
+     * @return $this
+     */
+    public function setWeeeTaxApplied($weeeTaxApplied)
+    {
+        return $this->setData(self::KEY_WEEE_TAX_APPLIED, $weeeTaxApplied);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->_get(self::KEY_NAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::KEY_NAME, $name);
     }
 
     /**
