@@ -4,6 +4,10 @@
  */
 /*jshint browser:true*/
 /*global alert*/
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 define([
     'jquery',
     'mage/template',

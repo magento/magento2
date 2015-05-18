@@ -8,13 +8,13 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
     <route url="/V1/products/:sku/downloadable-links" method="GET">
-        <service class="Magento\Downloadable\Api\LinkRepositoryInterface" method="getLinks"/>
+        <service class="Magento\Downloadable\Api\LinkRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Downloadable::downloadable" />
         </resources>
     </route>
     <route url="/V1/products/:sku/downloadable-links/samples" method="GET">
-        <service class="Magento\Downloadable\Api\LinkRepositoryInterface" method="getSamples"/>
+        <service class="Magento\Downloadable\Api\SampleRepositoryInterface" method="getList"/>
         <resources>
             <resource ref="Magento_Downloadable::downloadable" />
         </resources>

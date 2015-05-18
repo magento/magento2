@@ -75,7 +75,7 @@
     }
     .package-add-products {
         margin: @indent__base 0 0;
-        .grid {
+        .data-grid {
             padding: 0;
             button {
                 vertical-align: middle;
@@ -106,9 +106,21 @@
         }
     }
     .action-secondary {
+        &:extend(.abs-action-l all);
         float: right;
+        margin: 0 0 0 @popup__padding__horizontal;
     }
     .action-close {
         &:extend(.abs-action-tertiary all);
+        font-size: @button__large__font-size;
+        margin: 0 0 0 @popup__padding__horizontal;
+        padding: @button__large__padding-vertical 0;
+        &:before {
+            content: normal;
+        }
+        span {
+            position: static;
+            overflow: auto;
+        }
     }
 }
