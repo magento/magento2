@@ -38,9 +38,7 @@
         </div>
     </div>
 <?php else: ?>
-
-<div id="order-items_grid">
-    <div class="admin__table-wrapper">
+    <div class="admin__table-wrapper" id="order-items_grid">
     <?php if (count($_items)>10): ?>
         <div class="actions update actions-update">
             <?php echo $block->getButtonHtml(__('Update Items and Qty\'s'), 'order.itemsUpdate()', 'action-secondary'); ?>
@@ -212,7 +210,6 @@
             order.itemsOnchangeBind()
         });
     </script>
-</div>
 
 <?php if ($block->isGiftMessagesAvailable()) : ?>
 <script>

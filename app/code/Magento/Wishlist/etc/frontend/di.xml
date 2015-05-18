@@ -23,4 +23,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="wishlist" xsi:type="string">Magento\Wishlist\CustomerData\Wishlist</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

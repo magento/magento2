@@ -1,0 +1,62 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<li id="opc-payment" data-bind=", attr: {'class': stepClassAttributes() }" role="presentation">
+    <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
+        <span class="number" data-bind="text: stepNumber()"></span>
+        <h2 data-bind="text: $t('Payment Information')"></h2>
+    </div>
+    <div id="checkout-step-payment"
+         class="step-content"
+         data-role="content"
+         role="tabpanel"
+         aria-hidden="false"
+         data-bind="fadeVisible: isVisible() && quoteHasShippingMethod()">
+        <form id="co-payment-form" class="form payments" novalidate="novalidate" data-bind="submit: setPaymentMethod">
+            <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
+            <fieldset class="fieldset">
+                <legend class="legend payments-title">
+                    <span><!-- ko text: $t('Payment Information')--><!-- /ko --></span>`
+                </legend>
+                <br>
+                <!-- ko foreach: getRegion('beforeMethods') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
+                <div id="checkout-payment-method-load" class="opc-payment">
+                    <dl class="items methods-payment">
+                        <!-- ko foreach: getAvailableViews() -->
+                        <dt data-bind='attr: {class: "item-title " + getCode()}'>
+                            <input data-bind='attr: {id: "p_method_" + getCode(), value: getCode(), title: getTitle(), class: "radio" + $parent.getMethodControlAdditionalClass()}, checked: $parent.activeMethod, enable: isEnabled' type="radio" name="payment[method]"/>
+                            <label data-bind='attr: {for: "p_method_" + getCode()}'><!-- ko template: titleTemplate --><!--/ko--></label>
+                        </dt>
+                        <!-- ko if: $data.formTemplate -->
+                        <dd data-bind='attr: {class: "item-content " + getCode()}, visible: $parent.isMethodActive(getCode()), enable: isEnabled'><!-- ko template: formTemplate --><!--/ko--></dd>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <!-- ko ifnot: getAvailableViews().length > 0 -->
+                        <dt class="item-title"><!-- ko text: $t('No Payment Methods')--><!-- /ko --></dt>
+                        <!-- /ko -->
+                    </dl>
+                </div>
+                <!-- ko foreach: getRegion('afterMethods') -->
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                <!-- /ko -->
+            </fieldset>
+            <div class="actions-toolbar" id="payment-buttons-container">
+                <div class="primary">
+                    <button data-role="opc-continue"
+                            type="submit"
+                            class="button action continue primary">
+                        <span><!-- ko text: $t('Continue')--><!-- /ko --></span>
+                    </button>
+                </div>
+                <div class="secondary">
+                    <a class="action back" href="#" data-bind="click: backToShippingMethod"><span>Back</span></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</li>

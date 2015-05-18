@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<fieldset class="fieldset payment method" data-bind='attr: {id: "payment_form_" + getCode()}'>
+    <div class="field field-number required">
+        <label for="po_number" class="label"><span><!-- ko text: $t('Purchase Order Number')--><!-- /ko --></span></label>
+        <div class="control">
+            <input type="text"
+                   id="po_number"
+                   name="payment[po_number]"
+                   data-validate="{required:true}"
+                   data-bind='
+                        attr: {title: $t("Purchase Order Number")},
+                        value: purchaseOrderNumber,
+                        enable: isActive($parent)'
+                   class="input-text"/>
+        </div>
+    </div>
+</fieldset>

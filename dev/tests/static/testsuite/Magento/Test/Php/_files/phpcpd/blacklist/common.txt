@@ -166,3 +166,4 @@ Magento/Reports/Setup
 Magento/Sales/Setup
 Magento/SalesRule/Setup
 Magento/Eav/Setup
+setup/src/Magento/Setup/Fixtures
