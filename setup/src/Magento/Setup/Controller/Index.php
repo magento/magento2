@@ -35,9 +35,16 @@ class Index extends AbstractActionController
     public function indexAction()
     {
         if ($this->objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+            /** @var \Magento\Framework\App\State $adminAppState */
+            $adminAppState = $this->objectManager->get('Magento\Framework\App\State');
+            $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
+
             $this->objectManager->create(
                 'Magento\Backend\Model\Auth\Session',
-                ['sessionConfig' => $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig')]
+                [
+                    'sessionConfig' => $this->objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
+                    'appState' => $adminAppState
+                ]
             );
             if (!$this->objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
                 $view = new ViewModel();
