@@ -10,7 +10,7 @@
     <update handle="sales_order_item_price"/>
     <update handle="sales_order_guest_info_links"/>
     <body>
-        <referenceContainer name="page.main.title">
+       <referenceContainer name="page.main.title">
             <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
             <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
             <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
@@ -32,7 +32,7 @@
                     </block>
                 </block>
             </block>
-            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" after="sales.order.view"/>
+            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" />
         </referenceContainer>
     </body>
 </page>
