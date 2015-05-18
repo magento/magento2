@@ -53,20 +53,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->uiFactoryMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponentFactory')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $bookmarkFactory = $this->getMockBuilder('Magento\Ui\Model\BookmarkFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $bookmarkMock = $this->getMockBuilder('Magento\Ui\Model\Bookmark')
-            ->setMethods(['saveState'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $bookmarkMock->expects($this->any())
-            ->method('setState');
-        $bookmarkFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($bookmarkMock);
-        $this->render = new Render($contextMock, $this->uiFactoryMock, $bookmarkFactory);
+        $this->render = new Render($contextMock, $this->uiFactoryMock);
     }
 
     public function testExecute()
@@ -100,6 +87,9 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $viewMock->expects($this->once())
             ->method('render')
             ->willReturn($renderedData);
+        $viewMock->expects($this->once())
+            ->method('getChildComponents')
+            ->willReturn([]);
         $this->uiFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($viewMock);
