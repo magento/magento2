@@ -12,7 +12,6 @@ use Magento\Developer\Model\Tools\Formatter;
 use Magento\Framework\DomDocument\Factory;
 use Magento\Framework\XSLTProcessor\Factory as XSLTProcessorFactory;
 
-
 class XmlConverterCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
