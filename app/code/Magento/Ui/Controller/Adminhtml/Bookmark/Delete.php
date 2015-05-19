@@ -50,9 +50,9 @@ class Delete extends AbstractAction
      */
     public function execute()
     {
-        $viewId = array_pop(explode('.', $this->_request->getParam('data')));
+        $viewIds = explode('.', $this->_request->getParam('data'));
         $bookmark = $this->bookmarkManagement->getByIdentifierNamespace(
-            $viewId,
+            array_pop($viewIds),
             $this->_request->getParam('namespace')
         );
 
