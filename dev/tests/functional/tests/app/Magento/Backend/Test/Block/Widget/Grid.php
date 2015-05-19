@@ -165,14 +165,14 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $actionNextPage = '.pager .action-next';
+    protected $actionNextPage = '[class*=data-grid-pager] .action-next';
 
     /**
      * Locator for disabled next page action
      *
      * @var string
      */
-    protected $actionNextPageDisabled = '.pager .action-next.disabled';
+    protected $actionNextPageDisabled = '[class*=data-grid-pager] .action-next.disabled';
 
     /**
      * First row selector
@@ -180,6 +180,13 @@ abstract class Grid extends Block
      * @var string
      */
     protected $firstRowSelector = '';
+
+    /**
+     * Selector for no records row.
+     *
+     * @var string
+     */
+    protected $noRecords = '[data-role="row"] .empty-text';
 
     /**
      * Get backend abstract block
@@ -317,6 +324,9 @@ abstract class Grid extends Block
      */
     public function massaction(array $items, $action, $acceptAlert = false, $massActionSelection = '')
     {
+        if ($this->_rootElement->find($this->noRecords)->isVisible()) {
+            return;
+        }
         if (!is_array($action)) {
             $action = [$action => '-'];
         }

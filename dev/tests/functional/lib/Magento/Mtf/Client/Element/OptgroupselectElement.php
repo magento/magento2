@@ -14,13 +14,6 @@ use Magento\Mtf\Client\Locator;
 class OptgroupselectElement extends SelectElement
 {
     /**
-     * Option locator.
-     *
-     * @var string
-     */
-    protected $optionByIndex = './/option';
-
-    /**
      * Option group selector.
      *
      * @var string
@@ -44,14 +37,7 @@ class OptgroupselectElement extends SelectElement
     {
         $this->eventManager->dispatchEvent(['get_value'], [(string)$this->getAbsoluteSelector()]);
 
-        $selectedLabel = '';
-        $labels = $this->getElements($this->optionByIndex, Locator::SELECTOR_XPATH);
-        foreach ($labels as $label) {
-            if ($label->isSelected()) {
-                $selectedLabel = $label->getText();
-                break;
-            }
-        }
+        $selectedLabel = parent::getValue();
         if ($selectedLabel == '') {
             throw new \Exception('Selected value has not been found in optgroup select.');
         }

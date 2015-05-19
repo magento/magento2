@@ -29,16 +29,25 @@ class CreateTaxRuleStep implements TestStepInterface
     protected $fixtureFactory;
 
     /**
+     * Delete all Tax Rule on backend.
+     *
+     * @var DeleteAllTaxRulesStep
+     */
+    protected $deleteAllTaxRule;
+
+    /**
      * Preparing step properties.
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
+     * @param DeleteAllTaxRulesStep $deleteTaxRule
      * @param string $taxRule
      */
-    public function __construct(FixtureFactory $fixtureFactory, $taxRule = null)
+    public function __construct(FixtureFactory $fixtureFactory, DeleteAllTaxRulesStep $deleteTaxRule, $taxRule = null)
     {
         $this->fixtureFactory = $fixtureFactory;
         $this->taxRule = $taxRule;
+        $this->deleteAllTaxRule = $deleteTaxRule;
     }
 
     /**
@@ -62,5 +71,15 @@ class CreateTaxRuleStep implements TestStepInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Delete all tax rule.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->deleteAllTaxRule->run();
     }
 }
