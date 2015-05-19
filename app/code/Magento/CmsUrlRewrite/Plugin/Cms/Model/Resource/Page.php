@@ -64,13 +64,13 @@ class Page
      *
      * @param \Magento\Cms\Model\Resource\Page $subject
      * @param \Closure $proceed
-     * @param \Magento\Cms\Model\Page $page
+     * @param \Magento\Framework\Model\AbstractModel $page
      * @return \Magento\Cms\Model\Resource\Page
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
-        \Magento\Cms\Model\Resource\Page $subject, \Closure $proceed, \Magento\Cms\Model\Page $page
+        \Magento\Cms\Model\Resource\Page $subject, \Closure $proceed, \Magento\Framework\Model\AbstractModel $page
     ) {
         $result = $proceed($page);
         if ($page->isDeleted()) {
