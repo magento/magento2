@@ -127,6 +127,7 @@ class Db implements \Magento\Framework\Backup\Db\BackupDbInterface
      *
      * @param \Magento\Framework\Backup\Db\BackupInterface $backup
      * @return $this
+     * @api
      */
     public function createBackup(\Magento\Framework\Backup\Db\BackupInterface $backup)
     {
