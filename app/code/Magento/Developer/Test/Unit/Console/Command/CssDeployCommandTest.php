@@ -16,6 +16,7 @@ use Magento\Framework\View\Asset\SourceFileGeneratorPool;
 use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
 use Magento\Developer\Console\Command\CssDeployCommand;
 use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Framework\Validator\Locale;
 
 class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -64,6 +65,11 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $filesystem;
 
+    /**
+     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $validator;
+
     public function setUp()
     {
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
@@ -82,6 +88,7 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface'
         );
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
 
         $this->command = new CssDeployCommand(
             $this->objectManager,
@@ -91,7 +98,8 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
             $this->assetSource,
             $this->sourceFileGeneratorPool,
             $this->chainFactory,
-            $this->filesystem
+            $this->filesystem,
+            $this->validator
         );
     }
 
@@ -128,6 +136,8 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
             $this->getMock('\Magento\Framework\Filesystem\Directory\WriteInterface', [], [], '', false)
         );
 
+        $this->validator->expects($this->once())->method('isValid')->with('en_US')->willReturn(true);
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(
             [
@@ -149,7 +159,7 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage WRONG_LOCALE argument has invalid value format
+     * @expectedExceptionMessage WRONG_LOCALE argument has invalid value, please run info:language:list
      */
     public function testExecuteWithWrongFormat()
     {

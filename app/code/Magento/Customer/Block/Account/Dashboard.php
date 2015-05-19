@@ -61,7 +61,6 @@ class Dashboard extends \Magento\Framework\View\Element\Template
         $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
     }
 
     /**

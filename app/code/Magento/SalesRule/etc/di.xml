@@ -24,4 +24,19 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesRule\Model\Resource\Report\Rule">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\Resource\Report\Rule\Createdat">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\Resource\Report\Rule\Updatedat">
+        <arguments>
+            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
 </config>

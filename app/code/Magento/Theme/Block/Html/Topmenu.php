@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Block\Html;
 
-use Magento\Framework\View\Block\IdentityInterface;
+use Magento\Framework\Object\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\Data\Tree\Node;

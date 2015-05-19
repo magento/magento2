@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Framework\System;
+
 /**
  * Class to work with remote FTP server
  */
-namespace Magento\Framework\System;
-
 class Ftp
 {
     /**
