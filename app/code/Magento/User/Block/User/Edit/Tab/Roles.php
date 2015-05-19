@@ -106,7 +106,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'assigned_user_role',
             [
-                'header_css_class' => 'a-center',
+                'header_css_class' => 'data-grid-actions-cell',
                 'header' => __('Assigned'),
                 'type' => 'radio',
                 'html_name' => 'roles[]',

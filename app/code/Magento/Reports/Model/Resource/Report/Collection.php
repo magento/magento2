@@ -325,12 +325,7 @@ class Collection extends \Magento\Framework\Data\Collection
             return [];
         }
         $reportResource = $this->_collectionFactory->create($this->_reportCollection);
-        $reportResource->setDateRange(
-            $this->timeShift($fromDate),
-            $this->timeShift($toDate)
-        )->setStoreIds(
-            $this->getStoreIds()
-        );
+        $reportResource->setDateRange($fromDate, $toDate)->setStoreIds($this->getStoreIds());
         return $reportResource;
     }
 
@@ -354,20 +349,7 @@ class Collection extends \Magento\Framework\Data\Collection
         }
         return $this->_reports;
     }
-
-    /**
-     * Retrieve time shift
-     *
-     * @param string $datetime
-     * @return string
-     */
-    public function timeShift($datetime)
-    {
-        return $this->_localeDate->scopeDate(null, $datetime, true)
-            ->setTimezone(new \DateTimeZone('UTC'))
-            ->format('Y-m-d H:i:s');
-    }
-
+    
     /**
      * Load data
      *

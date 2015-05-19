@@ -16,6 +16,7 @@ define([
         type: 'form.input',
         name: '<%= $data.index %>_input',
         dataScope: '<%= $data.customEntry %>',
+        customScope: '<%= $data.customScope %>',
         sortOrder: {
             after: '<%= $data.name %>'
         },

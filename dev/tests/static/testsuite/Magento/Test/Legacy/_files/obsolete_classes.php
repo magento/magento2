@@ -3161,6 +3161,9 @@ return [
     ['Magento\Framework\Exception\File\ValidatorException'],
     ['Magento\Framework\Filesystem\FilesystemException', 'Magento\Framework\Exception\FileSystemException'],
     ['Magento\Shipping\Exception'],
+    ['Magento\Tax\Model\Resource\Sales\Order\Tax\Item\Collection'],
+    ['Magento\Tax\Model\Resource\Sales\Order\Tax\Item', 'Magento\Sales\Model\Resource\Order\Tax\Item'],
+    ['Magento\Tax\Model\Sales\Order\Tax\Item', 'Magento\Sales\Model\Order\Tax\Item'],
     ['Magento\Reports\Block\Adminhtml\Product\Grid'],
     ['Magento\Reports\Model\Totals'],
     ['Magento\Log\Model\Shell'],
@@ -3336,5 +3339,254 @@ return [
     ['Magento\Log\Model\LogFactory\Clean'],
     ['Magento\Log\Model\Shell\CommandInterface'],
     ['Magento\Framework\App\Filesystem\DirectoryList\AbstractShell'],
+    [
+        'Magento\Integration\Service\V1\AdminTokenServiceInterface',
+        'Magento\Integration\Api\AdminTokenServiceInterface'
+    ],
+    [
+        'Magento\Integration\Service\V1\AuthorizationServiceInterface',
+        'Magento\Integration\Api\AuthorizationServiceInterface'
+    ],
+    [
+        'Magento\Integration\Service\V1\CustomerTokenServiceInterface',
+        'Magento\Integration\Api\CustomerTokenServiceInterface'
+    ],
+    ['Magento\Integration\Service\V1\IntegrationInterface', 'Magento\Integration\Api\IntegrationServiceInterface'],
+    ['Magento\Integration\Service\V1\OauthInterface', 'Magento\Integration\Api\OauthServiceInterface'],
+    ['Magento\Integration\Service\V1\AdminTokenService', 'Magento\Integration\Model\AdminTokenService'],
+    ['Magento\Integration\Service\V1\AuthorizationService', 'Magento\Integration\Model\AuthorizationService'],
+    ['Magento\Integration\Service\V1\CustomerTokenService', 'Magento\Integration\Model\CustomerTokenService'],
+    ['Magento\Integration\Service\V1\Integration', 'Magento\Integration\Model\IntegrationService'],
+    ['Magento\Integration\Service\V1\Oauth', 'Magento\Integration\Model\OauthService'],
+    ['Magento\Integration\Model\Plugin\Service\V1\Integration', 'Magento\Integration\Model\Plugin\Integration'],
     ['Magento\Search\Model\Resource\Helper'],
+    ['Magento\Tools\Layout\Reference'],
+    ['Magento\Tools\Layout\Formatter', 'Magento\Developer\Model\Tools\Formatter'],
+    ['Magento\Tools\Dependency\Circular', 'Magento\Setup\Module\Dependency\Circular'],
+    ['Magento\Tools\Dependency\Parser\Code', 'Magento\Setup\Module\Dependency\Parser\Code'],
+    ['Magento\Tools\Dependency\Parser\Composer\Json', 'Magento\Setup\Module\Dependency\Composer\Json'],
+    ['Magento\Tools\Dependency\Parser\Config\Xml', 'Magento\Setup\Module\Dependency\Config\Xml'],
+    ['Magento\Tools\Dependency\ParserInterface', 'Magento\Setup\Module\Dependency\ParserInterface'],
+    [
+        'Magento\Tools\Dependency\Report\Builder\AbstractBuilder',
+        'Magento\Setup\Module\Dependency\Report\Builder\AbstractBuilder'
+    ],
+    ['Magento\Tools\Dependency\Report\BuilderInterface', 'Magento\Setup\Module\Dependency\Report\BuilderInterface'],
+    ['Magento\Tools\Dependency\Report\Circular\Builder', 'Magento\Setup\Module\Dependency\Report\Circular\Builder'],
+    [
+        'Magento\Tools\Dependency\Report\Circular\Data\Chain',
+        'Magento\Setup\Module\Dependency\Report\Circular\Data\Chain'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Circular\Data\Config',
+        'Magento\Setup\Module\Dependency\Report\Circular\Data\Config'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Circular\Data\Module',
+        'Magento\Setup\Module\Dependency\Report\Circular\Data\Module'
+    ],
+    ['Magento\Tools\Dependency\Report\Circular\Writer', 'Magento\Setup\Module\Dependency\Report\Circular\Writer'],
+    [
+        'Magento\Tools\Dependency\Report\Data\Config\AbstractConfig',
+        'Magento\Setup\Module\Dependency\Report\Data\Config\AbstractConfig'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Data\ConfigInterface',
+        'Magento\Setup\Module\Dependency\Report\Data\ConfigInterface'
+    ],
+    ['Magento\Tools\Dependency\Report\Dependency\Builder', 'Magento\Setup\Module\Dependency\Report\Dependency\Builder'],
+    [
+        'Magento\Tools\Dependency\Report\Dependency\Data\Config',
+        'Magento\Setup\Module\Dependency\Report\Dependency\Data\Config'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Dependency\Data\Dependency',
+        'Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Dependency\Data\Module',
+        'Magento\Setup\Module\Dependency\Report\Dependency\Data\Module'
+    ],
+    ['Magento\Tools\Dependency\Report\Dependency\Writer', 'Magento\Setup\Module\Dependency\Report\Dependency\Writer'],
+    ['Magento\Tools\Dependency\Report\Framework\Builder', 'Magento\Setup\Module\Dependency\Report\Framework\Builder'],
+    [
+        'Magento\Tools\Dependency\Report\Framework\Data\Config',
+        'Magento\Setup\Module\Dependency\Report\Framework\Data\Config'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Framework\Data\Dependency',
+        'Magento\Setup\Module\Dependency\Report\Framework\Data\Dependency'
+    ],
+    [
+        'Magento\Tools\Dependency\Report\Framework\Data\Module',
+        'Magento\Setup\Module\Dependency\Report\Framework\Data\Module'
+    ],
+    ['Magento\Tools\Dependency\Report\Framework\Writer', 'Magento\Setup\Module\Dependency\Report\Framework\Writer'],
+    [
+        'Magento\Tools\Dependency\Report\Writer\Csv\AbstractWriter',
+        'Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter'
+    ],
+    ['Magento\Tools\Dependency\Report\WriterInterface', 'Magento\Setup\Module\Dependency\Report\WriterInterface'],
+    ['Magento\Tools\Dependency\ServiceLocator', 'Magento\Setup\Module\Dependency\ServiceLocator'],
+    ['Magento\Tools\SampleData\Helper\Csv\Reader', 'Magento\SampleData\Helper\Csv\Reader'],
+    ['Magento\Tools\SampleData\Helper\Csv\ReaderFactory', 'Magento\SampleData\Helper\Csv\ReaderFactory'],
+    ['Magento\Tools\SampleData\Helper\Deploy', 'Magento\SampleData\Helper\Deploy'],
+    ['Magento\Tools\SampleData\Helper\Fixture', 'Magento\SampleData\Helper\Fixture'],
+    ['Magento\Tools\SampleData\Helper\PostInstaller', 'Magento\SampleData\Helper\PostInstaller'],
+    ['Magento\Tools\SampleData\Helper\StoreManager', 'Magento\SampleData\Helper\StoreManager'],
+    ['Magento\Tools\SampleData\Installer', 'Magento\SampleData\Model\Installer'],
+    ['Magento\Tools\SampleData\Logger', 'Magento\SampleData\Model\Logger'],
+    ['Magento\Tools\SampleData\ObserverManager', 'Magento\SampleData\Model\ObserverManager'],
+    ['Magento\Tools\SampleData\SetupFactory', 'Magento\SampleData\Model\SetupFactory'],
+    ['Magento\Tools\SampleData\SetupInterface', 'Magento\SampleData\Model\SetupInterface'],
+    [
+        'Magento\Tools\SampleData\Module\Bundle\Setup\Product\Converter',
+        'Magento\SampleData\Module\Bundle\Setup\Product\Converter'
+    ],
+    ['Magento\Tools\SampleData\Module\Bundle\Setup\Product', 'Magento\SampleData\Module\Bundle\Setup\Product'],
+    ['Magento\Tools\SampleData\Module\Bundle\Setup', 'Magento\SampleData\Module\Bundle\Setup'],
+    ['Magento\Tools\SampleData\Module\Catalog\Setup\Attribute', 'Magento\SampleData\Module\Catalog\Setup\Attribute'],
+    ['Magento\Tools\SampleData\Module\Catalog\Setup\Category', 'Magento\SampleData\Module\Catalog\Setup\Category'],
+    [
+        'Magento\Tools\SampleData\Module\Catalog\Setup\Product\Converter',
+        'Magento\SampleData\Module\Catalog\Setup\Product\Converter'
+    ],
+    [
+        'Magento\Tools\SampleData\Module\Catalog\Setup\Product\Gallery',
+        'Magento\SampleData\Module\Catalog\Setup\Product\Gallery'
+    ],
+    ['Magento\Tools\SampleData\Module\Catalog\Setup\Product', 'Magento\SampleData\Module\Catalog\Setup\Product'],
+    [
+        'Magento\Tools\SampleData\Module\Catalog\Setup\ProductLink',
+        'Magento\SampleData\Module\Catalog\Setup\ProductLink'
+    ],
+    ['Magento\Tools\SampleData\Module\Catalog\Setup', 'Magento\SampleData\Module\Catalog\Setup'],
+    ['Magento\Tools\SampleData\Module\CatalogRule\Setup\Rule', 'Magento\SampleData\Module\CatalogRule\Setup\Rule'],
+    ['Magento\Tools\SampleData\Module\CatalogRule\Setup', 'Magento\SampleData\Module\CatalogRule\Setup'],
+    [
+        'Magento\Tools\SampleData\Module\Cms\Setup\Block\Converter',
+        'Magento\SampleData\Module\Cms\Setup\Block\Converter'
+    ],
+    ['Magento\Tools\SampleData\Module\Cms\Setup\Block', 'Magento\SampleData\Module\Cms\Setup\Block'],
+    ['Magento\Tools\SampleData\Module\Cms\Setup\Page', 'Magento\SampleData\Module\Cms\Setup\Page'],
+    ['Magento\Tools\SampleData\Module\Cms\Setup', 'Magento\SampleData\Module\Cms\Setup'],
+    [
+        'Magento\Tools\SampleData\Module\ConfigurableProduct\Setup\Product\Converter',
+        'Magento\SampleData\Module\ConfigurableProduct\Setup\Product\Converter'
+    ],
+    [
+        'Magento\Tools\SampleData\Module\ConfigurableProduct\Setup\Product\Gallery',
+        'Magento\SampleData\Module\ConfigurableProduct\Setup\Product\Gallery'
+    ],
+    [
+        'Magento\Tools\SampleData\Module\ConfigurableProduct\Setup\Product',
+        'Magento\SampleData\Module\ConfigurableProduct\Setup\Product'
+    ],
+    [
+        'Magento\Tools\SampleData\Module\ConfigurableProduct\Setup',
+        'Magento\SampleData\Module\ConfigurableProduct\Setup'
+    ],
+    ['Magento\Tools\SampleData\Module\Customer\Setup\Customer', 'Magento\SampleData\Module\Customer\Setup\Customer'],
+    ['Magento\Tools\SampleData\Module\Customer\Setup', 'Magento\SampleData\Module\Customer\Setup'],
+    ['Magento\Tools\SampleData\Module\CustomerBalance\Observer', 'Magento\SampleData\Module\CustomerBalance\Observer'],
+    [
+        'Magento\Tools\SampleData\Module\Downloadable\Setup\Product\Converter',
+        'Magento\SampleData\Module\Downloadable\Setup\Product\Converter'
+    ],
+    [
+        'Magento\Tools\SampleData\Module\Downloadable\Setup\Product',
+        'Magento\SampleData\Module\Downloadable\Setup\Product'
+    ],
+    ['Magento\Tools\SampleData\Module\Downloadable\Setup', 'Magento\SampleData\Module\Downloadable\Setup'],
+    [
+        'Magento\Tools\SampleData\Module\GiftCard\Setup\Product\Converter',
+        'Magento\SampleData\Module\GiftCard\Setup\Product\Converter'
+    ],
+    ['Magento\Tools\SampleData\Module\GiftCard\Setup\Product', 'Magento\SampleData\Module\GiftCard\Setup\Product'],
+    ['Magento\Tools\SampleData\Module\GiftCard\Setup', 'Magento\SampleData\Module\GiftCard\Setup'],
+    [
+        'Magento\Tools\SampleData\Module\GiftRegistry\Setup\GiftRegistry',
+        'Magento\SampleData\Module\GiftRegistry\Setup\GiftRegistry'
+    ],
+    ['Magento\Tools\SampleData\Module\GiftRegistry\Setup', 'Magento\SampleData\Module\GiftRegistry\Setup'],
+    [
+        'Magento\Tools\SampleData\Module\GroupedProduct\Setup\Product\Converter',
+        'Magento\SampleData\Module\GroupedProduct\Setup\Product\Converter'
+    ],
+    [
+        'Magento\Tools\SampleData\Module\GroupedProduct\Setup\Product',
+        'Magento\SampleData\Module\GroupedProduct\Setup\Product'
+    ],
+    ['Magento\Tools\SampleData\Module\GroupedProduct\Setup', 'Magento\SampleData\Module\GroupedProduct\Setup'],
+    [
+        'Magento\Tools\SampleData\Module\MultipleWishlist\Setup\Wishlist',
+        'Magento\SampleData\Module\MultipleWishlist\Setup\Wishlist'
+    ],
+    ['Magento\Tools\SampleData\Module\MultipleWishlist\Setup', 'Magento\SampleData\Module\MultipleWishlist\Setup'],
+    [
+        'Magento\Tools\SampleData\Module\OfflineShipping\Setup\Tablerate',
+        'Magento\SampleData\Module\OfflineShipping\Setup\Tablerate'
+    ],
+    ['Magento\Tools\SampleData\Module\OfflineShipping\Setup', 'Magento\SampleData\Module\OfflineShipping\Setup'],
+    ['Magento\Tools\SampleData\Module\Review\Setup\Review', 'Magento\SampleData\Module\Review\Setup\Review'],
+    ['Magento\Tools\SampleData\Module\Review\Setup', 'Magento\SampleData\Module\Review\Setup'],
+    [
+        'Magento\Tools\SampleData\Module\Sales\Setup\Order\Converter',
+        'Magento\SampleData\Module\Sales\Setup\Order\Converter'
+    ],
+    [
+        'Magento\Tools\SampleData\Module\Sales\Setup\Order\Processor',
+        'Magento\SampleData\Module\Sales\Setup\Order\Processor'
+    ],
+    ['Magento\Tools\SampleData\Module\Sales\Setup\Order', 'Magento\SampleData\Module\Sales\Setup\Order'],
+    ['Magento\Tools\SampleData\Module\Sales\Setup', 'Magento\SampleData\Module\Sales\Setup'],
+    ['Magento\Tools\SampleData\Module\SalesRule\Setup\Rule', 'Magento\SampleData\Module\SalesRule\Setup\Rule'],
+    ['Magento\Tools\SampleData\Module\SalesRule\Setup', 'Magento\SampleData\Module\SalesRule\Setup'],
+    ['Magento\Tools\SampleData\Module\TargetRule\Setup\Rule', 'Magento\SampleData\Module\TargetRule\Setup\Rule'],
+    ['Magento\Tools\SampleData\Module\TargetRule\Setup', 'Magento\SampleData\Module\TargetRule\Setup'],
+    ['Magento\Tools\SampleData\Module\Tax\Setup\Tax', 'Magento\SampleData\Module\Tax\Setup\Tax'],
+    ['Magento\Tools\SampleData\Module\Tax\Setup', 'Magento\SampleData\Module\Tax\Setup'],
+    ['Magento\Tools\SampleData\Module\Theme\Setup', 'Magento\SampleData\Module\Theme\Setup'],
+    ['Magento\Tools\SampleData\Module\Widget\Setup\CmsBlock', 'Magento\SampleData\Module\Widget\Setup\CmsBlock'],
+    ['Magento\Tools\SampleData\Module\Widget\Setup', 'Magento\SampleData\Module\Widget\Setup'],
+    [
+        'Magento\Tools\SampleData\Module\Wishlist\Setup\Wishlist\Helper',
+        'Magento\SampleData\Module\Wishlist\Setup\Wishlist\Helper'
+    ],
+    ['Magento\Tools\SampleData\Module\Wishlist\Setup\Wishlist', 'Magento\SampleData\Module\Wishlist\Setup\Wishlist'],
+    ['Magento\Tools\SampleData\Module\Wishlist\Setup', 'Magento\SampleData\Module\Wishlist\Setup'],
+    ['Magento\Tools\SampleData\InstallerApp'],
+    [
+        'Magento\ToolkitFramework\ImportExport\Fixture\Complex\Generator',
+        'Magento\Setup\Model\Complex\Generator'
+    ],
+    [
+        'Magento\ToolkitFramework\ImportExport\Fixture\Complex\Pattern',
+        'Magento\Setup\Model\Complex\Pattern'
+    ],
+    [
+        'Magento\ToolkitFramework\ImportExport\Fixture\Generator',
+        'Magento\Setup\Model\Generator'
+    ],
+    ['Magento\ToolkitFramework\Helper\Cli'],
+    ['Magento\ToolkitFramework\Config'],
+    ['Magento\Framework\Locale\Validator', 'Magento\Framework\Validator\Locale'],
+    ['Magento\ToolkitFramework\Fixture', 'Magento\Setup\Fixtures\Fixture'],
+    ['Magento\ToolkitFramework\Application', 'Magento\Setup\Fixtures\FixtureModel'],
+    ['Magento\Framework\Locale\Lists', 'Magento\Framework\Locale\TranslatedLists'],
+    ['Magento\Setup\Model\Lists', 'Magento\Framework\Setup\Lists'],
+    ['Magento\Framework\View\Block\IdentityInterface'],
+    ['Magento\Framework\Config\ConfigOptionsList', 'Magento\Setup\Model\ConfigOptionsList'],
+    ['Magento\Customer\Controller\Address\BillingList'],
+    ['Magento\Checkout\Block\Onepage\Login'],
+    ['Magento\Checkout\Block\Onepage\Progress'],
+    ['Magento\Checkout\Block\Onepage\Review'],
+    ['Magento\Checkout\Controller\Onepage\Review'],
+    ['Magento\Checkout\Controller\Onepage\SaveBilling'],
+    ['Magento\Checkout\Controller\Onepage\SaveMethod'],
+    ['Magento\Checkout\Controller\Onepage\SavePayment'],
+    ['Magento\Checkout\Controller\Onepage\SaveShipping'],
+    ['Magento\Checkout\Controller\Onepage\SaveShippingMethod'],
+    ['Magento\Checkout\Controller\Onepage\ShippingMethod'],
+    ['Magento\Catalog\Model\Product\Gallery\ContentValidator', 'Magento\Framework\Api\ImageContentValidator'],
 ];

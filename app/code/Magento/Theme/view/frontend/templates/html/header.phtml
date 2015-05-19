@@ -9,10 +9,26 @@
 /**
  * @var \Magento\Theme\Block\Html\Header $block
  */
+$welcomeMessage = $block->getWelcome();
 ?>
 <?php switch ($block->getShowPart()):
     case 'welcome': ?>
-        <li class="greet welcome"><?php echo $block->getWelcome() ?></li>
+        <li class="greet welcome" data-bind="scope: 'customer'">
+            <span data-bind="text: customer().fullname ? $t('Welcome, %1!').replace('%1', customer().fullname) : '<?=$block->escapeHtml($welcomeMessage) ?>'"></span>
+        </li>
+        <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "customer": {
+                            "component": "Magento_Customer/js/view/customer"
+                        }
+                    }
+                }
+            }
+        }
+        </script>
     <?php break; ?>
 
     <?php case 'other': ?>

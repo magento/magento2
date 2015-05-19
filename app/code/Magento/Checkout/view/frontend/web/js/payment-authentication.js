@@ -3,6 +3,10 @@
  * See COPYING.txt for license details.
  */
 /*jshint jquery:true*/
+/**
+ * @deprecated
+ * @removeCandidate
+ */
 define([
     "jquery",
     "jquery/ui"

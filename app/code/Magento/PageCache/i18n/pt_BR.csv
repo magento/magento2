@@ -14,6 +14,6 @@
 "Backend port","Backend port"
 "Specify backend port for config file generation. If field is empty default value 8080 will be saved.","Specify backend port for config file generation. If field is empty default value 8080 will be saved."
 "TTL for public content","TTL for public content"
-"Public content cache lifetime in seconds. If field is empty default value 120 will be saved. ","Public content cache lifetime in seconds. If field is empty default value 120 will be saved. "
+"Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. ","Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. "
 "Page Cache","Page Cache"
 "Full page caching.","Full page caching."

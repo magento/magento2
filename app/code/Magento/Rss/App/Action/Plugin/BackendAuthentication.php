@@ -14,7 +14,8 @@ use Magento\Framework\Exception\AuthenticationException;
 
 /**
  * Class BackendAuthentication
- * @package Magento\Rss\App\Action\Plugin
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentication
 {
@@ -44,10 +45,14 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @param ResponseInterface $response
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Backend\Model\UrlInterface $backendUrl
+     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+     * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param array $aclResources
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\Model\Auth $auth,
@@ -55,6 +60,9 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
         ResponseInterface $response,
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Backend\Model\UrlInterface $backendUrl,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
+        \Magento\Backend\App\BackendAppList $backendAppList,
         \Magento\Framework\HTTP\Authentication $httpAuthentication,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\AuthorizationInterface $authorization,
@@ -64,7 +72,16 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
         $this->logger = $logger;
         $this->authorization = $authorization;
         $this->aclResources = $aclResources;
-        parent::__construct($auth, $url, $response, $actionFlag, $messageManager);
+        parent::__construct(
+            $auth,
+            $url,
+            $response,
+            $actionFlag,
+            $messageManager,
+            $backendUrl,
+            $resultRedirectFactory,
+            $backendAppList
+        );
     }
 
     /**

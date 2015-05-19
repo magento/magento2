@@ -15,7 +15,8 @@ define([
             required: false,
             template: 'ui/group/group',
             fieldTemplate: 'ui/form/field',
-            breakLine: true
+            breakLine: true,
+            validateWholeGroup: false
         },
 
         /**

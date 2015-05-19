@@ -10,6 +10,8 @@ use Magento\Framework\Pricing\Object\SaleableInterface;
 
 /**
  * Interface AdjustmentInterface
+ *
+ * @api
  */
 interface AdjustmentInterface
 {
