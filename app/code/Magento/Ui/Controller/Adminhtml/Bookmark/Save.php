@@ -170,6 +170,8 @@ class Save extends AbstractAction
                     $value = true;
                 } elseif ($value == 'false') {
                     $value = false;
+                } elseif (is_numeric($value)) {
+                    $value = (int) $value;
                 }
             }
         }
