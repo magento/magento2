@@ -73,13 +73,13 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                 $fields
             );
         }
-        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
-            ['children']['shipping-address-fieldset']['children']
+        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
+            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children']
         )) {
-            $fields = $jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
-            ['children']['shipping-address-fieldset']['children'];
-            $jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
-            ['children']['shipping-address-fieldset']['children'] = $this->merger->merge(
+            $fields = $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
+            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children'];
+            $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
+            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children'] = $this->merger->merge(
                 $elements,
                 'checkoutProvider',
                 'shippingAddress',

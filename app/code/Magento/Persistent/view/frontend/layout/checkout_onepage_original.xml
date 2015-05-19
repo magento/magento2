@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- TODO remove this file as soon as enhanced checkout is implemented -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="checkout.root">
@@ -15,19 +16,20 @@
                             <item name="children" xsi:type="array">
                                 <item name="steps" xsi:type="array">
                                     <item name="children" xsi:type="array">
-                                        <item name="review" xsi:type="array">
+                                        <item name="authentication" xsi:type="array">
                                             <item name="children" xsi:type="array">
-                                                <item name="beforePlaceOrder" xsi:type="array">
-                                                    <item name="children" xsi:type="array">
-                                                        <item name="checkoutAgreements" xsi:type="array">
-                                                            <item name="component"  xsi:type="string">Magento_CheckoutAgreements/js/view/checkoutAgreements</item>
-                                                            <item name="dataScope" xsi:type="string">checkoutAgreements</item>
-                                                            <item name="displayArea" xsi:type="string">checkoutAgreements</item>
-                                                            <item name="provider" xsi:type="string">checkoutProvider</item>
-                                                            <item name="children" xsi:type="array">
-                                                            </item>
-                                                        </item>
-                                                    </item>
+                                                <item name="remember-me" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Persistent/js/view/remember-me</item>
+                                                    <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                        <item name="billingAddress" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="remember-me" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Magento_Persistent/js/view/remember-me</item>
+                                                    <item name="dataScope" xsi:type="string">additionalAddressData</item>
+                                                    <item name="displayArea" xsi:type="string">additional-fieldsets</item>
                                                 </item>
                                             </item>
                                         </item>

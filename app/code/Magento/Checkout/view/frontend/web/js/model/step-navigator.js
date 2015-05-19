@@ -35,14 +35,14 @@ define(
                 },
                 {
                     name: 'shippingAddress',
-                    isVisible: ko.observable(false),
+                    isVisible: ko.observable(true),
                     isEnabled: true,
                     number: ko.observable(3),
                     classAttributes: ko.observable(defaultStepClass)
                 },
                 {
                     name: 'shippingMethod',
-                    isVisible: ko.observable(false),
+                    isVisible: ko.observable(true),
                     isEnabled: true,
                     number: ko.observable(4),
                     classAttributes: ko.observable(defaultStepClass)
