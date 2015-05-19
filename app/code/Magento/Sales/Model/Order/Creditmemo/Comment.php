@@ -12,7 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Comment getResource()
- * @method \Magento\Sales\Model\Order\Creditmemo\Comment setCreatedAt(string $value)
  */
 class Comment extends AbstractModel implements CreditmemoCommentInterface
 {
@@ -33,8 +32,6 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -46,8 +43,6 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -58,8 +53,6 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $localeDate,
-            $dateTime,
             $resource,
             $resourceCollection,
             $data
@@ -130,6 +123,14 @@ class Comment extends AbstractModel implements CreditmemoCommentInterface
     public function getCreatedAt()
     {
         return $this->getData(CreditmemoCommentInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(CreditmemoCommentInterface::CREATED_AT, $createdAt);
     }
 
     /**

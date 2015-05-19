@@ -15,3 +15,11 @@ $customerRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager(
     ->create('Magento\Customer\Api\CustomerRepositoryInterface');
 $customer = $customerRepository->getById(1);
 $quote->setCustomer($customer)->setCustomerIsGuest(false)->save();
+
+/** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+$quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Quote\Model\QuoteIdMaskFactory')
+    ->create();
+$quoteIdMask->setQuoteId($quote->getId());
+$quoteIdMask->setDataChanges(true);
+$quoteIdMask->save();

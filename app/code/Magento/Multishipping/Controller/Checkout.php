@@ -23,21 +23,18 @@ class Checkout extends \Magento\Checkout\Controller\Action implements
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
-     * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         CustomerRepositoryInterface $customerRepository,
-        AccountManagementInterface $accountManagement,
-        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
+        AccountManagementInterface $accountManagement
     ) {
         parent::__construct(
             $context,
             $customerSession,
             $customerRepository,
-            $accountManagement,
-            $resultRedirectFactory
+            $accountManagement
         );
     }
 

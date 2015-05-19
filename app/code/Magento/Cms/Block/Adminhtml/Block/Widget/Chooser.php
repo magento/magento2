@@ -16,7 +16,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_blockFactory;
 
     /**
-     * @var \Magento\Cms\Model\Resource\Block\Grid\CollectionFactory
+     * @var \Magento\Cms\Model\Resource\Block\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -24,14 +24,14 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Cms\Model\BlockFactory $blockFactory
-     * @param \Magento\Cms\Model\Resource\Block\Grid\CollectionFactory $collectionFactory
+     * @param \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Cms\Model\BlockFactory $blockFactory,
-        \Magento\Cms\Model\Resource\Block\Grid\CollectionFactory $collectionFactory,
+        \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_blockFactory = $blockFactory;
@@ -81,7 +81,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
         if ($element->getValue()) {
             $block = $this->_blockFactory->create()->load($element->getValue());
             if ($block->getId()) {
-                $chooser->setLabel($block->getTitle());
+                $chooser->setLabel($this->escapeHtml($block->getTitle()));
             }
         }
 

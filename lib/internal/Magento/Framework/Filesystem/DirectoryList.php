@@ -96,7 +96,7 @@ class DirectoryList
         static::validate($config);
         $this->root = $this->filterPath($root);
         $this->directories = static::getDefaultConfig();
-        $this->directories[self::SYS_TMP] = [self::PATH => sys_get_temp_dir()];
+        $this->directories[self::SYS_TMP] = [self::PATH => realpath(sys_get_temp_dir())];
 
         // inject custom values from constructor
         foreach ($this->directories as $code => $dir) {
@@ -228,13 +228,15 @@ class DirectoryList
      * Asserts that specified directory code is in the registry
      *
      * @param string $code
-     * @throws FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @return void
      */
     private function assertCode($code)
     {
         if (!isset($this->directories[$code])) {
-            throw new FilesystemException("Unknown directory type: '$code'");
+            throw new \Magento\Framework\Exception\FileSystemException(
+                new \Magento\Framework\Phrase('Unknown directory type: \'%1\'', [$code])
+            );
         }
     }
 }

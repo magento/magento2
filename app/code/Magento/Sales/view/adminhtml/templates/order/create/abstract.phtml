@@ -8,9 +8,11 @@
 
 ?>
 
-<div class="fieldset-wrapper-title">
-	<span class="title"><?php echo $block->getHeaderText() ?></span>
-	<div class="actions"><?php echo $block->getButtonsHtml() ?></div>
+<div class="admin__page-section-title">
+    <span class="title"><?php echo $block->getHeaderText() ?></span>
+    <?php if($block->getButtonsHtml()): ?>
+        <div class="actions"><?php echo $block->getButtonsHtml() ?></div>
+    <?php endif; ?>
 </div>
 
 <?php echo $block->getChildHtml('', true) ?>

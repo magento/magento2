@@ -32,7 +32,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $searchButton = '[title=Search][class*=action]';
+    protected $searchButton = '[data-action="grid-filter-apply"]';
 
     /**
      * Locator for 'Sort' link
@@ -46,7 +46,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $resetButton = '.action-reset';
+    protected $resetButton = '[data-action="grid-filter-reset"]';
 
     /**
      * The first row in grid. For this moment we suggest that we should strictly define what we are going to search
@@ -137,21 +137,14 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $filterButton = '.action.filters-toggle';
+    protected $filterButton = '[data-action="grid-filter-expand"]';
 
     /**
      * Active class
      *
      * @var string
      */
-    protected $active = '.active';
-
-    /**
-     * Base part of row locator template for getRow() method
-     *
-     * @var string
-     */
-    protected $location = '//div[@class="grid"]//tr[';
+    protected $active = '[class=*_active]';
 
     /**
      * Secondary part of row locator template for getRow() method
@@ -226,7 +219,7 @@ abstract class Grid extends Block
                     : null;
                 $this->_rootElement->find($selector, $strategy, $typifiedElement)->setValue($value);
             } else {
-                throw new \Exception('Such column is absent in the grid or not described yet.');
+                throw new \Exception("Column $key is absent in the grid or not described yet.");
             }
         }
     }
@@ -381,16 +374,12 @@ abstract class Grid extends Block
         if ($isSearchable) {
             $this->search($filter);
         }
-        $location = '//div[@class="grid"]//tr[';
-        $rowTemplate = 'td[contains(.,normalize-space("%s"))]';
-        if ($isStrict) {
-            $rowTemplate = 'td[text()[normalize-space()="%s"]]';
-        }
+        $rowTemplate = ($isStrict) ? $this->rowTemplateStrict : $this->rowTemplate;
         $rows = [];
         foreach ($filter as $value) {
             $rows[] = sprintf($rowTemplate, $value);
         }
-        $location = $location . implode(' and ', $rows) . ']';
+        $location = '//tr[' . implode(' and ', $rows) . ']';
         return $this->_rootElement->find($location, Locator::SELECTOR_XPATH);
     }
 
@@ -428,7 +417,6 @@ abstract class Grid extends Block
      */
     public function isRowVisible(array $filter, $isSearchable = true, $isStrict = true)
     {
-        $this->openFilterBlock();
         return $this->getRow($filter, $isSearchable, $isStrict)->isVisible();
     }
 
@@ -457,14 +445,14 @@ abstract class Grid extends Block
     {
         $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
 
-        $button = $this->_rootElement->find($this->filterButton);
-        if ($button->isVisible() && !$this->_rootElement->find($this->filterButton . $this->active)->isVisible()) {
-            $button->click();
+        $toggleFilterButton = $this->_rootElement->find($this->filterButton);
+        $searchButton = $this->_rootElement->find($this->searchButton);
+        if ($toggleFilterButton->isVisible() && !$searchButton->isVisible()) {
+            $toggleFilterButton->click();
             $browser = $this->_rootElement;
-            $selector = $this->searchButton;
             $browser->waitUntil(
-                function () use ($browser, $selector) {
-                    return $browser->find($selector)->isVisible() ? true : null;
+                function () use ($searchButton) {
+                    return $searchButton->isVisible() ? true : null;
                 }
             );
         }

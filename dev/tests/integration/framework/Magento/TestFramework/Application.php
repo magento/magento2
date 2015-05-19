@@ -10,7 +10,8 @@ use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\DeploymentConfig\DbConfig;
+use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\App\DeploymentConfig\Reader;
 
 /**
  * Encapsulates application installation, initialization and uninstall
@@ -116,11 +117,19 @@ class Application
     protected $dirList;
 
     /**
+     * Config file for integration tests
+     *
+     * @var string
+     */
+    private $globalConfigFile;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Shell $shell
      * @param string $installDir
      * @param array $installConfigFile
+     * @param string $globalConfigFile
      * @param string $globalConfigDir
      * @param string $appMode
      * @param AutoloaderInterface $autoloadWrapper
@@ -129,6 +138,7 @@ class Application
         \Magento\Framework\Shell $shell,
         $installDir,
         $installConfigFile,
+        $globalConfigFile,
         $globalConfigDir,
         $appMode,
         AutoloaderInterface $autoloadWrapper
@@ -150,6 +160,7 @@ class Application
         $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
+        $this->globalConfigFile = $globalConfigFile;
     }
 
     /**
@@ -161,12 +172,10 @@ class Application
     {
         if (null === $this->_db) {
             if ($this->isInstalled()) {
-                $deploymentConfig = new DeploymentConfig(
-                    new \Magento\Framework\App\DeploymentConfig\Reader($this->dirList),
-                    []
-                );
-                $dbConfig = new DbConfig($deploymentConfig->getSegment(DbConfig::CONFIG_KEY));
-                $dbInfo = $dbConfig->getConnection('default');
+                $reader = new Reader($this->dirList);
+                $deploymentConfig = new DeploymentConfig($reader, []);
+                $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
+                $dbInfo = $dbConfig['connection']['default'];
                 $host = $dbInfo['host'];
                 $user = $dbInfo['username'];
                 $password = $dbInfo['password'];
@@ -175,7 +184,7 @@ class Application
                 $installConfig = $this->getInstallConfig();
                 $host = $installConfig['db_host'];
                 $user = $installConfig['db_user'];
-                $password = $installConfig['db_pass'];
+                $password = $installConfig['db_password'];
                 $dbName = $installConfig['db_name'];
             }
             $this->_db = new Db\Mysql(
@@ -298,6 +307,8 @@ class Application
         );
         $objectManager->removeSharedInstance('Magento\Framework\Logger\Monolog');
         $objectManager->addSharedInstance($logger, 'Magento\Framework\Logger\Monolog');
+        $sequenceBuilder = $objectManager->get('\Magento\TestFramework\Db\Sequence\Builder');
+        $objectManager->addSharedInstance($sequenceBuilder, 'Magento\SalesSequence\Model\Builder');
 
         Helper\Bootstrap::setObjectManager($objectManager);
 
@@ -331,7 +342,12 @@ class Application
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
         );
-        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\RendererInterface'));
+        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\Renderer\Placeholder'));
+        /** @var \Magento\TestFramework\Db\Sequence $sequence */
+        $sequence = $objectManager->get('Magento\TestFramework\Db\Sequence');
+        $sequence->generateSequences();
+        $objectManager->create('Magento\TestFramework\Config', ['configPath' => $this->globalConfigFile])
+            ->rewriteAdditionalConfig();
     }
 
     /**
@@ -367,12 +383,16 @@ class Application
      */
     public function cleanup()
     {
+        $this->_ensureDirExists($this->installDir);
+        $this->_ensureDirExists($this->_configDir);
+
+        $this->copyAppConfigFiles();
         /**
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            'php -f %s uninstall --magento_init_params=%s',
-            [BP . '/setup/index.php', $this->getInitParamsQuery()]
+            'php -f %s setup:uninstall -n --magento_init_params=%s',
+            [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
 
@@ -380,7 +400,7 @@ class Application
      * Install an application
      *
      * @return void
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function install()
     {
@@ -403,23 +423,23 @@ class Application
 
         // run install script
         $this->_shell->execute(
-            'php -f %s install ' . implode(' ', array_keys($installParams)),
-            array_merge([BP . '/setup/index.php'], array_values($installParams))
+            'php -f %s setup:install ' . implode(' ', array_keys($installParams)),
+            array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
         // enable only specified list of caches
-        $cacheScript = BP . '/dev/shell/cache.php';
         $initParamsQuery = $this->getInitParamsQuery();
-        $this->_shell->execute('php -f %s -- --set=0 --bootstrap=%s', [$cacheScript, $initParamsQuery]);
-        $cacheTypes = [
-            \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
-            \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
-            \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
-            \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
-        ];
+        $this->_shell->execute('php -f %s cache:disable --all --bootstrap=%s', [BP . '/bin/magento', $initParamsQuery]);
         $this->_shell->execute(
-            'php -f %s -- --set=1 --types=%s --bootstrap=%s',
-            [$cacheScript, implode(',', $cacheTypes), $initParamsQuery]
+            'php -f %s cache:enable %s %s %s %s --bootstrap=%s',
+            [
+                BP . '/bin/magento',
+                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
+                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
+                $initParamsQuery,
+            ]
         );
 
         // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
@@ -509,7 +529,7 @@ class Application
      *
      * @param string $dir
      * @return void
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _ensureDirExists($dir)
     {
@@ -518,7 +538,7 @@ class Application
             mkdir($dir, 0777);
             umask($old);
         } elseif (!is_dir($dir)) {
-            throw new \Magento\Framework\Exception("'$dir' is not a directory.");
+            throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
         }
     }
 

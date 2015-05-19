@@ -208,6 +208,10 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                     'onclick' => $this->getJsObjectName() . '.resetFilter()',
                     'class' => 'action-reset'
                 ]
+            )->setDataAttribute(
+                [
+                    'action' => 'grid-filter-reset'
+                ]
             )
         );
         $this->setChild(
@@ -217,6 +221,10 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
                     'label' => __('Search'),
                     'onclick' => $this->getJsObjectName() . '.doFilter()',
                     'class' => 'task',
+                ]
+            )->setDataAttribute(
+                [
+                    'action' => 'grid-filter-apply'
                 ]
             )
         );

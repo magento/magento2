@@ -79,7 +79,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testSetUsedProductAttributeIds()
     {
         $testConfigurable = $this->_getAttributeByCode('test_configurable');
-        $this->assertEmpty($this->_product->getData('_cache_instance_configurable_attributes'));
         $this->_model->setUsedProductAttributeIds([$testConfigurable->getId()], $this->_product);
         $attributes = $this->_product->getData('_cache_instance_configurable_attributes');
         $this->assertArrayHasKey(0, $attributes);

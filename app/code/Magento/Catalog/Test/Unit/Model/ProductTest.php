@@ -124,7 +124,37 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $mediaGalleryEntryFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productLinkFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $dataObjectHelperMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataServiceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $attributeValueFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $linkTypeProviderMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entityCollectionProviderMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -249,6 +279,25 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->productLinkFactory = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->mediaGalleryEntryFactoryMock =
+            $this->getMockBuilder('Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->metadataServiceMock = $this->getMock('\Magento\Catalog\Api\ProductAttributeRepositoryInterface');
+        $this->attributeValueFactory = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+            ->disableOriginalConstructor()->getMock();
+        $this->linkTypeProviderMock = $this->getMock('Magento\Catalog\Model\Product\LinkTypeProvider',
+            ['getLinkTypes'], [], '', false);
+        $this->entityCollectionProviderMock = $this->getMock('Magento\Catalog\Model\ProductLink\CollectionProvider',
+            ['getCollection'], [], '', false);
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -268,6 +317,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'categoryRepository' => $this->categoryRepository,
                 'catalogProduct' => $this->_catalogProduct,
                 'imageCacheFactory' => $this->imageCacheFactory,
+                'productLinkFactory' => $this->productLinkFactory,
+                'mediaGalleryEntryFactory' => $this->mediaGalleryEntryFactoryMock,
+                'metadataService' => $this->metadataServiceMock,
+                'customAttributeFactory' => $this->attributeValueFactory,
+                'entityCollectionProvider' => $this->entityCollectionProviderMock,
+                'linkTypeProvider' => $this->linkTypeProviderMock,
                 'data' => ['id' => 1]
             ]
         );
@@ -692,5 +747,396 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
             ->will($this->returnValue($this->categoryIndexerMock));
+    }
+
+    /**
+     *  Test for getProductLinks()
+     */
+    public function testGetProductLinks()
+    {
+        $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
+        $this->linkTypeProviderMock->expects($this->once())
+            ->method('getLinkTypes')
+            ->willReturn($linkTypes);
+
+        $inputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink->setProductSku("Simple Product 1");
+        $inputRelatedLink->setLinkType("related");
+        $inputRelatedLink->setData("sku", "Simple Product 2");
+        $inputRelatedLink->setData("type", "simple");
+        $inputRelatedLink->setPosition(0);
+
+        $outputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $outputRelatedLink->setProductSku("Simple Product 1");
+        $outputRelatedLink->setLinkType("related");
+        $outputRelatedLink->setLinkedProductSku("Simple Product 2");
+        $outputRelatedLink->setLinkedProductType("simple");
+        $outputRelatedLink->setPosition(0);
+
+        $this->entityCollectionProviderMock->expects($this->at(0))
+            ->method('getCollection')
+            ->with($this->model, 'related')
+            ->willReturn([$inputRelatedLink]);
+        $this->entityCollectionProviderMock->expects($this->at(1))
+            ->method('getCollection')
+            ->with($this->model, 'upsell')
+            ->willReturn([]);
+        $this->entityCollectionProviderMock->expects($this->at(2))
+            ->method('getCollection')
+            ->with($this->model, 'crosssell')
+            ->willReturn([]);
+        $this->entityCollectionProviderMock->expects($this->at(3))
+            ->method('getCollection')
+            ->with($this->model, 'associated')
+            ->willReturn([]);
+
+        $expectedOutput = [$outputRelatedLink];
+        $typeInstanceMock = $this->getMock(
+            'Magento\ConfigurableProduct\Model\Product\Type\Simple', ["getSku"], [], '', false);
+        $typeInstanceMock
+            ->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn("Simple Product 1");
+        $this->model->setTypeInstance($typeInstanceMock);
+
+        $productLink1 = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $this->productLinkFactory->expects($this->at(0))
+            ->method('create')
+            ->willReturn($productLink1);
+
+        $links = $this->model->getProductLinks();
+        $this->assertEquals($links, $expectedOutput);
+    }
+
+    /**
+     *  Test for setProductLinks()
+     */
+    public function testSetProductLinks()
+    {
+        $link = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $link->setProductSku("Simple Product 1");
+        $link->setLinkType("upsell");
+        $link->setLinkedProductSku("Simple Product 2");
+        $link->setLinkedProductType("simple");
+        $link->setPosition(0);
+        $productLinks = [$link];
+        $this->model->setProductLinks($productLinks);
+        $this->assertEquals($productLinks, $this->model->getProductLinks());
+    }
+
+    /**
+     * Set up two media attributes: image and small_image
+     */
+    protected function setupMediaAttributes()
+    {
+        $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+            ->setMethods(['getEditableAttributes'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
+            $this->returnValue($productType)
+        );
+
+        $frontendMock = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend')
+            ->disableOriginalConstructor()
+            ->setMethods(['getInputType'])
+            ->getMockForAbstractClass();
+        $frontendMock->expects($this->any())->method('getInputType')->willReturn('media_image');
+        $attributeImage = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['__wakeup', 'getFrontend', 'getAttributeCode'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attributeImage->expects($this->any())
+            ->method('getFrontend')
+            ->willReturn($frontendMock);
+        $attributeImage->expects($this->any())->method('getAttributeCode')->willReturn('image');
+        $attributeSmallImage = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['__wakeup', 'getFrontend', 'getAttributeCode'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attributeSmallImage->expects($this->any())
+            ->method('getFrontend')
+            ->willReturn($frontendMock);
+        $attributeSmallImage->expects($this->any())->method('getAttributeCode')->willReturn('small_image');
+
+        $productType->expects($this->any())->method('getEditableAttributes')->will(
+            $this->returnValue(['image' => $attributeImage, 'small_image' => $attributeSmallImage])
+        );
+
+        return [$attributeImage, $attributeSmallImage];
+    }
+
+    public function getMediaAttributes()
+    {
+        $expected = [];
+        $mediaAttributes = $this->setupMediaAttributes();
+        foreach ($mediaAttributes as $mediaAttribute) {
+            $expected[$mediaAttribute->getAttributeCode()] = $mediaAttribute;
+        }
+        $this->assertEquals($expected, $this->model->getMediaAttributes());
+    }
+
+    public function testGetMediaAttributeValues()
+    {
+        $this->setupMediaAttributes();
+
+        $this->model->setData('image', 'imageValue');
+        $this->model->setData('small_image', 'smallImageValue');
+
+        $expectedMediaAttributeValues = [
+            'image' => 'imageValue',
+            'small_image' => 'smallImageValue',
+        ];
+        $this->assertEquals($expectedMediaAttributeValues, $this->model->getMediaAttributeValues());
+    }
+
+    public function testGetGalleryAttributeBackendNon()
+    {
+        $this->setupMediaAttributes();
+        $this->assertNull($this->model->getGalleryAttributeBackend());
+    }
+
+    public function testGetGalleryAttributeBackend()
+    {
+        $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+            ->setMethods(['getEditableAttributes'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
+            $this->returnValue($productType)
+        );
+
+        $attributeMediaGallery = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['__wakeup', 'getAttributeCode', 'getBackend'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attributeMediaGallery->expects($this->any())->method('getAttributeCode')->willReturn('media_gallery');
+        $expectedValue = 'expected';
+        $attributeMediaGallery->expects($this->once())->method('getBackend')->willReturn($expectedValue);
+
+        $productType->expects($this->once())->method('getEditableAttributes')
+            ->willReturn(['media_gallery' => $attributeMediaGallery]);
+        $this->assertEquals($expectedValue, $this->model->getGalleryAttributeBackend());
+    }
+
+    public function testGetMediaGalleryEntriesNone()
+    {
+        $this->assertNull($this->model->getMediaGalleryEntries());
+    }
+
+    public function testGetMediaGalleryEntries()
+    {
+        $this->setupMediaAttributes();
+        $this->model->setData('image', 'imageFile.jpg');
+        $this->model->setData('small_image', 'smallImageFile.jpg');
+
+        $mediaEntries = [
+            'images' => [
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                ],
+                [
+                    'value_id' => 2,
+                    'file' => 'smallImageFile.jpg',
+                ],
+            ]
+        ];
+        $this->model->setData('media_gallery', $mediaEntries);
+
+        $entry1 = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
+            ->setMethods(['setId'])
+            ->getMockForAbstractClass();
+        $entry1->expects($this->once())->method('setId')->with(1);
+        $entry2 = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
+            ->setMethods(['setId'])
+            ->getMockForAbstractClass();
+        $entry2->expects($this->once())->method('setId')->with(2);
+
+        $this->mediaGalleryEntryFactoryMock->expects($this->at(0))
+            ->method('create')
+            ->willReturn($entry1);
+        $this->mediaGalleryEntryFactoryMock->expects($this->at(1))
+            ->method('create')
+            ->willReturn($entry2);
+
+        $this->dataObjectHelperMock->expects($this->at(0))
+            ->method('populateWithArray')
+            ->with(
+                $entry1,
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                    'types' => ['image'],
+                ],
+                '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface'
+            );
+        $this->dataObjectHelperMock->expects($this->at(1))
+            ->method('populateWithArray')
+            ->with(
+                $entry1,
+                [
+                    'value_id' => 2,
+                    'file' => 'smallImageFile.jpg',
+                    'types' => ['small_image'],
+                ],
+                '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface'
+            );
+
+        $this->assertEquals([$entry1, $entry2], $this->model->getMediaGalleryEntries());
+    }
+
+    public function testSetMediaGalleryEntries()
+    {
+        $expectedResult = [
+            'images' => [
+                [
+                    "value_id" => 1,
+                    'file' => 'file1.jpg',
+                    'label' => 'label_text',
+                    'position' => 4,
+                    'disabled' => false,
+                    'types' => ['image'],
+                    'content' => [
+                        'entry_data' => 'content_data',
+                        'mime_type' => 'image/jpg',
+                        'name' => 'product_image',
+                    ]
+                ]
+            ],
+        ];
+
+        $contentMock =
+            $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface')
+                ->setMethods(['getEntryData', 'getMimeType', 'getName'])
+                ->getMockForAbstractClass();
+        $contentMock->expects($this->once())->method('getEntryData')
+            ->willReturn($expectedResult['images'][0]['content']['entry_data']);
+        $contentMock->expects($this->once())->method('getMimeType')
+            ->willReturn($expectedResult['images'][0]['content']['mime_type']);
+        $contentMock->expects($this->once())->method('getName')
+            ->willReturn($expectedResult['images'][0]['content']['name']);
+
+        $entryMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
+            ->setMethods(['getId', 'getFile', 'getLabel', 'getPosition', 'isDisabled', 'types', 'getContent'])
+            ->getMockForAbstractClass();
+        $entryMock->expects($this->once())->method('getId')
+            ->willReturn($expectedResult['images'][0]['value_id']);
+        $entryMock->expects($this->once())->method('getFile')
+            ->willReturn($expectedResult['images'][0]['file']);
+        $entryMock->expects($this->once())->method('getLabel')
+            ->willReturn($expectedResult['images'][0]['label']);
+        $entryMock->expects($this->once())->method('getPosition')
+            ->willReturn($expectedResult['images'][0]['position']);
+        $entryMock->expects($this->once())->method('isDisabled')
+            ->willReturn($expectedResult['images'][0]['disabled']);
+        $entryMock->expects($this->once())->method('getTypes')
+            ->willReturn($expectedResult['images'][0]['types']);
+        $entryMock->expects($this->once())->method('getContent')
+            ->willReturn($contentMock);
+
+        $this->model->setMediaGalleryEntries([$entryMock]);
+        $this->assertEquals($expectedResult, $this->model->getMediaGallery());
+    }
+
+    public function testGetCustomAttributes()
+    {
+        $priceCode = 'price';
+        $colorAttributeCode = 'color';
+        $interfaceAttribute = $this->getMock('\Magento\Framework\Api\MetadataObjectInterface');
+        $interfaceAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($priceCode);
+        $colorAttribute = $this->getMock('\Magento\Framework\Api\MetadataObjectInterface');
+        $colorAttribute->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn($colorAttributeCode);
+        $customAttributesMetadata = [$interfaceAttribute, $colorAttribute];
+
+        $this->metadataServiceMock->expects($this->once())
+            ->method('getCustomAttributesMetadata')
+            ->willReturn($customAttributesMetadata);
+        $this->model->setData($priceCode, 10);
+
+        //The color attribute is not set, expect empty custom attribute array
+        $this->assertEquals([], $this->model->getCustomAttributes());
+
+        //Set the color attribute;
+        $this->model->setData($colorAttributeCode, "red");
+        $attributeValue = new \Magento\Framework\Api\AttributeValue();
+        $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
+        $this->attributeValueFactory->expects($this->exactly(2))->method('create')
+            ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
+        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
+        $this->assertEquals("red", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+
+        //Change the attribute value, should reflect in getCustomAttribute
+        $this->model->setData($colorAttributeCode, "blue");
+        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertNotNull($this->model->getCustomAttribute($colorAttributeCode));
+        $this->assertEquals("blue", $this->model->getCustomAttribute($colorAttributeCode)->getValue());
+    }
+
+    /**
+     * @dataProvider priceDataProvider
+     */
+    public function testGetGroupPrices($originalGroupPrices)
+    {
+        $this->invokeGetGroupOrTierPrices($originalGroupPrices, 'getGroupPrices');
+    }
+
+    /**
+     * @dataProvider priceDataProvider
+     */
+    public function testGetTierPrices($originalGroupPrices)
+    {
+        $this->invokeGetGroupOrTierPrices($originalGroupPrices, 'getTierPrices');
+    }
+
+    protected function invokeGetGroupOrTierPrices($originalPrices, $getter)
+    {
+        // the priceModel's getter method will return the originalPrices
+        $priceModelMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\Price')
+            ->disableOriginalConstructor()
+            ->setMethods([$getter])
+            ->getMock();
+        $priceModelMock->expects($this->any())
+            ->method($getter)
+            ->will($this->returnValue($originalPrices));
+
+        // the catalogProductType's priceFactory method will return the above priceModel
+        $catalogProductTypeMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type')
+            ->disableOriginalConstructor()
+            ->setMethods(['priceFactory'])
+            ->getMock();
+        $catalogProductTypeMock->expects(($this->any()))
+            ->method('priceFactory')
+            ->will($this->returnValue($priceModelMock));
+
+        // the productModel
+        $productModel = $this->objectManagerHelper->getObject(
+            'Magento\Catalog\Model\Product',
+            [
+                'catalogProductType' => $catalogProductTypeMock
+            ]
+        );
+
+        $expectedResultIsEmpty = (empty($originalPrices) ? true : false);
+        $groupPrices = $productModel->$getter();
+        $actualResultIsEmpty = (empty($groupPrices) ? true : false);
+        $this->assertEquals($expectedResultIsEmpty, $actualResultIsEmpty);
+    }
+
+    /**
+     * @return array
+     */
+    public function priceDataProvider()
+    {
+        return [
+            'receive empty array' => [[]],
+            'receive null' => [null],
+            'receive non-empty array' => [['non-empty', 'array', 'of', 'values']]
+        ];
     }
 }

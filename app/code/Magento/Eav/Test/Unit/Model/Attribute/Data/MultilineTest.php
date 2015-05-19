@@ -24,11 +24,16 @@ class MultilineTest extends \PHPUnit_Framework_TestCase
         $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
         $this->stringMock = $this->getMock('\Magento\Framework\Stdlib\String', [], [], '', false);
 
-        $this->model = new \Magento\Eav\Model\Attribute\Data\Multiline($timezoneMock, $loggerMock, $localeResolverMock, $this->stringMock);
+        $this->model = new \Magento\Eav\Model\Attribute\Data\Multiline(
+            $timezoneMock,
+            $loggerMock,
+            $localeResolverMock,
+            $this->stringMock
+        );
     }
 
     /**
-     * covers \Magento\Eav\Model\Attribute\Data\Multiline::extractValue
+     * @covers \Magento\Eav\Model\Attribute\Data\Multiline::extractValue
      *
      * @param mixed $param
      * @param mixed $expectedResult
@@ -64,7 +69,7 @@ class MultilineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Eav\Model\Attribute\Data\Multiline::outputValue
+     * @covers \Magento\Eav\Model\Attribute\Data\Multiline::outputValue
      *
      * @param string $format
      * @param mixed $expectedResult
@@ -108,8 +113,8 @@ class MultilineTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Eav\Model\Attribute\Data\Multiline::validateValue
-     * covers \Magento\Eav\Model\Attribute\Data\Text::validateValue
+     * @covers \Magento\Eav\Model\Attribute\Data\Multiline::validateValue
+     * @covers \Magento\Eav\Model\Attribute\Data\Text::validateValue
      *
      * @param mixed $value
      * @param bool $isAttributeRequired

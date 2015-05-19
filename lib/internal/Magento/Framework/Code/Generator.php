@@ -68,8 +68,8 @@ class Generator
      * Generate Class
      *
      * @param string $className
-     * @return string
-     * @throws \Magento\Framework\Exception
+     * @return string | void
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \InvalidArgumentException
      */
     public function generateClass($className)
@@ -99,13 +99,17 @@ class Generator
         $generatorClass = $this->_generatedEntities[$entity];
         /** @var EntityAbstract $generator */
         $generator = $this->createGeneratorInstance($generatorClass, $entityName, $className);
-        $this->tryToLoadSourceClass($className, $generator);
-        if (!($file = $generator->generate())) {
-            $errors = $generator->getErrors();
-            throw new \Magento\Framework\Exception(implode(' ', $errors));
+        if ($generator !== null) {
+            $this->tryToLoadSourceClass($className, $generator);
+            if (!($file = $generator->generate())) {
+                $errors = $generator->getErrors();
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(implode(' ', $errors))
+                );
+            }
+            $this->includeFile($file);
+            return self::GENERATION_SUCCESS;
         }
-        $this->includeFile($file);
-        return self::GENERATION_SUCCESS;
     }
 
     /**
@@ -167,15 +171,18 @@ class Generator
      * @param string $className
      * @param \Magento\Framework\Code\Generator\EntityAbstract $generator
      * @return void
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function tryToLoadSourceClass($className, $generator)
     {
         $sourceClassName = $generator->getSourceClassName();
         if (!$this->definedClasses->classLoadable($sourceClassName)) {
             if ($this->generateClass($sourceClassName) !== self::GENERATION_SUCCESS) {
-                throw new \Magento\Framework\Exception(
-                    sprintf('Source class "%s" for "%s" generation does not exist.', $sourceClassName, $className)
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        'Source class "%1" for "%2" generation does not exist.',
+                        [$sourceClassName, $className]
+                    )
                 );
             }
         }

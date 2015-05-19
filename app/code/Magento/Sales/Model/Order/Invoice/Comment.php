@@ -12,7 +12,6 @@ use Magento\Sales\Model\AbstractModel;
 /**
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Invoice\Comment getResource()
- * @method \Magento\Sales\Model\Order\Invoice\Comment setCreatedAt(string $value)
  */
 class Comment extends AbstractModel implements InvoiceCommentInterface
 {
@@ -33,8 +32,6 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -46,8 +43,6 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -58,8 +53,6 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $localeDate,
-            $dateTime,
             $resource,
             $resourceCollection,
             $data
@@ -130,6 +123,14 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
     public function getCreatedAt()
     {
         return $this->getData(InvoiceCommentInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(InvoiceCommentInterface::CREATED_AT, $createdAt);
     }
 
     /**

@@ -334,7 +334,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Quote'
@@ -391,7 +390,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'address_type',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            10,
             [],
             'Address Type'
         )->addColumn(
@@ -409,19 +408,19 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'firstname',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Firstname'
         )->addColumn(
             'middlename',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            40,
+            20,
             [],
             'Middlename'
         )->addColumn(
             'lastname',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Lastname'
         )->addColumn(
@@ -439,19 +438,19 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'street',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'Street'
         )->addColumn(
             'city',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'City'
         )->addColumn(
             'region',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'Region'
         )->addColumn(
@@ -463,25 +462,25 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'postcode',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Postcode'
         )->addColumn(
             'country_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            30,
             [],
             'Country Id'
         )->addColumn(
             'telephone',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Phone Number'
         )->addColumn(
             'fax',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            20,
             [],
             'Fax'
         )->addColumn(
@@ -499,7 +498,7 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'shipping_method',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            40,
             [],
             'Shipping Method'
         )->addColumn(
@@ -684,7 +683,6 @@ class InstallSchema implements InstallSchemaInterface
             'quote_id',
             $installer->getTable('quote'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Quote Address'
@@ -965,29 +963,25 @@ class InstallSchema implements InstallSchemaInterface
             'parent_item_id',
             $installer->getTable('quote_item'),
             'item_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('quote_item', 'product_id', 'catalog_product_entity', 'entity_id'),
             'product_id',
             $installer->getTable('catalog_product_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('quote_item', 'quote_id', 'quote', 'entity_id'),
             'quote_id',
             $installer->getTable('quote'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('quote_item', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Sales Flat Quote Item'
         );
@@ -1245,7 +1239,6 @@ class InstallSchema implements InstallSchemaInterface
             'quote_address_id',
             $installer->getTable('quote_address'),
             'address_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -1257,14 +1250,12 @@ class InstallSchema implements InstallSchemaInterface
             'parent_item_id',
             $installer->getTable('quote_address_item'),
             'address_item_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('quote_address_item', 'quote_item_id', 'quote_item', 'item_id'),
             'quote_item_id',
             $installer->getTable('quote_item'),
             'item_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Quote Address Item'
@@ -1314,7 +1305,6 @@ class InstallSchema implements InstallSchemaInterface
             'item_id',
             $installer->getTable('quote_item'),
             'item_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Quote Item Option'
@@ -1448,7 +1438,6 @@ class InstallSchema implements InstallSchemaInterface
             'quote_id',
             $installer->getTable('quote'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Quote Payment'
@@ -1540,11 +1529,48 @@ class InstallSchema implements InstallSchemaInterface
             'address_id',
             $installer->getTable('quote_address'),
             'address_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Sales Flat Quote Shipping Rate'
         );
+        $installer->getConnection()->createTable($table);
+
+        /**
+         * Create table to store cartId and obscured UUID based cartId mapping
+         */
+        $table = $installer->getConnection()->newTable(
+            $installer->getTable('quote_id_mask')
+        )->addColumn(
+            'entity_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Entity Id'
+        )->addColumn(
+            'quote_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Quote ID'
+        )->addIndex(
+            $installer->getIdxName('quote_id_mask', ['quote_id']),
+            ['quote_id']
+        )->addForeignKey(
+            $installer->getFkName('quote_id_mask', 'quote_id', 'quote', 'entity_id'),
+            'quote_id',
+            $installer->getTable('quote'),
+            'entity_id',
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+        )->addColumn(
+            'masked_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            32,
+            ['nullable' => 'false'],
+            'Masked ID'
+        )->setComment(
+            'Quote ID and masked ID mapping'
+        );
+
         $installer->getConnection()->createTable($table);
 
         $installer->endSetup();

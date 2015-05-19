@@ -229,4 +229,79 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes);
+
+    /**
+     * Get product links info
+     *
+     * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]|null
+     */
+    public function getProductLinks();
+
+    /**
+     * Set product links info
+     *
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
+     * @return $this
+     */
+    public function setProductLinks(array $links = null);
+
+    /**
+     * Get list of product options
+     *
+     * @return \Magento\Catalog\Api\Data\ProductCustomOptionInterface[]|null
+     */
+    public function getOptions();
+
+    /**
+     * Set list of product options
+     *
+     * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
+     * @return $this
+     */
+    public function setOptions(array $options = null);
+
+    /**
+     * Get media gallery entries
+     *
+     * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]|null
+     */
+    public function getMediaGalleryEntries();
+
+    /**
+     * Set media gallery entries
+     *
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
+     * @return $this
+     */
+    public function setMediaGalleryEntries(array $mediaGalleryEntries = null);
+
+    /**
+     * Gets list of product group prices
+     *
+     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
+     */
+    public function getGroupPrices();
+
+    /**
+     * Sets list of product group prices
+     *
+     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterface[] $groupPrices
+     * @return $this
+     */
+    public function setGroupPrices(array $groupPrices = null);
+
+    /**
+     * Gets list of product tier prices
+     *
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null
+     */
+    public function getTierPrices();
+
+    /**
+     * Sets list of product tier prices
+     *
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
+     * @return $this
+     */
+    public function setTierPrices(array $tierPrices = null);
 }

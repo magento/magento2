@@ -12,27 +12,26 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class Items
- * Customer wishlist items block on frontend
+ * Customer wishlist items block on frontend.
  */
 class Items extends Block
 {
     /**
-     * Item product block
+     * Item product block.
      *
      * @var string
      */
     protected $itemBlock = '//li[.//a[contains(.,"%s")]]';
 
     /**
-     * Selector for 'Remove item' button
+     * Selector for 'Remove item' button.
      *
      * @var string
      */
     protected $remove = '[data-role="remove"]';
 
     /**
-     * Get item product block
+     * Get item product block.
      *
      * @param FixtureInterface $product
      * @return Product
@@ -44,17 +43,5 @@ class Items extends Block
             'Magento\Wishlist\Test\Block\Customer\Wishlist\Items\Product',
             ['element' => $this->_rootElement->find($productBlock, Locator::SELECTOR_XPATH)]
         );
-    }
-
-    /**
-     * Remove all products from wish list
-     *
-     * @return void
-     */
-    public function removeAllProducts()
-    {
-        while ($this->_rootElement->find($this->remove)->isVisible()) {
-            $this->_rootElement->find($this->remove)->click();
-        }
     }
 }

@@ -42,7 +42,7 @@ class DbStatusValidator
      * @param \Closure $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      *
-     * @throws \Magento\Framework\Module\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\App\ResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -55,9 +55,12 @@ class DbStatusValidator
             $errors = $this->dbVersionInfo->getDbVersionErrors();
             if ($errors) {
                 $formattedErrors = $this->formatErrors($errors);
-                throw new \Magento\Framework\Module\Exception(
-                    'Please update your database: Run "php -f index.php update" from the Magento root/setup directory.'
-                    . PHP_EOL . 'The following modules are outdated:' . PHP_EOL . implode(PHP_EOL, $formattedErrors)
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(
+                        'Please upgrade your database: Run "bin/magento setup:upgrade" from the Magento root directory.'
+                        . ' %1The following modules are outdated:%2%3',
+                        [PHP_EOL, PHP_EOL, implode(PHP_EOL, $formattedErrors)]
+                    )
                 );
             } else {
                 $this->cache->save('true', 'db_is_up_to_date');

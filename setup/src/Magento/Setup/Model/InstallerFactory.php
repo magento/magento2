@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Module\ResourceFactory;
 use Magento\Framework\App\ErrorHandler;
+use Magento\Framework\App\State\CleanupFiles;
 
 class InstallerFactory
 {
@@ -52,13 +53,10 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Writer'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig'),
-            $this->serviceLocator->get('Magento\Framework\Module\ModuleList\DeploymentConfigFactory'),
             $this->serviceLocator->get('Magento\Framework\Module\ModuleList'),
             $this->serviceLocator->get('Magento\Framework\Module\ModuleList\Loader'),
-            $this->serviceLocator->get('Magento\Framework\App\Filesystem\DirectoryList'),
             $this->serviceLocator->get('Magento\Setup\Model\AdminAccountFactory'),
             $log,
-            $this->serviceLocator->get('Magento\Framework\Math\Random'),
             $this->serviceLocator->get('Magento\Setup\Module\ConnectionFactory'),
             $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
             $this->serviceLocator->get('Magento\Framework\Filesystem'),
@@ -68,7 +66,9 @@ class InstallerFactory
                 $this->getResource(),
                 $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\TransactionManager'),
                 $this->serviceLocator->get('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor')
-            )
+            ),
+            $this->serviceLocator->get('Magento\Setup\Model\ConfigModel'),
+            $this->serviceLocator->get('Magento\Framework\App\State\CleanupFiles')
         );
     }
 
@@ -79,10 +79,7 @@ class InstallerFactory
      */
     private function getResource()
     {
-        $deploymentConfig = new \Magento\Framework\App\DeploymentConfig(
-            $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
-            []
-        );
+        $deploymentConfig = $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig');
         return $this->resourceFactory->create($deploymentConfig);
     }
 }

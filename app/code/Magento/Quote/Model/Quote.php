@@ -11,6 +11,7 @@ namespace Magento\Quote\Model;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
@@ -27,7 +28,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  sales_quote_delete_after
  *
  * @method Quote setStoreId(int $value)
- * @method Quote setIsVirtual(int $value)
  * @method int getIsMultiShipping()
  * @method Quote setIsMultiShipping(int $value)
  * @method float getStoreToBaseRate()
@@ -559,6 +559,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     /**
      * {@inheritdoc}
      */
+    public function setIsVirtual($isVirtual)
+    {
+        return $this->setData(self::KEY_IS_VIRTUAL, $isVirtual);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getItemsCount()
     {
         return $this->_getData(self::KEY_ITEMS_COUNT);
@@ -771,6 +779,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if ($this->_customer) {
             $this->setCustomerId($this->_customer->getId());
         }
+
+        //mark quote if it has virtual products only
+        $this->setIsVirtual($this->getIsVirtual());
 
         parent::beforeSave();
     }
@@ -1538,8 +1549,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         /**
          * Error message
          */
-        if (is_string($cartCandidates)) {
-            return $cartCandidates;
+        if (is_string($cartCandidates) || $cartCandidates instanceof \Magento\Framework\Phrase) {
+            return strval($cartCandidates);
         }
 
         /**
@@ -1847,10 +1858,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Payment $payment
+     * Adds a payment to quote
+     *
+     * @param PaymentInterface $payment
      * @return $this
      */
-    public function addPayment(\Magento\Quote\Model\Quote\Payment $payment)
+    public function addPayment(PaymentInterface $payment)
     {
         $payment->setQuote($this);
         if (!$payment->getId()) {
@@ -1860,10 +1873,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Payment $payment
-     * @return \Magento\Quote\Model\Quote\Payment
+     * Sets payment to current quote
+     *
+     * @param PaymentInterface $payment
+     * @return PaymentInterface
      */
-    public function setPayment(\Magento\Quote\Model\Quote\Payment $payment)
+    public function setPayment(PaymentInterface $payment)
     {
         if (!$this->getIsMultiPayment() && ($old = $this->getPayment())) {
             $payment->setId($old->getId());
@@ -2243,12 +2258,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         if (!$this->getReservedOrderId()) {
             $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
-        } else {
-            //checking if reserved order id was already used for some order
-            //if yes reserving new one if not using old one
-            if ($this->_getResource()->isOrderIncrementIdUsed($this->getReservedOrderId())) {
-                $this->setReservedOrderId($this->_getResource()->getReservedOrderId($this));
-            }
         }
         return $this;
     }

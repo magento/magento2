@@ -4,21 +4,34 @@
 //  */
 
 @import (reference) '_extends.less';
+@import '_control-table.less';
 
 //
 //  Variables
 //  _____________________________________________
 
 @field-control__background-color: @color-white;
-@field-control__border-color: @color-gray68;
+@field-control__border-color: @action__border-color;
+@field-control__border-radius: 1px;
+@field-control__border-width: .1rem;
 @field-control__color: @color-very-dark-gray-black;
-@field-control__font-size: 1.4rem;
-@field-control__height: 3.3rem;
+@field-control__font-size: @action__font-size;
+@field-control__line-height: @action__line-height;
+@field-control__height: @action__height;
+@field-control__padding-top: @action__padding-top;
+@field-control__padding-horizontal: 1rem;
+@field-control__padding-bottom: @action__padding-bottom;
+
+@field-control__active__border-color: @field-control__focus__border-color;
+@field-control__hover__border-color: @action__hover__border-color;
+@field-control__focus__border-color: @color-blue-pure;
+@field-control__disabled__background-color: @color-lighter-gray;
+
 @field-control-addon__color: @color-gray52;
 
-//  States
-@field-control__disabled__background-color: @color-lighter-gray;
-@field-control__focus__border-color: @color-blue-pure;
+@field-control-option-label__padding-left: 26px;
+
+@field-label__indent: 1rem;
 @field-label__disabled__color: @color-gray60;
 @field-label__required__color: @color-phoenix;
 
@@ -30,44 +43,47 @@
 //  Common
 //  ---------------------------------------------
 
-.__form-control-styles() {
+.__form-control-pattern() {
     background-color: @field-control__background-color;
-    border-radius: .1rem;
-    border: 1px solid @field-control__border-color;
+    border-radius: @field-control__border-radius;
+    border: @field-control__border-width solid @field-control__border-color;
     color: @field-control__color;
     font-size: @field-control__font-size;
     font-weight: @font-weight__regular;
-    height: @field-control__height;
-    max-width: 100%;
-    min-width: 10rem;
-    padding: 0 1rem;
-    transition: border-color .1s ease-in;
+    line-height: @field-control__line-height;
+    height: auto;
+    width: auto;
+    padding: @field-control__padding-top @field-control__padding-horizontal @field-control__padding-bottom;
+    transition: @smooth__border-color;
+    vertical-align: baseline;
 }
 
-.__form-control-styles__focus() {
+.__form-control-pattern__hover() {
+    border-color: @field-control__hover__border-color;
+}
+
+.__form-control-pattern__focus() {
     border-color: @field-control__focus__border-color;
     box-shadow: none;
     outline: 0;
 }
 
-.__form-control-styles__disabled() {
+.__form-control-pattern__disabled() {
     background-color: @field-control__disabled__background-color;
     border-color: @field-control__border-color;
     color: @field-control__color;
-    opacity: .5;
+    opacity: @disabled__opacity;
     cursor: not-allowed;
 }
 
-// Input text styles
+//  Input text styles
 .admin__control-text {
-    .extend__form-control-styles();
-    line-height: @field-control__height;
-    width: 100%;
+    &:extend(.abs-form-control-pattern all);
 }
 
-// Select styles
+//  Select styles
 .admin__control-select {
-    .extend__form-control-styles();
+    &:extend(.abs-form-control-pattern all);
     .css(appearance, none, 1);
 
     background-repeat: no-repeat;
@@ -83,7 +99,14 @@
     background-position+: ~'calc(100% - 33px)' 0;
     background-size+: 1px 100%;
 
+    height: @field-control__height;
     padding-right: 4.4rem; // Distance between select switch and inner text
+    transition: @smooth__border-color;
+
+    &:hover {
+        border-color: @field-control__hover__border-color;
+        cursor: pointer;
+    }
 
     &:focus {
         background-image+: url('../images/arrows-bg.svg');
@@ -94,27 +117,34 @@
 
         background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color);
         background-position+: ~'calc(100% - 33px)' 0;
+        border-color: @field-control__focus__border-color;
     }
     &::-ms-expand {
         display: none;
     }
     .ie9 & {
-        padding-right: 0;
+        background-image: none;
+        padding-right: @field-control__padding-horizontal;
     }
 }
+
+// ToDo UI: add month and date styles
+//.admin__control-select-month {width:140px;}
+//.admin__control-select-year {width:103px;}
+//.admin__control-cvn {width:3em;}
 
 option:empty {
     display: none;
 }
 
-// Multiple select
+//  Multiple select
 .admin__control-multiselect {
-    .extend__form-control-styles();
+    &:extend(.abs-form-control-pattern all);
     height: auto;
     padding: .6rem 1rem;
 }
 
-// File uploader
+//  File uploader
 .admin__control-file-wrapper {
     display: inline-block;
     padding: .5rem 1rem;
@@ -122,20 +152,22 @@ option:empty {
     z-index: 1;
 }
 
-.admin__control-file-label:before {
-    &:extend(.__form-control-styles);
-    content:'';
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 0;
-    .admin__control-file:active + &,
-    .admin__control-file:focus + & {
-        &:extend(.__form-control-styles:focus);
-    }
-    .admin__control-file[disabled] + & {
-        &:extend(.__form-control-styles[disabled]);
+.admin__control-file-label {
+    :before {
+        &:extend(.abs-form-control-pattern);
+        content:'';
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 0;
+        .admin__control-file:active + &,
+        .admin__control-file:focus + & {
+            &:extend(.abs-form-control-pattern:focus);
+        }
+        .admin__control-file[disabled] + & {
+            &:extend(.abs-form-control-pattern[disabled]);
+        }
     }
 }
 
@@ -147,95 +179,38 @@ option:empty {
     width: auto;
 }
 
-// Textarea
+//
+//  Support text. Can be used on label or plain text to align controls & actions
+//  ---------------------------------------------
+
+.admin__control-support-text { // ToDo UI: should be renamed to .admin__control-text
+    border: @field-control__border-width solid transparent;
+    display: inline-block;
+    font-size: @field-control__font-size;
+    line-height: @field-control__line-height;
+    padding-top: @field-control__padding-top;
+    padding-bottom: @field-control__padding-bottom;
+}
+
+[class*='admin__control-'] {
+    + .admin__control-support-text {
+        margin-left: .7rem;
+    }
+}
+
+//
+//  Textarea
+//  ---------------------------------------------
+
 .admin__control-textarea {
-    .extend__form-control-styles();
+    &:extend(.abs-form-control-pattern all);
     height: 8.48rem;
     line-height: 1.18;
     padding-top: .8rem;
-    width: 100%;
+    resize: vertical;
 }
 
-// Checkboxes and radios
-.admin__control-radio,
-.admin__control-checkbox {
-    margin: .3rem 0 0;
-    opacity: 0.01; // hack for successful selenium tests
-    overflow: hidden;
-    position: absolute;
-    vertical-align: top;
-    + label {
-        cursor: pointer;
-        display: inline-block;
-        padding-left: 26px;
-
-        &:before {
-            background: none;
-            border-radius: .2rem;
-            border: 1px solid @field-control__border-color;
-            color: transparent;
-            content: @icon-check-mage__content;
-            float: left;
-            font:  0/14px @icons-admin__font-name;
-            height: 1.6rem;
-            margin: 1px 10px 0 -26px;
-            text-align: center;
-            transition: border-color .1s ease-in, color .1s ease-in, font-size .1s ease-in;
-            vertical-align: top;
-            width: 1.6rem;
-        }
-    }
-    &:focus {
-         + label {
-            .keyfocus & {
-                &:extend(.keyfocus *:focus);
-            }
-            &:before {
-                border-color: @field-control__focus__border-color;
-            }
-        }
-    }
-    &[disabled] {
-        + label {
-            &:before {
-                background-color: @field-control__disabled__background-color;
-                border-color: @field-control__border-color;
-            }
-            color: @field-control__color;
-            opacity: .5;
-        }
-    }
-}
-
-.admin__control-radio {
-    + label {
-        &:before {
-            border-radius: .8rem;
-            content: @icon-enable__content;
-        }
-    }
-    &:checked {
-        + label {
-            &:before {
-                color: @color-brownie;
-                font-size: 1rem;
-            }
-        }
-    }
-}
-
-.admin__control-checkbox {
-    &:checked {
-        + label {
-            &:before {
-                color: @color-brownie;
-                font-size: 1.1rem;
-            }
-        }
-    }
-}
-
-// Control with additional prefix or suffix label
+//  Control with additional prefix or suffix label
 .admin__control-addon {
     .vendor-prefix-display(inline-flex);
     .vendor-prefix-flex-direction(row);
@@ -275,7 +250,7 @@ option:empty {
             }
         }
         & + [class*='admin__addon-']:before {
-            &:extend(.__form-control-styles);
+            &:extend(.abs-form-control-pattern);
             bottom: 0;
             box-sizing: border-box;
             content: '';
@@ -286,10 +261,10 @@ option:empty {
             z-index: 0;
         }
         &[disabled] + [class*='admin__addon-']:before {
-            &:extend(.__form-control-styles[disabled]);
+            &:extend(.abs-form-control-pattern[disabled]);
         }
-        &:focus + label:before {
-            &:extend(.__form-control-styles:focus);
+        &:focus + [class*='admin__addon-']:before {
+            &:extend(.abs-form-control-pattern:focus);
         }
     }
 }
@@ -317,6 +292,7 @@ option:empty {
         order: 0;
     }
 }
+
 .ie9 {
     .admin__control-addon {
         &:after {

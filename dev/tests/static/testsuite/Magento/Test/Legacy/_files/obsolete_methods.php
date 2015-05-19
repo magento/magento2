@@ -338,6 +338,11 @@ return [
     ['_getItemPosition', 'Magento\Catalog\Block\Navigation'],
     ['_renderCategoryMenuItemHtml', 'Magento\Catalog\Block\Navigation'],
     ['getCurrentCategoryPath', 'Magento\Catalog\Block\Navigation'],
+    [
+        'getIsMessagesAvailable',
+        'Magento\GiftMessage\Helper\Message',
+        'Magento\GiftMessage\Helper\Message::isMessagesAllowed'
+    ],
     ['drawOpenCategoryItem', 'Magento\Catalog\Block\Navigation'],
     ['renderCategoriesMenuHtml', 'Magento\Catalog\Block\Navigation'],
     ['dropKey', 'Magento\Framework\DB\Adapter\Pdo\Mysql'],
@@ -2150,4 +2155,13 @@ return [
     ['_isCacheEnabled', 'Magento\Eav\Model\Config'],
     ['_createCustomerAttribute', '\Magento\Customer\Model\Customer'],
     ['prepareCatalogProductPriceIndexTable', 'Magento\CatalogRule\Model\Observer'],
+    ['joinOrders', 'Magento\Reports\Model\Resource\Customer\Collection'],
+    ['addOrdersCount', 'Magento\Reports\Model\Resource\Customer\Collection'],
+    ['addSumAvgTotals', 'Magento\Reports\Model\Resource\Customer\Collection'],
+    ['orderByTotalAmount', 'Magento\Reports\Model\Resource\Customer\Collection'],
+    ['addOrdersCount', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['addOrderedQty', 'Magento\Reports\Model\Resource\Product\Collection'],
+    ['prepareForProductsInCarts', 'Magento\Reports\Model\Resource\Quote\Collection'],
+    ['getOrdersSubSelect', 'Magento\Reports\Model\Resource\Quote\Collection'],
+    ['isOrderIncrementIdUsed', 'Magento\Quote\Model\Resource\Quote'],
 ];

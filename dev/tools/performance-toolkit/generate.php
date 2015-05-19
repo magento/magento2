@@ -11,7 +11,8 @@ try {
 
     $shell = new Zend_Console_Getopt(
         [
-            'profile-s' => 'Profile configuration file',
+            'profile=s' => 'Profile configuration file',
+            'skip-reindex-i' => 'Skip reindex (Default - 0)',
         ]
     );
 
@@ -41,6 +42,18 @@ try {
         echo ' |- ' . $label . ': ' . $config->getValue($configKey) . PHP_EOL;
     }
 
+    /** @var $config \Magento\Indexer\Model\Config */
+    $config = $application->getObjectManager()->get('Magento\Indexer\Model\Config');
+    $indexerListIds = $config->getIndexers();
+    /** @var $indexerRegistry \Magento\Indexer\Model\IndexerRegistry */
+    $indexerRegistry = $application->getObjectManager()->create('Magento\Indexer\Model\IndexerRegistry');
+    $application->indexerStates = [];
+    foreach ($indexerListIds as $key => $indexerId) {
+        $indexer = $indexerRegistry->get($indexerId['indexer_id']);
+        $application->indexersStates[$indexerId['indexer_id']] = $indexer->isScheduled();
+        $indexer->setScheduled(true);
+    }
+
     foreach ($application->getFixtures() as $fixture) {
         echo $fixture->getActionTitle() . '... ';
         $startTime = microtime(true);
@@ -50,7 +63,15 @@ try {
         echo ' done in ' . gmdate('H:i:s', $resultTime) . PHP_EOL;
     }
 
-    $application->reindex();
+    foreach ($indexerListIds as $indexerId) {
+        /** @var $indexer \Magento\Indexer\Model\Indexer */
+        $indexer = $indexerRegistry->get($indexerId['indexer_id']);
+        $indexer->setScheduled($application->indexersStates[$indexerId['indexer_id']]);
+    }
+
+    if (!\Magento\ToolkitFramework\Helper\Cli::getOption('skip-reindex')) {
+        $application->reindex();
+    }
     $totalEndTime = microtime(true);
     $totalResultTime = $totalEndTime - $totalStartTime;
 

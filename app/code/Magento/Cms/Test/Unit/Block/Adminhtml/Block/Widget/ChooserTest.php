@@ -6,7 +6,7 @@
 namespace Magento\Cms\Test\Unit\Block\Adminhtml\Block\Widget;
 
 /**
- * covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser
+ * @covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser
  */
 class ChooserTest extends \PHPUnit_Framework_TestCase
 {
@@ -34,6 +34,11 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $urlBuilderMock;
+
+    /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $escaper;
 
     /**
      * @var \Magento\Cms\Model\BlockFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -66,6 +71,14 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->escaper = $this->getMockBuilder('Magento\Framework\Escaper')
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'escapeHtml',
+                ]
+            )
+            ->getMock();
         $this->blockFactoryMock = $this->getMockBuilder('Magento\Cms\Model\BlockFactory')
             ->setMethods(
                 [
@@ -90,6 +103,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
                 [
                     'getTitle',
                     'load',
+                    'getId',
                 ]
             )
             ->getMock();
@@ -112,22 +126,23 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         $this->context = $objectManager->getObject(
             'Magento\Backend\Block\Template\Context',
             [
-                'layout' => $this->layoutMock,
+                'layout'     => $this->layoutMock,
                 'mathRandom' => $this->mathRandomMock,
-                'urlBuilder' => $this->urlBuilderMock
+                'urlBuilder' => $this->urlBuilderMock,
+                'escaper'    => $this->escaper,
             ]
         );
         $this->this = $objectManager->getObject(
             'Magento\Cms\Block\Adminhtml\Block\Widget\Chooser',
             [
-                'context' => $this->context,
+                'context'      => $this->context,
                 'blockFactory' => $this->blockFactoryMock
             ]
         );
     }
 
     /**
-     * covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::prepareElementHtml
+     * @covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::prepareElementHtml
      * @param string $elementValue
      * @param integer|null $modelBlockId
      *
@@ -135,13 +150,14 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareElementHtml($elementValue, $modelBlockId)
     {
-        $elementId = 1;
-        $uniqId = '126hj4h3j73hk7b347jhkl37gb34';
-        $sourceUrl = 'cms/block_widget/chooser/126hj4h3j73hk7b347jhkl37gb34';
-        $config = ['key1' => 'value1'];
-        $fieldsetId = 2;
-        $html = 'some html';
-        $title = 'some title';
+        $elementId    = 1;
+        $uniqId       = '126hj4h3j73hk7b347jhkl37gb34';
+        $sourceUrl    = 'cms/block_widget/chooser/126hj4h3j73hk7b347jhkl37gb34';
+        $config       = ['key1' => 'value1'];
+        $fieldsetId   = 2;
+        $html         = 'some html';
+        $title        = 'some "><img src=y onerror=prompt(document.domain)>; title';
+        $titleEscaped = 'some &quot;&gt;&lt;img src=y onerror=prompt(document.domain)&gt;; title';
 
         $this->this->setConfig($config);
         $this->this->setFieldsetId($fieldsetId);
@@ -197,13 +213,18 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
         $this->modelBlockMock->expects($this->any())
             ->method('getTitle')
             ->willReturn($title);
-        $this->chooserMock->expects($this->any())
-            ->method('setLabel')
-            ->with($title)
-            ->willReturnSelf();
         $this->chooserMock->expects($this->atLeastOnce())
             ->method('toHtml')
             ->willReturn($html);
+        if (!empty($elementValue) && !empty($modelBlockId)) {
+            $this->escaper->expects(($this->atLeastOnce()))
+                ->method('escapeHtml')
+                ->willReturn($titleEscaped);
+            $this->chooserMock->expects($this->atLeastOnce())
+                ->method('setLabel')
+                ->with($titleEscaped)
+                ->willReturnSelf();
+        }
         $this->elementMock->expects($this->atLeastOnce())
             ->method('setData')
             ->with('after_element_html', $html)
@@ -231,7 +252,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::getGridUrl
+     * @covers \Magento\Cms\Block\Adminhtml\Block\Widget\Chooser::getGridUrl
      */
     public function testGetGridUrl()
     {

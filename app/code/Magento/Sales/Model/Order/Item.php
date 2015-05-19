@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
@@ -14,7 +14,6 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  *
  * @method \Magento\Sales\Model\Resource\Order\Item _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Item getResource()
- * @method \Magento\Sales\Model\Order\Item setCreatedAt(string $value)
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order\Item setGiftMessageId(int $value)
  * @method int getGiftMessageAvailable()
@@ -23,7 +22,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Item extends AbstractExtensibleModel implements OrderItemInterface
+class Item extends AbstractModel implements OrderItemInterface
 {
     const STATUS_PENDING = 1;
 
@@ -947,6 +946,14 @@ class Item extends AbstractExtensibleModel implements OrderItemInterface
     public function getCreatedAt()
     {
         return $this->getData(OrderItemInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(OrderItemInterface::CREATED_AT, $createdAt);
     }
 
     /**

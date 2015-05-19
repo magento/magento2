@@ -125,7 +125,6 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
             [
                 'name' => 'custom_theme_from',
                 'label' => __('Custom Design From'),
-                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'date_format' => $dateFormat,
                 'disabled' => $isElementDisabled,
                 'class' => 'validate-date validate-date-range date-range-custom_theme-from'
@@ -138,7 +137,6 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
             [
                 'name' => 'custom_theme_to',
                 'label' => __('Custom Design To'),
-                'image' => $this->getViewFileUrl('images/grid-cal.png'),
                 'date_format' => $dateFormat,
                 'disabled' => $isElementDisabled,
                 'class' => 'validate-date validate-date-range date-range-custom_theme-to'

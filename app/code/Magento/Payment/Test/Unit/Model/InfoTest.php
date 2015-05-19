@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 class InfoTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Payment\Model\Info */
+    /** @var \Magento\Payment\Model\InfoInterface */
     protected $info;
 
     /** @var ObjectManagerHelper */

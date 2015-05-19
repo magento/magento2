@@ -69,7 +69,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
      * @param array $elements
      * @return void
      * @dataProvider importExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testImportException($elements)
     {
@@ -184,7 +184,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateElementException()
     {
@@ -365,7 +365,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
      * @param string $elementId
      * @param string $parentId
      * @return void
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider setAsChildExceptionDataProvider
      */
     public function testSetAsChildException($elementId, $parentId)
@@ -459,7 +459,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testReorderChildException()
     {
@@ -516,7 +516,7 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testReorderToSiblingException()
     {
@@ -566,8 +566,8 @@ class StructureTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * covers \Magento\Framework\Data\Structure::addToParentGroup
-     * covers \Magento\Framework\Data\Structure::getGroupChildNames
+     * @covers \Magento\Framework\Data\Structure::addToParentGroup
+     * @covers \Magento\Framework\Data\Structure::getGroupChildNames
      */
     public function testGroups()
     {

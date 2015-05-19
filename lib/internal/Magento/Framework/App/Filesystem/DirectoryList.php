@@ -91,6 +91,11 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const SESSION = 'session';
 
     /**
+     * Directory for Setup application
+     */
+    const SETUP = 'setup';
+
+    /**
      * Dependency injection related file directory
      */
     const DI = 'di';
@@ -139,6 +144,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::UPLOAD => [parent::PATH => 'pub/media/upload', parent::URL_PATH => 'pub/media/upload'],
             self::TMP_MATERIALIZATION_DIR => [parent::PATH => 'var/view_preprocessed'],
             self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed/html'],
+            self::SETUP => [parent::PATH => 'setup/src'],
         ];
         return parent::getDefaultConfig() + $result;
     }

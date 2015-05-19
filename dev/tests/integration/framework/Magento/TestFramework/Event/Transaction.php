@@ -121,7 +121,7 @@ class Transaction
      *
      * @param string $connectionName 'read' or 'write'
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|\Magento\TestFramework\Db\Adapter\TransactionInterface
-     * @throws \Magento\Framework\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getAdapter($connectionName = 'core_write')
     {

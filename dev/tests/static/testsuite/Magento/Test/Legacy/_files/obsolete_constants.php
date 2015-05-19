@@ -687,6 +687,11 @@ return [
         'Magento\Framework\App\SetupInfo::DEFAULT_PATH',
     ],
     [
+        'PARAM_BACKEND_FRONT_NAME',
+        'Magento\Backend\App\Area\FrontNameResolver',
+        'Magento\Backend\Setup\ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME'
+    ],
+    [
         'DEFAULT_ATTRIBUTE_SET_ID',
         'Magento\Catalog\Api\Data\CategoryAttributeInterface',
         'Use \Magento\Eav\Model\Entity\Type::getDefaultAttributeSetId() method instead',
@@ -697,4 +702,26 @@ return [
         'Use \Magento\Eav\Model\Entity\Type::getDefaultAttributeSetId() method instead',
     ],
     ['CONFIG_PATH_WSDL_CACHE_ENABLED', 'Magento\Webapi\Model\Soap\Server'],
+    ['ENTITY', 'Magento\Framework\App\Config\ValueInterface'],
+    ['XML_PATH_ALLOW_CURRENCIES_INSTALLED', 'Magento\Framework\Locale\CurrencyInterface'],
+    [
+        'DEFAULT_CURRENCY',
+        'Magento\Framework\Locale\CurrencyInterface',
+        'Magento\Framework\Locale\Currency::DEFAULT_CURRENCY'
+    ],
+    [
+        'DEFAULT_LOCALE',
+        'Magento\Framework\Locale\ResolverInterface',
+        'Magento\Framework\Locale\Resolver::DEFAULT_LOCALE'
+    ],
+    [
+        'DEFAULT_GROUP',
+        'Magento\Framework\Message\ManagerInterface',
+        'Magento\Framework\Message\Manager::DEFAULT_GROUP'
+    ],
+    [
+        'SCOPE_DEFAULT',
+        'Magento\Framework\App\ScopeInterface',
+        'Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT'
+    ]
 ];

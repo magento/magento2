@@ -81,13 +81,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'is_active',
@@ -123,20 +123,18 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->addForeignKey(
             $installer->getFkName('customer_entity', 'website_id', 'store_website', 'website_id'),
             'website_id',
             $installer->getTable('store_website'),
             'website_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->setComment(
             'Customer Entity'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity'
          */
@@ -176,13 +174,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'is_active',
@@ -204,7 +202,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Address Entity'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_datetime'
          */
@@ -262,7 +260,6 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -274,7 +271,6 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('customer_address_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -286,13 +282,12 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Datetime'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_decimal'
          */
@@ -350,7 +345,6 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -362,7 +356,6 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('customer_address_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -374,13 +367,12 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Decimal'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_int'
          */
@@ -438,27 +430,24 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_address_entity_int', 'entity_id', 'customer_address_entity', 'entity_id'),
             'entity_id',
             $installer->getTable('customer_address_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_address_entity_int', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Int'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_text'
          */
@@ -513,14 +502,12 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_address_entity_text', 'entity_id', 'customer_address_entity', 'entity_id'),
             'entity_id',
             $installer->getTable('customer_address_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -532,13 +519,12 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Text'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_address_entity_varchar'
          */
@@ -596,7 +582,6 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -608,7 +593,6 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('customer_address_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -620,13 +604,12 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Address Entity Varchar'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_datetime'
          */
@@ -684,27 +667,24 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_datetime', 'entity_id', 'customer_entity', 'entity_id'),
             'entity_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_datetime', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Datetime'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_decimal'
          */
@@ -762,27 +742,24 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_decimal', 'entity_id', 'customer_entity', 'entity_id'),
             'entity_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_decimal', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Decimal'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_int'
          */
@@ -840,27 +817,24 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_int', 'entity_id', 'customer_entity', 'entity_id'),
             'entity_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_int', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Int'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_text'
          */
@@ -915,27 +889,24 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_text', 'entity_id', 'customer_entity', 'entity_id'),
             'entity_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_text', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Text'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_entity_varchar'
          */
@@ -993,27 +964,24 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_varchar', 'entity_id', 'customer_entity', 'entity_id'),
             'entity_id',
             $installer->getTable('customer_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_entity_varchar', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Entity Varchar'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_group'
          */
@@ -1041,7 +1009,7 @@ class InstallSchema implements InstallSchemaInterface
             'Customer Group'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_eav_attribute'
          */
@@ -1100,13 +1068,12 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Eav Attribute'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_form_attribute'
          */
@@ -1132,13 +1099,12 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Form Attribute'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_eav_attribute_website'
          */
@@ -1188,20 +1154,18 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('customer_eav_attribute_website', 'website_id', 'store_website', 'website_id'),
             'website_id',
             $installer->getTable('store_website'),
             'website_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Customer Eav Attribute Website'
         );
         $installer->getConnection()->createTable($table);
-        
+
         /**
          * Create table 'customer_visitor'
          */
@@ -1229,8 +1193,8 @@ class InstallSchema implements InstallSchemaInterface
             'Visitor Table'
         );
         $installer->getConnection()->createTable($table);
-        
+
         $installer->endSetup();
-        
+
     }
 }

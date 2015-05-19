@@ -20,7 +20,7 @@
         <?php if ((!$_product->isAvailable() && !$_skipSaleableCheck) || !$_hasAssociatedProducts): ?>
             <p class="availability out-of-stock"><?php echo __('Availability:') ?> <span><?php echo __('Out of stock') ?></span></p>
         <?php endif; ?>
-        <table class="data-table grouped-items-table" id="super-product-table">
+        <table class="data-table admin__table-primary grouped-items-table" id="super-product-table">
             <thead>
                 <tr class="headings">
                     <th class="col-id"><?php echo __('ID') ?></th>
@@ -52,7 +52,13 @@
                     <?php if ($_product->isSaleable() || $_skipSaleableCheck): ?>
                     <td class="col-qty">
                     <?php if ($_item->isSaleable() || $_skipSaleableCheck) : ?>
-                        <input type="text" name="super_group[<?php echo $_item->getId() ?>]" id="super_group[<?php echo $_item->getId() ?>]" maxlength="12" value="<?php echo $_item->getQty()*1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" />
+                        <input type="text"
+                               name="super_group[<?php echo $_item->getId() ?>]"
+                               id="super_group[<?php echo $_item->getId() ?>]"
+                               maxlength="12"
+                               value="<?php echo $_item->getQty()*1 ?>"
+                               title="<?php echo __('Qty') ?>"
+                               class="input-text admin__control-text qty" />
                         <input type="hidden" value="1" price="<?php echo $block->getCurrencyPrice($_item->getPrice()) ?>" qtyId="super_group[<?php echo $_item->getId() ?>]" />
                     <?php else: ?>
                         <p class="availability out-of-stock"><span><?php echo __('Out of stock') ?></span></p>

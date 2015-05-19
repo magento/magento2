@@ -12,7 +12,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme\Domain;
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * covers \Magento\Framework\View\Design\Theme\Domain\Factory::create
+     * @covers \Magento\Framework\View\Design\Theme\Domain\Factory::create
      */
     public function testCreate()
     {
@@ -44,7 +44,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * covers \Magento\Framework\View\Design\Theme\Domain\Factory::create
+     * @covers \Magento\Framework\View\Design\Theme\Domain\Factory::create
      */
     public function testCreateWithWrongThemeType()
     {
@@ -57,7 +57,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $themeDomainFactory = new \Magento\Framework\View\Design\Theme\Domain\Factory($objectManager);
 
         $this->setExpectedException(
-            'Magento\Framework\Exception',
+            'Magento\Framework\Exception\LocalizedException',
             sprintf('Invalid type of theme domain model "%s"', $wrongThemeType)
         );
         $themeDomainFactory->create($themeMock);

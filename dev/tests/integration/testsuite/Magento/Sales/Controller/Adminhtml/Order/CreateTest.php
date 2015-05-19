@@ -7,6 +7,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class CreateTest extends \Magento\Backend\Utility\Controller
 {
@@ -152,7 +153,7 @@ class CreateTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
 
         $this->assertNotEmpty($body);
-        $this->assertContains('>Quantity</label>', $body);
+        $this->assertContains('><span>Quantity</span></label>', $body);
         $this->assertContains('>Test Configurable</label>', $body);
         $this->assertContains('"code":"test_configurable","label":"Test Configurable"', $body);
         $this->assertContains('"productId":"1"', $body);

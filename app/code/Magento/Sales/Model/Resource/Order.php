@@ -7,9 +7,8 @@ namespace Magento\Sales\Model\Resource;
 
 use Magento\Framework\App\Resource as AppResource;
 use Magento\Framework\Math\Random;
-use Magento\Sales\Model\Increment as SalesIncrement;
-use Magento\Sales\Model\Resource\Entity as SalesResource;
-use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
+use Magento\SalesSequence\Model\Manager;
+use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
 use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
@@ -18,6 +17,7 @@ use Magento\Sales\Model\Spi\OrderResourceInterface;
  * Flat sales order resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Order extends SalesResource implements OrderResourceInterface
 {
@@ -58,24 +58,24 @@ class Order extends SalesResource implements OrderResourceInterface
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
-     * @param SalesIncrement $salesIncrement
+     * @param Manager $sequenceManager
+     * @param EntitySnapshot $entitySnapshot
      * @param AddressHandler $addressHandler
      * @param StateHandler $stateHandler
-     * @param OrderGrid $gridAggregator
-     * @param string|null $resourcePrefix
+     * @param null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Attribute $attribute,
-        SalesIncrement $salesIncrement,
+        Manager $sequenceManager,
+        EntitySnapshot $entitySnapshot,
         AddressHandler $addressHandler,
         StateHandler $stateHandler,
-        OrderGrid $gridAggregator,
         $resourcePrefix = null
     ) {
         $this->stateHandler = $stateHandler;
         $this->addressHandler = $addressHandler;
-        parent::__construct($context, $attribute, $salesIncrement, $resourcePrefix, $gridAggregator);
+        parent::__construct($context, $attribute, $sequenceManager, $entitySnapshot, $resourcePrefix);
     }
 
     /**
@@ -166,7 +166,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function processRelations(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order $object */
         $this->addressHandler->process($object);
@@ -195,10 +195,12 @@ class Order extends SalesResource implements OrderResourceInterface
                 $statusHistory->setOrder($object);
             }
         }
-        foreach ($object->getRelatedObjects() as $relatedObject) {
-            $relatedObject->save();
-            $relatedObject->setOrder($object);
+        if (null !== $object->getRelatedObjects()) {
+            foreach ($object->getRelatedObjects() as $relatedObject) {
+                $relatedObject->save();
+                $relatedObject->setOrder($object);
+            }
         }
-        return parent::_afterSave($object);
+        return parent::processRelations($object);
     }
 }

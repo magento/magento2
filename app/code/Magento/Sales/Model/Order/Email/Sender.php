@@ -8,6 +8,7 @@ namespace Magento\Sales\Model\Order\Email;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
 use Magento\Sales\Model\Order\Email\Container\Template;
+use Magento\Sales\Model\Order\Address\Renderer;
 
 abstract class Sender
 {
@@ -27,18 +28,34 @@ abstract class Sender
     protected $identityContainer;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var Renderer
+     */
+    protected $addressRenderer;
+
+    /**
      * @param Template $templateContainer
      * @param IdentityInterface $identityContainer
-     * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      */
     public function __construct(
         Template $templateContainer,
         IdentityInterface $identityContainer,
-        \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
+        \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
+        \Psr\Log\LoggerInterface $logger,
+        Renderer $addressRenderer
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;
         $this->senderBuilderFactory = $senderBuilderFactory;
+        $this->logger = $logger;
+        $this->addressRenderer = $addressRenderer;
     }
 
     /**
@@ -56,8 +73,12 @@ abstract class Sender
         /** @var SenderBuilder $sender */
         $sender = $this->getSender();
 
-        $sender->send();
-        $sender->sendCopyTo();
+        try {
+            $sender->send();
+            $sender->sendCopyTo();
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+        }
 
         return true;
     }
@@ -105,5 +126,25 @@ abstract class Sender
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'store' => $this->identityContainer->getStore()->getStoreId()
         ];
+    }
+
+    /**
+     * @param Order $order
+     * @return string|null
+     */
+    protected function getFormattedShippingAddress($order)
+    {
+        return $order->getIsVirtual()
+            ? null
+            : $this->addressRenderer->format($order->getShippingAddress(), 'html');
+    }
+
+    /**
+     * @param Order $order
+     * @return string|null
+     */
+    protected function getFormattedBillingAddress($order)
+    {
+        return $this->addressRenderer->format($order->getBillingAddress(), 'html');
     }
 }

@@ -9,6 +9,8 @@ namespace Magento\Sales\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\SalesSequence\Model\Builder;
+use Magento\SalesSequence\Model\Config as SequenceConfig;
 
 /**
  * Class InstallData
@@ -25,13 +27,28 @@ class InstallData implements InstallDataInterface
     private $salesSetupFactory;
 
     /**
-     * Init
-     *
-     * @param SalesSetupFactory $salesSetupFactory
+     * @var Builder
      */
-    public function __construct(SalesSetupFactory $salesSetupFactory)
-    {
+    private $sequenceBuilder;
+
+    /**
+     * @var SequenceConfig
+     */
+    private $sequenceConfig;
+
+    /**
+     * @param SalesSetupFactory $salesSetupFactory
+     * @param Builder $sequenceBuilder
+     * @param SequenceConfig $sequenceConfig
+     */
+    public function __construct(
+        SalesSetupFactory $salesSetupFactory,
+        Builder $sequenceBuilder,
+        SequenceConfig $sequenceConfig
+    ) {
         $this->salesSetupFactory = $salesSetupFactory;
+        $this->sequenceBuilder = $sequenceBuilder;
+        $this->sequenceConfig = $sequenceConfig;
     }
 
     /**

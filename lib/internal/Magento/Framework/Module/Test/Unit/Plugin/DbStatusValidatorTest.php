@@ -116,8 +116,8 @@ class DbStatusValidatorTest extends \PHPUnit_Framework_TestCase
      * @param array $dbVersionErrors
      *
      * @dataProvider aroundDispatchExceptionDataProvider
-     * @expectedException \Magento\Framework\Module\Exception
-     * @expectedExceptionMessage Please update your database:
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Please upgrade your database:
      */
     public function testAroundDispatchException(array $dbVersionErrors)
     {

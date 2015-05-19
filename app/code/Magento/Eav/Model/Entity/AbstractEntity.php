@@ -14,7 +14,7 @@ use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Framework\App\Config\Element;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Eav\Exception as EavException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
 
@@ -31,14 +31,14 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     /**
      * Read connection
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql | string
      */
     protected $_read;
 
     /**
      * Write connection
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql | string
      */
     protected $_write;
 
@@ -334,12 +334,12 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * Retrieve current entity config
      *
      * @return Type
-     * @throws EavException
+     * @throws LocalizedException
      */
     public function getEntityType()
     {
         if (empty($this->_type)) {
-            throw new EavException(__('Entity is not initialized'));
+            throw new LocalizedException(__('Entity is not initialized'));
         }
         return $this->_type;
     }
@@ -372,7 +372,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param array|string|null $attributes
      * @return $this
-     * @throws EavException
+     * @throws LocalizedException
      */
     public function unsetAttributes($attributes = null)
     {
@@ -387,7 +387,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         }
 
         if (!is_array($attributes)) {
-            throw new EavException(__('Unknown parameter'));
+            throw new LocalizedException(__('Unknown parameter'));
         }
 
         foreach ($attributes as $attrCode) {
@@ -733,7 +733,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
                     /** @var \Magento\Eav\Model\Entity\Attribute\Exception $e */
                     $e = $this->_universalFactory->create(
                         'Magento\Eav\Model\Entity\Attribute\Exception',
-                        ['message' => $e->getMessage()]
+                        ['phrase' => __($e->getMessage())]
                     );
                     $e->setAttributeCode($attrCode)->setPart($part);
                     throw $e;

@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Api/etc/data_object.xsd">
-    <custom_attributes for="Magento\Customer\Api\Data\CustomerInterface">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Api/etc/service_data_attributes.xsd">
+    <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
         <attribute code="custom_2" type="Magento\CustomerExtra\Api\Data\CustomerCustom22" />
         <attribute code="custom_3" type="Magento\Customer\Api\Data\CustomerCustom3" />
-    </custom_attributes>
+    </extension_attributes>
 </config>

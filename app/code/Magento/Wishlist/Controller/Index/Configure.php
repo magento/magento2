@@ -1,14 +1,14 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
-use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Wishlist\Controller\IndexInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 class Configure extends Action\Action implements IndexInterface
 {
@@ -50,12 +50,14 @@ class Configure extends Action\Action implements IndexInterface
     /**
      * Action to reconfigure wishlist item
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface
      * @throws NotFoundException
      */
     public function execute()
     {
         $id = (int)$this->getRequest()->getParam('id');
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         try {
             /* @var $item \Magento\Wishlist\Model\Item */
             $item = $this->_objectManager->create('Magento\Wishlist\Model\Item');
@@ -65,7 +67,7 @@ class Configure extends Action\Action implements IndexInterface
             }
             $wishlist = $this->wishlistProvider->getWishlist($item->getWishlistId());
             if (!$wishlist) {
-                throw new NotFoundException();
+                throw new NotFoundException(__('Page not found.'));
             }
 
             $this->_coreRegistry->register('wishlist_item', $item);
@@ -83,7 +85,7 @@ class Configure extends Action\Action implements IndexInterface
             }
             $params->setBuyRequest($buyRequest);
             /** @var \Magento\Framework\View\Result\Page $resultPage */
-            $resultPage = $this->resultPageFactory->create();
+            $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
             $this->_objectManager->get(
                 'Magento\Catalog\Helper\Product\View'
             )->prepareAndRender(
@@ -96,13 +98,13 @@ class Configure extends Action\Action implements IndexInterface
             return $resultPage;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
-            $this->_redirect('*');
-            return;
+            $resultRedirect->setPath('*');
+            return $resultRedirect;
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t configure the product.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->_redirect('*');
-            return;
+            $resultRedirect->setPath('*');
+            return $resultRedirect;
         }
     }
 }

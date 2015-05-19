@@ -4,8 +4,13 @@
 //  */
 
 //
-//    List default styles reset
-//--------------------------------------
+//  Styles Extends
+//  _____________________________________________
+
+//
+//  List default styles reset
+//  ---------------------------------------------
+
 .abs-reset-list {
     .list-reset-styles();
     > li {
@@ -14,8 +19,9 @@
 }
 
 //
-//    Link as a button
-//--------------------------------------
+//  Link as a button
+//  ---------------------------------------------
+
 .abs-action-link-button {
     .button();
     .link-as-button();
@@ -23,8 +29,9 @@
 }
 
 //
-//    Product options list
-//--------------------------------------
+//  Product options list
+//  ---------------------------------------------
+
 @abs-product-options-list: {
     dt {
         float: left;
@@ -52,8 +59,9 @@
 }
 
 //
-//    Button reset width, floats, margins
-//--------------------------------------
+//  Button reset width, floats, margins
+//  ---------------------------------------------
+
 @abs-button-responsive: {
     .button-responsive();
 };
@@ -75,8 +83,9 @@
 }
 
 //
-//    Blocks in 2 columns
-//--------------------------------------
+//  Blocks in 2 columns
+//  ---------------------------------------------
+
 @abs-blocks-2columns: {
     width: 48.8%;
     &:nth-child(odd) {
@@ -101,8 +110,9 @@
 }
 
 //
-//    Reset image alignment in container
-//--------------------------------------
+//  Reset image alignment in container
+//  ---------------------------------------------
+
 .abs-reset-image-wrapper {
     height: auto;
     padding: 0!important;
@@ -112,8 +122,9 @@
 }
 
 //
-//    Adaptive images
-//--------------------------------------
+//  Adaptive images
+//  ---------------------------------------------
+
 .abs-adaptive-images {
     display: block;
     height: auto;
@@ -128,8 +139,9 @@
 }
 
 //
-//    Title for login blocks
-//--------------------------------------
+//  Title for login blocks
+//  ---------------------------------------------
+
 .abs-login-block-title {
     strong {
         font-weight: 500;
@@ -141,8 +153,9 @@
 }
 
 //
-//    Abstract block title
-//--------------------------------------
+//  Abstract block title
+//  ---------------------------------------------
+
 .abs-block-title {
     > strong {
         .heading(h3);
@@ -151,8 +164,9 @@
 }
 
 //
-//    Account blocks
-//--------------------------------------
+//  Account blocks
+//  ---------------------------------------------
+
 .abs-account-blocks {
     .block-title {
         &:extend(.abs-block-title all);
@@ -182,8 +196,9 @@
 }
 
 //
-//    Simple Dropdown
-//--------------------------------------
+//  Simple Dropdown
+//  ---------------------------------------------
+
 .abs-dropdown-simple {
     .dropdown(
         @_dropdown-list-item-padding: 5px 5px 5px 23px,
@@ -194,23 +209,26 @@
 }
 
 //
-//    Input quantity
-//--------------------------------------
+//  Input quantity
+//  ---------------------------------------------
+
 .abs-input-qty {
     width: 47px;
     text-align: center;
 }
 
 //
-//    Marging for blocks & widgets
-//--------------------------------------
+//  Marging for blocks & widgets
+//  ---------------------------------------------
+
 .abs-margin-for-blocks-and-widgets {
     margin-bottom: @indent__xl;
 }
 
 //
-//    Remove button for blocks
-//--------------------------------------
+//  Remove button for blocks
+//  ---------------------------------------------
+
 .abs-remove-button-for-blocks {
     .icon-font(
         @icon-remove,
@@ -224,20 +242,29 @@
 }
 
 //
-//    Product link
-//--------------------------------------
+//  Product link
+//  ---------------------------------------------
+
 .abs-product-link {
-    .link(
-        @_link-color: @color-gray19,
-        @_link-color-hover: @color-gray19,
-        @_link-color-active: @color-gray19,
-        @_link-color-visited: @color-gray19
-    );
+    font-weight: @font-weight__regular;
+    > a {
+        .link(
+        @_link-color: @product-name-link__color,
+        @_link-text-decoration: @product-name-link__text-decoration,
+        @_link-color-visited: @product-name-link__color__visited,
+        @_link-text-decoration-visited: @product-name-link__text-decoration__visited,
+        @_link-color-hover: @product-name-link__color__hover,
+        @_link-text-decoration-hover: @product-name-link__text-decoration__hover,
+        @_link-color-active: @product-name-link__color__active,
+        @_link-text-decoration-active: @product-name-link__text-decoration__active
+        );
+    }
 }
 
 //
-//   Reset left margin
-//--------------------------------------
+//  Reset left margin
+//  ---------------------------------------------
+
 @abs-reset-left-margin: {
     margin-left: 0;
 };
@@ -259,8 +286,9 @@
 }
 
 //
-//    Action with icon remove with text
-//--------------------------------------
+//  Action with icon remove with text
+//  ---------------------------------------------
+
 .abs-action-remove {
     &:extend(.abs-action-button-as-link all);
     width: auto;
@@ -271,8 +299,9 @@
 }
 
 //
-//    Action with icon remove with text for desktop
-//--------------------------------------
+//  Action with icon remove with text for desktop
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-action-remove-desktop when not (@form-field-type-label-inline__width = false) and not (@form-field-type-label-inline__width = '') {
         top: 6px;
@@ -281,8 +310,9 @@
 }
 
 //
-//    Add Recipient
-//--------------------------------------
+//  Add Recipient
+//  ---------------------------------------------
+
 .abs-add-fields {
     .fieldset {
         margin-bottom: 50px;
@@ -329,8 +359,9 @@
 }
 
 //
-//    Add Recipient for desktop
-//--------------------------------------
+//  Add Recipient for desktop
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-add-fields-desktop {
         .fieldset {
@@ -353,8 +384,9 @@
 }
 
 //
-//    Margin for forms
-//--------------------------------------
+//  Margin for forms
+//  ---------------------------------------------
+
 @abs-margin-for-forms-desktop: {
     .css(margin-left, @form-field-type-label-inline__width);
 };
@@ -372,15 +404,17 @@
 }
 
 //
-//    Visibility hidden / show visibility hidden
-//--------------------------------------
+//  Visibility hidden / show visibility hidden
+//  ---------------------------------------------
+
 .abs-hidden {
     .visibility-hidden();
 }
 
 //
-//    Visually hidden / show visually hidden
-//--------------------------------------
+//  Visually hidden / show visually hidden
+//  ---------------------------------------------
+
 @abs-visually-hidden: {
     .visually-hidden();
 };
@@ -414,8 +448,9 @@
 }
 
 //
-//    Clearfix
-//--------------------------------------
+//  Clearfix
+//  ---------------------------------------------
+
 @abs-add-clearfix: {
     .clearfix();
 };
@@ -449,8 +484,9 @@
 }
 
 //
-//    Box-sizing
-//--------------------------------------
+//  Box-sizing
+//  ---------------------------------------------
+
 @abs-add-box-sizing: {
     box-sizing: border-box;
 };
@@ -472,8 +508,9 @@
 }
 
 //
-//    Revert field type
-//--------------------------------------
+//  Revert field type
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-revert-field-type-desktop {
         .fieldset {
@@ -489,8 +526,9 @@
 }
 
 //
-//    Settings icons
-//--------------------------------------
+//  Settings icons
+//  ---------------------------------------------
+
 .abs-navigation-icon {
     .icon-font(
         @_icon-font-content: @icon-down,
@@ -507,8 +545,9 @@
 }
 
 //
-//    Split button
-//--------------------------------------
+//  Split button
+//  ---------------------------------------------
+
 .abs-split-button {
     .dropdown-split(
         @_options-selector : ~".items",
@@ -518,8 +557,9 @@
 }
 
 //
-//    Action addto
-//--------------------------------------
+//  Action addto
+//  ---------------------------------------------
+
 .abs-action-addto-product {
     &:extend(.abs-action-link-button all);
     .button-s();
@@ -538,15 +578,17 @@
 }
 
 //
-//    Large button
-//--------------------------------------
+//  Large button
+//  ---------------------------------------------
+
 .abs-button-l {
     .button-l();
 }
 
 //
-//   Button as a link
-//--------------------------------------
+//  Button as a link
+//  ---------------------------------------------
+
 .abs-action-button-as-link {
     .button-as-link(
         @_margin: false
@@ -561,29 +603,33 @@
 }
 
 //
-//   Button revert secondary color
-//--------------------------------------
+//  Button revert secondary color
+//  ---------------------------------------------
+
 .abs-revert-secondary-color {
     .button-revert-secondary-color();
 }
 
 //
-//   Button revert secondary size
-//--------------------------------------
+//  Button revert secondary size
+//  ---------------------------------------------
+
 .abs-revert-secondary-size {
     .button-revert-secondary-size();
 }
 
 //
-//    Box-tocart block
-//--------------------------------------
+//  Box-tocart block
+//  ---------------------------------------------
+
 .abs-box-tocart {
     margin: @indent__s 0;
 }
 
 //
-//    Excl/Incl tax
-//--------------------------------------
+//  Excl/Incl tax
+//  ---------------------------------------------
+
 .abs-adjustment-incl-excl-tax {
     .price-including-tax,
     .price-excluding-tax,
@@ -605,12 +651,13 @@
 }
 
 //
-//    Cart tax total
-//--------------------------------------
+//  Cart tax total
+//  ---------------------------------------------
+
 .abs-tax-total {
     cursor: pointer;
-    position: relative;
     padding-right: 12px;
+    position: relative;
     .icon-font(
         @icon-down,
         @_icon-font-size: 26px,
@@ -639,8 +686,9 @@
 }
 
 //
-//    Checkout shipping methods title
-//--------------------------------------
+//  Checkout shipping methods title
+//  ---------------------------------------------
+
 .abs-methods-shipping-title {
     .font-size(14);
     margin: 0 0 15px;
@@ -648,20 +696,23 @@
 }
 
 //
-//    Checkout order review price
-//--------------------------------------
+//  Checkout order review price
+//  ---------------------------------------------
+
 .abs-checkout-cart-price {
 }
 
 //
-//    Checkout order product name
-//--------------------------------------
+//  Checkout order product name
+//  ---------------------------------------------
+
 .abs-checkout-product-name {
 }
 
 //
-//    Checkout order review
-//--------------------------------------
+//  Checkout order review
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .abs-checkout-order-review {
         tbody tr {
@@ -699,8 +750,9 @@
 }
 
 //
-//    Add colon
-//--------------------------------------
+//  Add colon
+//  ---------------------------------------------
+
 .abs-colon {
     &:after {
         content: ": ";
@@ -708,8 +760,9 @@
 }
 
 //
-//    Icon - create add
-//--------------------------------------
+//  Icon - create add
+//  ---------------------------------------------
+
 .abs-icon-add {
     .icon-font(
         @_icon-font-content: @icon-expand,
@@ -733,8 +786,9 @@
 }
 
 //
-//    Dropdown items - create new
-//--------------------------------------
+//  Dropdown items - create new
+//  ---------------------------------------------
+
 .abs-dropdown-items-new {
     .items .item:last-child {
         &:hover {
@@ -751,8 +805,9 @@
 }
 
 //
-//    Abstract toggle title block
-//--------------------------------------
+//  Abstract toggle title block
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-toggling-title-mobile {
         border-top: @border-width__base solid @border-color__base;
@@ -783,8 +838,9 @@
 }
 
 //
-//    Abstract no display
-//--------------------------------------
+//  Abstract no display
+//  ---------------------------------------------
+
 @abs-no-display: {
     display: none;
 };
@@ -806,16 +862,18 @@
 }
 
 //
-//    Status
-//--------------------------------------
+//  Status
+//  ---------------------------------------------
+
 .abs-status {
     display: inline-block;
     margin-bottom: @indent__base;
 }
 
 //
-//    Pager toolbar for non-catalog pages mobile
-//--------------------------------------
+//  Pager toolbar for non-catalog pages mobile
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-pager-toolbar-mobile {
         .toolbar-amount,
@@ -828,8 +886,9 @@
 }
 
 //
-//    Pager toolbar for non-catalog pages mobile
-//--------------------------------------
+//  Pager toolbar for non-catalog pages mobile
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .abs-pager-toolbar-mobile-s {
         .toolbar-amount,
@@ -841,8 +900,9 @@
 }
 
 //
-//    Pager toolbar for non-catalog pages desktop
-//--------------------------------------
+//  Pager toolbar for non-catalog pages desktop
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-pager-toolbar {
         margin-bottom: @indent__base;
@@ -869,8 +929,9 @@
 }
 
 //
-//    Items counter in blocks
-//--------------------------------------
+//  Items counter in blocks
+//  ---------------------------------------------
+
 .abs-block-items-counter {
     .css(color, @primary__color__lighter);
     .font-size(12px);
@@ -878,8 +939,9 @@
 }
 
 //
-//    Shopping cart items
-//--------------------------------------
+//  Shopping cart items
+//  ---------------------------------------------
+
 .abs-shopping-cart-items {
     .action {
         &.continue {
@@ -942,5 +1004,20 @@
                 margin-right: @indent__s;
             }
         }
+    }
+}
+
+//
+//  Form Field Date
+//  ---------------------------------------------
+
+.abs-field-date {
+    .control {
+        &:extend(.abs-add-box-sizing all);
+        position: relative;
+    }
+    input {
+        margin-right: @indent__s;
+        width: calc(~"100% - (@{icon-calendar__font-size} + @{indent__s})");
     }
 }

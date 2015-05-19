@@ -12,39 +12,39 @@
  * @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit
  */
 ?>
-
-<div class="product-actions">
-    <div id="product-template-suggest-container" class="suggest-expandable">
-        <div class="action-dropdown">
-            <button type="button" class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
-                <span><?php echo $block->getAttributeSetName()?></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><input type="text" id="product-template-suggest" class="search"
-                       placeholder="start typing to search template"/></li>
-            </ul>
+<div class="admin__scope-old">
+    <div class="product-actions">
+        <div id="product-template-suggest-container" class="suggest-expandable">
+            <div class="action-dropdown">
+                <button type="button" class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
+                    <span><?php echo $block->getAttributeSetName()?></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><input type="text" id="product-template-suggest" class="search"
+                           placeholder="start typing to search template"/></li>
+                </ul>
+            </div>
         </div>
-    </div>
 
-    <div class="switcher" onselectstart='return false;'>
-        <input type="checkbox" id="product-online-switcher" name="product-online-switcher" />
-        <label class="switcher-label"
-               for="product-online-switcher"
-               data-text-on="<?php echo __('Product online'); ?>"
-               data-text-off="<?php echo __('Product offline'); ?>"
-               title="<?php echo __('Product online status'); ?>"></label>
-    </div>
+        <div class="switcher" onselectstart='return false;'>
+            <input type="checkbox" id="product-online-switcher" name="product-online-switcher" />
+            <label class="switcher-label"
+                   for="product-online-switcher"
+                   data-text-on="<?php echo __('Product online'); ?>"
+                   data-text-off="<?php echo __('Product offline'); ?>"
+                   title="<?php echo __('Product online status'); ?>"></label>
+        </div>
 
-    <?php if ($block->getProductId()): ?>
-        <?php echo $block->getDeleteButtonHtml() ?>
-    <?php endif; ?>
-    <?php if ($block->getProductSetId()): ?>
-        <?php echo $block->getChangeAttributeSetButtonHtml() ?>
-        <?php echo $block->getSaveSplitButtonHtml(); ?>
-    <?php endif; ?>
-    <?php echo $block->getBackButtonHtml() ?>
+        <?php if ($block->getProductId()): ?>
+            <?php echo $block->getDeleteButtonHtml() ?>
+        <?php endif; ?>
+        <?php if ($block->getProductSetId()): ?>
+            <?php echo $block->getChangeAttributeSetButtonHtml() ?>
+            <?php echo $block->getSaveSplitButtonHtml(); ?>
+        <?php endif; ?>
+        <?php echo $block->getBackButtonHtml() ?>
+    </div>
 </div>
-
 <?php if ($block->getUseContainer()): ?>
 <form action="<?php echo $block->getSaveUrl() ?>" method="post" enctype="multipart/form-data"
       data-form="edit-product" data-product-id="<?php echo $block->getProduct()->getId()?>">

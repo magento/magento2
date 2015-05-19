@@ -6,8 +6,8 @@
 namespace Magento\Sales\Model\Order\Creditmemo;
 
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
+use Magento\Sales\Model\AbstractModel;
 
 /**
  * @method \Magento\Sales\Model\Resource\Order\Creditmemo\Item _getResource()
@@ -15,7 +15,7 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
+class Item extends AbstractModel implements CreditmemoItemInterface
 {
     /**
      * @var string
@@ -219,7 +219,7 @@ class Item extends AbstractExtensibleModel implements CreditmemoItemInterface
         $rowTotalInclTax = $orderItem->getRowTotalInclTax();
         $baseRowTotalInclTax = $orderItem->getBaseRowTotalInclTax();
 
-        if (!$this->isLast() && $orderItemQtyInvoiced > 0 && $this->getQty() > 0) {
+        if (!$this->isLast() && $orderItemQtyInvoiced > 0 && $this->getQty() >= 0) {
             $availableQty = $orderItemQtyInvoiced - $orderItem->getQtyRefunded();
             $rowTotal = $creditmemo->roundPrice($rowTotal / $availableQty * $this->getQty());
             $baseRowTotal = $creditmemo->roundPrice($baseRowTotal / $availableQty * $this->getQty(), 'base');

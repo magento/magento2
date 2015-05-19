@@ -12,18 +12,16 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
 
 /**
- * Test Coverage for Create Catalog Rule
- *
- * Test Flow:
+ * Steps:
  * 1. Log in as default admin user.
- * 2. Go to Marketing > Catalog Price Rules
- * 3. Press "+" button to start create new catalog price rule
- * 4. Fill in all data according to data set
- * 5. Save rule
- * 6. Apply newly created catalog rule
- * 7. Create simple product
- * 8. Clear cache
- * 9. Perform all assertions
+ * 2. Go to Marketing > Catalog Price Rules.
+ * 3. Press "+" button to start create new catalog price rule.
+ * 4. Fill in all data according to data set.
+ * 5. Save rule.
+ * 6. Apply newly created catalog rule.
+ * 7. Create simple product.
+ * 8. Clear cache.
+ * 9. Perform all assertions.
  *
  * @ticketId MAGETWO-23036
  */
@@ -33,11 +31,11 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
     const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
-    const STABLE = 'no';
+    const TO_MAINTAIN = 'yes'; // Selecting conditions in parallel mode
     /* end tags */
 
     /**
-     * Create Catalog Price Rule
+     * Create Catalog Price Rule.
      *
      * @param CatalogRule $catalogPriceRule
      * @param Customer $customer
@@ -69,9 +67,6 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         // Fill and Save the Form
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->save();
-
-        // Prepare data for tear down
-        $this->catalogRules[] = $catalogPriceRule;
 
         // Apply Catalog Price Rule
         $this->catalogRuleIndex->getGridPageActions()->applyRules();

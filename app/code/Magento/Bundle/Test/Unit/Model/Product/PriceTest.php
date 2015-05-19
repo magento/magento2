@@ -5,6 +5,8 @@
  */
 namespace Magento\Bundle\Test\Unit\Model\Product;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -75,16 +77,26 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $this->groupManagement = $this->getMockBuilder('Magento\Customer\Api\GroupManagementInterface')
             ->getMockForAbstractClass();
+        $gpFactory = $this->getMock('Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory', [], [], '', false);
+        $tpFactory = $this->getMock('Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory', [], [], '', false);
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-        $this->model = new \Magento\Bundle\Model\Product\Price(
-            $this->ruleFactoryMock,
-            $this->storeManagerMock,
-            $this->localeDateMock,
-            $this->customerSessionMock,
-            $this->eventManagerMock,
-            $this->priceCurrency,
-            $this->groupManagement,
-            $this->catalogHelperMock
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $objectManagerHelper->getObject(
+            'Magento\Bundle\Model\Product\Price',
+            [
+                'ruleFactory' => $this->ruleFactoryMock,
+                'storeManager' => $this->storeManagerMock,
+                'localeDate' => $this->localeDateMock,
+                'customerSession' => $this->customerSessionMock,
+                'eventManager' => $this->eventManagerMock,
+                'priceCurrency' => $this->priceCurrency,
+                'groupManagement' => $this->groupManagement,
+                'groupPriceFactory' => $gpFactory,
+                'tierPriceFactory' => $tpFactory,
+                'config' => $scopeConfig,
+                'catalogData' => $this->catalogHelperMock
+            ]
         );
     }
 
@@ -95,8 +107,8 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      * @param bool $dateInInterval
      * @param float $expected
      *
-     * covers \Magento\Bundle\Model\Product\Price::calculateSpecialPrice
-     * covers \Magento\Bundle\Model\Product\Price::__construct
+     * @covers \Magento\Bundle\Model\Product\Price::calculateSpecialPrice
+     * @covers \Magento\Bundle\Model\Product\Price::__construct
      * @dataProvider calculateSpecialPrice
      */
     public function testCalculateSpecialPrice($finalPrice, $specialPrice, $callsNumber, $dateInInterval, $expected)

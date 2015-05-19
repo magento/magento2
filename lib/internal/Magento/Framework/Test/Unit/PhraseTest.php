@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-use \Magento\Framework\Phrase;
+use Magento\Framework\Phrase;
 
 class PhraseTest extends \PHPUnit_Framework_TestCase
 {
@@ -123,5 +123,26 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals([], $phrase1->getArguments());
         $this->assertEquals($arguments, $phrase2->getArguments());
+    }
+
+    public function testToStringWithExceptionOnRender()
+    {
+        $text = 'raw text';
+        $exception = new \Exception('something went wrong');
+        $phrase = new Phrase($text);
+
+        $this->rendererMock->expects($this->any())
+            ->method('render')
+            ->willThrowException($exception);
+
+        $this->assertEquals($text, (string)$phrase);
+    }
+
+    /**
+     * Test default renderer
+     */
+    public function testDefaultRenderer()
+    {
+        $this->assertInstanceOf('Magento\Framework\Phrase\Renderer\Placeholder', Phrase::getRenderer());
     }
 }

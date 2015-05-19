@@ -8,10 +8,12 @@
 
 namespace Magento\Shipping\Model\Carrier;
 
-use Magento\Quote\Model\Quote\Address\AbstractCarrierInterface;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
 
+/**
+ * Class AbstractCarrier
+ */
 abstract class AbstractCarrier extends \Magento\Framework\Object implements AbstractCarrierInterface
 {
     /**
@@ -137,6 +139,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      * @param string $field
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @api
      */
     public function getConfigFlag($field)
     {
@@ -154,11 +157,11 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     /**
      * Collect and get rates
      *
-     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Framework\Object $request
      * @return \Magento\Shipping\Model\Rate\Result|bool|null
      * @abstract
      */
-    abstract public function collectRates(\Magento\Quote\Model\Quote\Address\RateRequest $request);
+    abstract public function collectRates(\Magento\Framework\Object $request);
 
     /**
      * Do request to shipment
@@ -276,11 +279,11 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
+     * @param \Magento\Framework\Object $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function checkAvailableShipCountries(\Magento\Quote\Model\Quote\Address\RateRequest $request)
+    public function checkAvailableShipCountries(\Magento\Framework\Object $request)
     {
         $speCountriesAllow = $this->getConfigData('sallowspecific');
         /*
@@ -323,11 +326,11 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     /**
      * Processing additional validation to check is carrier applicable.
      *
-     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
-     * @return $this|bool|Error
+     * @param \Magento\Framework\Object $request
+     * @return $this|bool|\Magento\Framework\Object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function proccessAdditionalValidation(\Magento\Quote\Model\Quote\Address\RateRequest $request)
+    public function proccessAdditionalValidation(\Magento\Framework\Object $request)
     {
         return $this;
     }
@@ -593,6 +596,7 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @api
      */
     public function getDebugFlag()
     {

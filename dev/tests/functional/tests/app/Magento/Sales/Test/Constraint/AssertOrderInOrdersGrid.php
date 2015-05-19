@@ -11,13 +11,12 @@ use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderInOrdersGrid
- * Assert that order is present in Orders grid
+ * Assert that order is present in Orders grid.
  */
 class AssertOrderInOrdersGrid extends AbstractConstraint
 {
     /**
-     * Assert that order with fixture data is present in Sales -> Orders Grid
+     * Assert that order with fixture data is present in Sales -> Orders Grid.
      *
      * @param OrderInjectable $order
      * @param OrderIndex $orderIndex
@@ -32,7 +31,7 @@ class AssertOrderInOrdersGrid extends AbstractConstraint
     }
 
     /**
-     * Process assert
+     * Process assert.
      *
      * @param OrderInjectable $order
      * @param OrderIndex $orderIndex
@@ -40,7 +39,7 @@ class AssertOrderInOrdersGrid extends AbstractConstraint
      * @param string $orderId [optional]
      * @return void
      */
-    protected function assert(OrderInjectable $order, OrderIndex $orderIndex, $status, $orderId = '')
+    public function assert(OrderInjectable $order, OrderIndex $orderIndex, $status, $orderId = '')
     {
         $filter = [
             'id' => $order->hasData('id') ? $order->getId() : $orderId,
@@ -48,13 +47,13 @@ class AssertOrderInOrdersGrid extends AbstractConstraint
         ];
         $errorMessage = implode(', ', $filter);
         \PHPUnit_Framework_Assert::assertTrue(
-            $orderIndex->getSalesOrderGrid()->isRowVisible($filter),
+            $orderIndex->getSalesOrderGrid()->isRowVisible(array_filter($filter)),
             'Order with following data \'' . $errorMessage . '\' is absent in Orders grid.'
         );
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

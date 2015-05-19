@@ -9,7 +9,9 @@
  */
 namespace Magento\TestFramework\Performance\Scenario;
 
-class FailureException extends \Magento\Framework\Exception
+use Magento\Framework\Phrase;
+
+class FailureException extends \Magento\Framework\Exception\LocalizedException
 {
     /**
      * @var \Magento\TestFramework\Performance\Scenario
@@ -20,11 +22,14 @@ class FailureException extends \Magento\Framework\Exception
      * Constructor
      *
      * @param \Magento\TestFramework\Performance\Scenario $scenario
-     * @param string $message
+     * @param Phrase $phrase
      */
-    public function __construct(\Magento\TestFramework\Performance\Scenario $scenario, $message = '')
+    public function __construct(\Magento\TestFramework\Performance\Scenario $scenario, Phrase $phrase = null)
     {
-        parent::__construct($message);
+        if ($phrase === null) {
+            $phrase = new Phrase('Scenario failure.');
+        }
+        parent::__construct($phrase);
         $this->_scenario = $scenario;
     }
 

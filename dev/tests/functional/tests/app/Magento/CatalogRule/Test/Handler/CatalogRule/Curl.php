@@ -9,7 +9,6 @@ namespace Magento\CatalogRule\Test\Handler\CatalogRule;
 use Magento\Backend\Test\Handler\Conditions;
 use Magento\CatalogRule\Test\Handler\CatalogRule;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Config;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
@@ -159,7 +158,7 @@ class Curl extends Conditions implements CatalogRuleInterface
         $response = $curl->read();
         $curl->close();
 
-        $pattern = '/col-rule_id\W*(\d+)<.td><[^<>]*?>' . $data['name'] . '/siu';
+        $pattern = '/col\-rule_id[\s\W]*(\d+).*?' . $data['name'] . '/siu';
         preg_match($pattern, $response, $matches);
         if (empty($matches)) {
             throw new \Exception('Cannot find Catalog Price Rule id! Response: ' . $response);

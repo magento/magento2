@@ -7,10 +7,13 @@ namespace Magento\Quote\Model;
 
 use Magento\Framework\Exception\State\InvalidTransitionException;
 
+/**
+ * Class PaymentMethodManagement
+ */
 class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagementInterface
 {
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -25,12 +28,14 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
     protected $methodList;
 
     /**
-     * @param QuoteRepository $quoteRepository
+     * Constructor
+     *
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator
      * @param \Magento\Payment\Model\MethodList $methodList
      */
     public function __construct(
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator,
         \Magento\Payment\Model\MethodList $methodList
     ) {
@@ -45,7 +50,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
     public function set($cartId, \Magento\Quote\Api\Data\PaymentInterface $method)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->quoteRepository->getActive($cartId);
+        $quote = $this->quoteRepository->get($cartId);
 
         $method->setChecks([
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_USE_CHECKOUT,
@@ -87,7 +92,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
     public function get($cartId)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->quoteRepository->getActive($cartId);
+        $quote = $this->quoteRepository->get($cartId);
         $payment = $quote->getPayment();
         if (!$payment->getId()) {
             return null;
@@ -101,7 +106,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
     public function getList($cartId)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->quoteRepository->getActive($cartId);
+        $quote = $this->quoteRepository->get($cartId);
         return $this->methodList->getAvailableMethods($quote);
     }
 }

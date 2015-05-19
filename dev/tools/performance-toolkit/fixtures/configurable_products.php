@@ -820,7 +820,10 @@ class ConfigurableProductsFixture extends \Magento\ToolkitFramework\Fixture
      */
     public function execute()
     {
-        $configurablesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('configurable_products', 90);
+        $configurablesCount = \Magento\ToolkitFramework\Config::getInstance()->getValue('configurable_products', 0);
+        if (!$configurablesCount) {
+            return;
+        }
         $this->application->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */
@@ -885,7 +888,7 @@ class ConfigurableProductsFixture extends \Magento\ToolkitFramework\Fixture
         /** @var \Magento\ImportExport\Model\Import $import */
         $import = $this->application->getObjectManager()->create(
             'Magento\ImportExport\Model\Import',
-            ['data' => ['entity' => 'catalog_product', 'behavior' => 'append']]
+            ['data' => ['entity' => 'catalog_product', 'behavior' => 'replace']]
         );
 
         $source = new \Magento\ToolkitFramework\ImportExport\Fixture\Complex\Generator($pattern, $configurablesCount);

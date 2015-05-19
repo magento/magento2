@@ -101,6 +101,13 @@ abstract class AbstractType
     protected $_fileStorageDb;
 
     /**
+     * Cache key for Product Attributes
+     *
+     * @var string
+     */
+    protected $_cacheProductSetAttributes = '_cache_instance_product_set_attributes';
+
+    /**
      * Delete data specific for this product type
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -249,9 +256,13 @@ abstract class AbstractType
      */
     public function getSetAttributes($product)
     {
-        return $product->getResource()
-            ->loadAllAttributes($product)
-            ->getSortedAttributes($product->getAttributeSetId());
+        if (!$product->hasData($this->_cacheProductSetAttributes)) {
+            $setAttributes = $product->getResource()
+                ->loadAllAttributes($product)
+                ->getSortedAttributes($product->getAttributeSetId());
+            $product->setData($this->_cacheProductSetAttributes, $setAttributes);
+        }
+        return $product->getData($this->_cacheProductSetAttributes);
     }
 
     /**
@@ -488,7 +499,7 @@ abstract class AbstractType
                                 DirectoryList::ROOT
                             );
                             $rootDir->create($rootDir->getRelativePath($path));
-                        } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
+                        } catch (\Magento\Framework\Exception\FileSystemException $e) {
                             throw new \Magento\Framework\Exception\LocalizedException(
                                 __('We can\'t create writeable directory "%1".', $path)
                             );

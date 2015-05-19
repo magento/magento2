@@ -79,7 +79,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param File\ValidatorInfo $validatorInfo
      * @param File\ValidatorFile $validatorFile
      * @param array $data
-     * @throws \Magento\Framework\Filesystem\FilesystemException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -181,6 +181,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return $this
      * @throws LocalizedException
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateUserValue($values)
@@ -222,9 +223,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $value = $this->validatorFile->setProduct($this->getProduct())
                 ->validate($this->_getProcessingParams(), $option);
             $this->setUserValue($value);
-        } catch (\Magento\Framework\Exception\File\LargeSizeException $largeSizeException) {
-            $this->setIsValid(false);
-            throw new LocalizedException(__($largeSizeException->getMessage()));
         } catch (ProductException $e) {
             switch ($this->getProcessMode()) {
                 case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
@@ -236,7 +234,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             }
         } catch (\Magento\Framework\Validator\Exception $e) {
             $this->setUserValue(null);
-        } catch (\Magento\Framework\Exception\File\ValidatorException $e) {
+        } catch (LocalizedException $e) {
             $this->setIsValid(false);
             throw new LocalizedException(__($e->getMessage()));
         } catch (\Exception $e) {

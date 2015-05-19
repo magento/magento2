@@ -35,7 +35,6 @@ use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryColle
  * @method \Magento\Sales\Model\Resource\Order getResource()
  * @method int getGiftMessageId()
  * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
- * @method \Magento\Sales\Model\Order setCreatedAt(string $value)
  * @method bool hasBillingAddressId()
  * @method \Magento\Sales\Model\Order unsBillingAddressId()
  * @method bool hasShippingAddressId()
@@ -45,6 +44,7 @@ use Magento\Sales\Model\Resource\Order\Status\History\Collection as HistoryColle
  * @method bool hasForcedCanCreditmemo()
  * @method bool getIsInProcess()
  * @method \Magento\Customer\Model\Customer getCustomer()
+ * @method \Magento\Sales\Model\Order setSendEmail(bool $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -258,12 +258,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    protected $timezone;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Order\Config $orderConfig
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -292,8 +296,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -320,7 +323,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_orderConfig = $orderConfig;
         $this->productRepository = $productRepository;
         $this->productListFactory = $productListFactory;
-
+        $this->timezone = $timezone;
         $this->_orderItemCollectionFactory = $orderItemCollectionFactory;
         $this->_productVisibility = $productVisibility;
         $this->_serviceOrderFactory = $serviceOrderFactory;
@@ -340,8 +343,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $registry,
             $extensionFactory,
             $customAttributeFactory,
-            $localeDate,
-            $dateTime,
             $resource,
             $resourceCollection,
             $data
@@ -519,7 +520,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _canVoidOrder()
     {
-        return !($this->canUnhold() || $this->isPaymentReview());
+        return !($this->isCanceled() || $this->canUnhold() || $this->isPaymentReview());
     }
 
     /**
@@ -918,6 +919,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Order state setter.
      * If status is specified, will add order status history with specified comment
      * the setData() cannot be overridden because of compatibility issues with resource model
+     * By default allows to set any state. Can also update status to default or specified value
+     * Complete and closed states are encapsulated intentionally
      *
      * @param string $state
      * @param string|bool $status
@@ -925,6 +928,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param bool $isCustomerNotified
      * @param bool $shouldProtectState
      * @return \Magento\Sales\Model\Order
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setState(
         $state,
@@ -933,29 +937,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $isCustomerNotified = null,
         $shouldProtectState = true
     ) {
-        return $this->_setState($state, $status, $comment, $isCustomerNotified, $shouldProtectState);
-    }
 
-    /**
-     * Order state protected setter.
-     * By default allows to set any state. Can also update status to default or specified value
-     * Complete and closed states are encapsulated intentionally, see the _checkState()
-     *
-     * @param string $state
-     * @param string|bool $status
-     * @param string $comment
-     * @param bool $isCustomerNotified
-     * @param bool $shouldProtectState
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function _setState(
-        $state,
-        $status = false,
-        $comment = '',
-        $isCustomerNotified = null,
-        $shouldProtectState = false
-    ) {
         // attempt to set the specified state
         if ($shouldProtectState) {
             if ($this->isStateProtected($state)) {
@@ -964,17 +946,32 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
                 );
             }
         }
-        $this->setData('state', $state);
+
+        $transport = new \Magento\Framework\Object(
+            [
+                'state'     => $state,
+                'status'    => $status,
+                'comment'   => $comment,
+                'is_customer_notified'    => $isCustomerNotified
+            ]
+        );
+
+        $this->_eventManager->dispatch(
+            'sales_order_state_change_before',
+            ['order' => $this, 'transport' => $transport]
+        );
+        $status = $transport->getStatus();
+        $this->setData('state', $transport->getState());
 
         // add status history
         if ($status) {
             if ($status === true) {
-                $status = $this->getConfig()->getStateDefaultStatus($state);
+                $status = $this->getConfig()->getStateDefaultStatus($transport->getState());
             }
             $this->setStatus($status);
-            $history = $this->addStatusHistoryComment($comment, false);
+            $history = $this->addStatusHistoryComment($transport->getComment(), false);
             // no sense to set $status again
-            $history->setIsCustomerNotified($isCustomerNotified);
+            $history->setIsCustomerNotified($transport->getIsCustomerNotified());
         }
         return $this;
     }
@@ -1165,7 +1162,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $this->setTotalCanceled($this->getGrandTotal() - $this->getTotalPaid());
             $this->setBaseTotalCanceled($this->getBaseGrandTotal() - $this->getBaseTotalPaid());
 
-            $this->_setState($cancelState, true, $comment);
+            $this->setState($cancelState, true, $comment, null, false);
         } elseif (!$graceful) {
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot cancel this order.'));
         }
@@ -1835,7 +1832,15 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getCreatedAtFormated($format)
     {
-        return $this->_localeDate->formatDate($this->getCreatedAtStoreDate(), $format, true);
+        return $this->timezone->formatDate(
+            $this->timezone->scopeDate(
+                $this->getStore(),
+                $this->getCreatedAt(),
+                true
+            ),
+            $format,
+            true
+        );
     }
 
     /**
@@ -2473,6 +2478,14 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function getCreatedAt()
     {
         return $this->getData(OrderInterface::CREATED_AT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(OrderInterface::CREATED_AT, $createdAt);
     }
 
     /**
