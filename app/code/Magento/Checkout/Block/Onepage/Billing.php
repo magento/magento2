@@ -11,6 +11,8 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 /**
  * One page checkout status
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
+ * @removeCandidate
  */
 class Billing extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {

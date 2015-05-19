@@ -13,7 +13,7 @@
             <block class="Magento\Checkout\Block\Cart\ValidationMessages" name="checkout.cart.validationmessages"/>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml">
+            <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="cart.phtml" cacheable="false">
                 <container name="checkout.cart.items" as="with-items">
                     <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="rewards" before="checkout.cart.form"/>
                     <block class="Magento\Checkout\Block\Cart" name="checkout.cart.form" as="cart-items" template="cart/form.phtml">
@@ -38,7 +38,7 @@
                     </block>
                 </container>
                 <container name="checkout.cart.noitems" as="no-items">
-                    <block class="Magento\Checkout\Block\Cart\EmptyCart" name="checkout.cart.empty" before="-" template="cart/noItems.phtml"/>
+                    <block class="Magento\Checkout\Block\Cart" name="checkout.cart.empty" before="-" template="cart/noItems.phtml"/>
                     <container name="checkout.cart.empty.widget" as="checkout_cart_empty_widget" label="Empty Shopping Cart Content Before"/>
                 </container>
             </block>

@@ -35,7 +35,6 @@
     <preference for="Magento\Catalog\Api\Data\ProductAttributeTypeInterface" type="Magento\Catalog\Model\Product\Attribute\Type" />
     <preference for="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" type="Magento\Catalog\Model\ProductAttributeGroupRepository" />
     <preference for="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface" type="Magento\Catalog\Model\Product\Media\GalleryEntryContent" />
     <preference for="Magento\Catalog\Api\ProductLinkRepositoryInterface" type="Magento\Catalog\Model\ProductLink\Repository" />
     <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
@@ -88,6 +87,7 @@
                     <item name="category_ids" xsi:type="string">category_ids</item>
                     <item name="entity_id" xsi:type="string">entity_id</item>
                     <item name="store_id" xsi:type="string">store_id</item>
+                    <item name="website_ids" xsi:type="string">website_ids</item>
                     <item name="visibility" xsi:type="string">visibility</item>
                     <item name="status" xsi:type="string">status</item>
                 </item>
@@ -473,6 +473,13 @@
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>
             <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\Resource\Category\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
+        <arguments>
+            <argument name="instancesByType" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Helper\Product\Configuration</item>
+            </argument>
         </arguments>
     </type>
 </config>

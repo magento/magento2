@@ -17,7 +17,6 @@ class EditBilling extends \Magento\Multishipping\Controller\Checkout\Address
             \Magento\Multishipping\Model\Checkout\Type\Multishipping\State::STEP_BILLING
         );
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
         if ($addressForm = $this->_view->getLayout()->getBlock('customer_address_edit')) {
             $id = $this->getRequest()->getParam('id');
             $addressForm->setTitle(

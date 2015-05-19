@@ -39,7 +39,12 @@
                 <block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
             </container>
             <container name="header-wrapper" label="Page Header" as="header-wrapper" htmlTag="div" htmlClass="header content">
-                <block class="Magento\Theme\Block\Html\Header\Logo" name="logo" />
+                <block class="Magento\Theme\Block\Html\Header\Logo" name="logo">
+                    <arguments>
+                        <argument name="logo_img_width" xsi:type="number">189</argument>
+                        <argument name="logo_img_height" xsi:type="number">64</argument>
+                    </arguments>
+                </block>
                 <block class="Magento\Framework\View\Element\Html\Links" name="top.links">
                     <arguments>
                         <argument name="css_class" xsi:type="string">header links</argument>
@@ -56,8 +61,7 @@
             <block class="Magento\Theme\Block\Html\Title" name="page.main.title" template="html/title.phtml"/>
             <container name="page.messages" htmlTag="div" htmlClass="page messages">
                 <block class="Magento\Framework\View\Element\Template" name="ajax.message.placeholder" template="Magento_Theme::html/messages.phtml"/>
-                <block class="Magento\Framework\View\Element\Messages" name="global_messages" as="global_messages"/>
-                <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
+                <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages" template="Magento_Theme::messages.phtml"/>
             </container>
         </referenceContainer>
         <referenceContainer name="main">

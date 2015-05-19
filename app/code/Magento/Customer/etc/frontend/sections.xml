@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../../Magento/Customer/etc/sections.xsd">
+    <action name="customer/account/logout"/>
+    <action name="customer/account/loginPost"/>
+    <action name="customer/account/createPost"/>
+</config>
