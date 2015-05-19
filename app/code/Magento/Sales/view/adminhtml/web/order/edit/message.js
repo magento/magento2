@@ -44,26 +44,7 @@ define([
          * @protected
          */
         _prepareDialog: function() {
-            var self = this;
-
-            this.options.dialog = $('<div class="ui-dialog-content ui-widget-content"></div>').dialog({
-                type: 'modal',
-                dialogClass: 'edit-order-popup',
-                title: $.mage.__('Edit Order'),
-                buttons: [{
-                    text: $.mage.__('Ok'),
-                    'class': 'action-primary',
-                    click: function(){
-                        self.redirect();
-                    }
-                }, {
-                    text: $.mage.__('Cancel'),
-                    'class': 'action-close',
-                    click: function(){
-                        self.options.dialog.trigger('closeDialog');
-                    }
-                }]
-            });
+            this.options.dialog = $('<div class="ui-dialog-content ui-widget-content"></div>').dialog();
         }
     });
 

@@ -4,10 +4,11 @@
  */
 define([
     "jquery",
+    "underscore",
     "mage/template",
     "text!ui/template/dialog/dialog.html",
     "jquery/ui"
-], function($, template, dialogTemplate){
+], function($, _,template, dialogTemplate){
     "use strict";
 
     /**
@@ -16,18 +17,25 @@ define([
     $.widget('mage.dialog', {
         options: {
             type: 'modal',
-            title: null,
-            template: template(dialogTemplate),
-            buttons: [],
+            title: '',
+            template: dialogTemplate,
+            buttons: [{
+                text: $.mage.__('Ok'),
+                'class': 'action-primary',
+                click: function(){
+                    this.closeDialog();
+                }
+            }],
             events: [],
             dialogClass: '',
             dialogActiveClass: 'ui-dialog-active',
             overlayClass: 'overlay_magento',
-            dialogTitleSelector: '.ui-dialog-title',
-            dialogCloseBtnSelector: '.ui-dialog-titlebar-close',
-            dialogContentSelector: '.dialog-content',
-            dialogActionsSelector: '.dialog-actions',
+            dialogBlock: '[data-role="dialog"]',
+            dialogCloseBtn: '[data-role="closeBtn"]',
+            dialogContent: '[data-role="content"]',
+            dialogAction: '[data-role="action"]',
             appendTo: 'body',
+            wrapperId: 'dialogs-wrapper',
             position: {
                 modal: {
                     width: '75%',
@@ -40,101 +48,119 @@ define([
                     width: 'auto',
                     position: 'fixed',
                     top: '0',
-                    left: '100%',
+                    left: '148px',
                     bottom: '0',
                     right: '0'
                 }
             }
         },
 
-
         _create: function() {
+            this.options.transitionEvent = this.whichTransitionEvent();
             this._createWrapper();
-            this._createTitlebar();
+            this._renderDialog();
             this._createButtons();
             this._style();
-            this._insertContent();
 
+            this.dialog.find(this.options.dialogCloseBtn).on('click',  _.bind(this.closeDialog, this));
             this.element.on('openDialog', _.bind(this.openDialog, this));
             this.element.on('closeDialog', _.bind(this.closeDialog, this));
-
-            return this.element;
+        },
+        _getElem: function(elem) {
+            return this.dialog.find(elem);
         },
         openDialog: function() {
             this._isOpen = true;
-
             this._position();
             this._createOverlay();
-            this.uiDialog.show();
-            this.uiDialog.addClass(this.options.dialogActiveClass);
-            if ( this.options.type === 'slideOut' ) {
-                this.uiDialog.animate({
-                    left: '148px'
-                }, 300);
-            }
+            this.dialog.show();
+            this.dialog.addClass(this.options.dialogActiveClass);
+
+            return this.dialog;
         },
         closeDialog: function() {
             var that = this;
-            this._isOpen = false;
 
-            if ( this.options.type === 'slideOut' ) {
-                this.uiDialog.animate({
-                    left: '100%'
-                }, 300, function() {
-                    that._destroyOverlay();
-                });
-            } else {
-                this.uiDialog.removeClass(this.options.dialogActiveClass);
+            this._isOpen = false;
+            this.dialog.one(this.options.transitionEvent, function() {
+                that.dialog.hide();
+                that._destroyOverlay();
+            });
+            this.dialog.removeClass(this.options.dialogActiveClass);
+            if ( !this.options.transitionEvent ) {
+                this.dialog.hide();
                 this._destroyOverlay();
             }
+
+            return this.dialog;
         },
         _createWrapper: function() {
-            this.uiDialog = $(this.options.template({data: this.options}))
-                .addClass(this.options.dialogClass)
-                .appendTo(this.options.appendTo);
+            this.dialogWrapper = $('#'+this.options.wrapperId);
+
+            if ( !this.dialogWrapper.length ) {
+                this.dialogWrapper = $('<div></div>')
+                     .attr('id', this.options.wrapperId)
+                     .appendTo(this.options.appendTo);
+            }
         },
-        _createTitlebar: function() {
-            this.uiDialog.find(this.options.dialogTitleSelector).html(this.options.title);
-            this.closeButton = this.uiDialog.find(this.options.dialogCloseBtnSelector);
-            this.closeButton.on('click', _.bind(this.closeDialog, this));
-        },
-        _insertContent: function() {
-            this.content = this.uiDialog.find(this.options.dialogContentSelector);
-            this.element
-                .show()
-                .appendTo( this.content );
+        _renderDialog: function() {
+            this.dialog = $(template(
+                this.options.template,
+                {
+                    data: this.options
+                })).appendTo(this.dialogWrapper);
+
+            this.element.show().appendTo(this._getElem(this.options.dialogContent));
+            this.dialog.hide();
         },
         _createButtons: function() {
             var that = this;
 
-            this.buttonsPane = this.uiDialog.find(this.options.dialogActionsSelector);
+            this.buttons = this._getElem(this.options.dialogAction);
             _.each(this.options.buttons, function(btn, key) {
-                var button = that.buttonsPane.children()[key];
+                var button = that.buttons[key];
 
-                button.on('click', btn.click);
+                button.on('click', _.bind(btn.click, that));
             });
         },
         _createOverlay: function() {
-            var that = this;
+            var that = this,
+                events;
 
-            document.body.style.overflow = 'hidden';
-            this.overlay = $('<div></div>')
-                .addClass(this.options.overlayClass)
-                .appendTo( this.options.appendTo );
-            this.overlay.on('click', function(){
+            this.overlay = $('.' + this.options.overlayClass);
+            if ( !this.overlay.length ) {
+                document.body.style.overflow = 'hidden';
+                this.overlay = $('<div></div>')
+                    .addClass(this.options.overlayClass)
+                    .appendTo( this.options.appendTo );
+            } else {
+                var zIndex =this.overlay.zIndex();
+                this.overlay.zIndex(zIndex + 1);
+            }
+            events = this.overlay.data('events');
+            if ( events ) {
+                this.prevOverlayHandler = events.click[0].handler;
+            }
+            this.overlay.unbind().on('click', function() {
                 that.closeDialog();
             });
         },
 
         _destroyOverlay: function() {
-            document.body.style.overflow = 'auto';
-            if ( this.overlay ) {
+            var dialogCount = this.dialogWrapper.find(this.options.dialogBlock).filter(':visible').length;
+
+            if ( !dialogCount ) {
+                document.body.style.overflow = 'auto';
                 this.overlay.remove();
                 this.overlay = null;
+            } else {
+                var zIndex =this.overlay.zIndex();
+                this.overlay.zIndex(zIndex - 1);
+                this.overlay.unbind().on('click', this.prevOverlayHandler);
             }
         },
         _style: function() {
-            this.uiDialog.css({
+            this.dialog.css({
                 padding: '30px',
                 backgroundColor: '#fff',
                 zIndex: 1000
@@ -143,7 +169,23 @@ define([
         _position: function() {
             var type = this.options.type;
 
-            this.uiDialog.css(this.options.position[type]);
+            this.dialog.css(this.options.position[type]);
+        },
+        whichTransitionEvent: function() {
+            var t,
+                el = document.createElement('fakeelement'),
+                transitions = {
+                    'transition': 'transitionend',
+                    'OTransition': 'oTransitionEnd',
+                    'MozTransition': 'transitionend',
+                    'WebkitTransition': 'webkitTransitionEnd'
+                };
+
+            for (t in transitions){
+                if ( el.style[t] !== undefined && transitions.hasOwnProperty(t) ) {
+                    return transitions[t];
+                }
+            }
         }
     });
 

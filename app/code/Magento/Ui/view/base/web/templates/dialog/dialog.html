@@ -4,19 +4,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="ui-dialog">
-    <div class="dialog-header">
-        <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-            <span id="ui-id-3" class="ui-dialog-title"></span>
-            <a class="ui-dialog-titlebar-close ui-corner-all" role="button">
-                <span class="ui-icon ui-icon-closethick">close</span>
-            </a>
-        </div>
+<div class="ui-dialog mypopup-window <%= data.dialogClass %>" data-role="dialog">
+    <div class="mypopup-window-header">
+        <h1 style="float: left;" data-role="title"><%= data.title %></h1>
+        <button style="float: right;" data-action="close-mypopup" data-role="closeBtn" type="button">Close</button>
     </div>
-    <div class="dialog-content"></div>
-    <div class="dialog-actions">
+    <div class="mypopup-window-content" data-role="content"></div>
+    <div class="mypopup-window-footer">
         <% _.each(data.buttons, function(button) { %>
-            <button type="button" class="<%= button.class %>"><%= button.text %></button>
+            <button type="button" class="<%= button.class %>" data-role="action"><%= button.text %></button>
         <% }); %>
     </div>
 </div>
