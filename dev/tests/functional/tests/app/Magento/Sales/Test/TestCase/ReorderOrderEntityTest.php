@@ -41,21 +41,4 @@ class ReorderOrderEntityTest extends Scenario
     {
         $this->executeScenario();
     }
-
-    /**
-     * Disable enabled config after test.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        if (isset($this->currentVariation['arguments']['configData'])) {
-            $setConfigStep = $this->objectManager->create(
-                'Magento\Config\Test\TestStep\SetupConfigurationStep',
-                ['configData' => $this->currentVariation['arguments']['configData'], 'rollback' => true]
-            );
-            $setConfigStep->run();
-        }
-        $this->objectManager->create('Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep')->run();
-    }
 }
