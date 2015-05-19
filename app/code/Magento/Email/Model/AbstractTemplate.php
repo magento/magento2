@@ -182,6 +182,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $template = $this->_objectManager->create($thisClass);
         $template->loadByConfigPath($configPath, $variables);
 
+        // Ensure child templates have the same area/store context as parent
+        $template->setDesignConfig($this->getDesignConfig()->toArray());
+
         // Indicate that this is a child template so that when the template is being filtered, directives such as
         // inlinecss can respond accordingly
         $template->setIsChildTemplate(true);
@@ -355,7 +358,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function _getCssFileContent($file)
     {
         $file = self::INLINE_CSS_DIRECTORY. DIRECTORY_SEPARATOR . $file;
-        $designParams = $this->_design->getDesignParams();
+        $designParams = array(
+            // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
+            // return the emulated area
+            'area' => $this->getDesignConfig()->getArea(),
+            'theme' => $this->_design->getDesignTheme()->getArea(),
+            'locale' => $this->_design->getLocale(),
+        );
 
         $asset = $this->_assetRepo->createAsset($file, $designParams);
         return $asset->getContent();
