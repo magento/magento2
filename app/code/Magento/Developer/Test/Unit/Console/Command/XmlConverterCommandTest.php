@@ -9,6 +9,9 @@ namespace Magento\Developer\Test\Unit\Console\Command;
 use Magento\Developer\Console\Command\XmlConverterCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Developer\Model\Tools\Formatter;
+use Magento\Framework\DomDocument\Factory;
+use Magento\Framework\XSLTProcessor\Factory as XSLTProcessorFactory;
+
 
 class XmlConverterCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,35 +26,38 @@ class XmlConverterCommandTest extends \PHPUnit_Framework_TestCase
     private $command;
 
     /**
-     * @var \DOMDocument|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $domXml;
+    private $domFactory;
 
     /**
-     * @var \DOMDocument|\PHPUnit_Framework_MockObject_MockObject
+     * @var XSLTProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $domXsl;
-
-    /**
-     * @var \XSLTProcessor|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $xsltProcessor;
+    private $xsltProcessorFactory;
 
     public function setUp()
     {
         $this->formatter = $this->getMock('Magento\Developer\Model\Tools\Formatter', [], [], '', false);
-        $this->domXml = $this->getMock('DOMDocument', [], [], '', false);
-        $this->domXsl = $this->getMock('DOMDocument', [], [], '', false);
-        $this->xsltProcessor = $this->getMock('XSLTProcessor', [], [], '', false);
-        $this->command = new XmlConverterCommand($this->formatter, $this->domXml, $this->domXsl, $this->xsltProcessor);
+        $this->domFactory = $this->getMock('Magento\Framework\DomDocument\Factory', [], [], '', false);
+        $this->xsltProcessorFactory = $this->getMock('Magento\Framework\XSLTProcessor\Factory', [], [], '', false);
+
+        $this->command = new XmlConverterCommand($this->formatter, $this->domFactory, $this->xsltProcessorFactory);
     }
 
     public function testExecute()
     {
-        $this->domXml->expects($this->once())->method('load')->with('file.xml');
-        $this->domXsl->expects($this->once())->method('load')->with('file.xsl');
+        $domXml = $this->getMock('DOMDocument', [], [], '', false);
+        $domXsl = clone $domXml;
+        $domXml->expects($this->once())->method('load')->with('file.xml');
+        $domXsl->expects($this->once())->method('load')->with('file.xsl');
 
-        $this->xsltProcessor->expects($this->once())->method('transformToXml')->with($this->domXml)->willReturn('XML');
+        $this->domFactory->expects($this->at(0))->method('createDomDocument')->willReturn($domXml);
+        $this->domFactory->expects($this->at(1))->method('createDomDocument')->willReturn($domXsl);
+
+        $xsltProcessor = $this->getMock('XSLTProcessor', [], [], '', false);
+        $xsltProcessor->expects($this->once())->method('transformToXml')->with($domXml)->willReturn('XML');
+
+        $this->xsltProcessorFactory->expects($this->once())->method('createXSLTProcessor')->willReturn($xsltProcessor);
 
         $this->formatter->expects($this->once())->method('format')->with('XML')->willReturn('result');
 
