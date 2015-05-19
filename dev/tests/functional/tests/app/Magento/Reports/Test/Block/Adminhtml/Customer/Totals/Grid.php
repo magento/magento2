@@ -67,7 +67,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected function getRow(array $filter, $isSearchable = true, $isStrict = true)
     {
         $this->date = sprintf($this->date, $filter['date']);
-        $location = '//div[@class="grid"]//tr[((preceding-sibling::' . sprintf($this->preceding, $filter['date'])
+        $location = '//table//tr[((preceding-sibling::' . sprintf($this->preceding, $filter['date'])
             . ' and following-sibling::' . $this->following . ') or ' . $this->date . ') and ';
         unset($filter['date']);
         $rows = [];

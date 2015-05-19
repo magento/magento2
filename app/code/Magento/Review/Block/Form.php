@@ -26,13 +26,6 @@ class Form extends \Magento\Framework\View\Element\Template
     protected $_reviewData = null;
 
     /**
-     * Customer session model
-     *
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $_customerSession;
-
-    /**
      * Catalog product model
      *
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
@@ -45,13 +38,6 @@ class Form extends \Magento\Framework\View\Element\Template
      * @var \Magento\Review\Model\RatingFactory
      */
     protected $_ratingFactory;
-
-    /**
-     * Review session model
-     *
-     * @var \Magento\Review\Model\Session
-     */
-    protected $_reviewSession;
 
     /**
      * @var \Magento\Framework\Url\EncoderInterface
@@ -76,11 +62,14 @@ class Form extends \Magento\Framework\View\Element\Template
     protected $customerUrl;
 
     /**
+     * @var array
+     */
+    protected $jsLayout;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Framework\Session\Generic $reviewSession
      * @param \Magento\Review\Helper\Data $reviewData
-     * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -92,9 +81,7 @@ class Form extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Framework\Session\Generic $reviewSession,
         \Magento\Review\Helper\Data $reviewData,
-        \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -103,16 +90,14 @@ class Form extends \Magento\Framework\View\Element\Template
         array $data = []
     ) {
         $this->urlEncoder = $urlEncoder;
-        $this->_reviewSession = $reviewSession;
         $this->_reviewData = $reviewData;
-        $this->_customerSession = $customerSession;
         $this->productRepository = $productRepository;
         $this->_ratingFactory = $ratingFactory;
         $this->messageManager = $messageManager;
         $this->httpContext = $httpContext;
         $this->customerUrl = $customerUrl;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
+        $this->jsLayout = isset($data['jsLayout']) ? $data['jsLayout'] : [];
     }
 
     /**
@@ -123,17 +108,6 @@ class Form extends \Magento\Framework\View\Element\Template
     protected function _construct()
     {
         parent::_construct();
-
-        $data = $this->_reviewSession->getFormData(true);
-        $data = new \Magento\Framework\Object((array)$data);
-
-        // add logged in customer name as nickname
-        if (!$data->getNickname()) {
-            $customer = $this->_customerSession->getCustomerDataObject();
-            if ($customer && $customer->getId()) {
-                $data->setNickname($customer->getFirstname());
-            }
-        }
 
         $this->setAllowWriteReviewFlag(
             $this->httpContext->getValue(Context::CONTEXT_AUTH)
@@ -151,8 +125,15 @@ class Form extends \Magento\Framework\View\Element\Template
             );
         }
 
-        $this->setTemplate('form.phtml')
-            ->assign('data', $data);
+        $this->setTemplate('form.phtml');
+    }
+
+    /**
+     * @return string
+     */
+    public function getJsLayout()
+    {
+        return \Zend_Json::encode($this->jsLayout);
     }
 
     /**

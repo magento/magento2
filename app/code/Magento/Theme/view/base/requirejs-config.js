@@ -40,6 +40,7 @@ var config = {
         "jquery/file-uploader": "jquery/fileUploader/jquery.fileupload-fp",
         "jquery/jquery.hashchange": "jquery/jquery.ba-hashchange.min",
         "prototype": "legacy-build.min",
+        "jquery/jquery-storageapi": "jquery/jquery.storageapi.min",
         "text": "requirejs/text",
         "domReady": "requirejs/domReady",
         "ko": "ko/ko",

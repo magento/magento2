@@ -79,6 +79,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->setRegion(
                 $regionFactory->create()->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)
             )
+            ->setRegionId(1)
             ->setCompany('CompanyName')
             ->setStreet(['Green str, 67'])
             ->setTelephone('3468676')
@@ -96,6 +97,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->setRegion(
                 $regionFactory->create()->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)
             )
+            ->setRegionId(1)
             ->setCompany('Company')
             ->setStreet(['Black str, 48'])
             ->setCity('CityX')

@@ -132,6 +132,7 @@ class AssignCustomOrderStatusTest extends Injectable
             'orderStatus',
             ['data' => array_merge($orderStatus->getData(), $orderStatusState)]
         );
+        $this->orderStatus = $orderStatus;
 
         // Steps:
         $this->orderStatusIndex->open();
@@ -141,9 +142,6 @@ class AssignCustomOrderStatusTest extends Injectable
         $assertion->processAssert($this->orderStatusIndex);
 
         $order->persist();
-
-        // Prepare data for tear down
-        $this->orderStatus = $orderStatus;
         $this->order = $order;
 
         return [
@@ -160,8 +158,12 @@ class AssignCustomOrderStatusTest extends Injectable
      */
     public function tearDown()
     {
-        $this->orderIndex->open()->getSalesOrderGrid()->massaction([['id' => $this->order->getId()]], 'Cancel');
-        $filter = ['label' => $this->orderStatus->getLabel()];
-        $this->orderStatusIndex->open()->getOrderStatusGrid()->searchAndUnassign($filter);
+        if ($this->order) {
+            $this->orderIndex->open()->getSalesOrderGrid()->massaction([['id' => $this->order->getId()]], 'Cancel');
+        }
+        if ($this->orderStatus) {
+            $filter = ['label' => $this->orderStatus->getLabel()];
+            $this->orderStatusIndex->open()->getOrderStatusGrid()->searchAndUnassign($filter);
+        }
     }
 }

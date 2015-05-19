@@ -38,19 +38,29 @@ class LoginCustomerOnFrontendStep implements TestStepInterface
     protected $customerAccountLogin;
 
     /**
+     * Logout customer on frontend step.
+     *
+     * @var LogoutCustomerOnFrontendStep
+     */
+    protected $logoutCustomerOnFrontend;
+
+    /**
      * @constructor
      * @param CmsIndex $cmsIndex
      * @param CustomerAccountLogin $customerAccountLogin
+     * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend
      * @param Customer $customer
      */
     public function __construct(
         CmsIndex $cmsIndex,
         CustomerAccountLogin $customerAccountLogin,
+        LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend,
         Customer $customer
     ) {
         $this->cmsIndex = $cmsIndex;
         $this->customerAccountLogin = $customerAccountLogin;
         $this->customer = $customer;
+        $this->logoutCustomerOnFrontend = $logoutCustomerOnFrontend;
     }
 
     /**
@@ -70,5 +80,16 @@ class LoginCustomerOnFrontendStep implements TestStepInterface
         $this->cmsIndex->getLinksBlock()->openLink("Log In");
         $this->cmsIndex->getCmsPageBlock()->waitPageInit();
         $this->customerAccountLogin->getLoginBlock()->login($this->customer);
+        $this->cmsIndex->getCmsPageBlock()->waitPageInit();
+    }
+
+    /**
+     * Logout customer on fronted.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->logoutCustomerOnFrontend->run();
     }
 }

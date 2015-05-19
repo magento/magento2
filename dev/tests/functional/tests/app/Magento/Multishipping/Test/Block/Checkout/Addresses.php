@@ -48,7 +48,7 @@ class Addresses extends Block
     {
         foreach ($bindings as $key => $value) {
             $this->_rootElement->find(
-                '//tr[//a[text()="' . $key . '"]]/following-sibling::*//select',
+                '//tr[.//a[text()="' . $key . '"]]//select[contains(@name,"[address]")]',
                 Locator::SELECTOR_XPATH,
                 'select'
             )->setValue($value);
