@@ -289,9 +289,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
                 $emogrifier = new \Pelago\Emogrifier();
                 $emogrifier->setHtml($html);
                 $emogrifier->setCss($cssToInline);
+
                 // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                // TODO: Submit PR to Emogrifier to disable parsing inline styles: https://github.com/jjriv/emogrifier/issues/155
-    //                $emogrifier->setParseInlineStyleTags(false);
+                $emogrifier->disableStyleBlocksParsing();
 
                 $processedHtml = $emogrifier->emogrify();
             } catch (Exception $e) {
