@@ -70,7 +70,9 @@ class Page
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
-        \Magento\Cms\Model\Resource\Page $subject, \Closure $proceed, \Magento\Framework\Model\AbstractModel $page
+        \Magento\Cms\Model\Resource\Page $subject,
+        \Closure $proceed,
+        \Magento\Framework\Model\AbstractModel $page
     ) {
         $result = $proceed($page);
         if ($page->isDeleted()) {
