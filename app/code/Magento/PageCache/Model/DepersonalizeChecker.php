@@ -51,6 +51,7 @@ class DepersonalizeChecker
      *
      * @param \Magento\Framework\View\LayoutInterface $subject
      * @return bool
+     * @api
      */
     public function checkIfDepersonalize(\Magento\Framework\View\LayoutInterface $subject)
     {

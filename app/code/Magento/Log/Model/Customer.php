@@ -10,15 +10,25 @@ namespace Magento\Log\Model;
  *
  * @method \Magento\Log\Model\Resource\Customer _getResource()
  * @method \Magento\Log\Model\Resource\Customer getResource()
+ * @api
  * @method int getVisitorId()
+ * @api
  * @method \Magento\Log\Model\Customer setVisitorId(int $value)
+ * @api
  * @method int getCustomerId()
+ * @api
  * @method \Magento\Log\Model\Customer setCustomerId(int $value)
+ * @api
  * @method string getLoginAt()
+ * @api
  * @method \Magento\Log\Model\Customer setLoginAt(string $value)
+ * @api
  * @method string getLogoutAt()
+ * @api
  * @method \Magento\Log\Model\Customer setLogoutAt(string $value)
+ * @api
  * @method int getStoreId()
+ * @api
  * @method \Magento\Log\Model\Customer setStoreId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -66,6 +76,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $customerId
      * @return \Magento\Log\Model\Customer
+     * @api
      */
     public function loadByCustomer($customerId)
     {
@@ -76,6 +87,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Return last login at in Unix time format
      *
      * @return int
+     * @api
      */
     public function getLoginAtTimestamp()
     {

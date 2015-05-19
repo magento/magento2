@@ -68,6 +68,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
      * Return log clean time in seconds
      *
      * @return null|string
+     * @api
      */
     public function getLogCleanTime()
     {
@@ -81,6 +82,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
      * Clean Logs
      *
      * @return $this
+     * @api
      */
     public function clean()
     {
@@ -92,6 +94,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
      * Return Online Minutes Interval
      *
      * @return int Minutes Interval
+     * @api
      */
     public function getOnlineMinutesInterval()
     {
