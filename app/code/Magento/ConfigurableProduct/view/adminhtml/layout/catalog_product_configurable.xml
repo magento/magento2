@@ -24,5 +24,13 @@
                 <argument name="block" xsi:type="string">admin.product.edit.tab.super.config.grid.container</argument>
             </action>
         </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Ui\Block\Component\StepsWizard" name="steps_wizard">
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/images_vs_prising.phtml"/>
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
+            </block>
+        </referenceContainer>
     </body>
 </page>
