@@ -148,6 +148,18 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255
         )->addColumn(
+            'rp_token',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Reset password token'
+        )->addColumn(
+            'rp_token_created_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+            null,
+            ['nullable' => true, 'default' => null],
+            'Reset password token creation time'
+        )->addColumn(
             'default_billing',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
