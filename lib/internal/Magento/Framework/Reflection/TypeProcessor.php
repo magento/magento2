@@ -541,9 +541,9 @@ class TypeProcessor
      * Find the accessor method name for a property from the given class
      *
      * @param ClassReflection $class
-     * @param $camelCaseProperty
-     * @param $accessorName
-     * @param $boolAccessorName
+     * @param string $camelCaseProperty
+     * @param string $accessorName
+     * @param bool $boolAccessorName
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      */
@@ -576,7 +576,7 @@ class TypeProcessor
      * Case sensitivity of the method is taken into account.
      *
      * @param ClassReflection $class
-     * @param $methodName
+     * @param string $methodName
      * @return bool
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
