@@ -113,6 +113,7 @@ class Save extends AbstractAction
      */
     protected function updateBookmark(BookmarkInterface $bookmark, $identifier, $title, array $config = [])
     {
+        $this->filterVars($config);
         $bookmark->setUserId($this->userContext->getUserId())
             ->setNamespace($this->_request->getParam('namespace'))
             ->setIdentifier($identifier)
@@ -151,5 +152,26 @@ class Save extends AbstractAction
         }
 
         return $result;
+    }
+
+    /**
+     * Filter boolean vars
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function filterVars(array & $data = [])
+    {
+        foreach ($data as & $value) {
+            if (is_array($value)) {
+                $this->filterVars($value);
+            } else {
+                if ($value == 'true') {
+                    $value = true;
+                } elseif ($value == 'false') {
+                    $value = false;
+                }
+            }
+        }
     }
 }
