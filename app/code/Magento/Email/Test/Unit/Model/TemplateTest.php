@@ -398,20 +398,27 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->setMethods([
                 'setUseSessionInUrl',
                 'setPlainTemplateMode',
+                'setIsChildTemplate',
+//                'setTemplateProcessor',
                 'setVariables',
                 'setStoreId',
                 'filter',
                 'getStoreId',
+                'getInlineCssFiles',
             ])
             ->disableOriginalConstructor()
             ->getMock();
-        $filterTemplate->expects($this->once())
+
+         $filterTemplate->expects($this->once())
             ->method('setUseSessionInUrl')
             ->with(false)
             ->will($this->returnSelf());
         $filterTemplate->expects($this->once())
             ->method('setPlainTemplateMode')
             ->with($templateType === \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT)
+            ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setIsChildTemplate')
             ->will($this->returnSelf());
         $filterTemplate->expects($this->any())
             ->method('setStoreId')
@@ -421,9 +428,10 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($storeId));
 
         $store = $this->getMockBuilder('Magento\Store\Model\Store')
-            ->setMethods(['getFrontendName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        ->setMethods(['getFrontendName'])
+        ->disableOriginalConstructor()
+        ->getMock();
+
         $store->expects($this->any())
             ->method('getFrontendName')
             ->will($this->returnValue('frontendName'));
@@ -431,7 +439,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($store));
 
-        $model = $this->getModelMock(['getDesignConfig', '_applyDesignConfig', 'getPreparedTemplateText']);
+        //TODO - is this the right way? the store is not setup until runtime and
+        // is returned from getProcessedTemplate
+        $expectedVariables['store']=$store;
+
+//        $filterTemplate->expects($this->once())
+//            ->method('setTemplateProcessor')
+//            ->will($this->returnSelf());
+
+        $model = $this->getModelMock(['getDesignConfig', '_applyDesignConfig', 'getPreparedTemplateText','getTemplateText']);
+        $filterTemplate->expects($this->any())
+            ->method('setVariables')
+            ->with(array_merge([ 'this' => $model], $expectedVariables));
         $model->setTemplateFilter($filterTemplate);
         $model->setTemplateType($templateType);
 
@@ -446,18 +465,22 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->expects($this->once())
             ->method('getDesignConfig')
             ->will($this->returnValue($designConfig));
-        $filterTemplate->expects($this->once())
-            ->method('setVariables')
-            ->with(array_merge([ 'this' => $model], $expectedVariables));
 
-        $preparedTemplateText = 'prepared text';
+        $preparedTemplateText = $expectedResult; //'prepared text';
         $model->expects($this->once())
             ->method('getPreparedTemplateText')
             ->will($this->returnValue($preparedTemplateText));
+
+        $model->expects($this->once())
+            ->method('getTemplateText')
+            ->will($this->returnValue($preparedTemplateText));
+
         $filterTemplate->expects($this->once())
             ->method('filter')
             ->with($preparedTemplateText)
             ->will($this->returnValue($expectedResult));
+
+
 
         $this->assertEquals($expectedResult, $model->getProcessedTemplate($variables));
     }
@@ -475,6 +498,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'expectedVariables' => [
                     'logo_url' => null,
                     'logo_alt' => 'frontendName',
+                    'store' => null,
+                    'logo_width' => null,
+                    'logo_height' => null,
+                    'store_phone' => null,
+                    'store_hours' => null,
+                    'store_email' => null,
                 ],
                 'expectedResult' => 'expected result',
             ],
@@ -488,6 +517,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'expectedVariables' => [
                     'logo_url' => 'http://example.com/logo',
                     'logo_alt' => 'Logo Alt',
+                    'store' => null,
+                    'logo_width' => null,
+                    'logo_height' => null,
+                    'store_phone' => null,
+                    'store_hours' => null,
+                    'store_email' => null,
+                    'non_inline_styles' => '<style type="text/css">'."\n\n</style>\n",
                 ],
                 'expectedResult' => 'expected result',
             ],
@@ -508,6 +544,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->setTemplateStyles($templateStyles);
         $model->setTemplateText($templateText);
         $this->assertEquals($expectedResult, $model->getPreparedTemplateText());
+        // TODO: We may want change this to use getProcessedTemplate. See comment below
+//        $this->assertEquals($expectedResult, $model->getProcessedTemplate());
     }
 
     public function getPreparedTemplateTextProvider()
@@ -525,6 +563,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'templateText' => 'template text',
                 'expectedResult' => 'template text',
             ],
+            // TODO: Not sure if it's valuable to test this, due to new "{{var non_inline_styles}}" approach
             'html with style' => [
                 'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
                 'templateStyles' => '.body { color: orange }',
