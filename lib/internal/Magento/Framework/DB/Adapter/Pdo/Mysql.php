@@ -3734,7 +3734,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $statements
         );
 
-        return $this->query($sql);
+        return $this->multiQuery($sql);
     }
 
     /**
