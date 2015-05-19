@@ -403,6 +403,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
     }
 
+
     /**
      * Special handling for PDO query().
      * All bind parameter names must begin with ':'.
@@ -414,11 +415,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function query($sql, $bind = [])
+    protected function _query($sql, $bind = [])
     {
-        if (count($this->_splitMultiQuery($sql)) > 1) {
-            throw new LocalizedException(new Phrase('Cannot execute multiple queries.'));
-        }
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
             2013,  // SQLSTATE[HY000]: General error: 2013 Lost connection to MySQL server during query
@@ -466,6 +464,45 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 }
             }
         } while ($retry);
+    }
+
+
+    /**
+     * Special handling for PDO query().
+     * All bind parameter names must begin with ':'.
+     *
+     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param mixed $bind An array of data or data itself to bind to the placeholders.
+     * @return \Zend_Db_Statement_Pdo|void
+     * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
+     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function query($sql, $bind = [])
+    {
+        if (count($this->_splitMultiQuery($sql)) > 1) {
+            throw new LocalizedException(new Phrase('Cannot execute multiple queries.'));
+        }
+        return $this->_query($sql, $bind);
+    }
+
+    /**
+     * Allows multiple queries -- to safeguard against SQL injection, USE CAUTION and verify that input
+     * cannot be tampered with.
+     *
+     * Special handling for PDO query().
+     * All bind parameter names must begin with ':'.
+     *
+     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param mixed $bind An array of data or data itself to bind to the placeholders.
+     * @return \Zend_Db_Statement_Pdo|void
+     * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
+     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function multiQuery($sql, $bind = [])
+    {
+        return $this->_query($sql, $bind);
     }
 
     /**
