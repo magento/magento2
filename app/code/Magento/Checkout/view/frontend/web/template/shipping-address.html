@@ -36,19 +36,6 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
             </fieldset>
-
-            <div class="choice field" data-bind="visible: visible">
-                <input type="checkbox"
-                       name="shipping[same_as_billing]"
-                       id="shipping:same_as_billing"
-                       value="1"
-                       checked="checked"
-                       class="checkbox"
-                       data-bind="checked: sameAsBilling, click: sameAsBillingClick"/>
-                <label class="label" for="shipping:same_as_billing">
-                    <span data-bind="text: $t('Use Billing Address')"></span>
-                </label>
-            </div>
             <div class="actions-toolbar" id="shipping-buttons-container">
                 <div class="primary">
                     <button data-role="opc-continue" type="button" class="action continue primary" data-bind="click: selectShippingAddress"><span data-bind="text: $t('Continue')"></span></button>
