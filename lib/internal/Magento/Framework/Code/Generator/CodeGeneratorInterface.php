@@ -56,10 +56,10 @@ interface CodeGeneratorInterface extends \Zend\Code\Generator\GeneratorInterface
     public function setImplementedInterfaces(array $interfaces);
 
     /**
-     * Set a list of traits.
+     * Add a trait to the class.
      *
-     * @param array $traits
+     * @param $trait
      * @return $this
      */
-    public function setTraits(array $traits);
+    public function addTrait($trait);
 }
