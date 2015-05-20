@@ -10,16 +10,22 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
     protected $_template = 'Magento_Ui::stepswizard.phtml';
 
     /**
-     * @return \Magento\Ui\Block\Component\StepsWizard\Step[]
+     * @var null|\Magento\Ui\Block\Component\StepsWizard\StepInterface[]
+     */
+    private $steps;
+
+    /**
+     * @return \Magento\Ui\Block\Component\StepsWizard\StepInterface[]
      */
     public function getSteps()
     {
-        $steps = [];
-        foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $step) {
-            if ($step instanceof StepsWizard\Step) {
-                $steps[] = $step;
+        if ($this->steps == null) {
+            foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $step) {
+                if ($step instanceof StepsWizard\StepInterface) {
+                    $this->steps[] = $step;
+                }
             }
         }
-        return $steps;
+        return $this->steps;
     }
 }

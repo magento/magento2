@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Block\Component\StepsWizard;
 
-interface Step extends \Magento\Framework\View\Element\BlockInterface
+interface StepInterface extends \Magento\Framework\View\Element\BlockInterface
 {
     /**
      * Get step caption

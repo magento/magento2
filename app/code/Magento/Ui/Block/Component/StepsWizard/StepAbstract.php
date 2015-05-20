@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Block\Component\StepsWizard;
 
-abstract class StepAbstract extends \Magento\Framework\View\Element\Template implements Step
+abstract class StepAbstract extends \Magento\Framework\View\Element\Template implements StepInterface
 {
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
