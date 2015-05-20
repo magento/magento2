@@ -121,6 +121,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $viewConfig;
 
     /**
+     * @var \Magento\Directory\Model\Country\Postcode\Config
+     */
+    protected $postCodesConfig;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -139,6 +144,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param FormKey $formKey
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
+     * @param \Magento\Directory\Model\Country\Postcode\Config $postCodesConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -159,7 +165,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Customer\Model\Address\Config $addressConfig,
         FormKey $formKey,
         \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Framework\View\ConfigInterface $viewConfig
+        \Magento\Framework\View\ConfigInterface $viewConfig,
+        \Magento\Directory\Model\Country\Postcode\Config $postCodesConfig
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -179,6 +186,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->formKey = $formKey;
         $this->imageHelper = $imageHelper;
         $this->viewConfig = $viewConfig;
+        $this->postCodesConfig = $postCodesConfig;
     }
 
     /**
@@ -207,7 +215,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
             'basePriceFormat' => $this->localeFormat->getPriceFormat(
                 null,
                 $this->currencyManager->getDefaultCurrency()
-            )
+            ),
+            'postCodes' => $this->postCodesConfig->getPostCodes()
         ];
     }
 
