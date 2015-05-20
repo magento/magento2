@@ -174,19 +174,19 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'taxvat',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            50,
             [],
             'Tax/VAT Number'
         )->addColumn(
             'confirmation',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            64,
             [],
             'Is Confirmed'
         )->addColumn(
             'gender',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            10,
             [],
             'Gender'
         )->addIndex(
