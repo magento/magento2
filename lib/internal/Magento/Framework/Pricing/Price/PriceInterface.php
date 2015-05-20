@@ -10,6 +10,8 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * Catalog price interface
+ *
+ * @api
  */
 interface PriceInterface
 {

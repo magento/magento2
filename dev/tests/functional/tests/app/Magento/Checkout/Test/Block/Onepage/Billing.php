@@ -41,20 +41,16 @@ class Billing extends Form
      * Fill billing address
      *
      * @param Address $billingAddress
-     * @param Customer $customer
      * @param bool $isShippingAddress
      * @return void
      */
     public function fillBilling(
         Address $billingAddress = null,
-        Customer $customer = null,
         $isShippingAddress = false
     ) {
         if ($billingAddress) {
+            sleep(5);
             $this->fill($billingAddress);
-        }
-        if ($customer) {
-            $this->fill($customer);
         }
         if ($isShippingAddress) {
             $this->_rootElement->find($this->useForShipping)->click();

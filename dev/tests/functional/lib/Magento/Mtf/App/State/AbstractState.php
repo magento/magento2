@@ -7,7 +7,7 @@
 namespace Magento\Mtf\App\State;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig;
 
@@ -44,14 +44,24 @@ abstract class AbstractState implements StateInterface
         $dirList = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
             ->get('Magento\Framework\Filesystem\DirectoryList');
 
-        $reader = new Reader($dirList);
+        $configFilePool = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
+            ->get('\Magento\Framework\Config\File\ConfigFilePool');
+
+        $reader = new Reader($dirList, $configFilePool);
         $deploymentConfig = new DeploymentConfig($reader);
-        $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
-        $dbInfo = $dbConfig['connection']['default'];
-        $host = $dbInfo['host'];
-        $user = $dbInfo['username'];
-        $password = $dbInfo['password'];
-        $database = $dbInfo['dbname'];
+        $host = $deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_HOST
+        );
+        $user = $deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_USER
+        );
+        $password = $deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+            '/' . ConfigOptionsListConstants::KEY_PASSWORD
+        );
+        $database = $deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_NAME
+        );
 
         $fileName = MTF_BP . '/' . $database . '.sql';
         if (!file_exists($fileName)) {

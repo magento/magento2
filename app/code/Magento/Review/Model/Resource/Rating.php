@@ -159,88 +159,109 @@ class Rating extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Review\Model\Rating $object
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_afterSave($object);
-
-        $adapter = $this->_getWriteAdapter();
-        $ratingId = (int)$object->getId();
-
         if ($object->hasRatingCodes()) {
-            $ratingTitleTable = $this->getTable('rating_title');
-            $adapter->beginTransaction();
-            try {
-                $select = $adapter->select()->from(
-                    $ratingTitleTable,
-                    ['store_id', 'value']
-                )->where(
-                    'rating_id = :rating_id'
-                );
-                $old = $adapter->fetchPairs($select, [':rating_id' => $ratingId]);
-                $new = array_filter(array_map('trim', $object->getRatingCodes()));
-
-                $insert = array_diff_assoc($new, $old);
-                $delete = array_diff_assoc($old, $new);
-                if (!empty($delete)) {
-                    $where = ['rating_id = ?' => $ratingId, 'store_id IN(?)' => array_keys($delete)];
-                    $adapter->delete($ratingTitleTable, $where);
-                }
-
-                if ($insert) {
-                    $data = [];
-                    foreach ($insert as $storeId => $title) {
-                        $data[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId, 'value' => $title];
-                    }
-                    if (!empty($data)) {
-                        $adapter->insertMultiple($ratingTitleTable, $data);
-                    }
-                }
-                $adapter->commit();
-            } catch (\Exception $e) {
-                $this->_logger->critical($e);
-                $adapter->rollBack();
-            }
+            $this->processRatingCodes($object);
         }
 
         if ($object->hasStores()) {
-            $ratingStoreTable = $this->getTable('rating_store');
-            $adapter->beginTransaction();
-            try {
-                $select = $adapter->select()->from(
-                    $ratingStoreTable,
-                    ['store_id']
-                )->where(
-                    'rating_id = :rating_id'
-                );
-                $old = $adapter->fetchCol($select, [':rating_id' => $ratingId]);
-                $new = $object->getStores();
-
-                $insert = array_diff($new, $old);
-                $delete = array_diff($old, $new);
-
-                if ($delete) {
-                    $where = ['rating_id = ?' => $ratingId, 'store_id IN(?)' => $delete];
-                    $adapter->delete($ratingStoreTable, $where);
-                }
-
-                if ($insert) {
-                    $data = [];
-                    foreach ($insert as $storeId) {
-                        $data[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId];
-                    }
-                    $adapter->insertMultiple($ratingStoreTable, $data);
-                }
-
-                $adapter->commit();
-            } catch (\Exception $e) {
-                $this->_logger->critical($e);
-                $adapter->rollBack();
-            }
+            $this->processRatingStores($object);
         }
 
         return $this;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function processRatingCodes(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $adapter = $this->_getWriteAdapter();
+        $ratingId = (int)$object->getId();
+        $table = $this->getTable('rating_title');
+        $select = $adapter->select()->from($table, ['store_id', 'value'])
+            ->where('rating_id = :rating_id');
+        $old = $adapter->fetchPairs($select, [':rating_id' => $ratingId]);
+        $new = array_filter(array_map('trim', $object->getRatingCodes()));
+        $this->deleteRatingData($ratingId, $table, array_diff_assoc($old, $new));
+
+        $insert = [];
+        foreach (array_diff_assoc($new, $old) as $storeId => $title) {
+            $insert[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId, 'value' => $title];
+        }
+        $this->insertRatingData($table, $insert);
+        return $this;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function processRatingStores(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $adapter = $this->_getWriteAdapter();
+        $ratingId = (int)$object->getId();
+        $table = $this->getTable('rating_store');
+        $select = $adapter->select()->from($table, ['store_id'])
+            ->where('rating_id = :rating_id');
+        $old = $adapter->fetchCol($select, [':rating_id' => $ratingId]);
+        $new = $object->getStores();
+        $this->deleteRatingData($ratingId, $table, array_diff_assoc($old, $new));
+
+        $insert = [];
+        foreach (array_keys(array_diff_assoc($new, $old)) as $storeId) {
+            $insert[] = ['rating_id' => $ratingId, 'store_id' => (int)$storeId];
+        }
+        $this->insertRatingData($table, $insert);
+        return $this;
+    }
+
+    /**
+     * @param int $ratingId
+     * @param string $table
+     * @param array $data
+     * @return void
+     */
+    protected function deleteRatingData($ratingId, $table, array $data)
+    {
+        if (empty($data)) {
+            return;
+        }
+        $adapter = $this->_getWriteAdapter();
+        $adapter->beginTransaction();
+        try {
+            $where = ['rating_id = ?' => $ratingId, 'store_id IN(?)' => array_keys($data)];
+            $adapter->delete($table, $where);
+            $adapter->commit();
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+            $adapter->rollBack();
+        }
+    }
+
+    /**
+     * @param string $table
+     * @param array $data
+     * @return void
+     */
+    protected function insertRatingData($table, array $data)
+    {
+        if (empty($data)) {
+            return;
+        }
+        $adapter = $this->_getWriteAdapter();
+        $adapter->beginTransaction();
+        try {
+            $adapter->insertMultiple($table, $data);
+            $adapter->commit();
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+            $adapter->rollBack();
+        }
     }
 
     /**

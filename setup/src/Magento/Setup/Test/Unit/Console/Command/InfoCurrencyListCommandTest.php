@@ -17,14 +17,20 @@ class InfoCurrencyListCommandTest extends \PHPUnit_Framework_TestCase
             'CUR' => 'Currency description'
         ];
 
-        /** @var \Magento\Setup\Model\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
-        $list = $this->getMock('Magento\Setup\Model\Lists', [], [], '', false);
+        $table = $this->getMock('Symfony\Component\Console\Helper\Table', [], [], '', false);
+        $table->expects($this->once())->method('setHeaders')->with(['Currency', 'Code']);
+        $table->expects($this->once())->method('addRow')->with(['Currency description', 'CUR']);
+
+        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
+        $helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
+        $helperSet->expects($this->once())->method('get')->with('table')->will($this->returnValue($table));
+
+        /** @var \Magento\Framework\Setup\Lists|\PHPUnit_Framework_MockObject_MockObject $list */
+        $list = $this->getMock('Magento\Framework\Setup\Lists', [], [], '', false);
         $list->expects($this->once())->method('getCurrencyList')->will($this->returnValue($currencies));
-        $commandTester = new CommandTester(new InfoCurrencyListCommand($list));
+        $command = new InfoCurrencyListCommand($list);
+        $command->setHelperSet($helperSet);
+        $commandTester = new CommandTester($command);
         $commandTester->execute([]);
-        $this->assertStringMatchesFormat(
-            'CUR => Currency description',
-            $commandTester->getDisplay()
-        );
     }
 }

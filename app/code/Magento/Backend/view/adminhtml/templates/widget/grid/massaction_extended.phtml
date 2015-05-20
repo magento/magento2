@@ -10,43 +10,42 @@
 * @deprecated support Magento 1.x grid massaction implementation
  */
 ?>
-<div id="<?php echo $block->getHtmlId() ?>">
-<div class="massaction">
-    <div class="entry-edit">
-        <?php if ($block->getHideFormElement() !== true):?>
-            <form action="" id="<?php echo $block->getHtmlId() ?>-form" method="post">
-        <?php endif ?>
-                <?php echo $block->getBlockHtml('formkey')?>
-                <span class="field-row">
-                    <label class="label"><?php echo __('Actions') ?></label>
-                    <select id="<?php echo $block->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation">
-                        <option value=""></option>
-                        <?php foreach ($block->getItems() as $_item): ?>
-                            <option value="<?php echo $_item->getId() ?>"<?php echo($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </span>
-                <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-hiddens"></span>
-                <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-additional"></span>
-                <span class="field-row">
-                    <?php echo $block->getApplyButtonHtml() ?>
-                </span>
-        <?php if ($block->getHideFormElement() !== true):?>
-            </form>
-        <?php endif ?>
-        <div class="no-display">
-            <?php foreach ($block->getItems() as $_item): ?>
-                <div id="<?php echo $block->getHtmlId() ?>-item-<?php echo $_item->getId() ?>-block">
-                    <?php echo $_item->getAdditionalActionBlockHtml() ?>
-                </div>
-            <?php endforeach; ?>
+<div id="<?php echo $block->getHtmlId() ?>" class="admin__grid-massaction">
+
+    <?php if ($block->getHideFormElement() !== true):?>
+    <form action="" id="<?php echo $block->getHtmlId() ?>-form" method="post">
+    <?php endif ?>
+        <div class="admin__grid-massaction-form">
+        <?php echo $block->getBlockHtml('formkey')?>
+            <select
+                id="<?php echo $block->getHtmlId() ?>-select"
+                class="required-entry local-validation admin__control-select">
+                <option class="admin__control-select-placeholder" value="" selected><?php echo __('Actions') ?></option>
+                <?php foreach ($block->getItems() as $_item): ?>
+                    <option value="<?php echo $_item->getId() ?>"<?php echo($_item->getSelected() ? ' selected="selected"' : '')?>><?php echo $_item->getLabel() ?></option>
+                <?php endforeach; ?>
+            </select>
+            <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-hiddens"></span>
+            <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-additional"></span>
+            <?php echo $block->getApplyButtonHtml() ?>
         </div>
+    <?php if ($block->getHideFormElement() !== true):?>
+    </form>
+    <?php endif ?>
+    <div class="no-display">
+        <?php foreach ($block->getItems() as $_item): ?>
+            <div id="<?php echo $block->getHtmlId() ?>-item-<?php echo $_item->getId() ?>-block">
+                <?php echo $_item->getAdditionalActionBlockHtml() ?>
+            </div>
+        <?php endforeach; ?>
     </div>
-    <div class="entry-select">
-        <select id="massaction-select" class="select">
-            <option value="">
-                <?php echo __('Mass Actions')?>
-            </option>
+    <div class="mass-select-wrap">
+        <select
+            id="<?php echo $block->getHtmlId() ?>-mass-select"
+            class="action-select-multiselect"
+            data-menu="grid-mass-select">
+            <optgroup label="<?php echo __('Mass Actions')?>">
+                <option disabled selected></option>
             <?php if ($block->getUseSelectAll()):?>
                 <option value="selectAll">
                     <?php echo __('Select All') ?>
@@ -55,22 +54,20 @@
                     <?php echo __('Unselect All') ?>
                 </option>
             <?php endif; ?>
-            <option value="selectVisible">
-                <?php echo __('Select Visible') ?>
-            </option>
-            <option value="unselectVisible">
-                <?php echo __('Unselect Visible') ?>
-            </option>
+                <option value="selectVisible">
+                    <?php echo __('Select Visible') ?>
+                </option>
+                <option value="unselectVisible">
+                    <?php echo __('Unselect Visible') ?>
+                </option>
+            </optgroup>
         </select>
-        <span class="items">
-            <strong id="<?php echo $block->getHtmlId() ?>-count">0</strong> <?php echo __('items selected') ?>
-        </span>
+        <label for="<?php echo $block->getHtmlId() ?>-mass-select"></label>
     </div>
-</div>
 <script>
     require(['jquery'], function($){
         'use strict';
-        $('#massaction-select').change(function () {
+        $('#<?php echo $block->getHtmlId() ?>-mass-select').change(function () {
             var massAction = $('option:selected', this).val();
             switch (massAction) {
                 <?php if ($block->getUseSelectAll()):?>
@@ -88,6 +85,7 @@
                     return <?php echo $block->getJsObjectName() ?>.unselectVisible();
                     break;
             }
+            this.blur();
         });
     });
 

@@ -48,3 +48,25 @@ $model2->setName(
 );
 
 $model2->save();
+
+$model3 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+
+$model3->setName(
+    'customer_image'
+)->setEntityTypeId(
+    1
+)->setIsUserDefined(
+    1
+)->setAttributeSetId(
+    1
+)->setAttributeGroupId(
+    1
+)->setFrontendInput(
+    'image'
+)->setFrontendLabel(
+    'customer_image'
+)->setSortOrder(
+    1223
+)->setBackendType("varchar");
+
+$model3->save();

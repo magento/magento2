@@ -33,10 +33,7 @@ class ReviewPayment extends \Magento\Sales\Controller\Adminhtml\Order
                         $message = __('The payment has been denied.');
                         break;
                     case 'update':
-                        $order->getPayment()->registerPaymentReviewAction(
-                            \Magento\Sales\Model\Order\Payment::REVIEW_ACTION_UPDATE,
-                            true
-                        );
+                        $order->getPayment()->update();
                         $message = __('The payment update has been made.');
                         break;
                     default:
