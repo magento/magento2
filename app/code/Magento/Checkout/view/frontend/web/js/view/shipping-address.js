@@ -25,6 +25,8 @@ define(
             stepNumber: navigator.getStepNumber(stepName),
             isVisible: navigator.isStepVisible(stepName),
             isCustomerLoggedIn: customer.isLoggedIn(),
+            isFormPopUpVisible: ko.observable(false),
+            isFormInline: !customer.isLoggedIn() || window.checkoutConfig.customerAddressCount == 0,
 
             stepClassAttributes: function() {
                 return navigator.getStepClassAttributes(stepName);
@@ -50,6 +52,34 @@ define(
                 if (!navigator.isStepVisible(stepName)()) {
                     navigator.goToStep(stepName);
                 }
+            },
+            /** Show address form popup */
+            showFormPopUp: function() {
+                this.isFormPopUpVisible(true);
+            },
+            /** Hide address form popup */
+            hideFormPopUp: function() {
+                this.isFormPopUpVisible(false);
+            },
+            /** Save new shipping address */
+            saveNewAddress: function() {
+                this.validate();
+                if (!this.source.get('params.invalid')) {
+                    var addressData = this.source.get('shippingAddress');
+                    var saveInAddressBook = true;
+                    if (this.isCustomerLoggedIn) {
+                        var addressBookCheckBox =  $("input[name = 'shipping[save_in_address_book]']:checked");
+                        saveInAddressBook = addressBookCheckBox.val();
+                    }
+                    addressData.save_in_address_book = saveInAddressBook;
+                    // TODO add address to address list and save it
+                    //selectShippingAddress(addressData, additionalData);
+                    this.isFormPopUpVisible(false);
+                }
+            },
+            validate: function() {
+                this.source.set('params.invalid', false);
+                this.source.trigger('shippingAddress.data.validate');
             }
         });
     }

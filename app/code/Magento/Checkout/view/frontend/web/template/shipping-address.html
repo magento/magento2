@@ -12,16 +12,41 @@
          class="step-content"
          data-role="content"
          data-bind="fadeVisible: isVisible()">
+        <!-- ko foreach: getRegion('address-list') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+
+        <!-- Address form pop up -->
+        <!-- ko if: (!isFormInline) -->
+        <input type="button" data-bind="click: showFormPopUp, value: $t('New Address')" />
+        <div data-bind="fadeVisible: isFormPopUpVisible">
+            <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
+                <!-- ko foreach: getRegion('before-fields') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!--/ko-->
+                <fieldset id="shipping-new-address-form" class="fieldset address">
+                <!-- ko foreach: getRegion('additional-fieldsets') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <!--/ko-->
+                </fieldset>
+            </form>
+            <input type="button" data-bind="click: saveNewAddress, value: $t('Save Address')" />
+            <input type="button" data-bind="click: hideFormPopUp, value: $t('Cancel')" />
+        </div>
+        <!-- /ko -->
+
+        <!-- Inline address form -->
+        <!-- ko if: (isFormInline) -->
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
             <!-- ko foreach: getRegion('before-fields') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
-            <!-- ko foreach: getRegion('address-list') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
+            <fieldset id="shipping-new-address-form" class="fieldset address">
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
+            </fieldset>
         </form>
+        <!-- /ko -->
     </div>
 </li>

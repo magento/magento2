@@ -28,10 +28,10 @@ define(
                 },
                 {
                     name: 'shippingAddress',
-                    isVisible: ko.observable(customerIsLoggedIn),
+                    isVisible: ko.observable(true),
                     isEnabled: true,
                     number: ko.observable(2),
-                    classAttributes: ko.observable(defaultStepClass)
+                    classAttributes: ko.observable(defaultStepClass + ' ' + activeStepClass)
                 },
                 {
                     name: 'billingAddress',
