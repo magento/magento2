@@ -203,7 +203,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->_resourceHelper = $resourceHelper;
         $this->_resource = $resource;
         $this->_productColFac = $_productColFac;
-        parent::__construct($attrSetColFac, $prodAttrColFac, $params);
+        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_connection = $this->_entityModel->getConnection();
     }
 
