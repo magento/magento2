@@ -13,9 +13,9 @@ define(
         '../model/quote',
         'Magento_Checkout/js/model/step-navigator',
         '../model/addresslist',
-        'mage/translate'
+        'underscore'
     ],
-    function($, Component, ko, selectShippingAddress, customer, quote, navigator, addressList) {
+    function($, Component, ko, selectShippingAddress, customer, quote, navigator, addressList, _) {
         'use strict';
         var stepName = 'shippingAddress';
         var newAddressSelected = ko.observable(false);
@@ -87,6 +87,7 @@ define(
                 }
             },
             sameAsBillingClick: function() {
+                addressList.isBillingSameAsShipping = !addressList.isBillingSameAsShipping;
                 if (this.sameAsBilling()) {
                     var billingAddress = quote.getBillingAddress()();
                     if (billingAddress.customerAddressId) {
@@ -97,7 +98,11 @@ define(
                         var shippingAddress = this.source.get('shippingAddress');
                         for (var property in billingAddress) {
                             if (billingAddress.hasOwnProperty(property) && shippingAddress.hasOwnProperty(property)) {
-                                this.source.set('shippingAddress.' + property, billingAddress[property]);
+                                if (typeof billingAddress[property] === 'string') {
+                                    this.source.set('shippingAddress.' + property, billingAddress[property]);
+                                } else {
+                                    this.source.set('shippingAddress.' + property, _.clone(billingAddress[property]));
+                                }
                             }
                         }
                         this.selectedAddressId(null);

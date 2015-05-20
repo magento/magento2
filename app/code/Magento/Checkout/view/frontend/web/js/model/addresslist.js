@@ -23,6 +23,7 @@ define(['jquery'], function($) {
         },
         getAddresses: function() {
             return addresses.slice(0);
-        }
+        },
+        isBillingSameAsShipping: false
     };
 });
