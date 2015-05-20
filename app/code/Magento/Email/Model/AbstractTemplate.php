@@ -362,7 +362,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
             // return the emulated area
             'area' => $this->getDesignConfig()->getArea(),
-            'theme' => $this->_design->getDesignTheme()->getArea(),
+            'theme' => $this->_design->getDesignTheme()->getCode(),
             'locale' => $this->_design->getLocale(),
         );
 
