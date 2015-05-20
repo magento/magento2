@@ -33,9 +33,11 @@ class PreProcessor implements PreProcessorInterface
      * @var TranslateInterface
      */
     protected $translate;
-
+    
     /**
      * @param Config $config
+     * @param AreaList $areaList
+     * @param TranslateInterface $translate
      */
     public function __construct(Config $config, AreaList $areaList, TranslateInterface $translate)
     {
