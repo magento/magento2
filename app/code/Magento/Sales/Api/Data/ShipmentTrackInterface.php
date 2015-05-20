@@ -66,7 +66,7 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     /**
      * Gets the carrier code for the shipment package.
      *
-     * @return string|null Carrier code.
+     * @return string Carrier code.
      */
     public function getCarrierCode();
 
@@ -88,7 +88,7 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     /**
      * Gets the description for the shipment package.
      *
-     * @return string|null Description.
+     * @return string Description.
      */
     public function getDescription();
 
@@ -110,35 +110,35 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     /**
      * Gets the order_id for the shipment package.
      *
-     * @return int|null
+     * @return int
      */
     public function getOrderId();
 
     /**
      * Gets the parent ID for the shipment package.
      *
-     * @return int|null Parent ID.
+     * @return int Parent ID.
      */
     public function getParentId();
 
     /**
      * Gets the quantity for the shipment package.
      *
-     * @return float|null Quantity.
+     * @return float Quantity.
      */
     public function getQty();
 
     /**
      * Gets the title for the shipment package.
      *
-     * @return string|null Title.
+     * @return string Title.
      */
     public function getTitle();
 
     /**
      * Gets the track number for the shipment package.
      *
-     * @return string|null Track number.
+     * @return string Track number.
      */
     public function getTrackNumber();
 
@@ -152,7 +152,7 @@ interface ShipmentTrackInterface extends \Magento\Framework\Api\ExtensibleDataIn
     /**
      * Gets the weight for the shipment package.
      *
-     * @return float|null Weight.
+     * @return float Weight.
      */
     public function getWeight();
 

@@ -72,7 +72,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the transaction ID for the transaction.
      *
-     * @return int|null Transaction ID.
+     * @return int Transaction ID.
      */
     public function getTransactionId();
 
@@ -94,42 +94,42 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the order ID for the transaction.
      *
-     * @return int|null Order ID.
+     * @return int Order ID.
      */
     public function getOrderId();
 
     /**
      * Gets the payment ID for the transaction.
      *
-     * @return int|null Payment ID.
+     * @return int Payment ID.
      */
     public function getPaymentId();
 
     /**
      * Gets the transaction business ID for the transaction.
      *
-     * @return string|null Transaction business ID.
+     * @return string Transaction business ID.
      */
     public function getTxnId();
 
     /**
      * Gets the parent transaction business ID for the transaction.
      *
-     * @return string|null Parent transaction business ID.
+     * @return string Parent transaction business ID.
      */
     public function getParentTxnId();
 
     /**
      * Gets the transaction type for the transaction.
      *
-     * @return string|null Transaction type.
+     * @return string Transaction type.
      */
     public function getTxnType();
 
     /**
      * Gets the value of the is-closed flag for the transaction.
      *
-     * @return int|null Is-closed flag value.
+     * @return int Is-closed flag value.
      */
     public function getIsClosed();
 
@@ -143,7 +143,7 @@ interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the created-at timestamp for the transaction.
      *
-     * @return string|null Created-at timestamp.
+     * @return string Created-at timestamp.
      */
     public function getCreatedAt();
 

@@ -151,7 +151,7 @@ interface ShipmentInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Gets the order ID for the shipment.
      *
-     * @return int|null Order ID.
+     * @return int Order ID.
      */
     public function getOrderId();
 
