@@ -23,7 +23,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getPostcodesDataProvider
      */
-    public function testValidPostCodes($countryId, $validPostcode, $invalidPostcode)
+    public function testPostCodes($countryId, $validPostcode, $invalidPostcode)
     {
         $this->assertTrue($this->validator->validate($validPostcode, $countryId));
         $this->assertFalse($this->validator->validate($invalidPostcode, $countryId));
