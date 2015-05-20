@@ -18,31 +18,6 @@ class KeyLength extends \Zend_Validate_StringLength
     protected $_name = 'Key';
 
     /**
-     * Sets validator options
-     *
-     * @param  integer|array|\Zend_Config $options
-     */
-    public function __construct($options = [])
-    {
-        if (!is_array($options)) {
-            $options = func_get_args();
-            if (!isset($options[1])) {
-                $options[1] = 'utf-8';
-            }
-            parent::__construct($options[0], $options[0], $options[1]);
-            return;
-        } else {
-            if (isset($options['length'])) {
-                $options['max'] = $options['min'] = $options['length'];
-            }
-            if (isset($options['name'])) {
-                $this->_name = $options['name'];
-            }
-        }
-        parent::__construct($options);
-    }
-
-    /**
      * Init validation failure message template definitions
      *
      * @return $this
