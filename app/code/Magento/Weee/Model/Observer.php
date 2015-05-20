@@ -45,6 +45,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
     protected $productTypeConfig;
 
     /**
+     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\View\LayoutInterface $layout
