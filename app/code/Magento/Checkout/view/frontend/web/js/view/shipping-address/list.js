@@ -22,7 +22,7 @@ define(
 
             selectedShippingAddress: ko.computed(function(){
                 if (!quote.getShippingAddress()()) {
-                    quote.setShippingAddress(addressList.getAddresses().length ? addressList.getAddresses()[0] : null);
+                    quote.setShippingAddress(addressList.getDefaultShipping());
                 }
                 return quote.getShippingAddress()();
             }),

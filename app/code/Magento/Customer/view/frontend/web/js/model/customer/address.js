@@ -26,6 +26,8 @@ define([], function() {
             prefix: addressData.prefix,
             suffix: addressData.suffix,
             vatId: addressData.vat_id,
+            isDefaultShipping: addressData.default_shipping,
+            isDefaultBilling: addressData.default_billing,
             sameAsBilling: null,
             getAddressInline: function() {
                 return addressData.inline;

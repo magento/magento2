@@ -23,6 +23,23 @@ define(['jquery'], function($) {
         },
         getAddresses: function() {
             return addresses.slice(0);
+        },
+
+        getDefaultShipping: function() {
+            var address = null;
+            if (addresses.length == 0) {
+                return address;
+            } else if (addresses.length == 1) {
+                return addresses[0];
+            }
+            $.each(addresses, function(key, item) {
+                if (item.isDefaultShipping) {
+                    address = item;
+                    return false;
+                }
+            });
+            return address == null ? addresses[0] : address;
         }
+
     };
 });
