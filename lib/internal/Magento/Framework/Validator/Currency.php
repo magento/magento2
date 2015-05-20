@@ -33,6 +33,7 @@ class Currency
      *
      * @param string $currencyCode
      * @return bool
+     * @api
      */
     public function isValid($currencyCode)
     {

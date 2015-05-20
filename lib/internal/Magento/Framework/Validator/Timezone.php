@@ -33,6 +33,7 @@ class Timezone
      *
      * @param string $timezoneCode
      * @return bool
+     * @api
      */
     public function isValid($timezoneCode)
     {

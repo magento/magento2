@@ -36,6 +36,7 @@ interface CookieManagerInterface extends CookieReaderInterface
      * there is still no guarantee that the browser received and accepted the cookie.
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
+     * @api
      */
     public function setSensitiveCookie($name, $value, SensitiveCookieMetadata $metadata = null);
 
@@ -52,6 +53,7 @@ interface CookieManagerInterface extends CookieReaderInterface
      * @throws FailureToSendException If cookie couldn't be sent to the browser.
      * @throws CookieSizeLimitReachedException Thrown when the cookie is too big to store any additional data.
      * @throws InputException If the cookie name is empty or contains invalid characters.
+     * @api
      */
     public function setPublicCookie($name, $value, PublicCookieMetadata $metadata = null);
 
@@ -65,6 +67,7 @@ interface CookieManagerInterface extends CookieReaderInterface
      *     If this exception isn't thrown, there is still no guarantee that the browser
      *     received and accepted the request to delete this cookie.
      * @throws InputException If the cookie name is empty or contains invalid characters.
+     * @api
      */
     public function deleteCookie($name, CookieMetadata $metadata = null);
 }

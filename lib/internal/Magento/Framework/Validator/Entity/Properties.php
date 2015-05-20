@@ -35,6 +35,7 @@ class Properties extends \Magento\Framework\Validator\AbstractValidator
      * @param Object $value
      * @return bool
      * @throws \InvalidArgumentException when $value is not instanceof \Magento\Framework\Object
+     * @api
      */
     public function isValid($value)
     {

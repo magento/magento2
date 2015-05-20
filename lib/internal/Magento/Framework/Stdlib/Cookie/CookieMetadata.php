@@ -7,7 +7,7 @@ namespace Magento\Framework\Stdlib\Cookie;
 
 /**
  * Class CookieMetadata
- *
+ * @api
  */
 class CookieMetadata
 {

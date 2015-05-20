@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * CookieMetadataFactory is used to construct SensitiveCookieMetadata and PublicCookieMetadata objects.
+ * @api
  */
 class CookieMetadataFactory
 {
