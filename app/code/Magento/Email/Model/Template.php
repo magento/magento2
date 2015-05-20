@@ -296,7 +296,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     {
         $processor = $this->getTemplateFilter()
             ->setUseSessionInUrl(false)->setPlainTemplateMode($this->isPlain())
-            ->setIsChildTemplate($this->getIsChildTemplate());
+            ->setIsChildTemplate($this->getIsChildTemplate())
+            ->setTemplateModel($this);
 
         if (!$this->_preprocessFlag) {
             $variables['this'] = $this;
@@ -306,7 +307,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
             $processor->setStoreId($variables['subscriber']->getStoreId());
         }
 
-        $this->_applyDesignConfig();
+        // Only run app emulation if this is the parent template. Otherwise child will run inside parent emulation.
+        if (!$this->getIsChildTemplate()) {
+            $this->_applyDesignConfig();
+        }
 
         // Populate the variables array with store, store info, logo, etc. variables
         $variables = $this->_addEmailVariables($variables, $processor->getStoreId());
@@ -317,29 +321,26 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         try {
             // Filter the template text so that all HTML content will be present
             $result = $processor->setStoreId($storeId)->filter($this->getTemplateText());
-            // If the {{inlinecss file=""}} directive was included in the template, grab filename to use for inlining
-            $this->setInlineCssFiles($processor->getInlineCssFiles());
+
             // Now that all HTML has been assembled, run email through CSS inlining process
             $processedResult = $this->getPreparedTemplateText($result);
         } catch (\Exception $e) {
-            $this->_cancelDesignConfig();
+            if (!$this->getIsChildTemplate()) {
+                $this->_cancelDesignConfig();
+            }
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
         }
         return $processedResult;
     }
 
     /**
-     * Makes additional text preparations for HTML templates
+     * Applies inline CSS styles
      *
      * @param string $html
      * @return string
      */
-    public function getPreparedTemplateText($html = null)
+    public function getPreparedTemplateText($html)
     {
-        if (!$html) {
-            $html = $this->getTemplateText();
-        }
-
         if ($this->isPlain()) {
             return $html;
         }

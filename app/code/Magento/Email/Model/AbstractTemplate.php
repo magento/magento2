@@ -41,21 +41,21 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      *
      * @var string
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO_WIDTH      = 'design/email/logo_width';
+    const XML_PATH_DESIGN_EMAIL_LOGO_WIDTH = 'design/email/logo_width';
 
     /**
      * Email logo height
      *
      * @var string
      */
-    const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT     = 'design/email/logo_height';
+    const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
 
     /**
-     * The directory in which inline CSS files are stored
+     * The directory in which inline/non-inline CSS files are stored
      *
      * @var string
      */
-    const INLINE_CSS_DIRECTORY = 'css';
+    const CSS_DIRECTORY = 'css';
 
     /**
      * Configuration of design package for template
@@ -63,6 +63,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @var \Magento\Framework\Object
      */
     protected $_designConfig;
+
+    /**
+     * List of CSS files that should be inlined on this template
+     *
+     * @var array
+     */
+    protected $_inlineCssFiles = array();
 
     /**
      * Whether template is child of another template
@@ -105,6 +112,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $_appEmulation;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * Asset service
      *
      * @var \Magento\Framework\View\Asset\Repository
@@ -128,11 +140,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     protected $_emailConfig;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-    
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
@@ -179,6 +186,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function getTemplateContent($configPath, array $variables)
     {
         $thisClass = get_class($this);
+        /* @var \Magento\Email\Model\AbstractTemplate */
         $template = $this->_objectManager->create($thisClass);
         $template->loadByConfigPath($configPath, $variables);
 
@@ -275,6 +283,28 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
+     * Add filename of CSS file to inline
+     *
+     * @param string $file
+     * @return $this
+     */
+    public function addInlineCssFile($file)
+    {
+        $this->_inlineCssFiles[] = $file;
+        return $this;
+    }
+
+    /**
+     * Get filename of CSS file to inline
+     *
+     * @return array
+     */
+    public function getInlineCssFiles()
+    {
+        return $this->_inlineCssFiles;
+    }
+
+    /**
      * Merge HTML and CSS and returns HTML that has CSS styles applied "inline" to the HTML tags. This is necessary
      * in order to support all email clients.
      *
@@ -307,9 +337,24 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
+     * Loads CSS file from materialized static view directory
+     *
+     * @param $file
+     * @return string
+     */
+    public function getCssFileContent($file)
+    {
+        $file = self::CSS_DIRECTORY. DIRECTORY_SEPARATOR . $file;
+        $designParams = $this->_getDesignParams();
+
+        $asset = $this->_assetRepo->createAsset($file, $designParams);
+        return $asset->getContent();
+    }
+
+    /**
      * Loads CSS content from filesystem
      *
-     * @param array $fileNames
+     * @param array $files
      * @return string
      */
     protected function _getCssFilesContent($files)
@@ -319,45 +364,18 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 
         $css = '';
         foreach ($files as $file) {
-            $css .= $this->_getCssFileContent($file) . PHP_EOL;
+            $css .= $this->getCssFileContent($file) . PHP_EOL;
         }
         return $css;
-        // OLD M1 Code
-//        $storeId = $this->getDesignConfig()->getStore();
-//        $area = $this->getDesignConfig()->getArea();
-//        // This method should always be called within the context of the email's store, so these values will be correct
-//        $package = Mage::getDesign()->getPackageName();
-//        $theme = Mage::getDesign()->getTheme('skin');
-//
-//        $filePath = Mage::getDesign()->getFilename(
-//            'css' . DS . $filename,
-//            array(
-//                '_type' => 'skin',
-//                '_default' => false,
-//                '_store' => $storeId,
-//                '_area' => $area,
-//                '_package' => $package,
-//                '_theme' => $theme,
-//            )
-//        );
-//
-//        if (is_readable($filePath)) {
-//            return (string) file_get_contents($filePath);
-//        }
-//
-//        // If file can't be found, return empty string
-//        return '';
     }
 
     /**
-     * Loads CSS file from materialized static view directory
+     * Returns the design params for the template being processed
      *
-     * @param $file
-     * @return string
+     * @return array
      */
-    protected function _getCssFileContent($file)
+    protected function _getDesignParams()
     {
-        $file = self::INLINE_CSS_DIRECTORY. DIRECTORY_SEPARATOR . $file;
         $designParams = array(
             // Retrieve area from getDesignConfig, rather than the getDesignTheme->getArea(), as the latter doesn't
             // return the emulated area
@@ -365,59 +383,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             'theme' => $this->_design->getDesignTheme()->getCode(),
             'locale' => $this->_design->getLocale(),
         );
-
-        $asset = $this->_assetRepo->createAsset($file, $designParams);
-        return $asset->getContent();
-    }
-
-    /**
-     * Accepts a path to a System Config setting that contains a comma-delimited list of files to load. Loads those
-     * files and then returns the concatenated content.
-     *
-     * @param $configPath
-     * @return string
-     */
-    protected function _getCssByConfig($configPath)
-    {
-        // TODO: @Greg convert this code to trigger LESS compilation (if necessary) and load file using theme fallback mechanism
-        $file = BP . '/pub/static/frontend/Magento/blank/en_US/css/email-non-inline.css';
-        if (file_exists($file)) {
-            return file_get_contents($file);
-        }
-
-        // OLD M1 Code
-//        if (!isset($this->_cssFileCache[$configPath])) {
-//            $filesToLoad = Mage::getStoreConfig($configPath);
-//            if (!$filesToLoad) {
-//                return '';
-//            }
-//            $files = array_map('trim', explode(",", $filesToLoad));
-//
-//            $css = '';
-//            foreach($files as $fileName) {
-//                $css .= $this->_getCssFileContent($fileName) . "\n";
-//            }
-//            $this->_cssFileCache[$configPath] = $css;
-//        }
-//
-//        return $this->_cssFileCache[$configPath];
-    }
-
-    /**
-     * Loads content of files with non-inline CSS styles and merges them with any CSS styles that are specified
-     * within the <!--@styles @--> comments or in the Transactional Emails
-     *
-     * @return string
-     */
-    protected function _getNonInlineCssTag()
-    {
-        $styleTagWrapper = "<style type=\"text/css\">\n%s\n</style>\n";
-        // Load the non-inline CSS styles from theme so they can be included in the style tag
-        // TODO: Refactor
-        $styleTagContent = $this->_getCssByConfig('TODO: REFACTOR THIS CODE');
-        // Load the CSS that is included in the <!--@styles @--> comment or is added via Transactional Emails in admin
-        $styleTagContent .= $this->getTemplateStyles();
-        return sprintf($styleTagWrapper, $styleTagContent);
+        return $designParams;
     }
 
     /**
@@ -522,8 +488,8 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             );
         }
         // If template is text mode, don't include styles
-        if (!$this->isPlain() && !isset($variables['non_inline_styles'])) {
-            $variables['non_inline_styles'] = $this->_getNonInlineCssTag();
+        if (!$this->isPlain() && !isset($variables['template_styles'])) {
+            $variables['template_styles'] = $this->getTemplateStyles();
         }
 
         return $variables;
