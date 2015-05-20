@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Model\Country\Postcode;
 
-class Config 
+class Config implements \Magento\Directory\Model\Country\Postcode\ConfigInterface
 {
     /**
      * @var Config\Data
@@ -21,7 +21,7 @@ class Config
     }
 
     /**
-     * @return array|mixed|null
+     * {@inheritdoc}
      */
     public function getPostCodes()
     {

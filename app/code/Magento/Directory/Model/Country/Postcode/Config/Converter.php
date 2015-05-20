@@ -8,6 +8,19 @@ namespace Magento\Directory\Model\Country\Postcode\Config;
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
+     * @var \Magento\Framework\Stdlib\BooleanUtils
+     */
+    protected $booleanUtils;
+
+    /**
+     * @param \Magento\Framework\Stdlib\BooleanUtils $booleanUtils
+     */
+    public function __construct(\Magento\Framework\Stdlib\BooleanUtils $booleanUtils)
+    {
+        $this->booleanUtils = $booleanUtils;
+    }
+
+    /**
      * Convert dom node tree to array
      *
      * @param \DOMDocument $source
@@ -30,7 +43,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 /** @var \DOMNode $code */
                 foreach ($codesNode->childNodes as $code) {
                     if ($code->nodeType != XML_ELEMENT_NODE
-                        || $code->attributes->getNamedItem('active')->nodeValue == 'false'
+                        || !$this->booleanUtils->toBoolean($code->attributes->getNamedItem('active')->nodeValue)
                     ) {
                         continue;
                     }

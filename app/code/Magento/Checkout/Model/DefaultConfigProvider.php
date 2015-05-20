@@ -121,7 +121,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $viewConfig;
 
     /**
-     * @var \Magento\Directory\Model\Country\Postcode\Config
+     * @var \Magento\Directory\Model\Country\Postcode\ConfigInterface
      */
     protected $postCodesConfig;
 
@@ -144,7 +144,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param FormKey $formKey
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
-     * @param \Magento\Directory\Model\Country\Postcode\Config $postCodesConfig
+     * @param \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -166,7 +166,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         FormKey $formKey,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Framework\View\ConfigInterface $viewConfig,
-        \Magento\Directory\Model\Country\Postcode\Config $postCodesConfig
+        \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;

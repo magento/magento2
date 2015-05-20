@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Test\Unit\Model\Onepage\Country\Postcode;
+namespace Magento\Directory\Model\Country\Postcode;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +13,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected $postcodesConfigMock;
 
     /**
-     * @var \Magento\Checkout\Model\Onepage\Country\Postcode\Validator
+     * @var \Magento\Directory\Model\Country\Postcode\Validator
      */
     protected $model;
 
@@ -33,7 +33,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $this->postcodesConfigMock->expects($this->once())->method('getPostCodes')->willReturn($postCodes);
-        $this->model = new \Magento\Checkout\Model\Onepage\Country\Postcode\Validator($this->postcodesConfigMock);
+        $this->model = new \Magento\Directory\Model\Country\Postcode\Validator($this->postcodesConfigMock);
     }
 
     public function testValidatePositive()
