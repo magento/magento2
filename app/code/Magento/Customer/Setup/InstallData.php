@@ -66,6 +66,10 @@ class InstallData implements InstallDataInterface
 
         $customerSetup->installCustomerForms();
 
+        $disableAGCAttribute = $customerSetup->getEavConfig()->getAttribute('customer', 'disable_auto_group_change');
+        $disableAGCAttribute->setData('used_in_forms', ['adminhtml_customer']);
+        $disableAGCAttribute->save();
+
         $attributesInfo = [
             'vat_id' => [
                 'label' => 'VAT number',
