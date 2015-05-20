@@ -11,6 +11,7 @@ namespace Magento\Multishipping\Model\Checkout\Type;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Multishipping checkout model
@@ -453,6 +454,7 @@ class Multishipping extends \Magento\Framework\Object
      *
      * @param int $quoteItemId
      * @param array $data array('qty'=>$qty, 'address'=>$customerAddressId)
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -462,6 +464,11 @@ class Multishipping extends \Magento\Framework\Object
         $qty = isset($data['qty']) ? (int)$data['qty'] : 1;
         //$qty       = $qty > 0 ? $qty : 1;
         $addressId = isset($data['address']) ? $data['address'] : false;
+
+        if (!$this->isAddressIdApplicable($addressId)) {
+            throw new LocalizedException(__('Please check shipping address information.'));
+        }
+
         $quoteItem = $this->getQuote()->getItemById($quoteItemId);
 
         if ($addressId && $quoteItem) {
@@ -503,10 +510,14 @@ class Multishipping extends \Magento\Framework\Object
      * Reimport customer address info to quote shipping address
      *
      * @param int $addressId customer address id
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      */
     public function updateQuoteCustomerShippingAddress($addressId)
     {
+        if (!$this->isAddressIdApplicable($addressId)) {
+            throw new LocalizedException(__('Please check shipping address information.'));
+        }
         try {
             $address = $this->addressRepository->getById($addressId);
         } catch (\Exception $e) {
@@ -530,10 +541,14 @@ class Multishipping extends \Magento\Framework\Object
      * Reimport customer billing address to quote
      *
      * @param int $addressId customer address id
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping
      */
     public function setQuoteCustomerBillingAddress($addressId)
     {
+        if (!$this->isAddressIdApplicable($addressId)) {
+            throw new LocalizedException(__('Please check billing address information.'));
+        }
         try {
             $address = $this->addressRepository->getById($addressId);
         } catch (\Exception $e) {
@@ -930,5 +945,20 @@ class Multishipping extends \Magento\Framework\Object
     public function getCustomer()
     {
         return $this->_customerSession->getCustomerDataObject();
+    }
+
+    /**
+     * Check if specified address ID belongs to customer.
+     *
+     * @param $addressId
+     * @return bool
+     */
+    protected function isAddressIdApplicable($addressId)
+    {
+        $applicableAddressIds = array_map(function($address) {
+            /** @var \Magento\Customer\Api\Data\AddressInterface $address */
+            return $address->getId();
+        }, $this->getCustomer()->getAddresses());
+        return in_array($addressId, $applicableAddressIds);
     }
 }

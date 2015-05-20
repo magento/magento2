@@ -16,7 +16,7 @@
                 <label class="label" for="billing:address-select"><span data-bind="text: $t('Select a billing address from your address book or enter a new address.')"></span></label>
                 <div class="control">
                     <select name="billing_address_id" id="billing:address-select" data-bind="
-                        options: billingAddresses,
+                        options: billingAddresses(),
                         optionsText: billingAddressesOptionsText,
                         optionsValue: 'customerAddressId',
                         value: selectedBillingAddressId,
