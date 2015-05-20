@@ -52,11 +52,6 @@ class XmlConverterCommand extends Command
     private $xsltProcessorFactory;
 
     /**
-     * @var \XSLTProcessor
-     */
-    private $xsltProcessor;
-
-    /**
      * Inject dependencies
      *
      * @param Formatter $formatter

@@ -19,5 +19,4 @@ class Factory
     {
         return new \XSLTProcessor();
     }
-
 }
