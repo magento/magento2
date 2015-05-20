@@ -27,22 +27,22 @@ define(
                     classAttributes: ko.observable(defaultStepClass)
                 },
                 {
-                    name: 'billingAddress',
+                    name: 'shippingAddress',
                     isVisible: ko.observable(customerIsLoggedIn),
                     isEnabled: true,
                     number: ko.observable(2),
                     classAttributes: ko.observable(defaultStepClass)
                 },
                 {
-                    name: 'shippingAddress',
-                    isVisible: ko.observable(true),
+                    name: 'billingAddress',
+                    isVisible: ko.observable(false),
                     isEnabled: true,
                     number: ko.observable(3),
                     classAttributes: ko.observable(defaultStepClass)
                 },
                 {
                     name: 'shippingMethod',
-                    isVisible: ko.observable(true),
+                    isVisible: ko.observable(false),
                     isEnabled: true,
                     number: ko.observable(4),
                     classAttributes: ko.observable(defaultStepClass)

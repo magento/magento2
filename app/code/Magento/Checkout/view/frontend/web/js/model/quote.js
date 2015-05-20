@@ -5,8 +5,10 @@
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define(
-    ['ko'],
-    function(ko) {
+    [
+        'ko'
+    ],
+    function(ko, addressList) {
         var billingAddress = ko.observable(null);
         var shippingAddress = ko.observable(null);
         var shippingMethod = ko.observable(null);

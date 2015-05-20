@@ -17,7 +17,7 @@ define(
     function(quote, addressList, urlBuilder, navigator, shippingService, paymentService, storage, errorList) {
         "use strict";
         var actionCallback;
-        var result = function(shippingAddress, sameAsBilling, additionalData) {
+        var result = function(shippingAddress, additionalData) {
             var serviceUrl;
             if (quote.getCheckoutMethod()() === 'guest') {
                 serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/addresses', {quoteId: quote.getQuoteId()});
@@ -27,7 +27,6 @@ define(
 
             errorList.clear();
             additionalData = additionalData || {};
-            shippingAddress['same_as_billing'] = (sameAsBilling) ? 1 : 0;
             quote.setShippingAddress(shippingAddress);
 
             storage.post(

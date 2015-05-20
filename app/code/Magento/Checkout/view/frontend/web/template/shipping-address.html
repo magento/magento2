@@ -4,34 +4,61 @@
  * See COPYING.txt for license details.
  */
 -->
+<style type="text/css">
+    .shipping-address-item {
+        width: 200px;
+        height: 130px;
+        float: left;
+        padding: 10px;
+        margin-right: 20px;
+    }
+
+    .selected-item {
+        border: 2px solid darkorange;
+    }
+    .not-selected-item {
+        border: 2px solid silver;
+    }
+    .selected-item .select-item-button {
+        display: none;
+    }
+    .not-selected-item .select-item-button {
+        float: right;
+        margin-left: 10px;
+        margin-top: 10px;
+        width: 100px;
+        height: 20px;
+    }
+</style>
 <li id="opc-shipping" data-bind="fadeVisible: isActive(), attr: {'class': stepClassAttributes() }">
     <div class="step-title" data-role="title" data-bind="click: navigateToCurrentStep">
         <h2 data-bind="text: $t('Shipping Information')"></h2>
     </div>
     <div id="checkout-step-shipping"
          class="step-content"
-         data-role="content">
+         data-role="content"
+         data-bind="fadeVisible: isVisible()">
         <form class="form shipping address" id="co-shipping-form" data-hasrequired="* Required Fields">
+            <input type="text" data-bind="value: quoteObj" name="shipping_address_id" id="shipping:address-select" />
             <!-- ko foreach: getRegion('before-fields') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
             <!-- ko if: (customerAddressCount)-->
             <div class="field addresses" data-bind="visible: visible">
-                <label class="label" for="shipping:address-select"><span data-bind="text: $t('Select a shipping address from your address book or enter a new address.')"></span></label>
                 <div class="control">
-                    <select name="shipping_address_id" id="shipping:address-select" data-bind="
-                    options: addresses(),
-                    optionsText: function(item) { return item.getAddressInline(); },
-                    optionsValue: 'customerAddressId',
-                    value: selectedAddressId,
-                    event: {change: onAddressChange}
-                    ">
-                    </select>
+                    <div class="shipping-address-items" data-bind="foreach: {data: addresses(), as: 'address'}">
+                        <div class="shipping-address-item" data-bind="css: 88 ==  address.customerAddressId ? 'selected-item' : 'not-selected-item'">
+                            <!-- ko text: address.firstname --><!-- /ko --> <!-- ko text: address.lastname --><!-- /ko --><br/>
+                            <!-- ko text:  address.street --><!-- /ko --><br/>
+                            <!-- ko text:  address.city --><!-- /ko -->, <!-- ko text:  address.regionCode --><!-- /ko --> <!-- ko text:  address.postcode --><!-- /ko --><br/>
+                            <!-- ko text:  address.countryId --><!-- /ko --><br/>
+                            <!-- ko text:  address.telephone --><!-- /ko --><br/>
+                            <input type="button" class="select-item-button" data-bind="click: $parents[0].selectAddress, value: $t('Ship Here')" />
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- /ko -->
-            <fieldset id="shipping-new-address-form" class="fieldset address"
-                      data-bind="fadeVisible: isNewAddressSelected(), visible: formVisible">
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
