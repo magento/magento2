@@ -6,7 +6,7 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\Customer\Test\Fixture\CustomerGroupInjectable;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
@@ -22,14 +22,14 @@ class AssertCustomerGroupOnCustomerForm extends AbstractConstraint
      * Assert that customer group find on account information page
      *
      * @param FixtureFactory $fixtureFactory
-     * @param CustomerGroupInjectable $customerGroup
+     * @param CustomerGroup $customerGroup
      * @param CustomerIndexNew $customerIndexNew
      * @param CustomerIndex $customerIndex
      * @return void
      */
     public function processAssert(
         FixtureFactory $fixtureFactory,
-        CustomerGroupInjectable $customerGroup,
+        CustomerGroup $customerGroup,
         CustomerIndexNew $customerIndexNew,
         CustomerIndex $customerIndex
     ) {
