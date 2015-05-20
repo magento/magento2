@@ -45,12 +45,12 @@ class Observer extends \Magento\Framework\Model\AbstractModel
     protected $productTypeConfig;
 
     /**
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param Tax $weeeTax
      * @param \Magento\Weee\Helper\Data $weeeData
+     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Model\Product\Type $productType
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -59,21 +59,21 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\View\LayoutInterface $layout,
         Tax $weeeTax,
         \Magento\Weee\Helper\Data $weeeData,
+        \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Model\Product\Type $productType,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
-        $this->_taxData = $taxData;
         $this->_layout = $layout;
         $this->_weeeTax = $weeeTax;
+        $this->_taxData = $taxData;
         $this->_productType = $productType;
         $this->_weeeData = $weeeData;
         $this->productTypeConfig = $productTypeConfig;
