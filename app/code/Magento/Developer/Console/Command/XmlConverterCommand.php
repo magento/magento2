@@ -12,8 +12,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Developer\Model\Tools\Formatter;
-use Magento\Framework\DomDocument\Factory;
-use Magento\Framework\XSLTProcessor\Factory as XSLTProcessorFactory;
+use Magento\Framework\DomDocument\DomDocumentFactory;
+use Magento\Framework\XsltProcessor\XsltProcessorFactory;
 
 /**
  * Class XmlConverterCommand
@@ -42,12 +42,12 @@ class XmlConverterCommand extends Command
     private $formatter;
 
     /**
-     * @var Factory
+     * @var DomDocumentFactory
      */
     private $domFactory;
 
     /**
-     * @var XSLTProcessorFactory
+     * @var XsltProcessorFactory
      */
     private $xsltProcessorFactory;
 
@@ -55,13 +55,13 @@ class XmlConverterCommand extends Command
      * Inject dependencies
      *
      * @param Formatter $formatter
-     * @param Factory $domFactory
-     * @param xsltProcessorFactory $xsltProcessorFactory
+     * @param DomDocumentFactory $domFactory
+     * @param XsltProcessorFactory $xsltProcessorFactory
      */
     public function __construct(
         Formatter $formatter,
-        Factory $domFactory,
-        XSLTProcessorFactory $xsltProcessorFactory
+        DomDocumentFactory $domFactory,
+        XsltProcessorFactory $xsltProcessorFactory
     ) {
         $this->formatter = $formatter;
         $this->domFactory = $domFactory;
@@ -106,9 +106,9 @@ class XmlConverterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $domXml = $this->domFactory->createDomDocument();
-            $domXsl = $this->domFactory->createDomDocument();
-            $xsltProcessor = $this->xsltProcessorFactory->createXSLTProcessor();
+            $domXml = $this->domFactory->create();
+            $domXsl = $this->domFactory->create();
+            $xsltProcessor = $this->xsltProcessorFactory->create();
 
             $xmlFile = $input->getArgument(self::XML_FILE_ARGUMENT);
             $domXml->preserveWhiteSpace = true;

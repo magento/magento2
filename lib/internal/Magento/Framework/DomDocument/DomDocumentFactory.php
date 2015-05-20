@@ -8,14 +8,14 @@ namespace Magento\Framework\DomDocument;
 /**
  * DOM document factory
  */
-class Factory
+class DomDocumentFactory
 {
     /**
      * Create empty DOM document instance.
      *
      * @return \DOMDocument
      */
-    public function createDomDocument()
+    public function create()
     {
         return new \DOMDocument();
     }
