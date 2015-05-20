@@ -8,6 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Magento_ConfigurableProduct::css/configurable-product.css"/>
+        <css src="Magento_Ui::stepswizard/styles.css"/>
     </head>
     <update handle="catalog_product_superconfig_config"/>
     <body>
