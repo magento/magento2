@@ -25,7 +25,12 @@ define(
                 visible: true,
                 formVisible: customer.getShippingAddressList().length === 0
             },
-            quoteObj: quote.getShippingAddress(),
+            selectedShippingAddress: ko.computed(function(){
+                if (!quote.getShippingAddress()()) {
+                    quote.setShippingAddress(addressList.getAddresses().length ? addressList.getAddresses()[0] : null);
+                }
+                return quote.getShippingAddress()();
+            }),
             stepNumber: navigator.getStepNumber(stepName),
             isVisible: navigator.isStepVisible(stepName),
             isCustomerLoggedIn: customer.isLoggedIn(),
