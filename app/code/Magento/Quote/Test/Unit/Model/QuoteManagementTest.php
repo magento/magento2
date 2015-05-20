@@ -200,7 +200,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'getBillingAddress',
                 'setCustomerIsGuest',
                 'setCustomerGroupId',
-                'assignCustomer'
+                'assignCustomer',
+                'getPayment',
             ],
             [],
             '',
@@ -769,6 +770,15 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->with($cartId)
             ->willReturn($this->quoteMock);
 
+        $quotePayment = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $quotePayment->expects($this->once())
+            ->method('setQuote');
+        $quotePayment->expects($this->once())
+            ->method('importData');
+        $this->quoteMock->expects($this->atLeastOnce())
+            ->method('getPayment')
+            ->willReturn($quotePayment);
+
         $this->quoteMock->expects($this->once())
             ->method('getCheckoutMethod')
             ->willReturn(\Magento\Checkout\Model\Type\Onepage::METHOD_CUSTOMER);
@@ -787,7 +797,12 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderId')->with($orderId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
-        $this->assertEquals($orderId, $service->placeOrder($cartId));
+
+        $paymentMethod = $this->getMock('Magento\Quote\Model\Quote\Payment', ['setChecks', 'getData'], [], '', false);
+        $paymentMethod->expects($this->once())->method('setChecks');
+        $paymentMethod->expects($this->once())->method('getData')->willReturn(['additional_data' => []]);
+
+        $this->assertEquals($orderId, $service->placeOrder($cartId, null, $paymentMethod));
     }
 
     /**
