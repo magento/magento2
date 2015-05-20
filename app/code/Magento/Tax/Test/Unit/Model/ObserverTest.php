@@ -21,8 +21,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      * @param bool $displayPriceExcludingTax
      * @dataProvider dataProviderUpdateProductOptions
      */
-    public function testUpdateProductOptions($expected, $displayBothPrices, $priceIncludesTax, $displayPriceExcludingTax)
-    {
+    public function testUpdateProductOptions(
+        $expected,
+        $displayBothPrices,
+        $priceIncludesTax,
+        $displayPriceExcludingTax
+    ) {
 
         $frameworkObject= new \Magento\Framework\Object();
         $frameworkObject->setAdditionalOptions([]);
@@ -86,7 +90,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             [
                 'expected' => [
                     'calculationAlgorithm' => 'TOTAL_BASE_CALCULATION',
-                    'optionTemplate' => '<%= label %><% if (finalPrice.value) { %> <%= finalPrice.formatted %> (Excl. tax: <%= basePrice.formatted %>)<% } %>',
+                    'optionTemplate' => '<%= label %><% if (finalPrice.value) '.
+                        '{ %> <%= finalPrice.formatted %> (Excl. tax: <%= basePrice.formatted %>)<% } %>',
                 ],
                 'displayBothPrices' => true,
                 'priceIncludesTax' => false,
