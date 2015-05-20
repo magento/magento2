@@ -11,6 +11,13 @@ namespace Magento\Weee\Model;
 class Observer extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Tax data
+     *
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $_taxData;
+
+    /**
      * @var \Magento\Catalog\Model\Product\Type
      */
     protected $_productType;
@@ -51,6 +58,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\View\LayoutInterface $layout,
@@ -62,6 +70,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
+        $this->_taxData = $taxData;
         $this->_layout = $layout;
         $this->_weeeTax = $weeeTax;
         $this->_productType = $productType;
@@ -209,17 +218,16 @@ class Observer extends \Magento\Framework\Model\AbstractModel
             if (is_array($priceConfig)) {
                 foreach ($priceConfig as $keyConfigs => $configs) {
                     if (is_array($configs)) {
-                        if (array_key_exists('prices', $configs)) {
-                            $priceConfig[$keyConfigs]['prices']['weeePrice'] = [
-                                'amount' => $configs['prices']['finalPrice']['amount'],
-                            ];
-                        } else {
-                            foreach ($configs as $keyConfig => $config) {
-                                $priceConfig[$keyConfigs][$keyConfig]['prices']['weeePrice'] = [
-                                    'amount' => $config['prices']['finalPrice']['amount'],
-                                ];
+                        foreach ($configs as $keyConfig => $config) {
+                            $calcPrice='finalPrice';
+                            if ($this->_taxData->priceIncludesTax() && $this->_taxData->displayPriceExcludingTax()) {
+                                $calcPrice='basePrice';
                             }
+                            $priceConfig[$keyConfigs][$keyConfig]['prices']['weeePrice']= [
+                                'amount' => $config['prices'][$calcPrice]['amount'],
+                            ];
                         }
+
                     }
                 }
             }
