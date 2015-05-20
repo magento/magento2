@@ -8,6 +8,10 @@
 <mapping strict="0">
     <wrapper>attributes</wrapper>
     <fields>
-        <price/>
+        <toggle_price>
+            <selector>[name='toggle_price']</selector>
+            <input>checkbox</input>
+        </toggle_price>
+        <price />
     </fields>
 </mapping>

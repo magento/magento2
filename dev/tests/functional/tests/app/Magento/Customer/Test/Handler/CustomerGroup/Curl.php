@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\Handler\CustomerGroupInjectable;
+namespace Magento\Customer\Test\Handler\CustomerGroup;
 
 use Magento\Backend\Test\Handler\Extractor;
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -14,20 +14,19 @@ use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Class Curl
- * Curl handler for creating customer group
+ * Curl handler for creating customer group.
  */
-class Curl extends AbstractCurl implements CustomerGroupInjectableInterface
+class Curl extends AbstractCurl implements CustomerGroupInterface
 {
     /**
-     * Url for saving data
+     * Url for saving data.
      *
      * @var string
      */
     protected $saveUrl = 'customer/group/save/';
 
     /**
-     * POST request for creating Customer Group
+     * POST request for creating Customer Group.
      *
      * @param FixtureInterface $fixture
      * @return array|mixed
@@ -50,11 +49,11 @@ class Curl extends AbstractCurl implements CustomerGroupInjectableInterface
             );
         }
 
-        return ['customer_group_id' => $this->getCustomerGroupId($data, $response)];
+        return ['customer_group_id' => $this->getCustomerGroupId($data)];
     }
 
     /**
-     * Get id after creating Customer Group
+     * Get id after creating Customer Group.
      *
      * @param array $data
      * @return int|null
