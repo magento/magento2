@@ -959,9 +959,6 @@ class Multishipping extends \Magento\Framework\Object
             /** @var \Magento\Customer\Api\Data\AddressInterface $address */
             return $address->getId();
         }, $this->getCustomer()->getAddresses());
-        if (in_array($addressId, $applicableAddressIds)) {
-            return true;
-        }
-        return false;
+        return in_array($addressId, $applicableAddressIds);
     }
 }
