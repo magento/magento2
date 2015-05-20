@@ -11,7 +11,7 @@ use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * Before save and before delete plugin for \Magento\Cms\Model\Resource\Page:
+ * Before save and around delete plugin for \Magento\Cms\Model\Resource\Page:
  * - autogenerates url_key if the merchant didn't fill this field
  * - remove all url rewrites for cms page on delete
  */
