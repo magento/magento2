@@ -138,6 +138,30 @@ class ManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->setProductLinks($productSku, $linkType, $links));
     }
 
+    public function testSetProductLinksWithoutLinkTypeInLink()
+    {
+        $productSku = 'Simple Product 1';
+        $linkType = 'related';
+        $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
+            ->willReturn($this->productMock);
+
+        $inputRelatedLink = $this->objectManager->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $inputRelatedLink->setProductSku($productSku);
+        $inputRelatedLink->setLinkType($linkType);
+        $inputRelatedLink->setData("sku", "Simple Product 1");
+        $inputRelatedLink->setPosition(0);
+        $links = [$inputRelatedLink];
+
+        $linkTypes = ['related' => 1, 'upsell' => 4, 'crosssell' => 5, 'associated' => 3];
+        $this->linkTypeProviderMock->expects($this->once())
+            ->method('getLinkTypes')
+            ->willReturn($linkTypes);
+
+        $this->productMock->expects($this->once())->method('getProductLinks')->willReturn([]);
+        $this->productMock->expects($this->once())->method('setProductLinks')->with($links);
+        $this->assertTrue($this->model->setProductLinks($productSku, $linkType, $links));
+    }
+
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      * @expectedExceptionMessage Provided link type "bad type" does not exist

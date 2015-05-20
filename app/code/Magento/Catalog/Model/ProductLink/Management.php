@@ -72,6 +72,13 @@ class Management implements \Magento\Catalog\Api\ProductLinkManagementInterface
             );
         }
 
+        // Set product link type in the links
+        if (!empty($items)) {
+            foreach ($items as $newLink) {
+                $newLink->setLinkType($type);
+            }
+        }
+
         $product = $this->productRepository->get($sku);
 
         // Replace only links of the specified type

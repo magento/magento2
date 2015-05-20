@@ -126,6 +126,53 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     */
+    public function testAssignWithMinimalLinkData()
+    {
+        $linkType = 'related';
+        $productSku = 'simple';
+        $linkData = [
+            'linked_product_sku' => 'virtual-product',
+            'position' => 100,
+        ];
+
+        $expected = [
+            'linked_product_type' => 'virtual',
+            'linked_product_sku' => 'virtual-product',
+            'position' => 100,
+            'product_sku' => 'simple',
+            'link_type' => 'related',
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $productSku . '/links/' . $linkType,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'SetProductLinks',
+            ],
+        ];
+
+        $arguments = [
+            'sku' => $productSku,
+            'items' => [$linkData],
+            'type' => $linkType,
+        ];
+
+        $this->_webApiCall($serviceInfo, $arguments);
+        $actual = $this->getLinkedProducts($productSku, 'related');
+        array_walk($actual, function (&$item) {
+            $item = $item->__toArray();
+        });
+        $this->assertEquals([$expected], $actual);
+    }
+
+    /**
      * Get list of linked products
      *
      * @param string $sku
