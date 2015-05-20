@@ -8,41 +8,26 @@ define(
         "jquery",
         'Magento_Ui/js/form/form',
         'ko',
-        'Magento_Checkout/js/action/select-shipping-address',
         'Magento_Customer/js/model/customer',
         '../model/quote',
         'Magento_Checkout/js/model/step-navigator',
-        '../model/addresslist',
         'mage/translate'
     ],
-    function($, Component, ko, selectShippingAddress, customer, quote, navigator, addressList) {
+    function($, Component, ko, customer, quote, navigator) {
         'use strict';
         var stepName = 'shippingAddress';
-        var newAddressSelected = ko.observable(false);
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping-address',
                 visible: true,
                 formVisible: customer.getShippingAddressList().length === 0
             },
-            selectedShippingAddress: ko.computed(function(){
-                if (!quote.getShippingAddress()()) {
-                    quote.setShippingAddress(addressList.getAddresses().length ? addressList.getAddresses()[0] : null);
-                }
-                return quote.getShippingAddress()();
-            }),
             stepNumber: navigator.getStepNumber(stepName),
             isVisible: navigator.isStepVisible(stepName),
             isCustomerLoggedIn: customer.isLoggedIn(),
-            customerAddressCount: window.checkoutConfig.customerAddressCount,
 
             stepClassAttributes: function() {
                 return navigator.getStepClassAttributes(stepName);
-            },
-
-            /** Get all customer addresses  */
-            addresses: function() {
-                return addressList.getAddresses();
             },
 
             /** Initialize observable properties */
@@ -58,11 +43,6 @@ define(
                     navigator.setStepEnabled(stepName, false);
                 }
                 return !quote.isVirtual();
-            },
-
-            /** Set selected customer shipping address  */
-            selectAddress: function(address) {
-                quote.setShippingAddress(address);
             },
 
             /** Navigate to current step */
