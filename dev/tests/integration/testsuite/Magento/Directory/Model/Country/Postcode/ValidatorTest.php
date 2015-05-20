@@ -14,29 +14,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $validator;
 
-    /**
-     * @var \Magento\Directory\Model\Country\Postcode\ConfigInterface
-     */
-    protected $postcodesConfig;
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->validator = $objectManager->create('Magento\Directory\Model\Country\Postcode\ValidatorInterface');
-        $this->postcodesConfig = $objectManager->create('Magento\Directory\Model\Country\Postcode\ConfigInterface');
-    }
-
-    /**
-     * Validate rules count in test and config
-     */
-    public function testValidationRulesCount()
-    {
-        $configCountryIds = array_keys($this->postcodesConfig->getPostCodes());
-        $testCountryIds = [];
-        foreach ($this->getPostcodesDataProvider() as $postcode) {
-            $testCountryIds[] = $postcode['countryId'];
-        }
-        $this->assertEmpty(array_diff(array_unique($testCountryIds), array_unique($configCountryIds)));
     }
 
     /**
