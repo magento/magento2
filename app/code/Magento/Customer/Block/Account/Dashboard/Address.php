@@ -54,7 +54,6 @@ class Address extends \Magento\Framework\View\Element\Template
         $this->currentCustomerAddress = $currentCustomerAddress;
         $this->_addressConfig = $addressConfig;
         parent::__construct($context, $data);
-        $this->_isScopePrivate = true;
         $this->addressMapper = $addressMapper;
     }
 

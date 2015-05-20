@@ -29,6 +29,7 @@ $orderItem->setProductId($product->getId())->setQtyOrdered(2);
 $orderItem->setBasePrice($product->getPrice());
 $orderItem->setPrice($product->getPrice());
 $orderItem->setRowTotal($product->getPrice());
+$orderItem->setProductType('simple');
 
 /** @var \Magento\Sales\Model\Order $order */
 $order = $objectManager->create('Magento\Sales\Model\Order');

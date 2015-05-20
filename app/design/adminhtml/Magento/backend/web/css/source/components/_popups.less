@@ -91,14 +91,14 @@
     .ui-dialog-buttonpane {
         padding: 0 @popup__padding__horizontal @popup__padding__vertical;
     }
-    
+
     .content + .ui-dialog-buttonset {
         padding-top: @popup__padding__vertical;
         text-align: right;
     }
 
     .ui-dialog-buttonset {
-        .extend__clearfix();
+        &:extend(.abs-clearfix all);
     }
 
     .action-close {
@@ -106,6 +106,13 @@
         font-size: @button__large__font-size;
         margin: 0 0 0 @popup__padding__horizontal;
         padding: @button__large__padding-vertical 0;
+        &:before {
+            content: normal;
+        }
+        span {
+            position: static;
+            overflow: auto;
+        }
     }
 
     .ui-button,
@@ -115,7 +122,7 @@
         float: right;
         margin: 0 0 0 @popup__padding__horizontal;
     }
-    
+
     .fieldset {
         &:last-child {
             padding-bottom: 0;
@@ -144,7 +151,7 @@
     .pager {
         padding-bottom: 0;
     }
-    
+
     .grid-actions {
         padding-top: 0;
     }
@@ -237,10 +244,10 @@
     .main-col,
     .magento_message {
         .insert-title-inner {
+            &:extend(.abs-clearfix all);
             border-bottom: 1px solid @color-gray68;
             margin: 0 0 @indent__base;
             padding-bottom: @indent__xs;
-            .extend__clearfix();
         }
         .insert-actions {
             float: right;
@@ -257,8 +264,11 @@
         }
 
         .breadcrumbs {
+            list-style: none;
             padding-left: 0;
             li {
+                display: inline-block;
+                margin: 0 @indent__xs @indent__xs 0;
                 &:after {
                     content: '';
                     margin: 0 @indent__xs 0 0;
@@ -308,7 +318,7 @@
         }
 
         #contents-uploader {
-            .extend__clearfix()
+            &:extend(.abs-clearfix all);
         }
 
         .x-tree {
@@ -343,12 +353,13 @@
     top: 0;
 }
 
+//  The message/dialog popup
 .ui-popup-message {
     .ui-dialog-titlebar {
         background: @color-lazy-sun;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         font-weight: @font-weight__bold;
-        padding: 2rem 2rem 0;
+        padding: 2rem 2rem 0 7.5rem;
     }
     .ui-dialog-titlebar-close {
         right: 1.5rem;
@@ -360,11 +371,23 @@
     .ui-dialog-content {
         background: @color-lazy-sun;
         margin-bottom: 0;
+        overflow: inherit;
         padding: 0 2rem 2rem;
         .messages,
         .message {
             &:last-child {
                 margin-bottom: 0;
+            }
+        }
+        .message {
+            &:first-child {
+                padding-top: 0;
+                &:before {
+                    top: 0;
+                }
+            }
+            &:last-child {
+                padding-bottom: 0;
             }
         }
     }
@@ -473,9 +496,9 @@
     }
 
     .magento_buttons {
+        &:extend(.abs-clearfix all);
         padding: 0 @popup__padding__horizontal @popup__padding__vertical;
         text-align: right;
-        .extend__clearfix();
 
         .ok_button {
             &:extend(.ui-dialog .action-primary all);
@@ -526,9 +549,9 @@
     .popup-title {
         &:extend(.ui-dialog .ui-dialog-titlebar all);
         background: @color-lazy-sun;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         font-weight: @font-weight__bold;
-        padding: 2rem 2rem 0;
+        padding: 2rem 2rem 0 7.5rem;
     }
 
     .popup-header {
@@ -538,8 +561,8 @@
     }
 
     .popup-content {
+        &:extend(.abs-clearfix all);
         background: @color-lazy-sun;
-        .extend__clearfix();
         padding: 0 2rem 2rem;
         p {
             margin-top: 0;
@@ -549,8 +572,19 @@
                 margin-bottom: 0;
             }
         }
+        .message {
+            &:first-child {
+                padding-top: 0;
+                &:before {
+                    top: 0;
+                }
+            }
+            &:last-child {
+                padding-bottom: 0;
+            }
+        }
     }
-    
+
     .fieldset {
         background: @color-lazy-sun;
         border: 0;
@@ -565,16 +599,16 @@
     .messages {
         margin: 0 !important;
     }
-    
+
     .actions {
+        &:extend(.abs-clearfix all);
         margin: 0;
         text-align: right;
-        .extend__clearfix();
 
         .primary {
             &:extend(.ui-dialog .action-primary all);
-            font-size: 1.4rem;
             float: right;
+            line-height: inherit;
             margin: 0 0 0 @popup__padding__horizontal;
             &:hover {
                 box-shadow: none;
@@ -582,8 +616,8 @@
         }
 
         .cancel {
+            line-height: inherit;
             &:extend(.ui-dialog .action-close all);
-            font-size: 1.4rem;
             &:hover {
                 box-shadow: none;
             }

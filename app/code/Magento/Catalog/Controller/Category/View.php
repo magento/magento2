@@ -197,7 +197,6 @@ class View extends \Magento\Framework\App\Action\Action
                 ->addBodyClass('categorypath-' . $this->categoryUrlPathGenerator->getUrlPath($category))
                 ->addBodyClass('category-' . $category->getUrlKey());
 
-            $page->getLayout()->initMessages();
             return $page;
         } elseif (!$this->getResponse()->isRedirect()) {
             return $this->resultForwardFactory->create()->forward('noroute');

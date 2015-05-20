@@ -204,13 +204,9 @@
     .product-reviews-summary .reviews-actions {
         .font-size(@font-size__base);
     }
-    .product-options-wrapper {
-        .field {
-            .note {
-                display: block;
-            }
-        }
-    }
+}
+
+.product-options-wrapper {
     .fieldset-product-options-inner {
         .legend {
             border: none;
@@ -237,10 +233,10 @@
                 }
             }
         }
-        .datetime-picker {
-            + .time-picker {
-                .css(margin-left, @indent__xs);
-            }
+    }
+    .field {
+        .note {
+            display: block;
         }
     }
 }

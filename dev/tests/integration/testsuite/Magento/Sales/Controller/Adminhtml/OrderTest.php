@@ -13,7 +13,7 @@ class OrderTest extends \Magento\Backend\Utility\Controller
     public function testIndexAction()
     {
         $this->dispatch('backend/sales/order/index');
-        $this->assertContains('Total 0 records found', $this->getResponse()->getBody());
+        $this->assertContains('No records found.', $this->getResponse()->getBody());
     }
 
     /**
@@ -22,7 +22,10 @@ class OrderTest extends \Magento\Backend\Utility\Controller
     public function testIndexActionWithOrder()
     {
         $this->dispatch('backend/sales/order/index');
-        $this->assertContains('Total 1 records found', $this->getResponse()->getBody());
+        $this->assertRegExp(
+            '/<span.*id="sales_order_grid-total-count".*>\s*1\s*<\/span>\s*records found.\s*/',
+            $this->getResponse()->getBody()
+        );
     }
 
     /**

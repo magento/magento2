@@ -13,7 +13,9 @@ require([
     "mage/translate",
     "text!<?php echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>"
 ], function($, translate, data) {
-    $.mage.translate.add(JSON.parse(data));
+    if (data.length) {
+        $.mage.translate.add(JSON.parse(data));
+    }
 });
 </script>
 <?php endif; ?>

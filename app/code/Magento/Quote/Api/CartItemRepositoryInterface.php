@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api;
 
+/**
+ * Interface CartItemRepositoryInterface
+ * @api
+ */
 interface CartItemRepositoryInterface
 {
     /**

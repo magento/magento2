@@ -230,7 +230,6 @@ return [
     'oauth/consumer' => 'oauth_consumer',
     'oauth/nonce' => 'oauth_nonce',
     'oauth/token' => 'oauth_token',
-    'ogone/api_debug' => 'ogone_api_debug',
     'oscommerce/catalog_category' => 'catalog_category_entity',
     'oscommerce/catalog_product_website' => 'catalog_product_website',
     'oscommerce/oscommerce' => 'oscommerce_import',

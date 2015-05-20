@@ -22,7 +22,6 @@ class Success extends \Magento\Checkout\Controller\Onepage
         $session->clearQuote();
         //@todo: Refactor it to match CQRS
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->getLayout()->initMessages();
         $this->_eventManager->dispatch(
             'checkout_onepage_controller_success_action',
             ['order_ids' => [$session->getLastOrderId()]]
