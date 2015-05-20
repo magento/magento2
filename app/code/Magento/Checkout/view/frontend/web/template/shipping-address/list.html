@@ -30,8 +30,8 @@
         height: 20px;
     }
 </style>
-<input type="hidden" data-bind="value: selectedShippingAddress().customerAddressId" name="shipping_address_id" id="shipping:address-select" />
 <!-- ko if: (visible)-->
+<input type="hidden" data-bind="value: selectedShippingAddress().customerAddressId" name="shipping_address_id" id="shipping:address-select" />
 <div class="field addresses">
     <div class="control">
         <div class="shipping-address-items" data-bind="foreach: {data: addresses(), as: 'address'}">
