@@ -8,6 +8,8 @@
 
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
+use Magento\CatalogImportExport\Model\Import\Product;
+
 /**
  * Entity class which provide possibility to import product custom options
  *
@@ -886,7 +888,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         $this->_validatedRows[$rowNumber] = true;
 
-
         $multiRowData = $this->_getMultiRowFormat($rowData);
 
         foreach ($multiRowData as $optionData) {
@@ -1030,6 +1031,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _getMultiRowFormat($rowData)
     {
+        // Parse custom options.
+        $rowData = $this->_parseCustomOptions($rowData);
         $multiRow = array();
         if (empty($rowData['custom_options'])) {
             return $multiRow;
@@ -1052,7 +1055,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     self::COLUMN_PREFIX . 'sku' => $optionRow['sku']
                 );
 
-                $percent_suffix = isset($optionRow['price']) && ($optionRow['price'] == 'percent') ? '%' : '';
+                $percent_suffix = isset($optionRow['price_type']) && ($optionRow['price_type'] == 'percent') ? '%' : '';
                 $row[self::COLUMN_ROW_PRICE] = isset($optionRow['price']) ? $optionRow['price'] . $percent_suffix : '';
                 $row[self::COLUMN_PREFIX . 'price'] = $row[self::COLUMN_ROW_PRICE];
 
@@ -1716,6 +1719,77 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             );
         }
 
+        return $this;
+    }
+
+    /**
+     * Parse custom options string to inner format
+     *
+     * @param array $rowData
+     *
+     * @return array
+     */
+     protected function _parseCustomOptions($rowData)
+    {
+        $beforeOptionValueSkuDelimiter = ';';
+
+        if (empty($rowData['custom_options'])) {
+            return $rowData;
+        }
+
+        $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter, $this->_productEntity->getMultipleValueSeparator(), $rowData['custom_options']);
+
+        $options = array();
+
+        $optionValues = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['custom_options']);
+
+        $k = 0;
+        $name = '';
+
+        foreach ($optionValues as $optionValue) {
+
+            $optionValueParams = explode($this->_productEntity->getMultipleValueSeparator(), $optionValue);
+
+            foreach ($optionValueParams as $nameAndValue) {
+
+                $nameAndValue = explode('=', $nameAndValue);
+                if (!empty($nameAndValue)) {
+
+
+                    $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
+                    $value = trim($value);
+                    $fieldName  = trim($nameAndValue[0]);
+
+                    if ($value && ($fieldName == 'name')) {
+
+                        if ($name != $value) {
+                            $name = $value;
+                            $k = 0;
+                        }
+                    }
+
+                    if ($name) {
+                        $options[$name][$k][$fieldName] = $value;
+                    }
+                }
+            }
+
+            $options[$name][$k]['_custom_option_store'] = $rowData[Product::COL_WEBSITE];
+
+            $k++;
+        }
+        $rowData['custom_options'] = $options;
+        return $rowData;
+    }
+
+    /**
+     * Clear product sku to id array
+     *
+     * @return $this
+     */
+    public function clearProductsSkuToId()
+    {
+        $this->_productsSkuToId = null;
         return $this;
     }
 }

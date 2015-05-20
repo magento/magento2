@@ -41,9 +41,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
 
     /**
-     * custom option value delimiter
+     * pseudo multi line separator in one cell
+     * can be used as custom option value delimiter or in configurable fields cells
+     *
      */
-    const CUSTOM_OPTION_VALUE_DELIMITER = '|';
+    const PSEUDO_MULTI_LINE_SEPARATOR = '|';
+
+    /**
+     * Symbol between Name and Value between Pairs
+     *
+     */
+    const PAIR_NAME_VALUE_SEPARATOR = '=';
 
     /**
      * Value that means all entities (e.g. websites, groups etc.)
@@ -73,11 +81,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     const COL_ATTR_SET = '_attribute_set';
 
-    const COL_TYPE = '_type';
+    const COL_TYPE = 'product_type';
 
     const COL_CATEGORY = 'categories';
 
     const COL_SKU = 'sku';
+
+    const COL_NAME = 'name';
 
     const COL_PRODUCT_WEBSITES = '_product_websites';
 
@@ -88,6 +98,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const INVENTORY_USE_CONFIG = 'Use Config';
 
     const INVENTORY_USE_CONFIG_PREFIX = 'use_config_';
+
+    /**
+     * Attribute cache
+     *
+     * @var array
+     */
+    protected $_attributeCache = [];
 
     /**
      * Pairs of attribute set ID-to-name.
@@ -471,6 +488,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $transactionManager;
 
     /**
+     * Flag for replace operation
+     *
+     * @var null
+     */
+    protected $_replaceFlag = null;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
@@ -652,7 +676,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return string
      */
-    protected function _getMultipleValueSeparator()
+    public function getMultipleValueSeparator()
     {
         if (!empty($this->_parameters[\Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])) {
             return $this->_parameters[\Magento\ImportExport\Model\Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR];
@@ -690,6 +714,19 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Delete products for replacement
+     *
+     * @return $this
+     */
+    public function deleteProductsForReplacement()
+    {
+        $this->setParameters(array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE));
+        $this->_deleteProducts();
+
+        return $this;
+    }
+
+    /**
      * Delete products.
      *
      * @return $this
@@ -722,6 +759,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->transactionManager->rollBack();
                     throw $e;
                 }
+                $this->_eventManager->dispatch('catalog_product_import_bunch_delete_after', ['adapter' => $this, 'bunch' => $bunch]);
             }
         }
         return $this;
@@ -737,17 +775,51 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
             $this->_deleteProducts();
+        } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
+            $this->_replaceFlag = true;
+            $this->_replaceProducts();
         } else {
-            $this->_saveProducts();
-            foreach ($this->_productTypeModels as $productTypeModel) {
-                $productTypeModel->saveData();
-            }
-            $this->_saveLinks();
-            $this->_saveStockItem();
-            $this->getOptionEntity()->importData();
+            $this->_saveProductsData();
         }
         $this->_eventManager->dispatch('catalog_product_import_finish_before', ['adapter' => $this]);
         return true;
+    }
+
+    /**
+     * Replace imported products
+     *
+     * @return $this
+     */
+    protected function _replaceProducts()
+    {
+        $this->deleteProductsForReplacement();
+        $this->_oldSku = $this->skuProcessor->reloadOldSkus()->getOldSkus();
+        $this->_validatedRows = null;
+        $this->setParameters(array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND));
+        $this->_saveProductsData();
+
+        return $this;
+    }
+
+    /**
+     * Save products data
+     *
+     * @return $this
+     */
+    protected function _saveProductsData()
+    {
+        $this->_saveProducts();
+        foreach ($this->_productTypeModels as $productTypeModel) {
+            $productTypeModel->saveData();
+        }
+        $this->_saveLinks();
+        $this->_saveStockItem();
+        if ($this->_replaceFlag) {
+            $this->getOptionEntity()->clearProductsSkuToId();
+        }
+        $this->getOptionEntity()->importData();
+
+        return $this;
     }
 
     /**
@@ -804,6 +876,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
             }
+            $this->_fields_map = array_merge($this->_fields_map, $model->getCustomFieldsMapping());
             $this->_specialAttributes = array_merge($this->_specialAttributes, $model->getParticularAttributes());
         }
         // remove doubles
@@ -886,7 +959,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $productId = $this->skuProcessor->getNewSku($sku)['entity_id'];
                     $productIds[] = $productId;
                     if (isset($rowData[$linkName . 'sku'])) {
-                        $linkSkus = explode($this->_getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
+                        $linkSkus = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
 
                         foreach ($linkSkus as $linkedSku) {
                             $linkedSku = trim($linkedSku);
@@ -1201,8 +1274,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $mediaGalleryImages = array();
                 $mediaGalleryLabels = array();
                 if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
-                    $mediaGalleryImages = explode($this->_getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
-                    $mediaGalleryLabels = isset($rowData['_media_image_label']) ? explode($this->_getMultipleValueSeparator(), $rowData['_media_image_label']) : array();
+                    $mediaGalleryImages = explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
+                    $mediaGalleryLabels = isset($rowData['_media_image_label']) ? explode($this->getMultipleValueSeparator(), $rowData['_media_image_label']) : array();
                     if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
                         $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
                     } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
@@ -1290,7 +1363,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $product = $this->_proxyProdFactory->create(['data' => $rowData]);
 
                 foreach ($rowData as $attrCode => $attrValue) {
-                    $attribute = $resource->getAttribute($attrCode);
+                    if (!isset($this->_attributeCache[$attrCode])) {
+                        $this->_attributeCache[$attrCode] = $resource->getAttribute($attrCode);
+                    }
+                    $attribute = $this->_attributeCache[$attrCode];
+
                     if ('multiselect' != $attribute->getFrontendInput() && self::SCOPE_NULL == $rowScope) {
                         // skip attribute processing for SCOPE_NULL rows
                         continue;
@@ -1353,6 +1430,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             )->_saveProductAttributes(
                 $attributes
             );
+
+            $this->_eventManager->dispatch('catalog_product_import_bunch_save_after', ['adapter' => $this, 'bunch' => $bunch]);
         }
         return $this;
     }
@@ -1767,6 +1846,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function getRowScope(array $rowData)
     {
+        if (empty($rowData[self::COL_SKU])) {
+            return self::SCOPE_NULL;
+        }
         if (empty($rowData[self::COL_STORE])) {
             return self::SCOPE_DEFAULT;
         }
@@ -1906,73 +1988,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $rowData;
         }
 
-        $attributeNameValuePairs = explode($this->_getMultipleValueSeparator(), $rowData['additional_attributes']);
+        $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $rowData['additional_attributes']);
         foreach ($attributeNameValuePairs as $attributeNameValuePair) {
-            $nameAndValue = explode('=', $attributeNameValuePair);
+            $nameAndValue = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeNameValuePair);
             if (!empty($nameAndValue)) {
                 $rowData[$nameAndValue[0]] = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
             }
         }
-        return $rowData;
-    }
-
-    /**
-     * Parse custom options string to inner format
-     *
-     * @param array $rowData
-     *
-     * @return array
-     */
-    private function _parseCustomOptions($rowData)
-    {
-        $beforeOptionValueSkuDelimiter = ';';
-
-        if (empty($rowData['custom_options'])) {
-            return $rowData;
-        }
-
-        $rowData['custom_options'] = str_replace($beforeOptionValueSkuDelimiter, $this->_getMultipleValueSeparator(), $rowData['custom_options']);
-
-        $options = array();
-
-        $optionValues = explode(self::CUSTOM_OPTION_VALUE_DELIMITER, $rowData['custom_options']);
-
-        $k = 0;
-        $name = '';
-
-        foreach ($optionValues as $optionValue) {
-
-            $optionValueParams = explode($this->_getMultipleValueSeparator(), $optionValue);
-
-            foreach ($optionValueParams as $nameAndValue) {
-
-                $nameAndValue = explode('=', $nameAndValue);
-                if (!empty($nameAndValue)) {
-
-
-                    $value = isset($nameAndValue[1]) ? $nameAndValue[1] : '';
-                    $value = trim($value);
-                    $fieldName  = trim($nameAndValue[0]);
-
-                    if ($value && ($fieldName == 'name')) {
-
-                        if ($name != $value) {
-                            $name = $value;
-                            $k = 0;
-                        }
-                    }
-
-                    if ($name) {
-                        $options[$name][$k][$fieldName] = $value;
-                    }
-                }
-            }
-
-            $options[$name][$k]['_custom_option_store'] = $rowData[Product::COL_STORE];
-
-            $k++;
-        }
-        $rowData['custom_options'] = $options;
         return $rowData;
     }
 
@@ -2011,8 +2033,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         $rowData = $this->_parseAdditionalAttributes($rowData);
-
-        $rowData = $this->_parseCustomOptions($rowData);
 
         $rowData = $this->_setStockUseConfigFieldsValues($rowData);
         if (isset($rowData['status'])) {
@@ -2078,7 +2098,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @return \Magento\Framework\Model\AbstractModel|void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _populateToUrlGeneration($rowData)
+    public function _populateToUrlGeneration($rowData)
     {
         $product = $this->catalogProductFactory->create();
         $newSku = $this->skuProcessor->getNewSku($rowData[self::COL_SKU]);

@@ -57,6 +57,14 @@ abstract class AbstractType
      */
     protected $_specialAttributes = [];
 
+
+    /**
+     * Custom entity type fields mapping
+     *
+     * @var string[]
+     */
+    protected $_customFieldsMapping = [];
+
     /**
      * Product entity object.
      *
@@ -257,6 +265,16 @@ abstract class AbstractType
     public function getParticularAttributes()
     {
         return $this->_specialAttributes;
+    }
+
+    /**
+     * Return entity custom Fields mapping
+     *
+     * @return string[]
+     */
+    public function getCustomFieldsMapping()
+    {
+        return $this->_customFieldsMapping;
     }
 
     /**
