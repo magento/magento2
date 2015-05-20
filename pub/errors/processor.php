@@ -386,11 +386,6 @@ class Processor
     protected function _getFilePath($file, $directories = null)
     {
         if (is_null($directories)) {
-            $directories = [];
-
-            if (!$this->_root) {
-                $directories[] = $this->_indexDir . self::ERROR_DIR . '/';
-            }
             $directories[] = $this->_errorDir;
         }
 
@@ -409,16 +404,6 @@ class Processor
      */
     protected function _getTemplatePath($template)
     {
-        $directories = [];
-
-        if (!$this->_root) {
-            $directories[] = $this->_indexDir . self::ERROR_DIR . '/' . $this->_config->skin . '/';
-
-            if ($this->_config->skin != self::DEFAULT_SKIN) {
-                $directories[] = $this->_indexDir . self::ERROR_DIR . '/' . self::DEFAULT_SKIN . '/';
-            }
-        }
-
         $directories[] = $this->_errorDir . $this->_config->skin . '/';
 
         if ($this->_config->skin != self::DEFAULT_SKIN) {
