@@ -85,7 +85,7 @@ class QuoteAddressValidator
         }
 
         if ($addressData->getCustomerAddressId()) {
-            $applicableAddressIds = array_map(function($address) {
+            $applicableAddressIds = array_map(function ($address) {
                 /** @var \Magento\Customer\Api\Data\AddressInterface $address */
                 return $address->getId();
             }, $this->customerSession->getCustomerDataObject()->getAddresses());
