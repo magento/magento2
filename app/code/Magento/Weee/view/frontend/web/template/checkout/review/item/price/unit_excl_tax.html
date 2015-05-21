@@ -1,0 +1,40 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<!-- ko if:  (isDisplayPriceWithWeeeDetails(item)) -->
+    <span class="cart-tax-total" data-bind="mageInit:{taxToggle: {itemTaxId : '#eunit-item-tax-details' + item.item_id}}">
+        <span class="price" data-bind="text: getFormattedPrice(item.price)"></span>
+    </span>
+<!-- /ko -->
+<!-- ko ifnot:  (isDisplayPriceWithWeeeDetails(item)) -->
+    <span class="cart-price"><span class="price" data-bind="text: getFormattedPrice(item.price)"></span></span>
+<!-- /ko -->
+
+
+<!--ko if:  (getWeeeTaxApplied(item).length > 0)-->
+    <!-- ko ifnot:  (isDisplayPriceWithWeeeDetails(item))-->
+        <span class="cart-tax-info" data-bind ="attr: {'id': 'eunit-item-tax-details' + item.item_id}" style="display: none;"></span>
+    <!-- /ko-->
+    <!-- ko if:  (isDisplayPriceWithWeeeDetails(item))-->
+        <span class="cart-tax-info" data-bind ="attr: {'id': 'eunit-item-tax-details' + item.item_id}" style="display: none;">
+             <!-- ko foreach: getWeeeTaxApplied(item)-->
+                <span class="weee" data-bind="attr:{'data-label':title}">
+                    <span class="price" data-bind="text: $parent.getFormattedPrice(amount)"></span>
+                </span>
+            <!-- /ko-->
+            </span>
+    <!-- /ko-->
+
+
+    <!-- ko if: isDisplayFinalPrice(item)-->
+        <span class="cart-tax-total" data-bind="mageInit:{taxToggle: {itemTaxId : '#eunit-item-tax-details' + item.item_id}}">
+            <span class="weee" data-bind="attr: {'data-label':$t('Total')}">
+                <span class="price" data-bind="text: getFormattedPrice(getFinalUnitDisplayPriceExclTax(item))"></span>
+            </span>
+        </span>
+    <!-- /ko -->
+<!-- /ko -->

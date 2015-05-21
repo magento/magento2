@@ -21,4 +21,13 @@
         <plugin name="customer-app-action-dispatchController-context-plugin"
                 type="Magento\Customer\Model\App\Action\ContextPlugin" sortOrder="10"/>
     </type>
+    <preference for="Magento\Customer\CustomerData\SectionPoolInterface"
+                type="Magento\Customer\CustomerData\SectionPool"/>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\Customer\CustomerData\Customer</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

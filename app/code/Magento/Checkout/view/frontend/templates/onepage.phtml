@@ -3,45 +3,26 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
-/** @var \Magento\Checkout\Block\Onepage\Payment $_paymentBlock */
-$_paymentBlock = $block->getLayout()->getBlock('checkout.onepage.payment');
 ?>
-
-<div class="opc-wrapper">
-    <ol class="opc"
-        id="checkoutSteps"
-        data-accordion='{
-                "collapsibleElement": " > li",
-                "openedState": "active"
-            }'
-        data-mage-init='{
-                "opcOrderReview": {
-                    "checkoutAgreements": "#checkout-agreements",
-                    "checkoutProgressContainer": "#checkout-progress-wrapper",
-                    "methodDescription": ".items"
+    <div id="checkout" data-bind="scope:'checkout'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <script type="text/x-magento-init">
+            {
+                "#checkout": {
+                    "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
                 }
-            }'>
-    <?php $i = 0; foreach ($block->getSteps() as $_stepId => $_stepInfo): ?>
-    <?php if (!$block->getChildBlock($_stepId) || !$block->getChildBlock($_stepId)->isShow()): continue; endif; $i++ ?>
-        <li id="opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow']) ? ' allow' : '' ?><?php echo !empty($_stepInfo['complete']) ? ' saved' : '' ?>">
-            <div class="step-title" data-role="title">
-                <span class="number"><?php echo $i ?></span>
-                <h2><?php echo $_stepInfo['label'] ?></h2>
-            </div>
-            <div id="checkout-step-<?php echo $_stepId ?>" class="step-content" data-role="content">
-                <?php echo $block->getChildHtml($_stepId) ?>
-            </div>
-        </li>
-    <?php endforeach ?>
-    </ol>
-    <script type="text/x-magento-init">
-        {
-           "#checkoutSteps": {
-                "opcOrderReview": <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
-           }
-        }
-    </script>
-</div>
+            }
+        </script>
+        <script>
+            window.checkoutConfig = <?php echo \Zend_Json::encode($block->getCheckoutConfig()); ?>;
+            // Create aliases for customer.js model from customer module
+            window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+            window.customerData = window.checkoutConfig.customerData;
+        </script>
+        <script>
+            require(['mage/url', 'Magento_Checkout/js/model/step-loader'], function(url, loader) {
+                loader.registerLoader();
+                return url.setBaseUrl('<?php echo $block->getBaseUrl();?>');
+            })
+        </script>
+    </div>

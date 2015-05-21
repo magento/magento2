@@ -78,7 +78,7 @@ sub vcl_backend_response {
         return (deliver);
     } elsif (beresp.http.Cache-Control ~ "private") {
         set beresp.uncacheable = true;
-        set beresp.ttl = 120s;
+        set beresp.ttl = 86400s;
         return (deliver);
     }
 

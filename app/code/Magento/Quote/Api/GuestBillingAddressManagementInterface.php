@@ -7,11 +7,12 @@ namespace Magento\Quote\Api;
 
 /**
  * Billing address management interface for guest carts.
+ * @api
  */
 interface GuestBillingAddressManagementInterface
 {
     /**
-     * Assigns a specified billing address to a specified cart.
+     * Assign a specified billing address to a specified cart.
      *
      * @param string $cartId The cart ID.
      * @param \Magento\Quote\Api\Data\AddressInterface $address Billing address data.
@@ -22,7 +23,7 @@ interface GuestBillingAddressManagementInterface
     public function assign($cartId, \Magento\Quote\Api\Data\AddressInterface $address);
 
     /**
-     * Returns the billing address for a specified quote.
+     * Return the billing address for a specified quote.
      *
      * @param string $cartId The cart ID.
      * @return \Magento\Quote\Api\Data\AddressInterface Quote billing address object.
