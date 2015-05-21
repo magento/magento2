@@ -187,7 +187,10 @@ class Environment extends AbstractActionController
         $error = false;
         $iniSetting = ini_get('always_populate_raw_post_data');
 
-        if (version_compare(PHP_VERSION, '5.6.0') >= 0 && (int)$iniSetting > -1) {
+        if (version_compare(PHP_VERSION, '5.6.0') >= 0
+            && (int)$iniSetting > -1
+            && strpos(PHP_VERSION, 'hhvm') === false
+        ) {
             $error = true;
         }
 
