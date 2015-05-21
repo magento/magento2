@@ -6,6 +6,7 @@ define([
     "jquery",
     "jquery/ui"
 ], function ($) {
+    "use strict";
 
     $.widget('mage.step-wizard', $.ui.tabs, {
         defaultStep: {
@@ -15,7 +16,10 @@ define([
         options: {
             collapsible: false,
             disabled: [],
-            event: "click"
+            event: "click",
+            buttonNextElement: '[data-role="step-wizard-next"]',
+            buttonPrevElement: '[data-role="step-wizard-prev"]',
+            selectorScript: '[data-handler="step-wizard"]'
         },
         _create: function() {
             this._control();
@@ -23,12 +27,12 @@ define([
         },
         _control: function() {
             var self = this;
-            this.element.find('.btn-wrap-next').on('click', function(event){
+            this.element.find(this.options.buttonNextElement).on('click', function(event){
                 self._activate(self.options.active + 1);
             });
-            this.element.find('.btn-wrap-prev').on('click', function(event){
+            this.element.find(this.options.buttonPrevElement).on('click', function(event){
                 self._activate(self.options.active - 1);
-            })
+            });
         },
         load: function(index, event) {
             this._disabledTabs(index);
@@ -36,9 +40,9 @@ define([
             this._super(index, event);
         },
         _handlerStep: function (index) {
-            var script = this.panels.eq(index).find('[data-handler="step-wizard"]').first();
-            if(script.text()) {
-                var code = eval(script.text());
+            var script = this.panels.eq(index).find(this.options.selectorScript).first();
+            if (script.text()) {
+                eval(script.text());
                 this.step = step;
             } else {
                 this.step = this.defaultStep;

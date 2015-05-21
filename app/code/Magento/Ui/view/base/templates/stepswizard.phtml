@@ -6,7 +6,7 @@
 
 /** @var $block \Magento\Ui\Block\Component\StepsWizard */
 ?>
-<div data-mage-init='{"Magento_Ui/js/lib/step-wizard":{}}'>
+<div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{}}'>
     <ul class="nav-bar">
         <?php foreach ($block->getSteps() as $step) { ?>
         <li data-role="collapsible">
@@ -18,16 +18,16 @@
     </ul>
     <div class="nav-bar-outer-actions">
         <div class="outer-actions-inner-wrap">
-            <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next">
+            <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next" data-role="step-wizard-next">
                 <button type="button" class="btn btn-prime"><?= __('Next') ?></button>
             </div>
-            <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
+            <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev" data-role="step-wizard-prev">
                 <button type="button" class="btn" disabled=""><?= __('Back') ?></button>
             </div>
         </div>
     </div>
     <?php foreach ($block->getSteps() as $step) { ?>
-    <div id="<?= $step->getId() ?>" data-role="content">
+    <div class="content" id="<?= $step->getId() ?>" data-role="content">
         <?= $step->getContent() ?>
     </div>
     <?php } ?>
