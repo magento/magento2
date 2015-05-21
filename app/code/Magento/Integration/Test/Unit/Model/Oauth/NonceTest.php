@@ -43,11 +43,15 @@ class NonceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
-            ->setMethods(['getEventDispatcher'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eventManagerMock = $this->getMockForAbstractClass('Magento\Framework\Event\ManagerInterface',
+        $this->contextMock = $this->getMock(
+            'Magento\Framework\Model\Context',
+            ['getEventDispatcher'],
+            [],
+            '',
+            false
+        );
+        $eventManagerMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Event\ManagerInterface',
             [],
             '',
             false,
@@ -58,13 +62,22 @@ class NonceTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->will($this->returnValue($eventManagerMock));
-        $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->oauthDataMock = $this->getMockBuilder('Magento\Integration\Helper\Oauth\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceMock = $this->getMockForAbstractClass('Magento\Framework\Model\Resource\AbstractResource',
+        $this->registryMock = $this->getMock(
+            'Magento\Framework\Registry',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->oauthDataMock = $this->getMock(
+            'Magento\Integration\Helper\Oauth\Data',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->resourceMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Model\Resource\AbstractResource',
             [],
             '',
             false,
@@ -72,9 +85,13 @@ class NonceTest extends \PHPUnit_Framework_TestCase
             true,
             ['getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries']
         );
-        $this->resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceCollectionMock = $this->getMock(
+            'Magento\Framework\Data\Collection\Db',
+            [],
+            [],
+            '',
+            false
+        );
         $this->nonceModel = new \Magento\Integration\Model\Oauth\Nonce(
             $this->contextMock,
             $this->registryMock,
