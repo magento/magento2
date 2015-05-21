@@ -102,13 +102,32 @@ class NonceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->nonceModel, $this->nonceModel->afterSave());
     }
 
+    public function testAfterSaveNoCleanupProbability()
+    {
+        $this->oauthDataMock->expects($this->once())
+            ->method('isCleanupProbability')
+            ->will($this->returnValue(false));
+
+        $this->oauthDataMock->expects($this->never())
+            ->method('getCleanupExpirationPeriod');
+
+        $this->resourceMock->expects($this->never())
+            ->method('deleteOldEntries');
+
+        $this->assertEquals($this->nonceModel, $this->nonceModel->afterSave());
+    }
+
     public function testLoadByCompositeKey()
     {
         $expectedData = ['testData'];
+        $nonce = 'testNonce';
+        $consumerId = 1;
+
         $this->resourceMock->expects($this->once())
             ->method('selectByCompositeKey')
+            ->with($nonce, $consumerId)
             ->will($this->returnValue($expectedData));
-        $this->nonceModel->loadByCompositeKey('testNonce', 1);
+        $this->nonceModel->loadByCompositeKey($nonce, $consumerId);
 
         $this->assertEquals($expectedData, $this->nonceModel->getData());
     }
