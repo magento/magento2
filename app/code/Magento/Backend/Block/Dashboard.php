@@ -31,11 +31,11 @@ class Dashboard extends \Magento\Backend\Block\Template
 
         $this->addChild('sales', 'Magento\Backend\Block\Dashboard\Sales');
 
-        $isEnabledCharts = $this->_scopeConfig->getValue(
+        $isChartEnabled = $this->_scopeConfig->getValue(
             self::XML_PATH_ENABLE_CHARTS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        if ($isEnabledCharts) {
+        if ($isChartEnabled) {
             $block = $this->getLayout()->createBlock('Magento\Backend\Block\Dashboard\Diagrams');
         } else {
             $block = $this->getLayout()->createBlock(
