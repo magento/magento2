@@ -43,6 +43,10 @@ return [
     ['Mage_Adminhtml_Block_Backup_Grid'],
     ['Mage_Adminhtml_Block_Cache_Grid'],
     ['Mage_Adminhtml_Block_Catalog'],
+    [
+        'Magento\Catalog\Model\Resource\Category\Attribute\Source\Mode',
+        'Magento\Catalog\Model\Category\Attribute\Source\Mode',
+    ],
     ['Mage_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid'],
     ['Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Config_Grid'],
     ['Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Super_Group_Grid'],
