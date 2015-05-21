@@ -126,4 +126,14 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     {
         return $this->configProvider->getConfig();
     }
+
+    /**
+     * Get base url for block.
+     *
+     * @return string
+     */
+    public function getBaseUrl()
+    {
+        return $this->_storeManager->getStore()->getBaseUrl();
+    }
 }

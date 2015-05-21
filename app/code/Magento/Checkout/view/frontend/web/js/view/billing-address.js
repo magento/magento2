@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 /*jshint browser:true*/
-/*global define,alert*/
+/*global define*/
 define(
     [
         "jquery",
@@ -11,13 +11,11 @@ define(
         'ko',
         'Magento_Customer/js/model/customer',
         '../action/select-billing-address',
-        'Magento_Checkout/js/model/step-navigator',
+        '../model/step-navigator',
         '../model/quote',
-        '../model/addresslist',
-        '../action/check-email-availability',
-        'mage/validation'
+        '../model/addresslist'
     ],
-    function ($, Component, ko, customer, selectBillingAddress, navigator, quote, addressList, checkEmailAvailability) {
+    function ($, Component, ko, customer, selectBillingAddress, navigator, quote, addressList) {
         "use strict";
         var stepName = 'billingAddress';
         var newAddressSelected = ko.observable(false);
@@ -35,12 +33,23 @@ define(
                 return navigator.getStepClassAttributes(stepName);
             },
             stepNumber: navigator.getStepNumber(stepName),
-            billingAddresses: customer.getBillingAddressList(),
-            selectedBillingAddressId: addressList.getAddresses()[0].customerAddressId,
+            billingAddresses: function() {
+                var newAddress = {
+                        getAddressInline: function() {
+                            return $.mage.__('New address');
+                        },
+                        customerAddressId: null
+                    },
+                    addresses = addressList.getAddresses();
+                addresses.push(newAddress);
+                return addresses;
+            },
+            selectedBillingAddressId: ko.observable(
+                addressList.getAddresses().length ? addressList.getAddresses()[0].customerAddressId : null
+            ),
             isVisible: navigator.isStepVisible(stepName),
             useForShipping: "1",
             quoteIsVirtual: quote.isVirtual(),
-            isEmailCheckComplete: $.Deferred(),
             billingAddressesOptionsText: function(item) {
                 return item.getAddressInline();
             },
@@ -53,42 +62,32 @@ define(
                 return additionalData;
             },
             submitBillingAddress: function() {
-                if (this.selectedBillingAddressId) {
-                    var additionalData = this.checkUseForShipping(this.useForShipping);
+                var additionalData = this.checkUseForShipping(this.useForShipping);
+                if (this.selectedBillingAddressId()) {
                     selectBillingAddress(
-                        addressList.getAddressById(this.selectedBillingAddressId),
+                        addressList.getAddressById(this.selectedBillingAddressId()),
                         this.useForShipping,
                         additionalData
                     );
                 } else {
-                    var that = this;
                     this.validate();
-                    $.when(this.isEmailCheckComplete).done( function() {
-                        if (!that.source.get('params.invalid')) {
-                            var addressData = that.source.get('billingAddress');
-                            var additionalData = that.checkUseForShipping(that.useForShipping);
-                            /**
-                             * All the the input fields that are not a part of the address but need to be submitted
-                             * in the same request must have data-scope attribute set
-                             */
-                            var additionalFields = $('input[data-scope="additionalAddressData"]').serializeArray();
-                            additionalFields.forEach(function (field) {
-                                additionalData[field.name] = field.value;
-                            });
-                            if (quote.getCheckoutMethod()() && !customer.isLoggedIn()()) {
-                                addressData.email = that.source.get('customerDetails.email');
-                            }
-                            if($(billingFormSelector).validation() && $(billingFormSelector).validation('isValid')) {
-                                selectBillingAddress(addressData, that.useForShipping, additionalData);
-                            }
+                    if (!this.source.get('params.invalid')) {
+                        var addressData = this.source.get('billingAddress');
+                        /**
+                         * All the the input fields that are not a part of the address (e. g. CAPTCHA) but need to be
+                         * submitted in the same request must have data-scope attribute set
+                         */
+                        var additionalFields = $('input[data-scope="additionalAddressData"]').serializeArray();
+                        additionalFields.forEach(function (field) {
+                            additionalData[field.name] = field.value;
+                        });
+                        if (quote.getCheckoutMethod()() && !customer.isLoggedIn()()) {
+                            addressData.email = this.source.get('customerDetails.email');
                         }
-                    }).fail( function() {
-                        alert(
-                            "There is already a registered customer using this email address. " +
-                            "Please log in using this email address or enter a different email address " +
-                            "to register your account."
-                        );
-                    });
+                        if($(billingFormSelector).validation() && $(billingFormSelector).validation('isValid')) {
+                            selectBillingAddress(addressData, this.useForShipping, additionalData);
+                        }
+                    }
                 }
             },
             navigateToCurrentStep: function() {
@@ -103,11 +102,7 @@ define(
                 return newAddressSelected();
             },
             onAddressChange: function (value) {
-                if (value === null) {
-                    newAddressSelected(true);
-                } else {
-                    newAddressSelected(false);
-                }
+                value() === null ? newAddressSelected(true) : newAddressSelected(false);
             },
             validate: function() {
                 var fields = $(billingFormSelector).find('input, select');
@@ -116,7 +111,6 @@ define(
                 fields.trigger('change');
                 this.source.trigger('billingAddress.data.validate');
                 this.validateAdditionalAddressFields();
-                this.isEmailCheckComplete.resolve();
             },
             validateAdditionalAddressFields: function() {
                 $(billingFormSelector).validation();
