@@ -18,14 +18,8 @@ define([
             event: "click"
         },
         _create: function() {
-            this._dialog();
             this._control();
-            this.options.active = this.options.active >= 0 ? this.options.active : 0;
             this._super();
-        },
-        _dialog: function() {
-            var dialog = this.element.parent();
-            $('#dialog').dialog();
         },
         _control: function() {
             var self = this;
