@@ -19,6 +19,7 @@ use Magento\Framework\DB\Profiler;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\String;
 
@@ -402,6 +403,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
     }
 
+
     /**
      * Special handling for PDO query().
      * All bind parameter names must begin with ':'.
@@ -410,9 +412,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Pdo|void
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
+     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function query($sql, $bind = [])
+    protected function _query($sql, $bind = [])
     {
         $connectionErrors = [
             2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
@@ -461,6 +464,45 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 }
             }
         } while ($retry);
+    }
+
+
+    /**
+     * Special handling for PDO query().
+     * All bind parameter names must begin with ':'.
+     *
+     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param mixed $bind An array of data or data itself to bind to the placeholders.
+     * @return \Zend_Db_Statement_Pdo|void
+     * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
+     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function query($sql, $bind = [])
+    {
+        if (strpos(rtrim($sql, " \t\n\r\0;"), ';') && count($this->_splitMultiQuery($sql)) > 1) {
+            throw new \Magento\Framework\Exception\LocalizedException(new Phrase('Cannot execute multiple queries'));
+        }
+        return $this->_query($sql, $bind);
+    }
+
+    /**
+     * Allows multiple queries -- to safeguard against SQL injection, USE CAUTION and verify that input
+     * cannot be tampered with.
+     *
+     * Special handling for PDO query().
+     * All bind parameter names must begin with ':'.
+     *
+     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param mixed $bind An array of data or data itself to bind to the placeholders.
+     * @return \Zend_Db_Statement_Pdo|void
+     * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
+     * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function multiQuery($sql, $bind = [])
+    {
+        return $this->_query($sql, $bind);
     }
 
     /**
@@ -614,47 +656,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $prev = $this->_queryHook;
         $this->_queryHook = $hook;
         return $prev;
-    }
-
-    /**
-     * Executes a SQL statement(s)
-     *
-     * @param string $sql
-     * @throws \Zend_Db_Exception
-     * @return array
-     */
-    public function multiQuery($sql)
-    {
-        return $this->multiMagentoQuery($sql);
-    }
-
-    /**
-     * Run Multi Query
-     *
-     * @param string $sql
-     * @return array
-     * @throws \Exception
-     */
-    public function multiMagentoQuery($sql)
-    {
-        ##$result = $this->rawQuery($sql);
-
-        #$this->beginTransaction();
-        try {
-            $stmts = $this->_splitMultiQuery($sql);
-            $result = [];
-            foreach ($stmts as $stmt) {
-                $result[] = $this->rawQuery($stmt);
-            }
-            #$this->commit();
-        } catch (\Exception $e) {
-            #$this->rollback();
-            throw $e;
-        }
-
-        $this->resetDdlCache();
-
-        return $result;
     }
 
     /**
@@ -3736,7 +3737,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $statements
         );
 
-        return $this->query($sql);
+        return $this->multiQuery($sql);
     }
 
     /**
