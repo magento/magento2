@@ -126,6 +126,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected $postCodesConfig;
 
     /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    protected $directoryHelper;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -145,6 +150,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -166,7 +172,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
         FormKey $formKey,
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Framework\View\ConfigInterface $viewConfig,
-        \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig
+        \Magento\Directory\Model\Country\Postcode\ConfigInterface $postCodesConfig,
+        \Magento\Directory\Helper\Data $directoryHelper
     ) {
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
@@ -187,6 +194,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $this->imageHelper = $imageHelper;
         $this->viewConfig = $viewConfig;
         $this->postCodesConfig = $postCodesConfig;
+        $this->directoryHelper = $directoryHelper;
     }
 
     /**
@@ -216,7 +224,8 @@ class DefaultConfigProvider implements ConfigProviderInterface
                 null,
                 $this->currencyManager->getDefaultCurrency()
             ),
-            'postCodes' => $this->postCodesConfig->getPostCodes()
+            'postCodes' => $this->postCodesConfig->getPostCodes(),
+            'countryData' => $this->getCountryData()
         ];
     }
 
@@ -442,5 +451,26 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected function getStaticBaseUrl()
     {
         return $this->checkoutSession->getQuote()->getStore()->getBaseUrl(UrlInterface::URL_TYPE_STATIC);
+    }
+
+    /**
+     * Return countries data
+     * @return array
+     */
+    private function getCountryData()
+    {
+        $country = [];
+        $regionsData = $this->directoryHelper->getRegionData();
+        foreach ($this->directoryHelper->getCountryCollection() as $code => $data) {
+            $country[$code]['name'] = $data->getName();
+            if (array_key_exists($code, $regionsData)) {
+                foreach($regionsData[$code] as $key => $region) {
+                    $country[$code]['regions'][$key]['code'] = $region['code'];
+                    $country[$code]['regions'][$key]['name'] = $region['name'];
+                }
+            }
+
+        }
+        return $country;
     }
 }

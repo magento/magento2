@@ -324,4 +324,36 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $store
         );
     }
+
+    /**
+     * Retrieve regions data
+     *
+     * @return array
+     */
+    public function getRegionData()
+    {
+        $countryIds = [];
+        foreach ($this->getCountryCollection() as $country) {
+            $countryIds[] = $country->getCountryId();
+        }
+        $collection = $this->_regCollectionFactory->create();
+        $collection->addCountryFilter($countryIds)->load();
+        $regions = [
+            'config' => [
+                'show_all_regions' => $this->isShowNonRequiredState(),
+                'regions_required' => $this->getCountriesWithStatesRequired(),
+            ],
+        ];
+        foreach ($collection as $region) {
+            /** @var $region \Magento\Directory\Model\Region */
+            if (!$region->getRegionId()) {
+                continue;
+            }
+            $regions[$region->getCountryId()][$region->getRegionId()] = [
+                'code' => $region->getCode(),
+                'name' => (string)__($region->getName()),
+            ];
+        }
+        return $regions;
+    }
 }

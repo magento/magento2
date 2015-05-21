@@ -19,7 +19,6 @@ define(
                 template: 'Magento_Checkout/shipping-address/list',
                 visible: window.checkoutConfig.customerAddressCount
             },
-
             selectedShippingAddress: ko.computed(function(){
                 if (!quote.getShippingAddress()()) {
                     quote.setShippingAddress(addressList.getDefaultShipping());
@@ -29,7 +28,11 @@ define(
 
             /** Get all customer addresses  */
             addresses: function() {
-                return addressList.getAddresses();
+                var addresses = addressList.getAddresses();
+                addresses.forEach(function(entity){
+                    entity.countryName = window.checkoutConfig.countryData[entity.countryId].name;
+                });
+                return addresses;
             },
 
             /** Set selected customer shipping address  */
