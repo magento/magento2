@@ -14,6 +14,7 @@ define('globalNavigationScroll', [
         winHeight,
         menuHeight = menu.height(),
         menuHeightRest = 0,
+        menuScrollMax = 0,
         contentHeight,
         winTop = 0,
         winTopLast = 0,
@@ -39,25 +40,22 @@ define('globalNavigationScroll', [
 
     function positionMenu() {
 
-        //  Spot positions and heights
+        //  Spotting positions and heights
         winHeight = win.height();
         contentHeight = content.height();
         winTop = win.scrollTop();
-        scrollStep = winTop - winTopLast; // scroll step
-        menuHeightRest = menuHeight - winTop; // visible menu height
+        scrollStep = winTop - winTopLast;
+        menuHeightRest = menuHeight - winTop; // is a visible menu height
 
-        // Fixed menu cases
-        if (isMenuFixed()) {
+        if (isMenuFixed()) { // fixed menu cases
 
             addFixed(menu);
 
-            //  Smart scroll cases
-            if (menuHeight > winHeight) {
+            if (menuHeight > winHeight) { // smart scroll cases
 
-                //  Scroll down
-                if (winTop > winTopLast) {
+                if (winTop > winTopLast) { //  scroll down
 
-                    var menuScrollMax = menuHeight - winHeight;
+                    menuScrollMax = menuHeight - winHeight;
 
                     nextTop < (menuScrollMax - scrollStep) ?
                         nextTop += scrollStep : nextTop = menuScrollMax;
@@ -65,8 +63,7 @@ define('globalNavigationScroll', [
                     menu.css('top', -nextTop);
 
                 }
-                //  Scroll up
-                else if (winTop < winTopLast) {
+                else if (winTop < winTopLast) { // scroll up
 
                     nextTop > -scrollStep ?
                         nextTop += scrollStep : nextTop = 0;
@@ -76,8 +73,8 @@ define('globalNavigationScroll', [
                 }
 
             }
-            //  Static menu cases
-        } else {
+
+        } else { // static menu cases
             removeFixed(menu);
         }
 
@@ -86,8 +83,7 @@ define('globalNavigationScroll', [
 
     }
 
-    //  Page start calculation
-    positionMenu();
+    positionMenu(); // page start calculation
 
     //  Change position on scroll
     win.on('scroll', function () {
