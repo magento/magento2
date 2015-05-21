@@ -12,7 +12,10 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
+use Magento\Framework\Module\Resource;
+use Magento\Setup\Model\ModuleContext;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\UninstallCollector;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -57,6 +60,16 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $packageInfo;
 
     /**
+     * @var UninstallCollector
+     */
+    private $collector;
+
+    /**
+     * @var Resource
+     */
+    private $moduleResource;
+
+    /**
      * Constructor
      *
      * @param DeploymentConfig $deploymentConfig
@@ -64,6 +77,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param FullModuleList $fullModuleList
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param UninstallCollector $collector
      */
     public function __construct(
         Application $composerApp,
@@ -71,7 +85,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         DeploymentConfig\Writer $writer,
         FullModuleList $fullModuleList,
         MaintenanceMode $maintenanceMode,
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        UninstallCollector $collector
     ) {
         parent::__construct($objectManagerProvider);
         $this->composerApp = $composerApp;
@@ -84,6 +99,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             ->get()
             ->get('Magento\Framework\Module\PackageInfoFactory')
             ->create();
+        $this->collector = $collector;
+        $this->moduleResource = $this->objectManagerProvider->get()->get('Magento\Framework\Module\Resource');
     }
 
     /**
@@ -118,14 +135,14 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $modules = $input->getArgument(self::INPUT_KEY_MODULES);
         $messages = $this->validate($modules);
         if (!empty($messages)) {
-            $output->writeln(implode(PHP_EOL, $messages));
+            $output->writeln($messages);
             return;
         }
 
         // check dependencies
-        $dependencies = $this->checkDependencies($modules);
-        if (!empty($dependencies)) {
-            $output->writeln('Cannot uninstall because of dependencies: ' . implode(',', $dependencies));
+        $dependencyMessages = $this->checkDependencies($modules);
+        if (!empty($dependencyMessages)) {
+            $output->writeln($dependencyMessages);
             return;
         }
 
@@ -133,7 +150,16 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
         try {
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
-                // TODO: collection interface and remove data
+                $uninstalls = $this->collector->collectUninstall();
+                foreach ($modules as $module) {
+                    if (isset($uninstalls[$module])) {
+                        $output->writeln("<info>Removing data of $module</info>");
+                        $uninstalls[$module]->uninstall(
+                            $this->objectManagerProvider->get()->create('Magento\Setup\Module\Setup'),
+                            new ModuleContext($this->moduleResource->getDbVersion($module) ?: '')
+                        );
+                    }
+                }
             }
             $this->removeModulesFromDb($modules);
             $output->writeln('<info>Updated module registry in database</info>');
@@ -198,13 +224,14 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     }
 
     /**
-     * Check for dependencies to modules
+     * Check for dependencies to modules, return error messages
      *
      * @param string[] $modules
      * @return string[]
      */
     private function checkDependencies(array $modules)
     {
+        $messages = [];
         $dependencies = [];
         $packagesToUninstall = [];
         foreach ($modules as $module) {
@@ -213,16 +240,24 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             $packagesToUninstall[] = $packageName;
             if ($packageName !== '') {
                 $this->composerApp->run(new ArrayInput(['command' => 'depends', 'package' => $packageName]), $buffer);
-                $dependencies = array_unique(array_merge($dependencies, $this->parsePackages($buffer->fetch())));
+                $dependencies[$module] = $this->parsePackages($buffer->fetch());
             }
         }
-        $dependencies = array_diff($dependencies, $packagesToUninstall);
-        return $dependencies;
+        foreach ($dependencies as $module => &$dependency) {
+            $dependency = array_diff($dependency, $packagesToUninstall);
+            if (!empty($dependency)) {
+                $messages[] = "<error>Cannot uninstall $module because " .
+                    implode(', ', $dependency) . ' depends on it</error>';
+            }
+        }
+        return $messages;
     }
 
     /**
+     * Removes module from setup_module table
+     *
      * @param string[] $modules
-     * @void
+     * @return void
      */
     private function removeModulesFromDb(array $modules)
     {
@@ -236,6 +271,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     }
 
     /**
+     * Removes module from deployment configuration
+     *
      * @param string[] $modules
      * @return void
      */
