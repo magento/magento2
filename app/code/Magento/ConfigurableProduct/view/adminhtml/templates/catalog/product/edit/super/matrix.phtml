@@ -57,27 +57,28 @@ $productByUsedAttributes = $block->getAssociatedProducts();
             <tbody>
             <?php
             $isEven = true;
-            $productPrice = (float)$block->getProduct()->getPrice();
             foreach ($variations as $variation) {
                 $attributeValues = [];
                 $attributeLabels = [];
                 $attributeStoreLabels = [];
-                $price = $productPrice;
                 foreach ($usedProductAttributes as $attribute) {
                     /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
 
                     $attributeValues[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['value'];
                     $attributeLabels[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['label'];
-
-                    if (isset($variation[$attribute->getId()]['price'])) {
-                        $priceInfo = $variation[$attribute->getId()]['price'];
-                        $price += ($priceInfo['is_percent'] ? $productPrice / 100.0 : 1.0) * $priceInfo['pricing_value'];
-                    }
                 }
                 $attributeLabels = $block->escapeHtml($attributeLabels);
                 $key = implode('-', $attributeValues);
                 if (isset($productByUsedAttributes[$key])) {
                     $product = $productByUsedAttributes[$key];
+
+                    $price = $originPrice = $product->getPrice();
+                    foreach ($usedProductAttributes as $attribute) {
+                        if (isset($variation[$attribute->getId()]['price'])) {
+                            $priceInfo = $variation[$attribute->getId()]['price'];
+                            $price += ($priceInfo['is_percent'] ? $originPrice / 100.0 : 1.0) * $priceInfo['pricing_value'];
+                        }
+                    }
                     ?>
 
                 <tr data-role="row" class="<?php echo $isEven ? 'even' : '' ?>">
