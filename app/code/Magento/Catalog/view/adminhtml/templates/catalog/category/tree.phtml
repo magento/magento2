@@ -526,7 +526,7 @@ function categoryMove(obj) {
                 showLoader: true
             }).done(function(data) {
                 if (data.messages && data.messages.length > 0) {
-                    $('form .messages').html(data.messages);
+                    $('[name="category_edit_form"] .messages').html(data.messages);
                 }
                 if (data.error) {
                     reRenderTree();
