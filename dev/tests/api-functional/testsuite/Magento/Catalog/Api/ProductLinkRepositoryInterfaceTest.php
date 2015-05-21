@@ -71,7 +71,7 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $productSku . '/links/' . $linkType,
+                'resourcePath' => self::RESOURCE_PATH . $productSku . '/links',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
