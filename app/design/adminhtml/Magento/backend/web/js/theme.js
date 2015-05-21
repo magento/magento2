@@ -22,22 +22,37 @@ define('globalNavigationScroll', [
         nextTop = 0,
         fixedClass = '_fixed';
 
+    /**
+     * Check if menu is fixed
+     * @returns {boolean}
+     */
     function isMenuFixed() {
         return (menuHeight < contentHeight) && (contentHeight > winHeight);
     }
 
+    /**
+     * Add fixed menu class
+     * @param {jQuery} el
+     */
     function addFixed(el) {
         if (!el.hasClass(fixedClass)) {
             el.addClass(fixedClass);
         }
     }
 
+    /**
+     * Remove fixed menu class
+     * @param {jQuery} el
+     */
     function removeFixed(el) {
         if (el.hasClass(fixedClass)) {
             el.removeClass(fixedClass);
         }
     }
 
+    /**
+     * Calculate and apply menu position
+     */
     function positionMenu() {
 
         //  Spotting positions and heights
@@ -62,8 +77,7 @@ define('globalNavigationScroll', [
 
                     menu.css('top', -nextTop);
 
-                }
-                else if (winTop < winTopLast) { // scroll up
+                } else if (winTop < winTopLast) { // scroll up
 
                     nextTop > -scrollStep ?
                         nextTop += scrollStep : nextTop = 0;
@@ -95,9 +109,7 @@ define('globalNavigationScroll', [
         winHeight = win.height();
 
         //  Reset position if fixed and out of smart scroll
-        if (
-            (menuHeight < contentHeight) && (menuHeight <= winHeight)
-        ) {
+        if ((menuHeight < contentHeight) && (menuHeight <= winHeight)) {
             menu.removeAttr('style');
         }
 
