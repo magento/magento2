@@ -16,6 +16,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $_objectBuilder;
 
     /**
+     * @var \Magento\Config\Block\System\Config\Form
+     */
+    protected $object;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_systemConfigMock;
@@ -170,6 +175,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->_objectBuilder = $this->getMockBuilder('Magento\Config\Block\System\Config\Form')
             ->setConstructorArgs($objectArguments)
             ->setMethods(['something']);
+        $this->object = $helper->getObject('Magento\Config\Block\System\Config\Form', $data);
+        $this->object->setData('scope_id', 1);
     }
 
     /**
@@ -540,7 +547,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
         $fieldMock->expects($this->once())->method('populateInput');
 
-        $this->_objectBuilder->initFields($fieldsetMock, $groupMock, $sectionMock, $fieldPrefix, $labelPrefix);
+        $this->object->initFields($fieldsetMock, $groupMock, $sectionMock, $fieldPrefix, $labelPrefix);
     }
 
     /**
