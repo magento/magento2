@@ -66,8 +66,8 @@
     }
     &._fixed {
         left: 0;
-        top: 0;
         position: fixed;
+        top: 0;
         ~ .page-wrapper {
             margin-left: @menu__width;
         }
@@ -205,8 +205,8 @@
             padding: @submenu__padding-vertical 0 0;
             position: absolute;
             top: -@menu-logo__outer-size;
-            transition-property: left, visibility;
             transition-duration: .5s;
+            transition-property: left, visibility;
             transition-timing-function: ease;
             visibility: hidden;
             z-index: @submenu__z-index;
