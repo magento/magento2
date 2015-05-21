@@ -37,15 +37,15 @@ define(
                     name: 'billingAddress',
                     isVisible: ko.observable(false),
                     isEnabled: true,
-                    number: ko.observable(3),
+                    number: ko.observable(4),
                     classAttributes: ko.observable(defaultStepClass)
                 },
                 {
                     name: 'shippingMethod',
-                    isVisible: ko.observable(false),
+                    isVisible: ko.observable(true),
                     isEnabled: true,
-                    number: ko.observable(4),
-                    classAttributes: ko.observable(defaultStepClass)
+                    number: ko.observable(3),
+                    classAttributes: ko.observable(defaultStepClass + ' ' + activeStepClass)
                 },
                 {
                     name: 'paymentMethod',

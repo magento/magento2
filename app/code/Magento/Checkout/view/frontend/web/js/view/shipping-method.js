@@ -56,7 +56,7 @@ define(
                 var callbacks = [];
                 _.each(this.getAdditionalMethods(), function(view) {
                     if (typeof view.afterSelect === 'function') {
-                        callbacks.push(view.afterSelect);
+                        callbacks.push(view.afterSelect.bind(view));
                     }
                 });
                 return callbacks;
