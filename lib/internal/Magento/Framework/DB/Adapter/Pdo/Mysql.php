@@ -480,8 +480,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function query($sql, $bind = [])
     {
-        $firstSemi = strpos($sql, ';');
-        if (strpos($sql, ';', $firstSemi + 1) && count($this->_splitMultiQuery($sql)) > 1) {
+        if (strpos(rtrim($sql, " \t\n\r\0;"), ';') && count($this->_splitMultiQuery($sql)) > 1) {
             throw new \Magento\Framework\Exception\LocalizedException(new Phrase('Cannot execute multiple queries'));
         }
         return $this->_query($sql, $bind);
