@@ -626,7 +626,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 break;
             case 'decimal':
                 $val = trim($rowData[$attrCode]);
-                $valid = (double)$val == $val;
+                $valid = (string)(double)$val === $val;
                 break;
             case 'select':
             case 'multiselect':
@@ -634,7 +634,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 break;
             case 'int':
                 $val = trim($rowData[$attrCode]);
-                $valid = (int)$val == $val;
+                $valid = (string)(int)$val === $val;
                 break;
             case 'datetime':
                 $val = trim($rowData[$attrCode]);

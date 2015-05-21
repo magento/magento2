@@ -26,9 +26,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $jsonHelper;
 
-    /** @var \Magento\ImportExport\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_importExportData;
-
     /** @var \Magento\ImportExport\Model\Resource\Import\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $_dataSourceModel;
 
@@ -293,6 +290,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $productTypeInstance = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType')->disableOriginalConstructor()->getMock();
         $productTypeInstance->expects($this->once())->method('isSuitable')->willReturn(true);
         $productTypeInstance->expects($this->once())->method('getParticularAttributes')->willReturn([]);
+        $productTypeInstance->expects($this->once())->method('getCustomFieldsMapping')->willReturn([]);
         $this->_importConfig->expects($this->once())->method('getEntityTypes')->with(self::ENTITY_TYPE_CODE)->willReturn($entityTypes);
         $this->_productTypeFactory->expects($this->once())->method('create')->willReturn($productTypeInstance);
         return $this;
@@ -365,6 +363,246 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider isAttributeValidAssertAttrValidDataProvider
+     */
+    public function testIsAttributeValidAssertAttrValid($attrParams, $rowData)
+    {
+        $attrCode = 'code';
+        $rowNum = 0;
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')->setMethods(null)->getMock();
+        $this->setPropertyValue($this->importProduct, 'string', $string);
+
+        $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @dataProvider isAttributeValidAssertAttrInvalidDataProvider
+     */
+    public function testIsAttributeValidAssertAttrInvalid($attrParams, $rowData)
+    {
+        $attrCode = 'code';
+        $rowNum = 0;
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')->setMethods(null)->getMock();
+        $this->setPropertyValue($this->importProduct, 'string', $string);
+
+        $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+        $this->assertFalse($result);
+    }
+
+    public function testIsAttributeValidNotValidAddErrorCall()
+    {
+        $attrCode = 'code';
+        $attrParams = [
+            'type' => 'decimal',
+        ];
+        $rowData = [
+            $attrCode => 'incorrect'
+        ];
+        $rowNum = 0;
+
+        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
+            ->disableOriginalConstructor()
+            ->setMethods(array('addRowError'))
+            ->getMock();
+        $importProduct->expects($this->once())->method('addRowError');
+
+        $importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+    }
+
+    public function testIsAttributeValidOnDuplicateAddErrorCall()
+    {
+        $attrCode = 'code';
+        $attrCodeVal = 1000;
+        $expectedSkuVal = 'sku_val';
+        $testSkuVal = 'some_sku';
+        $attrParams = [
+            'type' => 'decimal',
+            'is_unique' => true,
+        ];
+        $rowData = [
+            $attrCode => $attrCodeVal,
+            \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => $expectedSkuVal
+        ];
+        $rowNum = 0;
+
+        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
+            ->disableOriginalConstructor()
+            ->setMethods(array('addRowError'))
+            ->getMock();
+        $importProduct->expects($this->once())->method('addRowError');
+        $this->setPropertyValue($importProduct, '_uniqueAttributes', [
+            $attrCode => [$attrCodeVal => $testSkuVal]
+        ]);
+
+        $importProduct->expects($this->once())->method('addRowError');
+
+        $return = $importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+
+        $this->assertFalse($return);
+    }
+
+    public function testIsAttributeValidAddIntoUniqueueAttributes()
+    {
+        $attrCode = 'code';
+        $attrCodeVal = 1000;
+        $expectedSkuVal = 'sku_val';
+        $attrParams = [
+            'type' => 'decimal',
+            'is_unique' => true,
+        ];
+        $rowData = [
+            $attrCode => $attrCodeVal,
+            \Magento\CatalogImportExport\Model\Import\Product::COL_SKU => $expectedSkuVal
+        ];
+        $rowNum = 0;
+
+        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
+
+        $importProduct->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+
+        $_uniqueAttributes = $this->getPropertyValue($importProduct, '_uniqueAttributes');
+        $this->assertEquals($expectedSkuVal, $_uniqueAttributes[$attrCode][$rowData[$attrCode]]);
+    }
+
+    /**
+     * @return array
+     */
+    public function isAttributeValidAssertAttrValidDataProvider()
+    {
+        return [
+            [
+                '$attrParams' => [
+                    'type' => 'varchar',
+                ],
+                '$rowData' => [
+                    'code' => str_repeat('a', \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_VARCHAR_LENGTH - 1),
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'decimal',
+                ],
+                '$rowData' => [
+                    'code' => 10,
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'select',
+                    'options' => ['code' => 1]
+                ],
+                '$rowData' => [
+                    'code' => 'code',
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'multiselect',
+                    'options' => ['code' => 1]
+                ],
+                '$rowData' => [
+                    'code' => 'code',
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'int',
+                ],
+                '$rowData' => [
+                    'code' => 1000,
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'datetime',
+                ],
+                '$rowData' => [
+                    'code' => "5 September 2015",
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'text',
+                ],
+                '$rowData' => [
+                    'code' => str_repeat('a', \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_TEXT_LENGTH - 1),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function isAttributeValidAssertAttrInvalidDataProvider()
+    {
+        return [
+            [
+                '$attrParams' => [
+                    'type' => 'varchar',
+                ],
+                '$rowData' => [
+                    'code' => str_repeat('a', \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_VARCHAR_LENGTH + 1),
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'decimal',
+                ],
+                '$rowData' => [
+                    'code' => 'incorrect',
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'select',
+                    'not options' => null,
+                ],
+                '$rowData' => [
+                    'code' => 'code',
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'multiselect',
+                    'not options' => null,
+                ],
+                '$rowData' => [
+                    'code' => 'code',
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'int',
+                ],
+                '$rowData' => [
+                    'code' => 'not int',
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'datetime',
+                ],
+                '$rowData' => [
+                    'code' => "incorrect datetime",
+                ],
+            ],
+            [
+                '$attrParams' => [
+                    'type' => 'text',
+                ],
+                '$rowData' => [
+                    'code' => str_repeat('a', \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_TEXT_LENGTH + 1),
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @return mixed
      */
     public function returnQuoteCallback() {
@@ -399,6 +637,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
+    }
+
+    /**
+     * @param $object
+     * @param $property
+     */
+    protected function getPropertyValue(&$object, $property)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($object);
     }
 
     /**
