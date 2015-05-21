@@ -480,8 +480,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function query($sql, $bind = [])
     {
-        if (count($this->_splitMultiQuery($sql)) > 1) {
-            throw new LocalizedException(new Phrase('Cannot execute multiple queries.'));
+        if ($this->isMultiQuery($sql)) {
+            throw new \Magento\Framework\Exception\LocalizedException(new Phrase('Cannot execute multiple queries'));
         }
         return $this->_query($sql, $bind);
     }
@@ -719,6 +719,62 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         return $stmts;
+    }
+
+    protected function isMultiQuery($sql) {
+        $inSingleComment = false;
+        $inMultiComment = false;
+        $inSingleQuote = false;
+        $inDoubleQuote = false;
+
+        $length = strlen($sql);
+        $sql = (string)$sql;
+        // for each char
+        for ($i=0; $i<$length; ++$i) {
+            $char = $sql[$i];
+            $next = isset($sql[$i+1]) ? $sql[$i+1] : null;
+            // if not in quote/comment
+            if (!$inSingleComment && !$inSingleQuote && !$inDoubleQuote && !$inMultiComment) {
+                // if find semicolon with anything after it, return true
+                if ($char === ';' && trim(substr($sql, $i+1))) {
+                    return true;
+                }
+                // if find something to start a comment/quote, start it
+                // single string quotes
+                if ($char === '\'') {
+                    $inSingleQuote = true;
+                } //else if double quote
+                else if ($char === '"') {
+                    $inDoubleQuote = true;
+                } // else if - single line comment
+                else if (in_array($char . $next, ['//', '--'])) {
+                    $i++;
+                    $inSingleComment = true;
+                } // else if - multiline comment
+                else if ($char . $next === '/*') {
+                    $i++;
+                    $inMultiComment = true;
+                }
+            } else {
+                $prev = $i === 0 ? null : $sql[$i - 1];
+                // if in quote/comment, look for the end
+                if ($inSingleQuote) {
+                    if ($char === '\'') {
+                        $inSingleQuote = ($prev === '\\' || $prev === '\'');
+                    }
+                } else if ($inDoubleQuote) {
+                    if ($char === '"') {
+                        $inDoubleQuote = ($prev === '\\' || $prev === '"');
+                    }
+                } else if ($inSingleComment) {
+                    $inSingleComment = ($char !== "\n");
+                } //$inMultiComment logically must be true here
+                else {
+                    $inMultiComment = ($char . $next !== '*/');
+                }
+            }
+        }
+        return false;
     }
 
     /**
