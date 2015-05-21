@@ -59,6 +59,15 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('E', $this->packageInfo->getModuleName('e'));
     }
 
+    public function testGetPackageName()
+    {
+        $this->assertEquals('a', $this->packageInfo->getPackageName('A'));
+        $this->assertEquals('b', $this->packageInfo->getPackageName('B'));
+        $this->assertEquals('c', $this->packageInfo->getPackageName('C'));
+        $this->assertEquals('d', $this->packageInfo->getPackageName('D'));
+        $this->assertEquals('e', $this->packageInfo->getPackageName('E'));
+    }
+
     public function testGetRequireReturnModuleName()
     {
         $this->assertEquals(['B'], $this->packageInfo->getRequire('A'));
