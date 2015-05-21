@@ -7,6 +7,8 @@ namespace Magento\Integration\Model\Config\Integration;
 
 /**
  * Service config data reader.
+
+ * @codeCoverageIgnore
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -14,7 +16,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * List of id attributes for merge
      *
      * @var array
-     * @codeCoverageIgnore
      */
     protected $_idAttributes = [
         '/integrations/integration' => 'name',
