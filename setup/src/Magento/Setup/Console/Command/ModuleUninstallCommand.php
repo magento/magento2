@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\Resource;
@@ -75,6 +76,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $moduleResource;
 
     /**
+     * @var DependencyChecker
+     */
+    private $dependencyChecker;
+
+    /**
      * Constructor
      *
      * @param Application $composerApp
@@ -107,6 +113,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             ->create();
         $this->collector = $collector;
         $this->moduleResource = $this->objectManagerProvider->get()->get('Magento\Framework\Module\Resource');
+        $this->dependencyChecker = $this->objectManagerProvider->get()
+            ->get('Magento\Framework\Module\DependencyChecker');
     }
 
     /**
@@ -139,6 +147,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         }
 
         $modules = $input->getArgument(self::INPUT_KEY_MODULES);
+        // validate modules input
         $messages = $this->validate($modules);
         if (!empty($messages)) {
             $output->writeln($messages);
@@ -148,6 +157,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         // check dependencies
         $dependencyMessages = $this->checkDependencies($modules);
         if (!empty($dependencyMessages)) {
+            $output->writeln('<error>Cannot uninstall because of depending module(s):</error>');
             $output->writeln($dependencyMessages);
             return;
         }
@@ -169,10 +179,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 }
             }
             $this->removeModulesFromDb($modules);
-            $output->writeln('<info>Removing ' . implode(', ', $modules) . ' module registry in database</info>');
+            $output->writeln('<info>Removing ' . implode(', ', $modules) . ' from module registry in database</info>');
             $this->removeModulesFromDeploymentConfig($modules);
             $output->writeln(
-                '<info>Removing ' . implode(', ', $modules) .  ' module list in deployment configuration</info>'
+                '<info>Removing ' . implode(', ', $modules) .  ' from module list in deployment configuration</info>'
             );
             $this->cleanup($input, $output);
         } catch (\Exception $e) {
@@ -195,7 +205,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->composerApp->run(new ArrayInput(['command' => 'show', '-i' => true]), $buffer);
         $installedPackages = $this->parsePackages($buffer->fetch());
         foreach ($modules as $module) {
-            if (!array_search($this->packageInfo->getPackageName($module), $installedPackages)) {
+            if (array_search($this->packageInfo->getPackageName($module), $installedPackages) === false) {
                 $unknownPackages[] = $module;
             }
             if (!$this->fullModuleList->has($module)) {
@@ -242,22 +252,14 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private function checkDependencies(array $modules)
     {
         $messages = [];
-        $dependencies = [];
-        $packagesToUninstall = [];
-        foreach ($modules as $module) {
-            $buffer = new BufferedOutput();
-            $packageName = $this->packageInfo->getPackageName($module);
-            $packagesToUninstall[] = $packageName;
-            if ($packageName !== '') {
-                $this->composerApp->run(new ArrayInput(['command' => 'depends', 'package' => $packageName]), $buffer);
-                $dependencies[$module] = $this->parsePackages($buffer->fetch());
-            }
-        }
-        foreach ($dependencies as $module => &$dependency) {
-            $dependency = array_diff($dependency, $packagesToUninstall);
-            if (!empty($dependency)) {
-                $messages[] = "<error>Cannot uninstall $module because " .
-                    implode(', ', $dependency) . ' depend(s) on it</error>';
+        $dependencies = $this->dependencyChecker->checkDependenciesWhenDisableModules(
+            $modules,
+            $this->fullModuleList->getNames()
+        );
+        foreach ($dependencies as $module => $dependingModules) {
+            if (!empty($dependingModules)) {
+                $messages[] = "<error>Module(s) depending on $module: " .
+                    implode(', ', array_keys($dependingModules)) . "</error>";
             }
         }
         return $messages;
