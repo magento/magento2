@@ -314,7 +314,7 @@
                                 </item>
                             </item>
                             <item name="checkoutProvider" xsi:type="array">
-                                <item name="component" xsi:type="string">Magento_Ui/js/lib/provider</item>
+                                <item name="component" xsi:type="string">uiComponent</item>
                             </item>
                         </item>
                     </argument>
