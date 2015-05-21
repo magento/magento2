@@ -6,11 +6,13 @@
 -->
 <style type="text/css">
     .shipping-address-item {
-        width: 200px;
+        width: 175px;
         height: 130px;
         float: left;
         padding: 10px;
         margin-right: 20px;
+        margin-bottom: 20px;
+        font-size: 12px;
     }
 
     .selected-item {
@@ -43,7 +45,7 @@
             <div class="shipping-address-item" data-bind="css: $parents[0].selectedShippingAddress().customerAddressId ==  address.customerAddressId ? 'selected-item' : 'not-selected-item'">
                 <!-- ko text: address.firstname --><!-- /ko --> <!-- ko text: address.lastname --><!-- /ko --><br/>
                 <!-- ko text:  address.street --><!-- /ko --><br/>
-                <!-- ko text:  address.city --><!-- /ko -->, <!-- ko text:  address.regionCode --><!-- /ko --> <!-- ko text:  address.postcode --><!-- /ko --><br/>
+                <!-- ko text:  address.city --><!-- /ko -->, <!-- ko text:  address.region --><!-- /ko --> <!-- ko text:  address.postcode --><!-- /ko --><br/>
                 <!-- ko text:  address.countryId --><!-- /ko --><br/>
                 <!-- ko text:  address.telephone --><!-- /ko --><br/>
                 <input type="button" class="select-item-button" data-bind="click: $parents[0].selectAddress, value: $t('Ship Here')" />

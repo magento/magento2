@@ -26,7 +26,7 @@ define(['jquery'], function($) {
         },
 
         getDefaultShipping: function() {
-            var address = null;
+            var address = {"customerAddressId": null};
             if (addresses.length == 0) {
                 return address;
             } else if (addresses.length == 1) {
