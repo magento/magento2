@@ -14,6 +14,7 @@ use Magento\Customer\Api\GroupManagementInterface as CustomerGroupManagement;
 use Magento\Customer\Api\GroupRepositoryInterface as CustomerGroupRepository;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Config;
 
@@ -166,6 +167,13 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     protected $priceCurrency;
 
     /**
+     * Tax Class Management
+     *
+     * @var TaxClassManagementInterface
+     */
+    protected $taxClassManagement;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -180,6 +188,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * @param CustomerGroupRepository $customerGroupRepository
      * @param CustomerRepository $customerRepository
      * @param PriceCurrencyInterface $priceCurrency
+     * @param TaxClassManagementInterface $taxClassManagement
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -199,6 +208,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         CustomerGroupRepository $customerGroupRepository,
         CustomerRepository $customerRepository,
         PriceCurrencyInterface $priceCurrency,
+        TaxClassManagementInterface $taxClassManagement,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = []
     ) {
@@ -213,6 +223,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
         $this->customerGroupRepository = $customerGroupRepository;
         $this->customerRepository = $customerRepository;
         $this->priceCurrency = $priceCurrency;
+        $this->taxClassManagement = $taxClassManagement;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -362,6 +373,19 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
             $key = $store . '|';
         }
 
+//        $productClassIds = $request->getProductClassId();
+//        if (is_array($productClassIds)) {
+//            //$productClassKeys = array_keys($productClassIds);
+//            $productClassIdString = implode("+", $productClassIds);
+//        } else {
+//            $productClassIdString = $productClassIds;
+//        }
+//
+//        $key .= $productClassIdString . '|'
+//            . $request->getCustomerClassId() . '|'
+//            . $request->getCountryId() . '|'
+//            . $request->getRegionId() . '|'
+//            . $request->getPostcode();
         $key .= $request->getProductClassId() . '|'
             . $request->getCustomerClassId() . '|'
             . $request->getCountryId() . '|'
@@ -646,5 +670,35 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     public function round($price)
     {
         return $this->priceCurrency->round($price);
+    }
+
+    /**
+     * @param array $billingAddress
+     * @param array $shippingAddress
+     * @param int $customerTaxClassId
+     * @return array
+     */
+    public function getTaxRates($billingAddress, $shippingAddress, $customerTaxClassId)
+    {
+        $billingAddressObj = null;
+        $shippingAddressObj = null;
+        if (!empty($billingAddress)) {
+            $billingAddressObj = new \Magento\Framework\Object($billingAddress);
+        }
+        if (!empty($shippingAddress)) {
+            $shippingAddressObj = new \Magento\Framework\Object($shippingAddress);
+        }
+        $rateRequest = $this->getRateRequest($shippingAddressObj, $billingAddressObj, $customerTaxClassId);
+
+        $ids = $this->taxClassManagement->getTaxClassIds(\Magento\Tax\Api\TaxClassManagementInterface::TYPE_PRODUCT);
+        $productRates = [];
+//        $rateRequest->setProductClassId(array_keys($ids));
+//        $productRates = $this->getRate($rateRequest);
+        foreach ($ids as $idKey => $idData) {
+            $rateRequest->setProductClassId($idKey);
+            $rate = $this->getRate($rateRequest);
+            $productRates[$idKey] = $rate;
+        }
+        return $productRates;
     }
 }

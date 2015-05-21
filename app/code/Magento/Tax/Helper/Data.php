@@ -126,7 +126,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context                         $context
-     * @param \Magento\Framework\Json\Helper\Data                                     $jsonHelper
+     * @param \Magento\Framework\Json\Helper\Data                           $jsonHelper
      * @param \Magento\Framework\Registry                                   $coreRegistry
      * @param Config                                                        $taxConfig
      * @param \Magento\Store\Model\StoreManagerInterface                    $storeManager
@@ -810,5 +810,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $taxClassAmount;
+    }
+
+    /**
+     * Check whether display price is affected by different tax rates
+     *
+     * @param null|int|string|Store $store
+     * @return bool
+     */
+    public function isCatalogPriceDisplayAffectedByTax($store = null)
+    {
+        if ($this->displayBothPrices($store)) {
+            return true;
+        }
+
+        $priceInclTax = $this->priceIncludesTax($store);
+        if ($priceInclTax) {
+            return ($this->isCrossBorderTradeEnabled($store) xor $this->displayPriceIncludingTax());
+        } else {
+            return $this->displayPriceIncludingTax();
+        }
     }
 }
