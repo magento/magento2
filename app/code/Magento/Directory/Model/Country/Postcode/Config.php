@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Model\Country\Postcode;
 
-class Config implements \Magento\Directory\Model\Country\Postcode\ConfigInterface
+class Config implements ConfigInterface
 {
     /**
      * @var Config\Data

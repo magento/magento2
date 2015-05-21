@@ -5,7 +5,7 @@
  */
 namespace Magento\Directory\Model\Country\Postcode;
 
-class Validator implements \Magento\Directory\Model\Country\Postcode\ValidatorInterface
+class Validator implements ValidatorInterface
 {
     /**
      * @var ConfigInterface
@@ -36,6 +36,6 @@ class Validator implements \Magento\Directory\Model\Country\Postcode\ValidatorIn
             }
             return false;
         }
-        return true;
+        throw new \InvalidArgumentException('Provided countryId does not exist.');
     }
 }

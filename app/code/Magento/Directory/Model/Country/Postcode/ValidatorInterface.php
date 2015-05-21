@@ -13,6 +13,7 @@ interface ValidatorInterface
      * @param string $postcode
      * @param string $countryId
      * @return bool
+     * @throws \InvalidArgumentException
      */
     public function validate($postcode, $countryId);
 }
