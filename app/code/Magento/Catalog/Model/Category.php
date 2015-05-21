@@ -65,6 +65,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     const KEY_POSITION = 'position';
     const KEY_LEVEL = 'level';
     const KEY_UPDATED_AT = 'updated_at';
+    const KEY_CREATED_AT = 'created_at';
     const KEY_PATH = 'path';
     const KEY_AVAILABLE_SORT_BY = 'available_sort_by';
     const KEY_INCLUDE_IN_MENU = 'include_in_menu';
@@ -126,6 +127,25 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         'page_layout',
         'custom_layout_update',
         'custom_apply_to_products',
+    ];
+
+    /**
+     * Attributes are that part of interface
+     *
+     * @var array
+     */
+    protected $interfaceAttributes = [
+        'id',
+        self::KEY_PARENT_ID,
+        self::KEY_NAME,
+        self::KEY_IS_ACTIVE,
+        self::KEY_POSITION,
+        self::KEY_LEVEL,
+        self::KEY_UPDATED_AT,
+        self::KEY_CREATED_AT,
+        self::KEY_AVAILABLE_SORT_BY,
+        self::KEY_INCLUDE_IN_MENU,
+        self::KEY_CHILDREN_DATA,
     ];
 
     /**
@@ -289,6 +309,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         if ($this->customAttributesCodes === null) {
             $this->customAttributesCodes = $this->getEavAttributesCodes($this->metadataService);
+            $this->customAttributesCodes = array_diff($this->customAttributesCodes, $this->interfaceAttributes);
         }
         return $this->customAttributesCodes;
     }
@@ -1294,6 +1315,15 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(self::KEY_UPDATED_AT, $updatedAt);
+    }
+
+    /**
+     * @param string $createdAt
+     * @return $this
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(self::KEY_CREATED_AT, $createdAt);
     }
 
     /**

@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <!--
 /**
  * Copyright © 2015 Magento. All rights reserved.
@@ -8,7 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Config\Test\Repository\ConfigData">
         <dataset name="wysiwyg_disabled">
-            <field path="cms/wysiwyg/enabled" scope="default" scope_id="0" label="Disabled Completely" xsi:type="string">disabled</field>
+            <field name="cms/wysiwyg/enabled" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="label" xsi:type="string">Disabled Completely</item>
+                <item name="value" xsi:type="string">disabled</item>
+            </field>
         </dataset>
     </repository>
 </config>

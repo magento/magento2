@@ -5,182 +5,164 @@
  */
 namespace Magento\Ui\Test\Unit\Component;
 
-use \Magento\Ui\Component\Paging;
+use Magento\Ui\Component\Paging;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
-use Magento\Framework\View\Asset\Repository;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context as TemplateContext;
-use Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface;
-use Magento\Framework\View\Element\UiComponent\ConfigFactory;
-use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Ui\ContentType\ContentTypeFactory;
-
+/**
+ * Class PagingTest
+ */
 class PagingTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Paging
-     */
-    protected $view;
-
-    /**
-     * @var ConfigBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $configurationBuilderMock;
-
-    /**
-     * @var TemplateContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager
      */
-    protected $renderContextMock;
+    protected $objectManager;
 
     /**
-     * @var ContentTypeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * Set up
      */
-    protected $contentTypeFactoryMock;
-
-    /**
-     * @var ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $configFactoryMock;
-
-    /**
-     * @var ConfigBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $configBuilderMock;
-
-    /**
-     * @var \Magento\Ui\DataProvider\Factory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dataProviderFactoryMock;
-
-    /**
-     * @var \Magento\Ui\DataProvider\Manager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dataProviderManagerMock;
-
-    /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $assetRepoMock;
-
     public function setUp()
     {
-        $this->renderContextMock = $this->getMock(
-            'Magento\Framework\View\Element\UiComponent\Context',
-            ['getNamespace', 'getStorage', 'getRequestParam'],
-            [],
-            '',
-            false
-        );
-        $this->contextMock = $this->getMock(
-            'Magento\Framework\View\Element\Template\Context',
-            ['getAssetRepository'],
-            [],
-            '',
-            false
-        );
-        $this->contentTypeFactoryMock = $this->getMock('Magento\Ui\ContentType\ContentTypeFactory', [], [], '', false);
-        $this->configurationBuilderMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface'
-        );
-        $this->assetRepoMock = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->contextMock->expects($this->any())->method('getAssetRepository')->willReturn($this->assetRepoMock);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->configFactoryMock = $this->getMock(
-            'Magento\Framework\View\Element\UiComponent\ConfigFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->configBuilderMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ConfigBuilderInterface',
-            [],
-            '',
-            false
-        );
-        $this->dataProviderFactoryMock = $this->getMock(
-            'Magento\Ui\DataProvider\Factory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->dataProviderManagerMock = $this->getMock(
-            'Magento\Ui\DataProvider\Manager',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->view = new \Magento\Ui\Component\Paging(
-            $this->contextMock,
-            $this->renderContextMock,
-            $this->contentTypeFactoryMock,
-            $this->configFactoryMock,
-            $this->configBuilderMock,
-            $this->dataProviderFactoryMock,
-            $this->dataProviderManagerMock
-        );
-    }
-
-    public function testPrepare()
-    {
-        $paramsSize = 20;
-        $paramsPage = 1;
-        $nameSpace = 'namespace';
-        $configurationMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ConfigInterface',
-            ['getData'],
-            '',
-            false
-        );
-        $this->renderContextMock->expects($this->any())->method('getNamespace')->willReturn($nameSpace);
-        $this->configFactoryMock->expects($this->once())->method('create')->willReturn($configurationMock);
-
-        $storageMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ConfigStorageInterface'
-        );
-        $dataCollectionMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Data\CollectionDataSourceInterface',
+        $this->contextMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\ContextInterface',
             [],
             '',
             false,
             true,
             true,
-            ['setPageSize', 'setCurPage']
+            []
+        );
+    }
+
+    /**
+     * Run test getComponentName method
+     *
+     * @return void
+     */
+    public function testGetComponentName()
+    {
+        /** @var Paging $listing */
+        $paging = $this->objectManager->getObject(
+            'Magento\Ui\Component\Paging',
+            [
+                'context' => $this->contextMock,
+                'data' => []
+            ]
         );
 
-        $this->renderContextMock->expects($this->any())->method('getStorage')->willReturn($storageMock);
+        $this->assertTrue($paging->getComponentName() === Paging::NAME);
+    }
 
-        $storageMock->expects($this->once())->method('getDataCollection')->willReturn($dataCollectionMock);
+    /**
+     * Run test prepare method
+     *
+     * @return void
+     */
+    public function testPrepare()
+    {
+        $resultData = [
+            'js_config' => [
+                'extends' => 'test_config_extends',
+                'testData' => 'testValue'
+            ],
+            'config' => [
+                'options' => [
+                    [
+                        'value' => 20,
+                        'label' => 20
+                    ],
+                    [
+                        'value' => 30,
+                        'label' => 30
+                    ],
+                    [
+                        'value' => 50,
+                        'label' => 50
+                    ],
+                    [
+                        'value' => 100,
+                        'label' => 100
+                    ],
+                    [
+                        'value' => 200,
+                        'label' => 200
+                    ],
+                    [
+                        'value' => 20,
+                        'label' => 'options1'
+                    ],
+                    [
+                        'value' => 40,
+                        'label' => 'options2'
+                    ],
+                ],
+                'pageSize' => 20,
+                'current' => 2
+            ]
+        ];
 
-        $configurationMock->expects($this->at(0))->method('getData')->with('current')->willReturn($paramsPage);
-
-        $configurationMock->expects($this->at(1))->method('getData')->with('pageSize')->willReturn($paramsSize);
-        $this->renderContextMock->expects($this->atLeastOnce())
-            ->method('getRequestParam')
-            ->willReturnMap(
-                [
-                    ['page', $paramsPage, $paramsPage],
-                    ['limit', $paramsSize, $paramsSize],
+        /** @var Paging $paging */
+        $paging = $this->objectManager->getObject(
+            'Magento\Ui\Component\Paging',
+            [
+                'context' => $this->contextMock,
+                'data' => [
+                    'js_config' => [
+                        'extends' => 'test_config_extends',
+                        'testData' => 'testValue',
+                    ],
+                    'config' => [
+                        'options' => [
+                            'options1' => [
+                                'label' => 'options1',
+                                'value' => '20'
+                            ],
+                            'options2' => [
+                                'label' => 'options2',
+                                'value' => '40'
+                            ]
+                        ],
+                        'current' => 2,
+                        'pageSize' => 20
+                    ]
                 ]
-            );
+            ]
+        );
+        /** @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject $dataProviderMock */
+        $dataProviderMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
+            [],
+            '',
+            false
+        );
 
-        $dataCollectionMock->expects($this->any())
-            ->method('setPageSize')
-            ->with($paramsSize)
-            ->willReturnSelf();
-        $dataCollectionMock->expects($this->any())
-            ->method('setCurPage')
-            ->with($paramsPage)
-            ->willReturnSelf();
+        $this->contextMock->expects($this->once())
+            ->method('getRequestParam')
+            ->with('paging')
+            ->willReturn(['pageSize' => 5, 'current' => 3]);
+        $this->contextMock->expects($this->once())
+            ->method('getDataProvider')
+            ->willReturn($dataProviderMock);
 
-        $this->assertNull($this->view->prepare());
+        $dataProviderMock->expects($this->once())
+            ->method('setLimit')
+            ->with(3, 5);
+
+        $this->contextMock->expects($this->once())
+            ->method('addComponentDefinition')
+            ->with($paging->getComponentName(), ['extends' => 'test_config_extends', 'testData' => 'testValue']);
+
+        $paging->prepare();
+
+        $this->assertEquals($paging->getData(), $resultData);
     }
 }

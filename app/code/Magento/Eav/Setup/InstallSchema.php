@@ -179,13 +179,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
             'Created At'
         )->addColumn(
             'updated_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false],
+            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
             'Updated At'
         )->addColumn(
             'is_active',
@@ -204,14 +204,12 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Entity'
@@ -281,21 +279,18 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('eav_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_datetime', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_datetime', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Entity Value Prefix'
@@ -365,21 +360,18 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('eav_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_decimal', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_decimal', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Entity Value Prefix'
@@ -449,21 +441,18 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('eav_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_int', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_int', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Entity Value Prefix'
@@ -533,21 +522,18 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('eav_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_text', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_text', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Entity Value Prefix'
@@ -617,21 +603,18 @@ class InstallSchema implements InstallSchemaInterface
             'entity_id',
             $installer->getTable('eav_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_varchar', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_varchar', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Entity Value Prefix'
@@ -758,7 +741,6 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Attribute'
@@ -811,14 +793,12 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_entity_store', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Entity Store'
@@ -870,7 +850,6 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Attribute Set'
@@ -940,7 +919,6 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_set_id',
             $installer->getTable('eav_attribute_set'),
             'attribute_set_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Attribute Group'
@@ -1015,7 +993,6 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName(
@@ -1027,7 +1004,6 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_group_id',
             $installer->getTable('eav_attribute_group'),
             'attribute_group_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Entity Attributes'
@@ -1065,7 +1041,6 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Attribute Option'
@@ -1112,14 +1087,12 @@ class InstallSchema implements InstallSchemaInterface
             'option_id',
             $installer->getTable('eav_attribute_option'),
             'option_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_attribute_option_value', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Attribute Option Value'
@@ -1166,14 +1139,12 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_attribute_label', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Attribute Label'
@@ -1237,7 +1208,6 @@ class InstallSchema implements InstallSchemaInterface
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Form Type'
@@ -1269,14 +1239,12 @@ class InstallSchema implements InstallSchemaInterface
             'entity_type_id',
             $installer->getTable('eav_entity_type'),
             'entity_type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_form_type_entity', 'type_id', 'eav_form_type', 'type_id'),
             'type_id',
             $installer->getTable('eav_form_type'),
             'type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Form Type Entity'
@@ -1325,7 +1293,6 @@ class InstallSchema implements InstallSchemaInterface
             'type_id',
             $installer->getTable('eav_form_type'),
             'type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Form Fieldset'
@@ -1363,14 +1330,12 @@ class InstallSchema implements InstallSchemaInterface
             'fieldset_id',
             $installer->getTable('eav_form_fieldset'),
             'fieldset_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_form_fieldset_label', 'store_id', 'store', 'store_id'),
             'store_id',
             $installer->getTable('store'),
             'store_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Form Fieldset Label'
@@ -1431,21 +1396,18 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_id',
             $installer->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $installer->getFkName('eav_form_element', 'fieldset_id', 'eav_form_fieldset', 'fieldset_id'),
             'fieldset_id',
             $installer->getTable('eav_form_fieldset'),
             'fieldset_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL,
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            \Magento\Framework\DB\Ddl\Table::ACTION_SET_NULL
         )->addForeignKey(
             $installer->getFkName('eav_form_element', 'type_id', 'eav_form_type', 'type_id'),
             'type_id',
             $installer->getTable('eav_form_type'),
             'type_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Eav Form Element'

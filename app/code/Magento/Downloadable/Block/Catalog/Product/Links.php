@@ -103,6 +103,7 @@ class Links extends \Magento\Catalog\Block\Product\AbstractProduct
             $amount = $finalPrice->getCustomAmount($link->getPrice());
             $linksConfig[$link->getId()] = [
                 'finalPrice' => $amount->getValue(),
+                'basePrice' => $amount->getBaseAmount()
             ];
         }
 

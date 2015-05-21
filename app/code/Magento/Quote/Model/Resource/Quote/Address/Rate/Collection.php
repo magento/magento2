@@ -24,7 +24,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
+     * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -33,7 +33,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Quote\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
+        \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {

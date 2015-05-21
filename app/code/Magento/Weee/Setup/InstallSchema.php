@@ -86,28 +86,24 @@ class InstallSchema implements InstallSchemaInterface
             'country',
             $setup->getTable('directory_country'),
             'country_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $setup->getFkName('weee_tax', 'entity_id', 'catalog_product_entity', 'entity_id'),
             'entity_id',
             $setup->getTable('catalog_product_entity'),
             'entity_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $setup->getFkName('weee_tax', 'website_id', 'store_website', 'website_id'),
             'website_id',
             $setup->getTable('store_website'),
             'website_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
             $setup->getFkName('weee_tax', 'attribute_id', 'eav_attribute', 'attribute_id'),
             'attribute_id',
             $setup->getTable('eav_attribute'),
             'attribute_id',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
             'Weee Tax'

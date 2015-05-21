@@ -1,9 +1,114 @@
+0.74.0-beta7
+=============
+* Framework improvements
+    * Exceptions are caught and logged before reaching the Phrase::__toString() method
+    * Refactored controller actions in the Checkout area
+    * Refactored controller actions in the Tax area
+    * Implemented new look & feel for the Edit Order page (View/Edit Order)
+    * Replaced the end-to-end test for Onepage Checkout with online shipment methods with the scenario test
+* Fixed bugs
+    * Fixed an issue where a success message was absent when adding a product with options from Wishlist to Shopping Cart
+    * Fixed an issue where an exception was thrown when trying to sort Customer Groups by Tax Class
+    * Fixed an issue where the background color changed to the “on focus” state when clicking  the Admin Menu logo
+    * Fixed an issue with Mini Shopping Cart containing extra empty space
+* GitHub issues
+    * [#1173] (https://github.com/magento/magento2/pull/1173) -- Change to HttpClient4 from Java client; fix regex issues
+    * [#1185] (https://github.com/magento/magento2/pull/1185) -- Error message for duplicated phrases not allowed in Generator.php
+    * [#1199] (https://github.com/magento/magento2/pull/1199) -- Add Event for sales_order_state_change_before during Order->saveState()
+    * [#1201] (https://github.com/magento/magento2/pull/1101) -- Add customer_validate event
+    * [#1202] (https://github.com/magento/magento2/pull/1102) -- Email sending events
+
+0.74.0-beta6
+=============
+* Framework improvements
+    * Implemented a default exception handler for blocks
+    * Updated the root composer.json file
+    * Updated the setup tool to support different editions
+    * Added an ability to operate with Sales & Checkout APIs as guests and registered users
+    * Implemented the additional Sales & Checkout APIs for registered customers and guests
+    * Added unit tests to cover Sales & Checkout services code
+* Various
+    * Standardized the hierarchy of exceptions
+    * Added bundle product API integration to Catalog
+* Fixed bugs
+    * Fixed an issue where it was impossible to place an order using multiple address checkout
+    * Fixed an issue where DB timestamp columns with current_timestamp on update were not handled correctly
+    * Fixed an issue with FPT in partial invoices
+    * Fixed a performance issue in benchmark test
+    * Fixed the incorrect Exception class in the Magento_CurrencySymbol module
+    * Fixed an issue by letting MySQL determine a database table type instead of MyISAM
+    * Fixed an issue where test failures occurred when the database and the application were in different time zones
+    * Fixed an issue where \Magento\Framework\Phrase omitted placeholder values if no renderer was set
+
+0.74.0-beta5
+=============
+* Various
+    * Added the new methods/fields in the Catalog Product Data Object
+    * Improved the Nginx configuration sample file for better web-server responsiveness and security
+    * Implemented the new look & feel for Create New Order page
+    * Removed the redundant DB constraints for cascade operations related to order management
+    * Implemented the mechanism of asynchronous email notifications after creation of Orders, Invoices, Shipments and Credit Memos
+    * Moved the join logic on application level in order to make DB separation possible in Reports component
+    * Implemented the TTL and event approaches of cache invalidation, introduced the full and the partial Varnish Cache flush
+    * Moved all Setup commands to Magento CLI
+    * Exposed CMS API as Web API
+* Fixed bugs:
+    * Unexpected response for API "/V1/customers/password" service
+    * Can’t include a third-party link to frontend section via layout
+    * Specified details for Grouped product are lost after adding to wishlist
+    * Impossible to configure products in customer wishlist in Admin Panel
+    * Adding the product from wishlist to cart if more than one store view exists
+    * Specified product field custom options is not displayed in wishlist in Admin Panel
+    * Checkout doesn't work with JS bundling enabled in production mode
+    * Issue with price excluding tax when selecting downloadable links
+    * Undefined index warning in case the frontend cache information is missing in configuration file
+    * "New Order" email is not sent to customer after placing order via API service
+    * 503 error when placing order with multiple shipping addresses if mail transport doesn't exist
+    * Broken words for fields with long labels all over the Admin Panel
+    * Issue with saving 'is_virtual' flag in quote
+    * "Void" button available after "Deny Payment" operation
+    * Uninstall logic did not clean cache properly
+    * Obsolete code tests did not cover Tests folders
+    * Random fail of Magento\Log\Test\Unit\Model\VisitorTest
+* GitHub issues:
+   * [#1149] (https://github.com/magento/magento2/issues/1149) -- Checkout Grand Total amount miscalculation
+   * [#1165] (https://github.com/magento/magento2/pull/1165) -- Fix typos
+   * [#1182] (https://github.com/magento/magento2/pull/1182) -- Update system.xml for 'fix' sortOrder in adminhtml
+   * [#1186] (https://github.com/magento/magento2/pull/1186) -- SalesSequence: Fixed composer installer dependency
+
+0.74.0-beta4
+=============
+* Various
+    * Implemented the getDefaultResult method, to be able to catch exceptions in FrontController and redirect user to the correct page
+    * The getDefaultResult method is invoked to return default result of action execution within controllers. It can be used to generate the ‘execute’ method result in action controllers
+    * Eliminated the unused exceptions. Exceptions that weren't linked to any logic were also eliminated and replaced with LocalizedException or its child classes
+    * Refactored all controllers where possible: the default exception handling logic moved to FrontController. Controllers that cannot be refactored do not conflict with the new logic
+* Framework:
+    * Created Magento Console to perform CLI actions
+    * Introduced a new SalesSequence module that is responsible for documents numeration management across the Order Management System
+    * Implemented the mechanism of asynchronous indexing of sales entities grids
+* Setup
+    * Added the ConfigOption and ConfigOptionsList classes to be used by modules to manage deployment configuration
+    * Moved all existing segments logic to new classes
+    * Added the config:set command, which enables deployment configuration management
+    * Removed the old 'install-configuration' tool
+* Functional tests:
+    * Fixed functional test for order placement from backend
+    * Replaced the end-to-end test for a product with MAP with an injectable test
+* Design
+    * Updated the Blank and Luma themes to enable theme (not only library) variables overriding in the _theme.less file of any inherited theme. Included LESS code standards to the UI Library documentation
+* Fixed bugs:
+    * Fixed an issue where composite products could not be added to the order from the Recently Viewed Products section
+    * Fixed an issue where not all .js files were added to a bundle
+    * Fixed an issue where it was possible to save an incorrect IP value in the Developer Client Restriction field
+    * Fixed an issue where a raw DB error was thrown when trying to enter a custom variable with duplicated variable code
+
 0.74.0-beta3
 =============
 * API
-   * The orders were extended with the gift messages
-   * The page and block data and repository interfaces
-   * Updated the public API list
+    * The orders were extended with the gift messages
+    * The page and block data and repository interfaces
+    * Updated the public API list
 * Framework improvements
     * Improved the profile generator 
     * Introduced the new environment for Jasmine tests
@@ -27,7 +132,7 @@
     * Fixed the Navigation Menu items on Admin Area
     * Various unit and integration tests bugs
 * GitHub issues and requests
-    [#675] (https://github.com/magento/magento2/issues/675) -- Fix for Textarea element cols and rows #675
+    * [#675] (https://github.com/magento/magento2/issues/675) -- Fix for Textarea element cols and rows #675
 
 0.74.0-beta2
 =============

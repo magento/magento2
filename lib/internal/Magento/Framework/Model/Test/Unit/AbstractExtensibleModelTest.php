@@ -49,6 +49,11 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
      */
     protected $actionValidatorMock;
 
+    /**
+     * @var AttributeValue
+     */
+    protected $customAttribute;
+
     protected function setUp()
     {
         $this->actionValidatorMock = $this->getMock(
@@ -115,15 +120,22 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
                 $this->attributeValueFactoryMock,
                 $this->resourceMock,
                 $this->resourceCollectionMock
-            ]
+            ],
+            '',
+            true,
+            true,
+            true,
+            ['getCustomAttributesCodes']
         );
+        $this->customAttribute = new AttributeValue();
     }
 
     /**
      * Test implementation of interface for work with custom attributes.
      */
-    public function testCustomAttributes()
+    public function testCustomAttributesWithEmptyCustomAttributes()
     {
+        $this->model->expects($this->any())->method('getCustomAttributesCodes')->willReturn([]);
         $this->assertEquals(
             [],
             $this->model->getCustomAttributes(),
@@ -143,11 +155,48 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCustomAttributesWithNonEmptyCustomAttributes()
+    {
+        $customAttributeCode = 'attribute_code';
+        $customAttributeValue = 'attribute_value';
+        $this->model->expects($this->any())->method('getCustomAttributesCodes')->willReturn([$customAttributeCode]);
+
+        $this->assertEquals(
+            [],
+            $this->model->getCustomAttributes(),
+            "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
+        );
+        $this->attributeValueFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->customAttribute);
+        $this->customAttribute->setAttributeCode($customAttributeCode)->setValue($customAttributeValue);
+        $this->model->setData($customAttributeCode, $customAttributeValue);
+        $this->assertEquals(
+            [$this->customAttribute],
+            $this->model->getCustomAttributes(),
+            "One custom attribute expected"
+        );
+        $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode), 'customer attribute expected');
+        $this->assertEquals(
+            $customAttributeValue,
+            $this->model->getCustomAttribute($customAttributeCode)->getValue(),
+            "Custom attribute value is incorrect"
+        );
+        //unset the data
+        $this->model->unsetData($customAttributeCode);
+        $this->assertEquals(
+            [],
+            $this->model->getCustomAttributes(),
+            "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
+        );
+    }
+
     /**
      * Test if getData works with custom attributes as expected
      */
     public function testGetDataWithCustomAttributes()
     {
+        $this->model->expects($this->any())->method('getCustomAttributesCodes')->willReturn([]);
         $attributesAsArray = [
             'attribute1' => true,
             'attribute2' => 'Attribute Value',
@@ -181,6 +230,7 @@ class AbstractExtensibleModelTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCustomAttributesAsLiterals()
     {
+        $this->model->expects($this->any())->method('getCustomAttributesCodes')->willReturn([]);
         $attributeCode = 'attribute2';
         $attributeValue = 'attribute_value';
         $attributeMock = $this->getMockBuilder('\Magento\Framework\Api\AttributeValue')

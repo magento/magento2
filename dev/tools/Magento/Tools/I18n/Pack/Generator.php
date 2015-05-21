@@ -100,7 +100,7 @@ class Generator
             /** @var \Magento\Tools\I18n\Dictionary\Phrase $phrase */
             $phrase = $phrases[0];
             $error .= sprintf(
-                "The phrase \"%s\" is translated differently in %d places.\n",
+                "The phrase \"%s\" is translated in %d places.\n",
                 $phrase->getPhrase(),
                 count($phrases)
             );

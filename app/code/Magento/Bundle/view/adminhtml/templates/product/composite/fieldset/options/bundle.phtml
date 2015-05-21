@@ -11,15 +11,14 @@
 <?php /* @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Bundle */ ?>
 <?php $options = $block->decorateArray($block->getOptions()); ?>
 <?php if (count($options)): ?>
-<fieldset id="catalog_product_composite_configure_fields_bundle" class="fieldset bundle<?php echo $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
-    <legend class="legend"><span><?php echo __('Bundle Items') ?></span></legend><br />
-    <div class="fields options">
-        <?php foreach ($options as $option) : ?>
-            <?php if ($option->getSelections()) : ?>
-                <?php echo $block->getOptionHtml($option); ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </div>
+<fieldset id="catalog_product_composite_configure_fields_bundle"
+          class="fieldset admin__fieldset composite-bundle<?php echo $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
+    <legend class="legend admin__legend"><span><?php echo __('Bundle Items') ?></span></legend><br />
+    <?php foreach ($options as $option) : ?>
+        <?php if ($option->getSelections()) : ?>
+            <?php echo $block->getOptionHtml($option); ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
 </fieldset>
 
 <script>

@@ -9,23 +9,32 @@
 ?>
 
 <?php if ($block->canDisplayGiftmessageForm()): ?>
-<div id="gift_options_giftmessage" class="giftcard-form giftcard-send-form fieldset">
-    <div class="field">
-        <label for="current_item_giftmessage_sender"><?php echo __('From'); ?></label>
-        <div class="control">
-            <input type="text" class="input-text" name="current_item_giftmessage_sender" id="current_item_giftmessage_sender" />
+<div id="gift_options_giftmessage" class="giftcard-form giftcard-send-form fieldset admin__fieldset">
+    <div class="field admin__field">
+        <label class="admin__field-label" for="current_item_giftmessage_sender"><?php echo __('From'); ?></label>
+        <div class="control admin__field-control">
+            <input type="text" class="input-text admin__control-text"
+                   name="current_item_giftmessage_sender"
+                   id="current_item_giftmessage_sender" />
         </div>
     </div>
-    <div class="field">
-        <label for="current_item_giftmessage_recipient"><?php echo __('To'); ?></label>
-        <div class="control">
-            <input type="text" class="input-text" name="current_item_giftmessage_recipient" id="current_item_giftmessage_recipient" />
+    <div class="field admin__field">
+        <label class="admin__field-label" for="current_item_giftmessage_recipient"><?php echo __('To'); ?></label>
+        <div class="control admin__field-control">
+            <input type="text"
+                   class="input-text admin__control-text"
+                   name="current_item_giftmessage_recipient"
+                   id="current_item_giftmessage_recipient" />
         </div>
     </div>
-    <div class="field">
-        <label for="current_item_giftmessage_message"><?php echo __('Message'); ?></label>
-        <div class="control">
-            <textarea class="textarea" cols="15" rows="2" name="current_item_giftmessage_message" id="current_item_giftmessage_message"></textarea>
+    <div class="field admin__field">
+        <label class="admin__field-label" for="current_item_giftmessage_message"><?php echo __('Message'); ?></label>
+        <div class="control admin__field-control">
+            <textarea class="textarea admin__control-textarea"
+                      cols="15"
+                      rows="2"
+                      name="current_item_giftmessage_message"
+                      id="current_item_giftmessage_message"></textarea>
         </div>
     </div>
 </div>
