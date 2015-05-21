@@ -57,7 +57,7 @@
                                                             <item name="shipping-address-fieldset" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">additional-fieldsets</item>
-                                                                <!--<item name="children" xsi:type="array">-->
+                                                                <item name="children" xsi:type="array">
                                                                     <!--TODO Add tooltip in the scope of MAGETWO-37632;-->
                                                                     <!--<item name="email" xsi:type="array">-->
                                                                         <!--<item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>-->
