@@ -11,7 +11,7 @@ namespace Magento\Integration\Model\Oauth\Consumer\Validator;
 class KeyLength extends \Zend_Validate_StringLength
 {
     /**
-     * Key name
+     * Default key name
      *
      * @var string
      */
@@ -34,7 +34,10 @@ class KeyLength extends \Zend_Validate_StringLength
     protected $_messageVariables = ['min' => '_min', 'max' => '_max', 'name' => '_name'];
 
     /**
-     * Sets validator options
+     * Sets KeyLength validator options
+     *
+     * Default encoding is set to utf-8 if none provided
+     * New option name added to allow adding key name in validation error messages
      *
      * @param  integer|array|\Zend_Config $options
      */
