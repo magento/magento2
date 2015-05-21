@@ -64,8 +64,12 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $this->assetCollectionMock->expects($this->once())->method('getGroups')->willReturn($propertyGroups);
 
         // Stubs for renderLessJsScripts code
-        $lessConfigFile = $this->getMockBuilder('Magento\Framework\View\Asset\File')->disableOriginalConstructor()->getMock();
-        $lessMinFile = $this->getMockBuilder('Magento\Framework\View\Asset\File')->disableOriginalConstructor()->getMock();
+        $lessConfigFile = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $lessMinFile = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+            ->disableOriginalConstructor()
+            ->getMock();
         $lessConfigUrl = 'less/config/url.css';
         $lessMinUrl = 'less/min/url.css';
         $lessConfigFile->expects($this->once())->method('getUrl')->willReturn($lessConfigUrl);

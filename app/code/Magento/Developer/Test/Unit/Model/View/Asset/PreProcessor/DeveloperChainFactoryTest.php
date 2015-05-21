@@ -34,7 +34,7 @@ class DeveloperChainFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->chainFactoryMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\ChainFactory')
             ->disableOriginalConstructor()
-            ->getMock();;
+            ->getMock();
 
         // Set up System Under Test
         $sutArgs = [
