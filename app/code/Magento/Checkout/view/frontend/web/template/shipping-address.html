@@ -22,7 +22,7 @@
                 <label class="label" for="shipping:address-select"><span data-bind="text: $t('Select a shipping address from your address book or enter a new address.')"></span></label>
                 <div class="control">
                     <select name="shipping_address_id" id="shipping:address-select" data-bind="
-                    options: addresses,
+                    options: addresses(),
                     optionsText: function(item) { return item.getAddressInline(); },
                     optionsValue: 'customerAddressId',
                     value: selectedAddressId,
@@ -33,7 +33,7 @@
             </div>
             <!-- /ko -->
             <fieldset id="shipping-new-address-form" class="fieldset address"
-                      data-bind="fadeVisible: isNewAddressSelected(), visible: visible">
+                      data-bind="fadeVisible: isNewAddressSelected(), visible: formVisible">
             <!-- ko foreach: getRegion('additional-fieldsets') -->
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
