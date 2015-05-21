@@ -69,7 +69,7 @@ define(
                     var saveInAddressBook = true;
                     if (this.isCustomerLoggedIn) {
                         var addressBookCheckBox =  $("input[name = 'shipping[save_in_address_book]']:checked");
-                        saveInAddressBook = addressBookCheckBox.val();
+                        saveInAddressBook = !!addressBookCheckBox.val();
                     }
                     addressData.save_in_address_book = saveInAddressBook;
                     // TODO add address to address list and save it

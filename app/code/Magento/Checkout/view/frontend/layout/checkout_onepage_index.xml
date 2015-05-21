@@ -126,16 +126,6 @@
                                                                             </item>
                                                                         </item>
                                                                     </item>
-                                                                    <item name="save_in_address_book" xsi:type="array">
-                                                                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
-                                                                        <item name="config" xsi:type="array">
-                                                                            <item name="template" xsi:type="string">ui/form/field</item>
-                                                                            <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
-                                                                        </item>
-                                                                        <item name="description" xsi:type="string">Save in address book</item>
-                                                                        <item name="provider" xsi:type="string">checkoutProvider</item>
-                                                                        <item name="dataScope" xsi:type="string">shippingAddress.save_in_address_book</item>
-                                                                    </item>
                                                                 </item>
                                                             </item>
                                                         </item>
