@@ -91,6 +91,9 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $tester;
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function setUp()
     {
         $this->app = $this->getMock('Composer\Console\Application', [], [], '', false);

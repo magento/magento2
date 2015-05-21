@@ -137,6 +137,14 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     /**
      * {@inheritdoc}
      */
+    protected function isModuleRequired()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->deploymentConfig->isAvailable()) {
@@ -202,10 +210,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     protected function validate(array $modules)
     {
         $messages = [];
-        if (empty($modules)) {
-            $messages[] = '<error>No modules specified. Specify a space-separated list of modules</error>';
-            return $messages;
-        }
         $unknownPackages = [];
         $unknownModules = [];
         $buffer = new BufferedOutput();

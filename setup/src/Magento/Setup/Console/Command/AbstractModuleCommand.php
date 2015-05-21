@@ -47,7 +47,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
     {
         $this->addArgument(
             self::INPUT_KEY_MODULES,
-            InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
+            InputArgument::IS_ARRAY | ($this->isModuleRequired() ? InputArgument::REQUIRED : InputArgument::OPTIONAL),
             'Name of the module'
         );
         $this->addOption(
@@ -59,6 +59,13 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
 
         parent::configure();
     }
+
+    /**
+     * Returns if module argument is required
+     *
+     * @return bool
+     */
+    abstract protected function isModuleRequired();
 
     /**
      * Cleanup after updated modules status

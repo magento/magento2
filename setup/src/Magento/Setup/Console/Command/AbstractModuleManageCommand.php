@@ -41,6 +41,14 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
     /**
      * {@inheritdoc}
      */
+    protected function isModuleRequired()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $isEnable = $this->isEnable();
