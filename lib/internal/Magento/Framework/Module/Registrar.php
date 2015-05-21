@@ -3,15 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Framework\Module\Dir;
+namespace Magento\Framework\Module;
 
 /**
  * Provides ability to statically register modules which do not reside in the modules directory
  *
  * @author Josh Di Fabio <joshdifabio@gmail.com>
  */
-final class Resolver implements ResolverInterface
+class Registrar implements ModuleRegistryInterface
 {
     /**
      * Paths to modules
@@ -26,7 +25,7 @@ final class Resolver implements ResolverInterface
      * @param string $moduleName Fully-qualified module name
      * @param string $path Absolute file path to the module
      */
-    public static function setModulePath($moduleName, $path)
+    public static function registerModule($moduleName, $path)
     {
         self::$modulePaths[$moduleName] = $path;
     }
