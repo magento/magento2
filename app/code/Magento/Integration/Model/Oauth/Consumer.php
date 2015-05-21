@@ -113,8 +113,9 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
         }
 
         /** @var $validatorLength \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength */
-        $validatorLength = $this->_keyLengthFactory->create();
-        $validatorLength->setLength(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY);
+        $validatorLength = $this->_keyLengthFactory->create(
+            ['length' => \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY]
+        );
 
         $validatorLength->setName('Consumer Key');
         if (!$validatorLength->isValid($this->getKey())) {

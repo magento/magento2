@@ -18,17 +18,13 @@ class KeyLength extends \Zend_Validate_StringLength
     protected $_name = 'Key';
 
     /**
-     * Init validation failure message template definitions
-     *
-     * @return $this
+     * @var array
      */
-    protected function _initMessageTemplates()
-    {
-        $_messageTemplates[self::TOO_LONG] = __("%name% '%value%' is too long. It must has length %min% symbols.");
-        $_messageTemplates[self::TOO_SHORT] = __("%name% '%value%' is too short. It must has length %min% symbols.");
-
-        return $this;
-    }
+    protected $_messageTemplates = array(
+        self::INVALID   => "Invalid type given for %name%. String expected",
+        self::TOO_SHORT => "%name% '%value%' is less than %min% characters long",
+        self::TOO_LONG  => "%name% '%value%' is more than %max% characters long",
+    );
 
     /**
      * Additional variables available for validation failure messages
@@ -36,6 +32,31 @@ class KeyLength extends \Zend_Validate_StringLength
      * @var array
      */
     protected $_messageVariables = ['min' => '_min', 'max' => '_max', 'name' => '_name'];
+
+    /**
+     * Sets validator options
+     *
+     * @param  integer|array|\Zend_Config $options
+     */
+    public function __construct($options = [])
+    {
+        if (!is_array($options)) {
+            $options = func_get_args();
+            if (!isset($options[1])) {
+                $options[1] = 'utf-8';
+            }
+            parent::__construct($options[0], $options[0], $options[1]);
+            return;
+        } else {
+            if (isset($options['length'])) {
+                $options['max'] = $options['min'] = $options['length'];
+            }
+            if (isset($options['name'])) {
+                $this->_name = $options['name'];
+            }
+        }
+        parent::__construct($options);
+    }
 
     /**
      * Set length
