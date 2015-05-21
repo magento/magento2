@@ -1,12 +1,14 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml\Term;
 
-class MassDelete extends \Magento\Search\Controller\Adminhtml\Term
+use Magento\Search\Controller\Adminhtml\Term as TermController;
+use Magento\Framework\Controller\ResultFactory;
+
+class MassDelete extends TermController
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
@@ -27,8 +29,9 @@ class MassDelete extends \Magento\Search\Controller\Adminhtml\Term
                 $this->messageManager->addError($e->getMessage());
             }
         }
-        /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
-        $redirectResult = $this->resultRedirectFactory->create();
-        return $redirectResult->setPath('search/*/');
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setPath('search/*/');
+        return $resultRedirect;
     }
 }

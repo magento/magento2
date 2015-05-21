@@ -25,7 +25,7 @@ $numColumns = sizeof($block->getColumns());
                 <?php if ($block->getHeadersVisibility()): ?>
                     <tr>
                         <?php foreach ($block->getColumns() as $_column): ?>
-                            <th <?php echo $_column->getHeaderHtmlProperty() ?>><?php echo $_column->getHeaderHtml() ?></th>
+                            <?php echo $_column->getHeaderHtml() ?>
                         <?php endforeach; ?>
                     </tr>
                 <?php endif; ?>

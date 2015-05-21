@@ -21,7 +21,7 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\View\Block\IdentityInterface
+class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -375,7 +375,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         }
 
         /* @var $collection \Magento\Framework\Message\Collection */
-        $collection = $this->messageManager->getMessages('quote_item' . $quoteItem->getId());
+        $collection = $this->messageManager->getMessages(true, 'quote_item' . $quoteItem->getId());
         if ($collection) {
             $additionalMessages = $collection->getItems();
             foreach ($additionalMessages as $message) {

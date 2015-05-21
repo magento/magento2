@@ -70,7 +70,6 @@ class PrintOrderFrontendGuestTest extends Scenario
      */
     public function tearDown()
     {
-        $this->objectManager->create('Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep')->run();
         $this->browser->closeWindow();
     }
 }

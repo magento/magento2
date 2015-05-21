@@ -732,7 +732,7 @@ class InstallSchema implements InstallSchemaInterface
             'rule_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->addForeignKey(
-            $installer->getFkName('salesrule_website', 'website_id', 'core/website', 'website_id'),
+            $installer->getFkName('salesrule_website', 'website_id', 'store_website', 'website_id'),
             'website_id',
             $websitesTable,
             'website_id',
