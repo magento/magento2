@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
-use Magento\Framework\Module\Dir\ResolverInterface;
+use Magento\Framework\Module\ModuleRegistryInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
@@ -40,11 +40,11 @@ class Loader
     private $parser;
 
     /**
-     * Module directory resolver
+     * Module registry
      *
-     * @var ResolverInterface
+     * @var ModuleRegistryInterface
      */
-    private $dirResolver;
+    private $moduleRegistry;
 
     /**
      * Filesystem driver to allow reading of module.xml files which live outside of app/code
@@ -59,21 +59,21 @@ class Loader
      * @param Filesystem $filesystem
      * @param Dom $converter
      * @param Parser $parser
-     * @param ResolverInterface $resolver
+     * @param ModuleRegistryInterface $moduleRegistry
      * @param DriverInterface $filesystemDriver
      */
     public function __construct(
         Filesystem $filesystem,
         Dom $converter,
         Parser $parser,
-        ResolverInterface $resolver,
+        ModuleRegistryInterface $moduleRegistry,
         DriverInterface $filesystemDriver
     ) {
         $this->filesystem = $filesystem;
         $this->converter = $converter;
         $this->parser = $parser;
         $this->parser->initErrorHandler();
-        $this->dirResolver = $resolver;
+        $this->moduleRegistry = $moduleRegistry;
         $this->filesystemDriver = $filesystemDriver;
     }
 
@@ -120,7 +120,7 @@ class Loader
             yield $modulesDir->readFile($filePath);
         }
 
-        foreach ($this->dirResolver->getModulePaths() as $modulePath) {
+        foreach ($this->moduleRegistry->getModulePaths() as $modulePath) {
             $filePath =  str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
             yield $this->filesystemDriver->fileGetContents($filePath);
         }

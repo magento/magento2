@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Stdlib\String as StringHelper;
-use Magento\Framework\Module\Dir\ResolverInterface;
+use Magento\Framework\Module\ModuleRegistryInterface;
 
 class Dir
 {
@@ -28,22 +28,25 @@ class Dir
     protected $_string;
 
     /**
-     * Module directory resolver
+     * Module registry
      *
-     * @var ResolverInterface
+     * @var ModuleRegistryInterface
      */
-    private $dirResolver;
+    private $moduleRegistry;
 
     /**
      * @param Filesystem $filesystem
      * @param StringHelper $string
-     * @param ResolverInterface $resolver
+     * @param ModuleRegistryInterface $moduleRegistry
      */
-    public function __construct(Filesystem $filesystem, StringHelper $string, ResolverInterface $resolver)
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        StringHelper $string,
+        ModuleRegistryInterface $moduleRegistry
+    ) {
         $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->_string = $string;
-        $this->dirResolver = $resolver;
+        $this->moduleRegistry = $moduleRegistry;
     }
 
     /**
@@ -56,7 +59,7 @@ class Dir
      */
     public function getDir($moduleName, $type = '')
     {
-        if (null === $path = $this->dirResolver->getModulePath($moduleName)) {
+        if (null === $path = $this->moduleRegistry->getModulePath($moduleName)) {
             $relativePath = $this->_string->upperCaseWords($moduleName, '_', '/');
             $path = $this->_modulesDirectory->getAbsolutePath($relativePath);
         }

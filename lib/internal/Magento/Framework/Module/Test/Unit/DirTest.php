@@ -28,9 +28,9 @@ class DirTest extends \PHPUnit_Framework_TestCase
     protected $directoryMock;
 
     /**
-     * @var \Magento\Framework\Module\Dir\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\ModuleRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dirResolverMock;
+    protected $moduleRegistryMock;
 
     protected function setUp()
     {
@@ -44,8 +44,8 @@ class DirTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\String', [], [], '', false, false);
-        $this->dirResolverMock = $this->getMock(
-            'Magento\Framework\Module\Dir\ResolverInterface',
+        $this->moduleRegistryMock = $this->getMock(
+            'Magento\Framework\Module\ModuleRegistryInterface',
             [],
             [],
             '',
@@ -64,13 +64,13 @@ class DirTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Framework\Module\Dir(
             $this->filesystemMock,
             $this->_stringMock,
-            $this->dirResolverMock
+            $this->moduleRegistryMock
         );
     }
 
     public function testGetDirModuleRoot()
     {
-        $this->dirResolverMock->expects(
+        $this->moduleRegistryMock->expects(
             $this->once()
         )->method(
             'getModulePath'
@@ -97,7 +97,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDirModuleRootFromResolver()
     {
-        $this->dirResolverMock->expects(
+        $this->moduleRegistryMock->expects(
             $this->once()
         )->method(
             'getModulePath'
