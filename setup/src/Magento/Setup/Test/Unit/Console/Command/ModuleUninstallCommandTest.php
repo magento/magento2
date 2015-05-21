@@ -11,6 +11,9 @@ use Magento\Setup\Console\Command\ModuleUninstallCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**

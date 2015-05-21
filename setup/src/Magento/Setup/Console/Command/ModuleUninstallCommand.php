@@ -194,11 +194,18 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     }
 
     /**
-     * {@inheritdoc}
+     * Validate list of modules against installed composer packages and return error messages
+     *
+     * @param string[] $modules
+     * @return string[]
      */
     protected function validate(array $modules)
     {
         $messages = [];
+        if (empty($modules)) {
+            $messages[] = '<error>No modules specified. Specify a space-separated list of modules</error>';
+            return $messages;
+        }
         $unknownPackages = [];
         $unknownModules = [];
         $buffer = new BufferedOutput();
@@ -221,7 +228,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         if (!empty($unknownModules)) {
             $messages[] = '<error>Unknown module(s): ' . implode(', ', $unknownModules) . '</error>';
         }
-        $messages = array_merge($messages, parent::validate($modules));
         return $messages;
     }
 
