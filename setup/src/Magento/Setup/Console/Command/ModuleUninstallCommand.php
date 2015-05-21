@@ -22,6 +22,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Command for uninstalling modules
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ModuleUninstallCommand extends AbstractModuleCommand
 {
     /**
@@ -72,6 +77,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     /**
      * Constructor
      *
+     * @param Application $composerApp
      * @param DeploymentConfig $deploymentConfig
      * @param DeploymentConfig\Writer $writer
      * @param FullModuleList $fullModuleList
@@ -146,6 +152,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             return;
         }
 
+        $output->writeln('<info>Enabling maintenance mode</info>');
         $this->maintenanceMode->set(true);
 
         try {
@@ -162,13 +169,16 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 }
             }
             $this->removeModulesFromDb($modules);
-            $output->writeln('<info>Updated module registry in database</info>');
+            $output->writeln('<info>Removing ' . implode(', ', $modules) . ' module registry in database</info>');
             $this->removeModulesFromDeploymentConfig($modules);
-            $output->writeln('<info>Updated module list in deployment configuration</info>');
+            $output->writeln(
+                '<info>Removing ' . implode(', ', $modules) .  ' module list in deployment configuration</info>'
+            );
             $this->cleanup($input, $output);
-            $this->maintenanceMode->set(false);
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+        } finally {
+            $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
         }
     }
@@ -247,7 +257,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             $dependency = array_diff($dependency, $packagesToUninstall);
             if (!empty($dependency)) {
                 $messages[] = "<error>Cannot uninstall $module because " .
-                    implode(', ', $dependency) . ' depends on it</error>';
+                    implode(', ', $dependency) . ' depend(s) on it</error>';
             }
         }
         return $messages;
