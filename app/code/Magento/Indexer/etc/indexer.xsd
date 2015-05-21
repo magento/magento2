@@ -122,7 +122,7 @@
         <xs:complexContent>
             <xs:extension base="fieldTypeAbstract">
                 <xs:sequence>
-                    <xs:element type="filterType" name="filter" minOccurs="1" maxOccurs="1" />
+                    <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
