@@ -6,12 +6,15 @@ define([
     "jquery",
     "jquery/ui"
 ], function ($) {
-    'use strict';
 
     $.widget('mage.step-wizard', $.ui.tabs, {
+        defaultStep: {
+            force: function() {},
+            back: function() {}
+        },
         options: {
             collapsible: false,
-            disabled: [1,2,3],
+            disabled: [],
             event: "click"
         },
         _create: function() {
@@ -35,7 +38,21 @@ define([
         },
         load: function(index, event) {
             this._disabledTabs(index);
+            this._handlerStep(index);
             this._super(index, event);
+        },
+        _handlerStep: function (index) {
+            var script = this.panels.eq(index).find('[data-handler="step-wizard"]').first();
+            if(script.text()) {
+                var code = eval(script.text());
+                this.step = step;
+            } else {
+                this.step = this.defaultStep;
+            }
+            this.step[this._way(index)]();
+        },
+        _way: function(index) {
+            return this.options.selected > index ? 'back' : 'force';
         },
         _disabledTabs: function(index) {
             var disabled = [];
@@ -45,7 +62,7 @@ define([
                 }
                 disabled.push(i);
             }
-            this._setupDisabled( disabled );
+            this._setupDisabled(disabled);
         }
     });
 
