@@ -169,17 +169,17 @@ class Editor extends Textarea
             // Display only buttons to additional features
             if ($this->getConfig('widget_window_url')) {
                 $html = $this->_getButtonsHtml() . $js . parent::getElementHtml();
-                $html .= '
-                <script type="text/javascript">
-                //<![CDATA[
-                require(["jquery", "mage/translate", "mage/adminhtml/wysiwyg/widget"], function(jQuery){
-                    (function($) {
-                        $.mage.translate.add(' . \Zend_Json::encode($this->getTranslatedString()) . ')
-                    })(jQuery);
-                });
-                //]]>
-                </script>
-                ';
+                if ($this->getConfig('add_widgets')) {
+                    $html .= '<script type="text/javascript">
+                    //<![CDATA[
+                    require(["jquery", "mage/translate", "mage/adminhtml/wysiwyg/widget"], function(jQuery){
+                        (function($) {
+                            $.mage.translate.add(' . \Zend_Json::encode($this->getTranslatedString()) . ')
+                        })(jQuery);
+                    });
+                    //]]>
+                    </script>';
+                }
                 $html = $this->_wrapIntoContainer($html);
                 return $html;
             }
