@@ -101,6 +101,94 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['unsigned' => true, 'nullable' => false, 'default' => '0'],
             'Disable automatic group change based on VAT ID'
+        )->addColumn(
+            'created_in',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Created From'
+        )->addColumn(
+            'prefix',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            40,
+            [],
+            'Prefix'
+        )->addColumn(
+            'firstname',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'First Name'
+        )->addColumn(
+            'middlename',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Middle Name/Initial'
+        )->addColumn(
+            'lastname',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            [],
+            'Last Name'
+        )->addColumn(
+            'suffix',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            40,
+            [],
+            'Suffix'
+        )->addColumn(
+            'dob',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
+            null,
+            [],
+            'Date Of Birth'
+        )->addColumn(
+            'password_hash',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255
+        )->addColumn(
+            'rp_token',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            255,
+            ['nullable' => true, 'default' => null],
+            'Reset password token'
+        )->addColumn(
+            'rp_token_created_at',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+            null,
+            ['nullable' => true, 'default' => null],
+            'Reset password token creation time'
+        )->addColumn(
+            'default_billing',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => true],
+            'Default Billing Address'
+        )->addColumn(
+            'default_shipping',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => true],
+            'Default Shipping Address'
+        )->addColumn(
+            'taxvat',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            50,
+            [],
+            'Tax/VAT Number'
+        )->addColumn(
+            'confirmation',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            64,
+            [],
+            'Is Confirmed'
+        )->addColumn(
+            'gender',
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+            10,
+            [],
+            'Gender'
         )->addIndex(
             $installer->getIdxName('customer_entity', ['store_id']),
             ['store_id']
