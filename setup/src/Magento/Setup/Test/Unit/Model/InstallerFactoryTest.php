@@ -77,6 +77,10 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\App\State\CleanupFiles',
                 $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false),
             ],
+            [
+                'Magento\Setup\Validator\DbValidator',
+                $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false),
+            ],
         ];
         $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
         $serviceLocatorMock

@@ -59,7 +59,13 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
             \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
         ]);
         $payment = $quote->getPayment();
-        $payment->importData($method->getData());
+
+        $data = $method->getData();
+        if (isset($data['additional_data'])) {
+            $data = array_merge($data, (array)$data['additional_data']);
+            unset($data['additional_data']);
+        }
+        $payment->importData($data);
 
         if ($quote->isVirtual()) {
             // check if billing address is set

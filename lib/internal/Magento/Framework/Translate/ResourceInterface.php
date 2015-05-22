@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Translate;
 
+/**
+ * Returns the translation resource data.
+ *
+ * @api
+ */
 interface ResourceInterface
 {
     /**

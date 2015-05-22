@@ -127,12 +127,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
                  * Validate from and to date
                  */
                 try {
-                    $from = $this->_localeDate->date(
-                        $this->getFilter('report_from'),
-                        null,
-                        false
-                    );
-                    $to = $this->_localeDate->date($this->getFilter('report_to'), null, false);
+                    $from = $this->_localeDate->scopeDate(null, $this->getFilter('report_from'), false);
+                    $to = $this->_localeDate->scopeDate(null, $this->getFilter('report_to'), false);
 
                     $collection->setInterval($from, $to);
                 } catch (\Exception $e) {

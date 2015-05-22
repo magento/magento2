@@ -50,7 +50,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->productRepositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
-        $this->contentValidatorMock = $this->getMock('\Magento\Catalog\Model\Product\Gallery\ContentValidator');
+        $this->contentValidatorMock = $this->getMock('\Magento\Framework\Api\ImageContentValidatorInterface');
         $this->productMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
             [
@@ -95,9 +95,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateWithInvalidImageException()
     {
-        $entryContentMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface'
-        );
+        $entryContentMock = $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 
         $storeId = 0;
@@ -116,9 +116,9 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithCannotSaveException()
     {
         $productSku = 'mediaProduct';
-        $entryContentMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface'
-        );
+        $entryContentMock = $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterface')
+            ->disableOriginalConstructor()
+            ->getMock();;
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 
         $storeId = 0;
@@ -140,7 +140,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
     {
         $productSku = 'mediaProduct';
         $entryContentMock = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryContentInterface'
+            'Magento\Framework\Api\Data\ImageContentInterface'
         );
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 

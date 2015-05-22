@@ -41,6 +41,7 @@
 @data-grid-th__hover__background-color: lighten(@data-grid-th__background-color, 5%);
 
 @data-grid-th-marker__width: .7rem;
+@data-grid-th-marker__required__color: lighten(@color-light-phoenix, 10%);
 
 @data-grid-checkbox-cell-inner__padding-top: 1.1rem;
 @data-grid-checkbox-cell-inner__padding-horizontal: 1.8rem;
@@ -49,9 +50,15 @@
 
 //
 
+.admin__data-grid-outer-wrap {
+    position: relative; // Used to keep spinner inside
+}
+
 .admin__data-grid-wrap {
+    margin-bottom: 2rem;
+    max-width: 100%;
+    overflow-x: auto;
     padding-top: 0;
-    position: relative;
 }
 
 .admin__data-grid-loading-mask {
@@ -81,29 +88,24 @@
     border-left: none;
     border-right: none;
     border-top: none;
+    box-sizing: border-box; // ToDo UI: Rewrite old styles. Should be deleted afterwards
     font-size: @data-grid__font-size;
-    margin-bottom: 2rem;
     max-width: 100%;
+    margin-bottom: 0;
     width: 100%;
     thead {
-        background-color: transparent; // ToDo UI: Rewrite old styles. Should be deleted afterwards
+        background-color: transparent;
         color: @text__color; // ToDo UI: Rewrite old styles. Should be deleted afterwards
+    }
+    tfoot {
+        th {
+            padding: @data-grid-cell__padding-vertical @data-grid-cell__padding-horizontal;
+        }
     }
     tr {
         &:nth-child(even) {
             td {
                 background-color: @data-grid-td__even__background-color;
-            }
-        }
-        &:active {
-            td {
-                background-color: @data-grid-tr__active__background-color;
-            }
-        }
-        &:hover {
-            td {
-                background-color: @data-grid-tr__hover__background-color;
-                cursor: pointer;
             }
         }
         &.data-grid-tr-no-data {
@@ -112,6 +114,24 @@
                     cursor: default;
                     background-color: @data-grid-td__odd__background-color;
                 }
+            }
+        }
+    }
+    tbody {
+        tr {
+            &:active {
+                td {
+                    background-color: @data-grid-tr__active__background-color;
+                }
+            }
+            &:hover {
+                td {
+                    background-color: @data-grid-tr__hover__background-color;
+                }
+            }
+            &._clickable,
+            ._clickable {
+                cursor: pointer;
             }
         }
     }
@@ -173,11 +193,14 @@
     .data-grid-th {
         color: @data-grid-th__color;
         padding: @data-grid-th__padding-vertical @data-grid-th__padding-horizontal;
+        vertical-align: middle;
         &._sortable {
+            background-clip: padding-box; // Fix for border overlay in Firefox
             cursor: pointer;
             padding-right: @data-grid-th__padding-horizontal * 2 + @data-grid-th-marker__width;
             position: relative;
             transition: @smooth__background-color;
+            z-index: 1;
             &:focus,
             &:hover {
                 background-color: @data-grid-th__hover__background-color;
@@ -187,9 +210,20 @@
                 padding-top: @data-grid-th__padding-vertical + .1rem;
             }
         }
+        //  Required column
+        &.required {
+            > span {
+                &:after {
+                    content: '*';
+                    margin-left: .3rem;
+                    color: @data-grid-th-marker__required__color;
+                }
+            }
+        }
     }
     .data-grid-checkbox-cell {
         padding: 0;
+        width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
         &:hover {
             cursor: default;
         }
@@ -197,7 +231,6 @@
     .data-grid-multiselect-cell {
         padding: @data-grid-th__padding-horizontal @data-grid-th__padding-vertical @data-grid-th__padding-horizontal - .1rem;
         text-align: center;
-        width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
     }
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;
@@ -258,7 +291,8 @@
             &:before {
                 position: absolute;
                 right: @data-grid-th__padding-horizontal;
-                top: @data-grid-th__padding-vertical - .1rem;
+                top: 50%;
+                margin-top: -.75em;
             }
         }
         &._ascend {
@@ -309,5 +343,10 @@
                 top: @data-grid-checkbox-cell-inner__padding-top + (@data-grid-row-parent-marker__size / 2);
             }
         }
+    }
+}
+.data-grid-th {
+    &._col-xs {
+        width: 1%;
     }
 }

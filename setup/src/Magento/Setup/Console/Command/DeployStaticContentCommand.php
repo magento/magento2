@@ -13,6 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\Validator\Locale;
 
 /**
  * Command for deploy static content
@@ -44,15 +45,25 @@ class DeployStaticContentCommand extends Command
     private $deploymentConfig;
 
     /**
+     * @var Locale
+     */
+    private $validator;
+
+    /**
      * Inject dependencies
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param DeploymentConfig $deploymentConfig
+     * @param Locale $validator
      */
-    public function __construct(ObjectManagerProvider $objectManagerProvider, DeploymentConfig $deploymentConfig)
-    {
+    public function __construct(
+        ObjectManagerProvider $objectManagerProvider,
+        DeploymentConfig $deploymentConfig,
+        Locale $validator
+    ) {
         $this->objectManagerProvider = $objectManagerProvider;
         $this->deploymentConfig = $deploymentConfig;
+        $this->validator = $validator;
         parent::__construct();
     }
 
@@ -94,9 +105,10 @@ class DeployStaticContentCommand extends Command
 
         $languages = $input->getArgument(self::LANGUAGE_OPTION);
         foreach ($languages as $lang) {
-            if (!preg_match('/^[a-z]{2}_[A-Z]{2}$/', $lang)) {
+
+            if (!$this->validator->isValid($lang)) {
                 throw new \InvalidArgumentException(
-                    $lang . ' argument has invalid value format'
+                    $lang . ' argument has invalid value, please run info:language:list for list of available locales'
                 );
             }
         }
