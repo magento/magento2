@@ -108,11 +108,12 @@ define([
                         //);
                     }
                 }]
-            });
-            this.insideDialog = $('<div>lol</div>').dialog({
+            }).data('mage-dialog');
+
+            this.insideDialog = $('<div>Another dialog</div>').dialog({
                 type: 'slideOut',
                 dialogClass: 'mage-new-category-dialog form-inline'
-            });
+            }).data('mage-dialog');
         }
     });
 

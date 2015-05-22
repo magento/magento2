@@ -7,7 +7,8 @@ define([
     "underscore",
     "mage/template",
     "text!ui/template/dialog/dialog.html",
-    "jquery/ui"
+    "jquery/ui",
+    "mage/translate"
 ], function($, _,template, dialogTemplate){
     "use strict";
 
@@ -21,7 +22,7 @@ define([
             template: dialogTemplate,
             buttons: [{
                 text: $.mage.__('Ok'),
-                'class': 'action-primary',
+                class: 'action-primary',
                 click: function(){
                     this.closeDialog();
                 }
@@ -70,33 +71,35 @@ define([
             return this.dialog.find(elem);
         },
         openDialog: function() {
-            this._isOpen = true;
+            this.options.isOpen = true;
             this._position();
             this._createOverlay();
             this.dialog.show();
             this.dialog.addClass(this.options.dialogActiveClass);
 
-            return this.dialog;
+            return this.element;
         },
         closeDialog: function() {
             var that = this;
 
-            this._isOpen = false;
+            this.options.isOpen = false;
             this.dialog.one(this.options.transitionEvent, function() {
-                that.dialog.hide();
-                that._destroyOverlay();
+                that._close();
             });
             this.dialog.removeClass(this.options.dialogActiveClass);
             if ( !this.options.transitionEvent ) {
-                this.dialog.hide();
-                this._destroyOverlay();
+                that._close();
             }
 
-            return this.dialog;
+            return this.element;
+        },
+        _close: function() {
+            this.dialog.hide();
+            this._destroyOverlay();
+            this._trigger('dialogClosed');
         },
         _createWrapper: function() {
             this.dialogWrapper = $('#'+this.options.wrapperId);
-
             if ( !this.dialogWrapper.length ) {
                 this.dialogWrapper = $('<div></div>')
                      .attr('id', this.options.wrapperId)
@@ -120,7 +123,7 @@ define([
             _.each(this.options.buttons, function(btn, key) {
                 var button = that.buttons[key];
 
-                button.on('click', _.bind(btn.click, that));
+                $(button).on('click', _.bind(btn.click, that));
             });
         },
         _createOverlay: function() {
@@ -172,7 +175,7 @@ define([
             this.dialog.css(this.options.position[type]);
         },
         whichTransitionEvent: function() {
-            var t,
+            var transition,
                 el = document.createElement('fakeelement'),
                 transitions = {
                     'transition': 'transitionend',
@@ -181,9 +184,9 @@ define([
                     'WebkitTransition': 'webkitTransitionEnd'
                 };
 
-            for (t in transitions){
-                if ( el.style[t] !== undefined && transitions.hasOwnProperty(t) ) {
-                    return transitions[t];
+            for (transition in transitions){
+                if ( el.style[transition] !== undefined && transitions.hasOwnProperty(transition) ) {
+                    return transitions[transition];
                 }
             }
         }
