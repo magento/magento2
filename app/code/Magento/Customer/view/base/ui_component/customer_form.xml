@@ -8,9 +8,7 @@
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="provider" xsi:type="string">customer_form.customer_form_data_source</item>
-            </item>
+            <item name="provider" xsi:type="string">customer_form.customer_form_data_source</item>
             <item name="deps" xsi:type="string">customer_form.customer_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Customer Information</item>
