@@ -29,28 +29,48 @@ db:
         - dbdata
     ports:
         - 3306
+shell:
+    build: docker
+    links:
+        - db
+    volumes:
+        - .:/var/www/html
+    command: bash
 setup:
-    build: .
+    build: docker
     links:
         - db
-    command: sh -ec 'php index.php install --base_url=http://localhost/
-                                           --backend_frontname=admin
-                                           --db_host=db_1
-                                           --db_name="$DB_1_ENV_MYSQL_DATABASE"
-                                           --db_user="$DB_1_ENV_MYSQL_USER"
-                                           --db_pass="$DB_1_ENV_MYSQL_PASSWORD"
-                                           --admin_firstname=Nim
-                                           --admin_lastname=Da
-                                           --admin_email=admin@localhost
-                                           --admin_username=admin
-                                           --admin_password=admin123
-                                           --language=en_US
-                                           --currency=USD
-                                           --timezone=America/New_York'
+    volumes:
+        - .:/var/www/html
+    command: sh -c '
+            echo "Installing Magento 2" &&
+            composer install &&
+            bin/magento setup:install --admin-email=nobody@example.com
+                                    --admin-firstname=Nobody
+                                    --admin-lastname=Example
+                                    --admin-password=admin123
+                                    --admin-user=admin
+                                    --backend-frontname=admin
+                                    --base-url=http://localhost/
+                                    --currency=USD
+                                    --db-host=db_1
+                                    --db-name="$DB_1_ENV_MYSQL_DATABASE"
+                                    --db-password="$DB_1_ENV_MYSQL_PASSWORD"
+                                    --db-user="$DB_1_ENV_MYSQL_USER"
+                                    --language=en_US
+                                    --timezone=America/New_York &&
+            echo "Cleaning up filesystem permissions" &&
+            chown -R www-data:www-data . &&
+            find . \( -type d -exec chmod 0750 {} + \)
+                -o \( -exec chmod 0640 {} + \) &&
+            chmod +x bin/magento
+        '
 webapp:
-    build: .
+    build: docker
     links:
         - db
+    volumes:
+        - .:/var/www/html
     ports:
         - 80
         - 443
