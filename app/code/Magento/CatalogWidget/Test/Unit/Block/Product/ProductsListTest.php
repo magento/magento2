@@ -207,7 +207,16 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('<pager_html>', $this->productsList->getPagerHtml());
     }
 
-    public function testCreateCollection()
+    /**
+     * Test public `createCollection` method and protected `getPageSize` method via `createCollection`
+     *
+     * @param $pagerEnable
+     * @param $productsCount
+     * @param $productsPerPage
+     * @param $expectedResult
+     * @dataProvider createCollectionDataProvider
+     */
+    public function testCreateCollection($pagerEnable, $productsCount, $productsPerPage, $expectedPageSize)
     {
         $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
             ->will($this->returnValue([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]));
@@ -233,7 +242,7 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());
         $collection->expects($this->once())->method('addUrlRewrite')->will($this->returnSelf());
         $collection->expects($this->once())->method('addStoreFilter')->will($this->returnSelf());
-        $collection->expects($this->once())->method('setPageSize')->will($this->returnSelf());
+        $collection->expects($this->once())->method('setPageSize')->with($expectedPageSize)->will($this->returnSelf());
         $collection->expects($this->once())->method('setCurPage')->will($this->returnSelf());
 
         $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
@@ -254,7 +263,35 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->rule->expects($this->once())->method('loadPost')->will($this->returnSelf());
         $this->rule->expects($this->once())->method('getConditions')->will($this->returnValue($conditions));
 
+
+        if ($productsPerPage) {
+            $this->productsList->setData('products_per_page', $productsPerPage);
+        } else {
+            $this->productsList->unsetData('products_per_page');
+        }
+
+        $this->productsList->setData('show_pager', $pagerEnable);
+        $this->productsList->setData('products_count', $productsCount);
+
         $this->assertSame($collection, $this->productsList->createCollection());
+    }
+
+    public function createCollectionDataProvider()
+    {
+        return [
+            [true, 1, null, 5],
+            [true, 5, null, 5],
+            [true, 10, null, 5],
+            [true, 1, 2, 2],
+            [true, 5, 3, 3],
+            [true, 10, 7, 7],
+            [false, 1, null, 1],
+            [false, 3, null, 3],
+            [false, 5, null, 5],
+            [false, 1, 3, 1],
+            [false, 3, 5, 3],
+            [false, 5, 10, 5]
+        ];
     }
 
     public function testGetProductsCount()
