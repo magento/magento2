@@ -63,7 +63,8 @@ class Match implements QueryInterface
         $resolvedFieldList = $this->resolver->resolve($fieldList);
 
         $scoreBuilder->addCondition(
-            $this->fulltextHelper->getMatchQuery($resolvedFieldList, $queryValue, Fulltext::FULLTEXT_MODE_BOOLEAN));
+            $this->fulltextHelper->getMatchQuery($resolvedFieldList, $queryValue, Fulltext::FULLTEXT_MODE_BOOLEAN)
+        );
         $select = $this->fulltextHelper->match(
             $select,
             $resolvedFieldList,
