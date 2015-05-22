@@ -7,6 +7,10 @@
 
 namespace Magento\Bundle\Api\Data;
 
+/**
+ * Interface LinkInterface
+ * @api
+ */
 interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     const PRICE_TYPE_FIXED = 0;

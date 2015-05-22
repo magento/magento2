@@ -1,3 +1,38 @@
+0.74.0-beta9
+=============
+* Framework improvements
+    * Magento became compatible with MySQL Cluster
+    * Zend Framework 2 is upgraded up to version 2.4.0
+* Various
+    * Updated payments infrastructure so it can use transparent redirects
+    * Defined public API for Tax/Pricing components
+    * Refactored controller actions in the Product area
+    * Moved commands cache.php, indexer.php, log.php, test.php, compiler.php, singletenant\_compiler.php, generator.php, pack.php, deploy.php and file\_assembler.php to the new bin/magento CLI framework
+* Data Migration Tool
+    * The Data Migraiton Tool is published in the separate [repository](https://github.com/magento/data-migration-tool-ce "Data Migration Tool repository")
+* Fixed bugs
+    * Fixed an issue where error appeared during placing order with virtual product
+    * Fixed an issue where billing and shipping sections didn't contain address information on order print
+    * Fixed an issue where fatal error appeared on Catalog page on backend for user with custom role scope
+    * Fixed an issue where product could not be found in search results when the website was assigned after product creation
+    * Fixed an issue where shopping cart was empty after attempt to update it
+    * Fixed an issue where there was no redirect to shopping cart after edit/updating cart product with custom options
+    * Fixed an issue where environment variables were messed up for different entry points
+    * Fixed an issue where tax class name was corrupted if containing '<' char
+    * Fixed an issue where there was no ability to place an order with custom option "file"
+    * Fixed an issue where sensitive cookies were persistent
+    * Fixed possible XSS in payment methods
+    * Fixed an issue with integration test failure when run in default mode
+    * Fixed an issue with integration tests failure when xdebug is enabled
+    * Fixed an issue where there was impossible to delete any entity which calls confirmation alert
+* GitHub issues and pull requests
+    * [#904](https://github.com/magento/magento2/issues/904) -- Installation Incomplete with XDebug enabled
+    * [#1083](https://github.com/magento/magento2/pull/1083) -- Move Topmenu CategoryData creation to a public method to enable plugin
+    * [#1125](https://github.com/magento/magento2/pull/1125) -- Saving category reset its changes in category tree
+    * [#1144](https://github.com/magento/magento2/pull/1144) -- Refactor bindRemoveButtons for improved performance
+    * [#1214](https://github.com/magento/magento2/pull/1214) -- Avoid following error
+    * [#1216](https://github.com/magento/magento2/issues/1216) -- Can't install sample data
+
 0.74.0-beta8
 =============
 * Performance Toolkit improvements

@@ -28,7 +28,6 @@ class Shipping extends \Magento\Multishipping\Controller\Checkout
 
         $this->_getState()->setActiveStep(State::STEP_SHIPPING);
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 }

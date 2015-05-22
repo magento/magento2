@@ -49,6 +49,11 @@ abstract class AbstractIndexerCommand extends Command
         $params[StoreManager::PARAM_RUN_CODE] = 'admin';
         $params[StoreManager::PARAM_RUN_TYPE] = 'store';
         $objectManager = $objectManagerFactory->create($params);
+
+
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $objectManager->get('Magento\Framework\App\State');
+        $appState->setAreaCode('adminmhtml'); //TODO: temporary fix.
         $this->collectionFactory = $objectManager->create('Magento\Indexer\Model\Indexer\CollectionFactory');
         $this->indexerFactory = $objectManager->create('Magento\Indexer\Model\IndexerFactory');
         parent::__construct();
