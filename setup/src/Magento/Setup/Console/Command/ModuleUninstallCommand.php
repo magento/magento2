@@ -5,11 +5,13 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Composer\Console\Application;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Json\Decoder;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
@@ -17,10 +19,8 @@ use Magento\Framework\Module\Resource;
 use Magento\Setup\Model\ModuleContext;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -36,9 +36,9 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     const INPUT_KEY_REMOVE_DATA = 'remove-data';
 
     /**
-     * @var Application
+     * @var Decoder
      */
-    private $composerApp;
+    private $decoder;
 
     /**
      * @var MaintenanceMode
@@ -81,9 +81,18 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $dependencyChecker;
 
     /**
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Constructor
      *
-     * @param Application $composerApp
      * @param DeploymentConfig $deploymentConfig
      * @param DeploymentConfig\Writer $writer
      * @param FullModuleList $fullModuleList
@@ -92,18 +101,21 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param UninstallCollector $collector
      */
     public function __construct(
-        Application $composerApp,
+        Decoder $decoder,
         DeploymentConfig $deploymentConfig,
         DeploymentConfig\Writer $writer,
+        DirectoryList $directoryList,
+        Filesystem $filesystem,
         FullModuleList $fullModuleList,
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
         UninstallCollector $collector
     ) {
         parent::__construct($objectManagerProvider);
-        $this->composerApp = $composerApp;
-        $this->composerApp->setAutoExit(false);
+        $this->decoder = $decoder;
         $this->deploymentConfig = $deploymentConfig;
+        $this->directoryList = $directoryList;
+        $this->filesystem = $filesystem;
         $this->writer = $writer;
         $this->maintenanceMode = $maintenanceMode;
         $this->fullModuleList = $fullModuleList;
@@ -212,9 +224,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $messages = [];
         $unknownPackages = [];
         $unknownModules = [];
-        $buffer = new BufferedOutput();
-        $this->composerApp->run(new ArrayInput(['command' => 'show', '-i' => true]), $buffer);
-        $installedPackages = $this->parsePackages($buffer->fetch());
+        $installedPackages = $this->parsePackages();
         foreach ($modules as $module) {
             if (array_search($this->packageInfo->getPackageName($module), $installedPackages) === false) {
                 $unknownPackages[] = $module;
@@ -236,21 +246,22 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     }
 
     /**
-     * Parse output from composer commands into list of package names
+     * Parse output from root composer.json into list of package names
      *
-     * @param string $output
      * @return array
      */
-    private function parsePackages($output)
+    private function parsePackages()
     {
-        $parsed = [];
-        foreach (explode(PHP_EOL, $output) as $package) {
-            $package = explode(' ', $package)[0];
+        $packages = [];
+        $directoryRead = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $rawJson = $directoryRead->readFile('composer.json');
+        $data = $this->decoder->decode($rawJson);
+        foreach (array_keys($data['require']) as $package) {
             if (count(explode('/', $package)) == 2) {
-                $parsed[] = $package;
+                $packages[] = $package;
             }
         }
-        return $parsed;
+        return $packages;
     }
 
     /**

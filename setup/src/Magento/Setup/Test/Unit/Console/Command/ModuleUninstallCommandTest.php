@@ -8,7 +8,6 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Setup\Console\Command\ModuleUninstallCommand;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -16,11 +15,6 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Composer\Console\Application|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $app;
-
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -129,20 +123,27 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap([
                 ['Magento\Setup\Module\Setup', [], $this->setup],
             ]));
+        $decoder = $this->getMock('Magento\Framework\Json\Decoder', [], [], '', false);
+        $decoder->expects($this->any())
+            ->method('decode')
+            ->willReturn(['require' => ['php' => '1.0', 'magento/package-a' => '1.0', 'magento/package-b' => '1.0']]);
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->willReturn(
+                $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface', [], '', false)
+            );
         $this->command = new ModuleUninstallCommand(
-            $this->app,
+            $decoder,
             $this->deploymentConfig,
             $this->writer,
+            $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false),
+            $filesystem,
             $this->fullModuleList,
             $this->maintenanceMode,
             $objectManagerProvider,
             $this->uninstallCollector
         );
-        $this->app->expects($this->any())->method('run')->will($this->returnCallback(
-            function ($input, OutputInterface $buffer) {
-                $buffer->writeln(['magento/package-a 1.0.0 package A', 'magento/package-b 1.0.0 package B']);
-            }
-        ));
         $this->tester = new CommandTester($this->command);
     }
 
