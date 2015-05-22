@@ -206,6 +206,12 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('customer_entity', ['website_id']),
             ['website_id']
+        )->addIndex(
+            $installer->getIdxName('customer_entity', ['firstname']),
+            ['firstname']
+        )->addIndex(
+            $installer->getIdxName('customer_entity', ['lastname']),
+            ['lastname']
         )->addForeignKey(
             $installer->getFkName('customer_entity', 'store_id', 'store', 'store_id'),
             'store_id',
