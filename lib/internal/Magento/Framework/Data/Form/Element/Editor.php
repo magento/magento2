@@ -40,6 +40,9 @@ class Editor extends Textarea
         }
     }
 
+    /**
+     * @return array
+     */
     protected function getTranslatedString()
     {
         $translatedString = [
