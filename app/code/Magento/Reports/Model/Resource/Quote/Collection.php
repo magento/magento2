@@ -176,7 +176,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     public function addCustomerData($filter = null)
     {
         $customersSelect = $this->customerResource->getReadConnection()->select();
-        $customersSelect->from(['customer' => 'customer_entity'], 'entity_id');
+        $customersSelect->from(['customer' => $this->getTable('customer_entity')], 'entity_id');
         if (isset($filter['customer_name'])) {
             $customersSelect = $this->getCustomerNames($customersSelect);
             $customerName = $customersSelect->getAdapter()->getConcatSql(['cust_fname.value', 'cust_lname.value'], ' ');
