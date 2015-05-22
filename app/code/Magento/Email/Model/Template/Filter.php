@@ -725,7 +725,11 @@ class Filter extends \Magento\Framework\Filter\Template
         try {
             $value = parent::filter($value);
         } catch (\Exception $e) {
-            $value = '';
+            if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+                $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
+            } else {
+                $value = '';
+            }
             $this->_logger->critical($e);
         }
         return $value;

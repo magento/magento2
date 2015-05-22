@@ -114,6 +114,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\Config $emailConfig
      * @param \Magento\Newsletter\Model\Template\Filter $templateFilter
@@ -134,6 +135,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Newsletter\Model\Template\Filter $templateFilter,
@@ -152,6 +154,7 @@ class Queue extends \Magento\Email\Model\AbstractTemplate
             $storeManager,
             $assetRepo,
             $filesystem,
+            $scopeConfig,
             $objectManager,
             $emailConfig,
             $data

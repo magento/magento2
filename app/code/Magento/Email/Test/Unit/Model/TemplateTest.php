@@ -76,6 +76,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     private $emailConfig;
 
+    /**
+     * @var \Magento\Email\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $templateFactory;
+
     public function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
@@ -114,6 +119,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->templateFactory = $this->getMockBuilder('Magento\Email\Model\TemplateFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -139,7 +147,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     $this->scopeConfig,
                     $this->objectManager,
                     $this->emailFilterFactory,
-                    $this->emailConfig
+                    $this->emailConfig,
+                    $this->templateFactory
                 ]
             )
             ->getMock();
@@ -399,7 +408,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'setUseSessionInUrl',
                 'setPlainTemplateMode',
                 'setIsChildTemplate',
-//                'setTemplateProcessor',
+                'setTemplateModel',
                 'setVariables',
                 'setStoreId',
                 'filter',
@@ -420,6 +429,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $filterTemplate->expects($this->once())
             ->method('setIsChildTemplate')
             ->will($this->returnSelf());
+        $filterTemplate->expects($this->once())
+            ->method('setTemplateModel')
+            ->will($this->returnSelf());
         $filterTemplate->expects($this->any())
             ->method('setStoreId')
             ->will($this->returnSelf());
@@ -428,9 +440,9 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($storeId));
 
         $store = $this->getMockBuilder('Magento\Store\Model\Store')
-        ->setMethods(['getFrontendName'])
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->setMethods(['getFrontendName'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $store->expects($this->any())
             ->method('getFrontendName')
@@ -441,11 +453,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         //TODO - is this the right way? the store is not setup until runtime and
         // is returned from getProcessedTemplate
-        $expectedVariables['store']=$store;
-
-//        $filterTemplate->expects($this->once())
-//            ->method('setTemplateProcessor')
-//            ->will($this->returnSelf());
+        $expectedVariables['store'] = $store;
 
         $model = $this->getModelMock(['getDesignConfig', '_applyDesignConfig', 'getPreparedTemplateText','getTemplateText']);
         $filterTemplate->expects($this->any())
@@ -479,8 +487,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('filter')
             ->with($preparedTemplateText)
             ->will($this->returnValue($expectedResult));
-
-
 
         $this->assertEquals($expectedResult, $model->getProcessedTemplate($variables));
     }
@@ -523,7 +529,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                     'store_phone' => null,
                     'store_hours' => null,
                     'store_email' => null,
-                    'non_inline_styles' => '<style type="text/css">'."\n\n</style>\n",
+                    'template_styles' => null,
                 ],
                 'expectedResult' => 'expected result',
             ],
@@ -543,9 +549,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->setTemplateType($templateType);
         $model->setTemplateStyles($templateStyles);
         $model->setTemplateText($templateText);
-        $this->assertEquals($expectedResult, $model->getPreparedTemplateText());
-        // TODO: We may want change this to use getProcessedTemplate. See comment below
-//        $this->assertEquals($expectedResult, $model->getProcessedTemplate());
+        $this->assertEquals($expectedResult, $model->getPreparedTemplateText($templateText));
     }
 
     public function getPreparedTemplateTextProvider()
@@ -553,23 +557,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         return [
             'plain text' => [
                 'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT,
-                'templateStyles' => '<style>',
-                'templateText' => 'template text',
-                'expectedResult' => 'template text',
-            ],
-            'html no style' => [
-                'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
                 'templateStyles' => '',
                 'templateText' => 'template text',
                 'expectedResult' => 'template text',
             ],
-            // TODO: Not sure if it's valuable to test this, due to new "{{var non_inline_styles}}" approach
-            'html with style' => [
+            'html' => [
                 'templateType' => \Magento\Framework\App\TemplateTypesInterface::TYPE_HTML,
-                'templateStyles' => '.body { color: orange }',
+                'templateStyles' => '',
                 'templateText' => 'template text',
-                'expectedResult' =>
-                    '<style type="text/css">' . "\n.body { color: orange }\n</style>\n" . 'template text',
+                'expectedResult' => 'template text',
             ],
         ];
     }
@@ -718,7 +714,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $model->setVars($vars);
         $model->expects($this->once())
             ->method('getProcessedTemplate')
-            ->with($vars, true)
+            ->with($vars)
             ->will($this->returnValue($expectedResult));
 
         $this->assertEquals($expectedResult, $model->processTemplate());
@@ -794,6 +790,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\ObjectManagerInterface'),
                 $this->getMock('Magento\Email\Model\Template\FilterFactory', [], [], '', false),
                 $emailConfig,
+                $this->getMock('Magento\Email\Model\TemplateFactory', [], [], '', false),
                 ['template_id' => 10],
             ]
         )->getMock();

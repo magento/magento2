@@ -119,13 +119,6 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     protected $_viewFileSystem;
 
     /**
-     * Scope config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * Constructor
      *
      * Email filter factory
@@ -147,6 +140,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\FilterFactory $emailFilterFactory
      * @param Template\Config $emailConfig
+     * @param \Magento\Email\Model\TemplateFactory $templateFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -164,11 +158,12 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\FilterFactory $emailFilterFactory,
         \Magento\Email\Model\Template\Config $emailConfig,
+        \Magento\Email\Model\TemplateFactory $templateFactory,
         array $data = []
     ) {
-        $this->_scopeConfig = $scopeConfig;
         $this->_viewFileSystem = $viewFileSystem;
         $this->_emailFilterFactory = $emailFilterFactory;
+        $this->_templateFactory = $templateFactory;
         parent::__construct(
             $context,
             $design,
@@ -177,6 +172,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
             $storeManager,
             $assetRepo,
             $filesystem,
+            $scopeConfig,
             $objectManager,
             $emailConfig,
             $data
@@ -295,16 +291,14 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
     public function getProcessedTemplate(array $variables = [])
     {
         $processor = $this->getTemplateFilter()
-            ->setUseSessionInUrl(false)->setPlainTemplateMode($this->isPlain())
+            ->setUseSessionInUrl(false)
+            ->setPlainTemplateMode($this->isPlain())
             ->setIsChildTemplate($this->getIsChildTemplate())
+            ->setTemplateProcessor([$this, 'getTemplateContent'])
             ->setTemplateModel($this);
 
         if (!$this->_preprocessFlag) {
             $variables['this'] = $this;
-        }
-
-        if (isset($variables['subscriber'])) {
-            $processor->setStoreId($variables['subscriber']->getStoreId());
         }
 
         // Only run app emulation if this is the parent template. Otherwise child will run inside parent emulation.
@@ -312,15 +306,21 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
             $this->_applyDesignConfig();
         }
 
+        if (isset($variables['subscriber'])) {
+            $storeId = $variables['subscriber']->getStoreId();
+        } else {
+            $storeId = $this->getDesignConfig()->getStore();
+        }
+        $processor->setStoreId($storeId);
+
         // Populate the variables array with store, store info, logo, etc. variables
-        $variables = $this->_addEmailVariables($variables, $processor->getStoreId());
+        $variables = $this->_addEmailVariables($variables, $storeId);
+        $processor->setVariables($variables);
 
-        $processor->setTemplateProcessor([$this, 'getTemplateContent'])->setVariables($variables);
-
-        $storeId = $this->getDesignConfig()->getStore();
         try {
             // Filter the template text so that all HTML content will be present
-            $result = $processor->setStoreId($storeId)->filter($this->getTemplateText());
+            $result = $processor->setStoreId($storeId)
+                ->filter($this->getTemplateText());
 
             // Now that all HTML has been assembled, run email through CSS inlining process
             $processedResult = $this->getPreparedTemplateText($result);
@@ -504,7 +504,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate implements \Magento
         }
 
         $this->setUseAbsoluteLinks(true);
-        $text = $this->getProcessedTemplate($this->_getVars(), true);
+        $text = $this->getProcessedTemplate($this->_getVars());
         return $text;
     }
 

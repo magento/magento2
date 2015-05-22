@@ -100,6 +100,11 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $_store;
 
     /**
+     * @var null|\Magento\Email\Model\AbstractTemplate
+     */
+    protected $_templateFactory = null;
+
+    /**
      * Design package instance
      *
      * @var \Magento\Framework\View\DesignInterface
@@ -129,6 +134,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $_filesystem;
 
     /**
+     * Scope config
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
      * Object manager
      *
      * @var \Magento\Framework\ObjectManagerInterface
@@ -149,6 +161,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Template\Config $emailConfig
      * @param array $data
      */
@@ -160,6 +173,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Email\Model\Template\Config $emailConfig,
         array $data = []
@@ -171,6 +185,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $this->_storeManager = $storeManager;
         $this->_assetRepo = $assetRepo;
         $this->_filesystem = $filesystem;
+        $this->_scopeConfig = $scopeConfig;
         $this->_objectManager = $objectManager;
         $this->_emailConfig = $emailConfig;
         parent::__construct($context, $registry, null, null, $data);
@@ -328,7 +343,14 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 
                 $processedHtml = $emogrifier->emogrify();
             } catch (Exception $e) {
-                $processedHtml = '{CSS inlining error: ' . $e->getMessage() . '}' . PHP_EOL . $html;
+                if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+                    $processedHtml = sprintf(__('{CSS inlining error: %s}'), $e->getMessage())
+                        . PHP_EOL
+                        . $html;
+                } else {
+                    $processedHtml = $html;
+                }
+                $this->_logger->error($e);
             }
         } else {
             $processedHtml = $html;
