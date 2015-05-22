@@ -27,8 +27,8 @@ define([
             });
         },
         _initOptionItem: function () {
-            var widget = this;
-            var originalElementClass=$(widget.element).attr('class');
+            var widget = this,
+                isOriginalRequired = $(widget.element).hasClass('required');
 
             this._on({
                 //Add new tax item
@@ -44,7 +44,9 @@ define([
                 //Change tax item country/state
                 'change [data-role="select-country"]': function (event, data) {
                     var currentElement = event.target || event.srcElement || event.currentTarget,
-                        parentElement = $(currentElement).closest('[data-role="fpt-item-row"]');
+                        parentElement = $(currentElement).closest('[data-role="fpt-item-row"]'),
+                        isCurrentRequired = $(widget.element).hasClass('required');
+
                     data = data || {};
                     var updater = new RegionUpdater(
                         parentElement.find('[data-role="select-country"]').attr('id'), null,
@@ -56,10 +58,9 @@ define([
                     if (data.state) {
                         parentElement.find('[data-role="select-state"]').val(data.state);
                     }
-                    //fpt is a field with multiple sub-fields  so we restore it's required status
-                    var currentElementClass=$(widget.element).attr('class');
-                    if (!originalElementClass.match(/required/) && currentElementClass.match(/required/))
-                        $(widget.element).attr('class',originalElementClass);
+                    if (!isOriginalRequired && isCurrentRequired) {
+                        $(widget.element).removeClass('required');
+                    }
                 }
             });
 
