@@ -2228,4 +2228,5 @@ return [
     ['getIdentities', 'Magento\Sales\Block\Reorder\Sidebar'],
     ['assignData', 'Magento\OfflinePayments\Model\Checkmo'],
     ['timeShift', 'Magento\Reports\Model\Resource\Report\Collection'],
+    ['Magento\Catalog\Model\Product\Attribute\Backend\Startdate', 'Magento\Catalog\Model\Attribute\Backend\Startdate'],
 ];

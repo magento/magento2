@@ -85,7 +85,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 'getApplyTo',
                 'getDefaultValue',
                 'usesSource',
-                'getFrontendInput'
+                'getFrontendInput',
             ],
             [],
             '',
@@ -119,7 +119,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             [
                 'attrSetColFac' => $attrSetColFactory,
                 'prodAttrColFac' => $attrColFactory,
-                'params' => [$this->entityModel, 'simple']
+                'params' => [$this->entityModel, 'simple'],
             ]
         );
     }
