@@ -202,6 +202,15 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
                 }
             }
         }
+        //@TODO: find appropriate place
+        $this->_getWriteAdapter()->update(
+            $this->getTable('customer_entity'),
+            [
+                'default_billing' => $customer->getData('default_billing'),
+                'default_shipping' => $customer->getData('default_shipping')
+            ],
+            $this->_getWriteAdapter()->quoteInto('entity_id = ?', $customer->getId())
+        );
 
         return $this;
     }
