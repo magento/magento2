@@ -18,7 +18,6 @@
         "magento/framework": "0.74.0-beta9",
         "magento/module-quote": "0.74.0-beta9",
         "magento/module-media-storage": "0.74.0-beta9",
-        "magento/module-msrp": "0.74.0-beta9",
         "magento/magento-composer-installer": "*"
     },
     "suggest": {
