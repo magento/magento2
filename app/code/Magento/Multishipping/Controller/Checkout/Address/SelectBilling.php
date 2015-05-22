@@ -17,7 +17,6 @@ class SelectBilling extends \Magento\Multishipping\Controller\Checkout\Address
             \Magento\Multishipping\Model\Checkout\Type\Multishipping\State::STEP_BILLING
         );
         $this->_view->loadLayout();
-        $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
 }

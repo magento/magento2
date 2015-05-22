@@ -126,6 +126,30 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testExecuteEnableInvalidModule()
+    {
+        $this->status->expects($this->once())
+            ->method('getModulesToChange')
+            ->with(true, ['invalid'])
+            ->willThrowException(new \LogicException('Unknown module(s): invalid'));
+        $commandTester = new CommandTester(new ModuleEnableCommand($this->objectManagerProvider));
+        $input = ['module' => ['invalid']];
+        $commandTester->execute($input);
+        $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
+    }
+
+    public function testExecuteDisableInvalidModule()
+    {
+        $this->status->expects($this->once())
+            ->method('getModulesToChange')
+            ->with(false, ['invalid'])
+            ->willThrowException(new \LogicException('Unknown module(s): invalid'));
+        $commandTester = new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+        $input = ['module' => ['invalid']];
+        $commandTester->execute($input);
+        $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
+    }
+
     /**
      * @param bool $isEnable
      * @param string $expectedMessage

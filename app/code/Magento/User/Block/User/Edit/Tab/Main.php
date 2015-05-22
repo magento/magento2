@@ -153,7 +153,6 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
                     'id' => 'is_active',
                     'title' => __('Account Status'),
                     'class' => 'input-select',
-                    'style' => 'width: 80px',
                     'options' => ['1' => __('Active'), '0' => __('Inactive')]
                 ]
             );

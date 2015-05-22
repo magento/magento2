@@ -33,7 +33,8 @@ define([
             parentScope: '<%= $data.getPart(dataScope, -2) %>',
             template: 'ui/collection',
             containers: [],
-            _elems: []
+            _elems: [],
+            additionalClasses: false
         },
 
         initialize: function (options) {
@@ -217,6 +218,27 @@ define([
                 property = this.uniqueProp;
 
             this[property](active);
+        },
+
+        /**
+         * Provides classes of element as object used by knockout's css binding.
+         */
+        getStyles: function() {
+            var styles = {
+                required: this.required,
+                _error: this.error,
+                _disabled: this.disabled
+            };
+            if (typeof this.additionalClasses === 'string') {
+                var item,
+                    additionalClasses = this.additionalClasses.split(" ");
+                for (item in additionalClasses) {
+                    if (additionalClasses.hasOwnProperty(item)) {
+                        styles[additionalClasses[item]] = true;
+                    }
+                }
+            }
+            return styles;
         }
     };
 });

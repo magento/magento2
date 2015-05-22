@@ -147,6 +147,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
      * Get integration status. Cast to the type of STATUS_* constants in order to make strict comparison valid.
      *
      * @return int
+     * @api
      */
     public function getStatus()
     {

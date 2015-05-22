@@ -91,7 +91,7 @@
     .ui-dialog-buttonpane {
         padding: 0 @popup__padding__horizontal @popup__padding__vertical;
     }
-    
+
     .content + .ui-dialog-buttonset {
         padding-top: @popup__padding__vertical;
         text-align: right;
@@ -106,6 +106,13 @@
         font-size: @button__large__font-size;
         margin: 0 0 0 @popup__padding__horizontal;
         padding: @button__large__padding-vertical 0;
+        &:before {
+            content: normal;
+        }
+        span {
+            position: static;
+            overflow: auto;
+        }
     }
 
     .ui-button,
@@ -115,7 +122,7 @@
         float: right;
         margin: 0 0 0 @popup__padding__horizontal;
     }
-    
+
     .fieldset {
         &:last-child {
             padding-bottom: 0;
@@ -144,7 +151,7 @@
     .pager {
         padding-bottom: 0;
     }
-    
+
     .grid-actions {
         padding-top: 0;
     }
@@ -257,8 +264,11 @@
         }
 
         .breadcrumbs {
+            list-style: none;
             padding-left: 0;
             li {
+                display: inline-block;
+                margin: 0 @indent__xs @indent__xs 0;
                 &:after {
                     content: '';
                     margin: 0 @indent__xs 0 0;
@@ -574,7 +584,7 @@
             }
         }
     }
-    
+
     .fieldset {
         background: @color-lazy-sun;
         border: 0;
@@ -589,7 +599,7 @@
     .messages {
         margin: 0 !important;
     }
-    
+
     .actions {
         &:extend(.abs-clearfix all);
         margin: 0;

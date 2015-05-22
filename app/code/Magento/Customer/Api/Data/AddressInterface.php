@@ -18,6 +18,7 @@ interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataIn
     const ID = 'id';
     const CUSTOMER_ID = 'customer_id';
     const REGION = 'region';
+    const REGION_ID = 'region_id';
     const COUNTRY_ID = 'country_id';
     const STREET = 'street';
     const COMPANY = 'company';
@@ -85,6 +86,23 @@ interface AddressInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setRegion(RegionInterface $region = null);
+
+    /**
+     * Get region ID
+     *
+     * @api
+     * @return int|null
+     */
+    public function getRegionId();
+
+    /**
+     * Set region ID
+     *
+     * @api
+     * @param int $regionId
+     * @return $this
+     */
+    public function setRegionId($regionId);
 
     /**
      * Two-letter country code in ISO_3166-2 format

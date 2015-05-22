@@ -17,7 +17,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
-    protected $editLink = 'td[data-column="increment_id"]';
+    protected $editLink = 'tbody td[data-column="increment_id"]';
 
     /**
      * Filters array mapping

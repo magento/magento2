@@ -110,7 +110,8 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $paymentId = 200;
-        $methodData = ['method' => 'data'];
+        $methodDataWithAdditionalData = ['method' => 'data', 'additional_data' => ['additional' => 'value']];
+        $methodData = ['method' => 'data', 'additional' => 'value'];
         $paymentMethod = 'checkmo';
 
         $quoteMock = $this->getMock(
@@ -132,7 +133,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
                 \Magento\Payment\Model\Method\AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
             ])
             ->willReturnSelf();
-        $methodMock->expects($this->once())->method('getData')->willReturn($methodData);
+        $methodMock->expects($this->once())->method('getData')->willReturn($methodDataWithAdditionalData);
 
         $paymentMock = $this->getMock(
             'Magento\Quote\Model\Quote\Payment',
