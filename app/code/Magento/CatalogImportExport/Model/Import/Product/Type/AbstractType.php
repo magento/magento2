@@ -178,17 +178,16 @@ abstract class AbstractType
     {
         // temporary storage for attributes' parameters to avoid double querying inside the loop
         $entity_id = $this->_entityModel->getEntityTypeId();
-
         $entityAttributes = $this->_connection->fetchPairs(
             $this->_connection->select()->from(
                 ['attr' => $this->_resource->getTableName('eav_entity_attribute')],
                 ['attr.attribute_id']
+            )->where(
+                $this->_connection->quoteInto('attr.entity_type_id IN (?)', $entity_id)
             )->joinLeft(
                 ['set' => $this->_resource->getTableName('eav_attribute_set')],
-                ['set.attribute_set_id = attr.attribute_set_id'],
+                'set.attribute_set_id = attr.attribute_set_id',
                 ['set.attribute_set_name']
-            )->where(
-                $this->_connection->quoteInto('attr.entity_id IN (?)', $entity_id)
             )
         );
         $absentKeys = [];
@@ -222,7 +221,7 @@ abstract class AbstractType
      */
     protected function attachAttributesById($attributeSetName, $attributeIds)
     {
-        foreach ($this->_prodAttrColFac->create()->addFieldToFilter('attribute_id', ['in' => $attributeIds]) as $attribute) {
+        foreach ($this->_prodAttrColFac->create()->addFieldToFilter('main_table.attribute_id', ['in' => $attributeIds]) as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
             $attributeId = $attribute->getId();
 
