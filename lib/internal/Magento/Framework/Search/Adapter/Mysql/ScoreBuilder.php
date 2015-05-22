@@ -16,6 +16,11 @@ class ScoreBuilder
     private $scoreCondition = '';
 
     /**
+     * @var string
+     */
+    const WEIGHT_FIELD = 'search_weight';
+
+    /**
      * Get column alias for global score query in sql
      *
      * @return string
@@ -69,13 +74,12 @@ class ScoreBuilder
      * Add Condition for score calculation
      *
      * @param string $score
-     * @param float $boost
      * @return void
      */
-    public function addCondition($score, $boost)
+    public function addCondition($score)
     {
         $this->addPlus();
-        $this->scoreCondition .= "{$score} * {$boost}";
+        $this->scoreCondition .= "{$score} * " . self::WEIGHT_FIELD;
     }
 
     /**
