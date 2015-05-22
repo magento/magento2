@@ -200,9 +200,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getTemplateContent($configPath, array $variables)
     {
-        $thisClass = get_class($this);
-        /* @var \Magento\Email\Model\AbstractTemplate */
-        $template = $this->_objectManager->create($thisClass);
+        $template = $this->_getTemplateInstance();
+        if (!$template) {
+            return '';
+        }
         $template->loadByConfigPath($configPath, $variables);
 
         // Ensure child templates have the same area/store context as parent
@@ -648,6 +649,21 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function isPlain()
     {
         return $this->getType() == self::TYPE_TEXT;
+    }
+
+    /**
+     * If child class has set a template factory, return a new object. Else return false.
+     * This allows child classes like \Magento\Email\Model\Template and \Magento\Newsletter\Model\Template to set
+     * their own factory objects
+     *
+     * @return null|\Magento\Email\Model\AbstractTemplate
+     */
+    protected function _getTemplateInstance()
+    {
+        if ($this->_templateFactory) {
+            return $this->_templateFactory->create();
+        }
+        return null;
     }
 
     /**

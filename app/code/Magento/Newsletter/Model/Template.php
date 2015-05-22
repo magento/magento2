@@ -282,9 +282,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         if ($this->_storeManager->hasSingleStore()) {
             $storeId = $this->_storeManager->getStore()->getId();
         } else {
-            $storeId = $this->_request->getParam('store_id');
+            $storeId = $this->getDesignConfig()->getStore();
         }
-        $storeId = $this->getDesignConfig()->getStore();
         $processor->setStoreId($storeId);
 
         $variables = $this->_addEmailVariables($variables, $storeId);
