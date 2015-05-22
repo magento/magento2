@@ -20,7 +20,13 @@ define(
                 // clone address form data to new object
                 var addressData = $.extend(true, {}, formData);
                 if (typeof addressData.street == 'object') {
+                    var regionName = addressData.region;
+                    addressData.region = {};
                     addressData.street = this.objectToString(addressData.street, ', ');
+                    if (!regionName) {
+                        regionName = window.checkoutConfig.countryData[addressData.country_id]['regions'][addressData.region_id].name;
+                    }
+                    addressData.region.region = regionName;
                 }
                 return Address(addressData);
             },
