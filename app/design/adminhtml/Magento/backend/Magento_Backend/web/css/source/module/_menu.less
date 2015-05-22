@@ -124,7 +124,6 @@
 //  ---------------------------------------------
 
 .admin__menu {
-    position: relative;
     li {
         display: block;
     }
@@ -204,12 +203,19 @@
             min-height: ~'calc(@{menu-logo__outer-size} + 2rem + 100%)';
             padding: @submenu__padding-vertical 0 0;
             position: absolute;
-            top: -@menu-logo__outer-size;
+            top: 0;
             transition-duration: .5s;
             transition-property: left, visibility;
             transition-timing-function: ease;
             visibility: hidden;
             z-index: @submenu__z-index;
+            &._overlap {
+                overflow-y: auto;
+                height: 100%;
+                &::-webkit-scrollbar {
+                    width: 0;
+                }
+            }
         }
         &._show  {
             > .submenu {

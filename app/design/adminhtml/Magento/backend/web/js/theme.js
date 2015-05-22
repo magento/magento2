@@ -9,18 +9,23 @@ define('globalNavigationScroll', [
     'use strict';
 
     var win = $(window),
+        subMenuClass = '.submenu',
+        overlapClassName = '_overlap',
+        fixedClassName = '_fixed',
         menu = $('.menu-wrapper'),
         content = $('.page-wrapper'),
+        menuItems = $('#nav').children('li'),
+        subMenus = menuItems.children(subMenuClass),
         winHeight,
         menuHeight = menu.height(),
         menuHeightRest = 0,
         menuScrollMax = 0,
+        submenuHeight = 0,
         contentHeight,
         winTop = 0,
         winTopLast = 0,
         scrollStep = 0,
-        nextTop = 0,
-        fixedClass = '_fixed';
+        nextTop = 0;
 
     /**
      * Check if menu is fixed
@@ -31,22 +36,24 @@ define('globalNavigationScroll', [
     }
 
     /**
-     * Add fixed menu class
+     * Check if class exist than add or do nothing
      * @param {jQuery} el
+     * @param $class string
      */
-    function addFixed(el) {
-        if (!el.hasClass(fixedClass)) {
-            el.addClass(fixedClass);
+    function checkAddClass(el, $class) {
+        if (!el.hasClass($class)) {
+            el.addClass($class);
         }
     }
 
     /**
-     * Remove fixed menu class
+     * Check if class exist than remove or do nothing
      * @param {jQuery} el
+     * @param $class string
      */
-    function removeFixed(el) {
-        if (el.hasClass(fixedClass)) {
-            el.removeClass(fixedClass);
+    function checkRemoveClass(el, $class) {
+        if (el.hasClass($class)) {
+            el.removeClass($class);
         }
     }
 
@@ -64,7 +71,7 @@ define('globalNavigationScroll', [
 
         if (isMenuFixed()) { // fixed menu cases
 
-            addFixed(menu);
+            checkAddClass(menu, fixedClassName);
 
             if (menuHeight > winHeight) { // smart scroll cases
 
@@ -89,7 +96,7 @@ define('globalNavigationScroll', [
             }
 
         } else { // static menu cases
-            removeFixed(menu);
+            checkRemoveClass(menu, fixedClassName);
         }
 
         //  Save previous window scrollTop
@@ -111,8 +118,22 @@ define('globalNavigationScroll', [
         //  Reset position if fixed and out of smart scroll
         if ((menuHeight < contentHeight) && (menuHeight <= winHeight)) {
             menu.removeAttr('style');
+            //  Remove overlap classes from submenus and clear overlap adding event
+            subMenus.removeClass(overlapClassName);
+            menuItems.off();
         }
 
+    });
+
+    //  Add event to menuItems to check submenu overlap
+    menuItems.on('click', function () {
+        
+        var submenu = $(this).children(subMenuClass);
+        submenuHeight = submenu.height();
+
+        if (isMenuFixed() && (submenuHeight > winHeight)) {
+            checkAddClass(submenu, overlapClassName);
+        }
     });
 
 });
