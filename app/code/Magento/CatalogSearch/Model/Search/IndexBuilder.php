@@ -54,16 +54,15 @@ class IndexBuilder implements IndexBuilderInterface
      */
     public function build(RequestInterface $request)
     {
+        $tableName = [$request->getIndex(), 'index_default'];
         $select = $this->getSelect()
             ->from(
-                ['search_index' => $this->resource->getTableName($request->getIndex())],
-                ['entity_id' => 'search_index.product_id']
+                ['search_index' => $this->resource->getTableName($tableName)],
+                ['product_id']
             )
             ->joinLeft(
-                ['category_index' => $this->resource->getTableName('catalog_category_product_index')],
-                'search_index.product_id = category_index.product_id'
-                . ' AND search_index.store_id = category_index.store_id',
-                []
+                ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
+                'search_index.attribute_id = cea.attribute_id'
             );
 
         $isShowOutOfStock = $this->config->isSetFlag(

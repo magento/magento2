@@ -5,9 +5,11 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
+use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match as MatchQueryBuilder;
+use Magento\Framework\Search\EntityMetadata;
 use Magento\Framework\Search\Request\Query\Bool as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
 use Magento\Framework\Search\Request\Query\Match as MatchQuery;
@@ -51,12 +53,24 @@ class Mapper
     private $indexProviders;
 
     /**
+     * @var Resource
+     */
+    private $resource;
+
+    /**
+     * @var EntityMetadata
+     */
+    private $entityMetadata;
+
+    /**
      * @param ScoreBuilderFactory $scoreBuilderFactory
      * @param MatchQueryBuilder $matchQueryBuilder
      * @param Builder $filterBuilder
      * @param Dimensions $dimensionsBuilder
      * @param ConditionManager $conditionManager
-     * @param \Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface[] $indexProviders
+     * @param Resource $resource
+     * @param EntityMetadata $entityMetadata
+     * @param array $indexProviders
      */
     public function __construct(
         ScoreBuilderFactory $scoreBuilderFactory,
@@ -64,6 +78,8 @@ class Mapper
         Builder $filterBuilder,
         Dimensions $dimensionsBuilder,
         ConditionManager $conditionManager,
+        Resource $resource,
+        EntityMetadata $entityMetadata,
         array $indexProviders
     ) {
         $this->scoreBuilderFactory = $scoreBuilderFactory;
@@ -71,6 +87,8 @@ class Mapper
         $this->filterBuilder = $filterBuilder;
         $this->dimensionsBuilder = $dimensionsBuilder;
         $this->conditionManager = $conditionManager;
+        $this->resource = $resource;
+        $this->entityMetadata = $entityMetadata;
         $this->indexProviders = $indexProviders;
     }
 
@@ -86,19 +104,31 @@ class Mapper
         if (!isset($this->indexProviders[$request->getIndex()])) {
             throw new \Exception('Index provider not configured');
         }
-        $select = $this->indexProviders[$request->getIndex()]->build($request);
+        $subSelect = $this->indexProviders[$request->getIndex()]->build($request);
 
         /** @var ScoreBuilder $scoreBuilder */
         $scoreBuilder = $this->scoreBuilderFactory->create();
-        $select = $this->processQuery(
+        $subSelect = $this->processQuery(
             $scoreBuilder,
             $request->getQuery(),
-            $select,
+            $subSelect,
             BoolQuery::QUERY_CONDITION_MUST
         );
-        $select = $this->processDimensions($request, $select);
-        $select->columns($scoreBuilder->build());
-        $select->order($scoreBuilder->getScoreAlias() . ' ' . Select::SQL_DESC);
+        $subSelect = $this->processDimensions($request, $subSelect);
+        $subSelect->columns($scoreBuilder->build());
+        $subSelect->limit($request->getSize());
+
+        $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
+        $select
+            ->from(
+                $subSelect,
+                [
+                    $this->entityMetadata->getEntityId() => 'product_id',
+                    'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
+                ]
+            )
+            ->group($this->entityMetadata->getEntityId());
+        $select->order('relevance ' . Select::SQL_DESC);
         return $select;
     }
 

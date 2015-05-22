@@ -22,7 +22,7 @@ class ScoreBuilder
      */
     public function getScoreAlias()
     {
-        return 'global_score';
+        return 'score';
     }
 
     /**
