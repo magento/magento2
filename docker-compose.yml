@@ -2,9 +2,9 @@
 # ======================================================
 #
 # 1. Make sure you have docker set up.
-# 2. Make sure you have fig installed.
-# 3. Run `fig run --rm setup` to get things set up.
-# 4. Run `fig up -d webapp` to launch the web server.
+# 2. Make sure you have docker-compose installed.
+# 3. Run `docker-compose run --rm setup` to get things set up.
+# 4. Run `docker-compose up -d webapp` to launch the web server.
 #
 #  Troubleshooting
 # -----------------
@@ -30,16 +30,10 @@ db:
     ports:
         - 3306
 setup:
-    image: kojiromike/magento_tools
-    volumes:
-        - .:/srv/magento
-        - /Users/smithm5/.composer/auth.json:/root/.composer/auth.json
+    build: .
     links:
         - db
-    command: sh -ec 'composer -o install &&
-                     cd setup &&
-                     php -d xdebug.max_nesting_level=200
-                         index.php install --base_url=http://localhost/
+    command: sh -ec 'php index.php install --base_url=http://localhost/
                                            --backend_frontname=admin
                                            --db_host=db_1
                                            --db_name="$DB_1_ENV_MYSQL_DATABASE"
@@ -53,20 +47,10 @@ setup:
                                            --language=en_US
                                            --currency=USD
                                            --timezone=America/New_York'
-shell:
-    image: kojiromike/magento_tools
-    volumes:
-        - .:/srv/magento
-    volumes_from:
-        - dbdata
-    links:
-        - db
-    command: ["/bin/bash", "--login"]
 webapp:
-    image: kojiromike/magento_apache
-    volumes:
-        - .:/srv/magento
+    build: .
     links:
         - db
     ports:
         - 80
+        - 443
