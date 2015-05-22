@@ -153,30 +153,25 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $productsCount,
         $productsPerPage,
         $expectedPageSize
-    )
-    {
-        $eventManager = $this->getMockBuilder('Magento\Framework\Event\Manager')
-            ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
-            ->getMock();
+    ) {
+        $eventManager = $this->getMock('Magento\Framework\Event\Manager', ['dispatch'], [], '', false, false);
         $eventManager->expects($this->once())->method('dispatch')->will($this->returnValue(true));
-        $scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config')
-            ->setMethods(['getValue'])
-            ->disableOriginalConstructor()->getMock();
+
+        $scopeConfig = $this->getMock('Magento\Framework\App\Config', ['getValue'], [], '', false, false);
         $scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
             ->willReturn(false);
-        $cacheState = $this->getMockBuilder('Magento\Framework\App\Cache\State')
-            ->setMethods(['isEnabled'])
-            ->disableOriginalConstructor()->getMock();
+
+        $cacheState = $this->getMock('Magento\Framework\App\Cache\State', ['isEnabled'], [], '', false, false);
         $cacheState->expects($this->atLeastOnce())->method('isEnabled')->withAnyParameters()
             ->willReturn(false);
-        $catalogConfig = $this->getMockBuilder('Magento\Catalog\Model\Config')
-            ->setMethods(['getProductAttributes'])
-            ->disableOriginalConstructor()->getMock();
+
+        $catalogConfig = $this->getMock(
+            'Magento\Catalog\Model\Config', ['getProductAttributes'], [], '', false, false
+        );
         $catalogConfig->expects($this->once())->method('getProductAttributes')
             ->willReturn([]);
-        $localDate = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\Timezone')
-            ->disableOriginalConstructor()->getMock();
+
+        $localDate = $this->getMock('Magento\Framework\Stdlib\DateTime\Timezone', [], [], '', false, false);
         $localDate->expects($this->any())->method('date')
             ->willReturn(new \DateTime('now', new \DateTimeZone('UTC')));
 
@@ -237,9 +232,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $productCollection->expects($this->any())->method('addAttributeToFilter')
             ->willReturnSelf();
 
-        $productCollectionFactory = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\CollectionFactory')
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+        $productCollectionFactory = $this->getMock(
+            'Magento\Catalog\Model\Resource\Product\CollectionFactory', ['create'], [], '', false, false
+        );
         $productCollectionFactory->expects($this->atLeastOnce())->method('create')
             ->willReturn($productCollection);
 
