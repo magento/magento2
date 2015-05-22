@@ -2266,8 +2266,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             }
         }
         if ($this->getOrigData('status') != $this->getData('status')) {
-            foreach ($this->getData('category_ids') as $categoryId) {
-                $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
+            $categoryIds = $this->getData('category_ids');
+            if (!empty($categoryIds)) {
+                foreach ($categoryIds as $categoryId) {
+                    $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
+                }
             }
         }
         return array_unique($identities);
