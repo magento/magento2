@@ -9,11 +9,13 @@ define(
         'Magento_Ui/js/form/form',
         'ko',
         'Magento_Customer/js/model/customer',
+        '../model/addresslist',
+        '../model/address-converter',
         '../model/quote',
         'Magento_Checkout/js/model/step-navigator',
         'mage/translate'
     ],
-    function($, Component, ko, customer, quote, navigator) {
+    function($, Component, ko, customer, addressList, addressConverter, quote, navigator) {
         'use strict';
         var stepName = 'shippingAddress';
         return Component.extend({
@@ -53,14 +55,17 @@ define(
                     navigator.goToStep(stepName);
                 }
             },
+
             /** Show address form popup */
             showFormPopUp: function() {
                 this.isFormPopUpVisible(true);
             },
+
             /** Hide address form popup */
             hideFormPopUp: function() {
                 this.isFormPopUpVisible(false);
             },
+
             /** Save new shipping address */
             saveNewAddress: function() {
                 this.validate();
@@ -72,7 +77,9 @@ define(
                         saveInAddressBook = !!addressBookCheckBox.val();
                     }
                     addressData.save_in_address_book = saveInAddressBook;
-                    // TODO add address to address list and save it
+
+                    var newAddress = addressConverter.formAddressDataToQuoteAddress(addressData);
+                    addressList.add(newAddress);
                     //selectShippingAddress(addressData, additionalData);
                     this.isFormPopUpVisible(false);
                 }
