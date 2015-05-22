@@ -64,7 +64,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'FTI_CATALOGSEARCH_FULLTEXT_DATA_INDEX',
                     ['data_index'],
                     ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
-
                 );
             $connection->createTable($table);
         }
