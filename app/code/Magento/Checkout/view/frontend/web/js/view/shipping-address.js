@@ -72,7 +72,7 @@ define(
                 if (!this.source.get('params.invalid')) {
                     var addressData = this.source.get('shippingAddress');
                     var saveInAddressBook = true;
-                    if (this.isCustomerLoggedIn) {
+                    if (this.isCustomerLoggedIn()) {
                         var addressBookCheckBox =  $("input[name = 'shipping[save_in_address_book]']:checked");
                         saveInAddressBook = !!addressBookCheckBox.val();
                     }
