@@ -104,6 +104,9 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->oauthDataMock->expects($this->any())
+            ->method('getConsumerExpirationPeriod')
+            ->will($this->returnValue(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT));
 
         $this->resourceMock = $this->getMock(
             'Magento\Integration\Model\Resource\Oauth\Consumer',
@@ -212,10 +215,6 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConsumerExpirationPeriodValid()
     {
-        $this->oauthDataMock->expects($this->once())
-            ->method('getConsumerExpirationPeriod')
-            ->will($this->returnValue(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT));
-
         $this->resourceMock->expects($this->once())
             ->method('getTimeInSecondsSinceCreation')
             ->will($this->returnValue(30));
@@ -226,10 +225,6 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConsumerExpirationPeriodExpired()
     {
-        $this->oauthDataMock->expects($this->once())
-            ->method('getConsumerExpirationPeriod')
-            ->will($this->returnValue(\Magento\Integration\Helper\Oauth\Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT));
-
         $this->resourceMock->expects($this->once())
             ->method('getTimeInSecondsSinceCreation')
             ->will($this->returnValue(400));
