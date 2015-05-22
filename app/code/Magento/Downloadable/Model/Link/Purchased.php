@@ -24,8 +24,8 @@ namespace Magento\Downloadable\Model\Link;
  * @method \Magento\Downloadable\Model\Link\Purchased setCustomerId(int $value)
  * @method string getProductName()
  * @method \Magento\Downloadable\Model\Link\Purchased setProductName(string $value)
- * @method string getProductSku()
- * @method \Magento\Downloadable\Model\Link\Purchased setProductSku(string $value)
+ * @method string getSku()
+ * @method \Magento\Downloadable\Model\Link\Purchased setSku(string $value)
  * @method string getLinkSectionTitle()
  * @method \Magento\Downloadable\Model\Link\Purchased setLinkSectionTitle(string $value)
  *

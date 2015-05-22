@@ -67,7 +67,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     public function save(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
-        $product = $this->productRepository->get($entity->getProductSku());
+        $product = $this->productRepository->get($entity->getSku());
         $links = $this->entityCollectionProvider->getCollection($product, $entity->getLinkType());
         $extensions = $this->dataObjectProcessor->buildOutputDataArray(
             $entity->getExtensionAttributes(),
@@ -96,7 +96,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     public function delete(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
-        $product = $this->productRepository->get($entity->getProductSku());
+        $product = $this->productRepository->get($entity->getSku());
         $links = $this->entityCollectionProvider->getCollection($product, $entity->getLinkType());
 
         if (!isset($links[$linkedProduct->getId()])) {
@@ -104,7 +104,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 __(
                     'Product with SKU %1 is not linked to product with SKU %2',
                     $entity->getLinkedProductSku(),
-                    $entity->getProductSku()
+                    $entity->getSku()
                 )
             );
         }

@@ -85,7 +85,7 @@ class ProductLinkRepositoryInterfaceTest extends WebapiAbstract
             $serviceInfo,
             [
                 'entity' => [
-                    'product_sku' => 'simple_with_cross',
+                    'sku' => 'simple_with_cross',
                     'link_type' => 'related',
                     'linked_product_sku' => 'simple',
                     'linked_product_type' => 'simple',

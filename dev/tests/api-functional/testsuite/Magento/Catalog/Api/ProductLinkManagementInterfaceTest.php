@@ -95,7 +95,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
             'linked_product_type' => 'virtual',
             'linked_product_sku' => 'virtual-product',
             'position' => 100,
-            'product_sku' => 'simple',
+            'sku' => 'simple',
             'link_type' => 'related',
         ];
 

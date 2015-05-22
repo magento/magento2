@@ -131,7 +131,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->saveProduct($productData);
 
         // Create a group product
-        $productLinkData = ["product_sku" => "group_product_500", "link_type" => "associated",
+        $productLinkData = ["sku" => "group_product_500", "link_type" => "associated",
                             "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
                             "position" => 0, "extension_attributes" => ["qty" => 1]];
         $productWithGroupData =  [
@@ -153,10 +153,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData, $links[0]);
 
         // update link information for Group Product
-        $productLinkData1 = ["product_sku" => "group_product_500", "link_type" => "associated",
+        $productLinkData1 = ["sku" => "group_product_500", "link_type" => "associated",
                             "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
                             "position" => 0, "extension_attributes" => ["qty" => 4]];
-        $productLinkData2 = ["product_sku" => "group_product_500", "link_type" => "upsell",
+        $productLinkData2 = ["sku" => "group_product_500", "link_type" => "upsell",
                              "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
                              "position" => 0, "extension_attributes" => []];
         $productWithGroupData =  [

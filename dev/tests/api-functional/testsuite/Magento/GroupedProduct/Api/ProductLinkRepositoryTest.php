@@ -32,7 +32,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
         $productSku = 'grouped-product';
         $linkType = 'associated';
         $productData = [
-            'product_sku' => $productSku,
+            'sku' => $productSku,
             'link_type' => $linkType,
             'linked_product_type' => 'simple',
             'linked_product_sku' => 'simple',
@@ -44,7 +44,7 @@ class ProductLinkRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAb
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . $productSku . '/links/' . $linkType,
+                'resourcePath' => self::RESOURCE_PATH . $productSku . '/links',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
