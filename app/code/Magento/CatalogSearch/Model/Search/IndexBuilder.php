@@ -10,6 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
+use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -62,7 +63,8 @@ class IndexBuilder implements IndexBuilderInterface
             )
             ->joinLeft(
                 ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
-                'search_index.attribute_id = cea.attribute_id'
+                'search_index.attribute_id = cea.attribute_id',
+                [ScoreBuilder::WEIGHT_FIELD]
             );
 
         $isShowOutOfStock = $this->config->isSetFlag(
