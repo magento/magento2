@@ -42,7 +42,15 @@
     </tr>
     <tr>
         <td>
-            <?php echo $block->getChildHtml('order_totals') ?>
+            <table class="table-totals" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                    <td class="padding-totals">
+                        <table cellspacing="0" cellpadding="0" border="0">
+                            <?php echo $block->getChildHtml('order_totals') ?>
+                        </table>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
     <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->isMessagesAllowed('order', $_order, $_order->getStore()) && $_order->getGiftMessageId()): ?>

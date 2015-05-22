@@ -11,8 +11,9 @@
 <?php $_item = $block->getItem() ?>
 <?php $_order = $block->getItem()->getOrder() ?>
 <tr>
-    <td align="left" valign="top" style="padding:3px 9px">
-        <strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+    <td class="cell-content product-info">
+        <p class="product-name"><?php echo $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?php echo __('SKU'); ?>: <?php echo $this->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
         <dl style="margin:0; padding:0;">
             <?php foreach ($block->getItemOptions() as $option): ?>
@@ -40,9 +41,8 @@
         <br /><?php echo __('Message:'); ?><br /> <?php echo $block->escapeHtml($_giftMessage->getMessage()) ?>
         <?php endif; ?>
     </td>
-    <td align="left" valign="top" style="padding:3px 9px"><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
-    <td align="center" valign="top" style="padding:3px 9px"><?php echo $_item->getQtyOrdered()*1 ?></td>
-    <td align="right" valign="top" style="padding:3px 9px">
+    <td class="cell-content align-center"><?php echo $_item->getQtyOrdered() * 1 ?></td>
+    <td class="cell-content align-right">
         <?php echo $block->getItemPrice($_item); ?>
     </td>
 </tr>
