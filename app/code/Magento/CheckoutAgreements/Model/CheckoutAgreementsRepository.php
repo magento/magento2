@@ -166,16 +166,10 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     {
         /** @var AgreementFactory $agreement */
         $agreement = $this->agreementFactory->create();
-        $agreement->setStoreId($storeId);
         $this->resourceModel->load($agreement, $id);
         if (!$agreement->getId()) {
             throw new NoSuchEntityException(__('Checkout agreement with specified ID "%1" not found.', $id));
         }
-        $this->dataObjectHelper->populateWithArray(
-            $agreement,
-            $agreement->getData(),
-            'Magento\CheckoutAgreements\Api\Data\AgreementInterface'
-        );
         return $agreement;
     }
 }
