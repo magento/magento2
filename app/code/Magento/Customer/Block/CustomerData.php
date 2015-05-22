@@ -22,8 +22,8 @@ class CustomerData extends \Magento\Framework\View\Element\Template
     /**
      * Get url for customer data ajax requests. Returns url with protocol matching used to request page.
      *
-     * @param $route
-     * @return string
+     * @param string $route
+     * @return string Customer data url.
      */
     public function getCustomerDataUrl($route)
     {
