@@ -7,7 +7,12 @@
  */
 namespace Magento\Captcha\Model;
 
-interface ModelInterface
+/**
+ * Captcha Model Interface
+ *
+ * @api
+ */
+interface CaptchaInterface
 {
     /**
      * Generates captcha
