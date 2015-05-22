@@ -16,6 +16,10 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
 
+        <!-- ko foreach: getRegion('address-list-additional-addresses') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
         <input type="button" data-bind="click: showFormPopUp, value: $t('New Address')" />

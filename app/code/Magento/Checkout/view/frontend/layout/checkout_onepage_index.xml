@@ -53,6 +53,14 @@
                                                             <item name="address-list" xsi:type="array">
                                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/shipping-address/list</item>
                                                                 <item name="displayArea" xsi:type="string">address-list</item>
+
+                                                              </item>
+                                                            <item name="address-list-additional-addresses" xsi:type="array">
+                                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                                <item name="displayArea" xsi:type="string">address-list-additional-addresses</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <!-- address-list-additional-addresses -->
+                                                                </item>
                                                               </item>
                                                             <item name="shipping-address-fieldset" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
