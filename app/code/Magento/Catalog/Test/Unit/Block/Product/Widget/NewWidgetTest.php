@@ -8,6 +8,9 @@ namespace Magento\Catalog\Test\Unit\Block\Product\Widget;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Block\Product\Widget\NewWidget as NewWidget;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class NewWidgetTest extends \PHPUnit_Framework_TestCase
 {
     /**
