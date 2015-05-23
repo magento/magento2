@@ -42,7 +42,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Framework\ObjectManagerInterface'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
-                $objectManager->get('Magento\Email\Model\Template\Config')
+                $objectManager->get('Magento\Email\Model\Template\Config'),
+                $objectManager->get('Magento\Email\Model\TemplateFactory')
             ]
         )->getMock();
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
@@ -241,7 +242,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetPreparedTemplateText()
     {
         $this->_model->loadDefault('customer_create_account_email_template');
-        $this->assertContains('<body style', $this->_model->getPreparedTemplateText());
+        $this->assertContains(
+            '<body style',
+            $this->_model->getPreparedTemplateText(
+                $this->_model->getTemplateText()
+            )
+        );
     }
 
     public function testGetSendingException()
