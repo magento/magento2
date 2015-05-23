@@ -17,6 +17,7 @@ FROM php:5.6-apache
 #
 
 RUN echo 'Installing Magento Dependencies' \
+ && a2enmod rewrite > /dev/null \
  && DEBIAN_NONINTERACTIVE=1 apt-get -qqy update \
  && DEBIAN_NONINTERACTIVE=1 apt-get -qqy install g++ \
                                                  git \
@@ -25,10 +26,13 @@ RUN echo 'Installing Magento Dependencies' \
                                                  libmcrypt-dev \
                                                  libpng12-dev \
                                                  libxslt1-dev \
+                                                 mysql-client \
  && docker-php-ext-configure gd --with-jpeg-dir=/usr/lib/x86_64-linux-gnu/ \
  && docker-php-ext-install gd \
                            intl \
+                           mbstring \
                            mcrypt \
+                           opcache \
                            pdo_mysql \
                            xsl \
                            zip \

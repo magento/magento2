@@ -21,10 +21,10 @@ dbdata:
 db:
     image: mysql:5
     environment:
+        - MYSQL_DATABASE=mage
+        - MYSQL_PASSWORD=mage
         - MYSQL_ROOT_PASSWORD=mage
         - MYSQL_USER=mage
-        - MYSQL_PASSWORD=mage
-        - MYSQL_DATABASE=mage
     volumes_from:
         - dbdata
     ports:
@@ -35,7 +35,16 @@ shell:
         - db
     volumes:
         - .:/var/www/html
-    command: bash
+    command: bash -c '
+            {
+                echo "[client]";
+                echo "database=$DB_1_ENV_MYSQL_DATABASE";
+                echo "host=db_1";
+                echo "password=$DB_1_ENV_MYSQL_PASSWORD";
+                echo "user=$DB_1_ENV_MYSQL_USER";
+            } > "$HOME/.my.cnf" &&
+            exec bash
+        '
 setup:
     build: docker
     links:
@@ -46,24 +55,24 @@ setup:
             echo "Installing Magento 2" &&
             composer install &&
             bin/magento setup:install --admin-email=nobody@example.com
-                                    --admin-firstname=Nobody
-                                    --admin-lastname=Example
-                                    --admin-password=admin123
-                                    --admin-user=admin
-                                    --backend-frontname=admin
-                                    --base-url=http://localhost/
-                                    --currency=USD
-                                    --db-host=db_1
-                                    --db-name="$DB_1_ENV_MYSQL_DATABASE"
-                                    --db-password="$DB_1_ENV_MYSQL_PASSWORD"
-                                    --db-user="$DB_1_ENV_MYSQL_USER"
-                                    --language=en_US
-                                    --timezone=America/New_York &&
+                                      --admin-firstname=Nobody
+                                      --admin-lastname=Example
+                                      --admin-password=admin123
+                                      --admin-user=admin
+                                      --backend-frontname=admin
+                                      --currency=USD
+                                      --db-host=db_1
+                                      --db-name="$DB_1_ENV_MYSQL_DATABASE"
+                                      --db-password="$DB_1_ENV_MYSQL_PASSWORD"
+                                      --db-user="$DB_1_ENV_MYSQL_USER"
+                                      --language=en_US
+                                      --timezone=America/New_York &&
             echo "Cleaning up filesystem permissions" &&
             chown -R www-data:www-data . &&
             find . \( -type d -exec chmod 0750 {} + \)
                 -o \( -exec chmod 0640 {} + \) &&
-            chmod +x bin/magento
+            chmod +x bin/magento &&
+            exec bin/magento cache:disable --all
         '
 webapp:
     build: docker
@@ -74,3 +83,10 @@ webapp:
     ports:
         - 80
         - 443
+    command: sh -c '
+            echo "Running Apache as whatever uid owns these files." &&
+            userdel www-data &&
+            useradd -Mru $(stat -c %u .htaccess) -d "$PWD" www-data &&
+            exec apache2ctl -DFOREGROUND
+        '
+
