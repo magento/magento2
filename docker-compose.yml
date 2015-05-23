@@ -1,4 +1,4 @@
-#  Install Magento 2 Into Docker Containers
+#  Install Magento 2 into Docker Containers
 # ==========================================
 #
 # ## Getting Started
@@ -7,12 +7,21 @@
 # 2. Install Docker Compose: https://docs.docker.com/compose/install/
 # 3. Run `docker-compose run --rm setup` to get things set up.
 # 4. Run `docker-compose up -d webapp` to launch the web server.
+# 5. Browse to http://$(boot2docker ip):port/ to view Magento 2.
 #
 # ## Commands
 #
 # - Bash Shell: `docker-compose run --rm shell`
 # - MySQL Shell: `docker-compose run --rm dbshell`
 # - Magento Command: `docker-compose run --rm magento`
+#
+# ## Troubleshooting
+#
+# ### I went to http://dockerhost/ in my browser, but no page loads!
+#
+# Look at `docker-compose ps` to discover which port Compose has exposed
+# for your webapp service. It is not port 80. Specify the port in your
+# browser like http://dockerhost:port/
 #
 
 dbdata:
