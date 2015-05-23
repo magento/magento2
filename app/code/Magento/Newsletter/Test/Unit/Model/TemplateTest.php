@@ -107,7 +107,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->emailConfig = $this->getMockBuilder('Magento\Email\Model\Template\Config')
             ->disableOriginalConstructor()
             ->getMock();
-        // TODO: Remove the unneeded ones
         $this->templateFactory = $this->getMockBuilder('Magento\Newsletter\Model\TemplateFactory')
             ->disableOriginalConstructor()
             ->getMock();
@@ -160,30 +159,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->once())
             ->method('hasSingleStore')
             ->will($this->returnValue($isSingleStore));
-
-        $data = ['template_text' => 'template text'];
-
-        /** @var \Magento\Newsletter\Model\Template $model */
-        $model = $this->getMock(
-            'Magento\Newsletter\Model\Template',
-            ['_init'],
-            [
-                $this->context,
-                $this->design,
-                $this->registry,
-                $this->appEmulation,
-                $this->storeManager,
-                $this->request,
-                $this->scopeConfig,
-                $this->assetRepo,
-                $this->filesystem,
-                $this->objectManager,
-                $this->emailConfig,
-                $this->templateFactory,
-                $this->filterFactory,
-                $data
-            ]
-        );
 
         $filterTemplate = $this->getMockBuilder('Magento\Newsletter\Model\Template\Filter')
             ->setMethods([
@@ -239,7 +214,13 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         // is returned from getProcessedTemplate
         $expectedVariables['store'] = $store;
 
-        $model = $this->getModelMock(['getDesignConfig', '_applyDesignConfig', 'getPreparedTemplateText', 'getTemplateText']);
+        /** @var \Magento\Newsletter\Model\Template $model */
+        $model = $this->getModelMock([
+            'getDesignConfig',
+            '_applyDesignConfig',
+            'getPreparedTemplateText',
+            'getTemplateText'
+        ]);
         $filterTemplate->expects($this->any())
             ->method('setVariables')
             ->with(array_merge([ 'this' => $model], $expectedVariables));

@@ -226,7 +226,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function loadByConfigPath($configPath)
     {
         $templateId = $this->_scopeConfig->getValue(
-            $configPath
+            $configPath,
+            ScopeInterface::SCOPE_STORE,
+            $this->getDesignConfig()->getStore()
         );
 
         if (is_numeric($templateId)) {
@@ -410,6 +412,19 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
+     * Get default email logo image
+     *
+     * @return string
+     */
+    public function getDefaultEmailLogo()
+    {
+        return $this->_assetRepo->getUrlWithParams(
+            'Magento_Email::logo_email.png',
+            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND]
+        );
+    }
+
+    /**
      * Return logo URL for emails. Take logo from theme if custom logo is undefined
      *
      * @param  \Magento\Store\Model\Store|int|string $store
@@ -530,7 +545,13 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $storeId = is_object($store) ? $store->getId() : $store;
         $area = $designConfig->getArea();
         if ($storeId !== null) {
-            $this->_appEmulation->startEnvironmentEmulation($storeId, $area);
+            $this->_appEmulation->startEnvironmentEmulation(
+                $storeId,
+                $area,
+                // Force emulation in case email is being sent from same store so that theme will be loaded. Helpful
+                // for situations where emails may be sent from bootstrap files that load frontend store, but not theme
+                true
+            );
         }
         return $this;
     }
@@ -618,7 +639,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         if ($storeId) {
             // save current design settings
             $this->_emulatedDesignConfig = clone $this->getDesignConfig();
-            if ($this->getDesignConfig()->getStore() != $storeId) {
+            if (
+                $this->getDesignConfig()->getStore() != $storeId
+                || $this->getDesignConfig()->getArea() != $area
+            ) {
                 $this->setDesignConfig(['area' => $area, 'store' => $storeId]);
                 $this->_applyDesignConfig();
             }

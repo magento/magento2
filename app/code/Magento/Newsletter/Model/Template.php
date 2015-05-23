@@ -263,6 +263,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function getProcessedTemplate(array $variables = [], $usePreprocess = false)
     {
+        $this->setUseAbsoluteLinks(true);
+
         $processor = $this->getTemplateFilter()
             ->setUseSessionInUrl(false)
             ->setPlainTemplateMode($this->isPlain())
@@ -270,9 +272,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             ->setTemplateProcessor([$this, 'getTemplateContent'])
             ->setTemplateModel($this);
 
-        if (!$this->_preprocessFlag) {
-            $variables['this'] = $this;
-        }
+        $variables['this'] = $this;
 
         // Only run app emulation if this is the parent template. Otherwise child will run inside parent emulation.
         if (!$this->getIsChildTemplate()) {
@@ -300,7 +300,12 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             }
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);
         }
-        return $this->getPreparedTemplateText($result);
+        $processedResult = $this->getPreparedTemplateText($result);
+
+        if (!$this->getIsChildTemplate()) {
+            $this->_cancelDesignConfig();
+        }
+        return $processedResult;
     }
 
     /**
@@ -331,9 +336,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     public function getProcessedTemplateSubject(array $variables)
     {
-        if (!$this->_preprocessFlag) {
-            $variables['this'] = $this;
-        }
+        $variables['this'] = $this;
+
         return $this->getTemplateFilter()
             ->setVariables($variables)
             ->filter($this->getTemplateSubject());
