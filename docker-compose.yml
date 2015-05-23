@@ -1,20 +1,20 @@
-#  Dockerized testing and analysis tools for developers
-# ======================================================
+#  Install Magento 2 Into Docker Containers
+# ==========================================
 #
-# 1. Make sure you have docker set up.
-# 2. Make sure you have docker-compose installed.
+# ## Getting Started
+#
+# 1. Install Docker: https://docs.docker.com/installation/
+# 2. Install Docker Compose: https://docs.docker.com/compose/install/
 # 3. Run `docker-compose run --rm setup` to get things set up.
 # 4. Run `docker-compose up -d webapp` to launch the web server.
 #
-#  Troubleshooting
-# -----------------
+# ## Commands
 #
-# You probably want to set
-# ini_set('xdebug.max_nesting_level', 200);
-# ini_set('display_errors', 1);
+# - Bash Shell: `docker-compose run --rm shell`
+# - MySQL Shell: `docker-compose run --rm dbshell`
+# - Magento Command: `docker-compose run --rm magento`
 #
-# in app/bootstrap.php
-#
+
 dbdata:
     image: mysql:5
     command: echo 'Just providing a volume for mysql data'
@@ -31,10 +31,10 @@ db:
         - 3306
 shell:
     build: docker
-    links:
-        - db
     volumes:
         - .:/var/www/html
+    links:
+        - db
     command: bash -c '
             {
                 echo "[client]";
@@ -43,8 +43,34 @@ shell:
                 echo "password=$DB_1_ENV_MYSQL_PASSWORD";
                 echo "user=$DB_1_ENV_MYSQL_USER";
             } > "$HOME/.my.cnf" &&
-            exec bash
+            PATH=/var/www/html/bin:$PATH exec bash
         '
+dbshell:
+    build: docker
+    volumes:
+        - .:/var/www/html
+    links:
+        - db
+    command: bash -c '
+            {
+                echo "[client]";
+                echo "database=$DB_1_ENV_MYSQL_DATABASE";
+                echo "host=db_1";
+                echo "password=$DB_1_ENV_MYSQL_PASSWORD";
+                echo "user=$DB_1_ENV_MYSQL_USER";
+            } > "$HOME/.my.cnf" &&
+            exec mysql
+        '
+magento:
+    build: docker
+    volumes:
+        - .:/var/www/html
+    links:
+        - db
+    entrypoint:
+        - /var/www/html/bin/magento
+    command:
+        - list
 setup:
     build: docker
     links:
