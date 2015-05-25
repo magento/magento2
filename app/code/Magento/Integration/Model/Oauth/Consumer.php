@@ -34,7 +34,7 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
     protected $urlValidator;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory
+     * @var \Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength
      */
     protected $keyLengthValidator;
 
