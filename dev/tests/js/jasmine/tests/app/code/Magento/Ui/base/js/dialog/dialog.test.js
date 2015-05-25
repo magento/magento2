@@ -13,12 +13,6 @@ define([
         var element = $('<div>some element</div>'),
             dialog = element.dialog({}).data('mage-dialog');
 
-        beforeEach(function () {
-        });
-
-        afterEach(function () {
-        });
-
         it('Check for dialog definition', function () {
             expect(dialog).toBeDefined();
         });
