@@ -50,7 +50,6 @@
         background-color: @dialog__background-color;
         box-shadow: @dialog__box-shadow;
         opacity: 1;
-        overflow-y: auto;
     }
 }
 
@@ -59,6 +58,7 @@
     z-index: @dialog-slide__z-index;
     .dialog-inner-wrap {
         height: 100%;
+        overflow-y: auto;
         position: static;
         transform: translate(100%, 0);
         transition: transform .5s ease, visibility 1s linear;
@@ -68,8 +68,11 @@
 
 .abs-dialog-modal() {
     left: 0;
+    overflow-y: auto;
     z-index: @dialog-modal__z-index;
     .dialog-inner-wrap {
+        .vendor-prefix-display(flex);
+        .vendor-prefix-flex-direction(column);
         height: auto;
         margin: @dialog-modal__indent-vertical (100% - @dialog-modal__width) / 2;
         position: absolute;
@@ -121,8 +124,16 @@
     .dialog-footer {
         padding: 0 @dialog-modal__padding @dialog-modal__padding;
     }
+    .dialog-header,
+    .dialog-footer {
+        .vendor-prefix-flex-grow(0);
+        .vendor-prefix-flex-shrink(0);
+    }
     .dialog-header {
         padding-top: @dialog-modal__padding;
+    }
+    .dialog-footer {
+        margin-top: auto;
     }
 }
 
