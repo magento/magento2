@@ -159,11 +159,11 @@ class BlockRepository implements BlockRepositoryInterface
             $this->dataObjectHelper->populateWithArray(
                 $blockData,
                 $blockModel->getData(),
-                'Magento\Cms\Api\Data\PageInterface'
+                'Magento\Cms\Api\Data\BlockInterface'
             );
             $blocks[] = $this->dataObjectProcessor->buildOutputDataArray(
                 $blockData,
-                'Magento\Cms\Api\Data\PageInterface'
+                'Magento\Cms\Api\Data\BlockInterface'
             );
         }
         $searchResults->setItems($blocks);

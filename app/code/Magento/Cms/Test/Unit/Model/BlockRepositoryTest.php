@@ -44,6 +44,11 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $dataHelper;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Reflection\DataObjectProcessor
+     */
+    protected $dataObjectProcessor;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Resource\Block\Collection
      */
     protected $collection;
@@ -54,6 +59,9 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->blockResource = $this->getMockBuilder('Magento\Cms\Model\Resource\Block')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dataObjectProcessor = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
             ->disableOriginalConstructor()
             ->getMock();
         $blockFactory = $this->getMockBuilder('Magento\Cms\Model\BlockFactory')
@@ -112,7 +120,8 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             $blockDataFactory,
             $collectionFactory,
             $blockSearchResultFactory,
-            $this->dataHelper
+            $this->dataHelper,
+            $this->dataObjectProcessor
         );
     }
 
@@ -262,7 +271,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->collection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with([['attribute' => $field, $condition => $value]], [])
+            ->with($field, [$condition => $value])
             ->willReturnSelf();
         $this->blockSearchResult->expects($this->once())
             ->method('setTotalCount')
@@ -292,7 +301,10 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->dataHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($this->blockData, ['data'], 'Magento\Cms\Api\Data\BlockInterface')
+            ->with($this->blockData, ['data'], 'Magento\Cms\Api\Data\BlockInterface');
+        $this->dataObjectProcessor->expects($this->once())
+            ->method('buildOutputDataArray')
+            ->with($this->blockData, 'Magento\Cms\Api\Data\BlockInterface')
             ->willReturn('someData');
 
         $this->assertEquals($this->blockSearchResult, $this->repository->getList($criteria));
