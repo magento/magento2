@@ -26,6 +26,7 @@ define(
             isFullTaxSummaryDisplayed: isFullTaxSummaryDisplayed,
             lastTaxGroupId: null,
             isDetailsVisible: ko.observable(),
+            notCalculatedMessage: 'Not yet calculated',
             getTitle: function() {
                 return "Tax";
             },
@@ -36,7 +37,7 @@ define(
                     if (taxTotal) {
                         amount = taxTotal.value;
                     } else {
-                        amount = this.totals().tax_amount
+                        return this.notCalculatedMessage;
                     }
                 }
                 return priceUtils.formatPrice(amount, quote.getPriceFormat());

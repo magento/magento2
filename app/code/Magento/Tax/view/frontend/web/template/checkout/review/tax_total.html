@@ -9,7 +9,7 @@
     <th data-bind="text: getTitle(), attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
     </th>
     <td data-bind="attr: {'style': style, 'data-th': $t(getTitle()) }" class="amount">
-        <span class="price" data-bind="text: getValue()"></span>
+        <span class="price" data-bind="text: $t(getValue())"></span>
     </td>
 </tr>
 <!-- /ko -->
@@ -18,7 +18,7 @@
         <th data-bind="text: getTitle(), attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
         </th>
         <td data-bind="attr: {'style': style, 'data-th': $t(getTitle()) }" class="amount">
-            <span class="price" data-bind="text: getValue()"></span>
+            <span class="price" data-bind="text: $t(getValue())"></span>
         </td>
     </tr>
     <!-- ko foreach: getDetails() -->

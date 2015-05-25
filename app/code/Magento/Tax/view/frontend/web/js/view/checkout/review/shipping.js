@@ -21,6 +21,7 @@ define(
             },
             getColspan: 3,
             style: "",
+            notCalculatedMessage: 'Not yet calculated',
             quoteIsVirtual: quote.isVirtual(),
             selectedShippingMethod: quote.getShippingMethod(),
             getTitle: function() {
@@ -44,22 +45,28 @@ define(
             },
             getValue: function() {
                 var price = 0;
-                if (this.totals()) {
+                if (this.totals() && this.totals().shipping_amount) {
                     price =  this.totals().shipping_amount;
+                } else {
+                    return this.notCalculatedMessage;
                 }
                 return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             getIncludingValue: function() {
                 var price = 0;
-                if (this.totals()) {
+                if (this.totals() && this.totals().shipping_incl_tax) {
                     price =  this.totals().shipping_incl_tax;
+                } else {
+                    return this.notCalculatedMessage;
                 }
                 return priceUtils.formatPrice(price, quote.getPriceFormat());
             },
             getExcludingValue: function() {
                 var price = 0;
-                if (this.totals()) {
+                if (this.totals() && this.totals().shipping_amount) {
                     price =  this.totals().shipping_amount;
+                } else {
+                    return this.notCalculatedMessage;
                 }
                 return priceUtils.formatPrice(price, quote.getPriceFormat());
             }

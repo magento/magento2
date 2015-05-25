@@ -21,11 +21,11 @@ define(
             },
             getColspan: 3,
             style: "",
-            exclTaxLabel: 'Grand Total Excl. Tax',
-            inclTaxLabel: 'Grand Total Incl. Tax',
+            exclTaxLabel: 'Order Total Excl. Tax',
+            inclTaxLabel: 'Order Total Incl. Tax',
             basicCurrencyMessage: 'Your credit card will be charged for',
             getTitle: function() {
-                return "Grand Total";
+                return "Order Total";
             },
             totals: quote.getTotals(),
             getValue: function() {
