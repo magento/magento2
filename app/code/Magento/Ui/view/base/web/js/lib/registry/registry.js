@@ -4,11 +4,26 @@
  */
 define([
     'mageUtils',
+    'underscore',
     './storage',
     './events'
-], function(utils, Storage, Events) {
+], function(utils, _, Storage, Events) {
     'use strict';
 
+    function async(name, registry, method) { 
+        var args = _.toArray(arguments).slice(3);
+
+        if (_.isString(method)) {
+            registry.get(name, function (component) {
+                component[method].apply(component, args); 
+            });
+        } else if (_.isFunction(method)) {
+            registry.get(name, method); 
+        } else if (!args.length) {
+            return registry.get(name);
+        }
+    }  
+    
     function Registry() {
         this.storage = new Storage();
         this.events = new Events(this.storage);
@@ -45,7 +60,6 @@ define([
                     records;
             }
         },
-
 
        /**
          * Sets data to registry.
@@ -86,6 +100,10 @@ define([
             elems = utils.stringToArray(elems);
 
             return this.storage.has(elems);
+        },
+
+        async: function (name) {
+            return async.bind(null, name, this);
         },
 
         create: function () {
