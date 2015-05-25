@@ -11,6 +11,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const DATA_TYPE = "type";
     const JOIN_DIRECTIVE = "join";
     const JOIN_REFERENCE_TABLE = "join_reference_table";
+    const JOIN_REFERENCE_FIELD = "join_reference_field";
     const JOIN_SELECT_FIELDS= "join_select_fields";
     const JOIN_JOIN_ON_FIELD= "join_join_on_field";
 
@@ -61,6 +62,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                         ->getNamedItem('select_fields')->nodeValue;
                     $join[self::JOIN_JOIN_ON_FIELD] = $joinElement->attributes
                         ->getNamedItem('join_on_field')->nodeValue;
+
+                    $referenceField = $joinElement->attributes->getNamedItem('reference_field');
+                    $join[self::JOIN_REFERENCE_FIELD] = $referenceField
+                        ? $referenceField->nodeValue
+                        : $join[self::JOIN_JOIN_ON_FIELD];
                 }
 
                 $typeConfig[$code] = [

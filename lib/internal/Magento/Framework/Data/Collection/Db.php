@@ -8,6 +8,7 @@ namespace Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -782,5 +783,44 @@ class Db extends \Magento\Framework\Data\Collection
     protected function _initSelect()
     {
         // no implementation, should be overridden in children classes
+    }
+
+    /**
+     * Join extension attribute.
+     *
+     * @param ExtensionAttributeJoinData $join
+     * @return $this
+     */
+    public function joinExtensionAttribute($join)
+    {
+        $fieldAlias = $join->getReferenceTableAlias() . '_' . $join->getSelectField();
+        $selectFrom = $this->getSelect()->getPart(\Zend_Db_Select::FROM);
+        $joinRequired = !isset($selectFrom[$join->getReferenceTableAlias()]);
+        if ($joinRequired) {
+            $this->getSelect()->joinLeft(
+                [$join->getReferenceTableAlias() => $join->getReferenceTable()],
+                $this->getMainTableName() . '.' . $join->getJoinField()
+                . ' = ' . $join->getReferenceTableAlias() . '.' . $join->getReferenceField(),
+                []
+            );
+        }
+        $this->getSelect()->columns([$fieldAlias => $join->getReferenceTable() . '.' . $join->getSelectField()]);
+        return $this;
+    }
+
+    /**
+     * Identify main table name/alias.
+     *
+     * @return string
+     * @throws \LogicException
+     */
+    protected function getMainTableName()
+    {
+        foreach ($this->getSelect()->getPart(\Zend_Db_Select::FROM) as $tableAlias => $tableMetadata) {
+            if ($tableMetadata['joinType'] == 'from') {
+                return $tableAlias;
+            }
+        }
+        throw new \LogicException("Main table cannot be identified.");
     }
 }

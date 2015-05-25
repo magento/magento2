@@ -8,6 +8,8 @@ namespace Magento\Framework\Api\Test\Unit;
 
 use Magento\Framework\Api\Config\Converter;
 use Magento\Framework\Api\Config\Reader;
+use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinData;
+use Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory;
 
 class JoinProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,9 +19,14 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
     private $joinProcessor;
 
     /**
-     * @var Reader
+     * @var Reader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configReader;
+
+    /**
+     * @var ExtensionAttributeJoinDataFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributeJoinDataFactory;
 
     /**
      * Initialize parameters
@@ -29,74 +36,44 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
         $this->configReader = $this->getMockBuilder('Magento\Framework\Api\Config\Reader')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->joinProcessor = new \Magento\Framework\Api\JoinProcessor($this->configReader);
+        $this->extensionAttributeJoinDataFactory = $this
+            ->getMockBuilder('Magento\Framework\Api\JoinProcessor\ExtensionAttributeJoinDataFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->joinProcessor = new \Magento\Framework\Api\JoinProcessor(
+            $this->configReader,
+            $this->extensionAttributeJoinDataFactory
+        );
     }
 
     /**
      * Test the processing of the join config for a particular type
-     *
-     * @dataProvider processDataProvider
      */
-    public function testProcess($typeName, $expectedResults)
+    public function testProcess()
     {
         $this->configReader->expects($this->once())
             ->method('read')
             ->will($this->returnValue($this->getConfig()));
 
         $collection = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
-            ->setMethods(['joinField'])
+            ->setMethods(['joinExtensionAttribute'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $c = 0;
-        foreach ($expectedResults as $result) {
-            $collection->expects($this->at($c))
-                ->method('joinField')
-                ->with($result);
-            $c++;
-        }
+        $extensionAttributeJoinData = new ExtensionAttributeJoinData();
+        $this->extensionAttributeJoinDataFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($extensionAttributeJoinData);
 
-        $this->joinProcessor->process($collection, $typeName);
-    }
+        $collection->expects($this->once())->method('joinExtensionAttribute')->with($extensionAttributeJoinData);
 
-    public function processDataProvider()
-    {
-        return [
-            'product extension' => [
-                'Magento\Catalog\Api\Data\ProductInterface',
-                [
-                    [
-                        'alias' => 'extension_attribute_review_id',
-                        'table' => 'reviews',
-                        'field' => 'review_id',
-                        'join_field' => 'product_id',
-                    ],
-                ],
-            ],
-            'customer extension' => [
-                'Magento\Customer\Api\Data\CustomerInterface',
-                [
-                    [
-                        'alias' => 'extension_attribute_library_card_id',
-                        'table' => 'library_account',
-                        'field' => 'library_card_id',
-                        'join_field' => 'customer_id',
-                    ],
-                    [
-                        'alias' => 'extension_attribute_reviews',
-                        'table' => 'reviews',
-                        'field' => 'comment',
-                        'join_field' => 'customer_id',
-                    ],
-                    [
-                        'alias' => 'extension_attribute_reviews',
-                        'table' => 'reviews',
-                        'field' => 'rating',
-                        'join_field' => 'customer_id',
-                    ],
-                ],
-            ],
-        ];
+        $this->joinProcessor->process($collection, 'Magento\Catalog\Api\Data\ProductInterface');
+        $this->assertEquals('reviews', $extensionAttributeJoinData->getReferenceTable());
+        $this->assertEquals('extension_attribute_review_id', $extensionAttributeJoinData->getReferenceTableAlias());
+        $this->assertEquals('product_id', $extensionAttributeJoinData->getReferenceField());
+        $this->assertEquals('id', $extensionAttributeJoinData->getJoinField());
+        $this->assertEquals('review_id', $extensionAttributeJoinData->getSelectField());
     }
 
     private function getConfig() {
@@ -107,8 +84,9 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "reviews",
+                        Converter::JOIN_REFERENCE_FIELD => "product_id",
                         Converter::JOIN_SELECT_FIELDS => "review_id",
-                        Converter::JOIN_JOIN_ON_FIELD => "product_id",
+                        Converter::JOIN_JOIN_ON_FIELD => "id",
                     ],
                 ],
             ],

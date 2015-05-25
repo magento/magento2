@@ -106,7 +106,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     Converter::JOIN_DIRECTIVE => [
                         Converter::JOIN_REFERENCE_TABLE => "library_account",
                         Converter::JOIN_SELECT_FIELDS => "library_card_id",
-                        Converter::JOIN_JOIN_ON_FIELD => "customer_id",
+                        Converter::JOIN_JOIN_ON_FIELD => "id",
+                        Converter::JOIN_REFERENCE_FIELD => "customer_id",
                     ],
                 ],
                 'reviews' => [
@@ -116,6 +117,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                         Converter::JOIN_REFERENCE_TABLE => "reviews",
                         Converter::JOIN_SELECT_FIELDS => "comment,rating",
                         Converter::JOIN_JOIN_ON_FIELD => "customer_id",
+                        Converter::JOIN_REFERENCE_FIELD => "customer_id",
                     ],
                 ],
             ],
