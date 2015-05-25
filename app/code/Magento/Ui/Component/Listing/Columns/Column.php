@@ -66,10 +66,7 @@ class Column extends AbstractComponent implements ColumnInterface
      */
     public function prepare()
     {
-        parent::prepare();
-
         $dataType = $this->getData('config/dataType');
-        $wrappedComponentConfig = [];
         if ($dataType) {
             $this->wrappedComponent = $this->uiComponentFactory->create(
                 $this->getName(),
@@ -77,29 +74,23 @@ class Column extends AbstractComponent implements ColumnInterface
                 array_merge(['context' => $this->getContext()], (array) $this->getData())
             );
             $this->wrappedComponent->prepare();
-            $wrappedComponentConfig = $this->getConfiguration($this->wrappedComponent);
-        }
+            $wrappedComponentConfig = $this->getJsConfig($this->wrappedComponent);
+            // Merge JS configuration with wrapped component configuration
+            $jsConfig = array_replace_recursive($wrappedComponentConfig, $this->getJsConfig($this));
+            $this->setData('js_config', $jsConfig);
 
-        $this->applySorting();
-        $jsConfig = array_replace_recursive($wrappedComponentConfig, $this->getConfiguration($this));
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
-    }
-
-    /**
-     * Get JS config
-     *
-     * @return array
-     */
-    public function getJsConfig()
-    {
-        if (isset($this->wrappedComponent)) {
-            return array_replace_recursive(
-                (array) $this->wrappedComponent->getData('config'),
-                (array) $this->getData('config')
+            $this->setData(
+                'config',
+                array_replace_recursive(
+                    (array)$this->wrappedComponent->getData('config'),
+                    (array)$this->getData('config')
+                )
             );
         }
 
-        return (array) $this->getData('config');
+        $this->applySorting();
+
+        parent::prepare();
     }
 
     /**
