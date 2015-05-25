@@ -82,6 +82,15 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                     'shortDescription' => 'Dynamic cached plugin calls',
                     'tags' => [['name' => 'var', 'description' => 'array']],
                 ]
+            ],
+            [
+                'name' => 'state',
+                'visibility' => 'protected',
+                'defaultValue' => [],
+                'docblock' => [
+                    'shortDescription' => 'Application State',
+                    'tags' => [['name' => 'var', 'description' => 'object']],
+                ]
             ]
         ];
     }
@@ -128,6 +137,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             'body' => "\$this->pluginLocator = \\Magento\\Framework\\App\\ObjectManager::getInstance();\n" .
                 "\$this->pluginList = \$this->pluginLocator->get('Magento\\Framework\\Interception\\PluginListInterface');\n" .
                 "\$this->chain = \$this->pluginLocator->get('Magento\\Framework\\Interception\\ChainInterface');\n" .
+                "\$this->state = \$this->pluginLocator->get('Magento\\Framework\\App\\State');\n" .
                 "\$this->subjectType = get_parent_class(\$this);\n" .
                 "if (method_exists(\$this->subjectType, '___init')) {\n" .
                 "    parent::___init();\n" .
@@ -251,11 +261,13 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             'name' => $method->getName(),
             'parameters' => $parameters,
             'body' =>
-            "if (!array_key_exists('{$method->getName()}', self::\$cachedPlugins)) {\n" .
+            "try {\$areaCode = \$this->state->getAreaCode();} catch (\Magento\Framework\Exception\LocalizedException \$e) {\$areaCode = 'no_area';}".
+            "if (!isset(self::\$cachedPlugins[\$areaCode])) { self::\$cachedPlugins[\$areaCode] = []; }".
+            "if (!array_key_exists('{$method->getName()}', self::\$cachedPlugins[\$areaCode])) {\n" .
             "\$pluginInfo = \$this->pluginList->getNext(\$this->subjectType, '{$method->getName()}');\n" .
-            "self::\$cachedPlugins['{$method->getName()}'] = \$pluginInfo;\n" .
+            "self::\$cachedPlugins[\$areaCode]['{$method->getName()}'] = \$pluginInfo;\n" .
             "} else {\n" .
-            "\$pluginInfo = self::\$cachedPlugins['{$method->getName()}'];\n" .
+            "\$pluginInfo = self::\$cachedPlugins[\$areaCode]['{$method->getName()}'];\n" .
             "}\n".
             "if (!\$pluginInfo) {\n" .
             "    return parent::{$method->getName()}({$this->_getParameterList(
