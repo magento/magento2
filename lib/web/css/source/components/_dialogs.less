@@ -14,15 +14,19 @@
 @import '../../source/_variables.less';
 
 @dialog__background-color: @color-white;
-@dialog__box-shadow: @component__box-shadow__base;
+@dialog__box-shadow: 0 0 12px 2px rgba(0, 0, 0, .35);
 
+@dialog-modal__indent-vertical: 5rem;
+@dialog-modal__padding: 3rem;
+@dialog-modal__width: 75%;
 @dialog-modal__z-index: @dialog__z-index;
 
 @dialog-slide__first__indent-left: 14.8rem;
 @dialog-slide__indent-left: 4.5rem;
+@dialog-slide__padding: 2.6rem;
 @dialog-slide__z-index: @dialog__z-index - 1;
 
-@dialog-header__padding-top: 2.6rem;
+@dialog-slide-header__padding-vertical: 2.1rem;
 
 //
 //  Utilities
@@ -38,28 +42,22 @@
     visibility: hidden;
     &._show {
         visibility: visible;
+        .dialog-inner-wrap {
+            transform: translate(0, 0);
+        }
     }
     .dialog-inner-wrap {
-        display: flex;
         background-color: @dialog__background-color;
-        flex-direction: column;
+        box-shadow: @dialog__box-shadow;
         opacity: 1;
-
-        max-height: initial;
-        max-width: initial;
+        overflow-y: auto;
     }
 }
 
 .abs-dialog-slide() {
     left: @dialog-slide__first__indent-left;
     z-index: @dialog-slide__z-index;
-    &._show {
-        .dialog-inner-wrap {
-            transform: translate(0, 0);
-        }
-    }
     .dialog-inner-wrap {
-        box-shadow: -1px 0 @component__shadow-size__base rgba(0, 0, 0, .5);
         height: 100%;
         position: static;
         transform: translate(100%, 0);
@@ -70,20 +68,14 @@
 
 .abs-dialog-modal() {
     left: 0;
-    overflow: auto;
     z-index: @dialog-modal__z-index;
-    &._show {
-        .dialog-inner-wrap {
-            transform: translate(50%, 10%);
-        }
-    }
     .dialog-inner-wrap {
-        box-shadow: @component__box-shadow__base;
         height: auto;
+        margin: @dialog-modal__indent-vertical (100% - @dialog-modal__width) / 2;
         position: absolute;
-        transform: translate(50%, -150%);
+        transform: translate(0, -150%);
         transition: transform .3s linear, visibility 1s linear;
-        width: 50%;
+        width: @dialog-modal__width;
     }
 }
 
@@ -102,6 +94,15 @@
 
 .dialog-slide {
     .abs-dialog-slide();
+    .dialog-header,
+    .dialog-content,
+    .dialog-footer {
+        padding: 0 @dialog-slide__padding @dialog-slide__padding;
+    }
+    .dialog-header {
+        padding-top: @dialog-slide-header__padding-vertical;
+        padding-bottom: @dialog-slide-header__padding-vertical;
+    }
     + .dialog-slide {
         margin-left: @dialog-slide__indent-left;
         + .dialog-slide {
@@ -115,34 +116,14 @@
 
 .dialog-modal {
     .abs-dialog-modal();
-}
-
-.dialog-header,
-.dialog-content,
-.dialog-footer {
-    padding: 2rem 3rem;
-}
-
-.dialog-header,
-.dialog-footer {
-    &:extend(.abs-clearfix all);
-    flex-grow: 0;
-    flex-shrink: 0;
-}
-
-.dialog-header {
-    padding-top: @dialog-header__padding-top;
-    padding-bottom: 3rem; // ToDo UI: Change to structure variables
-}
-
-.dialog-footer {
-    margin-bottom: 0;
-    margin-top: auto;
-}
-
-.dialog-content {
-    overflow: auto;
-    margin-bottom: 3rem;
+    .dialog-header,
+    .dialog-content,
+    .dialog-footer {
+        padding: 0 @dialog-modal__padding @dialog-modal__padding;
+    }
+    .dialog-header {
+        padding-top: @dialog-modal__padding;
+    }
 }
 
 //
@@ -150,7 +131,6 @@
 //  ---------------------------------------------
 
 //  Mobile transform to dialog-slide
-
 @media (max-width: @screen__m) {
     .dialog-modal {
         &.dialog-slide {

@@ -17,19 +17,25 @@
                 data-action="close-mypopup"
                 data-role="closeBtn"
                 type="button">
-                <span>Close</span>
+                <span>$t('Close')</span>
             </button>
         </header>
         <div
             class="dialog-content"
-            data-role="content"></div>
-        <footer class="dialog-footer">
-            <% _.each(data.buttons, function(button) { %>
-            <button
-                class="<%= button.class %>"
-                type="button"
-                data-role="action"><%= button.text %></button>
-            <% }); %>
-        </footer>
+            data-role="content">
+            <div class="page-main-actions">
+                <div class="page-actions">
+                    <div class="page-actions-buttons">
+                        <% _.each(data.buttons, function(button) { %>
+                        <button
+                            class="<%= button.class %>"
+                            type="button"
+                            data-role="action"><%= button.text %>
+                        </button>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>

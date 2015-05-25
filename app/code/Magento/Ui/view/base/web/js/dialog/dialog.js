@@ -6,7 +6,7 @@ define([
     "jquery",
     "underscore",
     "mage/template",
-    "text!ui/template/dialog/dialog.html",
+    "text!ui/template/dialog/dialog-modal.html",
     "jquery/ui",
     "mage/translate"
 ], function($, _,template, dialogTemplate){

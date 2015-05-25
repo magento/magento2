@@ -12,10 +12,14 @@
 //  ---------------------------------------------
 
 @dialog-title__color: @text__color;
-@dialog-title__font-size: 2.1rem;
+
+@dialog-modal-title__font-size: 2.4rem;
+
+@dialog-slide-title__font-size: 2.1rem;
 
 @dialog-action-close__color: @color-brownie-vanilla;
 @dialog-action-close__font-size: 2rem;
+@dialog-action-close__hover__color: darken(@color-brownie-vanilla, 10%);
 
 //
 
@@ -24,15 +28,40 @@
     .action-close {
         color: @dialog-action-close__color;
         position: absolute;
-        right: 3rem;
-        top: 3rem;
+        right: 0;
+        top: 0;
+        &:hover {
+            &:before {
+                color: @dialog-action-close__hover__color;
+            }
+        }
         &:before {
             font-size: @dialog-action-close__font-size;
         }
     }
 }
 
+.dialog-modal {
+    .dialog-title {
+        font-size: @dialog-modal-title__font-size;
+        margin-right: @dialog-modal-title__font-size + @dialog-modal__padding + 1rem;
+    }
+    .action-close {
+        padding: @dialog-modal__padding;
+    }
+}
+
+.dialog-slide {
+    .dialog-title {
+        font-size: @dialog-slide-title__font-size;
+        margin-bottom: 0;
+        margin-right: @dialog-slide-title__font-size + @dialog-slide__padding + 1rem;
+    }
+    .action-close {
+        padding: @dialog-slide-header__padding-vertical @dialog-slide__padding;
+    }
+}
+
 .dialog-title {
-    font-size: @dialog-title__font-size;
     font-weight: @font-weight__regular;
 }

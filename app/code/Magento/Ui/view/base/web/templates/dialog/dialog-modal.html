@@ -1,0 +1,35 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<section
+    class="dialog-<%= data.type %> <% if(data.responsive){ %><%= data.responsiveClass %><% } %> <%= data.dialogClass %>"
+    data-role="dialog">
+    <div class="dialog-inner-wrap">
+        <header class="dialog-header">
+            <h1 class="dialog-title"
+                data-role="title"><%= data.title %></h1>
+            <button
+                class="action-close"
+                data-action="close-mypopup"
+                data-role="closeBtn"
+                type="button">
+                <span>$t('Close')</span>
+            </button>
+        </header>
+        <div
+            class="dialog-content"
+            data-role="content"></div>
+        <footer class="dialog-footer">
+            <% _.each(data.buttons, function(button) { %>
+            <button
+                class="<%= button.class %>"
+                type="button"
+                data-role="action"><%= button.text %></button>
+            <% }); %>
+        </footer>
+    </div>
+</section>
