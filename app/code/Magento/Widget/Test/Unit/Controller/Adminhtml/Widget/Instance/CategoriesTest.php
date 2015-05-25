@@ -97,7 +97,10 @@ class CategoriesTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->chooser->expects($this->once())->method('toHtml')->willReturn($content);
 
-        $this->layout->expects($this->once())->method('createBlock')->with($this->blockClass)->willReturn($this->chooser);
+        $this->layout->expects($this->once())
+            ->method('createBlock')
+            ->with($this->blockClass)
+            ->willReturn($this->chooser);
 
         $this->resultRaw->expects($this->once())->method('setContents')->with($content)->willReturnSelf();
 
