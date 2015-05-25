@@ -154,7 +154,6 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         }
         $item['is_anchor'] = (int)$node->getIsAnchor();
         $item['url_key'] = $node->getData('url_key');
-        $item['level'] = $node->getLevel();
         return $item;
     }
 
