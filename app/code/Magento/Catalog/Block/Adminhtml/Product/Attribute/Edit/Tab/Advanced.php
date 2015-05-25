@@ -194,6 +194,9 @@ class Advanced extends Generic
         );
 
         $this->_eventManager->dispatch('product_attribute_form_build', ['form' => $form]);
+        if ($attributeObject->getId() && !$attributeObject->getIsUserDefined()) {
+            $form->getElement('is_global')->setDisabled(1);
+        }
         $this->setForm($form);
         return $this;
     }
