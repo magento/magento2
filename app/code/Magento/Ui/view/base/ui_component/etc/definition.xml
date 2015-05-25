@@ -190,13 +190,16 @@
     </text>
     <number class="Magento\Ui\Component\Form\Element\DataType\Number"/>
     <price class="Magento\Ui\Component\Form\Element\DataType\Price"/>
-    <media class="Magento\Ui\Component\Form\Element\DataType\Media">
+    <image class="Magento\Ui\Component\Form\Element\DataType\Media">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="extends" xsi:type="string">input</item>
+                <item name="config" xsi:type="array">
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/media</item>
+                </item>
             </item>
         </argument>
-    </media>
+    </image>
     <date class="Magento\Ui\Component\Form\Element\DataType\Date">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
