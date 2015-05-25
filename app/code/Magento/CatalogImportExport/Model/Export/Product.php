@@ -41,6 +41,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     const COL_TYPE = '_type';
 
+    const COL_PRODUCT_WEBSITES = '_product_websites';
+
     const COL_CATEGORY = '_category';
 
     const COL_ROOT_CATEGORY = '_root_category';
@@ -48,6 +50,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     const COL_SKU = 'sku';
 
     const COL_VISIBILITY = 'visibility';
+
+    const COL_MEDIA_IMAGE = '_media_image';
 
     /**
      * Pairs of attribute set ID-to-name.
@@ -213,6 +217,45 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $rowCustomizer;
 
+
+    /**
+     * Map between import file fields and system fields/attributes
+     *
+     * @var array
+     */
+    protected $_fields_map = [
+        'image' => 'base_image',
+        'image_label' => "base_image_label",
+        'image' => 'base_image',
+        'image_label' => 'base_image_label',
+        'thumbnail' => 'thumbnail_image',
+        'thumbnail_label' => 'thumbnail_image_label',
+        self::COL_MEDIA_IMAGE => 'additional_images',
+        '_media_image_label' => 'additional_image_labels',
+        Product::COL_STORE => 'store_view_code',
+        Product::COL_ATTR_SET => 'attribute_set_code',
+        Product::COL_TYPE => 'product_type',
+        Product::COL_PRODUCT_WEBSITES => 'product_websites',
+        'status' => 'product_online',
+        'news_from_date' => 'new_from_date',
+        'news_to_date' => 'new_to_date',
+        'options_container' => 'display_product_options_in',
+        'minimal_price' => 'map_price',
+        'msrp' => 'msrp_price',
+        'msrp_enabled' => 'map_enabled',
+        'special_from_date' => 'special_price_from_date',
+        'special_to_date' => 'special_price_to_date',
+        'min_qty' => 'out_of_stock_qty',
+        'backorders' => 'allow_backorders',
+        'min_sale_qty' => 'min_cart_qty',
+        'max_sale_qty' => 'max_cart_qty',
+        'notify_stock_qty' => 'notify_on_stock_below',
+        '_related_sku' => 'related_skus',
+        '_crosssell_sku' => 'crosssell_skus',
+        '_upsell_sku' => 'upsell_skus',
+        'meta_keyword' => 'meta_keywords',
+    ];
+
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
@@ -368,75 +411,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->_websiteIdToCode[$website->getId()] = $website->getCode();
         }
         return $this;
-    }
-
-    /**
-     * Prepare products tier prices
-     *
-     * @param  int[] $productIds
-     * @return array
-     */
-    protected function prepareTierPrices(array $productIds)
-    {
-        if (empty($productIds)) {
-            return [];
-        }
-        $select = $this->_connection->select()->from(
-            $this->_resourceModel->getTableName('catalog_product_entity_tier_price')
-        )->where(
-            'entity_id IN(?)',
-            $productIds
-        );
-
-        $rowTierPrices = [];
-        $stmt = $this->_connection->query($select);
-        while ($tierRow = $stmt->fetch()) {
-            $rowTierPrices[$tierRow['entity_id']][] = [
-                '_tier_price_customer_group' => $tierRow['all_groups']
-                    ? self::VALUE_ALL
-                    : $tierRow['customer_group_id'],
-                '_tier_price_website' => 0 ==
-                $tierRow['website_id'] ? self::VALUE_ALL : $this->_websiteIdToCode[$tierRow['website_id']],
-                '_tier_price_qty' => $tierRow['qty'],
-                '_tier_price_price' => $tierRow['value'],
-            ];
-        }
-
-        return $rowTierPrices;
-    }
-
-    /**
-     * Prepare products group prices
-     *
-     * @param  int[] $productIds
-     * @return array
-     */
-    protected function prepareGroupPrices(array $productIds)
-    {
-        if (empty($productIds)) {
-            return [];
-        }
-        $select = $this->_connection->select()->from(
-            $this->_resourceModel->getTableName('catalog_product_entity_group_price')
-        )->where(
-            'entity_id IN(?)',
-            $productIds
-        );
-
-        $rowGroupPrices = [];
-        $statement = $this->_connection->query($select);
-        while ($groupRow = $statement->fetch()) {
-            $rowGroupPrices[$groupRow['entity_id']][] = [
-                '_group_price_customer_group' => $groupRow['all_groups']
-                    ? self::VALUE_ALL
-                    : $groupRow['customer_group_id'],
-                '_group_price_website' => 0 ==
-                $groupRow['website_id'] ? self::VALUE_ALL : $this->_websiteIdToCode[$groupRow['website_id']],
-                '_group_price_price' => $groupRow['value'],
-            ];
-        }
-
-        return $rowGroupPrices;
     }
 
     /**
@@ -599,14 +573,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (!isset($rowCategories[$productId])) {
             return false;
         }
-
-        $categoryId = array_shift($rowCategories[$productId]);
-        if ($categoryId) {
-            $dataRow[self::COL_ROOT_CATEGORY] = $this->_rootCategories[$categoryId];
+        $categories = array();
+        foreach ($rowCategories[$productId] as $categoryId) {
             if (isset($this->_categories[$categoryId])) {
-                $dataRow[self::COL_CATEGORY] = $this->_categories[$categoryId];
+                $categories[] = $this->_rootCategories[$categoryId] . '/' . $this->_categories[$categoryId];
             }
         }
+        $dataRow[self::COL_CATEGORY] = implode('|', $categories);
+        unset($rowCategories[$productId]);
 
         return true;
     }
@@ -616,7 +590,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     public function _getHeaderColumns()
     {
-        return $this->_headerColumns;
+        return $this->_customHeadersMapping($this->_headerColumns);
     }
 
     /**
@@ -650,7 +624,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     self::COL_ATTR_SET,
                     self::COL_TYPE,
                     self::COL_CATEGORY,
-                    self::COL_ROOT_CATEGORY,
+                    //self::COL_ROOT_CATEGORY,
                     '_product_websites',
                 ],
                 $this->_getExportAttrCodes(),
@@ -767,7 +741,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $writer->setHeaderCols($this->_getHeaderColumns());
             }
             foreach ($exportData as $dataRow) {
-                $writer->writeRow($dataRow);
+                $writer->writeRow($this->_customFieldsMapping($dataRow));
             }
             if ($entityCollection->getCurPage() >= $entityCollection->getLastPageNumber()) {
                 break;
@@ -775,6 +749,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         }
         return $writer->getContents();
     }
+
+   // protected function combineComplexData ()
 
     /**
      * Get export data for collection
@@ -906,8 +882,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $data['rowWebsites'] = $rowWebsites;
         $data['rowCategories'] = $rowCategories;
         $data['mediaGalery'] = $this->getMediaGallery($productIds);
-        $data['rowTierPrices'] = $this->prepareTierPrices($productIds);
-        $data['rowGroupPrices'] = $this->prepareGroupPrices($productIds);
         $data['linksRows'] = $this->prepareLinks($productIds);
 
         $data['customOptionsData'] = $this->getCustomOptionsData($productIds);
@@ -982,24 +956,30 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         unset($dataRow['product_id']);
         unset($dataRow['store_id']);
-
-        while (true) {
+$tmp = 0;
+        while (true && ($tmp <= 1000)) {
+            $tmp++;
             if (Store::DEFAULT_STORE_ID == $storeId) {
                 unset($dataRow[self::COL_STORE]);
                 $this->updateDataWithCategoryColumns($dataRow, $multirawData['rowCategories'], $productId);
                 if (!empty($multirawData['rowWebsites'][$productId])) {
-                    $dataRow['_product_websites'] = $this->_websiteIdToCode[
-                        array_shift($multirawData['rowWebsites'][$productId])
-                    ];
-                }
-                if (!empty($multirawData['rowTierPrices'][$productId])) {
-                    $dataRow = array_merge($dataRow, array_shift($multirawData['rowTierPrices'][$productId]));
-                }
-                if (!empty($multirawData['rowGroupPrices'][$productId])) {
-                    $dataRow = array_merge($dataRow, array_shift($multirawData['rowGroupPrices'][$productId]));
+                    $websiteCodes = array();
+                    foreach ($multirawData['rowWebsites'][$productId] as $productWebsite) {
+                        $websiteCodes[] = $this->_websiteIdToCode[$productWebsite];
+                    }
+                    $dataRow['_product_websites'] = implode(',', $websiteCodes);
+                    $multirawData['rowWebsites'][$productId] = array();
                 }
                 if (!empty($multirawData['mediaGalery'][$productId])) {
-                    $dataRow = array_merge($dataRow, array_shift($multirawData['mediaGalery'][$productId]));
+                    $additionalImages = array();
+                    $additionalImageLabels = array();
+                    foreach ($multirawData['mediaGalery'][$productId] as $mediaItem) {
+                        $additionalImages[] = $mediaItem['_media_image'];
+                        $additionalImageLabels[] = $mediaItem['_media_label'];
+                    }
+                    $dataRow['additional_images'] = implode(',', $additionalImages);
+                    $dataRow['additional_image_labels'] = implode(',', $additionalImageLabels);
+                    $multirawData['mediaGalery'][$productId] = array();
                 }
                 foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {
                     if (!empty($multirawData['linksRows'][$productId][$linkId])) {
@@ -1046,8 +1026,46 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $result[] = $dataRow;
             $dataRow = [];
         }
+        if ($tmp>999) {
+            echo 'infinite loop';die();
+        }
 
         return $result;
+    }
+
+    /**
+     * Custom fields mapping for changed purposes of fields and field names
+     *
+     * @param array $rowData
+     *
+     * @return array
+     */
+    private function _customFieldsMapping($rowData)
+    {
+        foreach ($this->_fields_map as $system_field_name => $file_field_name) {
+            if (isset($rowData[$system_field_name])) {
+                $rowData[$file_field_name] = $rowData[$system_field_name];
+                unset($rowData[$system_field_name]);
+            }
+        }
+        return $rowData;
+    }
+
+    /**
+     * Custom headers mapping for changed field names
+     *
+     * @param array $rowData
+     *
+     * @return array
+     */
+    private function _customHeadersMapping($rowData)
+    {
+        foreach ($rowData as $key => $field_name) {
+            if (isset($this->_fields_map[$field_name])) {
+                $rowData[$key] = $this->_fields_map[$field_name];
+            }
+        }
+        return $rowData;
     }
 
     /**
