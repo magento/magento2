@@ -52,16 +52,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     }
 
     /**
-     * Send the response, including all headers, rendering exceptions if so requested.
-     *
-     * @return void
-     */
-    public function sendResponse()
-    {
-        parent::sendResponse();
-    }
-
-    /**
      * Send Vary cookie
      *
      * @return void
