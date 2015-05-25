@@ -142,11 +142,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             $category->setData('use_post_data_config', $this->getRequest()->getPost('use_config'));
 
             try {
+                $categoryResource = $category->getResource();
+                if ($category->hasCustomDesignTo()) {
+                    $categoryResource->getAttribute('custom_design_from')->setMaxValue($category->getCustomDesignTo());
+                }
                 $validate = $category->validate();
                 if ($validate !== true) {
                     foreach ($validate as $code => $error) {
                         if ($error === true) {
-                            $attribute = $category->getResource()->getAttribute($code)->getFrontend()->getLabel();
+                            $attribute = $categoryResource->getAttribute($code)->getFrontend()->getLabel();
                             throw new \Magento\Framework\Exception\LocalizedException(
                                 __('Attribute "%1" is required.', $attribute)
                             );

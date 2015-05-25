@@ -48,4 +48,12 @@ class GenerateFixturesCommandTest extends \PHPUnit_Framework_TestCase
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
     }
+
+    public function testSkipReindexOption()
+    {
+        $this->fixtureModel->expects($this->never())->method('reindex');
+
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['profile' => 'path_to_profile.xml', '--skip-reindex' => true]);
+    }
 }

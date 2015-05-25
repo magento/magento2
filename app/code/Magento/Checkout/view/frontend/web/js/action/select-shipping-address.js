@@ -58,7 +58,6 @@ define(
                     quote.setBillingAddress(null);
                     quote.setFormattedBillingAddress(null);
                     quote.setFormattedShippingAddress(null);
-                    quote.setSubtotal(null);
                     if (typeof actionCallback == 'function') {
                         actionCallback(false);
                     }
