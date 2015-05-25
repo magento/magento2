@@ -116,10 +116,11 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     public function resolveCustomerNames()
     {
         $select = $this->customerResource->getReadConnection()->select();
-        $customerName = $select->getAdapter()->getConcatSql(['cust_fname.value', 'cust_lname.value'], ' ');
+        $customerName = $select->getAdapter()->getConcatSql(['firstname', 'lastname'], ' ');
 
         $select->from(
-            ['customer' => $this->customerResource->getTable('customer_entity')]
+            ['customer' => $this->customerResource->getTable('customer_entity')],
+            ['email']
         )->columns(
             ['customer_name' => $customerName]
         )->where(
@@ -129,41 +130,11 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
                 'customer_id'
             )
         );
-        $customersData = $select->getAdapter()->fetchAll($this->getCustomerNames($select));
+        $customersData = $select->getAdapter()->fetchAll($select);
 
         foreach ($this->getItems() as $item) {
             $item->setData(array_merge($item->getData(), current($customersData)));
             next($customersData);
         }
-    }
-
-    /**
-     * @param \Magento\Framework\DB\Select $select
-     * @return \Magento\Framework\DB\Select
-     */
-    protected function getCustomerNames($select)
-    {
-        $attrFirstname = $this->customerResource->getAttribute('firstname');
-        $attrFirstnameId = (int)$attrFirstname->getAttributeId();
-        $attrFirstnameTableName = $attrFirstname->getBackend()->getTable();
-        $attrLastname = $this->customerResource->getAttribute('lastname');
-        $attrLastnameId = (int)$attrLastname->getAttributeId();
-        $attrLastnameTableName = $attrLastname->getBackend()->getTable();
-        $select->joinInner(
-            ['cust_fname' => $attrFirstnameTableName],
-            'customer.entity_id = cust_fname.entity_id',
-            ['firstname' => 'cust_fname.value']
-        )->joinInner(
-            ['cust_lname' => $attrLastnameTableName],
-            'customer.entity_id = cust_lname.entity_id',
-            ['lastname' => 'cust_lname.value']
-        )->where(
-            'cust_fname.attribute_id = ?',
-            (int)$attrFirstnameId
-        )->where(
-            'cust_lname.attribute_id = ?',
-            (int)$attrLastnameId
-        );
-        return $select;
     }
 }
