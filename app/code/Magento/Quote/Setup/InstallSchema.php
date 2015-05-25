@@ -147,13 +147,13 @@ class InstallSchema implements InstallSchemaInterface
             'customer_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true],
             'Customer Id'
         )->addColumn(
             'customer_tax_class_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['unsigned' => true, 'default' => '0'],
+            ['unsigned' => true],
             'Customer Tax Class Id'
         )->addColumn(
             'customer_group_id',

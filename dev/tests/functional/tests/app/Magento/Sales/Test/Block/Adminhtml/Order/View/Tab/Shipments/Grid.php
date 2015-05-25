@@ -24,7 +24,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
-    protected $shipmentId = 'td[data-column="real_shipment_id"]';
+    protected $shipmentId = 'tbody td[data-column="real_shipment_id"]';
 
     /**
      * Filters array mapping

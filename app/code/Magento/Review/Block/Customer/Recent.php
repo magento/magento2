@@ -53,7 +53,6 @@ class Recent extends \Magento\Framework\View\Element\Template
         $this->_collectionFactory = $collectionFactory;
         parent::__construct($context, $data);
         $this->currentCustomer = $currentCustomer;
-        $this->_isScopePrivate = true;
     }
 
     /**

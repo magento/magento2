@@ -7,6 +7,7 @@ namespace Magento\Quote\Api;
 
 /**
  * Billing address management interface for guest carts.
+ * @api
  */
 interface GuestBillingAddressManagementInterface
 {

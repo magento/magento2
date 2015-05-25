@@ -9,6 +9,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
  * Cart Management interface for guest carts.
+ * @api
  */
 interface GuestCartManagementInterface
 {
