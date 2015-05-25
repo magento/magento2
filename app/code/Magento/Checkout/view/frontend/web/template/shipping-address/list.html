@@ -38,18 +38,13 @@
     }
 </style>
 <!-- ko if: (visible)-->
-<input type="hidden" data-bind="value: selectedShippingAddress().customerAddressId" name="shipping_address_id" id="shipping:address-select" />
+<input type="hidden" data-bind="value: selectedAddress().customerAddressId" name="shipping_address_id" id="shipping:address-select" />
 <div class="field addresses">
     <div class="control">
-        <div class="shipping-address-items" data-bind="foreach: {data: addresses(), as: 'address'}">
-            <div class="shipping-address-item" data-bind="css: $parents[0].selectedShippingAddress().customerAddressId ==  address.customerAddressId ? 'selected-item' : 'not-selected-item'">
-                <!-- ko text: address.firstname --><!-- /ko --> <!-- ko text: address.lastname --><!-- /ko --><br/>
-                <!-- ko text:  address.street --><!-- /ko --><br/>
-                <!-- ko text:  address.city --><!-- /ko -->, <!-- ko text:  address.region --><!-- /ko --> <!-- ko text:  address.postcode --><!-- /ko --><br/>
-                <!-- ko text:  address.countryName --><!-- /ko --><br/>
-                <!-- ko text:  address.telephone --><!-- /ko --><br/>
-                <input type="button" class="select-item-button" data-bind="click: $parents[0].selectAddress, value: $t('Ship Here')" />
-            </div>
+        <div class="shipping-address-items">
+            <!-- ko foreach: { data: elems, as: 'element' } -->
+            <!-- ko template: element.getTemplate() --><!-- /ko -->
+            <!-- /ko -->
         </div>
     </div>
 </div>
