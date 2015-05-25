@@ -70,10 +70,8 @@ class CreateCmsPageEntityTest extends Injectable
         // Steps
         $this->cmsIndex->open();
         $this->cmsIndex->getPageActionsBlock()->addNew();
-        //TODO: remove condition after resolve issue with static js files publication
-        if ((int)$this->getVariationName() == 1) {
-            $this->cmsPageNew->open();
-        }
+        //TODO: remove condition after resolve issue with static js files publication (MAGETWO-37898)
+        $this->cmsPageNew->open();
         $this->cmsPageNew->getPageForm()->fill($cms);
         $this->cmsPageNew->getPageMainActions()->save();
     }
