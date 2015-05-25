@@ -12,8 +12,10 @@ define(
         "use strict";
         return Component.extend({
             defaults: {
-                displayArea: 'summary'
-            }
+                displayArea: 'summary',
+                template: 'Magento_Checkout/review/summary'
+            },
+            title: 'Order Summary'
         });
     }
 );

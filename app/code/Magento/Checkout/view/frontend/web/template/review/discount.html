@@ -6,7 +6,7 @@
 -->
 <!-- ko if: getPureValue() != 0 -->
 <tr class="totals">
-    <th data-bind="text: $t(fieldName) , attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
+    <th data-bind="text: $t(getTitle()) , attr: {'style':style, 'colspan': colspan}" class="mark" scope="row">
     </th>
     <td data-bind="text: getValue(), attr: {'style': style, 'data-th': $t(name) }" class="amount"></td>
 </tr>

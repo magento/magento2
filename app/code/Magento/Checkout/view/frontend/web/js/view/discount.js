@@ -18,19 +18,26 @@ define(
             },
         colspan: 3,
         style: '',
-        fieldName: 'Discount',
         totals: quote.getTotals(),
+        getTitle: function() {
+            var discountTotal = quote.getTotalByCode('discount');
+            if (discountTotal) {
+                var title = discountTotal.getTitle();
+                return title.replace("%1", this.totals().coupon_code);
+            }
+            return null;
+        },
         getPureValue: function() {
             var price = 0;
-            if (this.totals()) {
-                price = this.totals().discount_amount;
+            if (this.totals() && this.totals().discount_amount) {
+                price = parseFloat(this.totals().discount_amount);
             }
             return price;
         },
         getValue: function() {
             var price = 0;
-            if (this.totals()) {
-                price = this.totals().discount_amount;
+            if (this.totals() && this.totals().discount_amount) {
+                price = parseFloat(this.totals().discount_amount);
             }
             return priceUtils.formatPrice(price, quote.getPriceFormat());
         }

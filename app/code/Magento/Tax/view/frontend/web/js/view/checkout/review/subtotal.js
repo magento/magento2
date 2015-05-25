@@ -19,10 +19,10 @@ define(
             },
             getColspan: 3,
             style: "",
-            excludingTaxMessage: 'Subtotal (Excl. Tax)',
-            includingTaxMessage: 'Subtotal (Incl. Tax)',
+            excludingTaxMessage: 'Cart Subtotal (Excl. Tax)',
+            includingTaxMessage: 'Cart Subtotal (Incl. Tax)',
             getTitle: function() {
-                return "Subtotal"
+                return "Cart Subtotal"
             },
             totals: quote.getTotals(),
             getValue: function () {

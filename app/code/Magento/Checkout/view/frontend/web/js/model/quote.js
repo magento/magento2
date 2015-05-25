@@ -42,6 +42,9 @@ define(
                 return totals
             },
             getTotalByCode: function(code) {
+                if (!totals()) {
+                    return null;
+                }
                 for(var i in totals().calculated_totals) {
                     var total = totals().calculated_totals[i];
                     if (total.code == code) {
