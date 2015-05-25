@@ -29,8 +29,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $installer = $setup;
         $connection = $installer->getConnection();
         if (version_compare($context->getVersion(), '2.0.1') < 0) {
-            $connection->dropTable('catalogsearch_fulltext');
-            $table = $connection->newTable('catalogsearch_fulltext_index_default')
+            $connection->dropTable($installer->getTable('catalogsearch_fulltext'));
+            $table = $connection->newTable($installer->getTable('catalogsearch_fulltext_index_default'))
                 ->addColumn(
                     'FTS_DOC_ID',
                     Table::TYPE_BIGINT,
