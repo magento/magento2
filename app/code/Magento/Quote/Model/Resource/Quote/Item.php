@@ -39,4 +39,18 @@ class Item extends AbstractDb
         }
         return $result;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function prepareDataForUpdate($object)
+    {
+        $data = parent::prepareDataForUpdate($object);
+
+        if (isset($data['updated_at'])) {
+            unset($data['updated_at']);
+        }
+
+        return $data;
+    }
 }
