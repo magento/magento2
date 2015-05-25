@@ -19,7 +19,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
     protected function _validateCustomer($response)
     {
         $customer = null;
-        $errors = null;
+        $errors = [];
 
         try {
             /** @var CustomerInterface $customer */
@@ -48,7 +48,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
                 $data,
                 '\Magento\Customer\Api\Data\CustomerInterface'
             );
-            $errors = $this->customerAccountManagement->validate($customer);
+            $errors = $this->customerAccountManagement->validate($customer)->getMessages();
         } catch (\Magento\Framework\Validator\Exception $exception) {
             /* @var $error Error */
             foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
@@ -56,9 +56,9 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
             }
         }
 
-        if (!$errors->isValid()) {
+        if ($errors) {
             $messages = [];
-            foreach ($errors->getMessages() as $error) {
+            foreach ($errors as $error) {
                 $messages[] = $error;
             }
             $response->setMessages($messages);

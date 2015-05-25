@@ -164,11 +164,267 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             true
         );
         $validationResult->expects($this->once())
-            ->method('isValid')
-            ->willReturn(false);
+            ->method('getMessages')
+            ->willReturn(['Error message']);
+
+        $this->customerAccountManagement->expects($this->once())
+            ->method('validate')
+            ->willReturn($validationResult);
+
+        $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
+        $this->resultJson->expects($this->once())
+            ->method('setData');
+        $this->resultJsonFactory = $this->getMock(
+            'Magento\Framework\Controller\Result\JsonFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->resultJsonFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
+        $this->getController()->execute();
+    }
+
+    public function testExecuteWithoutAddresses()
+    {
+        $this->customer = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\CustomerInterface',
+            [],
+            '',
+            false,
+            true,
+            true
+        );
+        $this->customer->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn(2);
+
+        $this->customerDataFactory = $this->getMock(
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->customerDataFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->customer);
+
+        $this->request = $this->getMockForAbstractClass(
+            'Magento\Framework\App\RequestInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getPost']
+        );
+        $this->request->expects($this->once())
+            ->method('getPost')
+            ->willReturn(null);
+        $this->response = $this->getMockForAbstractClass(
+            'Magento\Framework\App\ResponseInterface',
+            [],
+            '',
+            false
+        );
+        $this->form = $this->getMock(
+            'Magento\Customer\Model\Metadata\Form',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->form->expects($this->once())
+            ->method('setInvisibleIgnored');
+        $this->form->expects($this->atLeastOnce())
+            ->method('extractData')
+            ->willReturn([]);
+
+        $error = $this->getMock('Magento\Framework\Message\Error', [], [], '', false);
+        $this->form->expects($this->never())
+            ->method('validateData')
+            ->willReturn([$error]);
+
+        $this->formFactory = $this->getMock('Magento\Customer\Model\Metadata\FormFactory', ['create'], [], '', false);
+        $this->formFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->form);
+
+        $this->extensibleDataObjectConverter = $this->getMock(
+            'Magento\Framework\Api\ExtensibleDataObjectConverter',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->extensibleDataObjectConverter->expects($this->once())
+            ->method('toFlatArray')
+            ->willReturn([]);
+
+        $this->dataObjectHelper = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $this->dataObjectHelper
+            ->expects($this->once())
+            ->method('populateWithArray');
+
+        $this->customerAccountManagement = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\AccountManagementInterface',
+            [],
+            '',
+            false,
+            true,
+            true
+        );
+
+        $validationResult = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\ValidationResultsInterface',
+            [],
+            '',
+            false,
+            true,
+            true
+        );
         $validationResult->expects($this->once())
             ->method('getMessages')
             ->willReturn(['Error message']);
+
+        $this->customerAccountManagement->expects($this->once())
+            ->method('validate')
+            ->willReturn($validationResult);
+
+        $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
+        $this->resultJson->expects($this->once())
+            ->method('setData');
+        $this->resultJsonFactory = $this->getMock(
+            'Magento\Framework\Controller\Result\JsonFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->resultJsonFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+
+        $this->getController()->execute();
+    }
+
+    public function testExecuteWithException()
+    {
+        $this->customer = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\CustomerInterface',
+            [],
+            '',
+            false,
+            true,
+            true
+        );
+        $this->customer->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn(2);
+
+        $this->customerDataFactory = $this->getMock(
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->customerDataFactory
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->customer);
+
+        $this->request = $this->getMockForAbstractClass(
+            'Magento\Framework\App\RequestInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getPost']
+        );
+        $this->request->expects($this->once())
+            ->method('getPost')
+            ->willReturn(null);
+        $this->response = $this->getMockForAbstractClass(
+            'Magento\Framework\App\ResponseInterface',
+            [],
+            '',
+            false
+        );
+        $this->form = $this->getMock(
+            'Magento\Customer\Model\Metadata\Form',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->form->expects($this->once())
+            ->method('setInvisibleIgnored');
+        $this->form->expects($this->atLeastOnce())
+            ->method('extractData')
+            ->willReturn([]);
+
+        $this->form->expects($this->never())
+            ->method('validateData');
+
+        $this->formFactory = $this->getMock('Magento\Customer\Model\Metadata\FormFactory', ['create'], [], '', false);
+        $this->formFactory->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($this->form);
+
+        $this->extensibleDataObjectConverter = $this->getMock(
+            'Magento\Framework\Api\ExtensibleDataObjectConverter',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->extensibleDataObjectConverter->expects($this->once())
+            ->method('toFlatArray')
+            ->willReturn([]);
+
+        $this->dataObjectHelper = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $this->dataObjectHelper
+            ->expects($this->once())
+            ->method('populateWithArray');
+
+        $this->customerAccountManagement = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\AccountManagementInterface',
+            [],
+            '',
+            false,
+            true,
+            true
+        );
+
+        $validationResult = $this->getMockForAbstractClass(
+            'Magento\Customer\Api\Data\ValidationResultsInterface',
+            [],
+            '',
+            false,
+            true,
+            true
+        );
+        $error = $this->getMock('Magento\Framework\Message\Error', [], [], '', false);
+        $error->expects($this->once())
+            ->method('getText')
+            ->willReturn('Error text');
+
+        $exception = $this->getMock('Magento\Framework\Validator\Exception', [], [], '', false);
+        $exception->expects($this->once())
+            ->method('getMessages')
+            ->willReturn([$error]);
+        $validationResult->expects($this->once())
+            ->method('getMessages')
+            ->willThrowException($exception);
 
         $this->customerAccountManagement->expects($this->once())
             ->method('validate')
