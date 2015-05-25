@@ -58,7 +58,11 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 
     const KEY_QUOTE_CURRENCY_CODE = 'quote_currency_code';
 
+    const KEY_COUPON_CODE = 'coupon_code';
+
     const KEY_ITEMS = 'items';
+
+    const KEY_CALCULATED_TOTALS = 'calculated_totals';
 
     /**#@-*/
 
@@ -393,6 +397,21 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setQuoteCurrencyCode($quoteCurrencyCode);
 
     /**
+     * Get applied coupon code
+     *
+     * @return string|null
+     */
+    public function getCouponCode();
+
+    /**
+     * Set applied coupon code
+     *
+     * @param $couponCode
+     * @return $this
+     */
+    public function setCouponCode($couponCode);
+
+    /**
      * Get totals by items
      *
      * @return \Magento\Quote\Api\Data\TotalsItemInterface[]|null
@@ -406,6 +425,21 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @return $this
      */
     public function setItems(array $items = null);
+
+    /**
+     * Get dynamically calculated totals
+     *
+     * @return \Magento\Quote\Api\Data\CalculatedTotalsInterface[]
+     */
+    public function getCalculatedTotals();
+
+    /**
+     * Set dynamically calculated totals
+     *
+     * @param \Magento\Quote\Api\Data\CalculatedTotalsInterface[] $totals
+     * @return $this
+     */
+    public function setCalculatedTotals($totals = []);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

@@ -479,6 +479,22 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getCouponCode()
+    {
+        return $this->getData(self::KEY_COUPON_CODE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCouponCode($couponCode)
+    {
+        return $this->setData(self::KEY_COUPON_CODE, $couponCode);
+    }
+
+    /**
      * Get totals by items
      *
      * @return \Magento\Quote\Api\Data\TotalsItemInterface[]|null
@@ -497,6 +513,22 @@ class Totals extends AbstractExtensibleModel implements TotalsInterface
     public function setItems(array $items = null)
     {
         return $this->setData(self::KEY_ITEMS, $items);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCalculatedTotals()
+    {
+        return $this->getData(self::KEY_CALCULATED_TOTALS);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCalculatedTotals($totals = [])
+    {
+        return $this->setData(self::KEY_CALCULATED_TOTALS, $totals);
     }
 
     /**

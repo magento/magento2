@@ -32,7 +32,12 @@ define(
             getValue: function() {
                 var amount = 0;
                 if (this.totals()) {
-                    amount = this.totals().tax_amount;
+                    var taxTotal = quote.getTotalByCode('tax');
+                    if (taxTotal) {
+                        amount = taxTotal.value;
+                    } else {
+                        amount = this.totals().tax_amount
+                    }
                 }
                 return priceUtils.formatPrice(amount, quote.getPriceFormat());
             },

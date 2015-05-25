@@ -7,7 +7,7 @@ namespace Magento\Tax\Model\Quote;
 
 use Magento\Quote\Model\Cart\CartTotalRepository;
 
-class GrandTotalDetails
+class GrandTotalDetailsPlugin
 {
     /**
      * @var \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory
@@ -81,7 +81,7 @@ class GrandTotalDetails
 
     /**
      * @param CartTotalRepository $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @param int $cartId
      * @return \Magento\Quote\Model\Cart\Totals
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -123,7 +123,6 @@ class GrandTotalDetails
         $taxInfo->setTaxGrandtotalDetails($finalData);
         /** @var $result \Magento\Quote\Model\Cart\Totals */
         $result->setExtensionAttributes($taxInfo);
-        $result->setTaxAmount($taxes['value']);
         return $result;
     }
 }

@@ -24,6 +24,7 @@
     <preference for="Magento\Quote\Api\CartTotalRepositoryInterface" type="\Magento\Quote\Model\Cart\CartTotalRepository" />
     <preference for="Magento\Quote\Api\CartTotalManagementInterface" type="\Magento\Quote\Model\Cart\CartTotalManagement" />
     <preference for="Magento\Quote\Api\Data\TotalsInterface" type="\Magento\Quote\Model\Cart\Totals" />
+    <preference for="Magento\Quote\Api\Data\CalculatedTotalsInterface" type="\Magento\Quote\Model\Cart\CalculatedTotals" />
     <preference for="Magento\Quote\Api\Data\TotalsItemInterface" type="\Magento\Quote\Model\Cart\Totals\Item" />
     <preference for="Magento\Quote\Api\Data\CurrencyInterface" type="\Magento\Quote\Model\Cart\Currency" />
     <preference for="Magento\Quote\Api\GuestCartManagementInterface" type="Magento\Quote\Model\GuestCart\GuestCartManagement" />

@@ -41,6 +41,15 @@ define(
             getTotals: function() {
                 return totals
             },
+            getTotalByCode: function(code) {
+                for(var i in totals().calculated_totals) {
+                    var total = totals().calculated_totals[i];
+                    if (total.code == code) {
+                        return total;
+                    }
+                }
+                return null;
+            },
             setTotals: function(totalsData) {
                 if (_.isObject(totalsData.extension_attributes)) {
                     _.each(totalsData.extension_attributes, function(element, index) {
