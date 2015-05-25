@@ -168,9 +168,6 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $this->block->getProductsCount());
     }
 
-    /**
-     * @return \Magento\Catalog\Model\Resource\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
     protected function generalGetProductCollection()
     {
         $this->eventManager->expects($this->once())->method('dispatch')
