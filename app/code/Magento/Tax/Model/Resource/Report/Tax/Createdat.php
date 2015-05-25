@@ -65,7 +65,7 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
             }
 
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect, false, $salesAdapter);
-            // convert dates from UTC to current admin timezone
+            // convert dates to current admin timezone
             $periodExpr = $writeAdapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['e' => $this->getTable('sales_order')],
