@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
+use Magento\Framework\View\Element\UiComponent\ContextFactory;
 
 /**
  * Class UiComponentFactory
@@ -39,22 +40,30 @@ class UiComponentFactory extends Object
     protected $argumentInterpreter;
 
     /**
+     * @var ContextFactory
+     */
+    protected $contextFactory;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
      * @param ManagerInterface $componentManager
      * @param InterpreterInterface $argumentInterpreter
+     * @param ContextFactory $contextFactory
      * @param array $data
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ManagerInterface $componentManager,
         InterpreterInterface $argumentInterpreter,
+        ContextFactory $contextFactory,
         array $data = []
     ) {
         $this->objectManager = $objectManager;
         $this->componentManager = $componentManager;
         $this->argumentInterpreter = $argumentInterpreter;
+        $this->contextFactory = $contextFactory;
         parent::__construct($data);
     }
 
@@ -105,10 +114,7 @@ class UiComponentFactory extends Object
         $attributes = $componentData[ManagerInterface::COMPONENT_ATTRIBUTES_KEY];
         $className = $attributes['class'];
         unset($attributes['class']);
-        $arguments = [];
-        foreach ($componentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY] as $name => $argument) {
-            $arguments[$name] = $this->argumentInterpreter->evaluate($argument);
-        }
+        $arguments = $componentData[ManagerInterface::COMPONENT_ARGUMENTS_KEY];
 
         if (!isset($arguments['data'])) {
             $arguments['data'] = [];
@@ -140,7 +146,9 @@ class UiComponentFactory extends Object
             );
             $componentArguments = array_merge($componentArguments, $arguments);
             if (!isset($componentArguments['context'])) {
-                throw new LocalizedException(new \Magento\Framework\Phrase('Context, is required argument.'));
+                $componentArguments['context'] = $this->contextFactory->create([
+                    'namespace' => $identifier
+                ]);
             }
             $componentContext = $componentArguments['context'];
             $components = [];
@@ -160,7 +168,7 @@ class UiComponentFactory extends Object
 
             return $component;
         } else {
-            $defaultData = $this->componentManager->createRawComponentData($name);
+            $defaultData = $this->componentManager->createRawComponentData($name, true);
             list($className, $componentArguments) = $this->argumentsResolver($identifier, $defaultData);
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create($className, array_merge($componentArguments, $arguments));

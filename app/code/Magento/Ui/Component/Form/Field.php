@@ -68,7 +68,6 @@ class Field extends AbstractComponent
      */
     public function prepare()
     {
-        parent::prepare();
         $formElement = $this->getData('config/formElement');
         if (null === $formElement) {
             throw new LocalizedException(__(
@@ -79,33 +78,26 @@ class Field extends AbstractComponent
         $this->wrappedComponent = $this->uiComponentFactory->create(
             $this->getName(),
             $formElement,
-            array_merge(['context' => $this->getContext()], (array) $this->getData())
+            array_merge(['context' => $this->getContext()], (array)$this->getData())
         );
         $this->wrappedComponent->prepare();
-
-        // To prepare the component configuration
-        $wrappedComponentConfig = $this->getConfiguration($this->wrappedComponent);
+        // Merge JS configuration with wrapped component configuration
+        $wrappedComponentConfig = $this->getJsConfig($this->wrappedComponent);
         $jsConfig = array_replace_recursive(
             $wrappedComponentConfig,
-            $this->getConfiguration($this, $this->wrappedComponent->getComponentName())
+            $this->getJsConfig($this)
         );
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
-    }
+        $jsConfig['extends'] = $this->wrappedComponent->getComponentName();
+        $this->setData('js_config', $jsConfig);
 
-    /**
-     * Get JS config
-     *
-     * @return array
-     */
-    public function getJsConfig()
-    {
-        if (isset($this->wrappedComponent)) {
-            return array_replace_recursive(
-                (array) $this->wrappedComponent->getData('config'),
-                (array) $this->getData('config')
-            );
-        }
+        $this->setData(
+            'config',
+            array_replace_recursive(
+                (array)$this->wrappedComponent->getData('config'),
+                (array)$this->getData('config')
+            )
+        );
 
-        return (array) $this->getData('config');
+        parent::prepare();
     }
 }

@@ -14,18 +14,24 @@
     <xs:include schemaLocation="ui_components.xsd"/>
     <!-- Components list -->
     <xs:element type="formConfiguration" name="form"/>
+    <xs:element type="containerConfiguration" name="container"/>
     <xs:element type="listingConfiguration" name="listing"/>
     <!-- Custom configuration -->
     <xs:complexType name="containerConfiguration">
         <xs:complexContent>
             <xs:extension base="container">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element type="formConfiguration" name="form"/>
+                    <xs:element type="fieldsetConfiguration" name="fieldset"/>
                     <xs:element type="paging" name="paging"/>
                     <xs:element type="filtersConfiguration" name="filters"/>
                     <xs:element type="massaction" name="massaction"/>
                     <xs:element type="columnsConfiguration" name="columns"/>
                     <xs:element type="containerConfiguration" name="container"/>
-                    <xs:element name="field" type="field" />
+                    <xs:element type="field" name="field"/>
+                    <xs:element type="dataSource" name="dataSource"/>
+                    <xs:element type="argumentType" name="argument"/>
+                    <xs:element type="bookmark" name="bookmark"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -58,8 +64,9 @@
         <xs:complexContent>
             <xs:extension base="form">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element name="fieldset" type="fieldsetConfiguration" />
-                    <xs:element name="field" type="field" />
+                    <xs:element type="field" name="field" />
+                    <xs:element type="fieldsetConfiguration" name="fieldset"/>
+                    <xs:element type="containerConfiguration" name="container"/>
                     <xs:element type="dataSource" name="dataSource"/>
                 </xs:choice>
             </xs:extension>
