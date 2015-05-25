@@ -11,13 +11,14 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Object\IdentityInterface;
 
 /**
  * Catalog Inventory Stock Model for adminhtml area
  * @method \Magento\CatalogInventory\Api\Data\StockItemExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Item extends \Magento\CatalogInventory\Model\Stock\Item
+class Item extends \Magento\CatalogInventory\Model\Stock\Item implements IdentityInterface
 {
     /**
      * @var GroupManagementInterface
@@ -121,5 +122,18 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item
     public function getShowDefaultNotificationMessage()
     {
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentities()
+    {
+        $tags = [];
+        if ($this->getProductId()) {
+            $tags[] = 'catalog_product_' . $this->getProductId();
+        }
+
+        return $tags;
     }
 }
