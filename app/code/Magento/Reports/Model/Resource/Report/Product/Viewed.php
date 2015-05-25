@@ -110,7 +110,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
             $subSelect = null;
         }
         $this->_clearTableByDateRange($mainTable, $from, $to, $subSelect);
-        // convert dates from UTC to current admin timezone
+        // convert dates to current admin timezone
         $periodExpr = $adapter->getDatePartSql(
             $this->getStoreTZOffsetQuery(
                 ['source_table' => $this->getTable('report_event')],

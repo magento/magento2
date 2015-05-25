@@ -113,7 +113,7 @@ class Bestsellers extends AbstractReport
             }
 
             $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
-            // convert dates from UTC to current admin timezone
+            // convert dates to current admin timezone
             $periodExpr = $adapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $this->getTable('sales_order')],

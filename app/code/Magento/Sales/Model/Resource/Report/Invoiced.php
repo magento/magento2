@@ -72,7 +72,7 @@ class Invoiced extends AbstractReport
             }
 
             $this->_clearTableByDateRange($table, $from, $to, $subSelect);
-            // convert dates from UTC to current admin timezone
+            // convert dates to current admin timezone
             $periodExpr = $adapter->getDatePartSql(
                 $this->getStoreTZOffsetQuery(
                     ['source_table' => $sourceTable],
@@ -183,7 +183,7 @@ class Invoiced extends AbstractReport
         }
 
         $this->_clearTableByDateRange($table, $from, $to, $subSelect);
-        // convert dates from UTC to current admin timezone
+        // convert dates to current admin timezone
         $periodExpr = $adapter->getDatePartSql($this->getStoreTZOffsetQuery($sourceTable, 'created_at', $from, $to));
 
         $columns = [
