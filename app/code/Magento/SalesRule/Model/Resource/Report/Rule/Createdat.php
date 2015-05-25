@@ -49,9 +49,6 @@ class Createdat extends \Magento\Reports\Model\Resource\Report\AbstractReport
      */
     protected function _aggregateByOrder($aggregationField, $from, $to)
     {
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $table = $this->getMainTable();
         $sourceTable = $this->getTable('sales_order');
         $adapter = $this->_getWriteAdapter();

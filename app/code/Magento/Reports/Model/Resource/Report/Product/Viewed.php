@@ -98,10 +98,6 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         $mainTable = $this->getMainTable();
         $adapter = $this->_getWriteAdapter();
 
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect(
                 $this->getTable('report_event'),
