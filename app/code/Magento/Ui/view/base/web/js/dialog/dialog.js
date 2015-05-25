@@ -29,31 +29,17 @@ define([
             }],
             events: [],
             dialogClass: '',
-            dialogActiveClass: 'ui-dialog-active',
+            dialogActiveClass: '_show',
+            parentDialogClass: '_has-dialog',
             overlayClass: 'overlay_magento',
+            responsiveClass: 'dialog-slide',
+            responsive: false,
             dialogBlock: '[data-role="dialog"]',
             dialogCloseBtn: '[data-role="closeBtn"]',
             dialogContent: '[data-role="content"]',
             dialogAction: '[data-role="action"]',
             appendTo: 'body',
-            wrapperId: 'dialogs-wrapper',
-            position: {
-                modal: {
-                    width: '75%',
-                    position: 'fixed',
-                    top: '50px',
-                    left: '12.5%',
-                    right: '12.5%'
-                },
-                slideOut: {
-                    width: 'auto',
-                    position: 'fixed',
-                    top: '0',
-                    left: '148px',
-                    bottom: '0',
-                    right: '0'
-                }
-            }
+            wrapperId: 'dialogs-wrapper'
         },
 
         _create: function() {
@@ -61,7 +47,6 @@ define([
             this._createWrapper();
             this._renderDialog();
             this._createButtons();
-            this._style();
 
             this.dialog.find(this.options.dialogCloseBtn).on('click',  _.bind(this.closeDialog, this));
             this.element.on('openDialog', _.bind(this.openDialog, this));
@@ -72,7 +57,6 @@ define([
         },
         openDialog: function() {
             this.options.isOpen = true;
-            this._position();
             this._createOverlay();
             this.dialog.show();
             this.dialog.addClass(this.options.dialogActiveClass);
@@ -84,10 +68,12 @@ define([
 
             this.options.isOpen = false;
             this.dialog.one(this.options.transitionEvent, function() {
+                that.dialog.removeClass(that.options.dialogActiveClass);
                 that._close();
             });
             this.dialog.removeClass(this.options.dialogActiveClass);
             if ( !this.options.transitionEvent ) {
+                that.dialog.removeClass(this.options.dialogActiveClass);
                 that._close();
             }
 
@@ -114,7 +100,6 @@ define([
                 })).appendTo(this.dialogWrapper);
 
             this.element.show().appendTo(this._getElem(this.options.dialogContent));
-            this.dialog.hide();
         },
         _createButtons: function() {
             var that = this;
@@ -132,7 +117,8 @@ define([
 
             this.overlay = $('.' + this.options.overlayClass);
             if ( !this.overlay.length ) {
-                document.body.style.overflow = 'hidden';
+
+                $(this.options.appendTo).addClass(this.options.parentDialogClass);
                 this.overlay = $('<div></div>')
                     .addClass(this.options.overlayClass)
                     .appendTo( this.options.appendTo );
@@ -150,10 +136,12 @@ define([
         },
 
         _destroyOverlay: function() {
-            var dialogCount = this.dialogWrapper.find(this.options.dialogBlock).filter(':visible').length;
+            var dialogCount = this.dialogWrapper.find(this.options.dialogBlock).filter(this.option.dialogClass).length;
 
             if ( !dialogCount ) {
-                document.body.style.overflow = 'auto';
+
+                $(this.options.appendTo).removeClass(this.options.parentDialogClass);
+
                 this.overlay.remove();
                 this.overlay = null;
             } else {
@@ -161,18 +149,6 @@ define([
                 this.overlay.zIndex(zIndex - 1);
                 this.overlay.unbind().on('click', this.prevOverlayHandler);
             }
-        },
-        _style: function() {
-            this.dialog.css({
-                padding: '30px',
-                backgroundColor: '#fff',
-                zIndex: 1000
-            });
-        },
-        _position: function() {
-            var type = this.options.type;
-
-            this.dialog.css(this.options.position[type]);
         },
         whichTransitionEvent: function() {
             var transition,

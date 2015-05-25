@@ -4,15 +4,32 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="ui-dialog mypopup-window <%= data.dialogClass %>" data-role="dialog">
-    <div class="mypopup-window-header">
-        <h1 style="float: left;" data-role="title"><%= data.title %></h1>
-        <button style="float: right;" data-action="close-mypopup" data-role="closeBtn" type="button">Close</button>
+
+<section
+    class="dialog-<%= data.type %> <% if(data.responsive){ %><%= data.responsiveClass %><% } %> <%= data.dialogClass %>"
+    data-role="dialog">
+    <div class="dialog-inner-wrap">
+        <header class="dialog-header">
+            <h1 class="dialog-title"
+                data-role="title"><%= data.title %></h1>
+            <button
+                class="action-close"
+                data-action="close-mypopup"
+                data-role="closeBtn"
+                type="button">
+                <span>Close</span>
+            </button>
+        </header>
+        <div
+            class="dialog-content"
+            data-role="content"></div>
+        <footer class="dialog-footer">
+            <% _.each(data.buttons, function(button) { %>
+            <button
+                class="<%= button.class %>"
+                type="button"
+                data-role="action"><%= button.text %></button>
+            <% }); %>
+        </footer>
     </div>
-    <div class="mypopup-window-content" data-role="content"></div>
-    <div class="mypopup-window-footer">
-        <% _.each(data.buttons, function(button) { %>
-            <button type="button" class="<%= button.class %>" data-role="action"><%= button.text %></button>
-        <% }); %>
-    </div>
-</div>
+</section>

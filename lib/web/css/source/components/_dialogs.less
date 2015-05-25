@@ -1,0 +1,160 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Lib -> Components -> Dialogs
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@import '../../source/_variables.less';
+
+@dialog__background-color: @color-white;
+@dialog__box-shadow: @component__box-shadow__base;
+
+@dialog-modal__z-index: @dialog__z-index;
+
+@dialog-slide__first__indent-left: 14.8rem;
+@dialog-slide__indent-left: 4.5rem;
+@dialog-slide__z-index: @dialog__z-index - 1;
+
+@dialog-header__padding-top: 2.6rem;
+
+//
+//  Utilities
+//  ---------------------------------------------
+
+.abs-dialog() {
+    bottom: 0;
+    left: 0;
+    min-width: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+    &._show {
+        visibility: visible;
+    }
+    .dialog-inner-wrap {
+        display: flex;
+        background-color: @dialog__background-color;
+        flex-direction: column;
+        opacity: 1;
+
+        max-height: initial;
+        max-width: initial;
+    }
+}
+
+.abs-dialog-slide() {
+    left: @dialog-slide__first__indent-left;
+    z-index: @dialog-slide__z-index;
+    &._show {
+        .dialog-inner-wrap {
+            transform: translate(0, 0);
+        }
+    }
+    .dialog-inner-wrap {
+        box-shadow: -1px 0 @component__shadow-size__base rgba(0, 0, 0, .5);
+        height: 100%;
+        position: static;
+        transform: translate(100%, 0);
+        transition: transform .5s ease, visibility 1s linear;
+        width: auto;
+    }
+}
+
+.abs-dialog-modal() {
+    left: 0;
+    overflow: auto;
+    z-index: @dialog-modal__z-index;
+    &._show {
+        .dialog-inner-wrap {
+            transform: translate(50%, 10%);
+        }
+    }
+    .dialog-inner-wrap {
+        box-shadow: @component__box-shadow__base;
+        height: auto;
+        position: absolute;
+        transform: translate(50%, -150%);
+        transition: transform .3s linear, visibility 1s linear;
+        width: 50%;
+    }
+}
+
+//
+
+._has-dialog {
+    height: 100vh;
+    overflow: hidden;
+    width: 100vw;
+}
+
+.dialog-slide,
+.dialog-modal {
+    .abs-dialog();
+}
+
+.dialog-slide {
+    .abs-dialog-slide();
+    + .dialog-slide {
+        margin-left: @dialog-slide__indent-left;
+        + .dialog-slide {
+            margin-left: @dialog-slide__indent-left * 2;
+            + .dialog-slide {
+                margin-left: @dialog-slide__indent-left * 3;
+            }
+        }
+    }
+}
+
+.dialog-modal {
+    .abs-dialog-modal();
+}
+
+.dialog-header,
+.dialog-content,
+.dialog-footer {
+    padding: 2rem 3rem;
+}
+
+.dialog-header,
+.dialog-footer {
+    &:extend(.abs-clearfix all);
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.dialog-header {
+    padding-top: @dialog-header__padding-top;
+    padding-bottom: 3rem; // ToDo UI: Change to structure variables
+}
+
+.dialog-footer {
+    margin-bottom: 0;
+    margin-top: auto;
+}
+
+.dialog-content {
+    overflow: auto;
+    margin-bottom: 3rem;
+}
+
+//
+//  Mobile
+//  ---------------------------------------------
+
+//  Mobile transform to dialog-slide
+
+@media (max-width: @screen__m) {
+    .dialog-modal {
+        &.dialog-slide {
+            .abs-dialog-slide();
+        }
+    }
+}

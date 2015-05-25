@@ -1,0 +1,38 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Components -> Dialogs
+//  _____________________________________________
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@dialog-title__color: @text__color;
+@dialog-title__font-size: 2.1rem;
+
+@dialog-action-close__color: @color-brownie-vanilla;
+@dialog-action-close__font-size: 2rem;
+
+//
+
+.dialog-modal,
+.dialog-slide {
+    .action-close {
+        color: @dialog-action-close__color;
+        position: absolute;
+        right: 3rem;
+        top: 3rem;
+        &:before {
+            font-size: @dialog-action-close__font-size;
+        }
+    }
+}
+
+.dialog-title {
+    font-size: @dialog-title__font-size;
+    font-weight: @font-weight__regular;
+}

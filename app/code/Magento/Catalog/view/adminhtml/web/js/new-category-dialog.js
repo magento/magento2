@@ -54,7 +54,7 @@ define([
                 }
             });
             this.dialog = this.element.dialog({
-                type: 'slideOut',
+                type: 'slide',
                 dialogClass: 'mage-new-category-dialog form-inline',
                 title: $.mage.__('Create Category'),
                 buttons: [{
@@ -111,9 +111,9 @@ define([
             }).data('mage-dialog');
 
             this.insideDialog = $('<div>Another dialog</div>').dialog({
-                type: 'slideOut',
+                type: 'slide',
                 dialogClass: 'mage-new-category-dialog form-inline'
-            }).data('mage-dialog');
+            });
         }
     });
 
