@@ -464,7 +464,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         foreach ($this->directoryHelper->getCountryCollection() as $code => $data) {
             $country[$code]['name'] = $data->getName();
             if (array_key_exists($code, $regionsData)) {
-                foreach($regionsData[$code] as $key => $region) {
+                foreach ($regionsData[$code] as $key => $region) {
                     $country[$code]['regions'][$key]['code'] = $region['code'];
                     $country[$code]['regions'][$key]['name'] = $region['name'];
                 }
