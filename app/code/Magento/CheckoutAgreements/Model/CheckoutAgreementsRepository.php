@@ -16,7 +16,6 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
 use Magento\CheckoutAgreements\Model\Resource\Agreement as AgreementResource;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Api\DataObjectHelper;
 use Magento\Store\Model\Store;
 
 /**
@@ -56,11 +55,6 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
     private $agreementFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
-     */
-    private $dataObjectHelper;
-
-    /**
      * Constructs a checkout agreement data object.
      *
      * @param AgreementCollectionFactory $collectionFactory Collection factory.
@@ -68,22 +62,19 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param ScopeConfigInterface $scopeConfig Scope config.
      * @param AgreementResource $agreementResource
      * @param AgreementFactory $agreementFactory
-     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         AgreementCollectionFactory $collectionFactory,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         AgreementResource $agreementResource,
-        AgreementFactory $agreementFactory,
-        DataObjectHelper $dataObjectHelper
+        AgreementFactory $agreementFactory
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
         $this->resourceModel = $agreementResource;
         $this->agreementFactory = $agreementFactory;
-        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**

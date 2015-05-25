@@ -49,11 +49,6 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $dataObjHelperMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $agreementMock;
 
     /**
@@ -82,8 +77,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->dataObjHelperMock  = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
-        $methods = ['addData', 'getData', 'setStores', 'getAgreementId', 'getId', 'setStoreId'];
+        $methods = ['addData', 'getData', 'setStores', 'getAgreementId', 'getId'];
         $this->agreementMock =
             $this->getMock('\Magento\CheckoutAgreements\Model\Agreement', $methods, [], '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
@@ -92,8 +86,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->storeManagerMock,
             $this->scopeConfigMock,
             $this->resourceMock,
-            $this->agrFactoryMock,
-            $this->dataObjHelperMock
+            $this->agrFactoryMock
         );
     }
 
@@ -150,16 +143,10 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('load')
             ->with($this->agreementMock, $agreementId);
-        $this->agreementMock->expects($this->once())->method('setStoreId')->with(1);
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->agreementMock->expects($this->once())->method('setStores');
         $this->agreementMock->expects($this->once())->method('getId')->willReturn($agreementId);
         $this->agreementMock->expects($this->any())->method('getData')->willReturn(['data']);
-        $this->dataObjHelperMock
-            ->expects($this->once())
-            ->method('populateWithArray')
-            ->with($this->agreementMock, ['data'], 'Magento\CheckoutAgreements\Api\Data\AgreementInterface')
-        ->willReturn($this->agreementMock);
         $this->agreementMock
             ->expects($this->once())
             ->method('addData')->with(['data'])
@@ -194,14 +181,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($this->agreementMock, $agreementId)
             ->willReturn($this->agreementMock);
-        $this->agreementMock->expects($this->any())->method('setStoreId')->with(null);
         $this->agreementMock->expects($this->once())->method('getId')->willReturn($agreementId);
-        $this->agreementMock->expects($this->once())->method('getData')->willReturn(['data']);
-        $this->dataObjHelperMock
-            ->expects($this->once())
-            ->method('populateWithArray')
-            ->with($this->agreementMock, ['data'], 'Magento\CheckoutAgreements\Api\Data\AgreementInterface')
-            ->willReturn($this->agreementMock);
         $this->resourceMock->expects($this->once())->method('delete');
         $this->assertTrue($this->model->deleteById(1));
     }
@@ -218,14 +198,7 @@ class CheckoutAgreementsRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($this->agreementMock, $agreementId)
             ->willReturn($this->agreementMock);
-        $this->agreementMock->expects($this->any())->method('setStoreId')->with(null);
         $this->agreementMock->expects($this->once())->method('getId')->willReturn($agreementId);
-        $this->agreementMock->expects($this->once())->method('getData')->willReturn(['data']);
-        $this->dataObjHelperMock
-            ->expects($this->once())
-            ->method('populateWithArray')
-            ->with($this->agreementMock, ['data'], 'Magento\CheckoutAgreements\Api\Data\AgreementInterface')
-            ->willReturn($this->agreementMock);
         $this->resourceMock->expects($this->once())->method('delete')->willThrowException(new \Exception());
         $this->assertTrue($this->model->deleteById(1));
     }
