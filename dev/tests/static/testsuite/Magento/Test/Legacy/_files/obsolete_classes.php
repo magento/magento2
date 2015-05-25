@@ -3165,7 +3165,7 @@ return [
     ['Magento\CatalogRule\CatalogRuleException'],
     ['Magento\Payment\Exception'],
     ['Magento\UrlRewrite\Model\Storage\DuplicateEntryException'],
-    ['Magento\Setup\Mvc\Console\RouteListener'],
+    ['Magento\Framework\View\Element\UiComponent\Config\Manager'],
     ['Magento\Setup\Mvc\Console\RouteMatcher'],
     ['Magento\Setup\Mvc\Console\VerboseValidator'],
     ['Magento\Setup\Controller\ConsoleController'],
