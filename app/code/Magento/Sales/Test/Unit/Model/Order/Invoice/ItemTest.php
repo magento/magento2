@@ -98,30 +98,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testSetQty()
     {
-        $this->orderItemFactoryMock->expects($this->once())->method('create')->willReturn($this->orderItemMock);
-        $this->orderItemMock->expects($this->once())->method('load')->with(1)->willReturn($this->orderItemMock);
-        $this->orderItemMock->expects($this->once())->method('getIsQtyDecimal')->willReturn(true);
-        $this->orderItemMock->expects($this->once())->method('getQtyToInvoice')->willReturn(2);
-        $this->orderItemMock->expects($this->once())->method('isDummy')->willReturn(true);
-        $this->item->setOrderItemId(1);
-        $this->assertEquals($this->item->setQty(3), $this->item);
-    }
-
-
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We found an invalid quantity to invoice item "Item Name".
-     */
-    public function testSetQtyWrongQty()
-    {
-        $this->orderItemFactoryMock->expects($this->once())->method('create')->willReturn($this->orderItemMock);
-        $this->orderItemMock->expects($this->once())->method('load')->with(1)->willReturn($this->orderItemMock);
-        $this->orderItemMock->expects($this->once())->method('getIsQtyDecimal')->willReturn(true);
-        $this->orderItemMock->expects($this->once())->method('getQtyToInvoice')->willReturn(2);
-        $this->orderItemMock->expects($this->once())->method('isDummy')->willReturn(false);
-        $this->item->setOrderItemId(1);
-        $this->item->setName('Item Name');
-        $this->assertEquals($this->item->setQty(3), $this->item);
+        $qty = 3;
+        $this->assertEquals($this->item->setQty($qty), $this->item);
+        $this->assertEquals($this->item->getQty(), $qty);
     }
 
     public function testRegister()
