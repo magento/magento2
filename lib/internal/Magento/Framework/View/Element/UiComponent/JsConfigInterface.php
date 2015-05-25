@@ -13,9 +13,10 @@ use Magento\Framework\View\Element\UiComponentInterface;
 interface JsConfigInterface extends UiComponentInterface
 {
     /**
-     * Get JS config
+     * Get configuration of related JavaScript Component
      *
-     * @return array|string
+     * @param UiComponentInterface $component
+     * @return array
      */
-    public function getJsConfig();
+    public function getJsConfig(UiComponentInterface $component);
 }
