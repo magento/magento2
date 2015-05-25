@@ -2164,6 +2164,7 @@ return [
     ['prepareForProductsInCarts', 'Magento\Reports\Model\Resource\Quote\Collection'],
     ['getOrdersSubSelect', 'Magento\Reports\Model\Resource\Quote\Collection'],
     ['isOrderIncrementIdUsed', 'Magento\Quote\Model\Resource\Quote'],
+    ['isStateProtected', 'Magento\Sales\Model\Order'],
     ['_getBundleOptions', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
     ['_getSelectionFinalPrice', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],
     ['_getSelectionQty', 'Magento\Bundle\Block\Checkout\Cart\Item\Renderer'],

@@ -46,21 +46,24 @@ class BlockActions extends Column
     }
 
     /**
-     * @param array $items
-     * @return array
+     * Prepare Data Source
+     *
+     * @param array $dataSource
+     * @return void
      */
-    public function prepareItems(array & $items)
+    public function prepareDataSource(array & $dataSource)
     {
-        foreach ($items as & $item) {
-            if (isset($item['block_id'])) {
-                $item[$this->getData('name')] = [
-                    'edit' => [
-                        'href' => $this->urlBuilder->getUrl(static::URL_PATH, ['block_id' => $item['block_id']]),
-                        'label' => __('Edit'),
-                    ]
-                ];
+        if (isset($dataSource['data']['items'])) {
+            foreach ($dataSource['data']['items'] as & $item) {
+                if (isset($item['block_id'])) {
+                    $item[$this->getData('name')] = [
+                        'edit' => [
+                            'href' => $this->urlBuilder->getUrl(static::URL_PATH, ['block_id' => $item['block_id']]),
+                            'label' => __('Edit'),
+                        ]
+                    ];
+                }
             }
         }
-        return $items;
     }
 }
