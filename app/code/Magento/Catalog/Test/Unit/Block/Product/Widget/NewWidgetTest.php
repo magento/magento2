@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Block\Product\Widget;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Block\Product\Widget\NewWidget as NewWidget;
+use Magento\Catalog\Block\Product\Widget\NewWidget;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,6 +48,9 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Framework\Stdlib\DateTime\Timezone|\PHPUnit_Framework_MockObject_MockObject */
     protected $localDate;
+
+    /** @var \Magento\Catalog\Model\Resource\Product\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    protected $productCollection;
 
     protected function setUp()
     {
@@ -166,22 +169,10 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test protected `__getProductCollection` and `getPageSize` methods via public `toHtml` method.
-     *
-     * @param $displayType
-     * @param $pagerEnable
-     * @param $productsCount
-     * @param $productsPerPage
-     * @param $expectedPageSize
-     * @dataProvider getProductCollectionDataProvider
+     * @return \Magento\Catalog\Model\Resource\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function testGetProductCollection(
-        $displayType,
-        $pagerEnable,
-        $productsCount,
-        $productsPerPage,
-        $expectedPageSize
-    ) {
+    protected function generalGetProductCollection()
+    {
         $this->eventManager->expects($this->once())->method('dispatch')
             ->will($this->returnValue(true));
         $this->scopeConfig->expects($this->once())->method('getValue')->withAnyParameters()
@@ -199,7 +190,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())->method('getCatalogConfig')->willReturn($this->catalogConfig);
         $this->context->expects($this->once())->method('getLocaleDate')->willReturn($this->localDate);
 
-        $productCollection = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Collection')
+        $this->productCollection = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Collection')
             ->setMethods(
                 [
                     'setVisibility', 'addMinimalPrice', 'addFinalPrice',
@@ -210,40 +201,36 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $productCollection->expects($this->once())->method('setVisibility')
+        $this->productCollection->expects($this->once())->method('setVisibility')
             ->willReturnSelf();
-        $productCollection->expects($this->once())->method('addMinimalPrice')
+        $this->productCollection->expects($this->once())->method('addMinimalPrice')
             ->willReturnSelf();
-        $productCollection->expects($this->once())->method('addFinalPrice')
+        $this->productCollection->expects($this->once())->method('addFinalPrice')
             ->willReturnSelf();
-        $productCollection->expects($this->once())->method('addTaxPercents')
+        $this->productCollection->expects($this->once())->method('addTaxPercents')
             ->willReturnSelf();
-        $productCollection->expects($this->once())->method('addAttributeToSelect')
+        $this->productCollection->expects($this->once())->method('addAttributeToSelect')
             ->willReturnSelf();
-        $productCollection->expects($this->once())->method('addUrlRewrite')
+        $this->productCollection->expects($this->once())->method('addUrlRewrite')
             ->willReturnSelf();
-        $productCollection->expects($this->once())->method('addStoreFilter')
+        $this->productCollection->expects($this->once())->method('addStoreFilter')
             ->willReturnSelf();
-        $productCollection->expects($this->once())->method('addAttributeToSort')
+        $this->productCollection->expects($this->once())->method('addAttributeToSort')
             ->willReturnSelf();
+        $this->productCollection->expects($this->atLeastOnce())->method('setCurPage')
+            ->willReturnSelf();
+        $this->productCollection->expects($this->any())->method('addAttributeToFilter')
+            ->willReturnSelf();
+    }
 
-        if (NewWidget::DISPLAY_TYPE_NEW_PRODUCTS === $displayType) {
-            $productCollection->expects($this->exactly(2))->method('setPageSize')
-                ->withConsecutive(
-                    [$productsCount],
-                    [$expectedPageSize]
-                )
-                ->willReturnSelf();
-        } else {
-            $productCollection->expects($this->atLeastOnce())->method('setPageSize')->with($expectedPageSize)
-                ->willReturnSelf();
-        }
-
-        $productCollection->expects($this->atLeastOnce())->method('setCurPage')
-            ->willReturnSelf();
-        $productCollection->expects($this->any())->method('addAttributeToFilter')
-            ->willReturnSelf();
-
+    /**
+     * @param string $displayType
+     * @param bool $pagerEnable
+     * @param int $productsCount
+     * @param int $productsPerPage
+     */
+    protected function startTestGetProductCollection($displayType, $pagerEnable, $productsCount, $productsPerPage)
+    {
         $productCollectionFactory = $this->getMock(
             'Magento\Catalog\Model\Resource\Product\CollectionFactory',
             ['create'],
@@ -253,7 +240,7 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
             false
         );
         $productCollectionFactory->expects($this->atLeastOnce())->method('create')
-            ->willReturn($productCollection);
+            ->willReturn($this->productCollection);
 
         $this->block = $this->objectManager->getObject(
             'Magento\Catalog\Block\Product\Widget\NewWidget',
@@ -275,34 +262,75 @@ class NewWidgetTest extends \PHPUnit_Framework_TestCase
         $this->block->toHtml();
     }
 
+    /**
+     * Test protected `_getProductCollection` and `getPageSize` methods via public `toHtml` method,
+     * for display_type == DISPLAY_TYPE_NEW_PRODUCTS.
+     *
+     * @param bool $pagerEnable
+     * @param int $productsCount
+     * @param int $productsPerPage
+     * @param int $expectedPageSize
+     * @dataProvider getProductCollectionDataProvider
+     */
+    public function testGetProductNewCollection($pagerEnable, $productsCount, $productsPerPage, $expectedPageSize)
+    {
+        $this->generalGetProductCollection();
+
+        $this->productCollection->expects($this->exactly(2))->method('setPageSize')
+            ->withConsecutive(
+                [$productsCount],
+                [$expectedPageSize]
+            )
+            ->willReturnSelf();
+
+        $this->startTestGetProductCollection(
+            NewWidget::DISPLAY_TYPE_NEW_PRODUCTS,
+            $pagerEnable,
+            $productsCount,
+            $productsPerPage
+        );
+    }
+
+    /**
+     * Test protected `_getProductCollection` and `getPageSize` methods via public `toHtml` method,
+     * for display_type == DISPLAY_TYPE_ALL_PRODUCTS.
+     *
+     * @param bool $pagerEnable
+     * @param int $productsCount
+     * @param int $productsPerPage
+     * @param int $expectedPageSize
+     * @dataProvider getProductCollectionDataProvider
+     */
+    public function testGetProductAllCollection($pagerEnable, $productsCount, $productsPerPage, $expectedPageSize)
+    {
+        $this->generalGetProductCollection();
+
+        $this->productCollection->expects($this->atLeastOnce())->method('setPageSize')->with($expectedPageSize)
+            ->willReturnSelf();
+
+        $this->startTestGetProductCollection(
+            NewWidget::DISPLAY_TYPE_ALL_PRODUCTS,
+            $pagerEnable,
+            $productsCount,
+            $productsPerPage
+        );
+    }
+
     public function getProductCollectionDataProvider()
     {
         return [
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, true, 1, null, 5],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, true, 5, null, 5],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, true, 10, null, 5],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, true, 1, 2, 2],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, true, 5, 3, 3],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, true, 10, 7, 7],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, false, 1, null, 1],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, false, 3, null, 3],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, false, 5, null, 5],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, false, 1, 3, 1],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, false, 3, 5, 3],
-            [NewWidget::DISPLAY_TYPE_NEW_PRODUCTS, false, 5, 10, 5],
-
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, true, 1, null, 5],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, true, 5, null, 5],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, true, 10, null, 5],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, true, 1, 2, 2],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, true, 5, 3, 3],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, true, 10, 7, 7],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, false, 1, null, 1],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, false, 3, null, 3],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, false, 5, null, 5],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, false, 1, 3, 1],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, false, 3, 5, 3],
-            [NewWidget::DISPLAY_TYPE_ALL_PRODUCTS, false, 5, 10, 5]
+            [true, 1, null, 5],
+            [true, 5, null, 5],
+            [true, 10, null, 5],
+            [true, 1, 2, 2],
+            [true, 5, 3, 3],
+            [true, 10, 7, 7],
+            [false, 1, null, 1],
+            [false, 3, null, 3],
+            [false, 5, null, 5],
+            [false, 1, 3, 1],
+            [false, 3, 5, 3],
+            [false, 5, 10, 5]
         ];
     }
 }
