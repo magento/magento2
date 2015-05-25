@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+
 /**
  * Import entity abstract product type model
  *
@@ -270,7 +272,7 @@ abstract class AbstractType
                         ))
                     ) {
                         $this->_entityModel->addRowError(
-                            \Magento\CatalogImportExport\Model\Import\Product::ERROR_VALUE_IS_REQUIRED,
+                            RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
                             $rowNum,
                             $attrCode
                         );

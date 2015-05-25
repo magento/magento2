@@ -40,8 +40,6 @@ class DateRange extends AbstractFilter
      */
     public function prepare()
     {
-        parent::prepare();
-
         $this->wrappedComponent = $this->uiComponentFactory->create(
             $this->getName(),
             static::COMPONENT,
@@ -50,8 +48,8 @@ class DateRange extends AbstractFilter
         $this->wrappedComponent->prepare();
 
         $this->applyFilter();
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+
+        parent::prepare();
     }
 
     /**

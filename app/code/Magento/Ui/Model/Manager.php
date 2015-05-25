@@ -3,14 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Element\UiComponent\Config;
+namespace Magento\Ui\Model;
 
 use ArrayObject;
+use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
+use Magento\Framework\View\Element\UiComponent\Config\Converter;
+use Magento\Framework\View\Element\UiComponent\Config\DomMergerInterface;
 use Magento\Framework\View\Element\UiComponent\Config\FileCollector\AggregatedFileCollectorFactory;
+use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition as ComponentDefinition;
+use Magento\Framework\View\Element\UiComponent\Config\ReaderFactory;
+use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
 
 /**
  * Class Manager
@@ -30,6 +36,13 @@ class Manager implements ManagerInterface
      * @var ComponentDefinition
      */
     protected $componentConfigProvider;
+
+    /**
+     * Argument interpreter
+     *
+     * @var InterpreterInterface
+     */
+    protected $argumentInterpreter;
 
     /**
      * DOM document merger
@@ -82,14 +95,13 @@ class Manager implements ManagerInterface
     protected $uiReader;
 
     /**
-     * Constructor
-     *
      * @param ComponentDefinition $componentConfigProvider
      * @param DomMergerInterface $domMerger
      * @param ReaderFactory $readerFactory
      * @param ArrayObjectFactory $arrayObjectFactory
      * @param AggregatedFileCollectorFactory $aggregatedFileCollectorFactory
      * @param CacheInterface $cache
+     * @param InterpreterInterface $argumentInterpreter
      */
     public function __construct(
         ComponentDefinition $componentConfigProvider,
@@ -97,7 +109,8 @@ class Manager implements ManagerInterface
         ReaderFactory $readerFactory,
         ArrayObjectFactory $arrayObjectFactory,
         AggregatedFileCollectorFactory $aggregatedFileCollectorFactory,
-        CacheInterface $cache
+        CacheInterface $cache,
+        InterpreterInterface $argumentInterpreter
     ) {
         $this->componentConfigProvider = $componentConfigProvider;
         $this->domMerger = $domMerger;
@@ -106,6 +119,7 @@ class Manager implements ManagerInterface
         $this->componentsData = $this->arrayObjectFactory->create();
         $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
         $this->cache = $cache;
+        $this->argumentInterpreter = $argumentInterpreter;
     }
 
     /**
@@ -158,17 +172,41 @@ class Manager implements ManagerInterface
             $this->componentsPool->unserialize($cachedPool);
         }
         $this->componentsData->offsetSet($name, $this->componentsPool);
+        $this->componentsData->offsetSet($name, $this->evaluateComponentArguments($this->getData($name)));
 
         return $this;
+    }
+
+    /**
+     * Evaluated components data
+     *
+     * @param array $components
+     * @return array
+     */
+    protected function evaluateComponentArguments($components)
+    {
+        foreach ($components as &$component) {
+            foreach ($component[ManagerInterface::COMPONENT_ARGUMENTS_KEY] as $argumentName => $argument) {
+                $component[ManagerInterface::COMPONENT_ARGUMENTS_KEY][$argumentName]
+                    = $this->argumentInterpreter->evaluate($argument);
+            }
+            $component['children'] = $this->evaluateComponentArguments($component['children']);
+            $this->mergeBookmarkConfig(
+                $component['attributes']['name'],
+                $component[ManagerInterface::COMPONENT_ARGUMENTS_KEY]['data']['config']
+            );
+        }
+        return $components;
     }
 
     /**
      * To create the raw  data components
      *
      * @param string $component
+     * @param bool $evaluated
      * @return array
      */
-    public function createRawComponentData($component)
+    public function createRawComponentData($component, $evaluated = false)
     {
         $componentData = $this->componentConfigProvider->getComponentData($component);
         $componentData[Converter::DATA_ATTRIBUTES_KEY] = isset($componentData[Converter::DATA_ATTRIBUTES_KEY])
@@ -177,6 +215,12 @@ class Manager implements ManagerInterface
         $componentData[Converter::DATA_ARGUMENTS_KEY] = isset($componentData[Converter::DATA_ARGUMENTS_KEY])
             ? $componentData[Converter::DATA_ARGUMENTS_KEY]
             : [];
+        if ($evaluated) {
+            foreach ($componentData[Converter::DATA_ARGUMENTS_KEY] as $argumentName => $argument) {
+                $componentData[Converter::DATA_ARGUMENTS_KEY][$argumentName]
+                    = $this->argumentInterpreter->evaluate($argument);
+            }
+        }
 
         return [
             ManagerInterface::COMPONENT_ATTRIBUTES_KEY => $componentData[Converter::DATA_ATTRIBUTES_KEY],
@@ -250,17 +294,42 @@ class Manager implements ManagerInterface
                 $rootComponent
             );
             unset($component[Converter::DATA_ATTRIBUTES_KEY]);
+
             // Create inner components
             foreach ($component as $subComponentName => $subComponent) {
                 $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge(
                     $resultConfiguration[ManagerInterface::CHILDREN_KEY],
-                    $this->createDataForComponent($subComponentName, $subComponent)
+                    $this->createDataForComponent($subComponentName, $subComponent, $name)
                 );
             }
             $createdComponents[$instanceName] = $resultConfiguration;
         }
 
         return $createdComponents;
+    }
+
+    /**
+     * Merged bookmark config with main config
+     *
+     * @param string $parentName
+     * @param array|null $configuration
+     * @return void
+     */
+    protected function mergeBookmarkConfig($parentName, &$configuration)
+    {
+        $data = [];//$this->bookmark->getCurrentBookmarkByIdentifier('cms_page_listing')->getConfig();
+
+        if (isset($data[$parentName])) {
+            foreach ($data[$parentName] as $name => $fields) {
+                if ($configuration['attributes']['name'] == $name && is_array($fields)) {
+                    $configuration['arguments']['data']['config'] = array_replace_recursive(
+                        $configuration['arguments']['data']['config'],
+                        $fields
+                    );
+                }
+            }
+        }
+
     }
 
     /**
