@@ -36,11 +36,6 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
     protected $logger;
 
     /**
-     * @var PaymentHelper
-     */
-    protected $paymentHelper;
-
-    /**
      * Payment method code
      *
      * @var string
@@ -70,8 +65,7 @@ abstract class IframeConfigProvider implements ConfigProviderInterface
         $this->request = $request;
         $this->urlBuilder = $urlBuilder;
         $this->logger = $logger;
-        $this->paymentHelper = $paymentHelper;
-        $this->method = $this->paymentHelper->getMethodInstance($this->methodCode);
+        $this->method = $paymentHelper->getMethodInstance($this->methodCode);
     }
 
     /**
