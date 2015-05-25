@@ -35,7 +35,7 @@ define([
                         $('body').notification('add', {
                             error: resp.error,
                             message: message,
-                            messageSelector: '#anchor-content'
+                            messageContainer: '#anchor-content'
                         });
                     });
                 }
