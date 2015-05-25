@@ -49,7 +49,6 @@ define([
         },
 
         createRendererComponent: function (address, addressIndex) {
-            address.type = 'gift-registry';
             var rendererTemplate = (address.type != undefined)
                 ? utils.extend(defaultRendererTemplate, rendererTemplates[address.type])
                 : defaultRendererTemplate;
