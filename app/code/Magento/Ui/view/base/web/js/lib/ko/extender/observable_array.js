@@ -8,28 +8,59 @@ define([
 ], function (ko, _) {
     'use strict';
 
-    function observeKeys(keys, array) {
-        array.each(function (item) {
-            keys.forEach(function (key) {
-                item[key] = !ko.isObservable(item[key]) ? ko.observable(item[key]) : item[key];
-            });
-        });
+    function iterator(callback, args, elem) {
+        callback = elem[callback];
+
+        if (_.isFunction(callback)) {
+            return callback.apply(elem, args);
+        }
+
+        return callback;
+    }
+
+    function wrapper(method) {
+        return function (iteratee) {
+            var callback = iteratee,
+                elems = this(),
+                args = _.toArray(arguments);
+
+            if (_.isString(iteratee)) {
+                callback = iterator.bind(null, iteratee, args.slice(1));
+
+                args.unshift(callback);
+            }
+
+            args.unshift(elems);
+
+            return _[method].apply(_, args);
+        };
     }
 
     _.extend(ko.observableArray.fn, {
+        each: wrapper('each'),
+
+        map: wrapper('map'),
+
+        filter: wrapper('filter'),
+
+        some: wrapper('some'),
+
+        every: wrapper('every'),
+
+        groupBy: wrapper('groupBy'),
+
+        sortBy: wrapper('sortBy'),
+
+        findWhere: function (properties) {
+            return _.findWhere(this(), properties);
+        },
+
         contains: function (value) {
             return _.contains(this(), value);
         },
 
-        hasNo: function (value) {
+        hasNo: function () {
             return !this.contains.apply(this, arguments);
-        },
-
-        observe: function (keys) {
-            keys = _.isArray(keys) ? keys : Array.prototype.slice.call(arguments);
-
-            observeKeys(keys, this);
-            this.subscribe(observeKeys.bind(this, keys));
         },
 
         getLength: function () {
@@ -38,18 +69,6 @@ define([
 
         indexBy: function (key) {
             return _.indexBy(this(), key);
-        },
-
-        each: function (iterator, ctx) {
-            return _.each(this(), iterator, ctx);
-        },
-
-        map: function (iterator, ctx) {
-            return _.map(this(), iterator, ctx);
-        },
-
-        filter: function (iterator, ctx) {
-            return _.filter(this(), iterator, ctx);
         },
 
         without: function () {
@@ -68,23 +87,7 @@ define([
             return _.last(this());
         },
 
-        some: function (predicate, ctx) {
-            return _.some(this(), predicate, ctx);
-        },
-
-        every: function (predicate, ctx) {
-            return _.every(this(), predicate, ctx);
-        },
-
-        groupBy: function (iteratee, ctx) {
-            return _.groupBy(this(), iteratee, ctx);
-        },
-
-        sortBy: function (iteratee, ctx) {
-            return _.sortBy(this(), iteratee, ctx);
-        },
-
-        pluck: function(){
+        pluck: function () {
             var args = Array.prototype.slice.call(arguments);
 
             args.unshift(this());
