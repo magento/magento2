@@ -16,8 +16,8 @@ interface BlockRepositoryInterface
     /**
      * Save block.
      *
-     * @param Data\BlockInterface $block
-     * @return Data\BlockInterface
+     * @param \Magento\Cms\Api\Data\BlockInterface $block
+     * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function save(Data\BlockInterface $block);
@@ -26,7 +26,7 @@ interface BlockRepositoryInterface
      * Retrieve block.
      *
      * @param int $blockId
-     * @return Data\BlockInterface
+     * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getById($blockId);
@@ -43,7 +43,7 @@ interface BlockRepositoryInterface
     /**
      * Delete block.
      *
-     * @param Data\BlockInterface $block
+     * @param \Magento\Cms\Api\Data\BlockInterface $block
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
