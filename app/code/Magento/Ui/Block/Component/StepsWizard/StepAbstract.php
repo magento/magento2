@@ -41,4 +41,13 @@ abstract class StepAbstract extends \Magento\Framework\View\Element\Template imp
     {
         return $this->toHtml();
     }
+
+    /**
+     * Get json data
+     * @return string json
+     */
+    public function getJsonData()
+    {
+        return '';
+    }
 }

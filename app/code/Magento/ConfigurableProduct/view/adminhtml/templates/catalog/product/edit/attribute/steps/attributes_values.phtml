@@ -7,3 +7,12 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Step1 */
 ?>
 TBD [attributes values step]
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/lib/steps/step1": {
+                "content": "<?= $block->getJsonData()?>"
+            }
+        }
+    }
+</script>

@@ -6,7 +6,10 @@
 
 /** @var $block \Magento\Ui\Block\Component\StepsWizard */
 ?>
-<div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{}}'>
+
+<div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{
+    "steps":["Magento_Ui/js/lib/steps/step1", "Magento_Ui/js/lib/steps/step2", "Magento_Ui/js/lib/steps/step3",
+    "Magento_Ui/js/lib/steps/step4"]}}'>
     <ul class="nav-bar">
         <?php foreach ($block->getSteps() as $step) { ?>
         <li data-role="collapsible">

@@ -8,21 +8,51 @@ define([
 ], function ($) {
     "use strict";
 
+    var getWizardBySteps = function (steps, element) {
+        var deferred = new $.Deferred();
+        require(steps, function () {
+            deferred.resolve(new Wizard(arguments, element));
+        });
+        return deferred.promise();
+    };
+
+    var Wizard = function(steps, element) {
+        this.index = 0;
+        this.step = steps[this.index];
+        this.element = element;
+        this.move = function(newIndex, tab) {
+            if (newIndex > this.index) {
+                this.next(newIndex);
+            } else if (newIndex < this.index) {
+                this.prev(newIndex);
+            }
+            this.render(tab);
+        };
+        this.next = function() {
+            this.step = steps[++this.index];
+            this.step.force(this);
+        };
+        this.prev = function() {
+            this.step = steps[--this.index];
+            this.step.back(this);
+        };
+        this.render = function(tab) {
+            this.step.render(tab);
+        };
+    };
+
     $.widget('mage.step-wizard', $.ui.tabs, {
-        defaultStep: {
-            force: function() {},
-            back: function() {}
-        },
+        wizard: {},
         options: {
             collapsible: false,
             disabled: [],
             event: "click",
             buttonNextElement: '[data-role="step-wizard-next"]',
-            buttonPrevElement: '[data-role="step-wizard-prev"]',
-            selectorScript: '[data-handler="step-wizard"]'
+            buttonPrevElement: '[data-role="step-wizard-prev"]'
         },
         _create: function() {
             this._control();
+            this.wizard = getWizardBySteps(this.options.steps, this.element);
             this._super();
         },
         _control: function() {
@@ -36,18 +66,14 @@ define([
         },
         load: function(index, event) {
             this._disabledTabs(index);
-            this._handlerStep(index);
             this._super(index, event);
+            this._handlerStep(index);
         },
         _handlerStep: function (index) {
-            var script = this.panels.eq(index).find(this.options.selectorScript).first();
-            if (script.text()) {
-                eval(script.text());
-                this.step = step;
-            } else {
-                this.step = this.defaultStep;
-            }
-            this.step[this._way(index)]();
+            var tab = this.panels.eq(index);
+            this.wizard.done(function (wizard) {
+                wizard.move(index, tab);
+            });
         },
         _way: function(index) {
             return this.options.selected > index ? 'back' : 'force';

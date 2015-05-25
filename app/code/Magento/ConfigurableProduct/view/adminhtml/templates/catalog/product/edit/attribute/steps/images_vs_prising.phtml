@@ -7,13 +7,18 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Step1 */
 ?>
 TBD [images vs prising step]
-<script data-handler="step-wizard">
-    var step = {
-        force: function() {
-            console.log('Force');
-        },
-        back: function() {
-            console.log('Back');
+<div>
+    <!-- ko text: data -->
+    <!-- ko text: data1 -->
+    <!-- ko text: data2 -->
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/lib/steps/step2": {
+                "content": "<?= $block->getJsonData()?>"
+            }
         }
-    };
+    }
 </script>
