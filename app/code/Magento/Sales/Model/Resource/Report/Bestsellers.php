@@ -96,10 +96,6 @@ class Bestsellers extends AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $adapter = $this->_getWriteAdapter();
         //$this->_getWriteAdapter()->beginTransaction();
 

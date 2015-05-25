@@ -31,10 +31,6 @@ class Invoiced extends AbstractReport
      */
     public function aggregate($from = null, $to = null)
     {
-        // convert input dates to UTC to be comparable with DATETIME fields in DB
-        $from = $this->_dateToUtc($from);
-        $to = $this->_dateToUtc($to);
-
         $this->_aggregateByOrderCreatedAt($from, $to);
         $this->_aggregateByInvoiceCreatedAt($from, $to);
 
