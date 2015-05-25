@@ -29,6 +29,15 @@ define([
             success: function (resp) {
                 if (!resp.error) {
                     save.resolve();
+                } else {
+                    $('body').notification('clear');
+                    $.each(resp.messages, function(key, message) {
+                        $('body').notification('add', {
+                            error: resp.error,
+                            message: message,
+                            messageSelector: '#anchor-content'
+                        });
+                    });
                 }
             },
             complete: function () {

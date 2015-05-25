@@ -57,9 +57,11 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         if (!$errors->isValid()) {
+            $messages = [];
             foreach ($errors->getMessages() as $error) {
-                $this->messageManager->addError($error);
+                $messages[] = $error;
             }
+            $response->setMessages($messages);
             $response->setError(1);
         }
 
@@ -90,9 +92,11 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
 
             $errors = $addressForm->validateData($formData);
             if ($errors !== true) {
+                $messages = [];
                 foreach ($errors as $error) {
-                    $this->messageManager->addError($error);
+                    $messages[] = $error;
                 }
+                $response->setMessages($messages);
                 $response->setError(1);
             }
         }
@@ -114,9 +118,8 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
         }
         $resultJson = $this->resultJsonFactory->create();
         if ($response->getError()) {
-            $layout = $this->layoutFactory->create();
-            $layout->initMessages();
-            $response->setHtmlMessage($layout->getMessagesBlock()->getGroupedHtml());
+            $response->setError(true);
+            $response->setMessages($response->getMessages());
         }
 
         $resultJson->setData($response);
