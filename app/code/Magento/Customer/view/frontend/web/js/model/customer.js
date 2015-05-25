@@ -10,9 +10,9 @@ define(
         'underscore',
         'mage/storage',
         'Magento_Checkout/js/model/addresslist',
-        './customer/address'
+        './address-list-provider'
     ],
-    function($, ko, _, storage, addressList, address) {
+    function($, ko, _, storage, addressList, addressListProvider) {
         "use strict";
         var isLoggedIn = ko.observable(window.isCustomerLoggedIn),
             failedLoginAttempts = ko.observable(0),
@@ -20,14 +20,14 @@ define(
 
         if (isLoggedIn()) {
             customerData = window.customerData;
-            if (Object.keys(customerData).length) {
-                $.each(customerData.addresses, function (key, item) {
-                    addressList.add(new address(item));
-                });
-            }
         } else {
             customerData = {};
         }
+
+        $.each(addressListProvider.getItems(), function (key, item) {
+            addressList.add(item);
+        });
+
         return {
             customerData: customerData,
             customerDetails: {},
