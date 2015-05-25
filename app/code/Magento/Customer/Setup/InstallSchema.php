@@ -111,7 +111,7 @@ class InstallSchema implements InstallSchemaInterface
             'prefix',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             40,
-            [],
+            ['nullable' => true, 'default' => null],
             'Prefix'
         )->addColumn(
             'firstname',
@@ -123,7 +123,7 @@ class InstallSchema implements InstallSchemaInterface
             'middlename',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
-            [],
+            ['nullable' => true, 'default' => null],
             'Middle Name/Initial'
         )->addColumn(
             'lastname',
@@ -135,7 +135,7 @@ class InstallSchema implements InstallSchemaInterface
             'suffix',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             40,
-            [],
+            ['nullable' => true, 'default' => null],
             'Suffix'
         )->addColumn(
             'dob',
@@ -146,11 +146,11 @@ class InstallSchema implements InstallSchemaInterface
         )->addColumn(
             'password_hash',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255
+            128
         )->addColumn(
             'rp_token',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            128,
             ['nullable' => true, 'default' => null],
             'Reset password token'
         )->addColumn(
@@ -163,13 +163,13 @@ class InstallSchema implements InstallSchemaInterface
             'default_billing',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => true],
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
             'Default Billing Address'
         )->addColumn(
             'default_shipping',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
-            ['nullable' => true],
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
             'Default Shipping Address'
         )->addColumn(
             'taxvat',
@@ -181,13 +181,13 @@ class InstallSchema implements InstallSchemaInterface
             'confirmation',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             64,
-            [],
+            ['nullable' => true, 'default' => null],
             'Is Confirmed'
         )->addColumn(
             'gender',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            10,
-            [],
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true],
             'Gender'
         )->addIndex(
             $installer->getIdxName('customer_entity', ['store_id']),
@@ -206,6 +206,12 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('customer_entity', ['website_id']),
             ['website_id']
+        )->addIndex(
+            $installer->getIdxName('customer_entity', ['firstname']),
+            ['firstname']
+        )->addIndex(
+            $installer->getIdxName('customer_entity', ['lastname']),
+            ['lastname']
         )->addForeignKey(
             $installer->getFkName('customer_entity', 'store_id', 'store', 'store_id'),
             'store_id',
