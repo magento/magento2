@@ -27,7 +27,7 @@ define([
 
     var addresses = addressList.getAddresses();
     addresses.forEach(function(address) {
-        address.countryName = window.checkoutConfig.countryData[address.countryId].name;
+        //address.countryName = window.checkoutConfig.countryData[address.countryId].name;
     });
 
     return Component.extend({
