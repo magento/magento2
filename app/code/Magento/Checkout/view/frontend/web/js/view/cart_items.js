@@ -6,13 +6,14 @@
 /*global define*/
 define(
     [
+        'Magento_Checkout/js/model/quote',
         'uiComponent'
     ],
-    function (Component) {
+    function (quote, Component) {
         "use strict";
         return Component.extend({
             defaults: {
-                template: 'Magento_Checkout/review/iterator',
+                template: 'Magento_Checkout/review/cart_items',
                 displayArea: 'columns'
             }
         });
