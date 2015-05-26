@@ -640,13 +640,12 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
 
             foreach ($fields as $unique) {
                 $select->reset(\Zend_Db_Select::WHERE);
-
-                if (is_array($unique['field'])) {
-                    foreach ($unique['field'] as $field) {
-                        $select->where($field . '=?', trim($data->getData($field)));
-                    }
-                } else {
-                    $select->where($unique['field'] . '=?', trim($data->getData($unique['field'])));
+                if (!is_array($unique['field'])) {
+                    $unique['field'] = [$unique['field']];
+                }
+                foreach ($unique['field'] as $field) {
+                    $value = $data->getData($field);
+                    $select->where($field . '=?', $value === null ? new \Zend_Db_Expr('NULL') : trim($value));
                 }
 
                 if ($object->getId() || $object->getId() === '0') {
