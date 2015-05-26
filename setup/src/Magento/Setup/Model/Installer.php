@@ -1056,8 +1056,10 @@ class Installer
     private function assertDeploymentConfigExists()
     {
         if (!$this->deploymentConfig->isAvailable()) {
-            throw new \Magento\Setup\Exception("Can't run this operation: deployment configuration is absent."
-                . "Run 'magento setup:config:set --help' for options.");
+            throw new \Magento\Setup\Exception(
+                "Can't run this operation: deployment configuration is absent."
+                . "Run 'magento setup:config:set --help' for options."
+            );
         }
     }
 
