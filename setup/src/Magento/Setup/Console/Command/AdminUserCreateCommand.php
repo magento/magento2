@@ -62,8 +62,9 @@ class AdminUserCreateCommand extends AbstractSetupCommand
         }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->installAdminUser($input->getOptions());
-        $output->writeln('<info>Created Magento administrator user named' . $input->getOption(AdminAccount::KEY_USER)
-            . '</info>');
+        $output->writeln(
+            '<info>Created Magento administrator user named' . $input->getOption(AdminAccount::KEY_USER) . '</info>'
+        );
     }
 
     /**
