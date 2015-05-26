@@ -90,5 +90,35 @@ define([
         }
     });
 
+    $(document).ready(function () {
+       var dialog = $('[data-role="step-wizard-dialog"]').dialog({
+            title: $.mage.__('Wizard Product'),
+            autoOpen: false,
+            minWidth: 980,
+            modal: true,
+            resizable: false,
+            draggable: false,
+            position: {
+                my: 'left top',
+                at: 'center top',
+                of: 'body'
+            },
+            open: function () {
+                $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+
+                var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 135;
+                $(this).closest('.ui-dialog').css('margin-top', topMargin);
+
+                $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
+            },
+            close: function () {
+                $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+            }
+        });
+        $('[data-action="open-steps-wizard"]').on('click', function () {
+            dialog.dialog('open');
+        });
+    });
+
     return $.mage["step-wizard"];
 });
