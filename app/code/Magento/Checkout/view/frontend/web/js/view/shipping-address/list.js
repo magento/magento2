@@ -19,12 +19,6 @@ define([
         component: 'Magento_Checkout/js/view/shipping-address/address-renderer/default'
     };
     // TODO inject address renderers and get addresses. Remove this hardcoded template.
-    var rendererTemplates = {
-        'gift-registry': {
-            component: 'Magento_GiftRegistry/js/view/shipping-address/address-renderer/gift-registry'
-        }
-    };
-
     var addresses = addressList.getAddresses();
     addresses.forEach(function(address) {
         //address.countryName = window.checkoutConfig.countryData[address.countryId].name;
@@ -49,8 +43,9 @@ define([
         },
 
         createRendererComponent: function (address, addressIndex) {
-            var rendererTemplate = (address.type != undefined)
-                ? utils.extend(defaultRendererTemplate, rendererTemplates[address.type])
+            // rendererTemplates are provided via layout
+            var rendererTemplate = (address.type != undefined && this.rendererTemplates[address.type] != undefined)
+                ? utils.extend(defaultRendererTemplate, this.rendererTemplates[address.type])
                 : defaultRendererTemplate;
             var templateData = {
                 parentName: this.name,
