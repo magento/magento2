@@ -126,6 +126,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Product collection
      *
+     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     */
+    protected $_entityCollectionFactory;
+
+    /**
+     * Product collection
+     *
      * @var \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected $_entityCollection;
@@ -231,7 +238,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Framework\App\Resource $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Catalog\Model\Resource\Product\Collection $collection,
+        \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFactory,
@@ -243,7 +250,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
     ) {
-        $this->_entityCollection = $collection;
+        $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
         $this->_logger = $logger;
         $this->_productFactory = $productFactory;
@@ -669,12 +676,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
-     * Get product collection
-     *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * {@inheritdoc}
      */
-    protected function _getEntityCollection()
+    protected function _getEntityCollection($resetCollection = false)
     {
+        if ($resetCollection || empty($this->_entityCollection)) {
+            $this->_entityCollection = $this->_entityCollectionFactory->create();
+            $this->_entityCollection->setOrder('has_options', 'asc');
+            $this->_entityCollection->setStoreId(Store::DEFAULT_STORE_ID);
+
+        }
         return $this->_entityCollection;
     }
 
@@ -735,7 +746,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     /**
      * Export process
      *
-     * @see https://jira.corp.x.com/browse/MAGETWO-7894
      * @return string
      */
     public function export()
@@ -743,13 +753,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         //Execution time may be very long
         set_time_limit(0);
 
-        $this->_prepareEntityCollection($this->_getEntityCollection());
-        $this->_getEntityCollection()->setOrder('has_options', 'asc');
-        $this->_getEntityCollection()->setStoreId(Store::DEFAULT_STORE_ID);
         $writer = $this->getWriter();
         $page = 0;
         while (true) {
             ++$page;
+            $this->_prepareEntityCollection($this->_getEntityCollection(true));
             $this->paginateCollection($page, $this->getItemsPerPage());
             if ($this->_getEntityCollection()->count() == 0) {
                 break;
