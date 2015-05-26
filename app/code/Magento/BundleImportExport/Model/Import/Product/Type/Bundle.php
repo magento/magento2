@@ -17,6 +17,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
 
     const VALUE_FIXED = 'fixed';
 
+    const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
+
     const SELECTION_PRICE_TYPE_FIXED = 0;
 
     const SELECTION_PRICE_TYPE_PERCENT = 1;
@@ -302,6 +304,45 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * @inherited
+     */
+    public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
+    {
+        $rowData = array_merge($rowData, $this->transformBundleCustomAttributes($rowData));
+        return parent::isRowValid($rowData, $rowNum, $isNewProduct);
+    }
+
+    /**
+    * @inherited
+    */
+    public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
+    {
+        $resultAttrs = parent::prepareAttributesWithDefaultValueForSave($rowData, $withDefaultValue);
+        $resultAttrs = array_merge($resultAttrs, $this->transformBundleCustomAttributes($rowData));
+        return $resultAttrs;
+    }
+
+    /**
+     * Transform dynamic/fixed values to integer
+     * @var array $rowData
+     * @return array
+     */
+    protected function transformBundleCustomAttributes($rowData)
+    {
+        $resultAttrs = [];
+        foreach ($this->_customFieldsMapping as $oldKey => $newKey) {
+            if (isset($rowData[$oldKey])) {
+                if ($oldKey != self::NOT_FIXED_DYNAMIC_ATTRIBUTE) {
+                    $resultAttrs[$oldKey] = (($rowData[$oldKey] == self::VALUE_FIXED) ?
+                        \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED :
+                        \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC);
+                }
+            }
+        }
+        return $resultAttrs;
+    }
+
+    /**
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function _populateExistingOptions()
@@ -480,5 +521,4 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $this->_cachedSkuToProducts = [];
         return $this;
     }
-
 }
