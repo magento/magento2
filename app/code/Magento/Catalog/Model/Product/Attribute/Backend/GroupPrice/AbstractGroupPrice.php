@@ -13,6 +13,8 @@ use Magento\Customer\Api\GroupManagementInterface;
 
 /**
  * Catalog product abstract group price backend attribute model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractGroupPrice extends Price
 {

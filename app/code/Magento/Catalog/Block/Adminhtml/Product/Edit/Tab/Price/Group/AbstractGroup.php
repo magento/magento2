@@ -12,6 +12,8 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Adminhtml group price item abstract renderer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractGroup extends Widget implements RendererInterface
 {
