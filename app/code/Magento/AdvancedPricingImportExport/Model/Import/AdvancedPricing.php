@@ -77,7 +77,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         \Magento\Catalog\Model\Product $productModel,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
-        ImportProduct $importProduct
+        ImportProduct $importProduct,
+        AdvancedPricing\Validator $validator
     )
     {
         $this->jsonHelper = $jsonHelper;
@@ -90,6 +91,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_catalogData = $catalogData;
         $this->_storeResolver = $storeResolver;
         $this->_importProduct = $importProduct;
+        $this->_validator = $validator;
     }
 
     /**
@@ -188,7 +190,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             }
             $this->_saveProductTierPrices($tierPrices)
                 ->_saveProductGroupPrices($groupPrices);
-            //$this->_gropedIndexer->reindexAll();
         }
     }
 
