@@ -4,14 +4,15 @@
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
 //
-//    Shopping cart
-//--------------------------------------
+//  Shopping cart
+//  ---------------------------------------------
+
 .cart {
     //  Summary block
     &-summary {
@@ -248,6 +249,20 @@
                 font-weight: @font-weight__regular;
             }
         }
+        .action-gift {
+            .button-icon(
+            @icon-down,
+            @_icon-font-size: 32px,
+            @_icon-font-line-height: 16px,
+            @_icon-font-position: after
+            );
+            &._active {
+                .icon-font-symbol(
+                @icon-up,
+                @_icon-font-position: after
+                );
+            }
+        }
         .product {
             &-item-photo {
                 display: block;
@@ -272,7 +287,7 @@
                 content: ":";
             }
         }
-        // Product options
+        //  Product options
         .item-options {
             font-size: @font-size__s;
             margin-bottom: @indent__s;
@@ -310,8 +325,9 @@
 }
 
 //
-//    Cross sell
-//--------------------------------------
+//  Cross sell
+//  ---------------------------------------------
+
 .block.crosssell {
     margin-top: 70px;
 }
@@ -319,8 +335,9 @@
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .cart {
         &.table-wrapper {
@@ -364,13 +381,15 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .cart {
         &-container {
             &:extend(.abs-add-clearfix-desktop all);
-            .form-cart {
+            .form-cart,
+            .cart-gift-item {
                 &:extend(.abs-shopping-cart-items-desktop all);
             }
             .widget {
