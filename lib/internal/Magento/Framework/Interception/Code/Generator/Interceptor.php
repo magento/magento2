@@ -207,6 +207,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
             }
         }
 
+
         return $methods;
     }
 
