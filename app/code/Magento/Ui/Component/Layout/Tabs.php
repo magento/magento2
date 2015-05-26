@@ -7,11 +7,11 @@ namespace Magento\Ui\Component\Layout;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
-use Magento\Framework\View\Element\UiComponent\JsConfigInterface;
 
 /**
  * Class Tabs
@@ -73,6 +73,15 @@ class Tabs extends Generic implements LayoutInterface
 
         $this->addNavigationBlock();
 
+        // Register html content element
+        $this->component->getContext()->addComponentDefinition(
+            'html_content',
+            [
+                'component' => 'Magento_Ui/js/form/components/html',
+                'extends' => $this->namespace
+            ]
+        );
+
         // Initialization of structure components
         $this->initSections();
         $this->initAreas();
@@ -94,14 +103,19 @@ class Tabs extends Generic implements LayoutInterface
         $childrenAreas = [];
         $collectedComponents = [];
 
-        foreach ($component->getContext()->getDataProvider()->getMeta() as $name => $meta) {
-            $childComponent = $component->getComponent($name);
-            if (null === $childComponent) {
+        foreach ($component->getChildComponents() as $childComponent) {
+            if ($childComponent instanceof DataSourceInterface) {
                 continue;
             }
-            $collectedComponents[$childComponent->getName()] = true;
+            if ($childComponent instanceof \Magento\Ui\Component\Wrapper\Block) {
+                $this->addWrappedBlock($childComponent, $childrenAreas);
+                continue;
+            }
 
-            if (isset($meta['is_collection']) && $meta['is_collection'] === true) {
+            $name = $childComponent->getName();
+            $config = $childComponent->getData('config');
+            $collectedComponents[$name] = true;
+            if (isset($config['is_collection']) && $config['is_collection'] === true) {
                 $label = $childComponent->getData('config/label');
                 $this->component->getContext()->addComponentDefinition(
                     'collection',
@@ -155,7 +169,7 @@ class Tabs extends Generic implements LayoutInterface
             $childrenAreas[$name] = [
                 'type' => $tabComponent->getComponentName(),
                 'dataScope' => 'data.' . $name,
-                'config' => isset($meta['config']) ? $meta['config'] : [],
+                'config' => $config,
                 'insertTo' => [
                     $this->namespace . '.sections' => [
                         'position' => $this->getNextSortIncrement()
@@ -165,8 +179,6 @@ class Tabs extends Generic implements LayoutInterface
             ];
         }
 
-        $this->addWrappedBlock($childrenAreas, $component, $collectedComponents);
-
         $this->structure[static::AREAS_KEY]['children'] = $childrenAreas;
         $topNode = $this->structure;
     }
@@ -174,58 +186,47 @@ class Tabs extends Generic implements LayoutInterface
     /**
      * Add wrapped layout block
      *
+     * @param \Magento\Ui\Component\Wrapper\Block $childComponent
      * @param array $areas
-     * @param UiComponentInterface $component
-     * @param array $collectedComponents
      * @return void
      */
-    protected function addWrappedBlock(array &$areas, UiComponentInterface $component, array $collectedComponents)
+    protected function addWrappedBlock(\Magento\Ui\Component\Wrapper\Block $childComponent, array &$areas)
     {
-        /** @var \Magento\Ui\Component\Wrapper\Block $childComponent */
-        foreach ($component->getChildComponents() as $name => $childComponent) {
-            /** @var TabInterface $block */
-            $block = $childComponent->getBlock();
-            if (isset($collectedComponents[$name]) || !($block instanceof TabInterface) || !$block->canShowTab()) {
-                continue;
-            }
-            $block->setData('target_form', $this->namespace);
+        $name = $childComponent->getName();
+        /** @var TabInterface $block */
+        $block = $childComponent->getBlock();
+        if (!$block->canShowTab()) {
+            return;
+        }
+        $block->setData('target_form', $this->namespace);
 
-            $config = [];
-            if ($block->isAjaxLoaded()) {
-                $config['url'] = $block->getTabUrl();
-            } else {
-                $config['content'] = $block->toHtml();
-            }
-
-            $tabComponent = $this->createTabComponent($childComponent, $name);
-            $areas[$name] = [
-                'type' => $tabComponent->getComponentName(),
-                'dataScope' => $name,
-                'insertTo' => [
-                    $this->namespace . '.sections' => [
-                        'position' => $block->hasSortOrder() ? $block->getSortOrder() : $this->getNextSortIncrement()
-                    ]
-                ],
-                'config' => [
-                    'label' => $block->getTabTitle()
-                ],
-                'children' => [
-                    $name => [
-                        'type' => 'html_content',
-                        'dataScope' => $name,
-                        'config' => $config,
-                    ]
-                ],
-            ];
+        $config = [];
+        if ($block->isAjaxLoaded()) {
+            $config['url'] = $block->getTabUrl();
+        } else {
+            $config['content'] = $block->toHtml();
         }
 
-        $this->component->getContext()->addComponentDefinition(
-            'html_content',
-            [
-                'component' => 'Magento_Ui/js/form/components/html',
-                'extends' => $this->namespace
-            ]
-        );
+        $tabComponent = $this->createTabComponent($childComponent, $name);
+        $areas[$name] = [
+            'type' => $tabComponent->getComponentName(),
+            'dataScope' => $name,
+            'insertTo' => [
+                $this->namespace . '.sections' => [
+                    'position' => $block->hasSortOrder() ? $block->getSortOrder() : $this->getNextSortIncrement()
+                ]
+            ],
+            'config' => [
+                'label' => $block->getTabTitle()
+            ],
+            'children' => [
+                $name => [
+                    'type' => 'html_content',
+                    'dataScope' => $name,
+                    'config' => $config,
+                ]
+            ],
+        ];
     }
 
     /**
@@ -287,8 +288,7 @@ class Tabs extends Generic implements LayoutInterface
             ]
         ];
 
-        /** @var JsConfigInterface $component */
-        list($config, $dataScope) = $this->prepareConfig((array) $component->getJsConfig(), $name, $parentName);
+        list($config, $dataScope) = $this->prepareConfig((array) $component->getConfiguration(), $name, $parentName);
 
         if ($dataScope !== false) {
             $structure[$name]['dataScope'] = $dataScope;

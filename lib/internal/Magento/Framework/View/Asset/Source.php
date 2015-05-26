@@ -138,11 +138,14 @@ class Source
             return unserialize($cached);
         }
 
+        $origContent = $path ? $this->rootDir->readFile($path) : '';
+        $origContentType = $this->getContentType($path) ?: $asset->getContentType();
+
         $chain = $this->chainFactory->create(
             [
                 'asset' => $asset,
-                'origContent' => $this->rootDir->readFile($path),
-                'origContentType' => $this->getContentType($path),
+                'origContent' => $origContent,
+                'origContentType' => $origContentType,
                 'origAssetPath' => $path
             ]
         );

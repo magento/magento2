@@ -11,6 +11,7 @@ define([
         getLabel: function (data) {
             var options = this.options || [],
                 label = '';
+            data = data || '';
 
             options.some(function (item) {
                 label = item.label;
