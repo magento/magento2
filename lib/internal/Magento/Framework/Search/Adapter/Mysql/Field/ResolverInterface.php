@@ -11,7 +11,7 @@ interface ResolverInterface
      * Resolve field
      *
      * @param string|array $fields
-     * @return string|array
+     * @return FieldInterface[]
      */
     public function resolve($fields);
 }

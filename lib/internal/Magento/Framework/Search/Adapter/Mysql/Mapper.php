@@ -8,7 +8,8 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
-use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match as MatchQueryBuilder;
+use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer;
+use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory;
 use Magento\Framework\Search\EntityMetadata;
 use Magento\Framework\Search\Request\Query\Bool as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
@@ -28,11 +29,6 @@ class Mapper
     private $scoreBuilderFactory;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match
-     */
-    private $matchQueryBuilder;
-
-    /**
      * @var Filter\Builder
      */
     private $filterBuilder;
@@ -48,7 +44,7 @@ class Mapper
     private $conditionManager;
 
     /**
-     * @var array
+     * @var IndexBuilderInterface[]
      */
     private $indexProviders;
 
@@ -63,33 +59,39 @@ class Mapper
     private $entityMetadata;
 
     /**
+     * @var MatchContainerFactory
+     */
+    private $matchContainerFactory;
+
+    /**
      * @param ScoreBuilderFactory $scoreBuilderFactory
      * @param MatchQueryBuilder $matchQueryBuilder
      * @param Builder $filterBuilder
      * @param Dimensions $dimensionsBuilder
      * @param ConditionManager $conditionManager
-     * @param Resource $resource
+     * @param Resource|Resource $resource
      * @param EntityMetadata $entityMetadata
-     * @param array $indexProviders
+     * @param MatchContainerFactory $matchContainerFactory
+     * @param IndexBuilderInterface[] $indexProviders
      */
     public function __construct(
         ScoreBuilderFactory $scoreBuilderFactory,
-        MatchQueryBuilder $matchQueryBuilder,
         Builder $filterBuilder,
         Dimensions $dimensionsBuilder,
         ConditionManager $conditionManager,
         Resource $resource,
         EntityMetadata $entityMetadata,
+        MatchContainerFactory $matchContainerFactory,
         array $indexProviders
     ) {
         $this->scoreBuilderFactory = $scoreBuilderFactory;
-        $this->matchQueryBuilder = $matchQueryBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->dimensionsBuilder = $dimensionsBuilder;
         $this->conditionManager = $conditionManager;
         $this->resource = $resource;
         $this->entityMetadata = $entityMetadata;
         $this->indexProviders = $indexProviders;
+        $this->matchContainerFactory = $matchContainerFactory;
     }
 
     /**
@@ -104,7 +106,15 @@ class Mapper
         if (!isset($this->indexProviders[$request->getIndex()])) {
             throw new \Exception('Index provider not configured');
         }
-        $subSelect = $this->indexProviders[$request->getIndex()]->build($request);
+
+        $indexBuilder = $this->indexProviders[$request->getIndex()];
+        $subSelect = $indexBuilder->build($request);
+        $matchContainer = $this->matchContainerFactory->create(
+            [
+            'indexBuilder' => $indexBuilder,
+            'request' => $request
+            ]
+        );
 
         /** @var ScoreBuilder $scoreBuilder */
         $scoreBuilder = $this->scoreBuilderFactory->create();
@@ -112,22 +122,34 @@ class Mapper
             $scoreBuilder,
             $request->getQuery(),
             $subSelect,
-            BoolQuery::QUERY_CONDITION_MUST
+            BoolQuery::QUERY_CONDITION_MUST,
+            $matchContainer
         );
         $subSelect = $this->processDimensions($request, $subSelect);
         $subSelect->columns($scoreBuilder->build());
         $subSelect->limit($request->getSize());
 
         $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
+        $tables = array_merge($matchContainer->getQueryNames(), ['main_select.score']) ;
+        $relevance = implode('.score + ', $tables);
         $select
             ->from(
-                $subSelect,
+                ['main_select' =>$subSelect],
                 [
                     $this->entityMetadata->getEntityId() => 'product_id',
-                    'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
+                    'relevance' => sprintf('(%s)', $relevance),
                 ]
             )
             ->group($this->entityMetadata->getEntityId());
+
+        foreach ($matchContainer->getQueries() as $matchName => $matchSelect) {
+            $select->join(
+                [$matchName => $matchSelect],
+                $matchName . '.product_id = main_select.product_id',
+                []
+            );
+        }
+
         $select->order('relevance ' . Select::SQL_DESC);
         return $select;
     }
@@ -146,12 +168,13 @@ class Mapper
         ScoreBuilder $scoreBuilder,
         RequestQueryInterface $query,
         Select $select,
-        $conditionType
+        $conditionType,
+        MatchContainer $matchContainer
     ) {
         switch ($query->getType()) {
             case RequestQueryInterface::TYPE_MATCH:
                 /** @var MatchQuery $query */
-                $select = $this->matchQueryBuilder->build(
+                $select = $matchContainer->build(
                     $scoreBuilder,
                     $select,
                     $query,
@@ -160,11 +183,11 @@ class Mapper
                 break;
             case RequestQueryInterface::TYPE_BOOL:
                 /** @var BoolQuery $query */
-                $select = $this->processBoolQuery($scoreBuilder, $query, $select);
+                $select = $this->processBoolQuery($scoreBuilder, $query, $select, $matchContainer);
                 break;
             case RequestQueryInterface::TYPE_FILTER:
                 /** @var FilterQuery $query */
-                $select = $this->processFilterQuery($scoreBuilder, $query, $select, $conditionType);
+                $select = $this->processFilterQuery($scoreBuilder, $query, $select, $conditionType, $matchContainer);
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Unknown query type \'%s\'', $query->getType()));
@@ -178,9 +201,15 @@ class Mapper
      * @param ScoreBuilder $scoreBuilder
      * @param BoolQuery $query
      * @param Select $select
+     * @param MatchContainer $matchContainer
      * @return Select
      */
-    private function processBoolQuery(ScoreBuilder $scoreBuilder, BoolQuery $query, Select $select)
+    private function processBoolQuery(
+        ScoreBuilder $scoreBuilder,
+        BoolQuery $query,
+        Select $select,
+        MatchContainer $matchContainer
+    )
     {
         $scoreBuilder->startQuery();
 
@@ -188,21 +217,24 @@ class Mapper
             $scoreBuilder,
             $query->getMust(),
             $select,
-            BoolQuery::QUERY_CONDITION_MUST
+            BoolQuery::QUERY_CONDITION_MUST,
+            $matchContainer
         );
 
         $select = $this->processBoolQueryCondition(
             $scoreBuilder,
             $query->getShould(),
             $select,
-            BoolQuery::QUERY_CONDITION_SHOULD
+            BoolQuery::QUERY_CONDITION_SHOULD,
+            $matchContainer
         );
 
         $select = $this->processBoolQueryCondition(
             $scoreBuilder,
             $query->getMustNot(),
             $select,
-            BoolQuery::QUERY_CONDITION_NOT
+            BoolQuery::QUERY_CONDITION_NOT,
+            $matchContainer
         );
 
         $scoreBuilder->endQuery($query->getBoost());
@@ -223,10 +255,11 @@ class Mapper
         ScoreBuilder $scoreBuilder,
         array $subQueryList,
         Select $select,
-        $conditionType
+        $conditionType,
+        MatchContainer $matchContainer
     ) {
         foreach ($subQueryList as $subQuery) {
-            $select = $this->processQuery($scoreBuilder, $subQuery, $select, $conditionType);
+            $select = $this->processQuery($scoreBuilder, $subQuery, $select, $conditionType, $matchContainer);
         }
         return $select;
     }
@@ -240,12 +273,24 @@ class Mapper
      * @param string $conditionType
      * @return Select
      */
-    private function processFilterQuery(ScoreBuilder $scoreBuilder, FilterQuery $query, Select $select, $conditionType)
+    private function processFilterQuery(
+        ScoreBuilder $scoreBuilder,
+        FilterQuery $query,
+        Select $select,
+        $conditionType,
+        MatchContainer $matchContainer
+    )
     {
         $scoreBuilder->startQuery();
         switch ($query->getReferenceType()) {
             case FilterQuery::REFERENCE_QUERY:
-                $select = $this->processQuery($scoreBuilder, $query->getReference(), $select, $conditionType);
+                $select = $this->processQuery(
+                    $scoreBuilder,
+                    $query->getReference(),
+                    $select,
+                    $conditionType,
+                    $matchContainer
+                );
                 $scoreBuilder->endQuery($query->getBoost());
                 break;
             case FilterQuery::REFERENCE_FILTER:

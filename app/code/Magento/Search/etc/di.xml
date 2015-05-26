@@ -23,6 +23,7 @@
     </type>
     <preference for="Magento\Search\Model\QueryFactoryInterface" type="Magento\Search\Model\QueryFactory" />
     <preference for="Magento\Search\Model\QueryInterface" type="Magento\Search\Model\Query" />
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Field"/>
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">
