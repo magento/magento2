@@ -38,7 +38,7 @@ class InfoLanguageListCommand extends Command
     protected function configure()
     {
         $this->setName('info:language:list')
-            ->setDescription('Prints list of available language locales');
+            ->setDescription('Displays the list of available language locales');
 
         parent::configure();
     }

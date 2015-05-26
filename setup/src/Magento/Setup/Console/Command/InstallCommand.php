@@ -110,7 +110,7 @@ class InstallCommand extends AbstractSetupCommand
             )
         ]);
         $this->setName('setup:install')
-            ->setDescription('Installs Magento Application')
+            ->setDescription('Installs the Magento application')
             ->setDefinition($inputOptions);
         parent::configure();
     }
