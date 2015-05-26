@@ -37,8 +37,7 @@ class AssertCouponReportResult extends AbstractConstraint
         $couponCode = $data['coupon_code']->getCouponCode();
         $filter = [
             'coupon_code' => $couponCode,
-            // Skipped because of the presence of bug: MAGETWO-37922
-            //'rule_name' => $data['coupon_code']->getName(),
+            'rule_name' => $data['coupon_code']->getName(),
             'subtotal' => $currency . number_format($data['price']['subtotal'], 2),
             'discount' => $discount,
         ];
