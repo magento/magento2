@@ -68,6 +68,7 @@
         <arguments>
             <argument name="prices" xsi:type="array">
                 <item name="attribute_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\AttributePrice</item>
+                <item name="regular_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice</item>
             </argument>
             <argument name="target" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
         </arguments>
