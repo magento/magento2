@@ -116,7 +116,6 @@ class Mapper
         );
         $subSelect = $this->processDimensions($request, $subSelect);
         $subSelect->columns($scoreBuilder->build());
-        $subSelect->limit($request->getSize());
 
         $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
         $select
@@ -126,9 +125,10 @@ class Mapper
                     $this->entityMetadata->getEntityId() => 'product_id',
                     'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
                 ]
-            )
-            ->group($this->entityMetadata->getEntityId());
+            );
+        $select->group($this->entityMetadata->getEntityId());
         $select->order('relevance ' . Select::SQL_DESC);
+        $select->limit($request->getSize());
         return $select;
     }
 
