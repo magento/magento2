@@ -32,7 +32,6 @@ class Columns extends AbstractComponent
      */
     public function prepare()
     {
-        parent::prepare();
         foreach ($this->getChildComponents() as $column) {
             if ($column instanceof Column) {
                 $meta = $this->getContext()->getDataProvider()->getFieldMetaInfo($this->getName(), $column->getName());
@@ -43,8 +42,6 @@ class Columns extends AbstractComponent
                 }
             }
         }
-
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+        parent::prepare();
     }
 }

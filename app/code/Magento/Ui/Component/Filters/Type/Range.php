@@ -29,10 +29,9 @@ class Range extends AbstractFilter
      */
     public function prepare()
     {
-        parent::prepare();
         $this->applyFilter();
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
+
+        parent::prepare();
     }
 
     /**

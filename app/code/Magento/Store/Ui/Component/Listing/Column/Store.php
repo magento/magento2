@@ -54,24 +54,27 @@ class Store extends Column
     }
 
     /**
-     * @param array $items
-     * @return array
+     * Prepare Data Source
+     *
+     * @param array $dataSource
+     * @return void
      */
-    public function prepareItems(array & $items)
+    public function prepareDataSource(array & $dataSource)
     {
-        foreach ($items as & $item) {
-            $item[$this->getData('name')] = $this->prepareItem($item);
+        if (isset($dataSource['data']['items'])) {
+            foreach ($dataSource['data']['items'] as & $item) {
+                $item[$this->getData('name')] = $this->prepareItem($item);
+            }
         }
-        return $items;
     }
 
     /**
      * Get data
      *
      * @param array $item
-     * @return mixed
+     * @return string
      */
-    public function prepareItem(array $item)
+    protected function prepareItem(array $item)
     {
         $content = '';
         $origStores = $item['store_id'];
