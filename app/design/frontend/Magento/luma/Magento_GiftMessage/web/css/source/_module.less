@@ -23,7 +23,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .gift-message {
         margin-bottom: @indent__m;
         .actions-toolbar {
@@ -113,9 +112,6 @@
         .title {
             color: @gift-item-block-title__color;
             cursor: pointer;
-            margin: 0;
-            padding: @indent__s @indent__xl @indent__s 15px;
-            position: relative;
             .icon-font(
             @gift-item-block-title-icon__content,
             @_icon-font-size: @gift-item-block-title-icon__font-size,
@@ -126,6 +122,9 @@
             @_icon-font-position: after,
             @_icon-font-display: block
             );
+            margin: 0;
+            padding: @indent__s @indent__xl @indent__s 15px;
+            position: relative;
         }
 
         .content {
@@ -143,21 +142,23 @@
     .order-details-items {
         .order-gift-message,
         .block-order-details-gift-message {
-            .item-options {
-                dt {
-                    margin: @indent__s 0;
-                    font-weight: @font-weight__regular;
-                }
-            }
             &:extend(.abs-add-clearfix all);
-            dt:after {
-                content: "";
+            dt {
+                &:after {
+                    content: '';
+                }
             }
             .label {
                 &:extend(.abs-colon all);
             }
             .item-message {
                 clear: left;
+            }
+            .item-options {
+                dt {
+                    font-weight: @font-weight__regular;
+                    margin: @indent__s 0;
+                }
             }
         }
     }
@@ -197,8 +198,8 @@
     }
 
     .gift-item-block {
-        border-top: @border-width__base solid @gift-item-block__border-color;
         border-bottom: 0;
+        border-top: @border-width__base solid @gift-item-block__border-color;
         .title {
             &:after {
                 .font-size(12);

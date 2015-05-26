@@ -15,7 +15,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .gift-message {
         .actions-toolbar {
             .action-cancel {
@@ -78,6 +77,7 @@
         }
 
         .title {
+            border-radius: 3px;
             .button(
             @_button-margin: 20px 0 0,
             @_button-padding: 7px 15px,
@@ -88,7 +88,6 @@
             @_button-icon-font-line-height: 16px,
             @_button-icon-font-position: after
             );
-            border-radius: 3px;
             font-weight: bold;
             &:active {
                 .css(box-shadow, @button__shadow);
@@ -113,14 +112,14 @@
         .block-order-details-gift-message {
             .item-options {
                 dt {
-                    margin: @indent__s 0;
                     font-weight: @font-weight__regular;
+                    margin: @indent__s 0;
                 }
             }
             &:extend(.abs-add-clearfix all);
             dt {
                 &:after {
-                    content: "";
+                    content: '';
                 }
             }
             .label {
@@ -142,15 +141,15 @@
             }
         }
         .action.show {
+            .icon-font(
+            @_icon-font-content: @icon-down,
+            @_icon-font-size: 22px,
+            @_icon-font-text-hide: false,
+            @_icon-font-position: after,
+            @_icon-font-display: inline-block
+            );
             padding-right: @indent__base;
             position: relative;
-            .icon-font(
-                @_icon-font-content: @icon-down,
-                @_icon-font-size: 22px,
-                @_icon-font-text-hide: false,
-                @_icon-font-position: after,
-                @_icon-font-display: inline-block
-            );
             &:after {
                 position: absolute;
                 right: 0;
@@ -158,8 +157,8 @@
             }
             &.expanded {
                 .icon-font-symbol(
-                    @_icon-font-content: @icon-up,
-                    @_icon-font-position: after
+                @_icon-font-content: @icon-up,
+                @_icon-font-position: after
                 );
             }
         }
@@ -186,8 +185,8 @@
         }
     }
     .gift-item-block {
-        border-top: @border-width__base solid @gift-item-block__border-color;
         border-bottom: 0;
+        border-top: @border-width__base solid @gift-item-block__border-color;
         .content {
             padding-left: 1.5rem;
             padding-right: 1.5rem;
