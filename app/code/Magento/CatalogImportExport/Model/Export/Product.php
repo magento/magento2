@@ -836,6 +836,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $data[$itemId][$storeId][self::COL_STORE] = $storeCode;
                     $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
                     $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
+                    $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 }
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
@@ -991,7 +992,7 @@ $tmp = 0;
                             $associations[$skuItem] = $linkData['position'];
                         }
                         $multirawData['linksRows'][$productId][$linkId] = array();
-                        sort($associations);
+                        asort($associations);
                         $dataRow[$colPrefix . 'sku'] = implode(',', array_keys($associations));
                     }
                 }
@@ -1016,7 +1017,6 @@ $tmp = 0;
                 break;
             } elseif ($storeId != Store::DEFAULT_STORE_ID) {
                 $dataRow[self::COL_STORE] = $this->_storeIdToCode[$storeId];
-                $dataRow[self::COL_SKU] = null;
                 $dataRow[self::COL_ATTR_SET] = null;
                 $dataRow[self::COL_TYPE] = null;
                 if (isset($productData[Store::DEFAULT_STORE_ID][self::COL_VISIBILITY])) {
