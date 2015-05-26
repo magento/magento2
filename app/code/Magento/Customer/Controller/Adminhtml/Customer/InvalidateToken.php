@@ -7,28 +7,11 @@
 
 namespace Magento\Customer\Controller\Adminhtml\Customer;
 
-use Magento\Integration\Api\CustomerTokenServiceInterface;
-
 /**
  *  Class to invalidate tokens for customers
  */
 class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
 {
-    /**
-     * @var CustomerTokenServiceInterface
-     */
-    protected $tokenService;
-
-    /**
-     * Inject dependencies.
-     *
-     * @param CustomerTokenServiceInterface $tokenService
-     */
-    public function __construct(CustomerTokenServiceInterface $tokenService)
-    {
-        $this->tokenService = $tokenService;
-    }
-
     /**
      * Reset customer's tokens handler
      *
