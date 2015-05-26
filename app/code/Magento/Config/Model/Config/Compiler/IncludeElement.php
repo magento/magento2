@@ -54,19 +54,21 @@ class IncludeElement implements ElementInterface
     public function compile(CompilerInterface $compiler, \DOMElement $node, Object $processedObject, Object $context)
     {
         $ownerDocument = $node->ownerDocument;
+        $parentNode = $node->parentNode;
 
         $document = new \DOMDocument();
         $document->loadXML($this->getContent($node->getAttribute(static::INCLUDE_PATH)));
+
+        foreach ($this->getChildNodes($document->documentElement) as $child) {
+            $compiler->compile($child, $processedObject, $context);
+        }
 
         $newFragment = $ownerDocument->createDocumentFragment();
         foreach ($document->documentElement->childNodes as $child) {
             $newFragment->appendXML($document->saveXML($child));
         }
 
-        $node = $node->parentNode->replaceChild($newFragment, $node);
-        foreach ($this->getChildNodes($node) as $child) {
-            $compiler->compile($child, $processedObject, $context);
-        }
+        $parentNode->replaceChild($newFragment, $node);
     }
 
     /**
@@ -106,6 +108,6 @@ class IncludeElement implements ElementInterface
             return $modulesDirectory->readFile($path);
         }
 
-        throw new LocalizedException(__('The file "' . $file . '" does not exist'));
+        throw new LocalizedException(__('The file "' . $path . '" does not exist'));
     }
 }
