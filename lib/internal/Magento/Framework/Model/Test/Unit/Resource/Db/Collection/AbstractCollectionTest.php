@@ -49,6 +49,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectManagerMock;
 
+    /**
+     * @var \Magento\Framework\App\ObjectManager
+     */
+    protected $objectMangerBackup;
+
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactoryInterface');
@@ -75,6 +80,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->selectMock));
 
         $this->objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
+        $this->objectMangerBackup = \Magento\Framework\App\ObjectManager::getInstance();
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -84,9 +90,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
-        $objectManager = $magentoObjectManagerFactory->create($_SERVER);
-        \Magento\Framework\App\ObjectManager::setInstance($objectManager);
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectMangerBackup);
     }
 
     protected function getUut()
