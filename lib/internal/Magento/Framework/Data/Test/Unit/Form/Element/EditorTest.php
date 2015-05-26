@@ -9,10 +9,12 @@
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\Data\Form\Element\Editor;
+
 class EditorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Form\Element\Editor
+     * @var Editor
      */
     protected $model;
 
@@ -48,7 +50,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         );
         $this->escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
 
-        $this->model = new \Magento\Framework\Data\Form\Element\Editor(
+        $this->model = new Editor(
             $this->factoryMock,
             $this->collectionFactoryMock,
             $this->escaperMock
@@ -65,12 +67,12 @@ class EditorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('textarea', $this->model->getType());
         $this->assertEquals('textarea', $this->model->getExtType());
-        $this->assertEquals(2, $this->model->getRows());
-        $this->assertEquals(15, $this->model->getCols());
+        $this->assertEquals(Editor::DEFAULT_ROWS, $this->model->getRows());
+        $this->assertEquals(Editor::DEFAULT_COLS, $this->model->getCols());
 
         $config = new \Magento\Framework\Object();
         $config->setData('enabled', true);
-        $model = new \Magento\Framework\Data\Form\Element\Editor(
+        $model = new Editor(
             $this->factoryMock,
             $this->collectionFactoryMock,
             $this->escaperMock,
@@ -88,18 +90,18 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('</textarea>', $html);
         $this->assertContains('rows="2"', $html);
         $this->assertContains('cols="15"', $html);
-        $this->assertTrue(preg_match('/class=\".*textarea.*\"/i', $html) > 0);
-        $this->assertFalse(preg_match('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html) > 0);
+        $this->assertRegExp('/class=\".*textarea.*\"/i', $html);
+        $this->assertNotRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
         $this->model->getConfig()->setData('enabled', true);
         $html = $this->model->getElementHtml();
-        $this->assertTrue(preg_match('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html) > 0);
+        $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
         $this->model->getConfig()->setData('widget_window_url', 'localhost');
         $this->model->getConfig()->unsetData('enabled');
         $this->model->getConfig()->setData('add_widgets', true);
         $html = $this->model->getElementHtml();
-        $this->assertTrue(preg_match('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html) > 0);
+        $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
     }
 
     public function testIsEnabled()
@@ -143,6 +145,6 @@ class EditorTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->getConfig()->setData('enabled', true);
         $html = $this->model->getElementHtml();
-        $this->assertTrue(preg_match('/.*"Insert Image...":"Insert Image...".*/i', $html) > 0);
+        $this->assertRegExp('/.*"Insert Image...":"Insert Image...".*/i', $html);
     }
 }
