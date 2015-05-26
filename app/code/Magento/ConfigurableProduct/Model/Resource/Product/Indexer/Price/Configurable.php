@@ -177,8 +177,8 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         );
         $select->columns(
             [
-                'min_price' => 'io.min_price',
-                'max_price' => 'io.max_price',
+                'min_price' => new \Zend_Db_Expr('i.min_price - i.orig_price + io.min_price'),
+                'max_price' => new \Zend_Db_Expr('i.max_price - i.orig_price + io.max_price'),
                 'tier_price' => 'io.tier_price',
                 'group_price' => 'io.group_price'
             ]
