@@ -83,6 +83,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     public function getActionClass()
     {
+        var_dump($this->getData('fields')[0]['field']);
         return $this->getData('action_class');
     }
 
