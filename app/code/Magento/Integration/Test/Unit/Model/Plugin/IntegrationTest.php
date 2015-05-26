@@ -5,7 +5,6 @@
  */
 namespace Magento\Integration\Test\Unit\Model\Plugin;
 
-use Magento\Authorization\Model\Acl\AclRetriever;
 use Magento\Integration\Model\Integration;
 
 /**
@@ -21,15 +20,17 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $integrationPlugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Api\IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
-    /** @var  AclRetriever */
+    /**
+     * @var  \Magento\Authorization\Model\Acl\AclRetriever|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $aclRetrieverMock;
 
     /**
-     * @var \Magento\Integration\Api\AuthorizationServiceInterface
+     * @var \Magento\Integration\Api\AuthorizationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $integrationAuthServiceMock;
 
