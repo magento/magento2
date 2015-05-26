@@ -5,8 +5,23 @@
  */
 namespace Magento\Indexer\Model\Config;
 
+use Magento\Indexer\Model\Fields\HandlerFactory;
+
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
+    /**
+     * @var HandlerFactory
+     */
+    protected $handlerFactory;
+
+    /**
+     * @param HandlerFactory $handlerFactory
+     */
+    public function __constructor(HandlerFactory $handlerFactory)
+    {
+        $this->handlerFactory = $handlerFactory;
+    }
+
     /**
      * Convert dom node tree to array
      *
@@ -34,7 +49,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 if ($childNode->nodeType != XML_ELEMENT_NODE) {
                     continue;
                 }
-
                 $data = $this->convertChild($childNode, $data);
             }
             $output[$indexerId] = $data;
@@ -72,8 +86,44 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             case 'description':
                 $data['description'] = $this->getTranslatedNodeValue($childNode);
                 break;
+            case 'fields': {
+                $data['class_handler'] = $this->getAttributeValue($childNode, 'handler');
+                $data['fields'] = $this->convertField($childNode);
+                break;
+            }
+            case 'field': {
+                $data['class_handler'] = $this->getAttributeValue($childNode, 'handler');
+                $data['field'] = [
+                    'name'    => $this->getAttributeValue($childNode, 'name'),
+                    'origin'  => $this->getAttributeValue($childNode, 'origin'),
+                    'filters' => $this->convertField($childNode),
+                ];
+                break;
+            }
+            case 'filter':
+                $data = $this->getAttributeValue($childNode, 'class');
+                break;
         }
         return $data;
+    }
+
+    /**
+     * Convert field
+     *
+     * @param \DOMNode $node
+     * @return array
+     */
+    protected function convertField(\DOMNode $node)
+    {
+        $fields = [];
+        /** @var $childNode \DOMNode */
+        foreach ($node->childNodes as $childNode) {
+            if ($childNode->nodeType != XML_ELEMENT_NODE) {
+                continue;
+            }
+            $fields[] = $this->convertChild($childNode, $fields);
+        }
+        return $fields;
     }
 
     /**

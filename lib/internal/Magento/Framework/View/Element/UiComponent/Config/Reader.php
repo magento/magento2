@@ -31,6 +31,20 @@ class Reader implements UiReaderInterface
     protected $converter;
 
     /**
+     * File Collector
+     *
+     * @var FileCollectorInterface
+     */
+    protected $fileCollector;
+
+    /**
+     * Read files checker
+     *
+     * @var bool
+     */
+    protected $isReadFileList = false;
+
+    /**
      * Constructor
      *
      * @param FileCollectorInterface $fileCollector
@@ -42,9 +56,9 @@ class Reader implements UiReaderInterface
         ConverterInterface $converter,
         DomMergerInterface $domMerger
     ) {
-        $this->converter = $converter;
-        $this->domMerger = $domMerger;
-        $this->readFiles($fileCollector->collectFiles());
+        $this->converter     = $converter;
+        $this->domMerger     = $domMerger;
+        $this->fileCollector = $fileCollector;
     }
 
     /**
@@ -92,6 +106,10 @@ class Reader implements UiReaderInterface
      */
     public function read($scope = null)
     {
+        if (!$this->isReadFileList) {
+            $this->readFiles($this->fileCollector->collectFiles());
+            $this->isReadFileList = true;
+        }
         return $this->converter->convert($this->domMerger->getDom());
     }
 
