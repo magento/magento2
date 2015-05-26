@@ -8,6 +8,7 @@ namespace Magento\Setup\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Setup\Fixtures\FixtureModel;
@@ -21,6 +22,8 @@ class GenerateFixturesCommand extends Command
      * Profile argument
      */
     const PROFILE_ARGUMENT = 'profile';
+
+    const SKIP_REINDEX_OPTION = 'skip-reindex';
 
     /**
      * @var FixtureModel
@@ -49,6 +52,12 @@ class GenerateFixturesCommand extends Command
                     InputArgument::REQUIRED,
                     'Path to profile configuration file'
                 ),
+                new InputOption(
+                    self::SKIP_REINDEX_OPTION,
+                    's',
+                    InputOption::VALUE_NONE,
+                    'Skip reindex'
+                )
             ]);
         parent::configure();
     }
@@ -99,7 +108,10 @@ class GenerateFixturesCommand extends Command
                 $indexer->setScheduled($indexersState[$indexerId['indexer_id']]);
             }
 
-            $fixtureModel->reindex($output);
+            if (!$input->getOption(self::SKIP_REINDEX_OPTION)) {
+                $fixtureModel->reindex($output);
+            }
+            
             $totalEndTime = microtime(true);
             $totalResultTime = $totalEndTime - $totalStartTime;
 
