@@ -12,6 +12,16 @@ namespace Magento\Config\Model\Config\Source\Locale;
 class Timezone implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * Timezones that works incorrect with php_intl extension
+     */
+    const IGNORED_TIMEZONES = [
+        'Antarctica/Troll',
+        'Asia/Chita',
+        'Asia/Srednekolymsk',
+        'Pacific/Bougainville'
+    ];
+
+    /**
      * @var \Magento\Framework\Locale\ListsInterface
      */
     protected $_localeLists;
@@ -29,6 +39,14 @@ class Timezone implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->_localeLists->getOptionTimezones();
+        $timezones = $this->_localeLists->getOptionTimezones();
+        $timezones = array_filter($timezones, function($value) {
+            if (in_array($value['value'], static::IGNORED_TIMEZONES)) {
+                return false;
+            }
+            return true;
+        });
+
+        return $timezones;
     }
 }
