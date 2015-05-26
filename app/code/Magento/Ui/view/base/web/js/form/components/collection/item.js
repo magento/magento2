@@ -157,7 +157,7 @@ define([
             items = items.map(function (index) {
                 var elem = elems[index];
 
-                preview = elem ? elem.delegate('getPreview') : '';
+                preview = elem && elem.visible() ? elem.delegate('getPreview') : '';
 
                 preview = Array.isArray(preview) ?
                     _.compact(preview).join(', ') :

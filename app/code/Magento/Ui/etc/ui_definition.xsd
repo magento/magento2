@@ -48,6 +48,7 @@
             <xs:element type="dataTypeEmail" name="email"/>
             <xs:element type="nav" name="nav"/>
             <xs:element type="actions" name="actions"/>
+            <xs:element type="bookmark" name="bookmark"/>
         </xs:all>
     </xs:complexType>
     <!-- Custom configuration -->
