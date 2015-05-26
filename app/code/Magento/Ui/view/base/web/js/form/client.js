@@ -34,8 +34,7 @@ define([
                     $.each(resp.messages, function(key, message) {
                         $('body').notification('add', {
                             error: resp.error,
-                            message: message,
-                            messageContainer: '#anchor-content'
+                            message: message
                         });
                     });
                 }
