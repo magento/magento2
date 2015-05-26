@@ -45,7 +45,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this->setName('admin:user:create')
-            ->setDescription('Creates admin user')
+            ->setDescription('Creates an administrator')
             ->setDefinition($this->getOptionsList());
         parent::configure();
     }
@@ -62,7 +62,8 @@ class AdminUserCreateCommand extends AbstractSetupCommand
         }
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->installAdminUser($input->getOptions());
-        $output->writeln('<info>Created admin user ' . $input->getOption(AdminAccount::KEY_USER) . '</info>');
+        $output->writeln('<info>Created Magento administrator user named' . $input->getOption(AdminAccount::KEY_USER)
+            . '</info>');
     }
 
     /**

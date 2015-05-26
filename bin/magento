@@ -5,10 +5,13 @@
  * See COPYING.txt for license details.
  */
 
+use Composer\Json\JsonFile;
+
 try {
     require __DIR__ . '/../app/bootstrap.php';
     if (PHP_SAPI == 'cli') {
-        $application = new Magento\Framework\Console\Cli('Magento CLI');
+        $jsonFile = new JsonFile(__DIR__ . '/../composer.json');
+        $application = new Magento\Framework\Console\Cli('Magento CLI', $jsonFile->read()['version']);
         $application->run();
     }
 

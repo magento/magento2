@@ -40,7 +40,7 @@ class MaintenanceStatusCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this->setName('maintenance:status')
-            ->setDescription('Checks maintenance mode status');
+            ->setDescription('Displays maintenance mode status');
         parent::configure();
     }
 

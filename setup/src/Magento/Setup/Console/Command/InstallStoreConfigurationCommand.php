@@ -67,7 +67,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
     protected function configure()
     {
         $this->setName('setup:store-config:set')
-            ->setDescription('Installs store configuration')
+            ->setDescription('Installs the store configuration')
             ->setDefinition($this->getOptionsList());
         parent::configure();
     }

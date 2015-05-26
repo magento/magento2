@@ -38,7 +38,7 @@ class InfoTimezoneListCommand extends Command
     protected function configure()
     {
         $this->setName('info:timezone:list')
-            ->setDescription('Prints list of available timezones');
+            ->setDescription('Displays the list of available timezones');
 
         parent::configure();
     }
