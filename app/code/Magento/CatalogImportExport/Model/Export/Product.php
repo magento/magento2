@@ -235,6 +235,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         Product::COL_STORE => 'store_view_code',
         Product::COL_ATTR_SET => 'attribute_set_code',
         Product::COL_TYPE => 'product_type',
+        Product::COL_CATEGORY => 'categories',
         Product::COL_PRODUCT_WEBSITES => 'product_websites',
         'status' => 'product_online',
         'news_from_date' => 'new_from_date',
@@ -632,15 +633,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 [],
                 [
                     '_related_sku',
-                    '_related_position',
                     '_crosssell_sku',
-                    '_crosssell_position',
                     '_upsell_sku',
-                    '_upsell_position'
                 ],
-                ['_tier_price_website', '_tier_price_customer_group', '_tier_price_qty', '_tier_price_price'],
-                ['_group_price_website', '_group_price_customer_group', '_group_price_price'],
-                ['_media_attribute_id', '_media_image', '_media_label', '_media_position', '_media_is_disabled']
+                ['additional_images', 'additional_image_labels']
             );
             // have we merge custom options columns
             if ($customOptionsData) {
@@ -985,13 +981,18 @@ $tmp = 0;
                     if (!empty($multirawData['linksRows'][$productId][$linkId])) {
                         $colPrefix = '_' . $linkTypeName . '_';
 
-                        $linkData = array_shift($multirawData['linksRows'][$productId][$linkId]);
-                        $dataRow[$colPrefix . 'position'] = $linkData['position'];
-                        $dataRow[$colPrefix . 'sku'] = $linkData['sku'];
-
-                        if ($linkData['default_qty'] !== null) {
-                            $dataRow[$colPrefix . 'default_qty'] = $linkData['default_qty'];
+                        $associations = array();
+                        foreach ($multirawData['linksRows'][$productId][$linkId] as $linkData) {
+                            if ($linkData['default_qty'] !== null) {
+                                $skuItem = $linkData['sku'] . '=' . $linkData['default_qty'];
+                            } else {
+                                $skuItem = $linkData['sku'];
+                            }
+                            $associations[$skuItem] = $linkData['position'];
                         }
+                        $multirawData['linksRows'][$productId][$linkId] = array();
+                        sort($associations);
+                        $dataRow[$colPrefix . 'sku'] = implode(',', array_keys($associations));
                     }
                 }
                 $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
