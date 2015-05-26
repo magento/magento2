@@ -9,10 +9,9 @@ define(
         'ko',
         'underscore',
         'mage/storage',
-        'Magento_Checkout/js/model/addresslist',
         './address-list-provider'
     ],
-    function($, ko, _, storage, addressList, addressListProvider) {
+    function($, ko, _, storage, addressListProvider) {
         "use strict";
         var isLoggedIn = ko.observable(window.isCustomerLoggedIn),
             failedLoginAttempts = ko.observable(0),
@@ -23,10 +22,6 @@ define(
         } else {
             customerData = {};
         }
-
-        $.each(addressListProvider.getItems(), function (key, item) {
-            addressList.add(item);
-        });
 
         return {
             customerData: customerData,
@@ -45,10 +40,10 @@ define(
                 failedLoginAttempts(++oldAttempts);
             },
             getBillingAddressList: function () {
-                return addressList.getAddresses();
+                return addressListProvider.getItems();
             },
             getShippingAddressList: function () {
-                return addressList.getAddresses();
+                return addressListProvider.getItems();
             },
             setDetails: function (fieldName, value) {
                 if (fieldName) {

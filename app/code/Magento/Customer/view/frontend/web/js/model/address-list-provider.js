@@ -5,26 +5,24 @@
 /*global define*/
 define(
     [
+        'Magento_Checkout/js/model/addresslist',
         './customer-addresses'
     ],
-    function(defaultProvider) {
+    function(addressList, defaultProvider) {
         "use strict";
-        var providers = [];
-        providers.push(defaultProvider);
+        defaultProvider.getItems().forEach(function (item) {
+            addressList.add(item);
+        });
 
         return {
             registerProvider: function(provider) {
-                providers.push(provider);
+                provider.getItems().forEach(function (item) {
+                    addressList.add(item);
+                });
             },
 
             getItems: function() {
-                var output = [];
-                providers.forEach(function(provider) {
-                    provider.getItems().forEach(function(addressItem) {
-                        output.push(addressItem);
-                    });
-                });
-                return output;
+                return addressList.getAddresses();
             }
         }
     }
