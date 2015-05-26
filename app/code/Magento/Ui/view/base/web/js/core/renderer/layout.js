@@ -199,7 +199,7 @@ define([
 
         insert: function (item, target, position) {
             registry.get(target, function (container) {
-                container.insert(item, position);
+                container.insertChild(item, position);
             });
 
             return this;
