@@ -12,6 +12,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Object\IdentityInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * Catalog Inventory Stock Model for adminhtml area
@@ -131,7 +132,7 @@ class Item extends \Magento\CatalogInventory\Model\Stock\Item implements Identit
     {
         $tags = [];
         if ($this->getProductId()) {
-            $tags[] = 'catalog_product_' . $this->getProductId();
+            $tags[] = Product::CACHE_TAG . '_' . $this->getProductId();
         }
 
         return $tags;
