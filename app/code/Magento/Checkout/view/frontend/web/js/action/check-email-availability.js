@@ -7,17 +7,14 @@
 define(
     [
         'mage/storage',
-        '../model/url-builder',
-        'Magento_Customer/js/model/customer'
+        '../model/url-builder'
     ],
-    function(storage, urlBuilder, customer) {
+    function(storage, urlBuilder) {
         "use strict";
-        return function(deferred) {
-            storage.post(
+        return function(deferred, email) {
+            return storage.post(
                 urlBuilder.createUrl('/customers/isEmailAvailable', {}),
-                JSON.stringify({
-                    customerEmail: customer.customerData.email
-                })
+                JSON.stringify({customerEmail: email})
             ).done(
                 function (isEmailAvailable) {
                     if (isEmailAvailable) {

@@ -43,6 +43,15 @@
                                                         <item name="provider" xsi:type="string">checkoutProvider</item>
                                                         <item name="sortOrder" xsi:type="string">1</item>
                                                         <item name="children" xsi:type="array">
+                                                            <item name="before-form" xsi:type="array">
+                                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                                <item name="displayArea" xsi:type="string">before-form</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <item name="customer-email" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/customer-email</item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
                                                             <item name="before-fields" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">before-fields</item>

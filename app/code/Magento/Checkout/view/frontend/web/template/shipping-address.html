@@ -20,6 +20,10 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
 
+        <!-- ko foreach: getRegion('before-form') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+
         <!-- Address form pop up -->
         <!-- ko if: (!isFormInline) -->
         <input type="button" data-bind="click: showFormPopUp, value: $t('New Address')" />
