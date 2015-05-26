@@ -15,6 +15,15 @@ define(
             defaults: {
                 template: 'Magento_Checkout/review/cart_items',
                 displayArea: 'columns'
+            },
+            colspan: 3,
+            getItemsCount: function() {
+                var totals = quote.getTotals()();
+                return totals.items.length;
+            },
+            getItems: function() {
+                var totals = quote.getTotals()();
+                return totals.items;
             }
         });
     }

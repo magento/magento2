@@ -4,7 +4,13 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<!-- ko foreach: elems() -->
-    <!-- ko template: getTemplate() --><!-- /ko -->
+<tr>
+    <td data-bind="attr: {'colspan': colspan}"><span data-bind="text: getItems().length"></span> Items in cart</td>
+</tr>
+<!-- ko foreach: getItems() -->
+<tr>
+    <!-- ko foreach: $parent.elems() -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+</tr>
 <!-- /ko -->

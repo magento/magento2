@@ -7,9 +7,10 @@ define(
     [
         'uiComponent',
         'Magento_Checkout/js/model/quote',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Catalog/js/price-utils',
+        'mage/translate'
     ],
-    function (Component, quote, priceUtils) {
+    function (Component, quote, priceUtils, $t) {
         "use strict";
         return Component.extend({
             defaults: {
@@ -22,7 +23,7 @@ define(
         getTitle: function() {
             var discountTotal = quote.getTotalByCode('discount');
             if (discountTotal) {
-                var title = discountTotal.getTitle();
+                var title = $t(discountTotal.title);
                 return title.replace("%1", this.totals().coupon_code);
             }
             return null;

@@ -14,7 +14,7 @@ define(
             defaults: {
                 ownClass: 'subtotal',
                 columnTitle: 'Subtotal',
-                template: 'Magento_Checkout/review/item/columns/price'
+                template: 'Magento_Checkout/review/item/columns/subtotal'
             },
             getValue: function(quoteItem) {
                 return this.getFormattedPrice(quoteItem.row_total);

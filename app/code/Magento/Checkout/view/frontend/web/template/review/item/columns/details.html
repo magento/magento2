@@ -4,14 +4,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<td class="col item" data-th="Product Name"><strong class="product name product-item-name" data-bind="text: $t(item.name)"></strong>
+<td class="col item" data-th="Product Name"><strong class="product name product-item-name" data-bind="text: $t($parent.name)"></strong>
+    Qty: <span data-bind="text: $parent.qty"></span>
     <!-- ko foreach: elems() -->
         <!-- ko template: getTemplate() --><!-- /ko -->
     <!-- /ko -->
 
-    <!-- ko if: (JSON.parse(item.options).length > 0)-->
+    <!-- ko if: (JSON.parse($parent.options).length > 0)-->
     <dl class="item-options">
-        <!--ko foreach: JSON.parse(item.options)-->
+        <!--ko foreach: JSON.parse($parent.options)-->
         <dt data-bind="text: $t(label)"></dt>
             <!-- ko if: ($data.full_view)-->
             <dd data-bind="html: full_view"></dd>

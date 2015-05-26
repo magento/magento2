@@ -12,12 +12,12 @@ define(
         "use strict";
         return column.extend({
             defaults: {
-                ownClass: 'price',
-                columnTitle: 'Price',
-                template: 'Magento_Checkout/review/item/columns/price'
+                ownClass: 'name',
+                columnTitle: 'Product Name',
+                template: 'Magento_Checkout/review/item/columns/details'
             },
             getValue: function(quoteItem) {
-                return this.getFormattedPrice(quoteItem.price);
+                return quoteItem.name;
             }
         });
     }

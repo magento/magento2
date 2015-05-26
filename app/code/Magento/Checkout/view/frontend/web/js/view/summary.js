@@ -6,16 +6,21 @@
 /*global define*/
 define(
     [
-        'uiComponent'
+        'uiComponent',
+        'Magento_Checkout/js/action/get-totals'
     ],
-    function (Component) {
+    function (Component, action) {
         "use strict";
+        action();
         return Component.extend({
             defaults: {
                 displayArea: 'summary',
                 template: 'Magento_Checkout/review/summary'
             },
-            title: 'Order Summary'
+            title: 'Order Summary',
+            getTotals: function() {
+                action();
+            }
         });
     }
 );
