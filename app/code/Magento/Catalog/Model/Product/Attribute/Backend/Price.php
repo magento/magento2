@@ -150,12 +150,58 @@ class Price extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             return parent::validate($object);
         }
 
-        if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $value) || $value < 0) {
+        if (!$this->isPositiveOrZero($value)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Please enter a number 0 or greater in this field.')
             );
         }
 
         return true;
+    }
+
+    /**
+     * Returns whether the value has a valid price format and is greater than, or equal to, zero
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    protected function isPositiveOrZero($value)
+    {
+        $value = $this->standardizePrice($value);
+
+        $hasValidFormat = preg_match('/^\d*(\.|,)?\d{0,4}$/i', $value);
+        $isNegative = $value < 0;
+
+        return  $hasValidFormat && !$isNegative;
+    }
+
+    /**
+     * Attempt to return the value in a standardized way.
+     * ex: 1.234,56 -> 1234.56
+     * ex: 1,234.56 -> 1234.56
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    protected function standardizePrice($value)
+    {
+        // based on the parseNumber() function in our validate.js script
+
+        $value = str_replace(' ', '', $value);
+        $iDot = strpos($value, '.');
+        $iComma = strpos($value, ',');
+
+        if ($iDot && $iComma) {
+            if ($iComma > $iDot) {
+                $value = str_replace('.', '', $value);
+                $value = str_replace(',', '.', $value);
+            } else {
+                $value = str_replace(',', '', $value);
+            }
+        } elseif ($iComma) {
+            $value = str_replace(',', '.', $value);
+        }
+
+        return $value;
     }
 }
