@@ -123,7 +123,7 @@ class DbStatusCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertStringMatchesFormat(
-            'No information is available: the application is not installed.%w',
+            'No information is available: the Magento application is not installed.%w',
             $tester->getDisplay()
         );
     }

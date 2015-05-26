@@ -434,7 +434,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->at(0))->method('quoteIdentifier')->with('magento')->willReturn('`magento`');
         $this->connection->expects($this->at(1))->method('query')->with('DROP DATABASE IF EXISTS `magento`');
         $this->connection->expects($this->at(2))->method('query')->with('CREATE DATABASE IF NOT EXISTS `magento`');
-        $this->logger->expects($this->once())->method('log')->with('Recreating database `magento`');
+        $this->logger->expects($this->once())->method('log')->with('Cleaning up database `magento`');
         $this->object->cleanupDb();
     }
 }
