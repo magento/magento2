@@ -60,7 +60,7 @@ define(['jquery', 'ko'], function($, ko) {
          * @returns {observableArray}
          */
         getAddresses: function() {
-            return addresses.slice(0);
+            return addresses;
         },
         /**
          * Returns customer default shipping address

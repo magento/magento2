@@ -18,11 +18,10 @@ define([
         name: '<%= $data.name %>',
         component: 'Magento_Checkout/js/view/shipping-address/address-renderer/default'
     };
-    // TODO inject address renderers and get addresses. Remove this hardcoded template.
-    var addresses = addressList.getAddresses();
-    addresses.forEach(function(address) {
-        //address.countryName = window.checkoutConfig.countryData[address.countryId].name;
-    });
+    var observableAddresses = addressList.getAddresses();
+    var addresses = observableAddresses();
+    var addressCount = addresses.length;
+    var lastAddedAddress = ko.observable({});
 
     return Component.extend({
         defaults: {
@@ -33,10 +32,26 @@ define([
         initialize: function () {
             this._super()
                 .initChildren();
+            observableAddresses.subscribe(
+                function(addresses) {
+                    var addressIndex = addresses.length - 1;
+                    if (addresses.length == addressCount) {
+                        // Update last added address (customer can update only one address)
+                        lastAddedAddress(addresses[addressIndex]);
+                    } else if (addresses.length > addressCount) {
+                        // Add a new tile for newly added address
+                        this.createRendererComponent(addresses[addressIndex], addressIndex);
+                        addressCount++;
+                    }
+                },
+                this
+            );
+
             return this;
         },
 
         initChildren: function () {
+            this.rendererComponents = [];
             _.each(addresses, this.createRendererComponent, this);
 
             return this;
@@ -52,15 +67,24 @@ define([
                 name: addressIndex
             };
             var rendererComponent = utils.template(rendererTemplate, templateData);
-
+            // remember last added address
+            lastAddedAddress = ko.observable(address);
             utils.extend(
                 rendererComponent,
                 {
-                    address: address
+                    address: lastAddedAddress,
+                    isSelected: ko.observable(!!address.isDefaultShipping)
                 }
             );
 
             layout([rendererComponent]);
+            this.rendererComponents[addressIndex] = rendererComponent;
+        },
+
+        selectAddressTile: function(addressIndex) {
+            this.rendererComponents.forEach(function(rendererComponent, rendererIndex) {
+                rendererComponent.isSelected(rendererIndex == addressIndex);
+            });
         },
 
         selectedAddress: ko.computed(function(){
