@@ -8,6 +8,9 @@ namespace Magento\Setup\Model;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Setup\UninstallInterface;
 
+/**
+ * Class for collecting all Uninstall interfaces in all modules
+ */
 class UninstallCollector
 {
     /**
