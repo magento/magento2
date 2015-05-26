@@ -3,23 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\TemplateEngine\Xhtml;
+namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
 use Magento\Framework\Object;
-use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Ui\TemplateEngine\Xhtml\Compiler\TextInterface;
-use Magento\Ui\TemplateEngine\Xhtml\Compiler\CdataInterface;
-use Magento\Ui\TemplateEngine\Xhtml\Compiler\CommentInterface;
-use Magento\Ui\TemplateEngine\Xhtml\Compiler\AttributeInterface;
-use Magento\Ui\TemplateEngine\Xhtml\Compiler\Element\ElementInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\TextInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\CdataInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\CommentInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\AttributeInterface;
+use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element\ElementInterface;
 
 /**
  * Class Compiler
  */
-class Compiler
+class Compiler implements CompilerInterface
 {
-    const PATTERN_TAG = '|@|';
-
     /**
      * @var TextInterface
      */
@@ -79,50 +76,51 @@ class Compiler
      * The compilation of the template and filling in the data
      *
      * @param \DOMNode $node
-     * @param UiComponentInterface $component
+     * @param  Object $processedObject
      * @param Object $context
      * @return void
      */
-    public function compile(\DOMNode $node, UiComponentInterface $component, Object $context)
+    public function compile(\DOMNode $node,  Object $processedObject, Object $context)
     {
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
-                $this->compilerText->compile($node, $component);
+                $this->compilerText->compile($node, $processedObject);
                 break;
             case XML_CDATA_SECTION_NODE:
-                $this->compilerCdata->compile($node, $component);
+                $this->compilerCdata->compile($node, $processedObject);
                 break;
             case XML_COMMENT_NODE:
-                $this->compilerComment->compile($node, $component);
+                $this->compilerComment->compile($node, $processedObject);
                 break;
             default:
                 /** @var \DomElement $node */
                 if ($node->hasAttributes()) {
                     foreach ($node->attributes as $attribute) {
-                        $this->compilerAttribute->compile($attribute, $component);
+                        $this->compilerAttribute->compile($attribute, $processedObject);
                     }
                 }
                 $compiler = $this->getElementCompiler($node->nodeName);
                 if (null !== $compiler) {
-                    $compiler->compile($this, $node, $component, $context);
+                    $compiler->compile($this, $node, $processedObject, $context);
                 } else if ($node->hasChildNodes()) {
                     foreach ($this->getChildNodes($node) as $child) {
-                        $this->compile($child, $component, $context);
+                        $this->compile($child, $processedObject, $context);
                     }
                 }
         }
     }
 
     /**
-     * Run postprocessing contents template
+     * Run postprocessing contents
      *
      * @param string $content
      * @return string
      */
     public function postprocessing($content)
     {
+        $patternTag = preg_quote(CompilerInterface::PATTERN_TAG);
         return preg_replace_callback(
-            '#' . preg_quote(static::PATTERN_TAG) . '(.+?)' . preg_quote(static::PATTERN_TAG) . '#',
+            '#' . $patternTag . '(.+?)' . $patternTag . '#',
             function ($match) {
                 return isset($this->data[$match[1]]) ? $this->data[$match[1]] : '';
             },
