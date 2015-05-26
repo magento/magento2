@@ -4,182 +4,233 @@
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Variables
+//  _____________________________________________
+
+@gift-message-field-label__color: @color-gray40;
+@gift-item-block__border-color: @color-gray-light5;
+
+//
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
-.gift-message {
-    margin: 0;
-    .fieldset& {
-        > .legend {
-            &:extend(.abs-methods-shipping-title all);
+    .gift-message {
+        .actions-toolbar {
+            .action-cancel {
+                &:extend(.abs-action-button-as-link all);
+                display: none;
+            }
+        }
+        .field {
+            .label {
+                .css(color, @gift-message-field-label__color);
+                .css(font-weight, @font-weight__regular);
+            }
         }
     }
-    .opc-wrapper .step-content .fieldset& {
-        br + .field {
-            margin: 0;
+
+    .item-gift {
+        display: none;
+        &._active {
+            display: table-row;
         }
     }
-    .field.choice {
-        font-weight: @font-weight__regular;
+
+    .gift-options {
+        &:extend(.abs-add-clearfix all);
+    }
+
+    .gift-options-title {
         margin: 0 0 @indent__base;
-        &:before {
+    }
+
+    .gift-options-content {
+        .fieldset {
+            margin: 0 0 @indent__base;
+        }
+    }
+    .gift-summary {
+        .actions-toolbar {
+            > .secondary {
+                float: none;
+                .action {
+                    margin: @indent__s @indent__base 0 0;
+                }
+            }
+        }
+    }
+
+    //
+    //  Collapsible block
+    //  ---------------------------------------------
+
+    .gift-item-block {
+        margin: 0;
+        &._active {
+            .title {
+                .icon-font-symbol(
+                @icon-up,
+                @_icon-font-position: after
+                );
+            }
+        }
+
+        .title {
+            .button(
+            @_button-margin: 20px 0 0,
+            @_button-padding: 7px 15px,
+            @_button-icon-use: true,
+            @_button-font-content: @icon-down,
+            @_button-icon-font: @button-icon__font,
+            @_button-icon-font-size: 32px,
+            @_button-icon-font-line-height: 16px,
+            @_button-icon-font-position: after
+            );
+            border-radius: 3px;
+            font-weight: bold;
+            &:active {
+                .css(box-shadow, @button__shadow);
+            }
+        }
+
+        .content {
+            &:extend(.abs-add-clearfix all);
+            border-bottom: 1px solid @gift-item-block__border-color;
             display: none;
+            padding: @indent__s 0 @indent__base;
+            position: relative;
         }
     }
-    .activate.message {
-        display: inline-block;
-        margin: 0 0 @indent__s;
-    }
-    .product-image-wrapper {
-        &:extend(.abs-reset-image-wrapper all);
-    }
-    .options-items {
-        .css(background, @sidebar__background-color);
-        display: block;
-        margin: @indent__base 0 0;
-        padding: @indent__base;
-        .order-title:not(:first-child),
-        .extra-options-container {
-            font-weight: @font-weight__regular;
-            margin: @indent__base 0 0;
-        }
-        .order-options {
-            margin: 0 0 @indent__base @indent__base;
-        }
-        .block.message {
-            margin-bottom: @indent__s;
-        }
-        .items {
-            .list-reset-styles();
-            .item {
-                border-bottom: @border-width__base solid @border-color__base;
-                margin-bottom: @indent__base;
-                padding-bottom: @indent__s;
-                .product {
-                    .photo {
-                        margin: @indent__s 0;
-                    }
-                }
-                &:last-child {
-                    border-bottom: 0;
-                    padding-bottom: 0;
+
+    //
+    //  Account order gift message
+    //  ---------------------------------------------
+
+    .order-details-items {
+        .order-gift-message,
+        .block-order-details-gift-message {
+            .item-options {
+                dt {
+                    margin: @indent__s 0;
+                    font-weight: @font-weight__regular;
                 }
             }
-        }
-        .number {
-            font-size: @font-size__s;
-        }
-        .regular-price,
-        .price-including-tax,
-        .price-excluding-tax {
-            &:before {
-                content: attr(data-label) ": ";
+            &:extend(.abs-add-clearfix all);
+            dt {
+                &:after {
+                    content: "";
+                }
             }
-            .price {
-                font-weight: @font-weight__bold;
+            .label {
+                &:extend(.abs-colon all);
+            }
+            .item-message {
+                clear: left;
             }
         }
-        .price-including-tax {
-            .font-size(14);
+    }
+
+    .order-details-items .order-items {
+        .order-gift-message {
+            &:not(.expanded-content) {
+                &:extend(.abs-hidden);
+            }
+            .action.close {
+                &:extend(.abs-no-display all);
+            }
+        }
+        .action.show {
+            padding-right: @indent__base;
+            position: relative;
+            .icon-font(
+                @_icon-font-content: @icon-down,
+                @_icon-font-size: 22px,
+                @_icon-font-text-hide: false,
+                @_icon-font-position: after,
+                @_icon-font-display: inline-block
+            );
+            &:after {
+                position: absolute;
+                right: 0;
+                top: -4px;
+            }
+            &.expanded {
+                .icon-font-symbol(
+                    @_icon-font-content: @icon-up,
+                    @_icon-font-position: after
+                );
+            }
+        }
+    }
+
+    .block-order-details-gift-message {
+        border-top: @border-width__base solid @border-color__base;
+        padding-top: @indent__s;
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .gift-message {
+        .actions-toolbar {
+            .action-update {
+                .font-size(20);
+                padding: 15px;
+                width: 100%;
+            }
+        }
+    }
+    .gift-item-block {
+        border-top: @border-width__base solid @gift-item-block__border-color;
+        border-bottom: 0;
+        .content {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
         }
     }
 }
 
 //
-//    Account order gift message
-//--------------------------------------
-.order-details-items {
-    .order-gift-message,
-    .block-order-details-gift-message {
-        .item-options {
-            dt {
-                margin: @indent__s 0;
-                font-weight: @font-weight__regular;
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .gift-message {
+        .actions-toolbar {
+            .secondary {
+                float: right;
+                .action {
+                    float: right;
+                    margin-left: @indent__base;
+                }
+                .action-cancel {
+                    display: block;
+                    float: left;
+                    margin-top: 6px;
+                }
             }
         }
-        &:extend(.abs-add-clearfix all);
-        dt:after {
-            content: "";
-        }
-        .label {
-            &:extend(.abs-colon all);
-        }
-        .item-message {
-            clear: left;
-        }
-    }
-}
-
-.order-details-items .order-items {
-    .order-gift-message {
-        &:not(.expanded-content) {
-            &:extend(.abs-hidden);
-        }
-        .action.close {
-            &:extend(.abs-no-display all);
-        }
-    }
-    .action.show {
-        padding-right: @indent__base;
-        position: relative;
-        .icon-font(
-            @_icon-font-content: @icon-down,
-            @_icon-font-size: 22px,
-            @_icon-font-text-hide: false,
-            @_icon-font-position: after,
-            @_icon-font-display: inline-block
-        );
-        &:after {
-            position: absolute;
-            right: 0;
-            top: -4px;
-        }
-        &.expanded {
-            .icon-font-symbol(
-                @_icon-font-content: @icon-up,
-                @_icon-font-position: after
+        .field {
+            &:extend(.abs-clearfix all);
+            .form-field-type-revert(
+            @_type: inline,
+            @_type-inline-label-align: left
             );
         }
     }
-}
-
-.block-order-details-gift-message {
-    border-top: @border-width__base solid @border-color__base;
-    padding-top: @indent__s;
-}
-
-}
-
-//
-//    Desktop
-//--------------------------------------
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
-    .gift-message {
-        .item {
-            border-bottom: @border-width__base solid @border-color__base;
-            margin-bottom: @indent__base;
-            padding-bottom: @indent__s;
-            &:extend(.abs-add-clearfix-desktop all);
-            .product {
-                float: left;
-                margin-right: @indent__base;
-                .photo {
-                    margin: @indent__s 0;
-                }
-                .name {
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                    max-width: 145px;
-                }
-            }
-            .options {
-                overflow: hidden;
-            }
-        }
-        .price-box > .price {
-            display: block;
+    .gift-options-title {
+        .css(font-weight, @font-weight__light);
+        .font-size(18);
+    }
+    .gift-summary,
+    .cart.table-wrapper .gift-summary {
+        .actions-toolbar {
+            &:extend(.abs-reset-left-margin-desktop all);
         }
     }
 }

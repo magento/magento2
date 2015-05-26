@@ -60,4 +60,48 @@
         <input type="hidden" value="" id="update_cart_action_container" />
     </div>
 </form>
+
+<?php /* Temp MAGETWO-36023 markup */?>
+<div class="cart-gift-item">
+    <div class="gift-item-block block"
+         data-collapsible="true"
+         data-mage-init='{"collapsible":{"openedState": "_active"}}'>
+        <div class="title" data-role="title">
+            <span><?php echo __('Gift wrap this order'); ?></span>
+        </div>
+        <div class="content" data-role="content">
+            <div class="gift-options">
+                <?php /* Gift Wrapping */ ?>
+                <?php include ($block->getTemplateFile('Magento_GiftWrapping::checkout\new-options.phtml')); ?>
+
+                <?php /* Gift Message */ ?>
+                <?php include ($block->getTemplateFile('Magento_GiftMessage::form.phtml')); ?>
+            </div>
+
+            <?php /* Gift options applied */ ?>
+            <div class="gift-summary">
+                <?php /* Applied Gift Wrapping */ ?>
+                <?php include ($block->getTemplateFile('Magento_GiftWrapping::checkout\applied.phtml')); ?>
+
+                <?php /* Applied Gift Message */ ?>
+                <?php include ($block->getTemplateFile('Magento_GiftMessage::applied.phtml')); ?>
+
+                <div class="actions-toolbar">
+                    <div class="secondary">
+                        <button type="submit" class="action action-edit" title="Edit">
+                            <span><?php echo __('Edit'); ?></span>
+                        </button>
+                        <button class="action action-delete" title="Delete">
+                            <span><?php echo __('Delete'); ?></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <?php /* End Gift options applied */ ?>
+        </div>
+    </div>
+</div>
+
+<?php /* End Temp MAGETWO-36023 markup */?>
+
 <?php echo $block->getChildHtml('shopping.cart.table.after'); ?>
