@@ -95,6 +95,17 @@ table {
                     }
                 }
             }
+            &.additional-attributes {
+                tbody {
+                    th {
+                        &:extend(.abs-no-display-s all);
+                    }
+                    td:last-child {
+                        border: none;
+                        padding: 0 0 @indent__xs;
+                    }
+                }
+            }
         }
     }
 }
