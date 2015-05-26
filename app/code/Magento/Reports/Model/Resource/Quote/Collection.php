@@ -69,6 +69,34 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
     }
 
     /**
+     * Add customer data
+     *
+     * @param array|null $filter
+     * @return $this
+     */
+    public function addCustomerData($filter = null)
+    {
+        $customersSelect = $this->customerResource->getReadConnection()->select();
+        $customersSelect->from(
+            ['customer' => $this->customerResource->getTable('customer_entity')],
+            'entity_id'
+        );
+        if (isset($filter['customer_name'])) {
+            $customerName = $customersSelect->getAdapter()
+                ->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
+            $customersSelect->where(
+                $customerName . ' LIKE ?', '%' . $filter['customer_name'] . '%'
+            );
+        }
+        if (isset($filter['email'])) {
+            $customersSelect->where('customer.email LIKE ?', '%' . $filter['email'] . '%');
+        }
+        $filteredCustomers = $this->customerResource->getReadConnection()->fetchCol($customersSelect);
+        $this->getSelect()->where('main_table.customer_id IN (?)', $filteredCustomers);
+        return $this;
+    }
+
+    /**
      * Add subtotals
      *
      * @param array $storeIds
