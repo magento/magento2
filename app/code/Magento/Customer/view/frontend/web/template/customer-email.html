@@ -15,6 +15,7 @@
             </label>
             <div class="control">
                 <input class="input-text" type="text" data-bind="textInput: email" name="username" data-validate="{required:true, 'validate-email':true}" id="customer-email">
+                <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
             </div>
         </div>
         <div class="field" data-bind="fadeVisible: isPasswordVisible">
