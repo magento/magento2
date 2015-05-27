@@ -47,21 +47,4 @@ class CreateOrderBackendTest extends Scenario
     {
         $this->executeScenario();
     }
-
-    /**
-     * Disable enabled config after test.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        if (isset($this->currentVariation['arguments']['configData'])) {
-            $this->objectManager->create(
-                'Magento\Config\Test\TestStep\SetupConfigurationStep',
-                ['configData' => $this->currentVariation['arguments']['configData'], 'rollback' => true]
-            )->run();
-        }
-        $this->objectManager->create('Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep')->run();
-        $this->objectManager->create('Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep')->run();
-    }
 }

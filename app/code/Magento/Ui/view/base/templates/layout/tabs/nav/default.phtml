@@ -7,11 +7,6 @@
  * @var \Magento\Ui\Component\Layout\Tabs\Nav $block
  */
 ?>
-<div data-role="spinner" data-component="<?php echo $block->getDataScope(); ?>.sections" class="grid-loading-mask">
-    <div class="spinner">
-        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
-</div>
 <div data-bind="scope: '<?php echo $block->getDataScope(); ?>.sections' " class="ui-tabs">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>

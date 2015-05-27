@@ -6,14 +6,14 @@
 define([
     'ko',
     './template/engine',
-    './bind/date',
     './bind/scope',
     './bind/datepicker',
     './bind/stop_propagation',
     './bind/outer_click',
-    './bind/class',
     './bind/keyboard',
     './bind/optgroup',
+    './bind/fadeVisible',
+    './bind/mage-init',
     './extender/observable_array'
 ], function(ko, templateEngine) {
     'use strict';

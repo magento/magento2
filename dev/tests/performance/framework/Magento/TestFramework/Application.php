@@ -118,7 +118,7 @@ class Application
     public function reindex()
     {
         $this->_shell->execute(
-            'php -f ' . $this->_config->getApplicationBaseDir() . '/dev/shell/indexer.php -- reindexall'
+            'php -f ' . $this->_config->getApplicationBaseDir() . '/bin/magento indexer:reindex --all'
         );
         return $this;
     }
@@ -156,7 +156,7 @@ class Application
 
         // Populate install options with global options
         $baseUrl = 'http://' . $this->_config->getApplicationUrlHost() . $this->_config->getApplicationUrlPath();
-        $installOptions = array_merge($installOptions, ['base_url' => $baseUrl, 'base_url_secure' => $baseUrl]);
+        $installOptions = array_merge($installOptions, ['base-url' => $baseUrl, 'base-url-secure' => $baseUrl]);
         $installCmd = 'php -f %s setup:install';
         $installCmdArgs = [$this->_script];
         foreach ($installOptions as $optionName => $optionValue) {

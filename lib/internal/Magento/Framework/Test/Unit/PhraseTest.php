@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-use \Magento\Framework\Phrase;
+use Magento\Framework\Phrase;
 
 class PhraseTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,11 +20,6 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     protected $rendererMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
      * SetUp method
      *
      * @return void
@@ -34,7 +29,6 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $this->defaultRenderer = Phrase::getRenderer();
         $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\RendererInterface')
             ->getMock();
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     /**
@@ -57,10 +51,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
-        $phrase = $this->objectManager->getObject('Magento\Framework\Phrase', [
-            'text' => $text,
-            'arguments' => $arguments,
-        ]);
+        $phrase = new Phrase($text, $arguments);
         Phrase::setRenderer($this->rendererMock);
 
         $this->rendererMock->expects($this->once())
@@ -81,9 +72,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $this->rendererMock->expects($this->never())
             ->method('render');
 
-        $this->objectManager->getObject('Magento\Framework\Phrase', [
-            'text' => 'some text',
-        ]);
+        new Phrase('some text');
     }
 
     /**
@@ -96,10 +85,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
         $result = 'rendered text';
-        $phrase = $this->objectManager->getObject('Magento\Framework\Phrase', [
-            'text' => $text,
-            'arguments' => $arguments,
-        ]);
+        $phrase = new Phrase($text, $arguments);
         Phrase::setRenderer($this->rendererMock);
 
         $this->rendererMock->expects($this->once())
@@ -119,9 +105,6 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     {
         $text = 'some text';
         $phrase = new Phrase($text);
-        $phrase = $this->objectManager->getObject('Magento\Framework\Phrase', [
-            'text' => $text,
-        ]);
 
         $this->assertEquals($text, $phrase->getText());
     }
@@ -135,36 +118,31 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     {
         $text = 'some text';
         $arguments = ['arg1', 'arg2'];
-        $phrase1 = $this->objectManager->getObject('Magento\Framework\Phrase', [
-            'text' => $text,
-        ]);
-        $phrase2 = $this->objectManager->getObject('Magento\Framework\Phrase', [
-            'text' => $text,
-            'arguments' => $arguments,
-        ]);
+        $phrase1 = new Phrase($text);
+        $phrase2 = new Phrase($text, $arguments);
 
         $this->assertEquals([], $phrase1->getArguments());
         $this->assertEquals($arguments, $phrase2->getArguments());
     }
 
-    /**
-     * Test default rendering
-     *
-     * @return void
-     */
-    public function testDefaultRendering()
+    public function testToStringWithExceptionOnRender()
     {
-        $text = 'parameter1 is replaced by %1 parameter2 is replaced by %2';
-        $arguments = ['arg1', 'arg2'];
-        $result = 'parameter1 is replaced by arg1 parameter2 is replaced by arg2';
-        $phrase = $this->objectManager->getObject('Magento\Framework\Phrase', [
-            'text' => $text,
-            'arguments' => $arguments,
-        ]);
+        $text = 'raw text';
+        $exception = new \Exception('something went wrong');
+        $phrase = new Phrase($text);
 
-        $this->assertEquals($text, $phrase->getText());
-        $this->assertEquals($arguments, $phrase->getArguments());
-        $this->assertTrue($phrase->getRenderer() instanceof \Magento\Framework\Phrase\Renderer\Placeholder);
-        $this->assertEquals($result, $phrase->render());
+        $this->rendererMock->expects($this->any())
+            ->method('render')
+            ->willThrowException($exception);
+
+        $this->assertEquals($text, (string)$phrase);
+    }
+
+    /**
+     * Test default renderer
+     */
+    public function testDefaultRenderer()
+    {
+        $this->assertInstanceOf('Magento\Framework\Phrase\Renderer\Placeholder', Phrase::getRenderer());
     }
 }

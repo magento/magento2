@@ -12,6 +12,8 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 
 /**
  * Price amount renderer interface
+ *
+ * @api
  */
 interface AmountRenderInterface
 {
@@ -49,6 +51,11 @@ interface AmountRenderInterface
      * @return string
      */
     public function getDisplayCurrencyCode();
+
+    /**
+     * @return string
+     */
+    public function getDisplayCurrencySymbol();
 
     /**
      * @return string

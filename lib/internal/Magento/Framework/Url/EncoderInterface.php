@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Url;
 
+/**
+ * Base64 encoder for URLs
+ *
+ * @api
+ */
 interface EncoderInterface
 {
     /**

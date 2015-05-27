@@ -11,12 +11,13 @@ class Index extends \Magento\Tax\Controller\Adminhtml\Rate
     /**
      * Show Main Grid
      *
-     * @return void
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        $this->_initAction()->_addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'));
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
-        $this->_view->renderLayout();
+        $resultPage = $this->initResultPage();
+        $resultPage->addBreadcrumb(__('Manage Tax Rates'), __('Manage Tax Rates'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
+        return $resultPage;
     }
 }

@@ -45,7 +45,8 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
             $this->identityContainerMock,
             $this->senderBuilderFactoryMock,
             $this->loggerMock,
-            $this->addressRenderer
+            $this->addressRenderer,
+            $this->eventManagerMock
         );
     }
 
@@ -53,6 +54,30 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
     {
         $billingAddress = $this->addressMock;
         $this->stepAddressFormat($billingAddress);
+        $result = $this->sender->send($this->creditmemoMock);
+        $this->assertFalse($result);
+    }
+
+    public function testSendVirtualOrder()
+    {
+        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, true);
+        $billingAddress = $this->addressMock;
+        $this->templateContainerMock->expects($this->once())
+            ->method('setTemplateVars')
+            ->with(
+                $this->equalTo(
+                    [
+                        'order' => $this->orderMock,
+                        'creditmemo' => $this->creditmemoMock,
+                        'comment' => '',
+                        'billing' => $billingAddress,
+                        'store' => $this->storeMock,
+                        'formattedShippingAddress' => null,
+                        'formattedBillingAddress' => 1
+                    ]
+                )
+            );
+        $this->stepAddressFormat($billingAddress, true);
         $result = $this->sender->send($this->creditmemoMock);
         $this->assertFalse($result);
     }

@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface TotalsInterface
+ * @api
+ */
 interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+

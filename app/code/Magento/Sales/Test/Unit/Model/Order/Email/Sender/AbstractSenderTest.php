@@ -63,6 +63,11 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
     protected $addressMock;
 
     /**
+     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $loggerMock;
@@ -128,6 +133,7 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
 
         $this->addressRenderer = $this->getMock('Magento\Sales\Model\Order\Address\Renderer', [], [], '', false);
         $this->addressMock = $this->getMock('Magento\Sales\Model\Order\Address', [], [], '', false);
+        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
 
         $this->paymentHelper = $this->getMock('\Magento\Payment\Helper\Data', ['getInfoBlockHtml'], [], '', false);
         $this->paymentHelper->expects($this->any())
@@ -151,14 +157,20 @@ abstract class AbstractSenderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function stepAddressFormat($billingAddress)
+    public function stepAddressFormat($billingAddress, $isVirtual = false)
     {
         $this->orderMock->expects($this->any())
             ->method('getBillingAddress')
             ->will($this->returnValue($billingAddress));
-        $this->orderMock->expects($this->any())
-            ->method('getShippingAddress')
-            ->will($this->returnValue($billingAddress));
+        if ($isVirtual) {
+            $this->orderMock->expects($this->never())
+                ->method('getShippingAddress');
+        } else {
+            $this->orderMock->expects($this->once())
+                ->method('getShippingAddress')
+                ->will($this->returnValue($billingAddress));
+        }
+
     }
 
     public function stepSendWithoutSendCopy()

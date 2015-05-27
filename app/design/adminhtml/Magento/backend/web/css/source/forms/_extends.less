@@ -7,23 +7,16 @@
 //  Extend common form control styles
 //  ---------------------------------------------
 
-.extend__form-control-styles() {
-    &:extend(.__form-control-styles);
+.abs-form-control-pattern {
+    .__form-control-pattern();
+    &:hover {
+        .__form-control-pattern__hover();
+    }
     &:focus {
-        &:extend(.__form-control-styles:focus);
+        .__form-control-pattern__focus();
     }
     &[disabled] {
-        &:extend(.__form-control-styles[disabled]);
-    }
-}
-
-.__form-control-styles {
-    .__form-control-styles();
-    &:focus {
-        .__form-control-styles__focus();
-    }
-    &[disabled] {
-        .__form-control-styles__disabled();
+        .__form-control-pattern__disabled();
     }
 }
 
@@ -31,9 +24,6 @@
 //  Transformation to rows form layout
 //  ---------------------------------------------
 
-.extend__field-rows() {
-    &:extend(.abs-field-rows all);
-}
 .abs-field-rows[class] {
     > .admin__field-control {
         float: none;

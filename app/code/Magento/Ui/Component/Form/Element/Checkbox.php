@@ -8,7 +8,17 @@ namespace Magento\Ui\Component\Form\Element;
 /**
  * Class Checkbox
  */
-class Checkbox extends AbstractFormElement
+class Checkbox extends AbstractElement
 {
-    //
+    const NAME = 'checkbox';
+
+    /**
+     * Get component name
+     *
+     * @return string
+     */
+    public function getComponentName()
+    {
+        return static::NAME;
+    }
 }

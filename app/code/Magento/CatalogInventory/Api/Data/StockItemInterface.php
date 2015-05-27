@@ -9,6 +9,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface StockItem
+ * @api
  */
 interface StockItemInterface extends ExtensibleDataInterface
 {
@@ -55,7 +56,7 @@ interface StockItemInterface extends ExtensibleDataInterface
     const CUSTOMER_GROUP_ID = 'customer_group_id';
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getItemId();
 
@@ -66,7 +67,7 @@ interface StockItemInterface extends ExtensibleDataInterface
     public function setItemId($itemId);
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getProductId();
 
@@ -79,7 +80,7 @@ interface StockItemInterface extends ExtensibleDataInterface
     /**
      * Retrieve Website Id
      *
-     * @return int
+     * @return int|null
      */
     public function getWebsiteId();
 
@@ -94,7 +95,7 @@ interface StockItemInterface extends ExtensibleDataInterface
     /**
      * Retrieve stock identifier
      *
-     * @return int
+     * @return int|null
      */
     public function getStockId();
 

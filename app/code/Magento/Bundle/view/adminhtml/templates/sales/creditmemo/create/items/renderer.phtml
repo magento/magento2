@@ -50,8 +50,8 @@
         <?php if (!$_item->getOrderItem()->getParentItem()): ?>
         <td class="col-product">
             <div class="product-title"><?php echo $block->escapeHtml($_item->getName()) ?></div>
-            <div>
-                <strong><?php echo __('SKU') ?>:</strong>
+            <div class="product-sku-block">
+                <span><?php echo __('SKU') ?>:</span>
                 <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
             </div>
         </td>
@@ -67,46 +67,46 @@
         </td>
         <td class="col-ordered-qty">
             <?php if ($block->canShowPriceInfo($_item)): ?>
-                <table cellspacing="0" class="qty-table">
+                <table class="qty-table">
                     <tr>
-                        <td><?php echo __('Ordered') ?></td>
-                        <td><strong><?php echo $_item->getOrderItem()->getQtyOrdered()*1 ?></strong></td>
+                        <th><?php echo __('Ordered') ?></th>
+                        <td><?php echo $_item->getOrderItem()->getQtyOrdered()*1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getOrderItem()->getQtyInvoiced()): ?>
                     <tr>
-                        <td><?php echo __('Invoiced') ?></td>
-                        <td><strong><?php echo $_item->getOrderItem()->getQtyInvoiced()*1 ?></strong></td>
+                        <th><?php echo __('Invoiced') ?></th>
+                        <td><?php echo $_item->getOrderItem()->getQtyInvoiced()*1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getOrderItem()->getQtyShipped() && $block->isShipmentSeparately($_item)): ?>
                     <tr>
-                        <td><?php echo __('Shipped') ?></td>
-                        <td><strong><?php echo $_item->getOrderItem()->getQtyShipped()*1 ?></strong></td>
+                        <th><?php echo __('Shipped') ?></th>
+                        <td><?php echo $_item->getOrderItem()->getQtyShipped()*1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getOrderItem()->getQtyRefunded()): ?>
                     <tr>
-                        <td><?php echo __('Refunded') ?></td>
-                        <td><strong><?php echo $_item->getOrderItem()->getQtyRefunded()*1 ?></strong></td>
+                        <th><?php echo __('Refunded') ?></th>
+                        <td><?php echo $_item->getOrderItem()->getQtyRefunded()*1 ?></td>
                     </tr>
                     <?php endif; ?>
                     <?php if ((float) $_item->getOrderItem()->getQtyCanceled()): ?>
                     <tr>
-                        <td><?php echo __('Canceled') ?></td>
-                        <td><strong><?php echo $_item->getOrderItem()->getQtyCanceled()*1 ?></strong></td>
+                        <th><?php echo __('Canceled') ?></th>
+                        <td><?php echo $_item->getOrderItem()->getQtyCanceled()*1 ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>
             <?php elseif ($block->isShipmentSeparately($_item)): ?>
-                <table cellspacing="0" class="qty-table">
+                <table class="qty-table">
                     <tr>
-                        <td><?php echo __('Ordered') ?></td>
-                        <td><strong><?php echo $_item->getOrderItem()->getQtyOrdered()*1 ?></strong></td>
+                        <th><?php echo __('Ordered') ?></th>
+                        <td><?php echo $_item->getOrderItem()->getQtyOrdered()*1 ?></td>
                     </tr>
                     <?php if ((float) $_item->getOrderItem()->getQtyShipped()): ?>
                     <tr>
-                        <td><?php echo __('Shipped') ?></td>
-                        <td><strong><?php echo $_item->getOrderItem()->getQtyShipped()*1 ?></strong></td>
+                        <th><?php echo __('Shipped') ?></th>
+                        <td><?php echo $_item->getOrderItem()->getQtyShipped()*1 ?></td>
                     </tr>
                     <?php endif; ?>
                 </table>
@@ -118,17 +118,24 @@
         <td class="col-return-to-stock">
             <?php if ($block->canShowPriceInfo($_item)): ?>
                 <?php if ($block->canReturnItemToStock($_item)) : ?>
-                    <input type="checkbox" name="creditmemo[items][<?php echo $_item->getOrderItemId() ?>][back_to_stock]" value="1"<?php if ($_item->getBackToStock()):?> checked="checked"<?php endif;?> />
+                    <input type="checkbox"
+                           class="admin__control-checkbox"
+                           name="creditmemo[items][<?php echo $_item->getOrderItemId() ?>][back_to_stock]"
+                           value="1"<?php if ($_item->getBackToStock()):?> checked="checked"<?php endif;?> />
+                    <label class="admin__field-label"></label>
                 <?php endif; ?>
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
         </td>
         <?php endif; ?>
-        <td class="col-refund">
+        <td class="col-refund col-qty">
             <?php if ($block->canShowPriceInfo($_item)): ?>
                 <?php if ($block->canEditQty()) : ?>
-                    <input type="text" class="input-text qty-input" name="creditmemo[items][<?php echo $_item->getOrderItemId() ?>][qty]" value="<?php echo $_item->getQty()*1 ?>" />
+                    <input type="text"
+                           class="input-text admin__control-text qty-input"
+                           name="creditmemo[items][<?php echo $_item->getOrderItemId() ?>][qty]"
+                           value="<?php echo $_item->getQty()*1 ?>" />
                 <?php else: ?>
                     <?php echo $_item->getQty()*1 ?>
                 <?php endif; ?>

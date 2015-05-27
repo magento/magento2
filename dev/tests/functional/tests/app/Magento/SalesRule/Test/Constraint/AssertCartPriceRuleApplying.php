@@ -15,7 +15,7 @@ use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Magento\SalesRule\Test\Fixture\SalesRuleInjectable;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -121,8 +121,8 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
      * @param CatalogCategoryView $catalogCategoryView
      * @param CatalogProductView $catalogProductView
      * @param Customer $customer
-     * @param SalesRuleInjectable $salesRule
-     * @param SalesRuleInjectable $salesRuleOrigin
+     * @param SalesRule $salesRule
+     * @param SalesRule $salesRuleOrigin
      * @param array $productQuantity
      * @param CatalogProductSimple $productForSalesRule1
      * @param CatalogProductSimple $productForSalesRule2
@@ -141,8 +141,8 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
         CatalogCategoryView $catalogCategoryView,
         CatalogProductView $catalogProductView,
         Customer $customer,
-        SalesRuleInjectable $salesRule,
-        SalesRuleInjectable $salesRuleOrigin,
+        SalesRule $salesRule,
+        SalesRule $salesRuleOrigin,
         array $productQuantity,
         CatalogProductSimple $productForSalesRule1,
         CatalogProductSimple $productForSalesRule2 = null,

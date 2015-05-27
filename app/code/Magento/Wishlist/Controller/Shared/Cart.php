@@ -1,10 +1,11 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller\Shared;
+
+use Magento\Framework\Controller\ResultFactory;
 
 class Cart extends \Magento\Framework\App\Action\Action
 {
@@ -14,7 +15,7 @@ class Cart extends \Magento\Framework\App\Action\Action
      * If Product has required options - redirect
      * to product view page with message about needed defined required options
      *
-     * @return \Magento\Framework\App\Response\Http
+     * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
     {
@@ -51,7 +52,9 @@ class Cart extends \Magento\Framework\App\Action\Action
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Cannot add item to shopping cart'));
         }
-
-        return $this->getResponse()->setRedirect($redirectUrl);
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setUrl($redirectUrl);
+        return $resultRedirect;
     }
 }

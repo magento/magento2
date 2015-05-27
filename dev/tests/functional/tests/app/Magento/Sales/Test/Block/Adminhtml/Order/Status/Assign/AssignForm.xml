@@ -9,10 +9,10 @@
     <fields>
         <label>
             <selector>[name="status"]</selector>
-            <input>select</input>
+            <input>strictselect</input>
         </label>
         <state>
-            <input>select</input>
+            <input>strictselect</input>
         </state>
         <is_default>
             <input>checkbox</input>

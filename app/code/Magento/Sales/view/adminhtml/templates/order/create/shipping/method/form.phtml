@@ -52,7 +52,7 @@
         </dl>
     </div>
     <?php if ($_rate = $block->getActiveMethodRate()): ?>
-        <div id="order-shipping-method-info">
+        <div id="order-shipping-method-info" class="order-shipping-method-info">
             <dl class="admin__order-shipment-methods">
                 <dt class="admin__order-shipment-methods-title">
                     <?php echo $block->escapeHtml($block->getCarrierName($_rate->getCarrier())) ?>

@@ -6,18 +6,12 @@
 
 namespace Magento\Tax\Api\Data;
 
+/**
+ * Applied tax rate interface.
+ * @api
+ */
 interface AppliedTaxRateInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
-    /**#@+
-     * Constants defined for keys of array, makes typos less likely
-     */
-    const KEY_CODE = 'code';
-
-    const KEY_TITLE = 'title';
-
-    const KEY_PERCENT = 'percent';
-    /**#@-*/
-
     /**
      * Get code
      *

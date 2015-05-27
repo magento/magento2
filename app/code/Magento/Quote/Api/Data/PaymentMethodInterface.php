@@ -5,6 +5,10 @@
  */
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface PaymentMethodInterface
+ * @api
+ */
 interface PaymentMethodInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**

@@ -29,16 +29,25 @@ class CreateSalesRuleStep implements TestStepInterface
     protected $fixtureFactory;
 
     /**
+     * Delete all Sales Rule on backend.
+     *
+     * @var DeleteAllSalesRuleStep
+     */
+    protected $deleteAllSalesRule;
+
+    /**
      * Preparing step properties.
      *
      * @constructor
      * @param FixtureFactory $fixtureFactory
+     * @param DeleteAllSalesRuleStep $deleteRule
      * @param string $salesRule
      */
-    public function __construct(FixtureFactory $fixtureFactory, $salesRule = null)
+    public function __construct(FixtureFactory $fixtureFactory, DeleteAllSalesRuleStep $deleteRule, $salesRule = null)
     {
         $this->fixtureFactory = $fixtureFactory;
         $this->salesRule = $salesRule;
+        $this->deleteAllSalesRule = $deleteRule;
     }
 
     /**
@@ -51,7 +60,7 @@ class CreateSalesRuleStep implements TestStepInterface
         $result['salesRule'] = null;
         if ($this->salesRule !== null) {
             $salesRule = $this->fixtureFactory->createByCode(
-                'salesRuleInjectable',
+                'salesRule',
                 ['dataSet' => $this->salesRule]
             );
             $salesRule->persist();
@@ -59,5 +68,15 @@ class CreateSalesRuleStep implements TestStepInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Delete all sales rule.
+     *
+     * @return void
+     */
+    public function cleanup()
+    {
+        $this->deleteAllSalesRule->run();
     }
 }

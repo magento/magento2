@@ -1,0 +1,30 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<td data-bind="visible: visible" class="data-grid-actions-cell">
+    <!-- ko if: getDisplayed(row[field.index]).length > 1 -->
+    <div class="action-select-wrap _active">
+        <button class="action-select">
+            <span data-bind="text: $t('Select')"></span>
+        </button>
+        <ul class="action-menu _active">
+            <li>
+                <a
+                    class="action-menu-item"
+                    data-bind="attr: {href: displayed[0].href},
+                               text: displayed[0].label"></a>
+            </li>
+        </ul>
+    </div>
+    <!-- /ko -->
+    <!-- ko ifnot: getDisplayed(row[field.index]).length > 1 -->
+    <a
+        class="action-menu-item"
+        data-bind="attr: {href: displayed[0].href},
+                               text: displayed[0].label"></a>
+    <!-- /ko -->
+</td>

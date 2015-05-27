@@ -26,7 +26,7 @@
     <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Theme\Model\Theme\Resolver" />
     <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config" />
     <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="\Magento\Framework\View\Asset\Bundle\Config" />
-    <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\Lists" />
+    <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists" />
     <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <type name="Magento\Store\Model\Store">
         <arguments>
@@ -128,6 +128,10 @@
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Framework\Api\AttributeInterface" type="Magento\Framework\Api\AttributeValue" />
     <preference for="Magento\Framework\Model\Resource\Db\TransactionManagerInterface" type="Magento\Framework\Model\Resource\Db\TransactionManager" />
+    <preference for="Magento\Framework\Api\Data\ImageContentInterface" type="Magento\Framework\Api\ImageContent" />
+    <preference for="Magento\Framework\Api\ImageContentValidatorInterface" type="Magento\Framework\Api\ImageContentValidator" />
+    <preference for="Magento\Framework\Api\ImageProcessorInterface" type="Magento\Framework\Api\ImageProcessor" />
+
     <type name="Magento\Framework\Model\Resource\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -215,6 +219,9 @@
                     <item name="parameters" xsi:type="array">
                         <item name="tag" xsi:type="string">MAGE</item>
                     </item>
+                </item>
+                <item name="logger" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Framework\Cache\Frontend\Decorator\Logger</item>
                 </item>
             </argument>
             <argument name="resource" xsi:type="object">Magento\Framework\App\Resource\Proxy</argument>
@@ -400,7 +407,7 @@
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -416,7 +423,7 @@
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
                 <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -440,7 +447,7 @@
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
                 <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -459,7 +466,7 @@
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
                 <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -476,7 +483,7 @@
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
                 <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
-                <item name="ui_component" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
+                <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -501,7 +508,7 @@
                 <item name="body" xsi:type="object">Magento\Framework\View\Page\Config\Generator\Body</item>
                 <item name="block" xsi:type="object">Magento\Framework\View\Layout\Generator\Block</item>
                 <item name="container" xsi:type="object">Magento\Framework\View\Layout\Generator\Container</item>
-                <item name="ui_component" xsi:type="object">Magento\Framework\View\Layout\Generator\UiComponent</item>
+                <item name="uiComponent" xsi:type="object">Magento\Framework\View\Layout\Generator\UiComponent</item>
             </argument>
         </arguments>
     </type>
@@ -512,7 +519,7 @@
                 <item name="body" xsi:type="object">Magento\Framework\View\Page\Config\Generator\Body</item>
                 <item name="block" xsi:type="object">Magento\Framework\View\Layout\Generator\Block</item>
                 <item name="container" xsi:type="object">Magento\Framework\View\Layout\Generator\Container</item>
-                <item name="ui_component" xsi:type="object">Magento\Framework\View\Layout\Generator\UiComponent</item>
+                <item name="uiComponent" xsi:type="object">Magento\Framework\View\Layout\Generator\UiComponent</item>
             </argument>
         </arguments>
     </virtualType>
@@ -964,6 +971,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Object\Copy\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Framework\Object\Copy\Config\Data\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Object\Copy\Config\Reader">
         <arguments>
             <argument name="fileName" xsi:type="string">fieldset.xml</argument>
@@ -1099,6 +1111,11 @@
                     <item name="model" xsi:type="string">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Url\Decoder">
+        <arguments>
+            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface\Proxy</argument>
         </arguments>
     </type>
 </config>
