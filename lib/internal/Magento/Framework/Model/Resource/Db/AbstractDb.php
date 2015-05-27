@@ -625,6 +625,7 @@ abstract class AbstractDb extends \Magento\Framework\Model\Resource\AbstractReso
      * @return $this
      * @throws AlreadyExistsException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _checkUnique(\Magento\Framework\Model\AbstractModel $object)
     {
