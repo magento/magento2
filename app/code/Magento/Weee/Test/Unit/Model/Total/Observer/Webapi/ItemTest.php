@@ -63,9 +63,21 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function testProcessTaxData(
-        $helperIsEnabled, $weeeTaxInclTax, $rowTotal, $weeeTaxRowApplied, $rowTotalInclTax, $rowWeeeInclTax,
-        $weeeTaxApplied, $weeeTaxAppliedAmount, $includeWeeeFlag, $priceIncTax, $calculationPrice,
-        $expectedRowTotal, $expectedRowInclTax, $expectedPrice, $expectedPriceInclTax
+        $helperIsEnabled,
+        $weeeTaxInclTax,
+        $rowTotal,
+        $weeeTaxRowApplied,
+        $rowTotalInclTax,
+        $rowWeeeInclTax,
+        $weeeTaxApplied,
+        $weeeTaxAppliedAmount,
+        $includeWeeeFlag,
+        $priceIncTax,
+        $calculationPrice,
+        $expectedRowTotal,
+        $expectedRowInclTax,
+        $expectedPrice,
+        $expectedPriceInclTax
     ) {
         $observerMock = $this->getMock('Magento\Framework\Object', ['getEvent'], [], '', false);
         $eventMock = $this->getMock('Magento\Framework\Event', ['getItem'], [], '', false);
@@ -121,7 +133,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function processTaxDataDataProvider() {
+    public function processTaxDataDataProvider()
+    {
         return [
             [
                 'helperIsEnabled' => false,

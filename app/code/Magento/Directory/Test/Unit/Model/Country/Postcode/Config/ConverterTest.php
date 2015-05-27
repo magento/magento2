@@ -12,14 +12,21 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $booleanUtilsMock;
+
     public function setUp()
     {
-        $this->model = new \Magento\Directory\Model\Country\Postcode\Config\Converter();
+        $this->booleanUtilsMock = $this->getMock('Magento\Framework\Stdlib\BooleanUtils', [], [], '', false);
+        $this->model = new \Magento\Directory\Model\Country\Postcode\Config\Converter($this->booleanUtilsMock);
     }
 
     public function testConvert()
     {
         $inputData = new \DOMDocument();
+        $this->booleanUtilsMock->expects($this->any())->method('toBoolean')->willReturn(true);
         $inputData->load(__DIR__ . '/../../../../_files/zip_codes.xml');
         $expectedResult = require __DIR__ . '/../../../../_files/zip_codes.php';
         $this->assertEquals($expectedResult, $this->model->convert($inputData));
