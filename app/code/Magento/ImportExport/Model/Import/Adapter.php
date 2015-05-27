@@ -22,7 +22,9 @@ class Adapter
      * @param Write $directory
      * @param string $source
      * @param mixed $options OPTIONAL Adapter constructor options
+     *
      * @return AbstractSource
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public static function factory($type, $directory, $source, $options = null)
@@ -55,6 +57,7 @@ class Adapter
      * @param string $source Source file path.
      * @param Write $directory
      * @param mixed $options OPTIONAL Adapter constructor options
+     *                       
      * @return AbstractSource
      */
     public static function findAdapterFor($source, $directory, $options = null)

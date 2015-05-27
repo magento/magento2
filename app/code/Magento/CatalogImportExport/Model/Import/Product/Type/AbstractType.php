@@ -61,7 +61,7 @@ abstract class AbstractType
 
 
     /**
-     * Custom entity type fields mapping
+     * Custom entity type fields mapping.
      *
      * @var string[]
      */
@@ -254,12 +254,13 @@ abstract class AbstractType
     }
 
     /**
-     * In case we've dynamically added new attribute option during import we need to add it to our cache
-     * in order to keep it up to date.
+     * In case we've dynamically added new attribute option during import we need
+     * to add it to our cache in order to keep it up to date.
      *
      * @param string $code
      * @param string $optionKey
      * @param string $optionValue
+     *
      * @return $this
      */
     public function addAttributeOption($code, $optionKey, $optionValue)
@@ -319,7 +320,7 @@ abstract class AbstractType
     }
 
     /**
-     * Return entity custom Fields mapping
+     * Return entity custom Fields mapping.
      *
      * @return string[]
      */

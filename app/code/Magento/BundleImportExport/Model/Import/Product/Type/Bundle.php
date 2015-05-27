@@ -9,51 +9,87 @@ namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
 class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
+
+    /**
+     * Delimiter before product option value.
+     */
     const BEFORE_OPTION_VALUE_DELIMITER = ';';
 
+    /**
+     * Pair value separator.
+     */
     const PAIR_VALUE_SEPARATOR = '=';
 
+    /**
+     * Dynamic value.
+     */
     const VALUE_DYNAMIC = 'dynamic';
 
+    /**
+     * Fixed value.
+     */
     const VALUE_FIXED = 'fixed';
 
+    /**
+     * Not fixed dynamic attribute.
+     */
     const NOT_FIXED_DYNAMIC_ATTRIBUTE = 'price_view';
 
+    /**
+     * Selection price type fixed.
+     */
     const SELECTION_PRICE_TYPE_FIXED = 0;
 
+    /**
+     * Selection price type percent.
+     */
     const SELECTION_PRICE_TYPE_PERCENT = 1;
 
     /**
+     * Instance of database adapter.
+     *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $connection;
 
     /**
+     * Instance of application resource.
+     *
      * @var \Magento\Framework\App\Resource
      */
     protected $_resource;
 
     /**
+     * Instance of product collection.
+     *
      * @var \Magento\Catalog\Model\Resource\Product\Collection
      */
     protected $_productCollection;
 
     /**
+     * Array of cached options.
+     *
      * @var array
      */
     protected $_cachedOptions = [];
 
     /**
+     * Array of cached skus.
+     *
      * @var array
      */
     protected $_cachedSkus = [];
 
     /**
+     * Mapping array between cached skus and products.
+     *
      * @var array
      */
     protected $_cachedSkuToProducts = [];
 
     /**
+     * Array of queries selecting cached options.
+     *
      * @var array
      */
     protected $_cachedOptionSelectQuery = [];
@@ -70,6 +106,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
+     * Custom fields mapping.
+     *
      * @inherited
      */
     protected $_customFieldsMapping = [
@@ -80,6 +118,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
+     * Bundle field mapping.
+     *
      * @var array
      */
     protected $_bundleFieldMapping = [
@@ -89,6 +129,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
+     * Option type mapping.
+     *
      * @var array
      */
     protected $_optionTypeMapping = [
@@ -116,8 +158,11 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Parse selections.
+     *
      * @param array $rowData
      * @param int $entity_id
+     *
      * @return array
      */
     protected function _parseSelections($rowData, $entity_id)
@@ -149,7 +194,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Parse the option.
+     *
      * @param array $values
+     *
      * @return array
      */
     protected function _parseOption($values)
@@ -172,9 +220,12 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Populate the option template.
+     *
      * @param array $option
      * @param int $entity_id
      * @param int $index
+     *
      * @return array
      */
     protected function _populateOptionTemplate($option, $entity_id, $index = null)
@@ -192,9 +243,12 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Populate the option value template.
+     *
      * @param array $option
      * @param int $option_id
      * @param int $store_id
+     *
      * @return array|bool
      */
     protected function _populateOptionValueTemplate($option, $option_id, $store_id = 0)
@@ -210,10 +264,13 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Populate the option value template.
+     *
      * @param array $selection
      * @param int $option_id
      * @param int $parent_id
      * @param int $index
+     *
      * @return array
      */
     protected function _populateSelectionTemplate($selection, $option_id, $parent_id, $index)
@@ -245,6 +302,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Retrieve mapping between skus and products.
+     *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function _retrieveProductHash()
@@ -304,6 +363,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Check whether the row is valid.
+     *
      * @inherited
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
@@ -313,6 +374,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Prepare attributes with default value for save.
+     *
     * @inherited
     */
     public function prepareAttributesWithDefaultValueForSave(array $rowData, $withDefaultValue = true)
@@ -323,7 +386,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
-     * Transform dynamic/fixed values to integer
+     * Transform dynamic/fixed values to integer.
+     *
      * @var array $rowData
      * @return array
      */
@@ -343,6 +407,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Populates existing options.
+     *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function _populateExistingOptions()
@@ -372,7 +438,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Populate existing selections.
+     *
      * @param array $existingOptions
+     *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function _populateExistingSelections($existingOptions)
@@ -404,6 +473,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Insert options.
+     *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function _insertOptions()
@@ -456,6 +527,8 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Insert selections.
+     *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function _insertSelections()
@@ -483,7 +556,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Delete options and selections.
+     *
      * @param array $productIds
+     *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
     protected function deleteOptionsAndSelections($productIds)

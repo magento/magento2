@@ -41,15 +41,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR = ',';
 
     /**
-     * pseudo multi line separator in one cell
-     * can be used as custom option value delimiter or in configurable fields cells
+     * Pseudo multi line separator in one cell.
      *
+     * Can be used as custom option value delimiter or in configurable fields cells.
      */
     const PSEUDO_MULTI_LINE_SEPARATOR = '|';
 
     /**
-     * Symbol between Name and Value between Pairs
-     *
+     * Symbol between Name and Value between Pairs.
      */
     const PAIR_NAME_VALUE_SEPARATOR = '=';
 
@@ -75,28 +74,65 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
+
+    /**
+     * Column product store.
+     */
     const COL_STORE = '_store';
 
+    /**
+     * Column website.
+     */
     const COL_WEBSITE = 'website_code';
 
+    /**
+     * Column product attribute set.
+     */
     const COL_ATTR_SET = '_attribute_set';
 
+    /**
+     * Column product type.
+     */
     const COL_TYPE = 'product_type';
 
+    /**
+     * Column product category.
+     */
     const COL_CATEGORY = 'categories';
 
+    /**
+     * Column product sku.
+     */
     const COL_SKU = 'sku';
 
+    /**
+     * Column product name.
+     */
     const COL_NAME = 'name';
 
+    /**
+     * Column product website.
+     */
     const COL_PRODUCT_WEBSITES = '_product_websites';
 
+    /**
+     * Media gallery attribute code.
+     */
     const MEDIA_GALLERY_ATTRIBUTE_CODE = 'media_gallery';
 
+    /**
+     * Column media image.
+     */
     const COL_MEDIA_IMAGE = '_media_image';
 
+    /**
+     * Inventory use config.
+     */
     const INVENTORY_USE_CONFIG = 'Use Config';
 
+    /**
+     * Inventory use config prefix.
+     */
     const INVENTORY_USE_CONFIG_PREFIX = 'use_config_';
 
     /**
@@ -143,7 +179,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     ];
 
     /**
-     * attribute id for product images storage
+     * Attribute id for product images storage.
      *
      * @var array
      */
@@ -182,7 +218,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     ];
 
     /**
-     * Map between import file fields and system fields/attributes
+     * Map between import file fields and system fields/attributes.
      *
      * @var array
      */
@@ -448,6 +484,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $categoryProcessor;
 
     /**
+     * Instance of product tax class processor.
+     *
      * @var Product\TaxClassProcessor
      */
     protected $taxClassProcessor;
@@ -458,6 +496,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $validator;
 
     /**
+     * Array of validated rows.
+     *
      * @var array
      */
     protected $validatedRows;
@@ -473,6 +513,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $masterAttributeCode = 'sku';
 
     /**
+     * Instance of catalog product factory.
+     *
      * @var \Magento\Catalog\Model\ProductFactory $catalogProductFactory
      */
     protected $catalogProductFactory;
@@ -488,7 +530,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $transactionManager;
 
     /**
-     * Flag for replace operation
+     * Flag for replace operation.
      *
      * @var null
      */
@@ -614,7 +656,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array $attrParams Attribute params
      * @param array $rowData Row data
      * @param int $rowNum
+     *
      * @return boolean
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum)
@@ -672,7 +716,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Multiple value separator getter
+     * Multiple value separator getter.
      *
      * @return string
      */
@@ -685,7 +729,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Retrieve id of media gallery attribute
+     * Retrieve id of media gallery attribute.
      *
      * @return int
      */
@@ -714,7 +758,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Delete products for replacement
+     * Delete products for replacement.
      *
      * @return $this
      */
@@ -786,7 +830,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Replace imported products
+     * Replace imported products.
      *
      * @return $this
      */
@@ -802,7 +846,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Save products data
+     * Save products data.
      *
      * @return $this
      */
@@ -1976,7 +2020,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Parse attributes names and values string to array
+     * Parse attributes names and values string to array.
      *
      * @param array $rowData
      *
@@ -1999,7 +2043,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * set values in use_config_ fields
+     * Set values in use_config_ fields.
      *
      * @param array $rowData
      *
@@ -2018,7 +2062,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Custom fields mapping for changed purposes of fields and field names
+     * Custom fields mapping for changed purposes of fields and field names.
      *
      * @param array $rowData
      *
@@ -2092,10 +2136,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Create product model from imported data for URL rewrite purposes
+     * Create product model from imported data for URL rewrite purposes.
      *
      * @param $rowData
+     *
      * @return \Magento\Framework\Model\AbstractModel|void
+     *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function _populateToUrlGeneration($rowData)

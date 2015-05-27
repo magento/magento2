@@ -48,21 +48,29 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     protected $_validator;
 
     /**
+     * Instance of filesystem directory write interface.
+     *
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $_directory;
 
     /**
+     * Instance of filesystem read factory.
+     *
      * @var \Magento\Framework\Filesystem\File\ReadFactory
      */
     protected $_readFactory;
 
     /**
+     * Instance of media file storage database.
+     *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDb;
 
     /**
+     * Instance of media file storage.
+     *
      * @var \Magento\MediaStorage\Helper\File\Storage
      */
     protected $_coreFileStorage;

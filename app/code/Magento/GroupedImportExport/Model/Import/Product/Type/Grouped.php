@@ -12,7 +12,7 @@ use Magento\CatalogImportExport\Model\Import\Product;
 class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
     /**
-     * Default delimiter for sku and qty
+     * Default delimiter for sku and qty.
      */
     const SKU_QTY_DELIMITER = '=';
 

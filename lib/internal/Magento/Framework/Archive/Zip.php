@@ -27,8 +27,11 @@ class Zip extends AbstractArchive implements ArchiveInterface
     }
 
     /**
+     * Pack file.
+     *
      * @param string $source
      * @param string $destination
+     *
      * @return string
      */
     public function pack($source, $destination)
@@ -41,8 +44,11 @@ class Zip extends AbstractArchive implements ArchiveInterface
     }
 
     /**
+     * Unpack file.
+     *
      * @param string $source
      * @param string $destination
+     *
      * @return string
      */
     public function unpack($source, $destination)

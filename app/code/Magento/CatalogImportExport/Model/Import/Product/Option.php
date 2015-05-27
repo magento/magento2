@@ -1024,9 +1024,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Get multiRow format from one line data
+     * Get multiRow format from one line data.
      *
      * @param array $rowData
+     *
      * @return array
      */
     protected function _getMultiRowFormat($rowData)
@@ -1723,7 +1724,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Parse custom options string to inner format
+     * Parse custom options string to inner format.
      *
      * @param array $rowData
      *
@@ -1783,7 +1784,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Clear product sku to id array
+     * Clear product sku to id array.
      *
      * @return $this
      */
