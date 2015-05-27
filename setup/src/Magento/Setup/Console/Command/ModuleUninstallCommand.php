@@ -22,6 +22,8 @@ use Magento\Setup\Model\UninstallCollector;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Setup\Model\BackupRollback;
+use Magento\Setup\Model\ConsoleLogger;
 
 /**
  * Command for uninstalling modules
@@ -34,6 +36,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Names of input arguments or options
      */
     const INPUT_KEY_REMOVE_DATA = 'remove-data';
+    const INPUT_KEY_CODE_BACKUP = 'code-backup';
 
     /**
      * @var MaintenanceMode
@@ -91,6 +94,11 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $composer;
 
     /**
+     * @var BackupRollback
+     */
+    private $backupRollback;
+
+    /**
      * Constructor
      *
      * @param ComposerInformation $composer,
@@ -102,6 +110,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
      * @param UninstallCollector $collector
+     * @param BackupRollback $backupRollback
      */
     public function __construct(
         ComposerInformation $composer,
@@ -112,7 +121,8 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         FullModuleList $fullModuleList,
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
-        UninstallCollector $collector
+        UninstallCollector $collector,
+        BackupRollback $backupRollback
     ) {
         parent::__construct($objectManagerProvider);
         $this->composer = $composer;
@@ -126,6 +136,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->collector = $collector;
         $this->moduleResource = $this->objectManager->get('Magento\Framework\Module\Resource');
         $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
+        $this->backupRollback = $backupRollback;
     }
 
     /**
@@ -141,7 +152,12 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             InputOption::VALUE_NONE,
             'Removes data installed by module(s)'
         );
-
+        $this->addOption(
+            self::INPUT_KEY_CODE_BACKUP,
+            null,
+            InputOption::VALUE_NONE,
+            'Take code backup (excludes \'' . DirectoryList::STATIC_VIEW . '\' and  \'' . DirectoryList::VAR_DIR . '\')'
+        );
         parent::configure();
     }
 
@@ -191,6 +207,9 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->maintenanceMode->set(true);
 
         try {
+            if ($input->getOption(self::INPUT_KEY_CODE_BACKUP)) {
+                $this->backupRollback->codeBackup($this->objectManager, new ConsoleLogger($output));
+            }
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
                 $this->removeData($modules, $output);
             }

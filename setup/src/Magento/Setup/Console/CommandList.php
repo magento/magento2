@@ -65,6 +65,7 @@ class CommandList
             'Magento\Setup\Console\Command\MaintenanceDisableCommand',
             'Magento\Setup\Console\Command\MaintenanceEnableCommand',
             'Magento\Setup\Console\Command\MaintenanceStatusCommand',
+            'Magento\Setup\Console\Command\RollbackCommand',
             'Magento\Setup\Console\Command\UpgradeCommand',
             'Magento\Setup\Console\Command\UninstallCommand',
         ];
