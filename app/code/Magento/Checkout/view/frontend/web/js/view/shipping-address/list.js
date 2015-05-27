@@ -18,15 +18,14 @@ define([
         name: '<%= $data.name %>',
         component: 'Magento_Checkout/js/view/shipping-address/address-renderer/default'
     };
+
     var observableAddresses = addressList.getAddresses();
-    var addresses = observableAddresses();
-    var addressCount = addresses.length;
-    var lastAddedAddress = ko.observable({});
 
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-address/list',
-            visible: window.checkoutConfig.customerAddressCount
+            visible: window.checkoutConfig.customerAddressCount,
+            rendererTemplates: []
         },
 
         initialize: function () {
@@ -35,13 +34,13 @@ define([
             observableAddresses.subscribe(
                 function(addresses) {
                     var addressIndex = addresses.length - 1;
-                    if (addresses.length == addressCount) {
+                    if (addresses.length == this.addressCount) {
                         // Update last added address (customer can update only one address)
-                        lastAddedAddress(addresses[addressIndex]);
-                    } else if (addresses.length > addressCount) {
+                        this.lastAddedAddress(addresses[addressIndex]);
+                    } else if (addresses.length > this.addressCount) {
                         // Add a new tile for newly added address
                         this.createRendererComponent(addresses[addressIndex], addressIndex);
-                        addressCount++;
+                        this.addressCount++;
                     }
                 },
                 this
@@ -50,13 +49,31 @@ define([
             return this;
         },
 
-        initChildren: function () {
+        initProperties: function () {
+            this._super();
+
+            this.lastAddedAddress = ko.observable({});
+            this.addresses = observableAddresses();
+            // number of addresses already shown in the list
+            this.addressCount = this.addresses.length;
+            // the list of child components that are responsible for address rendering
             this.rendererComponents = [];
-            _.each(addresses, this.createRendererComponent, this);
 
             return this;
         },
 
+        initChildren: function () {
+            _.each(this.addresses, this.createRendererComponent, this);
+
+            return this;
+        },
+
+        /**
+         * Create new component that will render given address in the address list
+         *
+         * @param address
+         * @param addressIndex
+         */
         createRendererComponent: function (address, addressIndex) {
             // rendererTemplates are provided via layout
             var rendererTemplate = (address.type != undefined && this.rendererTemplates[address.type] != undefined)
@@ -68,11 +85,11 @@ define([
             };
             var rendererComponent = utils.template(rendererTemplate, templateData);
             // remember last added address
-            lastAddedAddress = ko.observable(address);
+            this.lastAddedAddress = ko.observable(address);
             utils.extend(
                 rendererComponent,
                 {
-                    address: lastAddedAddress,
+                    address: this.lastAddedAddress,
                     isSelected: ko.observable(!!address.isDefaultShipping)
                 }
             );
@@ -81,17 +98,16 @@ define([
             this.rendererComponents[addressIndex] = rendererComponent;
         },
 
+        /**
+         * Select corresponding address tile.
+         * This method must be called by address renderer component in order to select it and unselect other tiles.
+         *
+         * @param addressIndex
+         */
         selectAddressTile: function(addressIndex) {
             this.rendererComponents.forEach(function(rendererComponent, rendererIndex) {
                 rendererComponent.isSelected(rendererIndex == addressIndex);
             });
-        },
-
-        selectedAddress: ko.computed(function(){
-            if (!quote.getShippingAddress()()) {
-                quote.setShippingAddress(addressList.getDefaultShipping());
-            }
-            return quote.getShippingAddress()();
-        })
+        }
     });
 });
