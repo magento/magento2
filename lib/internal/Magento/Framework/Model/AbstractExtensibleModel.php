@@ -63,6 +63,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     ) {
         $this->extensionAttributesFactory = $extensionFactory;
         $this->customAttributeFactory = $customAttributeFactory;
+
         $data = $this->filterCustomAttributes($data);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         if (isset($data['id'])) {
@@ -189,6 +190,8 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         }
         $this->customAttributesChanged = true;
         parent::setData($key, $value);
+        // TODO: Consider removing second argument, check abstract extensible object
+        $this->extensionAttributesFactory->populateExtensionAttributes($this, $this->getData());
         return $this;
     }
 

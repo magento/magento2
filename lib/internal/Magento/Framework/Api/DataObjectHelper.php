@@ -115,10 +115,8 @@ class DataObjectHelper
                     $getterMethodName = 'get' . $camelCaseKey;
                     $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value, $interfaceName);
                 }
-            } else {
-                if ($dataObject instanceof ExtensibleDataInterface) {
-                    $dataObject->setCustomAttribute($key, $value);
-                }
+            } elseif ($dataObject instanceof CustomAttributesDataInterface) {
+                $dataObject->setCustomAttribute($key, $value);
             }
         }
 

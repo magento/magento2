@@ -12,5 +12,16 @@
                 <resource ref="Magento_CatalogInventory::cataloginventory"/>
             </resources>
         </attribute>
+        <!--TODO: Should be moved to tests-->
+        <attribute code="stock_item_qty" type="string">
+            <resources>
+                <resource ref="Magento_CatalogInventory::cataloginventory"/>
+            </resources>
+            <join reference_table="cataloginventory_stock_item"
+                  select_fields="qty"
+                  join_on_field="entity_id"
+                  reference_field="product_id"
+                    />
+        </attribute>
     </extension_attributes>
 </config>

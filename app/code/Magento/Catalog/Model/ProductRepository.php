@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\Resource\Product\Collection;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -137,6 +138,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $imageProcessor;
 
     /**
+     * @var ExtensionAttributesFactory
+     */
+    protected $extensionAttributesFactory;
+
+    /**
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -157,6 +163,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ImageContentInterfaceFactory $contentFactory
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @param ImageProcessorInterface $imageProcessor
+     * @param ExtensionAttributesFactory $extensionAttributesFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -179,7 +186,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ImageContentInterfaceFactory $contentFactory,
         MimeTypeExtensionMap $mimeTypeExtensionMap,
         \Magento\Eav\Model\Config $eavConfig,
-        ImageProcessorInterface $imageProcessor
+        ImageProcessorInterface $imageProcessor,
+        ExtensionAttributesFactory $extensionAttributesFactory
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -201,6 +209,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->mimeTypeExtensionMap = $mimeTypeExtensionMap;
         $this->eavConfig = $eavConfig;
         $this->imageProcessor = $imageProcessor;
+        $this->extensionAttributesFactory = $extensionAttributesFactory;
     }
 
     /**
@@ -671,6 +680,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
+        $productDataInterface = 'Magento\Catalog\Model\Product';
+        $this->extensionAttributesFactory->process($collection, $productDataInterface);
         $collection->load();
 
         $searchResult = $this->searchResultsFactory->create();

@@ -804,7 +804,7 @@ class Db extends \Magento\Framework\Data\Collection
                 []
             );
         }
-        $this->getSelect()->columns([$fieldAlias => $join->getReferenceTable() . '.' . $join->getSelectField()]);
+        $this->getSelect()->columns([$fieldAlias => $join->getReferenceTableAlias() . '.' . $join->getSelectField()]);
         return $this;
     }
 
