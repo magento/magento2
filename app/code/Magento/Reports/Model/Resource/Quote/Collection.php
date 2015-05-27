@@ -84,9 +84,7 @@ class Collection extends \Magento\Quote\Model\Resource\Quote\Collection
         if (isset($filter['customer_name'])) {
             $customerName = $customersSelect->getAdapter()
                 ->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
-            $customersSelect->where(
-                $customerName . ' LIKE ?', '%' . $filter['customer_name'] . '%'
-            );
+            $customersSelect->where($customerName . ' LIKE ?', '%' . $filter['customer_name'] . '%');
         }
         if (isset($filter['email'])) {
             $customersSelect->where('customer.email LIKE ?', '%' . $filter['email'] . '%');
