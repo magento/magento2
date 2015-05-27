@@ -74,7 +74,6 @@ class AssertTermOnCheckout extends AbstractConstraint
         $catalogProductView->getMessagesBlock()->waitSuccessMessage();
         $checkoutCart->open();
         $checkoutCart->getCartBlock()->getOnepageLinkBlock()->proceedToCheckout();
-        $checkoutOnepage->getLoginBlock()->guestCheckout();
         $checkoutOnepage->getLoginBlock()->clickContinue();
         $checkoutOnepage->getBillingBlock()->fill($billingAddress);
         $checkoutOnepage->getBillingBlock()->clickContinue();

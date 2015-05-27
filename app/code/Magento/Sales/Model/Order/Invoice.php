@@ -432,11 +432,12 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $order->setBaseTotalInvoicedCost($order->getBaseTotalInvoicedCost() - $this->getBaseCost());
 
         if ($this->getState() == self::STATE_PAID) {
-            $this->getOrder()->setTotalPaid($this->getOrder()->getTotalPaid() - $this->getGrandTotal());
-            $this->getOrder()->setBaseTotalPaid($this->getOrder()->getBaseTotalPaid() - $this->getBaseGrandTotal());
+            $order->setTotalPaid($order->getTotalPaid() - $this->getGrandTotal());
+            $order->setBaseTotalPaid($order->getBaseTotalPaid() - $this->getBaseGrandTotal());
         }
         $this->setState(self::STATE_CANCELED);
-        $this->getOrder()->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true);
+        $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
+            ->setStatus($order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING));
         $this->_eventManager->dispatch('sales_order_invoice_cancel', [$this->_eventObject => $this]);
         return $this;
     }
