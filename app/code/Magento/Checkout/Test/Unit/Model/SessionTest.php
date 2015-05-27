@@ -46,6 +46,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $messageCollectionFactory = $this->getMockBuilder('Magento\Framework\Message\CollectionFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $quoteRepository = $this->getMockBuilder('Magento\Quote\Model\QuoteRepository')
             ->disableOriginalConstructor()

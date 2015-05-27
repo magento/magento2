@@ -189,7 +189,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         );
         $this->transactionCollectionFactory = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false
