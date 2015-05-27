@@ -95,7 +95,15 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCustomer()
     {
-        $this->assertEquals($this->_loadCustomer(), $this->_block->getCustomer());
+        $expectedCustomer = $this->_loadCustomer();
+        $actualCustomer = $this->_block->getCustomer();
+        $this->assertEquals(count($expectedCustomer->__toArray()), count($actualCustomer->__toArray()));
+        foreach ($expectedCustomer->__toArray() as $property => $value) {
+            $expectedValue = is_numeric($value) ? intval($value) : $value;
+            $actualValue = $actualCustomer->__toArray()[$property];
+            $actualValue = is_numeric($actualValue) ? intval($actualValue) : $actualValue;
+            $this->assertEquals($expectedValue, $actualValue);
+        }
     }
 
     public function testGetCustomerEmpty()
