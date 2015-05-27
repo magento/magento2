@@ -54,7 +54,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match|MockObject
      */
-    private $matchQueryBuilder;
+    private $matchContainer;
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Filter\Builder|MockObject
@@ -76,9 +76,12 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $helper = new ObjectManager($this);
 
         $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
-            ->setMethods([])
+            ->setMethods(['group', 'limit', 'where', 'columns', 'from'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->select->expects($this->any())
+            ->method('from')
+            ->willReturnSelf();
 
         $connectionAdapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select'])
@@ -110,14 +113,23 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->request = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
-            ->setMethods(['getQuery', 'getDimensions', 'getIndex'])
+            ->setMethods(['getQuery', 'getDimensions', 'getIndex', 'getSize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->matchQueryBuilder = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match')
+        $this->matchContainer = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer')
             ->setMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
+        $matchContainerFactory = $this->getMockBuilder(
+            'Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory'
+        )
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $matchContainerFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->matchContainer);
 
         $this->filter = $this->getMockBuilder('Magento\Framework\Search\Request\FilterInterface')
             ->disableOriginalConstructor()
@@ -147,7 +159,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             [
                 'resource' => $this->resource,
                 'scoreBuilderFactory' => $this->scoreBuilderFactory,
-                'matchQueryBuilder' => $this->matchQueryBuilder,
+                'matchContainerFactory' => $matchContainerFactory,
                 'filterBuilder' => $this->filterBuilder,
                 'dimensionsBuilder' => $this->dimensionsBuilder,
                 'indexProviders' => [$index => $indexBuilder]
@@ -168,7 +180,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->method('build')
             ->will($this->returnValue('a = b'));
 
-        $this->matchQueryBuilder->expects($this->once())->method('build')
+        $this->matchContainer->expects($this->once())->method('build')
             ->with(
                 $this->equalTo($this->scoreBuilder),
                 $this->equalTo($this->select),
@@ -217,7 +229,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $query = $this->createBoolQuery();
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
 
-        $this->matchQueryBuilder->expects($this->exactly(4))->method('build')
+        $this->matchContainer->expects($this->exactly(4))->method('build')
             ->will($this->returnValue($this->select));
 
         $matchQuery = $this->createMatchQuery();

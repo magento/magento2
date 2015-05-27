@@ -41,7 +41,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
-            ->setMethods(['from', 'joinLeft', 'where'])
+            ->setMethods(['from', 'joinLeft', 'where', 'joinInner'])
             ->getMock();
 
         $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
@@ -117,7 +117,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $website->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
 
-        $this->select->expects($this->at(3))
+        $this->select->expects($this->at(4))
             ->method('joinLeft')
             ->with(
                 ['stock_index' => 'cataloginventory_stock_status'],
@@ -177,5 +177,12 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 ['search_weight']
             )
             ->will($this->returnSelf());
+        $this->select->expects($this->at(3))
+            ->method('joinInner')
+            ->with(
+                ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
+                'search_index.product_id = cpie.entity_id'
+            )
+            ->willReturnSelf();
     }
 }
