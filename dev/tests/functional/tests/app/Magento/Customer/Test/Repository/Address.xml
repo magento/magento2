@@ -250,16 +250,8 @@
             <field name="region_id" xsi:type="string">London</field>
             <field name="telephone" xsi:type="string">444-44-444-44</field>
             <field name="vat_id" xsi:type="string">584451913</field>
-        </dataset>
-
-        <dataset name="address_US_pay_pal">
-            <field name="firstname" xsi:type="string">Dmytro</field>
-            <field name="lastname" xsi:type="string">Aponasenko</field>
-            <field name="city" xsi:type="string">Culver City</field>
-            <field name="street" xsi:type="string">1 Main St</field>
-            <field name="postcode" xsi:type="string">90230</field>
-            <field name="country_id" xsi:type="string">United States</field>
-            <field name="region_id" xsi:type="string">Culver City</field>
+            <field name="default_billing" xsi:type="string">Yes</field>
+            <field name="default_shipping" xsi:type="string">Yes</field>
         </dataset>
     </repository>
 </config>

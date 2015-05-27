@@ -25,7 +25,7 @@ class WidgetGrid extends AbstractGrid
      *
      * @var string
      */
-    protected $firstRowSelector = '//tr[./td[contains(@class, "col-title")]][1]/td';
+    protected $firstRowSelector = '//tbody//tr[@data-role="row"]/td[contains(@class, "col-title")][1]';
 
     /**
      * Filters array mapping.

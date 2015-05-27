@@ -5,12 +5,11 @@
  */
 namespace Magento\TestFramework;
 
-use Magento\Framework\Code\Generator\FileResolver;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsList;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\DeploymentConfig\Reader;
 
 /**
@@ -157,7 +156,8 @@ class Application
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         ];
         $driverPool = new \Magento\Framework\Filesystem\DriverPool;
-        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool);
+        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool;
+        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool, $configFilePool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
         $this->globalConfigFile = $globalConfigFile;
@@ -172,20 +172,31 @@ class Application
     {
         if (null === $this->_db) {
             if ($this->isInstalled()) {
-                $reader = new Reader($this->dirList);
+                $configPool = new \Magento\Framework\Config\File\ConfigFilePool();
+                $reader = new Reader($this->dirList, $configPool);
                 $deploymentConfig = new DeploymentConfig($reader, []);
-                $dbConfig = $deploymentConfig->getConfigData(ConfigOptionsList::KEY_DB);
-                $dbInfo = $dbConfig['connection']['default'];
-                $host = $dbInfo['host'];
-                $user = $dbInfo['username'];
-                $password = $dbInfo['password'];
-                $dbName = $dbInfo['dbname'];
+                $host = $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_HOST
+                );
+                $user = $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_USER
+                );
+                $password = $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_PASSWORD
+                );
+                $dbName = $deploymentConfig->get(
+                    ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                    '/' . ConfigOptionsListConstants::KEY_NAME
+                );
             } else {
                 $installConfig = $this->getInstallConfig();
-                $host = $installConfig['db_host'];
-                $user = $installConfig['db_user'];
-                $password = $installConfig['db_password'];
-                $dbName = $installConfig['db_name'];
+                $host = $installConfig['db-host'];
+                $user = $installConfig['db-user'];
+                $password = $installConfig['db-password'];
+                $dbName = $installConfig['db-name'];
             }
             $this->_db = new Db\Mysql(
                 $host,
@@ -391,7 +402,7 @@ class Application
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            'php -f %s setup:uninstall -n --magento_init_params=%s',
+            'php -f %s setup:uninstall -n --magento-init-params=%s',
             [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
@@ -478,7 +489,7 @@ class Application
          * Literal value is used instead of constant, because autoloader is not integrated with Magento Setup app
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
-        $params['magento_init_params'] = $this->getInitParamsQuery();
+        $params['magento-init-params'] = $this->getInitParamsQuery();
         $result = [];
         foreach ($params as $key => $value) {
             if (!empty($value)) {

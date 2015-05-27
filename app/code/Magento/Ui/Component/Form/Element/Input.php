@@ -21,17 +21,4 @@ class Input extends AbstractElement
     {
         return static::NAME;
     }
-
-    /**
-     * Prepare component configuration
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        parent::prepare();
-
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
-    }
 }

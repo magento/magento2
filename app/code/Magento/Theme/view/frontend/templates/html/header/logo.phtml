@@ -14,10 +14,16 @@
 <span data-action="toggle-nav" class="action nav-toggle"><span><?php echo __('Toggle Nav') ?></span></span>
 <?php if ($block->isHomePage()):?>
     <strong class="logo">
-        <img src="<?php echo $block->getLogoSrc() ?>" alt="<?php echo $block->getLogoAlt() ?>" />
+<?php else: ?>
+    <a class="logo" href="<?php echo $block->getUrl(''); ?>" title="<?php echo $storeName ?>">
+<?php endif ?>
+        <img src="<?php echo $block->getLogoSrc() ?>"
+             alt="<?php echo $block->getLogoAlt() ?>"
+             <?php echo $block->getLogoWidth() ? 'width="' . $block->getLogoWidth() . '"' : '' ?>
+             <?php echo $block->getLogoHeight() ? 'height="' . $block->getLogoHeight() . '"' : '' ?>
+        />
+<?php if ($block->isHomePage()):?>
     </strong>
 <?php else:?>
-    <a class="logo" href="<?php echo $block->getUrl(''); ?>" title="<?php echo $storeName ?>">
-        <img src="<?php echo $block->getLogoSrc() ?>" alt="<?php echo $storeName ?>" />
     </a>
 <?php endif?>

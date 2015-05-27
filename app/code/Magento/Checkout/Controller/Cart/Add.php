@@ -171,15 +171,6 @@ class Add extends \Magento\Checkout\Controller\Cart
         if ($backUrl || $backUrl = $this->getBackUrl()) {
             $result['backUrl'] = $backUrl;
         } else {
-            $this->_view->loadLayout(['default'], true, true, false);
-            $layout = $this->_view->getLayout();
-
-            $result['messages'] = $layout->getBlock('global_messages')->toHtml();
-
-            if ($this->_checkoutSession->getCartWasUpdated()) {
-                $result['minicart'] = $layout->getBlock('minicart')->toHtml();
-            }
-
             if ($product && !$product->getIsSalable()) {
                 $result['product'] = [
                     'statusText' => __('Out of stock')

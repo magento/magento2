@@ -21,17 +21,20 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      *
      * @var \Magento\Framework\Acl\RootResource
      */
-    protected $_rootResource;
+    protected $rootResource;
 
     /**
      * Acl resource provider
      *
      * @var \Magento\Framework\Acl\Resource\ProviderInterface
      */
-    protected $_aclResourceProvider;
+    protected $aclResourceProvider;
 
     /** @var \Magento\Integration\Helper\Data */
-    protected $_integrationData;
+    protected $integrationData;
+
+    /** @var \Magento\Integration\Api\IntegrationServiceInterface */
+    protected $integrationService;
 
     /**
      * Initialize dependencies.
@@ -42,7 +45,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Acl\RootResource $rootResource
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider
      * @param \Magento\Integration\Helper\Data $integrationData
-     * @param \Magento\Integration\Service\V1\Integration $integrationService
+     * @param \Magento\Integration\Api\IntegrationServiceInterface $integrationService
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -54,12 +57,12 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Acl\RootResource $rootResource,
         \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
         \Magento\Integration\Helper\Data $integrationData,
-        \Magento\Integration\Service\V1\Integration $integrationService,
+        \Magento\Integration\Api\IntegrationServiceInterface $integrationService,
         array $data = []
     ) {
-        $this->_rootResource = $rootResource;
-        $this->_aclResourceProvider = $aclResourceProvider;
-        $this->_integrationData = $integrationData;
+        $this->rootResource = $rootResource;
+        $this->aclResourceProvider = $aclResourceProvider;
+        $this->integrationData = $integrationData;
         $this->integrationService = $integrationService;
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -68,6 +71,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get tab label
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -78,6 +82,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Get tab title
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -101,6 +106,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Whether tab is visible
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -131,11 +137,11 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Check if everything is allowed
      *
-     * @return boolean
+     * @return bool
      */
     public function isEverythingAllowed()
     {
-        return in_array($this->_rootResource->getId(), $this->getSelectedResources());
+        return in_array($this->rootResource->getId(), $this->getSelectedResources());
     }
 
     /**
@@ -145,8 +151,8 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     public function getTree()
     {
-        $resources = $this->_aclResourceProvider->getAclResources();
-        $rootArray = $this->_integrationData->mapResources(
+        $resources = $this->aclResourceProvider->getAclResources();
+        $rootArray = $this->integrationData->mapResources(
             isset($resources[1]['children']) ? $resources[1]['children'] : []
         );
         return $rootArray;
