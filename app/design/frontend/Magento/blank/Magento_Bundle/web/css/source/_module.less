@@ -97,11 +97,11 @@
     .nested {
         .field.qty {
             .label {
+                .css(font-weight, @form-field-label__font-weight);
+                .css(margin, 0 0 @indent__xs);
                 display: inline-block;
-                font-weight: @form-field-label__font-weight;
-                margin: 0 0 @indent__xs;
             }
-            margin-top: @form-field__vertical-indent;
+            .css(margin-top, @form-field__vertical-indent);
         }
     }
     p.required {
