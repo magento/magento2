@@ -4,9 +4,14 @@
  */
 /*global define*/
 define(
-    ['../model/quote'],
-    function(quote) {
+    ['../model/quote',
+     'Magento_Checkout/js/model/shipping-rate-service'
+    ],
+    function(quote, shippingRateService) {
         "use strict";
+        quote.getShippingAddress().subscribe(function () {
+            shippingRateService.getRates(quote.getShippingAddress()())
+        });
         return function(shippingAddress) {
             quote.setShippingAddress(shippingAddress);
         };
