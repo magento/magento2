@@ -60,6 +60,7 @@ class RegisterCustomerFrontendEntityTest extends Injectable
         $this->customerAccountLogout = $customerAccountLogout;
         $this->customerAccountCreate = $customerAccountCreate;
         $this->cmsIndex = $cmsIndex;
+        $this->customerAccountLogout->open();
     }
 
     /**

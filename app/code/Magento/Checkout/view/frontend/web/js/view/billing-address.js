@@ -13,10 +13,9 @@ define(
         '../action/select-billing-address',
         '../model/step-navigator',
         '../model/quote',
-        '../model/addresslist',
-        'mage/translate'
+        '../model/addresslist'
     ],
-    function ($, Component, ko, customer, selectBillingAddress, navigator, quote, addressList, $t) {
+    function ($, Component, ko, customer, selectBillingAddress, navigator, quote, addressList) {
         "use strict";
         var stepName = 'billingAddress';
         var newAddressSelected = ko.observable(false);
@@ -37,7 +36,7 @@ define(
             billingAddresses: function() {
                 var newAddress = {
                         getAddressInline: function() {
-                            return $t('New address');
+                            return $.mage.__('New address');
                         },
                         customerAddressId: null
                     },
@@ -111,6 +110,9 @@ define(
                 this.source.set('params.invalid', false);
                 fields.trigger('change');
                 this.source.trigger('billingAddress.data.validate');
+                if (!customer.isLoggedIn()()) {
+                    this.source.trigger('customerDetails.data.validate');
+                }
                 this.validateAdditionalAddressFields();
             },
             validateAdditionalAddressFields: function() {
