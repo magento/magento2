@@ -15,7 +15,6 @@ use Magento\Framework\Json\Decoder;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
-use Magento\Framework\Module\Resource;
 use Magento\Setup\Model\ModuleContext;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
@@ -180,9 +179,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                 '<error>You cannot run this command because the Magento application is not installed.</error>'
             );
             return;
-        }
-        if ($input->getOption(self::INPUT_KEY_CODE_BACKUP)) {
-            $this->backupRollback->codeBackup($this->objectManagerProvider->get(), new ConsoleLogger($output));
         }
 
         $modules = $input->getArgument(self::INPUT_KEY_MODULES);

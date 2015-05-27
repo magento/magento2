@@ -76,6 +76,11 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $setup;
 
     /**
+     * @var \Magento\Setup\Model\BackupRollback|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $backupRollback;
+
+    /**
      * @var ModuleUninstallCommand
      */
     private $command;
@@ -103,6 +108,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $packageInfoFactory->expects($this->once())->method('create')->willReturn($this->packageInfo);
         $this->moduleResource = $this->getMock('Magento\Framework\Module\Resource', [], [], '', false);
         $this->dependencyChecker = $this->getMock('Magento\Framework\Module\DependencyChecker', [], [], '', false);
+        $this->backupRollback = $this->getMock('Magento\Setup\Model\BackupRollback', [], [], '', false);
         $this->dataSetup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
         $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
@@ -142,7 +148,8 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->fullModuleList,
             $this->maintenanceMode,
             $objectManagerProvider,
-            $this->uninstallCollector
+            $this->uninstallCollector,
+            $this->backupRollback
         );
         $this->tester = new CommandTester($this->command);
     }
@@ -400,6 +407,15 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->uninstallCollector->expects($this->once())
             ->method('collectUninstall')
             ->willReturn(['Magento_A' => $uninstallMock]);
+        $this->tester->execute($input);
+    }
+
+    public function testExecuteCodeBackup()
+    {
+        $input = ['module' => ['Magento_A', 'Magento_B'], '--code-backup' => true];
+        $this->setUpExecute($input);
+        $this->backupRollback->expects($this->once())
+            ->method('codeBackup');
         $this->tester->execute($input);
     }
 }

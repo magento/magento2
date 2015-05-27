@@ -33,7 +33,7 @@ class BackupRollback
      *
      * @param DirectoryList $directoryList
      */
-    public function __construct( DirectoryList $directoryList)
+    public function __construct(DirectoryList $directoryList)
     {
         $this->directoryList = $directoryList;
     }
@@ -59,7 +59,6 @@ class BackupRollback
         $fsBackup->setBackupsDir($backupsDir);
         $fsBackup->setBackupExtension('tgz');
         $fsBackup->setTime(time());
-        $fsBackup->setName('CLI');
         $fsBackup->create();
         $log->log('Code backup filename: ' . $fsBackup->getBackupFilename()
             . ' (The archive can be uncompressed with 7-Zip on Windows systems.)');
@@ -103,7 +102,6 @@ class BackupRollback
         $fsRollback->setBackupExtension('tgz');
         $time = explode('_', $rollbackFile);
         $fsRollback->setTime($time[0]);
-        $fsRollback->setName('CLI');
         $fsRollback->rollback();
         $log->log('Code rollback filename: ' . $fsRollback->getBackupFilename());
         $log->log('Code rollback file path: ' . $fsRollback->getBackupPath());
