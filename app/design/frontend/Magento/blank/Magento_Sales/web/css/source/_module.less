@@ -95,7 +95,8 @@
 }
 
 .account,
-[class^="sales-guest-"] {
+[class^="sales-guest-"],
+.sales-guest-view {
     .page-title-wrapper {
         .page-title {
             margin-right: @indent__m;
@@ -191,7 +192,8 @@
 //  Guest order view page
 //  ---------------------------------------------
 
-[class^="sales-guest-"] {
+[class^="sales-guest-"],
+.sales-guest-view {
     .column.main {
         .block:not(.widget) {
             &:extend(.abs-account-blocks all);
@@ -275,7 +277,8 @@
     //  Guest order view page
     //  ---------------------------------------------
 
-    [class^="sales-guest-"] {
+    [class^="sales-guest-"],
+    .sales-guest-view {
         .column.main {
             .block:not(.widget) {
                 .block-content {

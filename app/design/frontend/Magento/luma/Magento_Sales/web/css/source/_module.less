@@ -269,6 +269,7 @@
 
 .account,
 [class^="sales-guest-"],
+.sales-guest-view,
 .magento-rma-guest-returns {
     &:extend(.abs-title-orders all);
 }
@@ -309,7 +310,8 @@
 //  Guest order view page
 //  ---------------------------------------------
 
-[class^="sales-guest-"] {
+[class^="sales-guest-"],
+.sales-guest-view {
     .column.main {
         .block:not(.widget) {
             &:extend(.abs-account-blocks all);
@@ -367,7 +369,8 @@
         }
     }
     .account,
-    [class^="sales-guest-"] {
+    [class^="sales-guest-"],
+    .sales-guest-view {
         &:extend(.abs-title-orders-mobile all);
     }
     .order-details-items {
@@ -472,7 +475,8 @@
     }
 
     .account,
-    [class^="sales-guest-"] {
+    [class^="sales-guest-"],
+    .sales-guest-view {
         &:extend(.abs-title-orders-desktop all);
         .column.main .block.block-order-details-view {
             &:extend(.abs-add-clearfix-desktop all);
