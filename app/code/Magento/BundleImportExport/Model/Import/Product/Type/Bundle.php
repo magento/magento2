@@ -306,7 +306,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      *
      * @return \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
      */
-    protected function _retrieveProductHash()
+    protected function _retrieveProducsByCachedSkus()
     {
         $this->_cachedSkuToProducts = $this->connection->fetchPairs(
             $this->connection->select()->from(
@@ -351,7 +351,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->_parseSelections($rowData, $productData['entity_id']);
                 }
                 if (!empty($this->_cachedOptions)) {
-                    $this->_retrieveProductHash();
+                    $this->_retrieveProducsByCachedSkus();
                     $this->_populateExistingOptions();
                     $this->_insertOptions();
                     $this->_insertSelections();
