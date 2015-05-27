@@ -15,6 +15,7 @@ use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Message\Error;
 use Magento\Framework\ObjectFactory;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
  * Class Index
@@ -144,6 +145,11 @@ class Index extends \Magento\Backend\App\Action
     protected $resultJsonFactory;
 
     /**
+     * @var CustomerTokenServiceInterface
+     */
+    protected $tokenService;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
@@ -197,7 +203,8 @@ class Index extends \Magento\Backend\App\Action
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        CustomerTokenServiceInterface $tokenService
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
@@ -223,6 +230,7 @@ class Index extends \Magento\Backend\App\Action
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->tokenService = $tokenService;
         parent::__construct($context);
     }
 
