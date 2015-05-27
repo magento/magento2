@@ -39,7 +39,6 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
      * @param int $cartPriceExclTax
      * @param int $cartSubTotalBoth
      * @param int $cartSubTotalExclTax
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetConfig(
         $expectedResult,
@@ -79,6 +78,7 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getConfigDataProvider()
     {
