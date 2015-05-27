@@ -58,8 +58,6 @@ class MatchTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildQuery()
     {
-        $boost = 3.14;
-
         /** @var Select|\PHPUnit_Framework_MockObject_MockObject $select */
         $select = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->setMethods(['getMatchQuery', 'match'])
@@ -80,15 +78,12 @@ class MatchTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit_Framework_MockObject_MockObject $query */
         $query = $this->getMockBuilder('Magento\Framework\Search\Request\Query\Match')
-            ->setMethods(['getMatches', 'getValue', 'getBoost'])
+            ->setMethods(['getMatches', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();
         $query->expects($this->once())
             ->method('getValue')
             ->willReturn('some_value ');
-        $query->expects($this->once())
-            ->method('getBoost')
-            ->willReturn($boost);
         $query->expects($this->once())
             ->method('getMatches')
             ->willReturn([['field' => 'some_field']]);
