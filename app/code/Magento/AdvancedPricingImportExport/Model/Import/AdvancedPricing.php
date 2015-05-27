@@ -109,27 +109,22 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     public function validateRow(array $rowData, $rowNum)
     {
         $sku = false;
-
         if (isset($this->_validatedRows[$rowNum])) {
             return !isset($this->_invalidRows[$rowNum]);
         }
         $this->_validatedRows[$rowNum] = true;
-
         if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
-            //todo
-//            if (false) {
-//                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
-//                return false;
-//            }
+            if (false) {
+                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+                return false;
+            }
             return true;
         }
-
         if (!$this->_validator->isValid($rowData)) {
             foreach ($this->_validator->getMessages() as $message) {
                 $this->addRowError($message, $rowNum);
             }
         }
-
         if (isset($rowData[self::COL_SKU])) {
             $sku = $rowData[self::COL_SKU];
         }
@@ -138,7 +133,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         } elseif (false === $sku) {
             $this->addRowError(ValidatorInterface::ERROR_ROW_IS_ORPHAN, $rowNum);
         }
-
         return !isset($this->_invalidRows[$rowNum]);
     }
 
@@ -154,13 +148,16 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $this->deleteAdvancedPricing();
         } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
             $this->replaceAdvancedPricing();
-        } else {
+        } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND == $this->getBehavior()) {
             $this->saveAdvancedPricing();
         }
 
         return true;
     }
 
+    /**
+     * Save advanced pricing
+     */
     public function saveAdvancedPricing()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
@@ -195,10 +192,28 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         }
     }
 
-    // todo
+    /**
+     * Deletes Advanced price data from raw data.
+     */
     protected function deleteAdvancedPricing()
     {
-        return true;
+        $listSku = [];
+        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            foreach ($bunch as $rowNum => $rowData) {
+                if (!$this->validateRow($rowData, $rowNum)) {
+                    continue;
+                } else {
+                    $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, $rowNum);
+                    return false;
+                }
+                $rowSku = $rowData[self::COL_SKU];
+                $listSku[] = $rowSku;
+            }
+        }
+        if ($listSku) {
+            $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_GROUPED_PRICE)
+                ->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE);
+        }
     }
 
     // todo
@@ -220,11 +235,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $affectedIds = [];
             $tableName = $this->_resourceFactory->create()->getTable($table);
             $priceIn = [];
-
             foreach ($priceData as $sku => $priceRows) {
                 $productId = $this->_productModel->getIdBySku($sku);
                 $affectedIds[] = $productId;
-
                 foreach ($priceRows as $row) {
                     $row['entity_id'] = $productId;
                     $priceIn[] = $row;
@@ -232,6 +245,39 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             }
             if ($priceIn) {
                 $this->_connection->insertOnDuplicate($tableName, $priceIn, ['value']);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Deletes tier prices and group prices.
+     *
+     * @param array $listSku
+     * @param $table
+     * @return $this
+     */
+    protected function deleteProductTierAndGroupPrices(array $listSku, $table)
+    {
+        if (isset($table)) {
+            $tableName = $this->_resourceFactory->create()->getTable($table);
+        }
+        if ($tableName) {
+            if ($listSku) {
+                foreach ($listSku as $delSku) {
+                    $productId = $this->_productModel->getIdBySku($delSku);
+                    $affectedIds[] = $productId;
+                }
+                if($affectedIds) {
+                    $this->_connection->delete(
+                        $tableName,
+                        $this->_connection->quoteInto('entity_id IN (?)', $affectedIds)
+                    );
+                    $this->_productModel->cleanCache();
+                } else {
+                    $this->addRowError(ValidatorInterface::ERROR_SKU_IS_EMPTY, 0);
+                    return false;
+                }
             }
         }
         return $this;
