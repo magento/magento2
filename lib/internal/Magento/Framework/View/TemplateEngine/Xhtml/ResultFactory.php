@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -53,7 +54,7 @@ class ResultFactory
         $object = $this->objectManager->create($this->instanceName, $arguments);
 
         if (!($object instanceof ResultInterface)) {
-            throw new LocalizedException(__('This class must implement the "ResultInterface"'));
+            throw new LocalizedException(new Phrase('This class must implement the "ResultInterface"'));
         }
 
         return $object;
