@@ -9,10 +9,15 @@ define([
     'Magento_Checkout/js/action/select-shipping-address'
 ], function(ko, Component, selectShippingAddressAction) {
     'use strict';
+    var countryData = window.checkoutConfig.countryData;
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-address/address-renderer/default',
             isSelected: ko.observable(false)
+        },
+
+        getCountryName: function(countryId) {
+            return (countryData[countryId] != undefined) ? countryData[countryId].name : "";
         },
 
         /** Set selected customer shipping address  */
