@@ -183,7 +183,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var array
      */
-    protected $_media_gallery_attribute_id = null;
+    protected $_mediaGalleryAttributeId = null;
 
     /**
      * Validation failure message template definitions
@@ -222,7 +222,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @var array
      */
-    protected $_fields_map = [
+    protected $_fieldsMap = [
         'image' => 'base_image',
         'image_label' => "base_image_label",
         'image' => 'base_image',
@@ -735,12 +735,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function getMediaGalleryAttributeId()
     {
-        if (!$this->_media_gallery_attribute_id) {
+        if (!$this->_mediaGalleryAttributeId) {
             /** @var $resource \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource */
             $resource = $this->_resourceFactory->create();
-            $this->_media_gallery_attribute_id = $resource->getAttribute(self::MEDIA_GALLERY_ATTRIBUTE_CODE)->getId();
+            $this->_mediaGalleryAttributeId = $resource->getAttribute(self::MEDIA_GALLERY_ATTRIBUTE_CODE)->getId();
         }
-        return $this->_media_gallery_attribute_id;
+        return $this->_mediaGalleryAttributeId;
     }
 
     /**
@@ -920,7 +920,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
             }
-            $this->_fields_map = array_merge($this->_fields_map, $model->getCustomFieldsMapping());
+            $this->_fieldsMap = array_merge($this->_fieldsMap, $model->getCustomFieldsMapping());
             $this->_specialAttributes = array_merge($this->_specialAttributes, $model->getParticularAttributes());
         }
         // remove doubles
@@ -2051,13 +2051,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function _setStockUseConfigFieldsValues($rowData)
     {
-        $use_config_fields = array();
+        $useConfigFields = array();
         foreach ($rowData as $key => $value) {
             if (isset($this->defaultStockData[$key]) && isset($this->defaultStockData[self::INVENTORY_USE_CONFIG_PREFIX . $key]) && !empty($value)) {
-                $use_config_fields[self::INVENTORY_USE_CONFIG_PREFIX . $key] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
+                $useConfigFields[self::INVENTORY_USE_CONFIG_PREFIX . $key] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
             }
         }
-        $rowData = array_merge($rowData, $use_config_fields);
+        $rowData = array_merge($rowData, $useConfigFields);
         return $rowData;
     }
 
@@ -2070,9 +2070,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function _customFieldsMapping($rowData)
     {
-        foreach ($this->_fields_map as $system_field_name => $file_field_name) {
-            if (isset($rowData[$file_field_name])) {
-                $rowData[$system_field_name] = $rowData[$file_field_name];
+        foreach ($this->_fieldsMap as $systemFieldName => $fileFieldName) {
+            if (isset($rowData[$fileFieldName])) {
+                $rowData[$systemFieldName] = $rowData[$fileFieldName];
             }
         }
 
