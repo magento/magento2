@@ -682,9 +682,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         if ($resetCollection || empty($this->_entityCollection)) {
             $this->_entityCollection = $this->_entityCollectionFactory->create();
-            $this->_entityCollection->setOrder('has_options', 'asc');
-            $this->_entityCollection->setStoreId(Store::DEFAULT_STORE_ID);
-
         }
         return $this->_entityCollection;
     }
@@ -757,9 +754,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $page = 0;
         while (true) {
             ++$page;
-            $this->_prepareEntityCollection($this->_getEntityCollection(true));
+            $entityCollection = $this->_getEntityCollection(true);
+            $entityCollection->setOrder('has_options', 'asc');
+            $entityCollection->setStoreId(Store::DEFAULT_STORE_ID);
+            $this->_prepareEntityCollection($entityCollection);
             $this->paginateCollection($page, $this->getItemsPerPage());
-            if ($this->_getEntityCollection()->count() == 0) {
+            if ($entityCollection->count() == 0) {
                 break;
             }
             $exportData = $this->getExportData();
@@ -769,7 +769,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             foreach ($exportData as $dataRow) {
                 $writer->writeRow($dataRow);
             }
-            if ($this->_getEntityCollection()->getCurPage() >= $this->_getEntityCollection()->getLastPageNumber()) {
+            if ($entityCollection->getCurPage() >= $entityCollection->getLastPageNumber()) {
                 break;
             }
         }
