@@ -77,7 +77,7 @@ define([
          * * @return {Number} - visible dialog count.
          */
         _getVisibleSlideCount: function() {
-            var elems = this.dialogWrapper.find('[data-type="'+this.options.type+'"]');
+            var elems = this.dialogWrapper.find('[data-type="slide"]');
 
             return elems.filter('.'+this.options.dialogVisibleClass).length;
         },
@@ -139,7 +139,9 @@ define([
          */
         _unsetActive: function() {
             this.dialog.removeAttr('style');
-            this.overlay.zIndex(this.prevOverlayIndex);
+            if ( this.overlay ) {
+                this.overlay.zIndex(this.prevOverlayIndex);
+            }
         },
         /**
          * Creates wrapper to hold all dialogs.
