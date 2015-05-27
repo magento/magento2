@@ -15,13 +15,6 @@ use Magento\Framework\Setup\UninstallInterface;
 class UninstallCollector
 {
     /**
-     * Module list including enabled and disabled modules
-     *
-     * @var FullModuleList
-     */
-    private $fullModuleList;
-
-    /**
      * Object manager
      *
      * @var ObjectManagerInterface
