@@ -23,15 +23,18 @@ define(
             style: "",
             notCalculatedMessage: 'Not yet calculated',
             quoteIsVirtual: quote.isVirtual(),
-            selectedShippingMethod: quote.getShippingMethod(),
+            selectedShippingMethod: quote.getSelectedShippingMethod(),
             getTitle: function() {
-                return "Shipping & Handling" + "(" + shippingService.getTitleByCode(this.selectedShippingMethod()) + ")";
+                return "Shipping";
             },
             getExcludingLabel: function() {
-                return "Shipping Excl. Tax" + "(" + shippingService.getTitleByCode(this.selectedShippingMethod()) + ")";
+                return "Shipping Excl. Tax";
             },
             getIncludingLabel: function() {
-                return "Shipping Incl. Tax" + "(" + shippingService.getTitleByCode(this.selectedShippingMethod()) + ")";
+                return "Shipping Incl. Tax";
+            },
+            getShippingMethodTitle: function() {
+                return shippingService.getTitleByCode(this.selectedShippingMethod())
             },
             totals: quote.getTotals(),
             isBothPricesDisplayed: function() {
