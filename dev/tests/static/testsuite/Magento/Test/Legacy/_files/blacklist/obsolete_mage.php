@@ -12,5 +12,6 @@ return [
     'downloader/app/Magento/Downloader/Model/Session.php',
     'downloader/lib/Magento/Framework/Backup/Db.php',
     'downloader/lib/Magento/Framework/Backup/Snapshot.php',
-    'dev/tests/static/testsuite/Magento/Test/Integrity/ClassesTest.php'
+    'dev/tests/static/testsuite/Magento/Test/Integrity/ClassesTest.php',
+    'app/code/Magento/CatalogImportExport/Model/Import/Product/Validator/Category.php'
 ];
