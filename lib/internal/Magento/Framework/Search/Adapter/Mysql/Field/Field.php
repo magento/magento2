@@ -11,7 +11,7 @@ class Field implements FieldInterface
     /**
      * @var string
      */
-    private $field;
+    private $column;
     /**
      * @var int|null
      */
@@ -22,13 +22,13 @@ class Field implements FieldInterface
     private $type;
 
     /**
-     * @param string $field
+     * @param string $column
      * @param int|null $attributeId
      * @param int $type
      */
-    public function __construct($field, $attributeId = null, $type = self::TYPE_FULLTEXT)
+    public function __construct($column, $attributeId = null, $type = self::TYPE_FULLTEXT)
     {
-        $this->field = $field;
+        $this->column = $column;
         $this->attributeId = $attributeId;
         $this->type = $type;
     }
@@ -36,9 +36,9 @@ class Field implements FieldInterface
     /**
      * @return string
      */
-    public function getField()
+    public function getColumn()
     {
-        return $this->field;
+        return $this->column;
     }
 
     /**
@@ -55,13 +55,5 @@ class Field implements FieldInterface
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getField();
     }
 }

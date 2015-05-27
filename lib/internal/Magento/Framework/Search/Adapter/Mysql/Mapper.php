@@ -155,6 +155,7 @@ class Mapper
                 );
             }
         }
+
         $select->order('relevance ' . Select::SQL_DESC);
         return $select;
     }

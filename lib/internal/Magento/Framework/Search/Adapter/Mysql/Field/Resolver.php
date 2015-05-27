@@ -27,7 +27,7 @@ class Resolver implements ResolverInterface
     {
         $resolvedFields = [];
         foreach ((array)$fields as $field) {
-            $resolvedFields[] = $this->fieldFactory->create(['field' => $field]);
+            $resolvedFields[] = $this->fieldFactory->create(['column' => $field]);
         }
 
         return $resolvedFields;

@@ -28,11 +28,5 @@ interface FieldInterface
      * Get field name
      * @return string
      */
-    public function getField();
-
-    /**
-     * Get field name when converted to string
-     * @return string
-     */
-    public function __toString();
+    public function getColumn();
 }

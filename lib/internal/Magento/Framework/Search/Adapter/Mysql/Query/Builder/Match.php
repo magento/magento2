@@ -64,17 +64,17 @@ class Match implements QueryInterface
         $resolvedFieldList = $this->resolver->resolve($fieldList);
 
         $fieldIds = [];
-        $fieldNames = [];
+        $columns = [];
         foreach ($resolvedFieldList as $field) {
             if ($field->getType() === FieldInterface::TYPE_FULLTEXT && $field->getAttributeId()) {
                 $fieldIds[] = $field->getAttributeId();
             }
-            $fieldName = $field->getField();
-            $fieldNames[$fieldName] = $fieldName;
+            $column = $field->getColumn();
+            $columns[$column] = $column;
         }
 
         $matchQuery = $this->fulltextHelper->getMatchQuery(
-            $fieldNames,
+            $columns,
             $queryValue,
             Fulltext::FULLTEXT_MODE_BOOLEAN
         );

@@ -96,21 +96,17 @@ class Preprocessor implements PreprocessorInterface
                     ->where($query);
             } else {
                 if ($filter->getType() == FilterInterface::TYPE_TERM) {
-                    $field = $filter->getField();
-                    $mapper = function ($value) use ($field, $isNegation) {
-                        return ($isNegation ? '-' : '') . $this->attributePrefix . $field . '_' . $value;
-                    };
                     if (is_array($filter->getValue())) {
                         $value = sprintf(
                             '%s IN (%s)',
                             ($isNegation ? 'NOT' : ''),
-                            implode(',', array_map($mapper, $filter->getValue()))
+                            implode(',', $filter->getValue())
                         );
                     } else {
                         $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
                     }
                     return sprintf(
-                        'cpie.store_id = %d AND cpie.attribute_id = %d and cpie.value %s',
+                        'cpie.store_id = %d AND cpie.attribute_id = %d AND cpie.value %s',
                         $this->scopeResolver->getScope()->getId(),
                         $attribute->getId(),
                         $value

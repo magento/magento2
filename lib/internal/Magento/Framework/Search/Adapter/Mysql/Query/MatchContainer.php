@@ -17,7 +17,7 @@ use Magento\Framework\Search\Adapter\Mysql\Query\Builder\QueryInterface as Build
 
 class MatchContainer implements BuilderQueryInterface
 {
-    const QUERY_NAME_PREFIX = 'derivative_';
+    const QUERY_NAME_PREFIX = 'derived_';
     /**
      * @var array [[$select, $scoreBuilder], [$select, $scoreBuilder]]
      */

@@ -45,7 +45,7 @@ class Resolver implements ResolverInterface
                     $this->fieldFactory->create(
                         [
                             'attributeId' => null,
-                            'field' => 'data_index',
+                            'column' => 'data_index',
                             'type' => FieldInterface::TYPE_FULLTEXT
                         ]
                     )
@@ -53,10 +53,11 @@ class Resolver implements ResolverInterface
                 break;
             }
             $attribute = $this->attributeCollection->getItemByColumnValue('attribute_code', $field);
+            $attributeId = $attribute ? $attribute->getId() : 0;
             $resolvedFields[$field] = $this->fieldFactory->create(
                 [
-                    'attributeId' => $attribute ? $attribute->getId() : 0,
-                    'field' => 'data_index',
+                    'attributeId' => $attributeId,
+                    'column' => 'data_index',
                     'type' => FieldInterface::TYPE_FULLTEXT
                 ]
             );
