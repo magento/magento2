@@ -133,18 +133,11 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $composer->expects($this->any())
             ->method('getRootRequiredPackages')
             ->willReturn(['magento/package-a', 'magento/package-b']);
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->willReturn(
-                $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface', [], '', false)
-            );
         $this->command = new ModuleUninstallCommand(
             $composer,
             $this->deploymentConfig,
             $this->writer,
             $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false),
-            $filesystem,
             $this->fullModuleList,
             $this->maintenanceMode,
             $objectManagerProvider,

@@ -10,7 +10,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
@@ -84,11 +83,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $directoryList;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var ComposerInformation
      */
     private $composer;
@@ -105,7 +99,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @param DeploymentConfig $deploymentConfig
      * @param DeploymentConfig\Writer $writer
      * @param DirectoryList $directoryList
-     * @param Filesystem $filesystem
      * @param FullModuleList $fullModuleList
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
@@ -117,7 +110,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         DeploymentConfig $deploymentConfig,
         DeploymentConfig\Writer $writer,
         DirectoryList $directoryList,
-        Filesystem $filesystem,
         FullModuleList $fullModuleList,
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
@@ -128,7 +120,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList = $directoryList;
-        $this->filesystem = $filesystem;
         $this->writer = $writer;
         $this->maintenanceMode = $maintenanceMode;
         $this->fullModuleList = $fullModuleList;
