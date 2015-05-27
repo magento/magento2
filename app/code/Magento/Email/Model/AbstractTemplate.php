@@ -678,7 +678,10 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function _getTemplateInstance()
     {
         if ($this->_templateFactory) {
-            return $this->_templateFactory->create();
+            return $this->_templateFactory->create([
+                // Pass filesystem object to child template. Intended to be used for the test isolation purposes.
+                'filesystem' => $this->_filesystem
+            ]);
         }
         return null;
     }
