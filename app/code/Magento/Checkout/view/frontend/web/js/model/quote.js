@@ -22,6 +22,7 @@ define(
         var formattedShippingAddress = ko.observable(null);
         var formattedBillingAddress = ko.observable(null);
         var collectedTotals = ko.observable({});
+        var isCustomerLoggedIn = ko.observable(window.checkoutConfig.isCustomerLoggedIn);
         return {
             getQuoteId: function() {
                 return quoteData.entity_id;
@@ -40,6 +41,12 @@ define(
             },
             getTotals: function() {
                 return totals
+            },
+            getIsCustomerLoggedIn: function() {
+                return isCustomerLoggedIn;
+            },
+            setIsCustomerLoggedIn: function(status) {
+                isCustomerLoggedIn(status);
             },
             getTotalByCode: function(code) {
                 if (!totals()) {

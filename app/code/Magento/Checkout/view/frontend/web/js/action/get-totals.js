@@ -17,10 +17,10 @@ define(
         "use strict";
         return function (callbacks) {
             var serviceUrl = '';
-            if (quote.getCheckoutMethod()() === 'guest') {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/totals', {quoteId: quote.getQuoteId()});
-            } else {
+            if (quote.getIsCustomerLoggedIn()()) {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/totals', {});
+            } else {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:quoteId/totals', {quoteId: quote.getQuoteId()});
             }
 
             return storage.get(
