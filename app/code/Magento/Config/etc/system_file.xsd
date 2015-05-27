@@ -20,7 +20,7 @@
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element ref="tab" />
                     <xs:element ref="section" />
-                    <xs:element ref="include" />
+                    <xs:element name="include" type="includeType"/>
                 </xs:choice>
             </xs:sequence>
         </xs:complexType>
@@ -65,17 +65,14 @@
         <xs:attribute name="extends" type="xs:string" use="optional" />
     </xs:attributeGroup>
 
-    <xs:element name="include">
+    <xs:complexType name="includeType">
         <xs:annotation>
             <xs:documentation>
                 Include Resource. Recursive complex type
             </xs:documentation>
         </xs:annotation>
-
-        <xs:complexType>
-            <xs:attribute name="path" type="typePath" use="required" />
-        </xs:complexType>
-    </xs:element>
+        <xs:attribute name="path" type="typePath" use="required" />
+    </xs:complexType>
 
     <xs:element name="tab">
         <xs:annotation>
@@ -108,7 +105,7 @@
                     <xs:element name="header_css" type="xs:string" />
                     <xs:element name="resource" type="typeAclResourceId" />
                     <xs:element ref="group" />
-                    <xs:element ref="include" />
+                    <xs:element name="include" type="includeType"/>
                 </xs:choice>
             </xs:sequence>
 
@@ -150,7 +147,7 @@
                     <xs:element ref="group" minOccurs="0" maxOccurs="unbounded"/>
                     <xs:element ref="depends" />
                     <xs:element ref="attribute" />
-                    <xs:element ref="include" />
+                    <xs:element name="include" type="includeType"/>
                 </xs:choice>
             </xs:sequence>
 
