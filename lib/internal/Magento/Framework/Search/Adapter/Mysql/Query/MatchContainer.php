@@ -107,6 +107,7 @@ class MatchContainer implements BuilderQueryInterface
 
     /**
      * @param Select $select
+     * @return void
      */
     private function addQuery(Select $select)
     {
