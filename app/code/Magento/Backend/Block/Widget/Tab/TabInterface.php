@@ -17,6 +17,7 @@ interface TabInterface
      * Return Tab label
      *
      * @return string
+     * @api
      */
     public function getTabLabel();
 
@@ -24,6 +25,7 @@ interface TabInterface
      * Return Tab title
      *
      * @return string
+     * @api
      */
     public function getTabTitle();
 
@@ -31,6 +33,7 @@ interface TabInterface
      * Can show tab in tabs
      *
      * @return boolean
+     * @api
      */
     public function canShowTab();
 
@@ -38,6 +41,7 @@ interface TabInterface
      * Tab is hidden
      *
      * @return boolean
+     * @api
      */
     public function isHidden();
 }
