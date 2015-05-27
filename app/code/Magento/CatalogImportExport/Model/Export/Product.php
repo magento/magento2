@@ -6,6 +6,7 @@
 namespace Magento\CatalogImportExport\Model\Export;
 
 use \Magento\Store\Model\Store;
+use \Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
 /**
  * Export entity product model
@@ -53,6 +54,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     const COL_MEDIA_IMAGE = '_media_image';
 
+    const COL_ADDITIONAL_ATTRIBUTES = 'additional_attributes';
+
     /**
      * Pairs of attribute set ID-to-name.
      *
@@ -80,9 +83,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @var string[]
      */
     protected $_indexValueAttributes = [
-        'status',
-        'tax_class_id',
-        'visibility',
         'gift_message_available',
         'custom_design',
     ];
@@ -217,7 +217,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $rowCustomizer;
 
-
     /**
      * Map between import file fields and system fields/attributes
      *
@@ -251,10 +250,38 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         'min_sale_qty' => 'min_cart_qty',
         'max_sale_qty' => 'max_cart_qty',
         'notify_stock_qty' => 'notify_on_stock_below',
-        '_related_sku' => 'related_skus',
-        '_crosssell_sku' => 'crosssell_skus',
-        '_upsell_sku' => 'upsell_skus',
         'meta_keyword' => 'meta_keywords',
+        'tax_class_id' => 'tax_class_name',
+    ];
+
+    /**
+     * Attributes codes which are appropriate for export and not the part of additional_attributes.
+     *
+     * @var array
+     */
+    protected $_exportMainAttrCodes = [
+        self::COL_SKU,
+        'name',
+        'description',
+        'short_description',
+        'weight',
+        'product_online',
+        'tax_class_name',
+        'visibility',
+        'price',
+        'special_price',
+        'special_price_from_date',
+        'special_price_to_date',
+        'url_key',
+        'meta_title',
+        'meta_keywords',
+        'meta_description',
+        'base_image',
+        'base_image_label',
+        'small_image',
+        'small_image_label',
+        'thumbnail_image',
+        'thumbnail_image_label'
     ];
 
     /**
@@ -576,11 +603,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         }
         $categories = array();
         foreach ($rowCategories[$productId] as $categoryId) {
+            $categoryPath = $this->_rootCategories[$categoryId];
             if (isset($this->_categories[$categoryId])) {
-                $categories[] = $this->_rootCategories[$categoryId] . '/' . $this->_categories[$categoryId];
+                $categoryPath .= '/' . $this->_categories[$categoryId];
             }
+            $categories[] = $categoryPath;
         }
-        $dataRow[self::COL_CATEGORY] = implode('|', $categories);
+        $dataRow[self::COL_CATEGORY] = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $categories);
         unset($rowCategories[$productId]);
 
         return true;
@@ -605,18 +634,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         if (!$this->_headerColumns) {
             $customOptCols = [
-                '_custom_option_store',
-                '_custom_option_type',
-                '_custom_option_title',
-                '_custom_option_is_required',
-                '_custom_option_price',
-                '_custom_option_sku',
-                '_custom_option_max_characters',
-                '_custom_option_sort_order',
-                '_custom_option_row_title',
-                '_custom_option_row_price',
-                '_custom_option_row_sku',
-                '_custom_option_row_sort',
+                'custom_options',
             ];
             $this->_headerColumns = array_merge(
                 [
@@ -625,16 +643,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     self::COL_ATTR_SET,
                     self::COL_TYPE,
                     self::COL_CATEGORY,
-                    //self::COL_ROOT_CATEGORY,
                     '_product_websites',
                 ],
-                $this->_getExportAttrCodes(),
+                $this->_getExportMainAttrCodes(),
+                [self::COL_ADDITIONAL_ATTRIBUTES],
                 reset($stockItemRows) ? array_keys(end($stockItemRows)) : [],
                 [],
                 [
-                    '_related_sku',
-                    '_crosssell_sku',
-                    '_upsell_sku',
+                    'related_skus',
+                    'crosssell_skus',
+                    'upsell_skus',
                 ],
                 ['additional_images', 'additional_image_labels']
             );
@@ -643,6 +661,16 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $this->_headerColumns = array_merge($this->_headerColumns, $customOptCols);
             }
         }
+    }
+
+    /**
+     * Get attributes codes which are appropriate for export and not the part of additional_attributes.
+     *
+     * @return array
+     */
+    protected function _getExportMainAttrCodes()
+    {
+        return $this->_exportMainAttrCodes;
     }
 
     /**
@@ -746,8 +774,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         return $writer->getContents();
     }
 
-   // protected function combineComplexData ()
-
     /**
      * Get export data for collection
      *
@@ -805,6 +831,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
              * @var \Magento\Catalog\Model\Product $item
              */
             foreach ($collection as $itemId => $item) {
+                $additionalAttributes = array();
                 foreach ($this->_getExportAttrCodes() as $code) {
                     $attrValue = $item->getData($code);
                     if (!$this->isValidAttributeValue($code, $attrValue)) {
@@ -814,21 +841,34 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     if (isset($this->_attributeValues[$code][$attrValue]) && !empty($this->_attributeValues[$code])) {
                         $attrValue = $this->_attributeValues[$code][$attrValue];
                     }
+                    $fieldName = isset($this->_fields_map[$code]) ? $this->_fields_map[$code] : $code;
 
                     if ($storeId != Store::DEFAULT_STORE_ID
-                        && isset($data[$itemId][Store::DEFAULT_STORE_ID][$code])
-                        && $data[$itemId][Store::DEFAULT_STORE_ID][$code] == $attrValue
+                        && isset($data[$itemId][Store::DEFAULT_STORE_ID][$fieldName])
+                        && $data[$itemId][Store::DEFAULT_STORE_ID][$fieldName] == $attrValue
                     ) {
                         continue;
                     }
 
                     if ($this->_attributeTypes[$code] !== 'multiselect') {
                         if (is_scalar($attrValue)) {
-                            $data[$itemId][$storeId][$code] = $attrValue;
+                            if (!in_array($fieldName, $this->_getExportMainAttrCodes())) {
+                                $additionalAttributes[$fieldName] = $fieldName . ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
+                            }
+                            $data[$itemId][$storeId][$fieldName] = $attrValue;
+                        } else {
+                            $this->collectMultiselectValues($item, $code, $storeId);
                         }
-                    } else {
-                        $this->collectMultiselectValues($item, $code, $storeId);
                     }
+                }
+
+                if (!empty($data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES])) {
+                    $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
+                    foreach ($additionalAttributes as $fieldName => $value) {
+                        unset($data[$itemId][$storeId][$fieldName]);
+                    }
+                } else {
+                    unset($data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES]);
                 }
 
                 if (!empty($data[$itemId][$storeId]) || $this->hasMultiselectData($item, $storeId)) {
@@ -836,8 +876,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $data[$itemId][$storeId][self::COL_STORE] = $storeCode;
                     $data[$itemId][$storeId][self::COL_ATTR_SET] = $this->_attrSetIdToName[$attrSetId];
                     $data[$itemId][$storeId][self::COL_TYPE] = $item->getTypeId();
-                    $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 }
+                $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
             }
@@ -905,7 +945,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function collectMultiselectValues($item, $attrCode, $storeId)
     {
         $attrValue = $item->getData($attrCode);
-        $optionIds = explode(',', $attrValue);
+        $optionIds = explode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attrValue);
         $options = array_intersect_key(
             $this->_attributeValues[$attrCode],
             array_flip($optionIds)
@@ -940,96 +980,92 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     /**
      * @param array $dataRow
-     * @param array $multirawData
+     * @param array $multiRawData
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function addMultirowData($dataRow, $multirawData)
+    protected function addMultirowData($dataRow, $multiRawData)
     {
         $result = [];
         $productId = $dataRow['product_id'];
         $storeId = $dataRow['store_id'];
+        $sku = $dataRow[self::COL_SKU];
 
         unset($dataRow['product_id']);
         unset($dataRow['store_id']);
-$tmp = 0;
-        while (true && ($tmp <= 1000)) {
-            $tmp++;
-            if (Store::DEFAULT_STORE_ID == $storeId) {
-                unset($dataRow[self::COL_STORE]);
-                $this->updateDataWithCategoryColumns($dataRow, $multirawData['rowCategories'], $productId);
-                if (!empty($multirawData['rowWebsites'][$productId])) {
-                    $websiteCodes = array();
-                    foreach ($multirawData['rowWebsites'][$productId] as $productWebsite) {
-                        $websiteCodes[] = $this->_websiteIdToCode[$productWebsite];
-                    }
-                    $dataRow['_product_websites'] = implode(',', $websiteCodes);
-                    $multirawData['rowWebsites'][$productId] = array();
-                }
-                if (!empty($multirawData['mediaGalery'][$productId])) {
-                    $additionalImages = array();
-                    $additionalImageLabels = array();
-                    foreach ($multirawData['mediaGalery'][$productId] as $mediaItem) {
-                        $additionalImages[] = $mediaItem['_media_image'];
-                        $additionalImageLabels[] = $mediaItem['_media_label'];
-                    }
-                    $dataRow['additional_images'] = implode(',', $additionalImages);
-                    $dataRow['additional_image_labels'] = implode(',', $additionalImageLabels);
-                    $multirawData['mediaGalery'][$productId] = array();
-                }
-                foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {
-                    if (!empty($multirawData['linksRows'][$productId][$linkId])) {
-                        $colPrefix = '_' . $linkTypeName . '_';
+        unset($dataRow[self::COL_SKU]);
 
-                        $associations = array();
-                        foreach ($multirawData['linksRows'][$productId][$linkId] as $linkData) {
-                            if ($linkData['default_qty'] !== null) {
-                                $skuItem = $linkData['sku'] . '=' . $linkData['default_qty'];
-                            } else {
-                                $skuItem = $linkData['sku'];
-                            }
-                            $associations[$skuItem] = $linkData['position'];
+        if (Store::DEFAULT_STORE_ID == $storeId) {
+            unset($dataRow[self::COL_STORE]);
+            $this->updateDataWithCategoryColumns($dataRow, $multiRawData['rowCategories'], $productId);
+            if (!empty($multiRawData['rowWebsites'][$productId])) {
+                $websiteCodes = array();
+                foreach ($multiRawData['rowWebsites'][$productId] as $productWebsite) {
+                    $websiteCodes[] = $this->_websiteIdToCode[$productWebsite];
+                }
+                $dataRow['_product_websites'] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteCodes);
+                $multiRawData['rowWebsites'][$productId] = array();
+            }
+            if (!empty($multiRawData['mediaGalery'][$productId])) {
+                $additionalImages = array();
+                $additionalImageLabels = array();
+                foreach ($multiRawData['mediaGalery'][$productId] as $mediaItem) {
+                    $additionalImages[] = $mediaItem['_media_image'];
+                    $additionalImageLabels[] = $mediaItem['_media_label'];
+                }
+                $dataRow['additional_images'] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImages);
+                $dataRow['additional_image_labels'] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageLabels);
+                $multiRawData['mediaGalery'][$productId] = array();
+            }
+            foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {
+                if (!empty($multiRawData['linksRows'][$productId][$linkId])) {
+                    $colPrefix = $linkTypeName . '_';
+
+                    $associations = array();
+                    foreach ($multiRawData['linksRows'][$productId][$linkId] as $linkData) {
+                        if ($linkData['default_qty'] !== null) {
+                            $skuItem = $linkData['sku'] . ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $linkData['default_qty'];
+                        } else {
+                            $skuItem = $linkData['sku'];
                         }
-                        $multirawData['linksRows'][$productId][$linkId] = array();
-                        asort($associations);
-                        $dataRow[$colPrefix . 'sku'] = implode(',', array_keys($associations));
+                        $associations[$skuItem] = $linkData['position'];
                     }
-                }
-                $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
-
-                if (!empty($multirawData['customOptionsData'][$productId])) {
-                    $dataRow = array_merge($dataRow, array_shift($multirawData['customOptionsData'][$productId]));
+                    $multiRawData['linksRows'][$productId][$linkId] = array();
+                    asort($associations);
+                    $dataRow[$colPrefix . 'skus'] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, array_keys($associations));
                 }
             }
+            $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
 
-            if (!empty($this->collectedMultiselectsData[$storeId][$productId])) {
-                foreach (array_keys($this->collectedMultiselectsData[$storeId][$productId]) as $attrKey) {
-                    if (!empty($this->collectedMultiselectsData[$storeId][$productId][$attrKey])) {
-                        $dataRow[$attrKey] = array_shift(
-                            $this->collectedMultiselectsData[$storeId][$productId][$attrKey]
-                        );
-                    }
-                }
-            }
-
-            if (empty($dataRow)) {
-                break;
-            } elseif ($storeId != Store::DEFAULT_STORE_ID) {
-                $dataRow[self::COL_STORE] = $this->_storeIdToCode[$storeId];
-                $dataRow[self::COL_ATTR_SET] = null;
-                $dataRow[self::COL_TYPE] = null;
-                if (isset($productData[Store::DEFAULT_STORE_ID][self::COL_VISIBILITY])) {
-                    $dataRow[self::COL_VISIBILITY] = $productData[Store::DEFAULT_STORE_ID][self::COL_VISIBILITY];
-                }
-            }
-
-            $result[] = $dataRow;
-            $dataRow = [];
         }
-        if ($tmp>999) {
-            echo 'infinite loop';die();
+
+        if (!empty($this->collectedMultiselectsData[$storeId][$productId])) {
+            foreach (array_keys($this->collectedMultiselectsData[$storeId][$productId]) as $attrKey) {
+                if (!empty($this->collectedMultiselectsData[$storeId][$productId][$attrKey])) {
+                    $dataRow[$attrKey] = implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $this->collectedMultiselectsData[$storeId][$productId][$attrKey]);
+                }
+            }
         }
+
+        if (!empty($multiRawData['customOptionsData'][$productId][$storeId])) {
+            $customOptionsRows = $multiRawData['customOptionsData'][$productId][$storeId];
+            $multiRawData['customOptionsData'][$productId][$storeId] = array();
+            $customOptions = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $customOptionsRows);
+
+            $dataRow = array_merge($dataRow, array('custom_options' => $customOptions));
+        }
+
+        if (empty($dataRow)) {
+            return $result;
+        } elseif ($storeId != Store::DEFAULT_STORE_ID) {
+            $dataRow[self::COL_STORE] = $this->_storeIdToCode[$storeId];
+            if (isset($productData[Store::DEFAULT_STORE_ID][self::COL_VISIBILITY])) {
+                $dataRow[self::COL_VISIBILITY] = $productData[Store::DEFAULT_STORE_ID][self::COL_VISIBILITY];
+            }
+        }
+        $dataRow[self::COL_SKU] = $sku;
+        $result[] = $dataRow;
 
         return $result;
     }
@@ -1070,6 +1106,21 @@ $tmp = 0;
     }
 
     /**
+     * @param array $option
+     * @return string
+     */
+    protected function optionRowToCellString($option)
+    {
+        $result = array();
+
+        foreach ($option as $key => $value) {
+            $result[] = $key . ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $value;
+        }
+
+        return implode(ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $result);
+    }
+
+    /**
      * @param int[] $productIds
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -1078,10 +1129,15 @@ $tmp = 0;
     protected function getCustomOptionsData($productIds)
     {
         $customOptionsData = [];
-        $customOptionsDataPre = [];
 
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
-            $options = $this->_optionColFactory->create()->reset()->addTitleToResult(
+            if (Store::DEFAULT_STORE_ID != $storeId) {
+                continue;
+            }
+            $options = $this->_optionColFactory->create();
+            /* @var \Magento\Catalog\Model\Resource\Product\Option\Collection $options*/
+            $options->addOrder('sort_order');
+            $options->reset()->addOrder('sort_order')->addTitleToResult(
                 $storeId
             )->addPriceToResult(
                 $storeId
@@ -1094,73 +1150,31 @@ $tmp = 0;
             foreach ($options as $option) {
                 $row = [];
                 $productId = $option['product_id'];
-                $optionId = $option['option_id'];
 
-                if (Store::DEFAULT_STORE_ID == $storeId) {
-                    $row['_custom_option_type'] = $option['type'];
-                    $row['_custom_option_title'] = $option['title'];
-                    $row['_custom_option_is_required'] = $option['is_require'];
-                    $row['_custom_option_price'] = $option['price'] . ($option['price_type'] == 'percent' ? '%' : '');
-                    $row['_custom_option_sku'] = $option['sku'];
-                    $row['_custom_option_max_characters'] = $option['max_characters'];
-                    $row['_custom_option_sort_order'] = $option['sort_order'];
-                } else {
-                    $row['_custom_option_title'] = $option['title'];
-                }
+                $row['name'] = $option['title'];
+                $row['type'] = $option['type'];
+                $row['required'] = $option['is_require'];
+                $row['price'] = $option['price'];
+                $row['price_type'] = ($option['price_type'] == 'percent') ? $option['price_type'] : 'fixed';
+                $row['sku'] = $option['sku'];
+
                 $values = $option->getValues();
-                if ($values) {
-                    $firstValue = array_shift($values);
-                    $priceType = $firstValue['price_type'] == 'percent' ? '%' : '';
-
-                    if (Store::DEFAULT_STORE_ID == $storeId) {
-                        $row['_custom_option_row_title'] = $firstValue['title'];
-                        $row['_custom_option_row_price'] = $firstValue['price'] . $priceType;
-                        $row['_custom_option_row_sku'] = $firstValue['sku'];
-                        $row['_custom_option_row_sort'] = $firstValue['sort_order'];
-                    } else {
-                        $row['_custom_option_row_title'] = $firstValue['title'];
-                    }
-                }
-
-                if (Store::DEFAULT_STORE_ID != $storeId) {
-                    $row['_custom_option_store'] = $this->_storeIdToCode[$storeId];
-                }
-                $customOptionsDataPre[$productId][$optionId][] = $row;
 
                 if ($values) {
                     foreach ($values as $value) {
-                        $row = [];
-                        $valuePriceType = $value['price_type'] == 'percent' ? '%' : '';
-
-                        if (Store::DEFAULT_STORE_ID == $storeId) {
-                            $row['_custom_option_row_title'] = $value['title'];
-                            $row['_custom_option_row_price'] = $value['price'] . $valuePriceType;
-                            $row['_custom_option_row_sku'] = $value['sku'];
-                            $row['_custom_option_row_sort'] = $value['sort_order'];
-                        } else {
-                            $row['_custom_option_row_title'] = $value['title'];
-                        }
-                        if ($row) {
-                            if (Store::DEFAULT_STORE_ID != $storeId) {
-                                $row['_custom_option_store'] = $this->_storeIdToCode[$storeId];
-                            }
-                            $customOptionsDataPre[$option['product_id']][$optionId][] = $row;
-                        }
+                        $valuePriceType = ($value['price_type'] == 'percent') ? $value['price_type'] : 'fixed';
+                        $row['option_title'] = $value['title'];
+                        $row['price'] = $value['price'];
+                        $row['price_type'] = $valuePriceType;
+                        $row['sku'] = $value['sku'];
+                        $customOptionsData[$productId][$storeId][] = $this->optionRowToCellString($row);
                     }
+                } else {
+                    $customOptionsData[$productId][$storeId][] = $this->optionRowToCellString($row);
                 }
                 $option = null;
             }
             $options = null;
-        }
-
-        foreach ($customOptionsDataPre as $productId => $optionsData) {
-            $customOptionsData[$productId] = [];
-            foreach ($optionsData as $optionId => $optionRows) {
-                $customOptionsData[$productId] = array_merge(
-                    $customOptionsData[$productId],
-                    $optionRows
-                );
-            }
         }
 
         return $customOptionsData;
