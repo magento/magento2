@@ -51,13 +51,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     const XML_PATH_DESIGN_EMAIL_LOGO_HEIGHT = 'design/email/logo_height';
 
     /**
-     * The directory in which inline/non-inline CSS files are stored
-     *
-     * @var string
-     */
-    const CSS_DIRECTORY = 'css';
-
-    /**
      * Configuration of design package for template
      *
      * @var \Magento\Framework\Object
@@ -332,11 +325,12 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function _applyInlineCss($html)
     {
         // Check to see if the {{inlinecss file=""}} directive set CSS file(s) to inline
-        $inlineCssFiles = $this->getInlineCssFiles();
+        $cssToInline = $this->_getCssFilesContent(
+            $this->getInlineCssFiles()
+        );
         // Only run Emogrify if HTML exists and if there is at least one file to inline
-        if ($html && !empty($inlineCssFiles)) {
+        if ($html && !empty($cssToInline)) {
             try {
-                $cssToInline = $this->_getCssFilesContent($inlineCssFiles);
                 $emogrifier = new \Pelago\Emogrifier();
                 $emogrifier->setHtml($html);
                 $emogrifier->setCss($cssToInline);
@@ -369,7 +363,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     public function getCssFileContent($file)
     {
-        $file = self::CSS_DIRECTORY. DIRECTORY_SEPARATOR . $file;
         $designParams = $this->_getDesignParams();
 
         $asset = $this->_assetRepo->createAsset($file, $designParams);
@@ -377,7 +370,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
-     * Loads CSS content from filesystem
+     * Loads CSS content from filesystem.
      *
      * @param array $files
      * @return string
@@ -389,7 +382,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
 
         $css = '';
         foreach ($files as $file) {
-            $css .= $this->getCssFileContent($file) . PHP_EOL;
+            $css .= $this->getCssFileContent($file);
         }
         return $css;
     }
