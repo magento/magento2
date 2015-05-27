@@ -123,10 +123,10 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap([
                 ['Magento\Setup\Module\Setup', [], $this->setup],
             ]));
-        $decoder = $this->getMock('Magento\Framework\Json\Decoder', [], [], '', false);
-        $decoder->expects($this->any())
-            ->method('decode')
-            ->willReturn(['require' => ['php' => '1.0', 'magento/package-a' => '1.0', 'magento/package-b' => '1.0']]);
+        $composer = $this->getMock('Magento\Setup\Model\ComposerInformation', [], [], '', false);
+        $composer->expects($this->any())
+            ->method('getRootRequiredPackages')
+            ->willReturn(['magento/package-a', 'magento/package-b']);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $filesystem->expects($this->any())
             ->method('getDirectoryRead')
@@ -134,7 +134,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface', [], '', false)
             );
         $this->command = new ModuleUninstallCommand(
-            $decoder,
+            $composer,
             $this->deploymentConfig,
             $this->writer,
             $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false),
@@ -316,12 +316,18 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
             [
                 ['Magento_A' => ['Magento_D' => ['Magento_D', 'Magento_A']]],
                 ['module' => ['Magento_A']],
-                ['Module(s) depending on Magento_A: Magento_D']
+                [
+                    "Cannot uninstall module 'Magento_A' because the following module(s) depend on it:" .
+                    PHP_EOL .  "\tMagento_D"
+                ]
             ],
             [
                 ['Magento_A' => ['Magento_D' => ['Magento_D', 'Magento_A']]],
                 ['module' => ['Magento_A', 'Magento_B']],
-                ['Module(s) depending on Magento_A: Magento_D']
+                [
+                    "Cannot uninstall module 'Magento_A' because the following module(s) depend on it:" .
+                    PHP_EOL .  "\tMagento_D"
+                ]
             ],
             [
                 [
@@ -329,9 +335,34 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
                     'Magento_B' => ['Magento_E' => ['Magento_E', 'Magento_A']]
                 ],
                 ['module' => ['Magento_A', 'Magento_B']],
-                ['Module(s) depending on Magento_A: Magento_D', 'Module(s) depending on Magento_B: Magento_E']
+                [
+                    "Cannot uninstall module 'Magento_A' because the following module(s) depend on it:" .
+                    PHP_EOL .  "\tMagento_D",
+                    "Cannot uninstall module 'Magento_B' because the following module(s) depend on it:" .
+                    PHP_EOL .  "\tMagento_E"
+                ]
             ],
         ];
+    }
+
+    public function testExecuteFailedUninstall()
+    {
+        $input = ['module' => ['Magento_A', 'Magento_B']];
+        $this->setUpPassValidation();
+        $this->dependencyChecker->expects($this->once())
+            ->method('checkDependenciesWhenDisableModules')
+            ->willReturn(['Magento_A' => [], 'Magento_B' => []]);
+        $this->dataSetup->expects($this->at(0))
+            ->method('getTableRow')
+            ->with('setup_module', 'module', 'Magento_A')
+            ->willReturn(['module' => 'Magento_A', 'schema_version' => '1.0', 'data_version' => '1.0']);
+        $this->dataSetup->expects($this->at(1))
+            ->method('getTableRow')
+            ->with('setup_module', 'module', 'Magento_B')
+            ->willReturn(false);
+        $this->tester->execute($input);
+        $this->assertNotContains('Magento_A is already uninstalled', $this->tester->getDisplay());
+        $this->assertContains('Magento_B is already uninstalled', $this->tester->getDisplay());
     }
 
     private function setUpExecute($input)
@@ -340,9 +371,10 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
             ->willReturn(['Magento_A' => [], 'Magento_B' => []]);
-        $this->dataSetup->expects($this->once())->method('startSetup');
+        $this->dataSetup->expects($this->any())
+            ->method('getTableRow')
+            ->willReturn(['module' => 'module', 'schema_version' => '1.0', 'data_version' => '1.0']);
         $this->dataSetup->expects($this->exactly(count($input['module'])))->method('deleteTableRow');
-        $this->dataSetup->expects($this->once())->method('endSetup');
         $this->deploymentConfig->expects($this->once())
             ->method('getConfigData')
             ->with(ConfigOptionsListConstants::KEY_MODULES)

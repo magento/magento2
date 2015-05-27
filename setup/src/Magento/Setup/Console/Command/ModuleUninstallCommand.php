@@ -11,11 +11,11 @@ use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Json\Decoder;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\Resource;
+use Magento\Setup\Model\ComposerInformation;
 use Magento\Setup\Model\ModuleContext;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
@@ -34,11 +34,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * Names of input arguments or options
      */
     const INPUT_KEY_REMOVE_DATA = 'remove-data';
-
-    /**
-     * @var Decoder
-     */
-    private $decoder;
 
     /**
      * @var MaintenanceMode
@@ -91,17 +86,25 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $filesystem;
 
     /**
+     * @var ComposerInformation
+     */
+    private $composer;
+
+    /**
      * Constructor
      *
+     * @param ComposerInformation $composer,
      * @param DeploymentConfig $deploymentConfig
      * @param DeploymentConfig\Writer $writer
+     * @param DirectoryList $directoryList
+     * @param Filesystem $filesystem
      * @param FullModuleList $fullModuleList
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
      * @param UninstallCollector $collector
      */
     public function __construct(
-        Decoder $decoder,
+        ComposerInformation $composer,
         DeploymentConfig $deploymentConfig,
         DeploymentConfig\Writer $writer,
         DirectoryList $directoryList,
@@ -112,21 +115,17 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         UninstallCollector $collector
     ) {
         parent::__construct($objectManagerProvider);
-        $this->decoder = $decoder;
+        $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList = $directoryList;
         $this->filesystem = $filesystem;
         $this->writer = $writer;
         $this->maintenanceMode = $maintenanceMode;
         $this->fullModuleList = $fullModuleList;
-        $this->packageInfo = $this->objectManagerProvider
-            ->get()
-            ->get('Magento\Framework\Module\PackageInfoFactory')
-            ->create();
+        $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         $this->collector = $collector;
-        $this->moduleResource = $this->objectManagerProvider->get()->get('Magento\Framework\Module\Resource');
-        $this->dependencyChecker = $this->objectManagerProvider->get()
-            ->get('Magento\Framework\Module\DependencyChecker');
+        $this->moduleResource = $this->objectManager->get('Magento\Framework\Module\Resource');
+        $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
     }
 
     /**
@@ -177,8 +176,14 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         // check dependencies
         $dependencyMessages = $this->checkDependencies($modules);
         if (!empty($dependencyMessages)) {
-            $output->writeln('<error>Cannot uninstall because of depending module(s):</error>');
             $output->writeln($dependencyMessages);
+            return;
+        }
+
+        // check if modules are already uninstalled
+        $uninstallMessages = $this->checkUninstalled($modules);
+        if (!empty($uninstallMessages)) {
+            $output->writeln($uninstallMessages);
             return;
         }
 
@@ -187,29 +192,45 @@ class ModuleUninstallCommand extends AbstractModuleCommand
 
         try {
             if ($input->getOption(self::INPUT_KEY_REMOVE_DATA)) {
-                $uninstalls = $this->collector->collectUninstall();
-                foreach ($modules as $module) {
-                    if (isset($uninstalls[$module])) {
-                        $output->writeln("<info>Removing data of $module</info>");
-                        $uninstalls[$module]->uninstall(
-                            $this->objectManagerProvider->get()->create('Magento\Setup\Module\Setup'),
-                            new ModuleContext($this->moduleResource->getDbVersion($module) ?: '')
-                        );
-                    }
-                }
+                $this->removeData($modules, $output);
             }
-            $this->removeModulesFromDb($modules);
             $output->writeln('<info>Removing ' . implode(', ', $modules) . ' from module registry in database</info>');
-            $this->removeModulesFromDeploymentConfig($modules);
+            $this->removeModulesFromDb($modules);
             $output->writeln(
                 '<info>Removing ' . implode(', ', $modules) .  ' from module list in deployment configuration</info>'
             );
+            $this->removeModulesFromDeploymentConfig($modules);
             $this->cleanup($input, $output);
+            $output->writeln('<info>To completely remove modules, please run composer remove</info>');
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
         } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
+        }
+    }
+
+    /**
+     * Invoke remove data routine in each specified module
+     *
+     * @param string[] $modules
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function removeData(array $modules, OutputInterface $output)
+    {
+        $output->writeln('<info>Removing data</info>');
+        $uninstalls = $this->collector->collectUninstall();
+        foreach ($modules as $module) {
+            if (isset($uninstalls[$module])) {
+                $output->writeln("<info>Removing data of $module</info>");
+                $uninstalls[$module]->uninstall(
+                    $this->objectManager->create('Magento\Setup\Module\Setup'),
+                    new ModuleContext($this->moduleResource->getDbVersion($module) ?: '')
+                );
+            } else {
+                $output->writeln("<info>No data to clear in $module</info>");
+            }
         }
     }
 
@@ -224,7 +245,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $messages = [];
         $unknownPackages = [];
         $unknownModules = [];
-        $installedPackages = $this->parsePackages();
+        $installedPackages = $this->composer->getRootRequiredPackages();
         foreach ($modules as $module) {
             if (array_search($this->packageInfo->getPackageName($module), $installedPackages) === false) {
                 $unknownPackages[] = $module;
@@ -246,25 +267,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     }
 
     /**
-     * Parse output from root composer.json into list of package names
-     *
-     * @return array
-     */
-    private function parsePackages()
-    {
-        $packages = [];
-        $directoryRead = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $rawJson = $directoryRead->readFile('composer.json');
-        $data = $this->decoder->decode($rawJson);
-        foreach (array_keys($data['require']) as $package) {
-            if (count(explode('/', $package)) == 2) {
-                $packages[] = $package;
-            }
-        }
-        return $packages;
-    }
-
-    /**
      * Check for dependencies to modules, return error messages
      *
      * @param string[] $modules
@@ -279,8 +281,29 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         );
         foreach ($dependencies as $module => $dependingModules) {
             if (!empty($dependingModules)) {
-                $messages[] = "<error>Module(s) depending on $module: " .
-                    implode(', ', array_keys($dependingModules)) . "</error>";
+                $messages[] =
+                    "<error>Cannot uninstall module '$module' because the following module(s) depend on it:</error>" .
+                    PHP_EOL . "\t<error>" . implode('</error>' . PHP_EOL . "\t<error>", array_keys($dependingModules)) .
+                    "</error>";
+            }
+        }
+        return $messages;
+    }
+
+    /**
+     * Check for uninstalled modules, return error messages
+     *
+     * @param string[] $modules
+     * @return string[]
+     */
+    private function checkUninstalled(array $modules)
+    {
+        $messages = [];
+        /** @var \Magento\Setup\Module\DataSetup $setup */
+        $setup = $this->objectManager->get('Magento\Setup\Module\DataSetup');
+        foreach ($modules as $module) {
+            if (!$setup->getTableRow('setup_module', 'module', $module)) {
+                $messages[] = "<error>$module is already uninstalled.</error>";
             }
         }
         return $messages;
@@ -295,12 +318,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private function removeModulesFromDb(array $modules)
     {
         /** @var \Magento\Setup\Module\DataSetup $setup */
-        $setup = $this->objectManagerProvider->get()->get('Magento\Setup\Module\DataSetup');
-        $setup->startSetup();
+        $setup = $this->objectManager->get('Magento\Setup\Module\DataSetup');
         foreach ($modules as $module) {
             $setup->deleteTableRow('setup_module', 'module', $module);
         }
-        $setup->endSetup();
     }
 
     /**

@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,11 +24,11 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
     const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
     /**
-     * Object manager provider
+     * Object manager
      *
-     * @var ObjectManagerProvider
+     * @var ObjectManagerInterface
      */
-    protected $objectManagerProvider;
+    protected $objectManager;
 
     /**
      * Inject dependencies
@@ -36,7 +37,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
     {
-        $this->objectManagerProvider = $objectManagerProvider;
+        $this->objectManager = $objectManagerProvider->get();
         parent::__construct();
     }
 
@@ -76,13 +77,12 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
      */
     protected function cleanup(InputInterface $input, OutputInterface $output)
     {
-        $objectManager = $this->objectManagerProvider->get();
         /** @var \Magento\Framework\App\Cache $cache */
-        $cache = $objectManager->get('Magento\Framework\App\Cache');
+        $cache = $this->objectManager->get('Magento\Framework\App\Cache');
         $cache->clean();
         $output->writeln('<info>Cache cleared successfully.</info>');
         /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
-        $cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
+        $cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
         $cleanupFiles->clearCodeGeneratedClasses();
         $output->writeln('<info>Generated classes cleared successfully.</info>');
         if ($input->getOption(self::INPUT_KEY_CLEAR_STATIC_CONTENT)) {
