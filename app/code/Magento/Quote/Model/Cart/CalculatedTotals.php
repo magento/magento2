@@ -95,6 +95,4 @@ class CalculatedTotals extends AbstractExtensibleModel implements CalculatedTota
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
-
-
 }

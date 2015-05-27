@@ -39,10 +39,16 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
      * @param int $cartPriceExclTax
      * @param int $cartSubTotalBoth
      * @param int $cartSubTotalExclTax
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetConfig(
-        $expectedResult, $cartShippingBoth, $cartShippingExclTax,
-        $cartBothPrices, $cartPriceExclTax, $cartSubTotalBoth, $cartSubTotalExclTax
+        $expectedResult,
+        $cartShippingBoth,
+        $cartShippingExclTax,
+        $cartBothPrices,
+        $cartPriceExclTax,
+        $cartSubTotalBoth,
+        $cartSubTotalExclTax
     ) {
         $this->taxConfigMock->expects($this->any())->method('displayCartShippingBoth')
             ->will($this->returnValue($cartShippingBoth));

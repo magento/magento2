@@ -63,7 +63,9 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
             ->with('user_login')->will($this->returnValue($this->captchaMock));
 
         $this->model = new \Magento\Captcha\Model\Customer\Plugin\AjaxLogin(
-            $this->captchaHelperMock, $this->sessionManagerMock, $this->jsonFactoryMock
+            $this->captchaHelperMock,
+            $this->sessionManagerMock,
+            $this->jsonFactoryMock
         );
     }
 
@@ -80,7 +82,9 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
         $this->captchaMock->expects($this->once())->method('isCorrect')->with($captchaString)
             ->will($this->returnValue(true));
 
-        $closure = function(){return 'result';};
+        $closure = function () {
+            return 'result';
+        };
         $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
@@ -104,7 +108,9 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
         $this->resultJsonMock->expects($this->once())->method('setData')
             ->with(['errors' => true, 'message' => __('Incorrect CAPTCHA')])->will($this->returnValue('response'));
 
-        $this->assertEquals('response', $this->model->aroundExecute($this->loginControllerMock, function(){}));
+        $closure = function () {
+        };
+        $this->assertEquals('response', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 
     /**
@@ -121,7 +127,9 @@ class AjaxLoginTest extends \PHPUnit_Framework_TestCase
         $this->captchaMock->expects($this->never())->method('logAttempt')->with($username);
         $this->captchaMock->expects($this->never())->method('isCorrect');
 
-        $closure = function(){return 'result';};
+        $closure = function () {
+            return 'result';
+        };
         $this->assertEquals('result', $this->model->aroundExecute($this->loginControllerMock, $closure));
     }
 

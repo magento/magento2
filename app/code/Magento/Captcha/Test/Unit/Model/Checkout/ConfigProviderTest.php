@@ -46,7 +46,9 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
         $formIds = [$this->formId];
 
         $this->model = new \Magento\Captcha\Model\Checkout\ConfigProvider(
-            $this->storeManagerMock, $this->captchaHelperMock, $formIds
+            $this->storeManagerMock,
+            $this->captchaHelperMock,
+            $formIds
         );
     }
 

@@ -42,7 +42,9 @@ class WeeeConfigProviderTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
 
         $this->model = new \Magento\Weee\Model\WeeeConfigProvider(
-            $this->weeeHelperMock, $this->storeManagerMock, $this->weeeConfigMock
+            $this->weeeHelperMock,
+            $this->storeManagerMock,
+            $this->weeeConfigMock
         );
     }
 
@@ -55,7 +57,11 @@ class WeeeConfigProviderTest extends \PHPUnit_Framework_TestCase
      * @param bool $includeInSubtotal
      */
     public function testGetConfig(
-        $expectedResult, $weeeHelperEnabled, $displayWeeeDetails, $weeeConfigEnabled, $includeInSubtotal
+        $expectedResult,
+        $weeeHelperEnabled,
+        $displayWeeeDetails,
+        $weeeConfigEnabled,
+        $includeInSubtotal
     ) {
         $storeId = 1;
         $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue($storeId));

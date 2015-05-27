@@ -6,6 +6,7 @@
 namespace Magento\Quote\Model\Cart;
 
 use Magento\Quote\Api\Data\CalculatedTotalsInterface;
+
 /**
  * Cart totals data objects converter.
  */

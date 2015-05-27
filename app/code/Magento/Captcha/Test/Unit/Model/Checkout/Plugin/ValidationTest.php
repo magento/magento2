@@ -43,7 +43,15 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
         $this->captchaHelperMock = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
         $this->addressDataMock = $this->getMock('Magento\Quote\Api\Data\AddressAdditionalDataInterface');
-        $this->addressDataExtMock = $this->getMock('Magento\Quote\Api\Data\AddressAdditionalDataExtensionInterface');
+        $this->addressDataExtMock = $this->getMockForAbstractClass(
+            'Magento\Quote\Api\Data\AddressAdditionalDataExtensionInterface',
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['__wakeUp', 'getCaptchaFormId', 'getCaptchaString']
+        );
         $this->captchaMock = $this->getMock('Magento\Captcha\Model\DefaultModel', [], [], '', false);
         $this->processorMock = $this->getMock('Magento\Quote\Model\AddressAdditionalDataProcessor', [], [], '', false);
 

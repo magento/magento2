@@ -13,7 +13,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     protected $moduleReaderMock;
 
     /**
-     * @var \Magento\AdminGws\Model\Config\SchemaLocator
+     * @var \Magento\Directory\Model\Country\Postcode\Config\SchemaLocator
      */
     protected $model;
 

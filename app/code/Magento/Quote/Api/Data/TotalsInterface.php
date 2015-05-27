@@ -406,7 +406,7 @@ interface TotalsInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     /**
      * Set applied coupon code
      *
-     * @param $couponCode
+     * @param string $couponCode
      * @return $this
      */
     public function setCouponCode($couponCode);
