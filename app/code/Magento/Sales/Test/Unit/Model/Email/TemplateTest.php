@@ -28,7 +28,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\ObjectManager
      */
-    protected $objectMangerBackup;
+    protected $objectManagerBackup;
 
     public function setUp()
     {
@@ -43,7 +43,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Magento\Email\Model\Resource\Template')
             ->will($this->returnValue($objectManagerHelper->getObject('Magento\Email\Model\Resource\Template')));
-        $this->objectMangerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $this->template = $objectManagerHelper->getObject(
@@ -57,7 +57,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        \Magento\Framework\App\ObjectManager::setInstance($this->objectMangerBackup);
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
     }
 
     public function testIncludeTemplate()
