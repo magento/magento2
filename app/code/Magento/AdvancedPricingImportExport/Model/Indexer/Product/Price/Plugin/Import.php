@@ -14,4 +14,20 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
     {
         $this->invalidateIndexer();
     }
+
+    /**
+     * After delete handler
+     */
+    public function afterDeleteAdvancedPricing()
+    {
+        $this->invalidateIndexer();
+    }
+
+    /**
+     * After replace handler
+     */
+    public function afterReplaceAdvancedPricing()
+    {
+        $this->invalidateIndexer();
+    }
 }
