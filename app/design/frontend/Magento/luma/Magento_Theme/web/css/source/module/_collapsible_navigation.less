@@ -3,27 +3,34 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  ---------------------------------------------
+
 @collapsible-nav-background: @sidebar__background-color;
-@collapsible-nav-item-hover: @color-gray91;
 @collapsible-nav-color: @color-gray34;
-@collapsible-nav-current-color: @color-black;
-@collapsible-nav-current-font-weight: @font-weight__semibold;
 @collapsible-nav-current-border: 3px solid transparent;
 @collapsible-nav-current-border-color: @color-orange-red1;
+@collapsible-nav-current-color: @color-black;
+@collapsible-nav-current-font-weight: @font-weight__semibold;
+@collapsible-nav-item-hover: @color-gray91;
 
 //
-//    Common
-//--------------------------------------
+
+//
+//  Common
+//  ---------------------------------------------
 
 & when (@media-common = true) {
 
 //
-//    Collapsible navigation
-//--------------------------------------
+//  Collapsible navigation
+//  ---------------------------------------------
+
 .block-collapsible-nav {
     .content {
-        padding: 15px 0;
         .css(background, @collapsible-nav-background);
+        padding: 15px 0;
     }
     .item {
         margin: 3px 0 0;
@@ -31,11 +38,11 @@
             margin-top: 0;
         }
         a,
-        strong {
-            display: block;
-            padding: 5px 18px 5px 15px;
+        > strong {
             border-left: 3px solid transparent;
             .css(color, @collapsible-nav-color);
+            display: block;
+            padding: 5px 18px 5px 15px;
         }
         a {
             text-decoration: none;
@@ -45,15 +52,14 @@
         }
         &.current {
             a,
-            strong {
-                .css(color, @collapsible-nav-current-color);
+            > strong {
                 .css(border-color, @collapsible-nav-current-border-color);
+                .css(color, @collapsible-nav-current-color);
                 .css(font-weight, @collapsible-nav-current-font-weight);
             }
             a {
                 .css(border-color, @collapsible-nav-current-border-color);
             }
-
         }
     }
 }
@@ -61,8 +67,9 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .block-collapsible-nav {
         .title {
@@ -72,13 +79,14 @@
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .block-collapsible-nav {
+        left: 0;
         position: absolute;
         top: -21px;
-        left: 0;
         width: 100%;
         z-index: 5;
         .title {

@@ -1,0 +1,98 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@control-table-cell__background-color: @color-white-dark-smoke;
+@control-table-cell__border-color: @color-white;
+@control-table-cell__padding-vertical: 1.3rem;
+
+//
+
+.admin__control-table-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.admin__control-table {
+    width: 100%;
+    thead {
+        background-color: transparent;
+    }
+    tbody {
+        td {
+            vertical-align: middle;
+        }
+    }
+    tfoot {
+        th {
+            padding-bottom: @control-table-cell__padding-vertical;
+        }
+    }
+    tr {
+        &:last-child {
+            th,
+            td {
+                border-bottom: none;
+            }
+        }
+    }
+    td,
+    th {
+        background-color: @control-table-cell__background-color;
+        border: 0;
+        border-bottom: 1px solid @control-table-cell__border-color;
+        padding: @control-table-cell__padding-vertical 2.5rem @control-table-cell__padding-vertical 0;
+        text-align: left;
+        vertical-align: top;
+        &:first-child {
+            padding-left: 1.5rem;
+        }
+    }
+    th {
+        border: 0;
+        vertical-align: bottom;
+        color: @color-very-dark-gray-black;
+        font-size: @font-size__base;
+        font-weight: @font-weight__semibold;
+        padding-bottom: 0;
+        &._required {
+            span {
+                &:after {
+                    color: @field-label__required__color;
+                    content: '*';
+                }
+            }
+        }
+    }
+    //  Actions column
+    .control-table-actions-th {
+        white-space: nowrap;
+    }
+    .control-table-actions-cell {
+        padding-top: 1.8rem;
+        text-align: center;
+        width: 1%;
+    }
+    //  Draggable column
+    .col-draggable {
+        padding-top: 2.2rem;
+        width: 1%;
+    }
+    //  Actions
+    .action-delete {
+        .action-icon();
+        &:before {
+            &:extend(.abs-icon all);
+            content: @icon-delete__content;
+        }
+        > span {
+            display: none;
+        }
+    }
+}

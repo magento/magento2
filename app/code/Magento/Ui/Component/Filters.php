@@ -21,17 +21,4 @@ class Filters extends AbstractComponent
     {
         return static::NAME;
     }
-
-    /**
-     * Register component.
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        parent::prepare();
-
-        $jsConfig = $this->getConfiguration($this);
-        $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
-    }
 }

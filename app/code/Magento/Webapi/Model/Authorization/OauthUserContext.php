@@ -9,7 +9,7 @@ namespace Magento\Webapi\Model\Authorization;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Oauth\Helper\Request as OauthRequestHelper;
 use Magento\Framework\Oauth\OauthInterface as OauthService;
-use Magento\Integration\Service\V1\Integration as IntegrationService;
+use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Framework\Webapi\Request;
 
 /**
@@ -23,7 +23,7 @@ class OauthUserContext implements UserContextInterface
     protected $request;
 
     /**
-     * @var IntegrationService
+     * @var IntegrationServiceInterface
      */
     protected $integrationService;
 
@@ -46,13 +46,13 @@ class OauthUserContext implements UserContextInterface
      * Initialize dependencies.
      *
      * @param Request $request
-     * @param IntegrationService $integrationService
+     * @param IntegrationServiceInterface $integrationService
      * @param OauthService $oauthService
      * @param OauthRequestHelper $oauthHelper
      */
     public function __construct(
         Request $request,
-        IntegrationService $integrationService,
+        IntegrationServiceInterface $integrationService,
         OauthService $oauthService,
         OauthRequestHelper $oauthHelper
     ) {

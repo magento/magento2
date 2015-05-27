@@ -28,6 +28,7 @@
             <argument name="commands" xsi:type="array">
                 <item name="dev_tests_run" xsi:type="object">Magento\Developer\Console\Command\DevTestsRunCommand</item>
                 <item name="dev_css_deploy" xsi:type="object">Magento\Developer\Console\Command\CssDeployCommand</item>
+                <item name="xml_converter" xsi:type="object">Magento\Developer\Console\Command\XmlConverterCommand</item>
             </argument>
         </arguments>
     </type>
