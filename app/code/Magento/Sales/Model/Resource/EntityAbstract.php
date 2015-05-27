@@ -78,6 +78,9 @@ abstract class EntityAbstract extends AbstractDb
         $this->sequenceManager = $sequenceManager;
         $this->gridAggregator = $gridAggregator;
         $this->entitySnapshot = $entitySnapshot;
+        if ($resourcePrefix === null) {
+            $resourcePrefix = 'sales';
+        }
         parent::__construct($context, $resourcePrefix);
     }
 

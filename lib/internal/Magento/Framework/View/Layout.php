@@ -10,6 +10,9 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\App\State as AppState;
+use Psr\Log\LoggerInterface as Logger;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Layout model
@@ -153,6 +156,16 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     protected $readerContext;
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    protected $appState;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param Layout\ProcessorFactory $processorFactory
      * @param ManagerInterface $eventManager
      * @param Layout\Data\Structure $structure
@@ -163,6 +176,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param FrontendInterface $cache
      * @param Layout\Reader\ContextFactory $readerContextFactory
      * @param Layout\Generator\ContextFactory $generatorContextFactory
+     * @param \Magento\Framework\App\State $appState
+     * @param \Psr\Log\LoggerInterface $logger
      * @param bool $cacheable
      */
     public function __construct(
@@ -176,6 +191,8 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         FrontendInterface $cache,
         Layout\Reader\ContextFactory $readerContextFactory,
         Layout\Generator\ContextFactory $generatorContextFactory,
+        AppState $appState,
+        Logger $logger,
         $cacheable = true
     ) {
         $this->_elementClass = 'Magento\Framework\View\Layout\Element';
@@ -190,9 +207,10 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $this->generatorPool = $generatorPool;
         $this->cacheable = $cacheable;
         $this->cache = $cache;
-
         $this->readerContextFactory = $readerContextFactory;
         $this->generatorContextFactory = $generatorContextFactory;
+        $this->appState = $appState;
+        $this->logger = $logger;
     }
 
     /**
@@ -467,15 +485,25 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @param string $name
      * @return string
+     * @throws \Exception
      */
     public function renderNonCachedElement($name)
     {
-        if ($this->isUiComponent($name)) {
-            $result = $this->_renderUiComponent($name);
-        } elseif ($this->isBlock($name)) {
-            $result = $this->_renderBlock($name);
-        } else {
-            $result = $this->_renderContainer($name);
+        $result = '';
+        try {
+            if ($this->isUiComponent($name)) {
+                $result = $this->_renderUiComponent($name);
+            } elseif ($this->isBlock($name)) {
+                $result = $this->_renderBlock($name);
+            } else {
+                $result = $this->_renderContainer($name);
+            }
+        } catch (\Exception $e) {
+            if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
+                throw $e;
+            }
+            $message = ($e instanceof LocalizedException) ? $e->getLogMessage() : $e->getMessage();
+            $this->logger->critical($message);
         }
         return $result;
     }

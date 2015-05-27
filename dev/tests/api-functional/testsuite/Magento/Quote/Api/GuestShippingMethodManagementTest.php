@@ -59,10 +59,12 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Quote\Model\QuoteIdMaskFactory')
             ->create();
-        $quoteIdMask->load($cartId);
+        $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
-
+        $shippingAddress = $this->quote->getShippingAddress();
+        $shippingAddress->setCollectShippingRates(true);
+        $shippingAddress->collectTotals()->save();
         $requestData = [
             'cartId' => $cartId,
             'carrierCode' => 'flatrate',
@@ -88,7 +90,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Quote\Model\QuoteIdMaskFactory')
             ->create();
-        $quoteIdMask->load($cartId);
+        $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
@@ -125,7 +127,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Quote\Model\QuoteIdMaskFactory')
             ->create();
-        $quoteIdMask->load($cartId);
+        $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
@@ -158,11 +160,13 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Quote\Model\QuoteIdMaskFactory')
             ->create();
-        $quoteIdMask->load($cartId);
+        $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
         $shippingAddress = $quote->getShippingAddress();
+        $shippingAddress->setCollectShippingRates(true);
+        $shippingAddress->collectTotals()->save();
         list($carrierCode, $methodCode) = explode('_', $shippingAddress->getShippingMethod());
         list($carrierTitle, $methodTitle) = explode(' - ', $shippingAddress->getShippingDescription());
         $data = [
@@ -173,10 +177,13 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
             ShippingMethodInterface::KEY_SHIPPING_AMOUNT => $shippingAddress->getShippingAmount(),
             ShippingMethodInterface::KEY_BASE_SHIPPING_AMOUNT => $shippingAddress->getBaseShippingAmount(),
             ShippingMethodInterface::KEY_AVAILABLE => true,
+            ShippingMethodInterface::KEY_ERROR_MESSAGE => null,
         ];
-
         $requestData = ["cartId" => $cartId];
-        $this->assertEquals($data, $this->_webApiCall($this->getSelectedMethodServiceInfo($cartId), $requestData));
+        $actual = $this->_webApiCall($this->getSelectedMethodServiceInfo($cartId), $requestData);
+        unset($actual[ShippingMethodInterface::KEY_PRICE_EXCL_TAX]);
+        unset($actual[ShippingMethodInterface::KEY_PRICE_INCL_TAX ]);
+        $this->assertEquals($data, $actual);
     }
 
     /**
@@ -191,7 +198,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Quote\Model\QuoteIdMaskFactory')
             ->create();
-        $quoteIdMask->load($cartId);
+        $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
@@ -211,7 +218,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Quote\Model\QuoteIdMaskFactory')
             ->create();
-        $quoteIdMask->load($cartId);
+        $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
@@ -232,7 +239,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Quote\Model\QuoteIdMaskFactory')
             ->create();
-        $quoteIdMask->load($cartId);
+        $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
@@ -256,7 +263,7 @@ class GuestShippingMethodManagementTest extends WebapiAbstract
         $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Quote\Model\QuoteIdMaskFactory')
             ->create();
-        $quoteIdMask->load($cartId);
+        $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 

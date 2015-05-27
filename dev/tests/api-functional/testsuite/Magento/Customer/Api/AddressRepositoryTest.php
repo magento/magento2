@@ -141,6 +141,7 @@ class AddressRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstra
             'default_shipping' => true,
             'customer_id' => '1',
             'region' => ['region' => 'Alabama', 'region_id' => 1, 'region_code' => 'AL'],
+            'region_id' => 1,
         ];
     }
 
@@ -164,6 +165,7 @@ class AddressRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstra
             'default_shipping' => false,
             'customer_id' => '1',
             'region' => ['region' => 'Alabama', 'region_id' => 1, 'region_code' => 'AL'],
+            'region_id' => 1,
         ];
     }
 }

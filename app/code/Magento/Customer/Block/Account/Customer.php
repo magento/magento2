@@ -21,32 +21,17 @@ class Customer extends \Magento\Framework\View\Element\Template
     protected $httpContext;
 
     /**
-     * @var \Magento\Customer\Helper\Session\CurrentCustomer
-     */
-    protected $currentCustomer;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param CustomerRepositoryInterface $accountManagement
-     * @param \Magento\Customer\Helper\View $viewHelper
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        CustomerRepositoryInterface $accountManagement,
-        \Magento\Customer\Helper\View $viewHelper,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->customerRepository = $accountManagement;
-        $this->_viewHelper = $viewHelper;
         $this->httpContext = $httpContext;
-        $this->currentCustomer = $currentCustomer;
-        $this->_isScopePrivate = true;
     }
 
     /**
@@ -57,20 +42,5 @@ class Customer extends \Magento\Framework\View\Element\Template
     public function customerLoggedIn()
     {
         return (bool)$this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_AUTH);
-    }
-
-    /**
-     * Return the full name of the customer currently logged in
-     *
-     * @return string|null
-     */
-    public function getCustomerName()
-    {
-        try {
-            $customer = $this->customerRepository->getById($this->currentCustomer->getCustomerId());
-            return $this->escapeHtml($this->_viewHelper->getCustomerName($customer));
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            return null;
-        }
     }
 }

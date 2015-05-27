@@ -23,19 +23,9 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     protected $productRepository;
 
     /**
-     * @var \Magento\Downloadable\Model\Product\Type
-     */
-    protected $downloadableType;
-
-    /**
      * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory
      */
     protected $linkDataObjectFactory;
-
-    /**
-     * @var \Magento\Downloadable\Api\Data\SampleInterfaceFactory
-     */
-    protected $sampleDataObjectFactory;
 
     /**
      * @var \Magento\Downloadable\Model\LinkFactory
@@ -61,7 +51,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Downloadable\Model\Product\Type $downloadableType
      * @param \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkDataObjectFactory
-     * @param \Magento\Downloadable\Api\Data\SampleInterfaceFactory $sampleDataObjectFactory
      * @param LinkFactory $linkFactory
      * @param Link\ContentValidator $contentValidator
      * @param EncoderInterface $jsonEncoder
@@ -71,7 +60,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Downloadable\Model\Product\Type $downloadableType,
         \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkDataObjectFactory,
-        \Magento\Downloadable\Api\Data\SampleInterfaceFactory $sampleDataObjectFactory,
         LinkFactory $linkFactory,
         Link\ContentValidator $contentValidator,
         EncoderInterface $jsonEncoder,
@@ -80,7 +68,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         $this->productRepository = $productRepository;
         $this->downloadableType = $downloadableType;
         $this->linkDataObjectFactory = $linkDataObjectFactory;
-        $this->sampleDataObjectFactory = $sampleDataObjectFactory;
         $this->linkFactory = $linkFactory;
         $this->contentValidator = $contentValidator;
         $this->jsonEncoder = $jsonEncoder;
@@ -90,7 +77,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * {@inheritdoc}
      */
-    public function getLinks($sku)
+    public function getList($sku)
     {
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productRepository->get($sku);
@@ -134,10 +121,10 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     }
 
     /**
-     * Subroutine for buildLink and buildSample
+     * Subroutine for build link
      *
-     * @param \Magento\Downloadable\Model\Link|\Magento\Downloadable\Model\Sample $resourceData
-     * @param \Magento\Downloadable\Api\Data\LinkInterface|\Magento\Downloadable\Api\Data\SampleInterface $dataObject
+     * @param \Magento\Downloadable\Model\Link $resourceData
+     * @param \Magento\Downloadable\Api\Data\LinkInterface $dataObject
      * @return null
      */
     protected function setBasicFields($resourceData, $dataObject)
@@ -154,43 +141,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         $dataObject->setSampleType($resourceData->getSampleType());
         $dataObject->setSampleFile($resourceData->getSampleFile());
         $dataObject->setSampleUrl($resourceData->getSampleUrl());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSamples($sku)
-    {
-        $product = $this->productRepository->get($sku);
-        return $this->getSamplesByProduct($product);
-    }
-
-    /**
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return array
-     */
-    public function getSamplesByProduct(\Magento\Catalog\Api\Data\ProductInterface $product)
-    {
-        $sampleList = [];
-        $samples = $this->downloadableType->getSamples($product);
-        /** @var \Magento\Downloadable\Model\Sample $sample */
-        foreach ($samples as $sample) {
-            $sampleList[] = $this->buildSample($sample);
-        }
-        return $sampleList;
-    }
-
-    /**
-     * Build a sample data object
-     *
-     * @param \Magento\Downloadable\Model\Sample $resourceData
-     * @return \Magento\Downloadable\Model\Sample
-     */
-    protected function buildSample($resourceData)
-    {
-        $sample = $this->sampleDataObjectFactory->create();
-        $this->setBasicFields($resourceData, $sample);
-        return $sample;
     }
 
     /**

@@ -23,7 +23,7 @@ class Config extends Tab
      *
      * @var string
      */
-    protected $variationsTabTrigger = '[data-panel="product-variations"] .title span';
+    protected $variationsTabTrigger = '[data-target="#super_config-content"][data-toggle="collapse"] span';
 
     /**
      * Selector for content "Variations" tab.
