@@ -61,10 +61,13 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $name = 'test-name';
         $renderedData = '<html>data</html>';
 
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock->expects($this->any())
             ->method('getParam')
             ->with('namespace')
             ->willReturn($name);
+        $this->requestMock->expects($this->any())
+            ->method('getParams')
+            ->willReturn([]);
         $this->responseMock->expects($this->once())
             ->method('appendBody')
             ->with($renderedData);
@@ -84,6 +87,9 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $viewMock->expects($this->once())
             ->method('render')
             ->willReturn($renderedData);
+        $viewMock->expects($this->once())
+            ->method('getChildComponents')
+            ->willReturn([]);
         $this->uiFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($viewMock);
