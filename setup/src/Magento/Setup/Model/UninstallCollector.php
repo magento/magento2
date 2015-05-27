@@ -6,6 +6,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\Module\FullModuleList;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\UninstallInterface;
 
 /**
@@ -21,24 +22,21 @@ class UninstallCollector
     private $fullModuleList;
 
     /**
-     * Object manager provider
+     * Object manager
      *
-     * @var ObjectManagerProvider
+     * @var ObjectManagerInterface
      */
-    private $objectManagerProvider;
+    private $objectManager;
 
     /**
      * Constructor
      *
-     * @param FullModuleList $fullModuleList
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
-        FullModuleList $fullModuleList,
         ObjectManagerProvider $objectManagerProvider
     ) {
-        $this->fullModuleList = $fullModuleList;
-        $this->objectManagerProvider = $objectManagerProvider;
+        $this->objectManager = $objectManagerProvider->get();
     }
 
     /**
@@ -49,14 +47,16 @@ class UninstallCollector
     public function collectUninstall()
     {
         $uninstallList = [];
-
+        /** @var \Magento\Setup\Module\DataSetup $setup */
+        $setup = $this->objectManager->get('Magento\Setup\Module\DataSetup');
+        $result = $setup->getConnection()->select()->from($setup->getTable('setup_module'), ['module']);
         // go through modules
-        foreach ($this->fullModuleList->getNames() as $moduleName) {
-            $uninstallClassName = str_replace('_', '\\', $moduleName) . '\Setup\Uninstall';
+        foreach ($setup->getConnection()->fetchAll($result) as $row) {
+            $uninstallClassName = str_replace('_', '\\', $row['module']) . '\Setup\Uninstall';
             if (class_exists($uninstallClassName)) {
-                $uninstallClass = $this->objectManagerProvider->get()->create($uninstallClassName);
-                if ($uninstallClassName instanceof UninstallInterface) {
-                    $uninstallList[$moduleName] = $uninstallClass;
+                $uninstallClass = $this->objectManager->create($uninstallClassName);
+                if (is_subclass_of($uninstallClass, 'Magento\Framework\Setup\UninstallInterface')) {
+                    $uninstallList[$row['module']] = $uninstallClass;
                 }
             }
         }
