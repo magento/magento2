@@ -65,6 +65,10 @@ class IndexBuilder implements IndexBuilderInterface
                 ['cea' => $this->resource->getTableName('catalog_eav_attribute')],
                 'search_index.attribute_id = cea.attribute_id',
                 [ScoreBuilder::WEIGHT_FIELD]
+            )
+            ->joinLeft(
+                ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
+                'search_index.product_id = cpie.entity_id'
             );
 
         $isShowOutOfStock = $this->config->isSetFlag(

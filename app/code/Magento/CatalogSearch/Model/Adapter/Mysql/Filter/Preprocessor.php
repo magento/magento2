@@ -101,12 +101,21 @@ class Preprocessor implements PreprocessorInterface
                         return ($isNegation ? '-' : '') . $this->attributePrefix . $field . '_' . $value;
                     };
                     if (is_array($filter->getValue())) {
-                        $value = implode(' ', array_map($mapper, $filter->getValue()));
+                        $value = sprintf(
+                            '%s IN (%s)',
+                            ($isNegation ? 'NOT' : ''),
+                            implode(',', array_map($mapper, $filter->getValue()))
+                        );
                     } else {
-                        $value = $mapper($filter->getValue());
+                        $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
                     }
+                    return sprintf(
+                        'cpie.store_id = %d AND cpie.attribute_id = %d and cpie.value %s',
+                        $this->scopeResolver->getScope()->getId(),
+                        $attribute->getId(),
+                        $value
 
-                    return 'MATCH (data_index) AGAINST (' . $this->getConnection()->quote($value) . ' IN BOOLEAN MODE)';
+                );
                 }
                 $ifNullCondition = $this->getConnection()->getIfNullSql('current_store.value', 'main_table.value');
 
