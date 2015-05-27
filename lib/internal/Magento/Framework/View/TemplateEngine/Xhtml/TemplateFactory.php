@@ -10,9 +10,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class CompilerFactory
+ * Class TemplateFactory
  */
-class CompilerFactory
+class TemplateFactory
 {
     /**
      * Object manager
@@ -34,8 +34,10 @@ class CompilerFactory
      * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
-    public function __construct(ObjectManagerInterface $objectManager, $instanceName)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        $instanceName = 'Magento\Framework\View\TemplateEngine\Xhtml\Template'
+    ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
     }
@@ -44,15 +46,15 @@ class CompilerFactory
      * Create result
      *
      * @param array $arguments
-     * @return CompilerInterface
+     * @return Template
      * @throws LocalizedException
      */
     public function create(array $arguments = [])
     {
         $object = $this->objectManager->create($this->instanceName, $arguments);
 
-        if (!($object instanceof CompilerInterface)) {
-            throw new LocalizedException(new Phrase('This class must implement the "CompilerInterface"'));
+        if (!($object instanceof Template)) {
+            throw new LocalizedException(new Phrase('This class must inherit from a class "Template"'));
         }
 
         return $object;

@@ -76,11 +76,11 @@ class Compiler implements CompilerInterface
      * The compilation of the template and filling in the data
      *
      * @param \DOMNode $node
-     * @param  Object $processedObject
+     * @param Object $processedObject
      * @param Object $context
      * @return void
      */
-    public function compile(\DOMNode $node,  Object $processedObject, Object $context)
+    public function compile(\DOMNode $node, Object $processedObject, Object $context)
     {
         switch ($node->nodeType) {
             case XML_TEXT_NODE:
