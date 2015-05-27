@@ -20,6 +20,8 @@ use Magento\Store\Model\Store;
 
 /**
  * Checkout agreement repository.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterface
 {
