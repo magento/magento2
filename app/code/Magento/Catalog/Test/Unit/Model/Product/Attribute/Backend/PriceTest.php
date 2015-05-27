@@ -15,7 +15,25 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectHelper->getObject('Magento\Catalog\Model\Product\Attribute\Backend\Price');
+
+        // we want to use an actual implementation of \Magento\Framework\Locale\FormatInterface
+        $scopeResolver = $this->getMockForAbstractClass('\Magento\Framework\App\ScopeResolverInterface', [], '', false);
+        $localeResolver = $this->getMockForAbstractClass('\Magento\Framework\Locale\ResolverInterface', [], '', false);
+        $currencyFactory = $this->getMock('\Magento\Directory\Model\CurrencyFactory', [], [], '', false);
+        $localeFormat = $objectHelper->getObject(
+            'Magento\Framework\Locale\Format',
+            [
+                'scopeResolver'   => $scopeResolver,
+                'localeResolver'  => $localeResolver,
+                'currencyFactory' => $currencyFactory,
+            ]
+        );
+
+        // the model we are testing
+        $this->model = $objectHelper->getObject(
+            'Magento\Catalog\Model\Product\Attribute\Backend\Price',
+            ['localeFormat' => $localeFormat]
+        );
 
         $attribute = $this->getMockForAbstractClass(
             '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
@@ -51,6 +69,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             'India'     => ['1,23,456.78'],
             'Lebanon'   => ['1 234'],
             'zero'      => ['0.00'],
+            'NaN becomes zero' => ['kiwi'],
         ];
     }
 
@@ -80,7 +99,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             'negative Brazil'    => ['-123.456,78'],
             'negative India'     => ['-1,23,456.78'],
             'negative Lebanon'   => ['-1 234'],
-            'not a number'       => ['kiwi'],
         ];
     }
 }
