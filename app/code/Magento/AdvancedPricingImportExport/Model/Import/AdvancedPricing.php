@@ -115,11 +115,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_validatedRows[$rowNum] = true;
 
         if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
-            //todo
-//            if (false) {
-//                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
-//                return false;
-//            }
+            if (false) {
+                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+                return false;
+            }
             return true;
         }
 
@@ -153,8 +152,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $this->_deleteAdvancedPricing();
         } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
             $this->_replaceAdvancedPricing();
+        } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE == $this->getBehavior()) {
+            $this->_saveAdvancedPricing();
         }
-        $this->_saveAdvancedPricing();
 
         return true;
     }
@@ -193,10 +193,25 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         }
     }
 
-    // todo
+    /**
+     * Deletes Advanced price data from raw data.
+     */
     protected function _deleteAdvancedPricing()
     {
-        return true;
+        $listSku = [];
+        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            foreach ($bunch as $rowNum => $rowData) {
+                if (!$this->validateRow($rowData, $rowNum)) {
+                    continue;
+                }
+                $rowSku = $rowData[self::COL_SKU];
+                $listSku[] = $rowSku;
+            }
+        }
+        if($listSku) {
+            $this->_deleteProductTierAndGroupPrices(self::COL_GROUP_PRICE, array_unique($listSku))
+                ->_deleteProductTierAndGroupPrices(self::COL_TIER_PRICE, array_unique($listSku));
+        }
     }
 
     // todo
@@ -279,6 +294,38 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             }
             if ($groupPriceIn) {
                 $this->_connection->insertOnDuplicate($tableName, $groupPriceIn, ['value']);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Deletes tier prices and group prices.
+     *
+     * @param $advancedTypePrice
+     * @param array $listSku
+     * @return $this
+     */
+    protected function _deleteProductTierAndGroupPrices($advancedTypePrice, array $listSku)
+    {
+        $tableName = null;
+        if(isset($advancedTypePrice)) {
+            if (!$tableName) {
+                $tableName = $this->_resourceFactory->create()->getTable('catalog_product_entity_' . $advancedTypePrice);
+            }
+        }
+        if($tableName) {
+            if($listSku) {
+                foreach ($listSku as $delSku) {
+                    $productId = $this->_productModel->getIdBySku($delSku);
+                    $affectedIds[] = $productId;
+                }
+
+                $this->_connection->delete(
+                    $tableName,
+                    $this->_connection->quoteInto('entity_id IN (?)', $affectedIds)
+                );
             }
         }
 
