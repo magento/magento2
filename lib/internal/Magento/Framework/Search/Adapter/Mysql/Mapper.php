@@ -189,6 +189,7 @@ class Mapper
      * @param RequestQueryInterface $query
      * @param Select $select
      * @param string $conditionType
+     * @param MatchContainer $matchContainer
      * @return Select
      * @throws \InvalidArgumentException
      */
@@ -237,8 +238,7 @@ class Mapper
         BoolQuery $query,
         Select $select,
         MatchContainer $matchContainer
-    )
-    {
+    ) {
         $scoreBuilder->startQuery();
 
         $select = $this->processBoolQueryCondition(
@@ -277,6 +277,7 @@ class Mapper
      * @param RequestQueryInterface[] $subQueryList
      * @param Select $select
      * @param string $conditionType
+     * @param MatchContainer $matchContainer
      * @return Select
      */
     private function processBoolQueryCondition(
@@ -299,6 +300,7 @@ class Mapper
      * @param FilterQuery $query
      * @param Select $select
      * @param string $conditionType
+     * @param MatchContainer $matchContainer
      * @return Select
      */
     private function processFilterQuery(
@@ -307,8 +309,7 @@ class Mapper
         Select $select,
         $conditionType,
         MatchContainer $matchContainer
-    )
-    {
+    ) {
         $scoreBuilder->startQuery();
         switch ($query->getReferenceType()) {
             case FilterQuery::REFERENCE_QUERY:

@@ -105,6 +105,9 @@ class MatchContainer implements BuilderQueryInterface
         return array_keys($this->getQueries());
     }
 
+    /**
+     * @param Select $select
+     */
     private function addQuery(Select $select)
     {
         $name = self::QUERY_NAME_PREFIX . count($this->queries);
@@ -123,7 +126,7 @@ class MatchContainer implements BuilderQueryInterface
      * @param ScoreBuilder $scoreBuilder
      * @param Select $select
      * @param RequestQueryInterface $query
-     * @param $conditionType
+     * @param string $conditionType
      * @return Select
      */
     private function buildMatchQuery(

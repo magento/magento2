@@ -110,8 +110,7 @@ class Preprocessor implements PreprocessorInterface
                         $this->scopeResolver->getScope()->getId(),
                         $attribute->getId(),
                         $value
-
-                );
+                    );
                 }
                 $ifNullCondition = $this->getConnection()->getIfNullSql('current_store.value', 'main_table.value');
 
