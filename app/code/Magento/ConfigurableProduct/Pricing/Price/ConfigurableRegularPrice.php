@@ -23,11 +23,6 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     const PRICE_CODE = 'regular_price';
 
     /**
-     * @var Configurable
-     */
-    protected $configurableType;
-
-    /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected $maxRegularAmount;
@@ -38,35 +33,35 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     protected $minRegularAmount;
 
     /**
-     * @param Product $saleableItem
-     * @param float $quantity
-     * @param CalculatorInterface $calculator
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param Configurable $configurableType
+     * @var array
      */
-    public function __construct(
-        Product $saleableItem,
-        $quantity,
-        CalculatorInterface $calculator,
-        PriceCurrencyInterface $priceCurrency,
-        Configurable $configurableType
-    ) {
-        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
-        $this->configurableType = $configurableType;
-    }
+    protected $values = [];
 
     /**
      * {@inheritdoc}
      */
     public function getValue()
     {
-        if (null === $this->value) {
-            $this->value = false;
-            $this->value = $this->getAmount()->getValue();
-        }
-        return $this->value;
-    }
+        $selectedConfigurableOption = $this->product->getSelectedConfigurableOption();
+        $productId = $selectedConfigurableOption ? $selectedConfigurableOption->getId() : $this->product->getId();
+        if (!isset($this->values[$productId])) {
+            $price = null;
+            if (!$selectedConfigurableOption) {
+                foreach ($this->getUsedProducts() as $product) {
+                    if ($price === null || $price > $product->getPrice()) {
+                        $price = $product->getPrice();
+                    }
+                }
+            } else {
+                $price = $selectedConfigurableOption->getPrice();
+            }
 
+            $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
+            $this->values[$productId] = $priceInCurrentCurrency ? floatval($priceInCurrentCurrency) : false;
+        }
+
+        return $this->values[$productId];
+    }
     /**
      * {@inheritdoc}
      */
@@ -86,8 +81,8 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     public function getMaxRegularAmount()
     {
         if (null === $this->maxRegularAmount) {
-            $this->maxRegularAmount = false;
             $this->maxRegularAmount = $this->doGetMaxRegularAmount();
+            $this->maxRegularAmount = $this->doGetMaxRegularAmount() ?: false;
         }
         return $this->maxRegularAmount;
 
@@ -101,8 +96,8 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     protected function doGetMaxRegularAmount()
     {
         // TODO: think about quantity
-        $maxAmount = 0;
-        foreach ($this->getUsedProducts($this->product) as $product) {
+        $maxAmount = null;
+        foreach ($this->getUsedProducts() as $product) {
             $childPriceAmount = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getAmount();
             if (!$maxAmount || ($childPriceAmount->getValue() > $maxAmount->getValue())) {
                 $maxAmount = $childPriceAmount;
@@ -117,8 +112,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     public function getMinRegularAmount()
     {
         if (null === $this->minRegularAmount) {
-            $this->minRegularAmount = false;
-            $this->minRegularAmount = $this->doGetMinRegularAmount();
+            $this->minRegularAmount = $this->doGetMinRegularAmount() ?: false;
         }
         return $this->minRegularAmount;
 
@@ -132,8 +126,8 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     protected function doGetMinRegularAmount()
     {
         // TODO: think about quantity
-        $minAmount = 0;
-        foreach ($this->getUsedProducts($this->product) as $product) {
+        $minAmount = null;
+        foreach ($this->getUsedProducts() as $product) {
             $childPriceAmount = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getAmount();
             if (!$minAmount || ($childPriceAmount->getValue() < $minAmount->getValue())) {
                 $minAmount = $childPriceAmount;
@@ -149,6 +143,6 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
      */
     protected function getUsedProducts()
     {
-        return $this->configurableType->getUsedProducts($this->product);
+        return $this->product->getTypeInstance()->getUsedProducts($this->product);
     }
 }

@@ -175,6 +175,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Profiler::stop('TTT3:' . __METHOD__);
         \Magento\Framework\Profiler::start('TTT4:' . __METHOD__, ['group' => 'TTT4', 'method' => __METHOD__]);
         $this->_loadPrices();
+        $this->loadOptions();
         \Magento\Framework\Profiler::stop('TTT4:' . __METHOD__);
         return $this;
     }
@@ -253,6 +254,40 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     }
 
     /**
+     * @return array
+     */
+    protected function loadOptions()
+    {
+        $values = [];
+        $usedProducts = $this->getProductType()->getUsedProducts($this->getProduct());
+        if ($usedProducts) {
+            foreach ($this->_items as $item) {
+                $values = [];
+
+                $productAttribute = $item->getProductAttribute();
+                if (!$productAttribute instanceof AbstractAttribute) {
+                    continue;
+                }
+                $itemId = $item->getId();
+                $options = $this->getIncludedOptions($usedProducts, $productAttribute);
+                foreach ($options as $option) {
+                    foreach ($usedProducts as $associatedProduct) {
+                        $attributeCodeValue = $associatedProduct->getData($productAttribute->getAttributeCode());
+                        if (!empty($option['value']) && $option['value'] == $attributeCodeValue) {
+                                $values[$itemId . ':' . $option['value']] = [
+                                    'value_index' => $option['value'],
+                                    'label' => $option['label'],
+                                ];
+                        }
+                    }
+                }
+                $item->setOptions($values);
+            }
+        }
+        return $values;
+    }
+
+    /**
      * Load attribute prices information
      *
      * @return $this
@@ -278,6 +313,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Retrieve price values
      *
      * @return array
+     * @deprecated TODO: MAGETWO-23739 remove method
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

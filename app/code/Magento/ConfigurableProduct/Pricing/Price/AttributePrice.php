@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\PriceModifierInterface;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
-use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
@@ -78,7 +78,7 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
                 'id' => $attributeId,
                 'code' => $productAttribute->getAttributeCode(),
                 'label' => $attribute->getLabel(),
-                'options' => $this->getPriceOptions($attributeId, $attribute, $options),
+                'options' => $this->prepareOptions($attribute, $options),
             ];
             $defaultValues[$attributeId] = $this->getAttributeConfigValue($attributeId);
             if ($this->validateAttributeInfo($info)) {
@@ -86,9 +86,28 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
             }
         }
         return [
-            'priceOptions' => $attributes,
+            'attributes' => $attributes,
             'defaultValues' => $defaultValues
         ];
+    }
+
+    /**
+     * @param Attribute $attribute
+     * @param array $options
+     * @return array
+     */
+    protected function prepareOptions($attribute, $options)
+    {
+        $labels = [];
+        foreach ($attribute->getOptions() as $option) {
+            $optionId = $option['value_index'];
+            $labels[] = [
+                'id' => $optionId,
+                'label' => $option['label'],
+                'products' => $options[$attribute->getAttributeId()][$optionId],
+            ];
+        }
+        return $labels;
     }
 
     /**
@@ -97,6 +116,7 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
      * @param int $attributeId
      * @param Attribute $attribute
      * @param array $options
+     * @deprecated TODO: MAGETWO-23739 remove old prices mechanism
      * @return array
      */
     public function getPriceOptions($attributeId, $attribute, array $options = [])

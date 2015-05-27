@@ -176,8 +176,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $attributes = $attributePrice->prepareAttributes($options);
 
         $config = [
-            'attributes' => $attributes['priceOptions'],
+            'attributes' => $attributes['attributes'],
             'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
+            'optionPrices' => $this->getOptionPrices(),
             'prices' => [
                 'oldPrice' => [
                     'amount' => $this->_registerJsPrice($this->_convertPrice($regularPrice->getAmount()->getValue())),
@@ -203,6 +204,22 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         $config = array_merge($config, $this->_getAdditionalConfig());
 
         return $this->jsonEncoder->encode($config);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOptionPrices()
+    {
+        $prices = [];
+        foreach ($this->getAllowProducts() as $product) {
+            $prices[$product->getId()] = $this->getProduct()
+                ->setSelectedConfigurableOption($product)
+                ->getPriceInfo()->getPrice('final_price')
+                ->getAmount()
+                ->getValue();
+        }
+        return $prices;
     }
 
     /**
