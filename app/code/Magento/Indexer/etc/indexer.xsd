@@ -42,6 +42,12 @@
         <xs:sequence>
             <xs:element name="title" type="translatableType" />
             <xs:element name="description" type="translatableType" />
+            <xs:element name="fields" type="fieldsType"  minOccurs="0" maxOccurs="1">
+                <xs:unique name="uniqueField">
+                    <xs:selector xpath="field"/>
+                    <xs:field xpath="@name"/>
+                </xs:unique>
+            </xs:element>
         </xs:sequence>
         <xs:attribute name="id" type="xs:string" use="required" />
         <xs:attribute name="view_id" type="viewIdType" use="required" />
@@ -75,6 +81,81 @@
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:pattern value="[a-zA-Z\\]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="fieldsType">
+        <xs:annotation>
+            <xs:documentation>
+                Index fields declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="field" type="fieldTypeAbstract" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="handler" type="classType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="fieldTypeAbstract">
+        <xs:annotation>
+            <xs:documentation>
+                Index field declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="origin" type="originType" use="required"/>
+        <xs:attribute name="handler" type="classType" use="required"/>
+    </xs:complexType>
+
+    <xs:simpleType name="originType">
+        <xs:annotation>
+            <xs:documentation>
+                Origin can contain only [a-zA-Z0-9_.].
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9_]+\.[a-zA-Z0-9_]+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="match">
+        <xs:complexContent>
+            <xs:extension base="fieldTypeAbstract">
+                <xs:sequence>
+                    <xs:element type="filterType" name="filter" minOccurs="0" maxOccurs="1" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="filterType">
+        <xs:annotation>
+            <xs:documentation>
+                Index field filter.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="class" type="classType" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="both">
+        <xs:complexContent>
+            <xs:extension base="match"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="filter">
+        <xs:complexContent>
+            <xs:extension base="fieldTypeAbstract">
+                <xs:attribute type="dataType" name="dataType" use="required" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:simpleType name="dataType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="int" />
+            <xs:enumeration value="float" />
+            <xs:enumeration value="varchar" />
         </xs:restriction>
     </xs:simpleType>
 
