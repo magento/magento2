@@ -38,7 +38,7 @@ class ComposerInformation
         $vendorPath = $filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath() . include $vendor;
         // Create Composer
         $io = new \Composer\IO\BufferIO();
-        $this->composer = ComposerFactory::create($io, $vendorPath . '/../composer.json' );
+        $this->composer = ComposerFactory::create($io, $vendorPath . '/../composer.json');
         $this->locker = $this->composer->getLocker();
     }
 
