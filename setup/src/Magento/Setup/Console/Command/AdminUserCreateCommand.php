@@ -108,9 +108,8 @@ class AdminUserCreateCommand extends AbstractSetupCommand
             ->setUsername($input->getOption(AdminAccount::KEY_USER))
             ->setEmail($input->getOption(AdminAccount::KEY_EMAIL))
             ->setPassword(
-                $input->getOption(
-                    AdminAccount::KEY_PASSWORD) === null ? '' : $input->getOption(AdminAccount::KEY_PASSWORD
-                )
+                $input->getOption(AdminAccount::KEY_PASSWORD) === null ?
+                    '' : $input->getOption(AdminAccount::KEY_PASSWORD)
             );
 
         $validator = new \Magento\Framework\Validator\Object;
