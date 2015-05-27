@@ -19,6 +19,7 @@
 
 @dialog-action-close__color: @color-brownie-vanilla;
 @dialog-action-close__font-size: 2rem;
+@dialog-action-close__active__font-size: 1.8rem;
 @dialog-action-close__hover__color: darken(@color-brownie-vanilla, 10%);
 
 //
@@ -32,7 +33,9 @@
         top: 0;
         &:active {
             transform: none;
-            margin-top: 1px;
+            &:before {
+                font-size: @dialog-action-close__active__font-size;
+            }
         }
         &:hover {
             &:before {
@@ -52,6 +55,10 @@
     }
     .action-close {
         padding: @dialog-modal__padding;
+        &:active {
+            padding-top: @dialog-modal__padding + (@dialog-action-close__font-size - @dialog-action-close__active__font-size) / 2;
+            padding-right: @dialog-modal__padding + (@dialog-action-close__font-size - @dialog-action-close__active__font-size) / 2;
+        }
     }
 }
 
@@ -62,6 +69,10 @@
     }
     .action-close {
         padding: @dialog-slide-header__padding-vertical @dialog-slide__padding;
+        &:active {
+            padding-top: @dialog-slide-header__padding-vertical + (@dialog-action-close__font-size - @dialog-action-close__active__font-size) / 2;
+            padding-right: @dialog-slide__padding + (@dialog-action-close__font-size - @dialog-action-close__active__font-size) / 2;
+        }
     }
 }
 
