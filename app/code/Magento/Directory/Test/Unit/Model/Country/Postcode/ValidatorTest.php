@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Directory\Model\Country\Postcode;
+namespace Magento\Directory\Test\Unit\Model\Country\Postcode;
 
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {

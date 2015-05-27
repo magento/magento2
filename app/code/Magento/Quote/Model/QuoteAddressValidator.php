@@ -39,7 +39,7 @@ class QuoteAddressValidator
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Customer\Model\Session $customerSession
     ) {
-        $this->addressReporitory = $addressRepository;
+        $this->addressRepository = $addressRepository;
         $this->customerRepository = $customerRepository;
         $this->customerSession = $customerSession;
     }

@@ -64,7 +64,11 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
         $this->addressDetailsFactory = $this->getMock('\Magento\Quote\Model\AddressDetailsFactory', [], [], '', false);
         $this->dataProcessor = $this->getMock('\Magento\Quote\Model\AddressAdditionalDataProcessor', [], [], '', false);
         $this->quoteRepository = $this->getMock(
-            '\Magento\Quote\Model\QuoteRepository', ['setCheckoutMethod', 'getActive', 'save'], [], '', false
+            '\Magento\Quote\Model\QuoteRepository',
+            ['setCheckoutMethod', 'getActive', 'save'],
+            [],
+            '',
+            false
         );
 
         $this->model = $this->objectManager->getObject(
@@ -149,7 +153,11 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
             ->with($quote);
 
         $this->model->saveAddresses(
-            $cartId, $billingAddressMock, $shippingAddressMock, $additionalData, $checkoutMethod
+            $cartId,
+            $billingAddressMock,
+            $shippingAddressMock,
+            $additionalData,
+            $checkoutMethod
         );
     }
 }

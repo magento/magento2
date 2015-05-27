@@ -39,7 +39,11 @@ class ItemConverterTest extends \PHPUnit_Framework_TestCase
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->dataObjectHelperMock = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
         $this->totalsFactoryMock = $this->getMock(
-            'Magento\Quote\Api\Data\TotalsItemInterfaceFactory', [], [], '', false
+            'Magento\Quote\Api\Data\TotalsItemInterfaceFactory',
+            [],
+            [],
+            '',
+            false
         );
 
         $this->model = new \Magento\Quote\Model\Cart\Totals\ItemConverter(
