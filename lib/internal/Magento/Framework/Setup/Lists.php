@@ -80,9 +80,8 @@ class Lists
         $languages = (new LanguageBundle())->get(Resolver::DEFAULT_LOCALE)['Languages'];
         $countries = (new RegionBundle())->get(Resolver::DEFAULT_LOCALE)['Countries'];
         $locales = \ResourceBundle::getLocales(null);
-
         $list = [];
-        foreach ($locales as $locale) {
+        foreach ((array)$locales as $locale) {
             if (!in_array($locale, $this->allowedLocales)) {
                 continue;
             }

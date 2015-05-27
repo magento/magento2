@@ -906,6 +906,11 @@ input.no-display,
         }
     }
 
+    //  Fix for jquery.jstree.js (checkboxes in admin__scope-old only)
+    .jstree .jstree-real-checkbox {
+        display: none;
+    }
+
     input[type="radio"]  {
         border-radius: 8px;
         &:checked {

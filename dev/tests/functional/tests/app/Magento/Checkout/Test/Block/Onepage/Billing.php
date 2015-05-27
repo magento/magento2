@@ -9,8 +9,6 @@ namespace Magento\Checkout\Test\Block\Onepage;
 use Magento\Customer\Test\Fixture\Address;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Block\Form;
-use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Class Billing
@@ -51,10 +49,7 @@ class Billing extends Form
         $isShippingAddress = false
     ) {
         if ($billingAddress) {
-            $fields = $this->dataMapping($billingAddress->getData());
-            foreach ($fields as $field) {
-                $this->waitForElementVisible($field['selector'], $field['strategy']);
-            }
+            sleep(5);
             $this->fill($billingAddress);
         }
         if ($isShippingAddress) {
