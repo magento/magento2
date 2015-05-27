@@ -38,6 +38,11 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     protected $formMock;
 
+    /**
+     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $configMock;
+
     protected function setUp()
     {
         $this->factoryMock = $this->getMock('\Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
@@ -49,17 +54,23 @@ class EditorTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
+        $this->configMock = $this->getMock('\Magento\Framework\Object', ['getData'], [], '', false);
 
         $this->model = new Editor(
             $this->factoryMock,
             $this->collectionFactoryMock,
-            $this->escaperMock
+            $this->escaperMock,
+            ['config' => $this->configMock]
         );
 
-        $this->formMock = new \Magento\Framework\Object();
-        $this->formMock->getHtmlIdPrefix('id_prefix');
-        $this->formMock->getHtmlIdPrefix('id_suffix');
-
+        $this->formMock = $this->getMock(
+            'Magento\Framework\Data\Form',
+            ['getHtmlIdPrefix', 'getHtmlIdSuffix'],
+            [],
+            '',
+            false,
+            false
+        );
         $this->model->setForm($this->formMock);
     }
 
@@ -70,15 +81,14 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Editor::DEFAULT_ROWS, $this->model->getRows());
         $this->assertEquals(Editor::DEFAULT_COLS, $this->model->getCols());
 
-        $config = new \Magento\Framework\Object();
-        $config->setData('enabled', true);
+        $this->configMock->expects($this->once())->method('getData')->with('enabled')->willReturn(true);
+
         $model = new Editor(
             $this->factoryMock,
             $this->collectionFactoryMock,
             $this->escaperMock,
-            ['config' => $config]
+            ['config' => $this->configMock]
         );
-        $model->setForm($this->formMock);
 
         $this->assertEquals('wysiwyg', $model->getType());
         $this->assertEquals('wysiwyg', $model->getExtType());
@@ -93,13 +103,25 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $this->assertRegExp('/class=\".*textarea.*\"/i', $html);
         $this->assertNotRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
-        $this->model->getConfig()->setData('enabled', true);
+        $this->configMock->expects($this->any())->method('getData')
+            ->willReturnMap(
+                [
+                    ['enabled', null, true],
+                    ['hidden', null, null]
+                ]
+            );
         $html = $this->model->getElementHtml();
         $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
-        $this->model->getConfig()->setData('widget_window_url', 'localhost');
-        $this->model->getConfig()->unsetData('enabled');
-        $this->model->getConfig()->setData('add_widgets', true);
+        $this->configMock->expects($this->any())->method('getData')
+            ->willReturnMap(
+                [
+                    ['enabled', null, null],
+                    ['widget_window_url', null, 'localhost'],
+                    ['add_widgets', null, true],
+                    ['hidden', null, null]
+                ]
+            );
         $html = $this->model->getElementHtml();
         $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
     }
@@ -112,7 +134,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->isEnabled());
 
         $this->model->unsetData('wysiwyg');
-        $this->model->getConfig()->setData('enabled', true);
+        $this->configMock->expects($this->once())->method('getData')->with('enabled')->willReturn(true);
         $this->assertTrue($this->model->isEnabled());
     }
 
@@ -120,7 +142,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEmpty($this->model->isHidden());
 
-        $this->model->getConfig()->setData('hidden', true);
+        $this->configMock->expects($this->once())->method('getData')->with('hidden')->willReturn(true);
         $this->assertTrue($this->model->isHidden());
     }
 
@@ -131,10 +153,10 @@ class EditorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $config = new \Magento\Framework\Object();
+        $config = $this->getMock('\Magento\Framework\Object', ['getData'], [], '', false);
         $this->assertEquals($config, $this->model->getConfig());
 
-        $this->model->getConfig()->setData('test', 'test');
+        $this->configMock->expects($this->once())->method('getData')->with('test')->willReturn('test');
         $this->assertEquals('test', $this->model->getConfig('test'));
     }
 
@@ -143,7 +165,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTranslatedString()
     {
-        $this->model->getConfig()->setData('enabled', true);
+        $this->configMock->expects($this->any())->method('getData')->withConsecutive(['enabled'])->willReturn(true);
         $html = $this->model->getElementHtml();
         $this->assertRegExp('/.*"Insert Image...":"Insert Image...".*/i', $html);
     }
