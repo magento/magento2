@@ -200,7 +200,8 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'getBillingAddress',
                 'setCustomerIsGuest',
                 'setCustomerGroupId',
-                'assignCustomer'
+                'assignCustomer',
+                'getPayment',
             ],
             [],
             '',
@@ -724,6 +725,42 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($orderId, $service->placeOrder($cartId));
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     */
+    public function testPlaceOrderIfAgreementsIsNotValid()
+    {
+        $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(false);
+        
+        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\QuoteManagement $service */
+        $service = $this->getMock(
+            '\Magento\Quote\Model\QuoteManagement',
+            ['submit'],
+            [
+                'eventManager' => $this->eventManager,
+                'quoteValidator' => $this->quoteValidator,
+                'orderFactory' => $this->orderFactory,
+                'orderManagement' => $this->orderManagement,
+                'customerManagement' => $this->customerManagement,
+                'quoteAddressToOrder' => $this->quoteAddressToOrder,
+                'quoteAddressToOrderAddress' => $this->quoteAddressToOrderAddress,
+                'quoteItemToOrderItem' => $this->quoteItemToOrderItem,
+                'quotePaymentToOrderPayment' => $this->quotePaymentToOrderPayment,
+                'userContext' => $this->userContextMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
+                'customerRepository' => $this->customerRepositoryMock,
+                'customerModelFactory' => $this->customerFactoryMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'storeManager' => $this->storeManagerMock,
+                'checkoutSession' => $this->checkoutSessionMock,
+                'customerSession' => $this->customerSessionMock,
+                'accountManagement' => $this->accountManagementMock,
+                'agreementsValidator' => $this->agreementsValidatorMock,
+            ]
+        );
+        $service->placeOrder(45);
+    }
+
     public function testPlaceOrder()
     {
         $cartId = 323;
@@ -769,6 +806,15 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->with($cartId)
             ->willReturn($this->quoteMock);
 
+        $quotePayment = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $quotePayment->expects($this->once())
+            ->method('setQuote');
+        $quotePayment->expects($this->once())
+            ->method('importData');
+        $this->quoteMock->expects($this->atLeastOnce())
+            ->method('getPayment')
+            ->willReturn($quotePayment);
+
         $this->quoteMock->expects($this->once())
             ->method('getCheckoutMethod')
             ->willReturn(\Magento\Checkout\Model\Type\Onepage::METHOD_CUSTOMER);
@@ -787,7 +833,12 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderId')->with($orderId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->willReturn(true);
-        $this->assertEquals($orderId, $service->placeOrder($cartId));
+
+        $paymentMethod = $this->getMock('Magento\Quote\Model\Quote\Payment', ['setChecks', 'getData'], [], '', false);
+        $paymentMethod->expects($this->once())->method('setChecks');
+        $paymentMethod->expects($this->once())->method('getData')->willReturn(['additional_data' => []]);
+
+        $this->assertEquals($orderId, $service->placeOrder($cartId, null, $paymentMethod));
     }
 
     /**
