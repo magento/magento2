@@ -30,6 +30,10 @@
         position: absolute;
         right: 0;
         top: 0;
+        &:active {
+            transform: none;
+            margin-top: 1px;
+        }
         &:hover {
             &:before {
                 color: @dialog-action-close__hover__color;

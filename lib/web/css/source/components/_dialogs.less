@@ -53,20 +53,24 @@
         opacity: 1;
         pointer-events: auto;
     }
-    &._active {
-      z-index: @dialog__z-index + 1;
-    }
 }
 
 .abs-dialog-slide() {
     left: @dialog-slide__first__indent-left;
     z-index: @dialog-slide__z-index;
+    &._show {
+        .dialog-inner-wrap {
+            transform: translateX(0);
+        }
+    }
     .dialog-inner-wrap {
         height: 100%;
         overflow-y: auto;
         position: static;
-        transform: translate(100%, 0);
-        transition: transform .5s ease, visibility 1s linear;
+        transform: translateX(100%);
+        transition-duration: .3s;
+        transition-timing-function: ease-in-out;
+        transition-property: transform, visibility;
         width: auto;
     }
 }
@@ -75,14 +79,21 @@
     left: 0;
     overflow-y: auto;
     z-index: @dialog-modal__z-index;
+    &._show {
+        .dialog-inner-wrap {
+            transform: translateY(0);
+        }
+    }
     .dialog-inner-wrap {
         .vendor-prefix-display(flex);
         .vendor-prefix-flex-direction(column);
         height: auto;
         margin: @dialog-modal__indent-vertical (100% - @dialog-modal__width) / 2;
         position: absolute;
-        transform: translate(0, -150%);
-        transition: transform .3s linear, visibility 1s linear;
+        transform: translateY(-200%);
+        transition-duration: .2s;
+        transition-timing-function: ease;
+        transition-property: transform, visibility;
         width: @dialog-modal__width;
     }
 }
@@ -111,23 +122,25 @@
         padding-top: @dialog-slide-header__padding-vertical;
         padding-bottom: @dialog-slide-header__padding-vertical;
     }
-    + .dialog-slide {
-        margin-left: @dialog-slide__indent-left;
-        + .dialog-slide {
-            margin-left: @dialog-slide__indent-left * 2;
-            + .dialog-slide {
-                margin-left: @dialog-slide__indent-left * 3;
-            }
-        }
-    }
 }
 
 .dialog-modal {
     .abs-dialog-modal();
+    //  If applied, switching outer modal scroll to inner
+    &._inner-scroll {
+        overflow-y: inherit;
+        .dialog-inner-wrap {
+            max-height: 90%;
+        }
+        .dialog-content {
+            overflow-y: auto;
+        }
+    }
     .dialog-header,
     .dialog-content,
     .dialog-footer {
-        padding: 0 @dialog-modal__padding @dialog-modal__padding;
+        padding-left: @dialog-modal__padding;
+        padding-right: @dialog-modal__padding;
     }
     .dialog-header,
     .dialog-footer {
@@ -136,9 +149,12 @@
     }
     .dialog-header {
         padding-top: @dialog-modal__padding;
+        padding-bottom: @dialog-modal__padding;
     }
     .dialog-footer {
         margin-top: auto;
+        padding-top: @dialog-modal__padding;
+        padding-bottom: @dialog-modal__padding;
     }
 }
 
@@ -151,6 +167,10 @@
     .dialog-modal {
         &.dialog-slide {
             .abs-dialog-slide();
+            .dialog-inner-wrap {
+                margin: 0;
+                max-height: none;
+            }
         }
     }
 }
