@@ -13,7 +13,7 @@ class QuoteAddressValidator
      *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
-    protected $addressReporitory;
+    protected $addressRepository;
 
     /**
      * Customer factory.
@@ -32,7 +32,7 @@ class QuoteAddressValidator
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Model\CustomerFactory $customerFactory
     ) {
-        $this->addressReporitory = $addressRepository;
+        $this->addressRepository = $addressRepository;
         $this->customerFactory = $customerFactory;
     }
 
@@ -60,7 +60,7 @@ class QuoteAddressValidator
         // validate address id
         if ($addressData->getId()) {
             try {
-                $address = $this->addressReporitory->getById($addressData->getId());
+                $address = $this->addressRepository->getById($addressData->getId());
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
                     __('Invalid address id %1', $addressData->getId())

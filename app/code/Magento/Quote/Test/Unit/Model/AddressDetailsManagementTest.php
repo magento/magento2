@@ -45,6 +45,11 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
     protected $dataProcessor;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $quoteRepository;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
@@ -58,6 +63,9 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
         $this->shippingMethodManagement = $this->getMock('\Magento\Quote\Api\ShippingMethodManagementInterface');
         $this->addressDetailsFactory = $this->getMock('\Magento\Quote\Model\AddressDetailsFactory', [], [], '', false);
         $this->dataProcessor = $this->getMock('\Magento\Quote\Model\AddressAdditionalDataProcessor', [], [], '', false);
+        $this->quoteRepository = $this->getMock(
+            '\Magento\Quote\Model\QuoteRepository', ['setCheckoutMethod', 'getActive', 'save'], [], '', false
+        );
 
         $this->model = $this->objectManager->getObject(
             'Magento\Quote\Model\AddressDetailsManagement',
@@ -67,7 +75,8 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
                 'paymentMethodManagement' => $this->paymentMethodManagement,
                 'shippingMethodManagement' => $this->shippingMethodManagement,
                 'addressDetailsFactory' => $this->addressDetailsFactory,
-                'dataProcessor' => $this->dataProcessor
+                'dataProcessor' => $this->dataProcessor,
+                'quoteRepository' => $this->quoteRepository
             ]
         );
     }
@@ -75,6 +84,7 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
     public function testSaveAddresses()
     {
         $cartId = 100;
+        $checkoutMethod = 'onePage';
         $additionalData = $this->getMock('\Magento\Quote\Api\Data\AddressAdditionalDataInterface');
         $billingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
         $shippingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
@@ -125,6 +135,21 @@ class AddressDetailsManagementTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->dataProcessor->expects($this->once())->method('process')->with($additionalData);
 
-        $this->model->saveAddresses($cartId, $billingAddressMock, $shippingAddressMock, $additionalData);
+        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $this->quoteRepository->expects($this->once())
+            ->method('getActive')
+            ->with($cartId)
+            ->will($this->returnSelf());
+        $this->quoteRepository->expects($this->once())
+            ->method('setCheckoutMethod')
+            ->with($checkoutMethod)
+            ->will($this->returnValue($quote));
+        $this->quoteRepository->expects($this->once())
+            ->method('save')
+            ->with($quote);
+
+        $this->model->saveAddresses(
+            $cartId, $billingAddressMock, $shippingAddressMock, $additionalData, $checkoutMethod
+        );
     }
 }

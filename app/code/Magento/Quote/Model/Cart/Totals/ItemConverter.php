@@ -86,10 +86,12 @@ class ItemConverter
     private function getFormattedOptionValue($item)
     {
         $optionsData = [];
+
+        /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
+        $helper = $this->configurationPool->getByProductType('default');
+
         $options = $this->configurationPool->getByProductType($item->getProductType())->getOptions($item);
         foreach ($options as $index => $optionValue) {
-            /* @var $helper \Magento\Catalog\Helper\Product\Configuration */
-            $helper = $this->configurationPool->getByProductType('default');
             $params = [
                 'max_length' => 55,
                 'cut_replacer' => ' <a href="#" class="dots tooltip toggle" onclick="return false">...</a>'
