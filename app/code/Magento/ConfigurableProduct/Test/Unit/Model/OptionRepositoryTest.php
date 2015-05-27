@@ -207,4 +207,57 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->model->getList($productSku);
     }
+
+    /**
+     * @param int $attributeId
+     * @param string $label
+     * @param array $optionValues
+     * @param string $msg
+     * @dataProvider validateOptionDataProvider
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    public function testValidateNewOptionData($attributeId, $label, $optionValues, $msg)
+    {
+        $this->setExpectedException('Magento\Framework\Exception\InputException', $msg);
+        $optionValueMock = $this->getMock('\Magento\ConfigurableProduct\Api\Data\OptionValueInterface');
+        $optionValuesMock = [];
+        if (!empty($optionValues)) {
+            $optionValueMock->expects($this->any())
+                ->method('getValueIndex')
+                ->willReturn($optionValues['v']);
+            $optionValueMock->expects($this->any())
+                ->method('getPricingValue')
+                ->willReturn($optionValues['p']);
+            $optionValueMock->expects($this->any())
+                ->method('getIsPercent')
+                ->willReturn($optionValues['r']);
+            $optionValuesMock = [$optionValueMock];
+        }
+
+        $optionMock = $this->getMock('\Magento\ConfigurableProduct\Api\Data\OptionInterface');
+        $optionMock->expects($this->any())
+            ->method('getAttributeId')
+            ->willReturn($attributeId);
+        $optionMock->expects($this->any())
+            ->method('getLabel')
+            ->willReturn($label);
+        $optionMock->expects($this->any())
+            ->method('getValues')
+            ->willReturn($optionValuesMock);
+
+        $this->model->validateNewOptionData($optionMock);
+    }
+
+    public function validateOptionDataProvider()
+    {
+        return [
+            [null, '', ['v' => null, 'p' => null, 'r' => null], 'One or more input exceptions have occurred.'],
+            [1, 'Label', [], 'Option values are not specified.'],
+            [null, 'Label', ['v' => 1, 'p' => 1, 'r' => 1], 'Option attribute ID is not specified.'],
+            [1, '', ['v' => 1, 'p' => 1, 'r' => 1], 'Option label is not specified.'],
+            [1, 'Label', ['v' => null, 'p' => 1, 'r' => 1], 'Value index is not specified for an option.'],
+            [1, 'Label', ['v' => 1, 'p' => null, 'r' => 1], 'Price is not specified for an option.'],
+            [1, 'Label', ['v' => 1, 'p' => 1, 'r' => null], 'Percent/absolute is not specified for an option.'],
+        ];
+    }
 }

@@ -8,6 +8,8 @@
  * One page checkout status
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated
+ * @removeCandidate
  */
 namespace Magento\Checkout\Block\Onepage\Payment;
 

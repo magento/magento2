@@ -63,7 +63,7 @@ class DataProvider implements DataProviderInterface
      * Get translation data
      *
      * @param string $themePath
-     * @return string[]
+     * @return array
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      */

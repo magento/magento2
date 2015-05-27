@@ -7,7 +7,6 @@ namespace Magento\Framework\App\Cache\Frontend;
 
 use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsList;
 
 /**
  * In-memory readonly pool of all cache front-end instances known to the system

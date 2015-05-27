@@ -58,7 +58,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             ' value="' .
             $this->getEscapedValue(
                 'from'
-            ) . '" class="input-text no-changes" placeholder="' . __(
+            ) . '" class="admin__control-text input-text no-changes" placeholder="' . __(
                 'From'
             ) . '" ' . $this->getUiId(
                 'filter',
@@ -74,7 +74,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
             ' value="' .
             $this->getEscapedValue(
                 'to'
-            ) . '" class="input-text no-changes" placeholder="' . __(
+            ) . '" class="input-text admin__control-text no-changes" placeholder="' . __(
                 'To'
             ) . '" ' . $this->getUiId(
                 'filter',

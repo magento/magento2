@@ -46,6 +46,6 @@ class GuestCartRepository implements GuestCartRepositoryInterface
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->quoteRepository->get($quoteIdMask->getId());
+        return $this->quoteRepository->get($quoteIdMask->getQuoteId());
     }
 }

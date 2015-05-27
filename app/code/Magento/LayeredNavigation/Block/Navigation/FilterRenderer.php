@@ -7,16 +7,17 @@
  */
 namespace Magento\LayeredNavigation\Block\Navigation;
 
+use Magento\Catalog\Model\Layer\Filter\FilterInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\LayeredNavigation\Block\Navigation\FilterRendererInterface;
 
-class FilterRenderer extends \Magento\Framework\View\Element\Template implements
-    \Magento\LayeredNavigation\Block\Navigation\FilterRendererInterface
+class FilterRenderer extends Template implements FilterRendererInterface
 {
     /**
-     * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
+     * @param FilterInterface $filter
      * @return string
      */
-    public function render(\Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter)
+    public function render(FilterInterface $filter)
     {
         $this->assign('filterItems', $filter->getItems());
         $html = $this->_toHtml();
