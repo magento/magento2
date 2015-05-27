@@ -47,7 +47,7 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomAttributesMetadata()
     {
         $customAttributesMetadata = $this->_service->getCustomAttributesMetadata();
-        $this->assertCount(1, $customAttributesMetadata, "Invalid number of attributes returned.");
+        $this->assertCount(0, $customAttributesMetadata, "Invalid number of attributes returned.");
     }
 
     public function testGetNestedOptionsCustomAttributesMetadata()
@@ -106,7 +106,7 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
             'email' => 'customer@example.com',
             'default_billing' => '1',
             'default_shipping' => '1',
-            'disable_auto_group_change' => '0',
+            'disable_auto_group_change' => 0,
         ];
 
         $customer = $this->customerRepository->getById(1);
@@ -144,10 +144,13 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerAttributeMetadataNoSuchEntity()
     {
         try {
-            $this->_service->getAttributeMetadata('20');
+            $this->_service->getAttributeMetadata('wrong_attribute_code');
             $this->fail('Expected exception not thrown.');
         } catch (NoSuchEntityException $e) {
-            $this->assertEquals('No such entity with entityType = customer, attributeCode = 20', $e->getMessage());
+            $this->assertEquals(
+                'No such entity with entityType = customer, attributeCode = wrong_attribute_code',
+                $e->getMessage()
+            );
         }
     }
 
