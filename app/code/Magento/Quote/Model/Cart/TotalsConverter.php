@@ -37,10 +37,13 @@ class TotalsConverter
         foreach ($addressTotals as $addressTotal) {
             $pureData = [
                 CalculatedTotalsInterface::CODE => $addressTotal->getCode(),
-                CalculatedTotalsInterface::TITLE => $addressTotal->getTitle()->getText(),
+                CalculatedTotalsInterface::TITLE => '',
                 CalculatedTotalsInterface::VALUE => $addressTotal->getValue(),
                 CalculatedTotalsInterface::AREA => $addressTotal->getArea(),
             ];
+            if (is_object($addressTotal->getTitle())) {
+                $pureData[CalculatedTotalsInterface::TITLE] = $addressTotal->getTitle()->getText();
+            }
             /** @var \Magento\Quote\Model\Cart\CalculatedTotals $total */
             $total = $this->factory->create();
             $total->setData($pureData);
