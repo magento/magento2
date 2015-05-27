@@ -9,6 +9,7 @@ namespace Magento\Backend\Model\Auth\Credential;
  * Backend Auth Credential Storage interface
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  */
 interface StorageInterface
 {
