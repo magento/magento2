@@ -108,50 +108,77 @@ class Mapper
         }
 
         $indexBuilder = $this->indexProviders[$request->getIndex()];
-        $subSelect = $indexBuilder->build($request);
+
         $matchContainer = $this->matchContainerFactory->create(
             [
-            'indexBuilder' => $indexBuilder,
-            'request' => $request
+                'indexBuilder' => $indexBuilder,
+                'request' => $request
             ]
         );
-
+        $select = $indexBuilder->build($request);
         /** @var ScoreBuilder $scoreBuilder */
         $scoreBuilder = $this->scoreBuilderFactory->create();
-        $subSelect = $this->processQuery(
+        $select = $this->processQuery(
             $scoreBuilder,
             $request->getQuery(),
-            $subSelect,
+            $select,
             BoolQuery::QUERY_CONDITION_MUST,
             $matchContainer
         );
-        $subSelect = $this->processDimensions($request, $subSelect);
-        $subSelect->columns($scoreBuilder->build());
-        $subSelect->limit($request->getSize());
+        $select = $this->processDimensions($request, $select);
+        $select->columns($scoreBuilder->build());
+        $select->limit($request->getSize());
 
-        $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
-        $tables = array_merge($matchContainer->getQueryNames(), ['main_select.score']) ;
-        $relevance = implode('.score + ', $tables);
-        $select
+        $select = $this->createAroundSelect($select, $scoreBuilder);
+
+        $matchQueries = $matchContainer->getQueries();
+
+        if ($matchQueries) {
+            $subSelect = $select;
+            $select = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
+            $tables = array_merge($matchContainer->getQueryNames(), ['main_select.relevance']);
+            $relevance = implode('.relevance + ', $tables);
+            $select
+                ->from(
+                    ['main_select' => $subSelect],
+                    [
+                        $this->entityMetadata->getEntityId() => 'entity_id',
+                        'relevance' => sprintf('(%s)', $relevance),
+                    ]
+                );
+
+            foreach ($matchQueries as $matchName => $matchSelect) {
+                $select->join(
+                    [$matchName => $this->createAroundSelect($matchSelect, $scoreBuilder)],
+                    $matchName . '.entity_id = main_select.entity_id',
+                    []
+                );
+            }
+        }
+        $select->order('relevance ' . Select::SQL_DESC);
+        return $select;
+    }
+
+    /**
+     * @param Select $select
+     * @param ScoreBuilder $scoreBuilder
+     * @return Select
+     */
+    private function createAroundSelect(
+        Select $select,
+        ScoreBuilder $scoreBuilder
+    ) {
+        $parentSelect = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
+        $parentSelect
             ->from(
-                ['main_select' =>$subSelect],
+                ['main_select' => $select],
                 [
                     $this->entityMetadata->getEntityId() => 'product_id',
-                    'relevance' => sprintf('(%s)', $relevance),
+                    'relevance' => sprintf('MAX(%s)', $scoreBuilder->getScoreAlias())
                 ]
             )
             ->group($this->entityMetadata->getEntityId());
-
-        foreach ($matchContainer->getQueries() as $matchName => $matchSelect) {
-            $select->join(
-                [$matchName => $matchSelect],
-                $matchName . '.product_id = main_select.product_id',
-                []
-            );
-        }
-
-        $select->order('relevance ' . Select::SQL_DESC);
-        return $select;
+        return $parentSelect;
     }
 
     /**

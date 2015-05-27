@@ -40,18 +40,24 @@ class Resolver implements ResolverInterface
     {
         $resolvedFields = [];
         foreach ((array)$fields as $field) {
-            $attribute = $this->attributeCollection->getItemByColumnValue('attribute_code', $field);
-            $id = 0;
-            $type = FieldInterface::TYPE_FULLTEXT;
-            $fieldName = 'data_index';
-            if ($attribute) {
-                $id = $attribute->getId();
+            if ('*' === $field) {
+                $resolvedFields = [
+                    $this->fieldFactory->create(
+                        [
+                            'attributeId' => null,
+                            'field' => 'data_index',
+                            'type' => FieldInterface::TYPE_FULLTEXT
+                        ]
+                    )
+                ];
+                break;
             }
-            $resolvedFields[] = $this->fieldFactory->create(
+            $attribute = $this->attributeCollection->getItemByColumnValue('attribute_code', $field);
+            $resolvedFields[$field] = $this->fieldFactory->create(
                 [
-                    'attributeId' => $id,
-                    'field' => $fieldName,
-                    'type' => $type
+                    'attributeId' => $attribute ? $attribute->getId() : 0,
+                    'field' => 'data_index',
+                    'type' => FieldInterface::TYPE_FULLTEXT
                 ]
             );
         }

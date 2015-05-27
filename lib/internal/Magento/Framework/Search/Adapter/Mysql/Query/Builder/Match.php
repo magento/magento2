@@ -63,19 +63,23 @@ class Match implements QueryInterface
         }
         $resolvedFieldList = $this->resolver->resolve($fieldList);
 
+        $fieldIds = [];
+        $fieldNames = [];
+        foreach ($resolvedFieldList as $field) {
+            if ($field->getType() === FieldInterface::TYPE_FULLTEXT && $field->getAttributeId()) {
+                $fieldIds[] = $field->getAttributeId();
+            }
+            $fieldName = $field->getField();
+            $fieldNames[$fieldName] = $fieldName;
+        }
+
         $matchQuery = $this->fulltextHelper->getMatchQuery(
-            $resolvedFieldList,
+            $fieldNames,
             $queryValue,
             Fulltext::FULLTEXT_MODE_BOOLEAN
         );
         $scoreBuilder->addCondition($matchQuery);
 
-        $fieldIds = [];
-        foreach ($resolvedFieldList as $field) {
-            if ($field->getType() === FieldInterface::TYPE_FULLTEXT) {
-                $fieldIds[] = $field->getAttributeId();
-            }
-        }
         if ($fieldIds) {
             $matchQuery = sprintf('(%s AND search_index.attribute_id IN (%s))', $matchQuery, implode(',', $fieldIds));
         }
