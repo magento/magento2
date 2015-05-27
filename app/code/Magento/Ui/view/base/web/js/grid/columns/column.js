@@ -3,8 +3,10 @@
  * See COPYING.txt for license details.
  */
 define([
+    'underscore',
+    'mageUtils',
     'uiComponent'
-], function (Component) {
+], function (_, utils, Component) {
     'use strict';
 
     return Component.extend({
@@ -13,14 +15,35 @@ define([
             bodyTmpl: 'ui/grid/cells/text',
             sortable: false,
             visible: true,
-            defaultVisible: '<%= visible %>',
-            imports: {
-                visible: '<%= provider %>:config.columns.<%= index %>.visible'
+            links: {
+                visible: '${ $.storageConfig.path }.visible'
             }
         },
 
-        resetVisible: function () {
-            this.visible(this.defaultVisible);
+        initObservable: function () {
+            this._super()
+                .observe('visible');
+
+            return this;
+        },
+
+        applyState: function (property, state) {
+            var storage = this.storage(),
+                namespace = this.storageConfig.root + '.' + property,
+                data,
+                value;
+
+            if (state === 'default') {
+                data = storage.getDefault();
+            } else if (state === 'last') {
+                data = storage.getSaved();
+            }
+
+            value = utils.nested(data, namespace);
+
+            if (!_.isUndefined(value)) {
+                this.set(property, value);
+            }
         },
 
         getClickUrl: function (row) {

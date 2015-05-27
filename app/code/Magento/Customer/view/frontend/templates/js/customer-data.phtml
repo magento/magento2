@@ -11,7 +11,7 @@
 <?php
     echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode([
         '*' => ['Magento_Customer/js/customer-data' => [
-            'sectionLoadUrl' => $block->getUrl('customer/section/load'),
+            'sectionLoadUrl' => $block->getCustomerDataUrl('customer/section/load'),
             'cookieLifeTime' => $block->getCookieLifeTime(),
         ]],
     ]);

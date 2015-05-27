@@ -13,27 +13,31 @@ define(
         'uiRegistry',
         '../model/url-builder',
         'mage/storage',
-        '../model/payment-service'
-
+        '../model/payment-service',
+        'underscore'
     ],
-    function (quote, addressList, navigator, selectShippingAddress, registry, urlBuilder, storage, paymentService) {
+    function (quote, addressList, navigator, selectShippingAddress, registry, urlBuilder, storage, paymentService, _) {
         "use strict";
         var actionCallback;
         var result = function (billingAddress, useForShipping, additionalData) {
+            var copyBillingToShipping = function() {
+                var shippingAddressSource = registry.get('checkoutProvider'),
+                    shippingAddress = shippingAddressSource.get('shippingAddress');
+                for (var property in billingAddress) {
+                    if (billingAddress.hasOwnProperty(property) && shippingAddress.hasOwnProperty(property)) {
+                        if (typeof billingAddress[property] === 'string') {
+                            shippingAddressSource.set('shippingAddress.' + property, billingAddress[property]);
+                        } else {
+                            shippingAddressSource.set('shippingAddress.' + property, _.clone(billingAddress[property]));
+                        }
+                    }
+                }
+            };
             additionalData = additionalData || {};
             quote.setBillingAddress(billingAddress);
             if (useForShipping() === '1' && !quote.isVirtual()) {
                 if (!billingAddress.customerAddressId) {
-                    // update shipping address data in corresponding provider
-                    var shippingAddressSource = registry.get('checkoutProvider');
-                    var shippingAddress = shippingAddressSource.get('shippingAddress');
-                    for (var property in billingAddress) {
-                        if (billingAddress.hasOwnProperty(property)
-                            && shippingAddress.hasOwnProperty(property)
-                        ) {
-                            shippingAddressSource.set('shippingAddress.' + property, billingAddress[property]);
-                        }
-                    }
+                    copyBillingToShipping();
                 }
                 selectShippingAddress(billingAddress, useForShipping, additionalData);
             } else if (quote.isVirtual()) {
@@ -72,6 +76,9 @@ define(
                 );
             } else {
                 navigator.setCurrent('billingAddress').goNext();
+                if (addressList.isBillingSameAsShipping) {
+                    copyBillingToShipping();
+                }
             }
         };
         result.setActionCallback = function (value) {
