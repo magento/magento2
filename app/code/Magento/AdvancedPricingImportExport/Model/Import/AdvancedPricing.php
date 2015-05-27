@@ -28,6 +28,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const COL_GROUP_PRICE = 'group_price';
 
+    const TABLE_TIER_PRICE = 'catalog_product_entity_tier_price';
+
+    const TABLE_GROUPED_PRICE = 'catalog_product_entity_group_price';
+
     /**
      * Validation failure message template definitions
      *
@@ -61,9 +65,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     /** @var ImportProduct */
     protected $_importProduct;
-
-    /** @var \Magento\Catalog\Model\Indexer\Product\Price\Processor */
-    protected $_productPriceIndexerProcessor;
 
     protected $_validator;
 
@@ -107,7 +108,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     // todo
     public function validateRow(array $rowData, $rowNum)
     {
-        $sku = null;
+        $sku = false;
 
         if (isset($this->_validatedRows[$rowNum])) {
             return !isset($this->_invalidRows[$rowNum]);
@@ -115,10 +116,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_validatedRows[$rowNum] = true;
 
         if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
-            if (false) {
-                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
-                return false;
-            }
+            //todo
+//            if (false) {
+//                $this->addRowError(ValidatorInterface::ERROR_SKU_NOT_FOUND_FOR_DELETE, $rowNum);
+//                return false;
+//            }
             return true;
         }
 
@@ -149,17 +151,17 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected function _importData()
     {
         if (\Magento\ImportExport\Model\Import::BEHAVIOR_DELETE == $this->getBehavior()) {
-            $this->_deleteAdvancedPricing();
+            $this->deleteAdvancedPricing();
         } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $this->getBehavior()) {
-            $this->_replaceAdvancedPricing();
-        } elseif (\Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE == $this->getBehavior()) {
-            $this->_saveAdvancedPricing();
+            $this->replaceAdvancedPricing();
+        } else {
+            $this->saveAdvancedPricing();
         }
 
         return true;
     }
 
-    protected function _saveAdvancedPricing()
+    public function saveAdvancedPricing()
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $tierPrices = [];
@@ -172,163 +174,66 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 if (!empty($rowData[self::COL_TIER_PRICE_WEBSITE])) {
                     $tierPrices[$rowSku][] = [
                         'all_groups' => $rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL,
-                        'customer_group_id' => $this->_getCustomerGroupId($rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP]),
+                        'customer_group_id' => $this->getCustomerGroupId($rowData[self::COL_TIER_PRICE_CUSTOMER_GROUP]),
                         'qty' => $rowData[self::COL_TIER_PRICE_QTY],
                         'value' => $rowData[self::COL_TIER_PRICE],
-                        'website_id' => $this->_getWebsiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
+                        'website_id' => $this->getWebsiteId($rowData[self::COL_TIER_PRICE_WEBSITE])
 
                     ];
                 }
                 if (!empty($rowData[self::COL_GROUP_PRICE_WEBSITE])) {
                     $groupPrices[$rowSku][] = [
                         'all_groups' => $rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP] == self::VALUE_ALL,
-                        'customer_group_id' => $this->_getCustomerGroupId($rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP]),
+                        'customer_group_id' => $this->getCustomerGroupId($rowData[self::COL_GROUP_PRICE_CUSTOMER_GROUP]),
                         'value' => $rowData[self::COL_GROUP_PRICE],
-                        'website_id' => $this->_getWebSiteId($rowData[self::COL_GROUP_PRICE_WEBSITE])
+                        'website_id' => $this->getWebSiteId($rowData[self::COL_GROUP_PRICE_WEBSITE])
                     ];
                 }
             }
-            $this->_saveProductTierPrices($tierPrices)
-                ->_saveProductGroupPrices($groupPrices);
-        }
-    }
-
-    /**
-     * Deletes Advanced price data from raw data.
-     */
-    protected function _deleteAdvancedPricing()
-    {
-        $listSku = [];
-        while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            foreach ($bunch as $rowNum => $rowData) {
-                if (!$this->validateRow($rowData, $rowNum)) {
-                    continue;
-                }
-                $rowSku = $rowData[self::COL_SKU];
-                $listSku[] = $rowSku;
-            }
-        }
-        if($listSku) {
-            $this->_deleteProductTierAndGroupPrices(self::COL_GROUP_PRICE, array_unique($listSku))
-                ->_deleteProductTierAndGroupPrices(self::COL_TIER_PRICE, array_unique($listSku));
+            $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE)
+                ->saveProductPrices($groupPrices, self::TABLE_GROUPED_PRICE);
         }
     }
 
     // todo
-    protected function _replaceAdvancedPricing()
+    protected function deleteAdvancedPricing()
+    {
+        return true;
+    }
+
+    // todo
+    protected function replaceAdvancedPricing()
     {
         return true;
     }
 
     /**
-     * Save product tier prices.
+     * Save product prices.
      *
-     * @param array $tierPriceData
+     * @param array $priceData
+     * @param string $table
      * @return $this
      */
-    protected function _saveProductTierPrices(array $tierPriceData)
+    protected function saveProductPrices(array $priceData, $table)
     {
-        static $tableName = null;
-        $affectedIds = [];
+        if ($priceData) {
+            $affectedIds = [];
+            $tableName = $this->_resourceFactory->create()->getTable($table);
+            $priceIn = [];
 
-        if (!$tableName) {
-            $tableName = $this->_resourceFactory->create()->getTable('catalog_product_entity_tier_price');
-        }
-        if ($tierPriceData) {
-            $tierPriceIn = [];
-
-            foreach ($tierPriceData as $delSku => $tierPriceRows) {
-                $productId = $this->_productModel->getIdBySku($delSku);
+            foreach ($priceData as $sku => $priceRows) {
+                $productId = $this->_productModel->getIdBySku($sku);
                 $affectedIds[] = $productId;
 
-                foreach ($tierPriceRows as $row) {
+                foreach ($priceRows as $row) {
                     $row['entity_id'] = $productId;
-                    $tierPriceIn[] = $row;
+                    $priceIn[] = $row;
                 }
             }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior()) {
-                $this->_connection->delete(
-                    $tableName,
-                    $this->_connection->quoteInto('entity_id IN (?)', $affectedIds)
-                );
-            }
-            if ($tierPriceIn) {
-                $this->_connection->insertOnDuplicate($tableName, $tierPriceIn, ['value']);
+            if ($priceIn) {
+                $this->_connection->insertOnDuplicate($tableName, $priceIn, ['value']);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * Save product group prices.
-     *
-     * @param array $groupPriceData
-     * @return $this
-     */
-    protected function _saveProductGroupPrices(array $groupPriceData)
-    {
-        static $tableName = null;
-        $affectedIds = [];
-
-        if (!$tableName) {
-            $tableName = $this->_resourceFactory->create()->getTable('catalog_product_entity_group_price');
-        }
-        if ($groupPriceData) {
-            $groupPriceIn = [];
-
-            foreach ($groupPriceData as $delSku => $groupPriceRows) {
-                $productId = $this->_productModel->getIdBySku($delSku);
-                $affectedIds[] = $productId;
-
-                foreach ($groupPriceRows as $row) {
-                    $row['entity_id'] = $productId;
-                    $groupPriceIn[] = $row;
-                }
-            }
-            if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior()) {
-                $this->_connection->delete(
-                    $tableName,
-                    $this->_connection->quoteInto('entity_id IN (?)', $affectedIds)
-                );
-            }
-            if ($groupPriceIn) {
-                $this->_connection->insertOnDuplicate($tableName, $groupPriceIn, ['value']);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Deletes tier prices and group prices.
-     *
-     * @param $advancedTypePrice
-     * @param array $listSku
-     * @return $this
-     */
-    protected function _deleteProductTierAndGroupPrices($advancedTypePrice, array $listSku)
-    {
-        $tableName = null;
-        if(isset($advancedTypePrice)) {
-            if (!$tableName) {
-                $tableName = $this->_resourceFactory->create()->getTable('catalog_product_entity_' . $advancedTypePrice);
-            }
-        }
-        if($tableName) {
-            if($listSku) {
-                foreach ($listSku as $delSku) {
-                    $productId = $this->_productModel->getIdBySku($delSku);
-                    $affectedIds[] = $productId;
-                }
-
-                $this->_connection->delete(
-                    $tableName,
-                    $this->_connection->quoteInto('entity_id IN (?)', $affectedIds)
-                );
-            }
-        }
-
         return $this;
     }
 
@@ -338,7 +243,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param $websiteCode
      * @return array|int|string
      */
-    protected function _getWebSiteId($websiteCode)
+    protected function getWebSiteId($websiteCode)
     {
         $result = $websiteCode == self::VALUE_ALL ||
         $this->_catalogData->isPriceGlobal() ? 0 : $this->_storeResolver->getWebsiteCodeToId($websiteCode);
@@ -351,7 +256,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param string $customerGroup
      * @return int
      */
-    protected function _getCustomerGroupId($customerGroup)
+    protected function getCustomerGroupId($customerGroup)
     {
         return $customerGroup == self::VALUE_ALL ? 0 : $customerGroup;
     }

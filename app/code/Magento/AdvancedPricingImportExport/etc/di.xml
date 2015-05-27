@@ -6,6 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing">
+         <plugin name="invalidateAdvancedPriceIndexerOnImport" type="Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import" />
+     </type>
     <type name="Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator">
         <arguments>
             <argument name="validators" xsi:type="array">
