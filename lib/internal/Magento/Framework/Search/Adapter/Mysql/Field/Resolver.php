@@ -23,10 +23,10 @@ class Resolver implements ResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function resolve($fields)
+    public function resolve(array $fields)
     {
         $resolvedFields = [];
-        foreach ((array)$fields as $field) {
+        foreach ($fields as $field) {
             $resolvedFields[] = $this->fieldFactory->create(['column' => $field]);
         }
 
