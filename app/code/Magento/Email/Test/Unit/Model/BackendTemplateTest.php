@@ -40,7 +40,7 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\ObjectManager
      */
-    protected $objectMangerBackup;
+    protected $objectManagerBackup;
 
     protected function setUp()
     {
@@ -59,7 +59,7 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Magento\Email\Model\Resource\Template')
             ->will($this->returnValue($this->resourceModelMock));
-        $this->objectMangerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $this->model = $helper->getObject(
@@ -71,7 +71,7 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        \Magento\Framework\App\ObjectManager::setInstance($this->objectMangerBackup);
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
     }
 
     public function testGetSystemConfigPathsWhereUsedAsDefaultNoTemplateCode()

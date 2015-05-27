@@ -52,7 +52,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\ObjectManager
      */
-    protected $objectMangerBackup;
+    protected $objectManagerBackup;
 
     protected function setUp()
     {
@@ -80,7 +80,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->selectMock));
 
         $this->objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $this->objectMangerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -90,7 +90,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        \Magento\Framework\App\ObjectManager::setInstance($this->objectMangerBackup);
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
     }
 
     protected function getUut()
